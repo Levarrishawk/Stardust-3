@@ -601,7 +601,7 @@ alderaan = {
   gcwEnabled = 1,
 
   planetTravelPoints = {
---    {name = "Yavin IV Labor Outpost", x = -6921.6733, z = 73, y = -5726.5161, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+   {name = "Aldera City", x = 1151, z = 28, y = -1383, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 0, landingRange = 3},
  --   {name = "Yavin IV Mining Outpost", x = -267.23914, z = 35, y = 4896.3013, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
  --   {name = "Yavin IV Imperial Outpost", x = 4054.1, z = 37, y = -6216.9, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 0, landingRange = 3}
   },
