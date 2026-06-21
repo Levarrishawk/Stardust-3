@@ -23,7 +23,7 @@ alderaan_regions = {
 
 
 	-- Cities
-	{"@alderaan_region_names:aldera_city", -178, -4504, {CIRCLE, 581}, CITY + NOSPAWNAREA},
+	{"@alderaan_region_names:aldera_city", 1151, -1383, {CIRCLE, 600}, CITY + NOSPAWNAREA},
 	
 
 	{"aldera_nobuild_1", -178, -4504, {CIRCLE, 1000}, CAMPINGAREA + NOBUILDZONEAREA},
