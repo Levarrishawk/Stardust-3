@@ -596,6 +596,35 @@ yavin4 = {
 	}
 }
 
+alderaan = {
+  weatherEnabled = 1,
+  gcwEnabled = 1,
+
+  planetTravelPoints = {
+--    {name = "Yavin IV Labor Outpost", x = -6921.6733, z = 73, y = -5726.5161, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+ --   {name = "Yavin IV Mining Outpost", x = -267.23914, z = 35, y = 4896.3013, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+ --   {name = "Yavin IV Imperial Outpost", x = 4054.1, z = 37, y = -6216.9, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 0, landingRange = 3}
+  },
+
+ -- jtlLaunchPoint = {"space_yavin4", -5600, -5200, -5200},
+
+  badgeAreas = {
+ --   {"badge_temple_exar_kun",5097,5537,0,30,23},
+ --   {"badge_temple_woolamander",519,-646,0,30,21},
+ --   {"badge_yav_temple_blueleaf",-875,-2047,0,30,22},
+  },
+
+  navAreas = {
+--    {"dark_jedi_enclave",5080,306,100},   
+  },
+
+  planetObjects = {
+--    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = -0.705623, oz = 0, ow = 0.708587, x = -6917.18, z = 73, y = -5732.25, parentid = 0},
+--    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = 0.723339, oz = 0, ow = -0.690493, x = 4057.69, z = 37, y = -6217.54, parentid = 0},
+--    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = 0.00721678, oz = 0, ow = 0.999974, x = -293.367, z = 35, y = 4854.52, parentid = 0}
+  }
+}
+
 tutorial = {
 	weatherEnabled = 0,
 	gcwEnabled = 0,
