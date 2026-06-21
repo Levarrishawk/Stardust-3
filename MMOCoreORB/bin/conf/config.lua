@@ -128,16 +128,16 @@ Core3 = {
 	},
 	-------- SPACE ZONES -------
 	SpaceZonesEnabled = {
-		"space_corellia",
-		"space_dantooine",
-		"space_dathomir",
-		"space_endor",
-		"space_heavy1",
-		"space_light1",
-		"space_lok",
-		"space_naboo",
-		"space_tatooine",
-		"space_yavin4"
+--		"space_corellia",
+--		"space_dantooine",
+--		"space_dathomir",
+--		"space_endor",
+--		"space_heavy1",
+--		"space_light1",
+--		"space_lok",
+--		"space_naboo",
+--		"space_tatooine",
+--		"space_yavin4"
 		---- TEST ZONES ----
 		--"space_09",
 		--"space_corellia_2",
