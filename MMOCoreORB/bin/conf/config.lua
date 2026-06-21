@@ -152,6 +152,7 @@ Core3 = {
   TreFiles = {
     
     "stardust_3_01.tre",
+    "stardust_3_00.tre",
     "mtg_patch_022.tre",
     "mtg_planets.tre",
     "mtg_patch_021.tre",
