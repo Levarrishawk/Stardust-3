@@ -1,0 +1,7 @@
+
+
+object_building_corellia_filler_block_corellia_32x16_s01_white = object_building_corellia_shared_filler_block_corellia_32x16_s01_white:new {
+
+}
+
+ObjectTemplates:addTemplate(object_building_corellia_filler_block_corellia_32x16_s01_white, "object/building/corellia/filler_block_corellia_32x16_s01_white.iff")
