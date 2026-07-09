@@ -1057,7 +1057,7 @@ includeFile("custom_content/tangible/smuggler/objects.lua")
 includeFile("custom_content/tangible/smuggler/contraband/objects.lua")
 
 includeFile("custom_content/tangible/door/objects.lua")
-includeFile("tangible/loot/creature_loot/collections/objects.lua")
+--includeFile("tangible/loot/creature_loot/collections/objects.lua")
 includeFile("tangible/smuggler/contraband/objects.lua")
 includeFile("tangible/smuggler/objects.lua")
 
