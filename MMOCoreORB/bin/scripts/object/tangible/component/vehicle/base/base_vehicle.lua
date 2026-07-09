@@ -41,10 +41,8 @@
 --this exception also makes it possible to release a modified version 
 
 
+object_tangible_component_vehicle_base_base_vehicle = object_tangible_component_vehicle_base_shared_base_vehicle:new {
 
---Children folder includes
+}
 
--- Server Objects
-includeFile("tangible/furniture/base/furniture_base.lua")
-includeFile("tangible/furniture/base/flag_city_base.lua")
-includeFile("tangible/furniture/base/flag_home_base.lua")
+ObjectTemplates:addTemplate(object_tangible_component_vehicle_base_base_vehicle, "object/tangible/component/vehicle/base/base_vehicle.iff")
