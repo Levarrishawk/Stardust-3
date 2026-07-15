@@ -1218,7 +1218,7 @@ int PlayerManagerImplementation::notifyDestruction(TangibleObject* destructor, T
 		destructor->clearCombatState(false);
 	}
 
-	if (ghost->getIncapacitationCounter() >= 99999) {
+	if (ghost->getIncapacitationCounter() >= 255) {
 		killPlayer(destructor, playerCreature, 0, isCombatAction);
 	} else {
 		playerCreature->setPosture(CreaturePosture::INCAPACITATED, true, true);
@@ -1751,6 +1751,11 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 		return;
 	}
 
+	if (ghost->getCloneCounter() >= 5) {
+		player->sendSystemMessage("Your clone data has degraded too much.   You will now pass into the nether world of the force.");
+		return;
+	}
+
 	CloningBuildingObjectTemplate* cbot = cast<CloningBuildingObjectTemplate*>(cloner->getObjectTemplate());
 
 	if (cbot == nullptr) {
@@ -1881,6 +1886,8 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 		ghost->setFoodFilling(0);
 		ghost->setDrinkFilling(0);
 	}
+
+	ghost->addCloneCounter();
 
 	Reference<Task*> task = new PlayerIncapacitationRecoverTask(player, true);
 	task->schedule(3 * 1000);

@@ -1195,10 +1195,24 @@ class PlayerObject extends IntangibleObject {
 	public native void addIncapacitationTime();
 
 	@read
+	
 	public byte getIncapacitationCounter() {
 		return incapacitationTimes.size();
 	}
-
+	
+	byte cloneCounter = 0;
+	
+	public byte getCloneCounter() {
+		return cloneCounter;
+	}
+	
+	public void addCloneCounter() {
+		cloneCounter++;
+	}	
+	
+	public void resetCloneCounter() {
+		cloneCounter = 0;}
+	
 	public void resetIncapacitationTimes() {
 		incapacitationTimes.removeAll();
 	}
