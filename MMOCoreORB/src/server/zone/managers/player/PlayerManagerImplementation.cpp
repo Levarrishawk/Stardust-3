@@ -1218,7 +1218,7 @@ int PlayerManagerImplementation::notifyDestruction(TangibleObject* destructor, T
 		destructor->clearCombatState(false);
 	}
 
-	if (ghost->getIncapacitationCounter() =< 0) {  //Default 3,  remove limits on incapacitations so there is no triple incap deaths in theory.
+	if (ghost->getIncapacitationCounter() >= 99999) {
 		killPlayer(destructor, playerCreature, 0, isCombatAction);
 	} else {
 		playerCreature->setPosture(CreaturePosture::INCAPACITATED, true, true);
