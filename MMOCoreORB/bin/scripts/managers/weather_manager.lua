@@ -240,7 +240,17 @@ alderaan = {
   weatherStability = 90, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
 }
 
+-----------------
+--   Elysium
+-----------------
+elysium = {
 
+  defaultWeather = 0, -- Sunny
+
+  averageWeatherDuration = 900, -- In seconds
+
+  weatherStability = 100, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
+}
 
 
 
