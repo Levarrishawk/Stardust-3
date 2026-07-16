@@ -1931,6 +1931,21 @@ void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) 
 
 	player->switchZone("elysium", 43, 12, 20, 0);
 
+	if (ConfigManager::instance()->getBool("Core3.PlayerManager.WipeFillingOnClone", false)) {
+			ghost->setFoodFilling(0);
+			ghost->setDrinkFilling(0);
+		}
+
+	player->addWounds(CreatureAttribute::HEALTH, 100, true, false);
+		player->addWounds(CreatureAttribute::ACTION, 100, true, false);
+		player->addWounds(CreatureAttribute::MIND, 100, true, false);
+		player->addShockWounds(100, true);
+
+	Reference<Task*> task = new PlayerIncapacitationRecoverTask(player, true);
+		task->schedule(3 * 1000);
+
+	player->notifyObservers(ObserverEventType::PLAYERCLONED, player, 0);
+
 	player->sendSystemMessage("Your clone data has degraded to the point of no return.  You have died and transformed to the nether world of the force.   Enjoy your eternity!");
 
 	ghost->resetCloneCounter();
