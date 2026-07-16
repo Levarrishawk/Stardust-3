@@ -654,6 +654,86 @@ elysium = {
   }
 }
 
+lothal = {
+  weatherEnabled = 0,
+  gcwEnabled = 0,
+  
+  planetTravelPoints = {
+    {name = "Lothal Capital City South", x = -1312, z = 28, y = -3357, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Lothal Capital City North", x = -1363, z = 28, y = -2919, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    },
+    
+    badgeAreas = {   
+      {"lothal_jedi_temple", 122,4158,0,50,156}, 
+       
+  },
+}
+
+hutta = { -- 23
+  weatherEnabled = 1,
+  gcwEnabled = 1,
+  
+  planetTravelPoints = {
+    {name = "Bilbousa Starport", x = -789, z = 80, y = 1769, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    },
+    
+    badgeAreas = {
+      {"hutta_jiguuna",4716,1937,0,15,150},   
+  },
+}
+
+coruscant = { -- 24
+  weatherEnabled = 1,
+  gcwEnabled = 1,
+  
+  planetTravelPoints = {
+    {name = "Collective Commerce District", x = -1851, z = 40, y = -175, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Monument Square", x = 1538, z = 40, y = 779, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Entertainment District", x = 2248, z = 0, y = -4546, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Spaceport District Shuttle", x = -28, z = 40, y = 3202, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Coruscant Spaceport", x = -96, z = 40, y = 3149, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Lower City Level 1312", x = -5815, z = 0, y = -4850, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+    },
+    
+    badgeAreas = { 
+      {"coruscant_imperial_palace", -120,3311,0,30,146},   
+  },
+}
+
+moraband = { -- 25
+  weatherEnabled = 1,
+  gcwEnabled = 1,
+  
+  planetTravelPoints = {
+    {name = "Archaeological Outpost", x = -1696, z = 91, y = -624, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    },
+    
+    badgeAreas = {   
+      {"moraband_valley", -1626,-669,0,20,148}, 
+      {"moraband_dreshdae", 1091,-5328,0,90,149}, 
+  },
+}
+
+chandrila = { -- 21
+  weatherEnabled = 1,
+  gcwEnabled = 1,
+  
+  planetTravelPoints = {
+    {name = "Hanna City Spaceport", x = 178, z = 6, y = -2961, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Nayli Outpost", x = -5272, z = 18, y = 264, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    },
+    
+    badgeAreas = {
+     {"chandrila_mon_mothma_house",2469,2307,0,30,140},
+     {"chandrila_jedi_tomb",4339,-4287,0,30,141},
+     {"chandrila_state_park",-5013,4089,0,30,142},
+  },
+  
+  navAreas = {
+   --[[ {"dark_jedi_enclave",5080,306,100},--]]
+  },
+}
+
 
 
 tutorial = {
