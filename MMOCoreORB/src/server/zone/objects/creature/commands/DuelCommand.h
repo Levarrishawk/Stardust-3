@@ -23,6 +23,11 @@ public:
 		if (!creature->isPlayerCreature())
 			return GENERALERROR;
 
+		if (creature->getZone()->getZoneName()== "elysium") {
+						creature->sendSystemMessage("You are unable to engage in hostilities of any kind here."); // Prevent Combat by duels in Elysium
+					 	return GENERALERROR;
+					}
+
 		auto zoneServer = server->getZoneServer();
 
 		if (zoneServer == nullptr)
