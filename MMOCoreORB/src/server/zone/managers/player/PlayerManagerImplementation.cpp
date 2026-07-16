@@ -1929,10 +1929,11 @@ void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) 
 
 	ghost->setCloning(true);
 
-	player->switchZone("elysium", 0, 0, -3, 0);
+	player->switchZone("elysium", 43, 12, 20, 0);
 
 	player->sendSystemMessage("Your clone data has degraded to the point of no return.  You have died and transformed to the nether world of the force.   Enjoy your eternity!");
 
+	resetCloneCounter(player);
 }
 
 
