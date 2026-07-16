@@ -601,9 +601,9 @@ alderaan = {
   gcwEnabled = 1,
 
   planetTravelPoints = {
-   {name = "Aldera City", x = 1131, z = 28, y = -1135, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 0},
-    {name = "Aldera City Shuttleport West", x = 817, z = 28, y = -1455, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 0},
-   {name = "Aldera City Shuttleport East", x = 1305, z = 28, y = -1524, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 0}
+   {name = "Aldera City", x = 1131, z = 28, y = -1135, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Aldera City Shuttleport West", x = 817, z = 28, y = -1455, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+   {name = "Aldera City Shuttleport East", x = 1305, z = 28, y = -1524, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3}
   },
 
  -- jtlLaunchPoint = {"space_yavin4", -5600, -5200, -5200},
