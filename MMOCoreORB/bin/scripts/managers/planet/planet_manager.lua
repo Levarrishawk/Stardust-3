@@ -601,9 +601,9 @@ alderaan = {
   gcwEnabled = 1,
 
   planetTravelPoints = {
-   {name = "Aldera City", x = 1151, z = 28, y = -1383, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 0, landingRange = 3},
- --   {name = "Yavin IV Mining Outpost", x = -267.23914, z = 35, y = 4896.3013, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
- --   {name = "Yavin IV Imperial Outpost", x = 4054.1, z = 37, y = -6216.9, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 0, landingRange = 3}
+   {name = "Aldera City", x = 1151, z = 28, y = -1383, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 0},
+    {name = "Aldera City Shuttleport West", x = -267.23914, z = 35, y = 4896.3013, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 0},
+   {name = "Aldera City Shuttleport East", x = 4054.1, z = 37, y = -6216.9, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 0}
   },
 
  -- jtlLaunchPoint = {"space_yavin4", -5600, -5200, -5200},
@@ -626,8 +626,8 @@ alderaan = {
 }
 
 elysium = {
-  weatherEnabled = 0,
-  gcwEnabled = 1,
+  weatherEnabled = 1,
+  gcwEnabled = 0,
 
   planetTravelPoints = {
 --   {name = "Aldera City", x = 1151, z = 28, y = -1383, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 0, landingRange = 3},
