@@ -1933,8 +1933,6 @@ void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) 
 
 	player->sendSystemMessage("Your clone data has degraded to the point of no return.  You have died and transformed to the nether world of the force.   Enjoy your eternity!");
 
-	PlayerObject* ghost = player->getPlayerObject();
-
 	ghost->resetCloneCounter();
 }
 
