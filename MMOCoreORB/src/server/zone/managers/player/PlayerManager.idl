@@ -411,6 +411,20 @@ class PlayerManager extends Observer implements Logger {
 	public native void sendPlayerToCloner(CreatureObject player, unsigned long clonerID, int typeofdeath = 0);
 	
 	public native void sendPlayerToAfterlife(CreatureObject player);
+	
+	byte cloneCounter = 0;
+	
+	public byte getCloneCounter() {
+		return cloneCounter;
+	}
+	
+	public void addCloneCounter() {
+		cloneCounter++;
+	}	
+	
+	public void resetCloneCounter() {
+		cloneCounter = 0;
+	}
 
 	public native void ejectPlayerFromBuilding(CreatureObject player);
 
