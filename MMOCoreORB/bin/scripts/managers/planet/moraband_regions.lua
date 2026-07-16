@@ -17,5 +17,6 @@ moraband_regions = {
   {"valley_of_the_dark_lords", -1346, -830, {1, 1000}, NOBUILDZONEAREA},
   {"shyrack_cave", 457, -235, {1, 250}, NOBUILDZONEAREA},
   {"archaeological_outpost", -1712, -679, {1, 200}, NOBUILDZONEAREA + NOSPAWNAREA},
-  {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"moraband_world", "global_hard"}, 2048}
+  {"@moraband_region_names:dreshdae_valley", 1081, -5333, {CIRCLE, 500}, CITY + NOSPAWNAREA},
+ -- {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"moraband_world", "global_hard"}, 2048}
 }

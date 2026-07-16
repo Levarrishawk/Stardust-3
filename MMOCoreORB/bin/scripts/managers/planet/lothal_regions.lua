@@ -13,12 +13,13 @@
 require("scripts.managers.spawn_manager.regions")
 
 lothal_regions = {  
-  {"capital_city", -1297, -3146, {1, 500}, NOBUILDZONEAREA + WORLDSPAWNAREA, {"loth_cats"}, 512},
+--  {"capital_city", -1297, -3146, {1, 500}, NOBUILDZONEAREA + WORLDSPAWNAREA, {"loth_cats"}, 512},
   {"capital_city_outskirts", -1297, -3146, {1, 2000}, NOBUILDZONEAREA},
   {"lothal_jedi_temple", 122, 4158, {1, 500}, NOBUILDZONEAREA + NOSPAWNAREA},
   {"easthills_bunker", 6370, -5559, {1, 250}, NOBUILDZONEAREA + NOSPAWNAREA},
   {"loth_wolf_cave", 6846, 620, {1, 500}, NOBUILDZONEAREA},
   {"first_settlement", -2715, 7287, {1, 450}, NOBUILDZONEAREA + NOSPAWNAREA},
   {"lothal_comm_tower", 384, -3143, {1, 150}, NOBUILDZONEAREA + NOSPAWNAREA},
-  {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"loth_cats", "lothal_world"}, 2048}
+  {"@lothal_region_names:capitol_city", -1297, -3146, {CIRCLE, 800}, CITY + NOSPAWNAREA},
+ -- {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"loth_cats", "lothal_world"}, 2048}
 }
