@@ -1929,7 +1929,7 @@ void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) 
 
 	ghost->setCloning(true);
 
-	player->switchZone("elysium", 43, 12, 20, 0);
+	player->switchZone("elysium", 47, 12, -14, 0);
 
 	if (ConfigManager::instance()->getBool("Core3.PlayerManager.WipeFillingOnClone", false)) {
 			ghost->setFoodFilling(0);
