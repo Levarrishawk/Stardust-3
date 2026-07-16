@@ -1752,7 +1752,8 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 	}
 
 	if (ghost->getCloneCounter() >= 5) {
-		player->sendSystemMessage("Your clone data has degraded too much.   You will now pass into the nether world of the force.");
+		player->sendSystemMessage("Critical Error: Clone data corrupted from degradation!");
+		sendPlayerToAfterlife(player);
 		return;
 	}
 
@@ -1913,6 +1914,27 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 		player->sendSystemMessage(message);
 	}
 }
+
+void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) {
+
+	PlayerObject* ghost = player->getPlayerObject();
+
+	if (ghost == nullptr)
+		return;
+
+	Zone* zone = server->getZone("elysium");
+
+	if (zone == nullptr)
+		return;
+
+	ghost->setCloning(true);
+
+	player->switchZone("elysium", 0, 0, -3, 0);
+
+	player->sendSystemMessage("Your clone data has degraded to the point of no return.  You have died and transformed to the nether world of the force.   Enjoy your eternity!");
+
+}
+
 
 void PlayerManagerImplementation::ejectPlayerFromBuilding(CreatureObject* player) {
 	Zone* zone = player->getZone();
