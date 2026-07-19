@@ -13,7 +13,7 @@
 
 require("scripts.managers.planet.regions")
 
-alderaan_regions = {
+coruscant_regions = {
 	-- No Build Zones
 
 
