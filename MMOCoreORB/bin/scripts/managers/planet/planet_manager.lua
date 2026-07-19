@@ -692,7 +692,7 @@ coruscant = { -- 24
     {name = "Entertainment District", x = 2248, z = 0, y = -4546, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
     {name = "Spaceport District Shuttle", x = -28, z = 40, y = 3202, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
     {name = "Coruscant Spaceport", x = -96, z = 40, y = 3149, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
-  --  {name = "Lower City Level 1312", x = -5815, z = 0, y = -4850, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+    {name = "Lower City Level 1312", x = -5815, z = 0, y = -4850, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
     },
     
     badgeAreas = { 
