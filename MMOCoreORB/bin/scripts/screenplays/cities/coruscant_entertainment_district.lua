@@ -565,28 +565,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   spawnMobile("coruscant", "stormtrooper", 60, -1813.7, 40, -21.9, -90, 0)
   spawnMobile("coruscant", "stormtrooper", 60, -1813.7, 40, -14.1, -90, 0)
   
-  spawnMobile("coruscant", "rebel_trooper", 60, 0.2, 0.3, 3.2, 0, 37000570)
-  spawnMobile("coruscant", "rebel_trooper", 60, 4.6, 0.3, -1.1, -25, 37000570)
   
-  spawnMobile("coruscant", "rebel_recruiter", 60, -4.3, 0.3, -4.3, 90, 37000571)
-  
-  spawnMobile("coruscant", "rebel_trooper", 60, 5.6, -6.8, -5.1, -7, 37000573)
-  spawnMobile("coruscant", "rebel_trooper", 60, 2.8, -6.8, -5.8, 0, 37000573)
-  
-  spawnMobile("coruscant", "rebel_trooper", 60, -2.6, -13.7, -9.6, 0, 37000575)
-  spawnMobile("coruscant", "rebel_trooper", 60, -5.8, -13.7, -4.2, 0, 37000575)
-  spawnMobile("coruscant", "rebel_trooper", 60, -1.8, -13.7, 0.6, 0, 37000575)
-  
-  spawnMobile("coruscant", "rebel_trooper", 60, -3.1, -13.8, 11.9, 0, 37000576)
-  spawnMobile("coruscant", "rebel_trooper", 60, 4.5, -13.8, 12.6, -90, 37000576)
-  
-  spawnMobile("coruscant", "rebel_trooper", 60, 17, -13.8, 11.6, -125, 37000577)
-  spawnMobile("coruscant", "rebel_trooper", 60, 15.5, -13.8, 6.8, 10, 37000577)
-  
-  spawnMobile("coruscant", "rebel_trooper", 60, 14.5, -13.8, -7.6, 157, 37000578)
-  spawnMobile("coruscant", "rebel_trooper", 60, 15.7, -13.8, -13.6, -5, 37000578)
-  
-  spawnMobile("coruscant", "fbase_rebel_heavy_trooper", 60, 14.8, -11.5, -20.8, -11, 37000578)
   
   -- Lower City 1312
     -- Race Spectators  Row 1 Westside
@@ -744,22 +723,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "vendor", 60, -5750, 0, -4899, -102, 0)
   self:setMoodString(pNpc, "happy")
   
-  pNpc = spawnMobile("coruscant", "coruscant_security", 60, -5804, 0, -4850, 180, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security", 60, -5748.9, 0, -4951.7, -50, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security", 60, -5748.9, 0, -4984.3, -134, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security", 60, -5716.9, 0, -4851.7, 43, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security", 60, -5707.1, 0, -4988, -150, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security", 60, -5784, 0, -4986, 0, 0)
+ 
   self:setMoodString(pNpc, "neutral")
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5766.6, 0, -4918.3, -29, 0)
@@ -813,8 +777,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "slavemaster", 60, -5674, 0, -4906.4, 48, 0)
   self:setMoodString(pNpc, "happy")
   
-  pNpc = spawnMobile("coruscant", "coruscant_security", 60, -5694.2, 0, -4932, -92, 0)
-  self:setMoodString(pNpc, "neutral")
   
   pNpc = spawnMobile("coruscant", "r4", 60, -5706.7, 0, -4948.3, 114, 0)
   self:setMoodString(pNpc, "neutral")
@@ -843,17 +805,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "commoner", 60, -5732, 0, -4930.1, 11, 0)
   self:setMoodString(pNpc, "conversation")
   
-  pNpc = spawnMobile("coruscant", "rebel_recruiter", 60, -5675.9, 0, -4795.0, 0, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security_weak", 60, -5716, 0, -4772, 100, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security_weak", 60, -5717, 0, -4769, 90, 0)
-  self:setMoodString(pNpc, "neutral")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_security_weak", 60, -5722, 0, -4777, 126, 0)
-  self:setMoodString(pNpc, "neutral")
   
   pNpc = spawnMobile("coruscant", "thug", 60, -5706, 0, -4792, 0, 0)
   self:setMoodString(pNpc, "neutral")
@@ -1010,8 +961,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "jabba_swooper",60,-5694,0,-5029.6,108,0)
   self:setMoodString(pNpc, "conversation")
   
-  pNpc = spawnMobile("coruscant", "coruscant_security",60,-5745.9,0,-5020.4,173,0)
-  self:setMoodString(pNpc, "neutral")
   pNpc = spawnMobile("coruscant", "tough_thug_male_rodian", 60, -5770, 0, -5012, 11, 0)
   self:setMoodString(pNpc, "neutral")
   pNpc = spawnMobile("coruscant", "tough_thug_male_rodian", 60, -5716, 0, -5031, -15, 0)
@@ -1148,25 +1097,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   spawnMobile("coruscant", "stormtrooper", 60, -1822, 40, -19, -145, 0)
   spawnMobile("coruscant", "stormtrooper", 60, -1816, 40, -37, -3, 0)
   
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 40, -1827, 40, -41, 40, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 40, -1820, 40, -44, 35, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 40, -1809, 40, -45, 0, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 40, -1834, 40, -30, 71, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 40, -1839, 40, -20, 90, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 40, -1832, 40, -25, 85, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 40, -1831, 40, -35, 62, 0)
   
-  pNpc = spawnMobile("coruscant", "coruscant_rebel_insurgent",60,-1826,40,-56,24,0)
-  self:setMoodString(pNpc, "conversation")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_rebel_insurgent",60,-1833,40,-52,34,0)
-  self:setMoodString(pNpc, "conversation")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_rebel_insurgent",60,-1841,40,-42,42,0)
-  self:setMoodString(pNpc, "conversation")
-  
-  pNpc = spawnMobile("coruscant", "coruscant_rebel_insurgent",60,-1846,40,-29,73,0)
-  self:setMoodString(pNpc, "angry")
   
   spawnMobile("coruscant", "stormtrooper", 60, -1802.3, 40, -138.8, -90, 0)
   spawnMobile("coruscant", "stormtrooper", 60, -1802.3, 40, -233.8, -90, 0)
@@ -1180,8 +1111,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "technician",60,-1803,40,-182,0,0)
   self:setMoodString(pNpc, "conversation")
   
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1813, 40, -220, 136, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1824, 40, -238, 77, 0)
+
   
   spawnMobile("coruscant", "civil_patrol_captain", 60, -1849, 40, -188, 77, 0)
   
@@ -1193,11 +1123,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   spawnMobile("coruscant", "rebel_recruiter", 60, 17.5, -11.5, -21.2, 0, 37000578)
   
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1980, 40, -162, 38, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1984, 40, -158, 38, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1989, 40, -154, 38, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1997, 40, -148, 38, 0)
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1995, 40, -133, 86, 0)
   
   spawnMobile("coruscant", "stormtrooper", 60, -1982, 40, -124, -138, 0)
   spawnMobile("coruscant", "stormtrooper", 60, -1977, 40, -128, -138, 0)
