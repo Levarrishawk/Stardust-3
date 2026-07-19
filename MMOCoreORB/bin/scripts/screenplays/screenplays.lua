@@ -732,3 +732,5 @@ includeFile("events/ServerEventAutomation.lua")
 
 -- Custom content - Loads last to allow for overrides
 includeFile("../custom_scripts/screenplays/screenplays.lua")
+
+includeFile("cities/coruscant_entertainment_district.lua")
