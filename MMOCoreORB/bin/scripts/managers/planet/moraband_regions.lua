@@ -13,10 +13,10 @@
 require("scripts.managers.planet.regions")
 
 moraband_regions = {
-  {"dreshdae_valley", 1060, -5332, {1, 400}, NOSPAWNAREA + NOBUILDZONEAREA},
-  {"valley_of_the_dark_lords", -1346, -830, {1, 1000}, NOBUILDZONEAREA},
-  {"shyrack_cave", 457, -235, {1, 250}, NOBUILDZONEAREA},
-  {"archaeological_outpost", -1712, -679, {1, 200}, NOBUILDZONEAREA + NOSPAWNAREA},
+  {"dreshdae_valley", 1060, -5332, {CIRCLE, 400}, NOSPAWNAREA + NOBUILDZONEAREA},
+  {"valley_of_the_dark_lords", -1346, -830, {CIRCLE, 1000}, NOBUILDZONEAREA},
+  {"shyrack_cave", 457, -235, {CIRCLE, 250}, NOBUILDZONEAREA},
+  {"archaeological_outpost", -1712, -679, {CIRCLE, 200}, NOBUILDZONEAREA + NOSPAWNAREA},
   {"@moraband_region_names:dreshdae_valley", 1081, -5333, {CIRCLE, 500}, CITY + NOSPAWNAREA},
  -- {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"moraband_world", "global_hard"}, 2048}
 }
