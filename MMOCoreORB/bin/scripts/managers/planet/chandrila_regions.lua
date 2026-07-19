@@ -15,7 +15,7 @@ require("scripts.managers.planet.regions")
 chandrila_regions = {
        
   {"@chandrila_region_names:hanna", 294, -2938, {CIRCLE, 800}, CITY + NOSPAWNAREA},
-  {"hanna_nobuild_1", 1151, -1383, {CIRCLE, 1000}, CAMPINGAREA + NOBUILDZONEAREA},               
+  {"hanna_nobuild_1", 294, -2938, {CIRCLE, 1000}, CAMPINGAREA + NOBUILDZONEAREA},               
   {"@corellia_region_names:world_spawner", 0, 0, {RECTANGLE, 0, 0}, WORLDSPAWNAREA + SPAWNAREA, {"corellia_world"}, 2048}
 
 }
