@@ -707,9 +707,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "vendor", 60, -5747.8, 0, -4881.6, -82, 0)
   self:setMoodString(pNpc, "npc_accusing")
   
-  pNpc = spawnMobile("coruscant", "thief", 60, -5750.3, 0, -4880.5, 101, 0)
-  self:setMoodString(pNpc, "conversation")
-  
   pNpc = spawnMobile("coruscant", "vendor", 60, -5750.3, 0, -4896.8, -92, 0)
   self:setMoodString(pNpc, "angry")
   
@@ -1106,13 +1103,10 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   spawnMobile("coruscant", "civil_patrol_captain", 60, -1849, 40, -188, 77, 0)
   
-  spawnMobile("coruscant", "coruscant_rebel_insurgent", 60, -1903, 40, -178, -97, 0)
-  
   spawnMobile("coruscant", "civil_patrol_captain", 60, -1916, 40, -166, 129, 0)
   spawnMobile("coruscant", "civil_patrol_captain", 60, -1919, 40, -189, 53, 0)
   spawnMobile("coruscant", "civil_patrol_captain", 60, -1919, 40, -175, -109, 0)
   
-  spawnMobile("coruscant", "rebel_recruiter", 60, 17.5, -11.5, -21.2, 0, 37000578)
   
   
   spawnMobile("coruscant", "stormtrooper", 60, -1982, 40, -124, -138, 0)
