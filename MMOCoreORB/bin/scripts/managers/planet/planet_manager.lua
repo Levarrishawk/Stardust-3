@@ -602,26 +602,18 @@ alderaan = {
 
   planetTravelPoints = {
    {name = "Aldera City", x = 1131, z = 28, y = -1135, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
-    {name = "Aldera City Shuttleport West", x = 817, z = 28, y = -1455, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
+   {name = "Aldera City Shuttleport West", x = 817, z = 28, y = -1455, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
    {name = "Aldera City Shuttleport East", x = 1305, z = 28, y = -1524, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3}
   },
 
- -- jtlLaunchPoint = {"space_yavin4", -5600, -5200, -5200},
 
   badgeAreas = {
- --   {"badge_temple_exar_kun",5097,5537,0,30,23},
- --   {"badge_temple_woolamander",519,-646,0,30,21},
- --   {"badge_yav_temple_blueleaf",-875,-2047,0,30,22},
   },
 
-  navAreas = {
---    {"dark_jedi_enclave",5080,306,100},   
+  navAreas = {   
   },
 
   planetObjects = {
---    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = -0.705623, oz = 0, ow = 0.708587, x = -6917.18, z = 73, y = -5732.25, parentid = 0},
---    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = 0.723339, oz = 0, ow = -0.690493, x = 4057.69, z = 37, y = -6217.54, parentid = 0},
---    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = 0.00721678, oz = 0, ow = 0.999974, x = -293.367, z = 35, y = 4854.52, parentid = 0}
   }
 }
 
@@ -630,43 +622,16 @@ elysium = {
   gcwEnabled = 0,
 
   planetTravelPoints = {
---   {name = "Aldera City", x = 1151, z = 28, y = -1383, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 0, landingRange = 3},
- --   {name = "Yavin IV Mining Outpost", x = -267.23914, z = 35, y = 4896.3013, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
- --   {name = "Yavin IV Imperial Outpost", x = 4054.1, z = 37, y = -6216.9, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 0, landingRange = 3}
   },
-
- -- jtlLaunchPoint = {"space_yavin4", -5600, -5200, -5200},
 
   badgeAreas = {
- --   {"badge_temple_exar_kun",5097,5537,0,30,23},
- --   {"badge_temple_woolamander",519,-646,0,30,21},
- --   {"badge_yav_temple_blueleaf",-875,-2047,0,30,22},
   },
 
-  navAreas = {
---    {"dark_jedi_enclave",5080,306,100},   
+  navAreas = { 
   },
 
   planetObjects = {
---    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = -0.705623, oz = 0, ow = 0.708587, x = -6917.18, z = 73, y = -5732.25, parentid = 0},
---    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = 0.723339, oz = 0, ow = -0.690493, x = 4057.69, z = 37, y = -6217.54, parentid = 0},
---    {templateFile = "object/tangible/terminal/terminal_character_builder.iff", ox = 0, oy = 0.00721678, oz = 0, ow = 0.999974, x = -293.367, z = 35, y = 4854.52, parentid = 0}
   }
-}
-
-lothal = {
-  weatherEnabled = 0,
-  gcwEnabled = 0,
-  
-  planetTravelPoints = {
-    {name = "Lothal Capital City South", x = -1312, z = 28, y = -3357, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
-    {name = "Lothal Capital City North", x = -1363, z = 28, y = -2919, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
-    },
-    
-    badgeAreas = {   
-      {"lothal_jedi_temple", 122,4158,0,50,156}, 
-       
-  },
 }
 
 hutta = { -- 23
@@ -679,7 +644,7 @@ hutta = { -- 23
     
     badgeAreas = {
       {"hutta_jiguuna",4716,1937,0,15,150},   
-  },
+  }
 }
 
 coruscant = { -- 24
@@ -697,7 +662,7 @@ coruscant = { -- 24
     
     badgeAreas = { 
       {"coruscant_imperial_palace", -120,3311,0,30,146},   
-  },
+  }
 }
 
 moraband = { -- 25
@@ -711,7 +676,7 @@ moraband = { -- 25
     badgeAreas = {   
       {"moraband_valley", -1626,-669,0,20,148}, 
       {"moraband_dreshdae", 1091,-5328,0,90,149}, 
-  },
+  }
 }
 
 chandrila = { -- 21
@@ -731,7 +696,7 @@ chandrila = { -- 21
   
   navAreas = {
    --[[ {"dark_jedi_enclave",5080,306,100},--]]
-  },
+  }
 }
 
 
