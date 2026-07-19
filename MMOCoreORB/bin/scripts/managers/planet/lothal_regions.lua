@@ -10,7 +10,7 @@
 -- That means that it is not possible to have both a spawn area and a no spawn area in the same region, but
 -- a spawn area that is also a no build zone is possible.
 
-require("scripts.managers.spawn_manager.regions")
+require("scripts.managers.planet.regions")
 
 lothal_regions = {  
 --  {"capital_city", -1297, -3146, {1, 500}, NOBUILDZONEAREA + WORLDSPAWNAREA, {"loth_cats"}, 512},

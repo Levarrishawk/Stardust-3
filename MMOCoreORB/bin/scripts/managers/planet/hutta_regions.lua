@@ -10,7 +10,7 @@
 -- That means that it is not possible to have both a spawn area and a no spawn area in the same region, but
 -- a spawn area that is also a no build zone is possible.
 
-require("scripts.managers.spawn_manager.regions")
+require("scripts.managers.planet.regions")
 
 hutta_regions = {
   {"bilbousa_city", -746, 1645, {1, 700}, NOSPAWNAREA + NOBUILDZONEAREA}, 
