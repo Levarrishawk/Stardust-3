@@ -734,3 +734,4 @@ includeFile("events/ServerEventAutomation.lua")
 includeFile("../custom_scripts/screenplays/screenplays.lua")
 
 includeFile("cities/coruscant_entertainment_district.lua")
+includeFile("cities/elysium_spawn.lua")
