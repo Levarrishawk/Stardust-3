@@ -44,17 +44,20 @@ void ShuttleZoneComponent::notifyInsertToZone(SceneObject* sceneObject, Zone* zo
 	if (zoneServer->isServerLoading()) {
 		uint32 startDiff = zone->getZoneServer()->getStartTimestamp()->miliDifference();
 
-		// Shuttles delayed 5 minutes for server start
-		int bootDelay = ConfigManager::instance()->getInt("Core3.ShuttleZoneComponent.BootDelay", 5 * 60 * 1000);
+		int bootDelay = ConfigManager::instance()->getInt("Core3.ShuttleZoneComponent.BootDelay", 2 * 60 * 1000);
 
 		delay = bootDelay - startDiff;
+
+		// Limit shuttle startup delay to 2 minutes maximum
+		if (delay > 120 * 1000)
+			delay = 120 * 1000;
 
 		if (delay <= 0)
 			delay = 500;
 
-#ifdef SHUTTLE_TIMER_DEBUG
-		info(true) << "ScheduleShuttleTask for " << zone->getZoneName() << " scheduled due to server loading: militime since server start - " << startDiff << "  shuttle dealy time - " << delay << " miliseconds.";
-#endif
+	#ifdef SHUTTLE_TIMER_DEBUG
+		info(true) << "ScheduleShuttleTask for " << zone->getZoneName() << " scheduled due to server loading: militime since server start - " << startDiff << " shuttle delay time - " << delay << " milliseconds.";
+	#endif
 	}
 
 	task->schedule(delay);
