@@ -354,7 +354,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   spawnMobile("coruscant", "stormtrooper", 60, -123.8, 40, 3216.3, 58, 0)
   spawnMobile("coruscant", "stormtrooper", 60, -29.3, 40.4, 3190, -75, 0)
   
-  spawnMobile("coruscant", "cll_8", 60, -210.9, 40, 3166.5, -109, 0)
+ 
   
   pNpc = spawnMobile("coruscant", "at_st", 60, -176, 40, 3245, 90, 0)
   self:setMoodString(pNpc, "neutral")
@@ -464,15 +464,8 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   pNpc = spawnMobile("coruscant", "imperial_moff", 60, 1534, 40, 728.6, 180, 0)
   self:setMoodString(pNpc, "conversation")
-  
-  pNpc = spawnMobile("coruscant", "imperial_inquisitor", 60, 1531.5, 40, 730.7, 180, 0)
-  self:setMoodString(pNpc, "angry")
-  
-  pNpc = spawnMobile("coruscant", "imperial_inquisitor", 60, 1536.5, 40, 730.7, 180, 0)
-  self:setMoodString(pNpc, "angry")
-  
-  pNpc = spawnMobile("coruscant", "emperors_hand", 60, 1534, 40, 730.7, 180, 0)
-  self:setMoodString(pNpc, "angry")
+ 
+
   
   
   --  Collective Commerce District NPCs
@@ -934,8 +927,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "valarian_swooper",60,6.5,-0.9,9.9,176,37000970)
   self:setMoodString(pNpc, "neutral")
   
-  pNpc = spawnMobile("coruscant", "rebel_resistance_agitator",60,5.6,-0.9,5.7,-176,37000970)
-  self:setMoodString(pNpc, "neutral")
   pNpc = spawnMobile("coruscant", "civil_patrol_sergeant",60,27.9,0.1,1.3,-179,37000970)
   self:setMoodString(pNpc, "neutral")
   
