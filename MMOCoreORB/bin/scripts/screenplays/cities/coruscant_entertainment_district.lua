@@ -566,141 +566,186 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4821, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4825, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4829, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4833, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4837, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4841, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4845, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4849, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4853, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
    
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4857, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4861, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4865, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4869, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4873, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4877, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4881, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4885, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4889, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4894, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4898, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4902, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4906, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5856, 0, -4910, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
     -- Race Spectators Row 2 Westside
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4823, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4827, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4831, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4835, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4839, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4843, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4847, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4851, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4855, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4859, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
     
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4863, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4867, -90, 0)
   self:setMoodString(pNpc, "entertained")  
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4871, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4875, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4879, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4883, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4887, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4891, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4895, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4899, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4903, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, -5854, 0, -4907, -90, 0)
   self:setMoodString(pNpc, "entertained")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   -- Lower City Market
   
