@@ -89,6 +89,30 @@ function HelperDroid:greetPlayer(pPlayer, pDroid)
 	if (pPlayer == nil or pDroid == nil) then
 		return
 	end
+	
+	 local zone = SceneObject(pPlayer):getZoneName()
+
+  if (zone == "elysium") then
+    self:playDroidSound(pPlayer)
+
+    local playerID = SceneObject(pPlayer):getObjectID()
+    local droidID = SceneObject(pDroid):getObjectID()
+
+    writeData(playerID .. ":HelperDroidID:", droidID)
+
+    local sui = SuiListBox.new("HelperDroid", "elysiumCallback")
+    sui.setTitle(SceneObject(pDroid):getCustomObjectName())
+    sui.setProperty("", "Size", "500,200")
+    sui.setForceCloseDistance(10)
+
+    sui.setPrompt("@new_player:droid_greeting_begin_01 Welcome to the afterlife, you're dead.  How can I help you?")
+
+    sui.add("Elysium Information", "")
+
+    sui.sendTo(pPlayer)
+
+    return
+  end
 
 	self:playDroidSound(pPlayer)
 
@@ -216,4 +240,25 @@ function HelperDroid:playDroidSound(pPlayer)
 	local sound = self.droidSounds[randSound]
 
 	CreatureObject(pPlayer):playMusicMessage(sound)
+end
+
+function HelperDroid:elysiumCallback(pPlayer, pSui, eventIndex, args)
+  if (pPlayer == nil) then
+    return
+  end
+
+  if (eventIndex == 1) then
+    return
+  end
+
+  local playerID = SceneObject(pPlayer):getObjectID()
+  local droidID = readData(playerID .. ":HelperDroidID:")
+  local pDroid = getSceneObject(droidID)
+
+  if (pDroid == nil) then
+    return
+  end
+
+  -- Your Elysium response here
+  spatialChat(pDroid, "You are here because you have died and cloned more than five times.  Complex cloning data loses it's integrity with each subsequent copy made.   On the other hand now you and I have an eternity to explore the Netherworld of the Force together!  Hurrah! ")
 end
