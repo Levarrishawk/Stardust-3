@@ -3847,11 +3847,6 @@ String PlayerObjectImplementation::getPlayedTimeString(bool verbose) const {
 
 void PlayerObjectImplementation::createHelperDroid() {
 
-	bool onElysium = (zone->getZoneName() == "elysium");
-
-	if (!onElysium && (getCharacterAgeInDays() >= 1 || isPrivileged()))
-	    return;
-
 	CreatureObject* player = dynamic_cast<CreatureObject*>(parent.get().get());
 
 	if (player == nullptr)
@@ -3859,7 +3854,15 @@ void PlayerObjectImplementation::createHelperDroid() {
 
 	Zone* zone = player->getZone();
 
-	if (zone == nullptr || zone->getZoneName() == "tutorial")
+	if (zone == nullptr)
+		return;
+
+	bool onElysium = (zone->getZoneName() == "elysium");
+
+	if (!onElysium && (getCharacterAgeInDays() >= 1 || isPrivileged()))
+		return;
+
+	if (zone->getZoneName() == "tutorial")
 		return;
 
 	Reference<Task*> createDroid = new SpawnHelperDroidTask(player);
