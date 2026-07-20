@@ -107,7 +107,7 @@ function HelperDroid:greetPlayer(pPlayer, pDroid)
 
     sui.setPrompt("@new_player:droid_greeting_begin_01 Welcome to the afterlife, would you like to learn more about being dead?")
 
-    sui.add("Elysium Information", "")
+    sui.add("How did I get here?", "")
 
     sui.sendTo(pPlayer)
 
