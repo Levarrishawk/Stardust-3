@@ -3,6 +3,9 @@
 -- npcFunction and convoTemplate are left as "" if unused
 
 villageMobileSpawns = {
+	
+--[[	
+
 	[0] = {
 		{ "paemos", 5289, 78, -4149, 240, "", "" },
 		{ "noldan", 5243, 78, -4224, 0, "", "" },
@@ -220,4 +223,5 @@ villageObjectSpawns = {
 		{ "object/static/structure/tatooine/pillar_pristine_large_style_01.iff", 5354.1, 78.5, -4024.2, -160.8 },
 		{ "object/static/structure/tatooine/pillar_pristine_large_style_01.iff", 5257.25, 78.5, -4241, 9.74 },
 	},
+	--]]
 }
