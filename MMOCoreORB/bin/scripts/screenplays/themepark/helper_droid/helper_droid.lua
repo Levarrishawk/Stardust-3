@@ -105,7 +105,7 @@ function HelperDroid:greetPlayer(pPlayer, pDroid)
     sui.setProperty("", "Size", "500,200")
     sui.setForceCloseDistance(10)
 
-    sui.setPrompt("@new_player:droid_greeting_begin_01 Welcome to the afterlife, you're dead.  How can I help you?")
+    sui.setPrompt("@new_player:droid_greeting_begin_01 Welcome to the afterlife, would you like to learn more about being dead?")
 
     sui.add("Elysium Information", "")
 
