@@ -108,6 +108,7 @@
 #include "server/zone/objects/ship/components/LuaShipComponent.h"
 #include "server/zone/objects/ship/components/ShipComponent.h"
 #include "server/zone/objects/area/space/SpaceActiveArea.h"
+#include "server/zone/objects/area/areashapes/RectangularAreaShape.h"
 #include "server/zone/objects/area/areashapes/SphereAreaShape.h"
 #include "server/zone/packets/ui/CreateClientPathMessage.h"
 #include "server/zone/objects/ship/squadron/ShipSquadronFormation.h"
@@ -464,6 +465,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->registerFunction("deleteStringVectorSharedMemory", deleteStringVectorSharedMemory);
 	luaEngine->registerFunction("spawnSceneObject", spawnSceneObject);
 	luaEngine->registerFunction("spawnActiveArea", spawnActiveArea);
+	luaEngine->registerFunction("spawnRectangularActiveArea", spawnRectangularActiveArea);
 	luaEngine->registerFunction("spawnSpaceActiveArea", spawnSpaceActiveArea);
 	luaEngine->registerFunction("spawnBuilding", spawnBuilding);
 	luaEngine->registerFunction("spawnSecurityPatrol", spawnSecurityPatrol);
@@ -3169,6 +3171,94 @@ int DirectorManager::spawnActiveArea(lua_State* L) {
 
 		area->initializePosition(x, z, y);
 		area->setRadius(radius);
+
+		Reference<SceneObject*> cellParent = nullptr;
+
+		if (cellID != 0) {
+			cellParent = zoneServer->getObject(cellID);
+
+			if (cellParent == nullptr || !cellParent->isCellObject()) {
+				cellID = 0;
+			}
+		}
+
+		area->setCellObjectID(cellID);
+
+		Locker zoneLocker(zone);
+
+		zone->transferObject(area, -1, true);
+
+		area->_setUpdated(true); //mark updated so the GC doesnt delete it while in LUA
+
+		lua_pushlightuserdata(L, area);
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int DirectorManager::spawnRectangularActiveArea(lua_State* L) {
+	int numberOfArguments = lua_gettop(L);
+	if (numberOfArguments != 8) {
+		String err = "incorrect number of arguments passed to DirectorManager::spawnRectangularActiveArea";
+		printTraceError(L, err);
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	uint64 cellID = lua_tointeger(L, -1);
+	float z = lua_tonumber(L, -2);
+	float y2 = lua_tonumber(L, -3);
+	float x2 = lua_tonumber(L, -4);
+	float y1 = lua_tonumber(L, -5);
+	float x1 = lua_tonumber(L, -6);
+	String script = lua_tostring(L, -7);
+	String zoneID = lua_tostring(L, -8);
+
+	ZoneServer* zoneServer = ServerCore::getZoneServer();
+	Zone* zone = zoneServer->getZone(zoneID);
+
+	if (zone == nullptr) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	ManagedReference<SceneObject*> object = zoneServer->createObject(script.hashCode(), 0);
+
+	if (object != nullptr && object->isActiveArea()) {
+		ActiveArea* area = object.castTo<ActiveArea*>();
+
+		if (area == nullptr) {
+			lua_pushnil(L);
+			return 1;
+		}
+
+		if (x1 > x2) {
+			float swap = x1;
+			x1 = x2;
+			x2 = swap;
+		}
+
+		if (y1 > y2) {
+			float swap = y1;
+			y1 = y2;
+			y2 = swap;
+		}
+
+		float centerX = x1 + ((x2 - x1) / 2.f);
+		float centerY = y1 + ((y2 - y1) / 2.f);
+
+		ManagedReference<RectangularAreaShape*> areaShape = new RectangularAreaShape();
+
+		Locker locker(area);
+		Locker shapeLocker(areaShape);
+
+		areaShape->setDimensions(x1, y1, x2, y2);
+		areaShape->setAreaCenter(centerX, centerY);
+
+		area->initializePosition(centerX, z, centerY);
+		area->setAreaShape(areaShape);
 
 		Reference<SceneObject*> cellParent = nullptr;
 

@@ -131,6 +131,7 @@ namespace server {
 		static int spawnShipAgent(lua_State* L);
 		static int spawnSceneObject(lua_State* L);
 		static int spawnActiveArea(lua_State* L);
+		static int spawnRectangularActiveArea(lua_State* L);
 		static int spawnSpaceActiveArea(lua_State* L);
 		static int spawnBuilding(lua_State* L);
 		static int spawnSecurityPatrol(lua_State* L);
