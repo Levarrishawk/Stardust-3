@@ -41,9 +41,8 @@
 --this exception also makes it possible to release a modified version 
 
 
-object_creature_player_ithorian_female = object_creature_player_shared_ithorian_female:new {
-	baseHAM = { 0, 0, 0, 0, 0, 150, 300, 300, 150 },
-
+object_creature_player_chiss_male = object_creature_player_shared_chiss_male:new {
+	baseHAM = { 100, 100, 100, 100, 100, 100, 100, 100, 100 },
 	gameObjectType = 1033,
 
 	groundZoneComponent = "PlayerZoneComponent",
@@ -54,16 +53,17 @@ object_creature_player_ithorian_female = object_creature_player_shared_ithorian_
 	pvpStatusBitmask = PLAYER,
 	templateType = PLAYERCREATURE,
 	childObjects = {
-		{templateFile = "object/player/player.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4},
 		{templateFile = "object/tangible/inventory/character_inventory.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4},
 		{templateFile = "object/tangible/datapad/character_datapad.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4},
+		{templateFile = "object/player/player.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4},
+		{templateFile = "object/tangible/bank/character_bank.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4},
 		{templateFile = "object/tangible/mission_bag/mission_bag.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4},
-		{templateFile = "object/weapon/melee/unarmed/unarmed_default_player.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4},
-		{templateFile = "object/tangible/bank/character_bank.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4}
+		{templateFile = "object/weapon/melee/unarmed/unarmed_default_player.iff", x = 0, z = 0, y = 0, ox = 0, oy = 0, oz = 0, ow = 0, cellid = -1, containmentType = 4}
+		
 	},
 	defaultLanguage = 1,
 	startingItems = { },
-	startingSkills = { "species_ithorian", "social_language_basic_comprehend", "social_language_basic_speak" , "social_language_ithorian_comprehend", "social_language_ithorian_speak" }
+	startingSkills = { "species_chiss", "social_language_basic_comprehend", "social_language_basic_speak" }
 }
 
-ObjectTemplates:addTemplate(object_creature_player_ithorian_female, "object/creature/player/ithorian_female.iff")
+ObjectTemplates:addTemplate(object_creature_player_chiss_male, "object/creature/player/chiss_male.iff")

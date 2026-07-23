@@ -41,9 +41,8 @@
 --this exception also makes it possible to release a modified version 
 
 
-object_creature_player_ithorian_female = object_creature_player_shared_ithorian_female:new {
-	baseHAM = { 0, 0, 0, 0, 0, 150, 300, 300, 150 },
-
+object_creature_player_smc_female = object_creature_player_shared_smc_female:new {
+	baseHAM = { 100, 100, 100, 100, 100, 100, 100, 100, 100 },
 	gameObjectType = 1033,
 
 	groundZoneComponent = "PlayerZoneComponent",
@@ -63,7 +62,7 @@ object_creature_player_ithorian_female = object_creature_player_shared_ithorian_
 	},
 	defaultLanguage = 1,
 	startingItems = { },
-	startingSkills = { "species_ithorian", "social_language_basic_comprehend", "social_language_basic_speak" , "social_language_ithorian_comprehend", "social_language_ithorian_speak" }
+	startingSkills = { "species_smc", "social_language_basic_comprehend", "social_language_basic_speak" }
 }
 
-ObjectTemplates:addTemplate(object_creature_player_ithorian_female, "object/creature/player/ithorian_female.iff")
+ObjectTemplates:addTemplate(object_creature_player_smc_female, "object/creature/player/smc_female.iff")
