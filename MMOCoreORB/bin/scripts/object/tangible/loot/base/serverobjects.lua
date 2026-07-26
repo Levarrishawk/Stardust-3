@@ -44,4 +44,4 @@
 
 --Children folder includes
 
---includeFile("tangible/loot/base/loot_base.lua")
+includeFile("tangible/loot/base/loot_base.lua")
