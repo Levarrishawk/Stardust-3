@@ -43,7 +43,7 @@ includeFile("themepark/helper_droid/helper_droid_quest.lua")
 includeFile("themepark/imperial/themeParkImperial.lua")
 includeFile("themepark/imperial/emperors_retreat.lua")
 includeFile("themepark/nym/themeParkNym.lua")
-includeFile("themepark/rebel/themeParkRebel.lua")
+--includeFile("themepark/rebel/themeParkRebel.lua")
 includeFile("themepark/jabba/themeParkJabba.lua")
 includeFile("themepark/valarian/themeParkValarian.lua")
 includeFile("themepark/marauder/themeParkMarauderCharal.lua")
@@ -161,6 +161,8 @@ includeFile("dungeon/corellian_corvette/ticket_takers/lt_lance.lua")
 
 
 -- Village
+
+--[[
 includeFile("village/village_community_crafting.lua")
 includeFile("village/village_gm_sui.lua")
 includeFile("village/village_jedi_manager_common.lua")
@@ -245,6 +247,8 @@ includeFile("village/convos/phase4/chief_engineer_phase4_conv_handler.lua")
 includeFile("village/convos/phase4/med_droid_phase4_conv_handler.lua")
 includeFile("village/convos/phase4/sarguillo_phase4_conv_handler.lua")
 includeFile("village/convos/phase4/sivarra_phase4_conv_handler.lua")
+--]]
+
 
 -- Jedi Trials
 includeFile("jedi/trialData.lua")
@@ -625,7 +629,7 @@ includeFile("cities/yavin4_mining_outpost.lua")
 
 -- POIs
 includeFile("poi/corellia_rogue_corsec_base.lua")
-includeFile("poi/corellia_rebel_hideout.lua")
+--includeFile("poi/corellia_rebel_hideout.lua")
 includeFile("poi/corellia_stronghold.lua")
 includeFile("poi/dantooine_abandoned_rebel_base.lua")
 includeFile("poi/dantooine_dantari_village.lua")
@@ -662,7 +666,7 @@ includeFile("poi/rori_gungans_swamp_town.lua")
 includeFile("poi/rori_hyperdrive_research_facility.lua")
 includeFile("poi/rori_imperial_encampment.lua")
 includeFile("poi/rori_poacher_vs_creature_battle.lua")
-includeFile("poi/rori_rebel_military_base.lua")
+--includeFile("poi/rori_rebel_military_base.lua")
 includeFile("poi/talus_corsec_vs_flail_battle.lua")
 includeFile("poi/talus_lost_village_of_durbin.lua")
 includeFile("poi/talus_imperial_vs_rebel_battle.lua")
