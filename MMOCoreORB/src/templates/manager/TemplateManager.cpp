@@ -930,7 +930,7 @@ AppearanceTemplate* TemplateManager::instantiateAppearanceTemplate(IffStream* if
 			break;
 		}
 		default:
-			error() << "unknown appearance type " << (char)((formType >> 24) & 0xFF) << (char)((formType >> 16) & 0xFF) << (char)((formType >> 8) & 0xFF) << (char)(formType & 0xFF);
+			error() << "unknown appearance type " << (char)((formType >> 24) & 0xFF) << (char)((formType >> 16) & 0xFF) << (char)((formType >> 8) & 0xFF) << (char)(formType & 0xFF) << " in " << iffStream->getFileName();
 			break;
 		}
 
