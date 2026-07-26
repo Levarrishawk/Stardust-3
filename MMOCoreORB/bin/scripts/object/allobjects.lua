@@ -1072,3 +1072,6 @@ includeFile("custom_content/tangible/holiday/love_day/rewards_10/objects.lua")
 includeFile("custom_content/tangible/holiday/love_day/rewards_11/objects.lua")
 
 -- SD 2 Custom Inserts Below Here
+
+includeFile("custom_content/draft_schematic/objects.lua")
+includeFile("custom_content/draft_schematic/city/objects.lua")

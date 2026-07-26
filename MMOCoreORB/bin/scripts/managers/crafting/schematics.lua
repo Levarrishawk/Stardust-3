@@ -1824,4 +1824,52 @@ schematics = {
 	{path="object/draft_schematic/item/theme_park/alderaan/act2/dead_eye_decoder.iff"},
 	{path="object/draft_schematic/item/theme_park/alderaan/act3/dead_eye_prototype.iff"},
 	{path="object/draft_schematic/item/quest_item/fs_medic_puzzle_heal_pack.iff"},
+	
+	  -- NGE Houses
+--  {path="object/draft_schematic/structure/atat_house_schem.iff"},
+ -- {path="object/draft_schematic/structure/bespin_house_schem.iff"},
+--  {path="object/draft_schematic/structure/commando_house_schem.iff"},
+--  {path="object/draft_schematic/structure/emperors_house_schem.iff"},
+  {path="object/draft_schematic/structure/gen_lg_win_01_schem.iff"},
+  {path="object/draft_schematic/structure/gen_lg_win_02_schem.iff"},
+  {path="object/draft_schematic/structure/gen_md_win_01_schem.iff"},
+  {path="object/draft_schematic/structure/gen_md_win_02_schem.iff"},
+  {path="object/draft_schematic/structure/gen_sm_win_01_schem.iff"},
+  {path="object/draft_schematic/structure/gen_sm_win_02_schem.iff"},
+ -- {path="object/draft_schematic/structure/nab_sm_win_01_schem.iff"},
+ -- {path="object/draft_schematic/structure/tat_sm_win_01_schem.iff"},
+  {path="object/draft_schematic/structure/hangar_house_schem.iff"},
+--  {path="object/draft_schematic/structure/jabbas_house_schem.iff"},
+  {path="object/draft_schematic/structure/jedi_house_schem.iff"},
+  {path="object/draft_schematic/structure/musty_house_schem.iff"},
+  {path="object/draft_schematic/structure/rebel_house_schem.iff"},
+  {path="object/draft_schematic/structure/relaxation_house_schem.iff"},
+--  {path="object/draft_schematic/structure/sandcrawler_house_schem.iff"},
+  {path="object/draft_schematic/structure/sith_house_schem.iff"},
+--  {path="object/draft_schematic/structure/tree_house_schem.iff"},
+  {path="object/draft_schematic/structure/vehicle_house_schem.iff"},
+--  {path="object/draft_schematic/structure/yoda_house_schem.iff"},
+--  {path="object/draft_schematic/structure/yt1300_house_schem.iff"},
+--  {path="object/draft_schematic/structure/vipbunker_house_schem.iff"},
+
+ ------------------------------------------------------------------
+  
+  -- New Furniture Schematics
+  ------------------------------------------------------------------
+  -- Jedi Furniture
+ 
+  {path="object/draft_schematic/furniture/furniture_chair_jedi_dark_s01.iff"},
+  {path="object/draft_schematic/furniture/furniture_chair_jedi_dark_s02.iff"},
+  {path="object/draft_schematic/furniture/furniture_chair_jedi_dark_throne.iff"},
+  {path="object/draft_schematic/furniture/furniture_chair_jedi_light_s01.iff"},
+  {path="object/draft_schematic/furniture/furniture_chair_jedi_light_s02.iff"},
+  {path="object/draft_schematic/furniture/furniture_chair_jedi_light_throne.iff"},
+  {path="object/draft_schematic/furniture/furniture_jedi_banner.iff"},
+  {path="object/draft_schematic/furniture/furniture_sith_banner.iff"}, 
+  {path="object/draft_schematic/furniture/furniture_table_jedi_light_s01.iff"},
+  {path="object/draft_schematic/furniture/furniture_table_jedi_light_s02.iff"},
+  {path="object/draft_schematic/furniture/furniture_table_jedi_dark_s01.iff"},
+  {path="object/draft_schematic/furniture/furniture_table_jedi_dark_s02.iff"},
+
+
 };
