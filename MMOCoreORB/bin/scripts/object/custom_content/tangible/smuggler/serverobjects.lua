@@ -1,4 +1,4 @@
-includeFile("custom_content/tangible/smuggler/contraband/serverobjects.lua")
+--includeFile("custom_content/tangible/smuggler/contraband/serverobjects.lua")
 
 -- Server Objects
 includeFile("custom_content/tangible/smuggler/delicate_trigger_assembly.lua")

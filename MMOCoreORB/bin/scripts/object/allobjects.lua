@@ -1054,8 +1054,8 @@ includeFile("custom_content/tangible/tcg/series7/objects.lua")
 includeFile("custom_content/tangible/tcg/series7/garage_display_vehicles/objects.lua")
 includeFile("custom_content/tangible/tcg/series8/objects.lua")
 
-includeFile("custom_content/tangible/smuggler/objects.lua")
-includeFile("custom_content/tangible/smuggler/contraband/objects.lua")
+--includeFile("custom_content/tangible/smuggler/objects.lua")
+--includeFile("custom_content/tangible/smuggler/contraband/objects.lua")
 
 includeFile("custom_content/tangible/door/objects.lua")
 
