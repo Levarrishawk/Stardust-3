@@ -844,6 +844,8 @@ void PlayerCreationManager::addHair(CreatureObject* creature,
 		error(
 				"hair " + hairTemplate
 						+ " is not compatible with this creature player "
+						+ " expects " + hairAssetData->getServerPlayerTemplate()
+						+ " but creature uses "
 						+ creature->getObjectTemplate()->getFullTemplateString());
 		return;
 	}
