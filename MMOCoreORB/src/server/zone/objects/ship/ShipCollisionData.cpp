@@ -23,7 +23,12 @@ void ShipCollisionData::setCollisionData(SharedShipObjectTemplate* templateData)
 	appearance = templateData->getAppearanceTemplate();
 
 	if (appearance == nullptr || templateData->getAppearanceFilename() == "") {
-		auto portalLayout = templateData->getPortalLayout();
+		const String& portalLayoutPath = templateData->getPortalLayoutFilename();
+		const PortalLayout* portalLayout = nullptr;
+
+		if (portalLayoutPath != "" && DataArchiveStore::instance()->fileExists(portalLayoutPath)) {
+			portalLayout = templateData->getPortalLayout();
+		}
 
 		if (portalLayout != nullptr && portalLayout->getAppearanceTemplatesSize() > 0) {
 			appearance = portalLayout->getAppearanceTemplate(0);
@@ -59,7 +64,13 @@ void ShipCollisionData::setClientData(SharedShipObjectTemplate* shipTemplate) {
 		return;
 	}
 
-	IffStream* iffStream = DataArchiveStore::instance()->openIffFile(clientDataPath.toLowerCase());
+	clientDataPath = clientDataPath.toLowerCase();
+
+	if (!DataArchiveStore::instance()->fileExists(clientDataPath)) {
+		return;
+	}
+
+	IffStream* iffStream = DataArchiveStore::instance()->openIffFile(clientDataPath);
 
 	if (iffStream == nullptr || iffStream->getNextFormType() != 'CLDF') {
 		return;
