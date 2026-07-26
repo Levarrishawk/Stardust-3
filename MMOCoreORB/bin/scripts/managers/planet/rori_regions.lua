@@ -86,7 +86,7 @@ rori_regions = {
 	-- Cities
 	{"@rori_region_names:narmle", -5200, -2288, {CIRCLE, 392}, CITY + NOSPAWNAREA},
 	{"narmle_nobuild_1", -5200, -2288, {CIRCLE, 800}, CAMPINGAREA + NOBUILDZONEAREA},
-	{"@rori_region_names:sdungeon_rebel_outpost", 3677, -6447, {CIRCLE, 150}, CITY + NOSPAWNAREA + NOBUILDZONEAREA},
+	--{"@rori_region_names:sdungeon_rebel_outpost", 3677, -6447, {CIRCLE, 150}, CITY + NOSPAWNAREA + NOBUILDZONEAREA},
 	--{"sdungeon_rebel_outpost", 3677, -6447, {CIRCLE, 150}, NOSPAWNAREA + NOBUILDZONEAREA},
 	{"@rori_region_names:restuss", 5318, 5680, {CIRCLE, 700}, CITY + NOSPAWNAREA},
 	{"restuss_nobuild_1", 5318, 5680, {CIRCLE, 800}, CAMPINGAREA + NOBUILDZONEAREA},
