@@ -922,6 +922,8 @@ AppearanceTemplate* TemplateManager::instantiateAppearanceTemplate(IffStream* if
 			break;
 		case 'LSAT':
 			break;
+		case 'SPRT':
+			break;
 		case 'APT ': {
 			AppearanceRedirect redirect;
 			redirect.readObject(iffStream);
