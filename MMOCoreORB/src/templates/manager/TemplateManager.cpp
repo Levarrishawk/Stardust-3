@@ -295,9 +295,14 @@ void TemplateManager::loadAssetCustomizationManager() {
 }
 
 Reference<SlotDescriptor*> TemplateManager::getSlotDescriptor(const String& filename) {
+	String descriptorFile = filename;
+
+	if (descriptorFile == "abstract/slot/descriptor/shipcontrol_pob.iff")
+		descriptorFile = "abstract/slot/descriptor/ship_pilot_station.iff";
+
 	//If the slot descriptor doesn't already exist, attempt to load it.
-	if (!slotDescriptors.contains(filename)) {
-		IffStream* iffStream = openIffFile(filename);
+	if (!slotDescriptors.contains(descriptorFile)) {
+		IffStream* iffStream = openIffFile(descriptorFile);
 
 		if (iffStream == nullptr)
 			return nullptr; //Descriptor does not exist.
@@ -305,12 +310,12 @@ Reference<SlotDescriptor*> TemplateManager::getSlotDescriptor(const String& file
 		Reference<SlotDescriptor*> slotDesc = new SlotDescriptor();
 		slotDesc->readObject(iffStream);
 
-		slotDescriptors.put(filename, slotDesc);
+		slotDescriptors.put(descriptorFile, slotDesc);
 
 		delete iffStream;
 	}
 
-	return slotDescriptors.get(filename);
+	return slotDescriptors.get(descriptorFile);
 }
 
 PaletteTemplate* TemplateManager::getPaletteTemplate(const String& fileName) {
