@@ -98,6 +98,7 @@ protected:
 	int type;
 
 	VectorMap<String, ComponentSlotData*> componentMap;
+	void loadComponentHardpoints();
 public:
 	ShipChassisData(DataTableRow *row, Vector<String>& columnNames);
 

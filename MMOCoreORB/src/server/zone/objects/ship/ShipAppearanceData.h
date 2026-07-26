@@ -24,7 +24,13 @@ public:
 	}
 
 	void readChassisIff() {
-		IffStream* iffStream = DataArchiveStore::instance()->openIffFile("datatables/space/ship_chassis_" + dataName + ".iff");
+		String fileName = "datatables/space/ship_chassis_" + dataName + ".iff";
+
+		if (!DataArchiveStore::instance()->fileExists(fileName)) {
+			return;
+		}
+
+		IffStream* iffStream = DataArchiveStore::instance()->openIffFile(fileName);
 		if (iffStream == nullptr) {
 			return;
 		}

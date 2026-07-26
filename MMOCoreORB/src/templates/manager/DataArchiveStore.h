@@ -26,6 +26,7 @@ public:
 	~DataArchiveStore();
 
 	byte* getData(const String& path, int& size) const;
+	bool fileExists(const String& path) const;
 
 	int loadTres(const String& path, const Vector<String>& treFilesToLoad);
 

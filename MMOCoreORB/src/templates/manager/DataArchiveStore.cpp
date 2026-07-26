@@ -53,6 +53,29 @@ byte* DataArchiveStore::getData(const String& path, int& size) const {
 	return data;
 }
 
+bool DataArchiveStore::fileExists(const String& path) const {
+	File file(path);
+
+	if (file.exists())
+		return true;
+
+	ReadLocker locker(this);
+
+	if (treeDirectory == nullptr)
+		return false;
+
+	int pos = path.lastIndexOf("/");
+
+	if (pos == -1)
+		return false;
+
+	String directory = path.subString(0, pos);
+	String fileName = path.subString(pos + 1, path.length());
+	const TreeDirectory* treeDir = treeDirectory->getDirectory(directory);
+
+	return treeDir != nullptr && treeDir->find(fileName) != -1;
+}
+
 int DataArchiveStore::loadTres(const String& path, const Vector<String>& treFilesToLoad) {
 	Locker locker(this);
 
