@@ -1,3 +1,5 @@
+
+--[[
 includeFile("custom_content/tangible/loot/beast/beast_steroid_bat_bull.lua")
 includeFile("custom_content/tangible/loot/beast/beast_steroid_bat_bull_mk2.lua")
 includeFile("custom_content/tangible/loot/beast/beast_steroid_cat_rabbit.lua")
@@ -35,3 +37,5 @@ includeFile("custom_content/tangible/loot/beast/enzyme_3_element_2.lua")
 includeFile("custom_content/tangible/loot/beast/enzyme_3_element_3.lua")
 includeFile("custom_content/tangible/loot/beast/enzyme_3_element_4.lua")
 includeFile("custom_content/tangible/loot/beast/enzyme_3_element_5.lua")
+
+--]]
