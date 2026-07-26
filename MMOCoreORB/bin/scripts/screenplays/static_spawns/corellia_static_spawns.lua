@@ -78,6 +78,8 @@ function CorelliaStaticSpawnsScreenPlay:spawnMobiles()
 	pNpc = spawnMobile("corellia", "contractor", 60,618.957,26.2465,-433.424,130,0)
 	self:setMoodString(pNpc, "angry")
 
+
+--[[
 	--Rebels vs Imps (4112 -1252) Smoking small Rebel base
 	spawnMobile("corellia", "rebel_army_captain", 360,5.2,0.1,-3.6,-93,6036092)
 	spawnMobile("corellia", "rebel_medic", 360,-4.4,0.1,-1.2,-11,6036093)
@@ -93,6 +95,8 @@ function CorelliaStaticSpawnsScreenPlay:spawnMobiles()
 	spawnMobile("corellia", "imperial_trooper", 360, 4132.13,24,-1269.63,-75,0)
 	spawnMobile("corellia", "imperial_trooper", 360, 4075.41,26.4493,-1269.93,90,0)
 	spawnMobile("corellia", "imperial_trooper", 360, 4066.41,35.4493,-1268.93,90,0)
+--]]
+
 
 	--Imperial Detachment HQ (-2975 2908) Outside Kor Vella, populated in city kor_vella screenplay
 

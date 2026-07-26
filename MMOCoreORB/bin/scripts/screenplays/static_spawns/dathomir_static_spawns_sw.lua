@@ -39,10 +39,10 @@ end
 function DathomirStaticSpawnsSwScreenPlay:spawnMobiles()
 
 	--destroyed imperial camp (-6467,-6722)
-	local pNpc = spawnMobile("dathomir", "specforce_marine", 300, -6455.5, 555.1, -6743.6, -33, 0)
-	self:setMoodString(pNpc, "neutral")
-	spawnMobile("dathomir", "specforce_marine", 300, -6471.7, 553.5, -6741.9, 0, 0)
-	spawnMobile("dathomir", "specforce_marine", 300, -6476.2, 546.3, -6733.3, 33, 0)
+	-- local pNpc = spawnMobile("dathomir", "specforce_marine", 300, -6455.5, 555.1, -6743.6, -33, 0)
+	-- self:setMoodString(pNpc, "neutral")
+	--spawnMobile("dathomir", "specforce_marine", 300, -6471.7, 553.5, -6741.9, 0, 0)
+	--spawnMobile("dathomir", "specforce_marine", 300, -6476.2, 546.3, -6733.3, 33, 0)
 
 	--lookout station (-4573,-6556)
 	spawnMobile("dathomir", "singing_mountain_clan_sentry", 360, -4573.5, 34.7, -6556.4, 138, 0)

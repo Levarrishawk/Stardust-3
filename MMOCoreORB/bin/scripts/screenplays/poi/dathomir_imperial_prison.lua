@@ -210,7 +210,7 @@ function ImperialPrisonScreenPlay:spawnMobiles()
 	spawnMobile("dathomir", "stormtrooper", 300, -6267.7, 119.9, 938.8, -100, 0)
 	spawnMobile("dathomir", "dathomir_prisoner", 300, -6272.7, 119.9, 938.0, -100, 0)
 	spawnMobile("dathomir", "force_sensitive_renegade", 600, -6277.7, 119.9, 937.2, -100, 0)
-	spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, -6282.7, 119.9, 936.4, -100, 0)
+	-- spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, -6282.7, 119.9, 936.4, -100, 0)
 	spawnMobile("dathomir", "dark_trooper", 300, -6287.7, 119.9, 935.6, -100, 0)
 	spawnMobile("dathomir", "dark_trooper", 300, -6292.7, 119.9, 934.8, -100, 0)
 
@@ -260,9 +260,9 @@ function ImperialPrisonScreenPlay:spawnMobiles()
 	spawnMobile("dathomir", "dathomir_prisoner", 300, -4.2, 0.1, -3.6, -66, 5335791)
 	spawnMobile("dathomir", "dathomir_prisoner", 300, -4.5, 0.1, -4.8, 96, 5335791)
 
-	spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, 4.5, 0.1, -2.2, 0, 5335783)
-	spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, 4.5, 0.1, -3.6, 90, 5335783)
-	spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, 3.0, 0.1, -5.6, -60, 5335783)
+	-- spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, 4.5, 0.1, -2.2, 0, 5335783)
+	-- spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, 4.5, 0.1, -3.6, 90, 5335783)
+	-- spawnMobile("dathomir", "imprisoned_rebel_soldier", 300, 3.0, 0.1, -5.6, -60, 5335783)
 
 	spawnMobile("dathomir", "imprisoned_jabba_employee", 300, 4.5, 0.1, -2.2, 40, 5335804)
 	spawnMobile("dathomir", "tough_dathomir_prisoner", 300, 4.5, 0.1, -3.6, 180, 5335804)
@@ -298,7 +298,7 @@ function ImperialPrisonScreenPlay:spawnMobiles()
 
 	spawnMobile("dathomir", "stormtrooper_colonel", 300, -18.0, 1.0, 19.9, 90, 2665367)
 
-	spawnMobile("dathomir", "imprisoned_rebel_soldier", 600, 11.2, 1.0, -19.5, -147, 2665369)
+	-- spawnMobile("dathomir", "imprisoned_rebel_soldier", 600, 11.2, 1.0, -19.5, -147, 2665369)
 	spawnMobile("dathomir", "dark_trooper", 300, 14.1, 1.0, -18.0, -90, 2665369)
 
 	spawnMobile("dathomir", "imprisoned_jabba_employee", 300, 0, 1.0, -18.4, 0, 2665370)

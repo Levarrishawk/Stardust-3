@@ -76,6 +76,8 @@ function TalusStaticSpawnsSouthScreenPlay:spawnMobiles()
 	spawnMobile("talus", "selonian_warrior", 300, 158.2, 30.4, -5585.9, 90, 0)
 	spawnMobile("talus", "selonian_assassin", 300, 157.5, 30.6, -5576.4, -90, 0)
 
+
+--[[
 	--Rebel Installation (2378,-4984)
 	spawnMobile("talus", "rebel_army_captain", 360, -4.4, 0.1, -3.5, 90, 9645417)
 	spawnMobile("talus", "rebel_medic", 360, 3.7, 0.1, -3.7, -90, 9645416)
@@ -85,10 +87,13 @@ function TalusStaticSpawnsSouthScreenPlay:spawnMobiles()
 	spawnMobile("talus", "rebel_trooper", 360, 2384.6, 125.3, -4989.8, 180, 0)
 	spawnMobile("talus", "rebel_trooper", 360, 2372.8, 125.7, -4989.8, 180, 0)
 	spawnMobile("talus", "rebel_trooper", 360, 2353.9, 125.4, -5004.1, -90, 0)
+--]]
 
 	--Tie Debris (4850,-4720)
 	spawnMobile("talus", "foaming_vynock", 360, 4850.2, 93.8, -4727.0, -16, 0)
 
+
+--[[
 	--Rebel Camp (3100,-4044)
 	spawnMobile("talus", "rebel_trooper", 360, 3106.9, 65.8, -4057.9, 180, 0)
 	spawnMobile("talus", "rebel_trooper", 360, 3102.9, 65.8, -4057.9, 180, 0)
@@ -98,6 +103,10 @@ function TalusStaticSpawnsSouthScreenPlay:spawnMobiles()
 	spawnMobile("talus", "rebel_trooper", 360, 3097.3, 65.9, -4013.7, 0, 0)
 	spawnMobile("talus", "specforce_technician", 360, 3107.4, 65.8, -4034.0, -135, 0)
 	spawnMobile("talus", "specforce_technician", 360, 3100.7, 65.8, -4048.9, 0, 0)
+	
+	--]]
+	
+	
 	--Debris (-1011,-5092)
 	--Supply Drop (-3363,-3813)
 	pNpc = spawnMobile("talus", "binayre_smuggler", 360, -3364.0, 32.2, -3812.9, 90, 0)
@@ -117,8 +126,8 @@ function TalusStaticSpawnsSouthScreenPlay:spawnMobiles()
 	self:setMoodString(pNpc, "npc_use_terminal_high")
 
 	--Campsite (-2716,-2265)
-	spawnMobile("talus", "rebel_commando", 360, -2713.4, 32.9, -2263.3, 60, 0)
-	spawnMobile("talus", "rebel_commando", 360, -2716.2, 32.6, -2273.2, -130, 0)
+	-- spawnMobile("talus", "rebel_commando", 360, -2713.4, 32.9, -2263.3, 60, 0)
+	-- spawnMobile("talus", "rebel_commando", 360, -2716.2, 32.6, -2273.2, -130, 0)
 
 	--Broken AT-AT (-2434,-2218)
 	spawnMobile("talus", "frenzied_fynock_guardian", 300, -2446.4, 35.2, -2206.6, 145, 0)

@@ -19,15 +19,18 @@ Yavin4StaticSpawnsScreenPlay = ScreenPlay:new {
 		{"crazed_geonosian_guard",300,-6302.1,24.9,-1504.2,-90,0},
 		{"crazed_geonosian_guard",300,-6296.0,25.3,-1504.2,90,0},
 
+--[[
 		-- Captain Eso & Yith Seenath's base of operations (1591, 1536)
 		{"rebel_commando", 360, 1595.0, 102.5, 1531.9, -40, 0},
 		{"rebel_commando", 360, 1595.0, 102.5, 1530.4, -30, 0},
 		{"rebel_commando", 360, 1597.8, 102.9, 1530.3, -37, 0},
 		{"rebel_commando", 360, 1595.3, 102.7, 1527.8, -26, 0},
-
+--]]
+--[[
 		-- Imp base camp outside Massassi Temple POI
 		{"stormtrooper", 360, -3196.7, 69.6, -3139.5, -100, 0},
 		{"stormtrooper", 360, -3195.8, 69.8, -3130.7, -104, 0}
+		--]]
 	}
 }
 
