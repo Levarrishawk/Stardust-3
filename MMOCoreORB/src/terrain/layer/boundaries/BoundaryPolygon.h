@@ -279,6 +279,9 @@ public:
 		iffStream->openForm(version);
 
 		switch (version) {
+		case '0007':
+			parseFromIffStream(iffStream, Version<'0007'>());
+			break;
 		case '0005':
 			parseFromIffStream(iffStream, Version<'0005'>());
 			break;
@@ -291,6 +294,14 @@ public:
 	}
 
 	void parseFromIffStream(engine::util::IffStream* iffStream, Version<'0005'>) {
+		parseFromIffStream(iffStream, false);
+	}
+
+	void parseFromIffStream(engine::util::IffStream* iffStream, Version<'0007'>) {
+		parseFromIffStream(iffStream, true);
+	}
+
+	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasTrailingField) {
 		informationHeader.readObject(iffStream);
 
 		iffStream->openChunk('DATA');
@@ -311,6 +322,9 @@ public:
 		localWaterTableHeight = iffStream->getFloat(); // water height
 		shaderSize = iffStream->getFloat();
 		iffStream->getString(shaderName);
+
+		if (hasTrailingField)
+			iffStream->getInt();
 
 		iffStream->closeChunk('DATA');
 
