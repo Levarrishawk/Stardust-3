@@ -22,7 +22,7 @@ coruscant_regions = {
 	{"@coruscant_region_names:entertainment_district", 2248, -4462, {CIRCLE, 300}, CITY + NOSPAWNAREA},
 	{"@coruscant_region_names:monument_square", 1566, 662, {CIRCLE, 300}, CITY + NOSPAWNAREA},
 	{"@coruscant_region_names:coco_district", -1918, -134, {CIRCLE, 300}, CITY + NOSPAWNAREA},
-	{"@coruscant_region_names:palace_district", -472, 6679, {CIRCLE, 300}, CITY + NOSPAWNAREA},
+	{"@coruscant_region_names:palace_district", -120, 5460, {CIRCLE, 400}, CITY + NOSPAWNAREA},
 	{"@coruscant_region_names:lower_city_1312", -5766, -4889, {CIRCLE, 300}, CITY + NOSPAWNAREA},
 
 	
