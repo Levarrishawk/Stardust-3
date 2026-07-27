@@ -1231,46 +1231,46 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   -- ISB Quarter
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -108, 40, 5520, 177, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -134, 40, 5520, 177, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -126, 40, 5461, 0, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -111, 40, 5461, 0, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -117, 40, 5447, 0, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -123, 40, 5447, 0, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -95, 40, 5549, 177, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -85, 40, 5549, 177, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   
   
   -- Prison Quarter
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -93, 40, 5605, 90, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -86, 40, 5605, -90, 0)
   self:setMoodString(pNpc, "neutral")
-  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   -- Palace / Jedi Temple Quarter
   
   
