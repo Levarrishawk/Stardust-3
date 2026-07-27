@@ -6,4 +6,4 @@ For right now, Stardust is a fork of SWGEmu Core3, Split from the main branch as
 
 Stay tuned.
 
-I'm working on it. 
+I'm working on it.
