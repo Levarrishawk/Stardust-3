@@ -1261,6 +1261,10 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, -82.7, 44, 5544.9, -92, 0)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
   
   
   -- Prison Quarter
@@ -1268,9 +1272,30 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
-  pNpc = spawnMobile("coruscant", "stormtrooper", 60, -86, 40, 5605, -90, 0)
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, -87, 40, 5605, -90, 0)
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, -1.2, 2.0, 4.7, 0, 37002228)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, 1.1, 2.0, 4.8, 0, 37002228)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "imperial_major", 60, 0.1, 2.0, 4.6, 0, 37002228)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, -112.1, 47, 5607.1, -137, 0)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, -68.3, 47, 5607.1, 126, 0)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
   -- Palace / Jedi Temple Quarter
   
   
