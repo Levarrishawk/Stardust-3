@@ -11,7 +11,7 @@
 #include "server/zone/packets/object/ObjectMenuResponse.h"
 
 void GuildManagementDeviceImplementation::fillObjectMenuResponse(ObjectMenuResponse* menuResponse, CreatureObject* player) {
-	if (player == nullptr || getRootParent() != player)
+	if (player == nullptr || !isASubChildOf(player))
 		return;
 
 	ManagedReference<PlayerObject*> playerGhost = player->getPlayerObject().get();
@@ -72,7 +72,7 @@ void GuildManagementDeviceImplementation::fillObjectMenuResponse(ObjectMenuRespo
 int GuildManagementDeviceImplementation::handleObjectMenuSelect(CreatureObject* player, byte selectedID) {
 	Locker _lock(_this.getReferenceUnsafeStaticCast());
 
-	if (player == nullptr || getRootParent() != player)
+	if (player == nullptr || !isASubChildOf(player))
 		return 1;
 
 	ManagedReference<GuildManager*> guildManager = getZoneServer()->getGuildManager();
