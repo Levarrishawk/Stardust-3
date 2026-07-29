@@ -2568,6 +2568,28 @@ void PlayerObjectImplementation::setLinkDead(bool isSafeLogout) {
 		logoutTimeStamp.addMiliTime(ConfigManager::instance()->getInt("Core3.PlayerObject.LinkDeadDelay", 3 * 60) * 1000); // 3 minutes if unsafe
 	}
 
+	if (!isSafeLogout && ConfigManager::instance()->getPvpMode()) {
+		const String protectionCooldown = "pvp_linkdead_attack_grace";
+		ManagedReference<CreatureObject*> strongCreature = creature;
+
+		creature->addCooldown(protectionCooldown, 30000);
+
+		Core::getTaskManager()->scheduleTask([strongCreature, protectionCooldown] {
+			if (strongCreature == nullptr)
+				return;
+
+			Locker creatureLocker(strongCreature);
+			PlayerObject* ghost = strongCreature->getPlayerObject();
+
+			if (ghost == nullptr || !ghost->isLinkDead() ||
+					!strongCreature->checkCooldownRecovery(protectionCooldown))
+				return;
+
+			strongCreature->dropFromDefenderLists();
+			strongCreature->broadcastPvpStatusBitmask();
+		}, "PvpLinkDeadProtectionTask", 30000);
+	}
+
 	setPlayerBit(PlayerBitmasks::LD, true);
 
 	activateRecovery();

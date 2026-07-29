@@ -3473,6 +3473,11 @@ bool CreatureObjectImplementation::isAggressiveTo(TangibleObject* target) {
 		}
 
 		if (tarCreo->isPlayerCreature()) {
+			PlayerObject* tarGhost = tarCreo->getPlayerObject();
+
+			if (tarGhost == nullptr)
+				return false;
+
 			if (ConfigManager::instance()->getPvpMode()) {
 				if (getGroupID() != 0 && getGroupID() == tarCreo->getGroupID())
 					return false;
@@ -3480,13 +3485,15 @@ bool CreatureObjectImplementation::isAggressiveTo(TangibleObject* target) {
 				if (getGuildID() != 0 && getGuildID() == tarCreo->getGuildID())
 					return false;
 
+				if (tarGhost->isLinkDead() &&
+						tarCreo->checkCooldownRecovery("pvp_linkdead_attack_grace"))
+					return false;
+
 				return hasDefender(tarCreo);
 			}
 
 			if (CombatManager::instance()->areInDuel(tarCreo, asCreatureObject()))
 				return true;
-
-			PlayerObject* tarGhost = tarCreo->getPlayerObject();
 
 			if (thisFaction != targetFaction && thisFaction > 0 && targetFaction > 0) {
 				bool covertOvert = ConfigManager::instance()->useCovertOvertSystem();
@@ -3736,6 +3743,10 @@ bool CreatureObjectImplementation::isAttackableBy(CreatureObject* creature, bool
 					return false;
 
 				if (getGuildID() != 0 && getGuildID() == creature->getGuildID())
+					return false;
+
+				if (ghost->isLinkDead() &&
+						checkCooldownRecovery("pvp_linkdead_attack_grace"))
 					return false;
 
 				return true;
