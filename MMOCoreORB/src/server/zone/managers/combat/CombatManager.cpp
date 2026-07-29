@@ -34,10 +34,19 @@
 #include "server/zone/objects/region/CityRegion.h"
 #include "server/zone/objects/cell/CellObject.h"
 #include "server/zone/managers/creature/CreatureManager.h"
+#include "server/chat/ChatManager.h"
 
 #define COMBAT_SPAM_RANGE 85 // Range at which players will see Combat Log Info
 
 namespace {
+	void sendCityAuthorityChat(AiAgent* responder, const String& message) {
+		if (responder == nullptr || responder->getZoneServer() == nullptr)
+			return;
+
+		responder->getZoneServer()->getChatManager()->broadcastChatMessage(
+				responder, message, 0, 0, responder->getMoodID());
+	}
+
 	String getCityAuthorityOffenderMarker(uint64 offenderID) {
 		StringBuffer marker;
 		marker << "city_authority_offender:" << offenderID;
@@ -116,12 +125,13 @@ namespace {
 		const int cleanupTime = Math::max(backupDelay + 1000, config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
 
 		defender->addCooldown(backupCooldown, cleanupTime);
-		attacker->sendSystemMessage("The responding officer has called for backup.");
+		sendCityAuthorityChat(defender->asAiAgent(), "Suspect is hostile, requesting backup!");
 
 		ManagedReference<CreatureObject*> strongAttacker = attacker;
+		ManagedReference<AiAgent*> strongCaller = defender->asAiAgent();
 		ManagedReference<CityRegion*> strongCity = city;
 
-		Core::getTaskManager()->scheduleTask([strongAttacker, strongCity, responderTemplate, cleanupTime] {
+		Core::getTaskManager()->scheduleTask([strongAttacker, strongCaller, strongCity, responderTemplate, cleanupTime] {
 			if (strongAttacker == nullptr || strongCity == nullptr)
 				return;
 
@@ -133,12 +143,21 @@ namespace {
 					strongAttacker->getCityRegion().get() != strongCity)
 				return;
 
-			strongAttacker->sendSystemMessage("Authority reinforcements have arrived.");
+			ManagedReference<AiAgent*> firstBackup = nullptr;
 
 			for (int i = 0; i < 3; ++i) {
 				float offset = 2.f + (i * 1.5f);
-				spawnCityAuthorityResponder(zone, responderTemplate, strongAttacker, offset, true, cleanupTime);
+				ManagedReference<AiAgent*> backup = spawnCityAuthorityResponder(
+						zone, responderTemplate, strongAttacker, offset, true, cleanupTime);
+
+				if (firstBackup == nullptr)
+					firstBackup = backup;
 			}
+
+			if (strongCaller != nullptr && strongCaller->getZone() == zone)
+				sendCityAuthorityChat(strongCaller, "Blast him!");
+			else
+				sendCityAuthorityChat(firstBackup, "Blast him!");
 		}, "CityAuthorityBackupTask", backupDelay);
 	}
 
@@ -207,6 +226,7 @@ namespace {
 				responder->addCooldown(getCityAuthorityOffenderMarker(strongAttacker->getObjectID()), cleanupTime);
 			}
 
+			sendCityAuthorityChat(responder, "You are in violation of Imperial Law. Surrender Immediately!");
 			strongAttacker->sendSystemMessage("Local authorities order you to cease hostilities immediately.");
 			strongVictim->sendSystemMessage("Local authorities have warned your attacker to cease hostilities.");
 
