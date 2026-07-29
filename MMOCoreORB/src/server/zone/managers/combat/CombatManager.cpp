@@ -13,6 +13,7 @@
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/player/FactionStatus.h"
+#include "server/zone/objects/guild/GuildObject.h"
 #include "templates/params/creature/CreatureState.h"
 #include "server/zone/objects/creature/commands/CombatQueueCommand.h"
 #include "templates/params/creature/CreatureAttribute.h"
@@ -58,7 +59,15 @@ namespace {
 		if (attacker == nullptr || victim == nullptr)
 			return false;
 
+		if (CombatManager::instance()->areInDuel(attacker, victim))
+			return true;
+
 		if (attacker->hasBountyMissionFor(victim))
+			return true;
+
+		ManagedReference<GuildObject*> victimGuild = victim->getGuildObject().get();
+
+		if (victimGuild != nullptr && victimGuild->isInWaringGuild(attacker))
 			return true;
 
 		uint32 attackerFaction = attacker->getFaction();
