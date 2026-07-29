@@ -759,6 +759,9 @@ void TangibleObjectImplementation::addDefender(SceneObject* defender) {
 	setCombatState();
 
 	notifyObservers(ObserverEventType::DEFENDERADDED, defender);
+
+	if (ConfigManager::instance()->getPvpMode() && isPlayerCreature() && defender->isPlayerCreature())
+		sendPvpStatusTo(defender->asCreatureObject());
 }
 
 void TangibleObjectImplementation::removeDefenders() {
@@ -767,6 +770,17 @@ void TangibleObjectImplementation::removeDefenders() {
 	if (defenderList.size() == 0) {
 		debug("no defenders in list");
 		return;
+	}
+
+	Vector<ManagedReference<CreatureObject*>> pvpStatusReceivers;
+
+	if (ConfigManager::instance()->getPvpMode() && isPlayerCreature()) {
+		for (int i = 0; i < defenderList.size(); ++i) {
+			SceneObject* defender = defenderList.get(i);
+
+			if (defender != nullptr && defender->isPlayerCreature())
+				pvpStatusReceivers.add(defender->asCreatureObject());
+		}
 	}
 
 	for (int i = 0; i < defenderList.size(); i++)
@@ -782,6 +796,9 @@ void TangibleObjectImplementation::removeDefenders() {
 	broadcastMessage(dtano6, true);
 
 	debug("removed all defenders");
+
+	for (int i = 0; i < pvpStatusReceivers.size(); ++i)
+		sendPvpStatusTo(pvpStatusReceivers.get(i));
 }
 
 void TangibleObjectImplementation::removeDefender(SceneObject* defender) {
@@ -807,6 +824,10 @@ void TangibleObjectImplementation::removeDefender(SceneObject* defender) {
 			broadcastMessage(dtano6, true);
 
 			debug("defender found and removed");
+
+			if (ConfigManager::instance()->getPvpMode() && isPlayerCreature() && defender->isPlayerCreature())
+				sendPvpStatusTo(defender->asCreatureObject());
+
 			break;
 		}
 	}

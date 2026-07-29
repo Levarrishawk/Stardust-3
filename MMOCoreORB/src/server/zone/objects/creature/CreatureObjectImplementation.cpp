@@ -3477,7 +3477,7 @@ bool CreatureObjectImplementation::isAggressiveTo(TangibleObject* target) {
 				if (getGroupID() != 0 && getGroupID() == tarCreo->getGroupID())
 					return false;
 
-				return true;
+				return hasDefender(tarCreo);
 			}
 
 			if (CombatManager::instance()->areInDuel(tarCreo, asCreatureObject()))
