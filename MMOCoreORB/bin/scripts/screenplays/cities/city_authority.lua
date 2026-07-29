@@ -34,5 +34,13 @@ function CityAuthorityScreenPlay:completeArrest(pPlayer)
 	local destination = self.arrestDestination
 
 	player:sendSystemMessage("You have been arrested by local authorities.")
+
+	for _, attribute in ipairs({ 0, 3, 6 }) do
+		if (player:getHAM(attribute) < 1) then
+			player:setHAM(attribute, 1)
+		end
+	end
+
+	player:setPosture(UPRIGHT)
 	SceneObject(pPlayer):switchZone(destination.zone, destination.x, destination.z, destination.y, destination.cellID)
 end
