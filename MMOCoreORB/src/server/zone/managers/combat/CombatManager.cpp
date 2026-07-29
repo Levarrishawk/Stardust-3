@@ -55,6 +55,12 @@ namespace {
 		return marker.toString();
 	}
 
+	String getCityAuthorityDeathBlowMarker(uint64 victimID) {
+		StringBuffer marker;
+		marker << "city_authority_deathblow_response:" << victimID;
+		return marker.toString();
+	}
+
 	bool isLawfulCityPlayerAttack(CreatureObject* attacker, CreatureObject* victim) {
 		if (attacker == nullptr || victim == nullptr)
 			return false;
@@ -105,6 +111,17 @@ namespace {
 
 	void scheduleCityAuthorityCleanup(AiAgent* responder, int cleanupTime) {
 		ManagedReference<AiAgent*> strongResponder = responder;
+		int standDownTime = Math::max(0, cleanupTime - 2000);
+
+		Core::getTaskManager()->scheduleTask([strongResponder] {
+			if (strongResponder == nullptr || strongResponder->getZone() == nullptr)
+				return;
+
+			Locker responderLocker(strongResponder);
+
+			if (strongResponder->getZone() != nullptr && !strongResponder->isDead())
+				sendCityAuthorityChat(strongResponder, "Standing down, returning to base.");
+		}, "CityAuthorityStandDownTask", standDownTime);
 
 		Core::getTaskManager()->scheduleTask([strongResponder] {
 			if (strongResponder == nullptr)
@@ -272,7 +289,9 @@ namespace {
 			if (strongAttacker->isDead() || strongAttacker->isIncapacitated() ||
 					strongAttacker->getZone() == nullptr || strongAttacker->getZone() != strongVictim->getZone() ||
 					strongAttacker->getCityRegion().get() != strongCity ||
-					strongVictim->getCityRegion().get() != strongCity)
+					strongVictim->getCityRegion().get() != strongCity ||
+					!strongAttacker->checkCooldownRecovery(
+							getCityAuthorityDeathBlowMarker(strongVictim->getObjectID())))
 				return;
 
 			ManagedReference<AiAgent*> responder = spawnCityAuthorityResponder(strongAttacker->getZone(), responderTemplate,
@@ -313,6 +332,61 @@ namespace {
 				strongResponder->setDefender(strongAttacker);
 			}, "CityAuthorityEnforcementTask", warningTime);
 		}, "CityAuthorityResponseTask", responseDelay);
+	}
+}
+
+void CombatManager::handleCityAuthorityDeathBlow(CreatureObject* attacker, CreatureObject* victim) const {
+	if (attacker == nullptr || victim == nullptr || !attacker->isPlayerCreature() || !victim->isPlayerCreature())
+		return;
+
+	ManagedReference<CityRegion*> city = attacker->getCityRegion().get();
+
+	if (city == nullptr || !city->isClientRegion() || city != victim->getCityRegion().get())
+		return;
+
+	const String responseCooldown = "city_authority_response";
+	StringBuffer pairCooldown;
+	uint64 firstPlayerID = Math::min(attacker->getObjectID(), victim->getObjectID());
+	uint64 secondPlayerID = Math::max(attacker->getObjectID(), victim->getObjectID());
+	pairCooldown << responseCooldown << ":" << firstPlayerID << ":" << secondPlayerID;
+
+	if (attacker->checkCooldownRecovery(responseCooldown) ||
+			attacker->checkCooldownRecovery(pairCooldown.toString()) ||
+			victim->checkCooldownRecovery(pairCooldown.toString()))
+		return;
+
+	const String deathBlowMarker = getCityAuthorityDeathBlowMarker(victim->getObjectID());
+
+	if (!attacker->checkCooldownRecovery(deathBlowMarker))
+		return;
+
+	Zone* zone = attacker->getZone();
+
+	if (zone == nullptr)
+		return;
+
+	ConfigManager* config = ConfigManager::instance();
+	const String responderTemplate = config->getString("Core3.CityAuthority.ResponderTemplate", "stormtrooper");
+	const int cleanupTime = Math::max(1000, config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
+	const int reinforcementCount = Math::min(10, Math::max(1,
+			config->getInt("Core3.CityAuthority.DeathBlowReinforcementCount", 3)));
+
+	attacker->addCooldown(deathBlowMarker, cleanupTime);
+
+	ManagedReference<AiAgent*> firstResponder = nullptr;
+
+	for (int i = 0; i < reinforcementCount; ++i) {
+		float offset = 3.f + (i * 1.5f);
+		ManagedReference<AiAgent*> responder = spawnCityAuthorityResponder(
+				zone, responderTemplate, attacker, offset, true, cleanupTime);
+
+		if (firstResponder == nullptr)
+			firstResponder = responder;
+	}
+
+	if (firstResponder != nullptr) {
+		sendCityAuthorityChat(firstResponder, "Blast him!");
+		attacker->sendSystemMessage("You committed a murder. Local authorities have escalated their response.");
 	}
 }
 

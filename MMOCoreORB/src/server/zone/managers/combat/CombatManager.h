@@ -188,6 +188,8 @@ public:
 
 	bool areInDuel(CreatureObject* player1, CreatureObject* player2) const;
 
+	void handleCityAuthorityDeathBlow(CreatureObject* attacker, CreatureObject* victim) const;
+
 	/**
 	 * Checks if there is an active challenge
 	 * @param challenger player that is being checked if they have an open challenge for target

@@ -139,6 +139,11 @@ namespace {
 		if (responder->checkCooldownRecovery(offenderMarker.toString()))
 			return;
 
+		if (responder->getZoneServer() != nullptr) {
+			responder->getZoneServer()->getChatManager()->broadcastChatMessage(
+					responder, "Target down, Area Secure!", 0, 0, responder->getMoodID());
+		}
+
 		Lua* lua = DirectorManager::instance()->getLuaInstance();
 		Reference<LuaFunction*> arrestPlayer = lua->createFunction("CityAuthorityScreenPlay", "arrestPlayer", 0);
 
@@ -1397,6 +1402,9 @@ void PlayerManagerImplementation::killPlayer(TangibleObject* attacker, CreatureO
 	player->clearDots();
 
 	player->setPosture(CreaturePosture::DEAD, !isCombatAction, !isCombatAction);
+
+	if (typeofdeath == 1 && attacker->isPlayerCreature())
+		CombatManager::instance()->handleCityAuthorityDeathBlow(attacker->asCreatureObject(), player);
 
 	sendActivateCloneRequest(player, typeofdeath);
 
