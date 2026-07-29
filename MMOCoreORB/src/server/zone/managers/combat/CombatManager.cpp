@@ -68,8 +68,8 @@ namespace {
 		const int cleanupTime = Math::max(warningTime + 1000, config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
 
 		Reference<AiAgent*> responder = cast<AiAgent*>(zone->getCreatureManager()->spawnCreature(
-				responderTemplate.hashCode(), attacker->getPositionX() + 2.f, attacker->getPositionZ(),
-				attacker->getPositionY() + 2.f, attacker->getParentID()));
+				responderTemplate.hashCode(), 0, attacker->getPositionX() + 2.f, attacker->getPositionZ(),
+				attacker->getPositionY() + 2.f, attacker->getParentID(), false, 0));
 
 		if (responder == nullptr) {
 			attacker->sendSystemMessage("Local authorities were unable to respond.");
