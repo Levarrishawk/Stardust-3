@@ -61,6 +61,25 @@ namespace {
 		return marker.toString();
 	}
 
+	String getCityAuthorityPairCooldown(CreatureObject* attacker, CreatureObject* victim) {
+		StringBuffer marker;
+		uint64 firstPlayerID = Math::min(attacker->getObjectID(), victim->getObjectID());
+		uint64 secondPlayerID = Math::max(attacker->getObjectID(), victim->getObjectID());
+		marker << "city_authority_response:" << firstPlayerID << ":" << secondPlayerID;
+		return marker.toString();
+	}
+
+	void resetCityAuthorityResponse(CreatureObject* attacker, CreatureObject* victim) {
+		if (attacker == nullptr || victim == nullptr)
+			return;
+
+		const String pairCooldown = getCityAuthorityPairCooldown(attacker, victim);
+
+		attacker->updateCooldownTimer("city_authority_response");
+		attacker->updateCooldownTimer(pairCooldown);
+		victim->updateCooldownTimer(pairCooldown);
+	}
+
 	bool isLawfulCityPlayerAttack(CreatureObject* attacker, CreatureObject* victim) {
 		if (attacker == nullptr || victim == nullptr)
 			return false;
@@ -250,13 +269,10 @@ namespace {
 			return;
 
 		const String cooldownName = "city_authority_response";
-		StringBuffer pairCooldownName;
-		uint64 firstPlayerID = Math::min(attacker->getObjectID(), victim->getObjectID());
-		uint64 secondPlayerID = Math::max(attacker->getObjectID(), victim->getObjectID());
-		pairCooldownName << cooldownName << ":" << firstPlayerID << ":" << secondPlayerID;
+		const String pairCooldownName = getCityAuthorityPairCooldown(attacker, victim);
 
 		if (!attacker->checkCooldownRecovery(cooldownName) ||
-				!attacker->checkCooldownRecovery(pairCooldownName.toString()))
+				!attacker->checkCooldownRecovery(pairCooldownName))
 			return;
 
 		Zone* zone = attacker->getZone();
@@ -272,8 +288,8 @@ namespace {
 				config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
 
 		attacker->addCooldown(cooldownName, cleanupTime);
-		attacker->addCooldown(pairCooldownName.toString(), cleanupTime);
-		victim->addCooldown(pairCooldownName.toString(), cleanupTime);
+		attacker->addCooldown(pairCooldownName, cleanupTime);
+		victim->addCooldown(pairCooldownName, cleanupTime);
 
 		ManagedReference<CreatureObject*> strongAttacker = attacker;
 		ManagedReference<CreatureObject*> strongVictim = victim;
@@ -293,6 +309,11 @@ namespace {
 					!strongAttacker->checkCooldownRecovery(
 							getCityAuthorityDeathBlowMarker(strongVictim->getObjectID())))
 				return;
+
+			if (!strongAttacker->hasDefender(strongVictim)) {
+				resetCityAuthorityResponse(strongAttacker, strongVictim);
+				return;
+			}
 
 			ManagedReference<AiAgent*> responder = spawnCityAuthorityResponder(strongAttacker->getZone(), responderTemplate,
 					strongAttacker, 2.f, false, cleanupTime);
@@ -316,12 +337,19 @@ namespace {
 				Locker victimLocker(strongVictim, strongAttacker);
 				Locker responderLocker(strongResponder, strongAttacker);
 
+				bool ceasedHostilities = !strongAttacker->hasDefender(strongVictim);
+
 				if (strongAttacker->isDead() || strongAttacker->isIncapacitated() ||
 						strongAttacker->getZone() == nullptr || strongAttacker->getZone() != strongVictim->getZone() ||
 						strongResponder->getZone() != strongAttacker->getZone() ||
 						strongAttacker->getCityRegion().get() != strongCity ||
 						strongVictim->getCityRegion().get() != strongCity ||
-						!strongAttacker->hasDefender(strongVictim)) {
+						ceasedHostilities) {
+					if (ceasedHostilities && !strongAttacker->isDead() && !strongAttacker->isIncapacitated()) {
+						sendCityAuthorityChat(strongResponder, "Standing down, returning to base.");
+						resetCityAuthorityResponse(strongAttacker, strongVictim);
+					}
+
 					strongResponder->destroyObjectFromWorld(true);
 					return;
 				}
@@ -345,14 +373,11 @@ void CombatManager::handleCityAuthorityDeathBlow(CreatureObject* attacker, Creat
 		return;
 
 	const String responseCooldown = "city_authority_response";
-	StringBuffer pairCooldown;
-	uint64 firstPlayerID = Math::min(attacker->getObjectID(), victim->getObjectID());
-	uint64 secondPlayerID = Math::max(attacker->getObjectID(), victim->getObjectID());
-	pairCooldown << responseCooldown << ":" << firstPlayerID << ":" << secondPlayerID;
+	const String pairCooldown = getCityAuthorityPairCooldown(attacker, victim);
 
 	if (attacker->checkCooldownRecovery(responseCooldown) ||
-			attacker->checkCooldownRecovery(pairCooldown.toString()) ||
-			victim->checkCooldownRecovery(pairCooldown.toString()))
+			attacker->checkCooldownRecovery(pairCooldown) ||
+			victim->checkCooldownRecovery(pairCooldown))
 		return;
 
 	const String deathBlowMarker = getCityAuthorityDeathBlowMarker(victim->getObjectID());
