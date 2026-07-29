@@ -310,7 +310,7 @@ namespace {
 							getCityAuthorityDeathBlowMarker(strongVictim->getObjectID())))
 				return;
 
-			if (!strongAttacker->hasDefender(strongVictim)) {
+			if (strongAttacker->hasState(CreatureState::PEACE)) {
 				resetCityAuthorityResponse(strongAttacker, strongVictim);
 				return;
 			}
@@ -337,7 +337,7 @@ namespace {
 				Locker victimLocker(strongVictim, strongAttacker);
 				Locker responderLocker(strongResponder, strongAttacker);
 
-				bool ceasedHostilities = !strongAttacker->hasDefender(strongVictim);
+				bool ceasedHostilities = strongAttacker->hasState(CreatureState::PEACE);
 
 				if (strongAttacker->isDead() || strongAttacker->isIncapacitated() ||
 						strongAttacker->getZone() == nullptr || strongAttacker->getZone() != strongVictim->getZone() ||
@@ -358,6 +358,7 @@ namespace {
 				strongVictim->sendSystemMessage("Local authorities are moving to arrest your attacker.");
 
 				strongResponder->setDefender(strongAttacker);
+				strongResponder->activateAiBehavior(true);
 			}, "CityAuthorityEnforcementTask", warningTime);
 		}, "CityAuthorityResponseTask", responseDelay);
 	}
