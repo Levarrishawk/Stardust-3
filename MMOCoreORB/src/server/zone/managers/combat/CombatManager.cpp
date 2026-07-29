@@ -38,6 +38,110 @@
 #define COMBAT_SPAM_RANGE 85 // Range at which players will see Combat Log Info
 
 namespace {
+	String getCityAuthorityOffenderMarker(uint64 offenderID) {
+		StringBuffer marker;
+		marker << "city_authority_offender:" << offenderID;
+		return marker.toString();
+	}
+
+	void scheduleCityAuthorityCleanup(AiAgent* responder, int cleanupTime) {
+		ManagedReference<AiAgent*> strongResponder = responder;
+
+		Core::getTaskManager()->scheduleTask([strongResponder] {
+			if (strongResponder == nullptr)
+				return;
+
+			Locker responderLocker(strongResponder);
+
+			if (strongResponder->getZone() != nullptr)
+				strongResponder->destroyObjectFromWorld(true);
+		}, "CityAuthorityCleanupTask", cleanupTime);
+	}
+
+	ManagedReference<AiAgent*> spawnCityAuthorityResponder(Zone* zone, const String& responderTemplate, CreatureObject* offender,
+			float offset, bool engageOffender, int cleanupTime) {
+		if (zone == nullptr || offender == nullptr)
+			return nullptr;
+
+		ManagedReference<AiAgent*> responder = cast<AiAgent*>(zone->getCreatureManager()->spawnCreature(
+				responderTemplate.hashCode(), 0, offender->getPositionX() + offset, offender->getPositionZ(),
+				offender->getPositionY() + offset, offender->getParentID(), false, 0));
+
+		if (responder == nullptr)
+			return nullptr;
+
+		{
+			Locker responderLocker(responder, offender);
+			ManagedReference<CellObject*> parentCell = offender->getParent().get().castTo<CellObject*>();
+
+			responder->setFaction(0);
+			responder->setRespawnTimer(0);
+			responder->setDespawnOnNoPlayerInRange(false);
+			responder->setHomeLocation(offender->getPositionX() + offset, offender->getPositionZ(),
+					offender->getPositionY() + offset, parentCell);
+
+			if (engageOffender)
+				responder->setDefender(offender);
+			else
+				responder->setFollowObject(offender);
+		}
+
+		scheduleCityAuthorityCleanup(responder, cleanupTime);
+
+		return responder;
+	}
+
+	void handleCityAuthorityBackup(CreatureObject* attacker, CreatureObject* defender) {
+		if (attacker == nullptr || defender == nullptr || !attacker->isPlayerCreature() || !defender->isAiAgent())
+			return;
+
+		const String offenderMarker = getCityAuthorityOffenderMarker(attacker->getObjectID());
+
+		if (defender->checkCooldownRecovery(offenderMarker))
+			return;
+
+		const String backupCooldown = "city_authority_backup_called";
+
+		if (!defender->checkCooldownRecovery(backupCooldown))
+			return;
+
+		ManagedReference<CityRegion*> city = attacker->getCityRegion().get();
+
+		if (city == nullptr || !city->isClientRegion())
+			return;
+
+		ConfigManager* config = ConfigManager::instance();
+		const String responderTemplate = config->getString("Core3.CityAuthority.ResponderTemplate", "stormtrooper");
+		const int backupDelay = Math::max(1000, config->getInt("Core3.CityAuthority.BackupDelayMs", 5000));
+		const int cleanupTime = Math::max(backupDelay + 1000, config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
+
+		defender->addCooldown(backupCooldown, cleanupTime);
+		attacker->sendSystemMessage("The responding officer has called for backup.");
+
+		ManagedReference<CreatureObject*> strongAttacker = attacker;
+		ManagedReference<CityRegion*> strongCity = city;
+
+		Core::getTaskManager()->scheduleTask([strongAttacker, strongCity, responderTemplate, cleanupTime] {
+			if (strongAttacker == nullptr || strongCity == nullptr)
+				return;
+
+			Locker attackerLocker(strongAttacker);
+
+			Zone* zone = strongAttacker->getZone();
+
+			if (zone == nullptr || strongAttacker->isDead() || strongAttacker->isIncapacitated() ||
+					strongAttacker->getCityRegion().get() != strongCity)
+				return;
+
+			strongAttacker->sendSystemMessage("Authority reinforcements have arrived.");
+
+			for (int i = 0; i < 3; ++i) {
+				float offset = 2.f + (i * 1.5f);
+				spawnCityAuthorityResponder(zone, responderTemplate, strongAttacker, offset, true, cleanupTime);
+			}
+		}, "CityAuthorityBackupTask", backupDelay);
+	}
+
 	void handleCityAuthorityResponse(CreatureObject* attacker, CreatureObject* victim) {
 		if (attacker == nullptr || victim == nullptr || !attacker->isPlayerCreature() || !victim->isPlayerCreature())
 			return;
@@ -64,75 +168,74 @@ namespace {
 
 		ConfigManager* config = ConfigManager::instance();
 		const String responderTemplate = config->getString("Core3.CityAuthority.ResponderTemplate", "stormtrooper");
+		const int responseDelay = Math::max(1000, config->getInt("Core3.CityAuthority.ResponseDelayMs", 5000));
 		const int warningTime = Math::max(1000, config->getInt("Core3.CityAuthority.WarningTimeMs", 10000));
-		const int cleanupTime = Math::max(warningTime + 1000, config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
-
-		Reference<AiAgent*> responder = cast<AiAgent*>(zone->getCreatureManager()->spawnCreature(
-				responderTemplate.hashCode(), 0, attacker->getPositionX() + 2.f, attacker->getPositionZ(),
-				attacker->getPositionY() + 2.f, attacker->getParentID(), false, 0));
-
-		if (responder == nullptr) {
-			attacker->sendSystemMessage("Local authorities were unable to respond.");
-			return;
-		}
+		const int cleanupTime = Math::max(responseDelay + warningTime + 1000,
+				config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
 
 		attacker->addCooldown(cooldownName, cleanupTime);
 		attacker->addCooldown(pairCooldownName.toString(), cleanupTime);
 		victim->addCooldown(pairCooldownName.toString(), cleanupTime);
 
-		{
-			Locker responderLocker(responder, attacker);
-			ManagedReference<CellObject*> parentCell = attacker->getParent().get().castTo<CellObject*>();
-
-			responder->setFaction(0);
-			responder->setRespawnTimer(0);
-			responder->setDespawnOnNoPlayerInRange(false);
-			responder->setHomeLocation(attacker->getPositionX() + 2.f, attacker->getPositionZ(),
-					attacker->getPositionY() + 2.f, parentCell);
-			responder->setFollowObject(attacker);
-		}
-
-		attacker->sendSystemMessage("Local authorities order you to cease hostilities immediately.");
-		victim->sendSystemMessage("Local authorities have warned your attacker to cease hostilities.");
-
 		ManagedReference<CreatureObject*> strongAttacker = attacker;
 		ManagedReference<CreatureObject*> strongVictim = victim;
-		ManagedReference<AiAgent*> strongResponder = responder;
 		ManagedReference<CityRegion*> strongCity = city;
 
-		Core::getTaskManager()->scheduleTask([strongAttacker, strongVictim, strongResponder, strongCity] {
-			if (strongAttacker == nullptr || strongVictim == nullptr || strongResponder == nullptr || strongCity == nullptr)
+		Core::getTaskManager()->scheduleTask([strongAttacker, strongVictim, strongCity, responderTemplate, warningTime, cleanupTime] {
+			if (strongAttacker == nullptr || strongVictim == nullptr || strongCity == nullptr)
 				return;
 
 			Locker attackerLocker(strongAttacker);
 			Locker victimLocker(strongVictim, strongAttacker);
-			Locker responderLocker(strongResponder, strongAttacker);
 
 			if (strongAttacker->isDead() || strongAttacker->isIncapacitated() ||
 					strongAttacker->getZone() == nullptr || strongAttacker->getZone() != strongVictim->getZone() ||
-					strongResponder->getZone() != strongAttacker->getZone() ||
 					strongAttacker->getCityRegion().get() != strongCity ||
-					strongVictim->getCityRegion().get() != strongCity ||
-					!strongAttacker->hasDefender(strongVictim)) {
-				strongResponder->destroyObjectFromWorld(true);
+					strongVictim->getCityRegion().get() != strongCity)
+				return;
+
+			ManagedReference<AiAgent*> responder = spawnCityAuthorityResponder(strongAttacker->getZone(), responderTemplate,
+					strongAttacker, 2.f, false, cleanupTime);
+
+			if (responder == nullptr) {
+				strongAttacker->sendSystemMessage("Local authorities were unable to respond.");
 				return;
 			}
 
-			strongAttacker->sendSystemMessage("You ignored the order to cease hostilities. Local authorities are attempting an arrest.");
-			strongVictim->sendSystemMessage("Local authorities are moving to arrest your attacker.");
+			{
+				Locker responderLocker(responder, strongAttacker);
+				responder->addCooldown(getCityAuthorityOffenderMarker(strongAttacker->getObjectID()), cleanupTime);
+			}
 
-			strongResponder->setDefender(strongAttacker);
-		}, "CityAuthorityEnforcementTask", warningTime);
+			strongAttacker->sendSystemMessage("Local authorities order you to cease hostilities immediately.");
+			strongVictim->sendSystemMessage("Local authorities have warned your attacker to cease hostilities.");
 
-		Core::getTaskManager()->scheduleTask([strongResponder] {
-			if (strongResponder == nullptr)
-				return;
+			ManagedReference<AiAgent*> strongResponder = responder;
 
-			Locker responderLocker(strongResponder);
+			Core::getTaskManager()->scheduleTask([strongAttacker, strongVictim, strongResponder, strongCity] {
+				if (strongAttacker == nullptr || strongVictim == nullptr || strongResponder == nullptr || strongCity == nullptr)
+					return;
 
-			if (strongResponder->getZone() != nullptr)
-				strongResponder->destroyObjectFromWorld(true);
-		}, "CityAuthorityCleanupTask", cleanupTime);
+				Locker attackerLocker(strongAttacker);
+				Locker victimLocker(strongVictim, strongAttacker);
+				Locker responderLocker(strongResponder, strongAttacker);
+
+				if (strongAttacker->isDead() || strongAttacker->isIncapacitated() ||
+						strongAttacker->getZone() == nullptr || strongAttacker->getZone() != strongVictim->getZone() ||
+						strongResponder->getZone() != strongAttacker->getZone() ||
+						strongAttacker->getCityRegion().get() != strongCity ||
+						strongVictim->getCityRegion().get() != strongCity ||
+						!strongAttacker->hasDefender(strongVictim)) {
+					strongResponder->destroyObjectFromWorld(true);
+					return;
+				}
+
+				strongAttacker->sendSystemMessage("You ignored the order to cease hostilities. Local authorities are attempting an arrest.");
+				strongVictim->sendSystemMessage("Local authorities are moving to arrest your attacker.");
+
+				strongResponder->setDefender(strongAttacker);
+			}, "CityAuthorityEnforcementTask", warningTime);
+		}, "CityAuthorityResponseTask", responseDelay);
 	}
 }
 
@@ -209,15 +312,21 @@ bool CombatManager::startCombat(CreatureObject* attacker, TangibleObject* defend
 		}
 	}
 
-	bool newPlayerAttack = attacker->isPlayerCreature() && defender->isPlayerCreature() && !attacker->hasDefender(defender);
+	bool newDirectAttack = attacker->isPlayerCreature() && !attacker->hasDefender(defender);
 
 	attacker->setCombatState();
 	defender->setCombatState();
 
 	attacker->setDefender(defender);
 
-	if (newPlayerAttack)
-		handleCityAuthorityResponse(attacker, defender->asCreatureObject());
+	if (newDirectAttack) {
+		CreatureObject* defenderCreature = defender->asCreatureObject();
+
+		if (defender->isPlayerCreature())
+			handleCityAuthorityResponse(attacker, defenderCreature);
+		else if (defenderCreature != nullptr && defenderCreature->isAiAgent())
+			handleCityAuthorityBackup(attacker, defenderCreature);
+	}
 
 	if (defender->isCreatureObject()) {
 		ThreatMap* defenderThreatMap = defender->getThreatMap();
