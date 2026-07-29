@@ -29,12 +29,7 @@ public:
 
 		ManagedReference<SceneObject*> obj = suiBox->getUsingObject().get();
 
-		if (obj == nullptr || !obj->isTerminal())
-			return;
-
-		Terminal* terminal = cast<Terminal*>( obj.get());
-
-		if (!terminal->isGuildTerminal())
+		if (obj == nullptr || !obj->isGuildTerminal())
 			return;
 
 		ManagedReference<GuildObject*> guild = player->getGuildObject().get();

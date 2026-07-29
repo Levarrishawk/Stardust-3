@@ -43,6 +43,7 @@
 #include "server/zone/objects/player/events/PlayerDisconnectEvent.h"
 #include "server/zone/objects/player/events/PlayerRecoveryEvent.h"
 #include "server/zone/managers/group/GroupManager.h"
+#include "server/zone/managers/guild/GuildManager.h"
 #include "server/zone/objects/creature/variables/Skill.h"
 #include "server/zone/objects/player/sui/inputbox/SuiInputBox.h"
 #include "server/zone/objects/building/BuildingObject.h"
@@ -1795,9 +1796,13 @@ void PlayerObjectImplementation::notifyOnline() {
 	if (playerCreature->isInGuild()) {
 		ManagedReference<GuildObject*> guild = playerCreature->getGuildObject().get();
 		uint64 playerId = playerCreature->getObjectID();
+		ManagedReference<GuildManager*> guildManager = zoneServer->getGuildManager();
 
 		if (guild != nullptr && !guild->hasMember(playerId)) {
 			playerCreature->setGuildObject(nullptr);
+
+			if (guildManager != nullptr)
+				guildManager->removeGuildManagementDevice(playerCreature);
 
 			CreatureObjectDeltaMessage6* creod6 = new CreatureObjectDeltaMessage6(playerCreature);
 			creod6->updateGuildID();
@@ -1805,7 +1810,14 @@ void PlayerObjectImplementation::notifyOnline() {
 			playerCreature->broadcastMessage(creod6, true);
 
 			updateInRangeBuildingPermissions();
+		} else if (guildManager != nullptr) {
+			guildManager->ensureGuildManagementDevice(playerCreature);
 		}
+	} else {
+		ManagedReference<GuildManager*> guildManager = zoneServer->getGuildManager();
+
+		if (guildManager != nullptr)
+			guildManager->removeGuildManagementDevice(playerCreature);
 	}
 
 	// Checks for DoTs that should have expired during server downtime and removes them

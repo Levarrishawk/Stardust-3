@@ -88,6 +88,7 @@ public:
 
 	/// Not in client **********
 	const static int THEATEROBJECT = 0x80C;
+	const static int GUILDMANAGEMENTDEVICE = 0x80D;
 	/// End not in client ************
 
 	const static int INSTALLATION = 0x1000;

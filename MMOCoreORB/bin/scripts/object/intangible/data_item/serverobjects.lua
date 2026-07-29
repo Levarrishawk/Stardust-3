@@ -48,6 +48,7 @@
 includeFile("intangible/data_item/data_geiger_counter.lua")
 includeFile("intangible/data_item/data_imperial.lua")
 includeFile("intangible/data_item/data_item.lua")
+includeFile("intangible/data_item/guild_management_device.lua")
 includeFile("intangible/data_item/data_rebel.lua")
 includeFile("intangible/data_item/droid_command.lua")
 includeFile("intangible/data_item/warren_encryption_key.lua")

@@ -120,25 +120,25 @@ class GuildManager extends ManagedService implements Logger {
 
 	public native void sendGuildChangeAbbrevTo(CreatureObject player, GuildObject guild);
 
-	public native void sendGuildInformationTo(CreatureObject player, GuildObject guild, GuildTerminal guildTerminal);
+	public native void sendGuildInformationTo(CreatureObject player, GuildObject guild, SceneObject guildTerminal);
 
-	public native void sendGuildMemberListTo(CreatureObject player, GuildObject guild, GuildTerminal guildTerminal);
+	public native void sendGuildMemberListTo(CreatureObject player, GuildObject guild, SceneObject guildTerminal);
 
-	public native void sendGuildMemberOptionsTo(CreatureObject player, GuildObject guild, unsigned long memberID, GuildTerminal guildTerminal);
+	public native void sendGuildMemberOptionsTo(CreatureObject player, GuildObject guild, unsigned long memberID, SceneObject guildTerminal);
 
-	public native void sendGuildDisbandConfirmTo(CreatureObject player, GuildObject guild, GuildTerminal guildTerminal);
+	public native void sendGuildDisbandConfirmTo(CreatureObject player, GuildObject guild, SceneObject guildTerminal);
 
-	public native void sendGuildSponsoredListTo(CreatureObject player, GuildObject guild, GuildTerminal guildTerminal);
+	public native void sendGuildSponsoredListTo(CreatureObject player, GuildObject guild, SceneObject guildTerminal);
 
-	public native void sendGuildSponsoredOptionsTo(CreatureObject player, GuildObject guild, unsigned long playerID, GuildTerminal guildTerminal);
+	public native void sendGuildSponsoredOptionsTo(CreatureObject player, GuildObject guild, unsigned long playerID, SceneObject guildTerminal);
 
-	public native void sendGuildSponsorTo(CreatureObject player, GuildObject guild, GuildTerminal guildTerminal);
+	public native void sendGuildSponsorTo(CreatureObject player, GuildObject guild, SceneObject guildTerminal);
 
 	public native void sendGuildKickPromptTo(CreatureObject player, CreatureObject target);
 
 	public native void sendGuildSetTitleTo(CreatureObject player, CreatureObject target);
 
-	public native void sendGuildWarStatusTo(CreatureObject player, GuildObject guild, GuildTerminal guildTerminal);
+	public native void sendGuildWarStatusTo(CreatureObject player, GuildObject guild, SceneObject guildTerminal);
 
 	public native void promptAddNewEnemy(CreatureObject player, GuildObject guild, SceneObject terminal);
 
@@ -148,7 +148,7 @@ class GuildManager extends ManagedService implements Logger {
 
 	public native void updateWarStatusToWaringGuild(GuildObject guild, GuildObject waringGuild);
 
-	public native void sendMemberPermissionsTo(CreatureObject player, unsigned long targetID, GuildTerminal guildTerminal);
+	public native void sendMemberPermissionsTo(CreatureObject player, unsigned long targetID, SceneObject guildTerminal);
 
 	public native boolean validateGuildName(CreatureObject player, final string guildName, GuildObject guild = null);
 
@@ -180,7 +180,7 @@ class GuildManager extends ManagedService implements Logger {
 
 	public native void setMemberTitle(CreatureObject player, CreatureObject target, final string title);
 
-	public native void toggleGuildPermission(CreatureObject player, unsigned long targetID, int permissionIndex, GuildTerminal guildTerminal);
+	public native void toggleGuildPermission(CreatureObject player, unsigned long targetID, int permissionIndex, SceneObject guildTerminal);
 
 	public native ChatRoom createGuildChannels(GuildObject guild);
 
@@ -207,11 +207,15 @@ class GuildManager extends ManagedService implements Logger {
 
 	public native void unregisterFromElection(GuildObject guild, CreatureObject player);
 
-	public native void promptCastVote(GuildObject guild, CreatureObject player, GuildTerminal terminal);
+	public native void promptCastVote(GuildObject guild, CreatureObject player, SceneObject terminal);
 
 	public native void castVote(GuildObject guild, CreatureObject player, unsigned long candidateID);
 
-	public native void viewElectionStandings(GuildObject guild, CreatureObject player, GuildTerminal terminal);
+	public native void viewElectionStandings(GuildObject guild, CreatureObject player, SceneObject terminal);
+
+	public native void ensureGuildManagementDevice(CreatureObject player);
+
+	public native void removeGuildManagementDevice(CreatureObject player);
 
 	@local
 	public native void iterateGuilds(@dereferenced final GuildObjectIterator iterator);

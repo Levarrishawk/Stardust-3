@@ -19,6 +19,7 @@
 #include "server/zone/objects/intangible/PetControlDevice.h"
 #include "server/zone/objects/intangible/ShipControlDevice.h"
 #include "server/zone/objects/intangible/TheaterObject.h"
+#include "server/zone/objects/intangible/GuildManagementDevice.h"
 #include "server/zone/objects/ship/ShipObject.h"
 #include "server/zone/objects/ship/FighterShipObject.h"
 #include "server/zone/objects/ship/ai/SpaceStationObject.h"

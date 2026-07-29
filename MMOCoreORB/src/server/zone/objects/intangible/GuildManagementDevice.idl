@@ -1,0 +1,29 @@
+/*
+				Copyright <SWGEmu>
+		See file COPYING for copying conditions.*/
+
+package server.zone.objects.intangible;
+
+import server.zone.objects.intangible.IntangibleObject;
+import server.zone.objects.creature.CreatureObject;
+import server.zone.packets.object.ObjectMenuResponse;
+
+@json
+class GuildManagementDevice extends IntangibleObject {
+	public GuildManagementDevice() {
+		Logger.setLoggingName("GuildManagementDevice");
+
+		datapadSize = 1;
+	}
+
+	@dirty
+	public boolean isGuildTerminal() {
+		return true;
+	}
+
+	public native int handleObjectMenuSelect(CreatureObject player, byte selectedID);
+
+	@local
+	@dirty
+	public native void fillObjectMenuResponse(ObjectMenuResponse menuResponse, CreatureObject player);
+}

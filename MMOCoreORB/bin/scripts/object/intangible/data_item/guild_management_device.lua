@@ -1,0 +1,5 @@
+object_intangible_data_item_guild_management_device = object_intangible_data_item_shared_data_item:new {
+	gameObjectType = 2061
+}
+
+ObjectTemplates:addTemplate(object_intangible_data_item_guild_management_device, "object/intangible/data_item/guild_management_device.iff")

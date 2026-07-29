@@ -43,22 +43,15 @@ public:
 
 		ManagedReference<SceneObject*> obj = suiBox->getUsingObject().get();
 
-		if (obj == nullptr || !obj->isTerminal())
+		if (obj == nullptr || !obj->isGuildTerminal())
 			return;
-
-		Terminal* terminal = cast<Terminal*>( obj.get());
-
-		if (!terminal->isGuildTerminal())
-			return;
-
-		GuildTerminal* guildTerminal = cast<GuildTerminal*>( terminal);
 
 		ManagedReference<GuildObject*> guild = player->getGuildObject().get();
 
 		if (guild == nullptr)
 			return;
 
-		guildManager->toggleGuildPermission(player, memberID, index, guildTerminal);
+		guildManager->toggleGuildPermission(player, memberID, index, obj);
 	}
 };
 
