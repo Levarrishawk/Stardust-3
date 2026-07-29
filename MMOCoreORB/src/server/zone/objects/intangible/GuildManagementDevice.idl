@@ -12,8 +12,6 @@ import server.zone.packets.object.ObjectMenuResponse;
 class GuildManagementDevice extends IntangibleObject {
 	public GuildManagementDevice() {
 		Logger.setLoggingName("GuildManagementDevice");
-
-		datapadSize = 1;
 	}
 
 	@dirty
