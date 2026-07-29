@@ -3477,6 +3477,9 @@ bool CreatureObjectImplementation::isAggressiveTo(TangibleObject* target) {
 				if (getGroupID() != 0 && getGroupID() == tarCreo->getGroupID())
 					return false;
 
+				if (getGuildID() != 0 && getGuildID() == tarCreo->getGuildID())
+					return false;
+
 				return hasDefender(tarCreo);
 			}
 
@@ -3727,9 +3730,12 @@ bool CreatureObjectImplementation::isAttackableBy(CreatureObject* creature, bool
 
 		// PvP Attackable checks - both this creo and attacker are players
 		if (creature->isPlayerCreature()) {
-			// PvP Mode Config active, players outside the same group are attackable
+			// PvP Mode Config active, players outside the same group and guild are attackable
 			if (ConfigManager::instance()->getPvpMode()) {
 				if (getGroupID() != 0 && getGroupID() == creature->getGroupID())
+					return false;
+
+				if (getGuildID() != 0 && getGuildID() == creature->getGuildID())
 					return false;
 
 				return true;
