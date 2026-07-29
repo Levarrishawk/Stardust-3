@@ -23,7 +23,7 @@ ezawo_wagli = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = NONE,
-	creatureBitmask = KILLER,
+	creatureBitmask = NONE,
 	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 

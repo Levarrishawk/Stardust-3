@@ -24,7 +24,7 @@ pirate_leader = Creature:new {
 	tamingChance = 0.000000,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	diet = HERBIVORE,
 
 	templates = {

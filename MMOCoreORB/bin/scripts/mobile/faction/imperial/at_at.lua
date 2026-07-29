@@ -22,7 +22,7 @@ at_at = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE + OVERT,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
 	diet = NONE,
 

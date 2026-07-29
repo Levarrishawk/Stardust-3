@@ -22,7 +22,7 @@ dune_lizard = Creature:new {
 	tamingChance = 0.25,
 	ferocity = 0,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = HERD + KILLER + STALKER,
+	creatureBitmask = HERD + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

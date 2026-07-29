@@ -25,7 +25,7 @@ bh_bounty_hunter_thug = Creature:new {
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	optionsBitmask = AIENABLED,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_bountyhunter_trainer_01.iff",

@@ -22,7 +22,7 @@ male_plains_tusk_cat = Creature:new {
 	tamingChance = 0.25,
 	ferocity = 9,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = KILLER + STALKER,
+	creatureBitmask = STALKER,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

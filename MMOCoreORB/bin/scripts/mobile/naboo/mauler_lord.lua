@@ -24,7 +24,7 @@ mauler_lord = Creature:new {
 	tamingChance = 0.000000,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE + AGGRESSIVE + ENEMY,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_mauler_lord.iff"},

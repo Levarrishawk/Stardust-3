@@ -22,7 +22,7 @@ hand_of_solitude = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/human_male.iff"},

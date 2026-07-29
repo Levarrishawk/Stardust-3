@@ -22,7 +22,7 @@ rabid_mutant_kahmurra = Creature:new {
 	tamingChance = 0.15,
 	ferocity = 6,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

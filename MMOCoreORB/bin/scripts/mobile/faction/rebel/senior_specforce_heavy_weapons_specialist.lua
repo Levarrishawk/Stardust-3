@@ -24,7 +24,7 @@ senior_specforce_heavy_weapons_specialist = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_rebel_second_lieutenant_human_female_01.iff",

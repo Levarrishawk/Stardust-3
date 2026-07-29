@@ -22,7 +22,7 @@ sith_shadow_taskmaster = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = KILLER + HEALER,
+	creatureBitmask = HEALER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 

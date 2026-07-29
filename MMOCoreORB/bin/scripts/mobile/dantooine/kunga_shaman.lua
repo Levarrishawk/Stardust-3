@@ -24,7 +24,7 @@ kunga_shaman = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + HERD + KILLER + HEALER,
+	creatureBitmask = PACK + HERD + HEALER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 

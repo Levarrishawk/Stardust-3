@@ -22,7 +22,7 @@ tie_pilot = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = NONE,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = NONE,
 	diet = HERBIVORE,
 

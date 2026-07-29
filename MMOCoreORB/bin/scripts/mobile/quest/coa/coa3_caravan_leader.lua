@@ -24,7 +24,7 @@ coa3_caravan_leader = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + HERD + KILLER,
+	creatureBitmask = PACK + HERD,
 	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 

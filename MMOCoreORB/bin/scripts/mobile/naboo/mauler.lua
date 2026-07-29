@@ -22,7 +22,7 @@ mauler = Creature:new {
 	tamingChance = 0.000000,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE + AGGRESSIVE + ENEMY,
-	creatureBitmask = PACK + KILLER + STALKER,
+	creatureBitmask = PACK + STALKER,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_mauler.iff"},

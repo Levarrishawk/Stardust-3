@@ -22,7 +22,7 @@ razor_cat_eviscerator = Creature:new {
 	tamingChance = 0.05,
 	ferocity = 2,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + HERD + KILLER,
+	creatureBitmask = PACK + HERD,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

@@ -22,7 +22,7 @@ bh_ig_assassin_droid = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = KILLER,
+	creatureBitmask = NONE,
 	optionsBitmask = AIENABLED,
 	diet = NONE,
 

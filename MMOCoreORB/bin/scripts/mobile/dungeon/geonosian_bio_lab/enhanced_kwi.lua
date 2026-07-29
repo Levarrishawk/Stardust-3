@@ -22,7 +22,7 @@ enhanced_kwi = Creature:new {
 	tamingChance = 0,
 	ferocity = 16,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 

@@ -24,7 +24,7 @@ corvette_imperial_inquisitor = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED + NOINTIMIDATE,
 	diet = HERBIVORE,
 

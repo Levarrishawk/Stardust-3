@@ -22,7 +22,7 @@ great_plains_stalker = Creature:new {
 	tamingChance = 0.05,
 	ferocity = 15,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = KILLER + STALKER,
+	creatureBitmask = STALKER,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

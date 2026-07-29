@@ -23,7 +23,7 @@ rogue_bageraset = Creature:new {
 	tamingChance = 0.25,
 	ferocity = 4,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = KILLER,
+	creatureBitmask = NONE,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

@@ -22,7 +22,7 @@ ds_297 = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = NONE,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = CONVERSABLE,
 	diet = HERBIVORE,
 

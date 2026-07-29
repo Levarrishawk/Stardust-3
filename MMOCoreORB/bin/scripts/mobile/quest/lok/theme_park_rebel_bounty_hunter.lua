@@ -23,7 +23,7 @@ theme_park_rebel_bounty_hunter = Creature:new {
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	optionsBitmask = AIENABLED,
-	creatureBitmask = KILLER,
+	creatureBitmask = NONE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_bountyhunter_trainer_03.iff"},

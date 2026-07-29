@@ -24,7 +24,7 @@ mokk_shaman = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = PACK + HERD + KILLER + HEALER,
+	creatureBitmask = PACK + HERD + HEALER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 

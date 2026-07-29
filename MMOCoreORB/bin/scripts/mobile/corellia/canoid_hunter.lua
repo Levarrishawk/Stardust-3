@@ -22,7 +22,7 @@ canoid_hunter = Creature:new {
 	tamingChance = 0.25,
 	ferocity = 4,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + HERD + KILLER,
+	creatureBitmask = PACK + HERD,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

@@ -22,7 +22,7 @@ sunstained_dune_lizard = Creature:new {
 	tamingChance = 0.05,
 	ferocity = 0,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = PACK + HERD + KILLER + STALKER,
+	creatureBitmask = PACK + HERD + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

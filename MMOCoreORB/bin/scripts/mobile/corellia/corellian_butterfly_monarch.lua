@@ -22,7 +22,7 @@ corellian_butterfly_monarch = Creature:new {
 	tamingChance = 0,
 	ferocity = 2,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + HERD + KILLER,
+	creatureBitmask = PACK + HERD,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

@@ -22,7 +22,7 @@ theme_park_imperial_mattias = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = NONE,
-	creatureBitmask = KILLER,
+	creatureBitmask = NONE,
 	optionsBitmask = INVULNERABLE + CONVERSABLE,
 	diet = HERBIVORE,
 

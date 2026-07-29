@@ -22,7 +22,7 @@ greater_sludge_panther = Creature:new {
 	tamingChance = 0.25,
 	ferocity = 7,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

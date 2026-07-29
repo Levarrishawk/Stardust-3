@@ -22,7 +22,7 @@ carrion_spat_corpsereaver = Creature:new {
 	tamingChance = 0.05,
 	ferocity = 5,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

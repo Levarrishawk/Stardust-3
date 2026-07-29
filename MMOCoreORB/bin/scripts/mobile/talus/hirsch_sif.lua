@@ -22,7 +22,7 @@ hirsch_sif = Creature:new {
 	tamingChance = 0.000000,
 	ferocity = 0,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = PACK + KILLER + STALKER,
+	creatureBitmask = PACK + STALKER,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_hirsch_sif.iff"},

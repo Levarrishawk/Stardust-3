@@ -22,7 +22,7 @@ melloc_fitzal = Creature:new {
   tamingChance = 0.,
   ferocity = 0,
   pvpBitmask = ATTACKABLE + ENEMY,
-  creatureBitmask = PACK + KILLER,
+  creatureBitmask = PACK,
   optionsBitmask = AIENABLED,
   diet = HERBIVORE,
 

@@ -22,7 +22,7 @@ theme_park_rebel_disgruntled_citizen = Creature:new {
 	tamingChance = 0.000000,
 	ferocity = 0,
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
-	creatureBitmask = PACK + KILLER,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 

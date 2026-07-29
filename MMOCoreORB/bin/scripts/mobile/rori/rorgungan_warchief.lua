@@ -24,7 +24,7 @@ rorgungan_warchief = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + KILLER + HERD,
+	creatureBitmask = PACK + HERD,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/gungan_s02_male.iff"},

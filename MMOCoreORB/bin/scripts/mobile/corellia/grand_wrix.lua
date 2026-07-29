@@ -22,7 +22,7 @@ grand_wrix = Creature:new {
 	tamingChance = 0.25,
 	ferocity = 8,
 	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + HERD + KILLER,
+	creatureBitmask = PACK + HERD,
 	optionsBitmask = AIENABLED,
 	diet = CARNIVORE,
 

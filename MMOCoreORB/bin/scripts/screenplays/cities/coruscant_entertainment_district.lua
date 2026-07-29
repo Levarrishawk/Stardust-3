@@ -1261,10 +1261,31 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
-  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, -82.7, 44, 5544.9, -92, 0)
+  
+  --Inside COMPNOR Arcology------------------------------
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, 6.7, -12.0, 25.6, -95, 37002130)
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, -19.6, -12.0, 54.0, 120, 37002130)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, 25.0, -12.0, 52.7, 178, 37002130)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  -- Briefing room / conference
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, 16.2, -12.0, 0.4, 84, 37002139)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, 16.2, -12.0, 5.7, 84, 37002139)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  -- armory
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, -16.6, -20.0, 10.9, 180, 37002141)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   
   -- Prison Quarter
