@@ -4176,6 +4176,9 @@ bool AiAgentImplementation::isAggressive(TangibleObject* target) {
 	if (targetCreo == nullptr)
 		return false;
 
+	if (hasDefender(target))
+		return true;
+
 	bool targetIsPlayer = targetCreo->isPlayerCreature();
 	bool targetIsAgent = targetCreo->isAiAgent();
 
