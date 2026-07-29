@@ -12,6 +12,7 @@
 #include "server/zone/objects/building/BuildingObject.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
+#include "server/zone/objects/player/FactionStatus.h"
 #include "templates/params/creature/CreatureState.h"
 #include "server/zone/objects/creature/commands/CombatQueueCommand.h"
 #include "templates/params/creature/CreatureAttribute.h"
@@ -51,6 +52,46 @@ namespace {
 		StringBuffer marker;
 		marker << "city_authority_offender:" << offenderID;
 		return marker.toString();
+	}
+
+	bool isLawfulCityPlayerAttack(CreatureObject* attacker, CreatureObject* victim) {
+		if (attacker == nullptr || victim == nullptr)
+			return false;
+
+		if (attacker->hasBountyMissionFor(victim))
+			return true;
+
+		uint32 attackerFaction = attacker->getFaction();
+		uint32 victimFaction = victim->getFaction();
+
+		if (attackerFaction == 0 || victimFaction == 0 || attackerFaction == victimFaction)
+			return false;
+
+		uint32 attackerStatus = attacker->getFactionStatus();
+		uint32 victimStatus = victim->getFactionStatus();
+
+		if (!ConfigManager::instance()->useCovertOvertSystem())
+			return attackerStatus == FactionStatus::OVERT && victimStatus == FactionStatus::OVERT;
+
+		PlayerObject* attackerGhost = attacker->getPlayerObject();
+		PlayerObject* victimGhost = victim->getPlayerObject();
+
+		if (attackerGhost == nullptr || victimGhost == nullptr)
+			return false;
+
+		bool attackerGcwTef = attackerGhost->hasGcwTef();
+		bool victimGcwTef = victimGhost->hasGcwTef();
+
+		if (attackerStatus == FactionStatus::OVERT && victimStatus == FactionStatus::OVERT)
+			return true;
+
+		if (victimGcwTef && victimStatus == FactionStatus::COVERT &&
+				(attackerStatus == FactionStatus::OVERT ||
+				(attackerGcwTef && attackerStatus == FactionStatus::COVERT)))
+			return true;
+
+		return victimGcwTef && victimStatus == FactionStatus::OVERT &&
+				attackerGcwTef && attackerStatus == FactionStatus::COVERT;
 	}
 
 	void scheduleCityAuthorityCleanup(AiAgent* responder, int cleanupTime) {
@@ -172,6 +213,9 @@ namespace {
 
 	void handleCityAuthorityResponse(CreatureObject* attacker, CreatureObject* victim) {
 		if (attacker == nullptr || victim == nullptr || !attacker->isPlayerCreature() || !victim->isPlayerCreature())
+			return;
+
+		if (isLawfulCityPlayerAttack(attacker, victim))
 			return;
 
 		ManagedReference<CityRegion*> city = attacker->getCityRegion().get();
