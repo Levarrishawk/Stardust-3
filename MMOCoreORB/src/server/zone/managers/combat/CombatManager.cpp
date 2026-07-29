@@ -86,6 +86,12 @@ namespace {
 			responder->setFaction(0);
 			responder->setRespawnTimer(0);
 			responder->setDespawnOnNoPlayerInRange(false);
+			responder->addCooldown("city_authority_responder", cleanupTime);
+			responder->addCooldown(getCityAuthorityOffenderMarker(offender->getObjectID()), cleanupTime);
+
+			if (!engageOffender)
+				responder->addCooldown("city_authority_backup_authorized", cleanupTime);
+
 			responder->setHomeLocation(offender->getPositionX() + offset, offender->getPositionZ(),
 					offender->getPositionY() + offset, parentCell);
 
@@ -107,6 +113,9 @@ namespace {
 		const String offenderMarker = getCityAuthorityOffenderMarker(attacker->getObjectID());
 
 		if (defender->checkCooldownRecovery(offenderMarker))
+			return;
+
+		if (defender->checkCooldownRecovery("city_authority_backup_authorized"))
 			return;
 
 		const String backupCooldown = "city_authority_backup_called";
@@ -219,11 +228,6 @@ namespace {
 			if (responder == nullptr) {
 				strongAttacker->sendSystemMessage("Local authorities were unable to respond.");
 				return;
-			}
-
-			{
-				Locker responderLocker(responder, strongAttacker);
-				responder->addCooldown(getCityAuthorityOffenderMarker(strongAttacker->getObjectID()), cleanupTime);
 			}
 
 			sendCityAuthorityChat(responder, "You are in violation of Imperial Law. Surrender Immediately!");

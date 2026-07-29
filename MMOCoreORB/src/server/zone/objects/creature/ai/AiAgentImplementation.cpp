@@ -4176,6 +4176,13 @@ bool AiAgentImplementation::isAggressive(TangibleObject* target) {
 	if (targetCreo == nullptr)
 		return false;
 
+	if (!checkCooldownRecovery("city_authority_responder")) {
+		StringBuffer offenderMarker;
+		offenderMarker << "city_authority_offender:" << targetCreo->getObjectID();
+
+		return !checkCooldownRecovery(offenderMarker.toString()) && hasDefender(target);
+	}
+
 	if (hasDefender(target))
 		return true;
 
