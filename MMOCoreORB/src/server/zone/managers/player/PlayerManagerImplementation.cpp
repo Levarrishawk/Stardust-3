@@ -141,18 +141,18 @@ namespace {
 
 		ConfigManager* config = ConfigManager::instance();
 
-		if (!config->getBool("Core3.CityAuthority.ArrestDestination.Enabled", true))
+		if (!config->getBool("Core3.CityAuthority.ArrestEnabled", true))
 			return;
 
-		const String destinationZone = config->getString("Core3.CityAuthority.ArrestDestination.Zone", "coruscant");
+		const String destinationZone = config->getString("Core3.CityAuthority.ArrestZone", "coruscant");
 
 		if (destinationZone.isEmpty())
 			return;
 
-		const float destinationX = config->getFloat("Core3.CityAuthority.ArrestDestination.X", -99.9f);
-		const float destinationY = config->getFloat("Core3.CityAuthority.ArrestDestination.Y", 219.3f);
-		const float destinationZ = config->getFloat("Core3.CityAuthority.ArrestDestination.Z", -23.f);
-		const uint64 destinationCell = config->getInt("Core3.CityAuthority.ArrestDestination.CellID", 37002253);
+		const float destinationX = config->getFloat("Core3.CityAuthority.ArrestX", -99.9f);
+		const float destinationY = config->getFloat("Core3.CityAuthority.ArrestY", 219.3f);
+		const float destinationZ = config->getFloat("Core3.CityAuthority.ArrestZ", -23.f);
+		const uint64 destinationCell = config->getInt("Core3.CityAuthority.ArrestCellID", 37002253);
 		const int arrestDelay = Math::max(0, config->getInt("Core3.CityAuthority.ArrestDelayMs", 1000));
 		ManagedReference<CreatureObject*> strongOffender = offender;
 
