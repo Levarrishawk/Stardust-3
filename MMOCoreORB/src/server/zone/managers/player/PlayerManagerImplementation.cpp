@@ -139,37 +139,11 @@ namespace {
 		if (responder->checkCooldownRecovery(offenderMarker.toString()))
 			return;
 
-		ConfigManager* config = ConfigManager::instance();
+		Lua* lua = DirectorManager::instance()->getLuaInstance();
+		Reference<LuaFunction*> arrestPlayer = lua->createFunction("CityAuthorityScreenPlay", "arrestPlayer", 0);
 
-		if (!config->getBool("Core3.CityAuthority.ArrestEnabled", true))
-			return;
-
-		const String destinationZone = config->getString("Core3.CityAuthority.ArrestZone", "coruscant");
-
-		if (destinationZone.isEmpty())
-			return;
-
-		const float destinationX = config->getFloat("Core3.CityAuthority.ArrestX", -99.9f);
-		const float destinationY = config->getFloat("Core3.CityAuthority.ArrestY", 219.3f);
-		const float destinationZ = config->getFloat("Core3.CityAuthority.ArrestZ", -23.f);
-		const uint64 destinationCell = config->getInt("Core3.CityAuthority.ArrestCellID", 37002253);
-		const int arrestDelay = Math::max(0, config->getInt("Core3.CityAuthority.ArrestDelayMs", 1000));
-		ManagedReference<CreatureObject*> strongOffender = offender;
-
-		Core::getTaskManager()->scheduleTask([strongOffender, destinationZone, destinationX,
-				destinationY, destinationZ, destinationCell] {
-			if (strongOffender == nullptr)
-				return;
-
-			Locker offenderLocker(strongOffender);
-
-			if (!strongOffender->isIncapacitated() || strongOffender->isDead() ||
-					strongOffender->getZone() == nullptr)
-				return;
-
-			strongOffender->sendSystemMessage("You have been arrested by local authorities.");
-			strongOffender->switchZone(destinationZone, destinationX, destinationZ, destinationY, destinationCell);
-		}, "CityAuthorityArrestTask", arrestDelay);
+		*arrestPlayer << offender;
+		arrestPlayer->callFunction();
 	}
 }
 
