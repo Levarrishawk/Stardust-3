@@ -61,6 +61,7 @@ public:
 
 class MobileOutfit : public Object {
 	Vector<OutfitTangibleObject> objects;
+	VectorMap<String, int16> creatureCustomizationVariables;
 public:
 	MobileOutfit() {
 
@@ -68,6 +69,7 @@ public:
 
 	MobileOutfit(const MobileOutfit& o) : Object() {
 		objects = o.objects;
+		creatureCustomizationVariables = o.creatureCustomizationVariables;
 	}
 
 	MobileOutfit& operator=(const MobileOutfit& o) {
@@ -75,11 +77,31 @@ public:
 			return *this;
 
 		objects = o.objects;
+		creatureCustomizationVariables = o.creatureCustomizationVariables;
 
 		return *this;
 	}
 
 	void readObject(LuaObject* luaObject) {
+		LuaObject customizationTable = luaObject->getObjectField("creatureCustomizationVariables");
+
+		if (customizationTable.isValidTable()) {
+			for (int i = 1; i <= customizationTable.getTableSize(); ++i) {
+				LuaObject var = customizationTable.getObjectAt(i);
+
+				if (var.isValidTable() && var.getTableSize() >= 2) {
+					String name = var.getStringAt(1);
+					int16 val = var.getIntAt(2);
+
+					creatureCustomizationVariables.put(name, val);
+				}
+
+				var.pop();
+			}
+		}
+
+		customizationTable.pop();
+
 		for (int i = 1; i <= luaObject->getTableSize(); ++i) {
 			LuaObject obj = luaObject->getObjectAt(i);
 
@@ -94,6 +116,10 @@ public:
 
 	Vector<OutfitTangibleObject>* getObjects() {
 		return &objects;
+	}
+
+	VectorMap<String, int16>* getCreatureCustomizationVariables() {
+		return &creatureCustomizationVariables;
 	}
 
 };

@@ -303,6 +303,13 @@ void AiAgentImplementation::loadTemplateData(CreatureTemplate* templateData) {
 				if (num > -1) {
 					MobileOutfit* clothes = &outfits->get(num);
 
+					VectorMap<String, int16>* creatureCustomizationVariables = clothes->getCreatureCustomizationVariables();
+
+					for (int i = 0; i < creatureCustomizationVariables->size(); ++i) {
+						setCustomizationVariable(creatureCustomizationVariables->elementAt(i).getKey(),
+								creatureCustomizationVariables->elementAt(i).getValue(), false);
+					}
+
 					Vector<OutfitTangibleObject>* objects = clothes->getObjects();
 
 					for (int i = 0; i < objects->size(); ++i) {
