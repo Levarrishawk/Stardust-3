@@ -44,4 +44,4 @@ owen_lars = Creature:new {
 	secondaryAttacks = { }
 }
 
-CreatureTemplates:addCreatureTemplate(luke_skywalker, "luke_skywalker")
+CreatureTemplates:addCreatureTemplate(owen_lars, "owen_lars")
