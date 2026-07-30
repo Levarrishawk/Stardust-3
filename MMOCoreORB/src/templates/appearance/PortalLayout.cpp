@@ -171,7 +171,7 @@ void PortalLayout::parse(IffStream* iffStream) {
 
 		uint32 type = iffStream->getNextFormType();
 
-		if (type != '0003' && type != '0004') {
+		if (type != '0001' && type != '0003' && type != '0004') {
 			StringBuffer stream;
 			stream << "invalid PROTO type 0x" << hex << type;
 			error(stream);
@@ -190,7 +190,8 @@ void PortalLayout::parse(IffStream* iffStream) {
 
 		iffStream->openForm('PRTS');
 
-		if (type == '0003')
+		// Version 0001 uses the same counted vertex list as version 0003.
+		if (type == '0001' || type == '0003')
 			readPortalGeometry0003(iffStream, numPortals);
 		else
 			readPortalGeometry0004(iffStream, numPortals);

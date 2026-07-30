@@ -7,7 +7,16 @@ void CellPortal::readObject(IffStream* iff) {
 
 	uint32 formType = chunk->getChunkID();
 
-	if (formType == '0004' || formType == '0005') {
+	if (formType == '0002') {
+		solid = (bool) iff->getByte();
+		geometryIndex = iff->getInt();
+		winding = (bool) iff->getByte();
+		targetCell = iff->getInt();
+
+		// Version 0002 predates portal door templates and transforms.
+		doorName = "";
+		transformFlag = false;
+	} else if (formType == '0004' || formType == '0005') {
 
 		if (formType == '0005') {
 			iff->getByte(); // Unknown flag
