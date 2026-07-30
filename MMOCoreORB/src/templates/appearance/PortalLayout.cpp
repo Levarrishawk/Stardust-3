@@ -201,13 +201,14 @@ void PortalLayout::parse(IffStream* iffStream) {
 		//open CELS form
 		parseCELSForm(iffStream, numCells);
 
-		//path graph
+		// Version 0001 ends with a CRC chunk and does not contain a path graph.
+		if (type != '0001') {
+			uint32 nextType = iffStream->getNextFormType();
 
-		uint32 nextType = iffStream->getNextFormType();
-
-		if (nextType == 'PGRF') {
-			pathGraph = new PathGraph(nullptr);
-			pathGraph->readObject(iffStream);
+			if (nextType == 'PGRF') {
+				pathGraph = new PathGraph(nullptr);
+				pathGraph->readObject(iffStream);
+			}
 		}
 
 		iffStream->closeForm(type);
