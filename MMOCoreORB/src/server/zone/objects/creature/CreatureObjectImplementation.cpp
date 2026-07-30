@@ -3461,6 +3461,15 @@ bool CreatureObjectImplementation::isAggressiveTo(TangibleObject* target) {
 		if (ghost->isOnLoadScreen())
 			return false;
 
+		if (tarCreo->isPlayerCreature()) {
+			Zone* thisZone = getZone();
+			Zone* targetZone = tarCreo->getZone();
+
+			if ((thisZone != nullptr && thisZone->getZoneName() == "elysium") ||
+					(targetZone != nullptr && targetZone->getZoneName() == "elysium"))
+				return false;
+		}
+
 		if (hasPersonalEnemyFlag(tarCreo) && tarCreo->hasPersonalEnemyFlag(asCreatureObject()))
 			return true;
 
@@ -3737,6 +3746,11 @@ bool CreatureObjectImplementation::isAttackableBy(CreatureObject* creature, bool
 
 		// PvP Attackable checks - both this creo and attacker are players
 		if (creature->isPlayerCreature()) {
+			Zone* zone = getZone();
+
+			if (zone != nullptr && zone->getZoneName() == "elysium")
+				return false;
+
 			// PvP Mode Config active, players outside the same group and guild are attackable
 			if (ConfigManager::instance()->getPvpMode()) {
 				if (getGroupID() != 0 && getGroupID() == creature->getGroupID())
