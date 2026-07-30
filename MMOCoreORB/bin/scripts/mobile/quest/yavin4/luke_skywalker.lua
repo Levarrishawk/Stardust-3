@@ -10,6 +10,7 @@ luke_skywalker = Creature:new {
 	baseXp = 9429,
 	baseHAM = 24000,
 	baseHAMmax = 30000,
+	scale = 0.5,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,0,-1},
 	meatType = "",
@@ -23,7 +24,7 @@ luke_skywalker = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = PACK,
-	optionsBitmask = INVULNERABLE + CONVERSABLE,
+	optionsBitmask = INVULNERABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_luke_skywalker.iff"},
@@ -33,7 +34,7 @@ luke_skywalker = Creature:new {
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
 	primaryWeapon = "luke_skywalker_weapons",
 	secondaryWeapon = "unarmed",
-	conversationTemplate = "theme_park_rebel_mission_giver_convotemplate",
+	conversationTemplate = "",
 
 	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
 	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets

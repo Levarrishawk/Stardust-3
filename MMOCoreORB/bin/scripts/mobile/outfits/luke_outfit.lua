@@ -1,9 +1,8 @@
 luke_outfit = {
 	{ 
-		{objectTemplate = "object/tangible/wearables/boots/boots_s12.iff", customizationVariables = {{"/private/index_color_1", 06}} },
-		{objectTemplate = "object/tangible/wearables/pants/pants_s12.iff", customizationVariables = {{"/private/index_color_1", 06}} },	
-		{objectTemplate = "object/tangible/wearables/shirt/shirt_s08.iff", customizationVariables = {{"/private/index_color_1", 06}} },		
-		{objectTemplate = "object/tangible/wearables/gloves/gloves_s02.iff", customizationVariables = {{"/private/index_color_1", 06}} },
+		{objectTemplate = "object/tangible/wearables/boots/boots_s03.iff", customizationVariables = {{"/private/index_color_1", 38}} },
+		{objectTemplate = "object/tangible/wearables/pants/pants_s10.iff", customizationVariables = {{"/private/index_color_1", 56}} },	
+		{objectTemplate = "object/tangible/wearables/shirt/shirt_s09.iff", customizationVariables = {{"/private/index_color_1", 42}} },		
 	}
 	 
 }
