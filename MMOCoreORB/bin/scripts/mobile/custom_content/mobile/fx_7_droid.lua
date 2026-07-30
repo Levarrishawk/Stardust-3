@@ -1,5 +1,5 @@
 fx_7_droid = Creature:new {
-	customName = "fx_7_droid",
+	customName = "FX-7 Droid",
 	--objectName = "",
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
