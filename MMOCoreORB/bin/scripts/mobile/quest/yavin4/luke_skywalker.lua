@@ -10,7 +10,7 @@ luke_skywalker = Creature:new {
 	baseXp = 9429,
 	baseHAM = 24000,
 	baseHAMmax = 30000,
-	scale = 0.5,
+	scale = 0.65,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,0,-1},
 	meatType = "",
@@ -35,6 +35,7 @@ luke_skywalker = Creature:new {
 	primaryWeapon = "luke_skywalker_weapons",
 	secondaryWeapon = "unarmed",
 	conversationTemplate = "",
+	outfit = "luke_outfit",
 
 	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
 	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
