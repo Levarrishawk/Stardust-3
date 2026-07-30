@@ -5,7 +5,7 @@ owen_lars_outfit = {
       {"/private/index_color_facial_hair", 21}
     },
 
-    {objectTemplate = "object/tangible/wearables/robe/robe_s05.iff", customizationVariables = {{"/private/index_color_1", 97}} },
+    {objectTemplate = "object/tangible/wearables/robe/robe_s05.iff", customizationVariables = {{"/private/index_color_1", 20}} },
     {objectTemplate = "object/tangible/wearables/pants/pants_s04.iff", customizationVariables = {{"/private/index_color_1", 92}} },
     {objectTemplate = "object/tangible/wearables/shirt/shirt_s11.iff", customizationVariables = {{"/private/index_color_1", 92}} },
     {objectTemplate = "object/tangible/wearables/boots/boots_s05.iff", customizationVariables = {{"/private/index_color_1", 97}} },

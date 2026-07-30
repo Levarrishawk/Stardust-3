@@ -38,6 +38,9 @@ tatooine_regions = {
 	{"@tatooine_region_names:fort_tusken", -3900, 6260, {CIRCLE, 250}, NOSPAWNAREA + NOBUILDZONEAREA + NAMEDREGION + NAVAREA},
 	--{"@tatooine_region_names:fort_tusken_1", -3981, 6270, {CIRCLE, 250}, NAMEDREGION},
 	{"@tatooine_region_names:jawa_mountain_fortress", -6144, 1856, {CIRCLE, 200}, NAMEDREGION + NOSPAWNAREA + NAVAREA},
+	
+	{"tatooine_south_dune_sea_cave", -3408, -6853, {CIRCLE, 200}, NOSPAWNAREA + NAVAREA + NOBUILDZONEAREA},
+	
 	{"@tatooine_region_names:jawa_mountain_fortress_1", -6144, 1856, {CIRCLE, 300}, NOBUILDZONEAREA},
 	{"@tatooine_region_names:mushroom_mesa", 900, 5567, {CIRCLE, 250}, NAMEDREGION},
 	{"@tatooine_region_names:benzin_plateau_1", 880, 5456, {CIRCLE, 720}, NAMEDREGION},
