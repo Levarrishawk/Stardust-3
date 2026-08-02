@@ -1444,7 +1444,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -147, 40, 5681, 0, 0)
   self:setMoodString(pNpc, "neutral")
-  --CreatureObject(pNpc):clearOptionBit(AIENABLED)
   pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -168, 40, 5673, 0, 0)
   self:setMoodString(pNpc, "neutral")
   pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -169, 40, 5698, 0, 0)
@@ -1456,7 +1455,49 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -168, 40, 5636, 0, 0)
   self:setMoodString(pNpc, "neutral")
 
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, 13.7, -23.0, 112.5, -90, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, -42.7, -23.0, 112.5, 90, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, -42.7, -23.0, 202.2, 90, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, 13.7, -23.0, 202.2, -90, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -18.0, -23.0, 179.7, 0, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -19.1, -23.0, 174.7, 49, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -25.2, -23.0, 170, 135, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -3.0, -23.0, 163, 0, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -11.4, -23.0, 169, 49, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -5.2, -23.0, 177, 135, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -3.2, -23.0, 129, 0, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -7.7, -23.0, 133, 49, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -6, -23.0, 141, 135, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -18.2, -23.0, 126, 0, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -23, -23.0, 140, 49, 37002249)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -22, -23.0, 150, 135, 37002249)
+  self:setMoodString(pNpc, "neutral")
   -- Palace / Jedi Temple Quarter
   
   
