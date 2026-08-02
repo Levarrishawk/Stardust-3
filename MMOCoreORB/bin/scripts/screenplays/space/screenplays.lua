@@ -21,6 +21,10 @@ includeFile("space/SpaceDutyPatrolScreenplay.lua")
 includeFile("space/SpaceDutyRecoveryScreenplay.lua")
 includeFile("space/SpaceDutyRescueScreenplay.lua")
 
+-- Master-tier Kessel Corvette encounter (defines destroy_master_{imperial,rebel}_{1,2}).
+-- Must load BEFORE the squadron screenplays, which reference these master objects.
+includeFile("space/squadrons/KesselMasterEncounterScreenplay.lua")
+
 includeFile("space/chassis_dealer.lua")
 
 --[[
@@ -98,6 +102,8 @@ includeFile("space/conversations/neutral/corsec_squadron/turoldineConvoHandler.l
 -- Smuggler Squadron
 includeFile("space/squadrons/SmugglerSquadronScreenplay.lua")
 
+includeFile("space/conversations/neutral/smuggler_squadron/dravisConvoHandler.lua")
+
 -- RSF Squadron
 includeFile("space/squadrons/RsfSquadronScreenplay.lua")
 
@@ -112,8 +118,8 @@ includeFile("space/conversations/rebel/jPaiBrekConvoHandler.lua")
 -- Crimson Phoenix Squadron
 includeFile("space/squadrons/CrimsonPhoenixSquadronScreenplay.lua")
 
+includeFile("space/conversations/rebel/crimson_phoenix_squadron/daLaSocunaConvoHandler.lua")
 --includeFile("space/conversations/rebel/crimson_phoenix_squadron/ekerConvoHandler.lua")
---includeFile("space/conversations/rebel/crimson_phoenix_squadron/socunaConvoHandler.lua")
 --includeFile("space/conversations/rebel/crimson_phoenix_squadron/ulvawopConvoHandler.lua")
 --includeFile("space/conversations/rebel/crimson_phoenix_squadron/ufwolConvoHandler.lua")
 
@@ -129,9 +135,9 @@ includeFile("space/conversations/rebel/havoc_squadron/aqzowConvoHandler.lua")
 -- Vortex Squadron
 includeFile("space/squadrons/VortexSquadronScreenplay.lua")
 
+includeFile("space/conversations/rebel/vortex_squadron/v3fxConvoHandler.lua")
 --includeFile("space/conversations/rebel/vortex_squadron/evinConvoHandler.lua")
 --includeFile("space/conversations/rebel/vortex_squadron/ezkielConvoHandler.lua")
---includeFile("space/conversations/rebel/vortex_squadron/v3fxConvoHandler.lua")
 --includeFile("space/conversations/rebel/vortex_squadron/vrovelConvoHandler.lua")
 
 
@@ -141,11 +147,17 @@ includeFile("space/conversations/imperial/imperialBrokerConvoHandler.lua")
 -- Black Epsilon Squadron
 includeFile("space/squadrons/BlackEpsilonSquadronScreenplay.lua")
 
+includeFile("space/conversations/imperial/black_epsilon_squadron/hakasshaSireenConvoHandler.lua")
+
 -- Imperial Inquisition Squadron
 includeFile("space/squadrons/InquisitionSquadronScreenplay.lua")
 
+includeFile("space/conversations/imperial/inquisition_squadron/barnSinkkoConvoHandler.lua")
+
 -- Storm Squadron
 includeFile("space/squadrons/StormSquadronScreenplay.lua")
+
+includeFile("space/conversations/imperial/storm_squadron/akalColzetConvoHandler.lua")
 
 
 -- Spawning Sub Folder
