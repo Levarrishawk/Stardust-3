@@ -1279,10 +1279,14 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   
   --Inside COMPNOR Arcology------------------------------
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, 5.0, 0.3, -4.1, -90, 37002128)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+
   pNpc = spawnMobile("coruscant", "dark_trooper", 60, 6.7, -12.0, 25.6, -95, 37002130)
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
-  
+
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -19.6, -12.0, 54.0, 120, 37002130)
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
@@ -1303,6 +1307,46 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 0.8, -12.0, 26.1, 131, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 3.7, -12.0, 40.3, 1, 37002130)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 26.9, -12.0, 43.4, -89, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 6.3, -12.0, 67.7, -0, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 3.5, -12.0, 67.7, -0, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 0.8, -12.0, 67.7, -0, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 3.6, -12.0, 60.8, -10, 37002130)
+  self:setMoodString(pNpc, "conversation")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 3.4, -12.0, 65.1, 168, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, -19.2, -12.0, 43.4, 0, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  --conference room
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 47.5, -12.0, 4.7, -90, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   
   -- Prison Quarter
