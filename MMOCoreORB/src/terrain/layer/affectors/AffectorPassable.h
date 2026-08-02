@@ -28,7 +28,7 @@ public:
 			baseValue = var1 != 0.f ? 1.f : 0.f;
 	}
 
-	void parseFromIffStream(engine::util::IffStream* iffStream) {
+	void parseFromIffStream(engine::util::IffStream* iffStream) override {
 		uint32 version = iffStream->getNextFormType();
 
 		iffStream->openForm(version);
