@@ -31,7 +31,7 @@ isb_officer = Creature:new {
 
 	templates = { 
 	   "object/mobile/tatooine_npc/hedon_istee.iff", 
-	   "object/mobile/mara_jade.iff"
+	   "object/mobile/tatooine_npc/brea_tonnika.iff"
 	   },  
 	outfit = "isb_outfit",
 	lootGroups = {
