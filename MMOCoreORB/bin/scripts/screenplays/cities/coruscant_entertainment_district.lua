@@ -1261,6 +1261,14 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, -125, 40, 5500, 46, 0)
+  self:setMoodString(pNpc, "conversation")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, -122, 40, 5502, -132, 0)
+  self:setMoodString(pNpc, "conversation")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
   
   --Inside COMPNOR Arcology------------------------------
   pNpc = spawnMobile("coruscant", "dark_trooper", 60, 6.7, -12.0, 25.6, -95, 37002130)
@@ -1286,6 +1294,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -16.6, -20.0, 10.9, 180, 37002141)
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
   
   
   -- Prison Quarter
