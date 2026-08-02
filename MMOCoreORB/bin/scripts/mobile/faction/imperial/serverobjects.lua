@@ -189,3 +189,5 @@ includeFile("faction/imperial/stormtrooper_sniper.lua")
 includeFile("faction/imperial/stormtrooper_squad_leader.lua")
 includeFile("faction/imperial/tie_pilot.lua")
 includeFile("faction/imperial/veteran_compforce_trooper.lua")
+--custom
+includeFile("faction/imperial/isb_officer.lua")
