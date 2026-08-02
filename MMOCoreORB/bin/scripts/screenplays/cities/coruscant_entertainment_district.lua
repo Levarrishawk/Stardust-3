@@ -1269,6 +1269,14 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "conversation")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, -118, 40, 5479, -90, 0)
+  self:setMoodString(pNpc, "npc_consoling")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, -122, 40, 5479, 90, 0)
+  self:setMoodString(pNpc, "npc_accusing")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
   
   --Inside COMPNOR Arcology------------------------------
   pNpc = spawnMobile("coruscant", "dark_trooper", 60, 6.7, -12.0, 25.6, -95, 37002130)
