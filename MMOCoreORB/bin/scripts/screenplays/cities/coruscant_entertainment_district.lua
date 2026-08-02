@@ -1344,7 +1344,47 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   --conference room
-  pNpc = spawnMobile("coruscant", "isb_officer", 60, 47.5, -12.0, 4.7, -90, 37002139)
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 47.5, -12.0, 4.7, -0, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 44.2, -12.0, 4.7, -14, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 41.2, -12.0, 4.7, 7, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 38.5, -12.0, 4.7, 29, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 34.6, -12.0, 6.1, 51, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 33.2, -12.0, 10.1, 90, 37002139)   -- replace with partagaz
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 39.2, -12.0, 15.5, 180, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 41.8, -12.0, 15.5, 180, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 44.1, -12.0, 15.5, 180, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 45.9, -12.0, 15.5, 178, 37002139)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 49.0, -12.0, 15.5, -169, 37002139)
   self:setMoodString(pNpc, "npc_sitting_chair")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
