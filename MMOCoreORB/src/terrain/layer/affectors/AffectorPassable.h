@@ -16,7 +16,16 @@ class AffectorPassable : public ProceduralRule<'APAS'>, public AffectorProcedura
 
 public:
 	AffectorPassable() : var1(0), var2(0) {
+		affectorType = PASSABLE;
+	}
 
+	bool isEnabled() override {
+		return informationHeader.isEnabled();
+	}
+
+	void process(float x, float y, float transformValue, float& baseValue, TerrainGenerator* terrainGenerator) override {
+		if (transformValue > 0.f)
+			baseValue = var1 != 0.f ? 1.f : 0.f;
 	}
 
 	void parseFromIffStream(engine::util::IffStream* iffStream) {

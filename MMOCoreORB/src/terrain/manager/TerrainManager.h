@@ -51,6 +51,8 @@ public:
 	void removeTerrainModification(uint64 objectid);
 
 	ProceduralTerrainAppearance* getProceduralTerrainAppearance();
+	bool isPassable(float x, float y) const;
+	bool isPathPassable(float x0, float y0, float x1, float y1) const;
 
 	float getCachedHeight(float x, float y);
 	float getUnCachedHeight(float x, float y) const;

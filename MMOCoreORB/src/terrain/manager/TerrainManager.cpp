@@ -154,6 +154,45 @@ ProceduralTerrainAppearance* TerrainManager::getProceduralTerrainAppearance() {
 	return dynamic_cast<ProceduralTerrainAppearance*>(terrainData.get());
 }
 
+bool TerrainManager::isPassable(float x, float y) const {
+	const ProceduralTerrainAppearance* terrain = dynamic_cast<const ProceduralTerrainAppearance*>(terrainData.get());
+
+	return terrain == nullptr || terrain->isPassable(x, y);
+}
+
+bool TerrainManager::isPathPassable(float x0, float y0, float x1, float y1) const {
+	const ProceduralTerrainAppearance* terrain = dynamic_cast<const ProceduralTerrainAppearance*>(terrainData.get());
+
+	if (terrain == nullptr || !terrain->hasPassabilityRules())
+		return true;
+
+	float deltaX = x1 - x0;
+	float deltaY = y1 - y0;
+	float distance = sqrt((deltaX * deltaX) + (deltaY * deltaY));
+
+	if (distance > 128.f)
+		return false;
+
+	float sampleDistance = terrain->getDistanceBetweenPoles();
+
+	if (sampleDistance <= 0.f)
+		sampleDistance = 1.f;
+
+	int steps = (int)ceil(distance / sampleDistance);
+
+	if (steps == 0)
+		return isPassable(x1, y1);
+
+	for (int i = 1; i <= steps; ++i) {
+		float ratio = (float)i / (float)steps;
+
+		if (!isPassable(x0 + (deltaX * ratio), y0 + (deltaY * ratio)))
+			return false;
+	}
+
+	return true;
+}
+
 float TerrainManager::getUnCachedHeight(float x, float y) const {
 	if (terrainData == nullptr) {
 		return 0.f;

@@ -16,6 +16,7 @@
 
 #include "server/zone/managers/planet/PlanetManager.h"
 #include "server/zone/managers/player/PlayerManager.h"
+#include "terrain/manager/TerrainManager.h"
 #include "server/zone/managers/collision/CollisionManager.h"
 #include "server/zone/managers/collision/IntersectionResults.h"
 #include "server/zone/managers/objectcontroller/ObjectController.h"
@@ -323,6 +324,16 @@ public:
 
 		if (movementValidation == Transform::INVALID_POSITION) {
 			return updateError(creO, "!DT_checkSpeedHackTests_POS", true);
+		}
+
+		auto terrainManager = planetManager->getTerrainManager();
+
+		if (terrainManager != nullptr) {
+			Vector3 lastValidatedWorldPosition = validPosition->getWorldPosition(zoneServer);
+
+			if (!terrainManager->isPathPassable(lastValidatedWorldPosition.getX(), lastValidatedWorldPosition.getY(), transform.getPositionX(), transform.getPositionY())) {
+				return updateError(creO, "!DT_affectorPassable", true);
+			}
 		}
 
 		// Determine if we should attempt to predict position due to velocity

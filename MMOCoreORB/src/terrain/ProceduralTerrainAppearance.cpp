@@ -50,6 +50,8 @@ ProceduralTerrainAppearance::ProceduralTerrainAppearance() : Logger("ProceduralT
 	radialFarTileSize = 0;
 	radialFarTileBorder = 0;
 	radialFarSeed = 0;
+
+	hasPassabilityAffectors = false;
 }
 
 ProceduralTerrainAppearance::~ProceduralTerrainAppearance() {
@@ -77,6 +79,7 @@ bool ProceduralTerrainAppearance::load(IffStream* iffStream) {
 	terrainMaps = new TerrainMaps();
 
 	readObject(iffStream);
+	hasPassabilityAffectors = containsPassabilityAffector(terrainGenerator);
 
 	terrainGenerator->processLayers();
 
@@ -284,7 +287,7 @@ float ProceduralTerrainAppearance::calculateFeathering(float value, int featheri
 	return result;
 }
 
-float ProceduralTerrainAppearance::processTerrain(const Layer* layer, float x, float y, float& baseValue, float affectorTransformValue, int affectorType) const {
+float ProceduralTerrainAppearance::processTerrain(const Layer* layer, float x, float y, float& baseValue, float affectorTransformValue, int affectorType, const float* filterBaseValue) const {
 	const Vector<Boundary*>* boundaries = layer->getBoundaries();
 	const Vector<AffectorProceduralRule*>* affectors = layer->getAffectors();
 	const Vector<FilterProceduralRule*>* filters = layer->getFilters();
@@ -350,7 +353,14 @@ float ProceduralTerrainAppearance::processTerrain(const Layer* layer, float x, f
 			/*if (!(filter->getFilterType() & affectorType))
 				continue;*/
 
-			float result = filter->process(x, y, transformValue, baseValue, terrainGenerator, &rect);
+			float result;
+
+			if (filterBaseValue != nullptr) {
+				float filterValue = *filterBaseValue;
+				result = filter->process(x, y, transformValue, filterValue, terrainGenerator, &rect);
+			} else {
+				result = filter->process(x, y, transformValue, baseValue, terrainGenerator, &rect);
+			}
 
 			int featheringType = filter->getFeatheringType();
 
@@ -389,7 +399,7 @@ float ProceduralTerrainAppearance::processTerrain(const Layer* layer, float x, f
 				const Layer* layer = children->get(i);
 
 				if (layer->isEnabled()) {
-					processTerrain(layer, x, y, baseValue, affectorTransformValue * transformValue, affectorType);
+					processTerrain(layer, x, y, baseValue, affectorTransformValue * transformValue, affectorType, filterBaseValue);
 				}
 			}
 		}
@@ -454,6 +464,62 @@ float ProceduralTerrainAppearance::getHeight(float x, float y) const {
 	debug() << "full traverse height for (" << x << "," << y << ") is " << fullTraverse;
 
 	return fullTraverse;
+}
+
+bool ProceduralTerrainAppearance::containsPassabilityAffector(const Layer* layer) const {
+	const Vector<AffectorProceduralRule*>* affectors = layer->getAffectors();
+
+	for (int i = 0; i < affectors->size(); ++i) {
+		if (affectors->get(i)->getAffectorType() & AffectorProceduralRule::PASSABLE)
+			return true;
+	}
+
+	const Vector<Layer*>* children = layer->getChildren();
+
+	for (int i = 0; i < children->size(); ++i) {
+		if (containsPassabilityAffector(children->get(i)))
+			return true;
+	}
+
+	return false;
+}
+
+bool ProceduralTerrainAppearance::containsPassabilityAffector(const TerrainGenerator* generator) const {
+	const Vector<Layer*>* layers = generator->getLayersGroup()->getLayers();
+
+	for (int i = 0; i < layers->size(); ++i) {
+		if (containsPassabilityAffector(layers->get(i)))
+			return true;
+	}
+
+	return false;
+}
+
+bool ProceduralTerrainAppearance::isPassable(float x, float y) const {
+	if (!hasPassabilityAffectors)
+		return true;
+
+	float terrainHeight = getHeight(x, y);
+
+	ReadLocker locker(&guard);
+
+	float passable = 1.f;
+	float affectorTransform = 1.f;
+	int count = 0;
+	const TerrainGenerator* terrain = terrainGenerator;
+
+	do {
+		const Vector<Layer*>* layers = terrain->getLayersGroup()->getLayers();
+
+		for (int i = 0; i < layers->size(); ++i) {
+			const Layer* layer = layers->get(i);
+
+			if (layer->isEnabled())
+				processTerrain(layer, x, y, passable, affectorTransform, AffectorProceduralRule::PASSABLE, &terrainHeight);
+		}
+	} while (count < customTerrain.size() && (terrain = customTerrain.get(count++)));
+
+	return passable != 0.f;
 }
 
 void ProceduralTerrainAppearance::translateBoundaries(Layer* layer, float x, float y) {
@@ -527,6 +593,9 @@ TerrainGenerator* ProceduralTerrainAppearance::addTerrainModification(engine::ut
 	}
 
 	Locker locker(&guard);
+
+	if (containsPassabilityAffector(terrain))
+		hasPassabilityAffectors = true;
 
 	TerrainGenerator* oldLayer = terrainModifications.put(objectid, terrain);
 	customTerrain.add(terrain);

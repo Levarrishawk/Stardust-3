@@ -68,10 +68,13 @@ class ProceduralTerrainAppearance : public TemplateVariable<'PTAT'>, public Logg
 	HashTable<uint64, TerrainGenerator*> terrainModifications;
 
 	Vector<TerrainGenerator*> customTerrain;
+	bool hasPassabilityAffectors;
 
 protected:
 	static float calculateFeathering(float value, int featheringType);
-	float processTerrain(const Layer* layer, float x, float y, float& baseValue, float affectorTransformValue, int affectorType) const;
+	float processTerrain(const Layer* layer, float x, float y, float& baseValue, float affectorTransformValue, int affectorType, const float* filterBaseValue = nullptr) const;
+	bool containsPassabilityAffector(const Layer* layer) const;
+	bool containsPassabilityAffector(const TerrainGenerator* generator) const;
 	Layer* getLayerRecursive(float x, float y, Layer* rootParent) const;
 	Layer* getLayer(float x, float y) const;
 
@@ -104,6 +107,10 @@ public:
 	bool getWater(float x, float y, float& waterHeight) const override;
 	float getHeight(float x, float y) const override;
 	int getEnvironmentID(float x, float y) const;
+	bool isPassable(float x, float y) const;
+	bool hasPassabilityRules() const {
+		return hasPassabilityAffectors;
+	}
 
 	float getGlobalWaterTableHeight() const {
 		return globalWaterTableHeight;

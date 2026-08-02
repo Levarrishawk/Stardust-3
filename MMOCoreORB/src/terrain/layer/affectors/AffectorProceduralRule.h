@@ -24,6 +24,7 @@ public:
 	const static int HEIGHTCONSTANT = 0x103;
 	const static int HEIGHTROAD = 0x104;
 	const static int ENVIRONMENT = 0x200;
+	const static int PASSABLE = 0x400;
 
 	virtual ~AffectorProceduralRule() {
 
