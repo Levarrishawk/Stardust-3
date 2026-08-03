@@ -30,6 +30,23 @@ int HelperDroidObjectImplementation::handleObjectMenuSelect(CreatureObject* play
 		if (lua == nullptr)
 			return 0;
 
+		if (selectedID == 117) {
+			Zone* playerZone = player->getZone();
+
+			if (playerZone == nullptr || playerZone->getZoneName() != "elysium")
+				return 0;
+
+			Reference<LuaFunction*> luaElysiumProgression = lua->createFunction("HelperDroid", "elysiumProgression", 0);
+
+			if (luaElysiumProgression == nullptr)
+				return 0;
+
+			*luaElysiumProgression << asAiAgent();
+			*luaElysiumProgression << player;
+			luaElysiumProgression->callFunction();
+			return 0;
+		}
+
 		if (selectedID >= 182 && selectedID <= 185) {
 			// Space Information
 			Reference<LuaFunction*> luaSpaceInfo = lua->createFunction("HelperDroid", "spaceInformation", 0);
@@ -136,8 +153,10 @@ void HelperDroidObjectImplementation::fillObjectMenuResponse(ObjectMenuResponse*
 
 		Zone* playerZone = player->getZone();
 
-		if (playerZone != nullptr && playerZone->getZoneName() == "elysium")
+		if (playerZone != nullptr && playerZone->getZoneName() == "elysium") {
+			menuResponse->addRadialMenuItem(117, 3, "Ask about this place");
 			return;
+		}
 
 		// Starship Pilot Help
 		menuResponse->addRadialMenuItem(181, 3, "@new_player:menu_space");

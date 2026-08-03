@@ -97,7 +97,6 @@ function HelperDroid:greetPlayer(pPlayer, pDroid)
 
 		local playerID = SceneObject(pPlayer):getObjectID()
 		local droidID = SceneObject(pDroid):getObjectID()
-		local stage = ElysiumJediProgression:getStage(pPlayer)
 
 		writeData(playerID .. ":HelperDroidID:", droidID)
 
@@ -105,19 +104,8 @@ function HelperDroid:greetPlayer(pPlayer, pDroid)
 		sui.setTitle(SceneObject(pDroid):getCustomObjectName())
 		sui.setProperty("", "Size", "500,200")
 		sui.setForceCloseDistance(10)
-		sui.setPrompt(ElysiumJediProgression:getDroidPrompt(pPlayer))
-
-		if (CreatureObject(pPlayer):hasSkill("force_title_jedi_novice")) then
-			sui.add("My path through the Force has already begun.", "")
-		elseif (stage == ElysiumJediProgression.NOT_STARTED) then
-			sui.add("I am ready to learn why I am here.", "")
-		elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
-			sui.add("Remind me what I must do.", "")
-		elseif (stage == ElysiumJediProgression.NPC_SEARCH_ACTIVE) then
-			sui.add("Tell me again about the presence I must find.", "")
-		else
-			sui.add("Tell me what comes next.", "")
-		end
+		sui.setPrompt("@new_player:droid_greeting_begin_01 Welcome to the afterlife, would you like to learn more about being dead?")
+		sui.add("How did I get here?", "")
 
 		sui.sendTo(pPlayer)
 		return
@@ -267,6 +255,65 @@ function HelperDroid:elysiumCallback(pPlayer, pSui, eventIndex, args)
 	local pDroid = getSceneObject(droidID)
 
 	deleteData(playerID .. ":HelperDroidID:")
+
+	if (pDroid == nil or SceneObject(pPlayer):getZoneName() ~= "elysium") then
+		return
+	end
+
+	spatialChat(pDroid, "You are here because you have died and cloned more than five times. Complex cloning data loses its integrity with each subsequent copy made. On the other hand, now you and I have an eternity to explore the Netherworld of the Force together! Hurrah!")
+end
+
+function HelperDroid:elysiumProgression(pDroid, pPlayer)
+	if (pDroid == nil or pPlayer == nil or SceneObject(pPlayer):getZoneName() ~= "elysium") then
+		return
+	end
+
+	self:playDroidSound(pPlayer)
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local droidID = SceneObject(pDroid):getObjectID()
+	local stage = ElysiumJediProgression:getStage(pPlayer)
+
+	writeData(playerID .. ":HelperDroid:ElysiumProgressionDroidID:", droidID)
+
+	local sui = SuiListBox.new("HelperDroid", "elysiumProgressionCallback")
+	sui.setTitle(SceneObject(pDroid):getCustomObjectName())
+	sui.setProperty("", "Size", "500,200")
+	sui.setForceCloseDistance(10)
+	sui.setPrompt(ElysiumJediProgression:getDroidPrompt(pPlayer))
+
+	if (CreatureObject(pPlayer):hasSkill("force_title_jedi_novice")) then
+		sui.add("My path through the Force has already begun.", "")
+	elseif (stage == ElysiumJediProgression.NOT_STARTED) then
+		sui.add("I am ready to learn why I am here.", "")
+	elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
+		sui.add("Remind me what I must do.", "")
+	elseif (stage == ElysiumJediProgression.NPC_SEARCH_ACTIVE) then
+		sui.add("Tell me again about the presence I must find.", "")
+	else
+		sui.add("Tell me what comes next.", "")
+	end
+
+	sui.sendTo(pPlayer)
+end
+
+function HelperDroid:elysiumProgressionCallback(pPlayer, pSui, eventIndex, args)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local dataKey = playerID .. ":HelperDroid:ElysiumProgressionDroidID:"
+
+	if (eventIndex == 1) then
+		deleteData(dataKey)
+		return
+	end
+
+	local droidID = readData(dataKey)
+	local pDroid = getSceneObject(droidID)
+
+	deleteData(dataKey)
 
 	if (pDroid == nil or SceneObject(pPlayer):getZoneName() ~= "elysium") then
 		return
