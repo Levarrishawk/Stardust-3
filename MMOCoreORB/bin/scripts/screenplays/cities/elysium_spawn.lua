@@ -19,11 +19,11 @@ end
 
 function ElysiumSpawnScreenPlay:spawnElysiumTwoMobiles()
 	local mobiles = {
-		{"elysium2_force_spirit", 2606, 2494, 180},
-		{"elysium2_combat_spirit", 2600, 2498, 135},
-		{"elysium2_reflexes_spirit", 2612, 2498, 225},
-		{"elysium2_crafting_spirit", 2600, 2490, 45},
-		{"elysium2_senses_spirit", 2612, 2490, 315},
+		{"elysium2_force_spirit", 2606, 2500, 0},
+		{"elysium2_combat_spirit", 2606, 2520, 180},
+		{"elysium2_reflexes_spirit", 2586, 2500, 90},
+		{"elysium2_crafting_spirit", 2606, 2480, 0},
+		{"elysium2_senses_spirit", 2625, 2500, -90},
 	}
 
 	for i = 1, #mobiles do

@@ -145,7 +145,12 @@ function ElysiumJediProgression:unlockForceSensitiveTrees(pPlayer)
 	end
 
 	if (self:getStage(pPlayer) == self.FORCE_TRIALS_ACTIVE) then
-		return self:setStage(pPlayer, self.UNLOCK_COMPLETE)
+		if (not self:setStage(pPlayer, self.UNLOCK_COMPLETE)) then
+			return false
+		end
+
+		CreatureObject(pPlayer):sendSystemMessage("You feel an inner glow.  The force is with you.")
+		return true
 	end
 
 	return true
