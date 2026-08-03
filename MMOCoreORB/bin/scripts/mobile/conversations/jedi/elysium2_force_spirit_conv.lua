@@ -45,7 +45,7 @@ end
 elysiumTwoForceSpiritConvoTemplate = createElysiumTwoConversation(
 	"elysiumTwoForceSpiritConvoTemplate",
 	"elysiumTwoForceSpiritConvoHandler",
-	"You have crossed the threshold. What stirred within you on Elysium must now be acknowledged before it can be shaped.",
+	"You have crossed the threshold. What has stirred within you since you crossed the veil of death must now be acknowledged before it can be shaped.",
 	"I am ready to accept what I have become.",
 	"Then awaken. The paths of Force sensitivity now stand before you. Seek the spirits gathered here and learn what each guards."
 )
@@ -100,9 +100,9 @@ elysiumInitiateSpiritConvoTemplate:addScreen(ConvoScreen:new {
 elysiumInitiateSpiritConvoTemplate:addScreen(ConvoScreen:new {
 	id = "intro",
 	leftDialog = "",
-	customDialogText = "You have learned the four disciplines and awakened what slept within you. One threshold remains. Beyond it, you will stand as a Jedi Initiate and your trials will begin.",
+	customDialogText = "You have learned the four disciplines and awakened what slept within you. One threshold remains. Beyond it, you will stand alive again as a vergence in the force.",
 	stopConversation = "false",
-	options = {{"I am ready to leave Elysium and face the trials.", "depart"}}
+	options = {{"I am ready to leave this place.", "depart"}}
 })
 
 elysiumInitiateSpiritConvoTemplate:addScreen(ConvoScreen:new {
@@ -116,7 +116,7 @@ elysiumInitiateSpiritConvoTemplate:addScreen(ConvoScreen:new {
 elysiumInitiateSpiritConvoTemplate:addScreen(ConvoScreen:new {
 	id = "complete",
 	leftDialog = "",
-	customDialogText = "Your path now lies beyond Elysium.",
+	customDialogText = "Your path now lies in the world of the living.",
 	stopConversation = "true",
 	options = {}
 })

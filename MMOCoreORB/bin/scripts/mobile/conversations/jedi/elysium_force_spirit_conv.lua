@@ -21,7 +21,7 @@ local waiting = ConvoScreen:new {
 	customDialogText = "You have followed the vision and found me. Few who wander this place would have recognized the call.",
 	stopConversation = "false",
 	options = {
-		{"The structure showed me where to look.", "search_complete"}
+		{"The vision did not include the insane amount of time it took me to find you.", "search_complete"}
 	}
 }
 
@@ -30,7 +30,7 @@ elysiumForceSpiritConvoTemplate:addScreen(waiting)
 local searchComplete = ConvoScreen:new {
 	id = "search_complete",
 	leftDialog = "",
-	customDialogText = "Then the first veil has been lifted. I can send you to the place where the next part of your journey must begin.",
+	customDialogText = "Time doesn't mean a thing here.  The first veil has been lifted. I can send you to the place where the next part of your journey must begin.",
 	stopConversation = "false",
 	options = {
 		{"I am ready. Send me there.", "teleport"},

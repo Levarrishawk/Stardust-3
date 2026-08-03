@@ -40,16 +40,16 @@ function ElysiumSpawnScreenPlay:spawnElysiumTwoMobiles()
 end
 
 function ElysiumSpawnScreenPlay:spawnSceneObjects()
-	local x = 60
-	local y = -14
+	local x = getRandomNumber(-250, 250)
+	local y = getRandomNumber(-250, 250)
 	local z = getWorldFloor(x, y, "elysium")
 
 	spawnSceneObject("elysium", "object/tangible/jedi/elysium_force_shrine_stone.iff", x, z, y, 0, 180)
 end
 
 function ElysiumSpawnScreenPlay:spawnMobiles()
-	local x = getRandomNumber(-100, 100)
-	local y = getRandomNumber(-100, 100)
+	local x = getRandomNumber(-6500, 6500)
+	local y = getRandomNumber(-6500, 6500)
 	local z = getWorldFloor(x, y, "elysium")
 
 	local pNpc = spawnMobile("elysium", "elysium_force_spirit", 60, x, z, y, 0, 0)
