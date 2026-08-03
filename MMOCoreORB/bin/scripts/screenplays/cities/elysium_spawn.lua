@@ -26,7 +26,7 @@ function ElysiumSpawnScreenPlay:spawnMobiles()
 	local y = getRandomNumber(-100, 100)
 	local z = getWorldFloor(x, y, "elysium")
 
-	local pNpc = spawnMobile("elysium", "commoner", 60, x, z, y, 0, 0)
+	local pNpc = spawnMobile("elysium", "elysium_force_spirit", 60, x, z, y, 0, 0)
 
 	if (pNpc ~= nil) then
 		self:setMoodString(pNpc, "neutral")
