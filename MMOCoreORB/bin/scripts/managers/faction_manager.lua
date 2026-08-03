@@ -10,8 +10,9 @@
 -- adjustFactor  - This factor affects the amount of faction gained/lost when killing a mobile
 
 factionList = {
-	{ "rebel", true, "imperial", "", 1.0 },
-	{ "imperial", true, "rebel", "", 1.0 },
+	{ "rebel", true, "imperial", "fs_villager,separatist", 1.0 },
+	{ "imperial", true, "rebel,fs_villager", "", 1.0 },
+	{ "separatist", true, "imperial", "rebel", 1.0 },
 	{ "aakuans", true, "binayre,fed_dub,liberation_party", "", 1.0 },
 	{ "afarathu", true, "corsec", "", 1.0 },
 	{ "alkhara", true, "tusken_raider", "", 1.0 },
@@ -32,7 +33,7 @@ factionList = {
 	{ "fed_dub", true, "binayre,drall,liberation_party,lost_aqualish", "", 1.0 },
 	{ "flail", true, "hidden_daggers", "", 1.0 },
 	{ "followers_of_lord_nyax", true, "beldonnas_league,corsec", "", 1.0 },
-	{ "fs_villager", true, "sith_shadow,sith_shadow_nonaggro", "", 0.0 },
+	{ "fs_villager", true, "sith_shadow,sith_shadow_nonaggro,imperial", "rebel", 0.0 },
 	{ "garyn", true, "restuss", "", 1.0 },
 	{ "gondula_tribe", true, "donkuwah_tribe,korga_tribe,pubam,endor_marauder,gorax", "panshee_tribe", 1.0 },
 	{ "gorax", true, "panshee_tribe,gondula_tribe", "", 1.0 },
