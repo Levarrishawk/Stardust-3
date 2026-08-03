@@ -208,32 +208,32 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	-- Handle first free training after completing all 4 missions (player chooses which skill)
 	if (screenID == "missions_complete") then
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_40f3848e", "train_player_fighters_free") -- I'm interested in space combat training.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_3818dc2a", "train_player_fighters_free") -- I am interested in basic fighters.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_527c6359", "train_player_component_free") -- I'm interested in equipment.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_3fa70900", "train_player_component_free") -- I am interested in basic starship component use.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_5e3cf461", "train_player_basics_free") -- I'm interested in Imperial technology.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_7d57477f", "train_player_basics_free") -- I am interested in basic training.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_a57e647c", "train_player_droid_free") -- I'm interested in astromech management.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_9480f430", "train_player_droid_free") -- I am interested in droid interface basics.
 		end
 	-- Handle additional training (requires XP)
 	elseif (screenID == "more_training") then
 		local skillManager = LuaSkillManager()
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_starships_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_40f3848e", "train_player_fighters") -- I'm interested in space combat training.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_3818dc2a", "train_player_fighters") -- I am interested in basic fighters.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_weapons_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_527c6359", "train_player_component") -- I'm interested in equipment.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_3fa70900", "train_player_component") -- I am interested in basic starship component use.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_procedures_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_5e3cf461", "train_player_basics") -- I'm interested in Imperial technology.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_7d57477f", "train_player_basics") -- I am interested in basic training.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_01")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_a57e647c", "train_player_droid") -- I'm interested in astromech management.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_9480f430", "train_player_droid") -- I am interested in droid interface basics.
 		end
 	-- Handle Skill box granting
 	elseif (string.find(screenID, "train_player_")) then
@@ -292,7 +292,7 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then
 			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_4358efe9", "no_ship") -- Where is my ship?
 		else
-			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_729d0338", "yes_ship") -- Thank you, Sir.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_1:s_d335136f", "yes_ship") -- Yes I am.
 		end
 	elseif (screenID == "no_ship") then
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then

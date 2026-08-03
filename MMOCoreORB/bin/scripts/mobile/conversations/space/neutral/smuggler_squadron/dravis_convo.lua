@@ -64,30 +64,30 @@ dravis_convo:addScreen(dravis_convo_non_inquisition_pilot)
 --[[ Recruitment flow ]]
 dravis_convo_recruitment = ConvoScreen:new {
 	id = "recruitment",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d60a3e3", -- Welcome to the Imperial Navy Recruitment Center. My name is Lieutenant Barn Sinkko. Are you interested in learning about the Imperial Navy?
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d60a3e3", -- Oh you do, huh? Well what do I look like, a flight instructor? Go join the Imperial Academy if you want to learn how to fly.
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_8d95c731", "yes_join"}, -- I'd like to sign up, sir.
-		{"@conversation/tatooine_privateer_trainer_1:s_381dd7dd", "why_volunteers"}, -- The Empire is recruiting volunteer pilots?
-		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- I'd rather not sign up right now, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_6d273b75", "yes_join"}, -- Will you train me?
+		{"@conversation/tatooine_privateer_trainer_1:s_381dd7dd", "why_volunteers"}, -- How much is this going to cost?
+		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- Not right now, thanks.
 	}
 }
 dravis_convo:addScreen(dravis_convo_recruitment)
 
 dravis_convo_why_volunteers = ConvoScreen:new {
 	id = "why_volunteers",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_85355c2f", -- Yes, volunteers or conscripts. Rebel opposition has become more direct. We want to recruit new pilots for support duty, freeing up combat pilots for the front lines.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_62f16f7a", -- Well, training like this, it's worth its weight in spice. And I hope you don't think you're going to turn into an ace spacer overnight!
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_8d95c731", "yes_join"}, -- I'd like to sign up, sir.
-		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- I'd rather not sign up right now, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_940e1e78", "yes_join"}, -- I want to join.
+		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- Not right now, thanks.
 	}
 }
 dravis_convo:addScreen(dravis_convo_why_volunteers)
 
 dravis_convo_decline_join = ConvoScreen:new {
 	id = "decline_join",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_41e93b9e", -- I hope you reconsider. Good day, citizen.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_41e93b9e", -- Perhaps some other time, then.
 	stopConversation = "true",
 	animation = "goodbye",
 	options = {}
@@ -97,11 +97,11 @@ dravis_convo:addScreen(dravis_convo_decline_join)
 -- Sign-up confirmation (handler routes "yes_join" here)
 dravis_convo_join_confirm = ConvoScreen:new {
 	id = "join_confirm",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_7436b5b6", -- Are you sure you want to sign up? You'll be expected to follow orders and treat your superiors with respect. This is a tight operation and we deal harshly with insubordinate behavior.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_aa69d394", -- I suppose we could work something out. But you're going to owe me! And you'll need your own ship! I can't supply every wannabe freighter bum.
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_e81a1436", "yes_i_am"}, -- Yes, sir! I want to be in the Imperial Navy.
-		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- I'd rather not sign up right now, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_ebe2e111", "yes_i_am"}, -- It's a deal.
+		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- Not right now, thanks.
 	}
 }
 dravis_convo:addScreen(dravis_convo_join_confirm)
@@ -109,7 +109,7 @@ dravis_convo:addScreen(dravis_convo_join_confirm)
 -- Conscription/welcome (handler grants novice box + squadron + tier here)
 dravis_convo_yes_i_am = ConvoScreen:new {
 	id = "yes_i_am",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_7f1ca275", -- By the powers vested in me by the Imperial Naval Command... I hereby conscript you to service with the non-officer flight rank of Pilot Initiate. May you serve the Empire dutifully. Welcome to the Imperial Navy.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_807f6dd0", -- Ok, I'll let Talon Karrde know we've got a new employee. Are you ready for your first assignment?
 	stopConversation = "false",
 	options = {}
 }

@@ -208,32 +208,32 @@ function v3fxConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 	-- Handle first free training after completing all 4 missions (player chooses which skill)
 	if (screenID == "missions_complete") then
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_40f3848e", "train_player_fighters_free") -- I'm interested in space combat training.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_26970ef", "train_player_fighters_free") -- I am interested in basic starfighter training.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_527c6359", "train_player_component_free") -- I'm interested in equipment.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_3fa70900", "train_player_component_free") -- I am interested in basic starship component use.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_5e3cf461", "train_player_basics_free") -- I'm interested in Imperial technology.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_8c272224", "train_player_basics_free") -- I am interested in starfighter survival tactics.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_a57e647c", "train_player_droid_free") -- I'm interested in astromech management.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_9480f430", "train_player_droid_free") -- I am interested in droid interface basics.
 		end
 	-- Handle additional training (requires XP)
 	elseif (screenID == "more_training") then
 		local skillManager = LuaSkillManager()
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_40f3848e", "train_player_fighters") -- I'm interested in space combat training.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_26970ef", "train_player_fighters") -- I am interested in basic starfighter training.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_527c6359", "train_player_component") -- I'm interested in equipment.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_3fa70900", "train_player_component") -- I am interested in basic starship component use.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_5e3cf461", "train_player_basics") -- I'm interested in Imperial technology.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_8c272224", "train_player_basics") -- I am interested in starfighter survival tactics.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_01")) then
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_a57e647c", "train_player_droid") -- I'm interested in astromech management.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_9480f430", "train_player_droid") -- I am interested in droid interface basics.
 		end
 	-- Handle Skill box granting
 	elseif (string.find(screenID, "train_player_")) then
@@ -292,7 +292,7 @@ function v3fxConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then
 			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_4358efe9", "no_ship") -- Where is my ship?
 		else
-			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_729d0338", "yes_ship") -- Thank you, Sir.
+			clonedConversation:addOption("@conversation/naboo_rebel_trainer_1:s_f0b6493f", "yes_ship") -- Thank you, V3.
 		end
 	elseif (screenID == "no_ship") then
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then

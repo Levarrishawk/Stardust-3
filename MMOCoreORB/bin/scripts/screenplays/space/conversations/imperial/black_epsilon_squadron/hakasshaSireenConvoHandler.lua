@@ -208,10 +208,10 @@ function hakasshaSireenConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pN
 	-- Handle first free training after completing all 4 missions (player chooses which skill)
 	if (screenID == "missions_complete") then
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_starships_01")) then
-			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_40f3848e", "train_player_fighters_free") -- I'm interested in space combat training.
+			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_fb13007f", "train_player_fighters_free") -- I'm interested in Imperial operations.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_weapons_01")) then
-			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_527c6359", "train_player_component_free") -- I'm interested in equipment.
+			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_577aca95", "train_player_component_free") -- I'm interested in weapons.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_procedures_01")) then
 			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_5e3cf461", "train_player_basics_free") -- I'm interested in Imperial technology.
@@ -224,10 +224,10 @@ function hakasshaSireenConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pN
 		local skillManager = LuaSkillManager()
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_starships_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_imperial_navy_starships_01")) then
-			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_40f3848e", "train_player_fighters") -- I'm interested in space combat training.
+			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_fb13007f", "train_player_fighters") -- I'm interested in Imperial operations.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_weapons_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_imperial_navy_weapons_01")) then
-			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_527c6359", "train_player_component") -- I'm interested in equipment.
+			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_577aca95", "train_player_component") -- I'm interested in weapons.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_procedures_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_imperial_navy_procedures_01")) then
 			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_5e3cf461", "train_player_basics") -- I'm interested in Imperial technology.
@@ -292,7 +292,7 @@ function hakasshaSireenConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pN
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then
 			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_4358efe9", "no_ship") -- Where is my ship?
 		else
-			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_729d0338", "yes_ship") -- Thank you, Sir.
+			clonedConversation:addOption("@conversation/corellia_imperial_trainer_1:s_b9b27823", "yes_ship") -- Thank you.
 		end
 	elseif (screenID == "no_ship") then
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then
