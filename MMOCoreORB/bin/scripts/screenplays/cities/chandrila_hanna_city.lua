@@ -48,7 +48,7 @@ function HannaCityScreenPlay:spawnSceneObjects()
   spawnSceneObject("chandrila", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -0.2, 0.6, 48.1, 35791476, math.rad(0) )
   spawnSceneObject("chandrila", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -13.5, 0.6, 50.9, 35791476, math.rad(0) )
   
-  spawnSceneObject("chandrila", "object/tangible/terminal/terminal_event_buffs.iff", -5.8, 0.3, 4.4, 35791495, math.rad(-45) )
+ -- spawnSceneObject("chandrila", "object/tangible/terminal/terminal_event_buffs.iff", -5.8, 0.3, 4.4, 35791495, math.rad(-45) )
   
   
   spawnSceneObject("chandrila", "object/building/corellia/garage_corellia.iff", 220, 6, -2758, 0, math.rad(0) ) 
