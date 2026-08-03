@@ -27,20 +27,44 @@ elysiumForceSpiritConvoTemplate:addScreen(waiting)
 
 local searchComplete = ConvoScreen:new {
 	id = "search_complete",
-	leftDialog = "Then the first veil has been lifted. Return when you are prepared to learn why the Force has drawn you here.",
-	stopConversation = "true",
-	options = {}
+	leftDialog = "Then the first veil has been lifted. I can send you to the place where the next part of your journey must begin.",
+	stopConversation = "false",
+	options = {
+		{"I am ready. Send me there.", "teleport"},
+		{"I need more time.", "not_ready"}
+	}
 }
 
 elysiumForceSpiritConvoTemplate:addScreen(searchComplete)
 
 local found = ConvoScreen:new {
 	id = "found",
-	leftDialog = "You have already proven that you can follow the faintest movement of the Force. Our work will continue when you are ready.",
+	leftDialog = "You have already proven that you can follow the faintest movement of the Force. Are you ready to continue?",
+	stopConversation = "false",
+	options = {
+		{"I am ready. Send me there.", "teleport"},
+		{"Not yet.", "not_ready"}
+	}
+}
+
+elysiumForceSpiritConvoTemplate:addScreen(found)
+
+local teleport = ConvoScreen:new {
+	id = "teleport",
+	leftDialog = "Then step beyond this place and follow where the Force leads you.",
 	stopConversation = "true",
 	options = {}
 }
 
-elysiumForceSpiritConvoTemplate:addScreen(found)
+elysiumForceSpiritConvoTemplate:addScreen(teleport)
+
+local notReady = ConvoScreen:new {
+	id = "not_ready",
+	leftDialog = "Return when you are prepared. I will remain here.",
+	stopConversation = "true",
+	options = {}
+}
+
+elysiumForceSpiritConvoTemplate:addScreen(notReady)
 
 addConversationTemplate("elysiumForceSpiritConvoTemplate", elysiumForceSpiritConvoTemplate)

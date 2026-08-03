@@ -101,6 +101,14 @@ function ElysiumJediProgression:completeNpcSearch(pPlayer)
 	return self:setStage(pPlayer, self.NPC_FOUND)
 end
 
+function ElysiumJediProgression:startForceTrials(pPlayer)
+	if (not self:isPlayerOnElysium(pPlayer) or self:getStage(pPlayer) ~= self.NPC_FOUND) then
+		return false
+	end
+
+	return self:setStage(pPlayer, self.FORCE_TRIALS_ACTIVE)
+end
+
 function ElysiumJediProgression:isGlowing(pPlayer)
 	return self:getStage(pPlayer) >= self.GLOWING
 end
