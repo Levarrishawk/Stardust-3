@@ -2,16 +2,19 @@
 	Dravis -- Smuggler Alliance Squadron (Neutral) Tier 1 recruiter/trainer conversation.
 
 	Structural port of the proven Inquisition recruiter template, driven by the
-	authentic Live Imperial trainer string file extracted from the client TRE:
+	authentic Live neutral/privateer trainer string file extracted from the client TRE:
 		string/en/conversation/tatooine_privateer_trainer_1.stf
 	Every leftDialog / option below references a real @conversation/tatooine_privateer_trainer_1:s_<hash>
-	string from that table (English text shown in the trailing comment). Screen-flow control lives in
-	dravisConvoHandler.lua. The screen graph mirrors the template's recruit -> ship -> tier-1
-	mission ladder (patrol/destroy/escort/assassinate) -> duties -> reassignment-to-Inquisitor flow.
+	string from that table (English text shown in the trailing comment, verified against the
+	extracted STF). Screen-flow control lives in dravisConvoHandler.lua.
 
-	RECONSTRUCTED (marked inline): a small number of connective screen transitions whose exact
-	original screen-id wiring is client-side data; the dialogue STRINGS themselves are all sourced
-	from the real Imperial trainer STF (no invented prose).
+	Quest ladder follows the real privateer storyline told by the STF:
+		Q1 patrol (missing shipments) -> Q2 destroy (Black Sun pirates) ->
+		Q3 patrol again (more Black Sun) -> Q4 assassinate (the Black Sun ace) ->
+		training -> report to Talon Karrde.
+
+	Every option link target below is a defined screen (the base conv_handler falls back to
+	the initial screen when a link target is missing, which presents as "clicking does nothing").
 ]]
 
 dravis_convo = ConvoTemplate:new {
@@ -24,39 +27,39 @@ dravis_convo = ConvoTemplate:new {
 -- JTL Disabled / No Space Expansion
 dravis_convo_no_jtl = ConvoScreen:new {
 	id = "no_jtl",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_c30fda16", -- Unless you have business with the Imperial Navy, I must ask you to come back another time. I'm very busy right now.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_c30fda16", -- Don't you have something you should be doing right now?
 	stopConversation = "true",
 	options = {}
 }
 dravis_convo:addScreen(dravis_convo_no_jtl)
 
--- Rebel Pilot (turned away)
-dravis_convo_rebel_pilot = ConvoScreen:new {
+-- Imperial Pilot (turned away)
+dravis_convo_imperial_pilot = ConvoScreen:new {
 	id = "imperial_pilot",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_681e480d", -- I've seen your face! You're a known Rebel pilot!
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_49a60ce1", -- I don't want any trouble, Imperial. Why don't you go harass someone else?
 	stopConversation = "true",
 	animation = "point_accusingly",
 	options = {}
 }
-dravis_convo:addScreen(dravis_convo_rebel_pilot)
+dravis_convo:addScreen(dravis_convo_imperial_pilot)
 
--- Neutral/Privateer Pilot (turned away)
-dravis_convo_neutral_pilot = ConvoScreen:new {
+-- Rebel Pilot (turned away)
+dravis_convo_rebel_pilot = ConvoScreen:new {
 	id = "rebel_pilot",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_20df70f7", -- Good to meet you Pilot. According to my records you're already working with a different division. What can I do for you?
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_35047e82", -- Look, no offense, but I could get in big trouble with the Smugglers Alliance if I started just handing out missions...
 	stopConversation = "true",
 	animation = "shrug_shoulders",
 	options = {}
 }
-dravis_convo:addScreen(dravis_convo_neutral_pilot)
+dravis_convo:addScreen(dravis_convo_rebel_pilot)
 
--- Imperial pilot, different squadron
+-- Neutral pilot, different squadron
 dravis_convo_non_inquisition_pilot = ConvoScreen:new {
 	id = "non_inquisition_pilot",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_20df70f7", -- Good to meet you Pilot. According to my records you're already working with a different division. What can I do for you?
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_20df70f7", -- Hey, I've heard of you! Not a bad pilot, as I understand it. What can I do for you?
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_e81a1436", "duty_missions"}, -- I would like to request a mission.
+		{"@conversation/tatooine_privateer_trainer_1:s_c1ff5062", "duty_missions"}, -- I'm looking for a mission. Do you have any?
 	}
 }
 dravis_convo:addScreen(dravis_convo_non_inquisition_pilot)
@@ -76,7 +79,7 @@ dravis_convo:addScreen(dravis_convo_recruitment)
 
 dravis_convo_why_volunteers = ConvoScreen:new {
 	id = "why_volunteers",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_62f16f7a", -- Well, training like this, it's worth its weight in spice. And I hope you don't think you're going to turn into an ace spacer overnight!
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_62f16f7a", -- Well, training like this, it's worth its weight in spice. And I hope you don't think you're going to turn into an ace spacer overnight! Tell you what:
 	stopConversation = "false",
 	options = {
 		{"@conversation/tatooine_privateer_trainer_1:s_940e1e78", "yes_join"}, -- I want to join.
@@ -94,6 +97,19 @@ dravis_convo_decline_join = ConvoScreen:new {
 }
 dravis_convo:addScreen(dravis_convo_decline_join)
 
+-- Player asked to join; the handler redirects this to "join_confirm". Defined with the
+-- same content as join_confirm so the flow is intact even without the handler redirect.
+dravis_convo_yes_join = ConvoScreen:new {
+	id = "yes_join",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_aa69d394", -- I suppose we could work something out. But you're going to owe me! And you'll need your own ship! I can't supply every wannabe freighter bum.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_1:s_ebe2e111", "yes_i_am"}, -- It's a deal.
+		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- Not right now, thanks.
+	}
+}
+dravis_convo:addScreen(dravis_convo_yes_join)
+
 -- Sign-up confirmation (handler routes "yes_join" here)
 dravis_convo_join_confirm = ConvoScreen:new {
 	id = "join_confirm",
@@ -106,7 +122,7 @@ dravis_convo_join_confirm = ConvoScreen:new {
 }
 dravis_convo:addScreen(dravis_convo_join_confirm)
 
--- Conscription/welcome (handler grants novice box + squadron + tier here)
+-- Enlistment/welcome (handler grants novice box + squadron + tier here, then adds the ship option)
 dravis_convo_yes_i_am = ConvoScreen:new {
 	id = "yes_i_am",
 	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_807f6dd0", -- Ok, I'll let Talon Karrde know we've got a new employee. Are you ready for your first assignment?
@@ -118,29 +134,29 @@ dravis_convo:addScreen(dravis_convo_yes_i_am)
 -- No Ship - grants ship
 dravis_convo_no_ship = ConvoScreen:new {
 	id = "no_ship",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_70421509", -- I'm transferring a ship authorization and control device to your datapad. You'll need this to use your TIE Fighter...
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_ce52ddaa", -- You're going to need a ship if you plan on doing anything constructive around here. I'll add the control codes...
 	stopConversation = "false",
 	animation = "nod_head_multiple",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "yes_im_ready"}, -- I'm ready, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "yes_im_ready"}, -- I'm ready.
 	}
 }
 dravis_convo:addScreen(dravis_convo_no_ship)
 
 dravis_convo_yes_ship = ConvoScreen:new {
 	id = "yes_ship",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_807f6dd0", -- Are you ready for your first assignment?
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_807f6dd0", -- Ok, I'll let Talon Karrde know we've got a new employee. Are you ready for your first assignment?
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "yes_im_ready"}, -- I'm ready, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "yes_im_ready"}, -- I'm ready.
 	}
 }
 dravis_convo:addScreen(dravis_convo_yes_ship)
 
---[[ Tier 1 -- Mission 1: Patrol (handler starts patrol_naboo_imperial_1) ]]
+--[[ Tier 1 -- Mission 1: Patrol (handler starts patrol_tatooine_privateer_1) ]]
 dravis_convo_yes_im_ready = ConvoScreen:new {
 	id = "yes_im_ready",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d345d41f", -- Not today. I'm transferring the coordinates of a local security patrol route... Fly a single circuit of the patrol route... When you're done, return to me for further instructions.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_95df6b05", -- Some of our shipments have come up missing. We suspect foul play... Why don't you run a quick patrol and make sure...
 	stopConversation = "true",
 	options = {}
 }
@@ -149,27 +165,27 @@ dravis_convo:addScreen(dravis_convo_yes_im_ready)
 -- Player is on quest 1 and returns before completing it
 dravis_convo_first_quest_active = ConvoScreen:new {
 	id = "first_quest_active",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2e5f3688", -- Report back to me when you are finished with the patrol.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_ca38bc3e", -- Run that patrol, and we'll talk about training later.
 	stopConversation = "true",
 	options = {}
 }
 dravis_convo:addScreen(dravis_convo_first_quest_active)
 
--- Quest 1 complete, needs reward (handler rewards on "patrol_complete")
+-- Quest 1 complete, player reports in (handler rewards on "patrol_complete")
 dravis_convo_excellent_work = ConvoScreen:new {
 	id = "excellent_work",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2e5f3688", -- Pilot. Report on the status of your patrol.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_9fdd7cf3", -- Yes?
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_3818dc2a", "patrol_complete"}, -- I was attacked by a Rebel fighter wing, sir.
-		{"@conversation/tatooine_privateer_trainer_1:s_6106187c", "patrol_complete"}, -- Just doing my duty, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_ff2a95e8", "patrol_complete"}, -- A Black Sun pirate attacked me!
+		{"@conversation/tatooine_privateer_trainer_1:s_676c343f", "patrol_complete"}, -- That was easy.
 	}
 }
 dravis_convo:addScreen(dravis_convo_excellent_work)
 
 dravis_convo_patrol_complete = ConvoScreen:new {
 	id = "patrol_complete",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_6d6f9a8d", -- You did? Impressive... You've shown that not only can you fly a basic patrol, but you aren't bad with a laser cannon either. Here's your payment for the job.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_7705d12c", -- Good job. I knew that patrol would be no problem for you.
 	stopConversation = "true",
 	options = {}
 }
@@ -178,96 +194,135 @@ dravis_convo:addScreen(dravis_convo_patrol_complete)
 -- Quest 1 failed/aborted
 dravis_convo_failed_quest1 = ConvoScreen:new {
 	id = "failed_quest1",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_70421509", -- I've transferred the patrol coordinates to your datapad. Try harder this time, pilot.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_fa5082f1", -- Ran into a spot of trouble, huh? Are you up to running that patrol again, or not? 'Course you are!
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest1"}, -- I'm ready, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest1"}, -- I'm ready.
 	}
 }
 dravis_convo:addScreen(dravis_convo_failed_quest1)
 
---[[ Tier 1 -- Mission 2: Destroy (handler starts destroy_naboo_imperial_2) ]]
+-- Quest 1 retry acknowledged (handler restarts patrol_tatooine_privateer_1)
+dravis_convo_retry_quest1 = ConvoScreen:new {
+	id = "retry_quest1",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_ca38bc3e", -- Run that patrol, and we'll talk about training later.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_retry_quest1)
+
+--[[ Tier 1 -- Mission 2: Destroy (handler starts destroy_tatooine_privateer_2 on "quest2_accepted") ]]
 dravis_convo_grant_quest2 = ConvoScreen:new {
 	id = "grant_quest2",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_3924fc00", -- You performed admirably... I want you to hunt down and destroy the rebel vessels in the area of the 'Kantari' attack... The security of the Naboo system must be maintained.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_3924fc00", -- There are still pirates in the area. We need you to get out there and kill them right now, understand?
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_6106187c", "quest2_accepted"}, -- What's the mission, sir?
+		{"@conversation/tatooine_privateer_trainer_1:s_d24a2285", "quest2_accepted"}, -- Will do.
 	}
 }
 dravis_convo:addScreen(dravis_convo_grant_quest2)
 
 dravis_convo_quest2_accepted = ConvoScreen:new {
 	id = "quest2_accepted",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_3924fc00", -- I want you to hunt down and destroy the Rebel vessels in the area of the 'Kantari' attack. The Rebels are still out there and we must make them pay. Eliminate them.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_25669048", -- So the Black Sun are trying to move in on Hutt space, huh? Well we'd better show them who's in charge around here...
 	stopConversation = "true",
 	options = {}
 }
 dravis_convo:addScreen(dravis_convo_quest2_accepted)
 
+-- Quest 2 rewarded; leads into Mission 3 (second patrol)
 dravis_convo_excellent_work2 = ConvoScreen:new {
 	id = "excellent_work2",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_e5c453e0", -- Good job. I'm crediting you for the mission, along with a little extra. You performed admirably.
-	stopConversation = "true",
-	options = {}
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_6d6f9a8d", -- We thought that would be the last of the Black Sun pirates, but I guess there were more out there. Try running that patrol again, ok?...
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_1:s_d24a2285", "train_me3"}, -- Will do.
+		{"@conversation/tatooine_privateer_trainer_1:s_9237617f", "train_me3"}, -- What about training?
+	}
 }
 dravis_convo:addScreen(dravis_convo_excellent_work2)
 
+-- Mission 3 accepted (handler starts patrol_tatooine_privateer_3 on "train_me3")
+dravis_convo_train_me3 = ConvoScreen:new {
+	id = "train_me3",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_ca38bc3e", -- Run that patrol, and we'll talk about training later.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_train_me3)
+
 dravis_convo_failed_quest2 = ConvoScreen:new {
 	id = "failed_quest2",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_9ea8105f", -- Report back to me when you've successfully eliminated the Rebels. And do not abort your mission again!
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_fa5082f1", -- Ran into a spot of trouble, huh? Are you up to running that patrol again, or not? 'Course you are!
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest2"}, -- I'm ready, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest2"}, -- I'm ready.
 	}
 }
 dravis_convo:addScreen(dravis_convo_failed_quest2)
 
---[[ Tier 1 -- Mission 3: Patrol/Escort (handler starts patrol_naboo_imperial_3 on "train_me3") ]]
+-- Quest 2 retry acknowledged (handler restarts destroy_tatooine_privateer_2)
+dravis_convo_retry_quest2 = ConvoScreen:new {
+	id = "retry_quest2",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_5ac0c4a5", -- Good, great, whatever. See you later.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_retry_quest2)
+
+--[[ Tier 1 -- Mission 3 report (handler grants the reward on "quest3_rewarded") ]]
 dravis_convo_excellent_work3 = ConvoScreen:new {
 	id = "excellent_work3",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_e5c453e0", -- With the recent increase in Rebel activity, our supply transports are at risk... You will be paid for every successful escort operation you complete.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_9fdd7cf3", -- Yes?
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_b26194cb", "quest3_rewarded"}, -- What are my orders, sir?
+		{"@conversation/tatooine_privateer_trainer_1:s_d0cc72e0", "quest3_rewarded"}, -- I bet there are more out there.
+		{"@conversation/tatooine_privateer_trainer_1:s_676c343f", "quest3_rewarded"}, -- That was easy.
 	}
 }
 dravis_convo:addScreen(dravis_convo_excellent_work3)
 
 dravis_convo_quest3_rewarded = ConvoScreen:new {
 	id = "quest3_rewarded",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2a8b0366", -- Good, I have a lot of work for you... I can also assign you to escorting transports moving supplies.
-	stopConversation = "false",
-	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "train_me3"}, -- I'm ready, sir.
-	}
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_1f0c9843", -- Ha! That'll get the Black Sun off our backs for a while. Way to go!
+	stopConversation = "true",
+	options = {}
 }
 dravis_convo:addScreen(dravis_convo_quest3_rewarded)
 
 dravis_convo_failed_quest3 = ConvoScreen:new {
 	id = "failed_quest3",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_61b6e28a", -- Report to me when you've completed your mission.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_fa5082f1", -- Ran into a spot of trouble, huh? Are you up to running that patrol again, or not? 'Course you are!
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest3"}, -- I'm ready, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest3"}, -- I'm ready.
 	}
 }
 dravis_convo:addScreen(dravis_convo_failed_quest3)
 
---[[ Tier 1 -- Mission 4: Assassinate (handler starts assassinate_naboo_imperial_4 on "quest4_accepted") ]]
+-- Quest 3 retry acknowledged (handler restarts patrol_tatooine_privateer_3)
+dravis_convo_retry_quest3 = ConvoScreen:new {
+	id = "retry_quest3",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_ca38bc3e", -- Run that patrol, and we'll talk about training later.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_retry_quest3)
+
+--[[ Tier 1 -- Mission 4: Assassinate the Black Sun ace (handler starts assassinate_tatooine_privateer_4) ]]
 dravis_convo_grant_quest4 = ConvoScreen:new {
 	id = "grant_quest4",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_3924fc00", -- You've shown a lot of promise so far, Pilot. This is a key assignment. We expect the Rebel team leader to be a highly skilled and well trained pilot. Don't underestimate him.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2a8b0366", -- Well these Black Sun pirates aren't getting the message. We need to hit them hard: Cut off the head and the tail will follow. I want you to kill an ace...
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_6106187c", "quest4_accepted"}, -- What's the mission, sir?
+		{"@conversation/tatooine_privateer_trainer_1:s_d24a2285", "quest4_accepted"}, -- Will do.
 	}
 }
 dravis_convo:addScreen(dravis_convo_grant_quest4)
 
 dravis_convo_quest4_accepted = ConvoScreen:new {
 	id = "quest4_accepted",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d345d41f", -- We have discovered the possible location of the Rebel team leader... Travel to the waypoint... Find and eliminate him.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_5ac0c4a5", -- Good, great, whatever. See you later.
 	stopConversation = "true",
 	options = {}
 }
@@ -275,18 +330,27 @@ dravis_convo:addScreen(dravis_convo_quest4_accepted)
 
 dravis_convo_failed_quest4 = ConvoScreen:new {
 	id = "failed_quest4",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_681e480d", -- Report on the status of your operation against the Rebel leader, Pilot.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_999009d", -- What happened to you? I thought you could handle this? Look, we need that ace DEAD. If you're not up to this, then maybe you should hire some help.
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest4"}, -- I'm ready, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_1adbadc4", "retry_quest4"}, -- I'm ready.
 	}
 }
 dravis_convo:addScreen(dravis_convo_failed_quest4)
 
+-- Quest 4 retry acknowledged (handler restarts assassinate_tatooine_privateer_4)
+dravis_convo_retry_quest4 = ConvoScreen:new {
+	id = "retry_quest4",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_5ac0c4a5", -- Good, great, whatever. See you later.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_retry_quest4)
+
 --[[ Player has an active (non-first) mission ]]
 dravis_convo_has_mission = ConvoScreen:new {
 	id = "has_mission",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_b4d6cb30", -- Report back to me when you are finished with your current mission. You can abort your mission if you want to start over.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_a2123b71", -- You need to do some more for me, before I do anything more for you. There'll be time for training later...
 	stopConversation = "true",
 	options = {}
 }
@@ -295,7 +359,7 @@ dravis_convo:addScreen(dravis_convo_has_mission)
 --[[ All four Tier-1 missions complete -> free training choices (handler builds options) ]]
 dravis_convo_missions_complete = ConvoScreen:new {
 	id = "missions_complete",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_6d6f9a8d", -- Pilot, I am singularly impressed. You have mastered the fundamentals of your profession and have performed beyond expectation... I think it's time for a promotion.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_ae220ebc", -- There's no doubt all that practice has paid off. I think you've proven you're ready for some additional training...
 	stopConversation = "false",
 	options = {}
 }
@@ -304,7 +368,7 @@ dravis_convo:addScreen(dravis_convo_missions_complete)
 --[[ Additional (XP-gated) training (handler builds options) ]]
 dravis_convo_more_training = ConvoScreen:new {
 	id = "more_training",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_4d19fcb1", -- You can learn about Imperial technology, equipment, space combat training, or astromech management.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_605d90db", -- Right! I think you're ready for some additional training. Now tell me, which area interests you the most?
 	stopConversation = "false",
 	options = {}
 }
@@ -313,7 +377,7 @@ dravis_convo:addScreen(dravis_convo_more_training)
 -- training acknowledgement screens (handler grants the skill then returns the cloned screen)
 dravis_convo_train_player_fighters = ConvoScreen:new {
 	id = "train_player_fighters",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Good choice. Report back when you are ready for an assignment.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Excellent choice. Learning to pilot better ships will allow you to tackle more difficult assignments.
 	stopConversation = "true",
 	options = {}
 }
@@ -321,7 +385,7 @@ dravis_convo:addScreen(dravis_convo_train_player_fighters)
 
 dravis_convo_train_player_component = ConvoScreen:new {
 	id = "train_player_component",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Good choice. Report back when you are ready for an assignment.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Excellent choice. Learning to pilot better ships will allow you to tackle more difficult assignments.
 	stopConversation = "true",
 	options = {}
 }
@@ -329,7 +393,7 @@ dravis_convo:addScreen(dravis_convo_train_player_component)
 
 dravis_convo_train_player_basics = ConvoScreen:new {
 	id = "train_player_basics",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Good choice. Report back when you are ready for an assignment.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Excellent choice. Learning to pilot better ships will allow you to tackle more difficult assignments.
 	stopConversation = "true",
 	options = {}
 }
@@ -337,7 +401,7 @@ dravis_convo:addScreen(dravis_convo_train_player_basics)
 
 dravis_convo_train_player_droid = ConvoScreen:new {
 	id = "train_player_droid",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Good choice. Report back when you are ready for an assignment.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Excellent choice. Learning to pilot better ships will allow you to tackle more difficult assignments.
 	stopConversation = "true",
 	options = {}
 }
@@ -346,7 +410,7 @@ dravis_convo:addScreen(dravis_convo_train_player_droid)
 -- free-training variants (same acknowledgement string)
 dravis_convo_train_player_fighters_free = ConvoScreen:new {
 	id = "train_player_fighters_free",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Good choice. Report back when you are ready for an assignment.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2b94498c", -- Excellent choice. Learning to pilot better ships will allow you to tackle more difficult assignments.
 	stopConversation = "true",
 	options = {}
 }
@@ -379,62 +443,81 @@ dravis_convo:addScreen(dravis_convo_train_player_droid_free)
 --[[ Duty missions (Tier-1 grind: destroy / escort duty) ]]
 dravis_convo_duty_missions = ConvoScreen:new {
 	id = "duty_missions",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_541c2f70", -- Pilot. I don't have any specific work for you at this time. You can now select your preferred operation from a list of general duties...
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_4d19fcb1", -- What's on your mind? Thinking about performing some duty missions?
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_3818dc2a", "destroy_duty"}, -- [Destroy Duty] I'm interested in hunting Rebel scum.
-		{"@conversation/tatooine_privateer_trainer_1:s_7d57477f", "escort_duty"}, -- [Escort Duty] I'm interested in escorting transports.
+		{"@conversation/tatooine_privateer_trainer_1:s_695b8483", "destroy_duty"}, -- Black Sun pirates.
+		{"@conversation/tatooine_privateer_trainer_1:s_96294214", "escort_duty"}, -- Escort Duty.
+		{"@conversation/tatooine_privateer_trainer_1:s_6106187c", "what_is_duty"}, -- What is a duty mission?
 	}
 }
 dravis_convo:addScreen(dravis_convo_duty_missions)
 
--- recruitment_not_imperial (player not yet faction-aligned)
-dravis_convo_recruitment_not_imperial = ConvoScreen:new {
-	id = "recruitment_not_imperial",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d60a3e3", -- Welcome to the Imperial Navy Recruitment Center. My name is Lieutenant Barn Sinkko. Are you interested in learning about the Imperial Navy?
+dravis_convo_what_is_duty = ConvoScreen:new {
+	id = "what_is_duty",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d43b2932", -- Duty missions are a good way for you to get experience as a pilot. Only experienced pilots can receive the pro...
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_8d95c731", "yes_join"}, -- I'd like to sign up, sir.
-		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- I'd rather not sign up right now, sir.
+		{"@conversation/tatooine_privateer_trainer_1:s_695b8483", "destroy_duty"}, -- Black Sun pirates.
+		{"@conversation/tatooine_privateer_trainer_1:s_96294214", "escort_duty"}, -- Escort Duty.
+	}
+}
+dravis_convo:addScreen(dravis_convo_what_is_duty)
+
+-- Duty accepted (handler starts destroy_duty_tatooine_privateer_6)
+dravis_convo_destroy_duty = ConvoScreen:new {
+	id = "destroy_duty",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_71015a7d", -- There are a lot of Black Sun pirates in the Tatooine system and they have no business being here. Just go out...
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_destroy_duty)
+
+-- Duty accepted (handler starts escort_duty_tatooine_privateer_7)
+dravis_convo_escort_duty = ConvoScreen:new {
+	id = "escort_duty",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_7436b5b6", -- That's good thinking. We need to make sure our shipments are making it through safely. Get out there and escort...
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_escort_duty)
+
+-- recruitment_not_imperial (player is aligned with the GCW factions, not yet a pilot)
+dravis_convo_recruitment_not_imperial = ConvoScreen:new {
+	id = "recruitment_not_imperial",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_c6f8e9e9", -- Ever heard of the Smugglers Alliance?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_1:s_940e1e78", "yes_join"}, -- I want to join.
+		{"@conversation/tatooine_privateer_trainer_1:s_2883b989", "decline_join"}, -- Not right now, thanks.
 	}
 }
 dravis_convo:addScreen(dravis_convo_recruitment_not_imperial)
 
---[[ Tier 1 complete -> reassigned to the Inquisition (Under Inquisitor Fa'Zoll) ]]
+--[[ Tier 1 complete -> reassigned to Talon Karrde ]]
 dravis_convo_completed_sinkko = ConvoScreen:new {
 	id = "completed_sinkko",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_999009d", -- Your skill behind the controls of the TIE Fighter have peaked the interest of several high ranking officers. In particular, members of the Imperial Inquisition have expressed their desire to take over your training...
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_be1beb37", -- Listen, something has come up that we need you to take care of. Talon Karrde's got a special assignment for you...
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_6106187c", "what_is_inquisition"}, -- What is the Imperial Inquisition?
-		{"@conversation/tatooine_privateer_trainer_1:s_111621e7", "report_to_fazoll"}, -- Who do I report to?
+		{"@conversation/tatooine_privateer_trainer_1:s_111621e7", "report_to_fazoll"}, -- Where do I go now?
 	}
 }
 dravis_convo:addScreen(dravis_convo_completed_sinkko)
 
-dravis_convo_what_is_inquisition = ConvoScreen:new {
-	id = "what_is_inquisition",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_85355c2f", -- The Inquisition is a special judicial branch of the Imperial Intelligence bureau... To become a member of the Inquisition is a rare honor.
-	stopConversation = "false",
-	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_111621e7", "report_to_fazoll"}, -- Who do I report to?
-	}
-}
-dravis_convo:addScreen(dravis_convo_what_is_inquisition)
-
--- Reassignment: grant waypoint to Under Inquisitor Fa'Zoll (handler sets sinkko_finished + waypoint)
+-- Reassignment: grant waypoint to the next trainer (handler sets dravis_finished + waypoint)
 dravis_convo_report_to_fazoll = ConvoScreen:new {
 	id = "report_to_fazoll",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_7f1ca275", -- Under Inquisitor Fa'Zoll in the Emperor's Retreat has been assigned as your new commanding officer...
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d3d66c68", -- Excellent! Now talk to Talon Karrde.
 	stopConversation = "true",
 	options = {}
 }
 dravis_convo:addScreen(dravis_convo_report_to_fazoll)
 
--- Player already reassigned, returns to Sinkko
+-- Player already reassigned, returns to Dravis
 dravis_convo_go_to_next = ConvoScreen:new {
 	id = "go_to_next",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_71e7a88", -- I don't have anything else for you. Talk to Under Inquisitor Fa'Zoll in the Emperor's Retreat.
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_31fc5801", -- Well then go away and stop bothering me. I'm a busy man!
 	stopConversation = "true",
 	options = {}
 }
