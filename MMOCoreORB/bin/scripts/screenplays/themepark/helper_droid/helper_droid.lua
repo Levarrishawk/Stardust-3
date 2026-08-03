@@ -330,7 +330,7 @@ function HelperDroid:elysiumProgressionCallback(pPlayer, pSui, eventIndex, args)
 
 	if (stage == ElysiumJediProgression.NOT_STARTED) then
 		if (ElysiumJediProgression:startDroidQuest(pPlayer)) then
-			spatialChat(pDroid, "Then listen carefully. Your first task begins now. Return when you have completed it.")
+			spatialChat(pDroid, "I can't be more precise. My sensors can't really lock onto anything here, it's like the whole place isn't actually for a lack of better term, real.")
 		end
 	elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
 		spatialChat(pDroid, "Complete the task I set before you, then return to me.")

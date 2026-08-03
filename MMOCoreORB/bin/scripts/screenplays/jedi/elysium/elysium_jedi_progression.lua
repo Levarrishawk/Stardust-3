@@ -113,9 +113,9 @@ function ElysiumJediProgression:getDroidPrompt(pPlayer)
 	local stage = self:getStage(pPlayer)
 
 	if (stage == self.NOT_STARTED) then
-		return "You have arrived at a place between life and the Force. I may be able to help you understand why, but the path ahead will not be easy."
+		return "You're not going to believe this. My sensors have found something nearby, it could be an artificial structure of some kind.  There is a lot of interference but it is close by."
 	elseif (stage == self.DROID_QUEST_ACTIVE) then
-		return "Your first task has begun. Return to me when you have completed what is required of you."
+		return "You can either go find the structure or not it's up to you."
 	elseif (stage == self.GLOWING) then
 		return "Something within you has changed. My sensors have located what appears to be an artificial structure somewhere nearby. You should investigate it."
 	elseif (stage == self.SHRINE_SEARCH_ACTIVE) then

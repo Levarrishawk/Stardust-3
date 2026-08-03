@@ -154,7 +154,7 @@ void HelperDroidObjectImplementation::fillObjectMenuResponse(ObjectMenuResponse*
 		Zone* playerZone = player->getZone();
 
 		if (playerZone != nullptr && playerZone->getZoneName() == "elysium") {
-			menuResponse->addRadialMenuItem(117, 3, "Ask about this place");
+			menuResponse->addRadialMenuItem(117, 3, "Run Sensor Scan");
 			return;
 		}
 
