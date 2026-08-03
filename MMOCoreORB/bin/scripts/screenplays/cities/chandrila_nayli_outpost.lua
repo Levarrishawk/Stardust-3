@@ -37,7 +37,7 @@ function NayliOutpostScreenPlay:spawnMobiles()
 	--Outdoors
 	local pNpc = spawnMobile("chandrila", "surgical_droid_21b",60,3.1,0.1,11.5,0,0)
 	self:setMoodString(pNpc, "neutral")
---[[
+
 	pNpc = spawnMobile("chandrila", "chandrila_park_ranger",60,-5255.0,23.0,345.1,151,0)
 	self:setMoodString(pNpc, "conversation")
 	
@@ -49,7 +49,7 @@ function NayliOutpostScreenPlay:spawnMobiles()
   
   pNpc = spawnMobile("chandrila", "chandrila_park_ranger",60,-5214.4,20.1,312.0,-90,0)
   self:setMoodString(pNpc, "conversation")
-	--]]
+
 	pNpc = spawnMobile("chandrila", "commoner",60,4.4,0.6,2.2,-42,35792086)
   self:setMoodString(pNpc, "conversation")
 	
@@ -71,7 +71,7 @@ function NayliOutpostScreenPlay:spawnMobiles()
 
   
 	-- Gladean Park Ranger OP POI
-	--[[
+	
 	pNpc = spawnMobile("chandrila", "chandrila_park_ranger",60,-5013.6,9.1,4091.8,45,0)
   self:setMoodString(pNpc, "conversation") 
   pNpc = spawnMobile("chandrila", "chandrila_park_ranger",60,-5013.1,9.3,4079.6,124,0)
@@ -79,6 +79,6 @@ function NayliOutpostScreenPlay:spawnMobiles()
   pNpc = spawnMobile("chandrila", "chandrila_park_ranger",60,-5025.9,9.8,4078.8,-134,0)
   self:setMoodString(pNpc, "conversation")
   pNpc = spawnMobile("chandrila", "chandrila_park_ranger",60,-5026.1,10.0,4092.0,-47,0)
-  self:setMoodString(pNpc, "conversation") --]]
+  self:setMoodString(pNpc, "conversation") 
 
 end
