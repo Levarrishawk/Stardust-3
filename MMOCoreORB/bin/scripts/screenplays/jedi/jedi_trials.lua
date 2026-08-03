@@ -27,12 +27,17 @@ function JediTrials:isEligibleForPadawanTrials(pPlayer)
 		return false
 	end
 
-	local learnedBranches = VillageJediManagerCommon.getLearnedForceSensitiveBranches(pPlayer)
+	local villageEligible = false
 
-	local progressionEligible = CreatureObject(pPlayer):hasScreenPlayState(32, "VillageJediProgression") or
-		(ElysiumJediProgression ~= nil and ElysiumJediProgression:isPadawanEligible(pPlayer))
+	if (VillageJediManagerCommon ~= nil) then
+		local learnedBranches = VillageJediManagerCommon.getLearnedForceSensitiveBranches(pPlayer)
+		villageEligible = CreatureObject(pPlayer):hasScreenPlayState(32, "VillageJediProgression") and learnedBranches >= 6
+	end
 
-	return progressionEligible and not CreatureObject(pPlayer):hasSkill("force_title_jedi_rank_02") and learnedBranches >= 6 and tonumber(readScreenPlayData(pPlayer, "PadawanTrials", "completedTrials")) ~= 1
+	local elysiumEligible = ElysiumJediProgression ~= nil and ElysiumJediProgression:isPadawanEligible(pPlayer)
+	local progressionEligible = villageEligible or elysiumEligible
+
+	return progressionEligible and not CreatureObject(pPlayer):hasSkill("force_title_jedi_rank_02") and tonumber(readScreenPlayData(pPlayer, "PadawanTrials", "completedTrials")) ~= 1
 end
 
 function JediTrials:isOnPadawanTrials(pPlayer)
