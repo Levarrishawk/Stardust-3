@@ -330,10 +330,13 @@ function HelperDroid:elysiumProgressionCallback(pPlayer, pSui, eventIndex, args)
 
 	if (stage == ElysiumJediProgression.NOT_STARTED) then
 		if (ElysiumJediProgression:startDroidQuest(pPlayer)) then
+			ElysiumJediProgression:completeDroidQuest(pPlayer)
 			spatialChat(pDroid, "I can't be more precise. My sensors can't really lock onto anything here, it's like the whole place isn't actually for a lack of better term, real.")
 		end
 	elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
-		spatialChat(pDroid, "Complete the task I set before you, then return to me.")
+		if (ElysiumJediProgression:completeDroidQuest(pPlayer)) then
+			spatialChat(pDroid, "I can't be more precise. My sensors can't really lock onto anything here, it's like the whole place isn't actually for a lack of better term, real.")
+		end
 	elseif (stage == ElysiumJediProgression.SHRINE_SEARCH_ACTIVE) then
 		spatialChat(pDroid, "The artificial structure is close to where you entered Elysium. You should be able to reach it on foot.")
 	elseif (stage == ElysiumJediProgression.NPC_SEARCH_ACTIVE) then
