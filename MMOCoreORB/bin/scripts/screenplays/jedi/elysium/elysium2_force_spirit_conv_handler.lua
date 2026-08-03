@@ -4,8 +4,12 @@ ElysiumForceSensitiveTrainer = conv_handler:new {
 }
 
 function ElysiumForceSensitiveTrainer:isEligible(pPlayer)
-	return pPlayer ~= nil and SceneObject(pPlayer):getZoneName() == "elysium2" and
-		ElysiumJediProgression:getStage(pPlayer) >= ElysiumJediProgression.UNLOCK_COMPLETE
+	if (pPlayer == nil or SceneObject(pPlayer):getZoneName() ~= "elysium2" or
+		ElysiumJediProgression:getStage(pPlayer) < ElysiumJediProgression.UNLOCK_COMPLETE) then
+		return false
+	end
+
+	return ElysiumJediProgression:unlockForceSensitiveTrees(pPlayer)
 end
 
 function ElysiumForceSensitiveTrainer:getInitialScreen(pPlayer, pNpc, pConvTemplate)
@@ -47,6 +51,10 @@ function elysiumTwoForceSpiritConvoHandler:getInitialScreen(pPlayer, pNpc, pConv
 
 	if (pPlayer == nil or pNpc == nil or SceneObject(pPlayer):getZoneName() ~= "elysium2") then
 		return convoTemplate:getScreen("silent")
+	end
+
+	if (ElysiumJediProgression:getStage(pPlayer) >= ElysiumJediProgression.UNLOCK_COMPLETE) then
+		ElysiumJediProgression:unlockForceSensitiveTrees(pPlayer)
 	end
 
 	local stage = ElysiumJediProgression:getStage(pPlayer)

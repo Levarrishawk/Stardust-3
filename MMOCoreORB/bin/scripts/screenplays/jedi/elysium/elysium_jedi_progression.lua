@@ -122,8 +122,18 @@ function ElysiumJediProgression:startForceTrials(pPlayer)
 end
 
 function ElysiumJediProgression:unlockForceSensitiveTrees(pPlayer)
-	if (pPlayer == nil or SceneObject(pPlayer):getZoneName() ~= "elysium2" or self:getStage(pPlayer) ~= self.FORCE_TRIALS_ACTIVE) then
+	if (pPlayer == nil or SceneObject(pPlayer):getZoneName() ~= "elysium2" or self:getStage(pPlayer) < self.FORCE_TRIALS_ACTIVE) then
 		return false
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return false
+	end
+
+	if (PlayerObject(pGhost):getJediState() < 1) then
+		PlayerObject(pGhost):setJediState(1)
 	end
 
 	if (not CreatureObject(pPlayer):hasSkill("force_title_jedi_novice")) then
@@ -134,7 +144,11 @@ function ElysiumJediProgression:unlockForceSensitiveTrees(pPlayer)
 		return false
 	end
 
-	return self:setStage(pPlayer, self.UNLOCK_COMPLETE)
+	if (self:getStage(pPlayer) == self.FORCE_TRIALS_ACTIVE) then
+		return self:setStage(pPlayer, self.UNLOCK_COMPLETE)
+	end
+
+	return true
 end
 
 function ElysiumJediProgression:isGlowing(pPlayer)
