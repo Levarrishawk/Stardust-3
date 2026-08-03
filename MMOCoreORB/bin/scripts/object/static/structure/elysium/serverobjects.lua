@@ -43,21 +43,6 @@
 
 
 --Children folder includes
-includeFile("static/structure/base/serverobjects.lua")
-includeFile("static/structure/corellia/serverobjects.lua")
-includeFile("static/structure/dantooine/serverobjects.lua")
-includeFile("static/structure/dathomir/serverobjects.lua")
-includeFile("static/structure/endor/serverobjects.lua")
-includeFile("static/structure/general/serverobjects.lua")
-includeFile("static/structure/lok/serverobjects.lua")
-includeFile("static/structure/military/serverobjects.lua")
-includeFile("static/structure/naboo/serverobjects.lua")
-includeFile("static/structure/nobuild/serverobjects.lua")
-includeFile("static/structure/rori/serverobjects.lua")
-includeFile("static/structure/talus/serverobjects.lua")
-includeFile("static/structure/tatooine/serverobjects.lua")
-includeFile("static/structure/yavin/serverobjects.lua")
+includeFile("static/structure/elysium/invisible_wall.lua")
 
 -- Server Objects
-
-includeFile("static/structure/elysium/serverobjects.lua")

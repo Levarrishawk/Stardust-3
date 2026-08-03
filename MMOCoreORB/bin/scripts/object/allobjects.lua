@@ -1075,3 +1075,5 @@ includeFile("custom_content/tangible/holiday/love_day/rewards_11/objects.lua")
 
 includeFile("custom_content/draft_schematic/furniture/objects.lua")
 includeFile("custom_content/draft_schematic/furniture/city/objects.lua")
+
+includeFile("static/structure/elysium/objects.lua")
