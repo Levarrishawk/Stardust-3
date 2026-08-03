@@ -439,3 +439,5 @@ hakassha_sireen_convo_go_to_next = ConvoScreen:new {
 	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_go_to_next)
+
+addConversationTemplate("hakassha_sireen_convo", hakassha_sireen_convo);

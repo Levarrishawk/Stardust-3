@@ -439,3 +439,5 @@ akal_colzet_convo_go_to_next = ConvoScreen:new {
 	options = {}
 }
 akal_colzet_convo:addScreen(akal_colzet_convo_go_to_next)
+
+addConversationTemplate("akal_colzet_convo", akal_colzet_convo);

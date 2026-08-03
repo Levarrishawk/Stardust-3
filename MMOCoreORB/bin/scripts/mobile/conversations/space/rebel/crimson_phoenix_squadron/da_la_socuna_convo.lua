@@ -439,3 +439,5 @@ da_la_socuna_convo_go_to_next = ConvoScreen:new {
 	options = {}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_go_to_next)
+
+addConversationTemplate("da_la_socuna_convo", da_la_socuna_convo);

@@ -439,3 +439,5 @@ dravis_convo_go_to_next = ConvoScreen:new {
 	options = {}
 }
 dravis_convo:addScreen(dravis_convo_go_to_next)
+
+addConversationTemplate("dravis_convo", dravis_convo);

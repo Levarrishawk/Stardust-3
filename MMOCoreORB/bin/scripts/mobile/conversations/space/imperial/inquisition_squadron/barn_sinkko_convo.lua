@@ -439,3 +439,5 @@ barn_sinkko_convo_go_to_next = ConvoScreen:new {
 	options = {}
 }
 barn_sinkko_convo:addScreen(barn_sinkko_convo_go_to_next)
+
+addConversationTemplate("barn_sinkko_convo", barn_sinkko_convo);

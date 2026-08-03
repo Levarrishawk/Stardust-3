@@ -439,3 +439,5 @@ v3_fx_convo_go_to_next = ConvoScreen:new {
 	options = {}
 }
 v3_fx_convo:addScreen(v3_fx_convo_go_to_next)
+
+addConversationTemplate("v3_fx_convo", v3_fx_convo);
