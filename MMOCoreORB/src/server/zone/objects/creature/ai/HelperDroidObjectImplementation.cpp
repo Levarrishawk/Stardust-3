@@ -133,6 +133,11 @@ void HelperDroidObjectImplementation::fillObjectMenuResponse(ObjectMenuResponse*
 		menuResponse->addRadialMenuItem(132, 3, "@pet/pet_menu:droid_options");
 		menuResponse->addRadialMenuItemToRadialID(132, 59, 3, "@pet/pet_menu:menu_store"); // Store
 
+		Zone* playerZone = player->getZone();
+
+		if (playerZone != nullptr && playerZone->getZoneName() == "elysium")
+			return;
+
 		// Starship Pilot Help
 		menuResponse->addRadialMenuItem(181, 3, "@new_player:menu_space");
 		menuResponse->addRadialMenuItemToRadialID(181, 182, 3, "@new_player:space_option_how_to_find_ship");
