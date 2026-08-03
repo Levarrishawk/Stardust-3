@@ -128,6 +128,8 @@ function elysiumInitiateSpiritConvoHandler:getInitialScreen(pPlayer, pNpc, pConv
 		return convoTemplate:getScreen("silent")
 	end
 
+	ElysiumJediProgression:syncTrainerCompletion(pPlayer)
+
 	local stage = ElysiumJediProgression:getStage(pPlayer)
 
 	if (stage == ElysiumJediProgression.FS_TRAINING_COMPLETE) then

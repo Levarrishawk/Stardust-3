@@ -188,6 +188,28 @@ function ElysiumJediProgression:completeTrainer(pPlayer, trainerBit)
 	return true
 end
 
+function ElysiumJediProgression:syncTrainerCompletion(pPlayer)
+	if (pPlayer == nil or SceneObject(pPlayer):getZoneName() ~= "elysium2" or
+		self:getStage(pPlayer) < self.UNLOCK_COMPLETE) then
+		return false
+	end
+
+	local trainerSkills = {
+		{1, "force_sensitive_combat_prowess_master"},
+		{2, "force_sensitive_enhanced_reflexes_master"},
+		{4, "force_sensitive_crafting_mastery_master"},
+		{8, "force_sensitive_heightened_senses_master"},
+	}
+
+	for i = 1, #trainerSkills do
+		if (CreatureObject(pPlayer):hasSkill(trainerSkills[i][2])) then
+			self:completeTrainer(pPlayer, trainerSkills[i][1])
+		end
+	end
+
+	return self:getTrainerMask(pPlayer) == self.allTrainersComplete
+end
+
 function ElysiumJediProgression:isGlowing(pPlayer)
 	return self:getStage(pPlayer) >= self.GLOWING
 end
