@@ -53,3 +53,5 @@ includeFile("misc/record_keeper_rebel.lua")
 includeFile("misc/seeker.lua")
 includeFile("misc/sullustan_male.lua")
 includeFile("misc/trials_gungan_captain.lua")
+
+includeFile("misc/naboo_heat_memorial.lua")
