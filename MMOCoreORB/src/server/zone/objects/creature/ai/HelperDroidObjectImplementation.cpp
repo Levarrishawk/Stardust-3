@@ -4,6 +4,7 @@
 
 #include "server/zone/objects/creature/ai/HelperDroidObject.h"
 #include "server/zone/packets/object/ObjectMenuResponse.h"
+#include "server/zone/Zone.h"
 #include "server/zone/ZoneServer.h"
 #include "server/chat/ChatManager.h"
 #include "server/zone/managers/director/DirectorManager.h"
