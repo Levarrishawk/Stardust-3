@@ -52,6 +52,7 @@ Luna<LuaPlayerObject>::RegType LuaPlayerObject::Register[] = {
 		{ "isJediDark", &LuaPlayerObject::isJediDark },
 		{ "setJediState", &LuaPlayerObject::setJediState },
 		{ "getJediState", &LuaPlayerObject::getJediState },
+		{ "setCloneCounter", &LuaPlayerObject::setCloneCounter },
 		{ "isOnline", &LuaPlayerObject::isOnline },
 		{ "activateJournalQuest", &LuaPlayerObject::activateJournalQuest },
 		{ "completeJournalQuest", &LuaPlayerObject::completeJournalQuest },
@@ -442,6 +443,18 @@ int LuaPlayerObject::getJediState(lua_State* L) {
 	lua_pushinteger(L, realObject->getJediState());
 
 	return 1;
+}
+
+int LuaPlayerObject::setCloneCounter(lua_State* L) {
+	int cloneCount = lua_tointeger(L, -1);
+
+	if (cloneCount < 0)
+		cloneCount = 0;
+	else if (cloneCount > 5)
+		cloneCount = 5;
+
+	realObject->setCloneCounter(cloneCount);
+	return 0;
 }
 
 int LuaPlayerObject::isOnline(lua_State* L) {

@@ -1209,6 +1209,10 @@ class PlayerObject extends IntangibleObject {
 	public void addCloneCounter() {
 		cloneCounter++;
 	}	
+
+	public void setCloneCounter(byte count) {
+		cloneCounter = count;
+	}
 	
 	public void resetCloneCounter() {
 		cloneCounter = 0;}

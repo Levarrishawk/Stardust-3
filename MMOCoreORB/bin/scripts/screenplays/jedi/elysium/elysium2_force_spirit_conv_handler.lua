@@ -188,6 +188,8 @@ function elysiumInitiateSpiritConvoHandler:beginPadawanPath(pPlayer)
 		return false
 	end
 
+	PlayerObject(pGhost):setCloneCounter(5)
+
 	local x = SceneObject(pShrine):getWorldPositionX()
 	local y = SceneObject(pShrine):getWorldPositionY() + 5
 	local z = getWorldFloor(x, y, shrinePlanet)
