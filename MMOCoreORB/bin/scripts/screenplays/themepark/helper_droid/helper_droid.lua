@@ -90,29 +90,38 @@ function HelperDroid:greetPlayer(pPlayer, pDroid)
 		return
 	end
 	
-	 local zone = SceneObject(pPlayer):getZoneName()
+	local zone = SceneObject(pPlayer):getZoneName()
 
-  if (zone == "elysium") then
-    self:playDroidSound(pPlayer)
+	if (zone == "elysium") then
+		self:playDroidSound(pPlayer)
 
-    local playerID = SceneObject(pPlayer):getObjectID()
-    local droidID = SceneObject(pDroid):getObjectID()
+		local playerID = SceneObject(pPlayer):getObjectID()
+		local droidID = SceneObject(pDroid):getObjectID()
+		local stage = ElysiumJediProgression:getStage(pPlayer)
 
-    writeData(playerID .. ":HelperDroidID:", droidID)
+		writeData(playerID .. ":HelperDroidID:", droidID)
 
-    local sui = SuiListBox.new("HelperDroid", "elysiumCallback")
-    sui.setTitle(SceneObject(pDroid):getCustomObjectName())
-    sui.setProperty("", "Size", "500,200")
-    sui.setForceCloseDistance(10)
+		local sui = SuiListBox.new("HelperDroid", "elysiumCallback")
+		sui.setTitle(SceneObject(pDroid):getCustomObjectName())
+		sui.setProperty("", "Size", "500,200")
+		sui.setForceCloseDistance(10)
+		sui.setPrompt(ElysiumJediProgression:getDroidPrompt(pPlayer))
 
-    sui.setPrompt("@new_player:droid_greeting_begin_01 Welcome to the afterlife, would you like to learn more about being dead?")
+		if (CreatureObject(pPlayer):hasSkill("force_title_jedi_novice")) then
+			sui.add("My path through the Force has already begun.", "")
+		elseif (stage == ElysiumJediProgression.NOT_STARTED) then
+			sui.add("I am ready to learn why I am here.", "")
+		elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
+			sui.add("Remind me what I must do.", "")
+		elseif (stage == ElysiumJediProgression.NPC_SEARCH_ACTIVE) then
+			sui.add("Tell me again about the presence I must find.", "")
+		else
+			sui.add("Tell me what comes next.", "")
+		end
 
-    sui.add("How did I get here?", "")
-
-    sui.sendTo(pPlayer)
-
-    return
-  end
+		sui.sendTo(pPlayer)
+		return
+	end
 
 	self:playDroidSound(pPlayer)
 
@@ -243,22 +252,42 @@ function HelperDroid:playDroidSound(pPlayer)
 end
 
 function HelperDroid:elysiumCallback(pPlayer, pSui, eventIndex, args)
-  if (pPlayer == nil) then
-    return
-  end
+	if (pPlayer == nil) then
+		return
+	end
 
-  if (eventIndex == 1) then
-    return
-  end
+	local playerID = SceneObject(pPlayer):getObjectID()
 
-  local playerID = SceneObject(pPlayer):getObjectID()
-  local droidID = readData(playerID .. ":HelperDroidID:")
-  local pDroid = getSceneObject(droidID)
+	if (eventIndex == 1) then
+		deleteData(playerID .. ":HelperDroidID:")
+		return
+	end
 
-  if (pDroid == nil) then
-    return
-  end
+	local droidID = readData(playerID .. ":HelperDroidID:")
+	local pDroid = getSceneObject(droidID)
 
-  -- Your Elysium response here
-  spatialChat(pDroid, "You are here because you have died and cloned more than five times.  Complex cloning data loses it's integrity with each subsequent copy made.   On the other hand now you and I have an eternity to explore the Netherworld of the Force together!  Hurrah! ")
+	deleteData(playerID .. ":HelperDroidID:")
+
+	if (pDroid == nil or SceneObject(pPlayer):getZoneName() ~= "elysium") then
+		return
+	end
+
+	if (CreatureObject(pPlayer):hasSkill("force_title_jedi_novice")) then
+		spatialChat(pDroid, "Your connection to the Force has already awakened. Your path now lies beyond Elysium.")
+		return
+	end
+
+	local stage = ElysiumJediProgression:getStage(pPlayer)
+
+	if (stage == ElysiumJediProgression.NOT_STARTED) then
+		if (ElysiumJediProgression:startDroidQuest(pPlayer)) then
+			spatialChat(pDroid, "Then listen carefully. Your first task begins now. Return when you have completed it.")
+		end
+	elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
+		spatialChat(pDroid, "Complete the task I set before you, then return to me.")
+	elseif (stage == ElysiumJediProgression.NPC_SEARCH_ACTIVE) then
+		spatialChat(pDroid, "The presence is somewhere in Elysium. Its location is hidden even from my sensors.")
+	else
+		spatialChat(pDroid, ElysiumJediProgression:getDroidPrompt(pPlayer))
+	end
 end
