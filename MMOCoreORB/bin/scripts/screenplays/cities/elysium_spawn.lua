@@ -32,6 +32,7 @@ function ElysiumSpawnScreenPlay:spawnElysiumTwoMobiles()
 		local pNpc = spawnMobile("elysium2", mobile[1], 0, mobile[2], z, mobile[3], mobile[4], 0)
 
 		if (pNpc ~= nil) then
+			CreatureObject(pNpc):clearOptionBit(AIENABLED)
 			self:setMoodString(pNpc, "neutral")
 		end
 	end
