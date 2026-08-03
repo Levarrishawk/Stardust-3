@@ -24,6 +24,7 @@ function ElysiumSpawnScreenPlay:spawnElysiumTwoMobiles()
 		{"elysium2_reflexes_spirit", 2586, 2500, 90},
 		{"elysium2_crafting_spirit", 2606, 2480, 0},
 		{"elysium2_senses_spirit", 2625, 2500, -90},
+		{"elysium2_initiate_spirit", 2606, 2580, 180},
 	}
 
 	for i = 1, #mobiles do

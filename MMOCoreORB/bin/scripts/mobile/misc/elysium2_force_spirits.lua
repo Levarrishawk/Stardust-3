@@ -47,3 +47,6 @@ CreatureTemplates:addCreatureTemplate(elysium2_crafting_spirit, "elysium2_crafti
 
 elysium2_senses_spirit = createElysiumTwoSpirit("a Spirit of Insight", "elysiumSensesSpiritConvoTemplate")
 CreatureTemplates:addCreatureTemplate(elysium2_senses_spirit, "elysium2_senses_spirit")
+
+elysium2_initiate_spirit = createElysiumTwoSpirit("a Force Spirit", "elysiumInitiateSpiritConvoTemplate")
+CreatureTemplates:addCreatureTemplate(elysium2_initiate_spirit, "elysium2_initiate_spirit")

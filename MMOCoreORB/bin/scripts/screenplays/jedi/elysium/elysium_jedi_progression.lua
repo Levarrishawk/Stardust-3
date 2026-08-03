@@ -1,7 +1,9 @@
 ElysiumJediProgression = ScreenPlay:new {
 	screenplayData = "ElysiumJediProgression",
 	stageKey = "stage",
+	trainerMaskKey = "trainerMask",
 	droidHandoffComplete = 1,
+	allTrainersComplete = 15,
 
 	NOT_STARTED = 0,
 	DROID_QUEST_ACTIVE = 1,
@@ -12,7 +14,8 @@ ElysiumJediProgression = ScreenPlay:new {
 	NPC_FOUND = 6,
 	FORCE_TRIALS_ACTIVE = 7,
 	UNLOCK_COMPLETE = 8,
-	PADAWAN_ELIGIBLE = 9,
+	FS_TRAINING_COMPLETE = 9,
+	PADAWAN_ELIGIBLE = 10,
 }
 
 registerScreenPlay("ElysiumJediProgression", false)
@@ -151,6 +154,35 @@ function ElysiumJediProgression:unlockForceSensitiveTrees(pPlayer)
 
 		CreatureObject(pPlayer):sendSystemMessage("You feel an inner glow.  The force is with you.")
 		return true
+	end
+
+	return true
+end
+
+function ElysiumJediProgression:getTrainerMask(pPlayer)
+	if (pPlayer == nil) then
+		return 0
+	end
+
+	local trainerMask = tonumber(readScreenPlayData(pPlayer, self.screenplayData, self.trainerMaskKey))
+	return trainerMask or 0
+end
+
+function ElysiumJediProgression:completeTrainer(pPlayer, trainerBit)
+	if (pPlayer == nil or trainerBit == nil or SceneObject(pPlayer):getZoneName() ~= "elysium2" or
+		self:getStage(pPlayer) < self.UNLOCK_COMPLETE) then
+		return false
+	end
+
+	local trainerMask = self:getTrainerMask(pPlayer)
+
+	if (math.floor(trainerMask / trainerBit) % 2 == 0) then
+		trainerMask = trainerMask + trainerBit
+		writeScreenPlayData(pPlayer, self.screenplayData, self.trainerMaskKey, trainerMask)
+	end
+
+	if (trainerMask == self.allTrainersComplete and self:getStage(pPlayer) == self.UNLOCK_COMPLETE) then
+		return self:setStage(pPlayer, self.FS_TRAINING_COMPLETE)
 	end
 
 	return true

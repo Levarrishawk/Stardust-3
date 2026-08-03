@@ -36,7 +36,8 @@ function ForceShrineMenuComponent:doMeditate(pObject, pPlayer)
 		KnightTrials:resetCompletedTrialsToStart(pPlayer)
 	end
 
-	if (not CreatureObject(pPlayer):hasSkill("force_title_jedi_rank_02") and CreatureObject(pPlayer):hasScreenPlayState(32, "VillageJediProgression")) then
+	if (not CreatureObject(pPlayer):hasSkill("force_title_jedi_rank_02") and
+		(JediTrials:isEligibleForPadawanTrials(pPlayer) or JediTrials:isOnPadawanTrials(pPlayer))) then
 		local currentTrial = JediTrials:getCurrentTrial(pPlayer)
 
 		if (not JediTrials:isOnPadawanTrials(pPlayer)) then
