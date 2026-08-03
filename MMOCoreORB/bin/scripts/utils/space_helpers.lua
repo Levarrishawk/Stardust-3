@@ -725,6 +725,55 @@ function SpaceHelpers:addImperialInquisitionSquadWaypoint(pPlayer)
 	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:barn_sinkko", "@npc_spawner_n:barn_sinkko", 5182, 0, 6750, WAYPOINT_BLUE, true, true, 0)
 end
 
+-- Tier-1 completion hand-off waypoints. All six recruiter conversations use the
+-- Inquisition template dialogue ("report to Under Inquisitor Fa'Zoll in the
+-- Emperor's Retreat"), so all six point at Fa'Zoll's spawn (emperors_retreat.lua).
+-- Kept as per-squadron helpers so each can be retargeted individually if
+-- squadron-specific tier-2 trainers are authored later.
+local function addFaZollWaypointImpl(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:fa_zoll", "@npc_spawner_n:fa_zoll", 2444.4, 292, -3894.8, WAYPOINT_BLUE, true, true, 0)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Smuggler Squadron tier 1
+function SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Inquisition Squadron tier 1
+function SpaceHelpers:addInquisitionNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Storm Squadron tier 1
+function SpaceHelpers:addStormNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Black Epsilon Squadron tier 1
+function SpaceHelpers:addBlackEpsilonNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Crimson Phoenix Squadron tier 1
+function SpaceHelpers:addCrimsonPhoenixNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Vortex Squadron tier 1
+function SpaceHelpers:addVortexNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
 -- @param pPlayer pointer to check for skills
 -- @param factionString - neutral, rebel_navy, imperial_navy
 -- @param tierNumber
