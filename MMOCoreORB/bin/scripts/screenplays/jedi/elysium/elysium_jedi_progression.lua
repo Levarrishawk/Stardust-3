@@ -5,11 +5,13 @@ ElysiumJediProgression = ScreenPlay:new {
 	NOT_STARTED = 0,
 	DROID_QUEST_ACTIVE = 1,
 	GLOWING = 2,
-	NPC_SEARCH_ACTIVE = 3,
-	NPC_FOUND = 4,
-	FORCE_TRIALS_ACTIVE = 5,
-	UNLOCK_COMPLETE = 6,
-	PADAWAN_ELIGIBLE = 7,
+	SHRINE_SEARCH_ACTIVE = 3,
+	SHRINE_FOUND = 4,
+	NPC_SEARCH_ACTIVE = 5,
+	NPC_FOUND = 6,
+	FORCE_TRIALS_ACTIVE = 7,
+	UNLOCK_COMPLETE = 8,
+	PADAWAN_ELIGIBLE = 9,
 }
 
 registerScreenPlay("ElysiumJediProgression", false)
@@ -64,11 +66,27 @@ function ElysiumJediProgression:completeDroidQuest(pPlayer)
 		return false
 	end
 
-	return self:startNpcSearch(pPlayer)
+	return self:startShrineSearch(pPlayer)
+end
+
+function ElysiumJediProgression:startShrineSearch(pPlayer)
+	if (not self:isPlayerOnElysium(pPlayer) or self:getStage(pPlayer) ~= self.GLOWING) then
+		return false
+	end
+
+	return self:setStage(pPlayer, self.SHRINE_SEARCH_ACTIVE)
+end
+
+function ElysiumJediProgression:completeShrineSearch(pPlayer)
+	if (not self:isPlayerOnElysium(pPlayer) or self:getStage(pPlayer) ~= self.SHRINE_SEARCH_ACTIVE) then
+		return false
+	end
+
+	return self:setStage(pPlayer, self.SHRINE_FOUND)
 end
 
 function ElysiumJediProgression:startNpcSearch(pPlayer)
-	if (not self:isPlayerOnElysium(pPlayer) or self:getStage(pPlayer) ~= self.GLOWING) then
+	if (not self:isPlayerOnElysium(pPlayer) or self:getStage(pPlayer) ~= self.SHRINE_FOUND) then
 		return false
 	end
 
@@ -99,11 +117,15 @@ function ElysiumJediProgression:getDroidPrompt(pPlayer)
 	elseif (stage == self.DROID_QUEST_ACTIVE) then
 		return "Your first task has begun. Return to me when you have completed what is required of you."
 	elseif (stage == self.GLOWING) then
-		return "Something within you has changed. There is another presence somewhere in Elysium that you must seek out."
+		return "Something within you has changed. My sensors have located what appears to be an artificial structure somewhere nearby. You should investigate it."
+	elseif (stage == self.SHRINE_SEARCH_ACTIVE) then
+		return "The artificial structure is close to where you entered Elysium. Investigate it and determine why my sensors reacted to it."
+	elseif (stage == self.SHRINE_FOUND) then
+		return "You found the structure. Whatever purpose brought you there is beyond my programming. Return to it if you wish to continue."
 	elseif (stage == self.NPC_SEARCH_ACTIVE) then
-		return "The presence you seek is somewhere in Elysium. I cannot tell you where. You must find it yourself."
+		return "The structure has sent you searching for someone in Elysium. I cannot locate that individual for you."
 	elseif (stage == self.NPC_FOUND) then
-		return "You found the one who was hidden. Your journey through the Force has only begun."
+		return "You found the individual the structure revealed to you. Your journey through the Force has only begun."
 	elseif (stage < self.UNLOCK_COMPLETE) then
 		return "Continue the trials set before you. The Force will reveal the way forward when you are ready."
 	end

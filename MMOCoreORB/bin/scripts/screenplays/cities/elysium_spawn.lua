@@ -14,19 +14,21 @@ function ElysiumSpawnScreenPlay:start()
 end
 
 function ElysiumSpawnScreenPlay:spawnSceneObjects()
+	local x = 60
+	local y = -14
+	local z = getWorldFloor(x, y, "elysium")
 
-  --Monument Square Cantina Static Objects
-  
- -- spawnSceneObject("elysium", "object/building/player/city/shuttleport_corellia.iff", -5816, 0, -4833, 0, math.rad(180) )
- 
+	spawnSceneObject("elysium", "object/tangible/jedi/elysium_force_shrine_stone.iff", x, z, y, 0, 180)
 end
 
 function ElysiumSpawnScreenPlay:spawnMobiles()
+	local x = getRandomNumber(-100, 100)
+	local y = getRandomNumber(-100, 100)
+	local z = getWorldFloor(x, y, "elysium")
 
-    local x = math.random(-6500, 6500)
-    local y = math.random(-6500, 6500)
+	local pNpc = spawnMobile("elysium", "commoner", 60, x, z, y, 0, 0)
 
-    local pNpc = spawnMobile("elysium", "commoner", 60, x, 6, y, 0, 0)  -- Placeholder for the future.
-    self:setMoodString(pNpc, "neutral")
-
+	if (pNpc ~= nil) then
+		self:setMoodString(pNpc, "neutral")
+	end
 end

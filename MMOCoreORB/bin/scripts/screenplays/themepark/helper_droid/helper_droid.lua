@@ -288,8 +288,10 @@ function HelperDroid:elysiumProgression(pDroid, pPlayer)
 		sui.add("I am ready to learn why I am here.", "")
 	elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
 		sui.add("Remind me what I must do.", "")
+	elseif (stage == ElysiumJediProgression.SHRINE_SEARCH_ACTIVE) then
+		sui.add("Tell me again about the structure you detected.", "")
 	elseif (stage == ElysiumJediProgression.NPC_SEARCH_ACTIVE) then
-		sui.add("Tell me again about the presence I must find.", "")
+		sui.add("Can your sensors locate the person I must find?", "")
 	else
 		sui.add("Tell me what comes next.", "")
 	end
@@ -332,8 +334,10 @@ function HelperDroid:elysiumProgressionCallback(pPlayer, pSui, eventIndex, args)
 		end
 	elseif (stage == ElysiumJediProgression.DROID_QUEST_ACTIVE) then
 		spatialChat(pDroid, "Complete the task I set before you, then return to me.")
+	elseif (stage == ElysiumJediProgression.SHRINE_SEARCH_ACTIVE) then
+		spatialChat(pDroid, "The artificial structure is close to where you entered Elysium. You should be able to reach it on foot.")
 	elseif (stage == ElysiumJediProgression.NPC_SEARCH_ACTIVE) then
-		spatialChat(pDroid, "The presence is somewhere in Elysium. Its location is hidden even from my sensors.")
+		spatialChat(pDroid, "I cannot locate the individual from the structure's vision. You will have to search Elysium yourself.")
 	else
 		spatialChat(pDroid, ElysiumJediProgression:getDroidPrompt(pPlayer))
 	end

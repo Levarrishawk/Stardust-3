@@ -53,3 +53,9 @@ object_tangible_jedi_force_shrine_stone = object_tangible_jedi_shared_force_shri
 }
 
 ObjectTemplates:addTemplate(object_tangible_jedi_force_shrine_stone, "object/tangible/jedi/force_shrine_stone.iff")
+
+object_tangible_jedi_elysium_force_shrine_stone = object_tangible_jedi_shared_force_shrine_stone:new {
+	objectMenuComponent = "ElysiumForceShrineMenuComponent",
+}
+
+ObjectTemplates:addTemplate(object_tangible_jedi_elysium_force_shrine_stone, "object/tangible/jedi/elysium_force_shrine_stone.iff")
