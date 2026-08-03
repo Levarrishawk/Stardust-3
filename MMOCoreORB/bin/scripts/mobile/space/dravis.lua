@@ -25,7 +25,7 @@ dravis = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED + JTLINTERESTING,
+	optionsBitmask = AIENABLED + JTLINTERESTING + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/space_privateer_tier1_tatooine.iff"},
