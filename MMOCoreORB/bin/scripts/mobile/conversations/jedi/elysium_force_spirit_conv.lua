@@ -46,7 +46,7 @@ local found = ConvoScreen:new {
 	customDialogText = "You have already proven that you can follow the faintest movement of the Force. Are you ready to continue?",
 	stopConversation = "false",
 	options = {
-		{"I am ready. Send me there.", "teleport"},
+		{"I am ready.", "teleport"},
 		{"Not yet.", "not_ready"}
 	}
 }
@@ -66,7 +66,7 @@ elysiumForceSpiritConvoTemplate:addScreen(teleport)
 local notReady = ConvoScreen:new {
 	id = "not_ready",
 	leftDialog = "",
-	customDialogText = "Return when you are prepared. I will remain here.",
+	customDialogText = "Find me again when you are prepared, if you are able...",
 	stopConversation = "true",
 	options = {}
 }

@@ -260,6 +260,7 @@ includeFile("conversations/trials/padawan/the_ring_02_conv.lua")
 
 -- Village
 includeFile("conversations/jedi/elysium_force_spirit_conv.lua")
+includeFile("conversations/jedi/elysium2_force_spirit_conv.lua")
 includeFile("conversations/village/fs_village_convo3_m_conv.lua")
 includeFile("conversations/village/fs_village_convo4_f_conv.lua")
 includeFile("conversations/village/fs_village_convo5_f_conv.lua")
