@@ -14,7 +14,7 @@ function CustomJediManager:onPlayerLoggedIn(pPlayer)
 		return
 	end
 
-	-- Persistent Elysium progression is recovered on demand by its screenplay.
+	ElysiumJediProgression:syncScreenPlayState(pPlayer)
 end
 
 function CustomJediManager:checkForceStatusCommand(pPlayer)

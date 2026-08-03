@@ -33,7 +33,8 @@ int HelperDroidObjectImplementation::handleObjectMenuSelect(CreatureObject* play
 		if (selectedID == 117) {
 			Zone* playerZone = player->getZone();
 
-			if (playerZone == nullptr || playerZone->getZoneName() != "elysium")
+			if (playerZone == nullptr || playerZone->getZoneName() != "elysium" ||
+					(player->getScreenPlayState("ElysiumJediProgression") & 1) != 0)
 				return 0;
 
 			Reference<LuaFunction*> luaElysiumProgression = lua->createFunction("HelperDroid", "elysiumProgression", 0);
@@ -154,7 +155,9 @@ void HelperDroidObjectImplementation::fillObjectMenuResponse(ObjectMenuResponse*
 		Zone* playerZone = player->getZone();
 
 		if (playerZone != nullptr && playerZone->getZoneName() == "elysium") {
-			menuResponse->addRadialMenuItem(117, 3, "Run Sensor Scan");
+			if ((player->getScreenPlayState("ElysiumJediProgression") & 1) == 0)
+				menuResponse->addRadialMenuItem(117, 3, "Run Sensor Scan");
+
 			return;
 		}
 

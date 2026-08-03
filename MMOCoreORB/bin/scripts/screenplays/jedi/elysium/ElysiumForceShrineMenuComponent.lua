@@ -37,8 +37,8 @@ end
 function ElysiumForceShrineMenuComponent:sendNpcQuestOffer(pShrine, pPlayer)
 	local sui = SuiMessageBox.new("ElysiumJediProgression", "npcSearchQuestCallback")
 	sui.setTitle("An Ancient Structure")
-	sui.setPrompt("As you approach, the structure responds to your presence. A distant figure appears in your mind, hidden somewhere in Elysium. Find this individual and discover why the Force has drawn you together.")
-	sui.setOkButtonText("I will find them.")
+	sui.setPrompt("As you approach, the structure responds to your presence. A distant figure appears in your mind, hidden somewhere in the Netherworld of the Force. Find this individual and discover why the Force has drawn you together in this place.")
+	sui.setOkButtonText("Accept Quest.")
 	sui.setCancelButtonText("Not yet.")
 	sui.setForceCloseDistance(10)
 	sui.sendTo(pPlayer)
@@ -50,7 +50,7 @@ function ElysiumJediProgression:npcSearchQuestCallback(pPlayer, pSui, eventIndex
 	end
 
 	if (self:startNpcSearch(pPlayer)) then
-		CreatureObject(pPlayer):sendSystemMessage("The structure's vision remains in your mind. The individual is somewhere in Elysium.")
+		CreatureObject(pPlayer):sendSystemMessage("The structure's vision remains in your mind. The individual is somewhere in The Netherworld of the Force.")
 	end
 end
 

@@ -268,11 +268,17 @@ function HelperDroid:elysiumProgression(pDroid, pPlayer)
 		return
 	end
 
+	local stage = ElysiumJediProgression:getStage(pPlayer)
+
+	if (stage >= ElysiumJediProgression.SHRINE_SEARCH_ACTIVE) then
+		ElysiumJediProgression:syncScreenPlayState(pPlayer)
+		return
+	end
+
 	self:playDroidSound(pPlayer)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 	local droidID = SceneObject(pDroid):getObjectID()
-	local stage = ElysiumJediProgression:getStage(pPlayer)
 
 	writeData(playerID .. ":HelperDroid:ElysiumProgressionDroidID:", droidID)
 

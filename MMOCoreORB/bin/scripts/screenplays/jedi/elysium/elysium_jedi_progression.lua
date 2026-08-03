@@ -1,6 +1,7 @@
 ElysiumJediProgression = ScreenPlay:new {
 	screenplayData = "ElysiumJediProgression",
 	stageKey = "stage",
+	droidHandoffComplete = 1,
 
 	NOT_STARTED = 0,
 	DROID_QUEST_ACTIVE = 1,
@@ -66,7 +67,18 @@ function ElysiumJediProgression:completeDroidQuest(pPlayer)
 		return false
 	end
 
-	return self:startShrineSearch(pPlayer)
+	if (not self:startShrineSearch(pPlayer)) then
+		return false
+	end
+
+	CreatureObject(pPlayer):setScreenPlayState(self.droidHandoffComplete, self.screenplayData)
+	return true
+end
+
+function ElysiumJediProgression:syncScreenPlayState(pPlayer)
+	if (pPlayer ~= nil and self:getStage(pPlayer) >= self.SHRINE_SEARCH_ACTIVE) then
+		CreatureObject(pPlayer):setScreenPlayState(self.droidHandoffComplete, self.screenplayData)
+	end
 end
 
 function ElysiumJediProgression:startShrineSearch(pPlayer)
