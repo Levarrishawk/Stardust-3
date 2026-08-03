@@ -48,8 +48,9 @@ function naboo_memorial:spawnMobiles()
 
 -- Mobiles
 
-	spawnMobile("naboo", "naboo_heat_memorial", 200, 5373, 7.7, 1525.0, 169, 0)
-	
+	pNpc = spawnMobile("naboo", "naboo_heat_memorial", 200, 5373, 7.7, 1525.0, 169, 0)
+	self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
 	
 
 end
