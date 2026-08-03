@@ -740,3 +740,6 @@ includeFile("../custom_scripts/screenplays/screenplays.lua")
 
 includeFile("cities/coruscant_entertainment_district.lua")
 includeFile("cities/elysium_spawn.lua")
+includeFile("cities/chandrila_hanna_city.lua")
+includeFile("cities/chandrila_nayli_outpost.lua")
+includeFile("cities/hutta_bilbousa_city.lua")
