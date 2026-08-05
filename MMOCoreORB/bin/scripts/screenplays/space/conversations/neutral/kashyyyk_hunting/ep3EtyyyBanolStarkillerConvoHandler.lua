@@ -1,0 +1,239 @@
+--[[
+	Banol Starkiller -- the ground giver for the two Kashyyyk hunting quest heads that had no giver:
+
+		assassinate/ep3_hunting_banol_destroy_tripps_goods   (head, questZone space_kashyyyk)
+		recovery/ep3_hunting_banol_capture_fordan            (head, questZone space_kashyyyk)
+
+	Both globals live in screenplays/space/squadrons/KashyyykHuntingScreenplay.lua (lines 338/376 and
+	378/441). That file is included by screenplays/space/screenplays.lua before this one, so both
+	globals are loaded by the time this handler runs.
+
+	Neither quest has a parent and neither has a side quest (sideQuest = false on both), so this
+	conversation is their only entry point and their only retry point. The two are chained here in
+	conversation, not by the engine, exactly as the .stf chains them: s_526 "You did pretty good taking
+	out Tripp's latest shipment... Any interest in another little project?" is the Fordan pitch and it
+	only exists after the shipment job.
+
+	REACHABILITY, STATED PLAINLY. ep3_etyyy_banol_starkiller is not spawned anywhere in this repo,
+	there are no Kashyyyk ground spawn areas, and config.lua ZonesEnabled has no Kashyyyk ground zone
+	(only SpaceZonesEnabled has "space_kashyyyk"). This handler is correct and inert until all three of
+	those are addressed.
+]]
+
+Ep3EtyyyBanolStarkillerConvoHandler = conv_handler:new {}
+
+-- Copied from KashyyykHuntingScreenplay.lua verbatim (questType/questName, lines 341-342 and 381-382).
+EP3_BANOL_SHIPMENT = {type = "assassinate", name = "ep3_hunting_banol_destroy_tripps_goods"}
+EP3_BANOL_FORDAN = {type = "recovery", name = "ep3_hunting_banol_capture_fordan"}
+
+EP3_BANOL_SHIPMENT_TAKEN_KEY = ":ep3_banol:shipment_taken" -- has ever accepted the shipment job
+EP3_BANOL_FORDAN_TAKEN_KEY = ":ep3_banol:fordan_taken"     -- has ever accepted the Fordan capture
+EP3_BANOL_FORDAN_PITCHED_KEY = ":ep3_banol:fordan_pitched" -- has been shown the s_526 Fordan pitch
+EP3_BANOL_SORDAAN_KEY = ":ep3_sordaan_xris:referred"       -- nothing writes this yet; see below
+
+--[[
+	FLAGGED INTERPRETATION -- THE SORDAAN REFERRAL, and the one switch that reverts it.
+
+	s_556 opens "Sordaan wanted me to throw some work your way", and s_570 is the brush-off for anyone
+	Sordaan has not sent. Honouring that gate needs an ep3_sordaan_xris conversation to write
+	EP3_BANOL_SORDAAN_KEY. No such conversation exists anywhere in this repo -- his .stf ships 162
+	entries of an unbuilt ground chain -- so enforcing the gate today would make both of Banol's space
+	quests permanently unreachable, which is the exact defect this file was written to fix.
+
+	So the gate is present and OFF. Flip this one constant to true the day Sordaan Xris is built and
+	writes that key, and ep3_banol_brushoff becomes live with no other change.
+]]
+BANOL_REQUIRE_SORDAAN_REFERRAL = false
+
+function Ep3EtyyyBanolStarkillerConvoHandler:getFlag(pPlayer, flagKey)
+	if (pPlayer == nil) then
+		return 0
+	end
+
+	return readData(SceneObject(pPlayer):getObjectID() .. flagKey)
+end
+
+function Ep3EtyyyBanolStarkillerConvoHandler:setFlag(pPlayer, flagKey, value)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local key = SceneObject(pPlayer):getObjectID() .. flagKey
+
+	deleteData(key)
+
+	if (value ~= 0) then
+		writeData(key, value)
+	end
+end
+
+-- Hand the quest out and report whether it actually landed. Same shape as
+-- Ep3CpgVeteranConvoHandler:grant(). Neither quest name contains "_duty", so
+-- SpaceHelpers:activateSpaceQuest()'s one-duty-at-a-time refusal does not apply to either; the
+-- re-check is kept anyway so a refused grant leaves no residue.
+function Ep3EtyyyBanolStarkillerConvoHandler:grant(pPlayer, pNpc, screenplay, quest)
+	if (pPlayer == nil or screenplay == nil) then
+		return false
+	end
+
+	screenplay:startQuest(pPlayer, pNpc)
+
+	return SpaceHelpers:isSpaceQuestActive(pPlayer, quest.type, quest.name)
+		or SpaceHelpers:isSpaceQuestComplete(pPlayer, quest.type, quest.name)
+end
+
+function Ep3EtyyyBanolStarkillerConvoHandler:canFly(pPlayer)
+	return isJtlEnabled() and SpaceHelpers:isPilot(pPlayer) and SpaceHelpers:hasCertifiedShip(pPlayer, true)
+end
+
+function Ep3EtyyyBanolStarkillerConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+	if (pPlayer == nil or pNpc == nil or pConvTemplate == nil) then
+		return
+	end
+
+	local convoTemplate = LuaConversationTemplate(pConvTemplate)
+
+	local shipmentActive = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name)
+	local shipmentDone = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name)
+	local fordanActive = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_BANOL_FORDAN.type, EP3_BANOL_FORDAN.name)
+	local fordanDone = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BANOL_FORDAN.type, EP3_BANOL_FORDAN.name)
+
+	-- Holding one of his jobs right now. s_752 is literally true here.
+	if (shipmentActive or fordanActive) then
+		return convoTemplate:getScreen("ep3_banol_busy")
+	end
+
+	-- Fordan captured. s_516 is his standing screen from then on, and it is itself a repeatable
+	-- shipment offer, so nothing below needs to run.
+	if (fordanDone) then
+		return convoTemplate:getScreen("ep3_banol_fordan_praise")
+	end
+
+	-- Took the Fordan job and no longer holds it. s_506 says outright that Fordan is gone for good, so
+	-- the recovery quest is never re-offered; only the shipment job remains.
+	if (self:getFlag(pPlayer, EP3_BANOL_FORDAN_TAKEN_KEY) == 1) then
+		return convoTemplate:getScreen("ep3_banol_fordan_failed")
+	end
+
+	if (shipmentDone) then
+		-- Fordan already put to him once and turned down (or the pitch was walked away from): back to
+		-- the standing shipment offer. Accepting there clears the latch, so the next completed
+		-- shipment brings the Fordan pitch round again.
+		if (self:getFlag(pPlayer, EP3_BANOL_FORDAN_PITCHED_KEY) == 1) then
+			return convoTemplate:getScreen("ep3_banol_reoffer")
+		end
+
+		return convoTemplate:getScreen("ep3_banol_fordan_intro")
+	end
+
+	-- Took the shipment job once and no longer holds it. See the FLAGGED INTERPRETATION block above
+	-- ep3_banol_failed in the convo file.
+	if (self:getFlag(pPlayer, EP3_BANOL_SHIPMENT_TAKEN_KEY) == 1) then
+		return convoTemplate:getScreen("ep3_banol_failed")
+	end
+
+	if (BANOL_REQUIRE_SORDAAN_REFERRAL and self:getFlag(pPlayer, EP3_BANOL_SORDAAN_KEY) ~= 1) then
+		return convoTemplate:getScreen("ep3_banol_brushoff")
+	end
+
+	return convoTemplate:getScreen("ep3_banol_greeting")
+end
+
+function Ep3EtyyyBanolStarkillerConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+	if (pPlayer == nil or pConvScreen == nil) then
+		return
+	end
+
+	local screen = LuaConversationScreen(pConvScreen)
+	local screenID = screen:getScreenID()
+
+	local pScreenClone = screen:cloneScreen()
+	local pClonedConvo = LuaConversationScreen(pScreenClone)
+
+	pClonedConvo:setDialogTextTU(CreatureObject(pPlayer):getFirstName())
+
+	-- THE SHIPMENT GRANT. Four shipped accept points all land on the same quest.
+	if (screenID == "ep3_banol_accept" or screenID == "ep3_banol_retry"
+		or screenID == "ep3_banol_reoffer_accept" or screenID == "ep3_banol_fordan_failed_accept"
+		or screenID == "ep3_banol_praise_accept" or screenID == "ep3_banol_else_accept") then
+
+		if (not self:canFly(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("ep3_banol_no_space")
+		end
+
+		-- A COMPLETED journal quest still owns its slot. PlayerObjectImplementation::completeJournalQuest
+		-- sets only the completed flag (PlayerObjectImplementation.cpp:3236-3254); the ownerId is never
+		-- released, and activateJournalQuest refuses outright when ownerId is set (3213-3218). So the
+		-- journal write in SpaceHelpers:activateSpaceQuest (space_helpers.lua:1017) silently no-ops on a
+		-- completed quest while everything around it still fires -- the datapad mission object is created
+		-- (:981), "Mission Received" is sent (:1023) and the fanfare plays (:1025). The shipment job is a
+		-- repeatable offer that is reached from the completed state by design, so without this it hands
+		-- out a phantom mission every time and can never be completed again (completeSpaceQuest bails at
+		-- space_helpers.lua:1045 on not-active).
+		--
+		-- ALL SIX ACCEPT IDS ARE COVERED, which is why this sits inside the same if. Four of them are
+		-- reachable with the shipment already complete: ep3_banol_praise_accept off ep3_banol_fordan_praise
+		-- (getInitialScreen:108-110), ep3_banol_fordan_failed_accept off ep3_banol_fordan_failed (:114-116),
+		-- ep3_banol_reoffer_accept off ep3_banol_reoffer (:122-124), and ep3_banol_else_accept off the
+		-- ep3_banol_fordan_intro -> fordan_decline -> ep3_banol_else run (:126) -- that last one is the
+		-- ordinary first-playthrough path, not an edge case. ep3_banol_accept and ep3_banol_retry come in
+		-- on a not-complete shipment and the guard below simply does not fire for them.
+		--
+		-- IT SITS AFTER THE canFly EARLY RETURN ON PURPOSE. A player who is brushed off to
+		-- ep3_banol_no_space gets no quest, so their journal must not be touched.
+		--
+		-- reset + clear, in that order, is the shipped house move for exactly this, copied from
+		-- RsfSquadronScreenplay:resetDingeQuests (RsfSquadronScreenplay.lua:1841-1879). resetQuest is
+		-- SpaceAssassinateScreenplay:resetQuest (SpaceAssassinateScreenplay.lua:135-166) -- the shipment
+		-- job is a SpaceAssassinateScreenplay (KashyyykHuntingScreenplay.lua:338): it fails the quest
+		-- silently (failSpaceQuest with notifyClient false, which reaches clearJournalQuest at
+		-- space_helpers.lua:1105 and so does release the ownerId), drops the waypoint, drops the
+		-- ZONESWITCHED observer, despawns the target ships and cancels the fail event. clearSpaceQuest is
+		-- then a no-op that matches the precedent.
+		--
+		-- GUARDED ON THE COMPLETED STATE ON PURPOSE. On a first grant, and on ep3_banol_retry after a
+		-- shipment failure, the quest is neither active nor complete, which by isJournalQuestActive/
+		-- isJournalQuestComplete (PlayerObjectImplementation.cpp:3374-3387) means ownerId is already 0 --
+		-- every failure and abandon path runs SpaceHelpers:failSpaceQuest, which clears the journal entry.
+		-- Those paths must not be reset, and are not.
+		--
+		-- EP3_BANOL_FORDAN IS NOT TOUCHED HERE. Its own grant below is already correct: s_506 says Fordan
+		-- is gone for good, getInitialScreen never re-offers the recovery quest, and a completed Fordan
+		-- slot is exactly what :108 reads to hand out ep3_banol_fordan_praise.
+		if (SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name)) then
+			assassinate_ep3_hunting_banol_destroy_tripps_goods:resetQuest(pPlayer)
+			SpaceHelpers:clearSpaceQuest(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name, false)
+		end
+
+		-- grant() is the shared shape (see the comment on it, and Ep3CpgVeteranConvoHandler:grant()) and
+		-- is left alone. With the clear above, the shipment is neither active nor complete when startQuest
+		-- runs, so grant()'s "or isSpaceQuestComplete" arm can no longer return true vacuously and a true
+		-- return is now a real activation on all six ids.
+		if (self:grant(pPlayer, pNpc, assassinate_ep3_hunting_banol_destroy_tripps_goods, EP3_BANOL_SHIPMENT)) then
+			self:setFlag(pPlayer, EP3_BANOL_SHIPMENT_TAKEN_KEY, 1)
+
+			-- Taking the shipment job again puts the Fordan pitch back on the table for when it lands.
+			if (screenID == "ep3_banol_reoffer_accept" or screenID == "ep3_banol_else_accept") then
+				self:setFlag(pPlayer, EP3_BANOL_FORDAN_PITCHED_KEY, 0)
+			end
+		end
+
+	-- THE FORDAN GRANT. s_532 "I'll do it." lands on ep3_banol_fordan_accept.
+	elseif (screenID == "ep3_banol_fordan_accept") then
+		if (not self:canFly(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("ep3_banol_no_space")
+		end
+
+		if (self:grant(pPlayer, pNpc, recovery_ep3_hunting_banol_capture_fordan, EP3_BANOL_FORDAN)) then
+			self:setFlag(pPlayer, EP3_BANOL_FORDAN_TAKEN_KEY, 1)
+		end
+
+	-- The Fordan job has now been put to the player; latch it either way so he does not repeat the
+	-- pitch at every hail.
+	elseif (screenID == "ep3_banol_fordan_intro" or screenID == "ep3_banol_fordan_brush"
+		or screenID == "ep3_banol_fordan_decline") then
+		self:setFlag(pPlayer, EP3_BANOL_FORDAN_PITCHED_KEY, 1)
+	end
+
+	return pScreenClone
+end
