@@ -1,6 +1,6 @@
 anthropology_collector = ShipAgent:new {
 	template = "z95_tier3",
-	pilotTemplate = "light_fighter_light_fighter_tier3",
+	pilotTemplate = "light_fighter_tier3",
 	shipType = "fighter",
 
 	experience = 1280,

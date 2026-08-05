@@ -439,13 +439,22 @@ registerScreenPlay("destroy_surpriseattack_ep3_stren_dorn_bounty", true)
 --[[
 	Fezrik smuggling chain.
 
-	KNOWN DEGRADE -- the three deliveryPoint values below are the in-tree "<zone>:<point_name>"
-	composite strings. Named space patrol points live in the ShipAgentTemplateManager Lua state
+	RESOLVED -- the three deliveryPoint values below were "<zone>:<point_name>" composite strings,
+	which never resolve. Named space patrol points live in the ShipAgentTemplateManager Lua state
 	(ShipAgentTemplateManager.cpp:22-23, loaded at :110) and DirectorManager registers no lookup
-	binding, so a screenplay cannot resolve them. SpaceDeliveryScreenplay:getLegLocation
-	(:297-313) returns nil for a string and startLeg (:369-373) spawns the freighter on the
-	player after arrivalDelay -- completable, but with no approach waypoint and no rendezvous
-	active area. Swap in a {x =, z =, y =} table to restore the waypoint; no code change needed.
+	binding, so a screenplay cannot turn that string into coordinates.
+	SpaceDeliveryScreenplay:getLegLocation (:297-313) returns nil for a string and startLeg
+	(:369-373) then spawns the freighter on the player after arrivalDelay -- completable, but with
+	no approach waypoint and no rendezvous active area.
+
+	They are now {x =, z =, y =} tables, taken from the patrol points that carry each quest's own
+	name in each quest's own zone: ep3_trando_fezrik_01 (space_naboo.lua:157),
+	ep3_trando_fezrik_02 (space_corellia.lua:105), ep3_trando_fezrik_03 (space_lok.lua:64).
+
+	CAVEAT, STATED PLAINLY. Those three patrol points all carry the identical round coordinate
+	(1000, 3000, -5000) and no "-- src:" provenance comment, unlike the Kashyyyk hunting points
+	which do. They are our own placeholders, not Live-attested positions. The waypoint now works
+	and the rendezvous sits in the correct system; the exact position is unverified.
 ]]
 
 delivery_no_pickup_ep3_trando_fezrik_01 = SpaceDeliveryNoPickupScreenplay:new {
@@ -469,7 +478,7 @@ delivery_no_pickup_ep3_trando_fezrik_01 = SpaceDeliveryNoPickupScreenplay:new {
 
 	-- "Meet the Rendal Trading Company's Ship" -- trade uller pelts for computer control chips
 	deliveryShip = "freightermedium_tier3",
-	deliveryPoint = "space_naboo:fezrik_rendal_rendezvous", -- point name ours
+	deliveryPoint = {x = 1000, z = 3000, y = -5000}, -- space_naboo patrol point ep3_trando_fezrik_01 (space_naboo.lua:157); coords ours, not Live-attested
 
 	attackDelay = 30,
 	attackShips = {},
@@ -502,7 +511,7 @@ delivery_no_pickup_ep3_trando_fezrik_02 = SpaceDeliveryNoPickupScreenplay:new {
 
 	-- "Meet the Harkon Freighter" -- trade computer chips for blaster crystals
 	deliveryShip = "freighterheavy_tier4",
-	deliveryPoint = "space_corellia:fezrik_harkon_rendezvous", -- point name ours
+	deliveryPoint = {x = 1000, z = 3000, y = -5000}, -- space_corellia patrol point ep3_trando_fezrik_02 (space_corellia.lua:105); coords ours, not Live-attested
 
 	attackDelay = 30,
 	attackShips = {},
@@ -535,7 +544,7 @@ delivery_no_pickup_ep3_trando_fezrik_03 = SpaceDeliveryNoPickupScreenplay:new {
 
 	-- "Meet the Nym YT1300" -- trade blaster crystals for glitterdust with Nym's men
 	deliveryShip = "yt1300_nym",
-	deliveryPoint = "space_lok:fezrik_nym_rendezvous", -- point name ours
+	deliveryPoint = {x = 1000, z = 3000, y = -5000}, -- space_lok patrol point ep3_trando_fezrik_03 (space_lok.lua:64); coords ours, not Live-attested
 
 	attackDelay = 30,
 	attackShips = {},
