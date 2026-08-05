@@ -23,13 +23,17 @@ ep3_eyma = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	-- CONVERSABLE and conversationTemplate must be set together: LuaMobileTest.cpp:463-477 asserts that
+	-- any mobile carrying the CONVERSE option bit has a non-empty conversationTemplate. The template is
+	-- ep3_eyma_convotemplate, defined in
+	-- mobile/conversations/space/neutral/kashyyyk_station/ep3_eyma_convo.lua.
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_eyma.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_eyma_convotemplate",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }

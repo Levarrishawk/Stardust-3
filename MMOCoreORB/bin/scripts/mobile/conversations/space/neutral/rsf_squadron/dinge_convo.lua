@@ -466,4 +466,454 @@ go_to_tier2 = ConvoScreen:new {
 }
 dinge_convo_template:addScreen(go_to_tier2);
 
+--[[
+
+	Tier 4
+
+]]
+
+-- Tier 4 - Active Mission
+tier4_on_mission = ConvoScreen:new {
+	id = "tier4_on_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_67b2bdc1", -- Hurry up. It's time to get back to work.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(tier4_on_mission);
+
+-- Tier 4 - Initial Briefing
+tier4_initial_briefing = ConvoScreen:new {
+	id = "tier4_initial_briefing",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_cdffba3e", -- Tsk. You're late. That's not a good way to start your tour with me, pilot. Are you ready to begin? I have a briefing prepped for you.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_c82e9a2f", "tier4_first_mission"}, -- Yes, please.
+	}
+}
+dinge_convo_template:addScreen(tier4_initial_briefing);
+
+-- Tier 4 - Mission 1 (Escort the deep space scan vessel - Endor)
+tier4_first_mission = ConvoScreen:new {
+	id = "tier4_first_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_a82676b8", -- Royal Security Forces are using a deep space scan vessel in Endor space.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_b2e340f6", "tier4_first_mission_details"}, -- What's that?
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_first_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_first_mission);
+
+tier4_first_mission_details = ConvoScreen:new {
+	id = "tier4_first_mission_details",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_a224e8fe", -- A deep space scan vessel. It's an RSF ship. We're using it to investigate Endor space.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_first_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_first_mission_details);
+
+accept_tier4_first_mission = ConvoScreen:new {
+	id = "accept_tier4_first_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_90422eb5", -- Good luck.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_first_mission);
+
+failed_tier4_first_mission = ConvoScreen:new {
+	id = "failed_tier4_first_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_d858532", -- Get out there and try again.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(failed_tier4_first_mission);
+
+tier4_first_mission_success = ConvoScreen:new {
+	id = "tier4_first_mission_success",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_bdc28bb4", -- You did a nice job protecting that scan vessel. We took a look at the tapes.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_8289ab5b", "tier4_second_mission"}, -- I'm ready for my next mission.
+	}
+}
+dinge_convo_template:addScreen(tier4_first_mission_success);
+
+-- Tier 4 - Mission 2 (Inspect the heavy mining freighter - Endor)
+tier4_second_mission = ConvoScreen:new {
+	id = "tier4_second_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_9145ef83", -- Listen. There's a heavy mining freighter passing through Endor space.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_25f8ac14", "tier4_second_mission_details"}, -- What's it carrying?
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_second_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_second_mission);
+
+tier4_second_mission_details = ConvoScreen:new {
+	id = "tier4_second_mission_details",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_88678c75", -- Supplies, a few passengers, nothing special.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_8462774c", "tier4_second_mission_go"}, -- So I should inspect the ship.
+	}
+}
+dinge_convo_template:addScreen(tier4_second_mission_details);
+
+tier4_second_mission_go = ConvoScreen:new {
+	id = "tier4_second_mission_go",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_87246f3e", -- You got it. Go check it out. And I don't mean one quick pass, either. Take a GOOD look...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_second_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_second_mission_go);
+
+accept_tier4_second_mission = ConvoScreen:new {
+	id = "accept_tier4_second_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_9281abbb", -- Go get 'em, tiger.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_second_mission);
+
+failed_tier4_second_mission = ConvoScreen:new {
+	id = "failed_tier4_second_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_d858532", -- Get out there and try again.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(failed_tier4_second_mission);
+
+tier4_second_mission_success = ConvoScreen:new {
+	id = "tier4_second_mission_success",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_41799e3b", -- You did good. I have a new mission for you.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_614d7ac4", "tier4_third_mission"}, -- What is the mission?
+	}
+}
+dinge_convo_template:addScreen(tier4_second_mission_success);
+
+-- Tier 4 - Mission 3 (Imperial freighter go-between - Yavin)
+tier4_third_mission = ConvoScreen:new {
+	id = "tier4_third_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_b5ee61ed", -- A pair of Imperial freighters have entered Yavin space...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_77e48d5b", "tier4_third_mission_details"}, -- What do you mean?
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_third_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_third_mission);
+
+tier4_third_mission_details = ConvoScreen:new {
+	id = "tier4_third_mission_details",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_7378bc13", -- You know how testy Imperial freighter captains can be...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_third_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_third_mission_details);
+
+accept_tier4_third_mission = ConvoScreen:new {
+	id = "accept_tier4_third_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_ff66ed8b", -- You don't have to love 'em. You just have to keep 'em happy. Get out there and take care of those captains.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_third_mission);
+
+failed_tier4_third_mission = ConvoScreen:new {
+	id = "failed_tier4_third_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_d858532", -- Get out there and try again.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(failed_tier4_third_mission);
+
+tier4_third_mission_success = ConvoScreen:new {
+	id = "tier4_third_mission_success",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_44b1cd3c", -- Mm. We'll see. Let's get you going on a new mission.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_614d7ac4", "tier4_fourth_mission"}, -- What is the mission?
+	}
+}
+dinge_convo_template:addScreen(tier4_third_mission_success);
+
+-- Tier 4 - Mission 4 (Sortie against the Black Sun - Yavin)
+tier4_fourth_mission = ConvoScreen:new {
+	id = "tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_1cf9a0f6", -- I've saved the best for last. I need a pilot willing to fly sorties against Black Sun pirates...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_e9ea6fec", "tier4_fourth_mission_details"}, -- Good. Because I want to go after them.
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_fourth_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_fourth_mission);
+
+tier4_fourth_mission_details = ConvoScreen:new {
+	id = "tier4_fourth_mission_details",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_fd271a84", -- You read my mind. But this time, you're not going alone. We need a show of force. You'll be joining a fleet of RSF pilots in a sortie against the Black Sun.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_fourth_mission"}, -- I'm ready to go.
+	}
+}
+dinge_convo_template:addScreen(tier4_fourth_mission_details);
+
+accept_tier4_fourth_mission = ConvoScreen:new {
+	id = "accept_tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_9281abbb", -- Go get 'em, tiger.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_fourth_mission);
+
+failed_tier4_fourth_mission = ConvoScreen:new {
+	id = "failed_tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_a9d8ef68", -- Give it another shot. Those Black Suns aren't so tough.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(failed_tier4_fourth_mission);
+
+-- Tier 4 - Mission 4 Complete / Master hand-off (Grand Admiral Declann - Kessel)
+tier4_fourth_mission_success = ConvoScreen:new {
+	id = "tier4_fourth_mission_success",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_92fa7352", -- I have just been informed that Grand Admiral Nial Declann has ordered that you be transferred to his squadron, effective immediately...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_9fe8c7e7", "master_what_want"}, -- Does it say what they want from me?
+		{"@conversation/naboo_privateer_tier4:s_7177c3f2", "master_who_declann"}, -- Who is Grand Admiral Nial Declann?
+		{"@conversation/naboo_privateer_tier4:s_50d4081c", "master_where_report"}, -- Where do I report?
+		{"@conversation/naboo_privateer_tier4:s_57f232d6", "master_becoming_imperial"}, -- I am going to become an Imperial?
+		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+	}
+}
+dinge_convo_template:addScreen(tier4_fourth_mission_success);
+
+master_mission = ConvoScreen:new {
+	id = "master_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_92fa7352", -- I have just been informed that Grand Admiral Nial Declann has ordered that you be transferred to his squadron, effective immediately...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_9fe8c7e7", "master_what_want"}, -- Does it say what they want from me?
+		{"@conversation/naboo_privateer_tier4:s_7177c3f2", "master_who_declann"}, -- Who is Grand Admiral Nial Declann?
+		{"@conversation/naboo_privateer_tier4:s_50d4081c", "master_where_report"}, -- Where do I report?
+		{"@conversation/naboo_privateer_tier4:s_57f232d6", "master_becoming_imperial"}, -- I am going to become an Imperial?
+		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+	}
+}
+dinge_convo_template:addScreen(master_mission);
+
+master_what_want = ConvoScreen:new {
+	id = "master_what_want",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_492a501d", -- I wish I knew! That's highly classified information. The Admiral will explain everything to you. Pack your bags! The Admiral is waiting.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+	}
+}
+dinge_convo_template:addScreen(master_what_want);
+
+master_who_declann = ConvoScreen:new {
+	id = "master_who_declann",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_cf0a01fd", -- Well, let me put it this way. In the Imperial Navy, power is held by only a few men...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+	}
+}
+dinge_convo_template:addScreen(master_who_declann);
+
+master_where_report = ConvoScreen:new {
+	id = "master_where_report",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_cd140a4", -- According to this, you are to report directly to the Grand Admiral at the Theed Palace...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+	}
+}
+dinge_convo_template:addScreen(master_where_report);
+
+master_becoming_imperial = ConvoScreen:new {
+	id = "master_becoming_imperial",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_5d72fdfa", -- Well, not officially. But this is a big opportunity for you. You will be working under them until they no longer are in need of your services. You will retain all of your RSF rankings and privileges.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+	}
+}
+dinge_convo_template:addScreen(master_becoming_imperial);
+
+accept_master_mission = ConvoScreen:new {
+	id = "accept_master_mission",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_42d6c3ee", -- Go on. Your ship is waiting.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_master_mission);
+
+-- Tier 4 - Post-master
+tier4_completed = ConvoScreen:new {
+	id = "tier4_completed",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_bd35f50b", -- I see you made it back from serving with the Empire in one piece. I am very glad of that. I have some jobs for you if you are interested.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_85a73c8b", "tier4_duty_repeat"}, -- So do you have a mission for me?
+	}
+}
+dinge_convo_template:addScreen(tier4_completed);
+
+-- Tier 4 - Training
+ready_train_tier4 = ConvoScreen:new {
+	id = "ready_train_tier4",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_d91c04b2", -- I'm supposed to give you a skill. Hurry up. Let's get this over with.
+	stopConversation = "false",
+	options = {
+		-- Options added dynamically via handler
+	}
+}
+dinge_convo_template:addScreen(ready_train_tier4);
+
+tier4_train_fighters = ConvoScreen:new {
+	id = "tier4_train_fighters",
+	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(tier4_train_fighters);
+
+tier4_train_component = ConvoScreen:new {
+	id = "tier4_train_component",
+	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(tier4_train_component);
+
+tier4_train_basics = ConvoScreen:new {
+	id = "tier4_train_basics",
+	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(tier4_train_basics);
+
+tier4_train_droid = ConvoScreen:new {
+	id = "tier4_train_droid",
+	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(tier4_train_droid);
+
+-- Tier 4 - Duty Missions
+tier4_duty_missions = ConvoScreen:new {
+	id = "tier4_duty_missions",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_24231574", -- That's a nice attitude for a pilot to have. Actually, I do have some duty missions to assign. Take a look at what there is. Shall I give you a briefing?
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_e1e40ead", "tier4_duty_brief_destroy"}, -- That would be nice.
+	}
+}
+dinge_convo_template:addScreen(tier4_duty_missions);
+
+tier4_duty_repeat = ConvoScreen:new {
+	id = "tier4_duty_repeat",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_3f76a413", -- I like it when my pilots stay busy. Why don't you volunteer for something? Or I can give you the briefing again, if you like.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_62c8be58", "accept_tier4_duty1"}, -- I can handle those Black Suns.
+		{"@conversation/naboo_privateer_tier4:s_619658af", "accept_tier4_duty2"}, -- I'll escort that mining transport.
+		{"@conversation/naboo_privateer_tier4:s_7869de8a", "accept_tier4_duty3"}, -- What's wrong with that Ay'Nat ship?
+		{"@conversation/naboo_privateer_tier4:s_413ac49a", "accept_tier4_duty4"}, -- I want to help that mining craft.
+		{"@conversation/naboo_privateer_tier4:s_70d61202", "tier4_duty_brief_destroy"}, -- Please, give me the briefing again.
+	}
+}
+dinge_convo_template:addScreen(tier4_duty_repeat);
+
+tier4_duty_brief_destroy = ConvoScreen:new {
+	id = "tier4_duty_brief_destroy",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_1cf9a0f6", -- I've saved the best for last. I need a pilot willing to fly sorties against Black Sun pirates. Dangerous, but fun. Especially for a big strong pilot like you.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_2836e6b5", "tier4_duty_brief_escort"}, -- OK.
+	}
+}
+dinge_convo_template:addScreen(tier4_duty_brief_destroy);
+
+tier4_duty_brief_escort = ConvoScreen:new {
+	id = "tier4_duty_brief_escort",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_5603b2a1", -- Now listen up and pay attention. I hate repeating myself. I need a pilot to escort a Naboo mining transport through Endor space. I'll warn you, Borvo the Hutt's men will probably be interested in that transport.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_2836e6b5", "tier4_duty_brief_recovery"}, -- OK.
+	}
+}
+dinge_convo_template:addScreen(tier4_duty_brief_escort);
+
+tier4_duty_brief_recovery = ConvoScreen:new {
+	id = "tier4_duty_brief_recovery",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_8ca0b65b", -- If you have a thing against the Ay'Nat, you could help me out by capturing one of their private vessels.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_2836e6b5", "tier4_duty_menu"}, -- OK.
+	}
+}
+dinge_convo_template:addScreen(tier4_duty_brief_recovery);
+
+tier4_duty_menu = ConvoScreen:new {
+	id = "tier4_duty_menu",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_1993702c", -- If you're feeling like a hero today, you could rescue a Naboo mining craft from Ay'Nat pirates.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier4:s_62c8be58", "accept_tier4_duty1"}, -- I can handle those Black Suns.
+		{"@conversation/naboo_privateer_tier4:s_619658af", "accept_tier4_duty2"}, -- I'll escort that mining transport.
+		{"@conversation/naboo_privateer_tier4:s_7869de8a", "accept_tier4_duty3"}, -- What's wrong with that Ay'Nat ship?
+		{"@conversation/naboo_privateer_tier4:s_413ac49a", "accept_tier4_duty4"}, -- I want to help that mining craft.
+		{"@conversation/naboo_privateer_tier4:s_70d61202", "tier4_duty_brief_destroy"}, -- Please, give me the briefing again.
+	}
+}
+dinge_convo_template:addScreen(tier4_duty_menu);
+
+accept_tier4_duty1 = ConvoScreen:new {
+	id = "accept_tier4_duty1",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_9281abbb", -- Go get 'em, tiger.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_duty1);
+
+accept_tier4_duty2 = ConvoScreen:new {
+	id = "accept_tier4_duty2",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_90422eb5", -- Good luck.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_duty2);
+
+accept_tier4_duty3 = ConvoScreen:new {
+	id = "accept_tier4_duty3",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_42d6c3ee", -- Go on. Your ship is waiting.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_duty3);
+
+accept_tier4_duty4 = ConvoScreen:new {
+	id = "accept_tier4_duty4",
+	leftDialog = "@conversation/naboo_privateer_tier4:s_9750cd6f", -- Lucky miners! Have fun.
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(accept_tier4_duty4);
+
 addConversationTemplate("dinge_convo_template", dinge_convo_template);

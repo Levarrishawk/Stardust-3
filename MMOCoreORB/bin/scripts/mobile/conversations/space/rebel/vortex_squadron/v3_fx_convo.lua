@@ -539,4 +539,760 @@ v3_fx_convo_go_to_next = ConvoScreen:new {
 }
 v3_fx_convo:addScreen(v3_fx_convo_go_to_next)
 
+
+--[[
+	Tier 2 screens (Fa'Zoll-stage dispatch through V3-FX; authentic Live strings from
+	string/en/conversation/dantooine_rebel_trainer_2.stf)
+]]
+
+-- New tier 2 pilot introduction
+v3_fx_convo_tier2_introduction = ConvoScreen:new {
+	id = "tier2_introduction",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_e14c4a10", -- greeting
+	stopConversation = "false",
+	options = {
+		{"@conversation/dantooine_rebel_trainer_2:s_8631d353", "tier2_intro_accept"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_introduction)
+
+-- Introduction accepted (handler sets tier2_introduced)
+v3_fx_convo_tier2_intro_accept = ConvoScreen:new {
+	id = "tier2_intro_accept",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_6ad1ad62",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_intro_accept)
+
+-- Duty mission menu
+v3_fx_convo_tier2_duty_missions = ConvoScreen:new {
+	id = "tier2_duty_missions",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_2ba96f57",
+	stopConversation = "false",
+	options = {
+		{"@conversation/dantooine_rebel_trainer_2:s_544003d6", "tier2_destroy_duty"},
+		{"@conversation/dantooine_rebel_trainer_2:s_7a128ed0", "tier2_recovery_duty"},
+		{"@conversation/dantooine_rebel_trainer_2:s_2c008858", "tier2_escort_duty"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_duty_missions)
+
+-- Duty confirms (handler starts the duty quests)
+v3_fx_convo_tier2_destroy_duty = ConvoScreen:new {
+	id = "tier2_destroy_duty",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_360d72eb",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_destroy_duty)
+
+v3_fx_convo_tier2_recovery_duty = ConvoScreen:new {
+	id = "tier2_recovery_duty",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_f3cbd30c",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_recovery_duty)
+
+v3_fx_convo_tier2_escort_duty = ConvoScreen:new {
+	id = "tier2_escort_duty",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_b21d8dfe",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_escort_duty)
+
+-- Player already has an active tier 2 mission
+v3_fx_convo_tier2_has_mission = ConvoScreen:new {
+	id = "tier2_has_mission",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_d0f52630",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_has_mission)
+
+-- Tier 2 training menu (options added dynamically by handler)
+v3_fx_convo_tier2_training_menu = ConvoScreen:new {
+	id = "tier2_training_menu",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_c5b76777",
+	stopConversation = "false",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_training_menu)
+
+-- Tier 2 training results (handler grants the skill)
+v3_fx_convo_tier2_train_fighters = ConvoScreen:new {
+	id = "tier2_train_fighters",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_1b8807cc",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_train_fighters)
+
+v3_fx_convo_tier2_train_component = ConvoScreen:new {
+	id = "tier2_train_component",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_1b8807cc",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_train_component)
+
+v3_fx_convo_tier2_train_basics = ConvoScreen:new {
+	id = "tier2_train_basics",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_1b8807cc",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_train_basics)
+
+v3_fx_convo_tier2_train_droid = ConvoScreen:new {
+	id = "tier2_train_droid",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_1b8807cc",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_train_droid)
+
+-- Tier 2 mission 1
+v3_fx_convo_tier2_mission1_brief = ConvoScreen:new {
+	id = "tier2_mission1_brief",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_5b12c8f8",
+	stopConversation = "false",
+	options = {
+		{"@conversation/dantooine_rebel_trainer_2:s_8631d353", "tier2_accept_mission1"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission1_brief)
+
+v3_fx_convo_tier2_accept_mission1 = ConvoScreen:new {
+	id = "tier2_accept_mission1",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_1e45ad6c",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_accept_mission1)
+
+v3_fx_convo_tier2_mission1_rewarded = ConvoScreen:new {
+	id = "tier2_mission1_rewarded",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_15c6406b",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission1_rewarded)
+
+v3_fx_convo_tier2_failed_mission1 = ConvoScreen:new {
+	id = "tier2_failed_mission1",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_21736cfe",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_failed_mission1)
+
+-- Tier 2 mission 2
+v3_fx_convo_tier2_mission2_brief = ConvoScreen:new {
+	id = "tier2_mission2_brief",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_985bcff1",
+	stopConversation = "false",
+	options = {
+		{"@conversation/dantooine_rebel_trainer_2:s_e02f4f90", "tier2_accept_mission2"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission2_brief)
+
+v3_fx_convo_tier2_accept_mission2 = ConvoScreen:new {
+	id = "tier2_accept_mission2",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_339b44ad",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_accept_mission2)
+
+v3_fx_convo_tier2_mission2_rewarded = ConvoScreen:new {
+	id = "tier2_mission2_rewarded",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_e6de2bcb",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission2_rewarded)
+
+v3_fx_convo_tier2_failed_mission2 = ConvoScreen:new {
+	id = "tier2_failed_mission2",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_21736cfe",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_failed_mission2)
+
+-- Tier 2 mission 3
+v3_fx_convo_tier2_mission3_brief = ConvoScreen:new {
+	id = "tier2_mission3_brief",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_d9b0de0a",
+	stopConversation = "false",
+	options = {
+		{"@conversation/dantooine_rebel_trainer_2:s_f0eba675", "tier2_accept_mission3"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission3_brief)
+
+v3_fx_convo_tier2_accept_mission3 = ConvoScreen:new {
+	id = "tier2_accept_mission3",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_605dfe75",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_accept_mission3)
+
+v3_fx_convo_tier2_mission3_rewarded = ConvoScreen:new {
+	id = "tier2_mission3_rewarded",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_561c250a",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission3_rewarded)
+
+v3_fx_convo_tier2_failed_mission3 = ConvoScreen:new {
+	id = "tier2_failed_mission3",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_21736cfe",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_failed_mission3)
+
+-- Tier 2 mission 4
+v3_fx_convo_tier2_mission4_brief = ConvoScreen:new {
+	id = "tier2_mission4_brief",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_ee59d5b1",
+	stopConversation = "false",
+	options = {
+		{"@conversation/dantooine_rebel_trainer_2:s_948462ad", "tier2_accept_mission4"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission4_brief)
+
+v3_fx_convo_tier2_accept_mission4 = ConvoScreen:new {
+	id = "tier2_accept_mission4",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_78de5e19",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_accept_mission4)
+
+v3_fx_convo_tier2_mission4_rewarded = ConvoScreen:new {
+	id = "tier2_mission4_rewarded",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_74e55e9e",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_mission4_rewarded)
+
+v3_fx_convo_tier2_failed_mission4 = ConvoScreen:new {
+	id = "tier2_failed_mission4",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_21736cfe",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_failed_mission4)
+
+-- All tier 2 skills earned, tier incremented
+v3_fx_convo_tier2_completed = ConvoScreen:new {
+	id = "tier2_completed",
+	leftDialog = "@conversation/dantooine_rebel_trainer_2:s_319cfac4",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier2_completed)
+
+--[[
+	Tier 3 screens (authentic Live strings from string/en/conversation/naboo_rebel_tier3.stf)
+]]
+
+v3_fx_convo_tier3_not_ready = ConvoScreen:new {
+	id = "tier3_not_ready",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_3e7fb8a3",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_not_ready)
+
+v3_fx_convo_tier3_has_mission = ConvoScreen:new {
+	id = "tier3_has_mission",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_44fd681b",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_has_mission)
+
+-- Tier 3 mission 1
+v3_fx_convo_tier3_mission1_brief = ConvoScreen:new {
+	id = "tier3_mission1_brief",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_189c01a2",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier3:s_49776d50", "tier3_accept_mission1"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_mission1_brief)
+
+v3_fx_convo_tier3_accept_mission1 = ConvoScreen:new {
+	id = "tier3_accept_mission1",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_d55f2579",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_accept_mission1)
+
+v3_fx_convo_tier3_failed_mission1 = ConvoScreen:new {
+	id = "tier3_failed_mission1",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_51fbced7",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_failed_mission1)
+
+-- Tier 3 excellent work screens (training options added dynamically by handler)
+v3_fx_convo_tier3_excellent_work1 = ConvoScreen:new {
+	id = "tier3_excellent_work1",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_3f38ab04",
+	stopConversation = "false",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_excellent_work1)
+
+-- Tier 3 mission 2
+v3_fx_convo_tier3_mission2_brief = ConvoScreen:new {
+	id = "tier3_mission2_brief",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_9a2a8f72",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier3:s_fc9a12c0", "tier3_accept_mission2"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_mission2_brief)
+
+v3_fx_convo_tier3_accept_mission2 = ConvoScreen:new {
+	id = "tier3_accept_mission2",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_cb3876f5",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_accept_mission2)
+
+v3_fx_convo_tier3_failed_mission2 = ConvoScreen:new {
+	id = "tier3_failed_mission2",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_51fbced7",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_failed_mission2)
+
+v3_fx_convo_tier3_excellent_work2 = ConvoScreen:new {
+	id = "tier3_excellent_work2",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_8287425f",
+	stopConversation = "false",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_excellent_work2)
+
+-- Tier 3 mission 3
+v3_fx_convo_tier3_mission3_brief = ConvoScreen:new {
+	id = "tier3_mission3_brief",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_d40fde1",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier3:s_6a273da9", "tier3_accept_mission3"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_mission3_brief)
+
+v3_fx_convo_tier3_accept_mission3 = ConvoScreen:new {
+	id = "tier3_accept_mission3",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_18c308e1",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_accept_mission3)
+
+v3_fx_convo_tier3_failed_mission3 = ConvoScreen:new {
+	id = "tier3_failed_mission3",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_51fbced7",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_failed_mission3)
+
+v3_fx_convo_tier3_excellent_work3 = ConvoScreen:new {
+	id = "tier3_excellent_work3",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_b70082a7",
+	stopConversation = "false",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_excellent_work3)
+
+-- Tier 3 mission 4
+v3_fx_convo_tier3_mission4_brief = ConvoScreen:new {
+	id = "tier3_mission4_brief",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_e5f0e762",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier3:s_9d7c11a1", "tier3_accept_mission4"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_mission4_brief)
+
+v3_fx_convo_tier3_accept_mission4 = ConvoScreen:new {
+	id = "tier3_accept_mission4",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_b24e355f",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_accept_mission4)
+
+v3_fx_convo_tier3_failed_mission4 = ConvoScreen:new {
+	id = "tier3_failed_mission4",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_51fbced7",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_failed_mission4)
+
+v3_fx_convo_tier3_excellent_work4 = ConvoScreen:new {
+	id = "tier3_excellent_work4",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_fffd9426",
+	stopConversation = "false",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_excellent_work4)
+
+-- Tier 3 training results (handler grants the skill, no XP cost)
+v3_fx_convo_tier3_train_fighters = ConvoScreen:new {
+	id = "tier3_train_fighters",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_5a7254ca",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_train_fighters)
+
+v3_fx_convo_tier3_train_component = ConvoScreen:new {
+	id = "tier3_train_component",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_5a7254ca",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_train_component)
+
+v3_fx_convo_tier3_train_basics = ConvoScreen:new {
+	id = "tier3_train_basics",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_5a7254ca",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_train_basics)
+
+v3_fx_convo_tier3_train_droid = ConvoScreen:new {
+	id = "tier3_train_droid",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_5a7254ca",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_train_droid)
+
+-- All tier 3 skills earned, tier incremented
+v3_fx_convo_tier3_completed = ConvoScreen:new {
+	id = "tier3_completed",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_cbc2d68c",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier3_completed)
+
+--[[
+	Tier 4 + Master screens (authentic Live strings from string/en/conversation/naboo_rebel_tier4.stf)
+]]
+
+v3_fx_convo_tier4_on_mission = ConvoScreen:new {
+	id = "tier4_on_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_e59caef0",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_on_mission)
+
+v3_fx_convo_tier4_initial_briefing = ConvoScreen:new {
+	id = "tier4_initial_briefing",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_52ea3d5c",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_9f4dbe82", "tier4_first_mission"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_initial_briefing)
+
+-- Tier 4 mission 1
+v3_fx_convo_tier4_first_mission = ConvoScreen:new {
+	id = "tier4_first_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_7455cef5",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_9f4dbe82", "accept_tier4_first_mission"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_first_mission)
+
+v3_fx_convo_accept_tier4_first_mission = ConvoScreen:new {
+	id = "accept_tier4_first_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_df1c8925",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_first_mission)
+
+v3_fx_convo_failed_tier4_first_mission = ConvoScreen:new {
+	id = "failed_tier4_first_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_80803e51",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_failed_tier4_first_mission)
+
+v3_fx_convo_tier4_first_mission_success = ConvoScreen:new {
+	id = "tier4_first_mission_success",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_41e4adff",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_first_mission_success)
+
+-- Tier 4 mission 2
+v3_fx_convo_tier4_second_mission = ConvoScreen:new {
+	id = "tier4_second_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_ae528424",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_e01d95b6", "accept_tier4_second_mission"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_second_mission)
+
+v3_fx_convo_accept_tier4_second_mission = ConvoScreen:new {
+	id = "accept_tier4_second_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_df1c8925",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_second_mission)
+
+v3_fx_convo_failed_tier4_second_mission = ConvoScreen:new {
+	id = "failed_tier4_second_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_80803e51",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_failed_tier4_second_mission)
+
+v3_fx_convo_tier4_second_mission_success = ConvoScreen:new {
+	id = "tier4_second_mission_success",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_4222dbd0",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_second_mission_success)
+
+-- Tier 4 mission 3
+v3_fx_convo_tier4_third_mission = ConvoScreen:new {
+	id = "tier4_third_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_e5a30f12",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_80d8485c", "accept_tier4_third_mission"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_third_mission)
+
+v3_fx_convo_accept_tier4_third_mission = ConvoScreen:new {
+	id = "accept_tier4_third_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_df1c8925",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_third_mission)
+
+v3_fx_convo_failed_tier4_third_mission = ConvoScreen:new {
+	id = "failed_tier4_third_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_80803e51",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_failed_tier4_third_mission)
+
+v3_fx_convo_tier4_third_mission_success = ConvoScreen:new {
+	id = "tier4_third_mission_success",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_682985ff",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_third_mission_success)
+
+-- Tier 4 mission 4
+v3_fx_convo_tier4_fourth_mission = ConvoScreen:new {
+	id = "tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_b5815881",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_2477938c", "accept_tier4_fourth_mission"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_fourth_mission)
+
+v3_fx_convo_accept_tier4_fourth_mission = ConvoScreen:new {
+	id = "accept_tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_df1c8925",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_fourth_mission)
+
+v3_fx_convo_failed_tier4_fourth_mission = ConvoScreen:new {
+	id = "failed_tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_80803e51",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_failed_tier4_fourth_mission)
+
+v3_fx_convo_tier4_fourth_mission_success = ConvoScreen:new {
+	id = "tier4_fourth_mission_success",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_cc6fef40",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_fourth_mission_success)
+
+-- Tier 4 training menu (options added dynamically by handler)
+v3_fx_convo_ready_train_tier4 = ConvoScreen:new {
+	id = "ready_train_tier4",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_5dbf1a94",
+	stopConversation = "false",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_ready_train_tier4)
+
+-- Tier 4 training results (handler grants the skill)
+v3_fx_convo_tier4_train_fighters = ConvoScreen:new {
+	id = "tier4_train_fighters",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_4ef111c8",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_train_fighters)
+
+v3_fx_convo_tier4_train_component = ConvoScreen:new {
+	id = "tier4_train_component",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_4ef111c8",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_train_component)
+
+v3_fx_convo_tier4_train_basics = ConvoScreen:new {
+	id = "tier4_train_basics",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_4ef111c8",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_train_basics)
+
+v3_fx_convo_tier4_train_droid = ConvoScreen:new {
+	id = "tier4_train_droid",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_4ef111c8",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_train_droid)
+
+-- Tier 4 repeatable duty menu
+v3_fx_convo_tier4_duty_repeat = ConvoScreen:new {
+	id = "tier4_duty_repeat",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_127c7ddc",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_e01d95b6", "accept_tier4_duty1"},
+		{"@conversation/naboo_rebel_tier4:s_1adbadc4", "accept_tier4_duty2"},
+		{"@conversation/naboo_rebel_tier4:s_16d870fe", "accept_tier4_duty3"},
+		{"@conversation/naboo_rebel_tier4:s_1b9c5097", "accept_tier4_duty4"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_duty_repeat)
+
+v3_fx_convo_accept_tier4_duty1 = ConvoScreen:new {
+	id = "accept_tier4_duty1",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_c28b3318",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_duty1)
+
+v3_fx_convo_accept_tier4_duty2 = ConvoScreen:new {
+	id = "accept_tier4_duty2",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_be8a1d81",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_duty2)
+
+v3_fx_convo_accept_tier4_duty3 = ConvoScreen:new {
+	id = "accept_tier4_duty3",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_c9329734",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_duty3)
+
+v3_fx_convo_accept_tier4_duty4 = ConvoScreen:new {
+	id = "accept_tier4_duty4",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_adc84c63",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_tier4_duty4)
+
+-- Master mission hand-off
+v3_fx_convo_master_mission = ConvoScreen:new {
+	id = "master_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_75c90fe4",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_a65d4a43", "master_details"},
+		{"@conversation/naboo_rebel_tier4:s_df8d90f1", "accept_master_mission"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_master_mission)
+
+v3_fx_convo_master_details = ConvoScreen:new {
+	id = "master_details",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_839a8471",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_rebel_tier4:s_df8d90f1", "accept_master_mission"},
+	}
+}
+v3_fx_convo:addScreen(v3_fx_convo_master_details)
+
+v3_fx_convo_accept_master_mission = ConvoScreen:new {
+	id = "accept_master_mission",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_c9014c96",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_accept_master_mission)
+
+-- Master pilot: everything finished
+v3_fx_convo_tier4_completed = ConvoScreen:new {
+	id = "tier4_completed",
+	leftDialog = "@conversation/naboo_rebel_tier4:s_fc615cb9",
+	stopConversation = "true",
+	options = {}
+}
+v3_fx_convo:addScreen(v3_fx_convo_tier4_completed)
+
 addConversationTemplate("v3_fx_convo", v3_fx_convo);

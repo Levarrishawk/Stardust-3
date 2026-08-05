@@ -537,4 +537,760 @@ da_la_socuna_convo_go_to_next = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_go_to_next)
 
+
+--[[
+	Tier 2 screens (Vrak-stage dispatch through Da'la Socuna; authentic Live strings from
+	string/en/conversation/lok_rebel_trainer_2.stf)
+]]
+
+-- New tier 2 pilot introduction
+da_la_socuna_convo_tier2_introduction = ConvoScreen:new {
+	id = "tier2_introduction",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_438969d3", -- greeting
+	stopConversation = "false",
+	options = {
+		{"@conversation/lok_rebel_trainer_2:s_da77c355", "tier2_intro_accept"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_introduction)
+
+-- Introduction accepted (handler sets tier2_introduced)
+da_la_socuna_convo_tier2_intro_accept = ConvoScreen:new {
+	id = "tier2_intro_accept",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_e58d7043",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_intro_accept)
+
+-- Duty mission menu
+da_la_socuna_convo_tier2_duty_missions = ConvoScreen:new {
+	id = "tier2_duty_missions",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_9d922723",
+	stopConversation = "false",
+	options = {
+		{"@conversation/lok_rebel_trainer_2:s_1dfeca09", "tier2_destroy_duty"},
+		{"@conversation/lok_rebel_trainer_2:s_e02126d9", "tier2_recovery_duty"},
+		{"@conversation/lok_rebel_trainer_2:s_cd3e2b38", "tier2_escort_duty"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_duty_missions)
+
+-- Duty confirms (handler starts the duty quests)
+da_la_socuna_convo_tier2_destroy_duty = ConvoScreen:new {
+	id = "tier2_destroy_duty",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_99210986",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_destroy_duty)
+
+da_la_socuna_convo_tier2_recovery_duty = ConvoScreen:new {
+	id = "tier2_recovery_duty",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_e6569c04",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_recovery_duty)
+
+da_la_socuna_convo_tier2_escort_duty = ConvoScreen:new {
+	id = "tier2_escort_duty",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_37e5c8bc",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_escort_duty)
+
+-- Player already has an active tier 2 mission
+da_la_socuna_convo_tier2_has_mission = ConvoScreen:new {
+	id = "tier2_has_mission",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_d356f8d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_has_mission)
+
+-- Tier 2 training menu (options added dynamically by handler)
+da_la_socuna_convo_tier2_training_menu = ConvoScreen:new {
+	id = "tier2_training_menu",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_4ee75073",
+	stopConversation = "false",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_training_menu)
+
+-- Tier 2 training results (handler grants the skill)
+da_la_socuna_convo_tier2_train_fighters = ConvoScreen:new {
+	id = "tier2_train_fighters",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_fighters)
+
+da_la_socuna_convo_tier2_train_component = ConvoScreen:new {
+	id = "tier2_train_component",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_component)
+
+da_la_socuna_convo_tier2_train_basics = ConvoScreen:new {
+	id = "tier2_train_basics",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_basics)
+
+da_la_socuna_convo_tier2_train_droid = ConvoScreen:new {
+	id = "tier2_train_droid",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_droid)
+
+-- Tier 2 mission 1 (inspect)
+da_la_socuna_convo_tier2_mission1_brief = ConvoScreen:new {
+	id = "tier2_mission1_brief",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_c91bccf0",
+	stopConversation = "false",
+	options = {
+		{"@conversation/lok_rebel_trainer_2:s_359d1c6c", "tier2_accept_mission1"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission1_brief)
+
+da_la_socuna_convo_tier2_accept_mission1 = ConvoScreen:new {
+	id = "tier2_accept_mission1",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_5ee66c06",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission1)
+
+da_la_socuna_convo_tier2_mission1_rewarded = ConvoScreen:new {
+	id = "tier2_mission1_rewarded",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_71350221",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission1_rewarded)
+
+da_la_socuna_convo_tier2_failed_mission1 = ConvoScreen:new {
+	id = "tier2_failed_mission1",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission1)
+
+-- Tier 2 mission 2 (escort)
+da_la_socuna_convo_tier2_mission2_brief = ConvoScreen:new {
+	id = "tier2_mission2_brief",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_565951d5",
+	stopConversation = "false",
+	options = {
+		{"@conversation/lok_rebel_trainer_2:s_80b2d7f9", "tier2_accept_mission2"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission2_brief)
+
+da_la_socuna_convo_tier2_accept_mission2 = ConvoScreen:new {
+	id = "tier2_accept_mission2",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_2af8de7c",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission2)
+
+da_la_socuna_convo_tier2_mission2_rewarded = ConvoScreen:new {
+	id = "tier2_mission2_rewarded",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_4af0c602",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission2_rewarded)
+
+da_la_socuna_convo_tier2_failed_mission2 = ConvoScreen:new {
+	id = "tier2_failed_mission2",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission2)
+
+-- Tier 2 mission 3 (recovery)
+da_la_socuna_convo_tier2_mission3_brief = ConvoScreen:new {
+	id = "tier2_mission3_brief",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_3ae0bba3",
+	stopConversation = "false",
+	options = {
+		{"@conversation/lok_rebel_trainer_2:s_dce7fb", "tier2_accept_mission3"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_brief)
+
+da_la_socuna_convo_tier2_accept_mission3 = ConvoScreen:new {
+	id = "tier2_accept_mission3",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_723b4288",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission3)
+
+da_la_socuna_convo_tier2_mission3_rewarded = ConvoScreen:new {
+	id = "tier2_mission3_rewarded",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_9417b6d9",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_rewarded)
+
+da_la_socuna_convo_tier2_failed_mission3 = ConvoScreen:new {
+	id = "tier2_failed_mission3",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission3)
+
+-- Tier 2 mission 4 (assassinate)
+da_la_socuna_convo_tier2_mission4_brief = ConvoScreen:new {
+	id = "tier2_mission4_brief",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_75e5035c",
+	stopConversation = "false",
+	options = {
+		{"@conversation/lok_rebel_trainer_2:s_9b2edf50", "tier2_accept_mission4"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_brief)
+
+da_la_socuna_convo_tier2_accept_mission4 = ConvoScreen:new {
+	id = "tier2_accept_mission4",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_b24f64b",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission4)
+
+da_la_socuna_convo_tier2_mission4_rewarded = ConvoScreen:new {
+	id = "tier2_mission4_rewarded",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_5164f707",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_rewarded)
+
+da_la_socuna_convo_tier2_failed_mission4 = ConvoScreen:new {
+	id = "tier2_failed_mission4",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission4)
+
+-- All tier 2 skills earned, tier incremented
+da_la_socuna_convo_tier2_completed = ConvoScreen:new {
+	id = "tier2_completed",
+	leftDialog = "@conversation/lok_rebel_trainer_2:s_5884fe0d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_completed)
+
+--[[
+	Tier 3 screens (authentic Live strings from string/en/conversation/tatooine_rebel_tier3.stf)
+]]
+
+da_la_socuna_convo_tier3_not_ready = ConvoScreen:new {
+	id = "tier3_not_ready",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_614f7f1c",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_not_ready)
+
+da_la_socuna_convo_tier3_has_mission = ConvoScreen:new {
+	id = "tier3_has_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_5a66cd79",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_has_mission)
+
+-- Tier 3 mission 1
+da_la_socuna_convo_tier3_mission1_brief = ConvoScreen:new {
+	id = "tier3_mission1_brief",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_7b907498",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier3:s_90377ed4", "tier3_accept_mission1"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_mission1_brief)
+
+da_la_socuna_convo_tier3_accept_mission1 = ConvoScreen:new {
+	id = "tier3_accept_mission1",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_d5bf212f",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_accept_mission1)
+
+da_la_socuna_convo_tier3_failed_mission1 = ConvoScreen:new {
+	id = "tier3_failed_mission1",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_c74a6348",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_failed_mission1)
+
+-- Tier 3 excellent work screens (training options added dynamically by handler)
+da_la_socuna_convo_tier3_excellent_work1 = ConvoScreen:new {
+	id = "tier3_excellent_work1",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_8bd6bf55",
+	stopConversation = "false",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_excellent_work1)
+
+-- Tier 3 mission 2
+da_la_socuna_convo_tier3_mission2_brief = ConvoScreen:new {
+	id = "tier3_mission2_brief",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_a8e0243a",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier3:s_ca8f5dda", "tier3_accept_mission2"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_mission2_brief)
+
+da_la_socuna_convo_tier3_accept_mission2 = ConvoScreen:new {
+	id = "tier3_accept_mission2",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_b1479cf9",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_accept_mission2)
+
+da_la_socuna_convo_tier3_failed_mission2 = ConvoScreen:new {
+	id = "tier3_failed_mission2",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_c74a6348",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_failed_mission2)
+
+da_la_socuna_convo_tier3_excellent_work2 = ConvoScreen:new {
+	id = "tier3_excellent_work2",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_fa6e2383",
+	stopConversation = "false",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_excellent_work2)
+
+-- Tier 3 mission 3
+da_la_socuna_convo_tier3_mission3_brief = ConvoScreen:new {
+	id = "tier3_mission3_brief",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_573af66b",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier3:s_eba35f17", "tier3_accept_mission3"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_mission3_brief)
+
+da_la_socuna_convo_tier3_accept_mission3 = ConvoScreen:new {
+	id = "tier3_accept_mission3",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_db13b2d9",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_accept_mission3)
+
+da_la_socuna_convo_tier3_failed_mission3 = ConvoScreen:new {
+	id = "tier3_failed_mission3",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_c74a6348",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_failed_mission3)
+
+da_la_socuna_convo_tier3_excellent_work3 = ConvoScreen:new {
+	id = "tier3_excellent_work3",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_887fc0e9",
+	stopConversation = "false",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_excellent_work3)
+
+-- Tier 3 mission 4
+da_la_socuna_convo_tier3_mission4_brief = ConvoScreen:new {
+	id = "tier3_mission4_brief",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_d35a8803",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier3:s_76340c2f", "tier3_accept_mission4"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_mission4_brief)
+
+da_la_socuna_convo_tier3_accept_mission4 = ConvoScreen:new {
+	id = "tier3_accept_mission4",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_7b3fb40b",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_accept_mission4)
+
+da_la_socuna_convo_tier3_failed_mission4 = ConvoScreen:new {
+	id = "tier3_failed_mission4",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_c74a6348",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_failed_mission4)
+
+da_la_socuna_convo_tier3_excellent_work4 = ConvoScreen:new {
+	id = "tier3_excellent_work4",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_f72b6d44",
+	stopConversation = "false",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_excellent_work4)
+
+-- Tier 3 training results (handler grants the skill, no XP cost)
+da_la_socuna_convo_tier3_train_fighters = ConvoScreen:new {
+	id = "tier3_train_fighters",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_3b851af5",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_train_fighters)
+
+da_la_socuna_convo_tier3_train_component = ConvoScreen:new {
+	id = "tier3_train_component",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_3b851af5",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_train_component)
+
+da_la_socuna_convo_tier3_train_basics = ConvoScreen:new {
+	id = "tier3_train_basics",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_3b851af5",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_train_basics)
+
+da_la_socuna_convo_tier3_train_droid = ConvoScreen:new {
+	id = "tier3_train_droid",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_3b851af5",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_train_droid)
+
+-- All tier 3 skills earned, tier incremented
+da_la_socuna_convo_tier3_completed = ConvoScreen:new {
+	id = "tier3_completed",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_d72cbbfa",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_completed)
+
+--[[
+	Tier 4 + Master screens (authentic Live strings from string/en/conversation/tatooine_rebel_tier4.stf)
+]]
+
+da_la_socuna_convo_tier4_on_mission = ConvoScreen:new {
+	id = "tier4_on_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a86d6540",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_on_mission)
+
+da_la_socuna_convo_tier4_initial_briefing = ConvoScreen:new {
+	id = "tier4_initial_briefing",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_1ec8846c",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_5bc07030", "tier4_first_mission"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_initial_briefing)
+
+-- Tier 4 mission 1 (survival)
+da_la_socuna_convo_tier4_first_mission = ConvoScreen:new {
+	id = "tier4_first_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_ac30ef3",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_c1c9b365", "accept_tier4_first_mission"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_first_mission)
+
+da_la_socuna_convo_accept_tier4_first_mission = ConvoScreen:new {
+	id = "accept_tier4_first_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_first_mission)
+
+da_la_socuna_convo_failed_tier4_first_mission = ConvoScreen:new {
+	id = "failed_tier4_first_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_45ae8603",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_failed_tier4_first_mission)
+
+da_la_socuna_convo_tier4_first_mission_success = ConvoScreen:new {
+	id = "tier4_first_mission_success",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_6c01a28a",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_first_mission_success)
+
+-- Tier 4 mission 2 (assassinate)
+da_la_socuna_convo_tier4_second_mission = ConvoScreen:new {
+	id = "tier4_second_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_b659eebb",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_bc57b086", "accept_tier4_second_mission"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_second_mission)
+
+da_la_socuna_convo_accept_tier4_second_mission = ConvoScreen:new {
+	id = "accept_tier4_second_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_second_mission)
+
+da_la_socuna_convo_failed_tier4_second_mission = ConvoScreen:new {
+	id = "failed_tier4_second_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_45ae8603",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_failed_tier4_second_mission)
+
+da_la_socuna_convo_tier4_second_mission_success = ConvoScreen:new {
+	id = "tier4_second_mission_success",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_bf1cdb65",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_second_mission_success)
+
+-- Tier 4 mission 3 (space battle)
+da_la_socuna_convo_tier4_third_mission = ConvoScreen:new {
+	id = "tier4_third_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_4b3f09bc",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_89951606", "accept_tier4_third_mission"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_third_mission)
+
+da_la_socuna_convo_accept_tier4_third_mission = ConvoScreen:new {
+	id = "accept_tier4_third_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_third_mission)
+
+da_la_socuna_convo_failed_tier4_third_mission = ConvoScreen:new {
+	id = "failed_tier4_third_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_45ae8603",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_failed_tier4_third_mission)
+
+da_la_socuna_convo_tier4_third_mission_success = ConvoScreen:new {
+	id = "tier4_third_mission_success",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_fb3d31a9",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_third_mission_success)
+
+-- Tier 4 mission 4 (recovery)
+da_la_socuna_convo_tier4_fourth_mission = ConvoScreen:new {
+	id = "tier4_fourth_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_c946f118",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_d0fd857b", "accept_tier4_fourth_mission"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_fourth_mission)
+
+da_la_socuna_convo_accept_tier4_fourth_mission = ConvoScreen:new {
+	id = "accept_tier4_fourth_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_fourth_mission)
+
+da_la_socuna_convo_failed_tier4_fourth_mission = ConvoScreen:new {
+	id = "failed_tier4_fourth_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_45ae8603",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_failed_tier4_fourth_mission)
+
+da_la_socuna_convo_tier4_fourth_mission_success = ConvoScreen:new {
+	id = "tier4_fourth_mission_success",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_6c524e01",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_fourth_mission_success)
+
+-- Tier 4 training menu (options added dynamically by handler)
+da_la_socuna_convo_ready_train_tier4 = ConvoScreen:new {
+	id = "ready_train_tier4",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_cb594529",
+	stopConversation = "false",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_ready_train_tier4)
+
+-- Tier 4 training results (handler grants the skill)
+da_la_socuna_convo_tier4_train_fighters = ConvoScreen:new {
+	id = "tier4_train_fighters",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_7dae4367",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_train_fighters)
+
+da_la_socuna_convo_tier4_train_component = ConvoScreen:new {
+	id = "tier4_train_component",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_7dae4367",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_train_component)
+
+da_la_socuna_convo_tier4_train_basics = ConvoScreen:new {
+	id = "tier4_train_basics",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_7dae4367",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_train_basics)
+
+da_la_socuna_convo_tier4_train_droid = ConvoScreen:new {
+	id = "tier4_train_droid",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_7dae4367",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_train_droid)
+
+-- Tier 4 repeatable duty menu
+da_la_socuna_convo_tier4_duty_repeat = ConvoScreen:new {
+	id = "tier4_duty_repeat",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_39a10eac",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_91502216", "accept_tier4_duty1"},
+		{"@conversation/tatooine_rebel_tier4:s_d0fd857b", "accept_tier4_duty2"},
+		{"@conversation/tatooine_rebel_tier4:s_d55f2579", "accept_tier4_duty3"},
+		{"@conversation/tatooine_rebel_tier4:s_bc57b086", "accept_tier4_duty4"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_duty_repeat)
+
+da_la_socuna_convo_accept_tier4_duty1 = ConvoScreen:new {
+	id = "accept_tier4_duty1",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_duty1)
+
+da_la_socuna_convo_accept_tier4_duty2 = ConvoScreen:new {
+	id = "accept_tier4_duty2",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_duty2)
+
+da_la_socuna_convo_accept_tier4_duty3 = ConvoScreen:new {
+	id = "accept_tier4_duty3",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_duty3)
+
+da_la_socuna_convo_accept_tier4_duty4 = ConvoScreen:new {
+	id = "accept_tier4_duty4",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_tier4_duty4)
+
+-- Master mission hand-off
+da_la_socuna_convo_master_mission = ConvoScreen:new {
+	id = "master_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_30a32651",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_719a036e", "master_details"},
+		{"@conversation/tatooine_rebel_tier4:s_e42b260e", "accept_master_mission"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_master_mission)
+
+da_la_socuna_convo_master_details = ConvoScreen:new {
+	id = "master_details",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_3bf1bb23",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_tier4:s_e42b260e", "accept_master_mission"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_master_details)
+
+da_la_socuna_convo_accept_master_mission = ConvoScreen:new {
+	id = "accept_master_mission",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_e7488f0b",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_accept_master_mission)
+
+-- Master pilot: everything finished
+da_la_socuna_convo_tier4_completed = ConvoScreen:new {
+	id = "tier4_completed",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_233489bc",
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_completed)
+
 addConversationTemplate("da_la_socuna_convo", da_la_socuna_convo);

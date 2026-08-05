@@ -23,13 +23,17 @@ ep3_fezrik_bendledon = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	-- CONVERSABLE is required, not cosmetic: CreatureTemplateManager only builds a conversation
+	-- observer for a mobile that carries the CONVERSE option bit, and src/tests/LuaMobileTest.cpp
+	-- (the repo gauntlet) asserts that a mobile with the bit also has a conversationTemplate. The
+	-- two below must therefore be set together.
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_fezrik_bendledon.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_fezrik_bendledon_convotemplate",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }

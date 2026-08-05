@@ -518,4 +518,1022 @@ barn_sinkko_convo_go_to_next = ConvoScreen:new {
 }
 barn_sinkko_convo:addScreen(barn_sinkko_convo_go_to_next)
 
+--[[
+
+	Tier 2
+
+]]
+
+-- Tier 2 - Active Mission
+barn_sinkko_convo_tier2_on_mission = ConvoScreen:new {
+	id = "tier2_on_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_a59c7bd7",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_on_mission)
+
+-- Tier 2 - Initial Briefing
+barn_sinkko_convo_tier2_initial_briefing = ConvoScreen:new {
+	id = "tier2_initial_briefing",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_41786376",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_fa3398f3", "tier2_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_initial_briefing)
+
+-- Tier 2 - Mission 1
+barn_sinkko_convo_tier2_first_mission = ConvoScreen:new {
+	id = "tier2_first_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_199bd27f",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_f1be3213", "tier2_first_mission_details"},
+		{"@conversation/naboo_imperial_trainer_2:s_91223b5c", "accept_tier2_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_first_mission)
+
+barn_sinkko_convo_tier2_first_mission_details = ConvoScreen:new {
+	id = "tier2_first_mission_details",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_d2fa677d",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_91223b5c", "accept_tier2_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_first_mission_details)
+
+barn_sinkko_convo_accept_tier2_first_mission = ConvoScreen:new {
+	id = "accept_tier2_first_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_aceff31e",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier2_first_mission)
+
+barn_sinkko_convo_failed_tier2_first_mission = ConvoScreen:new {
+	id = "failed_tier2_first_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_825fac62",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier2_first_mission)
+
+barn_sinkko_convo_tier2_first_mission_success = ConvoScreen:new {
+	id = "tier2_first_mission_success",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_ad754",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_daf7bb7d", "tier2_second_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_first_mission_success)
+
+-- Tier 2 - Mission 2
+barn_sinkko_convo_tier2_second_mission = ConvoScreen:new {
+	id = "tier2_second_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_b8791e16",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_e6765c30", "accept_tier2_second_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_second_mission)
+
+barn_sinkko_convo_accept_tier2_second_mission = ConvoScreen:new {
+	id = "accept_tier2_second_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_dfdec194",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier2_second_mission)
+
+barn_sinkko_convo_failed_tier2_second_mission = ConvoScreen:new {
+	id = "failed_tier2_second_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_825fac62",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier2_second_mission)
+
+barn_sinkko_convo_tier2_second_mission_success = ConvoScreen:new {
+	id = "tier2_second_mission_success",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_de870f1",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_3c9b80ee", "tier2_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_second_mission_success)
+
+-- Tier 2 - Mission 3
+barn_sinkko_convo_tier2_third_mission = ConvoScreen:new {
+	id = "tier2_third_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_26408ea",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_6e39f51b", "tier2_third_mission_details"},
+		{"@conversation/naboo_imperial_trainer_2:s_51fe08f5", "accept_tier2_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_third_mission)
+
+barn_sinkko_convo_tier2_third_mission_details = ConvoScreen:new {
+	id = "tier2_third_mission_details",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_b257ddf8",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_51fe08f5", "accept_tier2_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_third_mission_details)
+
+barn_sinkko_convo_accept_tier2_third_mission = ConvoScreen:new {
+	id = "accept_tier2_third_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_1d63bf5d",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier2_third_mission)
+
+barn_sinkko_convo_failed_tier2_third_mission = ConvoScreen:new {
+	id = "failed_tier2_third_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_825fac62",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier2_third_mission)
+
+barn_sinkko_convo_tier2_third_mission_success = ConvoScreen:new {
+	id = "tier2_third_mission_success",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_2ccef947",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_96db4fc7", "tier2_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_third_mission_success)
+
+-- Tier 2 - Mission 4
+barn_sinkko_convo_tier2_fourth_mission = ConvoScreen:new {
+	id = "tier2_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_196d2fe6",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_20b3aa70", "tier2_fourth_mission_details"},
+		{"@conversation/naboo_imperial_trainer_2:s_1f033c46", "accept_tier2_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_fourth_mission)
+
+barn_sinkko_convo_tier2_fourth_mission_details = ConvoScreen:new {
+	id = "tier2_fourth_mission_details",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_e17af774",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_1f033c46", "accept_tier2_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_fourth_mission_details)
+
+barn_sinkko_convo_accept_tier2_fourth_mission = ConvoScreen:new {
+	id = "accept_tier2_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_d1fa21c",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier2_fourth_mission)
+
+barn_sinkko_convo_failed_tier2_fourth_mission = ConvoScreen:new {
+	id = "failed_tier2_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_306da215",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier2_fourth_mission)
+
+barn_sinkko_convo_tier2_fourth_mission_success = ConvoScreen:new {
+	id = "tier2_fourth_mission_success",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_78c7dc33",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_fourth_mission_success)
+
+-- Tier 2 - Training
+barn_sinkko_convo_ready_train_tier2 = ConvoScreen:new {
+	id = "ready_train_tier2",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_9ac35c60",
+	stopConversation = "false",
+	options = {
+		-- Options added dynamically via handler
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_ready_train_tier2)
+
+barn_sinkko_convo_tier2_train_fighters = ConvoScreen:new {
+	id = "tier2_train_fighters",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_c4880407",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_train_fighters)
+
+barn_sinkko_convo_tier2_train_component = ConvoScreen:new {
+	id = "tier2_train_component",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_241a34a1",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_train_component)
+
+barn_sinkko_convo_tier2_train_basics = ConvoScreen:new {
+	id = "tier2_train_basics",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_486da900",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_train_basics)
+
+barn_sinkko_convo_tier2_train_droid = ConvoScreen:new {
+	id = "tier2_train_droid",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_31804e15",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_train_droid)
+
+-- Tier 2 - Completed
+barn_sinkko_convo_tier2_completed = ConvoScreen:new {
+	id = "tier2_completed",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_49be19d2",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_completed)
+
+-- Tier 2 - Duty missions
+barn_sinkko_convo_tier2_duty_repeat = ConvoScreen:new {
+	id = "tier2_duty_repeat",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_be89481",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_f0a7a4ef", "accept_tier2_duty1"},
+		{"@conversation/naboo_imperial_trainer_2:s_e84f3a62", "accept_tier2_duty2"},
+		{"@conversation/naboo_imperial_trainer_2:s_e6765c30", "accept_tier2_duty3"},
+		{"@conversation/naboo_imperial_trainer_2:s_b2a924ab", "tier2_duty_brief1"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_duty_repeat)
+
+barn_sinkko_convo_tier2_duty_brief1 = ConvoScreen:new {
+	id = "tier2_duty_brief1",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_6a6fe80",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_8efde2ae", "tier2_duty_brief2"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_duty_brief1)
+
+barn_sinkko_convo_tier2_duty_brief2 = ConvoScreen:new {
+	id = "tier2_duty_brief2",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_9962665d",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_8efde2ae", "tier2_duty_brief3"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_duty_brief2)
+
+barn_sinkko_convo_tier2_duty_brief3 = ConvoScreen:new {
+	id = "tier2_duty_brief3",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_b2634e3d",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_8efde2ae", "tier2_duty_menu"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_duty_brief3)
+
+barn_sinkko_convo_tier2_duty_menu = ConvoScreen:new {
+	id = "tier2_duty_menu",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_5b4ccb84",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_trainer_2:s_f0a7a4ef", "accept_tier2_duty1"},
+		{"@conversation/naboo_imperial_trainer_2:s_e84f3a62", "accept_tier2_duty2"},
+		{"@conversation/naboo_imperial_trainer_2:s_e6765c30", "accept_tier2_duty3"},
+		{"@conversation/naboo_imperial_trainer_2:s_b2a924ab", "tier2_duty_brief1"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier2_duty_menu)
+
+barn_sinkko_convo_accept_tier2_duty1 = ConvoScreen:new {
+	id = "accept_tier2_duty1",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_aceff31e",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier2_duty1)
+
+barn_sinkko_convo_accept_tier2_duty2 = ConvoScreen:new {
+	id = "accept_tier2_duty2",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_205f33ca",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier2_duty2)
+
+barn_sinkko_convo_accept_tier2_duty3 = ConvoScreen:new {
+	id = "accept_tier2_duty3",
+	leftDialog = "@conversation/naboo_imperial_trainer_2:s_4682fc3c",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier2_duty3)
+
+--[[
+
+	Tier 3
+
+]]
+
+-- Tier 3 - Active Mission
+barn_sinkko_convo_tier3_on_mission = ConvoScreen:new {
+	id = "tier3_on_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_c9911c0f",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_on_mission)
+
+-- Tier 3 - Mission 1
+barn_sinkko_convo_tier3_first_mission = ConvoScreen:new {
+	id = "tier3_first_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_51edad38",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_d70dba34", "tier3_first_mission_details"},
+		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_first_mission)
+
+barn_sinkko_convo_tier3_first_mission_details = ConvoScreen:new {
+	id = "tier3_first_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_d2a2c5a9",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_first_mission_details)
+
+barn_sinkko_convo_accept_tier3_first_mission = ConvoScreen:new {
+	id = "accept_tier3_first_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_f64e0998",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier3_first_mission)
+
+barn_sinkko_convo_failed_tier3_first_mission = ConvoScreen:new {
+	id = "failed_tier3_first_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_5a9c71e2",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier3_first_mission)
+
+barn_sinkko_convo_tier3_first_mission_success = ConvoScreen:new {
+	id = "tier3_first_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_4b5066f2",
+	stopConversation = "false",
+	options = {
+		-- Training options added dynamically via handler
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_first_mission_success)
+
+-- Tier 3 - Mission 2
+barn_sinkko_convo_tier3_second_mission = ConvoScreen:new {
+	id = "tier3_second_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_47424e40",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_d70dba34", "tier3_second_mission_details"},
+		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_second_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_second_mission)
+
+barn_sinkko_convo_tier3_second_mission_details = ConvoScreen:new {
+	id = "tier3_second_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_b49d8273",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_second_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_second_mission_details)
+
+barn_sinkko_convo_accept_tier3_second_mission = ConvoScreen:new {
+	id = "accept_tier3_second_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_6ffd0979",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier3_second_mission)
+
+barn_sinkko_convo_failed_tier3_second_mission = ConvoScreen:new {
+	id = "failed_tier3_second_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_53d34239",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier3_second_mission)
+
+barn_sinkko_convo_tier3_second_mission_success = ConvoScreen:new {
+	id = "tier3_second_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_89772a9c",
+	stopConversation = "false",
+	options = {
+		-- Training options added dynamically via handler
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_second_mission_success)
+
+-- Tier 3 - Mission 3
+barn_sinkko_convo_tier3_third_mission = ConvoScreen:new {
+	id = "tier3_third_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_5400c2b8",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_d70dba34", "tier3_third_mission_details"},
+		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_third_mission)
+
+barn_sinkko_convo_tier3_third_mission_details = ConvoScreen:new {
+	id = "tier3_third_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_28876e4d",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_third_mission_details)
+
+barn_sinkko_convo_accept_tier3_third_mission = ConvoScreen:new {
+	id = "accept_tier3_third_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_b8302127",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier3_third_mission)
+
+barn_sinkko_convo_failed_tier3_third_mission = ConvoScreen:new {
+	id = "failed_tier3_third_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_a425b892",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier3_third_mission)
+
+barn_sinkko_convo_tier3_third_mission_success = ConvoScreen:new {
+	id = "tier3_third_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_596a67f0",
+	stopConversation = "false",
+	options = {
+		-- Training options added dynamically via handler
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_third_mission_success)
+
+-- Tier 3 - Mission 4
+barn_sinkko_convo_tier3_fourth_mission = ConvoScreen:new {
+	id = "tier3_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_ee64b80a",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_c142d50f", "tier3_fourth_mission_details"},
+		{"@conversation/naboo_imperial_tier3:s_180340a", "accept_tier3_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_fourth_mission)
+
+barn_sinkko_convo_tier3_fourth_mission_details = ConvoScreen:new {
+	id = "tier3_fourth_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_3bd0f63e",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier3:s_180340a", "accept_tier3_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_fourth_mission_details)
+
+barn_sinkko_convo_accept_tier3_fourth_mission = ConvoScreen:new {
+	id = "accept_tier3_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_6905c6b2",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier3_fourth_mission)
+
+barn_sinkko_convo_failed_tier3_fourth_mission = ConvoScreen:new {
+	id = "failed_tier3_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_1530dc31",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier3_fourth_mission)
+
+barn_sinkko_convo_tier3_fourth_mission_success = ConvoScreen:new {
+	id = "tier3_fourth_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_5df75ba2",
+	stopConversation = "false",
+	options = {
+		-- Training options added dynamically via handler
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_fourth_mission_success)
+
+-- Tier 3 - Training
+barn_sinkko_convo_tier3_train_fighters = ConvoScreen:new {
+	id = "tier3_train_fighters",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_train_fighters)
+
+barn_sinkko_convo_tier3_train_component = ConvoScreen:new {
+	id = "tier3_train_component",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_train_component)
+
+barn_sinkko_convo_tier3_train_procedures = ConvoScreen:new {
+	id = "tier3_train_procedures",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_train_procedures)
+
+barn_sinkko_convo_tier3_train_droid = ConvoScreen:new {
+	id = "tier3_train_droid",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_train_droid)
+
+-- Tier 3 - Completed
+barn_sinkko_convo_tier3_completed = ConvoScreen:new {
+	id = "tier3_completed",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_f50e2248",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_completed)
+
+--[[
+
+	Tier 4
+
+]]
+
+-- Tier 4 - Active Mission
+barn_sinkko_convo_tier4_on_mission = ConvoScreen:new {
+	id = "tier4_on_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_fcbb92d0",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_on_mission)
+
+-- Tier 4 - Initial Briefing
+barn_sinkko_convo_tier4_initial_briefing = ConvoScreen:new {
+	id = "tier4_initial_briefing",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_59da8c80",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_c82e9a2f", "tier4_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_initial_briefing)
+
+-- Tier 4 - Mission 1
+barn_sinkko_convo_tier4_first_mission = ConvoScreen:new {
+	id = "tier4_first_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_47b7d709",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_488aa777", "tier4_first_mission_details"},
+		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_first_mission)
+
+barn_sinkko_convo_tier4_first_mission_details = ConvoScreen:new {
+	id = "tier4_first_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_e89ef227",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_first_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_first_mission_details)
+
+barn_sinkko_convo_accept_tier4_first_mission = ConvoScreen:new {
+	id = "accept_tier4_first_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_6387b3e9",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_first_mission)
+
+barn_sinkko_convo_failed_tier4_first_mission = ConvoScreen:new {
+	id = "failed_tier4_first_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier4_first_mission)
+
+barn_sinkko_convo_tier4_first_mission_success = ConvoScreen:new {
+	id = "tier4_first_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_725be20b",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_bdebb4cc", "tier4_second_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_first_mission_success)
+
+-- Tier 4 - Mission 2
+barn_sinkko_convo_tier4_second_mission = ConvoScreen:new {
+	id = "tier4_second_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_1e39a0ae",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_8a38a5ed", "tier4_second_mission_details"},
+		{"@conversation/naboo_imperial_tier4:s_6d741d67", "accept_tier4_second_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_second_mission)
+
+barn_sinkko_convo_tier4_second_mission_details = ConvoScreen:new {
+	id = "tier4_second_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_4ee43f47",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_6d741d67", "accept_tier4_second_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_second_mission_details)
+
+barn_sinkko_convo_accept_tier4_second_mission = ConvoScreen:new {
+	id = "accept_tier4_second_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_9a9518f8",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_second_mission)
+
+barn_sinkko_convo_failed_tier4_second_mission = ConvoScreen:new {
+	id = "failed_tier4_second_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier4_second_mission)
+
+barn_sinkko_convo_tier4_second_mission_success = ConvoScreen:new {
+	id = "tier4_second_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_417ab2a4",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_834bed59", "tier4_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_second_mission_success)
+
+-- Tier 4 - Mission 3
+barn_sinkko_convo_tier4_third_mission = ConvoScreen:new {
+	id = "tier4_third_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_dafddb17",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_362a48e0", "tier4_third_mission_details"},
+		{"@conversation/naboo_imperial_tier4:s_c17d2691", "accept_tier4_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_third_mission)
+
+barn_sinkko_convo_tier4_third_mission_details = ConvoScreen:new {
+	id = "tier4_third_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_4bcaf756",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_c17d2691", "accept_tier4_third_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_third_mission_details)
+
+barn_sinkko_convo_accept_tier4_third_mission = ConvoScreen:new {
+	id = "accept_tier4_third_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_db35e23",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_third_mission)
+
+barn_sinkko_convo_failed_tier4_third_mission = ConvoScreen:new {
+	id = "failed_tier4_third_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier4_third_mission)
+
+barn_sinkko_convo_tier4_third_mission_success = ConvoScreen:new {
+	id = "tier4_third_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_aa21cdc1",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_938d7337", "tier4_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_third_mission_success)
+
+-- Tier 4 - Mission 4
+barn_sinkko_convo_tier4_fourth_mission = ConvoScreen:new {
+	id = "tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_1899241d",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_e07a0513", "tier4_fourth_mission_details"},
+		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_fourth_mission)
+
+barn_sinkko_convo_tier4_fourth_mission_details = ConvoScreen:new {
+	id = "tier4_fourth_mission_details",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_c25d28ef",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_fourth_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_fourth_mission_details)
+
+barn_sinkko_convo_accept_tier4_fourth_mission = ConvoScreen:new {
+	id = "accept_tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_320b2029",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_fourth_mission)
+
+barn_sinkko_convo_failed_tier4_fourth_mission = ConvoScreen:new {
+	id = "failed_tier4_fourth_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_failed_tier4_fourth_mission)
+
+barn_sinkko_convo_tier4_fourth_mission_success = ConvoScreen:new {
+	id = "tier4_fourth_mission_success",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_6fb4f06a",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_7177c3f2", "master_who_declann"},
+		{"@conversation/naboo_imperial_tier4:s_58edcac7", "master_where_report"},
+		{"@conversation/naboo_imperial_tier4:s_fae9dc1b", "master_what_want"},
+		{"@conversation/naboo_imperial_tier4:s_a3aef707", "master_becoming_imperial"},
+		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_fourth_mission_success)
+
+-- Master mission
+barn_sinkko_convo_master_mission = ConvoScreen:new {
+	id = "master_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_6fb4f06a",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_7177c3f2", "master_who_declann"},
+		{"@conversation/naboo_imperial_tier4:s_58edcac7", "master_where_report"},
+		{"@conversation/naboo_imperial_tier4:s_fae9dc1b", "master_what_want"},
+		{"@conversation/naboo_imperial_tier4:s_a3aef707", "master_becoming_imperial"},
+		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_master_mission)
+
+barn_sinkko_convo_master_who_declann = ConvoScreen:new {
+	id = "master_who_declann",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_55905a28",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_master_who_declann)
+
+barn_sinkko_convo_master_where_report = ConvoScreen:new {
+	id = "master_where_report",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_a0d28eb",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_master_where_report)
+
+barn_sinkko_convo_master_what_want = ConvoScreen:new {
+	id = "master_what_want",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_cd04b926",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_master_what_want)
+
+barn_sinkko_convo_master_becoming_imperial = ConvoScreen:new {
+	id = "master_becoming_imperial",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_c33416a7",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_master_becoming_imperial)
+
+barn_sinkko_convo_accept_master_mission = ConvoScreen:new {
+	id = "accept_master_mission",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_c28f20f3",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_master_mission)
+
+-- Tier 4 - Completed
+barn_sinkko_convo_tier4_completed = ConvoScreen:new {
+	id = "tier4_completed",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_145d7cc3",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_4854758d", "tier4_duty_repeat"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_completed)
+
+-- Tier 4 - Training
+barn_sinkko_convo_ready_train_tier4 = ConvoScreen:new {
+	id = "ready_train_tier4",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_5dce257f",
+	stopConversation = "false",
+	options = {
+		-- Options added dynamically via handler
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_ready_train_tier4)
+
+barn_sinkko_convo_tier4_train_fighters = ConvoScreen:new {
+	id = "tier4_train_fighters",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_train_fighters)
+
+barn_sinkko_convo_tier4_train_component = ConvoScreen:new {
+	id = "tier4_train_component",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_train_component)
+
+barn_sinkko_convo_tier4_train_basics = ConvoScreen:new {
+	id = "tier4_train_basics",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_train_basics)
+
+barn_sinkko_convo_tier4_train_droid = ConvoScreen:new {
+	id = "tier4_train_droid",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_train_droid)
+
+-- Tier 4 - Duty missions
+barn_sinkko_convo_tier4_duty_repeat = ConvoScreen:new {
+	id = "tier4_duty_repeat",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_ace49d41",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_82095b20", "accept_tier4_duty1"},
+		{"@conversation/naboo_imperial_tier4:s_be7e95c", "accept_tier4_duty2"},
+		{"@conversation/naboo_imperial_tier4:s_60a8bfcb", "accept_tier4_duty3"},
+		{"@conversation/naboo_imperial_tier4:s_851406fb", "accept_tier4_duty4"},
+		{"@conversation/naboo_imperial_tier4:s_49805f81", "tier4_duty_brief1"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_duty_repeat)
+
+barn_sinkko_convo_tier4_duty_brief1 = ConvoScreen:new {
+	id = "tier4_duty_brief1",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_85c9e37e",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_61657d0f", "tier4_duty_brief2"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_duty_brief1)
+
+barn_sinkko_convo_tier4_duty_brief2 = ConvoScreen:new {
+	id = "tier4_duty_brief2",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_52708145",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_61657d0f", "tier4_duty_brief3"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_duty_brief2)
+
+barn_sinkko_convo_tier4_duty_brief3 = ConvoScreen:new {
+	id = "tier4_duty_brief3",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_f76cec26",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_61657d0f", "tier4_duty_menu"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_duty_brief3)
+
+barn_sinkko_convo_tier4_duty_menu = ConvoScreen:new {
+	id = "tier4_duty_menu",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_ee9d18a3",
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_imperial_tier4:s_82095b20", "accept_tier4_duty1"},
+		{"@conversation/naboo_imperial_tier4:s_be7e95c", "accept_tier4_duty2"},
+		{"@conversation/naboo_imperial_tier4:s_60a8bfcb", "accept_tier4_duty3"},
+		{"@conversation/naboo_imperial_tier4:s_851406fb", "accept_tier4_duty4"},
+		{"@conversation/naboo_imperial_tier4:s_49805f81", "tier4_duty_brief1"},
+	}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier4_duty_menu)
+
+barn_sinkko_convo_accept_tier4_duty1 = ConvoScreen:new {
+	id = "accept_tier4_duty1",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_duty1)
+
+barn_sinkko_convo_accept_tier4_duty2 = ConvoScreen:new {
+	id = "accept_tier4_duty2",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_duty2)
+
+barn_sinkko_convo_accept_tier4_duty3 = ConvoScreen:new {
+	id = "accept_tier4_duty3",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_duty3)
+
+barn_sinkko_convo_accept_tier4_duty4 = ConvoScreen:new {
+	id = "accept_tier4_duty4",
+	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_accept_tier4_duty4)
+
+
 addConversationTemplate("barn_sinkko_convo", barn_sinkko_convo);

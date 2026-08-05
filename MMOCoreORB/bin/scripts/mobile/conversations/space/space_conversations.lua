@@ -18,6 +18,26 @@ includeFile("conversations/space/spacestation_talus.lua")
 includeFile("conversations/space/spacestation_tatooine.lua")
 includeFile("conversations/space/spacestation_yavin4.lua")
 
+-- Kashyyyk Space Stations
+includeFile("conversations/space/spacestation_kashyyyk.lua")
+includeFile("conversations/space/spacestation_kash_rebel.lua")
+includeFile("conversations/space/spacestation_kash_imperial.lua")
+includeFile("conversations/space/spacestation_rodian_base.lua")
+includeFile("conversations/space/spacestation_rodian_tripp_base.lua")
+includeFile("conversations/space/spacestation_indie_slaver.lua")
+includeFile("conversations/space/spacestation_avatar_platform.lua")
+
+-- Kashyyyk comm-hailable ship givers (Civilian Protection Guild patrols).
+-- These are ShipAgents, not stations: NpcConversationStartCommand.h starts a conversation with any
+-- ShipAiAgent, and both agents already ship a client comm portrait.
+includeFile("conversations/space/ep3_cpg_veteran.lua")
+includeFile("conversations/space/ep3_cpg_ace.lua")
+
+-- Deep Space - Kessel jump stations
+includeFile("conversations/space/jumpstation_rebel.lua")
+includeFile("conversations/space/jumpstation_imperial.lua")
+includeFile("conversations/space/jumpstation_neutral.lua")
+
 -- Coordinators
 
 -- Neutral
@@ -58,6 +78,44 @@ includeFile("conversations/space/neutral/corsec_squadron/rhea_convo.lua")
 includeFile("conversations/space/neutral/corsec_squadron/rikkh_convo.lua")
 includeFile("conversations/space/neutral/corsec_squadron/ramna_convo.lua")
 includeFile("conversations/space/neutral/corsec_squadron/turoldine_convo.lua")
+
+-- Kashyyyk hunting chain (ground givers for space quests registered in
+-- screenplays/space/squadrons/KashyyykHuntingScreenplay.lua)
+includeFile("conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_kerssoc_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_kara_corlon_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_tripp_rar_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_chrilooc_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_banol_starkiller_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_ziven_tissak_convo.lua")
+
+-- Kashyyyk mining chain (ground giver for space quests registered in
+-- screenplays/space/squadrons/KashyyykMiningScreenplay.lua)
+includeFile("conversations/space/neutral/kashyyyk_mining/ep3_mining_captain_koh_convo.lua")
+
+-- Kashyyyk slaver chain (ground givers for space quests registered in
+-- screenplays/space/squadrons/KashyyykSlaverScreenplay.lua)
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_boshaz_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_lesnorr_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_mssikss_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_fezrik_bendledon_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_musolium_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_belga_daeri_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_kymayrr_convo.lua")
+includeFile("conversations/space/neutral/kashyyyk_slaver/ep3_gursan_bryes_convo.lua")
+
+-- Kashyyyk station chain (ground giver for space quests registered in
+-- screenplays/space/squadrons/KashyyykStationScreenplay.lua)
+includeFile("conversations/space/neutral/kashyyyk_station/ep3_eyma_convo.lua")
+
+-- Kashyyyk bowcaster chain (ground giver for the space quest registered in
+-- screenplays/space/squadrons/KashyyykHuntingScreenplay.lua)
+includeFile("conversations/space/neutral/kashyyyk_bowcaster/ep3_wke_lolo_convo.lua")
+
+-- Clone relics chain (ground givers for the Boba Fett space quest registered in
+-- screenplays/space/squadrons/KesselDutyScreenplay.lua, and for the Jedi Starfighter space quests
+-- registered in screenplays/space/squadrons/KashyyykMiningScreenplay.lua)
+includeFile("conversations/space/neutral/clone_relics/ep3_clone_relics_kkrax_convo.lua")
+includeFile("conversations/space/neutral/clone_relics/ep3_clone_relics_darth_vader_convo.lua")
 
 -- Smuggler Squadron
 includeFile("conversations/space/neutral/smuggler_squadron/dravis_convo.lua")

@@ -81,6 +81,9 @@ includeFile("custom_content/ep3/ep3_clone_relics_claw_grunt_02.lua")
 includeFile("custom_content/ep3/ep3_clone_relics_claw_grunt_03.lua")
 includeFile("custom_content/ep3/ep3_clone_relics_claw_grunt_04.lua")
 includeFile("custom_content/ep3/ep3_clone_relics_cww8.lua")
+-- Ground giver for space_battle_ep3_clone_relics_jedi_starfighter_4. Wears the base-game
+-- object/mobile/darth_vader.iff because the client ships no ep3 Vader appearance; see the file header.
+includeFile("custom_content/ep3/ep3_clone_relics_darth_vader.lua")
 includeFile("custom_content/ep3/ep3_clone_relics_durge.lua")
 includeFile("custom_content/ep3/ep3_clone_relics_durge_droid_01.lua")
 includeFile("custom_content/ep3/ep3_clone_relics_durge_droid_02.lua")

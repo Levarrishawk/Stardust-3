@@ -23,13 +23,17 @@ ep3_clone_relics_kkrax = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	-- CONVERSABLE and conversationTemplate must be set together: LuaMobileTest.cpp:463-477 asserts that
+	-- any mobile carrying the CONVERSE option bit has a non-empty conversationTemplate. The template is
+	-- ep3_clone_relics_kkrax_convotemplate, defined in
+	-- mobile/conversations/space/neutral/clone_relics/ep3_clone_relics_kkrax_convo.lua.
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_clone_relics_kkrax.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_clone_relics_kkrax_convotemplate",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }
