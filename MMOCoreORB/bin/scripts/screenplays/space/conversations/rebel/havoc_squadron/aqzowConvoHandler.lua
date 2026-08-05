@@ -54,15 +54,29 @@ function aqzowConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Testing resetAqzowQuests
 	--HavocSquadronScreenplay:resetAqzowQuests(pPlayer)
 
-	local questOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1.name)
-	local questTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_2.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_2.name)
-	local questThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_3.name)
-	local questFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4.name)
+	local questOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+	local questTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_2.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_2.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+	local questThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_3.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+	local questFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
-	local questOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1.name)
-	local questTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_2.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_2.name)
-	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_3.name)
-	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4.name)
+	local questOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+	local questTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, HavocSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
 	local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 3)
 

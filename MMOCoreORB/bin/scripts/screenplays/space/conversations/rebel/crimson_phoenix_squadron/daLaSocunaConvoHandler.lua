@@ -215,15 +215,29 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier3_not_ready")
 		end
 
-		local t3QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name)
-		local t3QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name)
-		local t3QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.name)
-		local t3QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.name)
+		local t3QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+		local t3QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+		local t3QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+		local t3QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
-		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name)
-		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name)
-		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.name)
-		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.name)
+		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
 		local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 3)
 
