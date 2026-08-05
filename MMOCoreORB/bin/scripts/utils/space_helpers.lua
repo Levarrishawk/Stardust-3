@@ -478,7 +478,14 @@ function SpaceHelpers:surrenderPilot(pPlayer)
 	elseif (pilotSquadron == SMUGGLER_SQUADRON) then
 		pilotProfession = "neutralPilot"
 
-		-- TODO: Add SmugglerSquadronScreenplay reset functions
+		-- Tier 1
+		SmugglerSquadronScreenplay:resetDravisQuests(pPlayer)
+		-- Tier 2
+		SmugglerSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		SmugglerSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		SmugglerSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == RSF_SQUADRON) then
 		pilotProfession = "neutralPilot"
 
@@ -504,25 +511,60 @@ function SpaceHelpers:surrenderPilot(pPlayer)
 	elseif (pilotSquadron == VORTEX_SQUADRON) then
 		pilotProfession = "rebelPilot"
 
-		-- TODO: Add VortexSquadronScreenplay reset functions
+		-- Tier 1
+		VortexSquadronScreenplay:resetV3fxQuests(pPlayer)
+		-- Tier 2
+		VortexSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		VortexSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		VortexSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == CRIMSON_PHOENIX_SQUADRON) then
 		pilotProfession = "rebelPilot"
 
-		-- TODO: Add CrimsonPhoenixSquadronScreenplay reset functions
+		-- Tier 1
+		CrimsonPhoenixSquadronScreenplay:resetSocunaQuests(pPlayer)
+		-- Tier 2
+		CrimsonPhoenixSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		CrimsonPhoenixSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		CrimsonPhoenixSquadronScreenplay:resetTier4Quests(pPlayer)
 
 	-- Imperial Pilots
 	elseif (pilotSquadron == BLACK_EPSILON_SQUADRON) then
 		pilotProfession = "imperialPilot"
 
-		-- TODO: Add BlackEpsilonSquadronScreenplay reset functions
+		-- Tier 1
+		BlackEpsilonSquadronScreenplay:resetSireenQuests(pPlayer)
+		-- Tier 2
+		BlackEpsilonSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		BlackEpsilonSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		BlackEpsilonSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == STORM_SQUADRON) then
 		pilotProfession = "imperialPilot"
 
-		-- TODO: Add StormSquadronScreenplay reset functions
+		-- Tier 1
+		StormSquadronScreenplay:resetColzetQuests(pPlayer)
+		-- Tier 2
+		StormSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		StormSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		StormSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == INQUISITION_SQUADRON) then
 		pilotProfession = "imperialPilot"
 
-		-- TODO: Add InquisitionSquadronScreenplay reset functions
+		-- Tier 1
+		InquisitionSquadronScreenplay:resetSinkkoQuests(pPlayer)
+		-- Tier 2
+		InquisitionSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		InquisitionSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		InquisitionSquadronScreenplay:resetTier4Quests(pPlayer)
 	end
 
 	local pilotSkills = self.pilotSkills[pilotProfession]
@@ -542,6 +584,18 @@ function SpaceHelpers:surrenderPilot(pPlayer)
 	end
 
 	PlayerObject(pGhost):resetPilotTier()
+
+	-- Pilot resign: XP and prestige reset to zero
+	local resetXpTypes = { "space_combat_general", "prestige_pilot", "prestige_rebel", "prestige_imperial" }
+
+	for i = 1, #resetXpTypes, 1 do
+		local xpType = resetXpTypes[i]
+		local xpAmount = PlayerObject(pGhost):getExperience(xpType)
+
+		if (xpAmount > 0) then
+			CreatureObject(pPlayer):awardExperience(xpType, xpAmount * -1, false)
+		end
+	end
 end
 
 -- @param pPlayer pointer adds waypoint to the starting neutral Corsec Squadron trainer
