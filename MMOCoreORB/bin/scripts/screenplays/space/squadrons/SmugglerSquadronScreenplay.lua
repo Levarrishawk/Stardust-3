@@ -797,8 +797,8 @@ delivery_tatooine_privateer_tier3_2_a = SpaceDeliveryScreenplay:new {
 	pickupShip = "reb_xwing_tier2",
 	deliveryShip = "reb_awing_tier3",
 
-	pickupPoint = "space_lok:rebel_tier3_2_a_meeting",
-	deliveryPoint = "space_lok:rebel_tier3_2_a_delivery",
+	pickupPoint = {x = -3000, z = -2000, y = -2600}, -- space_lok:rebel_tier3_2_a_meeting
+	deliveryPoint = {x = 1000, z = -2000, y = -3452}, -- space_lok:rebel_tier3_2_a_delivery
 
 	attackDelay = 70,
 

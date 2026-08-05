@@ -797,8 +797,8 @@ delivery_corellia_rebel_tier3_2_a = SpaceDeliveryScreenplay:new {
 	pickupShip = "reb_xwing_tier2",
 	deliveryShip = "reb_awing_tier3",
 
-	pickupPoint = "space_lok:rebel_tier3_2_a_meeting",
-	deliveryPoint = "space_lok:rebel_tier3_2_a_delivery",
+	pickupPoint = {x = -3000, z = -2000, y = -2600}, -- space_lok:rebel_tier3_2_a_meeting
+	deliveryPoint = {x = 1000, z = -2000, y = -3452}, -- space_lok:rebel_tier3_2_a_delivery
 
 	attackDelay = 70,
 
@@ -906,8 +906,8 @@ delivery_corellia_rebel_tier3_3 = SpaceDeliveryScreenplay:new {
 	pickupShip = "nym_smuggler",
 	deliveryShip = "reb_gunboat_tier3",
 
-	pickupPoint = "space_endor:corellia_rebel_tier_3_3_pickup",
-	deliveryPoint = "space_endor:corellia_rebel_tier_3_3_deliver",
+	pickupPoint = {x = -2200, z = -5200, y = 1300}, -- space_endor:corellia_rebel_tier_3_3_pickup
+	deliveryPoint = {x = -2600, z = -300, y = 3200}, -- space_endor:corellia_rebel_tier_3_3_deliver
 
 	attackDelay = 80,
 
@@ -1420,7 +1420,7 @@ delivery_no_pickup_corellia_rebel_tier4_2_a = SpaceDeliveryNoPickupScreenplay:ne
 	parentQuestName = "corellia_rebel_tier4_2",
 
 	deliveryShip = "rebel_smuggler_tier3",
-	deliveryPoint = "space_dathomir:corellia_rebel_tier4_2_a_delivery",
+	deliveryPoint = {x = 5242, z = 4462, y = -48}, -- space_dathomir:corellia_rebel_tier4_2_a_delivery
 
 	attackDelay = 45,
 
