@@ -1620,12 +1620,14 @@ recovery_naboo_imperial_tier4_4 = SpaceRecoveryScreenplay:new {
 	creditReward = 0,
 
 	sideQuest = true,
-	sideQuestType = "assassinate",
-	sideQuestName = "naboo_imperial_tier4_4_a",
-	sideQuestType2 = "rescue",
-	sideQuestName2 = "naboo_imperial_tier4_4_b",
+	-- The leg parentQuest chain is strictly serial here: _b's parent is this head,
+	-- _a's parent is _b, and _c's parent is _a. So this head hands off to _b, and
+	-- _b already COMPLETION-splits onto _a. The head previously pointed at _a with
+	-- no split type at all (default NONE), so no leg ever started.
+	sideQuestType = "rescue",
+	sideQuestName = "naboo_imperial_tier4_4_b",
 
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	arrivalDelay = 10,
 	recoveryDelay = 30,
