@@ -189,15 +189,18 @@ assassinate_naboo_privateer_tier1_4a = SpaceAssassinateScreenplay:new {
 	arrivalDelay = 6,
 	failTimer = 20,
 
-	assassinateTarget = {
-		zone = "space_naboo",
-		ship = "blacksun_ace_s04_tier1",
-		x = 1500, z = 500, y = -1000,
+	-- SpaceAssassinateScreenplay reads self.assassinateSpawns.target / .escorts (:188-189)
+	-- and self.targetPatrols[1] for the spawn location (:197-200). The former
+	-- assassinateTarget/assassinateWingmen shape was read by nothing, so this quest
+	-- indexed a nil field on start. Ship, escort count and coordinates below are the
+	-- ones that were already authored above -- nothing here is new content.
+	assassinateSpawns = {
+		target = "blacksun_ace_s04_tier1",
+		escorts = {"blacksun_fighter_s02_tier1", "blacksun_fighter_s02_tier1"},
 	},
 
-	assassinateWingmen = {
-		zone = "space_naboo",
-		spawns = {{count = 2, shipName = "blacksun_fighter_s02_tier1"}},
+	targetPatrols = {
+		{patrolPointName = "naboo_privateer_tier1_4a_assassinate_1", x = 1500, z = 500, y = -1000},
 	},
 }
 

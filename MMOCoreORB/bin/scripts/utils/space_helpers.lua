@@ -956,7 +956,11 @@ function SpaceHelpers:activateSpaceQuest(pPlayer, pNpc, questType, questName, no
 		return
 	end
 
-	local isDutyMission = string.find(questName, "_duty")
+	-- The "_duty" marker lives in questType for the standard duty missions
+	-- (destroy_duty / escort_duty / recovery_duty / rescue_duty) and in questName
+	-- for the Kashyyyk station set (ep3_kash_station_*_duty_*). Check both, or the
+	-- one-duty-at-a-time rule and setSpaceDutyMission() below never fire.
+	local isDutyMission = string.find(questType, "_duty") or string.find(questName, "_duty")
 
 	if (isDutyMission) then
 		local hasDuty = false
@@ -1090,7 +1094,7 @@ function SpaceHelpers:failSpaceQuest(pPlayer, questType, questName, notifyClient
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:patrol_abandoned") -- "You abandoned your patrol!"
 		elseif (questType == "destroy_surpriseattack") then
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:destroy_surprise_abandoned") -- "You ran away from the attack and abandoned your duty!"
-		elseif (questType == "escort_duty" or questType == "destroy_duty" or questType == "recovery_duty") then
+		elseif (questType == "escort_duty" or questType == "destroy_duty" or questType == "recovery_duty" or questType == "rescue_duty") then
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:destroy_abandoned") -- "You have ended your duty mission."
 		elseif (questType == "inspect") then
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:inspect_abandoned") -- "You abandoned your inspection mission!"

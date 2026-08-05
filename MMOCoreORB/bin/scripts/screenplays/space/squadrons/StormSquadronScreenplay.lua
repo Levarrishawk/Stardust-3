@@ -1457,7 +1457,7 @@ rescue_tatooine_imperial_tier4_2_b = SpaceRescueScreenplay:new {
 	rescueShip = "reb_diplomat_tier4",
 	rescueArrivalDelay = 3,
 
-	rescuePoints = {
+	escortPoints = {
 		{patrolPointName = "tatooine_imperial_tier4_2_b_rescue_1", zoneName = "space_dathomir", x = 3872, z = 4158, y = -2791, escortNumber = 1, radius = 250},
 		{patrolPointName = "tatooine_imperial_tier4_2_b_rescue_2", zoneName = "space_dathomir", x = 2827, z = 3579, y = -4145, escortNumber = 2, radius = 250},
 		{patrolPointName = "tatooine_imperial_tier4_2_b_rescue_3", zoneName = "space_dathomir", x = 2103, z = 3204, y = -5079, escortNumber = 3, radius = 250},
@@ -1728,7 +1728,7 @@ rescue_tatooine_imperial_tier4_4_b = SpaceRescueScreenplay:new {
 	rescueShip = "spynet_spy_tier4",
 	rescueArrivalDelay = 5,
 
-	rescuePoints = {
+	escortPoints = {
 		{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_1", zoneName = "space_endor", x = -961, z = -5548, y = 513, escortNumber = 1, radius = 250},
 		{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_2", zoneName = "space_endor", x = -1637, z = -5535, y = 354, escortNumber = 2, radius = 250},
 		{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_3", zoneName = "space_endor", x = -2330, z = -5523, y = 191, escortNumber = 3, radius = 250},
@@ -1898,7 +1898,7 @@ recovery_duty_tatooine_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	targetShip = "lambdashuttle_troop_transport_ace",
+	recoverShip = "lambdashuttle_troop_transport_ace",
 	targetArrivalDelay = 10,
 	recoveryDelay = 30,
 
