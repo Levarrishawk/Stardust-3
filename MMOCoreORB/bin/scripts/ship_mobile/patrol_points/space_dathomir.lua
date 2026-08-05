@@ -571,6 +571,54 @@ space_dathomir = SpacePatrolPointTable:new {
 	{patrolPointName = "tier3_privateer_witchblood_inspect_01_04", x = -2483, z = 333, y = -2297},
 	{patrolPointName = "tier3_privateer_witchblood_inspect_01_05", x = -1550, z = 360, y = -2118},
 	{patrolPointName = "tier3_privateer_witchblood_inspect_01_06", x = -1069, z = 538, y = -1469},
+
+	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "corellia_imperial_tier4_2_b_rescue_1", x = 3872, z = 4158, y = -2791},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_2_b_rescue_2", x = 2827, z = 3579, y = -4145},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_2_b_rescue_3", x = 2103, z = 3204, y = -5079},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_2_b_rescue_4", x = 1424, z = 2853, y = -5956},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_2_b_rescue_1", x = 3872, z = 4158, y = -2791},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_2_b_rescue_2", x = 2827, z = 3579, y = -4145},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_2_b_rescue_3", x = 2103, z = 3204, y = -5079},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_2_b_rescue_4", x = 1424, z = 2853, y = -5956},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_2_b_rescue_1", x = 3872, z = 4158, y = -2791},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_2_b_rescue_2", x = 2827, z = 3579, y = -4145},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_2_b_rescue_3", x = 2103, z = 3204, y = -5079},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_2_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_2_b_rescue_4", x = 1424, z = 2853, y = -5956},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_2_b_rescue_1", x = 3872, z = 4158, y = -2791},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_2_b_rescue_2", x = 2827, z = 3579, y = -4145},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_2_b_rescue_3", x = 2103, z = 3204, y = -5079},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_2_b_rescue_4", x = 1424, z = 2853, y = -5956},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_2_b_rescue_1", x = 3872, z = 4158, y = -2791},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_2_b_rescue_2", x = 2827, z = 3579, y = -4145},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_2_b_rescue_3", x = 2103, z = 3204, y = -5079},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_2_b_rescue_4", x = 1424, z = 2853, y = -5956},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_2_b_rescue_1", x = 3872, z = 4158, y = -2791},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_2_b_rescue_2", x = 2827, z = 3579, y = -4145},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_2_b_rescue_3", x = 2103, z = 3204, y = -5079},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_2_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_2_b_rescue_4", x = 1424, z = 2853, y = -5956},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_2_b:escortPoints
+
+	-- Stardust-3 space port: re-filed into the zone the referencing quest actually runs in; coordinates copied verbatim from space_yavin4. (assassinate_naboo_rebel_tier4_2)
+	{patrolPointName = "naboo_rebel_tier4_2_assassin_1", x = 3918, z = 4348, y = -3225},
+	{patrolPointName = "naboo_rebel_tier4_2_assassin_2", x = 2563, z = 4412, y = -3307},
+	{patrolPointName = "naboo_rebel_tier4_2_assassin_3", x = 1131, z = 4477, y = -2086},
+	{patrolPointName = "naboo_rebel_tier4_2_assassin_4", x = -48, z = 4539, y = -344},
+	{patrolPointName = "naboo_rebel_tier4_2_assassin_5", x = -1519, z = 4604, y = 2034},
+	{patrolPointName = "naboo_rebel_tier4_2_assassin_6", x = -6830, z = 4677, y = 3510},
+
+	-- Stardust-3 space port: re-filed into the zone the referencing quest actually runs in; coordinates copied verbatim from space_yavin4. (escort_duty_naboo_rebel_tier4_1)
+	{patrolPointName = "naboo_rebel_tier4_1_escort_duty_1", x = 2096, z = 3236, y = -6065},
+	{patrolPointName = "naboo_rebel_tier4_1_escort_duty_2", x = 2494, z = 3767, y = -5614},
+	{patrolPointName = "naboo_rebel_tier4_1_escort_duty_3", x = 3491, z = 4797, y = -4904},
+	{patrolPointName = "naboo_rebel_tier4_1_escort_duty_4", x = 4619, z = 5351, y = -4806},
+	{patrolPointName = "naboo_rebel_tier4_1_escort_duty_5", x = 5626, z = 6460, y = -4707},
+
+	-- Stardust-3 space port: re-filed into the zone the referencing quest actually runs in; coordinates copied verbatim from space_endor. (escort_duty_tatooine_rebel_tier4_1)
+	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_1", x = 718, z = 763, y = -2985},
+	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_2", x = 400, z = 1766, y = -1686},
+	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_3", x = 1977, z = 2776, y = -1514},
+	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_4", x = 3723, z = 3514, y = -1530},
+	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_5", x = 6199, z = 4606, y = -2378},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_dathomir, "space_dathomir")

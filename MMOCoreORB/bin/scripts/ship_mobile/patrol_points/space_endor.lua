@@ -651,6 +651,156 @@ space_endor = SpacePatrolPointTable:new {
 	{patrolPointName = "scientists_route_1_20", x = 1232, z = -418, y = 2697},
 	{patrolPointName = "scientists_route_1_21", x = 912, z = -575, y = 2880},
 	{patrolPointName = "scientists_route_1_22", x = 693, z = -456, y = 2588},
+
+	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "corellia_imperial_tier3_3_a_spyship_1", x = 2940, z = -4680, y = 1200},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier3_3_a_spyship_2", x = 2922, z = -3692, y = 1654},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier3_3_a_spyship_3", x = 2900, z = -2445, y = 2228},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier3_3_a_spyship_4", x = 2892, z = -1093, y = 2859},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier3_3_a_spyship_5", x = 2892, z = 55, y = 3394},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier3_3_a_spyship_6", x = 2892, z = 1122, y = 3890},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier3_3_c_escort_1", x = -5250, z = -850, y = 2000},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:escort_corellia_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "corellia_imperial_tier3_3_c_escort_2", x = -4323, z = -525, y = 2310},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:escort_corellia_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "corellia_imperial_tier3_3_c_escort_3", x = -3632, z = -680, y = 1552},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:escort_corellia_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "corellia_imperial_tier3_3_c_escort_4", x = -2813, z = -400, y = 1793},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:escort_corellia_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_4_a_assassinate_1", x = 19, z = 5591, y = 1371},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier4_4_a_assassinate_2", x = 552, z = 5543, y = -5},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier4_4_a_assassinate_3", x = 2059, z = 5543, y = -1021},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier4_4_a_assassinate_4", x = 2632, z = 5518, y = -2724},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier4_4_a_assassinate_5", x = 4049, z = 5491, y = -4471},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "corellia_imperial_tier4_4_a_assassinate_6", x = 7162, z = 5467, y = -4481},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:assassinate_corellia_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier3_3_a_spyship_1", x = 2940, z = -4680, y = 1200},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier3_3_a_spyship_2", x = 2922, z = -3692, y = 1654},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier3_3_a_spyship_3", x = 2900, z = -2445, y = 2228},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier3_3_a_spyship_4", x = 2892, z = -1093, y = 2859},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier3_3_a_spyship_5", x = 2892, z = 55, y = 3394},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier3_3_a_spyship_6", x = 2892, z = 1122, y = 3890},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier3_3_c_escort_1", x = -5250, z = -850, y = 2000},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_imperial_tier3_3_c_escort_2", x = -4323, z = -525, y = 2310},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_imperial_tier3_3_c_escort_3", x = -3632, z = -680, y = 1552},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_imperial_tier3_3_c_escort_4", x = -2813, z = -400, y = 1793},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_4_a_assassinate_1", x = 19, z = 5591, y = 1371},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier4_4_a_assassinate_2", x = 552, z = 5543, y = -5},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier4_4_a_assassinate_3", x = 2059, z = 5543, y = -1021},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier4_4_a_assassinate_4", x = 2632, z = 5518, y = -2724},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier4_4_a_assassinate_5", x = 4049, z = 5491, y = -4471},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_imperial_tier4_4_a_assassinate_6", x = 7162, z = 5467, y = -4481},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:assassinate_naboo_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_privateer_tier4_escort_duty_1", x = 3523, z = 400, y = -4024},	-- src: screenplays/space/squadrons/RsfSquadronScreenplay.lua:escort_duty_naboo_privateer_tier4_1:escortPoints
+	{patrolPointName = "naboo_privateer_tier4_escort_duty_2", x = 2089, z = 4103, y = -4060},	-- src: screenplays/space/squadrons/RsfSquadronScreenplay.lua:escort_duty_naboo_privateer_tier4_1:escortPoints
+	{patrolPointName = "naboo_privateer_tier4_escort_duty_3", x = 1396, z = 5751, y = -3946},	-- src: screenplays/space/squadrons/RsfSquadronScreenplay.lua:escort_duty_naboo_privateer_tier4_1:escortPoints
+	{patrolPointName = "naboo_privateer_tier4_escort_duty_4", x = 817, z = 7127, y = -3851},	-- src: screenplays/space/squadrons/RsfSquadronScreenplay.lua:escort_duty_naboo_privateer_tier4_1:escortPoints
+	{patrolPointName = "naboo_rebel_tier3_3_a_spyship_1", x = 2940, z = -4680, y = 1200},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier3_3_a_spyship_2", x = 2922, z = -3692, y = 1654},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier3_3_a_spyship_3", x = 2900, z = -2445, y = 2228},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier3_3_a_spyship_4", x = 2892, z = -1093, y = 2859},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier3_3_a_spyship_5", x = 2892, z = 55, y = 3394},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier3_3_a_spyship_6", x = 2892, z = 1122, y = 3890},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier3_3_c_escort_1", x = -5250, z = -850, y = 2000},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:escort_naboo_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_rebel_tier3_3_c_escort_2", x = -4323, z = -525, y = 2310},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:escort_naboo_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_rebel_tier3_3_c_escort_3", x = -3632, z = -680, y = 1552},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:escort_naboo_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_rebel_tier3_3_c_escort_4", x = -2813, z = -400, y = 1793},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:escort_naboo_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_4_a_assassinate_1", x = 19, z = 5591, y = 1371},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier4_4_a_assassinate_2", x = 552, z = 5543, y = -5},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier4_4_a_assassinate_3", x = 2059, z = 5543, y = -1021},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier4_4_a_assassinate_4", x = 2632, z = 5518, y = -2724},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier4_4_a_assassinate_5", x = 4049, z = 5491, y = -4471},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "naboo_rebel_tier4_4_a_assassinate_6", x = 7162, z = 5467, y = -4481},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier3_3_a_spyship_1", x = 2940, z = -4680, y = 1200},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier3_3_a_spyship_2", x = 2922, z = -3692, y = 1654},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier3_3_a_spyship_3", x = 2900, z = -2445, y = 2228},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier3_3_a_spyship_4", x = 2892, z = -1093, y = 2859},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier3_3_a_spyship_5", x = 2892, z = 55, y = 3394},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier3_3_a_spyship_6", x = 2892, z = 1122, y = 3890},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier3_3_c_escort_1", x = -5250, z = -850, y = 2000},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_tatooine_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_imperial_tier3_3_c_escort_2", x = -4323, z = -525, y = 2310},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_tatooine_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_imperial_tier3_3_c_escort_3", x = -3632, z = -680, y = 1552},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_tatooine_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_imperial_tier3_3_c_escort_4", x = -2813, z = -400, y = 1793},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_tatooine_imperial_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_4_a_assassinate_1", x = 19, z = 5591, y = 1371},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier4_4_a_assassinate_2", x = 552, z = 5543, y = -5},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier4_4_a_assassinate_3", x = 2059, z = 5543, y = -1021},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier4_4_a_assassinate_4", x = 2632, z = 5518, y = -2724},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier4_4_a_assassinate_5", x = 4049, z = 5491, y = -4471},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_imperial_tier4_4_a_assassinate_6", x = 7162, z = 5467, y = -4481},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier3_3_a_spyship_1", x = 2940, z = -4680, y = 1200},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier3_3_a_spyship_2", x = 2922, z = -3692, y = 1654},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier3_3_a_spyship_3", x = 2900, z = -2445, y = 2228},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier3_3_a_spyship_4", x = 2892, z = -1093, y = 2859},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier3_3_a_spyship_5", x = 2892, z = 55, y = 3394},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier3_3_a_spyship_6", x = 2892, z = 1122, y = 3890},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier3_3_c_escort_1", x = -5250, z = -850, y = 2000},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:escort_tatooine_privateer_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_privateer_tier3_3_c_escort_2", x = -4323, z = -525, y = 2310},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:escort_tatooine_privateer_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_privateer_tier3_3_c_escort_3", x = -3632, z = -680, y = 1552},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:escort_tatooine_privateer_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_privateer_tier3_3_c_escort_4", x = -2813, z = -400, y = 1793},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:escort_tatooine_privateer_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_4_a_assassinate_1", x = 19, z = 5591, y = 1371},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier4_4_a_assassinate_2", x = 552, z = 5543, y = -5},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier4_4_a_assassinate_3", x = 2059, z = 5543, y = -1021},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier4_4_a_assassinate_4", x = 2632, z = 5518, y = -2724},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier4_4_a_assassinate_5", x = 4049, z = 5491, y = -4471},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_privateer_tier4_4_a_assassinate_6", x = 7162, z = 5467, y = -4481},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:assassinate_tatooine_privateer_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_1", x = 2940, z = -4680, y = 1200},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_2", x = 2922, z = -3692, y = 1654},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_3", x = 2900, z = -2445, y = 2228},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_4", x = 2892, z = -1093, y = 2859},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_5", x = 2892, z = 55, y = 3394},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_6", x = 2892, z = 1122, y = 3890},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier3_3_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier3_3_c_escort_1", x = -5250, z = -850, y = 2000},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:escort_tatooine_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_rebel_tier3_3_c_escort_2", x = -4323, z = -525, y = 2310},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:escort_tatooine_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_rebel_tier3_3_c_escort_3", x = -3632, z = -680, y = 1552},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:escort_tatooine_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_rebel_tier3_3_c_escort_4", x = -2813, z = -400, y = 1793},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:escort_tatooine_rebel_tier3_3_c:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_4_a_assassinate_1", x = 19, z = 5591, y = 1371},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier4_4_a_assassinate_2", x = 552, z = 5543, y = -5},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier4_4_a_assassinate_3", x = 2059, z = 5543, y = -1021},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier4_4_a_assassinate_4", x = 2632, z = 5518, y = -2724},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier4_4_a_assassinate_5", x = 4049, z = 5491, y = -4471},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier4_4_a:targetPatrols
+	{patrolPointName = "tatooine_rebel_tier4_4_a_assassinate_6", x = 7162, z = 5467, y = -4481},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier4_4_a:targetPatrols
+
+	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_1", x = -961, z = -5548, y = 513},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_2", x = -1637, z = -5535, y = 354},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_3", x = -2330, z = -5523, y = 191},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_4", x = -3110, z = -5509, y = 7},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_5", x = -3915, z = -5494, y = -182},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_6", x = -4794, z = -5884, y = -52},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_4_b_rescue_1", x = -961, z = -5548, y = 513},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_4_b_rescue_2", x = -1637, z = -5535, y = 354},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_4_b_rescue_3", x = -2330, z = -5523, y = 191},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_4_b_rescue_4", x = -3110, z = -5509, y = 7},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_4_b_rescue_5", x = -3915, z = -5494, y = -182},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_imperial_tier4_4_b_rescue_6", x = -4794, z = -5884, y = -52},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:rescue_naboo_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_4_b_rescue_1", x = -961, z = -5548, y = 513},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_4_b_rescue_2", x = -1637, z = -5535, y = 354},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_4_b_rescue_3", x = -2330, z = -5523, y = 191},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_4_b_rescue_4", x = -3110, z = -5509, y = 7},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_4_b_rescue_5", x = -3915, z = -5494, y = -182},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "naboo_rebel_tier4_4_b_rescue_6", x = -4794, z = -5884, y = -52},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:rescue_naboo_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_1", x = -961, z = -5548, y = 513},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_2", x = -1637, z = -5535, y = 354},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_3", x = -2330, z = -5523, y = 191},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_4", x = -3110, z = -5509, y = 7},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_5", x = -3915, z = -5494, y = -182},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_imperial_tier4_4_b_rescue_6", x = -4794, z = -5884, y = -52},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:rescue_tatooine_imperial_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_4_b_rescue_1", x = -961, z = -5548, y = 513},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_4_b_rescue_2", x = -1637, z = -5535, y = 354},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_4_b_rescue_3", x = -2330, z = -5523, y = 191},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_4_b_rescue_4", x = -3110, z = -5509, y = 7},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_4_b_rescue_5", x = -3915, z = -5494, y = -182},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_privateer_tier4_4_b_rescue_6", x = -4794, z = -5884, y = -52},	-- src: screenplays/space/squadrons/SmugglerSquadronScreenplay.lua:rescue_tatooine_privateer_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_4_b_rescue_1", x = -961, z = -5548, y = 513},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_4_b_rescue_2", x = -1637, z = -5535, y = 354},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_4_b_rescue_3", x = -2330, z = -5523, y = 191},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_4_b_rescue_4", x = -3110, z = -5509, y = 7},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_4_b_rescue_5", x = -3915, z = -5494, y = -182},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_4_b:escortPoints
+	{patrolPointName = "tatooine_rebel_tier4_4_b_rescue_6", x = -4794, z = -5884, y = -52},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:rescue_tatooine_rebel_tier4_4_b:escortPoints
+
+	-- Stardust-3 space port: re-filed into the zone the referencing quest actually runs in; coordinates copied verbatim from space_dathomir. (recovery_duty_tatooine_rebel_tier4_1)
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_1", x = -4112, z = -660, y = 6128},
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_2", x = -5064, z = -335, y = 5600},
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_3", x = -5624, z = -10, y = 4721},
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_4", x = -6025, z = 468, y = 3625},
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_5", x = -5332, z = -44, y = 3978},
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_6", x = -5072, z = -429, y = 4719},
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_7", x = -4328, z = -938, y = 4625},
+	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_8", x = -3661, z = -1468, y = 4180},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_endor, "space_endor")

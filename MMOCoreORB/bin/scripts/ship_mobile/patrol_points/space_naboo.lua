@@ -1037,6 +1037,15 @@ space_naboo = SpacePatrolPointTable:new {
 	-- RSF Tier 2: Recovery
 	{patrolPointName = "rsf_recovery_1", x = 2000, z = 300, y = -2500},
 	{patrolPointName = "rsf_recovery_2", x = 3000, z = 500, y = -1500},
+
+	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_4:targetPatrols
+	{patrolPointName = "military_escort_2", x = 2915, z = 3828, y = 2887},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_4:targetPatrols
+	{patrolPointName = "naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_4:targetPatrols
+	{patrolPointName = "trade_escort_4", x = 895, z = 210, y = 695},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_4:targetPatrols
+
+	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "naboo_privateer_tier1_4a_assassinate_1", x = 1500, z = 500, y = -1000},	-- src: screenplays/space/squadrons/RsfSquadronScreenplay.lua:assassinate_naboo_privateer_tier1_4a:targetPatrols
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_naboo, "space_naboo")

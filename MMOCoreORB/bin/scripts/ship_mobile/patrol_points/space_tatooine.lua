@@ -478,6 +478,22 @@ space_tatooine = SpacePatrolPointTable:new {
 	{patrolPointName = "mining_route_1_05", x = -5923, z = 6011, y = -702},
 	{patrolPointName = "mining_route_1_06", x = -5918, z = 6462, y = -974},
 	{patrolPointName = "mining_route_1_07", x = -5913, z = 7030, y = -1554},
+
+	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_4:targetPatrols
+	{patrolPointName = "military_escort_2", x = 2915, z = 3828, y = 2887},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_4:targetPatrols
+	{patrolPointName = "naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_4:targetPatrols
+	{patrolPointName = "rebel_escort_1", x = 7188, z = 1899, y = -2831},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_duty_tatooine_imperial_7:escortPoints
+	{patrolPointName = "rebel_escort_2", x = 6446, z = 2694, y = -5694},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_tatooine_imperial_3:escortPoints
+	{patrolPointName = "rebel_escort_3", x = 4453, z = 3127, y = -7150},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_tatooine_imperial_3:escortPoints
+	{patrolPointName = "rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_duty_tatooine_imperial_7:escortPoints
+	{patrolPointName = "rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_duty_tatooine_imperial_7:escortPoints
+	{patrolPointName = "rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:escort_duty_tatooine_imperial_7:escortPoints
+	{patrolPointName = "rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_4:targetPatrols
+	{patrolPointName = "trade_escort_4", x = 895, z = 210, y = 695},	-- src: screenplays/space/squadrons/StormSquadronScreenplay.lua:assassinate_tatooine_imperial_4:targetPatrols
+	{patrolPointName = "trando_reinforcement_1", x = 7100, z = 850, y = 6300},	-- src: screenplays/space/squadrons/KashyyykSlaverScreenplay.lua:assassinate_ep3_slaver_trando_reinforcement_intercept:targetPatrols
+	{patrolPointName = "trando_reinforcement_2", x = 6200, z = 700, y = 5400},	-- src: screenplays/space/squadrons/KashyyykSlaverScreenplay.lua:assassinate_ep3_slaver_trando_reinforcement_intercept:targetPatrols
+	{patrolPointName = "trando_reinforcement_3", x = 5300, z = 500, y = 4600},	-- src: screenplays/space/squadrons/KashyyykSlaverScreenplay.lua:assassinate_ep3_slaver_trando_reinforcement_intercept:targetPatrols
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_tatooine, "space_tatooine")
