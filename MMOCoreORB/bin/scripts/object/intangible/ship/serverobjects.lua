@@ -46,6 +46,7 @@
 includeFile("intangible/ship/base/serverobjects.lua")
 
 -- Server Objects
+includeFile("intangible/ship/advanced_xwing_pcd.lua")
 includeFile("intangible/ship/awing_pcd.lua")
 includeFile("intangible/ship/basic_hutt_light_pcd.lua")
 includeFile("intangible/ship/basic_tiefighter_pcd.lua")
@@ -90,6 +91,7 @@ includeFile("intangible/ship/tieaggressor_pcd.lua")
 includeFile("intangible/ship/tiebomber_pcd.lua")
 includeFile("intangible/ship/tiefighter_pcd.lua")
 includeFile("intangible/ship/tieinterceptor_pcd.lua")
+includeFile("intangible/ship/tieinterceptor_imperial_guard_pcd.lua")
 includeFile("intangible/ship/tieoppressor_pcd.lua")
 includeFile("intangible/ship/xwing_pcd.lua")
 includeFile("intangible/ship/ykl37r_pcd.lua")

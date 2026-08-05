@@ -45,7 +45,7 @@ object_ship_player_player_sorosuub_space_yacht = object_ship_player_shared_playe
 	name = "player_sorosuub_space_yacht",
 	slideFactor = 1.76,
 	chassisHitpoints = 1512,
-	chassisMass = 10000,
+	chassisMass = 5000000,
 
 	containerComponent = "PobShipContainerComponent",
 

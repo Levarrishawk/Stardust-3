@@ -46,7 +46,7 @@ object_ship_player_player_hutt_light_s02 = object_ship_player_shared_player_hutt
 	name = "player_hutt_light_s02",
 	slideFactor = 1.75,
 	chassisHitpoints = 1340,
-	chassisMass = 10000,
+	chassisMass = 40000,
 
 	containerComponent = "ShipContainerComponent",
 

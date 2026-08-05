@@ -41,6 +41,16 @@
 --which carries forward this exception.
 
 
+object_intangible_ship_shared_advanced_xwing_pcd = SharedIntangibleObjectTemplate:new {
+	clientTemplateFileName = "object/intangible/ship/shared_advanced_xwing_pcd.iff"
+	--The deprecated lookup block the sibling entries carry is omitted here: every value in it
+	--(appearance, CRC, derivedFromTemplates) is read from the client TREs at load time, and this
+	--entry was added server-side without a dump of those bytes. objectName in the TRE is
+	--"@space_item_n:advanced_xwing_pcd" ("Advanced X-Wing").
+}
+
+ObjectTemplates:addClientTemplate(object_intangible_ship_shared_advanced_xwing_pcd, "object/intangible/ship/shared_advanced_xwing_pcd.iff")
+
 object_intangible_ship_shared_awing_pcd = SharedIntangibleObjectTemplate:new {
 	clientTemplateFileName = "object/intangible/ship/shared_awing_pcd.iff"
 	--Data below here is deprecated and loaded from the tres, keeping for easy lookups
@@ -2196,6 +2206,15 @@ object_intangible_ship_shared_tieinterceptor_pcd = SharedIntangibleObjectTemplat
 }
 
 ObjectTemplates:addClientTemplate(object_intangible_ship_shared_tieinterceptor_pcd, "object/intangible/ship/shared_tieinterceptor_pcd.iff")
+
+object_intangible_ship_shared_tieinterceptor_imperial_guard_pcd = SharedIntangibleObjectTemplate:new {
+	clientTemplateFileName = "object/intangible/ship/shared_tieinterceptor_imperial_guard_pcd.iff"
+	--The deprecated lookup block the sibling entries carry is omitted here: every value in it
+	--(appearance, CRC, derivedFromTemplates) is read from the client TREs at load time, and this
+	--entry was added server-side without a dump of those bytes.
+}
+
+ObjectTemplates:addClientTemplate(object_intangible_ship_shared_tieinterceptor_imperial_guard_pcd, "object/intangible/ship/shared_tieinterceptor_imperial_guard_pcd.iff")
 
 object_intangible_ship_shared_tieoppressor_pcd = SharedIntangibleObjectTemplate:new {
 	clientTemplateFileName = "object/intangible/ship/shared_tieoppressor_pcd.iff"

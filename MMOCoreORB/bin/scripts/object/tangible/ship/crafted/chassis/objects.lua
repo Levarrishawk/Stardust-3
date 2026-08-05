@@ -41,6 +41,16 @@
 --which carries forward this exception.
 
 
+object_tangible_ship_crafted_chassis_shared_advanced_xwing_reward_deed = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/ship/crafted/chassis/shared_advanced_xwing_reward_deed.iff"
+	--The deprecated lookup block the sibling entries carry is omitted here: every value in it
+	--(appearance, CRC, derivedFromTemplates) is read from the client TREs at load time, and this
+	--entry was added server-side without a dump of those bytes. objectName in the TRE is
+	--"@space_crafting_n:advanced_xwing_reward_deed" ("Advanced X-Wing Deed").
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_crafted_chassis_shared_advanced_xwing_reward_deed, "object/tangible/ship/crafted/chassis/shared_advanced_xwing_reward_deed.iff")
+
 object_tangible_ship_crafted_chassis_shared_awing_deed = SharedTangibleObjectTemplate:new {
 	clientTemplateFileName = "object/tangible/ship/crafted/chassis/shared_awing_deed.iff"
 	--Data below here is deprecated and loaded from the tres, keeping for easy lookups
@@ -2990,6 +3000,17 @@ object_tangible_ship_crafted_chassis_shared_tieinterceptor_deed = SharedTangible
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_crafted_chassis_shared_tieinterceptor_deed, "object/tangible/ship/crafted/chassis/shared_tieinterceptor_deed.iff")
+
+object_tangible_ship_crafted_chassis_shared_tieinterceptor_imperial_guard_reward_deed = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/ship/crafted/chassis/shared_tieinterceptor_imperial_guard_reward_deed.iff"
+	--The deprecated lookup block the sibling entries carry is omitted here: every value in it
+	--(appearance, CRC, derivedFromTemplates) is read from the client TREs at load time, and this
+	--entry was added server-side without a dump of those bytes. objectName in the TRE is
+	--"@space_crafting_n:tieinterceptor_imperial_guard_reward_deed"
+	--("TIE Interceptor (Imperial Guard) Deed").
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_crafted_chassis_shared_tieinterceptor_imperial_guard_reward_deed, "object/tangible/ship/crafted/chassis/shared_tieinterceptor_imperial_guard_reward_deed.iff")
 
 object_tangible_ship_crafted_chassis_shared_tieoppressor_deed = SharedTangibleObjectTemplate:new {
 	clientTemplateFileName = "object/tangible/ship/crafted/chassis/shared_tieoppressor_deed.iff"

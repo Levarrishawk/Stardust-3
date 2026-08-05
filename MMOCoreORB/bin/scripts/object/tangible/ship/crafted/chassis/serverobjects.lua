@@ -45,6 +45,7 @@
 --Children folder includes
 
 -- Server Objects
+includeFile("tangible/ship/crafted/chassis/advanced_xwing_reward_deed.lua")
 includeFile("tangible/ship/crafted/chassis/awing_deed.lua")
 includeFile("tangible/ship/crafted/chassis/base_deed.lua")
 includeFile("tangible/ship/crafted/chassis/blacksun_heavy_s01_deed.lua")
@@ -95,6 +96,7 @@ includeFile("tangible/ship/crafted/chassis/tieaggressor_deed.lua")
 includeFile("tangible/ship/crafted/chassis/tiebomber_deed.lua")
 includeFile("tangible/ship/crafted/chassis/tiefighter_deed.lua")
 includeFile("tangible/ship/crafted/chassis/tieinterceptor_deed.lua")
+includeFile("tangible/ship/crafted/chassis/tieinterceptor_imperial_guard_reward_deed.lua")
 includeFile("tangible/ship/crafted/chassis/tieoppressor_deed.lua")
 includeFile("tangible/ship/crafted/chassis/xwing_customization_kit.lua")
 includeFile("tangible/ship/crafted/chassis/xwing_deed.lua")
