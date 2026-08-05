@@ -15,7 +15,7 @@ imp_corellian_corvette_tier4 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"civilian", "imperial", "merchant"},
+	alliedFactions = {"civilian", "imperial", "merchant", "rsf"},
 	enemyFactions = {"rebel", "nym", "pirate", "hutt", "valarian", "borvo", "aynat", "blacksun"},
 	imperialFactionReward = -191,
 	rebelFactionReward = 96,

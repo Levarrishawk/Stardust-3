@@ -15,6 +15,7 @@ imperial_scan_freighter_tier2 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -20,
 	appearance = "imperial_officer",
 	tauntAttackChance = 0.1,

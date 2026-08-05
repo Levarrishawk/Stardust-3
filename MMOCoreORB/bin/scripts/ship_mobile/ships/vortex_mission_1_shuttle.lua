@@ -15,6 +15,7 @@ vortex_mission_1_shuttle = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -25,
 	rebelFactionReward = 13,
 	questLoot = "vortex_mission_1",

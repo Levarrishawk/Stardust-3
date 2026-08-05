@@ -15,7 +15,7 @@ dathomir_prison_shuttle_tier4 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"corsec"},
+	alliedFactions = {"corsec", "rsf"},
 	imperialFactionReward = -218,
 	rebelFactionReward = 109,
 	appearance = "imperial_officer",

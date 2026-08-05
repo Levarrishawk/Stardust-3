@@ -15,7 +15,7 @@ nebula_scientist_lookout = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial"},
+	alliedFactions = {"imperial", "rsf"},
 	enemyFactions = {"pirate"},
 
 	color1 = 12,

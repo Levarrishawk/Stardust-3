@@ -15,7 +15,7 @@ nebula_scientist_analyst = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial"},
+	alliedFactions = {"imperial", "rsf"},
 	enemyFactions = {"pirate"},
 	appearance = "civilian",
 

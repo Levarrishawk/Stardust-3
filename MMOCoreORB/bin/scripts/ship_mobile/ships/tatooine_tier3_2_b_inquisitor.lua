@@ -15,6 +15,7 @@ tatooine_tier3_2_b_inquisitor = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -64,
 	rebelFactionReward = 32,
 	appearance = "imperial_inquisitor",

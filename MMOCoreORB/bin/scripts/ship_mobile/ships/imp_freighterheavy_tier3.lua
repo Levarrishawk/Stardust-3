@@ -15,6 +15,7 @@ imp_freighterheavy_tier3 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -30,
 	formationLocation = 2,
 	appearance = "imperial_pilot",

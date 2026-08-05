@@ -15,7 +15,7 @@ imperial_major_gek = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"civilian", "imperial"},
+	alliedFactions = {"civilian", "imperial", "rsf"},
 	enemyFactions = {"rebel", "nym", "pirate", "hutt", "valarian", "borvo", "aynat", "blacksun"},
 	imperialFactionReward = -7,
 	rebelFactionReward = 4,

@@ -7,7 +7,7 @@ imp_imperial_kessel_lootboat_tier5 = ShipAgent:new {
 
 	lootChance = 0.65,
 	lootRolls = 1,
-	lootTable = "space_kessel_imperial",
+	lootTable = "space_imperial_kessel",
 
 	minCredits = 617,
 	maxCredits = 1100,
@@ -15,7 +15,7 @@ imp_imperial_kessel_lootboat_tier5 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"merchant", "civilian", "imperial"},
+	alliedFactions = {"merchant", "civilian", "imperial", "rsf"},
 	enemyFactions = {"rebel", "nym", "pirate", "hutt", "valarian", "borvo", "aynat", "blacksun"},
 	imperialFactionReward = -479,
 	rebelFactionReward = 240,

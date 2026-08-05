@@ -15,7 +15,7 @@ recovery_overseer_shuttle = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial", "merchant", "civilian"},
+	alliedFactions = {"imperial", "merchant", "civilian", "rsf"},
 	enemyFactions = {"rebel", "hutt", "pirate", "nym"},
 	imperialFactionReward = -106,
 	rebelFactionReward = 53,

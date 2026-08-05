@@ -15,7 +15,7 @@ vortex_mission_4_guard = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial"},
+	alliedFactions = {"imperial", "rsf"},
 	enemyFactions = {"rebel", "hutt", "pirate", "nym"},
 	imperialFactionReward = -9,
 	rebelFactionReward = 5,

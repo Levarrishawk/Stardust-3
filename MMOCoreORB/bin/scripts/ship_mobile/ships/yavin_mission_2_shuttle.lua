@@ -15,6 +15,7 @@ yavin_mission_2_shuttle = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -25,
 	rebelFactionReward = 13,
 	questLoot = "yavin_mission_2",

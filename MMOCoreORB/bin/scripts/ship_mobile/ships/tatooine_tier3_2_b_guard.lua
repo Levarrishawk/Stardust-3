@@ -15,7 +15,7 @@ tatooine_tier3_2_b_guard = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"merchant", "civilian", "imperial"},
+	alliedFactions = {"merchant", "civilian", "imperial", "rsf"},
 	enemyFactions = {"rebel", "hutt", "pirate", "nym"},
 	imperialFactionReward = -23,
 	rebelFactionReward = 12,

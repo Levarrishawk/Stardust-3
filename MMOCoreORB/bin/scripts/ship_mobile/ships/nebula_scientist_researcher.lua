@@ -15,6 +15,7 @@ nebula_scientist_researcher = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	appearance = "civilian",
 
 	pvpBitmask = ATTACKABLE,

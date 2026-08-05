@@ -15,6 +15,7 @@ lambdashuttle = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -106,
 	rebelFactionReward = 53,
 	appearance = "imperial_officer",

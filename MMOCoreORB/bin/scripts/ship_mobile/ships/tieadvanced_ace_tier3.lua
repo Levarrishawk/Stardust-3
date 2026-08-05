@@ -15,7 +15,7 @@ tieadvanced_ace_tier3 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"merchant", "civilian", "imperial"},
+	alliedFactions = {"merchant", "civilian", "imperial", "rsf"},
 	enemyFactions = {"rebel", "hutt", "pirate", "nym"},
 	imperialFactionReward = -25,
 	rebelFactionReward = 13,

@@ -15,6 +15,7 @@ imp_engineer_shuttle_tier3 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -64,
 	rebelFactionReward = 32,
 	appearance = "imperial_officer",

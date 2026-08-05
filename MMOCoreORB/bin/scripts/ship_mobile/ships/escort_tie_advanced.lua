@@ -15,7 +15,7 @@ escort_tie_advanced = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial"},
+	alliedFactions = {"imperial", "rsf"},
 	imperialFactionReward = -4,
 	rebelFactionReward = 2,
 	appearance = "imperial_pilot",

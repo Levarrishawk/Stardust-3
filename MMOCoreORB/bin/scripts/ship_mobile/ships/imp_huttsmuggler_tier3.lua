@@ -15,7 +15,7 @@ imp_huttsmuggler_tier3 = ShipAgent:new {
 	aggressive = 1,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial"},
+	alliedFactions = {"imperial", "rsf"},
 	enemyFactions = {"rebel", "nym", "pirate", "hutt", "valarian", "borvo", "aynat", "blacksun"},
 	imperialFactionReward = -25,
 	rebelFactionReward = 13,

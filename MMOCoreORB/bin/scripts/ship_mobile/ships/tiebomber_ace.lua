@@ -15,7 +15,7 @@ tiebomber_ace = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial"},
+	alliedFactions = {"imperial", "rsf"},
 	enemyFactions = {"rebel", "hutt", "pirate", "nym"},
 	imperialFactionReward = -3,
 	rebelFactionReward = 2,
