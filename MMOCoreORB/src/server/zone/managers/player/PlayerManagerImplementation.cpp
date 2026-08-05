@@ -5419,7 +5419,9 @@ SortedVector<String> PlayerManagerImplementation::getTeachableSkills(CreatureObj
 
 		const auto& skillName = skill->getSkillName();
 
-		if (!(skillName.contains("novice") || skillName.contains("force_sensitive") || skillName.contains("force_rank") || skillName.contains("force_title") || skillName.contains("admin_")) && skillManager->canLearnSkill(skillName, student, false))
+		// Pilot skills cannot be taught player-to-player: they are granted by squadron
+		// trainers/missions only (mastery comes from the Kessel corvette mission).
+		if (!(skillName.contains("novice") || skillName.contains("force_sensitive") || skillName.contains("force_rank") || skillName.contains("force_title") || skillName.contains("admin_") || skillName.contains("pilot_")) && skillManager->canLearnSkill(skillName, student, false))
 			skills.put(skillName);
 	}
 
