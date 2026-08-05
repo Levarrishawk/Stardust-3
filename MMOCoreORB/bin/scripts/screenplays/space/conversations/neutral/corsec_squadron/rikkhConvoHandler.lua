@@ -65,7 +65,7 @@ function rikkhConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local destroyDuty1Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.type, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.name)
 	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.type, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.name)
 	local destroyDuty2Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
-	local recoveryDutyComplete = SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.name)
+	local recoveryDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.name)
 
 	local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)
 

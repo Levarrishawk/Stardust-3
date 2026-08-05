@@ -77,7 +77,7 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local duty1Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.name)
 	local duty2Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.name)
 	local duty3Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.name)
-	local duty4Complete = SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
+	local duty4Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
 
 	local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)
 

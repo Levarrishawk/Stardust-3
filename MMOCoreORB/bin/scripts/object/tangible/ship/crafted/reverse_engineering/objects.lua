@@ -64,7 +64,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_analysis_tool = SharedTa
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -123,7 +123,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_armor_analysis_tool = Sh
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -182,7 +182,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_booster_analysis_tool = 
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -241,7 +241,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_capacitor_analysis_tool 
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -300,7 +300,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_droid_interface_analysis
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -359,7 +359,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_engine_analysis_tool = S
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -418,7 +418,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_reactor_analysis_tool = 
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -536,7 +536,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_shields_analysis_tool = 
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
@@ -595,7 +595,7 @@ object_tangible_ship_crafted_reverse_engineering_shared_weapon_analysis_tool = S
 
 	detailedDescription = "@space_crafting_d:analysis_tool",
 
-	gameObjectType = 8197,
+	gameObjectType = 8256,
 
 	locationReservationRadius = 0,
 	lookAtText = "@container_lookat:base_container",
