@@ -18,7 +18,7 @@ patrol_tatooine_rebel_1 = SpacePatrolScreenplay:new {
 	questName = "tatooine_rebel_1",
 	questType = "patrol",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	creditReward = 100,
 
@@ -45,7 +45,7 @@ destroy_surpriseattack_tatooine_rebel_1 = SpaceSurpriseAttackScreenplay:new {
 	questName = "tatooine_rebel_1",
 	questType = "destroy_surpriseattack",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -55,7 +55,7 @@ destroy_surpriseattack_tatooine_rebel_1 = SpaceSurpriseAttackScreenplay:new {
 	parentQuestName = "tatooine_rebel_1",
 
 	surpriseAttackShips = {
-		zone = "space_naboo",
+		zone = "space_tatooine",
 		spawns = {{count = 3, shipName = "imp_tie_fighter_tier1"}},
 	},
 }
@@ -69,7 +69,7 @@ destroy_tatooine_rebel_2 = SpaceDestroyScreenplay:new {
 	questName = "tatooine_rebel_2",
 	questType = "destroy",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	creditReward = 200,
 
@@ -98,7 +98,7 @@ patrol_tatooine_rebel_3 = SpacePatrolScreenplay:new {
 	questName = "tatooine_rebel_3",
 	questType = "patrol",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	creditReward = 500,
 	itemReward = {
@@ -131,7 +131,7 @@ escort_tatooine_rebel_3 = SpaceEscortScreenplay:new {
 	questName = "tatooine_rebel_3",
 	questType = "escort",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -143,10 +143,10 @@ escort_tatooine_rebel_3 = SpaceEscortScreenplay:new {
 	escortShips = {"reb_freightermedium_tier1"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_escort_2", zoneName = "space_naboo", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_escort_3", zoneName = "space_naboo", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
+		{patrolPointName = "rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "rebel_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+		{patrolPointName = "rebel_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
+		{patrolPointName = "rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
@@ -167,7 +167,7 @@ assassinate_tatooine_rebel_4 = SpaceAssassinateScreenplay:new {
 	questType = "assassinate",
 	questName = "tatooine_rebel_4",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	creditReward = 1000,
 	itemReward = {
@@ -203,7 +203,7 @@ destroy_duty_tatooine_rebel_6 = SpaceDutyDestroyScreenplay:new {
 	questName = "tatooine_rebel_6",
 	questType = "destroy_duty",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	creditReward = 100,
 
@@ -231,7 +231,7 @@ escort_duty_tatooine_rebel_7 = SpaceDutyEscortScreenplay:new {
 	questName = "tatooine_rebel_7",
 	questType = "escort_duty",
 
-	questZone = "space_naboo",
+	questZone = "space_tatooine",
 
 	creditReward = 1000,
 
@@ -243,10 +243,10 @@ escort_duty_tatooine_rebel_7 = SpaceDutyEscortScreenplay:new {
 	escortShips = {"reb_transport_tier1", "reb_freightermedium_tier1", "reb_freighterlight_tier1", "reb_freighterheavy_tier1"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_patrol_1", zoneName = "space_naboo", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_patrol_3", zoneName = "space_naboo", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
+		{patrolPointName = "rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
+		{patrolPointName = "rebel_patrol_1", zoneName = "space_tatooine", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
+		{patrolPointName = "rebel_patrol_3", zoneName = "space_tatooine", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 100,

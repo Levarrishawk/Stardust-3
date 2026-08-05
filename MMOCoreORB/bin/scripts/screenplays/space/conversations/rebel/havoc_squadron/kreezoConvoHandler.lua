@@ -80,6 +80,123 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	end
 
 	--[[
+			Tier 4
+	--]]
+
+	if (ghost:getPilotTier() >= 4) then
+		local t4QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_1.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
+		local t4QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name)
+		local t4QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_3.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.name)
+		local t4QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_4.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_4.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
+
+		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
+		local t4QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name)
+		local t4QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.name)
+		local t4QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
+
+		local t4Duty1Started = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.name)
+		local t4Duty2Started = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.name)
+		local t4Duty3Started = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.name)
+		local t4Duty4Started = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
+
+		local t4Duty1Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.name)
+		local t4Duty2Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.name)
+		local t4Duty3Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.name)
+		local t4Duty4Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
+
+		local masterStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
+		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
+
+		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 4)
+
+		-- Player has an active tier 4 mission from Kreezo
+		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
+			(t4Duty1Started and not t4Duty1Complete) or (t4Duty2Started and not t4Duty2Complete) or (t4Duty3Started and not t4Duty3Complete) or (t4Duty4Started and not t4Duty4Complete) or
+			(masterStarted and not masterComplete)) then
+
+			return convoTemplate:getScreen("tier4_on_mission")
+
+		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
+		elseif (t4QuestFourComplete and completedTier4) then
+			if (ghost:getPilotTier() <= 4) then
+				-- Increment pilot to Tier 5!
+				ghost:incrementPilotTier()
+			end
+
+			-- Player has not earned the master box yet
+			if (not SpaceHelpers:hasMasterSkill(pPlayer, "rebel_navy")) then
+				return convoTemplate:getScreen("master_mission")
+			else
+				return convoTemplate:getScreen("tier4_completed")
+			end
+
+		-- Reward Checks
+		elseif (t4QuestFourComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_fourth_mission_success")
+		elseif (t4QuestThreeComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_third_mission_success")
+		elseif (t4QuestTwoComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_second_mission_success")
+		elseif (t4QuestOneComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_first_mission_success")
+
+		-- Pilot is able to train
+		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+			return convoTemplate:getScreen("ready_train_tier4")
+
+		-- Has not received the tier 4 briefing from Kreezo yet
+		elseif (getQuestStatus(playerID .. "HavocSquadronScreenplay:StartedKreezoTier4") ~= "1") then
+			setQuestStatus(playerID .. "HavocSquadronScreenplay:StartedKreezoTier4", 1)
+
+			return convoTemplate:getScreen("tier4_initial_briefing")
+
+		-- Missions are not complete yet
+		elseif (not t4QuestFourComplete) then
+			-- Player is able to start fourth mission
+			if (t4QuestThreeComplete and not t4QuestFourStarted) then
+				if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_fourth_mission")
+				else
+					return convoTemplate:getScreen("tier4_fourth_mission")
+				end
+			-- Player is able to start third mission
+			elseif (t4QuestTwoComplete and not t4QuestThreeStarted) then
+				if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_third_mission")
+				else
+					return convoTemplate:getScreen("tier4_third_mission")
+				end
+			-- Player is able to start second mission
+			elseif (t4QuestOneComplete and not t4QuestTwoStarted) then
+				if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_second_mission")
+				else
+					return convoTemplate:getScreen("tier4_second_mission")
+				end
+			-- Player is ready for first mission, so either was not given it after training first box or failed
+			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 4)) then
+				if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_first_mission")
+				else
+					return convoTemplate:getScreen("tier4_first_mission")
+				end
+			end
+		end
+
+		return convoTemplate:getScreen("tier4_duty_repeat")
+	end
+
+	--[[
 			Quests
 	--]]
 
@@ -510,6 +627,113 @@ function kreezoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_4adf1730", "viopa_bye_formal_male") -- Goodbye, Kreezo.
 		else
 			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_4adf1730", "viopa_bye_formal_female") -- Goodbye, Kreezo.
+		end
+
+	-- Tier 4 Training
+	elseif (screenID == "ready_train_tier4") then
+		local skillManager = LuaSkillManager()
+
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_04")) then
+			clonedConversation:addOption("@conversation/corellia_rebel_tier4:s_2a5db9a8", "tier4_train_fighters") -- I am interested in advanced starfighter training.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_04")) then
+			clonedConversation:addOption("@conversation/corellia_rebel_tier4:s_6065ab8b", "tier4_train_component") -- I am interested in advanced starship component use.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_04")) then
+			clonedConversation:addOption("@conversation/corellia_rebel_tier4:s_77758001", "tier4_train_basics") -- I am interested in advanced procedures.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_04")) then
+			clonedConversation:addOption("@conversation/corellia_rebel_tier4:s_f819adf9", "tier4_train_droid") -- I am interested in advanced droid interface training.
+		end
+
+	-- Handle Tier 4 Skill box granting
+	elseif (string.find(screenID, "tier4_train_")) then
+		local skillManager = LuaSkillManager()
+
+		if (screenID == "tier4_train_fighters") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_rebel_navy_starships_04", true)
+			end
+		elseif (screenID == "tier4_train_component") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_rebel_navy_weapons_04", true)
+			end
+		elseif (screenID == "tier4_train_basics") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_rebel_navy_procedures_04", true)
+			end
+		elseif (screenID == "tier4_train_droid") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_rebel_navy_droid_04", true)
+			end
+		end
+
+		if (ghost:getPilotTier() <= 4 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 4)) then
+			-- If player has all of the Tier 4 skills, increment their pilot tier
+			ghost:incrementPilotTier()
+		end
+
+		-- Either the player is ready to train again or they have all of the missions finished, so send them back to the main screen
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4) or
+				SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)) then
+			return self:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+		end
+
+	-- Tier 4 Duty Missions
+	elseif (screenID == "accept_tier4_duty1") then
+		escort_duty_corellia_rebel_tier4_1:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_duty2") then
+		rescue_duty_corellia_rebel_tier4_1:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_duty3") then
+		recovery_duty_corellia_rebel_tier4_1:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_duty4") then
+		destroy_duty_corellia_rebel_tier4_1:startQuest(pPlayer, pNpc)
+
+	-- Tier 4 Mission Rewards
+	elseif (screenID == "tier4_fourth_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward", 1)
+		recovery_corellia_rebel_tier4_4:rewardPlayer(pPlayer)
+	elseif (screenID == "tier4_third_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward", 1)
+		space_battle_corellia_rebel_tier4_3:rewardPlayer(pPlayer)
+	elseif (screenID == "tier4_second_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward", 1)
+		assassinate_corellia_rebel_tier4_2:rewardPlayer(pPlayer)
+	elseif (screenID == "tier4_first_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward", 1)
+		survival_corellia_rebel_tier4_1:rewardPlayer(pPlayer)
+
+	-- Give Tier 4 Missions
+	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
+
+		recovery_corellia_rebel_tier4_4:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
+
+		space_battle_corellia_rebel_tier4_3:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
+
+		assassinate_corellia_rebel_tier4_2:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
+
+		survival_corellia_rebel_tier4_1:startQuest(pPlayer, pNpc)
+
+	-- Master mission (hunts the Imperial corvette in Kessel)
+	elseif (screenID == "accept_master_mission") then
+		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and
+				not SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
+			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
 		end
 	end
 

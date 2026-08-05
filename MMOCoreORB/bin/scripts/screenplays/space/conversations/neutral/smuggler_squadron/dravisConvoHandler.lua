@@ -89,6 +89,361 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	end
 
 	--[[
+			Tier 4 (Dinge-pattern dispatch; SmugglerSquadronScreenplay tier 4 chains)
+	--]]
+
+	if (ghost:getPilotTier() >= 4) then
+		-- NOTE: Several TIER3/TIER4 *_SIDE* constants in SmugglerSquadronScreenplay.lua carry
+		-- class-style names (e.g. "space_battle_tatooine_privateer_tier4_1_a") instead of the
+		-- registered questName ("tatooine_privateer_tier4_1_a"). Space quest journal keys hash
+		-- the questName, so those constants can never match. The local literals below carry the
+		-- registered questNames (verified against the quest bodies in SmugglerSquadronScreenplay.lua).
+		local T4_SIDE_1A = { type = "space_battle", name = "tatooine_privateer_tier4_1_a" }
+		local T4_SIDE_1B = { type = "space_battle", name = "tatooine_privateer_tier4_1_b" }
+		local T4_SIDE_2A = { type = "delivery_no_pickup", name = "tatooine_privateer_tier4_2_a" }
+		local T4_SIDE_2B = { type = "rescue", name = "tatooine_privateer_tier4_2_b" }
+		local T4_SIDE_3A = { type = "space_battle", name = "tatooine_privateer_tier4_3_a" }
+		local T4_SIDE_3B = { type = "survival", name = "tatooine_privateer_tier4_3_b" }
+		local T4_SIDE_4A = { type = "assassinate", name = "tatooine_privateer_tier4_4_a" }
+		local T4_SIDE_4B = { type = "rescue", name = "tatooine_privateer_tier4_4_b" }
+
+		local t4QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_1A.type, T4_SIDE_1A.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_1B.type, T4_SIDE_1B.name)
+		local t4QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_2A.type, T4_SIDE_2A.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_2B.type, T4_SIDE_2B.name)
+		local t4QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_3A.type, T4_SIDE_3A.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_3B.type, T4_SIDE_3B.name)
+		local t4QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_4A.type, T4_SIDE_4A.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T4_SIDE_4B.type, T4_SIDE_4B.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
+
+		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, T4_SIDE_1A.type, T4_SIDE_1A.name) or
+								SpaceHelpers:isSpaceQuestComplete(pPlayer, T4_SIDE_1B.type, T4_SIDE_1B.name)
+		local t4QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, T4_SIDE_2A.type, T4_SIDE_2A.name) or
+								SpaceHelpers:isSpaceQuestComplete(pPlayer, T4_SIDE_2B.type, T4_SIDE_2B.name)
+		local t4QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, T4_SIDE_3A.type, T4_SIDE_3A.name) or
+								SpaceHelpers:isSpaceQuestComplete(pPlayer, T4_SIDE_3B.type, T4_SIDE_3B.name)
+		local t4QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
+
+		local t4Duty1Started = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.name)
+		local t4Duty2Started = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.name)
+		local t4Duty3Started = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.name)
+		local t4Duty4Started = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
+
+		local t4Duty1Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.name)
+		local t4Duty2Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.name)
+		local t4Duty3Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.name)
+		local t4Duty4Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
+
+		local masterStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
+		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
+
+		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)
+
+		-- Player has an active tier 4 mission from Dravis
+		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
+			(t4Duty1Started and not t4Duty1Complete) or (t4Duty2Started and not t4Duty2Complete) or (t4Duty3Started and not t4Duty3Complete) or (t4Duty4Started and not t4Duty4Complete) or
+			(masterStarted and not masterComplete)) then
+
+			return convoTemplate:getScreen("tier4_on_mission")
+
+		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
+		elseif (t4QuestFourComplete and completedTier4) then
+			if (ghost:getPilotTier() <= 4) then
+				-- Increment pilot to Tier 5!
+				ghost:incrementPilotTier()
+			end
+
+			-- Player has not earned the master box yet (pilot_neutral_master is granted inside the Kessel screenplay)
+			if (not SpaceHelpers:hasMasterSkill(pPlayer, "neutral")) then
+				return convoTemplate:getScreen("master_mission")
+			else
+				return convoTemplate:getScreen("tier4_completed")
+			end
+
+		-- Reward Checks
+		elseif (t4QuestFourComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_fourth_mission_success")
+		elseif (t4QuestThreeComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_third_mission_success")
+		elseif (t4QuestTwoComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_second_mission_success")
+		elseif (t4QuestOneComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier4_first_mission_success")
+
+		-- Pilot is able to train
+		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+			return convoTemplate:getScreen("ready_train_tier4")
+
+		-- Has not received the tier 4 briefing from Dravis yet
+		elseif (getQuestStatus(playerID .. "SmugglerSquadronScreenplay:StartedTier4") ~= "1") then
+			setQuestStatus(playerID .. "SmugglerSquadronScreenplay:StartedTier4", 1)
+
+			return convoTemplate:getScreen("tier4_initial_briefing")
+
+		-- Missions are not complete yet
+		elseif (not t4QuestFourComplete) then
+			-- Player is able to start fourth mission
+			if (t4QuestThreeComplete and not t4QuestFourStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_fourth_mission")
+				else
+					return convoTemplate:getScreen("tier4_fourth_mission")
+				end
+			-- Player is able to start third mission
+			elseif (t4QuestTwoComplete and not t4QuestThreeStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_third_mission")
+				else
+					return convoTemplate:getScreen("tier4_third_mission")
+				end
+			-- Player is able to start second mission
+			elseif (t4QuestOneComplete and not t4QuestTwoStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_second_mission")
+				else
+					return convoTemplate:getScreen("tier4_second_mission")
+				end
+			-- Player is ready for first mission, so either was not given it after training first box or failed
+			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 4)) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("failed_tier4_first_mission")
+				else
+					return convoTemplate:getScreen("tier4_first_mission")
+				end
+			end
+		end
+
+		return convoTemplate:getScreen("tier4_duty_repeat")
+	end
+
+	--[[
+			Tier 3 (Dulios-pattern dispatch; missions only, no XP gate)
+	--]]
+
+	local t2QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name)
+
+	if (ghost:getPilotTier() >= 3 and t2QuestFourComplete) then
+		-- Same questName-vs-className constant defect as tier 4 (see NOTE above); literals below
+		-- carry the registered questNames.
+		local T3_SIDE_1A = { type = "patrol", name = "tatooine_privateer_tier3_1_A" }
+		local T3_SIDE_2A = { type = "delivery", name = "tatooine_privateer_tier3_2_a" }
+		local T3_SIDE_4A = { type = "patrol", name = "tatooine_privateer_tier3_4_a" }
+
+		local t3QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T3_SIDE_1A.type, T3_SIDE_1A.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+		local t3QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T3_SIDE_2A.type, T3_SIDE_2A.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+		local t3QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+		local t3QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T3_SIDE_4A.type, T3_SIDE_4A.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+
+		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+
+		local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)
+
+		-- Check if players have all the tier3 skill boxes and finished the last mission, then move them on.
+		if (t3QuestFourComplete and completedTier3) then
+			-- Player has all the skill boxes, they should be a tier 4. Increment if not proper
+			if (ghost:getPilotTier() <= 3) then
+				-- Increment pilot to Tier 4
+				ghost:incrementPilotTier()
+			end
+
+			return convoTemplate:getScreen("tier3_completed_dulios")
+		end
+
+		-- Player has an active tier 3 mission from Dravis
+		if ((t3QuestOneStarted and not t3QuestOneComplete) or (t3QuestTwoStarted and not t3QuestTwoComplete) or (t3QuestThreeStarted and not t3QuestThreeComplete) or (t3QuestFourStarted and not t3QuestFourComplete)) then
+			return convoTemplate:getScreen("tier3_on_mission")
+		end
+
+		local tier3SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 3)
+
+		-- Reward Checks. Tier3 grants a skill box for each mission
+		if (t3QuestFourComplete and tier3SkillCount == 3) then
+			if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward") ~= "1") then
+				setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward", 1)
+
+				-- Grant Reward
+				assassinate_tatooine_privateer_tier3_4:rewardPlayer(pPlayer)
+			end
+
+			return convoTemplate:getScreen("tier3_complete_mission4")
+		elseif (t3QuestThreeComplete and tier3SkillCount == 2) then
+			if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward") ~= "1") then
+				setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward", 1)
+
+				-- Grant Reward
+				delivery_tatooine_privateer_tier3_3:rewardPlayer(pPlayer)
+			end
+
+			return convoTemplate:getScreen("tier3_complete_mission3")
+		elseif (t3QuestTwoComplete and tier3SkillCount == 1) then
+			if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":reward") ~= "1") then
+				setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":reward", 1)
+
+				-- Grant Reward
+				inspect_tatooine_privateer_tier3_2:rewardPlayer(pPlayer)
+			end
+
+			return convoTemplate:getScreen("tier3_complete_mission2")
+		elseif (t3QuestOneComplete and tier3SkillCount < 1) then
+			if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward") ~= "1") then
+				setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward", 1)
+
+				-- Grant Reward
+				recovery_tatooine_privateer_tier3_1:rewardPlayer(pPlayer)
+			end
+
+			return convoTemplate:getScreen("tier3_complete_mission1")
+
+		-- Mission Starters
+		elseif (not t3QuestFourComplete) then
+			-- Player is able to start fourth mission
+			if (t3QuestThreeComplete and not t3QuestFourStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier3_failed_fourth_mission")
+				else
+					return convoTemplate:getScreen("tier3_fourth_mission")
+				end
+			-- Player is able to start third mission
+			elseif (t3QuestTwoComplete and not t3QuestThreeStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier3_failed_third_mission")
+				else
+					return convoTemplate:getScreen("tier3_third_mission")
+				end
+			-- Player is able to start second mission
+			elseif (t3QuestOneComplete and not t3QuestTwoStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier3_failed_second_mission")
+				else
+					return convoTemplate:getScreen("tier3_second_mission")
+				end
+			-- Player is ready for first mission, so either was not given it after training first box or failed
+			elseif (not t3QuestOneComplete) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier3_failed_first_mission")
+				else
+					return convoTemplate:getScreen("tier3_first_mission")
+				end
+			end
+		end
+
+		return convoTemplate:getScreen("tier3_on_mission")
+	end
+
+	--[[
+			Tier 2 (Kaydine-pattern dispatch; XP-gated training)
+	--]]
+
+	if (ghost:getPilotTier() >= 2) then
+		-- Quest one chains a completion side quest carrying the same questName under
+		-- type destroy_surpriseattack; that chain terminal is the real completion marker.
+		local T2_SIDE_1 = { type = "destroy_surpriseattack", name = "tatooine_privateer_tier2_1" }
+
+		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, T2_SIDE_1.type, T2_SIDE_1.name)
+		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name)
+		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name)
+		local t2QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name)
+
+		local t2QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, T2_SIDE_1.type, T2_SIDE_1.name)
+		local t2QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name)
+		local t2QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name)
+
+		local t2DestroyDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.name)
+		local t2RecoveryDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.name)
+		local t2EscortDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
+
+		local t2DestroyDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.name)
+		local t2RecoveryDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.name)
+		local t2EscortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
+
+		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)
+
+		-- Player has an active tier 2 mission from Dravis
+		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or (t2QuestFourStarted and not t2QuestFourComplete) or
+			(t2DestroyDutyStarted and not t2DestroyDutyComplete) or (t2RecoveryDutyStarted and not t2RecoveryDutyComplete) or (t2EscortDutyStarted and not t2EscortDutyComplete)) then
+
+			return convoTemplate:getScreen("tier2_on_mission")
+
+		-- Check if players have all the tier2 skill boxes and finished the last mission, then move them on.
+		elseif (t2QuestFourComplete and completedTier2) then
+			-- Player has all the skill boxes, they should be tier 3. Increment if not proper
+			if (ghost:getPilotTier() <= 2) then
+				ghost:incrementPilotTier()
+			end
+
+			return convoTemplate:getScreen("tier2_completed_kaydine")
+		-- Reward Checks
+		elseif (t2QuestFourComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier2_complete_fourth_mission")
+		elseif (t2QuestThreeComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier2_complete_third_mission")
+		elseif (t2QuestTwoComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier2_complete_second_mission")
+		elseif (t2QuestOneComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
+			return convoTemplate:getScreen("tier2_complete_first_mission")
+		-- Pilot is able to train
+		elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+			return convoTemplate:getScreen("tier2_ready_train_pilot")
+		elseif (not t2QuestFourComplete) then
+			-- Player is able to start fourth mission
+			if (t2QuestThreeComplete and not t2QuestFourStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier2_failed_fourth_mission")
+				else
+					return convoTemplate:getScreen("tier2_fourth_mission")
+				end
+			-- Player is able to start third mission
+			elseif (t2QuestTwoComplete and not t2QuestThreeStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier2_failed_third_mission")
+				else
+					return convoTemplate:getScreen("tier2_third_mission")
+				end
+			-- Player is able to start second mission
+			elseif (t2QuestOneComplete and not t2QuestTwoStarted) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier2_failed_second_mission")
+				else
+					return convoTemplate:getScreen("tier2_second_mission")
+				end
+			-- Player is ready for first mission
+			elseif (not t2QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 2)) then
+				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
+					return convoTemplate:getScreen("tier2_failed_first_mission")
+				else
+					return convoTemplate:getScreen("tier2_first_mission")
+				end
+			end
+		end
+
+		return convoTemplate:getScreen("tier2_here_for_work")
+	end
+
+	--[[
 			Quests
 	--]]
 
@@ -361,6 +716,284 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:dravis_finished", 1)
 		SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
+	-- Tier 2 Training (Kaydine-pattern; XP-gated, player-paced)
+	elseif (screenID == "tier2_ready_train_pilot") then
+		local skillManager = LuaSkillManager()
+
+		local responseString = "tier2_initial_"
+
+		if (SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name)) then
+			responseString = "tier2_final_"
+		elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name)) then
+			responseString = "tier2_mission4_"
+		elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name)) then
+			responseString = "tier2_mission3_"
+		elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name)) then
+			responseString = "tier2_mission2_"
+		end
+
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_starships_02")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_45b71b4d", responseString .. "train_fighters") -- I am interested in advanced fighters.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_weapons_02")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_197f4f94", responseString .. "train_components") -- I am interested in intermediate starship component use.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_procedures_02")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_8f5942fa", responseString .. "train_techniques") -- I am interested in starship defense training.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_02")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_eff66f4d", responseString .. "train_algorithms") -- I am interested in reactor engineering algorithms.
+		end
+
+	-- Handle Tier 2 Skill box granting
+	elseif (string.find(screenID, "tier2_") and string.find(screenID, "_train_")) then
+		local skillManager = LuaSkillManager()
+
+		if (string.find(screenID, "train_fighters")) then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_starships_02")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_starships_02", true)
+			end
+		elseif (string.find(screenID, "train_components")) then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_weapons_02")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_weapons_02", true)
+			end
+		elseif (string.find(screenID, "train_techniques")) then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_procedures_02")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_procedures_02", true)
+			end
+		elseif (string.find(screenID, "train_algorithms")) then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_02")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_droid_02", true)
+			end
+		end
+
+		if (ghost:getPilotTier() <= 2 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
+			ghost:incrementPilotTier()
+		end
+
+		return pClonedScreen
+
+	-- Tier 2 Duty Missions
+	elseif (screenID == "tier2_accept_duty_destroy1") then
+		destroy_duty_tatooine_privateer_tier2_destroyduty:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier2_accept_duty_escort") then
+		escort_duty_tatooine_privateer_tier2_escortduty:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier2_accept_duty_recovery") then
+		recovery_duty_tatooine_privateer_tier2_recoveryduty:startQuest(pPlayer, pNpc)
+
+	-- Tier 2 Mission Rewards
+	elseif (screenID == "tier2_fourth_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward", 1)
+		assassinate_tatooine_privateer_tier2_4:rewardPlayer(pPlayer)
+	elseif (screenID == "tier2_turnover_intelligence") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)
+		recovery_tatooine_privateer_tier2_3:rewardPlayer(pPlayer)
+	elseif (screenID == "tier2_duty_calls" or screenID == "tier2_here_is_pay") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward", 1)
+		escort_tatooine_privateer_tier2_2:rewardPlayer(pPlayer)
+	elseif (screenID == "tier2_according_to_plan" or screenID == "tier2_first_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward", 1)
+		inspect_tatooine_privateer_tier2_1:rewardPlayer(pPlayer)
+
+	-- Give Tier 2 Missions
+	elseif (screenID == "tier2_accept_assassinate" or screenID == "tier2_nonsense" or screenID == "tier2_let_me_know" or screenID == "tier2_report_back_success" or screenID == "tier2_key_to_success" or screenID == "tier2_just_malfunctioned") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
+		assassinate_tatooine_privateer_tier2_4:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier2_accept_inspect" or screenID == "tier2_on_your_way" or screenID == "tier2_take_it_serious" or screenID == "tier2_bad_liar") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
+		recovery_tatooine_privateer_tier2_3:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier2_accept_escort" or screenID == "tier2_back_to_escort" or screenID == "tier2_now_is_good" or screenID == "tier2_be_smarter") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
+		escort_tatooine_privateer_tier2_2:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier2_start_first_mission" or screenID == "tier2_try_first_mission" or screenID == "tier2_cant_wait_first") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
+		inspect_tatooine_privateer_tier2_1:startQuest(pPlayer, pNpc)
+
+	-- Tier 3 Training (Dulios-pattern; one skill box per mission, no XP deduction)
+	elseif (string.find(screenID, "tier3_complete_mission")) then
+		local screenAppend = ""
+
+		if (screenID == "tier3_complete_mission4") then
+			screenAppend = "_final"
+		end
+
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_03")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_aa766bd6", "tier3_train_warships" .. screenAppend) -- I want to know about special warships.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_03")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_a70b470e", "tier3_train_components" .. screenAppend) -- I want to know about advanced starship components.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_03")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_da0e8cd0", "tier3_train_techniques" .. screenAppend) -- I want to know about advanced techniques.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_03")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_c28a300f", "tier3_train_programming" .. screenAppend) -- I want to know about system balance programming.
+		end
+
+	-- Handle Tier 3 Skill box granting
+	elseif (string.find(screenID, "tier3_train_")) then
+		if (string.find(screenID, "train_warships")) then
+			-- Train player Skill Box
+			SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_starships_03", false)
+		elseif (string.find(screenID, "train_components")) then
+			-- Train player Skill Box
+			SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_weapons_03", false)
+		elseif (string.find(screenID, "train_techniques")) then
+			-- Train player Skill Box
+			SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_procedures_03", false)
+		elseif (string.find(screenID, "train_programming")) then
+			-- Train player Skill Box
+			SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_droid_03", false)
+		end
+
+		if (ghost:getPilotTier() <= 3 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)) then
+			-- If player has all of the Tier 3 skills, increment their pilot tier
+			ghost:incrementPilotTier()
+		end
+
+	-- Give Tier 3 Missions
+	elseif (screenID == "tier3_accept_fourth_mission" or screenID == "tier3_nothing_cant_handle") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
+
+		--	Give fourth mission to player
+		assassinate_tatooine_privateer_tier3_4:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier3_accept_third_mission" or screenID == "tier3_i_was_better") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
+
+		--	Give third mission to player
+		delivery_tatooine_privateer_tier3_3:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier3_accept_second_mission" or screenID == "tier3_stories_about_me") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
+
+		--	Give second mission to player
+		inspect_tatooine_privateer_tier3_2:startQuest(pPlayer, pNpc)
+	elseif (screenID == "tier3_accept_first_mission" or screenID == "tier3_try_first_again") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
+
+		--	Give First mission to player
+		recovery_tatooine_privateer_tier3_1:startQuest(pPlayer, pNpc)
+
+	-- Tier 4 Training (Dinge-pattern)
+	elseif (screenID == "ready_train_tier4") then
+		local skillManager = LuaSkillManager()
+
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_starships_04")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_ada4db16", "tier4_train_fighters") -- Teach me about exotic vessels.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_weapons_04")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_25506b23", "tier4_train_component") -- Teach me about heavy starship component use.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_procedures_04")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_fd7e4ac8", "tier4_train_basics") -- Teach me about expert techniques.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_04")) then
+			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_1813de4d", "tier4_train_droid") -- Teach me about droid intelligence theory.
+		end
+
+	-- Handle Tier 4 Skill box granting
+	elseif (string.find(screenID, "tier4_train_")) then
+		local skillManager = LuaSkillManager()
+
+		if (screenID == "tier4_train_fighters") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_starships_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_starships_04", true)
+			end
+		elseif (screenID == "tier4_train_component") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_weapons_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_weapons_04", true)
+			end
+		elseif (screenID == "tier4_train_basics") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_procedures_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_procedures_04", true)
+			end
+		elseif (screenID == "tier4_train_droid") then
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_04")) then
+				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_droid_04", true)
+			end
+		end
+
+		if (ghost:getPilotTier() <= 4 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)) then
+			-- If player has all of the Tier 4 skills, increment their pilot tier
+			ghost:incrementPilotTier()
+		end
+
+		-- Either the player is ready to train again or they have all of the missions finished, so send them back to the main screen
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4) or
+				SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)) then
+			return self:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+		end
+
+	-- Tier 4 Duty Missions
+	elseif (screenID == "accept_tier4_duty1") then
+		destroy_duty_tatooine_privateer_tier4_1:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_duty2") then
+		escort_duty_tatooine_privateer_tier4_1:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_duty3") then
+		recovery_duty_tatooine_privateer_tier4_1:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_duty4") then
+		rescue_duty_tatooine_privateer_tier4_1:startQuest(pPlayer, pNpc)
+
+	-- Tier 4 Mission Rewards
+	elseif (screenID == "tier4_fourth_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward", 1)
+		recovery_tatooine_privateer_tier4_4:rewardPlayer(pPlayer)
+	elseif (screenID == "tier4_third_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward", 1)
+		space_battle_tatooine_privateer_tier4_3:rewardPlayer(pPlayer)
+	elseif (screenID == "tier4_second_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward", 1)
+		assassinate_tatooine_privateer_tier4_2:rewardPlayer(pPlayer)
+	elseif (screenID == "tier4_first_mission_success") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward", 1)
+		survival_tatooine_privateer_tier4_1:rewardPlayer(pPlayer)
+
+	-- Give Tier 4 Missions
+	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
+
+		recovery_tatooine_privateer_tier4_4:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
+
+		space_battle_tatooine_privateer_tier4_3:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
+
+		assassinate_tatooine_privateer_tier4_2:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
+
+		survival_tatooine_privateer_tier4_1:startQuest(pPlayer, pNpc)
+
+	-- Master mission (Smuggler Alliance is lightly Rebel-aligned - hunts the IMPERIAL corvette in Kessel)
+	elseif (screenID == "accept_master_mission") then
+		-- Player must hold the full tier 4 pilot training before the master hand-off;
+		-- pilot_neutral_master is granted inside the Kessel screenplay, never here.
+		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4) and
+				not SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and
+				not SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
+			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
+		end
 	end
 
 	return pClonedScreen

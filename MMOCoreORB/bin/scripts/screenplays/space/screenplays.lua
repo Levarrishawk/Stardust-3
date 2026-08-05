@@ -3,11 +3,13 @@
 includeFile("space/SpaceQuestLogic.lua")
 includeFile("space/SpaceAssassinateScreenplay.lua")
 includeFile("space/SpaceBattleScreenplay.lua")
+includeFile("space/SpaceConvoyScreenplay.lua")
 includeFile("space/SpaceDeliveryScreenplay.lua")
 includeFile("space/SpaceDeliveryNoPickupScreenplay.lua")
 includeFile("space/SpaceDestroyScreenplay.lua")
 includeFile("space/SpaceEscortScreenplay.lua")
 includeFile("space/SpaceInspectScreenplay.lua")
+includeFile("space/SpaceMiningDestroyScreenplay.lua")
 includeFile("space/SpacePatrolScreenplay.lua")
 includeFile("space/SpaceRecoveryScreenplay.lua")
 includeFile("space/SpaceRescueScreenplay.lua")
@@ -24,6 +26,9 @@ includeFile("space/SpaceDutyRescueScreenplay.lua")
 -- Master-tier Kessel Corvette encounter (defines destroy_master_{imperial,rebel}_{1,2}).
 -- Must load BEFORE the squadron screenplays, which reference these master objects.
 includeFile("space/squadrons/KesselMasterEncounterScreenplay.lua")
+
+-- Kessel duty quests (Kessel System / space_light1).
+includeFile("space/squadrons/KesselDutyScreenplay.lua")
 
 includeFile("space/chassis_dealer.lua")
 
@@ -44,6 +49,30 @@ includeFile("space/spacestations/spacestation_rori_conv_handler.lua")
 includeFile("space/spacestations/spacestation_talus_conv_handler.lua")
 includeFile("space/spacestations/spacestation_tatooine_conv_handler.lua")
 includeFile("space/spacestations/spacestation_yavin4_conv_handler.lua")
+
+-- Kashyyyk space quests. These define the quest globals the Kashyyyk station
+-- conversation handlers below call :startQuest on, so they must load FIRST.
+-- They also construct from SpaceConvoyScreenplay / SpaceMiningDestroyScreenplay,
+-- which are included in the base-class block at the top of this file.
+includeFile("space/squadrons/KashyyykStationScreenplay.lua")
+includeFile("space/squadrons/KashyyykHuntingScreenplay.lua")
+includeFile("space/squadrons/KashyyykSlaverScreenplay.lua")
+includeFile("space/squadrons/KashyyykMiningScreenplay.lua")
+
+-- Kashyyyk space stations
+includeFile("space/spacestations/spacestation_kashyyyk_conv_handler.lua")
+includeFile("space/spacestations/spacestation_kash_rebel_conv_handler.lua")
+includeFile("space/spacestations/spacestation_kash_imperial_conv_handler.lua")
+includeFile("space/spacestations/spacestation_rodian_base_conv_handler.lua")
+includeFile("space/spacestations/spacestation_rodian_tripp_base_conv_handler.lua")
+includeFile("space/spacestations/spacestation_indie_slaver_conv_handler.lua")
+includeFile("space/spacestations/spacestation_avatar_platform_conv_handler.lua")
+
+-- Deep Space - Kessel jump stations (prestige-gated Deep Space access)
+includeFile("space/spacestations/deep_space_jump.lua")
+includeFile("space/spacestations/jumpstation_rebel_conv_handler.lua")
+includeFile("space/spacestations/jumpstation_imperial_conv_handler.lua")
+includeFile("space/spacestations/jumpstation_neutral_conv_handler.lua")
 
 
 --[[
@@ -90,6 +119,45 @@ includeFile("space/conversations/greeters/kessYarrowConvoHandler.lua")
 
 -- Neutral
 includeFile("space/conversations/neutral/gilBurtinConvoHandler.lua")
+
+-- Kashyyyk CPG comm patrols (conversable ShipAiAgents, not stations).
+-- Quest globals come from KashyyykStationScreenplay.lua above; the stage key
+-- comes from spacestation_kashyyyk_conv_handler.lua above. Both already loaded.
+includeFile("space/conversations/neutral/cpg_patrol/ep3CpgVeteranConvoHandler.lua")
+includeFile("space/conversations/neutral/cpg_patrol/ep3CpgAceConvoHandler.lua")
+
+-- Kashyyyk ground quest givers. They grant the space quests registered in
+-- space/squadrons/Kashyyyk*Screenplay.lua above, so they must load after those.
+includeFile("space/conversations/neutral/kashyyyk_hunting/ep3EtyyyKerssocConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_hunting/ep3EtyyyKaraCorlonConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_hunting/ep3EtyyyTrippRarConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_hunting/ep3EtyyyChriloocConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_hunting/ep3EtyyyBanolStarkillerConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_hunting/ep3EtyyyZivenTissakConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_mining/ep3MiningCaptainKohConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3BoshazConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3LesnorrConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3MssikssConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3FezrikBendledonConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3MusoliumConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3BelgaDaeriConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3KymayrrConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_slaver/ep3GursanBryesConvoHandler.lua")
+includeFile("space/conversations/neutral/kashyyyk_station/ep3EymaConvoHandler.lua")
+
+-- Kachirho bowcaster ground giver (Lolo). Grants inspect_ep3_wke_bowcaster_crafting, whose global
+-- comes from space/squadrons/KashyyykHuntingScreenplay.lua above.
+includeFile("space/conversations/neutral/kashyyyk_bowcaster/ep3WkeLoloConvoHandler.lua")
+
+-- Clone Relics ground givers.
+--   Kkrax grants recovery_ep3_clone_relics_boba_fett_2, which auto-chains
+--   destroy_surpriseattack_ep3_clone_relics_boba_fett_3 on completion. Its quest global comes from
+--   space/squadrons/KesselDutyScreenplay.lua above.
+--   Darth Vader grants space_battle_ep3_clone_relics_jedi_starfighter_4, which auto-chains
+--   space_battle_ep3_clone_relics_jedi_starfighter_5 on completion. Both globals come from
+--   space/squadrons/KashyyykMiningScreenplay.lua above.
+includeFile("space/conversations/neutral/clone_relics/ep3CloneRelicsKkraxConvoHandler.lua")
+includeFile("space/conversations/neutral/clone_relics/ep3CloneRelicsDarthVaderConvoHandler.lua")
 
 -- Corsec
 includeFile("space/squadrons/CorsecSquadronScreenplay.lua")
