@@ -597,6 +597,7 @@ includeFile("cities/cantinas/bartender_conv_handler.lua")
 -- Cities
 includeFile("cities/city.lua")
 includeFile("cities/city_authority.lua")
+includeFile("cities/city_authority_warden_conv_handler.lua")
 includeFile("cities/corellia_bela_vistal.lua")
 includeFile("cities/corellia_coronet.lua")
 includeFile("cities/corellia_doaba_guerfel.lua")
