@@ -496,6 +496,22 @@ function PadawanTrials:createMainLocation(pPlayer)
 	local planetName = mainLocData[1]
 	local spawnLoc = JediTrials:getTrialLocation(pPlayer)
 
+	-- Fixed trial locations may be moved after a player has started the trial.
+	-- Refresh the stored location so every return waypoint uses current trial data.
+	if (trialData.trialLoc ~= nil) then
+		spawnLoc = trialData.trialLoc
+
+		if (spawnLoc[4] ~= nil) then
+			planetName = spawnLoc[4]
+		end
+
+		JediTrials:setTrialLocation(pPlayer, spawnLoc[1], spawnLoc[2], spawnLoc[3], planetName)
+
+		if (spawnLoc[5] ~= nil) then
+			JediTrials:setTrialPlanetAndCity(pPlayer, planetName, spawnLoc[5])
+		end
+	end
+
 	if (trialData.trialLoc == nil) then
 		local pActiveArea = spawnActiveArea(planetName, "object/active_area.iff", spawnLoc[1], spawnLoc[2], spawnLoc[3], 64, 0)
 		local playerID = SceneObject(pPlayer):getObjectID()
@@ -514,6 +530,7 @@ function PadawanTrials:createMainLocation(pPlayer)
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost ~= nil) then
+		PlayerObject(pGhost):removeWaypointBySpecialType(WAYPOINTQUESTTASK)
 		PlayerObject(pGhost):addWaypoint(planetName, "Speak to this person", "", spawnLoc[1], 0, spawnLoc[3], WAYPOINT_BLUE, true, true, WAYPOINTQUESTTASK)
 	end
 end
@@ -803,10 +820,10 @@ function PadawanTrials:notifyEnteredTargetLocSpawnArea(pArea, pPlayer)
 
 		local pNpc
 
-		if (string.find(trialData.targetNpc, ".iff")) then
-			pNpc = spawnSceneObject(planetName, trialData.targetNpc, locX, locZ, locY, 0, getRandomNumber(180) - 180)
+		if (string.find(npcTemplate, ".iff")) then
+			pNpc = spawnSceneObject(planetName, npcTemplate, locX, locZ, locY, 0, getRandomNumber(180) - 180)
 		else
-			pNpc = spawnMobile(planetName, trialData.targetNpc, 0, locX, locZ, locY, getRandomNumber(180) - 180, 0)
+			pNpc = spawnMobile(planetName, npcTemplate, 0, locX, locZ, locY, getRandomNumber(180) - 180, 0)
 		end
 
 		if (pNpc == nil) then
@@ -825,15 +842,19 @@ function PadawanTrials:notifyEnteredTargetLocSpawnArea(pArea, pPlayer)
 			SceneObject(pNpc):setCustomObjectName(trialData.targetNpcName)
 		end
 
-		if (not string.find(trialData.targetNpc, ".iff")) then
+		if (not string.find(npcTemplate, ".iff")) then
 			if ((isThirdLocation and trialData.thirdTargetKillable ~= nil and trialData.thirdTargetKillable) or trialData.targetKillable) then
 				createObserver(OBJECTDESTRUCTION, "PadawanTrials", "notifyQuestTargetDead", pNpc)
 			else
 				CreatureObject(pNpc):setPvpStatusBitmask(0)
 			end
+
+			if ((isThirdLocation and trialData.thirdTargetStationary) or (not isThirdLocation and trialData.targetStationary)) then
+				AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
+			end
 		end
 
-		if (trialData.trialType == TRIAL_TALK and not string.find(trialData.targetNpc, ".iff")) then
+		if (trialData.trialType == TRIAL_TALK and not string.find(npcTemplate, ".iff")) then
 			CreatureObject(pNpc):setOptionsBitmask(136)
 
 			if (isThirdLocation) then
@@ -1145,6 +1166,8 @@ function PadawanTrials:onPlayerLoggedIn(pPlayer)
 				dropObserver(PROTOTYPECREATED, "PadawanTrials", "notifyCraftedTrainingSaber", pPlayer)
 				createObserver(PROTOTYPECREATED, "PadawanTrials", "notifyCraftedTrainingSaber", pPlayer)
 			end
+		elseif (trialData.trialName == "pannaqa" and (readData(playerID .. ":JediTrials:acceptedTask") == 0 or readData(playerID .. ":JediTrials:spokeToTarget02") == 1)) then
+			self:createMainLocation(pPlayer)
 		elseif (trialData.trialType ~= TRIAL_HUNT and trialData.trialType ~= TRIAL_LIGHTSABER and not JediTrials:hasTrialArea(pPlayer) and trialData.trialName ~= "pannaqa" and readData(playerID .. ":JediTrials:acceptedTask") == 0) then
 			-- Restarts trial if player does not have a properly stored spawn location
 			if (JediTrials:getTrialLocation(pPlayer) == nil) then
