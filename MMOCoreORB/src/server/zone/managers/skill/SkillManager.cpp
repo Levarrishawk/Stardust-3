@@ -951,34 +951,22 @@ int SkillManager::getForceSensitiveSkillCount(CreatureObject* creature, bool inc
 bool SkillManager::villageKnightPrereqsMet(CreatureObject* creature, const String& skillToDrop) {
 	const SkillList* skillList = creature->getSkillList();
 
-	int fullTrees = 0;
-	int totalJediPoints = 0;
+	int masteredDisciplines = 0;
 
 	for (int i = 0; i < skillList->size(); ++i) {
 		Skill* skill = skillList->get(i);
 
 		String skillName = skill->getSkillName();
-		if (skillName.contains("force_discipline_") &&
-			(skillName.indexOf("0") != -1 || skillName.contains("novice") || skillName.contains("master") )) {
-			totalJediPoints += skill->getSkillPointsRequired();
-
-			if (skillName.indexOf("4") != -1) {
-				fullTrees++;
-			}
+		if (skillName.contains("force_discipline_") && skillName.contains("_master")) {
+			masteredDisciplines++;
 		}
 	}
 
-	if (!skillToDrop.isEmpty()) {
-		Skill* skillBeingDropped = skillMap.get(skillToDrop.hashCode());
-
-		if (skillToDrop.indexOf("4") != -1) {
-			fullTrees--;
-		}
-
-		totalJediPoints -= skillBeingDropped->getSkillPointsRequired();
+	if (!skillToDrop.isEmpty() && skillToDrop.contains("force_discipline_") && skillToDrop.contains("_master")) {
+		masteredDisciplines--;
 	}
 
-	return fullTrees >= 2 && totalJediPoints >= 206;
+	return masteredDisciplines >= 2;
 }
 
 void SkillManager::getPlayerDroidCommands(PlayerObject* ghost, Vector<String>& playerDroidCommands) {
