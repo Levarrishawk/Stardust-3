@@ -27,7 +27,10 @@ jedi_containment_inquisitor = Creature:new {
 	creatureBitmask = PACK + KILLER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
-	templates = {"object/mobile/dressed_imperial_inquisitor_human_male_01.iff"},
+	templates = { 
+     "object/mobile/tatooine_npc/hedon_istee.iff", 
+     "object/mobile/tatooine_npc/brea_tonnika.iff"
+     },  
 	outfit ="inquisitor_outfit",
 	lootGroups = {},
 	primaryWeapon = "dark_jedi_weapons_gen4",

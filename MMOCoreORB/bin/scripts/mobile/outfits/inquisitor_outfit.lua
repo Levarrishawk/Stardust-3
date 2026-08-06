@@ -5,10 +5,11 @@ inquisitor_outfit = {
      -- {"/private/index_color_facial_hair", 21}
     },
 
-    {objectTemplate = "object/tangible/wearables/jacket/jacket_s03.iff", customizationVariables = {{"/private/index_color_1", 24}} },
-    {objectTemplate = "object/tangible/wearables/pants/pants_s15.iff", customizationVariables = {{"/private/index_color_1", 41}} },
-    {objectTemplate = "object/tangible/wearables/hat/hat_imp_s01.iff", customizationVariables = {{"/private/index_color_1", 24}} },
-    {objectTemplate = "object/tangible/wearables/boots/boots_s14.iff", customizationVariables = {{"/private/index_color_1", 31}} }   
+    {objectTemplate = "object/tangible/wearables/bodysuit/bodysuit_tie_fighter.iff", customizationVariables = {{"/private/index_color_1", 1}} },
+    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_bicep_r.iff", customizationVariables = {{"/private/index_color_1", 15}, {"/private/index_color_2", 7}} },        
+    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_bracer_r.iff", customizationVariables = {{"/private/index_color_1", 15}, {"/private/index_color_2", 7}} },
+    {objectTemplate = "object/tangible/wearables/gloves/gloves_s02.iff", customizationVariables = {{"/private/index_color_1", 24}} },
+    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_boots.iff", customizationVariables = {{"/private/index_color_1", 15}, {"/private/index_color_2", 7}} }   
   }
 }
 
