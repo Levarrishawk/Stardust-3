@@ -28,6 +28,7 @@ jedi_containment_inquisitor = Creature:new {
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 	templates = {"object/mobile/dressed_imperial_inquisitor_human_male_01.iff"},
+	outfit ="inquisitor_outfit",
 	lootGroups = {},
 	primaryWeapon = "dark_jedi_weapons_gen4",
 	secondaryWeapon = "none",

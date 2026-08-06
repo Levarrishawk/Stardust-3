@@ -411,8 +411,8 @@ public:
 			break;
 		case 2:
 			containmentTroops.add("jedi_containment_inquisitor");
-			for (int i = 0; i < 4; ++i)
-				containmentTroops.add("crackdown_stormtrooper");
+			for (int i = 0; i < 2; ++i)
+				containmentTroops.add("dark_trooper");
 			break;
 		case 3:
 			containmentTroops.add("jedi_containment_inquisitor");
@@ -421,8 +421,8 @@ public:
 		case 4:
 			containmentTroops.add("jedi_containment_inquisitor");
 			containmentTroops.add("jedi_containment_inquisitor");
-			for (int i = 0; i < 5; ++i)
-				containmentTroops.add("crackdown_stormtrooper");
+			for (int i = 0; i < 2; ++i)
+				containmentTroops.add("dark_trooper");
 			break;
 		case 5:
 			containmentTroops.add("jedi_containment_darth_vader");
