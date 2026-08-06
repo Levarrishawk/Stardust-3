@@ -125,12 +125,20 @@ void BountyNotorietyManager::clearNotoriety(CreatureObject* creature) {
 		ghost->setBountyNotoriety(0);
 	}
 
-	updateBountyStatus(creature);
+	ManagedReference<CreatureObject*> target = creature;
 
-	Locker locker(&notorietyListLock);
+	Core::getTaskManager()->scheduleTask([target] {
+		if (target == nullptr)
+			return;
 
-	if (notorietyList.contains(creature->getObjectID()))
-		notorietyList.drop(creature->getObjectID());
+		BountyNotorietyManager* manager = BountyNotorietyManager::instance();
+		manager->updateBountyStatus(target);
+
+		Locker locker(&manager->notorietyListLock);
+
+		if (manager->notorietyList.contains(target->getObjectID()))
+			manager->notorietyList.drop(target->getObjectID());
+	}, "ClearBountyNotorietyTask", 1000);
 }
 
 void BountyNotorietyManager::increaseNotoriety(CreatureObject* creature, NotorietyAction action) {
