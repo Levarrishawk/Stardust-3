@@ -28,7 +28,7 @@ CityControlLanding = ScreenPlay:new {
 	imperialSpawnOffsetY = 12,
 }
 
-registerScreenPlay("CityControlLanding", true)
+registerScreenPlay("CityControlLanding", false)
 
 function CityControlLanding:start()
 	self:chanceToSpawn()
