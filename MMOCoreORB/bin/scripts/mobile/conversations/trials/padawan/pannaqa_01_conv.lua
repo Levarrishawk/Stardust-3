@@ -18,7 +18,7 @@ padawan_pannaqa_01_convo_template:addScreen(intro);
 
 cant_leave_village = ConvoScreen:new {
 	id = "cant_leave_village",
-	leftDialog = "@conversation/padawan_pannaqa_01:s_53c84ebd", -- 	I can't leave the village.. there's far too much to be done at the moment. But I also need a replacement part for my vibro-tiller. Without it, farming is much more difficult. As you can see, we have not had much luck of late trying to grow our crops. Between the harsh environment and the constant attacks of Mellichae's thugs, we have our hands full.
+	leftDialog = "@conversation/padawan_pannaqa_01:s_53c84ebd", -- I can't leave the farm; there's far too much to be done at the moment. But I also need a replacement part for my vibro-tiller. Without it, farming is much more difficult. As you can see, we have not had much luck of late trying to grow our crops in this harsh environment.
 	stopConversation = "false",
 	options = {
 		{"@conversation/padawan_pannaqa_01:s_dd5fc3e4", "find_shendo"}, -- Sure, why not.  How can I help?

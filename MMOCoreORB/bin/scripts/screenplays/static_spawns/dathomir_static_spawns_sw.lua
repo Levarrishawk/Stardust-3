@@ -37,6 +37,8 @@ function DathomirStaticSpawnsSwScreenPlay:start()
 end
 
 function DathomirStaticSpawnsSwScreenPlay:spawnMobiles()
+	--Pannaqa's farm (-75,-1592)
+	spawnMobile("dathomir", "fs_villager_farmer", 0, -74.8, 18.0, -1592, -139, 0)
 
 	--destroyed imperial camp (-6467,-6722)
 	-- local pNpc = spawnMobile("dathomir", "specforce_marine", 300, -6455.5, 555.1, -6743.6, -33, 0)
