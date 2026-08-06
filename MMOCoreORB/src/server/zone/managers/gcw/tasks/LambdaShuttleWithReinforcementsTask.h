@@ -140,6 +140,9 @@ private:
 
 		if (npc != nullptr) {
 			Locker npcLock(npc, player);
+			bool forceContainmentTarget = reinforcementType == CONTAINMENTTEAM &&
+					(creatureTemplate == "jedi_containment_inquisitor" ||
+					creatureTemplate == "jedi_containment_darth_vader");
 
 			if (reinforcementType == LAMBDASHUTTLEATTACK || reinforcementType == CONTAINMENTTEAM) {
 				CombatManager::instance()->startCombat(npc, player);
@@ -158,6 +161,11 @@ private:
 			}
 
 			npc->setAITemplate();
+
+			if (forceContainmentTarget) {
+				npc->setDefender(player);
+				npc->activateAiBehavior(true);
+			}
 
 			if (spawnNumber != 0) {
 				Vector3 formationOffset;
