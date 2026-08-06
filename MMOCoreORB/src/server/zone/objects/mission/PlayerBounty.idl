@@ -51,7 +51,7 @@ class PlayerBounty extends ManagedObject {
 	}
 
 	public void clearPlayerContribution() {
-		reward -= playerContribution;
+		reward = reward - playerContribution;
 		playerContribution = 0;
 	}
 
@@ -59,8 +59,8 @@ class PlayerBounty extends ManagedObject {
 		if (amount <= 0 || amount > playerContribution)
 			return false;
 
-		playerContribution -= amount;
-		reward -= amount;
+		playerContribution = playerContribution - amount;
+		reward = reward - amount;
 		return true;
 	}
 
