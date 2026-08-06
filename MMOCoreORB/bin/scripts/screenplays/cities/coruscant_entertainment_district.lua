@@ -1401,7 +1401,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
-  pNpc = spawnMobile("coruscant", "isb_warrant_officer_i", 60, 36.0, -20.0, 137.2, 168, 37002138)
+  pNpc = spawnMobile("coruscant", "imperial_warrant_officer_i", 60, 36.0, -20.0, 137.2, 168, 37002138)
   self:setMoodString(pNpc, "neutral")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
