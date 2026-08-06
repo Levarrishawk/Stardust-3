@@ -24,6 +24,7 @@
 #include "server/zone/objects/player/FactionStatus.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
 #include "server/zone/packets/scene/PlayClientEffectLocMessage.h"
+#include "server/zone/packets/player/PlayMusicMessage.h"
 
 int ContrabandScanSessionImplementation::initializeSession() {
 	ManagedReference<AiAgent*> scanner = weakScanner.get();
@@ -933,6 +934,11 @@ void ContrabandScanSessionImplementation::callInJediContainmentTeam(AiAgent* sca
 	auto spawnPoint = missionManager->getFreeNpcSpawnPoint(player->getPlanetCRC(), player->getWorldPositionX(), player->getWorldPositionY(), NpcSpawnPoint::CONTAINMENTTEAMSPAWN);
 
 	if (spawnPoint != nullptr) {
+		if (containmentLevel == 3 || containmentLevel == 4)
+			player->sendMessage(new PlayMusicMessage("sound/mus_vader_terror.snd"));
+		else if (containmentLevel == 5)
+			player->sendMessage(new PlayMusicMessage("sound/mus_hopeless_situation.snd"));
+
 		Reference<Task*> containmentTask = new LambdaShuttleWithReinforcementsTask(player, containmentLevel, landingMessage, *spawnPoint->getPosition(), *spawnPoint->getDirection());
 		containmentTask->schedule(IMMEDIATELY);
 	} else {
