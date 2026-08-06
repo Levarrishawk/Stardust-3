@@ -88,7 +88,7 @@ namespace {
 		if (CombatManager::instance()->areInDuel(attacker, victim))
 			return true;
 
-		if (attacker->hasBountyMissionFor(victim))
+		if (attacker->hasBountyMissionFor(victim) || victim->hasBountyMissionFor(attacker))
 			return true;
 
 		ManagedReference<GuildObject*> victimGuild = victim->getGuildObject().get();
@@ -368,6 +368,9 @@ namespace {
 
 void CombatManager::handleCityAuthorityDeathBlow(CreatureObject* attacker, CreatureObject* victim) const {
 	if (attacker == nullptr || victim == nullptr || !attacker->isPlayerCreature() || !victim->isPlayerCreature())
+		return;
+
+	if (isLawfulCityPlayerAttack(attacker, victim))
 		return;
 
 	ManagedReference<CityRegion*> city = attacker->getCityRegion().get();

@@ -1352,6 +1352,9 @@ void PlayerManagerImplementation::killPlayer(TangibleObject* attacker, CreatureO
 	}
 
 	StringIdChatParameter stringId;
+	CreatureObject* attackerCreature = attacker->asCreatureObject();
+	bool lawfulBountyDeathBlow = typeofdeath == 1 && attacker->isPlayerCreature() && attackerCreature != nullptr &&
+			(attackerCreature->hasBountyMissionFor(player) || player->hasBountyMissionFor(attackerCreature));
 
 	if (!attacker->isPlayerCreature() || !CombatManager::instance()->areInDuel(attacker->asCreatureObject(), player)) {
 		TransactionLog trx(attacker, player, TrxCode::PLAYERDIED);
@@ -1404,9 +1407,9 @@ void PlayerManagerImplementation::killPlayer(TangibleObject* attacker, CreatureO
 
 	player->setPosture(CreaturePosture::DEAD, !isCombatAction, !isCombatAction);
 
-	if (typeofdeath == 1 && attacker->isPlayerCreature()) {
-		BountyNotorietyManager::instance()->increaseNotoriety(attacker->asCreatureObject(), BountyNotorietyManager::PLAYERDEATHBLOW);
-		CombatManager::instance()->handleCityAuthorityDeathBlow(attacker->asCreatureObject(), player);
+	if (typeofdeath == 1 && attacker->isPlayerCreature() && !lawfulBountyDeathBlow) {
+		BountyNotorietyManager::instance()->increaseNotoriety(attackerCreature, BountyNotorietyManager::PLAYERDEATHBLOW);
+		CombatManager::instance()->handleCityAuthorityDeathBlow(attackerCreature, player);
 	}
 
 	sendActivateCloneRequest(player, typeofdeath);
