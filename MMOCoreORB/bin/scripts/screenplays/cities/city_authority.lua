@@ -94,7 +94,7 @@ end
 
 function CityAuthorityScreenPlay:releasePlayer(pPlayer)
 	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature() or
-			self:getSentenceEnd(pPlayer) == 0 or self:getRemainingSentence(pPlayer) > 0) then
+			self:getRemainingSentence(pPlayer) > 0) then
 		return false, "Your sentence has not been completed."
 	end
 

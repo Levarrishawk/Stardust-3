@@ -34,8 +34,9 @@ function cityAuthorityWardenConvoHandler:runScreenHandlers(pConvTemplate, pPlaye
 	local sentenceEnd = CityAuthorityScreenPlay:getSentenceEnd(pPlayer)
 
 	if (sentenceEnd == 0) then
-		clonedScreen:setCustomDialogText("I have no active sentence recorded for you.")
-		clonedScreen:addOption("Understood.", "end_conversation")
+		clonedScreen:setCustomDialogText("You have no active sentence recorded. I can process your release after payment of a 20,000 credit fine.")
+		clonedScreen:addOption("Pay the 20,000 credit fine and process my release.", "pay_fine")
+		clonedScreen:addOption("Not now.", "end_conversation")
 
 		return pClonedScreen
 	end
