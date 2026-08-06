@@ -21,6 +21,7 @@
 #include "server/chat/ChatManager.h"
 #include "server/zone/objects/mission/bountyhunter/BountyHunterDroid.h"
 #include "server/zone/objects/mission/bountyhunter/events/BountyHunterTargetTask.h"
+#include "server/zone/managers/director/DirectorManager.h"
 
 void BountyMissionObjectiveImplementation::setNpcTemplateToSpawn(SharedObjectTemplate* sp) {
 	npcTemplateToSpawn = sp;
@@ -136,6 +137,50 @@ void BountyMissionObjectiveImplementation::complete() {
 	locker.release();
 
 	MissionObjectiveImplementation::complete();
+}
+
+bool BountyMissionObjectiveImplementation::arrestPlayerTarget(CreatureObject* target) {
+	Locker locker(&syncMutex);
+
+	ManagedReference<MissionObject*> strongMission = mission.get();
+	ManagedReference<CreatureObject*> owner = getPlayerOwner();
+
+	if (completedMission || strongMission == nullptr || owner == nullptr || target == nullptr ||
+			!isPlayerTarget() || strongMission->getTargetObjectId() != target->getObjectID() ||
+			!target->isPlayerCreature() || !target->isIncapacitated() || target->isDead() ||
+			target->isFeigningDeath() || owner->isDead() || owner->isIncapacitated() ||
+			owner->getZone() == nullptr || owner->getZone() != target->getZone() ||
+			!owner->isInRange(target, 5.0f)) {
+		return false;
+	}
+
+	MissionManager* missionManager = owner->getZoneServer()->getMissionManager();
+
+	if (missionManager == nullptr || !missionManager->hasPlayerBountyTargetInList(target->getObjectID()) ||
+			!missionManager->hasBountyHunterInPlayerBounty(target->getObjectID(), owner->getObjectID())) {
+		return false;
+	}
+
+	Lua* lua = DirectorManager::instance()->getLuaInstance();
+
+	if (lua == nullptr)
+		return false;
+
+	Reference<LuaFunction*> arrestPlayer = lua->createFunction("CityAuthorityScreenPlay", "completeArrest", 0);
+
+	if (arrestPlayer == nullptr)
+		return false;
+
+	*arrestPlayer << target;
+	arrestPlayer->callFunction();
+
+	owner->sendSystemMessage("You have arrested your bounty target and completed the mission.");
+	target->sendSystemMessage("You have been arrested by a bounty hunter.");
+
+	locker.release();
+	complete();
+
+	return true;
 }
 
 void BountyMissionObjectiveImplementation::spawnTarget(const String& zoneName) {

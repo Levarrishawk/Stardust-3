@@ -78,6 +78,7 @@ class BountyMissionObjective extends MissionObjective {
 	public native void deactivate();
 	public native void abort();
 	public native void complete();
+	public native boolean arrestPlayerTarget(CreatureObject target);
 
 	@preLocked
 	public native void spawnTarget(final string zoneName);

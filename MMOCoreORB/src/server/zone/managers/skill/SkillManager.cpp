@@ -444,15 +444,7 @@ bool SkillManager::awardSkill(const String& skillName, CreatureObject* creature,
 		if (skill->getSkillName().contains("force_sensitive") && skill->getSkillName().contains("_04"))
 			JediManager::instance()->onFSTreeCompleted(creature, skill->getSkillName());
 
-		MissionManager* missionManager = creature->getZoneServer()->getMissionManager();
-
-		if (skill->getSkillName() == "force_title_jedi_rank_02") {
-			if (missionManager != nullptr)
-				missionManager->addPlayerToBountyList(creature->getObjectID(), ghost->calculateBhReward());
-		} else if (skill->getSkillName().contains("force_discipline")) {
-			if (missionManager != nullptr)
-				missionManager->updatePlayerBountyReward(creature->getObjectID(), ghost->calculateBhReward());
-		} else if (skill->getSkillName().contains("squadleader")) {
+		if (skill->getSkillName().contains("squadleader")) {
 			Reference<GroupObject*> group = creature->getGroup();
 
 			if (group != nullptr && group->getLeader() == creature) {
@@ -648,15 +640,7 @@ bool SkillManager::surrenderSkill(const String& skillName, CreatureObject* creat
 			creature->setLevel(playerManager->calculatePlayerLevel(creature));
 		}
 
-		MissionManager* missionManager = creature->getZoneServer()->getMissionManager();
-
-		if (skill->getSkillName() == "force_title_jedi_rank_02") {
-			if (missionManager != nullptr)
-				missionManager->removePlayerFromBountyList(creature->getObjectID());
-		} else if (skill->getSkillName().contains("force_discipline")) {
-			if (missionManager != nullptr)
-				missionManager->updatePlayerBountyReward(creature->getObjectID(), ghost->calculateBhReward());
-		} else if (skill->getSkillName().contains("squadleader")) {
+		if (skill->getSkillName().contains("squadleader")) {
 			Reference<GroupObject*> group = creature->getGroup();
 
 			if (group != nullptr && group->getLeader() == creature) {

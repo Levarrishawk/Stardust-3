@@ -23,6 +23,7 @@
 #include "server/zone/Zone.h"
 #include "server/zone/managers/collision/CollisionManager.h"
 #include "server/zone/managers/visibility/VisibilityManager.h"
+#include "server/zone/managers/bounty/BountyNotorietyManager.h"
 #include "server/zone/managers/creature/LairObserver.h"
 #include "server/zone/managers/reaction/ReactionManager.h"
 #include "server/zone/managers/player/PlayerManager.h"
@@ -290,6 +291,7 @@ namespace {
 		attacker->addCooldown(cooldownName, cleanupTime);
 		attacker->addCooldown(pairCooldownName, cleanupTime);
 		victim->addCooldown(pairCooldownName, cleanupTime);
+		BountyNotorietyManager::instance()->increaseNotoriety(attacker, BountyNotorietyManager::CITYAUTHORITYATTACK);
 
 		ManagedReference<CreatureObject*> strongAttacker = attacker;
 		ManagedReference<CreatureObject*> strongVictim = victim;

@@ -12,9 +12,14 @@
 #include "server/zone/managers/city/CityManager.h"
 #include "server/zone/managers/city/CityRemoveAmenityTask.h"
 #include "server/zone/objects/player/sessions/SlicingSession.h"
+#include "server/zone/objects/player/sui/inputbox/SuiInputBox.h"
+#include "server/zone/objects/player/sui/callbacks/PlacePlayerBountySuiCallback.h"
 
 void MissionTerminalImplementation::fillObjectMenuResponse(ObjectMenuResponse* menuResponse, CreatureObject* player) {
 	TerminalImplementation::fillObjectMenuResponse(menuResponse, player);
+
+	if (isBountyTerminal())
+		menuResponse->addRadialMenuItem(78, 3, "Place Player Bounty");
 
 	ManagedReference<CityRegion*> city = player->getCityRegion().get();
 
@@ -59,6 +64,22 @@ int MissionTerminalImplementation::handleObjectMenuSelect(CreatureObject* player
 		ManagedReference<SlicingSession*> session = new SlicingSession(player);
 		session->initalizeSlicingMenu(player, _this.getReferenceUnsafeStaticCast());
 
+		return 0;
+
+	} else if (selectedID == 78 && isBountyTerminal()) {
+		auto ghost = player->getPlayerObject();
+
+		if (ghost == nullptr)
+			return 0;
+
+		ManagedReference<SuiInputBox*> input = new SuiInputBox(player, SuiWindowType::PLACE_PLAYER_BOUNTY_TARGET);
+		input->setPromptTitle("Place Player Bounty");
+		input->setPromptText("Enter the first name of the player you want to place a bounty on.");
+		input->setMaxInputSize(20);
+		input->setCallback(new PlacePlayerBountySuiCallback(getZoneServer(), _this.getReferenceUnsafeStaticCast()));
+
+		ghost->addSuiBox(input);
+		player->sendMessage(input->generateMessage());
 		return 0;
 
 	} else if (selectedID == 72) {

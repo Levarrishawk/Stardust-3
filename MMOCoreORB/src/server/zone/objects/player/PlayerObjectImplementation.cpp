@@ -66,6 +66,7 @@
 #include "server/zone/objects/player/events/PvpTefRemovalTask.h"
 #include "server/zone/objects/player/events/SpawnHelperDroidTask.h"
 #include "server/zone/managers/visibility/VisibilityManager.h"
+#include "server/zone/managers/bounty/BountyNotorietyManager.h"
 #include "server/zone/managers/jedi/JediManager.h"
 #include "server/zone/objects/player/events/ForceRegenerationEvent.h"
 #include "server/login/account/AccountManager.h"
@@ -466,23 +467,7 @@ void PlayerObjectImplementation::unload() {
 }
 
 int PlayerObjectImplementation::calculateBhReward() {
-	int minReward = 25000; // Minimum reward for a player bounty
-
-	if (getJediState() >= 4) // Minimum if player is knight
-		minReward = 50000;
-
-	int skillPoints = getSpentJediSkillPoints();
-	int reward = skillPoints * 1000;
-
-	int frsRank = getFrsData()->getRank();
-
-	if (frsRank > 0)
-		reward += frsRank * 100000; // +100k per frs rank
-
-	if (reward < minReward)
-		reward = minReward;
-
-	return reward;
+	return (int)(getBountyNotoriety() * 100.f);
 }
 
 void PlayerObjectImplementation::sendBaselinesTo(SceneObject* player) {
@@ -1828,18 +1813,7 @@ void PlayerObjectImplementation::notifyOnline() {
 
 	schedulePvpTefRemovalTask();
 
-	MissionManager* missionManager = zoneServer->getMissionManager();
-
-	if (missionManager != nullptr && playerCreature->hasSkill("force_title_jedi_rank_02")) {
-		uint64 id = playerCreature->getObjectID();
-
-		if (!missionManager->hasPlayerBountyTargetInList(id))
-			missionManager->addPlayerToBountyList(id, calculateBhReward());
-		else {
-			missionManager->updatePlayerBountyReward(id, calculateBhReward());
-			missionManager->updatePlayerBountyOnlineStatus(id, true);
-		}
-	}
+	BountyNotorietyManager::instance()->addToNotorietyList(playerCreature);
 
 	playerCreature->schedulePersonalEnemyFlagTasks();
 
@@ -1896,11 +1870,7 @@ void PlayerObjectImplementation::notifyOffline() {
 	*luaOnPlayerLoggedOut << playerCreature;
 	luaOnPlayerLoggedOut->callFunction();
 
-	MissionManager* missionManager = getZoneServer()->getMissionManager();
-
-	if (missionManager != nullptr && playerCreature->hasSkill("force_title_jedi_rank_02")) {
-		missionManager->updatePlayerBountyOnlineStatus(playerCreature->getObjectID(), false);
-	}
+	BountyNotorietyManager::instance()->removeFromNotorietyList(playerCreature);
 
 	ManagedReference<SurveySession*> session = playerCreature->getActiveSession(SessionFacadeType::SURVEY).castTo<SurveySession*>();
 
@@ -2841,6 +2811,10 @@ void PlayerObjectImplementation::clearScreenPlayData(const String& screenPlay) {
 
 Time PlayerObjectImplementation::getLastVisibilityUpdateTimestamp() const {
 	return lastVisibilityUpdateTimestamp;
+}
+
+Time PlayerObjectImplementation::getLastBountyNotorietyUpdateTimestamp() const {
+	return lastBountyNotorietyUpdateTimestamp;
 }
 
 Time PlayerObjectImplementation::getLastBhPvpCombatActionTimestamp() const {

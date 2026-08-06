@@ -12,6 +12,7 @@
 #include "server/zone/managers/gcw/tasks/ContrabandScanTask.h"
 #include "server/zone/managers/gcw/tasks/LambdaShuttleWithReinforcementsTask.h"
 #include "server/zone/managers/mission/MissionManager.h"
+#include "server/zone/managers/bounty/BountyNotorietyManager.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/creature/ai/AiAgent.h"
@@ -400,6 +401,7 @@ void ContrabandScanSessionImplementation::checkIfPlayerHasReturned(Zone* zone, A
 		sendScannerChatMessage(zone, scanner, player, "return_thank_imperial", "return_thank_rebel");
 		scanner->doAnimation("nod_head_once");
 	} else if (timeLeft < 0) {
+		BountyNotorietyManager::instance()->increaseNotoriety(player, BountyNotorietyManager::CRACKDOWNEVASION);
 		sendScannerChatMessage(zone, scanner, player, "return_false_imperial", "return_false_rebel");
 		sendSystemMessage(scanner, player, "ran_away_imperial", "ran_away_rebel");
 		player->getPlayerObject()->decreaseFactionStanding(scanner->getFactionString(), zone->getGCWManager()->getCrackdownContrabandFineFactionPoints());
@@ -456,6 +458,7 @@ void ContrabandScanSessionImplementation::performScan(Zone* zone, AiAgent* scann
 		}
 
 		if (numberOfContrabandItems > 0 && !smugglerAvoidedScan) {
+			BountyNotorietyManager::instance()->increaseNotoriety(player, BountyNotorietyManager::CONTRABANDDETECTED);
 			sendScannerChatMessage(zone, scanner, player, "fined_imperial", "fined_rebel");
 			sendSystemMessage(scanner, player, "probe_scan_positive");
 			scanner->doAnimation("wave_finger_warning");

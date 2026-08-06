@@ -12,6 +12,7 @@ class PlayerBounty extends ManagedObject {
 	protected unsigned long targetPlayerID;
 
 	protected int reward;
+	protected int playerContribution;
 
 	protected boolean online;
 
@@ -28,6 +29,7 @@ class PlayerBounty extends ManagedObject {
 	public PlayerBounty(unsigned long targetID, int payout) {
 		targetPlayerID = targetID;
 		reward = payout;
+		playerContribution = 0;
 		online = true;
 		bountyHunterIDs.setNoDuplicateInsertPlan();
 		missionCooldownList.setNoDuplicateInsertPlan();
@@ -36,7 +38,30 @@ class PlayerBounty extends ManagedObject {
 	}
 
 	public void setReward(int amount) {
-		reward = amount;
+		reward = amount + playerContribution;
+	}
+
+	public boolean addPlayerContribution(int amount) {
+		if (amount <= 0 || reward > 2147483647 - amount)
+			return false;
+
+		playerContribution += amount;
+		reward += amount;
+		return true;
+	}
+
+	public void clearPlayerContribution() {
+		reward -= playerContribution;
+		playerContribution = 0;
+	}
+
+	public boolean removePlayerContribution(int amount) {
+		if (amount <= 0 || amount > playerContribution)
+			return false;
+
+		playerContribution -= amount;
+		reward -= amount;
+		return true;
 	}
 
 	public void setOnline(boolean state) {
@@ -51,6 +76,11 @@ class PlayerBounty extends ManagedObject {
 	@read
 	public int getReward() {
 		return reward;
+	}
+
+	@read
+	public int getPlayerContribution() {
+		return playerContribution;
 	}
 
 	@read

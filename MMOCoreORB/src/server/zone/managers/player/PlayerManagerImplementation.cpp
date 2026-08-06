@@ -6,6 +6,7 @@
  */
 
 #include "server/zone/managers/player/PlayerManager.h"
+#include "server/zone/managers/bounty/BountyNotorietyManager.h"
 #include <utility>
 #include <mutex>
 
@@ -1403,8 +1404,10 @@ void PlayerManagerImplementation::killPlayer(TangibleObject* attacker, CreatureO
 
 	player->setPosture(CreaturePosture::DEAD, !isCombatAction, !isCombatAction);
 
-	if (typeofdeath == 1 && attacker->isPlayerCreature())
+	if (typeofdeath == 1 && attacker->isPlayerCreature()) {
+		BountyNotorietyManager::instance()->increaseNotoriety(attacker->asCreatureObject(), BountyNotorietyManager::PLAYERDEATHBLOW);
 		CombatManager::instance()->handleCityAuthorityDeathBlow(attacker->asCreatureObject(), player);
+	}
 
 	sendActivateCloneRequest(player, typeofdeath);
 

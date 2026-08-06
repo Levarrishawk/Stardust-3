@@ -256,6 +256,11 @@ class PlayerObject extends IntangibleObject {
 	@dereferenced
 	protected Time lastVisibilityUpdateTimestamp;
 
+	protected float bountyNotoriety;
+
+	@dereferenced
+	protected Time lastBountyNotorietyUpdateTimestamp;
+
 	@dereferenced
 	protected Time lastBhPvpCombatActionTimestamp;
 
@@ -397,6 +402,8 @@ class PlayerObject extends IntangibleObject {
 
 		visibility = 0;
 		lastVisibilityUpdateTimestamp.updateToCurrentTime();
+		bountyNotoriety = 0;
+		lastBountyNotorietyUpdateTimestamp.updateToCurrentTime();
 
 		lastBhPvpCombatActionTimestamp.updateToCurrentTime();
 		lastGcwPvpCombatActionTimestamp.updateToCurrentTime();
@@ -1811,6 +1818,21 @@ class PlayerObject extends IntangibleObject {
 	@local
 	@read
 	public native Time getLastVisibilityUpdateTimestamp();
+
+	@read
+	public float getBountyNotoriety() {
+		return bountyNotoriety;
+	}
+
+	public void setBountyNotoriety(float value) {
+		bountyNotoriety = value;
+		lastBountyNotorietyUpdateTimestamp.updateToCurrentTime();
+	}
+
+	@dereferenced
+	@local
+	@read
+	public native Time getLastBountyNotorietyUpdateTimestamp();
 
 	@dereferenced
 	@local

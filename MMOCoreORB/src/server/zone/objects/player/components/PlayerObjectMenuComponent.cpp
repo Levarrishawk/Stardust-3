@@ -8,6 +8,10 @@
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/group/GroupObject.h"
 #include "server/zone/managers/player/PlayerManager.h"
+#include "server/zone/managers/mission/MissionManager.h"
+#include "server/zone/managers/radial/RadialOptions.h"
+#include "server/zone/objects/mission/MissionObject.h"
+#include "server/zone/objects/mission/BountyMissionObjective.h"
 
 void PlayerObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, ObjectMenuResponse* menuResponse, CreatureObject* player) const {
 	if (!sceneObject->isCreatureObject())
@@ -38,6 +42,14 @@ void PlayerObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject,
 	// Allow admins to grant divorce to married players
 	if (targetGhost != nullptr && targetGhost->isMarried() && ghost != nullptr && ghost->isPrivileged()) {
 		menuResponse->addRadialMenuItem(117, 3, "@unity:mnu_divorce"); // "Divorce"
+	}
+
+	if (targetGhost != nullptr && creature != player && creature->isIncapacitated() && !creature->isDead() && !creature->isFeigningDeath()) {
+		MissionManager* missionManager = player->getZoneServer()->getMissionManager();
+		Reference<MissionObject*> mission = missionManager == nullptr ? nullptr : missionManager->getBountyHunterMission(player);
+
+		if (mission != nullptr && mission->getTargetObjectId() == creature->getObjectID())
+			menuResponse->addRadialMenuItem(RadialOptions::SERVER_MENU10, 3, "Arrest");
 	}
 }
 
@@ -72,6 +84,22 @@ int PlayerObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, 
 			}, "GrantDivorceLambda");
 		}
 		break;
+	case RadialOptions::SERVER_MENU10: {
+		MissionManager* missionManager = player->getZoneServer()->getMissionManager();
+		Reference<MissionObject*> mission = missionManager == nullptr ? nullptr : missionManager->getBountyHunterMission(player);
+
+		if (mission == nullptr || mission->getTargetObjectId() != ownerPlayer->getObjectID()) {
+			player->sendSystemMessage("You do not have an active bounty mission for this target.");
+			break;
+		}
+
+		ManagedReference<BountyMissionObjective*> objective = cast<BountyMissionObjective*>(mission->getMissionObjective());
+
+		if (objective == nullptr || !objective->arrestPlayerTarget(ownerPlayer))
+			player->sendSystemMessage("The target must be incapacitated and within five meters to be arrested.");
+
+		break;
+	}
 	}
 
 	return 0;

@@ -2050,6 +2050,50 @@ void MissionManagerImplementation::updatePlayerBountyOnlineStatus(uint64 targetI
 	}
 }
 
+bool MissionManagerImplementation::addPlayerBountyContribution(uint64 targetId, int baseReward, int contribution, bool online) {
+	if (targetId == 0 || baseReward < 0 || contribution <= 0)
+		return false;
+
+	Locker listLocker(&playerBountyListMutex);
+	PlayerBounty* bounty = nullptr;
+
+	if (!playerBountyList.contains(targetId)) {
+		bounty = new PlayerBounty(targetId, baseReward);
+		ObjectManager::instance()->persistObject(bounty, 1, "playerbounties");
+		playerBountyList.put(targetId, bounty);
+	} else {
+		bounty = playerBountyList.get(targetId);
+	}
+
+	if (bounty == nullptr || !bounty->addPlayerContribution(contribution))
+		return false;
+
+	bounty->setOnline(online);
+	return true;
+}
+
+void MissionManagerImplementation::removePlayerBountyContribution(uint64 targetId, int contribution) {
+	Locker listLocker(&playerBountyListMutex);
+
+	if (!playerBountyList.contains(targetId))
+		return;
+
+	PlayerBounty* bounty = playerBountyList.get(targetId);
+
+	if (bounty != nullptr)
+		bounty->removePlayerContribution(contribution);
+}
+
+int MissionManagerImplementation::getPlayerBountyContribution(uint64 targetId) {
+	Locker listLocker(&playerBountyListMutex);
+
+	if (!playerBountyList.contains(targetId))
+		return 0;
+
+	PlayerBounty* bounty = playerBountyList.get(targetId);
+	return bounty != nullptr ? bounty->getPlayerContribution() : 0;
+}
+
 void MissionManagerImplementation::addBountyHunterToPlayerBounty(uint64 targetId, uint64 bountyHunterId) {
 	Locker listLocker(&playerBountyListMutex);
 
@@ -2092,9 +2136,9 @@ bool MissionManagerImplementation::isBountyValidForPlayer(CreatureObject* player
 	if (!bounty->isOnline())
 		return false;
 
-	int maxBountiesPerJedi = ConfigManager::instance()->getInt("Core3.MissionManager.MaxBountiesPerJedi", 5);
+	int maxBountiesPerTarget = ConfigManager::instance()->getInt("Core3.MissionManager.MaxBountiesPerJedi", 5);
 
-	if (bounty->numberOfActiveMissions() >= maxBountiesPerJedi)
+	if (bounty->numberOfActiveMissions() >= maxBountiesPerTarget)
 		return false;
 
 	uint64 targetId = bounty->getTargetPlayerID();
@@ -2180,6 +2224,7 @@ void MissionManagerImplementation::completePlayerBounty(uint64 targetId, uint64 
 		}
 
 		target->setLastBountyKill(curTime);
+		target->clearPlayerContribution();
 		uint64 lastDebuff = target->getLastBountyDebuff();
 
 		if (curTime-lastDebuff > playerBountyDebuffLength)
@@ -2320,16 +2365,6 @@ int MissionManagerImplementation::getRealBountyReward(CreatureObject* creo, Play
 	if (creo == nullptr || bounty == nullptr)
 		return 0;
 
-	if (System::getMiliTime() - bounty->getLastBountyDebuff() < playerBountyDebuffLength) {
-		ManagedReference<PlayerObject*> player = creo->getPlayerObject();
-		if (player == nullptr)
-			return 0;
-
-		if (player->getJediState() >= 4)
-			return 50000;
-		else
-			return 25000;
-	}
 	return bounty->getReward();
 }
 
@@ -2354,8 +2389,8 @@ bool MissionManagerImplementation::sendPlayerBountyDebug(CreatureObject* creatur
 	PlayerBounty* playerBounty = playerBountyList.get(target->getObjectID());
 
 	ManagedReference<SuiListBox*> box = new SuiListBox(creature, 0);
-	box->setPromptTitle("Jedi Visibility");
-	String promptText = "Player: " + target->getFirstName() + "\n" + "Visibility: " + String::valueOf(targetGhost->getVisibility()) + "\n";
+	box->setPromptTitle("Player Bounty Notoriety");
+	String promptText = "Player: " + target->getFirstName() + "\n" + "Bounty Notoriety: " + String::valueOf(targetGhost->getBountyNotoriety()) + "\n";
 
 	if (playerBounty == nullptr) {
 		promptText += "-- No player bounty data --\n";
@@ -2363,6 +2398,7 @@ bool MissionManagerImplementation::sendPlayerBountyDebug(CreatureObject* creatur
 		promptText += "-- Bounty Data --\n";
 		promptText += "Current Reward: " + String::valueOf(getRealBountyReward(target, playerBounty)) + "\n";
 		promptText += "Bounty Reward: " + String::valueOf(playerBounty->getReward()) + "\n";
+		promptText += "Player Contributions: " + String::valueOf(playerBounty->getPlayerContribution()) + "\n";
 		String onlineStatus = playerBounty->isOnline() ? "True" : "False";
 		promptText += "Online Status: " + onlineStatus + "\n";
 		int activeCount = playerBounty->numberOfActiveMissions();
