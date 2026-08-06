@@ -6,10 +6,10 @@ inquisitor_outfit = {
     },
 
     {objectTemplate = "object/tangible/wearables/bodysuit/bodysuit_tie_fighter.iff", customizationVariables = {{"/private/index_color_1", 1}} },
-    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_bicep_r.iff", customizationVariables = {{"/private/index_color_1", 15}, {"/private/index_color_2", 7}} },        
-    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_bracer_r.iff", customizationVariables = {{"/private/index_color_1", 15}, {"/private/index_color_2", 7}} },
-    {objectTemplate = "object/tangible/wearables/gloves/gloves_s02.iff", customizationVariables = {{"/private/index_color_1", 24}} },
-    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_boots.iff", customizationVariables = {{"/private/index_color_1", 15}, {"/private/index_color_2", 7}} }   
+    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_bicep_r.iff", customizationVariables = {{"/private/index_color_1", 1}, {"/private/index_color_2", 7}} },        
+    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_bracer_r.iff", customizationVariables = {{"/private/index_color_1", 1}, {"/private/index_color_2", 7}} },
+    {objectTemplate = "object/tangible/wearables/gloves/gloves_s02.iff", customizationVariables = {{"/private/index_color_1", 60}} },
+    {objectTemplate = "object/tangible/wearables/armor/stormtrooper/armor_stormtrooper_boots.iff", customizationVariables = {{"/private/index_color_1", 1}, {"/private/index_color_2", 7}} }   
   }
 }
 
