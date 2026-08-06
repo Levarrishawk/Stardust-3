@@ -111,6 +111,28 @@ void BountyNotorietyManager::ensureMinimumNotoriety(CreatureObject* creature, fl
 	addToNotorietyList(creature);
 }
 
+void BountyNotorietyManager::clearNotoriety(CreatureObject* creature) {
+	if (creature == nullptr || !creature->isPlayerCreature())
+		return;
+
+	auto ghost = creature->getPlayerObject();
+
+	if (ghost == nullptr)
+		return;
+
+	{
+		Locker locker(ghost);
+		ghost->setBountyNotoriety(0);
+	}
+
+	updateBountyStatus(creature);
+
+	Locker locker(&notorietyListLock);
+
+	if (notorietyList.contains(creature->getObjectID()))
+		notorietyList.drop(creature->getObjectID());
+}
+
 void BountyNotorietyManager::increaseNotoriety(CreatureObject* creature, NotorietyAction action) {
 	if (creature == nullptr || !creature->isPlayerCreature())
 		return;

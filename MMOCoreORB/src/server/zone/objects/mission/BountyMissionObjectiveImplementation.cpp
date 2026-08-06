@@ -22,6 +22,7 @@
 #include "server/zone/objects/mission/bountyhunter/BountyHunterDroid.h"
 #include "server/zone/objects/mission/bountyhunter/events/BountyHunterTargetTask.h"
 #include "server/zone/managers/director/DirectorManager.h"
+#include "server/zone/managers/bounty/BountyNotorietyManager.h"
 
 void BountyMissionObjectiveImplementation::setNpcTemplateToSpawn(SharedObjectTemplate* sp) {
 	npcTemplateToSpawn = sp;
@@ -124,6 +125,13 @@ void BountyMissionObjectiveImplementation::complete() {
 		return;
 
 	ManagedReference<CreatureObject*> owner = getPlayerOwner();
+	ManagedReference<CreatureObject*> playerTarget;
+
+	if (owner == nullptr || owner->getZoneServer() == nullptr)
+		return;
+
+	if (isPlayerTarget())
+		playerTarget = owner->getZoneServer()->getObject(mission->getTargetObjectId()).castTo<CreatureObject*>();
 	//Award bountyhunter xp.
 
 	int expGain = (mission->getRewardCredits() + mission->getBonusCredits()) / 50;
@@ -137,6 +145,9 @@ void BountyMissionObjectiveImplementation::complete() {
 	locker.release();
 
 	MissionObjectiveImplementation::complete();
+
+	if (playerTarget != nullptr)
+		BountyNotorietyManager::instance()->clearNotoriety(playerTarget);
 }
 
 bool BountyMissionObjectiveImplementation::arrestPlayerTarget(CreatureObject* target) {

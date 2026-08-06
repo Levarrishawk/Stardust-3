@@ -36,6 +36,7 @@ public:
 
 	void increaseNotoriety(CreatureObject* creature, NotorietyAction action);
 	void ensureMinimumNotoriety(CreatureObject* creature, float minimum);
+	void clearNotoriety(CreatureObject* creature);
 	void addToNotorietyList(CreatureObject* creature);
 	void removeFromNotorietyList(CreatureObject* creature);
 	void performNotorietyDecay();
