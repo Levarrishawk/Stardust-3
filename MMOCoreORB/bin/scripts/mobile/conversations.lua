@@ -320,6 +320,7 @@ includeFile("conversations/pet/pets_conv.lua")
 includeFile("conversations/misc/bartender_conv.lua")
 includeFile("conversations/misc/philosopher_conv.lua")
 includeFile("conversations/misc/city_authority_warden_conv.lua")
+includeFile("conversations/misc/city_authority_sentence_officer_conv.lua")
 
 -- Junk Dealers
 includeFile("conversations/junk_dealer/junk_dealer_generic_conv.lua")

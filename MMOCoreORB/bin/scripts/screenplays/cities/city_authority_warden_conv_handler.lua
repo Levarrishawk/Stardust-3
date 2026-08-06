@@ -18,6 +18,30 @@ function cityAuthorityWardenConvoHandler:runScreenHandlers(pConvTemplate, pPlaye
 
 	clonedScreen:removeAllOptions()
 
+	if (screenID == "sentence_info_end") then
+		clonedScreen:setCustomDialogText("Speak with the warden in his office near the entrance if you wish to discuss parole.")
+
+		return pClonedScreen
+	end
+
+	if (screenID == "sentence_info") then
+		local sentenceEnd = CityAuthorityScreenPlay:getSentenceEnd(pPlayer)
+		local remaining = CityAuthorityScreenPlay:getRemainingSentence(pPlayer)
+
+		if (sentenceEnd == 0) then
+			clonedScreen:setCustomDialogText("I have no active city-authority sentence recorded for you. Speak with the warden in his office near the entrance to discuss parole.")
+		elseif (remaining > 0) then
+			clonedScreen:setCustomDialogText("You have " .. self:formatRemainingTime(remaining) ..
+					" remaining on your sentence. Speak with the warden in his office near the entrance to discuss parole.")
+		else
+			clonedScreen:setCustomDialogText("Your sentence has elapsed. Speak with the warden in his office near the entrance to discuss parole.")
+		end
+
+		clonedScreen:addOption("Understood.", "sentence_info_end")
+
+		return pClonedScreen
+	end
+
 	if (screenID == "end_conversation") then
 		clonedScreen:setCustomDialogText("Very well.")
 

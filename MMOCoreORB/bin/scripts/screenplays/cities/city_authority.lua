@@ -13,10 +13,17 @@ CityAuthorityScreenPlay = ScreenPlay:new {
 	},
 
 	wardenLocation = {
-		x = -3.4,
+		x = 3.4,
 		z = -9.0,
 		y = 32.7,
 		cellID = 37002244,
+	},
+
+	sentenceOfficerLocation = {
+		x = -51.7,
+		z = -23.0,
+		y = 215.1,
+		cellID = 37002253,
 	},
 
 	releaseDestination = {
@@ -41,6 +48,14 @@ function CityAuthorityScreenPlay:start()
 
 	if (pWarden ~= nil) then
 		CreatureObject(pWarden):setMoodString("neutral")
+	end
+
+	local officerLocation = self.sentenceOfficerLocation
+	local pOfficer = spawnMobile("coruscant", "city_authority_sentence_officer", 0,
+			officerLocation.x, officerLocation.z, officerLocation.y, 0, officerLocation.cellID)
+
+	if (pOfficer ~= nil) then
+		CreatureObject(pOfficer):setMoodString("neutral")
 	end
 end
 
