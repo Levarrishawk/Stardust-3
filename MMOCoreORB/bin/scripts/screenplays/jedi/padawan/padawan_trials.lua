@@ -638,6 +638,7 @@ function PadawanTrials:notifyEnteredMainLocSpawnArea(pArea, pPlayer)
 	CreatureObject(pNpc):setCustomObjectName(trialData.trialNpcName)
 	writeData(areaID .. ":npcID", npcID)
 	writeData(npcID .. ":ownerID", playerID)
+	AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
 	AiAgent(pNpc):setConvoTemplate("padawan_" .. trialData.trialName .. "_01_convo_template")
 
 	deleteData(playerID .. ":mainLocSpawnAreaID")
@@ -855,13 +856,11 @@ function PadawanTrials:notifyEnteredTargetLocSpawnArea(pArea, pPlayer)
 				CreatureObject(pNpc):setPvpStatusBitmask(0)
 			end
 
-			if ((isThirdLocation and trialData.thirdTargetStationary) or (not isThirdLocation and trialData.targetStationary)) then
-				AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
-			end
 		end
 
 		if (trialData.trialType == TRIAL_TALK and not string.find(npcTemplate, ".iff")) then
 			CreatureObject(pNpc):setOptionsBitmask(136)
+			AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
 
 			if (isThirdLocation) then
 				AiAgent(pNpc):setConvoTemplate("padawan_" .. trialData.trialName .. "_03_convo_template")

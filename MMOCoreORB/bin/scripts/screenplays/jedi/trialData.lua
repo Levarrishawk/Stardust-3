@@ -83,11 +83,9 @@ padawanTrialQuests = {
 		trialLoc = { -74.8, 18.0, -1592, "dathomir", "Pannaqa's farm" },
 		targetNpc = "commoner",
 		targetKillable = false,
-		targetStationary = true,
 		thirdTargetNpc = "commoner_male",
 		thirdTargetName = "Shendo",
-		thirdTargetKillable = false,
-		thirdTargetStationary = true
+		thirdTargetKillable = false
 	},
 	{
 		trialName = "peoples_soldier",
