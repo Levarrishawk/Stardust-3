@@ -33,7 +33,6 @@
 #include "server/zone/Zone.h"
 #include "server/zone/managers/stringid/StringIdManager.h"
 #include "server/zone/objects/player/FactionStatus.h"
-#include "server/zone/managers/visibility/VisibilityManager.h"
 #include "server/zone/objects/building/BuildingObject.h"
 #include "server/zone/managers/director/DirectorManager.h"
 
@@ -2121,9 +2120,8 @@ bool MissionManagerImplementation::isBountyValidForPlayer(CreatureObject* player
 		return false;
 
 	auto targetGhost = creature->getPlayerObject();
-	float terminalVisibilityThreshold = VisibilityManager::instance()->getTerminalVisThreshold();
 
-	if (targetGhost == nullptr || targetGhost->getVisibility() < terminalVisibilityThreshold)
+	if (targetGhost == nullptr)
 		return false;
 
 	auto playerGhost = player->getPlayerObject();

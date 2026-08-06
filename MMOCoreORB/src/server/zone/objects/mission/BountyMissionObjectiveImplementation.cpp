@@ -21,7 +21,6 @@
 #include "server/chat/ChatManager.h"
 #include "server/zone/objects/mission/bountyhunter/BountyHunterDroid.h"
 #include "server/zone/objects/mission/bountyhunter/events/BountyHunterTargetTask.h"
-#include "server/zone/managers/visibility/VisibilityManager.h"
 
 void BountyMissionObjectiveImplementation::setNpcTemplateToSpawn(SharedObjectTemplate* sp) {
 	npcTemplateToSpawn = sp;
@@ -644,7 +643,6 @@ void BountyMissionObjectiveImplementation::handlePlayerKilled(ManagedObject* arg
 	int minXpLoss = -50000;
 	int maxXpLoss = -500000;
 
-	VisibilityManager::instance()->clearVisibility(target);
 	int rewardCreds = mission->getRewardCredits() + mission->getBonusCredits();
 	int xpLoss = rewardCreds * -2;
 

@@ -720,23 +720,40 @@ void ContrabandScanSessionImplementation::jediMindTrickResult(Zone* zone, AiAgen
 
 void ContrabandScanSessionImplementation::jediDetect(Zone* zone, AiAgent* scanner, CreatureObject* player) {
 	if (zone != nullptr) {
-		if (System::random(100) < jediAvoidDetectionSuccessChance(player) || (scannerFaction == Factions::FACTIONREBEL && !isDarkJedi(player))) {
+		auto ghost = player->getPlayerObject();
+		float visibility = ghost != nullptr ? ghost->getVisibility() : 0;
+		int containmentLevel = 0;
+
+		if (visibility >= JEDICONTAINMENTLEVEL5)
+			containmentLevel = 5;
+		else if (visibility >= JEDICONTAINMENTLEVEL4)
+			containmentLevel = 4;
+		else if (visibility >= JEDICONTAINMENTLEVEL3)
+			containmentLevel = 3;
+		else if (visibility >= JEDICONTAINMENTLEVEL2)
+			containmentLevel = 2;
+		else if (visibility >= JEDICONTAINMENTLEVEL1)
+			containmentLevel = 1;
+
+		if (containmentLevel == 0) {
 			scanState = FACTIONRANKCHECK;
 			timeLeft = SCANTIME;
 		} else {
-			sendScannerChatMessage(zone, scanner, player, "discovered_jedi_imperial", "discovered_jedi_rebel");
+			sendScannerChatMessage(zone, scanner, player, "discovered_jedi_imperial", "discovered_jedi_imperial");
 			scanner->doAnimation("point_accusingly");
 			StringIdChatParameter chatMessage;
 
-			String landingMessage = getFactionStringId(player, "containment_team_jedi_imperial", "containment_team_jedi_rebel");
-			callInLambdaShuttle(scanner, player, JEDIREINFORCEMENTDIFFICULTY, landingMessage);
+			String landingMessage = getFactionStringId(player, "containment_team_jedi_imperial", "containment_team_jedi_imperial");
+			callInJediContainmentTeam(scanner, player, containmentLevel, landingMessage);
 
 			scanner->removeObjectFlag(ObjectFlag::FOLLOW);
 			scanner->setMovementState(AiAgent::FOLLOWING);
 
-			addCrackdownTef(player);
+			if (ghost != nullptr)
+				ghost->setCrackdownTefTowards(Factions::FACTIONIMPERIAL);
 			enforcedScan = false;
-			CombatManager::instance()->startCombat(scanner, player);
+			if (scanner->getFaction() == Factions::FACTIONIMPERIAL)
+				CombatManager::instance()->startCombat(scanner, player);
 
 			scanState = FINISHED;
 		}
@@ -901,4 +918,21 @@ void ContrabandScanSessionImplementation::moveAlongMessage(AiAgent* scanner) {
 		return;
 
 	scanner->broadcastMessage(moveAlong, false);
+}
+
+void ContrabandScanSessionImplementation::callInJediContainmentTeam(AiAgent* scanner, CreatureObject* player, int containmentLevel, const String& landingMessage) {
+	if (scanner == nullptr || player == nullptr || containmentLevel < 1 || containmentLevel > 5) {
+		scanState = FINISHED;
+		return;
+	}
+
+	MissionManager* missionManager = player->getZoneServer()->getMissionManager();
+	auto spawnPoint = missionManager->getFreeNpcSpawnPoint(player->getPlanetCRC(), player->getWorldPositionX(), player->getWorldPositionY(), NpcSpawnPoint::CONTAINMENTTEAMSPAWN);
+
+	if (spawnPoint != nullptr) {
+		Reference<Task*> containmentTask = new LambdaShuttleWithReinforcementsTask(player, containmentLevel, landingMessage, *spawnPoint->getPosition(), *spawnPoint->getDirection());
+		containmentTask->schedule(IMMEDIATELY);
+	} else {
+		error("Could not find a Jedi containment team spawn point near " + player->getWorldPosition().toString() + ".");
+	}
 }

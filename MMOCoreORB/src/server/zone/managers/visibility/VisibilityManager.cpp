@@ -126,10 +126,6 @@ void VisibilityManager::addToVisibilityList(CreatureObject* creature) {
 	}
 }
 
-float VisibilityManager::getTerminalVisThreshold() {
-	return terminalVisThreshold;
-}
-
 void VisibilityManager::removeFromVisibilityList(CreatureObject* creature) {
 	//info("Logging out " + creature->getFirstName(), true);
 	Locker locker(&visibilityListLock);
@@ -193,8 +189,6 @@ void VisibilityManager::loadConfiguration() {
 		lua->runFile("scripts/managers/jedi/visibility_manager.lua");
 
 		maxVisibility  = (float)lua->getGlobalInt(String("maxVisibility"));
-		terminalVisThreshold = (float)lua->getGlobalInt(String("termThreshold"));
-		falloffThreshold = (float)lua->getGlobalInt(String("falloffThreshold"));
 		pvpRatingDivisor = (float)lua->getGlobalInt(String("pvpRatingDivisor"));
 
 		totalDecayTimeInDays = lua->getGlobalInt(String("totalDecayTimeInDays"));

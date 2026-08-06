@@ -40,6 +40,7 @@ private:
 	unsigned int faction;
 	int delayTime;
 	ReinforcementType reinforcementType;
+	Vector<String> containmentTroops;
 
 	const String LAMBDATEMPLATE = "object/creature/npc/theme_park/lambda_shuttle.iff";
 	const int LANDINGTIME = 18000;
@@ -222,7 +223,15 @@ private:
 				reinforcementType = LAMBDASHUTTLEATTACK;
 			}
 		}
-		if (reinforcementType != LAMBDASHUTTLEONLY) {
+		if (reinforcementType == CONTAINMENTTEAM && !containmentTroops.isEmpty()) {
+			spawnSingleTroop(lambdaShuttle, player, containmentTroops.get(spawnNumber), 0.0f, spawnOffset - spawnNumber);
+			spawnNumber++;
+
+			if (spawnNumber >= containmentTroops.size()) {
+				state = CLOSINGIN;
+				setupMovement(player);
+			}
+		} else if (reinforcementType != LAMBDASHUTTLEONLY) {
 			spawnOneSetOfTroops(lambdaShuttle, player);
 			if (spawnNumber > difficulty * TROOPSSPAWNPERDIFFICULTY) {
 				if (reinforcementType == CONTAINMENTTEAM) {
@@ -374,6 +383,52 @@ public:
 			state = SPAWNTROOPS;
 		} else {
 			state = SPAWNSHUTTLE;
+		}
+	}
+
+	LambdaShuttleWithReinforcementsTask(CreatureObject* player, unsigned int containmentLevel, String chatMessageId, Vector3 position, Quaternion direction) {
+		weakPlayer = player;
+		squadObserver = new SquadObserver();
+		difficulty = 1;
+		this->chatMessageId = chatMessageId;
+		spawnNumber = 0;
+		spawnPosition = position;
+		spawnDirection = direction;
+		closingInTime = 120;
+		timeToDespawnLambdaShuttle = -1;
+		cleanUpTime = 60;
+		spawnOffset = TROOPSSPAWNPERDIFFICULTY;
+		faction = Factions::FACTIONIMPERIAL;
+		troops = IMPERIALTROOPS;
+		delayTime = 90;
+		reinforcementType = CONTAINMENTTEAM;
+		state = SPAWNTROOPS;
+
+		switch (containmentLevel) {
+		case 1:
+			for (int i = 0; i < 5; ++i)
+				containmentTroops.add("crackdown_stormtrooper");
+			break;
+		case 2:
+			containmentTroops.add("jedi_containment_inquisitor");
+			for (int i = 0; i < 4; ++i)
+				containmentTroops.add("crackdown_stormtrooper");
+			break;
+		case 3:
+			containmentTroops.add("jedi_containment_inquisitor");
+			containmentTroops.add("jedi_containment_inquisitor");
+			break;
+		case 4:
+			containmentTroops.add("jedi_containment_inquisitor");
+			containmentTroops.add("jedi_containment_inquisitor");
+			for (int i = 0; i < 5; ++i)
+				containmentTroops.add("crackdown_stormtrooper");
+			break;
+		case 5:
+			containmentTroops.add("jedi_containment_darth_vader");
+			break;
+		default:
+			break;
 		}
 	}
 

@@ -18,18 +18,6 @@ namespace visibility {
 class VisibilityManager : public Singleton<VisibilityManager>, public Logger, public Object {
 
 	/**
-	 * Any player with a visibility greater than or equal to this amount will be
-	 * available on the bounty hunter mission terminal as a player bounty.
-	 */
-
-	float terminalVisThreshold;
-
-	/**
-	 * If a players visibility falls below this value they will be removed from the BH terminals
-	 */
-	float falloffThreshold;
-
-	/**
 	 * This is the maximum visibility that can be gained
 	 */
 	float maxVisibility;
@@ -120,8 +108,6 @@ public:
 	 * Constructor.
 	 */
 	VisibilityManager();
-
-	float getTerminalVisThreshold();
 
 	/**
 	 * Load lua configuration for visibility variables

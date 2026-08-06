@@ -20,7 +20,11 @@ class ContrabandScanSession extends Facade {
 	private static final int WAITFORPAYFINEANSWERTIMEOUT = 60; // 60 iterations = 60 s timeout.
 	private static final int SMUGGLERAVOIDSCANCHANCE = 80; // 80 percent chance for smugglers to completly avoid all scan related detections.
 	private static final int JEDIAVOIDDETECTIONBASECHANCE = 80; // 80 percent base chance for avoiding being detected as a jedi after all other scan avoidance checks.
-	private static final int JEDIREINFORCEMENTDIFFICULTY = 2; // Default to strongest reinforcements if a jedi is being detected.
+	private static final int JEDICONTAINMENTLEVEL1 = 1500;
+	private static final int JEDICONTAINMENTLEVEL2 = 3000;
+	private static final int JEDICONTAINMENTLEVEL3 = 4500;
+	private static final int JEDICONTAINMENTLEVEL4 = 6000;
+	private static final int JEDICONTAINMENTLEVEL5 = 8000;
 
 	// Contraband Scan Session States
 	private static final int SCANCHANCE = 0;
@@ -129,5 +133,6 @@ class ContrabandScanSession extends Facade {
 	private native void calculateSmugglingSuccess(CreatureObject player);
 	private native int getSmugglerAvoidanceChance(CreatureObject creature);
 	private native void callInLambdaShuttle(AiAgent scanner, CreatureObject player, int difficulty, final string landingMessage);
+	private native void callInJediContainmentTeam(AiAgent scanner, CreatureObject player, int containmentLevel, final string landingMessage);
 	private native void moveAlongMessage(AiAgent scanner);
 }
