@@ -1336,10 +1336,18 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "isb_officer", 60, 3.4, -12.0, 65.1, 168, 37002130)
-  self:setMoodString(pNpc, "npc_sitting_chair")
+  self:setMoodString(pNpc, "conversation")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   pNpc = spawnMobile("coruscant", "isb_officer", 60, -19.2, -12.0, 43.4, 0, 37002130)
+  self:setMoodString(pNpc, "npc_sitting_chair")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "imperial_first_lieutenant", 60, 0.1, -12.0, 59.8, -1, 37002130)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "stormtrooper", 60, 11.0, -12.0, 62.,5, -90, 37002130)
   self:setMoodString(pNpc, "npc_sitting_chair")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
@@ -1388,6 +1396,44 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "npc_sitting_chair")
   CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
+  -- Laboratories
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 19.4, -20.0, 116.3, -90, 37002138)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_warrant_officer_i", 60, 36.0, -20.0, 137.2, 168, 37002138)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "isb_officer", 60, 46.7, -12.0, 64, -50, 37002137)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -2.5, -20.0, 71, 45, 37002146)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -28.0, -20.0, 103, 180, 37002144)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -26.0, -20.0, 103, 180, 37002144)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -24.0, -20.0, 103, 180, 37002144)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -22.0, -20.0, 103, 180, 37002144)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -20.0, -20.0, 103, 180, 37002144)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -18.0, -20.0, 103, 180, 37002144)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
+  pNpc = spawnMobile("coruscant", "dark_trooper", 60, -16.0, -20.0, 103, 180, 37002144)
+  self:setMoodString(pNpc, "neutral")
+  CreatureObject(pNpc):clearOptionBit(AIENABLED)
   
   -- Prison Quarter
   pNpc = spawnMobile("coruscant", "stormtrooper", 60, -93, 40, 5605, 90, 0)
