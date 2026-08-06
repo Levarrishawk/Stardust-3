@@ -15,6 +15,7 @@ function CustomJediManager:onPlayerLoggedIn(pPlayer)
 	end
 
 	ElysiumJediProgression:syncScreenPlayState(pPlayer)
+	JediTrials:onPlayerLoggedIn(pPlayer)
 end
 
 function CustomJediManager:checkForceStatusCommand(pPlayer)
