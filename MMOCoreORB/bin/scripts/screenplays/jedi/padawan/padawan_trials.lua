@@ -303,8 +303,12 @@ function PadawanTrials:startTrial(pPlayer, trialNum, skipNotification)
 	self:createMainLocation(pPlayer)
 end
 
-function PadawanTrials:notifyCraftedTrainingSaber(pPlayer, pItem)
+function PadawanTrials:notifyCraftedTrainingSaber(pPlayer, pItem, practice)
 	if (pPlayer == nil or pItem == nil) then
+		return 0
+	end
+
+	if (practice == 1) then
 		return 0
 	end
 
@@ -330,7 +334,9 @@ function PadawanTrials:notifyCraftedTrainingSaber(pPlayer, pItem)
 		return 1
 	end
 
-	if (not string.find(SceneObject(pItem):getTemplateObjectPath(), "object/weapon/melee/sword/crafted_saber")) then
+	local templatePath = SceneObject(pItem):getTemplateObjectPath()
+
+	if (not string.find(templatePath, "/crafted_saber/") or not string.find(templatePath, "lightsaber")) then
 		return 0
 	end
 
