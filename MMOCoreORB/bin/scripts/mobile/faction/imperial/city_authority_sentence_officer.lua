@@ -1,7 +1,7 @@
 city_authority_sentence_officer = imperial_officer:new {
 	objectName = "Imperial Corrections Officer",
 	randomNameType = NAME_GENERIC,
-	randomNameTag = false,
+	randomNameTag = true,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
 	optionsBitmask = AIENABLED + CONVERSABLE,

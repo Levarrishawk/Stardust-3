@@ -1,7 +1,7 @@
 city_authority_warden = imperial_colonel:new {
 	objectName = "Imperial Prison Warden",
 	randomNameType = NAME_GENERIC,
-	randomNameTag = false,
+	randomNameTag = true,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
 	optionsBitmask = AIENABLED + CONVERSABLE,
