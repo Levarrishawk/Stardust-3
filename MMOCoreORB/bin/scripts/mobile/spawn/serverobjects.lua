@@ -503,3 +503,16 @@ includeFile("spawn/destroy_mission/yavin4_destroy_missions.lua")
 includeFile("spawn/destroy_mission/factional_imperial_destroy_missions.lua")
 includeFile("spawn/destroy_mission/factional_neutral_destroy_missions.lua")
 includeFile("spawn/destroy_mission/factional_rebel_destroy_missions.lua")
+
+
+-- custom --------------------------------
+-- Mustafar
+includeFile("spawn/mustafar_lava_fleas.lua")
+includeFile("spawn/mustafar_blistmoks.lua")
+includeFile("spawn/mustafar_tulrus.lua")
+includeFile("spawn/mustafar_tanrays.lua")
+includeFile("spawn/mustafar_xandanks.lua")
+includeFile("spawn/mustafar_jundaks.lua")
+includeFile("spawn/mustafar_kubaza_beetles.lua")
+includeFile("spawn/mustafar_storm_lord_minions.lua")
+

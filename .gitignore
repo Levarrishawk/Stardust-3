@@ -6,3 +6,17 @@ luacov.stats.out
 compile_commands.json
 README.md
 MMOCoreORB/bin/conf/config.lua
+*.pyc
+*.py
+*.tre
+*.vsh
+*.psh
+*.sht
+*.hlsl
+*.pdb
+*.dll
+/client-tools
+/.tool-cache
+/.python-packages
+/.analysis
+/.agents

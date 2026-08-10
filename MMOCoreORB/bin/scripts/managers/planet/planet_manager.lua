@@ -718,6 +718,20 @@ chandrila = { -- 21
 }
 
 
+mustafar = {
+  weatherEnabled = 0,
+  gcwEnabled = 0,
+  
+  planetTravelPoints = {
+    {name = "Mensix Mining Facility", x = -2471, z = 230, y = 1620, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 0},
+    },
+    
+    badgeAreas = {   
+      --{"hondo_camp", 3245,-756,0,20,153}, 
+       
+  },
+}
+
 
 tutorial = {
 	weatherEnabled = 0,

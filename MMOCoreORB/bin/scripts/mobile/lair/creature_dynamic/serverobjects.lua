@@ -432,3 +432,14 @@ includeFile("lair/creature_dynamic/yavin4/yavin4_tanc_mite_pack_neutral_none.lua
 includeFile("lair/creature_dynamic/yavin4/yavin4_tybis_herd_neutral_none.lua")
 includeFile("lair/creature_dynamic/yavin4/yavin4_tybis_pack_neutral_none.lua")
 includeFile("lair/creature_dynamic/yavin4/yavin4_whisper_bird_pack_neutral_none.lua")
+
+-- Custom -----------------
+-- Mustafar
+includeFile("lair/creature_dynamic/mustafar_lava_flea_pack.lua")
+includeFile("lair/creature_dynamic/mustafar_xandank_pack.lua")
+includeFile("lair/creature_dynamic/mustafar_blistmok_pack.lua")
+includeFile("lair/creature_dynamic/mustafar_tulrus_pack.lua")
+includeFile("lair/creature_dynamic/mustafar_tanray_pack.lua")
+includeFile("lair/creature_dynamic/mustafar_jundak_pack.lua")
+includeFile("lair/creature_dynamic/mustafar_kubaza_beetle_pack.lua")
+includeFile("lair/creature_dynamic/mustafar_storm_lord_pack.lua")
