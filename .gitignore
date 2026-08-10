@@ -20,3 +20,5 @@ MMOCoreORB/bin/conf/config.lua
 /.python-packages
 /.analysis
 /.agents
+/analysis
+/tools
