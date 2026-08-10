@@ -22,3 +22,10 @@ MMOCoreORB/bin/conf/config.lua
 /.agents
 /analysis
 /tools
+/.zig-cache-n4d-fullprobe
+/.zig-cache-n4d-probe
+/.zig-cache-n4d
+*.zig
+/.zig-global-cache-n4d-fullprobe
+/.zig-global-cache-n4d-probe
+/.zig-global-cache-n4d
