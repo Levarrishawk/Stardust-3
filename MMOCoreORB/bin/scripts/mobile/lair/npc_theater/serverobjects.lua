@@ -113,6 +113,8 @@ includeFile("lair/npc_theater/global/global_pirate_captain_camp_neutral_medium_t
 includeFile("lair/npc_theater/global/global_pirate_cutthroat_camp_neutral_medium_theater.lua")
 includeFile("lair/npc_theater/global/global_pirate_dread_camp_neutral_large_theater.lua")
 includeFile("lair/npc_theater/global/global_pirate_leader_camp_neutral_medium_theater.lua")
+
+
 includeFile("lair/npc_theater/global/global_rebel_army_captain_camp_rebel_medium_theater.lua")
 includeFile("lair/npc_theater/global/global_rebel_base2_rebel_large_theater.lua")
 includeFile("lair/npc_theater/global/global_rebel_base3_rebel_large_theater.lua")
@@ -141,6 +143,8 @@ includeFile("lair/npc_theater/global/global_rebel_specforce_camp2_rebel_small_th
 includeFile("lair/npc_theater/global/global_rebel_specforce_camp_rebel_large_theater.lua")
 includeFile("lair/npc_theater/global/global_rebel_specforce_camp_rebel_small_theater.lua")
 includeFile("lair/npc_theater/global/global_rebel_warrant_officer_camp_rebel_medium_theater.lua")
+
+
 includeFile("lair/npc_theater/global/global_rodian_tribe_camp.lua")
 includeFile("lair/npc_theater/global/global_rodian_thug_camp_neutral_small_theater.lua")
 includeFile("lair/npc_theater/global/global_slave_camp_neutral_small_theater.lua")
@@ -156,7 +160,7 @@ includeFile("lair/npc_theater/global/global_thief_camp_neutral_small_theater.lua
 includeFile("lair/npc_theater/global/global_wilder_frontiersman_camp_neutral_medium_theater.lua")
 includeFile("lair/npc_theater/global/global_wookiee_brawler_camp_neutral_small_theater.lua")
 
-includeFile("lair/npc_theater/global/rebel_listening_post.lua")
+--includeFile("lair/npc_theater/global/rebel_listening_post.lua")
 includeFile("lair/npc_theater/global/imperial_listening_post.lua")
 
 includeFile("lair/npc_theater/lok/lok_blood_razor_camp_neutral_easy_theater.lua")
@@ -280,6 +284,6 @@ includeFile("lair/npc_theater/yavin4/yavin4_hutt_expedition_force_camp_hutt_medi
 includeFile("lair/npc_theater/yavin4/yavin4_hutt_expedition_force_patrl_hutt_medium_theater.lua")
 includeFile("lair/npc_theater/yavin4/yavin4_stranded_imperial_base_imperial_medium_theater.lua")
 includeFile("lair/npc_theater/yavin4/yavin4_stranded_imperial_patrol_imperial_medium_theater.lua")
-includeFile("lair/npc_theater/yavin4/yavin4_stranded_rebel_base_rebel_medium_theater.lua")
-includeFile("lair/npc_theater/yavin4/yavin4_stranded_rebel_patrol_rebel_medium_theater.lua")
+--includeFile("lair/npc_theater/yavin4/yavin4_stranded_rebel_base_rebel_medium_theater.lua")
+--includeFile("lair/npc_theater/yavin4/yavin4_stranded_rebel_patrol_rebel_medium_theater.lua")
 

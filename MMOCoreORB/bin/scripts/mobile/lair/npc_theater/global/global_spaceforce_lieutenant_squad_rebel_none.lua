@@ -1,8 +1,8 @@
 global_spaceforce_lieutenant_squad_rebel_none = Lair:new {
 	mobiles = {
-		{"specforce_lieutenant",1},
-		{"specforce_technician",1},
-		{"specforce_wilderness_operative",2}
+		{"separatist_s_battle_droid",1},
+    {"separatist_droideka",2},    
+    {"separatist_battle_droid",4}
 	},
 	spawnLimit = 12,
 	buildingsVeryEasy = {"object/building/poi/anywhere_rebel_base_large_1.iff"},
@@ -13,7 +13,7 @@ global_spaceforce_lieutenant_squad_rebel_none = Lair:new {
 	missionBuilding = "object/tangible/lair/base/objective_banner_rebel.iff",
 	mobType = "npc",
 	buildingType = "theater",
-	faction = "rebel"
+	faction = "separatist"
 }
 
 addLairTemplate("global_spaceforce_lieutenant_squad_rebel_none", global_spaceforce_lieutenant_squad_rebel_none)

@@ -1,9 +1,8 @@
 global_rebel_base3_rebel_large_theater = Lair:new {
 	mobiles = {
-		{"rebel_sergeant",2},
-		{"rebel_sergeant_major",1},
-		{"rebel_corporal",2},
-		{"rebel_trooper",3}
+		{"separatist_s_battle_droid",1},
+    {"separatist_droideka",2},    
+    {"separatist_battle_droid",4}
 	},
 	spawnLimit = 15,
 	buildingsVeryEasy = {"object/building/poi/anywhere_rebel_base_large_1.iff"},
@@ -14,7 +13,7 @@ global_rebel_base3_rebel_large_theater = Lair:new {
 	missionBuilding = "object/tangible/lair/base/objective_banner_rebel.iff",
 	mobType = "npc",
 	buildingType = "theater",
-	faction = "rebel"
+	faction = "separatist"
 }
 
 addLairTemplate("global_rebel_base3_rebel_large_theater", global_rebel_base3_rebel_large_theater)

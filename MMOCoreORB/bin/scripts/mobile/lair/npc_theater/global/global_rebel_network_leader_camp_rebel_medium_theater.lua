@@ -1,5 +1,5 @@
 global_rebel_network_leader_camp_rebel_medium_theater = Lair:new {
-	mobiles = {{"rebel_network_leader",1}},
+	mobiles = {{"separatist_battle_droid",1}},
 	spawnLimit = 12,
 	buildingsVeryEasy = {"object/building/poi/anywhere_rebel_camp_large_1.iff"},
 	buildingsEasy = {"object/building/poi/anywhere_rebel_camp_large_1.iff"},
@@ -9,7 +9,7 @@ global_rebel_network_leader_camp_rebel_medium_theater = Lair:new {
 	missionBuilding = "object/tangible/lair/base/objective_banner_rebel.iff",
 	mobType = "npc",
 	buildingType = "theater",
-	faction = "rebel"
+	faction = "separatist"
 }
 
 addLairTemplate("global_rebel_network_leader_camp_rebel_medium_theater", global_rebel_network_leader_camp_rebel_medium_theater)

@@ -1,8 +1,8 @@
 global_rebel_detachment = Lair:new {
 	mobiles = {
-		{"rebel_first_lieutenant",1},
-		{"rebel_sergeant",2},
-		{"rebel_trooper",4},
+		{"separatist_s_battle_droid",1},
+    {"separatist_droideka",2},    
+    {"separatist_battle_droid",4}
 	},
 	spawnLimit = 15,
 	buildingsVeryEasy = {"object/building/poi/anywhere_rebel_base_large_1.iff"},
@@ -13,7 +13,7 @@ global_rebel_detachment = Lair:new {
 	missionBuilding = "object/tangible/lair/base/objective_banner_rebel.iff",
 	mobType = "npc",
 	buildingType = "theater",
-	faction = "rebel"
+	faction = "separatist"
 }
 
 addLairTemplate("global_rebel_detachment", global_rebel_detachment)
