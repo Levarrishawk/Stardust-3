@@ -15,8 +15,8 @@ AbandonedRebelBaseScreenPlay = ScreenPlay:new {
 	--	{"rebel_recruiter", 0, -6817, 46, 5511, 174, 0, ""},
 
 		--inside main building
-		{"vrovel", 60, -6809, 46, 5501, -58, 0, ""},
-		{"ezkiel", 60, -6809, 46, 5506, -139, 0, ""}
+		{"vrovel", 60, -6799, 5, 5479, -90, 0, ""},
+		{"ezkiel", 60, -6803, 5, 5479, 90, 0, ""}
 	}
 }
 
