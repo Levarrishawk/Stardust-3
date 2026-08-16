@@ -55,3 +55,6 @@ MMOCoreORB/bin/conf/config.lua
 /.zig-cache-n5-marker
 SwgClient_r.exe.planetmap.bin
 SWGEmu.exe.planetmap.bin
+/appearance
+/object
+/effect

@@ -7,16 +7,16 @@ AbandonedRebelBaseScreenPlay = ScreenPlay:new {
 
 	mobiles = {
 		--inside perimeter near east building area
-		{"rebel_commando", 400, -6656.4, 30.0, 5552.4, -1, 0, ""},
-		{"rebel_commando", 400, -6661.4, 30.0, 5557.4, -1, 0, ""},
-		{"rebel_commando", 400, -6651.4, 30.0, 5547.4, -1, 0, ""},
-		{"rebel_commando", 400, -6663.4, 30.0, 5562.4, -1, 0, ""},
+	--	{"rebel_commando", 400, -6656.4, 30.0, 5552.4, -1, 0, ""},
+	--	{"rebel_commando", 400, -6661.4, 30.0, 5557.4, -1, 0, ""},
+	--	{"rebel_commando", 400, -6651.4, 30.0, 5547.4, -1, 0, ""},
+	--	{"rebel_commando", 400, -6663.4, 30.0, 5562.4, -1, 0, ""},
 
-		{"rebel_recruiter", 0, -6817, 46, 5511, 174, 0, ""},
+	--	{"rebel_recruiter", 0, -6817, 46, 5511, 174, 0, ""},
 
 		--inside main building
-		{"vrovel", 60, -1.1, 1.0, 0.5, 177, 6555560, ""},
-		{"ezkiel", 60, -3.2, 1.0, 7.9, 11, 6555560, ""}
+		{"vrovel", 60, -6809, 46, 5501, -58, 0, ""},
+		{"ezkiel", 60, -6809, 46, 5506, -139, 0, ""}
 	}
 }
 
