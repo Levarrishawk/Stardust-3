@@ -7,6 +7,7 @@ NabooMoeniaScreenPlay = CityScreenPlay:new {
 
 	gcwMobs = {
 		--rebel 'stronghold' spawns
+		--[[
 		{"specforce_marine", 4794.6, 4.2, -4700, 50, 0, "", true},
 		{"specforce_marine", 4799.2, 4.2, -4693, -150, 0, "", true},
 		{"specforce_infiltrator", 4835.9, 4.1, -4732.2, -20, 0, "", true},
@@ -22,6 +23,8 @@ NabooMoeniaScreenPlay = CityScreenPlay:new {
 		{"specforce_marine", 4695.3, 3.8, -4873.9, 0, 0, "", true},
 		{"specforce_marine", 4695.7, 3.8, -4913.5, 180, 0, "", true},
 		{"rebel_specforce_pathfinder", 4707.1, 3.8, -4894.6, 90, 0, "", true},
+		
+		--]]
 	},
 
 	patrolNpcs = {"businessman_patrol", "commoner_fat_patrol", "commoner_naboo_patrol", "commoner_old_patrol", "commoner_patrol", "commoner_technician_patrol", "naboo_nomad_patrol", "noble_patrol", "official_patrol", "scientist_patrol"},
@@ -75,7 +78,7 @@ NabooMoeniaScreenPlay = CityScreenPlay:new {
 		{"informant_npc_lvl_1",0,4773,4.4,-4937,0,0, ""},
 		{"informant_npc_lvl_2",0,4638,4.4,-4643,270,0, ""},
 		{"informant_npc_lvl_3",0,4721,4.2,-4614,180,0, ""},
-		{"rebel_recruiter",0,4826,4.2,-4696,-93,0, ""},
+	--	{"rebel_recruiter",0,4826,4.2,-4696,-93,0, ""},
 		{"trainer_architect",0,4779,3.75,-4973,0,0, ""},
 		{"trainer_artisan",0,4823.13,4.17,-4705.34,81,0, ""},
 		{"trainer_brawler",0,4800,4.17,-4734,151,0, ""},
@@ -98,7 +101,7 @@ NabooMoeniaScreenPlay = CityScreenPlay:new {
 		{"junk_dealer", 0, 4810.44, 4.17, -4663.38, 112, 0, ""},
 
 		--Cantina
-		{"rebel_recruiter",0,-29,-0.89,-1.2,74,119, ""},
+	--	{"rebel_recruiter",0,-29,-0.89,-1.2,74,119, ""},
 		{"informant_npc_lvl_2",0,-2.2226,-0.894992,5.90785,90,111, ""},
 
 		--Hotel

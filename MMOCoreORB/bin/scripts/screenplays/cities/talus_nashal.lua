@@ -109,7 +109,7 @@ TalusNashalScreenPlay = CityScreenPlay:new {
 		{"informant_npc_lvl_1",0,4530,2,5094,250,0, ""},
 		{"informant_npc_lvl_2",0,4542,2,5329,20,0, ""},
 		{"informant_npc_lvl_3",0,4529,2,5371,260,0, ""},
-		{"rebel_recruiter",1,4072,2,5289,135,0, ""},
+	--	{"rebel_recruiter",1,4072,2,5289,135,0, ""},
 		{"junk_dealer", 0, 4541.9, 2, 5278.5, -64, 0, ""},
 		{"junk_dealer", 0, -14.6, 1.1, 2.6, 115, 4265404, ""},
 		{"junk_dealer", 0, 4142.2, 2, 5313.48, -144, 0, ""},

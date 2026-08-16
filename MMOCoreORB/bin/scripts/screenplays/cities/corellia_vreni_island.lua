@@ -6,6 +6,7 @@ CorelliaVreniIslandScreenPlay = CityScreenPlay:new {
 	planet = "corellia",
 
 	gcwMobs = {
+		--[[
 		{"rebel_specforce_pathfinder", -5538.4, 16.4902, -6054.7, 182.005, 0, "", true},
 		{"specforce_master_sergeant", -5533.2, 23.4, -6202.2, 46, 0, "", true},
 		{"specforce_technician", -5405, 25, -6220, 37, 0, "", true},
@@ -25,6 +26,7 @@ CorelliaVreniIslandScreenPlay = CityScreenPlay:new {
 		{"specforce_marine", -5290.0, 4.0, -6432.9, 180, 0, "", true},
 		{"specforce_marine", -5149.3, 4.2, -6418.8, -90, 0, "", true},
 		{"specforce_marine", -5160.1, 4.0, -6413.2, 90, 0, "", true},
+		--]]
 	},
 
 	patrolNpcs = {"businessman_patrol", "commoner_fat_patrol", "commoner_old_patrol", "commoner_patrol", "noble_patrol", "scientist_patrol"},

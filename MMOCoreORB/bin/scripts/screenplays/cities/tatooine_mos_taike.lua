@@ -6,17 +6,17 @@ TatooineMosTaikeScreenPlay = CityScreenPlay:new {
 	planet = "tatooine",
 
 	gcwMobs = {
-		{"stormtrooper", "rebel_crewman", 3732.4,5.6,2387.5,90,0, "", "", true},
-		{"stormtrooper", "rebel_crewman", 3732.2,5.5,2382.8,90,0, "", "", true},
-		{"stormtrooper", "rebel_trooper", 3759.3,8.4,2309.4,180,0, "", "", true},
-		{"stormtrooper", "rebel_trooper", 3788.5,8.4,2309.9,180,0, "", "", true},
-		{"scout_trooper", "rebel_scout", 3792.3,11.6,2379.2,180,0, "", "", true},
-		{"stormtrooper_sniper", "rebel_resistance_separatist", 3813.2,16.1,2315.6,-137,0, "", ""},
-		{"stormtrooper_bombardier", "rebel_surface_marshall", 3855.6,27.5,2325.3,-50,0, "", ""},
-		{"assault_trooper_squad_leader", "alliance_intelligence_case_officer", 3858.4,27.5,2328.6,-50,0, "", "", true},
-		{"assault_trooper", "rebel_major_general", 3951.7,53.5,2265.1,-114,0, "", "", true},
-		{"mos_taike_cantina_owner", "mos_taike_cantina_owner_rebel", 9.6,0.4,-0.6,23,1154122, "conversation", "conversation"},
-		{"mos_taike_veteran_guard", "mos_taike_veteran_guard_rebel", 3775.0,8.6,2369.7,0,0, "npc_accusing", "calm"},
+		{"stormtrooper", "mos_taike_veteran_guard", 3732.4,5.6,2387.5,90,0, "", "", true},
+		{"stormtrooper", "mos_taike_veteran_guard", 3732.2,5.5,2382.8,90,0, "", "", true},
+		{"stormtrooper", "mos_taike_veteran_guard", 3759.3,8.4,2309.4,180,0, "", "", true},
+		{"stormtrooper", "mos_taike_veteran_guard", 3788.5,8.4,2309.9,180,0, "", "", true},
+		{"scout_trooper", "mos_taike_veteran_guard", 3792.3,11.6,2379.2,180,0, "", "", true},
+		{"stormtrooper_sniper", "mos_taike_veteran_guard", 3813.2,16.1,2315.6,-137,0, "", ""},
+		{"stormtrooper_bombardier", "mos_taike_veteran_guard", 3855.6,27.5,2325.3,-50,0, "", ""},
+		{"assault_trooper_squad_leader", "mos_taike_veteran_guard", 3858.4,27.5,2328.6,-50,0, "", "", true},
+		{"assault_trooper", "mos_taike_veteran_guard", 3951.7,53.5,2265.1,-114,0, "", "", true},
+		{"mos_taike_cantina_owner", "mos_taike_veteran_guard", 9.6,0.4,-0.6,23,1154122, "conversation", "conversation"},
+		{"mos_taike_veteran_guard", "mos_taike_veteran_guard", 3775.0,8.6,2369.7,0,0, "npc_accusing", "calm"},
 	},
 
 

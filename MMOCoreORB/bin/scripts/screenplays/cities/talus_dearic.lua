@@ -210,8 +210,8 @@ TalusDearicScreenPlay = CityScreenPlay:new {
 		{"informant_npc_lvl_3",0,255,6,-3024,270,0, ""},
 		{"informant_npc_lvl_3",0,265,6,-2974,315,0, ""},
 		{"informant_npc_lvl_3",0,682,13,-3219,180,0, ""},
-		{"rebel_recruiter",60,-26,0,0,90,3175399, ""},
-		{"rebel_recruiter",60,17,3,-36,0,6255475, ""},
+	--	{"rebel_recruiter",60,-26,0,0,90,3175399, ""},
+	--	{"rebel_recruiter",60,17,3,-36,0,6255475, ""},
 		{"junk_dealer", 0, 183.6, 6, -3065.1, 87, 0, ""},
 		{"junk_dealer", 0, 146.55, 6, -2852.41, 87, 0, ""},
 		{"junk_dealer", 0, -14.4, 1.1, 2.9, 133, 3175374, ""}
