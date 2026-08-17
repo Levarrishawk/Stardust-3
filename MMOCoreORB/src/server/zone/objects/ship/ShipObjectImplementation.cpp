@@ -340,8 +340,7 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	bool sendSelf = player == owner.get() || player->isASubChildOf(asShipObject());
 	bool debugShipBaselines = ConfigManager::instance()->getBool("Core3.JTL.DebugShipBaselinePackets", true);
 	bool dumpWirePackets = ConfigManager::instance()->getBool("Core3.JTL.DumpShipWirePackets", true);
-	auto wireShipAgent = asShipAiAgent();
-	bool dumpThisShip = sendSelf || wireShipAgent != nullptr;
+	bool dumpThisShip = sendSelf || isShipAiAgent();
 
 	auto dumpPacket = [this, player, dumpWirePackets, dumpThisShip] (const char* packetName, BaseMessage* packet) {
 		if (!dumpWirePackets || !dumpThisShip || packet == nullptr) {
