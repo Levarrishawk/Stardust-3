@@ -751,12 +751,6 @@ ShipAiAgent* ShipManager::createAiShip(const String& shipName, uint32 shipCRC) {
 
 	shipAgent->setShipAiTemplate();
 
-	// Diagnostic: the Pre-CU client appears to apply a 64 m visibility limit to
-	// SHIPAGENT objects. Scope the fighter classification test to rsf_ace_tier1.
-	if (agentTemplate->getTemplateName() == "rsf_ace_tier1") {
-		shipAgent->setGameObjectType(SceneObjectType::SHIPFIGHTER);
-	}
-
 	return shipAgent;
 }
 
