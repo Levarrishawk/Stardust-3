@@ -56,7 +56,7 @@ destroy_surpriseattack_naboo_imperial_1 = SpaceSurpriseAttackScreenplay:new {
 
 	surpriseAttackShips = {
 		zone = "space_naboo",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier1"}},
+		spawns = {{count = 3, shipName = "droid_fighter"}},
 	},
 }
 
