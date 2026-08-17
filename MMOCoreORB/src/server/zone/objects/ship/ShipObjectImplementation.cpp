@@ -24,8 +24,6 @@
 #include "server/zone/packets/object/BeginHyperspace.h"
 #include "server/zone/packets/object/OrientForHyperspace.h"
 #include "server/zone/packets/scene/SceneObjectCreateMessage.h"
-#include "server/zone/packets/scene/SceneObjectCloseMessage.h"
-#include "server/zone/packets/scene/UpdateContainmentMessage.h"
 #include "templates/tangible/ship/SharedShipObjectTemplate.h"
 #include "server/zone/managers/stringid/StringIdManager.h"
 #include "templates/faction/Factions.h"
@@ -44,7 +42,6 @@
 #include "server/zone/objects/ship/transform/ShipObjectTransform.h"
 #include "server/zone/objects/ship/transform/SpaceTransform.h"
 #include "server/zone/managers/ship/tasks/ShipObjectTimerTask.h"
-#include "conf/ConfigManager.h"
 
 // #define DEBUG_COV
 
@@ -338,99 +335,22 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	// info(true) << "ShipObjectImplementation::sendBaselinesTo - sending to: " << player->getDisplayedName();
 
 	bool sendSelf = player == owner.get() || player->isASubChildOf(asShipObject());
-	bool debugShipBaselines = ConfigManager::instance()->getBool("Core3.JTL.DebugShipBaselinePackets", true);
-	bool dumpWirePackets = ConfigManager::instance()->getBool("Core3.JTL.DumpShipWirePackets", true);
-
-	auto dumpPacket = [this, player, dumpWirePackets] (const char* packetName, BaseMessage* packet) {
-		if (!dumpWirePackets || packet == nullptr) {
-			return;
-		}
-
-		const char* hexDigits = "0123456789abcdef";
-		const char* buffer = packet->getBuffer();
-		int packetSize = packet->size();
-
-		for (int offset = 0; offset < packetSize; offset += 32) {
-			int remainingBytes = packetSize - offset;
-			int bytesThisLine = remainingBytes < 32 ? remainingBytes : 32;
-			StringBuffer hexData;
-
-			for (int i = 0; i < bytesThisLine; ++i) {
-				uint8 value = static_cast<uint8>(buffer[offset + i]);
-				hexData << hexDigits[(value >> 4) & 0x0F] << hexDigits[value & 0x0F];
-			}
-
-			info(true) << "JTL_WIRE shipID=" << getObjectID()
-				<< " recipientID=" << player->getObjectID()
-				<< " packet=" << packetName
-				<< " size=" << packetSize
-				<< " offset=" << offset
-				<< " hex=" << hexData.toString();
-		}
-	};
-
-	if (dumpWirePackets) {
-		SceneObjectCreateMessage createMessage(asShipObject());
-		dumpPacket("CREATE", &createMessage);
-
-		auto parent = getParent().get();
-
-		if (parent != nullptr) {
-			UpdateContainmentMessage linkMessage(asShipObject(), parent, getContainmentType());
-			dumpPacket("LINK", &linkMessage);
-		} else {
-			info(true) << "JTL_WIRE shipID=" << getObjectID()
-				<< " recipientID=" << player->getObjectID()
-				<< " packet=LINK size=0 notSent=parentIsNull";
-		}
-	}
-
-	if (debugShipBaselines) {
-		auto objectTemplate = getObjectTemplate();
-		const auto& worldPosition = getWorldPosition();
-		StringBuffer logMessage;
-		logMessage << "JTL ship create/baseline sequence"
-			<< " shipID=" << getObjectID()
-			<< " shipName=" << getDisplayedName()
-			<< " template=" << (objectTemplate != nullptr ? objectTemplate->getFullTemplateString() : "null")
-			<< " clientCRC=0x" << String::hexvalueOf(getClientObjectCRC())
-			<< " gameObjectType=0x" << String::hexvalueOf(getGameObjectType())
-			<< " shipAiAgent=" << isShipAiAgent()
-			<< " hyperspacing=" << isHyperspacing()
-			<< " parentID=" << getParentID()
-			<< " position=(" << worldPosition.getX() << "," << worldPosition.getY() << "," << worldPosition.getZ() << ")"
-			<< " recipientID=" << player->getObjectID()
-			<< " recipientName=" << player->getDisplayedName()
-			<< " ownerOrPassenger=" << sendSelf
-			<< " priorPackets=CREATE,LINK"
-			<< " baselines=" << (sendSelf ? "SHIP1,SHIP3,SHIP4,SHIP6" : "SHIP3,SHIP6");
-		info(true) << logMessage.toString();
-	}
 
 	if (sendSelf) {
 		ShipObjectMessage1* ship1 = new ShipObjectMessage1(_this.getReferenceUnsafeStaticCast());
-		dumpPacket("SHIP1", ship1);
 		player->sendMessage(ship1);
 	}
 
 	ShipObjectMessage3* ship3 = new ShipObjectMessage3(_this.getReferenceUnsafeStaticCast());
-	dumpPacket("SHIP3", ship3);
 	player->sendMessage(ship3);
 
 	if (sendSelf) {
 		ShipObjectMessage4* ship4 = new ShipObjectMessage4(_this.getReferenceUnsafeStaticCast());
-		dumpPacket("SHIP4", ship4);
 		player->sendMessage(ship4);
 	}
 
 	ShipObjectMessage6* ship6 = new ShipObjectMessage6(_this.getReferenceUnsafeStaticCast());
-	dumpPacket("SHIP6", ship6);
 	player->sendMessage(ship6);
-
-	if (dumpWirePackets) {
-		SceneObjectCloseMessage closeMessage(asShipObject());
-		dumpPacket("CLOSE", &closeMessage);
-	}
 
 	if (player->isPlayerCreature()) {
 		auto creature = player->asCreatureObject();
