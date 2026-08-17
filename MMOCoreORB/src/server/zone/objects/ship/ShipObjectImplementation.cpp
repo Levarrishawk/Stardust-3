@@ -336,7 +336,6 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	// info(true) << "ShipObjectImplementation::sendBaselinesTo - sending to: " << player->getDisplayedName();
 
 	bool sendSelf = player == owner.get() || player->isASubChildOf(asShipObject());
-	bool sendPrivateBaselines = sendSelf || ConfigManager::instance()->getBool("Core3.JTL.SendPrivateShipBaselinesToObservers", true);
 	bool debugShipBaselines = ConfigManager::instance()->getBool("Core3.JTL.DebugShipBaselinePackets", true);
 
 	if (debugShipBaselines) {
@@ -357,11 +356,11 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 			<< " recipientName=" << player->getDisplayedName()
 			<< " ownerOrPassenger=" << sendSelf
 			<< " priorPackets=CREATE,LINK"
-			<< " baselines=" << (sendPrivateBaselines ? "SHIP1,SHIP3,SHIP4,SHIP6" : "SHIP3,SHIP6");
+			<< " baselines=" << (sendSelf ? "SHIP1,SHIP3,SHIP4,SHIP6" : "SHIP3,SHIP6");
 		info(true) << logMessage.toString();
 	}
 
-	if (sendPrivateBaselines) {
+	if (sendSelf) {
 		ShipObjectMessage1* ship1 = new ShipObjectMessage1(_this.getReferenceUnsafeStaticCast());
 		player->sendMessage(ship1);
 	}
@@ -369,7 +368,7 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	ShipObjectMessage3* ship3 = new ShipObjectMessage3(_this.getReferenceUnsafeStaticCast());
 	player->sendMessage(ship3);
 
-	if (sendPrivateBaselines) {
+	if (sendSelf) {
 		ShipObjectMessage4* ship4 = new ShipObjectMessage4(_this.getReferenceUnsafeStaticCast());
 		player->sendMessage(ship4);
 	}

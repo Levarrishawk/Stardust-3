@@ -38,6 +38,7 @@
 #include "server/zone/objects/tangible/threat/ThreatMap.h"
 #include "server/zone/managers/ship/ShipAgentTemplateManager.h"
 #include "server/zone/managers/director/DirectorManager.h"
+#include "conf/ConfigManager.h"
 
 int ShipManager::ERROR_CODE = NO_ERROR;
 
@@ -748,6 +749,11 @@ ShipAiAgent* ShipManager::createAiShip(const String& shipName, uint32 shipCRC) {
 
 	// Load data from ShipAgentTemplate
 	shipAgent->loadTemplateData(agentTemplate);
+
+	if (agentTemplate->getTemplateName() == "rsf_ace_tier1" && ConfigManager::instance()->getBool("Core3.JTL.TestRsfAceWithPlayerShipClientTemplate", true)) {
+		// Diagnostic: make the Pre-CU client construct this AI agent from a known-visible player ship template.
+		shipAgent->setClientObjectCRC(3874485406u); // object/ship/player/shared_player_prototype_tiefighter.iff
+	}
 
 	shipAgent->setShipAiTemplate();
 
