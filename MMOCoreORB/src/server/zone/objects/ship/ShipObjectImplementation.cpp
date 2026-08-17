@@ -340,10 +340,9 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	bool sendSelf = player == owner.get() || player->isASubChildOf(asShipObject());
 	bool debugShipBaselines = ConfigManager::instance()->getBool("Core3.JTL.DebugShipBaselinePackets", true);
 	bool dumpWirePackets = ConfigManager::instance()->getBool("Core3.JTL.DumpShipWirePackets", true);
-	bool dumpThisShip = sendSelf || isShipAiAgent();
 
-	auto dumpPacket = [this, player, dumpWirePackets, dumpThisShip] (const char* packetName, BaseMessage* packet) {
-		if (!dumpWirePackets || !dumpThisShip || packet == nullptr) {
+	auto dumpPacket = [this, player, dumpWirePackets] (const char* packetName, BaseMessage* packet) {
+		if (!dumpWirePackets || packet == nullptr) {
 			return;
 		}
 
@@ -370,7 +369,7 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 		}
 	};
 
-	if (dumpWirePackets && dumpThisShip) {
+	if (dumpWirePackets) {
 		SceneObjectCreateMessage createMessage(asShipObject());
 		dumpPacket("CREATE", &createMessage);
 
@@ -428,7 +427,7 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	dumpPacket("SHIP6", ship6);
 	player->sendMessage(ship6);
 
-	if (dumpWirePackets && dumpThisShip) {
+	if (dumpWirePackets) {
 		SceneObjectCloseMessage closeMessage(asShipObject());
 		dumpPacket("CLOSE", &closeMessage);
 	}
