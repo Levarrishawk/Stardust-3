@@ -752,6 +752,13 @@ Reference<SceneObject*> ZoneServerImplementation::createClientObject(uint32 temp
 		//lock(); ObjectManager has its own mutex
 
 		obj = objectManager->createObject(templateCRC, 1, "clientobjects", oid, false);
+
+		// createObject returns null when templateCRC has no loaded template (asset-absent
+		// items in a non-full TRE set). A null deref here is a hardware SIGSEGV that the
+		// catch below (Exception only) cannot intercept — guard it and let callers skip.
+		if (obj == nullptr)
+			return nullptr;
+
 		obj->setClientObject(true);
 		obj->initializeTransientMembers();
 

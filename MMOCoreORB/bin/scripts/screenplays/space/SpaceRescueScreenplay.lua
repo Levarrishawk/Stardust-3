@@ -570,12 +570,16 @@ function SpaceRescueScreenplay:assignEscortPoints(pPlayer)
 		return
 	end
 
-	-- Build patrol points table for the ship
+	-- Build patrol points table for the ship.
+	-- assignFixedPatrolPointsTable takes exactly ONE argument and it must be a table of
+	-- point-name STRINGS -- it resolves each name against the ship's zone
+	-- (LuaShipAiAgent.cpp:240-293). Passing a table of tables plus a second argument made
+	-- the binding bail on the arg-count check, so the rescue ship never received a route.
+	-- Escort speed is applied through its own binding, as SpaceRecoveryScreenplay:651-656 does.
 	local pointsTable = {}
 
 	for i = 1, #escortPoints, 1 do
-		local point = escortPoints[i]
-		pointsTable[i] = {patrolPointName = point.patrolPointName, zoneName = point.zoneName or self.questZone, x = point.x, z = point.z, y = point.y, patrolNumber = i, radius = point.radius or 250}
+		table.insert(pointsTable, escortPoints[i].patrolPointName)
 	end
 
 	-- Set escort point index
@@ -583,7 +587,8 @@ function SpaceRescueScreenplay:assignEscortPoints(pPlayer)
 
 	-- Switch ship to patrol mode and assign points
 	ShipAiAgent(pRescueShip):setFixedPatrol()
-	ShipAiAgent(pRescueShip):assignFixedPatrolPointsTable(pointsTable, self.escortSpeed)
+	ShipAiAgent(pRescueShip):assignFixedPatrolPointsTable(pointsTable)
+	ShipAiAgent(pRescueShip):setEscortSpeed(self.escortSpeed)
 
 	-- Create observer for reaching patrol points
 	createObserver(ENTEREDAREA, self.className, "notifyEnteredQuestArea", pRescueShip)

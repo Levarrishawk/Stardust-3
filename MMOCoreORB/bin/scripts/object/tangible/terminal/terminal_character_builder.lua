@@ -2514,7 +2514,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Alliance Starfighter Trainee", "pilot_rebel_navy_novice",
 					"Starships",
 					{
-						"Basic Starfighter Continuation Training", "pilot_rebel_navy_starships__01",
+						"Basic Starfighter Continuation Training", "pilot_rebel_navy_starships_01",
 						"Multi-role Craft", "pilot_rebel_navy_starships_02",
 						"Space Superiority Fighters", "pilot_rebel_navy_starships_03",
 						"Hyper-Maneuverable Starfighters", "pilot_rebel_navy_starships_04"
@@ -2580,7 +2580,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Basic Pilot", "pilot_neutral_novice",
 					"Starships",
 					{
-						"Basic Fighters", "pilot_neutral_starships__01",
+						"Basic Fighters", "pilot_neutral_starships_01",
 						"Advanced Fighters", "pilot_neutral_starships_02",
 						"Special Warships", "pilot_neutral_starships_03",
 						"Exotic Vessels", "pilot_neutral_starships_04"

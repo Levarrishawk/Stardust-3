@@ -65,7 +65,7 @@ object_ship_player_player_tie_light_duty = object_ship_player_shared_player_tie_
 		{"engineYawAccel", 600},
 		{"enginePitchAccel", 600},
 		{"engineRollAccel", 300},
-		{"maxSpeed", 0.96},
+		{"maxSpeed", 0.95},
 	},
 
 	reactor = { name = "rct_generic", hitpoints = 291.425, armor = 299.7746,},
@@ -75,7 +75,6 @@ object_ship_player_player_tie_light_duty = object_ship_player_shared_player_tie_
 	armor_1 = { name = "arm_generic", hitpoints = 387.7423, armor = 384.4127,},
 	capacitor = { name = "cap_generic", hitpoints = 0, armor = 0, rechargeRate = 45.63763, energy = 790.3254,},
 	weapon_0 = { name = "wpn_generic", hitpoints = 192.7384, armor = 194.3948, rate = 0.2769867, drain = 26.48631, maxDamage = 574.6135, shieldEfficiency = 0, minDamage = 493.8686, ammo = 0, ammo_type = 0, armorEfficiency = 0,},
-	weapon_1 = { name = "wpn_seinar_concussion_missile_s01", hitpoints = 196.8598, armor = 192.7333, rate = 9.186328, drain = 31.2048, maxDamage = 802.5913, shieldEfficiency = 0.7774226, minDamage = 497.8733, ammo = 8, ammo_type = 2, armorEfficiency = 0.5474777,},
 	weapon_2 = { name = "wpn_std_countermeasure", hitpoints = 243.6434, armor = 240.4096, rate = 0.09546758, drain = 23.2824, maxDamage = 96.26791, shieldEfficiency = 0, minDamage = 24.2269, ammo = 25, ammo_type = 6, armorEfficiency = 0,},
 }
 

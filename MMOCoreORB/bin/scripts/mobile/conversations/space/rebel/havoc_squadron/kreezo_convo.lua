@@ -1344,4 +1344,353 @@ kreezo_convo_goodbye = ConvoScreen:new {
 }
 kreezo_convo:addScreen(kreezo_convo_goodbye)
 
+
+--[[
+		Tier 4 (Capt. Kreezo dispatches the Tier 4 chain and the master hand-off)
+--]]
+
+-- Tier 4 - Player has an active tier 4 mission
+kreezo_convo_tier4_on_mission = ConvoScreen:new {
+	id = "tier4_on_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_3bcc34e7", -- Oh no! You've got WORK to do, junior!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_on_mission)
+
+-- Tier 4 - Initial briefing
+kreezo_convo_tier4_initial_briefing = ConvoScreen:new {
+	id = "tier4_initial_briefing",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_5bf6779f", -- OK %NU, let's talk business! This situation is SERIOUS!
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_6222b64d", "tier4_first_mission"}, -- Do you have any missions that I could fly?
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_initial_briefing)
+
+-- Tier 4 - Mission 1 (Survival - protect the miners from the Black Suns)
+kreezo_convo_tier4_first_mission = ConvoScreen:new {
+	id = "tier4_first_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_28d914fc", -- Well listen up. We are dealing with several situations here...
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_6318beeb", "tier4_first_mission_details"}, -- What's the situation?
+		{"@conversation/corellia_rebel_tier4:s_647ad2bc", "accept_tier4_first_mission"}, -- I'll take care of those Black Suns.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_first_mission)
+
+kreezo_convo_tier4_first_mission_details = ConvoScreen:new {
+	id = "tier4_first_mission_details",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_9f50a13", -- Back to those poor miners. They're outgunned...
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_647ad2bc", "accept_tier4_first_mission"}, -- I'll take care of those Black Suns.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_first_mission_details)
+
+kreezo_convo_accept_tier4_first_mission = ConvoScreen:new {
+	id = "accept_tier4_first_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_76c0ae11", -- Hurry up! There's no time to waste!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_first_mission)
+
+kreezo_convo_failed_tier4_first_mission = ConvoScreen:new {
+	id = "failed_tier4_first_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_fa6bfaff", -- I just want to rescue those mining vessels. Go on and try again!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_failed_tier4_first_mission)
+
+kreezo_convo_tier4_first_mission_success = ConvoScreen:new {
+	id = "tier4_first_mission_success",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_1047bc70", -- Nice work out there. Ready for round two?
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_c82e9a2f", "tier4_second_mission"}, -- Yes, please.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_first_mission_success)
+
+-- Tier 4 - Mission 2 (Assassinate - the Inquisitor headed to Dathomir)
+kreezo_convo_tier4_second_mission = ConvoScreen:new {
+	id = "tier4_second_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_d16ee99f", -- Intel reports that the Emperor is sending an Inquisitor to Dathomir.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_d1be90a9", "tier4_second_mission_details"}, -- What's the plan?
+		{"@conversation/corellia_rebel_tier4:s_410d920c", "accept_tier4_second_mission"}, -- Alright, let's do this!
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_second_mission)
+
+kreezo_convo_tier4_second_mission_details = ConvoScreen:new {
+	id = "tier4_second_mission_details",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_9a01b8f2", -- I want you to kill that Inquisitor before he reaches Dathomir.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_410d920c", "accept_tier4_second_mission"}, -- Alright, let's do this!
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_second_mission_details)
+
+kreezo_convo_accept_tier4_second_mission = ConvoScreen:new {
+	id = "accept_tier4_second_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_fed79efe", -- Then hurry up and get yourself over to Dathomir!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_second_mission)
+
+kreezo_convo_failed_tier4_second_mission = ConvoScreen:new {
+	id = "failed_tier4_second_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_f5d1e7f4", -- Now go back out there and clean up that mess!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_failed_tier4_second_mission)
+
+kreezo_convo_tier4_second_mission_success = ConvoScreen:new {
+	id = "tier4_second_mission_success",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_7afc40b8", -- The Alliance is feeling more confident, now that you've terminated that Inquisitor.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_99d3b4fd", "tier4_third_mission"}, -- What have you got for me?
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_second_mission_success)
+
+-- Tier 4 - Mission 3 (Space Battle - destroy the station components in the Lok system)
+kreezo_convo_tier4_third_mission = ConvoScreen:new {
+	id = "tier4_third_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_e93fce3e", -- They're planning to build a space station in the Lok system.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_d1be90a9", "tier4_third_mission_details"}, -- What's the plan?
+		{"@conversation/corellia_rebel_tier4:s_410d920c", "accept_tier4_third_mission"}, -- Alright, let's do this!
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_third_mission)
+
+kreezo_convo_tier4_third_mission_details = ConvoScreen:new {
+	id = "tier4_third_mission_details",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_b607bb2e", -- So here's the plan! We're going to destroy the station components...
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_410d920c", "accept_tier4_third_mission"}, -- Alright, let's do this!
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_third_mission_details)
+
+kreezo_convo_accept_tier4_third_mission = ConvoScreen:new {
+	id = "accept_tier4_third_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_16e3e795", -- Your ship is waiting. Watch your back.
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_third_mission)
+
+kreezo_convo_failed_tier4_third_mission = ConvoScreen:new {
+	id = "failed_tier4_third_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_6561f20e", -- Well then why aren't you DOING it? Get back out there!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_failed_tier4_third_mission)
+
+kreezo_convo_tier4_third_mission_success = ConvoScreen:new {
+	id = "tier4_third_mission_success",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_81e25d24", -- You showed them! Let's see the Empire try to build a station in THIS system!
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_8fc8c755", "tier4_fourth_mission"}, -- Do you have a mission for me?
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_third_mission_success)
+
+-- Tier 4 - Mission 4 (Recovery - disable the Imperial troop transports in the Endor system)
+kreezo_convo_tier4_fourth_mission = ConvoScreen:new {
+	id = "tier4_fourth_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_6429f86b", -- Another group of our men infiltrated a number of Imperial troop transports in the Endor system.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_8450d7db", "accept_tier4_fourth_mission"}, -- Let me take a crack at disabling those troop transports.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission)
+
+kreezo_convo_accept_tier4_fourth_mission = ConvoScreen:new {
+	id = "accept_tier4_fourth_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_b0d064ef", -- Endor it is! Leave immediately!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_fourth_mission)
+
+kreezo_convo_failed_tier4_fourth_mission = ConvoScreen:new {
+	id = "failed_tier4_fourth_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_4f755af2", -- In my day, a pilot would NEVER leave a job unfinished!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_failed_tier4_fourth_mission)
+
+-- Tier 4 - Mission 4 Complete / Master hand-off (Admiral Willham Burke - Kessel)
+kreezo_convo_tier4_fourth_mission_success = ConvoScreen:new {
+	id = "tier4_fourth_mission_success",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_b6b4b241", -- Attention! Alliance Headquarters has approved your transfer. You are now serving under the command of Admiral Willham Burke.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_bbe3529b", "master_who"}, -- Who is Admiral Burke?
+		{"@conversation/corellia_rebel_tier4:s_bcc6b959", "master_where"}, -- Where do I need to report?
+		{"@conversation/corellia_rebel_tier4:s_e42b260e", "accept_master_mission"}, -- I'm on my way.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission_success)
+
+kreezo_convo_master_mission = ConvoScreen:new {
+	id = "master_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_b6b4b241", -- Attention! Alliance Headquarters has approved your transfer. You are now serving under the command of Admiral Willham Burke.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_bbe3529b", "master_who"}, -- Who is Admiral Burke?
+		{"@conversation/corellia_rebel_tier4:s_bcc6b959", "master_where"}, -- Where do I need to report?
+		{"@conversation/corellia_rebel_tier4:s_e42b260e", "accept_master_mission"}, -- I'm on my way.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_master_mission)
+
+kreezo_convo_master_who = ConvoScreen:new {
+	id = "master_who",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_bcbc9230", -- Admiral Willham Burke is head of the fourth battle fleet.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_e42b260e", "accept_master_mission"}, -- I'm on my way.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_master_who)
+
+kreezo_convo_master_where = ConvoScreen:new {
+	id = "master_where",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_d74e67f", -- According to these orders, Admiral Burke is in Doaba Guerfel on Corellia.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_e42b260e", "accept_master_mission"}, -- I'm on my way.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_master_where)
+
+kreezo_convo_accept_master_mission = ConvoScreen:new {
+	id = "accept_master_mission",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_4ef35507", -- He is expecting you right away, so I suggest you get a move on.
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_master_mission)
+
+-- Tier 4 - Post-master
+kreezo_convo_tier4_completed = ConvoScreen:new {
+	id = "tier4_completed",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_d318a2bb", -- Back from your assignment with Admiral Burke, I see! I can use your help.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_6222b64d", "tier4_duty_repeat"}, -- Do you have any missions that I could fly?
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_completed)
+
+-- Tier 4 - Training
+kreezo_convo_ready_train_tier4 = ConvoScreen:new {
+	id = "ready_train_tier4",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_8907c99", -- What you need are SKILLS! And you've come to the right place.
+	stopConversation = "false",
+	options = {
+		-- Options added dynamically via handler
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_ready_train_tier4)
+
+kreezo_convo_tier4_train_fighters = ConvoScreen:new {
+	id = "tier4_train_fighters",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_62c873d4", -- That is a fine skill...
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_train_fighters)
+
+kreezo_convo_tier4_train_component = ConvoScreen:new {
+	id = "tier4_train_component",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_62c873d4", -- That is a fine skill...
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_train_component)
+
+kreezo_convo_tier4_train_basics = ConvoScreen:new {
+	id = "tier4_train_basics",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_62c873d4", -- That is a fine skill...
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_train_basics)
+
+kreezo_convo_tier4_train_droid = ConvoScreen:new {
+	id = "tier4_train_droid",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_62c873d4", -- That is a fine skill...
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_train_droid)
+
+-- Tier 4 - Duty Missions
+kreezo_convo_tier4_duty_repeat = ConvoScreen:new {
+	id = "tier4_duty_repeat",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_f0743f82", -- I don't have any missions, but there are plenty of elective duty assignments you can perform.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_d9116b4d", "accept_tier4_duty1"}, -- I'll escort those freighters.
+		{"@conversation/corellia_rebel_tier4:s_9943289", "accept_tier4_duty2"}, -- I want to help those scientists.
+		{"@conversation/corellia_rebel_tier4:s_ef3e641a", "accept_tier4_duty3"}, -- I'm here to help.
+		{"@conversation/corellia_rebel_tier4:s_ceb77d0c", "accept_tier4_duty4"}, -- We've got the Empire on the run! Let's kick 'em while they're down!
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_duty_repeat)
+
+kreezo_convo_accept_tier4_duty1 = ConvoScreen:new {
+	id = "accept_tier4_duty1",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_76c0ae11", -- Hurry up! There's no time to waste!
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_duty1)
+
+kreezo_convo_accept_tier4_duty2 = ConvoScreen:new {
+	id = "accept_tier4_duty2",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_16e3e795", -- Your ship is waiting. Watch your back.
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_duty2)
+
+kreezo_convo_accept_tier4_duty3 = ConvoScreen:new {
+	id = "accept_tier4_duty3",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_13835aab", -- You don't have much time.
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_duty3)
+
+kreezo_convo_accept_tier4_duty4 = ConvoScreen:new {
+	id = "accept_tier4_duty4",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_abf08a18", -- Check your ship's computer. All the information you need is there. Good luck.
+	stopConversation = "true",
+	options = {}
+}
+kreezo_convo:addScreen(kreezo_convo_accept_tier4_duty4)
+
 addConversationTemplate("kreezo_convo", kreezo_convo)

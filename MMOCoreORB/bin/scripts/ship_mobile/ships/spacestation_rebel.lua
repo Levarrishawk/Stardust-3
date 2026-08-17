@@ -2,12 +2,14 @@ spacestation_rebel = ShipAgent:new {
 	template = "spacestation_rebel",
 	shipType = "capital",
 
+	experience = 50000,
+
 	lootChance = 0,
 	lootRolls = 0,
 	lootTable = "space_rebel_tier1",
 
-	minCredits = 791,
-	maxCredits = 1300,
+	minCredits = 10000,
+	maxCredits = 20000,
 
 	aggressive = 0,
 
@@ -19,11 +21,11 @@ spacestation_rebel = ShipAgent:new {
 	tauntDefendChance = 0.05,
 	tauntDieChance = 0.1,
 
-	pvpBitmask = NONE,
+	pvpBitmask = ATTACKABLE,
 	shipBitmask = NONE,
-	optionsBitmask = AIENABLED + INVULNERABLE,
+	optionsBitmask = AIENABLED,
 
-	customShipAiMap = "spaceStations",
+	customShipAiMap = "attackableSpaceStations",
 
 	conversationTemplate = "spacestation_rebel_convotemplate",
 	conversationMobile = "object/mobile/shared_space_comm_rebel_transport_01.iff",

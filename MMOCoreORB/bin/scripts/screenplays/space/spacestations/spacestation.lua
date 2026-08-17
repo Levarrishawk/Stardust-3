@@ -38,6 +38,7 @@ SpaceStationScreenPlay = ScreenPlay:new {
 		yavin4_mining = {"yavin4", -267, 35, 4896},
 		labor = {"yavin4", -6921, 73, -5726},
 		yavin4_imperial = {"yavin4", 4054, 37, -6216},
+		kachirho = {"kashyyyk_main", -572, 18, -128},
 	},
 }
 
@@ -112,7 +113,10 @@ function SpaceStationScreenPlay:getRepairCost(pShip, repairPercent)
 
 	local totalCost = math.floor(totalDamage * self.REPAIR_COST)
 
-	if (string.find("basic", shipName) or string.find("prototype", shipName)) then
+	-- string.find(s, pattern) -- the arguments were reversed, so this searched for the
+	-- ship name inside the literal "basic"/"prototype" and was false for every ship,
+	-- charging starter hulls the full stat-based price instead of the flat rate.
+	if (string.find(shipName, "basic") or string.find(shipName, "prototype")) then
 		totalCost = math.floor((repairPercent * 100) * self.REPAIR_COST)
 	end
 

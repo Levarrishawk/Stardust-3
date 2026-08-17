@@ -15,7 +15,7 @@ imp_lambda_shuttle_tier4 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"merchant", "civilian", "imperial"},
+	alliedFactions = {"merchant", "civilian", "imperial", "rsf"},
 	enemyFactions = {"rebel", "nym", "pirate", "hutt", "valarian", "borvo", "aynat", "blacksun"},
 	imperialFactionReward = -136,
 	rebelFactionReward = 68,

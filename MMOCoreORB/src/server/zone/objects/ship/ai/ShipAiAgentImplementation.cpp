@@ -56,6 +56,7 @@
 #include "server/zone/managers/conversation/ConversationManager.h"
 #include "server/zone/objects/creature/conversation/ConversationObserver.h"
 #include "server/zone/managers/player/PlayerManager.h"
+#include "server/zone/managers/director/DirectorManager.h"
 #include "server/zone/managers/faction/FactionManager.h"
 #include "server/zone/objects/ship/transform/ShipObjectTransform.h"
 #include "server/zone/objects/ship/ai/SquadronObserver.h"
@@ -2036,8 +2037,18 @@ void ShipAiAgentImplementation::scheduleDestroyDisabled() {
 		return;
 	}
 
-	// info(true) << "scheduleDestroyDisabled -- task scheduled (300s) for: " << getDisplayedName();
-	addPendingTask("destroy_disabled", destroyTask, 300000);
+	// Generic disabled AI ships self-destruct after 300s. Screenplays can override
+	// per-agent via DirectorManager shared memory ("<oid>:destroyDisabledOverrideMs"),
+	// e.g. the Kessel master-encounter escort gunboats self-destruct after ~90s.
+	int destroyDelay = 300000;
+	uint64 overrideMs = DirectorManager::instance()->readSharedMemory(String::valueOf(getObjectID()) + ":destroyDisabledOverrideMs");
+
+	if (overrideMs > 0 && overrideMs < 300000) {
+		destroyDelay = (int) overrideMs;
+	}
+
+	// info(true) << "scheduleDestroyDisabled -- task scheduled (" << (destroyDelay / 1000) << "s) for: " << getDisplayedName();
+	addPendingTask("destroy_disabled", destroyTask, destroyDelay);
 }
 
 void ShipAiAgentImplementation::setWait(int wait) {

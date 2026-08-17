@@ -77,7 +77,7 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local duty1Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.name)
 	local duty2Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.name)
 	local duty3Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_3.name)
-	local duty4Complete = SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
+	local duty4Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
 
 	local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)
 
@@ -312,6 +312,24 @@ function turoldineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, s
 
 		--	Give first mission to player
 		patrol_corellia_privateer_tier4_1a:startQuest(pPlayer, pNpc)
+
+	-- Master mission choice: player decided to help the Alliance (hunt the Imperial corvette)
+	elseif (screenID == "should_help_alliance") then
+		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
+				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
+				not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
+				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name)) then
+			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
+		end
+
+	-- Master mission choice: player decided to help the Empire (hunt the Rebel corvette)
+	elseif (screenID == "decide_assist_empire") then
+		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
+				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
+				not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
+				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name)) then
+			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
+		end
 	end
 
 	return pClonedScreen

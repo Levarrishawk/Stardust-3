@@ -15,6 +15,7 @@ freighterheavy_imperial = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -5,
 	questLoot = "general_cargo",
 	appearance = "imperial_officer",

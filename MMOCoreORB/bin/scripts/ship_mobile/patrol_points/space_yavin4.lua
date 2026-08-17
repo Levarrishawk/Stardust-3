@@ -670,6 +670,12 @@ space_yavin4 = SpacePatrolPointTable:new {
 	{patrolPointName = "nice_miners_1_06", x = -849, z = -5821, y = -5760},
 	{patrolPointName = "nice_miners_1_07", x = -1580, z = -5748, y = -5673},
 	{patrolPointName = "nice_miners_1_08", x = -2466, z = -5660, y = -5569},
+
+	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "privateer_escort_1", x = -2163, z = 956, y = 4991},	-- src: screenplays/space/squadrons/CorsecSquadronScreenplay.lua:escort_corellia_privateer_14:escortPoints
+	{patrolPointName = "privateer_escort_2", x = -637, z = -295, y = 4770},	-- src: screenplays/space/squadrons/CorsecSquadronScreenplay.lua:escort_corellia_privateer_14:escortPoints
+	{patrolPointName = "privateer_escort_3", x = 2043, z = -1230, y = 5414},	-- src: screenplays/space/squadrons/CorsecSquadronScreenplay.lua:escort_corellia_privateer_14:escortPoints
+	{patrolPointName = "privateer_escort_4", x = -2064, z = -929, y = -3183},	-- src: screenplays/space/squadrons/CorsecSquadronScreenplay.lua:escort_corellia_privateer_14:escortPoints
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_yavin4, "space_yavin4")

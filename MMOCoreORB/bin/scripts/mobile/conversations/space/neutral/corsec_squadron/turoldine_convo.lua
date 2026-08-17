@@ -1147,7 +1147,7 @@ accept_fourth_mission = ConvoScreen:new {
 turoldine_convo_template:addScreen(accept_fourth_mission);
 
 failed_fourth_mission = ConvoScreen:new {
-	id = "failed_third_mission",
+	id = "failed_fourth_mission",
 	leftDialog = "@conversation/corellia_privateer_tier4:s_6862706c", -- No good.
 	animation = "shake_head_no",
 	playerAnimation = "",

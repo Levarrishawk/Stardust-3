@@ -15,7 +15,7 @@ imperial_engineer = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial", "civilian", "merchant"},
+	alliedFactions = {"imperial", "civilian", "merchant", "rsf"},
 	enemyFactions = {"rebel", "nym", "pirate", "hutt", "valarian", "borvo", "aynat", "blacksun"},
 	imperialFactionReward = -54,
 	rebelFactionReward = 27,

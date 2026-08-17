@@ -704,7 +704,12 @@ function SpaceRecoveryScreenplay:assignRecoveryPoints(pRecoveryShip)
 
 	ShipAiAgent(pRecoveryShip):assignFixedPatrolPointsTable(pointsTable)
 
-	writeData(SceneObject(pRecoveryShip):getObjectID() .. ":" .. self.className .. ":recoveryShipProgress:", totalPoints)
+	-- This function had no local for the agent id, so the addSpaceMissionObject call
+	-- below read a nil global and errored out on every escort leg. The id was already
+	-- being computed inline for writeData; hoist it, same as continueRecovery does (:621).
+	local recoveryAgentID = SceneObject(pRecoveryShip):getObjectID()
+
+	writeData(recoveryAgentID .. ":" .. self.className .. ":recoveryShipProgress:", totalPoints)
 
 	-- Re-add to the mission object list
 	CreatureObject(pPlayer):addSpaceMissionObject(recoveryAgentID, true)

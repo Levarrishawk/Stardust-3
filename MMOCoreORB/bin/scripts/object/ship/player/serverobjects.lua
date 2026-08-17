@@ -45,6 +45,7 @@
 --Children folder includes
 
 -- Server Objects
+includeFile("ship/player/player_advanced_xwing.lua")
 includeFile("ship/player/player_awing.lua")
 includeFile("ship/player/player_basic_hutt_light.lua")
 includeFile("ship/player/player_basic_tiefighter.lua")
@@ -83,6 +84,7 @@ includeFile("ship/player/player_tieaggressor.lua")
 includeFile("ship/player/player_tiebomber.lua")
 includeFile("ship/player/player_tiefighter.lua")
 includeFile("ship/player/player_tieinterceptor.lua")
+includeFile("ship/player/player_tieinterceptor_imperial_guard.lua")
 includeFile("ship/player/player_tieoppressor.lua")
 includeFile("ship/player/player_xwing.lua")
 includeFile("ship/player/player_ykl37r.lua")

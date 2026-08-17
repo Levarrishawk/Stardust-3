@@ -9,13 +9,13 @@ star_destroyer = ShipAgent:new {
 	lootRolls = 0,
 	lootTable = "space_imperial_tier1",
 
-	minCredits = 1840,
-	maxCredits = 23000,
+	minCredits = 10000,
+	maxCredits = 20000,
 
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"merchant", "civilian", "imperial"},
+	alliedFactions = {"merchant", "civilian", "imperial", "rsf"},
 	enemyFactions = {"rebel", "hutt", "pirate", "nym"},
 	imperialFactionReward = -200,
 	rebelFactionReward = 500,

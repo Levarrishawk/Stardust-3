@@ -1713,6 +1713,12 @@ CorsecSquadronScreenplay = ScreenPlay:new {
 	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "corellia_privateer_tier4_1"},
 	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "corellia_privateer_tier4_1"},
 	TIER4_QUEST_STRING_DUTY_4 = {type = "destroy_duty", name = "corellia_privateer_tier4_1"},
+
+	-- Master (Kessel corvette encounter -- player chooses Alliance or Empire)
+	MASTER_QUEST_STRING_REBEL = {type = "destroy", name = "master_rebel_1"},
+	MASTER_QUEST_STRING_REBEL_2 = {type = "destroy", name = "master_rebel_2"},
+	MASTER_QUEST_STRING_IMPERIAL = {type = "destroy", name = "master_imperial_1"},
+	MASTER_QUEST_STRING_IMPERIAL_2 = {type = "destroy", name = "master_imperial_2"},
 }
 
 registerScreenPlay("CorsecSquadronScreenplay", false)
@@ -1910,6 +1916,16 @@ function CorsecSquadronScreenplay:resetTuroldineQuests(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE1.type, self.TIER4_QUEST_STRING_4_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE2.type, self.TIER4_QUEST_STRING_4_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE3.type, self.TIER4_QUEST_STRING_4_SIDE3.name, false)
+
+	-- Master mission (both faction chains)
+	destroy_master_rebel_1:resetQuest(pPlayer)
+	destroy_master_rebel_2:resetQuest(pPlayer)
+	destroy_master_imperial_1:resetQuest(pPlayer)
+	destroy_master_imperial_2:resetQuest(pPlayer)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.MASTER_QUEST_STRING_REBEL.type, self.MASTER_QUEST_STRING_REBEL.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.MASTER_QUEST_STRING_REBEL_2.type, self.MASTER_QUEST_STRING_REBEL_2.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.MASTER_QUEST_STRING_IMPERIAL.type, self.MASTER_QUEST_STRING_IMPERIAL.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.MASTER_QUEST_STRING_IMPERIAL_2.type, self.MASTER_QUEST_STRING_IMPERIAL_2.name, false)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 

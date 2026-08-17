@@ -13,7 +13,6 @@
 #include "server/zone/packets/jtl/CreateMissileMessage.h"
 #include "server/zone/packets/ship/DestroyShipComponentMessage.h"
 #include "templates/params/ship/ShipFlag.h"
-#include "server/zone/objects/ship/ai/events/RemoveDisabledInvulnerableTask.h"
 
 void SpaceCombatManager::broadcastProjectile(ShipObject* ship, const ShipProjectile* projectile, CreatureObject* player) const {
 	auto cov = ship == nullptr ? nullptr : ship->getCloseObjects();
@@ -517,44 +516,14 @@ float SpaceCombatManager::applyComponentDamage(ShipObject* attackerShip, ShipObj
 float SpaceCombatManager::applyActiveComponentDamage(ShipObject* attackerShip, ShipObject* defenderShip, const SpaceCollisionResult& result, float damage, int targetSlot, ShipDeltaVector* deltaVector, Vector<BasePacket*>& messages) const {
 	bool defenderDisabled = defenderShip->isShipDisabled();
 
-	for (int i = 0; i < result.size(); ++i) {
-		int resultSlot = result.getSlot(i);
-
-		if (resultSlot != Components::CHASSIS && defenderShip->isComponentTargetable(resultSlot)) {
-			damage = applyComponentDamage(attackerShip, defenderShip, result, damage, resultSlot, deltaVector, messages);
-
-			if (damage <= 0.f) {
-				if (!defenderDisabled && defenderShip->isShipDisabled()) {
-					triggerDisabledObserver(attackerShip, defenderShip, false);
-				}
-
-				return damage;
-			}
-		}
-	}
-
-	if (targetSlot != Components::CHASSIS && defenderShip->isComponentTargetable(targetSlot)) {
-		damage = applyComponentDamage(attackerShip, defenderShip, result, damage, targetSlot, deltaVector, messages);
-
-		if (damage <= 0.f) {
-			if (!defenderDisabled && defenderShip->isShipDisabled()) {
-				bool targetedCritical = (targetSlot == Components::REACTOR || targetSlot == Components::ENGINE);
-				triggerDisabledObserver(attackerShip, defenderShip, targetedCritical);
-			}
-
-			return damage;
-		}
-	}
-
 	int activeSlot = getActiveComponentToDamage(defenderShip);
 
-	if (activeSlot != Components::CHASSIS) {
+	if (activeSlot != Components::CHASSIS && defenderShip->getCurrentHitpointsMap()->get(activeSlot) > 0.f) {
 		damage = applyComponentDamage(attackerShip, defenderShip, result, damage, activeSlot, deltaVector, messages);
 	}
 
 	if (!defenderDisabled && defenderShip->isShipDisabled()) {
-		bool targetedCritical = (targetSlot == Components::REACTOR || targetSlot == Components::ENGINE);
-		triggerDisabledObserver(attackerShip, defenderShip, targetedCritical);
+		triggerDisabledObserver(attackerShip, defenderShip);
 	}
 
 	return damage;
@@ -567,55 +536,24 @@ int SpaceCombatManager::getActiveComponentToDamage(ShipObject* target) const {
 		return Components::CHASSIS;
 	}
 
-	const auto hitpointsMap = target->getCurrentHitpointsMap();
-
-	if (hitpointsMap == nullptr) {
-		return Components::CHASSIS;
-	}
-
-	const auto collisionData = ShipManager::instance()->getCollisionData(target);
-
-	if (collisionData == nullptr) {
-		return Components::CHASSIS;
-	}
-
-	VectorMap<int, int> componentWeightMap;
-	int weightTotal = 0;
+	Vector<int> installedSlots;
 
 	for (int i = 0; i < componentMap->size(); ++i) {
 		auto slot = componentMap->getKeyAt(i);
 		auto compCRC = componentMap->getValueAt(i);
 
-		if (compCRC == 0 || hitpointsMap->get(slot) <= 0.f) {
+		if (compCRC == 0) {
 			continue;
 		}
 
-		int weight = collisionData->getSlotWeight(slot);
-
-		if (weight <= 0) {
-			continue;
-		}
-
-		componentWeightMap.put(slot, weight);
-		weightTotal += weight;
+		installedSlots.add(slot);
 	}
 
-	int weightIndex = System::random(weightTotal);
-
-	for (int i = componentWeightMap.size(); -1 < --i;) {
-		int slot = componentWeightMap.elementAt(i).getKey();
-		int weight = componentWeightMap.elementAt(i).getValue();
-
-		weightIndex -= weight;
-
-		if (weightIndex > 0) {
-			continue;
-		}
-
-		return slot;
+	if (installedSlots.size() == 0) {
+		return Components::CHASSIS;
 	}
 
-	return Components::CHASSIS;
+	return installedSlots.get(System::random(installedSlots.size() - 1));
 }
 
 int SpaceCombatManager::updateProjectile(ShipObject* ship, ShipProjectile* projectile, SpaceCollisionResult& result, Vector<ManagedReference<SceneObject*>>& targetVectorCopy, const uint64& miliTime) {
@@ -739,7 +677,7 @@ int SpaceCombatManager::updateMissile(ShipObject* ship, ShipProjectile* projecti
 	return ProjectileResult::MISS;
 }
 
-void SpaceCombatManager::triggerDisabledObserver(ShipObject* attackerShip, ShipObject* defenderShip, bool setInvulnerable) const {
+void SpaceCombatManager::triggerDisabledObserver(ShipObject* attackerShip, ShipObject* defenderShip) const {
 	if (attackerShip == nullptr || defenderShip == nullptr) {
 		return;
 	}
@@ -747,27 +685,13 @@ void SpaceCombatManager::triggerDisabledObserver(ShipObject* attackerShip, ShipO
 	Reference<ShipObject*> attackerShipRef = attackerShip;
 	Reference<ShipObject*> defenderShipRef = defenderShip;
 
-	Core::getTaskManager()->scheduleTask([attackerShipRef, defenderShipRef, setInvulnerable]() {
+	Core::getTaskManager()->scheduleTask([attackerShipRef, defenderShipRef]() {
 		if (attackerShipRef == nullptr || defenderShipRef == nullptr) {
 			return;
 		}
 
 		try {
 			Locker lock(defenderShipRef);
-
-			if (setInvulnerable && defenderShipRef->isShipAiAgent()) {
-				auto defenderShipAgent = defenderShipRef->asShipAiAgent();
-
-				if (defenderShipAgent != nullptr) {
-					defenderShipAgent->addShipFlag(ShipFlag::DISABLED_INVULNERABLE);
-
-					auto removeTask = new RemoveDisabledInvulnerableTask(defenderShipAgent);
-
-					if (removeTask != nullptr) {
-						removeTask->schedule(5000);
-					}
-				}
-			}
 
 			Locker clock(attackerShipRef, defenderShipRef);
 

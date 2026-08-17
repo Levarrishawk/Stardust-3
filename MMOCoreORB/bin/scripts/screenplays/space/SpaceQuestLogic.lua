@@ -84,7 +84,10 @@ function SpaceQuestLogic:rewardPlayer(pPlayer)
 		for j = 1, #itemTable.species, 1 do
 			local speciesIdentifier = itemTable.species[j]
 
-			if (rewardString == "" and speciesIdentifier == playerSpecies or speciesIdentifier == -1) then
+			-- Parenthesised: `and` binds tighter than `or`, so without these the test read
+			-- (rewardString == "" and species match) or (wildcard), which let a later
+			-- species = {-1} entry overwrite an already-chosen species-specific reward.
+			if (rewardString == "" and (speciesIdentifier == playerSpecies or speciesIdentifier == -1)) then
 				rewardString = itemTable.item
 
 				break

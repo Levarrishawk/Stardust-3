@@ -113,7 +113,7 @@ private:
 
 	int updateMissile(ShipObject* Ship, ShipProjectile* projectile, SpaceCollisionResult& result, Vector<ManagedReference<SceneObject*>>& targetVectorCopy, const uint64& miliTime);
 
-	void triggerDisabledObserver(ShipObject* attackerShip, ShipObject* defenderShip, bool setInvulnerable) const;
+	void triggerDisabledObserver(ShipObject* attackerShip, ShipObject* defenderShip) const;
 
 public:
 	int updateProjectiles();

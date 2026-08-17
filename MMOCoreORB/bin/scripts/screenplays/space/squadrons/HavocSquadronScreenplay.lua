@@ -797,8 +797,8 @@ delivery_corellia_rebel_tier3_2_a = SpaceDeliveryScreenplay:new {
 	pickupShip = "reb_xwing_tier2",
 	deliveryShip = "reb_awing_tier3",
 
-	pickupPoint = "space_lok:rebel_tier3_2_a_meeting",
-	deliveryPoint = "space_lok:rebel_tier3_2_a_delivery",
+	pickupPoint = {x = -3000, z = -2000, y = -2600}, -- space_lok:rebel_tier3_2_a_meeting
+	deliveryPoint = {x = 1000, z = -2000, y = -3452}, -- space_lok:rebel_tier3_2_a_delivery
 
 	attackDelay = 70,
 
@@ -906,8 +906,8 @@ delivery_corellia_rebel_tier3_3 = SpaceDeliveryScreenplay:new {
 	pickupShip = "nym_smuggler",
 	deliveryShip = "reb_gunboat_tier3",
 
-	pickupPoint = "space_endor:corellia_rebel_tier_3_3_pickup",
-	deliveryPoint = "space_endor:corellia_rebel_tier_3_3_deliver",
+	pickupPoint = {x = -2200, z = -5200, y = 1300}, -- space_endor:corellia_rebel_tier_3_3_pickup
+	deliveryPoint = {x = -2600, z = -300, y = 3200}, -- space_endor:corellia_rebel_tier_3_3_deliver
 
 	attackDelay = 80,
 
@@ -1420,7 +1420,7 @@ delivery_no_pickup_corellia_rebel_tier4_2_a = SpaceDeliveryNoPickupScreenplay:ne
 	parentQuestName = "corellia_rebel_tier4_2",
 
 	deliveryShip = "rebel_smuggler_tier3",
-	deliveryPoint = "space_dathomir:corellia_rebel_tier4_2_a_delivery",
+	deliveryPoint = {x = 5242, z = 4462, y = -48}, -- space_dathomir:corellia_rebel_tier4_2_a_delivery
 
 	attackDelay = 45,
 
@@ -1457,7 +1457,7 @@ rescue_corellia_rebel_tier4_2_b = SpaceRescueScreenplay:new {
 	rescueShip = "reb_diplomat_tier4",
 	rescueArrivalDelay = 3,
 
-	rescuePoints = {
+	escortPoints = {
 		{patrolPointName = "corellia_rebel_tier4_2_b_rescue_1", zoneName = "space_dathomir", x = 3872, z = 4158, y = -2791, escortNumber = 1, radius = 250},
 		{patrolPointName = "corellia_rebel_tier4_2_b_rescue_2", zoneName = "space_dathomir", x = 2827, z = 3579, y = -4145, escortNumber = 2, radius = 250},
 		{patrolPointName = "corellia_rebel_tier4_2_b_rescue_3", zoneName = "space_dathomir", x = 2103, z = 3204, y = -5079, escortNumber = 3, radius = 250},
@@ -1620,12 +1620,14 @@ recovery_corellia_rebel_tier4_4 = SpaceRecoveryScreenplay:new {
 	creditReward = 0,
 
 	sideQuest = true,
-	sideQuestType = "assassinate",
-	sideQuestName = "corellia_rebel_tier4_4_a",
-	sideQuestType2 = "rescue",
-	sideQuestName2 = "corellia_rebel_tier4_4_b",
+	-- The leg parentQuest chain is strictly serial here: _b's parent is this head,
+	-- _a's parent is _b, and _c's parent is _a. So this head hands off to _b, and
+	-- _b already COMPLETION-splits onto _a. The head previously pointed at _a with
+	-- no split type at all (default NONE), so no leg ever started.
+	sideQuestType = "rescue",
+	sideQuestName = "corellia_rebel_tier4_4_b",
 
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	arrivalDelay = 10,
 	recoveryDelay = 30,
@@ -1728,7 +1730,7 @@ rescue_corellia_rebel_tier4_4_b = SpaceRescueScreenplay:new {
 	rescueShip = "spynet_spy_tier4",
 	rescueArrivalDelay = 5,
 
-	rescuePoints = {
+	escortPoints = {
 		{patrolPointName = "corellia_rebel_tier4_4_b_rescue_1", zoneName = "space_endor", x = -961, z = -5548, y = 513, escortNumber = 1, radius = 250},
 		{patrolPointName = "corellia_rebel_tier4_4_b_rescue_2", zoneName = "space_endor", x = -1637, z = -5535, y = 354, escortNumber = 2, radius = 250},
 		{patrolPointName = "corellia_rebel_tier4_4_b_rescue_3", zoneName = "space_endor", x = -2330, z = -5523, y = 191, escortNumber = 3, radius = 250},
@@ -1800,31 +1802,11 @@ space_battle_corellia_rebel_tier4_4_c = SpaceBattleScreenplay:new {
 
 registerScreenPlay("space_battle_corellia_rebel_tier4_4_c", true)
 
--- Master Mission: Destroy
-destroy_corellia_rebel_master = SpaceDestroyScreenplay:new {
-	className = "destroy_corellia_rebel_master",
-
-	questName = "corellia_rebel_master",
-	questType = "destroy",
-
-	questZone = "space_corellia",
-
-	creditReward = 10000,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	killsRequired = 10,
-
-	shipLocations = {},
-
-	shipTypes = {
-		"imp_tie_fighter_tier4", "imp_tie_fighter_tier5", "imp_tie_bomber_tier4", "imp_tie_bomber_tier5",
-		"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier5", "imp_tie_advanced_tier4", "imp_tie_advanced_tier5",
-	},
-}
-
-registerScreenPlay("destroy_corellia_rebel_master", true)
+-- Master Mission (two-stage Kessel encounter). Havoc is a Rebel squadron, so it uses
+-- the authentic Rebel master chain: destroy_master_rebel_1 (Kessel: destroy 30 Imperial
+-- fighters) and destroy_master_rebel_2 (Kessel: destroy the Imperial Corellian Corvette
+-- / Star Ravager command vessel), defined in
+-- screenplays/space/squadrons/KesselMasterEncounterScreenplay.lua (loaded first).
 
 -- Aqzow Duty Missions
 
@@ -1919,7 +1901,7 @@ recovery_duty_corellia_rebel_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	targetShip = "lambdashuttle_troop_transport_ace",
+	recoverShip = "lambdashuttle_troop_transport_ace",
 	targetArrivalDelay = 10,
 	recoveryDelay = 30,
 
@@ -2016,12 +1998,12 @@ HavocSquadronScreenplay = ScreenPlay:new {
 
 	-- Tier 3 (Arkon)
 	TIER3_QUEST_STRING_1 = {type = "recovery", name = "corellia_rebel_tier3_1"},
-	TIER3_QUEST_STRING_1_SIDE1 = {type = "patrol", name = "patrol_corellia_rebel_tier3_1_A"},
+	TIER3_QUEST_STRING_1_SIDE1 = {type = "patrol", name = "corellia_rebel_tier3_1_A"},
 	TIER3_QUEST_STRING_1_SIDE2 = {type = "destroy_surpriseattack", name = "corellia_rebel_tier3_1_b"},
 	TIER3_QUEST_STRING_1_SIDE3 = {type = "assassinate", name = "corellia_rebel_tier3_1_c"},
 	TIER3_QUEST_STRING_1_SIDE4 = {type = "space_battle", name = "corellia_rebel_tier3_1_d"},
 	TIER3_QUEST_STRING_2 = {type = "inspect", name = "corellia_rebel_tier3_2"},
-	TIER3_QUEST_STRING_2_SIDE1 = {type = "delivery", name = "delivery_corellia_rebel_tier3_2_a"},
+	TIER3_QUEST_STRING_2_SIDE1 = {type = "delivery", name = "corellia_rebel_tier3_2_a"},
 	TIER3_QUEST_STRING_2_SIDE2 = {type = "survival", name = "corellia_rebel_tier3_2_b"},
 	TIER3_QUEST_STRING_2_SIDE3 = {type = "escort", name = "corellia_rebel_tier3_2_c"},
 	TIER3_QUEST_STRING_3 = {type = "delivery", name = "corellia_rebel_tier3_3"},
@@ -2029,26 +2011,27 @@ HavocSquadronScreenplay = ScreenPlay:new {
 	TIER3_QUEST_STRING_3_SIDE2 = {type = "space_battle", name = "corellia_rebel_tier3_3_b"},
 	TIER3_QUEST_STRING_3_SIDE3 = {type = "escort", name = "corellia_rebel_tier3_3_c"},
 	TIER3_QUEST_STRING_4 = {type = "assassinate", name = "corellia_rebel_tier3_4"},
-	TIER3_QUEST_STRING_4_SIDE1 = {type = "patrol", name = "patrol_corellia_rebel_tier3_4_a"},
+	TIER3_QUEST_STRING_4_SIDE1 = {type = "patrol", name = "corellia_rebel_tier3_4_a"},
 	TIER3_QUEST_STRING_4_SIDE2 = {type = "destroy_surpriseattack", name = "corellia_rebel_tier3_4_b"},
 	TIER3_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "corellia_rebel_tier3_4_c"},
 	TIER3_QUEST_STRING_4_SIDE4 = {type = "survival", name = "corellia_rebel_tier3_4_d"},
 
 	-- Tier 4 (Aqzow)
 	TIER4_QUEST_STRING_1 = {type = "survival", name = "corellia_rebel_tier4_1"},
-	TIER4_QUEST_STRING_1_SIDE1 = {type = "space_battle", name = "space_battle_corellia_rebel_tier4_1_a"},
-	TIER4_QUEST_STRING_1_SIDE2 = {type = "space_battle", name = "space_battle_corellia_rebel_tier4_1_b"},
+	TIER4_QUEST_STRING_1_SIDE1 = {type = "space_battle", name = "corellia_rebel_tier4_1_a"},
+	TIER4_QUEST_STRING_1_SIDE2 = {type = "space_battle", name = "corellia_rebel_tier4_1_b"},
 	TIER4_QUEST_STRING_2 = {type = "assassinate", name = "corellia_rebel_tier4_2"},
-	TIER4_QUEST_STRING_2_SIDE1 = {type = "delivery_no_pickup", name = "delivery_no_pickup_corellia_rebel_tier4_2_a"},
-	TIER4_QUEST_STRING_2_SIDE2 = {type = "rescue", name = "rescue_corellia_rebel_tier4_2_b"},
+	TIER4_QUEST_STRING_2_SIDE1 = {type = "delivery_no_pickup", name = "corellia_rebel_tier4_2_a"},
+	TIER4_QUEST_STRING_2_SIDE2 = {type = "rescue", name = "corellia_rebel_tier4_2_b"},
 	TIER4_QUEST_STRING_3 = {type = "space_battle", name = "corellia_rebel_tier4_3"},
-	TIER4_QUEST_STRING_3_SIDE1 = {type = "space_battle", name = "space_battle_corellia_rebel_tier4_3_a"},
-	TIER4_QUEST_STRING_3_SIDE2 = {type = "survival", name = "survival_corellia_rebel_tier4_3_b"},
+	TIER4_QUEST_STRING_3_SIDE1 = {type = "space_battle", name = "corellia_rebel_tier4_3_a"},
+	TIER4_QUEST_STRING_3_SIDE2 = {type = "survival", name = "corellia_rebel_tier4_3_b"},
 	TIER4_QUEST_STRING_4 = {type = "recovery", name = "corellia_rebel_tier4_4"},
-	TIER4_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "assassinate_corellia_rebel_tier4_4_a"},
-	TIER4_QUEST_STRING_4_SIDE2 = {type = "rescue", name = "rescue_corellia_rebel_tier4_4_b"},
+	TIER4_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "corellia_rebel_tier4_4_a"},
+	TIER4_QUEST_STRING_4_SIDE2 = {type = "rescue", name = "corellia_rebel_tier4_4_b"},
 	TIER4_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "corellia_rebel_tier4_4_c"},
-	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "corellia_rebel_master"},
+	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "master_rebel_1"},
+	TIER4_QUEST_STRING_MASTER_2 = {type = "destroy", name = "master_rebel_2"},
 	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "corellia_rebel_tier4_1"},
 	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "corellia_rebel_tier4_1"},
 	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "corellia_rebel_tier4_1"},
@@ -2235,9 +2218,11 @@ function HavocSquadronScreenplay:resetArkonQuests(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE2.type, self.TIER4_QUEST_STRING_4_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE3.type, self.TIER4_QUEST_STRING_4_SIDE3.name, false)
 
-	-- Master
-	destroy_corellia_rebel_master:resetQuest(pPlayer)
+	-- Master (two-stage Kessel corvette encounter)
+	destroy_master_rebel_1:resetQuest(pPlayer)
+	destroy_master_rebel_2:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_MASTER.type, self.TIER4_QUEST_STRING_MASTER.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_MASTER_2.type, self.TIER4_QUEST_STRING_MASTER_2.name, false)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 

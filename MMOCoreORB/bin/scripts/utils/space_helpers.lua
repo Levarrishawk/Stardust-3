@@ -478,7 +478,14 @@ function SpaceHelpers:surrenderPilot(pPlayer)
 	elseif (pilotSquadron == SMUGGLER_SQUADRON) then
 		pilotProfession = "neutralPilot"
 
-		-- TODO: Add SmugglerSquadronScreenplay reset functions
+		-- Tier 1
+		SmugglerSquadronScreenplay:resetDravisQuests(pPlayer)
+		-- Tier 2
+		SmugglerSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		SmugglerSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		SmugglerSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == RSF_SQUADRON) then
 		pilotProfession = "neutralPilot"
 
@@ -504,25 +511,60 @@ function SpaceHelpers:surrenderPilot(pPlayer)
 	elseif (pilotSquadron == VORTEX_SQUADRON) then
 		pilotProfession = "rebelPilot"
 
-		-- TODO: Add VortexSquadronScreenplay reset functions
+		-- Tier 1
+		VortexSquadronScreenplay:resetV3fxQuests(pPlayer)
+		-- Tier 2
+		VortexSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		VortexSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		VortexSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == CRIMSON_PHOENIX_SQUADRON) then
 		pilotProfession = "rebelPilot"
 
-		-- TODO: Add CrimsonPhoenixSquadronScreenplay reset functions
+		-- Tier 1
+		CrimsonPhoenixSquadronScreenplay:resetSocunaQuests(pPlayer)
+		-- Tier 2
+		CrimsonPhoenixSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		CrimsonPhoenixSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		CrimsonPhoenixSquadronScreenplay:resetTier4Quests(pPlayer)
 
 	-- Imperial Pilots
 	elseif (pilotSquadron == BLACK_EPSILON_SQUADRON) then
 		pilotProfession = "imperialPilot"
 
-		-- TODO: Add BlackEpsilonSquadronScreenplay reset functions
+		-- Tier 1
+		BlackEpsilonSquadronScreenplay:resetSireenQuests(pPlayer)
+		-- Tier 2
+		BlackEpsilonSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		BlackEpsilonSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		BlackEpsilonSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == STORM_SQUADRON) then
 		pilotProfession = "imperialPilot"
 
-		-- TODO: Add StormSquadronScreenplay reset functions
+		-- Tier 1
+		StormSquadronScreenplay:resetColzetQuests(pPlayer)
+		-- Tier 2
+		StormSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		StormSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		StormSquadronScreenplay:resetTier4Quests(pPlayer)
 	elseif (pilotSquadron == INQUISITION_SQUADRON) then
 		pilotProfession = "imperialPilot"
 
-		-- TODO: Add InquisitionSquadronScreenplay reset functions
+		-- Tier 1
+		InquisitionSquadronScreenplay:resetSinkkoQuests(pPlayer)
+		-- Tier 2
+		InquisitionSquadronScreenplay:resetTier2Quests(pPlayer)
+		-- Tier 3
+		InquisitionSquadronScreenplay:resetTier3Quests(pPlayer)
+		-- Tier 4
+		InquisitionSquadronScreenplay:resetTier4Quests(pPlayer)
 	end
 
 	local pilotSkills = self.pilotSkills[pilotProfession]
@@ -542,6 +584,18 @@ function SpaceHelpers:surrenderPilot(pPlayer)
 	end
 
 	PlayerObject(pGhost):resetPilotTier()
+
+	-- Pilot resign: XP and prestige reset to zero
+	local resetXpTypes = { "space_combat_general", "prestige_pilot", "prestige_rebel", "prestige_imperial" }
+
+	for i = 1, #resetXpTypes, 1 do
+		local xpType = resetXpTypes[i]
+		local xpAmount = PlayerObject(pGhost):getExperience(xpType)
+
+		if (xpAmount > 0) then
+			CreatureObject(pPlayer):awardExperience(xpType, xpAmount * -1, false)
+		end
+	end
 end
 
 -- @param pPlayer pointer adds waypoint to the starting neutral Corsec Squadron trainer
@@ -725,6 +779,55 @@ function SpaceHelpers:addImperialInquisitionSquadWaypoint(pPlayer)
 	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:barn_sinkko", "@npc_spawner_n:barn_sinkko", 5182, 0, 6750, WAYPOINT_BLUE, true, true, 0)
 end
 
+-- Tier-1 completion hand-off waypoints. All six recruiter conversations use the
+-- Inquisition template dialogue ("report to Under Inquisitor Fa'Zoll in the
+-- Emperor's Retreat"), so all six point at Fa'Zoll's spawn (emperors_retreat.lua).
+-- Kept as per-squadron helpers so each can be retargeted individually if
+-- squadron-specific tier-2 trainers are authored later.
+local function addFaZollWaypointImpl(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:fa_zoll", "@npc_spawner_n:fa_zoll", 2444.4, 292, -3894.8, WAYPOINT_BLUE, true, true, 0)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Smuggler Squadron tier 1
+function SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Inquisition Squadron tier 1
+function SpaceHelpers:addInquisitionNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Storm Squadron tier 1
+function SpaceHelpers:addStormNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Black Epsilon Squadron tier 1
+function SpaceHelpers:addBlackEpsilonNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Crimson Phoenix Squadron tier 1
+function SpaceHelpers:addCrimsonPhoenixNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
+-- @param pPlayer pointer adds hand-off waypoint after finishing Vortex Squadron tier 1
+function SpaceHelpers:addVortexNextWaypoint(pPlayer)
+	addFaZollWaypointImpl(pPlayer)
+end
+
 -- @param pPlayer pointer to check for skills
 -- @param factionString - neutral, rebel_navy, imperial_navy
 -- @param tierNumber
@@ -853,7 +956,11 @@ function SpaceHelpers:activateSpaceQuest(pPlayer, pNpc, questType, questName, no
 		return
 	end
 
-	local isDutyMission = string.find(questName, "_duty")
+	-- The "_duty" marker lives in questType for the standard duty missions
+	-- (destroy_duty / escort_duty / recovery_duty / rescue_duty) and in questName
+	-- for the Kashyyyk station set (ep3_kash_station_*_duty_*). Check both, or the
+	-- one-duty-at-a-time rule and setSpaceDutyMission() below never fire.
+	local isDutyMission = string.find(questType, "_duty") or string.find(questName, "_duty")
 
 	if (isDutyMission) then
 		local hasDuty = false
@@ -987,7 +1094,7 @@ function SpaceHelpers:failSpaceQuest(pPlayer, questType, questName, notifyClient
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:patrol_abandoned") -- "You abandoned your patrol!"
 		elseif (questType == "destroy_surpriseattack") then
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:destroy_surprise_abandoned") -- "You ran away from the attack and abandoned your duty!"
-		elseif (questType == "escort_duty" or questType == "destroy_duty" or questType == "recovery_duty") then
+		elseif (questType == "escort_duty" or questType == "destroy_duty" or questType == "recovery_duty" or questType == "rescue_duty") then
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:destroy_abandoned") -- "You have ended your duty mission."
 		elseif (questType == "inspect") then
 			SpaceHelpers:sendQuestUpdate(pPlayer, "@space/quest:inspect_abandoned") -- "You abandoned your inspection mission!"

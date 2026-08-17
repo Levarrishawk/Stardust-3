@@ -46,7 +46,7 @@ object_ship_player_player_tieoppressor = object_ship_player_shared_player_tieopp
 	name = "player_tieoppressor",
 	slideFactor = 1.78,
 	chassisHitpoints = 1765,
-	chassisMass = 10000,
+	chassisMass = 170000,
 
 	containerComponent = "ShipContainerComponent",
 

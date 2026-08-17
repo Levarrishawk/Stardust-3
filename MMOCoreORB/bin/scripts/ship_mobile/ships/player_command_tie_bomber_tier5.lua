@@ -15,7 +15,7 @@ player_command_tie_bomber_tier5 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"imperial"},
+	alliedFactions = {"imperial", "rsf"},
 	imperialFactionReward = -105,
 	rebelFactionReward = 53,
 	appearance = "imperial_pilot",

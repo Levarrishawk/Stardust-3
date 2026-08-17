@@ -7,7 +7,7 @@ lords_mistress_tier3 = ShipAgent:new {
 
 	lootChance = 0.3,
 	lootRolls = 1,
-	lootTable = "cilivian_tier3",
+	lootTable = "space_civilian_tier3",
 
 	minCredits = 200,
 	maxCredits = 480,

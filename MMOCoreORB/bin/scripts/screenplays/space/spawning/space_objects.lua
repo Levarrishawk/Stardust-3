@@ -145,6 +145,38 @@ SpaceObjects = ScreenPlay:new {
 
 		-- Space Heavy1
 
+		-- Kashyyyk Space
+		-- The nine stations are placed by space_manager.lua, so nothing here repeats them.
+		-- The five asteroid clientpoi rows get real rock; the rest marks the belt lane and
+		-- the wrecks the station missions keep talking about.
+		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", -2339, -5828, -5821},
+		{"space_kashyyyk", "object/static/space/asteroid/asteroid_mammoth_01.iff", -824, -2002, -999},
+		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", -5951, -14, 1034},
+		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", 3340, 2308, 3473},
+		{"space_kashyyyk", "object/static/space/asteroid/asteroid_mammoth_01.iff", 3011, 1962, 4304},
+		-- Belt lane beacons between the station and the organometallic rocks the CPG Veteran works.
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -5400, 120, -3400},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -5700, 40, -1300},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -5880, -20, 480},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -3900, 900, 2100},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -1600, 1600, 3000},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", 900, 2000, 3600},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_generator_01.iff", -4780, 300, -4780},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_generator_01.iff", 2700, 3100, 3760},
+		-- Rodian territory run, Tripp's outpost out to Sordaan's on the far side of the belt.
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -2400, 240, 2700},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", 200, 1400, 3200},
+		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", 2420, 3180, 3760},
+		-- Tyyyn Nebula: the shipped rescue and escort missions put crippled transports here.
+		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -6120, -3420, -4380},
+		{"space_kashyyyk", "object/static/space/debris/cargo_destroyed_large_a.iff", -6180, -3470, -4460},
+		{"space_kashyyyk", "object/static/space/debris/cargo_destroyed_large_a.iff", -6244, -3538, -4552},
+		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -5720, -3010, -4020},
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -6000, -2600, -3600},
+		-- Slaver approach, prize hulls parked short of the Independent Slavers' Base.
+		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -6390, -300, 3980},
+		{"space_kashyyyk", "object/static/space/debris/cargo_destroyed_large_a.iff", -6460, -260, 3900},
+
 		-- Space Light1
 		{"space_light1", "object/static/space/ship/cargo_freighter.iff", -4937, 2523, -6004},
 		{"space_light1", "object/static/space/ship/cargo_freighter.iff", 2264, -3464, 1469},

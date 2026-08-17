@@ -2617,30 +2617,6 @@ bool ShipObjectImplementation::isComponentTargetable(int slot) {
 		return false;
 	}
 
-	if (isComponentFunctional(Components::BRIDGE) && isSlotTargetable(Components::BRIDGE)) {
-		switch (slot) {
-			case Components::ENGINE: {
-				return (!isComponentFunctional(Components::SHIELD0) || !isSlotTargetable(Components::SHIELD0))
-					&& (!isComponentFunctional(Components::SHIELD1) || !isSlotTargetable(Components::SHIELD1));
-			}
-			case Components::REACTOR: {
-				return (!isComponentFunctional(Components::SHIELD0) || !isSlotTargetable(Components::SHIELD0))
-					&& (!isComponentFunctional(Components::SHIELD1) || !isSlotTargetable(Components::SHIELD1))
-					&& (!isComponentFunctional(Components::ENGINE) || !isSlotTargetable(Components::ENGINE));
-			}
-			case Components::BRIDGE: {
-				return (!isComponentFunctional(Components::SHIELD0) || !isSlotTargetable(Components::SHIELD0))
-					&& (!isComponentFunctional(Components::SHIELD1) || !isSlotTargetable(Components::SHIELD1))
-					&& (!isComponentFunctional(Components::ENGINE) || !isSlotTargetable(Components::ENGINE))
-					&& (!isComponentFunctional(Components::REACTOR) || !isSlotTargetable(Components::REACTOR));
-			}
-			case Components::TARGETING_STATION:
-			case Components::HANGAR: {
-				return false;
-			}
-		}
-	}
-
 	return true;
 }
 

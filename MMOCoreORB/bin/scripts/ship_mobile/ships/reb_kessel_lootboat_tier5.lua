@@ -7,7 +7,7 @@ reb_kessel_lootboat_tier5 = ShipAgent:new {
 
 	lootChance = 0.52,
 	lootRolls = 1,
-	lootTable = "space_kessel_rebel",
+	lootTable = "space_rebel_kessel",
 
 	minCredits = 525,
 	maxCredits = 1075,

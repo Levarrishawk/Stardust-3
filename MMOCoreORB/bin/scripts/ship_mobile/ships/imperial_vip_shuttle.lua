@@ -15,7 +15,7 @@ imperial_vip_shuttle = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
-	alliedFactions = {"hutt"},
+	alliedFactions = {"hutt", "rsf"},
 	imperialFactionReward = -106,
 	rebelFactionReward = 53,
 	appearance = "imperial_officer",

@@ -2518,3 +2518,115 @@ object_tangible_wearables_necklace_shared_necklace_wampum = SharedTangibleObject
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_wampum, "object/tangible/wearables/necklace/shared_necklace_wampum.iff")
+
+-- Kessel Master 'ace pilot' reward wearables (client shared templates; meshes in mtg_patch_010_object_01.tre).
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_m, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_m.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_f, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_f.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_m, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_m.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_f, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_f.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_m, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_m.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_f, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_f.iff")
+
+-- Kessel 'ace pilot' reward -- Wookiee + Ithorian species shared meshes (mtg_patch_010_object_01.tre).
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_wke_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_wke_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_wke_m, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_wke_m.iff")
+
+object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_empire_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_empire_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_empire_m, "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_empire_m.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_wke_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_wke_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_empire_wke_f, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_empire_wke_f.iff")
+
+object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_empire_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_empire_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_empire_f, "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_empire_f.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_wke_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_wke_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_wke_m, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_wke_m.iff")
+
+object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_rebel_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_rebel_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_rebel_m, "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_rebel_m.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_wke_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_wke_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_rebel_wke_f, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_rebel_wke_f.iff")
+
+object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_rebel_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_rebel_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_rebel_f, "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_rebel_f.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_wke_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_wke_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_wke_m, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_wke_m.iff")
+
+object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_neutral_m = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_neutral_m.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_neutral_m, "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_neutral_m.iff")
+
+object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_wke_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_wke_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_necklace_ace_pilot_neutral_wke_f, "object/tangible/wearables/necklace/shared_necklace_ace_pilot_neutral_wke_f.iff")
+
+object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_neutral_f = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_neutral_f.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_wearables_necklace_shared_ith_necklace_ace_pilot_neutral_f, "object/tangible/wearables/necklace/shared_ith_necklace_ace_pilot_neutral_f.iff")

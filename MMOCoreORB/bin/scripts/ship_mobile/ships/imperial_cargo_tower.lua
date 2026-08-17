@@ -15,6 +15,7 @@ imperial_cargo_tower = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -40,
 	appearance = "imperial_pilot",
 

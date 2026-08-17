@@ -2,16 +2,19 @@ spacestation_imperial = ShipAgent:new {
 	template = "spacestation_imperial",
 	shipType = "capital",
 
+	experience = 50000,
+
 	lootChance = 0,
 	lootRolls = 0,
 	lootTable = "space_imperial_tier1",
 
-	minCredits = 791,
-	maxCredits = 1300,
+	minCredits = 10000,
+	maxCredits = 20000,
 
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -100,
 	rebelFactionReward = 250,
 	appearance = "imperial_officer",
@@ -19,11 +22,11 @@ spacestation_imperial = ShipAgent:new {
 	tauntDefendChance = 0.05,
 	tauntDieChance = 0.1,
 
-	pvpBitmask = NONE,
+	pvpBitmask = ATTACKABLE,
 	shipBitmask = NONE,
-	optionsBitmask = AIENABLED + INVULNERABLE,
+	optionsBitmask = AIENABLED,
 
-	customShipAiMap = "spaceStations",
+	customShipAiMap = "attackableSpaceStations",
 
 	conversationTemplate = "spacestation_imperial_convotemplate",
 	conversationMobile = "object/mobile/shared_space_comm_imperial_officer_01.iff",

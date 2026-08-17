@@ -876,7 +876,9 @@ SceneObject* ObjectManager::createObject(uint32 objectCRC, int persistenceLevel,
 	object = instantiateSceneObject(objectCRC, oid, true);
 
 	if (object == nullptr) {
-		error() << "could not create object CRC = 0x" << hex << objectCRC << " template:" << templateManager->getTemplateFile(objectCRC);
+		// getTemplateFile() throws on an unknown key — never call it in this error
+		// path, or a missing template becomes a fatal boot crash instead of a skip.
+		error() << "could not create object CRC = 0x" << hex << objectCRC;
 		return nullptr;
 	}
 

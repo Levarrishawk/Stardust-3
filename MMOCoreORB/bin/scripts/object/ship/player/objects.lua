@@ -41,6 +41,15 @@
 --which carries forward this exception.
 
 
+object_ship_player_shared_player_advanced_xwing = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/player/shared_player_advanced_xwing.iff"
+	--The deprecated lookup block the sibling entries carry is omitted here: every value in it
+	--(appearance, CRC, derivedFromTemplates, certificationsRequired) is read from the client TREs
+	--at load time, and this entry was added server-side without a dump of those bytes.
+}
+
+ObjectTemplates:addClientTemplate(object_ship_player_shared_player_advanced_xwing, "object/ship/player/shared_player_advanced_xwing.iff")
+
 object_ship_player_shared_player_awing = SharedShipObjectTemplate:new {
 	clientTemplateFileName = "object/ship/player/shared_player_awing.iff"
 	--Data below here is deprecated and loaded from the tres, keeping for easy lookups
@@ -2282,6 +2291,15 @@ object_ship_player_shared_player_tieinterceptor = SharedShipObjectTemplate:new {
 }
 
 ObjectTemplates:addClientTemplate(object_ship_player_shared_player_tieinterceptor, "object/ship/player/shared_player_tieinterceptor.iff")
+
+object_ship_player_shared_player_tieinterceptor_imperial_guard = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/player/shared_player_tieinterceptor_imperial_guard.iff"
+	--The deprecated lookup block the sibling entries carry is omitted here: every value in it
+	--(appearance, CRC, derivedFromTemplates, certificationsRequired) is read from the client TREs
+	--at load time, and this entry was added server-side without a dump of those bytes.
+}
+
+ObjectTemplates:addClientTemplate(object_ship_player_shared_player_tieinterceptor_imperial_guard, "object/ship/player/shared_player_tieinterceptor_imperial_guard.iff")
 
 object_ship_player_shared_player_tieoppressor = SharedShipObjectTemplate:new {
 	clientTemplateFileName = "object/ship/player/shared_player_tieoppressor.iff"

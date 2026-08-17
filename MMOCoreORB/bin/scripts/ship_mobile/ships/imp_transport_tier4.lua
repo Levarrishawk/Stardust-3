@@ -15,6 +15,7 @@ imp_transport_tier4 = ShipAgent:new {
 	aggressive = 0,
 
 	spaceFaction = "imperial",
+	alliedFactions = {"rsf"},
 	imperialFactionReward = -40,
 	formationLocation = 2,
 	appearance = "imperial_pilot",
