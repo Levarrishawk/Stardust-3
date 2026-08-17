@@ -95,9 +95,9 @@ public:
 		result = nullptr;
 
 		// Check client version
-		String validClient = ConfigManager::instance()->getString("Core3.PlayerManager.ValidClientVersion", "20050408-18:00");
+		const String& validClient = ConfigManager::instance()->getLoginRequiredVersion();
 
-		if (!version.contains(validClient)) {
+		if (version != validClient) {
 			ErrorMessage* errMsg = new ErrorMessage("Login Error", "You are using an improper client version.", 0x0);
 			client->sendMessage(errMsg);
 

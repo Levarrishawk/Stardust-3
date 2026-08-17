@@ -67,7 +67,7 @@ Core3 = {
 	LoginPort = 44453,
 	LoginProcessingThreads = 1,
 	LoginAllowedConnections = 3000,
-	LoginRequiredVersion = "20050408-18:00",
+	LoginRequiredVersion = "20260817-SD:01",
 
 	------Mantis Database Config------
 	MantisHost = "127.0.0.1",
