@@ -42,6 +42,7 @@
 #include "server/zone/objects/ship/transform/ShipObjectTransform.h"
 #include "server/zone/objects/ship/transform/SpaceTransform.h"
 #include "server/zone/managers/ship/tasks/ShipObjectTimerTask.h"
+#include "conf/ConfigManager.h"
 
 // #define DEBUG_COV
 
@@ -335,8 +336,31 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	// info(true) << "ShipObjectImplementation::sendBaselinesTo - sending to: " << player->getDisplayedName();
 
 	bool sendSelf = player == owner.get() || player->isASubChildOf(asShipObject());
+	bool sendPrivateBaselines = sendSelf || ConfigManager::instance()->getBool("Core3.JTL.SendPrivateShipBaselinesToObservers", true);
+	bool debugShipBaselines = ConfigManager::instance()->getBool("Core3.JTL.DebugShipBaselinePackets", true);
 
-	if (sendSelf) {
+	if (debugShipBaselines) {
+		auto objectTemplate = getObjectTemplate();
+		StringBuffer logMessage;
+		logMessage << "JTL ship create/baseline sequence"
+			<< " shipID=" << getObjectID()
+			<< " shipName=" << getDisplayedName()
+			<< " template=" << (objectTemplate != nullptr ? objectTemplate->getFullTemplateString() : "null")
+			<< " clientCRC=0x" << String::hexvalueOf(getClientObjectCRC())
+			<< " gameObjectType=0x" << String::hexvalueOf(getGameObjectType())
+			<< " shipAiAgent=" << isShipAiAgent()
+			<< " hyperspacing=" << isHyperspacing()
+			<< " parentID=" << getParentID()
+			<< " position=" << getWorldPosition()
+			<< " recipientID=" << player->getObjectID()
+			<< " recipientName=" << player->getDisplayedName()
+			<< " ownerOrPassenger=" << sendSelf
+			<< " priorPackets=CREATE,LINK"
+			<< " baselines=" << (sendPrivateBaselines ? "SHIP1,SHIP3,SHIP4,SHIP6" : "SHIP3,SHIP6");
+		info(true) << logMessage.toString();
+	}
+
+	if (sendPrivateBaselines) {
 		ShipObjectMessage1* ship1 = new ShipObjectMessage1(_this.getReferenceUnsafeStaticCast());
 		player->sendMessage(ship1);
 	}
@@ -344,7 +368,7 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	ShipObjectMessage3* ship3 = new ShipObjectMessage3(_this.getReferenceUnsafeStaticCast());
 	player->sendMessage(ship3);
 
-	if (sendSelf) {
+	if (sendPrivateBaselines) {
 		ShipObjectMessage4* ship4 = new ShipObjectMessage4(_this.getReferenceUnsafeStaticCast());
 		player->sendMessage(ship4);
 	}
