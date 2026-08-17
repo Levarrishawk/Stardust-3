@@ -341,6 +341,7 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 
 	if (debugShipBaselines) {
 		auto objectTemplate = getObjectTemplate();
+		const auto& worldPosition = getWorldPosition();
 		StringBuffer logMessage;
 		logMessage << "JTL ship create/baseline sequence"
 			<< " shipID=" << getObjectID()
@@ -351,7 +352,7 @@ void ShipObjectImplementation::sendBaselinesTo(SceneObject* player) {
 			<< " shipAiAgent=" << isShipAiAgent()
 			<< " hyperspacing=" << isHyperspacing()
 			<< " parentID=" << getParentID()
-			<< " position=" << getWorldPosition()
+			<< " position=(" << worldPosition.getX() << "," << worldPosition.getY() << "," << worldPosition.getZ() << ")"
 			<< " recipientID=" << player->getObjectID()
 			<< " recipientName=" << player->getDisplayedName()
 			<< " ownerOrPassenger=" << sendSelf
