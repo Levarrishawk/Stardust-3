@@ -120,6 +120,14 @@ public:
 			return;
 		}
 
+		pilot->info(true) << "JTL CreateProjectileMessage received"
+			<< " shipID=" << shipID
+			<< " shipObjectID=" << ship->getObjectID()
+			<< " weaponIndex=" << weaponIndex
+			<< " projectileType=" << projectileType
+			<< " componentIndex=" << componentIndex
+			<< " sequence=" << sequence;
+
 		uint32 slot = Components::WEAPON_START + weaponIndex;
 		uint32 crc = ship->getShipComponentMap()->get(slot);
 
@@ -165,6 +173,14 @@ public:
 			projectile->readProjectileData(data);
 
 			SpaceCombatManager::instance()->addProjectile(ship, projectile, pilot);
+
+			pilot->info(true) << "JTL CreateProjectileMessage accepted"
+				<< " shipID=" << shipID
+				<< " weaponIndex=" << weaponIndex
+				<< " projectileType=" << projectileType
+				<< " componentIndex=" << componentIndex
+				<< " speed=" << data->getSpeed()
+				<< " range=" << data->getRange();
 		}
 	}
 
