@@ -1,11 +1,20 @@
 -- Quest-spawn variant of the Mustafar blistmok; name matches the sibling
 -- template mobile/custom_content/som/blistmok.lua and the client's
 -- @monster_name:blistmok.
+--
+-- mobType was MOB_HERBIVORE, which looks like it was read off diet = HERBIVORE
+-- below. That field is not a mobType signal in this set -- blackguard.lua:26 is
+-- diet = HERBIVORE on a humanoid -- and every sibling blistmok (blistmok,
+-- blistmok_shrieker, blistmok_trampler, trained_blistmok) is MOB_CARNIVORE.
+-- The mismatch was not cosmetic: AiAgentImplementation.cpp:4272 makes a carnivore
+-- treat any herbivore as attackable, so the wild packs would have hunted this
+-- quest spawn on sight. The profile here is a predator's anyway -- AGGRESSIVE +
+-- ENEMY, PACK + STALKER, posturedownattack/stunattack.
 som_kenobi_blistmok = Creature:new {
 	customName = "Blistmok",
 	socialGroup = "",
 	faction = "",
-	mobType = MOB_HERBIVORE,
+	mobType = MOB_CARNIVORE,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

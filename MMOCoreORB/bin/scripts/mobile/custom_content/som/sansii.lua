@@ -2,6 +2,7 @@ sansii = Creature:new {
 	customName = "Sans'ii the Kursk",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

@@ -2,6 +2,7 @@ must_foreman_chivos = Creature:new {
 	customName = "Foreman Chivos",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

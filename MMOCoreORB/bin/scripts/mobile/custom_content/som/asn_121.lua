@@ -2,6 +2,7 @@ asn_121 = Creature:new {
 	customName = "ASN-121",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_DROID,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

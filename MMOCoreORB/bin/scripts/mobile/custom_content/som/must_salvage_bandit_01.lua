@@ -2,6 +2,7 @@ must_salvage_bandit_01 = Creature:new {
 	customName = "a Salvage Bandit thug",
 	socialGroup = "",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

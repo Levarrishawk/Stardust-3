@@ -2,6 +2,7 @@ battlefield_foreman = Creature:new {
 	customName = "Battlefield Foreman",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

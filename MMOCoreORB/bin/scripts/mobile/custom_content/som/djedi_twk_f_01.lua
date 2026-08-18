@@ -2,6 +2,7 @@ djedi_twk_f_01 = Creature:new {
 	customName = "Dark Jedi",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

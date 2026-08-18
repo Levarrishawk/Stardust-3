@@ -2,6 +2,7 @@ foreman_nurfa = Creature:new {
 	customName = "Foreman Nurfa Laz'op",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

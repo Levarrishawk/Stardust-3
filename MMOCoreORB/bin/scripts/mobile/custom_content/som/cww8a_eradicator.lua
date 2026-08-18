@@ -2,6 +2,7 @@ cww8a_eradicator = Creature:new {
 	customName = "CWW8A Eradicator",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_DROID,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

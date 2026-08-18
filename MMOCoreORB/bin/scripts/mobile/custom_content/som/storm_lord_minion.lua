@@ -2,6 +2,7 @@ storm_lord_minion = Creature:new {
 	customName = "a storm lord minion",
 	socialGroup = "",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

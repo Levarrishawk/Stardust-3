@@ -4,6 +4,7 @@ ruins_weequay = Creature:new {
 	customName = "a Weequay scavenger",
 	socialGroup = "thug",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

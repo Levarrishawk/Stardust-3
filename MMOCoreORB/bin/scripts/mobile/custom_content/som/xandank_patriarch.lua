@@ -2,6 +2,7 @@ xandank_patriarch = Creature:new {
 	customName = "xandank_patriarch",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_CARNIVORE,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

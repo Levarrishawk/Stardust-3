@@ -2,6 +2,7 @@ npc_ithes_olok = Creature:new {
 	customName = "Ithes Olok",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

@@ -2,6 +2,7 @@ coyn_commando = Creature:new {
 	customName = "a Razor Runner commando",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

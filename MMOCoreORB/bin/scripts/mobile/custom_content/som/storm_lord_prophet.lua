@@ -2,6 +2,7 @@ storm_lord_prophet = Creature:new {
 	customName = "storm_lord_prophet",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

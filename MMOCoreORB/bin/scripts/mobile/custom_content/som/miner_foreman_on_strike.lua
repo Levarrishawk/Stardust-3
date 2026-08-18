@@ -2,6 +2,7 @@ miner_foreman_on_strike = Creature:new {
 	customName = "a Miner Foreman on strike",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

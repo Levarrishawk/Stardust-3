@@ -2,6 +2,7 @@ scorching_terror = Creature:new {
 	customName = "Scorching Terror",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_CARNIVORE,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

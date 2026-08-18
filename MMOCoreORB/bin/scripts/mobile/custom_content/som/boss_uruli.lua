@@ -2,6 +2,7 @@ boss_uruli = Creature:new {
 	customName = "Boss Uruli",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

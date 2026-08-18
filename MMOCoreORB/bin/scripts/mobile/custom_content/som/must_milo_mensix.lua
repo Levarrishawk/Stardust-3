@@ -2,6 +2,7 @@ must_milo_mensix = Creature:new {
 	customName = "Milo Mensix",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

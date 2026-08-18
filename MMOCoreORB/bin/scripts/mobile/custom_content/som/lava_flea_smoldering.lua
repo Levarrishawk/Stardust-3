@@ -2,6 +2,7 @@ lava_flea_smoldering = Creature:new {
 	customName = "Smoldering Lava Flea",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_HERBIVORE,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

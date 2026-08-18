@@ -2,6 +2,7 @@ must_mining_droid_mark_01 = Creature:new {
 	customName = "Mark I Mining Droid",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_DROID,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

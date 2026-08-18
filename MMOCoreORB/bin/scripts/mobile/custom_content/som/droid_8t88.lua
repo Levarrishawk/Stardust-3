@@ -2,6 +2,7 @@ droid_8t88 = Creature:new {
 	customName = "8T-88",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_ANDROID,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

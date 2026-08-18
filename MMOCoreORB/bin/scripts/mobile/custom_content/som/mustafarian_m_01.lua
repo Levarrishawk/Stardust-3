@@ -2,6 +2,7 @@ mustafarian_m_01 = Creature:new {
 	customName = "a Mustafarian Lava Miner",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

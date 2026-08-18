@@ -2,6 +2,7 @@ storm_lord_touched = Creature:new {
 	customName = "storm_lord_touched",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

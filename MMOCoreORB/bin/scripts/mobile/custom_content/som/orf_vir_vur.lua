@@ -2,6 +2,7 @@ orf_vir_vur = Creature:new {
 	customName = "Vir Vur",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_HERBIVORE,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

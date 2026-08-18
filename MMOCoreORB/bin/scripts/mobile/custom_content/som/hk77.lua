@@ -2,6 +2,7 @@ hk77 = Creature:new {
 	customName = "HK-77",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_ANDROID,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

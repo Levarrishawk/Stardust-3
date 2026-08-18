@@ -2,6 +2,7 @@ treasure_hunter_merc = Creature:new {
 	customName = "a treasure hunter mercenary",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

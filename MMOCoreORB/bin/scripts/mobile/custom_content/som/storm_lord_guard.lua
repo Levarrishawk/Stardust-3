@@ -2,6 +2,7 @@ storm_lord_guard = Creature:new {
 	customName = "a storm lord guard",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,

@@ -2,6 +2,7 @@ ig106 = Creature:new {
 	customName = "IG-106",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_ANDROID,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,
