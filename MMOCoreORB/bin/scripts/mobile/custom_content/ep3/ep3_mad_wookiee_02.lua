@@ -3,6 +3,7 @@ ep3_mad_wookiee_02 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "wookiee",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 105,
 	chanceHit = 1.05,
 	damageMin = 1150,

@@ -3,6 +3,7 @@ ep3_harwakokok_mighty = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "wookiee",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 250,
 	chanceHit = 25.00,
 	damageMin = 2250,

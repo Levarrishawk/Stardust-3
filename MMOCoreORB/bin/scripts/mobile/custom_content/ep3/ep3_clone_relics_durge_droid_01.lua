@@ -3,6 +3,7 @@ ep3_clone_relics_durge_droid_01 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "droids",
 	faction = "",
+	mobType = MOB_ANDROID,
 	level = 150,
 	chanceHit = 15.0,
 	damageMin = 1750,

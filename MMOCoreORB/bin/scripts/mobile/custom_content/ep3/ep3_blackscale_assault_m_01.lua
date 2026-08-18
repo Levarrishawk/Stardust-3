@@ -3,6 +3,7 @@ ep3_blackscale_assault_m_01 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 75,
 	chanceHit = 0.75,
 	damageMin = 550,

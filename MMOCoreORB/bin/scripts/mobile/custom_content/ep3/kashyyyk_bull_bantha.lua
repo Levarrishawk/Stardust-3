@@ -4,6 +4,7 @@ kashyyyk_bull_bantha = Creature:new {
 	randomNameTag = true,
 	socialGroup = "townsperson",
 	faction = "townsperson",
+	mobType = MOB_HERBIVORE,
 	level = 4,
 	chanceHit = 0.24,
 	damageMin = 40,

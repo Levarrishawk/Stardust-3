@@ -3,6 +3,7 @@ ep3_rryatt_gotal_hunter_champion_02 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 115,
 	chanceHit = 3.85,
 	damageMin = 1800,

@@ -2,6 +2,7 @@ kashyyyk_matriarch_bantha = Creature:new {
 	customName = "a Matriarch Kashyyyk Bantha",
 	socialGroup = "townsperson",
 	faction = "townsperson",
+	mobType = MOB_HERBIVORE,
 	level = 45,
 	chanceHit = 0.4,
 	damageMin = 295,

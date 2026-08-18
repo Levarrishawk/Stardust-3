@@ -3,6 +3,7 @@ ep3_rryatt_abandoned_battle_droid_01 = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "droids",
 	faction = "",
+	mobType = MOB_ANDROID,
 	level = 134,
 	chanceHit = 5.5,
 	damageMin = 795,

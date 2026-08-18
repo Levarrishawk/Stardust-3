@@ -2,6 +2,7 @@ ep3_blackscale_captain_beshk = Creature:new {
 	customName = "Captain Beshk",
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 115,
 	chanceHit = 1.25,
 	damageMin = 1380,

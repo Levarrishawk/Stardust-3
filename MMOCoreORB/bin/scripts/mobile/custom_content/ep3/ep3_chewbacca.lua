@@ -2,6 +2,7 @@ ep3_chewbacca = Creature:new {
 	customName = "Chewbacca",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.33,
 	damageMin = 180,

@@ -4,6 +4,7 @@ palpatine_hologram = Creature:new {
 	socialGroup = "townsperson",
 	pvpFaction = "",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 300,
 	chanceHit = 75.00,
 	damageMin = 1800,

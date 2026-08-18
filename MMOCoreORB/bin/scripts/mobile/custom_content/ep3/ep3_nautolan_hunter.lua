@@ -3,6 +3,7 @@ ep3_nautolan_hunter = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 120,
 	chanceHit = 4.50,
 	damageMin = 1250,

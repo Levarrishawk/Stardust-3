@@ -3,6 +3,7 @@ ep3_blackscale_trooper_m_03 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 100,
 	chanceHit = 1.00,
 	damageMin = 1150,

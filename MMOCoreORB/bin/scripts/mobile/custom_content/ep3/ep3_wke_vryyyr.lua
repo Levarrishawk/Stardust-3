@@ -3,6 +3,7 @@ ep3_wke_vryyyr = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 300,
 	chanceHit = 0.33,
 	damageMin = 180,

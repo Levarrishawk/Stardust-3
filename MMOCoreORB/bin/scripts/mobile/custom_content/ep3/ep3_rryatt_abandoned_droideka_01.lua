@@ -3,6 +3,7 @@ ep3_rryatt_abandoned_droideka_01 = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "droids",
 	faction = "",
+	mobType = MOB_DROID,
 	level = 134,
 	chanceHit = 5.5,
 	damageMin = 795,

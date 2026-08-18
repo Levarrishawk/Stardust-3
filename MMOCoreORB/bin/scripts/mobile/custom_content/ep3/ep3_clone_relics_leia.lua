@@ -3,6 +3,7 @@ ep3_clone_relics_leia = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 300,
 	chanceHit = 75.00,
 	damageMin = 1800,

@@ -3,6 +3,7 @@ ep3_etyyy_laen_pieweto = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 47,
 	chanceHit = 0.47,
 	damageMin = 500,

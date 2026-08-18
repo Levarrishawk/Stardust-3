@@ -3,6 +3,7 @@ ep3_blackscale_dead_02 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.50,
 	damageMin = 360,

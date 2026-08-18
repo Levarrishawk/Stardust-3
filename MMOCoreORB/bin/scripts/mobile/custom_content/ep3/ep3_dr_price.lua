@@ -2,6 +2,7 @@ ep3_dr_price = Creature:new {
 	customName = "Dr Price",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.33,
 	damageMin = 180,

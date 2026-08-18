@@ -3,6 +3,7 @@ ep3_blackscale_enforcer_m_01 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 85,
 	chanceHit = 0.85,
 	damageMin = 650,
