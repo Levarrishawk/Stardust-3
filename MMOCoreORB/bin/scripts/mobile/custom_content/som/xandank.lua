@@ -1,5 +1,7 @@
 xandank = Creature:new {
-	customName = "xandank",
+	-- Transcribed, not invented: shared_xandank.iff carries stringId monster_name:xandank,
+	-- and string/en/monster_name.stf resolves that key to "Xandank".
+	customName = "Xandank",
 	socialGroup = "townsperson",
 	faction = "",
 	level = 70,
