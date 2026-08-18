@@ -130,9 +130,21 @@ mustafar_regions = {
   {"smoking_forest_1", -5464, 4110, {1, 1000}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
   {"smoking_forest_2", -5464, 4110, {1, 1000}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
   -- Storm Lord Ruins
-  {"storm_lord_ruins", 193, 4163, {1, 500}, NOWORLDSPAWNAREA + NOBUILDZONEAREA, {"mustafar_storm_lord_minions"}, 256},
+  -- SPAWNAREA added: the row names a spawn group, but PlanetManagerImplementation.cpp:1069
+  -- only reads argument 6 when that flag is set, so this was built as a plain region_area
+  -- and mustafar_storm_lord_minions never spawned. setRegionFlags runs first at :1067, so
+  -- NOWORLDSPAWNAREA still applied -- the 500 m circle suppressed the planet-wide spawner
+  -- and supplied nothing in its place. Flag order matches smoking_forest_1/_2 above.
+  {"storm_lord_ruins", 193, 4163, {1, 500}, NOWORLDSPAWNAREA + SPAWNAREA + NOBUILDZONEAREA, {"mustafar_storm_lord_minions"}, 256},
   -- Areas Cleared of World Spawns
-  {"sw_bandit_camp", -6170, 10, {1, 100}, NOSPAWNAREA + NOBUILDZONEAREA},
+  -- Re-centred from (-6170, 10). The camp it is meant to clear is the 13 mobiles at
+  -- screenplays/mustafar/regions/mensix_facility_region.lua:68-93, which span
+  -- x -6059..-5998.9 and y -73.0..73.7. Against the old centre every one of the 13 sat
+  -- 111.4-181.1 m out, i.e. entirely outside the 100 m circle, so the camp was exposed to
+  -- the mensix_west_13 blistmoks and the planet-wide lava fleas. -6029, 0 is the bounding
+  -- box centre of those 13; it brings the farthest in to 75.7 m, so the shipped radius is
+  -- left at 100 rather than widened.
+  {"sw_bandit_camp", -6029, 0, {1, 100}, NOSPAWNAREA + NOBUILDZONEAREA},
   {"mensix_mining_facility", -2601, 1635, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
   {"striking_miner_camp", -5335, 4429, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
   {"blackguard_jedi_ruins", -4373, 3255, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},

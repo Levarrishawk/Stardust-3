@@ -50,7 +50,10 @@ that contain objects. The 13 unnamed ones are empty by construction.
 
 RESERVATIONS
 
-One copy per party, claimed on entry and released when it empties.
+One copy per entrant, claimed on entry and released when it empties. Not per party:
+there is no getGroup call anywhere in this file, so grouped players each claim their
+own copy and land in different ones. Group entry is an open design question, not a
+thing this file half-implements.
 
     mustafarInstance:<buildingID>              1 while the copy is claimed
     mustafarInstance:<buildingID>:claimedAt    os.time() of the claim
@@ -67,23 +70,44 @@ reschedules itself only while the copy is still claimed, so events exist only fo
 copies actually in use. EXITEDBUILDING also fires a one-shot releaseIfEmpty so a
 copy normally frees within seconds rather than waiting for the next sweep.
 
-initialize() clears every reservation and ejects anyone still inside at boot. That
-is what covers a player who logged out in an instance: without it their copy would
-stay claimed forever and the pool would leak one slot per stranded logout.
+initialize() does call deleteData on both reservation keys and then ejectAllPlayers,
+in prepareCopy -- but at boot both are no-ops, and the paragraph that used to stand
+here credited them with covering a stranded logout. They do not.
+
+start() runs inside startManagers() (ZoneServerImplementation.cpp:230), which is
+before serverState = ONLINE (:233), so no player is logged in yet. And reservations
+live in DirectorSharedMemory, which is four plain in-memory HashTables (see
+DirectorSharedMemory.h) constructed fresh by new DirectorSharedMemory() at
+DirectorManager.cpp:125 -- nothing serializes it, so it is already empty on every
+boot. reloadscreenplays never re-runs initialize() either.
+
+What actually covers a stranded logout is the ordinary path: logging out removes the
+creature from the world (PlayerObjectImplementation.cpp:419), so countPlayersInside
+falls to 0 and the 120 s checkCopy sweep releases the copy once claimGrace has
+passed. The slot is not leaked within a run either.
 
 WHAT IS WIRED, AND WHAT DELIBERATELY IS NOT
 
-Only the Old Republic Facility has an entry. It is the one this arc needs:
-som_kenobi_historian_1 sends the player to it, and reunite_shard_3's fusion machine
-stands inside it.
+Two of the six pools have an entry, not one -- this paragraph used to say only the
+Old Republic Facility did, and that was wrong.
 
-The other five pools have real exterior doors in the snapshot and they are recorded
-below, but they are NOT wired, and each one says why in its own entry. In every
-case the reason is the same shape: the door exists, the interior exists, but the
-quest or device that opened it in live did not ship in this tree, and opening them
-unconditionally would be inventing content rather than restoring it. A radial that
-teleports a player into an empty dungeon with no reason to be there is a grant that
-does nothing, which is worse than an honest gap.
+  old_republic_facility   entry = { ... }         ungated
+  lair_of_the_crystal     entry = { ... }         gate = "kenobi_spine"
+
+Both are the ones the arc needs. som_kenobi_historian_1 sends the player to the
+Old Republic Facility and reunite_shard_3's fusion machine stands inside it. The
+lair is the shard site; its gate string is resolved against the screenplay of that
+name, so the radial only appears once kenobiSpineScreenPlay:mayEnterLair
+(kenobi_spine.lua:1491) says the player is at that point in the spine.
+
+The remaining four -- monster_lair, uplink_cave, working_droid_factory and
+decrepit_droid_factory -- carry entry = nil. They have real exterior doors in the
+snapshot and they are recorded below, but they are NOT wired, and each one says why
+in its own entry. In every case the reason is the same shape: the door exists, the
+interior exists, but the quest or device that opened it in live did not ship in this
+tree, and opening them unconditionally would be inventing content rather than
+restoring it. A radial that teleports a player into an empty dungeon with no reason
+to be there is a grant that does nothing, which is worse than an honest gap.
 
 STRINGS
 

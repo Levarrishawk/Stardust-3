@@ -29,7 +29,16 @@ function mensix_facility_region:spawnMobiles()
 
   local pLavaMiner = spawnMobile("mustafar", "mustafarian_m_01",60,-2906.5,148.5,1371.8,127,0)
   self:setMoodString(pLavaMiner, "neutral")
-  local pLavaMiner1 = spawnMobile("mustafar", "mustafarian_m_01",60,-85.8,15.6,4679.7,-13,0)
+  -- PLACEMENT, NOT A TRANSCRIPTION -- Aaron may want this moved.
+  -- This line read -85.8,15.6,4679.7,-13,0, which is a verbatim copy of
+  -- screenplays/cities/chandrila_chandriltech_facility.lua:250 -- same respawn 60, same
+  -- heading -13, same three coordinates; that exact triple occurs in only those two files
+  -- in the whole scripts tree. It put this miner ~4400 m from the other ten under the same
+  -- header, in unregioned ground, and z 15.6 is roughly 85-145 m below terrain there, so
+  -- the camp showed ten miners and the eleventh was buried. The origin of the number is
+  -- recoverable; the position it was meant to have is not. Placed here between the
+  -- siblings at :34 and :36, taking z from their local floor (136.5 / 136.9).
+  local pLavaMiner1 = spawnMobile("mustafar", "mustafarian_m_01",60,-2960,137,1355,-13,0)
   self:setMoodString(pLavaMiner1, "idlewander")
   local pLavaMiner2 = spawnMobile("mustafar", "mustafarian_m_01",60,-2958.0,136.5,1348.7,-74,0)
   self:setMoodString(pLavaMiner2, "idlewander")

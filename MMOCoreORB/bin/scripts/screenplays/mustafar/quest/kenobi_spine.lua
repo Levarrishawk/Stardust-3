@@ -262,17 +262,35 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	--[[ The dying miner. som_obi_wan_signal_1 says only "at the new mining
 	     facility", so he lies on the landing deck, cell index 29 of the same POB
 	     -- node 12112248 -- which is the one room in the building a body could be
-	     carried into off the field. Nothing in the snapshot or the .ilf places
-	     him; this is a placement, and it is the only one in this file that no
-	     shipped line pins down. ]]
+	     carried into off the field.
+
+	     This used to read x -47.0, z 19.07, y 6.0, and the comment here used to
+	     claim no shipped line pinned the spot down. That was wrong on both counts.
+	     mensix/mensix_mining_facility_main.lua:38-40 records the original NGE
+	     positions of the two travelers, in this exact cell 12112248:
+
+	         traveler_m   -55.1, 31.5, -120.3
+	         traveler_f   -56.7, 31.5, -118.9
+
+	     Two independent lines agree the floor plane of landing_deck_room is
+	     z = 31.5. The old z of 19.07 is byte-identical to the technician's
+	     small_room_04 value at :247 -- that is the copy-paste this came from --
+	     and it put the miner about twelve metres beneath the deck and outside
+	     every room in the POB. Since STAGE_REPORT is set at exactly one site
+	     (:844, inside examineMiner) and :1574 gates on isInRangeWithObject(..., 8),
+	     no player could reach him and som_obi_wan_signal_1 was uncompletable.
+
+	     The coordinates below are traveler_m's recorded position, reused because
+	     it is a proven in-cell point on that floor; traveler_m itself now spawns
+	     outdoors, so the spot is unoccupied. ]]
 
 	miner = {
 		template = "som_kenobi_dying_miner",
 		cellName = "landing_deck_room",
 		cellID = 12112248,
-		x = -47.0,
-		z = 19.07,
-		y = 6.0,
+		x = -55.1,
+		z = 31.5,
+		y = -120.3,
 		heading = 0,
 	},
 
