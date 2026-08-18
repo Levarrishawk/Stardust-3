@@ -1,10 +1,23 @@
 --New Content Mob Template Files
 
---To Fix
---includeFile("som/miner_pilot.lua")	--ToDo Fix tre error
---includeFile("som/neimoidian.lua")	--ToDo Fix tre error
---includeFile("som/som_crazed_mustafarian_hermit.lua")	--ToDo Fix tre error
---includeFile("som/voakar_duset.lua")	--ToDo Fix tre error (Neimoidian race needs adding)
+--[[ These four were commented out as "ToDo Fix tre error".  There is no tre
+     error.  Every one of them used the bare som/ prefix while every live line in
+     this file uses custom_content/som/, so the include simply did not resolve --
+     that is the error the author hit.  The client assets do ship
+     (object/mobile/som/shared_neimoidian.iff is in mtg_patch_010_object_01.tre,
+     loaded at conf/config.lua:168, with the full appearance chain), and the
+     object templates are registered by
+     object/custom_content/mobile/som/serverobjects.lua.
+
+     miner_pilot and som_crazed_mustafarian_hermit are already included further
+     down this file with the correct path, so those two lines are dead
+     duplicates and are dropped rather than repaired.  neimoidian and
+     voakar_duset were registered nowhere, which is why the arc cross-reference
+     reported them as the only two unregistered creatures in the tree.
+     neimoidian is the NPC appearance for six of the ten HK history quests.
+     Both spawn clean on a boot probe. ]]
+includeFile("custom_content/som/neimoidian.lua")
+includeFile("custom_content/som/voakar_duset.lua")
 
 
 --Mustafar (som)
