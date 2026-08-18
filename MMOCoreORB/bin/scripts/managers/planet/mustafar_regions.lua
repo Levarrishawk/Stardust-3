@@ -10,7 +10,7 @@
 -- That means that it is not possible to have both a spawn area and a no spawn area in the same region, but
 -- a spawn area that is also a no build zone is possible.
 
-require("scripts.managers.spawn_manager.regions")
+require("scripts.managers.planet.regions")
 
 --[[ 
 
@@ -112,6 +112,20 @@ mustafar_regions = {
   {"berkens_10", 51, 5753, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tanrays"}, 256},
   {"berkens_10", 51, 5753, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
   {"berkens_10", 51, 5753, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
+  -- Burning Plains
+  -- Not produced by the World Spawner Tool: the block bounded by the NGE mining
+  -- field markers (x -2100..-4500, y 4590..5920) had no spawn region at all, so
+  -- the documented "kill 5 Kubaza Beetles in the Burning Plain" objective had no
+  -- creatures anywhere near any of the three waypoints the NGE guide quotes for
+  -- it. These are plain SPAWNAREA -- they layer kubaza beetles onto the plain
+  -- without suppressing the planet-wide world_spawner or changing build rules.
+  -- Centres are the NGE marker positions plus the guide's own alternates.
+  {"burning_plains_1", -2805, 5131, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
+  {"burning_plains_2", -2789, 5921, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
+  {"burning_plains_3", -2155, 5511, {1, 300}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
+  {"burning_plains_4", -4490, 5905, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
+  {"burning_plains_5", -2776, 4593, {1, 300}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
+  {"burning_plains_6", -3955, 5328, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
   -- Smoking Forest
   {"smoking_forest_1", -5464, 4110, {1, 1000}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
   {"smoking_forest_2", -5464, 4110, {1, 1000}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
