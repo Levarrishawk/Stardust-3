@@ -409,8 +409,29 @@ nil, hence the "or 0".
 	wp_<key>   waypoint id currently handed out for that objective, absent if none
 --]]
 
-function reuniteShardScreenPlay:getStage(pPlayer)
+function reuniteShardScreenPlay:rawStage(pPlayer)
 	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "stage")) or 0
+end
+
+--[[ The fusion is driven by createEvent, which does not survive a server restart, while
+     the stage does. Reading the stage settles an overdue fusion as well, so a restart
+     inside those 10-15 s cannot park a player at stage 5, where the machine offers no
+     radial at all and finishFusion is the only writer of stage 6. Both paths funnel into
+     finishFusion, which is guarded on the raw stage, so whichever arrives first wins. ]]
+function reuniteShardScreenPlay:getStage(pPlayer)
+	local stage = self:rawStage(pPlayer)
+
+	if (stage == 5) then
+		local due = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "fusionUntil")) or 0
+
+		if (due ~= 0 and getTimestamp() >= due) then
+			self:finishFusion(pPlayer)
+
+			return self:rawStage(pPlayer)
+		end
+	end
+
+	return stage
 end
 
 function reuniteShardScreenPlay:setStage(pPlayer, stage)
@@ -722,15 +743,22 @@ function reuniteShardScreenPlay:startFusion(pPlayer)
 	-- _3 task 3's journal entry, "Process under way".
 	CreatureObject(pPlayer):sendSystemMessage("Wait for the photon fusion machine to finish the process.")
 
-	createEvent(getRandomNumber(self.fusion.minTime, self.fusion.maxTime) * 1000, "reuniteShardScreenPlay", "finishFusion", pPlayer, "")
+	-- The deadline is stamped alongside the event so getStage can settle the fusion if the
+	-- event is lost with the process.
+	local fusionDelay = getRandomNumber(self.fusion.minTime, self.fusion.maxTime)
+
+	writeScreenPlayData(pPlayer, self.screenplayName, "fusionUntil", tostring(getTimestamp() + fusionDelay))
+	createEvent(fusionDelay * 1000, "reuniteShardScreenPlay", "finishFusion", pPlayer, "")
 end
 
 function reuniteShardScreenPlay:finishFusion(pPlayer)
-	if (pPlayer == nil or self:getStage(pPlayer) ~= 5) then
+	-- Raw, not getStage: the catch-up path in getStage calls this function.
+	if (pPlayer == nil or self:rawStage(pPlayer) ~= 5) then
 		return
 	end
 
 	self:setStage(pPlayer, 6)
+	deleteScreenPlayData(pPlayer, self.screenplayName, "fusionUntil")
 
 	-- _3 task 4's journal entry, "Finished".
 	CreatureObject(pPlayer):sendSystemMessage("The process is complete, hopefully it worked.")

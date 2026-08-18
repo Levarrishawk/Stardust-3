@@ -461,8 +461,30 @@ function historianScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
 end
 
-function historianScreenPlay:getQ1Step(pPlayer)
+function historianScreenPlay:rawQ1Step(pPlayer)
 	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "q1step")) or 0
+end
+
+--[[ The slicer's crack is driven by createEvent, which does not survive a server restart,
+     while q1step does. Reading the step settles an overdue crack as well, so a restart
+     inside those 20-45 s cannot park a smuggler at Q1_SCANNED: the terminal offers no
+     radial there, and notifyKilledCreature refuses the droid-key route to anyone carrying
+     the "slice" flag, so finishCrack is that player's only exit. Both paths funnel into
+     finishCrack, which is guarded on the raw step, so whichever arrives first wins. ]]
+function historianScreenPlay:getQ1Step(pPlayer)
+	local step = self:rawQ1Step(pPlayer)
+
+	if (step == self.Q1_SCANNED) then
+		local due = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "crackUntil")) or 0
+
+		if (due ~= 0 and getTimestamp() >= due) then
+			self:finishCrack(pPlayer)
+
+			return self:rawQ1Step(pPlayer)
+		end
+	end
+
+	return step
 end
 
 function historianScreenPlay:setQ1Step(pPlayer, step)
@@ -603,7 +625,12 @@ function historianScreenPlay:scanTerminal(pPlayer, pComputer)
 		-- Task 9's journalEntryDescription, "Cracking the code".
 		CreatureObject(pPlayer):sendSystemMessage("Your smuggling skills come in handy as you get to work on cracking the encryption on the computer terminal.")
 
-		createEvent(getRandomNumber(self.crackTimeMin, self.crackTimeMax) * 1000, "historianScreenPlay", "finishCrack", pPlayer, "")
+		-- The deadline is stamped alongside the event so getQ1Step can settle the crack if
+		-- the event is lost with the process.
+		local crackDelay = getRandomNumber(self.crackTimeMin, self.crackTimeMax)
+
+		writeScreenPlayData(pPlayer, self.screenplayName, "crackUntil", tostring(getTimestamp() + crackDelay))
+		createEvent(crackDelay * 1000, "historianScreenPlay", "finishCrack", pPlayer, "")
 	else
 		-- _1 task 2, then task 3's Destroy Multiple and Loot.
 		self:showMessageBox(pPlayer, pComputer, "Couldn't be that easy",
@@ -616,11 +643,13 @@ end
 
 -- _smuggler task 9 expiring, which fires task 4 and then task 10.
 function historianScreenPlay:finishCrack(pPlayer)
-	if (pPlayer == nil or self:getStage(pPlayer) ~= self.STAGE_Q1 or self:getQ1Step(pPlayer) ~= self.Q1_SCANNED) then
+	-- Raw, not getQ1Step: the catch-up path in getQ1Step calls this function.
+	if (pPlayer == nil or self:getStage(pPlayer) ~= self.STAGE_Q1 or self:rawQ1Step(pPlayer) ~= self.Q1_SCANNED) then
 		return
 	end
 
 	self:setQ1Step(pPlayer, self.Q1_UNLOCKED)
+	deleteScreenPlayData(pPlayer, self.screenplayName, "crackUntil")
 
 	-- _smuggler task 4.
 	self:showMessageBox(pPlayer, nil, "Success!",
