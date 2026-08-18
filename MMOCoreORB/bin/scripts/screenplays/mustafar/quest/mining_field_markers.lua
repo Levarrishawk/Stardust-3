@@ -496,6 +496,12 @@ end
 function miningFieldMarkersScreenPlay:turnInArea(pPlayer, area)
 	QuestManager.completeQuest(pPlayer, QuestManager.quests[area.doneQuest])
 
+	-- The search quest has to be closed as well. completeQuest clears the active bit only
+	-- for the id it is handed, so leaving setQuest active leaves getActiveArea matching this
+	-- finished area forever, which pins getInitialScreen on the option-less "in_progress"
+	-- screen and makes welcome_back unreachable -- the remaining areas can never be started.
+	QuestManager.completeQuest(pPlayer, QuestManager.quests[area.setQuest])
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 	local playerID = SceneObject(pPlayer):getObjectID()
 
