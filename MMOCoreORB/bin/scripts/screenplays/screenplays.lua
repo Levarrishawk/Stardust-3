@@ -782,6 +782,9 @@ includeFile("mustafar/quest/kenobi_spine.lua")
 includeFile("mustafar/quest/trophy_hunts.lua")
 includeFile("mustafar/quest/bounty_hunts.lua")
 includeFile("mustafar/quest/hk_history.lua")
+includeFile("mustafar/quest/som_poison_miners.lua")
+includeFile("mustafar/quest/jenha_tar_cube.lua")
+includeFile("mustafar/quest/glyph_hunt.lua")
 -- Last of the mustafar/quest block on purpose: som_prelude_obiwan_check reads the
 -- ten Kenobi side screenplays above through _G[name] to decide whether its gate has
 -- closed.  The lookup happens per call rather than at load, so this is ordering for
