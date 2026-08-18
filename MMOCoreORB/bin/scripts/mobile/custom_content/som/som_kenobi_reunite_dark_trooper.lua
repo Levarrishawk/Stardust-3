@@ -1,7 +1,11 @@
+-- reunite_shard chain ambusher.
+-- faction deliberately left empty: making him faction "imperial" would put
+-- Imperial-aligned players in a TEF bind on a quest they must be able to finish.
 som_kenobi_reunite_dark_trooper = Creature:new {
-	customName = "som_kenobi_reunite_dark_trooper",
-	socialGroup = "townsperson",
+	customName = "a Dark Trooper",
+	socialGroup = "imperial",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,
@@ -20,8 +24,8 @@ som_kenobi_reunite_dark_trooper = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + STALKER,
+	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
+	creatureBitmask = STALKER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 
@@ -32,9 +36,17 @@ som_kenobi_reunite_dark_trooper = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+
+	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
+	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
+	primaryWeapon = "imperial_weapons_heavy",
+	secondaryWeapon = "imperial_weapons_medium",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+
+	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
+	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
+	primaryAttacks = merge(marksmanmaster,commandomaster),
+	secondaryAttacks = marksmanmaster
 }
 
 CreatureTemplates:addCreatureTemplate(som_kenobi_reunite_dark_trooper, "som_kenobi_reunite_dark_trooper")

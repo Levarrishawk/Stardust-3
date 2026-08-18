@@ -34,7 +34,7 @@ diskret_stahn = Creature:new {
 		}
 	},
 	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
+	conversationTemplate = "som_diskret_stahn",
 	attacks = merge(marksmannovice,brawlernovice)
 }
 

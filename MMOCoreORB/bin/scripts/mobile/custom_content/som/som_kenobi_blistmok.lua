@@ -1,7 +1,11 @@
+-- Quest-spawn variant of the Mustafar blistmok; name matches the sibling
+-- template mobile/custom_content/som/blistmok.lua and the client's
+-- @monster_name:blistmok.
 som_kenobi_blistmok = Creature:new {
-	customName = "som_kenobi_blistmok",
-	socialGroup = "townsperson",
+	customName = "Blistmok",
+	socialGroup = "",
 	faction = "",
+	mobType = MOB_HERBIVORE,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,
@@ -20,7 +24,7 @@ som_kenobi_blistmok = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
+	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
@@ -32,9 +36,17 @@ som_kenobi_blistmok = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+
+	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
+	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+
+	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
+	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
+	primaryAttacks = { {"posturedownattack",""}, {"stunattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(som_kenobi_blistmok, "som_kenobi_blistmok")

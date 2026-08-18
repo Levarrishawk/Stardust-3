@@ -1,7 +1,9 @@
+-- reunite_shard chain ambusher. See the dark trooper note re: empty faction.
 som_kenobi_reunite_inquisitorium_hunter = Creature:new {
-	customName = "som_kenobi_reunite_inquisitorium_hunter",
-	socialGroup = "townsperson",
+	customName = "an Inquisitorium Hunter",
+	socialGroup = "imperial",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,
@@ -20,8 +22,8 @@ som_kenobi_reunite_inquisitorium_hunter = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + STALKER,
+	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
+	creatureBitmask = STALKER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 
@@ -32,9 +34,17 @@ som_kenobi_reunite_inquisitorium_hunter = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+
+	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
+	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
+	primaryWeapon = "imperial_weapons_medium",
+	secondaryWeapon = "imperial_pistol",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+
+	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
+	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
+	primaryAttacks = merge(marksmanmaster,brawlermaster),
+	secondaryAttacks = pistoleermaster
 }
 
 CreatureTemplates:addCreatureTemplate(som_kenobi_reunite_inquisitorium_hunter, "som_kenobi_reunite_inquisitorium_hunter")

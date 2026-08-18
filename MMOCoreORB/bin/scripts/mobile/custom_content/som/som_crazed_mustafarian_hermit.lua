@@ -1,3 +1,12 @@
+-- som_kenobi_main_quest_1's hermit, the one carrying the Soul Crystal shard.
+-- He is talked to twice and can end either way: task 15 fires 'talkedHermit2'
+-- when he hands the shard over, task 21 is Destroy Multiple and Loot when he
+-- does not. So he is CONVERSABLE and stays ATTACKABLE -- both endings are
+-- shipped and neither is privileged here.
+--
+-- The weapons/attacks fields below are the pre-rewrite shape and are inert in
+-- this build; they are left alone because they are a repo-wide pattern, not an
+-- arc defect.
 som_crazed_mustafarian_hermit = Creature:new {
 	customName = "Crazed Mustafarian Hermit",
 	socialGroup = "townsperson",
@@ -22,7 +31,7 @@ som_crazed_mustafarian_hermit = Creature:new {
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/som_crazed_mustafarian_hermit.iff"},
@@ -33,7 +42,7 @@ som_crazed_mustafarian_hermit = Creature:new {
 		}
 	},
 	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
+	conversationTemplate = "som_kenobi_crazed_hermit",
 	attacks = merge(marksmannovice,brawlernovice)
 }
 

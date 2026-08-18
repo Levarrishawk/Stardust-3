@@ -1,10 +1,18 @@
--- samaritan quest giver -- Ithorian geologist/ambassador.
--- Name from som_kenobi_samaritan.stf: "I am Pwwoz Pwwa, geologist and ambassador
---   for the Ithorian people on Mustafar".
--- NOT invulnerable: som_kenobi_samaritan_1.qst carries a killIthorian
--- Destroy Multiple task against this same template, so live had him attackable.
-som_pwwoz_pwwa = Creature:new {
-	customName = "Pwwoz Pwwa",
+-- moral_choice quest giver -- the mining corporation executive.
+--
+-- SUBSTITUTED. som_kenobi_moral_choice_1.qst never names him (he is only a
+-- conversation, never a task target), and no creature template of any executive
+-- ships. The appearance is object/mobile/som/neimoidian.iff, which does ship and
+-- is registered from object/custom_content/mobile/som/serverobjects.lua -- the
+-- Neimoidians are the Trade Federation's corporate caste, and the existing
+-- neimoidian template is left alone because it is generic population.
+--
+-- ATTACKABLE, not invulnerable, and no faction: nothing in the .qst kills him,
+-- but s_45 in his string table ("You have ruined me! I thought I could trust you,
+-- you rotting mynock!") is what he says to a player who took the miners' side,
+-- so he has to survive the betrayal and keep standing there.
+som_kenobi_moral_exec = Creature:new {
+	customName = "a Mining Corporation Executive",
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
@@ -31,7 +39,7 @@ som_pwwoz_pwwa = Creature:new {
 	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
-	templates = {"object/mobile/som/som_pwwoz_pwwa.iff"},
+	templates = {"object/mobile/som/neimoidian.iff"},
 	lootGroups = {
 		{
 			groups = {},
@@ -43,7 +51,7 @@ som_pwwoz_pwwa = Creature:new {
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
-	conversationTemplate = "som_kenobi_pwwoz_pwwa",
+	conversationTemplate = "som_kenobi_moral_exec",
 
 	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
 	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
@@ -51,4 +59,4 @@ som_pwwoz_pwwa = Creature:new {
 	secondaryAttacks = { }
 }
 
-CreatureTemplates:addCreatureTemplate(som_pwwoz_pwwa, "som_pwwoz_pwwa")
+CreatureTemplates:addCreatureTemplate(som_kenobi_moral_exec, "som_kenobi_moral_exec")

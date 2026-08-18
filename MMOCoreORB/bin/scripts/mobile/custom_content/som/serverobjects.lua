@@ -4,7 +4,6 @@
 --includeFile("som/miner_pilot.lua")	--ToDo Fix tre error
 --includeFile("som/neimoidian.lua")	--ToDo Fix tre error
 --includeFile("som/som_crazed_mustafarian_hermit.lua")	--ToDo Fix tre error
---includeFile("som/som_trinity_assassin_ithorian_male.lua")	--ToDo Fix tre error
 --includeFile("som/voakar_duset.lua")	--ToDo Fix tre error (Neimoidian race needs adding)
 
 
@@ -92,6 +91,15 @@ includeFile("custom_content/som/sher_kar.lua")
 includeFile("custom_content/som/som_alien_parasite.lua")
 includeFile("custom_content/som/som_ancient_guardian_droideka.lua")
 includeFile("custom_content/som/som_ancient_guardian_ig.lua")
+-- The commented-out line in the "To Fix" block at the top of this file blamed a
+-- tre error; it was a path error -- it read "som/..." instead of
+-- "custom_content/som/...", the same wrongness miner_pilot.lua had.
+-- shared_som_crazed_mustafarian_hermit.iff ships in mtg_patch_010_object_01.tre,
+-- the same TRE as shared_obi_wan_ghost.iff, and its object template is already
+-- registered from object/custom_content/mobile/som/serverobjects.lua:80.
+-- Without this line the creature template is never registered and
+-- som_kenobi_main_quest_1 has no hermit to find.
+includeFile("custom_content/som/som_crazed_mustafarian_hermit.lua")
 includeFile("custom_content/som/som_dark_jedi_boss.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_1.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_2.lua")
@@ -102,9 +110,14 @@ includeFile("custom_content/som/som_dark_jedi_minion_6.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_7.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_8.lua")
 includeFile("custom_content/som/som_kenobi_blistmok.lua")
+includeFile("custom_content/som/som_kenobi_dying_miner.lua")
 includeFile("custom_content/som/som_kenobi_epo_qetora.lua")
 includeFile("custom_content/som/som_kenobi_historian_dark_jedi.lua")
 includeFile("custom_content/som/som_kenobi_menth_paul.lua")
+includeFile("custom_content/som/som_kenobi_moral_corrupt_guard.lua")
+includeFile("custom_content/som/som_kenobi_moral_exec.lua")
+includeFile("custom_content/som/som_kenobi_moral_strike_leader.lua")
+includeFile("custom_content/som/som_kenobi_obi_wan.lua")
 includeFile("custom_content/som/som_kenobi_reunite_dark_jedi.lua")
 includeFile("custom_content/som/som_kenobi_reunite_dark_trooper.lua")
 includeFile("custom_content/som/som_kenobi_reunite_inquisitorium_hunter.lua")
@@ -121,6 +134,12 @@ includeFile("custom_content/som/som_pann_protocol_droid.lua")
 includeFile("custom_content/som/som_pwwoz_pwwa.lua")
 includeFile("custom_content/som/som_pwwoz_thug_1.lua")
 includeFile("custom_content/som/som_pwwoz_thug_2.lua")
+-- The old commented-out line above blamed a tre error; it was a path error. It read
+-- "som/..." instead of "custom_content/som/...", the same wrongness miner_pilot.lua had.
+-- shared_som_trinity_assassin_ithorian_male.iff ships in mtg_patch_010_object_01.tre, the
+-- same TRE as its two siblings below, and its object template is already registered from
+-- object/custom_content/mobile/som/serverobjects.lua:110. collectors_business needs it.
+includeFile("custom_content/som/som_trinity_assassin_ithorian_male.lua")
 includeFile("custom_content/som/som_trinity_assassin_nightsister_female.lua")
 includeFile("custom_content/som/som_trinity_assassin_zabrak_female.lua")
 includeFile("custom_content/som/storm_lord.lua")

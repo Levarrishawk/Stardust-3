@@ -1,5 +1,5 @@
 som_dark_jedi_minion_8 = Creature:new {
-	customName = "som_dark_jedi_minion_8",
+	customName = "Dark Jedi Minion",
 	socialGroup = "townsperson",
 	faction = "",
 	level = 70,

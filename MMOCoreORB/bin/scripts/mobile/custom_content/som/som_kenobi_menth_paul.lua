@@ -1,7 +1,10 @@
+-- cursed_shard quest giver.
+-- Name from som_kenobi_cursed_shard.stf task02: "the crystal Menth Paul gave you earlier".
 som_kenobi_menth_paul = Creature:new {
-	customName = "som_kenobi_menth_paul",
+	customName = "Menth Paul",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,
@@ -20,21 +23,24 @@ som_kenobi_menth_paul = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + STALKER,
-	optionsBitmask = AIENABLED,
+	pvpBitmask = NONE,
+	creatureBitmask = PACK,
+	optionsBitmask = AIENABLED + INVULNERABLE + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/som_kenobi_menth_paul.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	lootGroups = {},
+
+	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
+	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	conversationTemplate = "som_kenobi_menth_paul",
+
+	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
+	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
+	primaryAttacks = { },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(som_kenobi_menth_paul, "som_kenobi_menth_paul")

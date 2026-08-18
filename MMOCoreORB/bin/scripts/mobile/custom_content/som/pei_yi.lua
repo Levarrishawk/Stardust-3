@@ -33,7 +33,7 @@ pei_yi = Creature:new {
 		}
 	},
 	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
+	conversationTemplate = "som_pei_yi",
 	attacks = merge(marksmannovice,brawlernovice)
 }
 
