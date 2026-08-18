@@ -306,6 +306,23 @@ includeFile("conversations/racetracks/nashalconversation.lua")
 -- Space
 includeFile("conversations/space/space_conversations.lua")
 
+-- Mustafar
+includeFile("conversations/mustafar/som_exploration_marker.lua")
+includeFile("conversations/mustafar/som_pei_yi.lua")
+includeFile("conversations/mustafar/som_diskret_stahn.lua")
+includeFile("conversations/mustafar/som_kenobi_q4p3.lua")
+includeFile("conversations/mustafar/som_kenobi_menth_paul.lua")
+includeFile("conversations/mustafar/som_kenobi_cursed_shard_sucker.lua")
+includeFile("conversations/mustafar/som_kenobi_epo_qetora.lua")
+includeFile("conversations/mustafar/som_kenobi_ikt.lua")
+includeFile("conversations/mustafar/som_kenobi_serpent_thief.lua")
+includeFile("conversations/mustafar/som_kenobi_pwwoz_pwwa.lua")
+includeFile("conversations/mustafar/som_kenobi_moral_exec.lua")
+includeFile("conversations/mustafar/som_kenobi_moral_strike_leader.lua")
+includeFile("conversations/mustafar/som_kenobi_computer_technician.lua")
+includeFile("conversations/mustafar/som_kenobi_crazed_hermit.lua")
+includeFile("conversations/mustafar/som_kenobi_obi_wan.lua")
+
 -- Record Keepers
 includeFile("conversations/record_keepers/planet_record_keeper_dantooine_conv.lua")
 includeFile("conversations/record_keepers/planet_record_keeper_tatooine_conv.lua")
