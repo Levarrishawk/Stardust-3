@@ -189,8 +189,33 @@ nil, hence the "or 0".
 	wp_vault waypoint id handed out for the vault
 --]]
 
-function hiddenTreasureScreenPlay:getStage(pPlayer)
+function hiddenTreasureScreenPlay:rawStage(pPlayer)
 	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "stage")) or 0
+end
+
+--[[ Stage 5 hangs entirely off the guardian, and spawnMobile's mobs are not persistent --
+     DirectorManager passes persistent = false into CreatureManager::spawnCreature -- so a
+     restart takes the guardian and leaves the stage behind. There is no stage-5 radial on
+     either lever and nothing but notifyGuardianKilled writes stage 6, so that player would
+     be done with the quest still open. Reading the stage rolls an orphaned stage 5 back to
+     4, which is the same anti-strand rollback spawnGuardian already performs on both of
+     its spawn-failure paths: both levers are armed again and pulling one re-runs the
+     encounter from the top. ]]
+function hiddenTreasureScreenPlay:getStage(pPlayer)
+	local stage = self:rawStage(pPlayer)
+
+	if (stage == 5) then
+		local guardianID = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "guardian")) or 0
+
+		if (guardianID == 0 or getSceneObject(guardianID) == nil) then
+			self:setStage(pPlayer, 4)
+			deleteScreenPlayData(pPlayer, self.screenplayName, "guardian")
+
+			return 4
+		end
+	end
+
+	return stage
 end
 
 function hiddenTreasureScreenPlay:setStage(pPlayer, stage)
@@ -351,6 +376,10 @@ function hiddenTreasureScreenPlay:spawnGuardian(pPlayer, guardianTemplate)
 	-- in the non-persistent store; the player's stage is what persists.
 	writeData(SceneObject(pGuardian):getObjectID() .. ":hiddenTreasurePlayer", playerID)
 
+	-- The reverse link, on the player, is what lets getStage tell "guardian still up" from
+	-- "guardian went away with the process" and roll stage 5 back rather than strand it.
+	writeScreenPlayData(pPlayer, self.screenplayName, "guardian", tostring(SceneObject(pGuardian):getObjectID()))
+
 	createObserver(OBJECTDESTRUCTION, "hiddenTreasureScreenPlay", "notifyGuardianKilled", pGuardian)
 	AiAgent(pGuardian):setDefender(pPlayer)
 end
@@ -371,9 +400,13 @@ function hiddenTreasureScreenPlay:notifyGuardianKilled(pGuardian, pKiller)
 		return 1
 	end
 
-	if (self:getStage(pPlayer) ~= 5) then
+	-- Raw, not getStage: the guardian is being destroyed as this fires, so the reverse link
+	-- may no longer resolve and getStage's orphan rollback would take the reward away.
+	if (self:rawStage(pPlayer) ~= 5) then
 		return 1
 	end
+
+	deleteScreenPlayData(pPlayer, self.screenplayName, "guardian")
 
 	self:showMessageBox(pPlayer, nil, "Something more?",
 		"As you lay the ancient machine to rest, you notice a glimmer among its remains of something. As you bend down to look at it, you see that it's a small ornamented box. Inside it is a strange glowing crystal and a holodisc with a message recorded. As you play the message, the blue holo image of an elderly woman in a robe appears and starts to speak. '...this schematic seems to describe part of a doomsday device. I don't have time to investigate it further, or try and find schematics for the rest of the machine as my former padawan is already here. I fear that he's beyond redemption and that his power might actually exceed my own at this point. To avoid it ending up in the wrong hands, I will secure the schematic in this old vault, guarded by a droid. To you, the finder of the schematic, I urge you to travel to the Jedi Council on Coruscant and entrust the masters there with it and this disc. ...It is strange, last night I had a dream of a situation so similar to mine...a master facing down his student on this very world. It seemed so real, so strong; perhaps if I survive Master Yoda will have an explanation. He is newly raised to the rank of master but still seems to have wisdom well beyond his years. ' The message is on a loop and keeps playing until you turn it off.")
