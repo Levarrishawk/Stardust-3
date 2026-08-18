@@ -1,34 +1,61 @@
 --[[
 	The Mining Field Markers -- Surveyor Jo Keslev, Mensix Mining Facility
 
-	Live NGE reference (transcribed from the SWG wiki article; flavor text below is the
-	verbatim "tidbit" each marker printed when activated):
-
 	  Start:   Surveyor Jo Keslev, /wp 313 -1267, inside the Mensix Mining Facility.
-	  Rewards: 290 quest XP + 5000 credits per completed area set,
-	           Master Mustafar Trailblazer badge,
-	           Tanray Heart Crystal once every area has been completed.
-	  Level:   recommended CL75+ (the markers are not guarded, but the travel between
-	           them crosses high-CL world spawns).
 	  Areas:   Berken's Flow (5), Burning Plains (5), Central Volcano (3),
 	           Crystal Flats (5), Mining Field (5), Smoking Forest (5),
 	           Tulrus Nesting Grounds (3) -- 31 markers total.
+	  Level:   recommended CL75+ (the markers are not guarded, but the travel between
+	           them crosses high-CL world spawns).
+
+	SOURCE OF RECORD
+
+	The seven area quests are SOE-authored XML in the client TREs:
+	quest/som_exploration_{berken,burning,crystal,mining,smoking,tulrus,volcano}.qst.
+	Each is a nested task tree, not a flat list:
+
+	    task 0   Nothing            quest root
+	      task N   Retrieve Item      one marker -- carries "Server Object Template"
+	        task M   Show Message Box   that marker's tidbit, as messageBoxText
+	      ...
+	      task K   Wait for Tasks     gates on every marker in the area
+	        task R   Reward             Bank Credits 5000
+
+	The template and the prose are parent and child of the same task, so the
+	marker-to-text binding is read off the file rather than inferred. Every
+	`object =` and `tidbit =` below is that pairing verbatim, shipped typos included
+	("seperatists", "dominate", "elavation", and the unfinished "The ruins were
+	uncovered...edit..." line SOE left in som_berken_marker_03) -- the same
+	convention hk_history.lua follows.
 
 	COORDINATE FRAME
-	  The /way values quoted in the wiki are in the client waypoint frame, which is offset
-	  from the server world frame by a constant translation:
 
-	      world_x = way_x - 2880        world_y = way_y + 2976
+	World positions come from the world snapshot mustafar_mtg_patch_023.ws, which is
+	what places every som_*_marker_NN.iff in the client. Parsed with
+	C:\swg-extract\ws_dump.py. The snapshot stores (x, height, z) and Core3 lua takes
+	(x, z = height, y), so each row is x = snapshot x, z = snapshot height,
+	y = snapshot z. All 31 rows sit on their own template's snapshot node.
 
-	  Every marker below satisfies that relation against its quoted /way to within ~1m, and
-	  the transform is independently corroborated by mustafar_regions.lua (produced by the
-	  World Spawner Tool against the terrain):
+	The /way comment on each row is the client waypoint frame, kept as a human check
+	value against the world coordinate:
 
-	      Jedi Ruins    /way 2959 996   -> (79, 3972)    vs storm_lord_ruins      (193, 4163) r500
-	      N Jedi Ruins  /way -2572 3220 -> (-5452, 6196) vs nw_jedi_ruins        (-5424, 6028) r200
-	      S Jedi Ruins  /way -1404 400  -> (-4284, 3376) vs blackguard_jedi_ruins (-4373, 3255) r200
+	    world_x = way_x - 2880        world_y = way_y + 2976
 
-	  Keep the /way in each entry's comment: it is the check value for the world coordinate.
+	An earlier revision of this file was transcribed from the SWG wiki article and
+	numbered its `object =` paths 01..NN in its own listing order. That left 20 of
+	the 31 rows pointing at a template standing somewhere else. The .qst binding and
+	the snapshot placement agree with each other against that numbering, so both the
+	templates and the coordinates were re-derived from the shipped data.
+
+	REWARDS -- shipped vs wiki
+
+	The Reward task in each area quest grants Bank Credits 5000 and nothing else:
+	Experience Amount 0, Experience Type empty, Reward Badge empty, Item empty,
+	lootName empty. The wiki's "290 quest XP", the Master Mustafar Trailblazer badge
+	and the Tanray Heart Crystal have no backing in the shipped quest files. The 290
+	XP is still awarded below (areaXpReward) because that is what this file has always
+	done and combat_general is the only XP pool this screenplay tree uses -- flagged
+	here rather than changed, since dropping it is a reward-economy call.
 
 	Final conversation:
 	  "Hello again. my friend. You certainly have done a wonderful job and saved me all sorts
@@ -46,13 +73,15 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 
 	queststring = "miningfieldmarkerscreenplay",
 
-	-- Paid by Jo Keslev per completed area set (NGE: "five thousand credits per area
-	-- searched", 290 quest XP).
+	-- Paid by Jo Keslev per completed area set. The 5000 is the shipped Reward task's
+	-- Bank Credits; the 290 XP is the wiki figure and is not in the .qst (see the
+	-- REWARDS note in the header).
 	areaCreditReward = 5000,
 	areaXpReward = 290,
 
-	-- NGE's completion reward is exactly two things: the Tanray Heart Crystal and the
-	-- Master Mustafar Trailblazer badge. NEITHER can be granted from this tree as it stands:
+	-- The wiki's completion reward is two things: the Tanray Heart Crystal and the
+	-- Master Mustafar Trailblazer badge. Neither is in the shipped quest files, and
+	-- neither can be granted from this tree as it stands anyway:
 	--
 	--   * There is no Tanray Heart Crystal template. Grepping "tanray" across object/ returns
 	--     only object/mobile/skeleton/tanray, the beast/pet intangibles and the beast draft
@@ -65,8 +94,8 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 	--     commands -- so the Trailblazer badge cannot be awarded from Lua at all.
 	--
 	-- The stock dialog line on finished_all still promises the crystal; that is client text
-	-- and is left alone. The seven area payouts (35,000 credits, 2,030 xp) are the part of
-	-- the NGE reward this tree can actually deliver.
+	-- and is left alone. The seven area payouts (35,000 credits shipped, plus the 2,030 xp
+	-- this file adds) are what the tree actually delivers.
 	completionItem = nil,
 
 	-- Ordered list of the seven marker areas. Each area carries:
@@ -89,32 +118,32 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 					object = "object/tangible/quest/som_berken_marker_01.iff",
 					name = "Berken's Flow Marker",
 					x = -507.47, z = 58, y = 3681.4, -- /way 2373 706
-					tidbit = "Named after the famed Mustafarian Jesl Berken, Berken's Flow was once the richest source of raw materials in the known galaxy. The wealth of Mustafar all started with the discovery of Berken's Flow. Today, most of its minerals extracted, Berken's Flow is used only for the smallest of mining operations.",
+					tidbit = "Named after the famed Mustafarian Jesl Berken, Berken's Flow was once the richest source of raw minerals in the known galaxy. The wealth of Mustafar all started with the discovery of Berken's Flow. Today, most of its minerals extracted, Berken's Flow is used only for the smallest of mining operations.",
 				},
 				{
 					quest = "SOM_BERKENS_FLOW_MARKERS_02",
-					object = "object/tangible/quest/som_berken_marker_02.iff",
+					object = "object/tangible/quest/som_berken_marker_04.iff",
 					name = "Tulrus Isle Bridge Marker",
 					x = -574.82, z = 61.786, y = 2491.94, -- /way 2305 -486
-					tidbit = "The Klegger Corp. bridge connects Berken's Flow to the Tulrus Nesting Grounds. Due to the highly dangerous nature of the nesting grounds and their relative lack of resources, this bridge is hardly ever used.",
+					tidbit = "This Klegger Corp. bridge connects Berken's Flow to the Tulrus Nesting Grounds. Due to the highly dangerous nature of the nesting grounds and their relative lack of resources, this bridge is hardly ever used.",
 				},
 				{
 					quest = "SOM_BERKENS_FLOW_MARKERS_03",
-					object = "object/tangible/quest/som_berken_marker_03.iff",
+					object = "object/tangible/quest/som_berken_marker_05.iff",
 					name = "Droid Factory Marker",
 					x = 392.49, z = 45.1373, y = 2220.11, -- /way 3272 -758
-					tidbit = "Built by the separatists shortly before they were found slain in the old Klegger Mining Facility at the end of the Clone Wars. No mining crews who have entered this factory have ever come back.",
+					tidbit = "Built by the seperatists shortly before they were found slain in the old Klegger Mining Facility at the end of the Clone Wars. No mining crews who have entered this factory have ever come back.",
 				},
 				{
 					quest = "SOM_BERKENS_FLOW_MARKERS_04",
-					object = "object/tangible/quest/som_berken_marker_04.iff",
+					object = "object/tangible/quest/som_berken_marker_03.iff",
 					name = "Jedi Ruins Marker",
 					x = 79.3501, z = 128.963, y = 3971.21, -- /way 2959 996
-					tidbit = "WARNING: The party of archeologists who were examining these ruins formed themselves into some sort of dangerous cult. They worship a man they call the Storm Lord and will attack anyone who does not accept him as a god.",
+					tidbit = "The ruins were uncovered...edit...WARNING: The party of archeologists who were examining these ruins formed themselves into some sort of dangerous cult. They worship a man they call the Storm Lord and will attack anyone who does not accept him as a god.",
 				},
 				{
 					quest = "SOM_BERKENS_FLOW_MARKERS_05",
-					object = "object/tangible/quest/som_berken_marker_05.iff",
+					object = "object/tangible/quest/som_berken_marker_02.iff",
 					name = "Old Republic Facility Marker",
 					x = -610.59, z = 87.1491, y = 6031.32, -- /way 2269 3056
 					tidbit = "WARNING: Sealed by the order of Milo Mensix. This ancient facility, dating back to the days of the Old Republic, is overrun with still active security droids and the occasional beast which gets trapped inside.",
@@ -130,38 +159,38 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 			markers = {
 				{
 					quest = "SOM_BURNING_PLAINS_MARKERS_01",
-					object = "object/tangible/quest/som_burning_marker_01.iff",
+					object = "object/tangible/quest/som_burning_marker_04.iff",
 					name = "Berken's Flow Bridge Marker",
-					x = -2155.66, z = 62.7735, y = 5511.92, -- /way 764 2536
+					x = -2115.66, z = 62.7735, y = 5511.92, -- /way 764 2536
 					tidbit = "Another Klegger Corp. bridge that shows the wear of time on its steel frame. This bridge connects the Burning Plains to Berken's Flow.",
 				},
 				{
 					quest = "SOM_BURNING_PLAINS_MARKERS_02",
-					object = "object/tangible/quest/som_burning_marker_02.iff",
+					object = "object/tangible/quest/som_burning_marker_03.iff",
 					name = "Central Volcano Bridge Marker",
 					x = -2776.59, z = 23.5186, y = 4593.53, -- /way 103 1618
-					tidbit = "Another bridge built by the Klegger Corporation. This bridge leads to the second largest volcano in the region. Although a poor source of resources, the volcano is invaluable as a landmark on a ever-shifting world.",
+					tidbit = "Another bridge built by the Klegger Corporation. This bridge leads to the second largest volcano in the region. Although a poor source of resources, the volcano is invaluable as a landmark on an ever-shifting world.",
 				},
 				{
 					quest = "SOM_BURNING_PLAINS_MARKERS_03",
-					object = "object/tangible/quest/som_burning_marker_03.iff",
+					object = "object/tangible/quest/som_burning_marker_02.iff",
 					name = "Central Burning Plains Marker",
 					x = -2805.63, z = 122.179, y = 5131.71, -- /way 74 2156
-					tidbit = "There are only a few points of high elevation in the Burning Plains. When the plains finally are swallowed by the lava, these areas will become important mining islands.",
+					tidbit = "There are only a few points of high elavation in the Burning Plains. When the plains finally are swallowed by the lava, these areas will become important mining islands.",
 				},
 				{
 					quest = "SOM_BURNING_PLAINS_MARKERS_04",
-					object = "object/tangible/quest/som_burning_marker_04.iff",
+					object = "object/tangible/quest/som_burning_marker_05.iff",
 					name = "Temple Ruins Marker",
 					x = -2789.93, z = 21.4531, y = 5921.04, -- /way 90 2945
-					tidbit = "WARNING: These ruins are closed by the order of Milo Mensix. Everyone who spends any time in these ruins seems to lose their mind. Miners who have visited these ruins and returned have reported a very uneasy feeling, like they were being watched. The ruins themselves seem to be that of a great temple of unknown origin.",
+					tidbit = "WARNING: These ruins are closed by order of Milo Mensix. Everyone who spends any time in these ruins seems to lose their mind. Miners who have visited these ruins and returned have reported a very uneasy feeling, like they were being watched. The ruins themselves seem to be that of a great temple of unknown origin.",
 				},
 				{
 					quest = "SOM_BURNING_PLAINS_MARKERS_05",
-					object = "object/tangible/quest/som_burning_marker_05.iff",
+					object = "object/tangible/quest/som_burning_marker_01.iff",
 					name = "Northern Burning Plains Marker",
 					x = -4490.58, z = 15.909, y = 5905.25, -- /way -1610 2930
-					tidbit = "The surface crust of the Burning Plains is especially thin. This allows lava to nearly bubble through the surface. Most experts agree that, if the area suffers a big enough earthquake, the entire plain will become a sea of lava.",
+					tidbit = "The surface crust on the Burning Plains is especially thin. This allows lava to nearly bubble through the surface. Most experts agree that, if the area suffers a big enough earthquake, the entire plain will become a sea of lava.",
 				},
 			},
 		},
@@ -181,17 +210,17 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 				},
 				{
 					quest = "SOM_CENTRAL_VOLCANO_MARKERS_02",
-					object = "object/tangible/quest/som_volcano_marker_02.iff",
+					object = "object/tangible/quest/som_volcano_marker_03.iff",
 					name = "Kubaza Beetle Cavern Marker",
 					x = -3703.1, z = 136.583, y = 3405.69, -- /way -823 430
-					tidbit = "The cavern was originally built by the separatists during their excavation of the Old Republic cruiser. After they left, it became a hive for kubaza beetles, hence the name. WARNING: The cavern was closed by order of Milo Mensix after a field crew of miners was lost to the beetles while surveying the cavern.",
+					tidbit = "This cavern was originally built by the seperatists during their excavation of the Old Republic cruiser. After they left, it became a hive for kubaza beetles, hence the name. WARNING: The cavern was closed by order of Milo Mensix after a field crew of miners was lost to the beetles while surveying the cavern.",
 				},
 				{
 					quest = "SOM_CENTRAL_VOLCANO_MARKERS_03",
-					object = "object/tangible/quest/som_volcano_marker_03.iff",
+					object = "object/tangible/quest/som_volcano_marker_02.iff",
 					name = "Old Republic Cruiser Crash Site Marker",
 					x = -2783.21, z = 144.265, y = 3154.02, -- /way 97 179
-					tidbit = "The remains of this cruiser were excavated during the Clone Wars by the separatists. After a brief period where they had sealed the area off, the separatists left the area and began work on their new factory. WARNING: Salvage Bandits have moved into this region and have begun dismantling the ship. They are highly dangerous and will kill on sight.",
+					tidbit = "The remains of this cruiser were excavated during the Clone Wars by the seperatists. After a brief period where they had sealed the area off, the seperatists left the area and began work on their new factory. Warning: Salvage Bandits have moved into this region and have begun dismantling the ship. They are highly dangerous and will kill on sight.",
 				},
 			},
 		},
@@ -204,17 +233,17 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 			markers = {
 				{
 					quest = "SOM_CRYSTAL_FLATS_MARKERS_01",
-					object = "object/tangible/quest/som_crystal_marker_01.iff",
+					object = "object/tangible/quest/som_crystal_marker_04.iff",
 					name = "Crystal Fields Marker",
 					x = -4018.92, z = 75.1095, y = 2432.66, -- /way -1139 -543
 					tidbit = "Like most of Mustafar, the crystal fields were formed relatively quickly. The sudden shift of the moon's orbit is causing the world to tear itself apart. This has made many geologic formations, like the crystal fields, that normally take millions of years to form on other worlds to sprout up virtually over night.",
 				},
 				{
 					quest = "SOM_CRYSTAL_FLATS_MARKERS_02",
-					object = "object/tangible/quest/som_crystal_marker_02.iff",
+					object = "object/tangible/quest/som_crystal_marker_05.iff",
 					name = "Crystal Flats Bridge",
 					x = -5207.46, z = 5.71105, y = 2506.45, -- /way -2329 -468
-					tidbit = "Built by the Klegger Corporation when they were the dominant mining company on Mustafar, these bridges were originally formed out of steel, although you wouldn't know it by looking at them now. Years in the harsh environment have coated the bridges with volcanic ash and rock so that they now look like natural rock formations.",
+					tidbit = "Built by the Klegger Corporation when they were the dominate mining company on Mustafar, these bridges were originally formed out of steel, although you wouldn't know it by looking at them now. Years in the harsh environment have coated the bridges with volcanic ash and rock so that they now look like natural rock formations.",
 				},
 				{
 					quest = "SOM_CRYSTAL_FLATS_MARKERS_03",
@@ -225,14 +254,14 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 				},
 				{
 					quest = "SOM_CRYSTAL_FLATS_MARKERS_04",
-					object = "object/tangible/quest/som_crystal_marker_04.iff",
+					object = "object/tangible/quest/som_crystal_marker_02.iff",
 					name = "Salvage Bandit Camp",
 					x = -5920.99, z = 86.3664, y = 102.05, -- /way -3041 -2873
-					tidbit = "WARNING: Proceed at your own risk. This used to be a field miners' camp until it was overrun by salvage bandits. These Mustafarians belong to no company and will simply steal anything that isn't nailed down.",
+					tidbit = "WARNING: Proceed at your own risk. This used to be a field miners' camp until it was overrun by the salvage bandits. These Mustafarians belong to no company and will simply steal anything that isn't nailed down.",
 				},
 				{
 					quest = "SOM_CRYSTAL_FLATS_MARKERS_05",
-					object = "object/tangible/quest/som_crystal_marker_05.iff",
+					object = "object/tangible/quest/som_crystal_marker_01.iff",
 					name = "Crossroads",
 					x = -4248.21, z = 73.8265, y = 177.7, -- /way -1369 -2797
 					tidbit = "The crossroads is not really located at any sort of road. There are no true roads on Mustafar. The ever-shifting moon makes it impossible to maintain any sort of permanent road system. The name comes from what the locals call the strip where they leave the relative safety of the mining fields for the more wild parts of the planet.",
@@ -257,12 +286,12 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 					quest = "SOM_MINING_FIELD_MARKERS_02",
 					object = "object/tangible/quest/som_mining_marker_02.iff",
 					name = "Destroyed Mining Facility",
-					x = -2035.3, z = 151.1, y = 704.2, -- /way 842 -2273
+					x = -2035.22, z = 153.899, y = 704.12, -- /way 842 -2273
 					tidbit = "This facility was destroyed and abandoned shortly before the end of the Clone Wars. Salvage crews who investigated the facility after its destruction found the bodies of the separatist leaders, including Viceroy Gunray, murdered by a lightsaber.",
 				},
 				{
 					quest = "SOM_MINING_FIELD_MARKERS_03",
-					object = "object/tangible/quest/som_mining_marker_03.iff",
+					object = "object/tangible/quest/som_mining_marker_05.iff",
 					name = "Chu-Gon Dar Ruins",
 					x = -2542.81, z = 147.81, y = 58.28, -- /way 336 -2921
 					tidbit = "These ruins date back well into the earliest days of the Old Republic. Some experts date them from before the time of the first Sith War. Certain experts believe that this ruin was the laboratory of the great Jedi Master Chu-Gon Dar, an expert at using the force to manipulate physical objects.",
@@ -276,7 +305,7 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 				},
 				{
 					quest = "SOM_MINING_FIELD_MARKERS_05",
-					object = "object/tangible/quest/som_mining_marker_05.iff",
+					object = "object/tangible/quest/som_mining_marker_03.iff",
 					name = "Koseyet Bridge",
 					x = 168.49, z = 127.989, y = -205.708, -- /way 3045 -3186
 					tidbit = "This natural land bridge connects the main mining fields to the Koseyet Mining Camp. The Koseyet mining camp sits on one of the richest mineral deposits on Mustafar and is heavily defended by the miners.",
@@ -292,24 +321,24 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 			markers = {
 				{
 					quest = "SOM_SMOKING_FOREST_MARKERS_01",
-					object = "object/tangible/quest/som_smoking_marker_01.iff",
+					object = "object/tangible/quest/som_smoking_marker_02.iff",
 					name = "Southern Jedi Ruins Marker",
 					x = -4284.06, z = 80.8645, y = 3375.31, -- /way -1404 400
 					tidbit = "These ruins were uncovered roughly 18 years after the end of the Clone Wars. Mustafar simply shifted, and they were revealed. Offworlders have become very excited by the discovery of these ruins and others like them.",
 				},
 				{
 					quest = "SOM_SMOKING_FOREST_MARKERS_02",
-					object = "object/tangible/quest/som_smoking_marker_02.iff",
+					object = "object/tangible/quest/som_smoking_marker_03.iff",
 					name = "Field Miner Camp Marker",
 					x = -5151.03, z = 180.804, y = 4243.6, -- /way -2271 1268
 					tidbit = "Mines like those in the Smoking Forest are very rare on Mustafar because they actually involve digging into the lava rock to extract minerals. While much harder than lava mining, the mines in the Smoking Forest produce some very rich veins of raw materials.",
 				},
 				{
 					quest = "SOM_SMOKING_FOREST_MARKERS_03",
-					object = "object/tangible/quest/som_smoking_marker_03.iff",
+					object = "object/tangible/quest/som_smoking_marker_01.iff",
 					name = "Western Smoking Forest Marker",
 					x = -6225.11, z = 41.474, y = 4388.46, -- /way -3345 1413
-					tidbit = "The smoking forest was once thick with black smoke that was released by giant rock formations. Over time, the formations sealed off, and they eventually toppled down.",
+					tidbit = "The smoking forest was once thick with the black smoke that was released by giant rock formations. Over time, the formations sealed off, and they eventually toppled down.",
 				},
 				{
 					quest = "SOM_SMOKING_FOREST_MARKERS_04",
@@ -327,7 +356,7 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 					object = "object/tangible/quest/som_smoking_marker_05.iff",
 					name = "Northern Jedi Ruins Marker",
 					x = -5453.01, z = 137.572, y = 6194.37, -- /way -2572 3220
-					tidbit = "Like the other ruins located around Mustafar, this ruin appeared after a major earthquake. It's in remarkably good shape; our geologists place its age to be at least 5000 years old.",
+					tidbit = "Like the other ruins located around Mustafar, this ruin appeared after a major earthquake. It's in remarkably good shape; our geologists place its age to be at least 5000 years old. ",
 				},
 			},
 		},
@@ -356,8 +385,8 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 					quest = "SOM_NESTING_GROUNDS_MARKERS_03",
 					object = "object/tangible/quest/som_tulrus_marker_03.iff",
 					name = "Sher Kar Cave Marker",
-					x = -1971, z = 85.2697, y = 4073.65, -- /way 909 1098
-					tidbit = "WARNING: Entering into the Sher Kar Cave is very foolish and will result in your death. By order of Milo Mensix, the cave has been sealed by a relic we located at the Jedi ruins.",
+					x = -1971.31, z = 85.2697, y = 4073.65, -- /way 909 1098
+					tidbit = "WARNING: Entering into the Sher Kar Cave is very foolish and will result in your death. By order of Milo Mensix, the cave is sealed by a relic that we located at the Jedi ruins.",
 				},
 			},
 		},
