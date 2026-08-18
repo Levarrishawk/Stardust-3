@@ -407,6 +407,12 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		z = 0.0,
 		y = 5.1,
 		heading = 90,  -- facing back up the aisle, at the arriving player
+		-- One boss is placed per copy at start() and start() runs once per server
+		-- lifetime, so without a timer the first kill empties that copy for good and
+		-- findFreeCopy hands the cleared copy straight to the next player -- who then
+		-- has nothing to kill and no other way to reach STAGE_DONE. Matches the arc's
+		-- own dark jedi timer, historian.lua:220.
+		respawn = 600,
 	},
 
 	-- som_obi_wan_signal_1 task 1 and som_obi_wan_signal_2 task 1.
@@ -672,7 +678,7 @@ function kenobiSpineScreenPlay:spawnBosses()
 
 			if (cellID == 0) then
 				printLuaError("kenobiSpineScreenPlay: copy " .. buildings[i] .. " has no cell named " .. self.lair.cellName .. "; it has no boss")
-			elseif (spawnMobile("mustafar", self.lair.boss, 0, self.lair.x, self.lair.z, self.lair.y, self.lair.heading, cellID) == nil) then
+			elseif (spawnMobile("mustafar", self.lair.boss, self.lair.respawn, self.lair.x, self.lair.z, self.lair.y, self.lair.heading, cellID) == nil) then
 				printLuaError("kenobiSpineScreenPlay: failed to spawn " .. self.lair.boss .. " in copy " .. buildings[i])
 			else
 				self.bossCopies = self.bossCopies + 1
@@ -1182,8 +1188,34 @@ function kenobiSpineScreenPlay:getConduit(key)
 	return nil
 end
 
-function kenobiSpineScreenPlay:getConduitState(pPlayer, key)
+function kenobiSpineScreenPlay:rawConduitState(pPlayer, key)
 	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, key)) or 0
+end
+
+--[[ The charge is driven by createEvent, which does not survive a server restart, while
+     the conduit state does. Reading the state settles an overdue charge as well, so a
+     restart inside those 70-240 s cannot leave a player parked at state 1, where
+     getRadialText offers nothing on the conduit and takeCrystal refuses -- the only exit
+     is conduitCharged. Both paths funnel into conduitCharged, which is guarded on the raw
+     state, so whichever arrives first wins and the other does nothing.
+
+     The persistent 6-arg createEvent is not usable here: DirectorManager.cpp builds the
+     event name from key + screenplay + object id, which is identical for all three
+     conduits of one player, and the second one logs "Duplicate persistent event". ]]
+function kenobiSpineScreenPlay:getConduitState(pPlayer, key)
+	local state = self:rawConduitState(pPlayer, key)
+
+	if (state == 1) then
+		local due = tonumber(readScreenPlayData(pPlayer, self.screenplayName, key .. "Until")) or 0
+
+		if (due ~= 0 and getTimestamp() >= due) then
+			self:conduitCharged(pPlayer, key)
+
+			return self:rawConduitState(pPlayer, key)
+		end
+	end
+
+	return state
 end
 
 function kenobiSpineScreenPlay:setConduitState(pPlayer, key, value)
@@ -1245,8 +1277,12 @@ function kenobiSpineScreenPlay:wedgeCrystal(pPlayer, key)
 	CreatureObject(pPlayer):sendSystemMessage("The crystal sits in the conduit at the " .. conduit.label .. " and begins to draw a charge. Stay with it.")
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
 
-	-- tasks 19, 20 and 21, the charge Timers.
-	createEvent(getRandomNumber(conduit.chargeMin, conduit.chargeMax) * 1000, "kenobiSpineScreenPlay", "conduitCharged", pPlayer, key)
+	-- tasks 19, 20 and 21, the charge Timers. The deadline is stamped alongside the event so
+	-- getConduitState can settle the charge if the event is lost with the process.
+	local chargeDelay = getRandomNumber(conduit.chargeMin, conduit.chargeMax)
+
+	writeScreenPlayData(pPlayer, self.screenplayName, key .. "Until", tostring(getTimestamp() + chargeDelay))
+	createEvent(chargeDelay * 1000, "kenobiSpineScreenPlay", "conduitCharged", pPlayer, key)
 
 	-- tasks 27, 29 and 31, the ambush Timers.
 	createEvent(getRandomNumber(conduit.ambushDelayMin, conduit.ambushDelayMax) * 1000, "kenobiSpineScreenPlay", "conduitAmbush", pPlayer, key)
@@ -1259,11 +1295,13 @@ function kenobiSpineScreenPlay:conduitCharged(pPlayer, key)
 		return
 	end
 
-	if (self:getConduitState(pPlayer, key) ~= 1) then
+	-- Raw, not getConduitState: the catch-up path in getConduitState calls this function.
+	if (self:rawConduitState(pPlayer, key) ~= 1) then
 		return
 	end
 
 	self:setConduitState(pPlayer, key, 2)
+	deleteScreenPlayData(pPlayer, self.screenplayName, key .. "Until")
 
 	-- tasks 22, 23 and 24: Retrieve "Take crystal", whose taskNames are the
 	-- conduit1/2/3 that main_quest_3 waits on.
