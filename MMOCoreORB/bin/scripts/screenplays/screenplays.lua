@@ -779,6 +779,14 @@ includeFile("mustafar/quest/conversation/computer_technician_conv_handler.lua")
 includeFile("mustafar/quest/conversation/crazed_hermit_conv_handler.lua")
 includeFile("mustafar/quest/conversation/obi_wan_conv_handler.lua")
 includeFile("mustafar/quest/kenobi_spine.lua")
+includeFile("mustafar/quest/trophy_hunts.lua")
+includeFile("mustafar/quest/bounty_hunts.lua")
+includeFile("mustafar/quest/hk_history.lua")
+-- Last of the mustafar/quest block on purpose: som_prelude_obiwan_check reads the
+-- ten Kenobi side screenplays above through _G[name] to decide whether its gate has
+-- closed.  The lookup happens per call rather than at load, so this is ordering for
+-- a reader's benefit rather than a load-order requirement.
+includeFile("mustafar/quest/story_arc_prelude.lua")
 includeFile("mustafar/boundaries/mustafar_boundaries.lua")
 includeFile("mustafar/mensix/conversation/pei_yi_conv_handler.lua")
 includeFile("mustafar/mensix/conversation/diskret_stahn_conv_handler.lua")
