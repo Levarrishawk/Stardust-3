@@ -29,7 +29,7 @@ jo_kelsev_first_screen = ConvoScreen:new {
   stopConversation = "false",
   options = {
     {"@conversation/som_exploration_marker:s_17", "opt1"},  -- Sure. What is it you need?
-    {"@conversation/som_exploration_marker:s_74.", "deny"}  -- No thanks.  I think I will pass on this job.
+    {"@conversation/som_exploration_marker:s_74", "deny"}  -- No thanks.  I think I will pass on this job.
 
   }
 }
