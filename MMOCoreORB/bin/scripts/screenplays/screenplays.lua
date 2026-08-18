@@ -785,11 +785,23 @@ includeFile("mustafar/quest/hk_history.lua")
 includeFile("mustafar/quest/som_poison_miners.lua")
 includeFile("mustafar/quest/jenha_tar_cube.lua")
 includeFile("mustafar/quest/glyph_hunt.lua")
+includeFile("mustafar/quest/som_striking_miners.lua")
+includeFile("mustafar/quest/som_sceismic_charges.lua")
+includeFile("mustafar/quest/blackguard_problem.lua")
+includeFile("mustafar/quest/storm_lord.lua")
+includeFile("mustafar/quest/maneater.lua")
+includeFile("mustafar/quest/lava_beetle_nests.lua")
+includeFile("mustafar/quest/jedi_dog.lua")
 -- Last of the mustafar/quest block on purpose: som_prelude_obiwan_check reads the
 -- ten Kenobi side screenplays above through _G[name] to decide whether its gate has
 -- closed.  The lookup happens per call rather than at load, so this is ordering for
 -- a reader's benefit rather than a load-order requirement.
 includeFile("mustafar/quest/story_arc_prelude.lua")
+-- ...and story_arc_chapters continues the prelude, so it reads BOTH
+-- storyArcPreludeScreenPlay (above) and somHkHistoryScreenPlay (784) through _G at
+-- call time.  Same deal: nil-guarded lookups, so this is reader ordering, not a
+-- load-order requirement.
+includeFile("mustafar/quest/story_arc_chapters.lua")
 includeFile("mustafar/boundaries/mustafar_boundaries.lua")
 includeFile("mustafar/mensix/conversation/pei_yi_conv_handler.lua")
 includeFile("mustafar/mensix/conversation/diskret_stahn_conv_handler.lua")
