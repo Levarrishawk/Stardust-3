@@ -143,10 +143,10 @@ escort_naboo_imperial_3 = SpaceEscortScreenplay:new {
 	escortShips = {"imp_freightermedium_tier1"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_escort_2", zoneName = "space_naboo", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_escort_3", zoneName = "space_naboo", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
+		{patrolPointName = "inquisition_tier1_mission3_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "inquisition_tier1_mission3_escort_2", zoneName = "space_naboo", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+		{patrolPointName = "inquisition_tier1_mission3_escort_3", zoneName = "space_naboo", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
+		{patrolPointName = "inquisition_tier1_mission3_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,

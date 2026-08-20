@@ -1038,6 +1038,12 @@ space_naboo = SpacePatrolPointTable:new {
 	{patrolPointName = "rsf_recovery_1", x = 2000, z = 300, y = -2500},
 	{patrolPointName = "rsf_recovery_2", x = 3000, z = 500, y = -1500},
 
+	-- Inquisition Squadron Tier 1 Mission 3 escort route
+	{patrolPointName = "inquisition_tier1_mission3_escort_1", x = 7188, z = 1899, y = -2831},
+	{patrolPointName = "inquisition_tier1_mission3_escort_2", x = 6446, z = 2694, y = -5694},
+	{patrolPointName = "inquisition_tier1_mission3_escort_3", x = 4453, z = 3127, y = -7150},
+	{patrolPointName = "inquisition_tier1_mission3_escort_4", x = 1085, z = 4064, y = -7316},
+
 	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
 	{patrolPointName = "corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_4:targetPatrols
 	{patrolPointName = "military_escort_2", x = 2915, z = 3828, y = 2887},	-- src: screenplays/space/squadrons/VortexSquadronScreenplay.lua:assassinate_naboo_rebel_4:targetPatrols
