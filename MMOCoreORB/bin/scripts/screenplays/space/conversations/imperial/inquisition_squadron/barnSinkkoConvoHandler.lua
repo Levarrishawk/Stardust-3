@@ -60,7 +60,12 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local questThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_3.type, InquisitionSquadronScreenplay.QUEST_STRING_3.name)
 	local questFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_4.type, InquisitionSquadronScreenplay.QUEST_STRING_4.name)
 
-	local questOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.name)
+	local questOnePatrolComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_1.type, InquisitionSquadronScreenplay.QUEST_STRING_1.name)
+	local questOneSurpriseActive = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.name)
+	local questOneSurpriseComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.name)
+	-- The surprise-attack journal entry is spawned asynchronously during the patrol.
+	-- Accept its completion directly, or the completed patrol when no child remains active.
+	local questOneComplete = questOneSurpriseComplete or (questOnePatrolComplete and not questOneSurpriseActive)
 	local questTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_2.type, InquisitionSquadronScreenplay.QUEST_STRING_2.name)
 	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE.name)
 	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_4.type, InquisitionSquadronScreenplay.QUEST_STRING_4.name)
