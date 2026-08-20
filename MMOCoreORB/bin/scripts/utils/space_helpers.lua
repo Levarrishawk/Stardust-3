@@ -143,6 +143,61 @@ function SpaceHelpers:setSquadronType(pPlayer, squadron)
 	end
 
 	PlayerObject(pGhost):setSquadronType(squadron)
+	self:synchronizeSquadronFaction(pPlayer, squadron)
+end
+
+function SpaceHelpers:playSpaceQuestAcceptanceMusic(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local musicFile = "sound/music_themequest_acc_general.snd"
+
+	if (self:isImperialPilot(pPlayer)) then
+		musicFile = "sound/music_themequest_acc_imperial.snd"
+	elseif (self:isRebelPilot(pPlayer)) then
+		musicFile = "sound/music_themequest_acc_rebel.snd"
+	elseif (self:isNeutralPilot(pPlayer)) then
+		musicFile = "sound/music_themequest_acc_neutral.snd"
+	end
+
+	CreatureObject(pPlayer):playMusicMessage(musicFile)
+end
+
+function SpaceHelpers:playSpaceQuestVictoryMusic(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local musicFile = "sound/music_themequest_victory_rebel.snd"
+
+	if (self:isImperialPilot(pPlayer)) then
+		musicFile = "sound/music_themequest_victory_imperial.snd"
+	elseif (self:isRebelPilot(pPlayer)) then
+		musicFile = "sound/music_themequest_victory_rebel.snd"
+	end
+
+	CreatureObject(pPlayer):playMusicMessage(musicFile)
+end
+
+-- Keep ground GCW alignment synchronized with the pilot squadron selected by the
+-- player. Factional squadrons enlist covert by default, matching GCW recruiters;
+-- neutral squadrons clear faction membership and remain on leave.
+function SpaceHelpers:synchronizeSquadronFaction(pPlayer, squadron)
+	if (pPlayer == nil) then
+		return
+	end
+
+	if (squadron == BLACK_EPSILON_SQUADRON or squadron == STORM_SQUADRON or squadron == INQUISITION_SQUADRON) then
+		CreatureObject(pPlayer):setFaction(FACTIONIMPERIAL)
+		CreatureObject(pPlayer):setFactionStatus(COVERT)
+	elseif (squadron == CRIMSON_PHOENIX_SQUADRON or squadron == HAVOC_SQUADRON or squadron == VORTEX_SQUADRON) then
+		CreatureObject(pPlayer):setFaction(FACTIONREBEL)
+		CreatureObject(pPlayer):setFactionStatus(COVERT)
+	elseif (squadron == CORSEC_SQUADRON or squadron == RSF_SQUADRON or squadron == SMUGGLER_SQUADRON) then
+		CreatureObject(pPlayer):setFaction(0)
+		CreatureObject(pPlayer):setFactionStatus(ONLEAVE)
+	end
 end
 
 -- @param pPlayer pointer checks if the player has any type of pilot skills
@@ -1026,7 +1081,7 @@ function SpaceHelpers:activateSpaceQuest(pPlayer, pNpc, questType, questName, no
 
 	CreatureObject(pPlayer):sendSystemMessage(missionMsg:_getObject())
 
-	CreatureObject(pPlayer):playMusicMessage("sound/music_themequest_acc_criminal.snd")
+	self:playSpaceQuestAcceptanceMusic(pPlayer)
 end
 
 -- @param pPlayer pointer to complete quest on
@@ -1064,7 +1119,7 @@ function SpaceHelpers:completeSpaceQuest(pPlayer, questType, questName, notifyCl
 		-- Send Player Message
 		SpaceHelpers:sendQuestSuccess(pPlayer, "@" .. questString .. ":title")
 
-		CreatureObject(pPlayer):playMusicMessage("sound/music_themequest_victory_rebel.snd")
+		self:playSpaceQuestVictoryMusic(pPlayer)
 	end
 end
 
@@ -1505,7 +1560,7 @@ function SpaceHelpers:sendQuestReward(pPlayer, messageString)
 
 	CreatureObject(pPlayer):sendSystemMessage(alertMsg:_getObject())
 
-	CreatureObject(pPlayer):playMusicMessage("sound/music_themequest_victory_rebel.snd")
+	self:playSpaceQuestVictoryMusic(pPlayer)
 end
 
 -- @param pPlayer - pointer to player

@@ -21,7 +21,6 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	local faction = CreatureObject(pPlayer):getFaction()
 	local playerID = CreatureObject(pPlayer):getObjectID()
 
 	-- JTL is disabled
@@ -49,6 +48,10 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (isInquisitionPilot and not isImperialPilot) then
 		SpaceHelpers:grantNovicePilot(pPlayer, "imperialPilot")
 		isImperialPilot = true
+	end
+
+	if (isInquisitionPilot and CreatureObject(pPlayer):getFaction() ~= FACTIONIMPERIAL) then
+		SpaceHelpers:synchronizeSquadronFaction(pPlayer, INQUISITION_SQUADRON)
 	end
 
 	-- Player is Rebel Pilot
@@ -448,9 +451,6 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Check if players have all the tier1 skill boxes, send them to next trainer.
 	elseif (SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 1)) then
 		return convoTemplate:getScreen("completed_sinkko")
-	-- Player is not a member of the Imperial Faction
-	elseif (faction ~= FACTIONIMPERIAL) then
-		return convoTemplate:getScreen("recruitment_not_imperial")
 	-- Player is an Inquisition pilot and has at least one of the Tier1 skill boxes
 	elseif (SpaceHelpers:hasPilotTierSkill(pPlayer, "imperial_navy", 1)) then
 		-- Check if the player can be trained in the remaining Tier1 Skills
