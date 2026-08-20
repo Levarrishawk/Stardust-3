@@ -217,9 +217,9 @@ destroy_duty_naboo_imperial_6 = SpaceDutyDestroyScreenplay:new {
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "imp_tie_fighter_tier2",
+	bossShip = "rogue_droid_fighter_tier2_naboo",
 	shipTypes = {
-		{"imp_tie_fighter_tier1"},
+		{"rogue_droid_fighter_tier1_naboo"},
 	},
 }
 
@@ -240,7 +240,7 @@ escort_duty_naboo_imperial_7 = SpaceDutyEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"reb_transport_tier1", "reb_freightermedium_tier1", "reb_freighterlight_tier1", "reb_freighterheavy_tier1"},
+	escortShips = {"imp_transport_tier1", "imp_freightermedium_tier1", "imp_freighterlight_tier1", "imp_freighterheavy_tier1"},
 
 	escortPoints = {
 		{patrolPointName = "rebel_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
@@ -252,9 +252,9 @@ escort_duty_naboo_imperial_7 = SpaceDutyEscortScreenplay:new {
 	attackDelay = 100,
 
 	attackShips = {
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
+		{"borvo_fighter_tier1_naboo"},
+		{"borvo_fighter_tier1_naboo"},
+		{"borvo_fighter_tier1_naboo"},
 	},
 
 	creditKillBonus = 100,
