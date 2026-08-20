@@ -344,7 +344,7 @@ function SpaceDestroyScreenplay:notifyDestroyedShip(pPlayer, pShipAgent)
 	end
 
 	-- Kill counter sent to player
-	SpaceHelpers:sendQuestUpdate(pPlayer, self.killsRequired - killCount .. " targets remaining to be destroyed.") --  "destroy_remainder_update"
+	SpaceHelpers:sendQuestUpdate(pPlayer, "Mission Target Killed: " .. (self.killsRequired - killCount) .. " Remaining")
 
 	writeData(playerID .. ":" .. self.className .. ":killCount", killCount)
 
