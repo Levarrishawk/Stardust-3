@@ -60,9 +60,9 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local questThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_3.type, InquisitionSquadronScreenplay.QUEST_STRING_3.name)
 	local questFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_4.type, InquisitionSquadronScreenplay.QUEST_STRING_4.name)
 
-	local questOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_1.type, InquisitionSquadronScreenplay.QUEST_STRING_1.name) and SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.name)
+	local questOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE.name)
 	local questTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_2.type, InquisitionSquadronScreenplay.QUEST_STRING_2.name)
-	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_3.type, InquisitionSquadronScreenplay.QUEST_STRING_3.name) and SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE.name)
+	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE.type, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE.name)
 	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_4.type, InquisitionSquadronScreenplay.QUEST_STRING_4.name)
 
 	local destroyDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_1.type, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_1.name)
