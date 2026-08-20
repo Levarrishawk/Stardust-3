@@ -104,7 +104,7 @@ patrol_naboo_imperial_3 = SpacePatrolScreenplay:new {
 	itemReward = {
 		{species = {SPECIES_WOOKIEE}, item = "object/tangible/wearables/bandolier/multipocket_bandolier.iff"},
 		{species = {SPECIES_ITHORIAN}, item = "object/tangible/wearables/bandolier/ith_multipocket_bandolier.iff"},
-		{species = {-1}, item = "object/tangible/wearables/bodysuit/bodysuit_s14.iff"},
+		{species = {-1}, item = "object/tangible/wearables/bodysuit/bodysuit_tie_fighter.iff"},
 	},
 
 	sideQuest = true,
