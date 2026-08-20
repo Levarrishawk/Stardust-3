@@ -68,6 +68,12 @@ public:
 			removeDroid(ship, player);
 		}
 
+		// removeAllPlayersFromShip uses the ship's launch point as the ground
+		// destination. Update it before removing the occupants so a station
+		// landing uses the selected starport instead of the original launch point.
+		ship->setSpaceLaunchZone(zoneName);
+		ship->setSpaceLaunchLocation(coordinates);
+
 		// Make sure no players remain in the ship
 		ship->removeAllPlayersFromShip();
 

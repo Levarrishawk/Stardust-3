@@ -74,6 +74,7 @@ object_ship_player_player_prototype_tiefighter = object_ship_player_shared_playe
 	armor_0 = { name = "arm_prototype", hitpoints = 241.4306, armor = 249.378,},
 	armor_1 = { name = "arm_prototype", hitpoints = 246.3849, armor = 241.1599,},
 	capacitor = { name = "cap_prototype", hitpoints = 199.9194, armor = 97.33989, rechargeRate = 19.64005, energy = 482.3818,},
+	weapon_0 = { name = "wpn_tiefighter_basic", hitpoints = 192.3501, armor = 99.45217, rate = 0.3369635, drain = 16.91832, maxDamage = 401.2384, shieldEfficiency = 0, minDamage = 327.9787, ammo = 0, ammo_type = 0, armorEfficiency = 0,},
 }
 
 ObjectTemplates:addTemplate(object_ship_player_player_prototype_tiefighter, "object/ship/player/player_prototype_tiefighter.iff")

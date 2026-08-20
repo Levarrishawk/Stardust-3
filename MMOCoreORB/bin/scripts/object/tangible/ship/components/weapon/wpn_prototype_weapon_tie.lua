@@ -44,7 +44,7 @@
 object_tangible_ship_components_weapon_wpn_prototype_weapon_tie = object_tangible_ship_components_weapon_shared_wpn_prototype_weapon_tie:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "wpn_z95_basic",
+	componentDataName = "wpn_tiefighter_basic",
 
 	attributes = {
 		{"minDamage", 290},

@@ -56,7 +56,7 @@ destroy_surpriseattack_naboo_imperial_1 = SpaceSurpriseAttackScreenplay:new {
 
 	surpriseAttackShips = {
 		zone = "space_naboo",
-		spawns = {{count = 3, shipName = "droid_fighter"}},
+		spawns = {{count = 3, shipName = "rogue_droid_fighter_tier1_naboo"}},
 	},
 }
 
@@ -85,7 +85,7 @@ destroy_naboo_imperial_2 = SpaceDestroyScreenplay:new {
 	},
 
 	shipTypes = {
-		"imp_tie_fighter_tier1", "imp_tie_fighter_tier2", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4",
+		"rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo",
 	},
 }
 
@@ -140,7 +140,7 @@ escort_naboo_imperial_3 = SpaceEscortScreenplay:new {
 	parentQuestType = "patrol",
 	parentQuestName = "naboo_imperial_3",
 
-	escortShips = {"reb_freightermedium_tier1"},
+	escortShips = {"imp_freightermedium_tier1"},
 
 	escortPoints = {
 		{patrolPointName = "rebel_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
@@ -152,9 +152,9 @@ escort_naboo_imperial_3 = SpaceEscortScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
+		{"rogue_droid_fighter_tier1_naboo"},
+		{"rogue_droid_fighter_tier1_naboo"},
+		{"rogue_droid_fighter_tier1_naboo"},
 	}
 }
 
@@ -181,8 +181,8 @@ assassinate_naboo_imperial_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_tie_fighter_veteran_tier2",
-		escorts = {"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
+		target = "rogue_droid_fighter_tier2_naboo",
+		escorts = {"rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo"},
 	},
 
 	targetPatrols = {
