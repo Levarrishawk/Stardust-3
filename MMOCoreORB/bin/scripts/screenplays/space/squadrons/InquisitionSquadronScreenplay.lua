@@ -243,10 +243,10 @@ escort_duty_naboo_imperial_7 = SpaceDutyEscortScreenplay:new {
 	escortShips = {"imp_transport_tier1", "imp_freightermedium_tier1", "imp_freighterlight_tier1", "imp_freighterheavy_tier1"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_patrol_1", zoneName = "space_naboo", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_patrol_3", zoneName = "space_naboo", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
+		{patrolPointName = "inquisition_tier1_escort_duty_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "inquisition_tier1_escort_duty_2", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
+		{patrolPointName = "inquisition_tier1_escort_duty_3", zoneName = "space_naboo", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
+		{patrolPointName = "inquisition_tier1_escort_duty_4", zoneName = "space_naboo", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 100,
@@ -1074,10 +1074,10 @@ assassinate_naboo_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 	},
 
 	targetPatrols = {
-		{patrolPointName = "naboo_imperial_tier3_4_assassin_1", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier3_4_assassin_2", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier3_4_assassin_3", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier3_4_assassin_4", zoneName = "space_dathomir"},
+		{patrolPointName = "naboo_imperial_tier3_assassinate1_1", zoneName = "space_dathomir", x = -1879, z = -110, y = -1881},
+		{patrolPointName = "naboo_imperial_tier3_assassinate1_2", zoneName = "space_dathomir", x = 19, z = -2029, y = -411},
+		{patrolPointName = "naboo_imperial_tier3_assassinate1_3", zoneName = "space_dathomir", x = 2767, z = -3788, y = 1500},
+		{patrolPointName = "naboo_imperial_tier3_assassinate1_4", zoneName = "space_dathomir", x = 4998, z = -4963, y = 2982},
 	},
 }
 
@@ -1386,12 +1386,10 @@ assassinate_naboo_imperial_tier4_2 = SpaceAssassinateScreenplay:new {
 	},
 
 	targetPatrols = {
-		{patrolPointName = "naboo_imperial_tier4_2_assassin_1", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier4_2_assassin_2", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier4_2_assassin_3", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier4_2_assassin_4", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier4_2_assassin_5", zoneName = "space_dathomir"},
-		{patrolPointName = "naboo_imperial_tier4_2_assassin_6", zoneName = "space_dathomir"},
+		{patrolPointName = "naboo_imperial_tier4_assassinate2_1", zoneName = "space_dathomir", x = 2795, z = -5791, y = 6336},
+		{patrolPointName = "naboo_imperial_tier4_assassinate2_2", zoneName = "space_dathomir", x = 2631, z = -7584, y = 4070},
+		{patrolPointName = "naboo_imperial_tier4_assassinate2_3", zoneName = "space_dathomir", x = 3072, z = -6658, y = 5858},
+		{patrolPointName = "naboo_imperial_tier4_assassinate2_4", zoneName = "space_dathomir", x = 3613, z = -5613, y = 7149},
 	},
 }
 
@@ -1826,10 +1824,10 @@ escort_duty_naboo_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	escortShips = {"imp_freighterheavy_tier4", "imp_freighterlight_tier4", "imp_freightermedium_tier4"},
 
 	escortPoints = {
-		{patrolPointName = "naboo_imperial_tier4_1_escort_duty_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_escort_duty_2", zoneName = "space_dathomir", escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_escort_duty_3", zoneName = "space_dathomir", escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_escort_duty_4", zoneName = "space_dathomir", escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escort1_1", zoneName = "space_dathomir", x = 3787, z = -6425, y = 49, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escort1_2", zoneName = "space_dathomir", x = 3065, z = -5248, y = 1760, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escort1_3", zoneName = "space_dathomir", x = 2200, z = -4231, y = 2864, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escort1_4", zoneName = "space_dathomir", x = 1502, z = -3172, y = 4240, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 50,
@@ -1864,11 +1862,11 @@ rescue_duty_naboo_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	targetArrivalDelay = 3,
 
 	recoveryPoints = {
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_1", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_2", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_3", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_4", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_5", zoneName = "space_dantooine", radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_1", zoneName = "space_dantooine", x = -471, z = -1739, y = 1798, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_2", zoneName = "space_dantooine", x = 294, z = 509, y = 3594, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_3", zoneName = "space_dantooine", x = 1562, z = 97, y = 5577, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_4", zoneName = "space_dantooine", x = 2910, z = -386, y = 7314, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_5", zoneName = "space_dantooine", x = -6362, z = -477, y = 3393, radius = 250},
 	},
 
 	attackDelay = 60,
@@ -1907,17 +1905,17 @@ recovery_duty_naboo_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	escortShips = {"blacksun_fighter_s02_tier4"},
 
 	preRecoveryPoints = {
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_1", zoneName = "space_endor", escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_2", zoneName = "space_endor", escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_3", zoneName = "space_endor", escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_4", zoneName = "space_endor", escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_1", zoneName = "space_endor", x = -778, z = 1426, y = -905, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_2", zoneName = "space_endor", x = -1454, z = 3074, y = -1580, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_3", zoneName = "space_endor", x = -2232, z = 4616, y = -2283, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_4", zoneName = "space_endor", x = -2849, z = 6172, y = -2900, escortNumber = 4, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_5", zoneName = "space_endor", escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_6", zoneName = "space_endor", escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_7", zoneName = "space_endor", escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_8", zoneName = "space_endor", escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_5", zoneName = "space_endor", x = 70, z = 3633, y = -2133, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_6", zoneName = "space_endor", x = 2045, z = 4717, y = -3428, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_7", zoneName = "space_endor", x = 3980, z = 5779, y = -4704, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_8", zoneName = "space_endor", x = 6111, z = 7006, y = -6049, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 45,

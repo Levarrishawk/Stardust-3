@@ -1,4 +1,12 @@
 space_endor = SpacePatrolPointTable:new {
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_1", x = -778, z = 1426, y = -905},
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_2", x = -1454, z = 3074, y = -1580},
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_3", x = -2232, z = 4616, y = -2283},
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_4", x = -2849, z = 6172, y = -2900},
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_5", x = 70, z = 3633, y = -2133},
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_6", x = 2045, z = 4717, y = -3428},
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_7", x = 3980, z = 5779, y = -4704},
+	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_8", x = 6111, z = 7006, y = -6049},
 	{patrolPointName = "tatooine_imperial_tier4_recoveryduty_5", x = 70, z = 3633, y = -2133},
 	{patrolPointName = "corellia_imperial_tier3_leg_1_assassinate_3", x = 7000, z = -1500, y = 6994},
 	{patrolPointName = "tatooine_imperial_tier4_recovery2_7", x = 5008, z = -1982, y = 5994},

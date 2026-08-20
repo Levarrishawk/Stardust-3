@@ -1,4 +1,9 @@
 space_dantooine = SpacePatrolPointTable:new {
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_1", x = -471, z = -1739, y = 1798},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_2", x = 294, z = 509, y = 3594},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_3", x = 1562, z = 97, y = 5577},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_4", x = 2910, z = -386, y = 7314},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_5", x = -6362, z = -477, y = 3393},
 	{patrolPointName = "tier3_privateer_rancor_path_03", x = -2188, z = -21, y = 564},
 	{patrolPointName = "corellia_privateer_assassinate_42a_1", x = -6621, z = -6310, y = -1147},
 	{patrolPointName = "corellia_imperial_tier4_recoveryduty1_5", x = -1914, z = -7056, y = 1779},
