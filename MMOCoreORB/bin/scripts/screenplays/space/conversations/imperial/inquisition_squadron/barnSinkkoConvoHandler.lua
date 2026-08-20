@@ -41,8 +41,15 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("no_jtl")
 	end
 
-	-- Check if player is an imperial pilot
+	-- Squadron type is the persistent authority for this trainer. Repair characters
+	-- whose Inquisition assignment exists but whose novice pilot skill was not retained.
+	local isInquisitionPilot = SpaceHelpers:isInquisitionSquadron(pPlayer)
 	local isImperialPilot = SpaceHelpers:isImperialPilot(pPlayer)
+
+	if (isInquisitionPilot and not isImperialPilot) then
+		SpaceHelpers:grantNovicePilot(pPlayer, "imperialPilot")
+		isImperialPilot = true
+	end
 
 	-- Player is Rebel Pilot
 	if (SpaceHelpers:isRebelPilot(pPlayer) or (not isImperialPilot and ghost:getFactionStanding("imperial") < 0)) then
@@ -77,7 +84,7 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_2.type, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_2.name)
 
 	-- Player is an Imperial Pilot but a different squadron
-	if (isImperialPilot and not SpaceHelpers:isInquisitionSquadron(pPlayer)) then
+	if (isImperialPilot and not isInquisitionPilot) then
 		return convoTemplate:getScreen("non_inquisition_pilot")
 	-- Player is elligible for recruitment
 	elseif (not isImperialPilot) then
