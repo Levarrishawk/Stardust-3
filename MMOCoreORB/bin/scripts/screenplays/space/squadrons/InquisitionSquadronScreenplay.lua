@@ -307,7 +307,7 @@ destroy_surpriseattack_naboo_imperial_tier2_1 = SpaceSurpriseAttackScreenplay:ne
 
 	surpriseAttackShips = {
 		zone = "space_lok",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier2"}},
+		spawns = {{count = 3, shipName = "bloodrazor_berzerker_tier1"}},
 	},
 }
 
@@ -327,7 +327,7 @@ escort_naboo_imperial_tier2_2 = SpaceEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"viopa_mission_2_smuggler"},
+	escortShips = {"imp_transport_tier3"},
 
 	escortPoints = {
 		{patrolPointName = "naboo_imperial_tier2_2_1", zoneName = "space_dantooine", x = 1000, z = -900, y = -2100, escortNumber = 1, radius = 250},
