@@ -328,12 +328,13 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	--]]
 
 	if (ghost:getPilotTier() == 2) then
-		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1.name)
+		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1.name) or
+			SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.name)
 		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_2.type, StormSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_3.type, StormSquadronScreenplay.TIER2_QUEST_STRING_3.name)
 		local t2QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_4.type, StormSquadronScreenplay.TIER2_QUEST_STRING_4.name)
 
-		local t2QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1.name)
+		local t2QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.name)
 		local t2QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_2.type, StormSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_3.type, StormSquadronScreenplay.TIER2_QUEST_STRING_3.name)
 		local t2QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_4.type, StormSquadronScreenplay.TIER2_QUEST_STRING_4.name)

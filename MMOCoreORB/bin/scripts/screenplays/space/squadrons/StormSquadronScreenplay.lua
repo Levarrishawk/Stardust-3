@@ -3,12 +3,12 @@ local SpaceHelpers = require("utils.space_helpers")
 
 --[[
 
-	Inquisition Squadron Missions (Imperial - Naboo)
+	Storm Squadron Missions (Imperial - Tatooine)
 
 ]]
 
 --[[
-	Tier 1 -- Lt. Barn Sinkko Main Missions (Naboo)
+	Tier 1 -- Lt. Akal Colzet Main Missions (Tatooine)
 ]]
 
 -- Mission 1: Patrol with surprise attack
@@ -56,7 +56,7 @@ destroy_surpriseattack_tatooine_imperial_1 = SpaceSurpriseAttackScreenplay:new {
 
 	surpriseAttackShips = {
 		zone = "space_tatooine",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier1"}},
+		spawns = {{count = 3, shipName = "borvo_fighter_tier1"}},
 	},
 }
 
@@ -85,7 +85,7 @@ destroy_tatooine_imperial_2 = SpaceDestroyScreenplay:new {
 	},
 
 	shipTypes = {
-		"imp_tie_fighter_tier1", "imp_tie_fighter_tier2", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4",
+		"borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1",
 	},
 }
 
@@ -140,7 +140,7 @@ escort_tatooine_imperial_3 = SpaceEscortScreenplay:new {
 	parentQuestType = "patrol",
 	parentQuestName = "tatooine_imperial_3",
 
-	escortShips = {"reb_freightermedium_tier1"},
+	escortShips = {"imp_freightermedium_tier1"},
 
 	escortPoints = {
 		{patrolPointName = "rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
@@ -152,9 +152,9 @@ escort_tatooine_imperial_3 = SpaceEscortScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
+		{"borvo_fighter_tier1"},
+		{"borvo_fighter_tier1"},
+		{"borvo_fighter_tier1"},
 	}
 }
 
@@ -181,8 +181,8 @@ assassinate_tatooine_imperial_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_tie_fighter_veteran_tier2",
-		escorts = {"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
+		target = "borvo_boss_tier2",
+		escorts = {"borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1"},
 	},
 
 	targetPatrols = {
@@ -217,9 +217,9 @@ destroy_duty_tatooine_imperial_6 = SpaceDutyDestroyScreenplay:new {
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "imp_tie_fighter_tier2",
+	bossShip = "borvo_boss_tier2",
 	shipTypes = {
-		{"imp_tie_fighter_tier1"},
+		{"borvo_fighter_tier1"},
 	},
 }
 
@@ -240,7 +240,7 @@ escort_duty_tatooine_imperial_7 = SpaceDutyEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"reb_transport_tier1", "reb_freightermedium_tier1", "reb_freighterlight_tier1", "reb_freighterheavy_tier1"},
+	escortShips = {"imp_transport_tier1", "imp_freightermedium_tier1", "imp_freighterlight_tier1", "imp_freighterheavy_tier1"},
 
 	escortPoints = {
 		{patrolPointName = "rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
@@ -252,9 +252,9 @@ escort_duty_tatooine_imperial_7 = SpaceDutyEscortScreenplay:new {
 	attackDelay = 100,
 
 	attackShips = {
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
+		{"borvo_fighter_tier1_naboo"},
+		{"borvo_fighter_tier1_naboo"},
+		{"borvo_fighter_tier1_naboo"},
 	},
 
 	creditKillBonus = 100,
@@ -307,7 +307,7 @@ destroy_surpriseattack_tatooine_imperial_tier2_1 = SpaceSurpriseAttackScreenplay
 
 	surpriseAttackShips = {
 		zone = "space_lok",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier2"}},
+		spawns = {{count = 3, shipName = "bloodrazor_berzerker_tier1"}},
 	},
 }
 
@@ -327,7 +327,7 @@ escort_tatooine_imperial_tier2_2 = SpaceEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"viopa_mission_2_smuggler"},
+	escortShips = {"imp_transport_tier3"},
 
 	escortPoints = {
 		{patrolPointName = "tatooine_imperial_tier2_2_1", zoneName = "space_dantooine", x = 1000, z = -900, y = -2100, escortNumber = 1, radius = 250},
@@ -341,9 +341,9 @@ escort_tatooine_imperial_tier2_2 = SpaceEscortScreenplay:new {
 	attackDelay = 70,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
+		{"borvo_bomber_tier2", "borvo_fighter_tier2", "borvo_fighter_tier2"},
+		{"borvo_bomber_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2"},
+		{"borvo_defender_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2"},
 	}
 }
 
@@ -367,9 +367,9 @@ recovery_tatooine_imperial_tier2_3 = SpaceRecoveryScreenplay:new {
 	recoveryDelay = 30,
 
 	recoverShip = "viopa_mission_3_shuttle",
-	recoveryConversationMobile = "object/mobile/shared_dressed_rebel_commando_rodian_male_01.iff",
+	recoveryConversationMobile = "object/mobile/shared_dressed_nym_patrol_elite_nikto_m.iff",
 
-	escortShips = {"imp_tie_fighter_tier2"},
+	escortShips = {"borvo_fighter_tier2"},
 
 	preRecoveryPoints = {
 		{patrolPointName = "tatooine_imperial_tier2_3_target_1", zoneName = "space_lok", x = -5500, z = 3900, y = 3600, escortNumber = 1, radius = 250},
@@ -390,8 +390,8 @@ recovery_tatooine_imperial_tier2_3 = SpaceRecoveryScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_interceptor_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"borvo_fighter_tier2", "borvo_bomber_tier2"},
+		{"borvo_defender_tier2", "borvo_bomber_tier2"},
 	},
 }
 
@@ -416,8 +416,8 @@ assassinate_tatooine_imperial_tier2_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "viopa_mission_4_freighter",
-		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier3"},
+		target = "borvo_defender_tier2",
+		escorts = {"borvo_bomber_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2", "borvo_fighter_tier2", "borvo_fighter_tier2", "borvo_defender_tier3"},
 	},
 
 	targetPatrols = {
@@ -453,11 +453,11 @@ destroy_duty_tatooine_imperial_tier2_destroyduty = SpaceDutyDestroyScreenplay:ne
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "imp_tie_interceptor_tier3",
+	bossShip = "borvo_defender_tier3",
 	shipTypes = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"borvo_bomber_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2"},
+		{"borvo_fighter_tier2", "borvo_bomber_tier2", "borvo_bomber_tier2"},
+		{"borvo_defender_tier2", "borvo_fighter_tier2", "borvo_bomber_tier2"},
 	},
 }
 
@@ -524,7 +524,7 @@ escort_duty_tatooine_imperial_tier2_escortduty = SpaceDutyEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"nym_smuggle_vessel", "reb_smuggler_ykl37r_tier2", "reb_smuggler_yt1300_tier2"},
+	escortShips = {"imp_transport_tier2", "imp_freighterlight_tier2", "imp_freightermedium_tier2"},
 
 	escortPoints = {
 		{patrolPointName = "vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
@@ -536,9 +536,9 @@ escort_duty_tatooine_imperial_tier2_escortduty = SpaceDutyEscortScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_bomber_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"borvo_bomber_tier2", "borvo_defender_tier2", "borvo_fighter_tier2"},
+		{"borvo_bomber_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2"},
+		{"borvo_defender_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2"},
 	},
 
 	creditKillBonus = 200,
@@ -550,7 +550,7 @@ registerScreenPlay("escort_duty_tatooine_imperial_tier2_escortduty", true)
 	Tier 3 -- tatooine_imperial_tier3 Main Missions (missions-only tier)
 ]]
 
--- Mission 1: Recovery (Space Yavin4 - Imperial spy trying to escape with Rebel fleet hangar info)
+-- Mission 1: Recovery (Space Yavin4 - recover an Imperial agent carrying pirate fleet intelligence)
 recovery_tatooine_imperial_tier3_1 = SpaceRecoveryScreenplay:new {
 	className = "recovery_tatooine_imperial_tier3_1",
 
@@ -594,15 +594,15 @@ recovery_tatooine_imperial_tier3_1 = SpaceRecoveryScreenplay:new {
 	attackDelay = 70,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
+		{"borvo_fighter_tier2", "borvo_defender_tier2", "borvo_bomber_tier2"},
+		{"borvo_fighter_tier2", "borvo_defender_tier2", "borvo_bomber_tier2"},
+		{"borvo_fighter_tier3", "borvo_defender_tier2", "borvo_bomber_tier2"},
 	},
 }
 
 registerScreenPlay("recovery_tatooine_imperial_tier3_1", true)
 
--- Mission 1 Side Quest A: Patrol (Space Yavin4 - Clear Imperial ships from Rebel escape route)
+-- Mission 1 Side Quest A: Patrol (Space Yavin4 - clear a pirate pursuit route)
 patrol_tatooine_imperial_tier3_1_A = SpacePatrolScreenplay:new {
 	className = "patrol_tatooine_imperial_tier3_1_A",
 
@@ -635,7 +635,7 @@ patrol_tatooine_imperial_tier3_1_A = SpacePatrolScreenplay:new {
 
 registerScreenPlay("patrol_tatooine_imperial_tier3_1_A", true)
 
--- Mission 1 Side Quest B: Destroy Surprise Attack (Space Yavin4 - Destroy Imperial patrol on escape path)
+-- Mission 1 Side Quest B: Destroy Surprise Attack (Space Yavin4 - destroy a Borvo syndicate ambush)
 destroy_surpriseattack_tatooine_imperial_tier3_1_b = SpaceSurpriseAttackScreenplay:new {
 	className = "destroy_surpriseattack_tatooine_imperial_tier3_1_b",
 
@@ -657,13 +657,13 @@ destroy_surpriseattack_tatooine_imperial_tier3_1_b = SpaceSurpriseAttackScreenpl
 
 	surpriseAttackShips = {
 		zone = "space_yavin4",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier3"}},
+		spawns = {{count = 3, shipName = "borvo_fighter_tier3"}},
 	},
 }
 
 registerScreenPlay("destroy_surpriseattack_tatooine_imperial_tier3_1_b", true)
 
--- Mission 1 Side Quest C: Assassinate (Space Yavin4 - Stop Imperial scout patrol from escaping)
+-- Mission 1 Side Quest C: Assassinate (Space Yavin4 - stop a Borvo syndicate scout from escaping)
 assassinate_tatooine_imperial_tier3_1_c = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_imperial_tier3_1_c",
 
@@ -690,8 +690,8 @@ assassinate_tatooine_imperial_tier3_1_c = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_tie_interceptor_tier2",
-		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		target = "borvo_defender_tier3",
+		escorts = {"borvo_fighter_tier2", "borvo_defender_tier2"},
 	},
 
 	targetPatrols = {
@@ -704,7 +704,7 @@ assassinate_tatooine_imperial_tier3_1_c = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_imperial_tier3_1_c", true)
 
--- Mission 1 Side Quest D: Space Battle (Space Yavin4 - Assist X-Wing squad against Imperial patrol)
+-- Mission 1 Side Quest D: Space Battle (Space Yavin4 - assist an Imperial patrol against Borvo syndicate)
 space_battle_tatooine_imperial_tier3_1_d = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier3_1_d",
 
@@ -731,24 +731,24 @@ space_battle_tatooine_imperial_tier3_1_d = SpaceBattleScreenplay:new {
 	enemyArrivalDist = 0,
 
 	alliedShips = {
-		{"reb_xwing_tier3"},
-		{"reb_xwing_tier3"},
-		{"reb_xwing_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_interceptor_tier3"},
 	},
 
 	enemyShips = {
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
+		{"borvo_fighter_tier3"},
+		{"borvo_fighter_tier3"},
+		{"borvo_defender_tier3"},
+		{"borvo_bomber_tier3"},
+		{"borvo_bomber_tier3"},
+		{"borvo_defender_tier3"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_imperial_tier3_1_d", true)
 
--- Mission 2: Inspect (Space Endor - Rebel fleet forced out of hyperspace, need intel from Hutt smugglers)
+-- Mission 2: Inspect (Space Endor - locate a Hutt smuggler carrying pirate fleet intelligence)
 inspect_tatooine_imperial_tier3_2 = SpaceInspectScreenplay:new {
 	className = "inspect_tatooine_imperial_tier3_2",
 
@@ -772,7 +772,7 @@ inspect_tatooine_imperial_tier3_2 = SpaceInspectScreenplay:new {
 
 registerScreenPlay("inspect_tatooine_imperial_tier3_2", true)
 
--- Mission 2 Side Quest A: Delivery (Space Lok - Deliver data to Alliance fleet)
+-- Mission 2 Side Quest A: Delivery (Space Lok - deliver the intelligence to the Imperial Navy)
 delivery_tatooine_imperial_tier3_2_a = SpaceDeliveryScreenplay:new {
 	className = "delivery_tatooine_imperial_tier3_2_a",
 
@@ -794,8 +794,8 @@ delivery_tatooine_imperial_tier3_2_a = SpaceDeliveryScreenplay:new {
 	parentQuestType = "inspect",
 	parentQuestName = "tatooine_imperial_tier3_2",
 
-	pickupShip = "reb_xwing_tier2",
-	deliveryShip = "reb_awing_tier3",
+	pickupShip = "imp_tie_fighter_tier2",
+	deliveryShip = "imp_transport_tier3",
 
 	pickupPoint = {x = -3000, z = -2000, y = -2600}, -- space_lok:rebel_tier3_2_a_meeting
 	deliveryPoint = {x = 1000, z = -2000, y = -3452}, -- space_lok:rebel_tier3_2_a_delivery
@@ -803,15 +803,15 @@ delivery_tatooine_imperial_tier3_2_a = SpaceDeliveryScreenplay:new {
 	attackDelay = 70,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
+		{"borvo_fighter_tier2", "borvo_defender_tier2", "borvo_bomber_tier2"},
+		{"borvo_fighter_tier2", "borvo_fighter_tier2", "borvo_bomber_tier2"},
+		{"borvo_fighter_tier3", "borvo_defender_tier2", "borvo_defender_tier2"},
 	},
 }
 
 registerScreenPlay("delivery_tatooine_imperial_tier3_2_a", true)
 
--- Mission 2 Side Quest B: Survival (Space Endor - Defend fleet from Imperial fighter wings)
+-- Mission 2 Side Quest B: Survival (Space Endor - hold against a Borvo syndicate counterattack)
 survival_tatooine_imperial_tier3_2_b = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_imperial_tier3_2_b",
 
@@ -840,17 +840,17 @@ survival_tatooine_imperial_tier3_2_b = SpaceSurvivalScreenplay:new {
 	attackDelay = 100,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"borvo_fighter_tier2", "borvo_defender_tier2", "borvo_bomber_tier2", "borvo_bomber_tier2"},
+		{"borvo_fighter_tier2", "borvo_defender_tier2", "borvo_bomber_tier2", "borvo_defender_tier2"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3", "borvo_bomber_tier3"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3", "borvo_defender_tier3"},
+		{"borvo_boss_tier3", "borvo_defender_tier3"},
 	},
 }
 
 registerScreenPlay("survival_tatooine_imperial_tier3_2_b", true)
 
--- Mission 2 Side Quest C: Escort (Space Endor - Escort straggling freighter to new fleet position)
+-- Mission 2 Side Quest C: Escort (Space Endor - escort an Imperial intelligence freighter)
 escort_tatooine_imperial_tier3_2_c = SpaceEscortScreenplay:new {
 	className = "escort_tatooine_imperial_tier3_2_c",
 
@@ -868,7 +868,7 @@ escort_tatooine_imperial_tier3_2_c = SpaceEscortScreenplay:new {
 	parentQuestType = "survival",
 	parentQuestName = "tatooine_imperial_tier3_2_b",
 
-	escortShips = {"reb_freighterlight_tier3"},
+	escortShips = {"imp_freighterlight_tier3"},
 
 	escortPoints = {
 		{patrolPointName = "rebel_tier3_2_c_escort_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
@@ -880,14 +880,14 @@ escort_tatooine_imperial_tier3_2_c = SpaceEscortScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3"},
+		{"borvo_bomber_tier3", "borvo_defender_tier3"},
 	},
 }
 
 registerScreenPlay("escort_tatooine_imperial_tier3_2_c", true)
 
--- Mission 3: Delivery (Space Endor - Meet Nym smuggler with intel data from Lok Alliance Navy)
+-- Mission 3: Delivery (Space Endor - transfer pirate intelligence from a Nym informant)
 delivery_tatooine_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 	className = "delivery_tatooine_imperial_tier3_3",
 
@@ -904,7 +904,7 @@ delivery_tatooine_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	pickupShip = "nym_smuggler",
-	deliveryShip = "reb_gunboat_tier3",
+	deliveryShip = "imp_transport_tier3",
 
 	pickupPoint = "space_endor:tatooine_imperial_tier_3_3_pickup",
 	deliveryPoint = "space_endor:tatooine_imperial_tier_3_3_deliver",
@@ -912,15 +912,15 @@ delivery_tatooine_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3"},
+		{"borvo_bomber_tier3", "borvo_defender_tier3"},
+		{"borvo_defender_tier3", "borvo_boss_tier3"},
 	},
 }
 
 registerScreenPlay("delivery_tatooine_imperial_tier3_3", true)
 
--- Mission 3 Side Quest A: Assassinate (Space Endor - Destroy Imperial advanced recon ship)
+-- Mission 3 Side Quest A: Assassinate (Space Endor - destroy a Borvo syndicate command ship)
 assassinate_tatooine_imperial_tier3_3_a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_imperial_tier3_3_a",
 
@@ -947,8 +947,8 @@ assassinate_tatooine_imperial_tier3_3_a = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "lambdashuttle_advanced_recon",
-		escorts = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		target = "borvo_boss_tier3",
+		escorts = {"borvo_fighter_tier3", "borvo_defender_tier3", "borvo_defender_tier3"},
 	},
 
 	targetPatrols = {
@@ -963,7 +963,7 @@ assassinate_tatooine_imperial_tier3_3_a = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_imperial_tier3_3_a", true)
 
--- Mission 3 Side Quest B: Space Battle (Space Endor - Assist Green squadron against TIE wing)
+-- Mission 3 Side Quest B: Space Battle (Space Endor - assist an Imperial squadron against Borvo syndicate)
 space_battle_tatooine_imperial_tier3_3_b = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier3_3_b",
 
@@ -994,24 +994,24 @@ space_battle_tatooine_imperial_tier3_3_b = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -200,
 
 	alliedShips = {
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_bomber_tier3"},
+		{"imp_tie_interceptor_tier3"},
 	},
 
 	enemyShips = {
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
+		{"borvo_fighter_tier3"},
+		{"borvo_fighter_tier3"},
+		{"borvo_defender_tier3"},
+		{"borvo_bomber_tier3"},
+		{"borvo_defender_tier3"},
+		{"borvo_boss_tier3"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_imperial_tier3_3_b", true)
 
--- Mission 3 Side Quest C: Escort (Space Endor - Escort Rebel smuggler transporting fleet repair materials)
+-- Mission 3 Side Quest C: Escort (Space Endor - escort an Imperial logistics vessel)
 escort_tatooine_imperial_tier3_3_c = SpaceEscortScreenplay:new {
 	className = "escort_tatooine_imperial_tier3_3_c",
 
@@ -1029,7 +1029,7 @@ escort_tatooine_imperial_tier3_3_c = SpaceEscortScreenplay:new {
 	parentQuestType = "space_battle",
 	parentQuestName = "tatooine_imperial_tier3_3_b",
 
-	escortShips = {"rebel_smuggler_tier3"},
+	escortShips = {"imp_freightermedium_tier3"},
 
 	escortPoints = {
 		{patrolPointName = "tatooine_imperial_tier3_3_c_escort_1", zoneName = "space_endor", x = -5250, z = -850, y = 2000, escortNumber = 1, radius = 250},
@@ -1041,14 +1041,14 @@ escort_tatooine_imperial_tier3_3_c = SpaceEscortScreenplay:new {
 	attackDelay = 55,
 
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3"},
+		{"borvo_bomber_tier3", "borvo_defender_tier3"},
 	},
 }
 
 registerScreenPlay("escort_tatooine_imperial_tier3_3_c", true)
 
--- Mission 4: Assassinate (Space Dathomir - Stop Imperial fighter officer from reaching Dathomir fleet)
+-- Mission 4: Assassinate (Space Dathomir - stop a Borvo syndicate commander reaching pirate reinforcements)
 assassinate_tatooine_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_imperial_tier3_4",
 
@@ -1069,8 +1069,8 @@ assassinate_tatooine_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "tieadvanced_quest_officer_rebel_t3",
-		escorts = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		target = "borvo_boss_tier3",
+		escorts = {"borvo_defender_tier3", "borvo_defender_tier3"},
 	},
 
 	targetPatrols = {
@@ -1083,7 +1083,7 @@ assassinate_tatooine_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_imperial_tier3_4", true)
 
--- Mission 4 Side Quest A: Patrol (Space Endor - Search for missing Magenta squadron)
+-- Mission 4 Side Quest A: Patrol (Space Endor - search for a missing Imperial patrol)
 patrol_tatooine_imperial_tier3_4_a = SpacePatrolScreenplay:new {
 	className = "patrol_tatooine_imperial_tier3_4_a",
 
@@ -1116,7 +1116,7 @@ patrol_tatooine_imperial_tier3_4_a = SpacePatrolScreenplay:new {
 
 registerScreenPlay("patrol_tatooine_imperial_tier3_4_a", true)
 
--- Mission 4 Side Quest B: Destroy Surprise Attack (Space Endor - Imperial Elite Ambush squad)
+-- Mission 4 Side Quest B: Destroy Surprise Attack (Space Endor - Borvo syndicate elite ambush)
 destroy_surpriseattack_tatooine_imperial_tier3_4_b = SpaceSurpriseAttackScreenplay:new {
 	className = "destroy_surpriseattack_tatooine_imperial_tier3_4_b",
 
@@ -1138,13 +1138,13 @@ destroy_surpriseattack_tatooine_imperial_tier3_4_b = SpaceSurpriseAttackScreenpl
 
 	surpriseAttackShips = {
 		zone = "space_endor",
-		spawns = {{count = 6, shipName = "imp_tie_interceptor_tier3"}},
+		spawns = {{count = 6, shipName = "borvo_defender_tier3"}},
 	},
 }
 
 registerScreenPlay("destroy_surpriseattack_tatooine_imperial_tier3_4_b", true)
 
--- Mission 4 Side Quest C: Space Battle (Space Endor - Assist Blue Squadron attacking TIE bomber wing)
+-- Mission 4 Side Quest C: Space Battle (Space Endor - assist Imperial bombers against Borvo syndicate)
 space_battle_tatooine_imperial_tier3_4_c = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier3_4_c",
 
@@ -1175,25 +1175,25 @@ space_battle_tatooine_imperial_tier3_4_c = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -50,
 
 	alliedShips = {
-		{"reb_bwing_tier3"},
-		{"reb_bwing_tier3"},
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
+		{"imp_tie_bomber_tier3"},
+		{"imp_tie_bomber_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_interceptor_tier3"},
 	},
 
 	enemyShips = {
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
+		{"borvo_bomber_tier3"},
+		{"borvo_bomber_tier3"},
+		{"borvo_fighter_tier3"},
+		{"borvo_defender_tier3"},
+		{"borvo_defender_tier3"},
+		{"borvo_boss_tier3"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_imperial_tier3_4_c", true)
 
--- Mission 4 Side Quest D: Survival (Space Endor - Guard fleet flank during hyperspace evacuation)
+-- Mission 4 Side Quest D: Survival (Space Endor - guard the Imperial formation during withdrawal)
 survival_tatooine_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_imperial_tier3_4_d",
 
@@ -1218,9 +1218,9 @@ survival_tatooine_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
 	attackDelay = 60,
 
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3", "borvo_bomber_tier3"},
+		{"borvo_defender_tier3", "borvo_defender_tier3", "borvo_bomber_tier3"},
+		{"borvo_boss_tier3", "borvo_defender_tier3", "borvo_fighter_tier3"},
 	},
 }
 
@@ -1230,7 +1230,7 @@ registerScreenPlay("survival_tatooine_imperial_tier3_4_d", true)
 	Tier 4 -- tatooine_imperial_tier4 Main Missions
 ]]
 
--- Mission 1: Survival (Space Dathomir - Hold off Black Sun assault on Nym miners)
+-- Mission 1: Survival (Space Dathomir - Hold off Borvo syndicate assault on Nym miners)
 survival_tatooine_imperial_tier4_1 = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_imperial_tier4_1",
 
@@ -1244,10 +1244,7 @@ survival_tatooine_imperial_tier4_1 = SpaceSurvivalScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "tatooine_imperial_tier4_1_a",
-	sideQuestType2 = "space_battle",
-	sideQuestName2 = "tatooine_imperial_tier4_1_b",
-
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	survivalTime = 300,
 	survivalPoint = "space_dathomir:tatooine_imperial_tier4_1_survival_point",
@@ -1256,16 +1253,16 @@ survival_tatooine_imperial_tier4_1 = SpaceSurvivalScreenplay:new {
 	attackDelay = 60,
 
 	attackShips = {
-		{"blacksun_fighter_s03_tier4", "blacksun_bomber_s03_tier4", "blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4"},
-		{"blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4"},
-		{"blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
-		{"blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4"},
+		{"borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_bomber_tier4"},
+		{"borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_bomber_tier4"},
+		{"borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
+		{"borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_bomber_tier4"},
 	},
 }
 
 registerScreenPlay("survival_tatooine_imperial_tier4_1", true)
 
--- Mission 1 Side Quest A: Space Battle (Space Dathomir - Counter attack against Black Sun)
+-- Mission 1 Side Quest A: Space Battle (Space Dathomir - Counter attack against Borvo syndicate)
 space_battle_tatooine_imperial_tier4_1_a = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier4_1_a",
 
@@ -1276,8 +1273,10 @@ space_battle_tatooine_imperial_tier4_1_a = SpaceBattleScreenplay:new {
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "space_battle",
+	sideQuestName = "tatooine_imperial_tier4_1_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "survival_tatooine_imperial_tier4_1",
 	parentQuestType = "survival",
@@ -1295,26 +1294,26 @@ space_battle_tatooine_imperial_tier4_1_a = SpaceBattleScreenplay:new {
 		{"nym_enforcer_tier4"},
 		{"nym_enforcer_tier4"},
 		{"nym_enforcer_tier4"},
-		{"reb_xwing_tier4"},
-		{"reb_xwing_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_interceptor_tier4"},
 	},
 
 	enemyShips = {
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_fighter_s03_tier4"},
-		{"blacksun_fighter_s03_tier4"},
-		{"blacksun_fighter_s03_tier4"},
-		{"blacksun_marauder_tier4"},
-		{"blacksun_vehement_tier4"},
-		{"blacksun_marauder_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_bomber_tier4"},
+		{"borvo_bomber_tier4"},
+		{"borvo_bomber_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_boss_tier4"},
+		{"borvo_defender_tier4"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_imperial_tier4_1_a", true)
 
--- Mission 1 Side Quest B: Space Battle (Space Dathomir - Save Nym freighters from Black Sun)
+-- Mission 1 Side Quest B: Space Battle (Space Dathomir - Save Nym freighters from Borvo syndicate)
 space_battle_tatooine_imperial_tier4_1_b = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier4_1_b",
 
@@ -1328,9 +1327,9 @@ space_battle_tatooine_imperial_tier4_1_b = SpaceBattleScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "survival_tatooine_imperial_tier4_1",
-	parentQuestType = "survival",
-	parentQuestName = "tatooine_imperial_tier4_1",
+	parentQuest = "space_battle_tatooine_imperial_tier4_1_a",
+	parentQuestType = "space_battle",
+	parentQuestName = "tatooine_imperial_tier4_1_a",
 
 	battlePoint = "space_dathomir:corellia_rebe_tier4_1_b_battle_point",
 	allyArrivalDelay = 30,
@@ -1350,18 +1349,18 @@ space_battle_tatooine_imperial_tier4_1_b = SpaceBattleScreenplay:new {
 	},
 
 	enemyShips = {
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_fighter_s02_tier4"},
-		{"blacksun_gunship_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_defender_tier4"},
+		{"borvo_boss_tier4"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_imperial_tier4_1_b", true)
 
--- Mission 2: Assassinate (Space Dathomir - Terminate Imperial Inquisitor before he reaches the fleet)
+-- Mission 2: Assassinate (Space Dathomir - terminate a Borvo syndicate Vigo before reinforcements arrive)
 assassinate_tatooine_imperial_tier4_2 = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_imperial_tier4_2",
 
@@ -1376,17 +1375,14 @@ assassinate_tatooine_imperial_tier4_2 = SpaceAssassinateScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "delivery_no_pickup",
 	sideQuestName = "tatooine_imperial_tier4_2_a",
-	sideQuestType2 = "rescue",
-	sideQuestName2 = "tatooine_imperial_tier4_2_b",
-
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	arrivalDelay = 5,
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "tieadvanced_inquisitor_tier4",
-		escorts = {"tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard"},
+		target = "borvo_boss_tier4",
+		escorts = {"borvo_fighter_tier4", "borvo_defender_tier4", "borvo_bomber_tier4", "borvo_defender_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
 	},
 
 	targetPatrols = {
@@ -1401,7 +1397,7 @@ assassinate_tatooine_imperial_tier4_2 = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_imperial_tier4_2", true)
 
--- Mission 2 Side Quest A: Delivery No Pickup (Space Dathomir - Deliver Inquisitor wreck data)
+-- Mission 2 Side Quest A: Delivery No Pickup (Space Dathomir - deliver captured Borvo syndicate records)
 delivery_no_pickup_tatooine_imperial_tier4_2_a = SpaceDeliveryNoPickupScreenplay:new {
 	className = "delivery_no_pickup_tatooine_imperial_tier4_2_a",
 
@@ -1412,31 +1408,33 @@ delivery_no_pickup_tatooine_imperial_tier4_2_a = SpaceDeliveryNoPickupScreenplay
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "rescue",
+	sideQuestName = "tatooine_imperial_tier4_2_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "assassinate_tatooine_imperial_tier4_2",
 	parentQuestType = "assassinate",
 	parentQuestName = "tatooine_imperial_tier4_2",
 
-	deliveryShip = "rebel_smuggler_tier3",
+	deliveryShip = "imp_transport_tier3",
 	deliveryPoint = "space_dathomir:tatooine_imperial_tier4_2_a_delivery",
 
 	attackDelay = 45,
 
 	attackShips = {
-		{"imp_tie_interceptor_tier4", "imp_tie_advanced_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4"},
+		{"borvo_fighter_tier4", "borvo_defender_tier4", "borvo_bomber_tier4"},
+		{"borvo_defender_tier4", "borvo_bomber_tier4", "borvo_bomber_tier4"},
+		{"borvo_defender_tier4", "borvo_fighter_tier4", "borvo_defender_tier4"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3", "borvo_defender_tier4"},
+		{"borvo_boss_tier3", "borvo_defender_tier3", "borvo_bomber_tier4"},
+		{"borvo_boss_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
 	},
 }
 
 registerScreenPlay("delivery_no_pickup_tatooine_imperial_tier4_2_a", true)
 
--- Mission 2 Side Quest B: Rescue (Space Dathomir - Rescue Rebel diplomat ambushed by Imperials)
+-- Mission 2 Side Quest B: Rescue (Space Dathomir - rescue an Imperial envoy ambushed by Borvo syndicate)
 rescue_tatooine_imperial_tier4_2_b = SpaceRescueScreenplay:new {
 	className = "rescue_tatooine_imperial_tier4_2_b",
 
@@ -1450,11 +1448,11 @@ rescue_tatooine_imperial_tier4_2_b = SpaceRescueScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "assassinate_tatooine_imperial_tier4_2",
-	parentQuestType = "assassinate",
-	parentQuestName = "tatooine_imperial_tier4_2",
+	parentQuest = "delivery_no_pickup_tatooine_imperial_tier4_2_a",
+	parentQuestType = "delivery_no_pickup",
+	parentQuestName = "tatooine_imperial_tier4_2_a",
 
-	rescueShip = "reb_diplomat_tier4",
+	rescueShip = "imp_lambda_shuttle_tier4",
 	rescueArrivalDelay = 3,
 
 	escortPoints = {
@@ -1467,18 +1465,18 @@ rescue_tatooine_imperial_tier4_2_b = SpaceRescueScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_bomber_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
+		{"borvo_fighter_tier4", "borvo_defender_tier4", "borvo_bomber_tier4"},
+		{"borvo_defender_tier4", "borvo_bomber_tier4", "borvo_defender_tier4"},
+		{"borvo_fighter_tier4", "borvo_bomber_tier4", "borvo_boss_tier4"},
+		{"borvo_fighter_tier3", "borvo_defender_tier3", "borvo_defender_tier3"},
+		{"borvo_boss_tier3", "borvo_defender_tier3", "borvo_bomber_tier4"},
+		{"borvo_boss_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
 	},
 }
 
 registerScreenPlay("rescue_tatooine_imperial_tier4_2_b", true)
 
--- Mission 3: Space Battle (Space Dathomir - Guerilla strike on Imperial space station)
+-- Mission 3: Space Battle (Space Dathomir - repel the first coordinated Rebel strike)
 space_battle_tatooine_imperial_tier4_3 = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier4_3",
 
@@ -1492,10 +1490,7 @@ space_battle_tatooine_imperial_tier4_3 = SpaceBattleScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "tatooine_imperial_tier4_3_a",
-	sideQuestType2 = "survival",
-	sideQuestName2 = "tatooine_imperial_tier4_3_b",
-
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	battlePoint = "space_dathomir:tatooine_imperial_tier4_3_battle_point",
 	allyArrivalDelay = 60,
@@ -1506,30 +1501,30 @@ space_battle_tatooine_imperial_tier4_3 = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -200,
 
 	alliedShips = {
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_enforcer_tier5"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_interceptor_tier4"},
+		{"imp_tie_bomber_tier4"},
+		{"imp_imperial_gunboat_tier4"},
 	},
 
 	enemyShips = {
-		{"imp_imperial_gunboat_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_awing_tier4"},
+		{"reb_ywing_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_awing_tier4"},
+		{"reb_ywing_tier4"},
+		{"reb_bwing_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_ywing_tier4"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_imperial_tier4_3", true)
 
--- Mission 3 Side Quest A: Space Battle (Space Dathomir - Help ambushed B-Wing squadrons)
+-- Mission 3 Side Quest A: Space Battle (Space Dathomir - reinforce an ambushed Imperial squadron)
 space_battle_tatooine_imperial_tier4_3_a = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier4_3_a",
 
@@ -1540,8 +1535,10 @@ space_battle_tatooine_imperial_tier4_3_a = SpaceBattleScreenplay:new {
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "survival",
+	sideQuestName = "tatooine_imperial_tier4_3_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "space_battle_tatooine_imperial_tier4_3",
 	parentQuestType = "space_battle",
@@ -1556,24 +1553,24 @@ space_battle_tatooine_imperial_tier4_3_a = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -150,
 
 	alliedShips = {
-		{"reb_bwing_tier4"},
-		{"reb_bwing_tier4"},
-		{"reb_bwing_tier4"},
+		{"imp_tie_bomber_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_interceptor_tier4"},
 	},
 
 	enemyShips = {
-		{"imp_tie_aggressor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
+		{"reb_bwing_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_awing_tier4"},
+		{"reb_awing_tier4"},
+		{"reb_ywing_tier4"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_imperial_tier4_3_a", true)
 
--- Mission 3 Side Quest B: Survival (Space Dathomir - Defend Rebel bombers retreat after failed station attack)
+-- Mission 3 Side Quest B: Survival (Space Dathomir - hold the line against Rebel reinforcements)
 survival_tatooine_imperial_tier4_3_b = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_imperial_tier4_3_b",
 
@@ -1587,9 +1584,9 @@ survival_tatooine_imperial_tier4_3_b = SpaceSurvivalScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "space_battle_tatooine_imperial_tier4_3",
+	parentQuest = "space_battle_tatooine_imperial_tier4_3_a",
 	parentQuestType = "space_battle",
-	parentQuestName = "tatooine_imperial_tier4_3",
+	parentQuestName = "tatooine_imperial_tier4_3_a",
 
 	survivalTime = 480,
 	survivalPoint = "space_dathomir:tatooine_imperial_tier4_3_b_survival",
@@ -1598,17 +1595,17 @@ survival_tatooine_imperial_tier4_3_b = SpaceSurvivalScreenplay:new {
 	attackDelay = 45,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_advanced_tier4", "imp_tie_aggressor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
+		{"reb_xwing_tier4", "reb_awing_tier4", "reb_ywing_tier4", "reb_bwing_tier4"},
+		{"reb_xwing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_ywing_tier4"},
+		{"reb_xwing_tier4", "reb_ywing_tier4", "reb_bwing_tier4", "reb_awing_tier4"},
+		{"reb_xwing_tier4", "reb_xwing_tier4", "reb_awing_tier4", "reb_ywing_tier4"},
+		{"reb_bwing_tier4", "reb_ywing_tier4", "reb_xwing_tier4", "reb_awing_tier4"},
 	},
 }
 
 registerScreenPlay("survival_tatooine_imperial_tier4_3_b", true)
 
--- Mission 4: Recovery (Space Dantooine - Kidnap Imperial technician building space station)
+-- Mission 4: Recovery (Space Dantooine - capture a Rebel courier carrying fleet intelligence)
 recovery_tatooine_imperial_tier4_4 = SpaceRecoveryScreenplay:new {
 	className = "recovery_tatooine_imperial_tier4_4",
 
@@ -1632,10 +1629,10 @@ recovery_tatooine_imperial_tier4_4 = SpaceRecoveryScreenplay:new {
 	arrivalDelay = 10,
 	recoveryDelay = 30,
 
-	recoverShip = "imp_lambda_shuttle_tier4",
+	recoverShip = "reb_transport_tier4",
 	recoveryConversationMobile = "object/mobile/dressed_rebel_commando_moncal_male_01.iff",
 
-	escortShips = {"imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
+	escortShips = {"reb_xwing_tier4", "reb_xwing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_ywing_tier4", "reb_bwing_tier4"},
 
 	preRecoveryPoints = {
 		{patrolPointName = "tatooine_imperial_tier4_4_recovery_1", zoneName = "space_dantooine", x = -4000, z = 3100, y = 2700, escortNumber = 1, radius = 250},
@@ -1654,15 +1651,15 @@ recovery_tatooine_imperial_tier4_4 = SpaceRecoveryScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_advanced_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_oppressor_tier4"},
+		{"reb_xwing_tier4", "reb_awing_tier4", "reb_ywing_tier4"},
+		{"reb_xwing_tier4", "reb_xwing_tier4", "reb_awing_tier4"},
+		{"reb_bwing_tier4", "reb_ywing_tier4", "reb_awing_tier4"},
 	},
 }
 
 registerScreenPlay("recovery_tatooine_imperial_tier4_4", true)
 
--- Mission 4 Side Quest A: Assassinate (Space Endor - Destroy Imperial freighters carrying station materials)
+-- Mission 4 Side Quest A: Assassinate (Space Endor - destroy Rebel freighters carrying war materiel)
 assassinate_tatooine_imperial_tier4_4_a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_imperial_tier4_4_a",
 
@@ -1689,8 +1686,8 @@ assassinate_tatooine_imperial_tier4_4_a = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_freighterheavy_tier4",
-		escorts = {"imp_tie_aggressor_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4", "imp_tie_aggressor_tier4", "freighterlight_tatooine_imperial_mission", "freightermedium_tatooine_imperial_mission"},
+		target = "reb_freighterheavy_tier4",
+		escorts = {"reb_xwing_tier4", "reb_xwing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_ywing_tier4", "reb_bwing_tier4", "reb_xwing_tier4", "reb_freighterlight_tier3", "reb_freightermedium_tier3"},
 	},
 
 	targetPatrols = {
@@ -1705,7 +1702,7 @@ assassinate_tatooine_imperial_tier4_4_a = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_imperial_tier4_4_a", true)
 
--- Mission 4 Side Quest B: Rescue (Space Endor - Escort SpyNet operative to safety for freighter route intel)
+-- Mission 4 Side Quest B: Rescue (Space Endor - escort an Imperial intelligence operative to safety)
 rescue_tatooine_imperial_tier4_4_b = SpaceRescueScreenplay:new {
 	className = "rescue_tatooine_imperial_tier4_4_b",
 
@@ -1727,7 +1724,7 @@ rescue_tatooine_imperial_tier4_4_b = SpaceRescueScreenplay:new {
 	parentQuestType = "recovery",
 	parentQuestName = "tatooine_imperial_tier4_4",
 
-	rescueShip = "spynet_spy_tier4",
+	rescueShip = "imp_lambda_shuttle_tier4",
 	rescueArrivalDelay = 5,
 
 	escortPoints = {
@@ -1742,18 +1739,18 @@ rescue_tatooine_imperial_tier4_4_b = SpaceRescueScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_advanced_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
+		{"reb_xwing_tier4", "reb_awing_tier4", "reb_ywing_tier4"},
+		{"reb_xwing_tier4", "reb_xwing_tier4", "reb_awing_tier4"},
+		{"reb_bwing_tier4", "reb_ywing_tier4", "reb_awing_tier4"},
+		{"reb_xwing_tier4", "reb_xwing_tier4", "reb_xwing_tier4"},
+		{"reb_awing_tier4", "reb_awing_tier4", "reb_ywing_tier4"},
+		{"reb_bwing_tier4", "reb_ywing_tier4", "reb_xwing_tier4"},
 	},
 }
 
 registerScreenPlay("rescue_tatooine_imperial_tier4_4_b", true)
 
--- Mission 4 Side Quest C: Space Battle (Space Endor - Imperial retaliation for freighter attack)
+-- Mission 4 Side Quest C: Space Battle (Space Endor - break the Rebel counterattack)
 space_battle_tatooine_imperial_tier4_4_c = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_imperial_tier4_4_c",
 
@@ -1780,23 +1777,23 @@ space_battle_tatooine_imperial_tier4_4_c = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -200,
 
 	alliedShips = {
-		{"reb_xwing_tier4"},
-		{"reb_xwing_tier4"},
-		{"reb_bwing_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_bomber_tier4"},
+		{"imp_tie_interceptor_tier4"},
+		{"imp_tie_advanced_tier4"},
 	},
 
 	enemyShips = {
-		{"imp_decimator_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_oppressor_tier4"},
-		{"imp_tie_advanced_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_awing_tier4"},
+		{"reb_awing_tier4"},
+		{"reb_ywing_tier4"},
+		{"reb_ywing_tier4"},
+		{"reb_bwing_tier4"},
+		{"reb_bwing_tier4"},
+		{"reb_transport_tier4"},
 	},
 }
 
@@ -1809,7 +1806,7 @@ registerScreenPlay("space_battle_tatooine_imperial_tier4_4_c", true)
 
 -- Tier 4 Duty Missions
 
--- Escort Duty (Space Dathomir - Escort Nym freighters carrying loot from Imperial outpost raid)
+-- Escort Duty (Space Dathomir - escort Imperial supply freighters through pirate territory)
 escort_duty_tatooine_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	className = "escort_duty_tatooine_imperial_tier4_1",
 
@@ -1826,7 +1823,7 @@ escort_duty_tatooine_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"nym_freighterheavy_tier4", "nym_freighterlight_tier4", "nym_freightermedium_tier4"},
+	escortShips = {"imp_freighterheavy_tier4", "imp_freighterlight_tier4", "imp_freightermedium_tier4"},
 
 	escortPoints = {
 		{patrolPointName = "tatooine_imperial_tier4_1_escort_duty_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
@@ -1838,16 +1835,16 @@ escort_duty_tatooine_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_bomber_tier4", "imp_tie_advanced_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
+		{"borvo_fighter_tier4", "borvo_defender_tier4", "borvo_bomber_tier4", "borvo_defender_tier4"},
+		{"borvo_defender_tier4", "borvo_bomber_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
+		{"borvo_fighter_tier4", "borvo_bomber_tier4", "borvo_boss_tier4", "borvo_defender_tier4"},
+		{"borvo_bomber_tier4", "borvo_bomber_tier4", "borvo_boss_tier4", "borvo_boss_tier4"},
 	},
 }
 
 registerScreenPlay("escort_duty_tatooine_imperial_tier4_1", true)
 
--- Rescue Duty (Space Dantooine - Rescue disabled Rebel ships left after Imperial attack)
+-- Rescue Duty (Space Dantooine - rescue disabled Imperial ships after pirate attacks)
 rescue_duty_tatooine_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	className = "rescue_duty_tatooine_imperial_tier4_1",
 
@@ -1862,7 +1859,7 @@ rescue_duty_tatooine_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	targetShips = {"reb_xwing_tier4", "reb_transport_tier4", "reb_ywing_tier4", "reb_ykl37r_tier4", "reb_freightermedium_tier4", "reb_freighterheavy_tier4", "reb_freighterlight_tier4"},
+	targetShips = {"imp_tie_fighter_tier4", "imp_lambda_shuttle_tier4", "imp_tie_bomber_tier4", "imp_transport_tier4", "imp_freightermedium_tier4", "imp_freighterheavy_tier4", "imp_freighterlight_tier4"},
 
 	targetArrivalDelay = 3,
 
@@ -1877,9 +1874,9 @@ rescue_duty_tatooine_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	attackDelay = 60,
 
 	attackShips = {
-		{"imp_lambda_shuttle_tier4", "imp_lambda_shuttle_tier4", "imp_lambda_shuttle_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_advanced_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_advanced_tier4"},
+		{"borvo_fighter_tier4", "borvo_defender_tier4", "borvo_bomber_tier4"},
+		{"borvo_bomber_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
+		{"borvo_bomber_tier4", "borvo_boss_tier4", "borvo_boss_tier4"},
 	},
 }
 
@@ -1907,7 +1904,7 @@ recovery_duty_tatooine_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	recoveryFaction = "nym",
 	recoveryConversationMobile = "object/mobile/dressed_nym_brawler_tran_m.iff",
 
-	escortShips = {"imp_tie_interceptor_tier4"},
+	escortShips = {"borvo_defender_tier4"},
 
 	preRecoveryPoints = {
 		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_1", zoneName = "space_endor", escortNumber = 1, radius = 250},
@@ -1926,15 +1923,15 @@ recovery_duty_tatooine_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	attackDelay = 45,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_bomber_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_advanced_tier4"},
+		{"borvo_fighter_tier4", "borvo_defender_tier4", "borvo_bomber_tier4", "borvo_defender_tier4"},
+		{"borvo_defender_tier4", "borvo_bomber_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
+		{"borvo_bomber_tier4", "borvo_boss_tier4", "borvo_defender_tier4", "borvo_boss_tier4"},
 	},
 }
 
 registerScreenPlay("recovery_duty_tatooine_imperial_tier4_1", true)
 
--- Destroy Duty (Space Dantooine - Nym/Rebel alliance putting the squeeze on the Black Sun)
+-- Destroy Duty (Space Dantooine - suppress Borvo syndicate raiding forces)
 destroy_duty_tatooine_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_tatooine_imperial_tier4_1",
 
@@ -1955,13 +1952,13 @@ destroy_duty_tatooine_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "blacksun_marauder_tier4",
+	bossShip = "borvo_defender_tier4",
 	shipTypes = {
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4"},
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4"},
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4"},
-		{"blacksun_fighter_s01_tier4"},
-		{"blacksun_vehement_tier4"},
+		{"borvo_fighter_tier4", "borvo_fighter_tier4"},
+		{"borvo_fighter_tier4", "borvo_fighter_tier4"},
+		{"borvo_fighter_tier4", "borvo_fighter_tier4"},
+		{"borvo_fighter_tier4"},
+		{"borvo_boss_tier4"},
 	},
 }
 
@@ -1988,6 +1985,7 @@ StormSquadronScreenplay = ScreenPlay:new {
 
 	-- Tier 2
 	TIER2_QUEST_STRING_1 = {type = "inspect", name = "tatooine_imperial_tier2_1"},
+	TIER2_QUEST_STRING_1_SIDE = {type = "destroy_surpriseattack", name = "tatooine_imperial_tier2_1"},
 	TIER2_QUEST_STRING_2 = {type = "escort", name = "tatooine_imperial_tier2_2"},
 	TIER2_QUEST_STRING_3 = {type = "recovery", name = "tatooine_imperial_tier2_3"},
 	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_imperial_tier2_4"},
@@ -2090,6 +2088,8 @@ function StormSquadronScreenplay:resetTier2Quests(pPlayer)
 	-- Mission 1
 	inspect_tatooine_imperial_tier2_1:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1.type, self.TIER2_QUEST_STRING_1.name, false)
+	destroy_surpriseattack_tatooine_imperial_tier2_1:resetQuest(pPlayer)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1_SIDE.type, self.TIER2_QUEST_STRING_1_SIDE.name, false)
 
 	-- Mission 2
 	escort_tatooine_imperial_tier2_2:resetQuest(pPlayer)

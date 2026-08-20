@@ -47,7 +47,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player is Imperial Pilot (turned away)
 	if (SpaceHelpers:isImperialPilot(pPlayer)) then
 		return convoTemplate:getScreen("imperial_pilot")
-	-- Player is Rebel Pilot (lightly Rebel-aligned squad still routes through recruitment)
+	-- Player is a Rebel pilot and cannot join a neutral squadron concurrently
 	elseif (SpaceHelpers:isRebelPilot(pPlayer)) then
 		return convoTemplate:getScreen("rebel_pilot")
 	end
@@ -71,7 +71,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local destroyDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.name)
 	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.name)
 
-	-- Player is an Imperial Pilot but a different squadron
+	-- Player is a neutral pilot but belongs to a different squadron
 	if (isNeutralPilot and not SpaceHelpers:isSmugglerSquadron(pPlayer)) then
 		return convoTemplate:getScreen("non_inquisition_pilot")
 	-- Player is elligible for recruitment
@@ -84,7 +84,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	-- Player destroyed their ship control device
 	if (not hasShip) then
-		-- Grant Imperial Newbie Ship
+		-- Replace the neutral starter ship if its control device was destroyed
 		grantStarterShip(pPlayer, "neutral")
 	end
 
@@ -482,8 +482,6 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			-- Grant Reward
 			assassinate_tatooine_privateer_4:rewardPlayer(pPlayer)
 
-			-- Grant Faction Standing
-			ghost:increaseFactionStanding("rebel", 75)
 		end
 
 		return convoTemplate:getScreen("missions_complete")
@@ -509,9 +507,6 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		-- Grant Reward
 		destroy_tatooine_privateer_2:rewardPlayer(pPlayer)
-
-		-- Grant Faction Standing
-		ghost:increaseFactionStanding("rebel", 50)
 
 		return convoTemplate:getScreen("excellent_work2")
 	-- Player has attempted quest 2 but failed/aborted
@@ -626,17 +621,17 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		destroy_duty_tatooine_privateer_6:startQuest(pPlayer, pNpc)
 	elseif (screenID == "escort_duty") then
 		escort_duty_tatooine_privateer_7:startQuest(pPlayer, pNpc)
-	-- Recruitment flow - confirm enlistment into the Imperial Navy
+	-- Recruitment flow - confirm entry into the Smuggler Squadron
 	elseif (screenID == "yes_join") then
 		local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
 		return convoTemplate:getScreen("join_confirm")
-	-- Enlistment accepted: grant Imperial pilot novice box + set squadron + tier
+	-- Recruitment accepted: grant the neutral pilot novice box and set squadron/tier
 	elseif (screenID == "yes_i_am" or screenID == "welcome_navy") then
-		-- Grant imperial pilot novice box
+		-- Grant neutral pilot novice box
 		SpaceHelpers:grantNovicePilot(pPlayer, "neutralPilot")
 
-		-- Sets Inquisition Squadron
+		-- Set Smuggler Squadron
 		SpaceHelpers:setSquadronType(pPlayer, SMUGGLER_SQUADRON)
 
 		-- Set pilot tier
@@ -651,7 +646,7 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		end
 	elseif (screenID == "no_ship") then
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then
-			-- Grant Imperial Newbie Ship
+			-- Grant neutral starter ship
 			grantStarterShip(pPlayer, "neutral")
 		end
 	-- Missions
@@ -681,8 +676,6 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 			-- Grant Reward
 			patrol_tatooine_privateer_1:rewardPlayer(pPlayer)
 
-			-- Grant Faction Standing
-			PlayerObject(pGhost):increaseFactionStanding("rebel", 25)
 		end
 	elseif (screenID == "quest2_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
@@ -703,8 +696,6 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 			-- Grant Reward
 			patrol_tatooine_privateer_3:rewardPlayer(pPlayer)
 
-			-- Grant Faction Standing
-			PlayerObject(pGhost):increaseFactionStanding("rebel", 50)
 		end
 	-- Quest 4 accepted - start the assassinate mission
 	elseif (screenID == "quest4_accepted") then
@@ -985,14 +976,14 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 
 		survival_tatooine_privateer_tier4_1:startQuest(pPlayer, pNpc)
 
-	-- Master mission (Smuggler Alliance is lightly Rebel-aligned - hunts the IMPERIAL corvette in Kessel)
+	-- Master mission: temporary Imperial service in lieu of imprisonment.
 	elseif (screenID == "accept_master_mission") then
 		-- Player must hold the full tier 4 pilot training before the master hand-off;
 		-- pilot_neutral_master is granted inside the Kessel screenplay, never here.
 		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4) and
 				not SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and
 				not SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
-			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
+			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
 		end
 	end
 
