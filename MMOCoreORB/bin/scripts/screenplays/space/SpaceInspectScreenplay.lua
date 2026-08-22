@@ -49,12 +49,9 @@ function SpaceInspectScreenplay:startQuest(pPlayer, pNpc)
 		pNpc = nil
 	end
 
-	-- Retried inspect missions can retain completed task state from the previous
-	-- attempt. Clear an inactive journal entry before activating it again so zone
-	-- entry can initialize the inspection normally.
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
-		SpaceHelpers:clearSpaceQuest(pPlayer, self.questType, self.questName, false)
-	end
+	-- startQuest is only called for a new attempt. Always clear the previous
+	-- journal entry so no completed travel or inspection task survives a retry.
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.questType, self.questName, false)
 
 	-- Activate the Journal Quest
 	SpaceHelpers:activateSpaceQuest(pPlayer, pNpc, self.questType, self.questName, false)
@@ -205,6 +202,9 @@ function SpaceInspectScreenplay:setupInspection(pPlayer)
 	-- Remove a stale waypoint before recreating the inspection objective.
 	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
 
+	-- Notify the player that the in-system inspection stage has begun.
+	SpaceHelpers:sendQuestProgess(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title")
+
 	-- Give inspecion waypoint
 	local waypointID = PlayerObject(pGhost):addWaypoint(self.questZone, "@spacequest/inspect/" .. self.questName .. ":quest_location_t", "", inspectionLocation.x, inspectionLocation.z, inspectionLocation.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
 
@@ -288,17 +288,29 @@ function SpaceInspectScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		return 1
 	end
 
+	-- Hyperspace transfers can notify before the creature's final zone state is
+	-- settled. Defer the check and read the actual current zone after transfer.
+	createEvent(1000, self.className, "checkEnteredZone", pPlayer, "")
+
+	return 0
+end
+
+function SpaceInspectScreenplay:checkEnteredZone(pPlayer)
+	if (pPlayer == nil or not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
-		return 0
+		return
 	end
 
 	if (SpaceHelpers:isInYacht(pPlayer)) then
-		return 0
+		return
 	end
 
-	local playerID = SceneObject(pPlayer):getObjectID()
+	local zoneNameHash = getHashCode(SceneObject(pPlayer):getZoneName())
 	local spaceQuestHash = getHashCode(self.questZone)
 
 	if (self.DEBUG_SPACE_INSPECT) then
@@ -315,15 +327,9 @@ function SpaceInspectScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 
 		-- Setup the inspection for the player
 		createEvent(1000, self.className, "setupInspection", pPlayer, "")
-
-		return 0
 	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
-
-		return 1
 	end
-
-	return 0
 end
 
 function SpaceInspectScreenplay:inspectedShip(pPlayer, pTargetShip, cargoHash)
