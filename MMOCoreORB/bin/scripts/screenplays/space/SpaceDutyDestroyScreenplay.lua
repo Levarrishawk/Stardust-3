@@ -129,7 +129,7 @@ function SpaceDutyDestroyScreenplay:failQuest(pPlayer, notifyClient)
 	local playerID = SceneObject(pPlayer):getObjectID()
 
 	-- Destroy the active area
-	local areaID = writeData(playerID .. ":" .. self.className .. ":targetArea:", questAreaID)
+	local areaID = readData(playerID .. ":" .. self.className .. ":targetArea:")
 	deleteData(playerID .. ":" .. self.className .. ":targetArea:")
 
 	local pQuestArea = getSceneObject(areaID)
@@ -182,7 +182,7 @@ function SpaceDutyDestroyScreenplay:resetQuest(pPlayer)
 	local playerID = SceneObject(pPlayer):getObjectID()
 
 	-- Destroy the active area
-	local areaID = writeData(playerID .. ":" .. self.className .. ":targetArea:", questAreaID)
+	local areaID = readData(playerID .. ":" .. self.className .. ":targetArea:")
 	deleteData(playerID .. ":" .. self.className .. ":targetArea:")
 
 	local pQuestArea = getSceneObject(areaID)
@@ -231,7 +231,7 @@ function SpaceDutyDestroyScreenplay:completeQuest(pPlayer, notifyClient)
 	local playerID = SceneObject(pPlayer):getObjectID()
 
 	-- Destroy the active area
-	local areaID = writeData(playerID .. ":" .. self.className .. ":targetArea:", questAreaID)
+	local areaID = readData(playerID .. ":" .. self.className .. ":targetArea:")
 	deleteData(playerID .. ":" .. self.className .. ":targetArea:")
 
 	local pQuestArea = getSceneObject(areaID)
@@ -686,9 +686,9 @@ function SpaceDutyDestroyScreenplay:notifyBossShipDestroyed(pBossShip, pKillerSh
 
 	-- Destroy the area
 	local playerAreaID = readData(missionOwnerID .. ":" .. self.className .. ":targetArea:")
-	deleteData(missionOwnerID .. ":" .. self.className .. ":targetArea:", questAreaID)
+	deleteData(missionOwnerID .. ":" .. self.className .. ":targetArea:")
 
-	local pQuestArea = getSceneObject(questAreaID)
+	local pQuestArea = getSceneObject(playerAreaID)
 
 	if (pQuestArea ~= nil) then
 		destroyObjectFromWorld(pQuestArea)
@@ -890,9 +890,9 @@ function SpaceDutyDestroyScreenplay:notifyAttackShipDestroyed(pShipAgent, pKille
 
 			-- Destroy the area
 			local playerAreaID = readData(missionOwnerID .. ":" .. self.className .. ":targetArea:")
-			deleteData(missionOwnerID .. ":" .. self.className .. ":targetArea:", questAreaID)
+			deleteData(missionOwnerID .. ":" .. self.className .. ":targetArea:")
 
-			local pQuestArea = getSceneObject(questAreaID)
+			local pQuestArea = getSceneObject(playerAreaID)
 
 			if (pQuestArea ~= nil) then
 				destroyObjectFromWorld(pQuestArea)

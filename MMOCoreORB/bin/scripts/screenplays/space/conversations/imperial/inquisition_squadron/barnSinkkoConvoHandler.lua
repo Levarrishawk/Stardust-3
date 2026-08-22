@@ -694,6 +694,19 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 
+		-- Tier 1 duty missions repeat until explicitly stopped. Retire either duty
+		-- before starting the Tier 2 campaign so its observer cannot create a
+		-- competing waypoint or spawn another encounter after launch.
+		if (SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_1.type, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_1.name)) then
+			destroy_duty_naboo_imperial_6:resetQuest(pPlayer)
+			SpaceHelpers:clearSpaceQuest(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_1.type, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_1.name, false)
+		end
+
+		if (SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_2.type, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_2.name)) then
+			escort_duty_naboo_imperial_7:resetQuest(pPlayer)
+			SpaceHelpers:clearSpaceQuest(pPlayer, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_2.type, InquisitionSquadronScreenplay.QUEST_STRING_DUTY_2.name, false)
+		end
+
 		inspect_naboo_imperial_tier2_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier2_second_mission" or screenID == "failed_tier2_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
