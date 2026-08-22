@@ -260,6 +260,10 @@ function SpaceDutyDestroyScreenplay:getTargetLocation(pPlayer, initial)
 		return
 	end
 
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
@@ -343,6 +347,10 @@ end
 function SpaceDutyDestroyScreenplay:spawnAttackWave(pPlayer)
 	if (pPlayer == nil) then
 		Logger:log(self.className .. ":spawnAttackWave - pPlayer is nil.", LT_ERROR)
+		return
+	end
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
 		return
 	end
 
@@ -589,6 +597,10 @@ function SpaceDutyDestroyScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		return 0
 	end
 
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return 1
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
@@ -641,6 +653,10 @@ function SpaceDutyDestroyScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
 
 	if (pPilot == nil or not SceneObject(pPilot):isPlayerCreature()) then
 		return 0
+	end
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPilot, self.questType, self.questName)) then
+		return 1
 	end
 
 	local playerID = SceneObject(pPilot):getObjectID()
