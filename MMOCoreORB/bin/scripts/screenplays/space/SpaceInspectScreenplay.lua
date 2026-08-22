@@ -49,6 +49,13 @@ function SpaceInspectScreenplay:startQuest(pPlayer, pNpc)
 		pNpc = nil
 	end
 
+	-- Retried inspect missions can retain completed task state from the previous
+	-- attempt. Clear an inactive journal entry before activating it again so zone
+	-- entry can initialize the inspection normally.
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		SpaceHelpers:clearSpaceQuest(pPlayer, self.questType, self.questName, false)
+	end
+
 	-- Activate the Journal Quest
 	SpaceHelpers:activateSpaceQuest(pPlayer, pNpc, self.questType, self.questName, false)
 
@@ -181,6 +188,10 @@ function SpaceInspectScreenplay:setupInspection(pPlayer)
 		return
 	end
 
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
@@ -190,6 +201,9 @@ function SpaceInspectScreenplay:setupInspection(pPlayer)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 	local inspectionLocation = self.targetLocation
+
+	-- Remove a stale waypoint before recreating the inspection objective.
+	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
 
 	-- Give inspecion waypoint
 	local waypointID = PlayerObject(pGhost):addWaypoint(self.questZone, "@spacequest/inspect/" .. self.questName .. ":quest_location_t", "", inspectionLocation.x, inspectionLocation.z, inspectionLocation.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
@@ -291,10 +305,13 @@ function SpaceInspectScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
 	end
 
-	-- Player is in the correct zone
-	if (zoneNameHash == spaceQuestHash and not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
-		-- Activate the quest task 0
-		SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
+	-- Player is in the correct zone and has not completed the inspection itself.
+	-- Keying initialization only to task 0 leaves retries stuck when that travel
+	-- task survived a dropped mission.
+	if (zoneNameHash == spaceQuestHash and not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 1)) then
+		if (not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
+			SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
+		end
 
 		-- Setup the inspection for the player
 		createEvent(1000, self.className, "setupInspection", pPlayer, "")
