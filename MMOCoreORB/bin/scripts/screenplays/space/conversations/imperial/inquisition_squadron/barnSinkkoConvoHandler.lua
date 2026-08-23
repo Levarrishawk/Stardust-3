@@ -54,12 +54,31 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		SpaceHelpers:synchronizeSquadronFaction(pPlayer, INQUISITION_SQUADRON)
 	end
 
+	-- The Live conversation data for this squadron is stored in one template, but
+	-- each training tier belongs to a different NPC. Fa'Zoll is the Tier 2 trainer;
+	-- Sinkko must only refer Tier 2 pilots to him rather than continuing their missions.
+	local isFaZoll = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_naboo.iff"
+
 	-- Player is Rebel Pilot
 	if (SpaceHelpers:isRebelPilot(pPlayer) or (not isImperialPilot and ghost:getFactionStanding("imperial") < 0)) then
 		return convoTemplate:getScreen("rebel_pilot")
 	-- Player is Neutral Pilot
 	elseif (SpaceHelpers:isNeutralPilot(pPlayer)) then
 		return convoTemplate:getScreen("neutral_pilot")
+	end
+
+	if (isInquisitionPilot and ghost:getPilotTier() == 2 and not isFaZoll) then
+		return convoTemplate:getScreen("go_to_next")
+	elseif (isFaZoll and (not isInquisitionPilot or ghost:getPilotTier() ~= 2)) then
+		return convoTemplate:getScreen("go_to_next")
+	end
+
+	-- Meeting Fa'Zoll establishes the pilot's clearance to use the restricted
+	-- Emperor's Retreat landing facility. Keep this permission independent of an
+	-- individual mission so failed, dropped, or completed Tier 2 quests do not revoke it.
+	if (isFaZoll and getQuestStatus(playerID .. "SpaceLandingPermission:emperors_retreat") ~= "1") then
+		setQuestStatus(playerID .. "SpaceLandingPermission:emperors_retreat", 1)
+		CreatureObject(pPlayer):sendSystemMessage("Under Inquisitor Fa'Zoll has granted you clearance to land at the Emperor's Retreat.")
 	end
 
 	-- Check for a starter ship
@@ -364,7 +383,7 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 2)
 
-		-- Player has an active tier 2 mission from Sinkko
+		-- Player has an active tier 2 mission from Fa'Zoll
 		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or (t2QuestFourStarted and not t2QuestFourComplete) or
 			(t2Duty1Started and not t2Duty1Complete) or (t2Duty2Started and not t2Duty2Complete) or (t2Duty3Started and not t2Duty3Complete)) then
 
@@ -393,9 +412,9 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
 			return convoTemplate:getScreen("ready_train_tier2")
 
-		-- Has not received the tier 2 briefing from Sinkko yet
-		elseif (getQuestStatus(playerID .. "InquisitionSquadronScreenplay:StartedSinkkoTier2") ~= "1") then
-			setQuestStatus(playerID .. "InquisitionSquadronScreenplay:StartedSinkkoTier2", 1)
+		-- Has not received the tier 2 briefing from Fa'Zoll yet
+		elseif (getQuestStatus(playerID .. "InquisitionSquadronScreenplay:StartedFaZollTier2") ~= "1") then
+			setQuestStatus(playerID .. "InquisitionSquadronScreenplay:StartedFaZollTier2", 1)
 
 			return convoTemplate:getScreen("tier2_initial_briefing")
 

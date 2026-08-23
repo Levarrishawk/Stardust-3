@@ -48,6 +48,13 @@ function SpacestationNabooConvoHandler:runScreenHandlers(pConvTemplate, pPlayer,
 		pClonedConvo:addOption("@conversation/station_naboo:s_c358d041", "spacestation_naboo_repair") -- (Request Repairs)
 	end
 
+	-- Emperor's Retreat is a restricted destination. Fa'Zoll grants this persistent
+	-- clearance when an Inquisition pilot reports to him for Tier 2 training.
+	local playerID = CreatureObject(pPlayer):getObjectID()
+	if (screenID == "spacestation_naboo_land" and getQuestStatus(playerID .. "SpaceLandingPermission:emperors_retreat") == "1") then
+		pClonedConvo:addOption("Emperor's Retreat.", "spacestation_naboo_land_emperors_retreat")
+	end
+
 	if (screenID == "spacestation_naboo_land_theed_complete") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "theed")
 	elseif (screenID == "spacestation_naboo_land_kaadara_complete") then
@@ -56,6 +63,8 @@ function SpacestationNabooConvoHandler:runScreenHandlers(pConvTemplate, pPlayer,
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "keren")
 	elseif (screenID == "spacestation_naboo_land_moenia_complete") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "moenia")
+	elseif (screenID == "spacestation_naboo_land_emperors_retreat_complete") then
+		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "emperors_retreat")
 	end
 
 	-- Handle Repair Options

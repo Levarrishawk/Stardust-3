@@ -159,6 +159,35 @@ spacestation_naboo_land_moenia_abort = ConvoScreen:new {
 }
 spacestation_naboo_convotemplate:addScreen(spacestation_naboo_land_moenia_abort);
 
+-- Land at Emperor's Retreat. The handler adds this destination to the landing
+-- menu only after Fa'Zoll grants the player the required clearance.
+spacestation_naboo_land_emperors_retreat = ConvoScreen:new {
+	id = "spacestation_naboo_land_emperors_retreat",
+	customDialogText = "Clearance confirmed. The Emperor's Retreat landing facility is awaiting your arrival.",
+	stopConversation = "false",
+	options = {
+		{"Land at the Emperor's Retreat.", "spacestation_naboo_land_emperors_retreat_complete"},
+		{"Cancel request to land.", "spacestation_naboo_land_emperors_retreat_abort"},
+	}
+}
+spacestation_naboo_convotemplate:addScreen(spacestation_naboo_land_emperors_retreat);
+
+spacestation_naboo_land_emperors_retreat_complete = ConvoScreen:new {
+	id = "spacestation_naboo_land_emperors_retreat_complete",
+	customDialogText = "Proceed to the Emperor's Retreat landing facility.",
+	stopConversation = "true",
+	options = {}
+}
+spacestation_naboo_convotemplate:addScreen(spacestation_naboo_land_emperors_retreat_complete);
+
+spacestation_naboo_land_emperors_retreat_abort = ConvoScreen:new {
+	id = "spacestation_naboo_land_emperors_retreat_abort",
+	leftDialog = "@conversation/station_naboo:s_c6aaa6b3", -- Of course, Sir! Let me know when you are ready.
+	stopConversation = "true",
+	options = {}
+}
+spacestation_naboo_convotemplate:addScreen(spacestation_naboo_land_emperors_retreat_abort);
+
 -- Repair Main
 spacestation_naboo_repair = ConvoScreen:new {
 	id = "spacestation_naboo_repair",
