@@ -34,9 +34,9 @@ function barlowInquisitionConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemp
 	elseif (missionOneComplete) then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
-		if (getQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted") == "1") then
-			return convoTemplate:getScreen("failed_tier3_second_mission")
-		end
+		-- A failed or dropped assignment must return to Barlow's complete briefing
+		-- so the mission context and dialogue can be reviewed again before retrying.
+		removeQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted")
 
 		return convoTemplate:getScreen("tier3_second_mission")
 	end
