@@ -44,7 +44,7 @@
 object_tangible_ship_components_engine_eng_prototype_engine_dev = object_tangible_ship_components_engine_shared_eng_prototype_engine_dev:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "eng_z95_basic",
+	componentDataName = "eng_prototype_dev",
 
 	attributes = {
 		{"maxSpeed", 200},

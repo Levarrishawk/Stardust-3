@@ -44,7 +44,7 @@
 object_tangible_ship_components_weapon_capacitor_cap_prototype_capacitor_dev = object_tangible_ship_components_weapon_capacitor_shared_cap_prototype_capacitor_dev:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "cap_z95_basic",
+	componentDataName = "cap_prototype_dev",
 
 	attributes = {
 		{"maxEnergy", 5000},

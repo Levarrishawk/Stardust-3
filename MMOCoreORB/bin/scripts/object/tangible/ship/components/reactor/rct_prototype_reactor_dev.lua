@@ -44,7 +44,7 @@
 object_tangible_ship_components_reactor_rct_prototype_reactor_dev = object_tangible_ship_components_reactor_shared_rct_prototype_reactor_dev:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "",
+	componentDataName = "rct_prototype_dev",
 
 	attributes = {
 		{"energyGeneration", 99999},

@@ -44,7 +44,7 @@
 object_tangible_ship_components_armor_arm_prototype_armor_dev = object_tangible_ship_components_armor_shared_arm_prototype_armor_dev:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "armor_z95_basic",
+	componentDataName = "arm_prototype_dev",
 
 	attributes = {
 		{"maximumHitpoints", 10000.8},

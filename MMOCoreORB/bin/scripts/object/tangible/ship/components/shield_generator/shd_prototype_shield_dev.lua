@@ -44,7 +44,7 @@
 object_tangible_ship_components_shield_generator_shd_prototype_shield_dev = object_tangible_ship_components_shield_generator_shared_shd_prototype_shield_dev:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "shd_z95_basic",
+	componentDataName = "shd_prototype_dev",
 
 	attributes = {
 		{"shieldRechargeRate", 100},
@@ -68,4 +68,4 @@ object_tangible_ship_components_shield_generator_shd_prototype_shield_dev = obje
 	},
 }
 
-ObjectTemplates:addTemplate(object_tangible_ship_components_shield_generator_shd_prototype_shield, "object/tangible/ship/components/shield_generator/shd_prototype_shield.iff")
+ObjectTemplates:addTemplate(object_tangible_ship_components_shield_generator_shd_prototype_shield_dev, "object/tangible/ship/components/shield_generator/shd_prototype_shield_dev.iff")

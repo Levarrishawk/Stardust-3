@@ -44,7 +44,7 @@
 object_tangible_ship_components_booster_bst_sap_imperial_1_dev = object_tangible_ship_components_booster_shared_bst_sap_imperial_1_dev:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "bst_sap_imperial_1",
+	componentDataName = "bst_sap_imperial_1_dev",
 
 	attributes = {
 		{"maximumEnergy", 7000},

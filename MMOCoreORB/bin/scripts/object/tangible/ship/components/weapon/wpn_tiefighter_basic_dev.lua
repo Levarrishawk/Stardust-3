@@ -44,7 +44,7 @@
 object_tangible_ship_components_weapon_wpn_tiefighter_basic_dev = object_tangible_ship_components_weapon_shared_wpn_tiefighter_basic_dev:new {
 	templateType = SHIPCOMPONENT,
 
-	componentDataName = "wpn_tiefighter_basic",
+	componentDataName = "wpn_tiefighter_basic_dev",
 
 	attributes = {
 		{"minDamage", 5000},
