@@ -6825,3 +6825,11 @@ object_tangible_ship_components_reactor_shared_reactor_test = SharedTangibleObje
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_reactor_shared_reactor_test, "object/tangible/ship/components/reactor/shared_reactor_test.iff")
+
+object_tangible_ship_components_reactor_shared_rct_prototype_reactor_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/reactor/shared_rct_prototype_reactor_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_reactor_shared_rct_prototype_reactor_dev, "object/tangible/ship/components/reactor/shared_rct_prototype_reactor_dev.iff")

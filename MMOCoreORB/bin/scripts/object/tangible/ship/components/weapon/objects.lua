@@ -8654,3 +8654,12 @@ object_tangible_ship_components_weapon_shared_xwing_weapon_s02_test = SharedTang
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_weapon_shared_xwing_weapon_s02_test, "object/tangible/ship/components/weapon/shared_xwing_weapon_s02_test.iff")
+
+object_tangible_ship_components_weapon_shared_wpn_tiefighter_basic_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/weapon/shared_wpn_tiefighter_basic_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_weapon_shared_wpn_tiefighter_basic_dev, "object/tangible/ship/components/weapon/shared_wpn_tiefighter_basic_dev.iff")
+

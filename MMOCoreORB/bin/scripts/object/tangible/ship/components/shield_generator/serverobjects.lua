@@ -173,3 +173,4 @@ includeFile("tangible/ship/components/shield_generator/shd_unknown_holosteel_x2.
 includeFile("tangible/ship/components/shield_generator/shd_unknown_proton_projector.lua")
 includeFile("tangible/ship/components/shield_generator/shd_z95_basic.lua")
 includeFile("tangible/ship/components/shield_generator/shield_generator_test.lua")
+includeFile("tangible/ship/components/shield_generator/shd_prototype_shield_dev.lua")

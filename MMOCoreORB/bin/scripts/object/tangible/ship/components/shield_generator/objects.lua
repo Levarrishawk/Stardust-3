@@ -7592,3 +7592,12 @@ object_tangible_ship_components_shield_generator_shared_shield_generator_test = 
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_shield_generator_shared_shield_generator_test, "object/tangible/ship/components/shield_generator/shared_shield_generator_test.iff")
+
+
+object_tangible_ship_components_shield_generator_shared_shd_prototype_shield_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/shield_generator/shared_shd_prototype_shield_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_shield_generator_shared_shd_prototype_shield_dev, "object/tangible/ship/components/shield_generator/shared_shd_prototype_shield_dev.iff")

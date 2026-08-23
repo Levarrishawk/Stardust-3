@@ -182,3 +182,4 @@ includeFile("tangible/ship/components/weapon_capacitor/cap_z95_deepwell_experime
 includeFile("tangible/ship/components/weapon_capacitor/cap_z95_deepwell_k3.lua")
 includeFile("tangible/ship/components/weapon_capacitor/cap_z95_deepwell_k5.lua")
 includeFile("tangible/ship/components/weapon_capacitor/weapon_capacitor_test.lua")
+includeFile("tangible/ship/components/weapon_capacitor/cap_prototype_capacitor_dev.lua")

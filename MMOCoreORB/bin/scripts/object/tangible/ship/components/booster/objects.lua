@@ -8123,3 +8123,12 @@ object_tangible_ship_components_booster_shared_xwing_booster_test = SharedTangib
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_booster_shared_xwing_booster_test, "object/tangible/ship/components/booster/shared_xwing_booster_test.iff")
+
+object_tangible_ship_components_booster_shared_bst_sap_imperial_1_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/booster/shared_bst_sap_imperial_1_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_booster_shared_bst_sap_imperial_1_dev, "object/tangible/ship/components/booster/shared_bst_sap_imperial_1_dev.iff")
+

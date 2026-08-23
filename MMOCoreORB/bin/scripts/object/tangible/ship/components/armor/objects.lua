@@ -8005,3 +8005,11 @@ object_tangible_ship_components_armor_shared_armor_z95_basic = SharedTangibleObj
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_armor_shared_armor_z95_basic, "object/tangible/ship/components/armor/shared_armor_z95_basic.iff")
+
+object_tangible_ship_components_armor_shared_arm_prototype_armor_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/armor/shared_arm_prototype_armor_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_armor_shared_arm_prototype_armor_dev, "object/tangible/ship/components/armor/shared_arm_prototype_armor_dev.iff")
