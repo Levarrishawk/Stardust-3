@@ -55,9 +55,10 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	end
 
 	-- The Live conversation data for this squadron is stored in one template, but
-	-- each training tier belongs to a different NPC. Fa'Zoll is the Tier 2 trainer;
-	-- Sinkko must only refer Tier 2 pilots to him rather than continuing their missions.
+	-- each training tier belongs to a different NPC. Fa'Zoll is the Tier 2 trainer
+	-- and Vyrke is the Tier 3 trainer.
 	local isFaZoll = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_naboo.iff"
+	local isVyrke = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier3_naboo_vrke.iff"
 
 	-- Player is Rebel Pilot
 	if (SpaceHelpers:isRebelPilot(pPlayer) or (not isImperialPilot and ghost:getFactionStanding("imperial") < 0)) then
@@ -69,8 +70,14 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	if (isInquisitionPilot and ghost:getPilotTier() == 2 and not isFaZoll) then
 		return convoTemplate:getScreen("go_to_next")
-	elseif (isFaZoll and (not isInquisitionPilot or ghost:getPilotTier() ~= 2)) then
+	elseif (isFaZoll and isInquisitionPilot and ghost:getPilotTier() >= 3) then
+		-- Repeat Fa'Zoll's proper Tier 2 completion handoff instead of falling back
+		-- to Sinkko's referral text, which incorrectly directs the pilot to Fa'Zoll.
+		return convoTemplate:getScreen("tier2_completed")
+	elseif (isFaZoll and (not isInquisitionPilot or ghost:getPilotTier() < 2)) then
 		return convoTemplate:getScreen("go_to_next")
+	elseif (isInquisitionPilot and ghost:getPilotTier() == 3 and not isVyrke) then
+		return convoTemplate:getScreen("tier2_completed")
 	end
 
 	-- Meeting Fa'Zoll establishes the pilot's clearance to use the restricted
