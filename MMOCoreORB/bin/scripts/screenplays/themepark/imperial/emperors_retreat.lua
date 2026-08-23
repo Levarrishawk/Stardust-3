@@ -22,6 +22,7 @@ function EmperorsRetreatScreenPlay:spawnSceneObjects()
 	if (elevatorUp ~= nil) then
 		SceneObject(elevatorUp):setObjectMenuComponent("EmperorElevatorMenuComponent")
 	end
+	spawnSceneObject("naboo", "object/tangible/terminal/terminal_space.iff",2446.8, 292, -3903, 0,  math.rad(-60))
 end
 
 EmperorElevatorMenuComponent = {}
