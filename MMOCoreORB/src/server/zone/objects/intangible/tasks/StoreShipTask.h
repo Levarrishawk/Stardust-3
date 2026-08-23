@@ -63,6 +63,11 @@ public:
 		Locker shipLock(player);
 		Locker shipClock(ship, player);
 
+		// Landing cancels an in-progress hyperspace calculation. The calculation
+		// task stops rescheduling once the ship is no longer launched, so the flag
+		// must be cleared here or it remains set when the ship is launched again.
+		ship->setHyperspacing(false);
+
 		// Remove the ships astromech if one is assigned
 		if (ship->getShipDroidID() != 0) {
 			removeDroid(ship, player);
