@@ -764,7 +764,7 @@ inspect_naboo_imperial_tier3_2 = SpaceInspectScreenplay:new {
 	sideQuestName = "naboo_imperial_tier3_2_a",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
-	inspectTargets = {"huttsmuggler"},
+	inspectTargets = {"shinss_yacht_tier3"},
 	inspectCargo = "sector_recon_data",
 
 	targetLocation = {x = 4249, z = 2899, y = 3799},
