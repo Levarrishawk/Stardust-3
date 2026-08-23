@@ -1,5 +1,5 @@
 tiberus_anderlock_tier5 = ShipAgent:new {
-	template = "xwing_tier5",
+	template = "z95_tier5",
 	pilotTemplate = "medium_fighter_tier5",
 	shipType = "fighter",
 

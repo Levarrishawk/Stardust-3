@@ -1,5 +1,5 @@
 dath_deathmarked_mercenary = ShipAgent:new {
-	template = "xwing_tier4",
+	template = "z95_tier4",
 	pilotTemplate = "medium_fighter_tier4",
 	shipType = "fighter",
 

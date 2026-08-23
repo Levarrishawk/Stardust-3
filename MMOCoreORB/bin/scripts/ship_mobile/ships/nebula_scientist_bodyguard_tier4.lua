@@ -1,5 +1,5 @@
 nebula_scientist_bodyguard_tier4 = ShipAgent:new {
-	template = "xwing_tier4",
+	template = "z95_tier4",
 	pilotTemplate = "medium_fighter_tier4",
 	shipType = "bomber",
 
