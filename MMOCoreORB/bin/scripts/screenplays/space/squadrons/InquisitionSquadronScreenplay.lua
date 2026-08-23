@@ -31,9 +31,9 @@ patrol_naboo_imperial_1 = SpacePatrolScreenplay:new {
 	sideQuestDelay = 20,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_patrol_1", x = -3153, z = 302, y = -6442, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_patrol_2", x = -3971, z = -471, y = -6364, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_patrol_3", x = -5771, z = -1066, y = -5197, patrolNumber = 3, radius = 150},
+		{patrolPointName = "inquisition_tier1_mission1_patrol_1", x = -3153, z = 302, y = -6442, patrolNumber = 1, radius = 150},
+		{patrolPointName = "inquisition_tier1_mission1_patrol_2", x = -3971, z = -471, y = -6364, patrolNumber = 2, radius = 150},
+		{patrolPointName = "inquisition_tier1_mission1_patrol_3", x = -5771, z = -1066, y = -5197, patrolNumber = 3, radius = 150},
 	},
 }
 
@@ -116,10 +116,10 @@ patrol_naboo_imperial_3 = SpacePatrolScreenplay:new {
 	sideQuestDelay = 20,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_security_patrol_1", x = -2448, z = 879, y = -1221, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_security_patrol_2", x = -1792, z = 1559, y = -1193, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_security_patrol_3", x = -288, z = 1479, y = -1395, patrolNumber = 3, radius = 150},
-		{patrolPointName = "rebel_security_patrol_4", x = 39, z = 1753, y = 294, patrolNumber = 4, radius = 150},
+		{patrolPointName = "inquisition_tier1_mission3_patrol_1", x = -2448, z = 879, y = -1221, patrolNumber = 1, radius = 150},
+		{patrolPointName = "inquisition_tier1_mission3_patrol_2", x = -1792, z = 1559, y = -1193, patrolNumber = 2, radius = 150},
+		{patrolPointName = "inquisition_tier1_mission3_patrol_3", x = -288, z = 1479, y = -1395, patrolNumber = 3, radius = 150},
+		{patrolPointName = "inquisition_tier1_mission3_patrol_4", x = 39, z = 1753, y = 294, patrolNumber = 4, radius = 150},
 	},
 }
 
@@ -186,7 +186,7 @@ assassinate_naboo_imperial_4 = SpaceAssassinateScreenplay:new {
 	},
 
 	targetPatrols = {
-		{patrolPointName = "rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},
+		{patrolPointName = "inquisition_tier1_mission4_target_1", x = 3933, z = -3285, y = -3098},
 		{patrolPointName = "naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},
 		{patrolPointName = "trade_escort_4", x = 895, z = 210, y = 695},
 		{patrolPointName = "military_escort_2", x = 2915, z = 3828, y = 2887},
@@ -626,10 +626,10 @@ patrol_naboo_imperial_tier3_1_A = SpacePatrolScreenplay:new {
 	parentQuestName = "naboo_imperial_tier3_1",
 
 	patrolPoints = {
-		{patrolPointName = "rebel_tier_three_patrol_1", x = 2793, z = -276, y = -1231, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_tier_three_patrol_2", x = 3215, z = -695, y = -1854, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_tier_three_patrol_3", x = 3680, z = -853, y = -2726, patrolNumber = 3, radius = 150},
-		{patrolPointName = "rebel_tier_three_patrol_4", x = 3975, z = -1404, y = -3805, patrolNumber = 4, radius = 150},
+		{patrolPointName = "inquisition_tier3_mission1a_patrol_1", x = 2793, z = -276, y = -1231, patrolNumber = 1, radius = 150},
+		{patrolPointName = "inquisition_tier3_mission1a_patrol_2", x = 3215, z = -695, y = -1854, patrolNumber = 2, radius = 150},
+		{patrolPointName = "inquisition_tier3_mission1a_patrol_3", x = 3680, z = -853, y = -2726, patrolNumber = 3, radius = 150},
+		{patrolPointName = "inquisition_tier3_mission1a_patrol_4", x = 3975, z = -1404, y = -3805, patrolNumber = 4, radius = 150},
 	},
 }
 
@@ -871,10 +871,10 @@ escort_naboo_imperial_tier3_2_c = SpaceEscortScreenplay:new {
 	escortShips = {"imp_freighterlight_tier3"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_tier3_2_c_escort_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_tier3_2_c_escort_2", zoneName = "space_endor", x = -549, z = 3180, y = 3238, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_tier3_2_c_escort_3", zoneName = "space_endor", x = -1251, z = 1477, y = 3143, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_tier3_2_c_escort_4", zoneName = "space_endor", x = -1996, z = -330, y = 3042, escortNumber = 4, radius = 250},
+		{patrolPointName = "inquisition_tier3_mission2c_escort_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
+		{patrolPointName = "inquisition_tier3_mission2c_escort_2", zoneName = "space_endor", x = -549, z = 3180, y = 3238, escortNumber = 2, radius = 250},
+		{patrolPointName = "inquisition_tier3_mission2c_escort_3", zoneName = "space_endor", x = -1251, z = 1477, y = 3143, escortNumber = 3, radius = 250},
+		{patrolPointName = "inquisition_tier3_mission2c_escort_4", zoneName = "space_endor", x = -1996, z = -330, y = 3042, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
