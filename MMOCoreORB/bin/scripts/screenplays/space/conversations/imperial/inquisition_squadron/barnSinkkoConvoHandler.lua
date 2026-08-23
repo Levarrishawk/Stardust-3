@@ -346,11 +346,7 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				end
 			-- Player is able to start second mission
 			elseif (t3QuestOneComplete and not t3QuestTwoStarted) then
-				if (getQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted") == "1") then
-					return convoTemplate:getScreen("failed_tier3_second_mission")
-				else
-					return convoTemplate:getScreen("tier3_second_mission")
-				end
+				return convoTemplate:getScreen("tier3_second_mission_referral")
 			-- Player is ready for first mission
 			elseif (not t3QuestOneComplete) then
 				if (getQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted") == "1") then

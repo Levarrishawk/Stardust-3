@@ -221,6 +221,7 @@ includeFile("space/conversations/imperial/black_epsilon_squadron/hakasshaSireenC
 includeFile("space/squadrons/InquisitionSquadronScreenplay.lua")
 
 includeFile("space/conversations/imperial/inquisition_squadron/barnSinkkoConvoHandler.lua")
+includeFile("space/conversations/imperial/inquisition_squadron/barlowInquisitionConvoHandler.lua")
 
 -- Storm Squadron
 includeFile("space/squadrons/StormSquadronScreenplay.lua")

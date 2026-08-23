@@ -153,6 +153,7 @@ includeFile("conversations/space/imperial/black_epsilon_squadron/hakassha_sireen
 
 -- Imperial Inquisition Squadron
 includeFile("conversations/space/imperial/inquisition_squadron/barn_sinkko_convo.lua")
+includeFile("conversations/space/imperial/inquisition_squadron/barlow_inquisition_convo.lua")
 
 -- Storm Squadron
 includeFile("conversations/space/imperial/storm_squadron/akal_colzet_convo.lua")

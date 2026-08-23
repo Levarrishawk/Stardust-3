@@ -920,6 +920,14 @@ barn_sinkko_convo_tier3_first_mission_success = ConvoScreen:new {
 barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_first_mission_success)
 
 -- Tier 3 - Mission 2
+barn_sinkko_convo_tier3_second_mission_referral = ConvoScreen:new {
+	id = "tier3_second_mission_referral",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_47424e40",
+	stopConversation = "true",
+	options = {}
+}
+barn_sinkko_convo:addScreen(barn_sinkko_convo_tier3_second_mission_referral)
+
 barn_sinkko_convo_tier3_second_mission = ConvoScreen:new {
 	id = "tier3_second_mission",
 	leftDialog = "@conversation/naboo_imperial_tier3:s_47424e40",
