@@ -22,7 +22,7 @@ fa_zoll = Creature:new {
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = NONE,
-	creatureBitmask = PACK + STATIONARY,
+	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED + JTLINTERESTING + CONVERSABLE,
 	diet = HERBIVORE,
 

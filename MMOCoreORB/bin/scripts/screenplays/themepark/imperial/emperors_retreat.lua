@@ -211,6 +211,7 @@ function EmperorsRetreatScreenPlay:spawnMobiles()
 
 	pNpc = spawnMobile("naboo", "fa_zoll", 60, 2444.4, 292, -3894.8, -127, 0)
 	self:setMoodString(pNpc, "npc_imperial")
+	CreatureObject(pNpc):clearOptionBit(AIENABLED)
 end
 
 function EmperorsRetreatScreenPlay:setupDroidPatrol(pDroid)
