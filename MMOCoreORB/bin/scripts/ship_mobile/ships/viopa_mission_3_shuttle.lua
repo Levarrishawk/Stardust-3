@@ -14,8 +14,8 @@ viopa_mission_3_shuttle = ShipAgent:new {
 
 	aggressive = 0,
 
-	spaceFaction = "pirate",
-	alliedFactions = {"pirate"},
+	spaceFaction = "blacksun",
+	alliedFactions = {"pirate, blacksun"},
 	enemyFactions = {"imperial", "rebel", "civilian", "merchant", "rsf", "corsec", "hutt", "valarian"},
 	imperialFactionReward = -25,
 	rebelFactionReward = 13,
