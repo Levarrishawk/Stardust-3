@@ -527,10 +527,10 @@ escort_duty_naboo_imperial_tier2_escortduty = SpaceDutyEscortScreenplay:new {
 	escortShips = {"imp_transport_tier2", "imp_freighterlight_tier2", "imp_freightermedium_tier2"},
 
 	escortPoints = {
-		{patrolPointName = "vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
-		{patrolPointName = "lok_imp_pirate_9", zoneName = "space_lok", x = 1492, z = 662, y = -2814, escortNumber = 2, radius = 250},
-		{patrolPointName = "vortex_mission_1_1", zoneName = "space_lok", x = 2241, z = -1210, y = -2943, escortNumber = 3, radius = 250},
-		{patrolPointName = "vortex_mission_1_5", zoneName = "space_lok", x = -2464, z = -1051, y = -2900, escortNumber = 4, radius = 250},
+		{patrolPointName = "lok_imp_escort_duty_1", zoneName = "space_lok", x = 2700, z = 200, y = 2700, escortNumber = 1, radius = 250},
+		{patrolPointName = "lok_imp_escort_duty_2", zoneName = "space_lok", x = 1927, z = 285, y = 1901, escortNumber = 2, radius = 250},
+		{patrolPointName = "lok_imp_escort_duty_3", zoneName = "space_lok", x = 1564, z = 970, y = 1211, escortNumber = 3, radius = 250},
+		{patrolPointName = "lok_imp_escort_duty_4", zoneName = "space_lok", x = 814, z = 429, y = 1053, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
