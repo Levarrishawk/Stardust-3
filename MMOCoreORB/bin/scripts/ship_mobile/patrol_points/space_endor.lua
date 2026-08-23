@@ -763,6 +763,10 @@ space_endor = SpacePatrolPointTable:new {
 	{patrolPointName = "tatooine_rebel_tier4_4_a_assassinate_6", x = 7162, z = 5467, y = -4481},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:assassinate_tatooine_rebel_tier4_4_a:targetPatrols
 
 	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
+	{patrolPointName = "inquisition_tier3_mission2c_escort_1", x = -239, z = 3935, y = 3280},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_2_c:escortPoints
+	{patrolPointName = "inquisition_tier3_mission2c_escort_2", x = -549, z = 3180, y = 3238},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_2_c:escortPoints
+	{patrolPointName = "inquisition_tier3_mission2c_escort_3", x = -1251, z = 1477, y = 3143},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_2_c:escortPoints
+	{patrolPointName = "inquisition_tier3_mission2c_escort_4", x = -1996, z = -330, y = 3042},	-- src: screenplays/space/squadrons/InquisitionSquadronScreenplay.lua:escort_naboo_imperial_tier3_2_c:escortPoints
 	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_1", x = -961, z = -5548, y = 513},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
 	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_2", x = -1637, z = -5535, y = 354},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
 	{patrolPointName = "corellia_imperial_tier4_4_b_rescue_3", x = -2330, z = -5523, y = 191},	-- src: screenplays/space/squadrons/BlackEpsilonSquadronScreenplay.lua:rescue_corellia_imperial_tier4_4_b:escortPoints
