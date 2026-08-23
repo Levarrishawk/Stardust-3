@@ -74,7 +74,11 @@ public:
 				shipDevice->setParkingLocation(travelPointName);
 			}
 
-			shipMap.put(object->getObjectID(), shipDevice->getParkingLocation());
+			// Starship terminals are shared access points for the player's stored fleet.
+			// The client filters the list by comparing this value with the terminal's
+			// travel point, so report every owned ship at the current terminal instead
+			// of restricting access to its previously recorded parking location.
+			shipMap.put(object->getObjectID(), travelPointName);
 		}
 
 		insertInt(shipMap.size() +1); // Number of ships
