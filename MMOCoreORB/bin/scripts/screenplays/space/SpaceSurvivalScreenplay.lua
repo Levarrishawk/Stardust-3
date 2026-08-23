@@ -24,6 +24,7 @@ SpaceSurvivalScreenplay = SpaceQuestLogic:new {
 
 	survivalTime = 600, -- In Seconds, 0 runs the quest on survivalWaves instead
 	survivalWaves = 0, -- Number of waves that must be survived, 0 runs the quest on survivalTime
+	survivalUpdateInterval = 0, -- In Seconds, 0 disables periodic remaining-time messages
 
 	delayToFirstAttack = 5, -- In Seconds
 	attackDelay = 100, -- In Seconds, time between waves
@@ -198,6 +199,7 @@ function SpaceSurvivalScreenplay:cleanUpQuestData(playerID)
 	-- Delete the wave tracking
 	deleteData(playerID .. ":" .. self.className .. ":waveCount:")
 	deleteData(playerID .. ":" .. self.className .. ":survivalRunning:")
+	deleteData(playerID .. ":" .. self.className .. ":survivalRunID:")
 
 	-- Delete the defence point active area
 	local areaID = readData(playerID .. ":" .. self.className .. ":survivalArea:")
@@ -346,6 +348,9 @@ function SpaceSurvivalScreenplay:startSurvival(pPlayer)
 	writeData(playerID .. ":" .. self.className .. ":survivalRunning:", 1)
 	writeData(playerID .. ":" .. self.className .. ":waveCount:", 0)
 
+	local survivalRunID = getRandomNumber(1, 2147483646)
+	writeData(playerID .. ":" .. self.className .. ":survivalRunID:", survivalRunID)
+
 	if (self.DEBUG_SPACE_SURVIVAL) then
 		print(self.className .. ":startSurvival -- Survival Time: " .. self.survivalTime .. " Total Waves: " .. totalWaves .. " Wave Delay: " .. self:getWaveDelay())
 	end
@@ -355,6 +360,66 @@ function SpaceSurvivalScreenplay:startSurvival(pPlayer)
 	-- Timed survival, holding out for the full duration completes the quest
 	if (self.survivalTime > 0) then
 		createEvent(self.survivalTime * 1000, self.className, "endSurvival", pPlayer, "")
+
+		if (self.survivalUpdateInterval > 0) then
+			CreatureObject(pPlayer):sendSystemMessage("Hold position: " .. self:getSurvivalTimeText(self.survivalTime) .. " remaining.")
+
+			local remainingTime = self.survivalTime - self.survivalUpdateInterval
+
+			if (remainingTime > 0) then
+				createEvent(self.survivalUpdateInterval * 1000, self.className, "sendSurvivalUpdate", pPlayer, survivalRunID .. ":" .. remainingTime)
+			end
+		end
+	end
+end
+
+function SpaceSurvivalScreenplay:getSurvivalTimeText(remainingTime)
+	if (remainingTime >= 60 and remainingTime % 60 == 0) then
+		local minutes = remainingTime / 60
+		local unit = " minutes"
+
+		if (minutes == 1) then
+			unit = " minute"
+		end
+
+		return minutes .. unit
+	end
+
+	local unit = " seconds"
+
+	if (remainingTime == 1) then
+		unit = " second"
+	end
+
+	return remainingTime .. unit
+end
+
+function SpaceSurvivalScreenplay:sendSurvivalUpdate(pPlayer, eventData)
+	if (pPlayer == nil or eventData == nil) then
+		return
+	end
+
+	local runID, remainingTime = string.match(eventData, "^(%d+):(%d+)$")
+
+	if (runID == nil or remainingTime == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)
+			or readData(playerID .. ":" .. self.className .. ":survivalRunning:") ~= 1
+			or readData(playerID .. ":" .. self.className .. ":survivalRunID:") ~= tonumber(runID)) then
+		return
+	end
+
+	remainingTime = tonumber(remainingTime)
+	CreatureObject(pPlayer):sendSystemMessage("Hold position: " .. self:getSurvivalTimeText(remainingTime) .. " remaining.")
+
+	remainingTime = remainingTime - self.survivalUpdateInterval
+
+	if (remainingTime > 0) then
+		createEvent(self.survivalUpdateInterval * 1000, self.className, "sendSurvivalUpdate", pPlayer, runID .. ":" .. remainingTime)
 	end
 end
 
