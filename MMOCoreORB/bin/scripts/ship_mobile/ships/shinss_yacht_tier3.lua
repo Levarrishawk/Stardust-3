@@ -32,6 +32,7 @@ shinss_yacht_tier3 = ShipAgent:new {
 	conversationTemplate = "",
 	conversationMobile = "",
 	conversationMessage = "", --Too Far Message
+	cargoString = "shinss_personal_logs",
 }
 
 ShipAgentTemplates:addShipAgentTemplate(shinss_yacht_tier3, "shinss_yacht_tier3")

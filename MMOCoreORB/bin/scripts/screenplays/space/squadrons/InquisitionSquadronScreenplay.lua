@@ -748,14 +748,14 @@ space_battle_naboo_imperial_tier3_1_d = SpaceBattleScreenplay:new {
 
 registerScreenPlay("space_battle_naboo_imperial_tier3_1_d", true)
 
--- Mission 2: Inspect (Space Endor - locate a Hutt smuggler carrying pirate fleet intelligence)
+-- Mission 2: Inspect (Space Yavin4 - inspect Doctor Shinss' yacht)
 inspect_naboo_imperial_tier3_2 = SpaceInspectScreenplay:new {
 	className = "inspect_naboo_imperial_tier3_2",
 
 	questName = "naboo_imperial_tier3_2",
 	questType = "inspect",
 
-	questZone = "space_endor",
+	questZone = "space_yavin4",
 
 	creditReward = 0,
 
@@ -765,9 +765,9 @@ inspect_naboo_imperial_tier3_2 = SpaceInspectScreenplay:new {
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	inspectTargets = {"shinss_yacht_tier3"},
-	inspectCargo = "sector_recon_data",
+	inspectCargo = "shinss_personal_logs",
 
-	targetLocation = {x = 4249, z = 2899, y = 3799},
+	targetLocation = {x = 3196, z = -6203, y = -5010},
 }
 
 registerScreenPlay("inspect_naboo_imperial_tier3_2", true)
