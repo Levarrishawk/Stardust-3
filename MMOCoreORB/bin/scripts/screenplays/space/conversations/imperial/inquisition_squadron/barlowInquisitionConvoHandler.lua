@@ -53,7 +53,7 @@ function barlowInquisitionConvoHandler:runScreenHandlers(pConvTemplate, pPlayer,
 	local screenID = screen:getScreenID()
 	local pClonedScreen = screen:cloneScreen()
 
-	if (screenID == "accept_tier3_second_mission" or screenID == "failed_tier3_second_mission") then
+	if (screenID == "complete_interview") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
