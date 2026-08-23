@@ -15,10 +15,9 @@ barlow_inquisition_convo:addScreen(barlow_inquisition_unavailable)
 
 barlow_inquisition_mission = ConvoScreen:new {
 	id = "tier3_second_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_47424e40",
+	leftDialog = "@conversation/naboo_imperial_tier3:s_b49d8273",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_d70dba34", "tier3_second_mission_details"},
 		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_second_mission"},
 	}
 }
