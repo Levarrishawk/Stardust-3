@@ -404,7 +404,7 @@ assassinate_naboo_imperial_tier2_4 = SpaceAssassinateScreenplay:new {
 	questType = "assassinate",
 	questName = "naboo_imperial_tier2_4",
 
-	questZone = "space_lok",
+	questZone = "space_dantooine",
 
 	creditReward = 0,
 	itemReward = {},
@@ -416,7 +416,7 @@ assassinate_naboo_imperial_tier2_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "bloodrazor_destroyer_tier2",
+		target = "viopa_mission_3_shuttle",
 		escorts = {"bloodrazor_berzerker_tier2", "bloodrazor_berzerker_tier2", "bloodrazor_cutthroat_tier2", "bloodrazor_cutthroat_tier2", "bloodrazor_cutthroat_tier2", "bloodrazor_destroyer_tier3"},
 	},
 
