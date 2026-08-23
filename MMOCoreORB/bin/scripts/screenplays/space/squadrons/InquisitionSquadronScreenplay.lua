@@ -404,7 +404,7 @@ assassinate_naboo_imperial_tier2_4 = SpaceAssassinateScreenplay:new {
 	questType = "assassinate",
 	questName = "naboo_imperial_tier2_4",
 
-	questZone = "space_dantooine",
+	questZone = "space_lok",
 
 	creditReward = 0,
 	itemReward = {},
