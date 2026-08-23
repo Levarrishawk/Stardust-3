@@ -31,9 +31,9 @@ patrol_naboo_imperial_1 = SpacePatrolScreenplay:new {
 	sideQuestDelay = 20,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_patrol_1", x = 6439, z = -5021, y = -2217, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_patrol_2", x = 6031, z = -4540, y = -1962, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_patrol_3", x = 4891, z = -3215, y = -1345, patrolNumber = 3, radius = 150},
+		{patrolPointName = "rebel_patrol_1", x = -3153, z = 302, y = -6442, patrolNumber = 1, radius = 150},
+		{patrolPointName = "rebel_patrol_2", x = -3971, z = -471, y = -6364, patrolNumber = 2, radius = 150},
+		{patrolPointName = "rebel_patrol_3", x = -5771, z = -1066, y = -5197, patrolNumber = 3, radius = 150},
 	},
 }
 
@@ -116,10 +116,10 @@ patrol_naboo_imperial_3 = SpacePatrolScreenplay:new {
 	sideQuestDelay = 20,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_security_patrol_1", x = 5024, z = -3710, y = -1723, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_security_patrol_2", x = 3933, z = -3285, y = -3098, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_security_patrol_3", x = 3574, z = -2819, y = -4741, patrolNumber = 3, radius = 150},
-		{patrolPointName = "rebel_security_patrol_4", x = 4496, z = -1657, y = -6222, patrolNumber = 4, radius = 150},
+		{patrolPointName = "rebel_security_patrol_1", x = -2448, z = 879, y = -1221, patrolNumber = 1, radius = 150},
+		{patrolPointName = "rebel_security_patrol_2", x = -1792, z = 1559, y = -1193, patrolNumber = 2, radius = 150},
+		{patrolPointName = "rebel_security_patrol_3", x = -288, z = 1479, y = -1395, patrolNumber = 3, radius = 150},
+		{patrolPointName = "rebel_security_patrol_4", x = 39, z = 1753, y = 294, patrolNumber = 4, radius = 150},
 	},
 }
 
