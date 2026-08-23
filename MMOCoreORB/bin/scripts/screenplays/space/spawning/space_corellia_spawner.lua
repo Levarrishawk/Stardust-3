@@ -316,12 +316,6 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 		{spawnName = "rebel_fighter_two_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -3936, z = 2704, y = 2172, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
 			shipSpawns = {"reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_bwing_tier1"}
 		},
-		{spawnName = "rebel_spacestation_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -959, z = -5, y = -1328, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier1", "reb_bwing_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
-		},
-		{spawnName = "rebel_ace_guard_1", spawnType = SHIP_SPAWN_SINGLE, x = -1528, z = 152, y = -1096, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 12, maxSpawnDistance = 64, minPatrol = 100, maxPatrol = 400, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier1", "reb_bwing_tier1", "reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
-		},
 		{spawnName = "imperial_patrol_1", spawnType = SHIP_SPAWN_SINGLE, x = -3613, z = 1585, y = -2617, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 30, maxSpawnDistance = 60, totalSpawns = 7,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_patrol_1_00", "imperial_patrol_1_01", "imperial_patrol_1_02", "imperial_patrol_1_03", "imperial_patrol_1_04", "imperial_patrol_1_05", "imperial_patrol_1_06", "imperial_patrol_1_07", "imperial_patrol_1_08", "imperial_patrol_1_09", "imperial_patrol_1_10", "imperial_patrol_1_11", "imperial_patrol_1_12", "imperial_patrol_1_13", "imperial_patrol_1_14", "imperial_patrol_1_15", "imperial_patrol_1_16"},
 			shipSpawns = {"imp_tie_fighter_tier1", "imp_tie_bomber_tier1", "imp_tie_advanced_tier1", "imp_tie_aggressor_tier1", "imp_tie_interceptor_tier1", "imp_tie_oppressor_tier1"}

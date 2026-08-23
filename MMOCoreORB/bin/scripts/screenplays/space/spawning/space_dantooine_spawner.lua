@@ -12,15 +12,8 @@ SpaceDantooineSpawner = SpaceSpawnerScreenPlay:new {
 		{spawnName = "pirate_beacon_defense", spawnType = SHIP_SPAWN_SINGLE, x = -3807, z = -6665, y = 1966, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 60, maxPatrol = 320, totalSpawns = 3,
 			shipSpawns = {"velocity_smuggler_tier3"}
 		},
-		{spawnName = "rebel_base_defense_2", spawnType = SHIP_SPAWN_SINGLE, x = -3800, z = 6192, y = -4469, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 50, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier3", "reb_xwing_tier3_dantooine", "reb_ywing_tier3", "reb_ywing_tier3_dantooine", "reb_z95_tier2", "reb_z95_tier3", "reb_xwing_tier2", "reb_awing_tier2", "reb_awing_tier3", "reb_bwing_tier3", "reb_ywing_tier2"}
-		},
 		{spawnName = "naboo_rebel_tier3_inspect_target", spawnType = SHIP_SPAWN_SINGLE, x = -3838, z = 5840, y = -3806, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 10, maxRespawn = 30, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 50, maxPatrol = 120, totalSpawns = 1,
 			shipSpawns = {"naboo_tier3_imperial_spy"}
-		},
-		{spawnName = "rebel_base_defense_1", spawnType = SHIP_SPAWN_SINGLE, x = -2871, z = 5027, y = -3071, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 6,
-			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_base_defense_1_00", "rebel_base_defense_1_01", "rebel_base_defense_1_02", "rebel_base_defense_1_03", "rebel_base_defense_1_04", "rebel_base_defense_1_05", "rebel_base_defense_1_06", "rebel_base_defense_1_07", "rebel_base_defense_1_08", "rebel_base_defense_1_09", "rebel_base_defense_1_10", "rebel_base_defense_1_11", "rebel_base_defense_1_12", "rebel_base_defense_1_13", "rebel_base_defense_1_14", "rebel_base_defense_1_15"},
-			shipSpawns = {"reb_xwing_tier2", "reb_xwing_tier3_dantooine", "reb_ywing_tier2", "reb_ywing_tier3_dantooine", "reb_awing_tier2", "reb_bwing_tier2", "reb_z95_tier2"}
 		},
 		{spawnName = "warrens_guards_1", spawnType = SHIP_SPAWN_SINGLE, x = -5921, z = 1303, y = -4991, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, minPatrol = 80, maxPatrol = 370, totalSpawns = 3,
 			shipSpawns = {"warrens_fighter"}
@@ -169,9 +162,6 @@ SpaceDantooineSpawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "imperial_attack_base", spawnType = SHIP_SPAWN_SINGLE, x = 5937, z = 3394, y = 4492, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 50, maxPatrol = 350, totalSpawns = 6,
 			shipSpawns = {"imp_tie_fighter_tier3", "imp_tie_fighter_tier3_dantooine", "imp_tie_fighter_tier3_dantooine", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3_dantooine", "imp_tie_interceptor_tier3_dantooine", "imp_tie_oppressor_tier3", "imp_tie_bomber_tier3", "imp_tie_advanced_tier3", "imp_tie_aggressor_tier3"}
-		},
-		{spawnName = "rebel_base_defense_3", spawnType = SHIP_SPAWN_SINGLE, x = -1551, z = 3987, y = -3455, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 25, minPatrol = 50, maxPatrol = 100, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier2", "reb_xwing_tier3_dantooine", "reb_z95_tier2", "reb_z95_tier3", "reb_ywing_tier2", "reb_ywing_tier3", "reb_bwing_tier2", "reb_bwing_tier3", "reb_awing_tier2", "reb_awing_tier3"}
 		},
 		{spawnName = "warrens_dudes_1", spawnType = SHIP_SPAWN_SINGLE, x = -2499, z = 741, y = -6306, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, totalSpawns = 5,
 			patrolsToAssign = 5, fixedPatrolPoints = {"warrens_dudes_1_00", "warrens_dudes_1_01", "warrens_dudes_1_02", "warrens_dudes_1_03", "warrens_dudes_1_04", "warrens_dudes_1_05", "warrens_dudes_1_06", "warrens_dudes_1_07", "warrens_dudes_1_08", "warrens_dudes_1_09", "warrens_dudes_1_10", "warrens_dudes_1_11", "warrens_dudes_1_12", "warrens_dudes_1_13", "warrens_dudes_1_14", "warrens_dudes_1_15", "warrens_dudes_1_16", "warrens_dudes_1_17", "warrens_dudes_1_18", "warrens_dudes_1_19", "warrens_dudes_1_20", "warrens_dudes_1_21", "warrens_dudes_1_22", "warrens_dudes_1_23", "warrens_dudes_1_24", "warrens_dudes_1_25", "warrens_dudes_1_26", "warrens_dudes_1_27", "warrens_dudes_1_28", "warrens_dudes_1_29", "warrens_dudes_1_30", "warrens_dudes_1_31", "warrens_dudes_1_32", "warrens_dudes_1_33", "warrens_dudes_1_34", "warrens_dudes_1_35", "warrens_dudes_1_36", "warrens_dudes_1_37", "warrens_dudes_1_38", "warrens_dudes_1_39", "warrens_dudes_1_40", "warrens_dudes_1_41", "warrens_dudes_1_42", "warrens_dudes_1_43", "warrens_dudes_1_44", "warrens_dudes_1_45", "warrens_dudes_1_46", "warrens_dudes_1_47", "warrens_dudes_1_48", "warrens_dudes_1_49", "warrens_dudes_1_50", "warrens_dudes_1_51", "warrens_dudes_1_52", "warrens_dudes_1_53", "warrens_dudes_1_54", "warrens_dudes_1_55", "warrens_dudes_1_56", "warrens_dudes_1_57"},

@@ -178,9 +178,6 @@ SpaceLokSpawner = SpaceSpawnerScreenPlay:new {
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_equipment_route_1_00", "rebel_equipment_route_1_01", "rebel_equipment_route_1_02", "rebel_equipment_route_1_03", "rebel_equipment_route_1_04", "rebel_equipment_route_1_05", "rebel_equipment_route_1_06", "rebel_equipment_route_1_07", "rebel_equipment_route_1_08", "rebel_equipment_route_1_09", "rebel_equipment_route_1_10", "rebel_equipment_route_1_11", "rebel_equipment_route_1_12", "rebel_equipment_route_1_13", "rebel_equipment_route_1_14", "rebel_equipment_route_1_15", "rebel_equipment_route_1_16", "rebel_equipment_route_1_17", "rebel_equipment_route_1_18", "rebel_equipment_route_1_19", "rebel_equipment_route_1_20"},
 			shipSpawns = {"reb_xwing_tier2", "reb_ywing_tier2", "reb_ywing_tier3", "reb_freightermedium_tier3", "reb_freighterlight_tier3", "reb_freighterlight_tier3", "reb_freighterheavy_tier3"}
 		},
-		{spawnName = "rebel_outpost_guard_1", spawnType = SHIP_SPAWN_SINGLE, x = 1811, z = -2167, y = -3456, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 50, maxPatrol = 300, totalSpawns = 3,
-			shipSpawns = {"reb_z95_tier2", "reb_z95_tier3"}
-		},
 		{spawnName = "corsair_nebula_patrol_1", spawnType = SHIP_SPAWN_SINGLE, x = 3078, z = -645, y = -2264, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 64, totalSpawns = 2,
 			patrolsToAssign = 5, fixedPatrolPoints = {"corsair_nebula_patrol_1_00", "corsair_nebula_patrol_1_01", "corsair_nebula_patrol_1_02", "corsair_nebula_patrol_1_03", "corsair_nebula_patrol_1_04", "corsair_nebula_patrol_1_05", "corsair_nebula_patrol_1_06", "corsair_nebula_patrol_1_07"},
 			shipSpawns = {"corsair_behemoth_tier3"}

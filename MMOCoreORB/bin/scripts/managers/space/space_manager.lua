@@ -47,9 +47,7 @@ dungeon1 = {
 
 space_corellia = {
 	spaceStations = {
-		{templateFile = "spacestation_rebel", x = -7132.79, z = 2340.4, y = 2013.98, ow = 0.641545, ox = -0.0633626, oy = 0.76035, oz = 0.079203, parentid = 0},
 		{templateFile = "spacestation_talus", x = -6345.5, z = -5274.5, y = -3957.25, ow = 0.640802, ox = 0.015822, oy = 0.76738, oz = -0.0158223, parentid = 0},
-		{templateFile = "spacestation_rebel", x = -1463.42, z = 318.86, y = -1012.24, ow = 0.759136, ox = -0.0474463, oy = 0.648429, oz = 0.0316307, parentid = 0},
 		{templateFile = "spacestation_corellia", x = 6519.75, z = -5373.75, y = -2600.25, ow = -0.428073, ox = -1.39125e-08, oy = 0.90371, oz = -0.00792732, parentid = 0}
 	}
 }
@@ -78,9 +76,7 @@ space_dantooine = {
 		-- note "the corpus documents no XYZ for any Deep Space station, so this position
 		-- is ours, not Live-attested".  That note was wrong and the offset row was a
 		-- duplicate of this POI; both are folded into this single row.
-		{templateFile = "jumpstation_rebel", x = -4200, z = -3000, y = -6000, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		{templateFile = "spacestation_rebel", x = 5522.87, z = 3202, y = 5997.74, ow = -0.236536, ox = -0.031538, oy = 0.954028, oz = -0.181344, parentid = 0},
-		{templateFile = "spacestation_rebel", x = -3979.37, z = 5423.26, y = -4565.81, ow = 0.917577, ox = 0.0791015, oy = 0.387597, oz = -0.0395508, parentid = 0}
+		{templateFile = "jumpstation_rebel", x = -4200, z = -3000, y = -6000, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0}
 	}
 }
 
@@ -169,11 +165,8 @@ space_kashyyyk = {
 		-- ours, not Live-attested. Set opposite the independent slavers who prey on
 		-- its transports (station_indie_slaver:s_193).
 		{templateFile = "spacestation_avatar_platform", x = 5900, z = -1200, y = -3400, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		-- The Kashyyyk Rebel Outpost ships no clientpoi row, so this position is ours,
-		-- not Live-attested. Kept well clear of the Imperial base below.
-		{templateFile = "spacestation_kash_rebel", x = 1200, z = -2600, y = -6100, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
 		-- The Kashyyyk Imperial Base ships no clientpoi row, so this position is ours,
-		-- not Live-attested. Kept well clear of the Rebel outpost above.
+		-- not Live-attested.
 		{templateFile = "spacestation_kash_imperial", x = 6100, z = 2900, y = -1800, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0}
 	}
 }
@@ -197,8 +190,7 @@ space_light1 = {
 space_lok = {
 	spaceStations = {
 		{templateFile = "spacestation_imperial", x = -1798.64, z = 2649.25, y = 400.89, ow = -0.031722, ox = 0.0158608, oy = 0.999245, oz = 0.0158608, parentid = 0},
-		{templateFile = "spacestation_lok", x = -6235.21, z = -5341.59, y = 113.86, ow = 0.611794, ox = 0.347264, oy = 0.577203, oz = -0.414672, parentid = 0},
-		{templateFile = "spacestation_rebel", x = 1799.13, z = -2458.57, y = -3680.29, ow = 0.989635, ox = -0.13459, oy = 0.0475025, oz = 0.0158343, parentid = 0}
+		{templateFile = "spacestation_lok", x = -6235.21, z = -5341.59, y = 113.86, ow = 0.611794, ox = 0.347264, oy = 0.577203, oz = -0.414672, parentid = 0}
 	}
 }
 
