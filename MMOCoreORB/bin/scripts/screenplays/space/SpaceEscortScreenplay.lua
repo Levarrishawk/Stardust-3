@@ -112,6 +112,7 @@ function SpaceEscortScreenplay:completeQuest(pPlayer, notifyClient)
 
 	-- Complete the Journal Quest
 	SpaceHelpers:completeSpaceQuest(pPlayer, self.questType, self.questName, notifyBool)
+	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
 
 	if (questWasActive and self.completionSystemMessage ~= "") then
 		CreatureObject(pPlayer):sendSystemMessage(self.completionSystemMessage)
@@ -218,6 +219,9 @@ function SpaceEscortScreenplay:cleanUpQuestData(playerID)
 
 	-- Kill Count Tracking
 	deleteData(playerID .. ":" .. self.className .. ":" .. ":EscortKillCount:")
+
+	deleteData(playerID .. ":" .. self.className .. ":escortRouteIndex:")
+	deleteStringVectorSharedMemory(playerID .. ":" .. self.className .. ":escortRoute:")
 end
 
 function SpaceEscortScreenplay:setupEscort(pPlayer)
@@ -450,11 +454,70 @@ function SpaceEscortScreenplay:assignEscortPoints(pShipAgent)
 	-- Add the named escort points to the agent
 	ShipAiAgent(pShipAgent):assignFixedPatrolPointsTable(randomPoints)
 
+	local playerID = readData(agentID .. ":" .. self.className .. ":escorterID:")
+	writeStringVectorSharedMemory(playerID .. ":" .. self.className .. ":escortRoute:", randomPoints)
+	writeData(playerID .. ":" .. self.className .. ":escortRouteIndex:", 1)
+	self:updateEscortWaypoint(pShipAgent)
+
 	if (self.DEBUG_SPACE_ESCORT) then
 		print(self.className .. ":assignEscortPoints -- Total Points Assigned: " .. totalPoints)
 	end
 
 	writeData(agentID .. ":" .. self.className .. ":escortShipProgress:", totalPoints)
+end
+
+function SpaceEscortScreenplay:updateEscortWaypoint(pShipAgent)
+	if (pShipAgent == nil) then
+		return
+	end
+
+	local agentID = SceneObject(pShipAgent):getObjectID()
+	local playerID = readData(agentID .. ":" .. self.className .. ":escorterID:")
+	local pPlayer = getSceneObject(playerID)
+
+	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	local route = readStringVectorSharedMemory(playerID .. ":" .. self.className .. ":escortRoute:")
+	local routeIndex = readData(playerID .. ":" .. self.className .. ":escortRouteIndex:")
+
+	if (routeIndex < 1 or routeIndex > #route) then
+		SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+		return
+	end
+
+	local pointName = route[routeIndex]
+	local escortPoint = nil
+
+	for i = 1, #self.escortPoints do
+		if (self.escortPoints[i].patrolPointName == pointName) then
+			escortPoint = self.escortPoints[i]
+			break
+		end
+	end
+
+	if (escortPoint == nil) then
+		Logger:log(self.className .. ":updateEscortWaypoint -- Unable to resolve route point " .. pointName .. ".", LT_ERROR)
+		return
+	end
+
+	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+
+	local waypointID = PlayerObject(pGhost):addWaypoint(escortPoint.zoneName, "Escort Destination", "Escort Destination", escortPoint.x, escortPoint.z, escortPoint.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
+	local pWaypoint = getSceneObject(waypointID)
+
+	if (pWaypoint ~= nil) then
+		WaypointObject(pWaypoint):setQuestDetails("@spacequest/" .. self.questType .. "/" .. self.questName .. ":title_d")
+	end
+
+	setQuestStatus(playerID .. ":" .. self.className .. ":waypointID", waypointID)
 end
 
 function SpaceEscortScreenplay:checkEscort(pShipAgent)
@@ -915,6 +978,10 @@ function SpaceEscortScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
 
 		-- Write the escort ships progress
 		writeData(shipAgentID .. ":" .. self.className .. ":escortShipProgress:", shipProgress)
+
+		local routeIndex = readData(playerID .. ":" .. self.className .. ":escortRouteIndex:")
+		writeData(playerID .. ":" .. self.className .. ":escortRouteIndex:", routeIndex + 1)
+		self:updateEscortWaypoint(pShip)
 
 		return 0
 	end

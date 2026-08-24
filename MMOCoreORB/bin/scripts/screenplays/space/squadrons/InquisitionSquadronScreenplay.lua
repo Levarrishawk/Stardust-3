@@ -1153,7 +1153,10 @@ space_battle_naboo_imperial_tier3_4_b = SpaceBattleScreenplay:new {
 	parentQuestType = "escort",
 	parentQuestName = "naboo_imperial_tier3_4_a",
 
-	battlePoint = "space_dathomir:naboo_imperial_tier3_4_c_battlepoint",
+	-- The former named battle point was never present in the server patrol-point
+	-- registry. SpaceBattleScreenplay requires explicit coordinates in order to
+	-- create the approach waypoint and arrival area.
+	battleLocation = {x = -160, z = 2428, y = -2525}, -- naboo_imperial_tier4_spacebattle1
 	allyArrivalDelay = 60,
 	enemyArrivalDelay = 80,
 	allyOriginDist = 800,
