@@ -461,9 +461,9 @@ function SpaceRescueScreenplay:spawnAttackers(pPlayer)
 	-- Send attack notification
 	SpaceHelpers:sendQuestUpdate(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":attack_notify")
 
-	local pPilotShip = SpaceHelpers:getPlayerShip(pPlayer)
+	local pPilotShip = SceneObject(pPlayer):getRootParent()
 
-	if (pPilotShip == nil) then
+	if (pPilotShip == nil or not SceneObject(pPilotShip):isShipObject()) then
 		return
 	end
 
@@ -629,9 +629,9 @@ function SpaceRescueScreenplay:spawnEscortAttackers(pPlayer)
 	-- Send attack notification
 	SpaceHelpers:sendQuestUpdate(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":attack_notify")
 
-	local pPilotShip = SpaceHelpers:getPlayerShip(pPlayer)
+	local pPilotShip = SceneObject(pPlayer):getRootParent()
 
-	if (pPilotShip == nil) then
+	if (pPilotShip == nil or not SceneObject(pPilotShip):isShipObject()) then
 		return
 	end
 
