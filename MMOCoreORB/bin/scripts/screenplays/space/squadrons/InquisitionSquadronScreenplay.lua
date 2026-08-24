@@ -1019,6 +1019,7 @@ inspect_naboo_imperial_tier3_3_c = SpaceInspectScreenplay:new {
 
 	inspectTargets = {"nym_patrol_craft_tier3"},
 	inspectCargo = "conspirator_command_data",
+	spawnInspectTarget = true,
 
 	targetLocation = {x = 1936, z = 2300, y = 4704}, -- space_dathomir:naboo_imperial_tier3_recovery2_1
 }
