@@ -889,14 +889,14 @@ escort_naboo_imperial_tier3_2_c = SpaceEscortScreenplay:new {
 
 registerScreenPlay("escort_naboo_imperial_tier3_2_c", true)
 
--- Mission 3: Delivery (Space Endor - transfer pirate intelligence from a Nym informant)
+-- Mission 3: Delivery (Space Dathomir - transfer pirate intelligence from a Nym informant)
 delivery_naboo_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 	className = "delivery_naboo_imperial_tier3_3",
 
 	questName = "naboo_imperial_tier3_3",
 	questType = "delivery",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -908,8 +908,8 @@ delivery_naboo_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 	pickupShip = "nym_smuggler",
 	deliveryShip = "imp_transport_tier3",
 
-	pickupPoint = "space_endor:naboo_imperial_tier_3_3_pickup",
-	deliveryPoint = "space_endor:naboo_imperial_tier_3_3_deliver",
+	pickupPoint = {x = 4824, z = -1000, y = 264}, -- space_dathomir:naboo_imperial_tier3_delivery3_pickup
+	deliveryPoint = {x = -3608, z = 5628, y = 5256}, -- space_dathomir:naboo_imperial_tier3_delivery3_dropoff
 
 	attackDelay = 80,
 
@@ -922,14 +922,14 @@ delivery_naboo_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 
 registerScreenPlay("delivery_naboo_imperial_tier3_3", true)
 
--- Mission 3 Side Quest A: Assassinate (Space Endor - destroy a Black Sun command ship)
+-- Mission 3 Side Quest A: Assassinate (Space Dathomir - destroy a Black Sun command ship)
 assassinate_naboo_imperial_tier3_3_a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_naboo_imperial_tier3_3_a",
 
 	questType = "assassinate",
 	questName = "naboo_imperial_tier3_3_a",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 	itemReward = {},
@@ -954,25 +954,24 @@ assassinate_naboo_imperial_tier3_3_a = SpaceAssassinateScreenplay:new {
 	},
 
 	targetPatrols = {
-		{patrolPointName = "naboo_imperial_tier3_3_a_spyship_1", zoneName = "space_endor", x = 2940, z = -4680, y = 1200},
-		{patrolPointName = "naboo_imperial_tier3_3_a_spyship_2", zoneName = "space_endor", x = 2922, z = -3692, y = 1654},
-		{patrolPointName = "naboo_imperial_tier3_3_a_spyship_3", zoneName = "space_endor", x = 2900, z = -2445, y = 2228},
-		{patrolPointName = "naboo_imperial_tier3_3_a_spyship_4", zoneName = "space_endor", x = 2892, z = -1093, y = 2859},
-		{patrolPointName = "naboo_imperial_tier3_3_a_spyship_5", zoneName = "space_endor", x = 2892, z = 55, y = 3394},
-		{patrolPointName = "naboo_imperial_tier3_3_a_spyship_6", zoneName = "space_endor", x = 2892, z = 1122, y = 3890},
+		{patrolPointName = "naboo_imperial_tier3_assassinate2_1", zoneName = "space_dathomir", x = -2547, z = 4300, y = -6700},
+		{patrolPointName = "naboo_imperial_tier3_assassinate2_2", zoneName = "space_dathomir", x = -3778, z = 2958, y = -4435},
+		{patrolPointName = "naboo_imperial_tier3_assassinate2_3", zoneName = "space_dathomir", x = -3221, z = 1774, y = -1763},
+		{patrolPointName = "naboo_imperial_tier3_assassinate2_4", zoneName = "space_dathomir", x = -2111, z = -2507, y = -1841},
+		{patrolPointName = "naboo_imperial_tier3_assassinate2_5", zoneName = "space_dathomir", x = -4530, z = -5034, y = -4742},
 	},
 }
 
 registerScreenPlay("assassinate_naboo_imperial_tier3_3_a", true)
 
--- Mission 3 Side Quest B: Space Battle (Space Endor - assist an Imperial squadron against Black Sun)
+-- Mission 3 Side Quest B: Space Battle (Space Dathomir - assist an Imperial squadron against Black Sun)
 space_battle_naboo_imperial_tier3_3_b = SpaceBattleScreenplay:new {
 	className = "space_battle_naboo_imperial_tier3_3_b",
 
 	questName = "naboo_imperial_tier3_3_b",
 	questType = "space_battle",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -987,7 +986,7 @@ space_battle_naboo_imperial_tier3_3_b = SpaceBattleScreenplay:new {
 	parentQuestType = "assassinate",
 	parentQuestName = "naboo_imperial_tier3_3_a",
 
-	battlePoint = "space_endor:naboo_imperial_tier3_3_b_battlepoint",
+	battlePoint = "space_dathomir:naboo_imperial_tier3_spacebattle1",
 	allyArrivalDelay = 60,
 	enemyArrivalDelay = 85,
 	allyOriginDist = 500,
@@ -1013,14 +1012,14 @@ space_battle_naboo_imperial_tier3_3_b = SpaceBattleScreenplay:new {
 
 registerScreenPlay("space_battle_naboo_imperial_tier3_3_b", true)
 
--- Mission 3 Side Quest C: Escort (Space Endor - escort an Imperial logistics vessel)
+-- Mission 3 Side Quest C: Escort (Space Dathomir - escort an Imperial logistics vessel)
 escort_naboo_imperial_tier3_3_c = SpaceEscortScreenplay:new {
 	className = "escort_naboo_imperial_tier3_3_c",
 
 	questName = "naboo_imperial_tier3_3_c",
 	questType = "escort",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -1034,10 +1033,10 @@ escort_naboo_imperial_tier3_3_c = SpaceEscortScreenplay:new {
 	escortShips = {"imp_freightermedium_tier3"},
 
 	escortPoints = {
-		{patrolPointName = "naboo_imperial_tier3_3_c_escort_1", zoneName = "space_endor", x = -5250, z = -850, y = 2000, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier3_3_c_escort_2", zoneName = "space_endor", x = -4323, z = -525, y = 2310, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier3_3_c_escort_3", zoneName = "space_endor", x = -3632, z = -680, y = 1552, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier3_3_c_escort_4", zoneName = "space_endor", x = -2813, z = -400, y = 1793, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_escort1_1", zoneName = "space_dathomir", x = 7340, z = 2102, y = -3234, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_escort1_2", zoneName = "space_dathomir", x = 5193, z = 2105, y = -998, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_escort1_3", zoneName = "space_dathomir", x = 2192, z = 1097, y = -995, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_escort1_4", zoneName = "space_dathomir", x = 1019, z = 509, y = -505, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 55,
@@ -1085,14 +1084,14 @@ assassinate_naboo_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_naboo_imperial_tier3_4", true)
 
--- Mission 4 Side Quest A: Patrol (Space Endor - search for a missing Imperial patrol)
+-- Mission 4 Side Quest A: Patrol (Space Dathomir - search for a missing Imperial patrol)
 patrol_naboo_imperial_tier3_4_a = SpacePatrolScreenplay:new {
 	className = "patrol_naboo_imperial_tier3_4_a",
 
 	questName = "naboo_imperial_tier3_4_a",
 	questType = "patrol",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -1118,14 +1117,14 @@ patrol_naboo_imperial_tier3_4_a = SpacePatrolScreenplay:new {
 
 registerScreenPlay("patrol_naboo_imperial_tier3_4_a", true)
 
--- Mission 4 Side Quest B: Destroy Surprise Attack (Space Endor - Black Sun elite ambush)
+-- Mission 4 Side Quest B: Destroy Surprise Attack (Space Dathomir - Black Sun elite ambush)
 destroy_surpriseattack_naboo_imperial_tier3_4_b = SpaceSurpriseAttackScreenplay:new {
 	className = "destroy_surpriseattack_naboo_imperial_tier3_4_b",
 
 	questName = "naboo_imperial_tier3_4_b",
 	questType = "destroy_surpriseattack",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	sideQuest = true,
 	sideQuestType = "space_battle",
@@ -1139,21 +1138,21 @@ destroy_surpriseattack_naboo_imperial_tier3_4_b = SpaceSurpriseAttackScreenplay:
 	parentQuestName = "naboo_imperial_tier3_4_a",
 
 	surpriseAttackShips = {
-		zone = "space_endor",
+		zone = "space_dathomir",
 		spawns = {{count = 6, shipName = "blacksun_fighter_s02_tier3"}},
 	},
 }
 
 registerScreenPlay("destroy_surpriseattack_naboo_imperial_tier3_4_b", true)
 
--- Mission 4 Side Quest C: Space Battle (Space Endor - assist Imperial bombers against Black Sun)
+-- Mission 4 Side Quest C: Space Battle (Space Dathomir - assist Imperial bombers against Black Sun)
 space_battle_naboo_imperial_tier3_4_c = SpaceBattleScreenplay:new {
 	className = "space_battle_naboo_imperial_tier3_4_c",
 
 	questName = "naboo_imperial_tier3_4_c",
 	questType = "space_battle",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -1168,7 +1167,7 @@ space_battle_naboo_imperial_tier3_4_c = SpaceBattleScreenplay:new {
 	parentQuestType = "destroy_surpriseattack",
 	parentQuestName = "naboo_imperial_tier3_4_b",
 
-	battlePoint = "space_endor:naboo_imperial_tier3_4_c_battlepoint",
+	battlePoint = "space_dathomir:naboo_imperial_tier3_4_c_battlepoint",
 	allyArrivalDelay = 60,
 	enemyArrivalDelay = 80,
 	allyOriginDist = 800,
@@ -1195,14 +1194,14 @@ space_battle_naboo_imperial_tier3_4_c = SpaceBattleScreenplay:new {
 
 registerScreenPlay("space_battle_naboo_imperial_tier3_4_c", true)
 
--- Mission 4 Side Quest D: Survival (Space Endor - guard the Imperial formation during withdrawal)
+-- Mission 4 Side Quest D: Survival (Space Dathomir - guard the Imperial formation during withdrawal)
 survival_naboo_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
 	className = "survival_naboo_imperial_tier3_4_d",
 
 	questName = "naboo_imperial_tier3_4_d",
 	questType = "survival",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -1214,7 +1213,7 @@ survival_naboo_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
 	parentQuestName = "naboo_imperial_tier3_4_c",
 
 	survivalTime = 300,
-	survivalPoint = "space_endor:naboo_imperial_tier3_4_c_survival",
+	survivalPoint = "space_dathomir:naboo_imperial_tier3_4_c_survival",
 	delayToFirstAttack = 5,
 
 	attackDelay = 60,
