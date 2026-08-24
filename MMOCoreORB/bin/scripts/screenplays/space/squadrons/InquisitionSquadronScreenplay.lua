@@ -2029,6 +2029,25 @@ end
 
 -- Reset functions for quest clearing
 
+-- A failed or deleted campaign mission restarts at the beginning of its chain.
+-- Clear every stage before starting the parent so stale waypoints, observers,
+-- mission ships, journal flags, and duplicate datapad objects cannot leak into
+-- the new attempt.
+function InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
+	if (pPlayer == nil) then
+		return
+	end
+
+	-- Reset deepest stages first so their runtime state is gone before the parent.
+	for i = #missionScreenplays, 1, -1 do
+		missionScreenplays[i]:resetQuest(pPlayer)
+	end
+
+	for i = 1, #missionQuests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, missionQuests[i].type, missionQuests[i].name, false)
+	end
+end
+
 function InquisitionSquadronScreenplay:resetSinkkoQuests(pPlayer)
 	if (pPlayer == nil) then
 		return

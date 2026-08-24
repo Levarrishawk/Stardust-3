@@ -1502,8 +1502,10 @@ int LuaCreatureObject::failQuestMission(lua_State* L) {
 		return 0;
 	}
 
-	for (int i = 0; i < datapad->getContainerObjectsSize(); i++) {
-		auto object = datapad->getContainerObject(i);
+	// Clear every matching mission object. A space chain may have been restarted
+	// after a disconnect or deletion and contain more than one stale copy.
+	for (int i = datapad->getContainerObjectsSize(); i > 0; --i) {
+		auto object = datapad->getContainerObject(i - 1);
 
 		if (object == nullptr || !object->isMissionObject()) {
 			continue;
@@ -1511,13 +1513,15 @@ int LuaCreatureObject::failQuestMission(lua_State* L) {
 
 		auto mission = object.castTo<MissionObject*>();
 
-		if (mission == nullptr || (mission->getQuestCRC() != questCRC) || mission->isAborted()) {
+		if (mission == nullptr || (mission->getQuestCRC() != questCRC)) {
 			continue;
 		}
 
-		missionManager->handleMissionFail(mission, realObject);
-
-		return 0;
+		if (mission->isAborted()) {
+			missionManager->removeMission(mission, realObject);
+		} else {
+			missionManager->handleMissionFail(mission, realObject);
+		}
 	}
 
 	return 0;

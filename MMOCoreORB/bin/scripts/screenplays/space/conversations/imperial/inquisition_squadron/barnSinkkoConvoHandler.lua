@@ -713,6 +713,9 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Tier 2 mission starters
 	elseif (screenID == "accept_tier2_first_mission" or screenID == "failed_tier2_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{inspect_naboo_imperial_tier2_1, destroy_surpriseattack_naboo_imperial_tier2_1},
+			{InquisitionSquadronScreenplay.TIER2_QUEST_STRING_1, InquisitionSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 
@@ -728,18 +731,21 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		inspect_naboo_imperial_tier2_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier2_second_mission" or screenID == "failed_tier2_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_naboo_imperial_tier2_2}, {InquisitionSquadronScreenplay.TIER2_QUEST_STRING_2})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
 
 		escort_naboo_imperial_tier2_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier2_third_mission" or screenID == "failed_tier2_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_naboo_imperial_tier2_3}, {InquisitionSquadronScreenplay.TIER2_QUEST_STRING_3})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
 
 		recovery_naboo_imperial_tier2_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier2_fourth_mission" or screenID == "failed_tier2_fourth_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_naboo_imperial_tier2_4}, {InquisitionSquadronScreenplay.TIER2_QUEST_STRING_4})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
 
@@ -791,12 +797,18 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Tier 3 mission starters
 	elseif (screenID == "accept_tier3_first_mission" or screenID == "failed_tier3_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{recovery_naboo_imperial_tier3_1, patrol_naboo_imperial_tier3_1_A, destroy_surpriseattack_naboo_imperial_tier3_1_b, assassinate_naboo_imperial_tier3_1_c, space_battle_naboo_imperial_tier3_1_d},
+			{InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
 		recovery_naboo_imperial_tier3_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier3_second_mission" or screenID == "failed_tier3_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{inspect_naboo_imperial_tier3_2, delivery_naboo_imperial_tier3_2_a, survival_naboo_imperial_tier3_2_b, escort_naboo_imperial_tier3_2_c},
+			{InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
@@ -804,11 +816,18 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	elseif (screenID == "accept_tier3_third_mission" or screenID == "failed_tier3_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{delivery_naboo_imperial_tier3_3, destroy_surpriseattack_naboo_imperial_tier3_3_a, rescue_naboo_imperial_tier3_3_b, inspect_naboo_imperial_tier3_3_c, delivery_no_pickup_naboo_imperial_tier3_3_d},
+			{InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4})
+
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
 		delivery_naboo_imperial_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier3_fourth_mission" or screenID == "failed_tier3_fourth_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{assassinate_naboo_imperial_tier3_4, escort_naboo_imperial_tier3_4_a, space_battle_naboo_imperial_tier3_4_b, assassinate_naboo_imperial_tier3_4_c},
+			{InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
@@ -894,24 +913,36 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Tier 4 mission starters
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{survival_naboo_imperial_tier4_1, space_battle_naboo_imperial_tier4_1_a, space_battle_naboo_imperial_tier4_1_b},
+			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
 		survival_naboo_imperial_tier4_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{assassinate_naboo_imperial_tier4_2, delivery_no_pickup_naboo_imperial_tier4_2_a, rescue_naboo_imperial_tier4_2_b},
+			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
 		assassinate_naboo_imperial_tier4_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{space_battle_naboo_imperial_tier4_3, space_battle_naboo_imperial_tier4_3_a, survival_naboo_imperial_tier4_3_b},
+			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
 		space_battle_naboo_imperial_tier4_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{recovery_naboo_imperial_tier4_4, assassinate_naboo_imperial_tier4_4_a, rescue_naboo_imperial_tier4_4_b, space_battle_naboo_imperial_tier4_4_c},
+			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
@@ -928,6 +959,9 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Master mission hand-off
 	elseif (screenID == "accept_master_mission") then
 		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and not SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
+			InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+				{destroy_master_imperial_1, destroy_master_imperial_2},
+				{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2})
 			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
 		end
 	elseif (screenID == "destroy_duty") then
@@ -965,18 +999,29 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Missions
 	elseif (screenID == "yes_im_ready") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_naboo_imperial_1, destroy_surpriseattack_naboo_imperial_1},
+			{InquisitionSquadronScreenplay.QUEST_STRING_1, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE})
 
 		-- Track that quest was attempted
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.QUEST_STRING_1.name .. ":attempted", 1)
 
 		patrol_naboo_imperial_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest1") then
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_naboo_imperial_1, destroy_surpriseattack_naboo_imperial_1},
+			{InquisitionSquadronScreenplay.QUEST_STRING_1, InquisitionSquadronScreenplay.QUEST_STRING_1_SIDE})
 		patrol_naboo_imperial_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest2") then
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_naboo_imperial_2}, {InquisitionSquadronScreenplay.QUEST_STRING_2})
 		destroy_naboo_imperial_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest3") then
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_naboo_imperial_3, escort_naboo_imperial_3},
+			{InquisitionSquadronScreenplay.QUEST_STRING_3, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE})
 		patrol_naboo_imperial_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest4") then
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_naboo_imperial_4}, {InquisitionSquadronScreenplay.QUEST_STRING_4})
 		assassinate_naboo_imperial_4:startQuest(pPlayer, pNpc)
 	-- Quest 1 completion screens - give reward
 	elseif (screenID == "i_was_attacked" or screenID == "rebel_ambush" or screenID == "patrol_complete") then
@@ -994,10 +1039,14 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		end
 	elseif (screenID == "quest2_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_naboo_imperial_2}, {InquisitionSquadronScreenplay.QUEST_STRING_2})
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.QUEST_STRING_2.name .. ":attempted", 1)
 		destroy_naboo_imperial_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_naboo_imperial_3, escort_naboo_imperial_3},
+			{InquisitionSquadronScreenplay.QUEST_STRING_3, InquisitionSquadronScreenplay.QUEST_STRING_3_SIDE})
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.QUEST_STRING_3.name .. ":attempted", 1)
 		patrol_naboo_imperial_3:startQuest(pPlayer, pNpc)
 	-- Quest 3 Rewarded - give reward
@@ -1017,6 +1066,7 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Quest 4 accepted - start the assassinate mission
 	elseif (screenID == "quest4_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_naboo_imperial_4}, {InquisitionSquadronScreenplay.QUEST_STRING_4})
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.QUEST_STRING_4.name .. ":attempted", 1)
 		assassinate_naboo_imperial_4:startQuest(pPlayer, pNpc)
 	-- Finished: completed all Tier 1 skills, reassigned to Under Inquisitor Fa'Zoll (next trainer)
