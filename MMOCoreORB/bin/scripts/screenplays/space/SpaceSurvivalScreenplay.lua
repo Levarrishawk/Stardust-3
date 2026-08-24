@@ -725,13 +725,16 @@ function SpaceSurvivalScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
 	end
 
-	-- Player is in the correct zone
-	if (zoneNameHash == spaceQuestHash and not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
-		-- Complete the quest task 0
-		SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
+	-- Player is in the correct zone. Always resume setup because a chained quest may
+	-- retain its completed location task without having created its defence waypoint.
+	if (zoneNameHash == spaceQuestHash) then
+		if (not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
+			-- Complete the quest task 0
+			SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
 
-		-- Activate quest task 1
-		SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+			-- Activate quest task 1
+			SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+		end
 
 		-- Send the player to the defence point
 		createEvent(4000, self.className, "setupSurvival", pPlayer, "")

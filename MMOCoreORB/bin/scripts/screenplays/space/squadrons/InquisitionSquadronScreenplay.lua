@@ -835,7 +835,7 @@ survival_naboo_imperial_tier3_2_b = SpaceSurvivalScreenplay:new {
 
 	survivalTime = 600,
 	survivalUpdateInterval = 60,
-	survivalPoint = "space_endor:rebel_tier3_2_b_defend_point",
+	survivalPoint = {x = -153, z = 3803, y = 3265},
 	delayToFirstAttack = 5,
 
 	attackDelay = 100,
