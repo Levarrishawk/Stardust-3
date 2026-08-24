@@ -625,6 +625,9 @@ space_dathomir = SpacePatrolPointTable:new {
 	{patrolPointName = "naboo_imperial_tier3_4_a_escort_2", x = -3758, z = 345, y = -4588},
 	{patrolPointName = "naboo_imperial_tier3_4_a_escort_3", x = -3460, z = 37, y = -3563},
 	{patrolPointName = "naboo_imperial_tier3_4_a_escort_4", x = -2777, z = 778, y = -3350},
+
+	-- Inquisition 3_4_c Price of Liberty assassination location.
+	{patrolPointName = "naboo_imperial_tier3_4_c_price_of_liberty", x = 2005, z = 4299, y = -3566},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_dathomir, "space_dathomir")

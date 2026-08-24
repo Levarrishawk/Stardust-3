@@ -29,7 +29,13 @@ function SpaceAssassinateScreenplay:startQuest(pPlayer, pNpc)
 
 	-- Check if the player is in the proper zone already
 	if (playerZoneHash == spaceQuestHash and not SpaceHelpers:isInYacht(pPlayer)) then
-		createEvent(2000, self.className, "deployTargets", pPlayer, "")
+		-- Side quests can begin while the player is already in the required system.
+		-- Advance the same journal tasks and arrival messaging used by enteredZone
+		-- before deploying the targets.
+		SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
+		SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, false)
+		CreatureObject(pPlayer):sendSystemMessage("@spacequest/assassinate/" .. self.questName .. ":arrival_phase_1")
+		createEvent(self.arrivalDelay * 1000, self.className, "deployTargets", pPlayer, "")
 	end
 
 	-- Create inital observer for player entering Zone and to handle failing quest
