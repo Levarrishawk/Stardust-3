@@ -1225,6 +1225,11 @@ registerScreenPlay("assassinate_naboo_imperial_tier3_4_c", true)
 	Tier 4 -- naboo_imperial_tier4 Main Missions
 ]]
 
+-- The former Tier 4 block below was an early placeholder implementation whose
+-- quest archetypes did not match the shipped client journals. Keep it out of
+-- registration; the reconstructed Ja'ce Yiaso campaign is loaded after it.
+if (false) then
+
 -- Mission 1: Survival (Space Dathomir - Hold off Black Sun assault on Nym miners)
 survival_naboo_imperial_tier4_1 = SpaceSurvivalScreenplay:new {
 	className = "survival_naboo_imperial_tier4_1",
@@ -1792,6 +1797,10 @@ space_battle_naboo_imperial_tier4_4_c = SpaceBattleScreenplay:new {
 
 registerScreenPlay("space_battle_naboo_imperial_tier4_4_c", true)
 
+end
+
+includeFile("screenplays/space/squadrons/InquisitionTier4Screenplay.lua")
+
 -- Master Mission (two-stage Kessel encounter): destroy_master_imperial_1 (Kessel:
 -- destroy 30 Rebel fighters) and destroy_master_imperial_2 (Kessel: destroy the Rebel
 -- Corellian Corvette command vessel) are defined in
@@ -2007,19 +2016,22 @@ InquisitionSquadronScreenplay = ScreenPlay:new {
 	TIER3_QUEST_STRING_4_SIDE3 = {type = "assassinate", name = "naboo_imperial_tier3_4_c"},
 
 	-- Tier 4
-	TIER4_QUEST_STRING_1 = {type = "survival", name = "naboo_imperial_tier4_1"},
-	TIER4_QUEST_STRING_1_SIDE1 = {type = "space_battle", name = "naboo_imperial_tier4_1_a"},
-	TIER4_QUEST_STRING_1_SIDE2 = {type = "space_battle", name = "naboo_imperial_tier4_1_b"},
-	TIER4_QUEST_STRING_2 = {type = "assassinate", name = "naboo_imperial_tier4_2"},
-	TIER4_QUEST_STRING_2_SIDE1 = {type = "delivery_no_pickup", name = "naboo_imperial_tier4_2_a"},
-	TIER4_QUEST_STRING_2_SIDE2 = {type = "rescue", name = "naboo_imperial_tier4_2_b"},
-	TIER4_QUEST_STRING_3 = {type = "space_battle", name = "naboo_imperial_tier4_3"},
-	TIER4_QUEST_STRING_3_SIDE1 = {type = "space_battle", name = "naboo_imperial_tier4_3_a"},
-	TIER4_QUEST_STRING_3_SIDE2 = {type = "survival", name = "naboo_imperial_tier4_3_b"},
-	TIER4_QUEST_STRING_4 = {type = "recovery", name = "naboo_imperial_tier4_4"},
-	TIER4_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "naboo_imperial_tier4_4_a"},
-	TIER4_QUEST_STRING_4_SIDE2 = {type = "rescue", name = "naboo_imperial_tier4_4_b"},
-	TIER4_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "naboo_imperial_tier4_4_c"},
+	TIER4_QUEST_STRING_1 = {type = "patrol", name = "naboo_imperial_tier4_1"},
+	TIER4_QUEST_STRING_1_SIDE1 = {type = "inspect", name = "naboo_imperial_tier4_1_a"},
+	TIER4_QUEST_STRING_1_SIDE2 = {type = "destroy_surpriseattack", name = "naboo_imperial_tier4_1_b"},
+	TIER4_QUEST_STRING_1_SIDE3 = {type = "delivery_no_pickup", name = "naboo_imperial_tier4_1_c"},
+	TIER4_QUEST_STRING_2 = {type = "recovery", name = "naboo_imperial_tier4_2"},
+	TIER4_QUEST_STRING_2_SIDE1 = {type = "rescue", name = "naboo_imperial_tier4_2_a"},
+	TIER4_QUEST_STRING_2_SIDE2 = {type = "destroy_surpriseattack", name = "naboo_imperial_tier4_2_b"},
+	TIER4_QUEST_STRING_2_SIDE3 = {type = "recovery", name = "naboo_imperial_tier4_2_c"},
+	TIER4_QUEST_STRING_3 = {type = "survival", name = "naboo_imperial_tier4_3"},
+	TIER4_QUEST_STRING_3_SIDE1 = {type = "delivery_no_pickup", name = "naboo_imperial_tier4_3_a"},
+	TIER4_QUEST_STRING_3_SIDE2 = {type = "assassinate", name = "naboo_imperial_tier4_3_b"},
+	TIER4_QUEST_STRING_4 = {type = "escort", name = "naboo_imperial_tier4_4"},
+	TIER4_QUEST_STRING_4_SIDE1 = {type = "recovery", name = "naboo_imperial_tier4_4_a"},
+	TIER4_QUEST_STRING_4_SIDE2 = {type = "assassinate", name = "naboo_imperial_tier4_4_b"},
+	TIER4_QUEST_STRING_4_SIDE3 = {type = "assassinate", name = "naboo_imperial_tier4_4_c"},
+	TIER4_QUEST_STRING_4_SIDE4 = {type = "space_battle", name = "naboo_imperial_tier4_4_d"},
 	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "master_imperial_1"},
 	TIER4_QUEST_STRING_MASTER_2 = {type = "destroy", name = "master_imperial_2"},
 	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "naboo_imperial_tier4_1"},
@@ -2196,38 +2208,44 @@ function InquisitionSquadronScreenplay:resetTier4Quests(pPlayer)
 	end
 
 	-- Mission 1
-	survival_naboo_imperial_tier4_1:resetQuest(pPlayer)
-	space_battle_naboo_imperial_tier4_1_a:resetQuest(pPlayer)
-	space_battle_naboo_imperial_tier4_1_b:resetQuest(pPlayer)
+	patrol_naboo_imperial_tier4_1:resetQuest(pPlayer)
+	inspect_naboo_imperial_tier4_1_a:resetQuest(pPlayer)
+	destroy_surpriseattack_naboo_imperial_tier4_1_b:resetQuest(pPlayer)
+	delivery_no_pickup_naboo_imperial_tier4_1_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1.type, self.TIER4_QUEST_STRING_1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1_SIDE1.type, self.TIER4_QUEST_STRING_1_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1_SIDE2.type, self.TIER4_QUEST_STRING_1_SIDE2.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1_SIDE3.type, self.TIER4_QUEST_STRING_1_SIDE3.name, false)
 
 	-- Mission 2
-	assassinate_naboo_imperial_tier4_2:resetQuest(pPlayer)
-	delivery_no_pickup_naboo_imperial_tier4_2_a:resetQuest(pPlayer)
-	rescue_naboo_imperial_tier4_2_b:resetQuest(pPlayer)
+	recovery_naboo_imperial_tier4_2:resetQuest(pPlayer)
+	rescue_naboo_imperial_tier4_2_a:resetQuest(pPlayer)
+	destroy_surpriseattack_naboo_imperial_tier4_2_b:resetQuest(pPlayer)
+	recovery_naboo_imperial_tier4_2_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2.type, self.TIER4_QUEST_STRING_2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2_SIDE1.type, self.TIER4_QUEST_STRING_2_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2_SIDE2.type, self.TIER4_QUEST_STRING_2_SIDE2.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2_SIDE3.type, self.TIER4_QUEST_STRING_2_SIDE3.name, false)
 
 	-- Mission 3
-	space_battle_naboo_imperial_tier4_3:resetQuest(pPlayer)
-	space_battle_naboo_imperial_tier4_3_a:resetQuest(pPlayer)
-	survival_naboo_imperial_tier4_3_b:resetQuest(pPlayer)
+	survival_naboo_imperial_tier4_3:resetQuest(pPlayer)
+	delivery_no_pickup_naboo_imperial_tier4_3_a:resetQuest(pPlayer)
+	assassinate_naboo_imperial_tier4_3_b:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_3.type, self.TIER4_QUEST_STRING_3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_3_SIDE1.type, self.TIER4_QUEST_STRING_3_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_3_SIDE2.type, self.TIER4_QUEST_STRING_3_SIDE2.name, false)
 
 	-- Mission 4
-	recovery_naboo_imperial_tier4_4:resetQuest(pPlayer)
-	assassinate_naboo_imperial_tier4_4_a:resetQuest(pPlayer)
-	rescue_naboo_imperial_tier4_4_b:resetQuest(pPlayer)
-	space_battle_naboo_imperial_tier4_4_c:resetQuest(pPlayer)
+	escort_naboo_imperial_tier4_4:resetQuest(pPlayer)
+	recovery_naboo_imperial_tier4_4_a:resetQuest(pPlayer)
+	assassinate_naboo_imperial_tier4_4_b:resetQuest(pPlayer)
+	assassinate_naboo_imperial_tier4_4_c:resetQuest(pPlayer)
+	space_battle_naboo_imperial_tier4_4_d:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4.type, self.TIER4_QUEST_STRING_4.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE1.type, self.TIER4_QUEST_STRING_4_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE2.type, self.TIER4_QUEST_STRING_4_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE3.type, self.TIER4_QUEST_STRING_4_SIDE3.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE4.type, self.TIER4_QUEST_STRING_4_SIDE4.name, false)
 
 	-- Master (two-stage Kessel corvette encounter)
 	destroy_master_imperial_1:resetQuest(pPlayer)

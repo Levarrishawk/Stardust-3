@@ -143,22 +143,25 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (ghost:getPilotTier() >= 4) then
 		local t4QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.name)
 		local t4QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.name)
 		local t4QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.name)
 		local t4QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE4.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE4.name)
 
-		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
-		local t4QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name)
+		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.name)
+		local t4QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.name)
 		local t4QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.name)
-		local t4QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
+		local t4QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE4.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE4.name)
 
 		local t4Duty1Started = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_DUTY_1.name)
 		local t4Duty2Started = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_DUTY_2.name)
@@ -887,7 +890,7 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 			ghost:incrementPilotTier()
 		end
 
-		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4) or SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4) or SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE4.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE4.name)) then
 			return self:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		end
 
@@ -898,62 +901,62 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward", 1)
 
-		recovery_naboo_imperial_tier4_4:rewardPlayer(pPlayer)
+		escort_naboo_imperial_tier4_4:rewardPlayer(pPlayer)
 	elseif (screenID == "tier4_third_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward", 1)
 
-		space_battle_naboo_imperial_tier4_3:rewardPlayer(pPlayer)
+		survival_naboo_imperial_tier4_3:rewardPlayer(pPlayer)
 	elseif (screenID == "tier4_second_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward", 1)
 
-		assassinate_naboo_imperial_tier4_2:rewardPlayer(pPlayer)
+		recovery_naboo_imperial_tier4_2:rewardPlayer(pPlayer)
 	elseif (screenID == "tier4_first_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward", 1)
 
-		survival_naboo_imperial_tier4_1:rewardPlayer(pPlayer)
+		patrol_naboo_imperial_tier4_1:rewardPlayer(pPlayer)
 	-- Tier 4 mission starters
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
-			{survival_naboo_imperial_tier4_1, space_battle_naboo_imperial_tier4_1_a, space_battle_naboo_imperial_tier4_1_b},
-			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2})
+			{patrol_naboo_imperial_tier4_1, inspect_naboo_imperial_tier4_1_a, destroy_surpriseattack_naboo_imperial_tier4_1_b, delivery_no_pickup_naboo_imperial_tier4_1_c},
+			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
-		survival_naboo_imperial_tier4_1:startQuest(pPlayer, pNpc)
+		patrol_naboo_imperial_tier4_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
-			{assassinate_naboo_imperial_tier4_2, delivery_no_pickup_naboo_imperial_tier4_2_a, rescue_naboo_imperial_tier4_2_b},
-			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2})
+			{recovery_naboo_imperial_tier4_2, rescue_naboo_imperial_tier4_2_a, destroy_surpriseattack_naboo_imperial_tier4_2_b, recovery_naboo_imperial_tier4_2_c},
+			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
-		assassinate_naboo_imperial_tier4_2:startQuest(pPlayer, pNpc)
+		recovery_naboo_imperial_tier4_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
-			{space_battle_naboo_imperial_tier4_3, space_battle_naboo_imperial_tier4_3_a, survival_naboo_imperial_tier4_3_b},
+			{survival_naboo_imperial_tier4_3, delivery_no_pickup_naboo_imperial_tier4_3_a, assassinate_naboo_imperial_tier4_3_b},
 			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
-		space_battle_naboo_imperial_tier4_3:startQuest(pPlayer, pNpc)
+		survival_naboo_imperial_tier4_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
-			{recovery_naboo_imperial_tier4_4, assassinate_naboo_imperial_tier4_4_a, rescue_naboo_imperial_tier4_4_b, space_battle_naboo_imperial_tier4_4_c},
-			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3})
+			{escort_naboo_imperial_tier4_4, recovery_naboo_imperial_tier4_4_a, assassinate_naboo_imperial_tier4_4_b, assassinate_naboo_imperial_tier4_4_c, space_battle_naboo_imperial_tier4_4_d},
+			{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE4})
 
 		setQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
-		recovery_naboo_imperial_tier4_4:startQuest(pPlayer, pNpc)
+		escort_naboo_imperial_tier4_4:startQuest(pPlayer, pNpc)
 	-- Tier 4 duty missions
 	elseif (screenID == "accept_tier4_duty1") then
 		escort_duty_naboo_imperial_tier4_1:startQuest(pPlayer, pNpc)
