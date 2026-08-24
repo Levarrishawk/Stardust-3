@@ -905,7 +905,7 @@ delivery_naboo_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 	sideQuestName = "naboo_imperial_tier3_3_a",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
-	pickupShip = "nym_smuggler",
+	pickupShip = "nym_smuggler_freightermedium",
 	deliveryShip = "imp_transport_tier3",
 
 	pickupPoint = {x = 4824, z = -1000, y = 264}, -- space_dathomir:naboo_imperial_tier3_delivery3_pickup
