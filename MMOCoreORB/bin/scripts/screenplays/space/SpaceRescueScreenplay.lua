@@ -119,6 +119,7 @@ function SpaceRescueScreenplay:completeQuest(pPlayer, notifyClient)
 
 	-- Remove waypoint
 	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+	self:clearKnownQuestWaypoints(pPlayer)
 
 	-- Send completion message
 	SpaceHelpers:sendQuestUpdate(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":complete")
@@ -175,6 +176,7 @@ function SpaceRescueScreenplay:failQuest(pPlayer, notifyClient)
 
 	-- Remove any patrol points
 	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+	self:clearKnownQuestWaypoints(pPlayer)
 
 	-- Remove the zone entry observer
 	dropObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer)
@@ -220,6 +222,7 @@ function SpaceRescueScreenplay:resetQuest(pPlayer)
 
 	-- Remove any patrol points
 	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+	self:clearKnownQuestWaypoints(pPlayer)
 
 	-- Remove the zone entry observer
 	dropObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer)
@@ -231,11 +234,54 @@ function SpaceRescueScreenplay:resetQuest(pPlayer)
 end
 
 function SpaceRescueScreenplay:cleanUpQuestData(playerID)
+	local rescueShipID = readData(playerID .. ":" .. self.className .. ":rescueShipID")
+	local pRescueShip = getSceneObject(rescueShipID)
+	local pPlayer = getSceneObject(playerID)
+
+	if (pPlayer ~= nil and pRescueShip ~= nil) then
+		CreatureObject(pPlayer):removeSpaceMissionObject(rescueShipID, true)
+	end
+
+	if (pRescueShip ~= nil) then
+		dropObserver(SHIPDESTROYED, self.className, "handleTargetDestroyed", pRescueShip)
+		dropObserver(ENTEREDAREA, self.className, "notifyEnteredQuestArea", pRescueShip)
+		SceneObject(pRescueShip):destroyObjectFromWorld()
+	end
+
 	-- Clean up stored data
 	deleteData(playerID .. ":" .. self.className .. ":waypointID")
 	deleteData(playerID .. ":" .. self.className .. ":rescueShipID")
 	deleteData(playerID .. ":" .. self.className .. ":escortPointIndex")
 	deleteData(playerID .. ":" .. self.className .. ":repairsComplete")
+end
+
+-- Remove persistent rescue waypoints even when their transient tracking key was
+-- lost during a restart or an interrupted quest event.
+function SpaceRescueScreenplay:clearKnownQuestWaypoints(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	local locations = {self.rescueLocation}
+
+	for i = 1, #self.escortPoints, 1 do
+		locations[#locations + 1] = self.escortPoints[i]
+	end
+
+	for i = 1, #locations, 1 do
+		local location = locations[i]
+		local pWaypoint = PlayerObject(pGhost):getWaypointAt(location.x, location.y, self.questZone)
+
+		if (pWaypoint ~= nil) then
+			PlayerObject(pGhost):removeWaypoint(SceneObject(pWaypoint):getObjectID(), true)
+		end
+	end
 end
 
 --[[
