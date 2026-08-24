@@ -51,6 +51,9 @@ function SpaceSurpriseAttackScreenplay:completeQuest(pPlayer, notifyClient)
 	-- Complete quest for surprise attack
 	SpaceHelpers:completeSpaceQuest(pPlayer, self.questType, self.questName, notifyBool)
 
+	-- Clear the completed wave count so a later reset or retry cannot inherit it
+	deleteData(SceneObject(pPlayer):getObjectID() .. self.className .. ":Count")
+
 	-- Remove the zone entry observer
 	dropObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer)
 

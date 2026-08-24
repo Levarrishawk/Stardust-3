@@ -355,9 +355,7 @@ function SpaceRescueScreenplay:spawnRescueShip(pPlayer)
 	ShipAiAgent(pRescueShip):setMissionOwner(pPlayer)
 
 	-- Make ship stationary (damaged, not moving)
-	ShipAiAgent(pRescueShip):setMinimumGuardPatrol(0)
-	ShipAiAgent(pRescueShip):setMaximumGuardPatrol(50)
-	ShipAiAgent(pRescueShip):setGuardPatrol()
+	ShipAiAgent(pRescueShip):setFixedPatrol()
 
 	local rescueShipID = SceneObject(pRescueShip):getObjectID()
 

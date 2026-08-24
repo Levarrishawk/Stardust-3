@@ -1557,8 +1557,11 @@ int LuaCreatureObject::removeQuestMission(lua_State* L) {
 
 	Locker lock(realObject);
 
-	for (int i = 0; i < datapad->getContainerObjectsSize(); i++) {
-		auto object = datapad->getContainerObject(i);
+	// Remove every matching object. Repeated space-quest retries can leave a stale
+	// duplicate in the datapad, and stopping after the first match leaves that
+	// duplicate visible after the journal quest has completed.
+	for (int i = datapad->getContainerObjectsSize(); i > 0; --i) {
+		auto object = datapad->getContainerObject(i - 1);
 
 		if (object == nullptr || !object->isMissionObject()) {
 			continue;
@@ -1571,8 +1574,6 @@ int LuaCreatureObject::removeQuestMission(lua_State* L) {
 		}
 
 		missionManager->removeMission(mission, realObject);
-
-		return 0;
 	}
 
 	return 0;
