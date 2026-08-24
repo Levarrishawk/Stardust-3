@@ -32,6 +32,8 @@ SpaceEscortScreenplay = SpaceQuestLogic:new {
 	attackDelay = 0, -- In Seconds
 	attackShips = {},
 
+	completionSystemMessage = "",
+
 	tauntData = {
 		goodbyeCount = 5,
 		reasonCount = 5,
@@ -102,6 +104,7 @@ function SpaceEscortScreenplay:completeQuest(pPlayer, notifyClient)
 	end
 
 	local notifyBool = true
+	local questWasActive = SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)
 
 	if (notifyClient == "false") then
 		notifyBool = false
@@ -109,6 +112,10 @@ function SpaceEscortScreenplay:completeQuest(pPlayer, notifyClient)
 
 	-- Complete the Journal Quest
 	SpaceHelpers:completeSpaceQuest(pPlayer, self.questType, self.questName, notifyBool)
+
+	if (questWasActive and self.completionSystemMessage ~= "") then
+		CreatureObject(pPlayer):sendSystemMessage(self.completionSystemMessage)
+	end
 
 	-- Remove the zone entry observer
 	dropObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer)

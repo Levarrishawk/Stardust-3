@@ -861,6 +861,7 @@ escort_naboo_imperial_tier3_2_c = SpaceEscortScreenplay:new {
 	questZone = "space_endor",
 
 	creditReward = 0,
+	completionSystemMessage = "Mission complete. Return to Inquisitor Vrke for further orders.",
 
 	sideQuest = false,
 	sideQuestType = "",
