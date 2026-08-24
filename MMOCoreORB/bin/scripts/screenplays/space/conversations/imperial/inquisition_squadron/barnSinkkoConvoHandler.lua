@@ -263,17 +263,17 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t3QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.name)
 		local t3QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name)
 
 		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
 		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
-		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
-		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.name)
+		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, InquisitionSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name)
 
 		local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 3)
 

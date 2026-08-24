@@ -901,7 +901,7 @@ delivery_naboo_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 	creditReward = 0,
 
 	sideQuest = true,
-	sideQuestType = "assassinate",
+	sideQuestType = "destroy_surpriseattack",
 	sideQuestName = "naboo_imperial_tier3_3_a",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
@@ -922,20 +922,17 @@ delivery_naboo_imperial_tier3_3 = SpaceDeliveryScreenplay:new {
 
 registerScreenPlay("delivery_naboo_imperial_tier3_3", true)
 
--- Mission 3 Side Quest A: Assassinate (Space Dathomir - destroy a Black Sun command ship)
-assassinate_naboo_imperial_tier3_3_a = SpaceAssassinateScreenplay:new {
-	className = "assassinate_naboo_imperial_tier3_3_a",
+-- Mission 3 Side Quest A: Destroy Surprise Attack (Space Dathomir - destroy the late Black Sun fighters)
+destroy_surpriseattack_naboo_imperial_tier3_3_a = SpaceSurpriseAttackScreenplay:new {
+	className = "destroy_surpriseattack_naboo_imperial_tier3_3_a",
 
-	questType = "assassinate",
+	questType = "destroy_surpriseattack",
 	questName = "naboo_imperial_tier3_3_a",
 
 	questZone = "space_dathomir",
 
-	creditReward = 0,
-	itemReward = {},
-
 	sideQuest = true,
-	sideQuestType = "space_battle",
+	sideQuestType = "rescue",
 	sideQuestName = "naboo_imperial_tier3_3_b",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
@@ -945,109 +942,118 @@ assassinate_naboo_imperial_tier3_3_a = SpaceAssassinateScreenplay:new {
 	parentQuestType = "delivery",
 	parentQuestName = "naboo_imperial_tier3_3",
 
-	arrivalDelay = 20,
-	failTimer = 20,
-
-	assassinateSpawns = {
-		target = "blacksun_gunship_tier3",
-		escorts = {"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_marauder_tier3"},
-	},
-
-	targetPatrols = {
-		{patrolPointName = "naboo_imperial_tier3_assassinate2_1", zoneName = "space_dathomir", x = -2547, z = 4300, y = -6700},
-		{patrolPointName = "naboo_imperial_tier3_assassinate2_2", zoneName = "space_dathomir", x = -3778, z = 2958, y = -4435},
-		{patrolPointName = "naboo_imperial_tier3_assassinate2_3", zoneName = "space_dathomir", x = -3221, z = 1774, y = -1763},
-		{patrolPointName = "naboo_imperial_tier3_assassinate2_4", zoneName = "space_dathomir", x = -2111, z = -2507, y = -1841},
-		{patrolPointName = "naboo_imperial_tier3_assassinate2_5", zoneName = "space_dathomir", x = -4530, z = -5034, y = -4742},
+	surpriseAttackShips = {
+		zone = "space_dathomir",
+		spawns = {
+			{count = 4, shipName = "blacksun_fighter_s01_tier3"},
+			{count = 3, shipName = "blacksun_fighter_s02_tier3"},
+		},
 	},
 }
 
-registerScreenPlay("assassinate_naboo_imperial_tier3_3_a", true)
+registerScreenPlay("destroy_surpriseattack_naboo_imperial_tier3_3_a", true)
 
--- Mission 3 Side Quest B: Space Battle (Space Dathomir - assist an Imperial squadron against Black Sun)
-space_battle_naboo_imperial_tier3_3_b = SpaceBattleScreenplay:new {
-	className = "space_battle_naboo_imperial_tier3_3_b",
+-- Mission 3 Side Quest B: Rescue (Space Dathomir - repair and escort a damaged Imperial shuttle)
+rescue_naboo_imperial_tier3_3_b = SpaceRescueScreenplay:new {
+	className = "rescue_naboo_imperial_tier3_3_b",
 
 	questName = "naboo_imperial_tier3_3_b",
-	questType = "space_battle",
+	questType = "rescue",
 
 	questZone = "space_dathomir",
 
 	creditReward = 0,
 
 	sideQuest = true,
-	sideQuestType = "escort",
+	sideQuestType = "inspect",
 	sideQuestName = "naboo_imperial_tier3_3_c",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	sideQuestDelay = 0,
 
-	parentQuest = "assassinate_naboo_imperial_tier3_3_a",
-	parentQuestType = "assassinate",
+	parentQuest = "destroy_surpriseattack_naboo_imperial_tier3_3_a",
+	parentQuestType = "destroy_surpriseattack",
 	parentQuestName = "naboo_imperial_tier3_3_a",
 
-	battlePoint = "space_dathomir:naboo_imperial_tier3_spacebattle1",
-	allyArrivalDelay = 60,
-	enemyArrivalDelay = 85,
-	allyOriginDist = 500,
-	enemyOriginDist = -750,
-	allyArrivalDist = 50,
-	enemyArrivalDist = -200,
+	arrivalDelay = 3,
+	rescueShip = "imp_lambda_shuttle_tier3",
+	rescueLocation = {x = 4300, z = 6400, y = -4900}, -- space_dathomir:naboo_imperial_tier3_rescue1_1
+	repairDelay = 30,
 
-	alliedShips = {
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_interceptor_tier3"},
+	escortPoints = {
+		{patrolPointName = "naboo_imperial_tier3_rescue1_2", zoneName = "space_dathomir", x = 222, z = 6250, y = -4778, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_rescue1_3", zoneName = "space_dathomir", x = -1638, z = 3789, y = -6552, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_rescue1_4", zoneName = "space_dathomir", x = -3555, z = 3445, y = -6578, escortNumber = 3, radius = 250},
 	},
 
-	enemyShips = {
-		{"blacksun_fighter_s01_tier3"},
-		{"blacksun_fighter_s01_tier3"},
-		{"blacksun_fighter_s02_tier3"},
-		{"blacksun_bomber_s01_tier3"},
-		{"blacksun_marauder_tier3"},
-		{"blacksun_vehement_tier3"},
+	escortAttackDelay = 10,
+	escortAttackShips = {
+		{{count = 1, shipName = "blacksun_fighter_s01_tier3"}},
 	},
 }
 
-registerScreenPlay("space_battle_naboo_imperial_tier3_3_b", true)
+registerScreenPlay("rescue_naboo_imperial_tier3_3_b", true)
 
--- Mission 3 Side Quest C: Escort (Space Dathomir - escort an Imperial logistics vessel)
-escort_naboo_imperial_tier3_3_c = SpaceEscortScreenplay:new {
-	className = "escort_naboo_imperial_tier3_3_c",
+-- Mission 3 Side Quest C: Inspect (Space Dathomir - inspect the Black Sun command vessel)
+inspect_naboo_imperial_tier3_3_c = SpaceInspectScreenplay:new {
+	className = "inspect_naboo_imperial_tier3_3_c",
 
 	questName = "naboo_imperial_tier3_3_c",
-	questType = "escort",
+	questType = "inspect",
 
 	questZone = "space_dathomir",
+
+	creditReward = 0,
+
+	sideQuest = true,
+	sideQuestType = "delivery_no_pickup",
+	sideQuestName = "naboo_imperial_tier3_3_d",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+
+	sideQuestDelay = 5,
+
+	parentQuest = "rescue_naboo_imperial_tier3_3_b",
+	parentQuestType = "rescue",
+	parentQuestName = "naboo_imperial_tier3_3_b",
+
+	inspectTargets = {"nym_patrol_craft_tier3"},
+	inspectCargo = "conspirator_command_data",
+
+	targetLocation = {x = 1936, z = 2300, y = 4704}, -- space_dathomir:naboo_imperial_tier3_recovery2_1
+}
+
+registerScreenPlay("inspect_naboo_imperial_tier3_3_c", true)
+
+-- Mission 3 Side Quest D: Delivery No Pickup (Space Naboo - deliver the recovered plans to command)
+delivery_no_pickup_naboo_imperial_tier3_3_d = SpaceDeliveryNoPickupScreenplay:new {
+	className = "delivery_no_pickup_naboo_imperial_tier3_3_d",
+
+	questName = "naboo_imperial_tier3_3_d",
+	questType = "delivery_no_pickup",
+
+	questZone = "space_naboo",
 
 	creditReward = 0,
 
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "space_battle_naboo_imperial_tier3_3_b",
-	parentQuestType = "space_battle",
-	parentQuestName = "naboo_imperial_tier3_3_b",
+	parentQuest = "inspect_naboo_imperial_tier3_3_c",
+	parentQuestType = "inspect",
+	parentQuestName = "naboo_imperial_tier3_3_c",
 
-	escortShips = {"imp_freightermedium_tier3"},
+	deliveryShip = "imp_lambda_shuttle_tier3",
+	deliveryPoint = {x = 1069, z = 1110, y = 263}, -- space_naboo:naboo_imperial_tier3_delivery4
 
-	escortPoints = {
-		{patrolPointName = "naboo_imperial_tier3_escort1_1", zoneName = "space_dathomir", x = 7340, z = 2102, y = -3234, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier3_escort1_2", zoneName = "space_dathomir", x = 5193, z = 2105, y = -998, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier3_escort1_3", zoneName = "space_dathomir", x = 2192, z = 1097, y = -995, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier3_escort1_4", zoneName = "space_dathomir", x = 1019, z = 509, y = -505, escortNumber = 4, radius = 250},
-	},
-
-	attackDelay = 55,
+	attackDelay = 45,
 
 	attackShips = {
-		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3"},
-		{"blacksun_bomber_s01_tier3", "blacksun_marauder_tier3"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3"},
 	},
 }
 
-registerScreenPlay("escort_naboo_imperial_tier3_3_c", true)
+registerScreenPlay("delivery_no_pickup_naboo_imperial_tier3_3_d", true)
 
 -- Mission 4: Assassinate (Space Dathomir - stop a Black Sun commander reaching pirate reinforcements)
 assassinate_naboo_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
@@ -1062,7 +1068,7 @@ assassinate_naboo_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 	itemReward = {},
 
 	sideQuest = true,
-	sideQuestType = "patrol",
+	sideQuestType = "escort",
 	sideQuestName = "naboo_imperial_tier3_4_a",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
@@ -1070,8 +1076,8 @@ assassinate_naboo_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "blacksun_vehement_tier3",
-		escorts = {"blacksun_fighter_s02_tier3", "blacksun_marauder_tier3"},
+		target = "inquisition_traitor_lambda_tier3",
+		escorts = {"inquisition_traitor_tie_interceptor_tier3", "inquisition_traitor_tie_interceptor_tier3", "inquisition_traitor_tie_interceptor_tier3"},
 	},
 
 	targetPatrols = {
@@ -1084,88 +1090,65 @@ assassinate_naboo_imperial_tier3_4 = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_naboo_imperial_tier3_4", true)
 
--- Mission 4 Side Quest A: Patrol (Space Dathomir - search for a missing Imperial patrol)
-patrol_naboo_imperial_tier3_4_a = SpacePatrolScreenplay:new {
-	className = "patrol_naboo_imperial_tier3_4_a",
+-- Mission 4 Side Quest A: Escort (Space Dathomir - escort Doctor Shinss's prison transport)
+escort_naboo_imperial_tier3_4_a = SpaceEscortScreenplay:new {
+	className = "escort_naboo_imperial_tier3_4_a",
 
 	questName = "naboo_imperial_tier3_4_a",
-	questType = "patrol",
+	questType = "escort",
 
 	questZone = "space_dathomir",
 
 	creditReward = 0,
 
 	sideQuest = true,
-	sideQuestType = "destroy_surpriseattack",
+	sideQuestType = "space_battle",
 	sideQuestName = "naboo_imperial_tier3_4_b",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.PATROL_POINT,
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
-	sideQuestPatrolStart = 3,
 	sideQuestDelay = 5,
 
 	parentQuest = "assassinate_naboo_imperial_tier3_4",
 	parentQuestType = "assassinate",
 	parentQuestName = "naboo_imperial_tier3_4",
 
-	patrolPoints = {
-		{patrolPointName = "naboo_imperial_tier3_4_a_patrol_1", x = -3960, z = -400, y = -4950, patrolNumber = 1, radius = 150},
-		{patrolPointName = "naboo_imperial_tier3_4_a_patrol_2", x = -3758, z = 345, y = -4588, patrolNumber = 2, radius = 150},
-		{patrolPointName = "naboo_imperial_tier3_4_a_patrol_3", x = -3460, z = 37, y = -3563, patrolNumber = 3, radius = 150},
-		{patrolPointName = "naboo_imperial_tier3_4_a_patrol_4", x = -2777, z = 778, y = -3350, patrolNumber = 4, radius = 150},
+	escortShips = {"dathomir_prison_shuttle_tier4"},
+
+	escortPoints = {
+		{patrolPointName = "naboo_imperial_tier3_4_a_escort_1", zoneName = "space_dathomir", x = -3960, z = -400, y = -4950, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_4_a_escort_2", zoneName = "space_dathomir", x = -3758, z = 345, y = -4588, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_4_a_escort_3", zoneName = "space_dathomir", x = -3460, z = 37, y = -3563, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier3_4_a_escort_4", zoneName = "space_dathomir", x = -2777, z = 778, y = -3350, escortNumber = 4, radius = 250},
+	},
+
+	attackDelay = 55,
+
+	attackShips = {
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3"},
 	},
 }
 
-registerScreenPlay("patrol_naboo_imperial_tier3_4_a", true)
+registerScreenPlay("escort_naboo_imperial_tier3_4_a", true)
 
--- Mission 4 Side Quest B: Destroy Surprise Attack (Space Dathomir - Black Sun elite ambush)
-destroy_surpriseattack_naboo_imperial_tier3_4_b = SpaceSurpriseAttackScreenplay:new {
-	className = "destroy_surpriseattack_naboo_imperial_tier3_4_b",
+-- Mission 4 Side Quest B: Space Battle (Space Dathomir - assist the Imperial TIE wing)
+space_battle_naboo_imperial_tier3_4_b = SpaceBattleScreenplay:new {
+	className = "space_battle_naboo_imperial_tier3_4_b",
 
 	questName = "naboo_imperial_tier3_4_b",
-	questType = "destroy_surpriseattack",
+	questType = "space_battle",
 
 	questZone = "space_dathomir",
 
 	sideQuest = true,
-	sideQuestType = "space_battle",
+	sideQuestType = "assassinate",
 	sideQuestName = "naboo_imperial_tier3_4_c",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	sideQuestDelay = 0,
 
-	parentQuest = "patrol_naboo_imperial_tier3_4_a",
-	parentQuestType = "patrol",
+	parentQuest = "escort_naboo_imperial_tier3_4_a",
+	parentQuestType = "escort",
 	parentQuestName = "naboo_imperial_tier3_4_a",
-
-	surpriseAttackShips = {
-		zone = "space_dathomir",
-		spawns = {{count = 6, shipName = "blacksun_fighter_s02_tier3"}},
-	},
-}
-
-registerScreenPlay("destroy_surpriseattack_naboo_imperial_tier3_4_b", true)
-
--- Mission 4 Side Quest C: Space Battle (Space Dathomir - assist Imperial bombers against Black Sun)
-space_battle_naboo_imperial_tier3_4_c = SpaceBattleScreenplay:new {
-	className = "space_battle_naboo_imperial_tier3_4_c",
-
-	questName = "naboo_imperial_tier3_4_c",
-	questType = "space_battle",
-
-	questZone = "space_dathomir",
-
-	creditReward = 0,
-
-	sideQuest = true,
-	sideQuestType = "survival",
-	sideQuestName = "naboo_imperial_tier3_4_d",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 0,
-
-	parentQuest = "destroy_surpriseattack_naboo_imperial_tier3_4_b",
-	parentQuestType = "destroy_surpriseattack",
-	parentQuestName = "naboo_imperial_tier3_4_b",
 
 	battlePoint = "space_dathomir:naboo_imperial_tier3_4_c_battlepoint",
 	allyArrivalDelay = 60,
@@ -1176,30 +1159,35 @@ space_battle_naboo_imperial_tier3_4_c = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -50,
 
 	alliedShips = {
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3"},
 		{"imp_tie_interceptor_tier3"},
+		{"imp_tie_interceptor_tier3"},
+		{"imp_tie_interceptor_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_fighter_tier3"},
 	},
 
 	enemyShips = {
-		{"blacksun_bomber_s01_tier3"},
-		{"blacksun_bomber_s02_tier3"},
-		{"blacksun_fighter_s01_tier3"},
-		{"blacksun_fighter_s02_tier3"},
-		{"blacksun_marauder_tier3"},
-		{"blacksun_vehement_tier3"},
+		{"reb_ywing_tier3"},
+		{"reb_xwing_tier3"},
+		{"reb_xwing_tier3"},
+		{"reb_xwing_tier3"},
+		{"reb_xwing_tier3"},
+		{"reb_awing_tier3"},
+		{"reb_awing_tier3"},
+		{"reb_awing_tier3"},
+		{"reb_awing_tier3"},
+		{"reb_awing_tier3"},
 	},
 }
 
-registerScreenPlay("space_battle_naboo_imperial_tier3_4_c", true)
+registerScreenPlay("space_battle_naboo_imperial_tier3_4_b", true)
 
--- Mission 4 Side Quest D: Survival (Space Dathomir - guard the Imperial formation during withdrawal)
-survival_naboo_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
-	className = "survival_naboo_imperial_tier3_4_d",
+-- Mission 4 Side Quest C: Assassinate (Space Dathomir - destroy the Price of Liberty and its escort)
+assassinate_naboo_imperial_tier3_4_c = SpaceAssassinateScreenplay:new {
+	className = "assassinate_naboo_imperial_tier3_4_c",
 
-	questName = "naboo_imperial_tier3_4_d",
-	questType = "survival",
+	questName = "naboo_imperial_tier3_4_c",
+	questType = "assassinate",
 
 	questZone = "space_dathomir",
 
@@ -1208,24 +1196,24 @@ survival_naboo_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "space_battle_naboo_imperial_tier3_4_c",
+	parentQuest = "space_battle_naboo_imperial_tier3_4_b",
 	parentQuestType = "space_battle",
-	parentQuestName = "naboo_imperial_tier3_4_c",
+	parentQuestName = "naboo_imperial_tier3_4_b",
 
-	survivalTime = 300,
-	survivalPoint = "space_dathomir:naboo_imperial_tier3_4_c_survival",
-	delayToFirstAttack = 5,
+	arrivalDelay = 15,
+	failTimer = 20,
 
-	attackDelay = 60,
+	assassinateSpawns = {
+		target = "reb_priceofliberty_tier3",
+		escorts = {"reb_xwing_tier3", "reb_xwing_tier3", "reb_xwing_tier3", "reb_xwing_tier3", "reb_xwing_tier3", "reb_xwing_tier3"},
+	},
 
-	attackShips = {
-		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_bomber_s01_tier3"},
-		{"blacksun_fighter_s02_tier3", "blacksun_marauder_tier3", "blacksun_bomber_s02_tier3"},
-		{"blacksun_vehement_tier3", "blacksun_marauder_tier3", "blacksun_fighter_s01_tier3"},
+	targetPatrols = {
+		{patrolPointName = "naboo_imperial_tier3_4_c_price_of_liberty", zoneName = "space_dathomir", x = 2005, z = 4299, y = -3566},
 	},
 }
 
-registerScreenPlay("survival_naboo_imperial_tier3_4_d", true)
+registerScreenPlay("assassinate_naboo_imperial_tier3_4_c", true)
 
 --[[
 	Tier 4 -- naboo_imperial_tier4 Main Missions
@@ -2003,14 +1991,14 @@ InquisitionSquadronScreenplay = ScreenPlay:new {
 	TIER3_QUEST_STRING_2_SIDE2 = {type = "survival", name = "naboo_imperial_tier3_2_b"},
 	TIER3_QUEST_STRING_2_SIDE3 = {type = "escort", name = "naboo_imperial_tier3_2_c"},
 	TIER3_QUEST_STRING_3 = {type = "delivery", name = "naboo_imperial_tier3_3"},
-	TIER3_QUEST_STRING_3_SIDE1 = {type = "assassinate", name = "naboo_imperial_tier3_3_a"},
-	TIER3_QUEST_STRING_3_SIDE2 = {type = "space_battle", name = "naboo_imperial_tier3_3_b"},
-	TIER3_QUEST_STRING_3_SIDE3 = {type = "escort", name = "naboo_imperial_tier3_3_c"},
+	TIER3_QUEST_STRING_3_SIDE1 = {type = "destroy_surpriseattack", name = "naboo_imperial_tier3_3_a"},
+	TIER3_QUEST_STRING_3_SIDE2 = {type = "rescue", name = "naboo_imperial_tier3_3_b"},
+	TIER3_QUEST_STRING_3_SIDE3 = {type = "inspect", name = "naboo_imperial_tier3_3_c"},
+	TIER3_QUEST_STRING_3_SIDE4 = {type = "delivery_no_pickup", name = "naboo_imperial_tier3_3_d"},
 	TIER3_QUEST_STRING_4 = {type = "assassinate", name = "naboo_imperial_tier3_4"},
-	TIER3_QUEST_STRING_4_SIDE1 = {type = "patrol", name = "naboo_imperial_tier3_4_a"},
-	TIER3_QUEST_STRING_4_SIDE2 = {type = "destroy_surpriseattack", name = "naboo_imperial_tier3_4_b"},
-	TIER3_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "naboo_imperial_tier3_4_c"},
-	TIER3_QUEST_STRING_4_SIDE4 = {type = "survival", name = "naboo_imperial_tier3_4_d"},
+	TIER3_QUEST_STRING_4_SIDE1 = {type = "escort", name = "naboo_imperial_tier3_4_a"},
+	TIER3_QUEST_STRING_4_SIDE2 = {type = "space_battle", name = "naboo_imperial_tier3_4_b"},
+	TIER3_QUEST_STRING_4_SIDE3 = {type = "assassinate", name = "naboo_imperial_tier3_4_c"},
 
 	-- Tier 4
 	TIER4_QUEST_STRING_1 = {type = "survival", name = "naboo_imperial_tier4_1"},
@@ -2145,25 +2133,25 @@ function InquisitionSquadronScreenplay:resetTier3Quests(pPlayer)
 
 	-- Mission 3
 	delivery_naboo_imperial_tier3_3:resetQuest(pPlayer)
-	assassinate_naboo_imperial_tier3_3_a:resetQuest(pPlayer)
-	space_battle_naboo_imperial_tier3_3_b:resetQuest(pPlayer)
-	escort_naboo_imperial_tier3_3_c:resetQuest(pPlayer)
+	destroy_surpriseattack_naboo_imperial_tier3_3_a:resetQuest(pPlayer)
+	rescue_naboo_imperial_tier3_3_b:resetQuest(pPlayer)
+	inspect_naboo_imperial_tier3_3_c:resetQuest(pPlayer)
+	delivery_no_pickup_naboo_imperial_tier3_3_d:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3.type, self.TIER3_QUEST_STRING_3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE1.type, self.TIER3_QUEST_STRING_3_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE2.type, self.TIER3_QUEST_STRING_3_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE3.type, self.TIER3_QUEST_STRING_3_SIDE3.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE4.type, self.TIER3_QUEST_STRING_3_SIDE4.name, false)
 
 	-- Mission 4
 	assassinate_naboo_imperial_tier3_4:resetQuest(pPlayer)
-	patrol_naboo_imperial_tier3_4_a:resetQuest(pPlayer)
-	destroy_surpriseattack_naboo_imperial_tier3_4_b:resetQuest(pPlayer)
-	space_battle_naboo_imperial_tier3_4_c:resetQuest(pPlayer)
-	survival_naboo_imperial_tier3_4_d:resetQuest(pPlayer)
+	escort_naboo_imperial_tier3_4_a:resetQuest(pPlayer)
+	space_battle_naboo_imperial_tier3_4_b:resetQuest(pPlayer)
+	assassinate_naboo_imperial_tier3_4_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4.type, self.TIER3_QUEST_STRING_4.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE1.type, self.TIER3_QUEST_STRING_4_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE2.type, self.TIER3_QUEST_STRING_4_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE3.type, self.TIER3_QUEST_STRING_4_SIDE3.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE4.type, self.TIER3_QUEST_STRING_4_SIDE4.name, false)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 

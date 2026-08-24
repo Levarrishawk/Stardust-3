@@ -1409,7 +1409,25 @@ void ShipManager::reDeedShip(CreatureObject* player, ShipControlDevice* shipDevi
 	}
 
 	String chassisName = ship->getShipChassisName().replaceAll("player_", "");
-	String deedPath = "object/tangible/ship/crafted/chassis/" + chassisName + "_deed.iff";
+	bool isPrototypeTieFighter = chassisName == "prototype_tiefighter";
+	String deedChassisName = chassisName;
+
+	if (isPrototypeTieFighter) {
+		deedChassisName = "tiefighter";
+	}
+
+	String deedPath = "object/tangible/ship/crafted/chassis/" + deedChassisName + "_deed.iff";
+	String prototypeShipTemplate;
+
+	if (isPrototypeTieFighter) {
+		auto shipTemplate = ship->getObjectTemplate();
+
+		if (shipTemplate == nullptr) {
+			return;
+		}
+
+		prototypeShipTemplate = shipTemplate->getFullTemplateString();
+	}
 
 	// Create the deed and transfer
 	auto object = zoneServer->createObject(deedPath.hashCode(), 2);
@@ -1463,6 +1481,11 @@ void ShipManager::reDeedShip(CreatureObject* player, ShipControlDevice* shipDevi
 	*/
 
 	shipDeed->setControlDeviceTemplate(deviceStringName);
+
+	if (isPrototypeTieFighter) {
+		shipDeed->setGeneratedObjectTemplate(prototypeShipTemplate);
+	}
+
 	shipDeed->setCertificationRequired(certificationRequired);
 	shipDeed->setParkingLocation(parkingLocation);
 
