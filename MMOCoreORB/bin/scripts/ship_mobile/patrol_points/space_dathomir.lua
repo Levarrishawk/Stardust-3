@@ -619,6 +619,12 @@ space_dathomir = SpacePatrolPointTable:new {
 	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_3", x = 1977, z = 2776, y = -1514},
 	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_4", x = 3723, z = 3514, y = -1530},
 	{patrolPointName = "tatooine_rebel_tier4_1_escort_duty_5", x = 6199, z = 4606, y = -2378},
+
+	-- Inquisition 3_4_a prison shuttle escort route.
+	{patrolPointName = "naboo_imperial_tier3_4_a_escort_1", x = -3960, z = -400, y = -4950},
+	{patrolPointName = "naboo_imperial_tier3_4_a_escort_2", x = -3758, z = 345, y = -4588},
+	{patrolPointName = "naboo_imperial_tier3_4_a_escort_3", x = -3460, z = 37, y = -3563},
+	{patrolPointName = "naboo_imperial_tier3_4_a_escort_4", x = -2777, z = 778, y = -3350},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_dathomir, "space_dathomir")

@@ -1115,6 +1115,7 @@ escort_naboo_imperial_tier3_4_a = SpaceEscortScreenplay:new {
 	parentQuestName = "naboo_imperial_tier3_4",
 
 	escortShips = {"dathomir_prison_shuttle_tier4"},
+	escortSpeed = 60,
 
 	escortPoints = {
 		{patrolPointName = "naboo_imperial_tier3_4_a_escort_1", zoneName = "space_dathomir", x = -3960, z = -400, y = -4950, escortNumber = 1, radius = 250},
