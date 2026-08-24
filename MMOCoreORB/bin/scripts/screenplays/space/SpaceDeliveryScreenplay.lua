@@ -723,19 +723,29 @@ function SpaceDeliveryScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		return 1
 	end
 
+	-- Hyperspace can notify before the creature's final zone state is settled.
+	-- Defer the check and read the actual current zone after transfer.
+	createEvent(5000, self.className, "checkEnteredZone", pPlayer, "")
+
+	return 0
+end
+
+function SpaceDeliveryScreenplay:checkEnteredZone(pPlayer)
+	if (pPlayer == nil or not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
-		return 0
+		return
 	end
 
-	local pRootParent = SceneObject(pPlayer):getRootParent()
-
-	if (pRootParent ~= nil and SceneObject(pRootParent):getObjectName() == "player_sorosuub_space_yacht") then
-		return 0
+	if (SpaceHelpers:isInYacht(pPlayer)) then
+		return
 	end
 
-	local playerID = SceneObject(pPlayer):getObjectID()
+	local zoneNameHash = getHashCode(SceneObject(pPlayer):getZoneName())
 	local spaceQuestHash = getHashCode(self.questZone)
 
 	if (self.DEBUG_SPACE_DELIVERY) then
@@ -754,15 +764,9 @@ function SpaceDeliveryScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		end
 
 		createEvent(4000, self.className, "startFirstLeg", pPlayer, "")
-
-		return 0
 	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
-
-		return 1
 	end
-
-	return 0
 end
 
 function SpaceDeliveryScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
