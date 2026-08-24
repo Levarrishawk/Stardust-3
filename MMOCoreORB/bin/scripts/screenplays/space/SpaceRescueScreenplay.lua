@@ -58,6 +58,26 @@ registerScreenPlay("SpaceRescueScreenplay", false)
 --]]
 
 function SpaceRescueScreenplay:start()
+	self:spawnActiveAreas()
+end
+
+function SpaceRescueScreenplay:spawnActiveAreas()
+	for i = 1, #self.escortPoints, 1 do
+		local escortPoint = self.escortPoints[i]
+
+		if (isZoneEnabled(escortPoint.zoneName)) then
+			local pQuestArea = spawnSpaceActiveArea(escortPoint.zoneName, "object/space_active_area.iff", escortPoint.x, escortPoint.z, escortPoint.y, escortPoint.radius)
+
+			if (pQuestArea == nil) then
+				Logger:log(self.className .. ":spawnActiveAreas -- Failed to spawn escort area " .. i .. ".", LT_ERROR)
+				return
+			end
+
+			local questAreaID = SceneObject(pQuestArea):getObjectID()
+			writeData(questAreaID .. ":" .. self.className .. ":escortNumber", escortPoint.escortNumber)
+			createObserver(ENTEREDAREA, self.className, "notifyEnteredQuestArea", pQuestArea)
+		end
+	end
 end
 
 function SpaceRescueScreenplay:startQuest(pPlayer, pNpc)
@@ -634,9 +654,6 @@ function SpaceRescueScreenplay:assignEscortPoints(pPlayer)
 	ShipAiAgent(pRescueShip):assignFixedPatrolPointsTable(pointsTable)
 	ShipAiAgent(pRescueShip):setEscortSpeed(self.escortSpeed)
 
-	-- Create observer for reaching patrol points
-	createObserver(ENTEREDAREA, self.className, "notifyEnteredQuestArea", pRescueShip)
-
 	-- Clear old waypoint and create escort waypoint
 	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
 
@@ -717,16 +734,37 @@ function SpaceRescueScreenplay:spawnEscortAttackers(pPlayer)
 	end
 end
 
-function SpaceRescueScreenplay:notifyEnteredQuestArea(pRescueShip, pPlayer, pointNum)
-	if (pRescueShip == nil) then
-		return 1
+function SpaceRescueScreenplay:notifyEnteredQuestArea(pActiveArea, pRescueShip)
+	if (pActiveArea == nil or pRescueShip == nil or not SceneObject(pRescueShip):isShipAiAgent()) then
+		return 0
 	end
 
 	local missionOwnerID = ShipAiAgent(pRescueShip):getMissionOwnerID()
 	local pOwner = getSceneObject(missionOwnerID)
 
 	if (pOwner == nil or not SceneObject(pOwner):isPlayerCreature()) then
-		return 1
+		return 0
+	end
+
+	local playerID = SceneObject(pOwner):getObjectID()
+	local rescueShipID = readData(playerID .. ":" .. self.className .. ":rescueShipID")
+
+	-- Only this player's rescue target may advance the route.
+	if (rescueShipID ~= SceneObject(pRescueShip):getObjectID()) then
+		return 0
+	end
+
+	if (not SpaceHelpers:isSpaceQuestActive(pOwner, self.questType, self.questName)) then
+		return 0
+	end
+
+	local questAreaID = SceneObject(pActiveArea):getObjectID()
+	local pointNum = readData(questAreaID .. ":" .. self.className .. ":escortNumber")
+	local currentIndex = readData(playerID .. ":" .. self.className .. ":escortPointIndex")
+
+	-- Ignore a later area if a patrol path happens to cross it out of order.
+	if (pointNum ~= currentIndex) then
+		return 0
 	end
 
 	if (self.DEBUG_SPACE_RESCUE) then
@@ -736,19 +774,16 @@ function SpaceRescueScreenplay:notifyEnteredQuestArea(pRescueShip, pPlayer, poin
 	local pGhost = CreatureObject(pOwner):getPlayerObject()
 
 	if (pGhost == nil) then
-		return 1
+		return 0
 	end
 
-	local playerID = SceneObject(pOwner):getObjectID()
 	local escortPoints = self.escortPoints
-	local currentIndex = readData(playerID .. ":" .. self.className .. ":escortPointIndex")
 
 	-- Check if this is the final point
 	if (currentIndex >= #escortPoints) then
 		-- Mission complete!
-		dropObserver(ENTEREDAREA, self.className, "notifyEnteredQuestArea", pRescueShip)
 		self:completeQuest(pOwner, "true")
-		return 1
+		return 0
 	end
 
 	-- Move to next point

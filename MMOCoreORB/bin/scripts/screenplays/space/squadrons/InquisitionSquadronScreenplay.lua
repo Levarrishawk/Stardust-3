@@ -979,6 +979,7 @@ rescue_naboo_imperial_tier3_3_b = SpaceRescueScreenplay:new {
 	rescueShip = "imp_lambda_shuttle_tier3",
 	rescueLocation = {x = 4300, z = 6400, y = -4900}, -- space_dathomir:naboo_imperial_tier3_rescue1_1
 	repairDelay = 30,
+	escortSpeed = 60,
 
 	escortPoints = {
 		{patrolPointName = "naboo_imperial_tier3_rescue1_2", zoneName = "space_dathomir", x = 222, z = 6250, y = -4778, escortNumber = 1, radius = 250},
