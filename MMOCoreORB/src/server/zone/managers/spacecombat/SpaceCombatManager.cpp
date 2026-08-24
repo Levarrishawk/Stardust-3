@@ -516,7 +516,11 @@ float SpaceCombatManager::applyComponentDamage(ShipObject* attackerShip, ShipObj
 float SpaceCombatManager::applyActiveComponentDamage(ShipObject* attackerShip, ShipObject* defenderShip, const SpaceCollisionResult& result, float damage, int targetSlot, ShipDeltaVector* deltaVector, Vector<BasePacket*>& messages) const {
 	bool defenderDisabled = defenderShip->isShipDisabled();
 
-	int activeSlot = getActiveComponentToDamage(defenderShip);
+	int activeSlot = targetSlot;
+
+	if (!defenderShip->isComponentTargetable(activeSlot) || defenderShip->getCurrentHitpointsMap()->get(activeSlot) <= 0.f) {
+		activeSlot = getActiveComponentToDamage(defenderShip);
+	}
 
 	if (activeSlot != Components::CHASSIS && defenderShip->getCurrentHitpointsMap()->get(activeSlot) > 0.f) {
 		damage = applyComponentDamage(attackerShip, defenderShip, result, damage, activeSlot, deltaVector, messages);
@@ -542,7 +546,7 @@ int SpaceCombatManager::getActiveComponentToDamage(ShipObject* target) const {
 		auto slot = componentMap->getKeyAt(i);
 		auto compCRC = componentMap->getValueAt(i);
 
-		if (compCRC == 0) {
+		if (compCRC == 0 || target->getCurrentHitpointsMap()->get(slot) <= 0.f) {
 			continue;
 		}
 
