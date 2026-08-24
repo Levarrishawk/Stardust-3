@@ -59,6 +59,7 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- and Vyrke is the Tier 3 trainer.
 	local isFaZoll = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_naboo.iff"
 	local isVyrke = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier3_naboo_vrke.iff"
+	local isJaceYiaso = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier4_naboo_jace_yiaso.iff"
 
 	-- Player is Rebel Pilot
 	if (SpaceHelpers:isRebelPilot(pPlayer) or (not isImperialPilot and ghost:getFactionStanding("imperial") < 0)) then
@@ -78,6 +79,12 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("go_to_next")
 	elseif (isInquisitionPilot and ghost:getPilotTier() == 3 and not isVyrke) then
 		return convoTemplate:getScreen("tier2_completed")
+	elseif (isInquisitionPilot and ghost:getPilotTier() >= 4 and not isJaceYiaso) then
+		-- Vrke's Tier 3 completion screen directs the pilot to Grand Inquisitor
+		-- Ja'ce Yiaso. Do not allow an earlier trainer to serve Tier 4 missions.
+		return convoTemplate:getScreen("tier3_completed")
+	elseif (isJaceYiaso and (not isInquisitionPilot or ghost:getPilotTier() < 4)) then
+		return convoTemplate:getScreen("go_to_next")
 	end
 
 	-- Meeting Fa'Zoll establishes the pilot's clearance to use the restricted
