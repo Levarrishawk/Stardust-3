@@ -366,6 +366,11 @@ function SpacePatrolScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
 	-- Check to see if its the final patrol point
 	if (pointNumber == #self.patrolPoints) then
 		deleteData(playerID .. ":" .. self.className)
+
+		-- Finish the journal quest and process any completion-based side quest.
+		-- Previously this branch returned without calling completeQuest, leaving
+		-- patrols permanently active after their final waypoint.
+		self:completeQuest(pPilot, "true")
 		return 0
 	-- Arrived at first waypoint, send them the initial progress message
 	elseif (playerPointCount == 0) then
