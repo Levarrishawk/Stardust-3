@@ -18,6 +18,8 @@ SpaceDeliveryScreenplay = SpaceQuestLogic:new {
 
 	attackDelay = 0, -- In Seconds
 	attackShips = {},
+	waitForAttackShips = false,
+	postDeliveryAttackDelay = 1,
 
 	--[[
 		Journal task layout, taken from the delivery_no_pickup string files:
@@ -543,6 +545,13 @@ function SpaceDeliveryScreenplay:finishLeg(pPlayer, legName)
 		return
 	end
 
+	-- Some deliveries culminate in an interception after the cargo transfer.
+	-- Keep the journal active until those mission targets have been destroyed.
+	if (self.waitForAttackShips and #self.attackShips > 0) then
+		createEvent(self.postDeliveryAttackDelay * 1000, self.className, "spawnAttackWave", pPlayer, "")
+		return
+	end
+
 	createEvent(1000, self.className, "completeQuest", pPlayer, "true")
 end
 
@@ -625,6 +634,11 @@ function SpaceDeliveryScreenplay:spawnAttackWave(pPlayer)
 	end
 
 	if (#shipIDs == 0) then
+		if (self.waitForAttackShips) then
+			CreatureObject(pPlayer):sendSystemMessage("Mission failed because the intercepting ships could not be spawned.")
+			createEvent(1000, self.className, "failQuest", pPlayer, "true")
+		end
+
 		return
 	end
 
@@ -841,6 +855,10 @@ function SpaceDeliveryScreenplay:notifyAttackShipDestroyed(pShipAgent, pKillerSh
 		return 1
 	end
 
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return 1
+	end
+
 	local agentID = SceneObject(pShipAgent):getObjectID()
 
 	-- Remove agent as mission object
@@ -865,6 +883,10 @@ function SpaceDeliveryScreenplay:notifyAttackShipDestroyed(pShipAgent, pKillerSh
 
 	CreatureObject(pPlayer):playEffect("clienteffect/ui_quest_destroyed_all.cef", "")
 	CreatureObject(pPlayer):sendSystemMessage("@spacequest/" .. self.questType .. "/" .. self.questName .. ":attack_stopped")
+
+	if (self.waitForAttackShips) then
+		createEvent(1000, self.className, "completeQuest", pPlayer, "true")
+	end
 
 	return 1
 end

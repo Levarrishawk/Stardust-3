@@ -1259,7 +1259,8 @@ registerScreenPlay("destroy_surpriseattack_naboo_imperial_tier4_1_b", true)
 delivery_no_pickup_naboo_imperial_tier4_1_c = SpaceDeliveryNoPickupScreenplay:new {
 	className = "delivery_no_pickup_naboo_imperial_tier4_1_c", questName = "naboo_imperial_tier4_1_c", questType = "delivery_no_pickup", questZone = "space_dathomir", creditReward = 0,
 	sideQuest = false, sideQuestType = "", parentQuest = "destroy_surpriseattack_naboo_imperial_tier4_1_b", parentQuestType = "destroy_surpriseattack", parentQuestName = "naboo_imperial_tier4_1_b",
-	deliveryShip = "imp_lambda_shuttle_tier4", deliveryPoint = {x = 6312, z = 6992, y = -5062}, attackDelay = 45,
+	deliveryShip = "imp_lambda_shuttle_tier4", deliveryPoint = {x = 6312, z = 6992, y = -5062},
+	waitForAttackShips = true, postDeliveryAttackDelay = 2,
 	attackShips = {{"coynite_merc_neutron_tier4", "coynite_merc_neutron_tier4", "coynite_merc_neutron_tier4", "coynite_merc_neutron_tier4"}},
 }
 registerScreenPlay("delivery_no_pickup_naboo_imperial_tier4_1_c", true)
