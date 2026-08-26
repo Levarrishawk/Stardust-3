@@ -1297,7 +1297,7 @@ rescue_naboo_imperial_tier4_2_a = SpaceRescueScreenplay:new {
 		{patrolPointName = "naboo_imperial_tier4_rescue1_3", zoneName = "space_dathomir", x = -7528, z = 2452, y = -685, escortNumber = 2, radius = 250},
 		{patrolPointName = "naboo_imperial_tier4_rescue1_4", zoneName = "space_dathomir", x = -7505, z = 2904, y = -2924, escortNumber = 3, radius = 250},
 	},
-	attackDelay = 60, attackShips = {{"coynite_merc_quasar_tier4"}},
+	attackDelay = 60, attackShips = {{{count = 1, shipName = "coynite_merc_quasar_tier4"}}},
 }
 registerScreenPlay("rescue_naboo_imperial_tier4_2_a", true)
 

@@ -541,8 +541,18 @@ function SpaceRescueScreenplay:spawnAttackers(pPlayer)
 
 		for j = 1, #waveShips, 1 do
 			local shipData = waveShips[j]
-			local count = shipData.count or 1
-			local shipName = shipData.shipName
+			local count = 1
+			local shipName = shipData
+
+			if (type(shipData) == "table") then
+				count = shipData.count or 1
+				shipName = shipData.shipName
+			end
+
+			if (type(shipName) ~= "string" or shipName == "") then
+				Logger:log(self.className .. ":spawnAttackers -- Invalid attacker ship entry in wave " .. i .. ".", LT_ERROR)
+				goto continueAttackShip
+			end
 
 			for k = 1, count, 1 do
 				local pAttacker = spawnShipAgent(shipName, self.questZone, rescueLocation.x + getRandomNumber(200, 400), rescueLocation.z + getRandomNumber(-100, 100), rescueLocation.y + getRandomNumber(200, 400))
@@ -561,6 +571,8 @@ function SpaceRescueScreenplay:spawnAttackers(pPlayer)
 					CreatureObject(pPlayer):addSpaceMissionObject(attackerID, false)
 				end
 			end
+
+			::continueAttackShip::
 		end
 	end
 end
@@ -710,8 +722,18 @@ function SpaceRescueScreenplay:spawnEscortAttackers(pPlayer)
 
 		for j = 1, #waveShips, 1 do
 			local shipData = waveShips[j]
-			local count = shipData.count or 1
-			local shipName = shipData.shipName
+			local count = 1
+			local shipName = shipData
+
+			if (type(shipData) == "table") then
+				count = shipData.count or 1
+				shipName = shipData.shipName
+			end
+
+			if (type(shipName) ~= "string" or shipName == "") then
+				Logger:log(self.className .. ":spawnEscortAttackers -- Invalid attacker ship entry in wave " .. i .. ".", LT_ERROR)
+				goto continueEscortAttackShip
+			end
 
 			for k = 1, count, 1 do
 				local pAttacker = spawnShipAgent(shipName, self.questZone, shipX + getRandomNumber(200, 400), shipZ + getRandomNumber(-100, 100), shipY + getRandomNumber(200, 400))
@@ -730,6 +752,8 @@ function SpaceRescueScreenplay:spawnEscortAttackers(pPlayer)
 					CreatureObject(pPlayer):addSpaceMissionObject(attackerID, false)
 				end
 			end
+
+			::continueEscortAttackShip::
 		end
 	end
 end
