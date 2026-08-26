@@ -936,7 +936,36 @@ end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Black Epsilon Squadron tier 1
 function SpaceHelpers:addBlackEpsilonNextWaypoint(pPlayer)
-	addFaZollWaypointImpl(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("talus", "@npc_spawner_n:prisk_kith_vys", "@npc_spawner_n:prisk_kith_vys", -2184, 0, 2273, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addBlackEpsilonHaymirWaypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:haymir_rendundi", "@npc_spawner_n:haymir_rendundi", 4065, 0, -6193, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addBlackEpsilonInsurgentWaypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("dantooine", "@npc_spawner_n:insurgent", "@npc_spawner_n:insurgent", -4220, 0, -2380, WAYPOINT_BLUE, true, true, 0)
+	end
 end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Crimson Phoenix Squadron tier 1

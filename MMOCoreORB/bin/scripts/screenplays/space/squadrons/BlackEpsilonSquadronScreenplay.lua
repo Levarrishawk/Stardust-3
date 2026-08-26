@@ -11,6 +11,10 @@ local SpaceHelpers = require("utils.space_helpers")
 	Tier 1 -- Lt. Hakassha Sireen Main Missions (Corellia)
 ]]
 
+-- Legacy placeholder missions are retained below for history, but are not registered.
+-- The authoritative Pre-CU chains are loaded after this block.
+if false then
+
 -- Mission 1: Patrol with surprise attack
 patrol_corellia_imperial_1 = SpacePatrolScreenplay:new {
 	className = "patrol_corellia_imperial_1",
@@ -1963,6 +1967,9 @@ destroy_duty_corellia_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 }
 
 registerScreenPlay("destroy_duty_corellia_imperial_tier4_1", true)
+end
+
+includeFile("screenplays/space/squadrons/BlackEpsilonSquadronMissionScreenplay.lua")
 
 --[[
 
@@ -1973,71 +1980,86 @@ registerScreenPlay("destroy_duty_corellia_imperial_tier4_1", true)
 BlackEpsilonSquadronScreenplay = ScreenPlay:new {
 	screenplayName = "BlackEpsilonSquadronScreenplay",
 
-	-- Tier 1 (Lt. Barn Sinkko)
+	-- Tier 1 (Hakasha Sireen)
 	QUEST_STRING_1 = {type = "patrol", name = "corellia_imperial_1"},
 	QUEST_STRING_1_SIDE = {type = "destroy_surpriseattack", name = "corellia_imperial_1"},
 	QUEST_STRING_2 = {type = "destroy", name = "corellia_imperial_2"},
-	QUEST_STRING_3 = {type = "patrol", name = "corellia_imperial_3"},
+	QUEST_STRING_3 = {type = "escort", name = "corellia_imperial_3"},
 	QUEST_STRING_3_SIDE = {type = "escort", name = "corellia_imperial_3"},
 	QUEST_STRING_4 = {type = "assassinate", name = "corellia_imperial_4"},
 	QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "corellia_imperial_6"},
 	QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "corellia_imperial_7"},
 
 	-- Tier 2
-	TIER2_QUEST_STRING_1 = {type = "inspect", name = "corellia_imperial_tier2_1"},
-	TIER2_QUEST_STRING_1_SIDE = {type = "destroy_surpriseattack", name = "corellia_imperial_tier2_1"},
-	TIER2_QUEST_STRING_2 = {type = "escort", name = "corellia_imperial_tier2_2"},
-	TIER2_QUEST_STRING_3 = {type = "recovery", name = "corellia_imperial_tier2_3"},
-	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "corellia_imperial_tier2_4"},
-	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "corellia_imperial_tier2_destroyduty"},
-	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "corellia_imperial_tier2_recoveryduty"},
-	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "corellia_imperial_tier2_escortduty"},
+	TIER2_QUEST_STRING_1 = {type = "recovery", name = "corellia_imperial_16"},
+	TIER2_QUEST_STRING_1_SIDE = {type = "assassinate", name = "corellia_imperial_12"},
+	TIER2_QUEST_STRING_2 = {type = "assassinate", name = "corellia_imperial_14"},
+	TIER2_QUEST_STRING_3 = {type = "destroy_surpriseattack", name = "corellia_imperial_15_split"},
+	TIER2_QUEST_STRING_4 = {type = "destroy", name = "corellia_imperial_17"},
+	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "corellia_imperial_8"},
+	TIER2_QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "corellia_imperial_9"},
+	TIER2_QUEST_STRING_DUTY_3 = {type = "destroy_duty", name = "corellia_imperial_10"},
+	TIER2_QUEST_STRING_DUTY_4 = {type = "escort_duty", name = "corellia_imperial_11"},
 
 	-- Tier 3
-	TIER3_QUEST_STRING_1 = {type = "recovery", name = "corellia_imperial_tier3_1"},
-	TIER3_QUEST_STRING_1_SIDE1 = {type = "patrol", name = "corellia_imperial_tier3_1_A"},
-	TIER3_QUEST_STRING_1_SIDE2 = {type = "destroy_surpriseattack", name = "corellia_imperial_tier3_1_b"},
-	TIER3_QUEST_STRING_1_SIDE3 = {type = "assassinate", name = "corellia_imperial_tier3_1_c"},
-	TIER3_QUEST_STRING_1_SIDE4 = {type = "space_battle", name = "corellia_imperial_tier3_1_d"},
-	TIER3_QUEST_STRING_2 = {type = "inspect", name = "corellia_imperial_tier3_2"},
-	TIER3_QUEST_STRING_2_SIDE1 = {type = "delivery", name = "corellia_imperial_tier3_2_a"},
-	TIER3_QUEST_STRING_2_SIDE2 = {type = "survival", name = "corellia_imperial_tier3_2_b"},
-	TIER3_QUEST_STRING_2_SIDE3 = {type = "escort", name = "corellia_imperial_tier3_2_c"},
-	TIER3_QUEST_STRING_3 = {type = "delivery", name = "corellia_imperial_tier3_3"},
+	TIER3_QUEST_STRING_1 = {type = "patrol", name = "corellia_imperial_tier3_1"},
+	TIER3_QUEST_STRING_1_SIDE1 = {type = "inspect", name = "corellia_imperial_tier3_1_a"},
+	TIER3_QUEST_STRING_1_SIDE2 = {type = "delivery_no_pickup", name = "corellia_imperial_tier3_1_b"},
+	TIER3_QUEST_STRING_1_SIDE3 = {type = "recovery", name = "corellia_imperial_tier3_1_c"},
+	TIER3_QUEST_STRING_1_SIDE4 = {type = "recovery", name = "corellia_imperial_tier3_1_c"},
+	TIER3_QUEST_STRING_2 = {type = "recovery", name = "corellia_imperial_tier3_2"},
+	TIER3_QUEST_STRING_2_SIDE1 = {type = "survival", name = "corellia_imperial_tier3_2_a"},
+	TIER3_QUEST_STRING_2_SIDE2 = {type = "escort", name = "corellia_imperial_tier3_2_b"},
+	TIER3_QUEST_STRING_2_SIDE3 = {type = "space_battle", name = "corellia_imperial_tier3_2_c"},
+	TIER3_QUEST_STRING_3 = {type = "rescue", name = "corellia_imperial_tier3_3"},
 	TIER3_QUEST_STRING_3_SIDE1 = {type = "assassinate", name = "corellia_imperial_tier3_3_a"},
-	TIER3_QUEST_STRING_3_SIDE2 = {type = "space_battle", name = "corellia_imperial_tier3_3_b"},
-	TIER3_QUEST_STRING_3_SIDE3 = {type = "escort", name = "corellia_imperial_tier3_3_c"},
-	TIER3_QUEST_STRING_4 = {type = "assassinate", name = "corellia_imperial_tier3_4"},
-	TIER3_QUEST_STRING_4_SIDE1 = {type = "patrol", name = "corellia_imperial_tier3_4_a"},
-	TIER3_QUEST_STRING_4_SIDE2 = {type = "destroy_surpriseattack", name = "corellia_imperial_tier3_4_b"},
-	TIER3_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "corellia_imperial_tier3_4_c"},
-	TIER3_QUEST_STRING_4_SIDE4 = {type = "survival", name = "corellia_imperial_tier3_4_d"},
+	TIER3_QUEST_STRING_3_SIDE2 = {type = "assassinate", name = "corellia_imperial_tier3_3_a"},
+	TIER3_QUEST_STRING_3_SIDE3 = {type = "assassinate", name = "corellia_imperial_tier3_3_a"},
+	TIER3_QUEST_STRING_4 = {type = "recovery", name = "corellia_imperial_tier3_4"},
+	TIER3_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "corellia_imperial_tier3_4_a"},
+	TIER3_QUEST_STRING_4_SIDE2 = {type = "survival", name = "corellia_imperial_tier3_4_b"},
+	TIER3_QUEST_STRING_4_SIDE3 = {type = "assassinate", name = "corellia_imperial_tier3_4_c"},
+	TIER3_QUEST_STRING_4_SIDE4 = {type = "assassinate", name = "corellia_imperial_tier3_4_c"},
 
 	-- Tier 4
-	TIER4_QUEST_STRING_1 = {type = "survival", name = "corellia_imperial_tier4_1"},
-	TIER4_QUEST_STRING_1_SIDE1 = {type = "space_battle", name = "corellia_imperial_tier4_1_a"},
-	TIER4_QUEST_STRING_1_SIDE2 = {type = "space_battle", name = "corellia_imperial_tier4_1_b"},
-	TIER4_QUEST_STRING_2 = {type = "assassinate", name = "corellia_imperial_tier4_2"},
-	TIER4_QUEST_STRING_2_SIDE1 = {type = "delivery_no_pickup", name = "corellia_imperial_tier4_2_a"},
-	TIER4_QUEST_STRING_2_SIDE2 = {type = "rescue", name = "corellia_imperial_tier4_2_b"},
-	TIER4_QUEST_STRING_3 = {type = "space_battle", name = "corellia_imperial_tier4_3"},
-	TIER4_QUEST_STRING_3_SIDE1 = {type = "space_battle", name = "corellia_imperial_tier4_3_a"},
-	TIER4_QUEST_STRING_3_SIDE2 = {type = "survival", name = "corellia_imperial_tier4_3_b"},
-	TIER4_QUEST_STRING_4 = {type = "recovery", name = "corellia_imperial_tier4_4"},
-	TIER4_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "corellia_imperial_tier4_4_a"},
-	TIER4_QUEST_STRING_4_SIDE2 = {type = "rescue", name = "corellia_imperial_tier4_4_b"},
-	TIER4_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "corellia_imperial_tier4_4_c"},
+	TIER4_QUEST_STRING_1 = {type = "patrol", name = "corellia_imperial_tier4_1"},
+	TIER4_QUEST_STRING_1_SIDE1 = {type = "inspect", name = "corellia_imperial_tier4_1_a"},
+	TIER4_QUEST_STRING_1_SIDE2 = {type = "survival", name = "corellia_imperial_tier4_1_b"},
+	TIER4_QUEST_STRING_2 = {type = "recovery", name = "corellia_imperial_tier4_2"},
+	TIER4_QUEST_STRING_2_SIDE1 = {type = "inspect", name = "corellia_imperial_tier4_2_a"},
+	TIER4_QUEST_STRING_2_SIDE2 = {type = "delivery_no_pickup", name = "corellia_imperial_tier4_2_b"},
+	TIER4_QUEST_STRING_3 = {type = "escort", name = "corellia_imperial_tier4_3"},
+	TIER4_QUEST_STRING_3_SIDE1 = {type = "rescue", name = "corellia_imperial_tier4_3_a"},
+	TIER4_QUEST_STRING_3_SIDE2 = {type = "inspect", name = "corellia_imperial_tier4_3_c"},
+	TIER4_QUEST_STRING_4 = {type = "assassinate", name = "corellia_imperial_tier4_4"},
+	TIER4_QUEST_STRING_4_SIDE1 = {type = "recovery", name = "corellia_imperial_tier4_4_a"},
+	TIER4_QUEST_STRING_4_SIDE2 = {type = "destroy_surpriseattack", name = "corellia_imperial_tier4_4_b"},
+	TIER4_QUEST_STRING_4_SIDE3 = {type = "assassinate", name = "corellia_imperial_tier4_4_d"},
 	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "master_imperial_1"},
 	TIER4_QUEST_STRING_MASTER_2 = {type = "destroy", name = "master_imperial_2"},
-	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "corellia_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "corellia_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "corellia_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_4 = {type = "destroy_duty", name = "corellia_imperial_tier4_1"},
+	TIER4_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "corellia_imperial_tier4_1"},
+	TIER4_QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "corellia_imperial_tier4_2"},
+	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "corellia_imperial_tier4_3"},
+	TIER4_QUEST_STRING_DUTY_4 = {type = "rescue_duty", name = "corellia_imperial_tier4_4"},
 }
 
 registerScreenPlay("BlackEpsilonSquadronScreenplay", false)
 
 function BlackEpsilonSquadronScreenplay:start()
+end
+
+function BlackEpsilonSquadronScreenplay:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
+	if (pPlayer == nil) then
+		return
+	end
+
+	for i = #missionScreenplays, 1, -1 do
+		missionScreenplays[i]:resetQuest(pPlayer)
+	end
+
+	for i = 1, #missionQuests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, missionQuests[i].type, missionQuests[i].name, false)
+	end
 end
 
 -- Reset functions for quest clearing
@@ -2235,4 +2257,47 @@ function BlackEpsilonSquadronScreenplay:resetTier4Quests(pPlayer)
 	removeQuestStatus(playerID .. BlackEpsilonSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward")
 	removeQuestStatus(playerID .. BlackEpsilonSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward")
 	removeQuestStatus(playerID .. BlackEpsilonSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward")
+end
+
+-- Clear every phase in a reconstructed mission chain. Starting again from the
+-- trainer cannot inherit a completed child quest or a stale spawned objective.
+local function resetBlackEpsilonChain(pPlayer, screenplayNames, quests)
+	if (pPlayer == nil) then
+		return
+	end
+
+	for i = 1, #screenplayNames do
+		local screenplay = _G[screenplayNames[i]]
+		if (screenplay ~= nil) then
+			screenplay:resetQuest(pPlayer)
+		end
+	end
+
+	for i = 1, #quests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, quests[i][1], quests[i][2], false)
+	end
+end
+
+function BlackEpsilonSquadronScreenplay:resetSireenQuests(pPlayer)
+	resetBlackEpsilonChain(pPlayer,
+		{"patrol_corellia_imperial_1", "destroy_surpriseattack_corellia_imperial_1", "destroy_corellia_imperial_2", "escort_corellia_imperial_3", "assassinate_corellia_imperial_4"},
+		{{"patrol", "corellia_imperial_1"}, {"destroy_surpriseattack", "corellia_imperial_1"}, {"destroy", "corellia_imperial_2"}, {"escort", "corellia_imperial_3"}, {"assassinate", "corellia_imperial_4"}})
+end
+
+function BlackEpsilonSquadronScreenplay:resetTier2Quests(pPlayer)
+	resetBlackEpsilonChain(pPlayer,
+		{"recovery_corellia_imperial_16", "assassinate_corellia_imperial_12", "assassinate_corellia_imperial_14", "patrol_corellia_imperial_15", "destroy_surpriseattack_corellia_imperial_15_split", "inspect_corellia_imperial_13", "assassinate_corellia_imperial_17", "destroy_corellia_imperial_17"},
+		{{"recovery", "corellia_imperial_16"}, {"assassinate", "corellia_imperial_12"}, {"assassinate", "corellia_imperial_14"}, {"patrol", "corellia_imperial_15"}, {"destroy_surpriseattack", "corellia_imperial_15_split"}, {"inspect", "corellia_imperial_13"}, {"assassinate", "corellia_imperial_17"}, {"destroy", "corellia_imperial_17"}})
+end
+
+function BlackEpsilonSquadronScreenplay:resetTier3Quests(pPlayer)
+	resetBlackEpsilonChain(pPlayer,
+		{"patrol_corellia_imperial_tier3_1", "inspect_corellia_imperial_tier3_1_a", "delivery_no_pickup_corellia_imperial_tier3_1_b", "recovery_corellia_imperial_tier3_1_c", "recovery_corellia_imperial_tier3_2", "survival_corellia_imperial_tier3_2_a", "escort_corellia_imperial_tier3_2_b", "space_battle_corellia_imperial_tier3_2_c", "rescue_corellia_imperial_tier3_3", "assassinate_corellia_imperial_tier3_3_a", "recovery_corellia_imperial_tier3_4", "assassinate_corellia_imperial_tier3_4_a", "survival_corellia_imperial_tier3_4_b", "assassinate_corellia_imperial_tier3_4_c"},
+		{{"patrol", "corellia_imperial_tier3_1"}, {"inspect", "corellia_imperial_tier3_1_a"}, {"delivery_no_pickup", "corellia_imperial_tier3_1_b"}, {"recovery", "corellia_imperial_tier3_1_c"}, {"recovery", "corellia_imperial_tier3_2"}, {"survival", "corellia_imperial_tier3_2_a"}, {"escort", "corellia_imperial_tier3_2_b"}, {"space_battle", "corellia_imperial_tier3_2_c"}, {"rescue", "corellia_imperial_tier3_3"}, {"assassinate", "corellia_imperial_tier3_3_a"}, {"recovery", "corellia_imperial_tier3_4"}, {"assassinate", "corellia_imperial_tier3_4_a"}, {"survival", "corellia_imperial_tier3_4_b"}, {"assassinate", "corellia_imperial_tier3_4_c"}})
+end
+
+function BlackEpsilonSquadronScreenplay:resetTier4Quests(pPlayer)
+	resetBlackEpsilonChain(pPlayer,
+		{"patrol_corellia_imperial_tier4_1", "inspect_corellia_imperial_tier4_1_a", "survival_corellia_imperial_tier4_1_b", "recovery_corellia_imperial_tier4_2", "inspect_corellia_imperial_tier4_2_a", "delivery_no_pickup_corellia_imperial_tier4_2_b", "escort_corellia_imperial_tier4_3", "rescue_corellia_imperial_tier4_3_a", "patrol_corellia_imperial_tier4_3_b", "inspect_corellia_imperial_tier4_3_c", "assassinate_corellia_imperial_tier4_4", "recovery_corellia_imperial_tier4_4_a", "destroy_surpriseattack_corellia_imperial_tier4_4_b", "space_battle_corellia_imperial_tier4_4_c", "assassinate_corellia_imperial_tier4_4_d"},
+		{{"patrol", "corellia_imperial_tier4_1"}, {"inspect", "corellia_imperial_tier4_1_a"}, {"survival", "corellia_imperial_tier4_1_b"}, {"recovery", "corellia_imperial_tier4_2"}, {"inspect", "corellia_imperial_tier4_2_a"}, {"delivery_no_pickup", "corellia_imperial_tier4_2_b"}, {"escort", "corellia_imperial_tier4_3"}, {"rescue", "corellia_imperial_tier4_3_a"}, {"patrol", "corellia_imperial_tier4_3_b"}, {"inspect", "corellia_imperial_tier4_3_c"}, {"assassinate", "corellia_imperial_tier4_4"}, {"recovery", "corellia_imperial_tier4_4_a"}, {"destroy_surpriseattack", "corellia_imperial_tier4_4_b"}, {"space_battle", "corellia_imperial_tier4_4_c"}, {"assassinate", "corellia_imperial_tier4_4_d"}})
 end
