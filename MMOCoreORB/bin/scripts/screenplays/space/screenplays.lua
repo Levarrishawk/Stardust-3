@@ -215,6 +215,7 @@ includeFile("space/conversations/imperial/nialDeclannConvoHandler.lua")
 
 -- Black Epsilon Squadron
 includeFile("space/squadrons/BlackEpsilonSquadronScreenplay.lua")
+includeFile("space/squadrons/BlackEpsilonSquadronMissionScreenplay.lua")
 
 includeFile("space/conversations/imperial/black_epsilon_squadron/hakasshaSireenConvoHandler.lua")
 
@@ -226,6 +227,8 @@ includeFile("space/conversations/imperial/inquisition_squadron/barlowInquisition
 
 -- Storm Squadron
 includeFile("space/squadrons/StormSquadronScreenplay.lua")
+includeFile("space/squadrons/StormSquadronTier3Screenplay.lua")
+includeFile("space/squadrons/StormSquadronTier4Screenplay.lua")
 
 includeFile("space/conversations/imperial/storm_squadron/akalColzetConvoHandler.lua")
 

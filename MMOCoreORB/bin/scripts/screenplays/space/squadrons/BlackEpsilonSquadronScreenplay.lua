@@ -1969,8 +1969,6 @@ destroy_duty_corellia_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 registerScreenPlay("destroy_duty_corellia_imperial_tier4_1", true)
 end
 
-includeFile("screenplays/space/squadrons/BlackEpsilonSquadronMissionScreenplay.lua")
-
 --[[
 
 	BlackEpsilonSquadronScreenplay

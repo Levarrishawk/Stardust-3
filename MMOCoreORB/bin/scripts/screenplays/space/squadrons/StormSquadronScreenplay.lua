@@ -1158,8 +1158,6 @@ survival_tatooine_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
 registerScreenPlay("survival_tatooine_imperial_tier3_4_d", true)
 ]]
 
-includeFile("screenplays/space/squadrons/StormSquadronTier3Screenplay.lua")
-
 --[[
 	Tier 4 -- tatooine_imperial_tier4 Main Missions
 ]]
@@ -1901,8 +1899,6 @@ destroy_duty_tatooine_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 }
 
 registerScreenPlay("destroy_duty_tatooine_imperial_tier4_1", true)
-
-includeFile("screenplays/space/squadrons/StormSquadronTier4Screenplay.lua")
 
 --[[
 
