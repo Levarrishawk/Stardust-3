@@ -25,10 +25,12 @@ function nialDeclannConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local stageOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, "destroy", "master_imperial_1")
 	local stageTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, "destroy", "master_imperial_2")
 
-	if (stageOneActive or stageTwoActive or (stageOneComplete and not stageTwoComplete)) then
+	if (stageOneActive or stageTwoActive) then
 		return convoTemplate:getScreen("on_mission")
 	elseif (stageTwoComplete or SpaceHelpers:hasMasterSkill(pPlayer, "imperial_navy")) then
 		return convoTemplate:getScreen("completed")
+	elseif (stageOneComplete) then
+		return convoTemplate:getScreen("second_assignment_intro")
 	elseif (SpaceHelpers:isImperialPilot(pPlayer) and ghost:getPilotTier() >= 5) then
 		return convoTemplate:getScreen("briefing")
 	end
@@ -64,6 +66,15 @@ function nialDeclannConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc,
 		SpaceHelpers:clearSpaceQuest(pPlayer, "destroy", "master_imperial_1", false)
 		SpaceHelpers:clearSpaceQuest(pPlayer, "destroy", "master_imperial_2", false)
 		destroy_master_imperial_1:startQuest(pPlayer, pNpc)
+	elseif (screenID == "accept_second_master_mission"
+			and SpaceHelpers:isImperialPilot(pPlayer)
+			and LuaPlayerObject(pGhost):getPilotTier() >= 5
+			and SpaceHelpers:isSpaceQuestComplete(pPlayer, "destroy", "master_imperial_1")
+			and not SpaceHelpers:isSpaceQuestActive(pPlayer, "destroy", "master_imperial_2")
+			and not SpaceHelpers:isSpaceQuestComplete(pPlayer, "destroy", "master_imperial_2")) then
+		destroy_master_imperial_2:resetQuest(pPlayer)
+		SpaceHelpers:clearSpaceQuest(pPlayer, "destroy", "master_imperial_2", false)
+		destroy_master_imperial_2:startQuest(pPlayer, pNpc)
 	end
 
 	return pClonedScreen

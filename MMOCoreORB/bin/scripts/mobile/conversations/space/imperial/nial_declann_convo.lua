@@ -43,6 +43,44 @@ local acceptMasterMission = ConvoScreen:new {
 }
 nial_declann_convo:addScreen(acceptMasterMission)
 
+local secondAssignmentIntro = ConvoScreen:new {
+	id = "second_assignment_intro",
+	leftDialog = "@conversation/imperial_master_trainer:s_b170039f",
+	stopConversation = "false",
+	options = {
+		{"@conversation/imperial_master_trainer:s_78d92576", "second_assignment_target"},
+	}
+}
+nial_declann_convo:addScreen(secondAssignmentIntro)
+
+local secondAssignmentTarget = ConvoScreen:new {
+	id = "second_assignment_target",
+	leftDialog = "@conversation/imperial_master_trainer:s_36e64ebe",
+	stopConversation = "false",
+	options = {
+		{"@conversation/imperial_master_trainer:s_b41b5772", "second_assignment_orders"},
+	}
+}
+nial_declann_convo:addScreen(secondAssignmentTarget)
+
+local secondAssignmentOrders = ConvoScreen:new {
+	id = "second_assignment_orders",
+	leftDialog = "@conversation/imperial_master_trainer:s_50e3a94f",
+	stopConversation = "false",
+	options = {
+		{"@conversation/imperial_master_trainer:s_cd48bb84", "accept_second_master_mission"},
+	}
+}
+nial_declann_convo:addScreen(secondAssignmentOrders)
+
+local acceptSecondMasterMission = ConvoScreen:new {
+	id = "accept_second_master_mission",
+	leftDialog = "@conversation/imperial_master_trainer:s_36c3870b",
+	stopConversation = "true",
+	options = {}
+}
+nial_declann_convo:addScreen(acceptSecondMasterMission)
+
 local onMission = ConvoScreen:new {
 	id = "on_mission",
 	leftDialog = "@conversation/imperial_master_trainer:s_faa7bc59",

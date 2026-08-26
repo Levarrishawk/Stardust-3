@@ -563,11 +563,6 @@ destroy_master_imperial_1 = SpaceDestroyScreenplay:new {
 
 	creditReward = 10000,
 
-	sideQuest = true,
-	sideQuestType = "destroy",
-	sideQuestName = "master_imperial_2",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
 	killsRequired = 30,
 
 	shipLocations = {},
@@ -581,6 +576,14 @@ destroy_master_imperial_1 = SpaceDestroyScreenplay:new {
 		"reb_gunboat_tier4", "reb_gunboat_tier5",
 	},
 }
+
+function destroy_master_imperial_1:completeQuest(pPlayer, notifyClient)
+	SpaceDestroyScreenplay.completeQuest(self, pPlayer, notifyClient)
+
+	if (pPlayer ~= nil) then
+		CreatureObject(pPlayer):sendSystemMessage("Return to Grand Admiral Nial Declann on Naboo for further orders.")
+	end
+end
 
 registerScreenPlay("destroy_master_imperial_1", true)
 
