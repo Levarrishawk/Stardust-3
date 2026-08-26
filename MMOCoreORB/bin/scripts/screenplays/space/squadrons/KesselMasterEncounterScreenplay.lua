@@ -353,6 +353,7 @@ function KesselCorvetteEncounter:hyperspaceOutCorvette(pPlayer)
 		end
 
 		deleteData(corvetteID .. ":kesselMasterCorvette")
+		deleteData(corvetteID .. ":QuestOwner")
 		deleteData(playerID .. ":" .. self.className .. ":corvetteID")
 	end
 
@@ -372,6 +373,7 @@ function KesselCorvetteEncounter:clearEncounterState(pPlayer)
 
 	if (corvetteID ~= nil and corvetteID ~= 0) then
 		deleteData(corvetteID .. ":kesselMasterCorvette")
+		deleteData(corvetteID .. ":QuestOwner")
 	end
 
 	deleteData(playerID .. ":" .. self.className .. ":corvetteID")
