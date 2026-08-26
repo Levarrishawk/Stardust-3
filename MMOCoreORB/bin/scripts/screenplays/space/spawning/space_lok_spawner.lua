@@ -172,7 +172,7 @@ SpaceLokSpawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "nebulon_rebel_route_1", spawnType = SHIP_SPAWN_SINGLE, x = 3931, z = -411, y = -3770, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 32, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"nebulon_rebel_route_1_00", "nebulon_rebel_route_1_01", "nebulon_rebel_route_1_02", "nebulon_rebel_route_1_03", "nebulon_rebel_route_1_04", "nebulon_rebel_route_1_05", "nebulon_rebel_route_1_06", "nebulon_rebel_route_1_07", "nebulon_rebel_route_1_08", "nebulon_rebel_route_1_09"},
-			shipSpawns = {"reb_awing_tier3", "reb_bwing_tier3", "reb_xwing_tier3", "reb_ywing_tier3", "reb_z95_tier3"}
+			shipSpawns = {"reb_awing_tier3", "reb_ywing_tier3", "reb_xwing_tier3", "reb_ywing_tier3", "reb_z95_tier3"}
 		},
 		{spawnName = "rebel_equipment_route_1", spawnType = SHIP_SPAWN_SINGLE, x = 2033, z = -2311, y = -3680, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 300, maxRespawn = 420, minSpawnDistance = 2, maxSpawnDistance = 4, totalSpawns = 3,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_equipment_route_1_00", "rebel_equipment_route_1_01", "rebel_equipment_route_1_02", "rebel_equipment_route_1_03", "rebel_equipment_route_1_04", "rebel_equipment_route_1_05", "rebel_equipment_route_1_06", "rebel_equipment_route_1_07", "rebel_equipment_route_1_08", "rebel_equipment_route_1_09", "rebel_equipment_route_1_10", "rebel_equipment_route_1_11", "rebel_equipment_route_1_12", "rebel_equipment_route_1_13", "rebel_equipment_route_1_14", "rebel_equipment_route_1_15", "rebel_equipment_route_1_16", "rebel_equipment_route_1_17", "rebel_equipment_route_1_18", "rebel_equipment_route_1_19", "rebel_equipment_route_1_20"},

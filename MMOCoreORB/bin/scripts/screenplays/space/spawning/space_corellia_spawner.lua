@@ -41,7 +41,7 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"corsec_interceptor_tier1"}
 		},
 		{spawnName = "rebel_fighter_six_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 4652, z = -7032, y = -5491, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_bwing_tier1", "reb_awing_tier1"}
+			shipSpawns = {"reb_xwing_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_ywing_tier1", "reb_awing_tier1"}
 		},
 		{spawnName = "rebel_squad_3", spawnType = SHIP_SPAWN_SQUADRON, x = -713, z = 1740, y = 6555, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 300, maxRespawn = 420, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_squad_3_00", "rebel_squad_3_01", "rebel_squad_3_02", "rebel_squad_3_03", "rebel_squad_3_04", "rebel_squad_3_05"},
@@ -102,7 +102,7 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"reb_freightermedium_tier1", "reb_xwing_tier1"}
 		},
 		{spawnName = "rebel_fighterleader_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -7412, z = 1480, y = 980, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 25, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "rebel_major_metoni", "reb_z95_tier1", "reb_awing_tier1", "reb_bwing_tier1"}
+			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "rebel_major_metoni", "reb_z95_tier1", "reb_awing_tier1", "reb_ywing_tier1"}
 		},
 		{spawnName = "black_sun_asteroid_5", spawnType = SHIP_SPAWN_SINGLE, x = -2727, z = -34, y = -4571, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 64, minPatrol = 30, maxPatrol = 300, totalSpawns = 6,
 			shipSpawns = {"blacksun_ace_s04_tier1", "blacksun_aggressor_tier1", "blacksun_bomber_s01_tier1", "blacksun_fighter_s01_tier1", "blacksun_marauder_tier1"}
@@ -154,7 +154,7 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"squad_rebel_corellia_2"}
 		},
 		{spawnName = "rebel_fighter_seven_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 4213, z = -937, y = -2413, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_bwing_tier1", "reb_awing_tier1"}
+			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_ywing_tier1", "reb_awing_tier1"}
 		},
 		{spawnName = "corelliatotalus_transport", spawnType = SHIP_SPAWN_SINGLE, x = -5761, z = -5231, y = -4493, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 300, maxRespawn = 420, minSpawnDistance = 10, maxSpawnDistance = 11, totalSpawns = 2,
 			patrolsToAssign = 5, fixedPatrolPoints = {"corelliatotalus_transport_00", "corelliatotalus_transport_01", "corelliatotalus_transport_02", "corelliatotalus_transport_03", "corelliatotalus_transport_04", "corelliatotalus_transport_05", "corelliatotalus_transport_06", "corelliatotalus_transport_07", "corelliatotalus_transport_08", "corelliatotalus_transport_09", "corelliatotalus_transport_10"},
@@ -191,7 +191,7 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"squad_tie_mix_tier1"}
 		},
 		{spawnName = "rebel_fighter_three_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -5518, z = 399, y = 406, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_bwing_tier1"}
+			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_ywing_tier1"}
 		},
 		{spawnName = "imperial_fighter_two_spawner", spawnType = SHIP_SPAWN_SQUADRON, x = -5428, z = 370, y = 385, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 45, maxRespawn = 90, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 1,
 			shipSpawns = {"squad_tie_bomberwithguard_tier1"}
@@ -207,13 +207,13 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"imp_freighterheavy_tier1"}
 		},
 		{spawnName = "rebel_debris_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -609, z = -4293, y = -3426, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 25, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier1", "reb_awing_tier1", "reb_bwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
+			shipSpawns = {"reb_xwing_tier1", "reb_awing_tier1", "reb_ywing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
 		},
 		{spawnName = "corsec_fighter_five_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 1183, z = -4940, y = -4298, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 2,
 			shipSpawns = {"corsec_interceptor_tier1", "corsec_lancer_tier1"}
 		},
 		{spawnName = "rebel_fighter_four_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 3475, z = -7014, y = -6208, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_bwing_tier1", "reb_awing_tier1"}
+			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_ywing_tier1", "reb_awing_tier1"}
 		},
 		{spawnName = "corsec_fighterleader_two_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -463, z = -5717, y = -5334, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 3,
 			shipSpawns = {"corsec_chief_noloinian", "corsec_fighter_tier1", "corsec_fighter_tier1", "corsec_fighter_tier1", "corsec_fighter_tier1", "corsec_fighter_tier1", "corsec_fighter_tier1", "corsec_fighter_tier1", "corsec_fighter_tier1", "corsec_interceptor_tier1"}
@@ -290,7 +290,7 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"hidden_daggers_eliminator_tier1", "hidden_daggers_enforcer_tier1"}
 		},
 		{spawnName = "rebel_asteroid_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -530, z = -932, y = -1935, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 500, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier1", "reb_bwing_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
+			shipSpawns = {"reb_awing_tier1", "reb_ywing_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
 		},
 		{spawnName = "hiddendaggers_nebula_four_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 4675, z = 3781, y = -441, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 20, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 400, totalSpawns = 3,
 			shipSpawns = {"hidden_daggers_executioner_tier1", "hidden_daggers_killer_tier1"}
@@ -299,36 +299,36 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"hidden_daggers_executioner_tier1", "hidden_daggers_killer_tier1"}
 		},
 		{spawnName = "rebel_fighterleader_three_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -4156, z = 302, y = 796, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "rebel_lt_asperago", "reb_z95_tier1", "reb_bwing_tier1", "reb_awing_tier1"}
+			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "rebel_lt_asperago", "reb_z95_tier1", "reb_ywing_tier1", "reb_awing_tier1"}
 		},
 		{spawnName = "imperial_fighterleader_one_spawner", spawnType = SHIP_SPAWN_SQUADRON, x = -4219, z = 328, y = 829, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 150, maxRespawn = 210, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 500, totalSpawns = 1,
 			shipSpawns = {"squad_boss_corellia_imperial_major_gek"}
 		},
 		{spawnName = "rebel_corellia_deep_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -3466, z = 971, y = 493, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 40, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier1", "reb_bwing_tier1", "reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
+			shipSpawns = {"reb_awing_tier1", "reb_ywing_tier1", "reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
 		},
 		{spawnName = "rebel_asteroid_raider_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -1899, z = 1466, y = 1141, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 150, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier1", "reb_bwing_tier1", "reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
+			shipSpawns = {"reb_awing_tier1", "reb_ywing_tier1", "reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
 		},
 		{spawnName = "small_rebel_outpost", spawnType = SHIP_SPAWN_SINGLE, x = -1970, z = 1384, y = 1138, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 32, maxSpawnDistance = 64, minPatrol = 80, maxPatrol = 200, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_bwing_tier1"}
+			shipSpawns = {"reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_ywing_tier1"}
 		},
 		{spawnName = "rebel_fighter_two_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -3936, z = 2704, y = 2172, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_bwing_tier1"}
+			shipSpawns = {"reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_ywing_tier1"}
 		},
 		{spawnName = "imperial_patrol_1", spawnType = SHIP_SPAWN_SINGLE, x = -3613, z = 1585, y = -2617, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 30, maxSpawnDistance = 60, totalSpawns = 7,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_patrol_1_00", "imperial_patrol_1_01", "imperial_patrol_1_02", "imperial_patrol_1_03", "imperial_patrol_1_04", "imperial_patrol_1_05", "imperial_patrol_1_06", "imperial_patrol_1_07", "imperial_patrol_1_08", "imperial_patrol_1_09", "imperial_patrol_1_10", "imperial_patrol_1_11", "imperial_patrol_1_12", "imperial_patrol_1_13", "imperial_patrol_1_14", "imperial_patrol_1_15", "imperial_patrol_1_16"},
 			shipSpawns = {"imp_tie_fighter_tier1", "imp_tie_bomber_tier1", "imp_tie_advanced_tier1", "imp_tie_aggressor_tier1", "imp_tie_interceptor_tier1", "imp_tie_oppressor_tier1"}
 		},
 		{spawnName = "rebel_fighter_eight_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -3560, z = 1055, y = -3043, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_awing_tier1", "reb_bwing_tier1", "reb_xwing_tier1", "reb_z95_tier1"}
+			shipSpawns = {"reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_awing_tier1", "reb_ywing_tier1", "reb_xwing_tier1", "reb_z95_tier1"}
 		},
 		{spawnName = "binyare_nebula_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 3701, z = 500, y = 4875, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 25, totalSpawns = 3,
 			patrolsToAssign = 5, fixedPatrolPoints = {"binyare_nebula_spawner_00", "binyare_nebula_spawner_01", "binyare_nebula_spawner_02", "binyare_nebula_spawner_03", "binyare_nebula_spawner_04", "binyare_nebula_spawner_05", "binyare_nebula_spawner_06", "binyare_nebula_spawner_07", "binyare_nebula_spawner_08"},
 			shipSpawns = {"binyare_raider_rookie"}
 		},
 		{spawnName = "rebel_fighter_one_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 1674, z = -3672, y = -3223, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_ywing_tier1", "reb_xwing_tier1", "reb_z95_tier1", "reb_bwing_tier1", "reb_awing_tier1"}
+			shipSpawns = {"reb_ywing_tier1", "reb_xwing_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_awing_tier1"}
 		},
 		{spawnName = "corsec_security_1", spawnType = SHIP_SPAWN_SINGLE, x = 3779, z = -5178, y = -3888, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 32, minPatrol = 150, maxPatrol = 400, totalSpawns = 2,
 			shipSpawns = {"corsec_fighter_tier1"}
@@ -358,26 +358,26 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"blacksun_bomber_s01_tier1", "blacksun_fighter_s01_tier2", "blacksun_aggressor_tier1", "blacksun_ace_s04_tier1"}
 		},
 		{spawnName = "rebel_xwing_rookie", spawnType = SHIP_SPAWN_SINGLE, x = -182, z = -89, y = -864, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 12, maxSpawnDistance = 64, minPatrol = 80, maxPatrol = 200, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_bwing_tier1"}
+			shipSpawns = {"reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_z95_tier1", "reb_awing_tier1", "reb_ywing_tier1"}
 		},
 		{spawnName = "imperial_fighter_four_spawner", spawnType = SHIP_SPAWN_SQUADRON, x = -3532, z = -1293, y = -1945, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 45, maxRespawn = 90, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 1,
 			shipSpawns = {"squad_tie_bomberwithguard_tier1"}
 		},
 		{spawnName = "rebel_fighter_five_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -3558, z = -2340, y = -1909, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_bwing_tier1", "reb_awing_tier1"}
+			shipSpawns = {"reb_xwing_tier1", "reb_z95_tier1", "reb_ywing_tier1", "reb_ywing_tier1", "reb_awing_tier1"}
 		},
 		{spawnName = "imperial_salvage_two", spawnType = SHIP_SPAWN_SINGLE, x = -5525, z = -2268, y = -1586, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 300, maxRespawn = 420, minSpawnDistance = 10, maxSpawnDistance = 11, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_salvage_two_00", "imperial_salvage_two_01", "imperial_salvage_two_02", "imperial_salvage_two_03", "imperial_salvage_two_04", "imperial_salvage_two_05", "imperial_salvage_two_06", "imperial_salvage_two_07"},
 			shipSpawns = {"imp_freightermedium_tier1"}
 		},
 		{spawnName = "rebel_corellia_deep_two_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -6118, z = -3233, y = -2733, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 40, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_bwing_tier1", "reb_awing_tier1", "reb_z95_tier1", "reb_ywing_tier1"}
+			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_ywing_tier1", "reb_awing_tier1", "reb_z95_tier1", "reb_ywing_tier1"}
 		},
 		{spawnName = "imperial_fighter_one_spawner", spawnType = SHIP_SPAWN_SQUADRON, x = -3611, z = -3225, y = -2999, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 45, maxRespawn = 90, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 1,
 			shipSpawns = {"squad_tie_standard_tier1"}
 		},
 		{spawnName = "rebel_ace_guard_2", spawnType = SHIP_SPAWN_SINGLE, x = -4760, z = -1716, y = -1676, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 12, maxSpawnDistance = 64, minPatrol = 100, maxPatrol = 400, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier1", "reb_bwing_tier1", "reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
+			shipSpawns = {"reb_awing_tier1", "reb_ywing_tier1", "reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
 		},
 		{spawnName = "imperial_fighter_six_spawner", spawnType = SHIP_SPAWN_SQUADRON, x = -4810, z = -1763, y = -1779, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 45, maxRespawn = 90, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 1,
 			shipSpawns = {"squad_tie_standard_tier1"}

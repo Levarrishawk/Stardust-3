@@ -100,14 +100,14 @@ SpaceDantooineSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"anthropology_collector"}
 		},
 		{spawnName = "rebel_generator_assassin_1", spawnType = SHIP_SPAWN_SINGLE, x = 6804, z = 4530, y = 1057, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 420, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 250, maxPatrol = 520, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier2", "reb_awing_tier3", "reb_bwing_tier2", "reb_bwing_tier3", "reb_xwing_tier2", "reb_xwing_tier3_dantooine", "reb_ywing_tier2", "reb_ywing_tier3", "reb_z95_tier2", "reb_z95_tier3"}
+			shipSpawns = {"reb_awing_tier2", "reb_awing_tier3", "reb_ywing_tier2", "reb_ywing_tier3", "reb_xwing_tier2", "reb_xwing_tier3_dantooine", "reb_ywing_tier2", "reb_ywing_tier3", "reb_z95_tier2", "reb_z95_tier3"}
 		},
 		{spawnName = "random_valarian_filler_2", spawnType = SHIP_SPAWN_SINGLE, x = 4366, z = 5653, y = 2519, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, minPatrol = 80, maxPatrol = 390, totalSpawns = 2,
 			shipSpawns = {"valarian_bomber_tier3"}
 		},
 		{spawnName = "dantooine_rebel_spawner_1", spawnType = SHIP_SPAWN_SINGLE, x = 6089, z = 6831, y = 2528, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"dantooine_rebel_spawner_1_00", "dantooine_rebel_spawner_1_01", "dantooine_rebel_spawner_1_02", "dantooine_rebel_spawner_1_03", "dantooine_rebel_spawner_1_04", "dantooine_rebel_spawner_1_05", "dantooine_rebel_spawner_1_06", "dantooine_rebel_spawner_1_07", "dantooine_rebel_spawner_1_08", "dantooine_rebel_spawner_1_09", "dantooine_rebel_spawner_1_10", "dantooine_rebel_spawner_1_11", "dantooine_rebel_spawner_1_12", "dantooine_rebel_spawner_1_13", "dantooine_rebel_spawner_1_14", "dantooine_rebel_spawner_1_15", "dantooine_rebel_spawner_1_16", "dantooine_rebel_spawner_1_17", "dantooine_rebel_spawner_1_18", "dantooine_rebel_spawner_1_19", "dantooine_rebel_spawner_1_20"},
-			shipSpawns = {"reb_awing_tier3", "reb_xwing_tier3", "reb_ywing_tier3", "reb_bwing_tier3", "reb_z95_tier3"}
+			shipSpawns = {"reb_awing_tier3", "reb_xwing_tier3", "reb_ywing_tier3", "reb_ywing_tier3", "reb_z95_tier3"}
 		},
 		{spawnName = "valarian_guards_2", spawnType = SHIP_SPAWN_SINGLE, x = 7156, z = 5643, y = 5031, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, minPatrol = 90, maxPatrol = 380, totalSpawns = 3,
 			shipSpawns = {"valarian_bomber_tier3", "valarian_gunship_tier3"}

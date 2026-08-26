@@ -8,7 +8,7 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 	shipSpawns = {
 		{spawnName = "rebel_tier5Patrol_12", spawnType = SHIP_SPAWN_SINGLE, x = -3199, z = -6013, y = 5343, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_12_00", "rebel_tier5Patrol_12_01", "rebel_tier5Patrol_12_02", "rebel_tier5Patrol_12_03", "rebel_tier5Patrol_12_04", "rebel_tier5Patrol_12_05", "rebel_tier5Patrol_12_06", "rebel_tier5Patrol_12_07"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "imperial_tier5Patrol_12", spawnType = SHIP_SPAWN_SINGLE, x = -2448, z = 6000, y = -864, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 5,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_tier5Patrol_12_00", "imperial_tier5Patrol_12_01", "imperial_tier5Patrol_12_02", "imperial_tier5Patrol_12_03", "imperial_tier5Patrol_12_04", "imperial_tier5Patrol_12_05", "imperial_tier5Patrol_12_06", "imperial_tier5Patrol_12_07"},
@@ -20,7 +20,7 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_09", spawnType = SHIP_SPAWN_SINGLE, x = -2763, z = -2983, y = -6000, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_09_00", "rebel_tier5Patrol_09_01", "rebel_tier5Patrol_09_02", "rebel_tier5Patrol_09_03", "rebel_tier5Patrol_09_04", "rebel_tier5Patrol_09_05", "rebel_tier5Patrol_09_06"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "kessel_lootship_follow_reb_01", spawnType = SHIP_SPAWN_SQUADRON, x = -4338, z = -4211, y = -2065, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 603, maxRespawn = 1209, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"kessel_lootship_follow_reb_01_00", "kessel_lootship_follow_reb_01_01", "kessel_lootship_follow_reb_01_02", "kessel_lootship_follow_reb_01_03", "kessel_lootship_follow_reb_01_04", "kessel_lootship_follow_reb_01_05"},
@@ -28,18 +28,18 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_05", spawnType = SHIP_SPAWN_SINGLE, x = -4400, z = -4200, y = -2100, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 612, maxRespawn = 1202, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_05_00", "rebel_tier5Patrol_05_01", "rebel_tier5Patrol_05_02", "rebel_tier5Patrol_05_03", "rebel_tier5Patrol_05_04", "rebel_tier5Patrol_05_05", "rebel_tier5Patrol_05_06"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "kessel_lootship_lost_imp_01", spawnType = SHIP_SPAWN_SQUADRON, x = -4933, z = -1457, y = -3966, patrolType = SHIP_AI_RANDOM_PATROL,  minRespawn = 607, maxRespawn = 1209, minSpawnDistance = 32, maxSpawnDistance = 64, minPatrol = 256, maxPatrol = 1024, totalSpawns = 1,
 			shipSpawns = {"squad_kessel_loot_gunboat_solo_imp"}
 		},
 		{spawnName = "rebel_tier5Patrol_10", spawnType = SHIP_SPAWN_SINGLE, x = -6000, z = 6000, y = -5999, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_10_00", "rebel_tier5Patrol_10_01", "rebel_tier5Patrol_10_02", "rebel_tier5Patrol_10_03", "rebel_tier5Patrol_10_04", "rebel_tier5Patrol_10_05", "rebel_tier5Patrol_10_06"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "rebel_tier5Patrol_01", spawnType = SHIP_SPAWN_SINGLE, x = -6200, z = 5800, y = -6800, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 590, maxRespawn = 1215, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_01_00", "rebel_tier5Patrol_01_01", "rebel_tier5Patrol_01_02", "rebel_tier5Patrol_01_03", "rebel_tier5Patrol_01_04", "rebel_tier5Patrol_01_05", "rebel_tier5Patrol_01_06"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "kessel_lootship_derelict_reb", spawnType = SHIP_SPAWN_SQUADRON, x = -4951, z = 2514, y = -6009, patrolType = SHIP_AI_RANDOM_PATROL,  minRespawn = 603, maxRespawn = 1205, minSpawnDistance = 32, maxSpawnDistance = 63, minPatrol = 64, maxPatrol = 160, totalSpawns = 1,
 			shipSpawns = {"squad_kessel_lootship_w1_reb"}
@@ -50,7 +50,7 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_03", spawnType = SHIP_SPAWN_SINGLE, x = 6500, z = 0, y = -7000, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 604, maxRespawn = 1209, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_03_00", "rebel_tier5Patrol_03_01", "rebel_tier5Patrol_03_02", "rebel_tier5Patrol_03_03", "rebel_tier5Patrol_03_04", "rebel_tier5Patrol_03_05", "rebel_tier5Patrol_03_06", "rebel_tier5Patrol_03_07"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "kessel_lootship_lost_imp_02", spawnType = SHIP_SPAWN_SQUADRON, x = 3494, z = 1030, y = -5941, patrolType = SHIP_AI_RANDOM_PATROL,  minRespawn = 607, maxRespawn = 1209, minSpawnDistance = 32, maxSpawnDistance = 64, minPatrol = 256, maxPatrol = 2048, totalSpawns = 1,
 			shipSpawns = {"squad_kessel_loot_gunboat_solo_imp"}
@@ -64,7 +64,7 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_11", spawnType = SHIP_SPAWN_SINGLE, x = -1951, z = 5999, y = 4552, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_11_00", "rebel_tier5Patrol_11_01", "rebel_tier5Patrol_11_02", "rebel_tier5Patrol_11_03", "rebel_tier5Patrol_11_04", "rebel_tier5Patrol_11_05", "rebel_tier5Patrol_11_06", "rebel_tier5Patrol_11_07"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "imperial_tier5Patrol_01", spawnType = SHIP_SPAWN_SINGLE, x = -6046, z = 5987, y = 6452, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 5,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_tier5Patrol_01_00", "imperial_tier5Patrol_01_01", "imperial_tier5Patrol_01_02", "imperial_tier5Patrol_01_03", "imperial_tier5Patrol_01_04", "imperial_tier5Patrol_01_05", "imperial_tier5Patrol_01_06"},
@@ -80,11 +80,11 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_07", spawnType = SHIP_SPAWN_SINGLE, x = -2000, z = -6500, y = -4000, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 611, maxRespawn = 1214, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_07_00", "rebel_tier5Patrol_07_01", "rebel_tier5Patrol_07_02", "rebel_tier5Patrol_07_03", "rebel_tier5Patrol_07_04"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "rebel_tier5Patrol_02", spawnType = SHIP_SPAWN_SINGLE, x = -201, z = -7225, y = -1976, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 611, maxRespawn = 1221, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_02_00", "rebel_tier5Patrol_02_01", "rebel_tier5Patrol_02_02", "rebel_tier5Patrol_02_03", "rebel_tier5Patrol_02_04"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "imperial_tier5Patrol_05", spawnType = SHIP_SPAWN_SINGLE, x = 5500, z = 5500, y = 0, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 609, maxRespawn = 1204, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 5,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_tier5Patrol_05_00", "imperial_tier5Patrol_05_01", "imperial_tier5Patrol_05_02", "imperial_tier5Patrol_05_03", "imperial_tier5Patrol_05_04", "imperial_tier5Patrol_05_05", "imperial_tier5Patrol_05_06"},
@@ -96,7 +96,7 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_08", spawnType = SHIP_SPAWN_SINGLE, x = -963, z = 4520, y = -1077, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 611, maxRespawn = 1211, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_08_00", "rebel_tier5Patrol_08_01", "rebel_tier5Patrol_08_02", "rebel_tier5Patrol_08_03", "rebel_tier5Patrol_08_04", "rebel_tier5Patrol_08_05", "rebel_tier5Patrol_08_06", "rebel_tier5Patrol_08_07", "rebel_tier5Patrol_08_08", "rebel_tier5Patrol_08_09"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "kessel_lootship_lost_reb_01", spawnType = SHIP_SPAWN_SQUADRON, x = -2790, z = 4495, y = 1739, patrolType = SHIP_AI_RANDOM_PATROL,  minRespawn = 604, maxRespawn = 1206, minSpawnDistance = 32, maxSpawnDistance = 64, minPatrol = 256, maxPatrol = 1024, totalSpawns = 1,
 			shipSpawns = {"squad_kessel_loot_gunboat_solo_reb"}
@@ -113,7 +113,7 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_04", spawnType = SHIP_SPAWN_SINGLE, x = 0, z = 6000, y = 4500, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 607, maxRespawn = 1207, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_04_00", "rebel_tier5Patrol_04_01", "rebel_tier5Patrol_04_02", "rebel_tier5Patrol_04_03", "rebel_tier5Patrol_04_04", "rebel_tier5Patrol_04_05"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "kessel_lootship_impattack_reb_02", spawnType = SHIP_SPAWN_SQUADRON, x = -2977, z = 5986, y = -3472, patrolType = SHIP_AI_RANDOM_PATROL,  minRespawn = 602, maxRespawn = 1202, minSpawnDistance = 32, maxSpawnDistance = 64, minPatrol = 128, maxPatrol = 256, totalSpawns = 1,
 			shipSpawns = {"squad_kessel_lootship_w2b_reb"}
@@ -196,7 +196,7 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_tier5Patrol_06", spawnType = SHIP_SPAWN_SINGLE, x = 4000, z = 0, y = 5000, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 603, maxRespawn = 1200, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_06_00", "rebel_tier5Patrol_06_01", "rebel_tier5Patrol_06_02", "rebel_tier5Patrol_06_03", "rebel_tier5Patrol_06_04", "rebel_tier5Patrol_06_05", "rebel_tier5Patrol_06_06", "rebel_tier5Patrol_06_07"},
-			shipSpawns = {"reb_awing_tier5", "reb_bwing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
+			shipSpawns = {"reb_awing_tier5", "reb_ywing_tier5", "reb_gunboat_tier5", "reb_xwing_tier5", "reb_ywing_tier5", "reb_z95_tier5"}
 		},
 		{spawnName = "imperial_tier5Patrol_09", spawnType = SHIP_SPAWN_SINGLE, x = 2646, z = -1060, y = 7095, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 5,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_tier5Patrol_09_00", "imperial_tier5Patrol_09_01", "imperial_tier5Patrol_09_02", "imperial_tier5Patrol_09_03", "imperial_tier5Patrol_09_04", "imperial_tier5Patrol_09_05", "imperial_tier5Patrol_09_06", "imperial_tier5Patrol_09_07", "imperial_tier5Patrol_09_08"},
