@@ -57,9 +57,6 @@ SpaceDathomirSpawner = SpaceSpawnerScreenPlay:new {
 		{spawnName = "imperial_generator_lookout_4", spawnType = SHIP_SPAWN_SINGLE, x = 6234, z = -1952, y = -7218, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 70, maxPatrol = 340, totalSpawns = 6,
 			shipSpawns = {"imp_tie_bomber_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4"}
 		},
-		{spawnName = "naboo_imperial_tier4_inspect1_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 7606, z = 4673, y = -1681, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 50, maxPatrol = 140, totalSpawns = 1,
-			shipSpawns = {"crystal_smuggler_yt1300_tier4"}
-		},
 		{spawnName = "imperial_secret_station_guard_2", spawnType = SHIP_SPAWN_SQUADRON, x = 6338, z = 6281, y = -6527, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 100, minPatrol = 100, maxPatrol = 300, totalSpawns = 1,
 			shipSpawns = {"squad_tie_mix_ace"}
 		},
