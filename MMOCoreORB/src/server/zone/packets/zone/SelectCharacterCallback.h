@@ -185,6 +185,47 @@ public:
 		ManagedReference<SceneObject*> playerParent = zoneServer->getObject(savedParentID, true).get();
 		auto currentParent = player->getParent().get();
 		ManagedReference<SceneObject*> rootParent = player->getRootParent();
+		ManagedReference<SceneObject*> savedRootParent = nullptr;
+
+		if (playerParent != nullptr) {
+			if (playerParent->isShipObject()) {
+				savedRootParent = playerParent;
+			} else {
+				savedRootParent = playerParent->getRootParent();
+			}
+		}
+
+		bool hasCurrentShipParent = rootParent != nullptr && rootParent->isShipObject();
+		bool hasRestorablePobParent = playerParent != nullptr && playerParent->isCellObject() &&
+			savedRootParent != nullptr && savedRootParent->isPobShip() && savedRootParent->getZone() != nullptr;
+		bool hasShipParent = hasCurrentShipParent || hasRestorablePobParent;
+
+		// A character persisted directly in a space zone has lost its ship
+		// containment, usually because the server stopped before the ship could be
+		// stored. Recover only true orphans; passengers whose current or saved
+		// parent chain resolves to a POB ship remain aboard that ship.
+		if (zone->isSpaceZone() && !hasShipParent) {
+			String launchZoneName = ghost->getSpaceLaunchZone();
+			auto launchZone = zoneServer->getZone(launchZoneName);
+
+			if (launchZone != nullptr && !launchZone->isSpaceZone()) {
+				Vector3 launchPosition = ghost->getSpaceLaunchLocation();
+
+				player->info(true) << "Recovering shipless player from " << zoneName << " to launch point in " << launchZoneName;
+
+				zone = launchZone;
+				zoneName = launchZoneName;
+				lastWorldPosition = launchPosition;
+				playerArrangement = -1;
+				playerParent = nullptr;
+				currentParent = nullptr;
+				rootParent = nullptr;
+				savedRootParent = nullptr;
+				player->initializePosition(launchPosition.getX(), launchPosition.getZ(), launchPosition.getY());
+			} else {
+				player->error() << "Unable to recover shipless player from " << zoneName << ": invalid ground launch zone '" << launchZoneName << "'";
+			}
+		}
 
 #ifdef DEBUG_SELECT_CHAR_CALLBACK
 		debugMsg << "Player Arrangement: " << playerArrangement << "\nsavedParentID: " << savedParentID << "\nLast Logout World Position: " << lastWorldPosition.toString() << endl;
