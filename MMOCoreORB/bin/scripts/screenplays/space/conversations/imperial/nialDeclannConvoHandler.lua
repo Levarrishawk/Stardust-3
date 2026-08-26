@@ -47,7 +47,12 @@ function nialDeclannConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc,
 		return pConvScreen
 	end
 
-	local screenID = LuaConversationScreen(pConvScreen):getScreenID()
+	local screen = LuaConversationScreen(pConvScreen)
+	local screenID = screen:getScreenID()
+	local pClonedScreen = screen:cloneScreen()
+	local clonedScreen = LuaConversationScreen(pClonedScreen)
+
+	clonedScreen:setDialogTextTU(CreatureObject(pPlayer):getFirstName())
 
 	if (screenID == "accept_master_mission"
 			and SpaceHelpers:isImperialPilot(pPlayer)
@@ -61,5 +66,5 @@ function nialDeclannConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc,
 		destroy_master_imperial_1:startQuest(pPlayer, pNpc)
 	end
 
-	return pConvScreen
+	return pClonedScreen
 end
