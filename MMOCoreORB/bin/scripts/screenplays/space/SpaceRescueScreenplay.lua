@@ -533,7 +533,12 @@ function SpaceRescueScreenplay:spawnAttackers(pPlayer)
 		return
 	end
 
-	local rescueLocation = self.rescueLocation
+	-- The attack event may fire after repairs are complete and the escort has
+	-- already left its original rescue location. Spawn around the rescue ship's
+	-- current position so the announced wave reaches the active encounter.
+	local rescueX = SceneObject(pRescueShip):getPositionX()
+	local rescueZ = SceneObject(pRescueShip):getPositionZ()
+	local rescueY = SceneObject(pRescueShip):getPositionY()
 	local attackShips = self.attackShips
 
 	for i = 1, #attackShips, 1 do
@@ -555,7 +560,7 @@ function SpaceRescueScreenplay:spawnAttackers(pPlayer)
 			end
 
 			for k = 1, count, 1 do
-				local pAttacker = spawnShipAgent(shipName, self.questZone, rescueLocation.x + getRandomNumber(200, 400), rescueLocation.z + getRandomNumber(-100, 100), rescueLocation.y + getRandomNumber(200, 400))
+				local pAttacker = spawnShipAgent(shipName, self.questZone, rescueX + getRandomNumber(200, 400), rescueZ + getRandomNumber(-100, 100), rescueY + getRandomNumber(200, 400))
 
 				if (pAttacker ~= nil) then
 					ShipAiAgent(pAttacker):setMissionOwner(pPlayer)

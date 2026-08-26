@@ -1291,11 +1291,11 @@ rescue_naboo_imperial_tier4_2_a = SpaceRescueScreenplay:new {
 	className = "rescue_naboo_imperial_tier4_2_a", questName = "naboo_imperial_tier4_2_a", questType = "rescue", questZone = "space_dathomir", creditReward = 0,
 	sideQuest = true, sideQuestType = "destroy_surpriseattack", sideQuestName = "naboo_imperial_tier4_2_b", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 	parentQuest = "recovery_naboo_imperial_tier4_2", parentQuestType = "recovery", parentQuestName = "naboo_imperial_tier4_2",
-	arrivalDelay = 5, rescueShip = "imp_lambda_shuttle_tier4", rescueLocation = {x = -5889, z = 2454, y = 5119}, repairDelay = 20, escortSpeed = 60,
+	arrivalDelay = 5, rescueShip = "imp_lambda_shuttle_tier4", rescueLocation = {x = -7000, z = 6000, y = 7000}, repairDelay = 20, escortSpeed = 60,
 	escortPoints = {
-		{patrolPointName = "naboo_imperial_tier4_rescue1_2", zoneName = "space_dathomir", x = -6996, z = 1990, y = 1981, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_rescue1_3", zoneName = "space_dathomir", x = -7528, z = 2452, y = -685, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_rescue1_4", zoneName = "space_dathomir", x = -7505, z = 2904, y = -2924, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_rescue1_2", zoneName = "space_dathomir", x = -6000, z = 6500, y = 7000, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_rescue1_3", zoneName = "space_dathomir", x = -5000, z = 7000, y = 6500, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_rescue1_4", zoneName = "space_dathomir", x = -4000, z = 7000, y = 5500, escortNumber = 3, radius = 250},
 	},
 	attackDelay = 60, attackShips = {{{count = 1, shipName = "coynite_merc_quasar_tier4"}}},
 }
