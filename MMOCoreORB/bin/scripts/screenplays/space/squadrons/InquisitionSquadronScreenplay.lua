@@ -1365,7 +1365,7 @@ registerScreenPlay("assassinate_naboo_imperial_tier4_3_b", true)
 escort_naboo_imperial_tier4_4 = SpaceEscortScreenplay:new {
 	className = "escort_naboo_imperial_tier4_4", questName = "naboo_imperial_tier4_4", questType = "escort", questZone = "space_dathomir", creditReward = 0,
 	sideQuest = true, sideQuestType = "recovery", sideQuestName = "naboo_imperial_tier4_4_a", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-	escortShips = {"dathomir_prison_shuttle_tier4"}, escortSpeed = 60,
+	escortShips = {"dathomir_prison_shuttle_tier5"}, escortSpeed = 60,
 	escortPoints = {
 		{patrolPointName = "naboo_imperial_tier4_escort1_1", zoneName = "space_dathomir", x = 3787, z = -6425, y = 49, escortNumber = 1, radius = 250},
 		{patrolPointName = "naboo_imperial_tier4_escort1_2", zoneName = "space_dathomir", x = 3065, z = -5248, y = 1760, escortNumber = 2, radius = 250},
