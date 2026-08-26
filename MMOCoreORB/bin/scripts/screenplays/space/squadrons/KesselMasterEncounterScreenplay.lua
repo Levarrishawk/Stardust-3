@@ -57,15 +57,13 @@ KESSEL_TARGET_ZONE = "space_light1"
 KESSEL_REBEL_CORVETTE_SPAWN = { x = -7260, z = 4873, y = 6341 }   -- Rebel Corellian Corvette
 KESSEL_IMPERIAL_CORVETTE_SPAWN = { x = -6231, z = -259, y = -6059 } -- Imperial Star Ravager
 
--- Authentic Kessel corvette spawn timing (Biophilia Pre-CU Scrapbook v5.1):
+-- Authentic Kessel corvette dwell timing (Biophilia Pre-CU Scrapbook v5.1):
 --   MonsofoLexius "Corvette Master Mission Spawn Information" (data/20070127185616)
 --   Zina "Corvette Master Level Mission" FAQ v3.0b           (data/20070127191311)
--- The corvette stays in-system ~45 min then hyperspaces out; full per-faction cycle ~2h;
--- the two faction corvettes spawn ~1h apart; disabled gunboat escorts self-destruct ~1-2 min.
+-- The mission-owned corvette stays in-system ~45 min and disabled gunboat escorts
+-- self-destruct after ~1-2 min. Live's alternating global spawn schedule is not
+-- applied here because each mission creates a private target for its player.
 KESSEL_CORVETTE_DWELL_MS      = 2700 * 1000  -- ~45 min in-system, then hyperspace out (Zina)
-KESSEL_CORVETTE_RESPAWN_MS    = 4500 * 1000  -- ~1h15m after exit until next spawn      (Zina)
-KESSEL_CORVETTE_CYCLE_MS      = 7200 * 1000  -- ~2h full per-faction spawn cycle         (both guides)
-KESSEL_CORVETTE_ALTERNATE_MS  = 3600 * 1000  -- two vettes spawn ~1h apart               (both guides)
 KESSEL_ESCORT_SELFDESTRUCT_MS =   90 * 1000  -- disabled gunboat self-destructs ~1-2 min (MonsofoLexius)
 
 --[[
@@ -101,10 +99,6 @@ KesselCorvetteEncounter = SpaceDestroyScreenplay:new {
 	escortAgents = {}, -- 2 tier-5 gunboats
 	spawnAnchor = { x = 0, z = 0, y = 0 },
 
-	-- Alternating-hour spawn window (the two faction corvettes spawn ~1h apart):
-	-- 0 = even KESSEL_CORVETTE_ALTERNATE_MS window, 1 = odd window (set per subclass).
-	spawnWindowParity = 0,
-
 	DEBUG_KESSEL_ENCOUNTER = false,
 }
 
@@ -134,19 +128,9 @@ function KesselCorvetteEncounter:enteredZone(pPlayer, nill, zoneNameHash)
 	return 0
 end
 
---[[
-	Live spawn schedule gate (scrapbook: MonsofoLexius + Zina):
-	  * KESSEL_CORVETTE_ALTERNATE_MS : the two faction corvettes spawn ~1h apart --
-	    each corvette only spawns during its own alternating-hour wall-clock window
-	    (spawnWindowParity).
-	  * KESSEL_CORVETTE_RESPAWN_MS   : minimum gap after a hyperspace exit before
-	    this corvette can spawn again.
-	  * KESSEL_CORVETTE_CYCLE_MS     : full per-faction cycle -- minimum gap between
-	    successive spawns of this corvette.
-	  * The corvette will NOT spawn while its previous gunboat escorts still sit at
-	    its exit point (disable them -- they self-destruct -- or destroy them).
-	If blocked, ONE re-check event is scheduled for when the earliest gate could clear.
-]]
+-- Spawn immediately for the mission owner. The only blocker is a surviving escort
+-- group from an earlier attempt at the same exit point; one re-check is scheduled
+-- for the escort self-destruct cadence.
 function KesselCorvetteEncounter:trySpawnCorvette(pPlayer)
 	if (pPlayer == nil) then
 		return
@@ -174,33 +158,11 @@ function KesselCorvetteEncounter:trySpawnCorvette(pPlayer)
 		return
 	end
 
-	local now = getTimestampMilli()
 	local delay = 0
 
 	if (self:escortsAtExitPoint(playerID)) then
 		-- Escorts still hold the exit point; re-check on the self-destruct cadence.
 		delay = KESSEL_ESCORT_SELFDESTRUCT_MS
-	else
-		-- Alternating-hour faction window.
-		local windowIndex = math.floor(now / KESSEL_CORVETTE_ALTERNATE_MS) % 2
-
-		if (windowIndex ~= self.spawnWindowParity) then
-			delay = KESSEL_CORVETTE_ALTERNATE_MS - (now % KESSEL_CORVETTE_ALTERNATE_MS)
-		end
-
-		-- Minimum gap since the last hyperspace exit.
-		local lastExit = readData(playerID .. ":" .. self.className .. ":lastExitMs")
-
-		if (lastExit ~= nil and lastExit > 0 and (now - lastExit) < KESSEL_CORVETTE_RESPAWN_MS) then
-			delay = math.max(delay, KESSEL_CORVETTE_RESPAWN_MS - (now - lastExit))
-		end
-
-		-- Full per-faction cycle since the last spawn.
-		local lastSpawn = readData(playerID .. ":" .. self.className .. ":lastSpawnMs")
-
-		if (lastSpawn ~= nil and lastSpawn > 0 and (now - lastSpawn) < KESSEL_CORVETTE_CYCLE_MS) then
-			delay = math.max(delay, KESSEL_CORVETTE_CYCLE_MS - (now - lastSpawn))
-		end
 	end
 
 	if (delay == 0) then
@@ -208,7 +170,6 @@ function KesselCorvetteEncounter:trySpawnCorvette(pPlayer)
 
 		if (self:spawnCorvetteEncounter(pPlayer)) then
 			writeData(playerID .. ":" .. self.className .. ":corvetteUp", 1)
-			writeData(playerID .. ":" .. self.className .. ":lastSpawnMs", now)
 		end
 
 		return
@@ -387,8 +348,6 @@ function KesselCorvetteEncounter:hyperspaceOutCorvette(pPlayer)
 	end
 
 	deleteData(playerID .. ":" .. self.className .. ":corvetteUp")
-	writeData(playerID .. ":" .. self.className .. ":lastExitMs", getTimestampMilli())
-
 	SpaceHelpers:sendQuestUpdate(pPlayer, "The enemy corvette has jumped to hyperspace before you could destroy it. Its escorts remain at the exit point; the corvette will not return while they hold it.")
 end
 
@@ -426,8 +385,6 @@ function KesselCorvetteEncounter:clearEncounterState(pPlayer)
 	deleteData(playerID .. ":" .. self.className .. ":escortCount")
 	deleteData(playerID .. ":" .. self.className .. ":corvetteUp")
 	deleteData(playerID .. ":" .. self.className .. ":pendingSpawnCheck")
-	deleteData(playerID .. ":" .. self.className .. ":lastSpawnMs")
-	deleteData(playerID .. ":" .. self.className .. ":lastExitMs")
 end
 
 function KesselCorvetteEncounter:resetQuest(pPlayer)
@@ -638,9 +595,6 @@ destroy_master_imperial_2 = KesselCorvetteEncounter:new {
 	-- Imperial pilots earn the Imperial "ace pilot" wearable (Zina FAQ §VI).
 	aceRewardFaction = "empire",
 
-	-- Rebel corvette takes the even alternating-hour window.
-	spawnWindowParity = 0,
-
 	corvetteAgent = "reb_corellian_corvette_tier4",
 	escortAgents = { "reb_gunboat_tier5", "reb_gunboat_tier5" },
 	spawnAnchor = KESSEL_REBEL_CORVETTE_SPAWN,
@@ -663,9 +617,6 @@ destroy_master_rebel_2 = KesselCorvetteEncounter:new {
 	creditReward = 25000,
 	-- Rebel pilots earn the Rebel "ace pilot" wearable (Zina FAQ §VI).
 	aceRewardFaction = "rebel",
-
-	-- Imperial Star Ravager takes the odd window (the two vettes spawn ~1h apart).
-	spawnWindowParity = 1,
 
 	corvetteAgent = "imp_corellian_corvette_tier4",
 	escortAgents = { "imp_imperial_gunboat_tier5", "imp_imperial_gunboat_tier5" },
