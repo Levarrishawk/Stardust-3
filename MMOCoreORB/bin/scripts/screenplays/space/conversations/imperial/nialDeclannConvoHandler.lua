@@ -27,8 +27,10 @@ function nialDeclannConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	if (stageOneActive or stageTwoActive) then
 		return convoTemplate:getScreen("on_mission")
-	elseif (stageTwoComplete or SpaceHelpers:hasMasterSkill(pPlayer, "imperial_navy")) then
+	elseif (SpaceHelpers:hasMasterSkill(pPlayer, "imperial_navy")) then
 		return convoTemplate:getScreen("completed")
+	elseif (stageTwoComplete) then
+		return convoTemplate:getScreen("final_report")
 	elseif (stageOneComplete) then
 		return convoTemplate:getScreen("second_assignment_intro")
 	elseif (SpaceHelpers:isImperialPilot(pPlayer) and ghost:getPilotTier() >= 5) then
@@ -75,6 +77,13 @@ function nialDeclannConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc,
 		destroy_master_imperial_2:resetQuest(pPlayer)
 		SpaceHelpers:clearSpaceQuest(pPlayer, "destroy", "master_imperial_2", false)
 		destroy_master_imperial_2:startQuest(pPlayer, pNpc)
+	elseif (screenID == "claim_master_rewards"
+			and SpaceHelpers:isImperialPilot(pPlayer)
+			and SpaceHelpers:isSpaceQuestComplete(pPlayer, "destroy", "master_imperial_2")
+			and not SpaceHelpers:hasMasterSkill(pPlayer, "imperial_navy")) then
+		destroy_master_imperial_2:rewardPlayer(pPlayer)
+		destroy_master_imperial_2:grantAcePilotReward(pPlayer)
+		destroy_master_imperial_2:grantPilotMastery(pPlayer)
 	end
 
 	return pClonedScreen

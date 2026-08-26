@@ -91,11 +91,39 @@ nial_declann_convo:addScreen(onMission)
 
 local completed = ConvoScreen:new {
 	id = "completed",
-	leftDialog = "@conversation/imperial_master_trainer:s_c6be1c53",
+	leftDialog = "@conversation/imperial_master_trainer:s_6276e267",
 	stopConversation = "true",
 	options = {}
 }
 nial_declann_convo:addScreen(completed)
+
+local finalReport = ConvoScreen:new {
+	id = "final_report",
+	leftDialog = "@conversation/imperial_master_trainer:s_825762e5",
+	stopConversation = "false",
+	options = {
+		{"@conversation/imperial_master_trainer:s_6aa8adaf", "claim_master_rewards"},
+	}
+}
+nial_declann_convo:addScreen(finalReport)
+
+local claimMasterRewards = ConvoScreen:new {
+	id = "claim_master_rewards",
+	leftDialog = "@conversation/imperial_master_trainer:s_c6be1c53",
+	stopConversation = "false",
+	options = {
+		{"@conversation/imperial_master_trainer:s_377d1a96", "final_dismissal"},
+	}
+}
+nial_declann_convo:addScreen(claimMasterRewards)
+
+local finalDismissal = ConvoScreen:new {
+	id = "final_dismissal",
+	leftDialog = "@conversation/imperial_master_trainer:s_6276e267",
+	stopConversation = "true",
+	options = {}
+}
+nial_declann_convo:addScreen(finalDismissal)
 
 local notEligible = ConvoScreen:new {
 	id = "not_eligible",

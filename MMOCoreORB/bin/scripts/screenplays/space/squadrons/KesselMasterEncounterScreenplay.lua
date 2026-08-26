@@ -505,10 +505,9 @@ function KesselCorvetteEncounter:grantPilotMastery(pPlayer)
 end
 
 function KesselCorvetteEncounter:completeQuest(pPlayer, notifyClient)
-	self:grantAcePilotReward(pPlayer)
-	self:grantPilotMastery(pPlayer)
 	self:clearEncounterState(pPlayer)
 	SpaceDestroyScreenplay.completeQuest(self, pPlayer, notifyClient)
+	CreatureObject(pPlayer):sendSystemMessage("Return to Grand Admiral Nial Declann on Naboo to report your victory.")
 end
 
 function KesselCorvetteEncounter:failQuest(pPlayer, notifyClient)
