@@ -1314,11 +1314,11 @@ recovery_naboo_imperial_tier4_2_c = SpaceRecoveryScreenplay:new {
 	sideQuest = false, sideQuestType = "", parentQuest = "destroy_surpriseattack_naboo_imperial_tier4_2_b", parentQuestType = "destroy_surpriseattack", parentQuestName = "naboo_imperial_tier4_2_b",
 	arrivalDelay = 5, recoveryDelay = 20, escortSpeed = 60, recoverShip = "coynite_merc_neutron_tier5", recoveryConversationMobile = "object/mobile/dressed_coynite_pilot_hum_m_01.iff",
 	escortShips = {"coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4"},
-	preRecoveryPoints = {{patrolPointName = "naboo_imperial_tier4_recovery2_1", zoneName = "space_dathomir", x = -7238, z = 2332, y = -1848, escortNumber = 1, radius = 250}},
+	preRecoveryPoints = {{patrolPointName = "naboo_imperial_tier4_recovery2_1", zoneName = "space_dathomir", x = -6500, z = -3500, y = 5000, escortNumber = 1, radius = 250}},
 	recoveryPoints = {
-		{patrolPointName = "naboo_imperial_tier4_recovery2_5", zoneName = "space_dathomir", x = -6263, z = 3140, y = 1529, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_recovery2_6", zoneName = "space_dathomir", x = -4648, z = 2991, y = 4029, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_recovery2_7", zoneName = "space_dathomir", x = -3618, z = 2711, y = 7068, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recovery2_5", zoneName = "space_dathomir", x = -5500, z = -4000, y = 5500, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recovery2_6", zoneName = "space_dathomir", x = -4500, z = -4500, y = 6000, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recovery2_7", zoneName = "space_dathomir", x = -3500, z = -5000, y = 6500, escortNumber = 3, radius = 250},
 	},
 	attackDelay = 60, attackShips = {{"coynite_merc_pulsar_tier4"}},
 }
