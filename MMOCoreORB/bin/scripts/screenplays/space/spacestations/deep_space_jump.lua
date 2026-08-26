@@ -4,10 +4,9 @@
 	faction prestige to reach Deep Space via factional 'Deep Space - Kessel jump'
 	stations (Dantooine space for Rebel, Endor space for Imperial)."
 
-	Jump mechanism: mirrors HyperspaceToLocationTask (src/server/zone/objects/ship/
-	events/HyperspaceToLocationTask.h) from the Lua side using the exposed
-	primitives - ShipObject:setHyperspacing() and SceneObject:switchZone() (the
-	same core call the C++ task performs in its case 10).
+	Jump mechanism: starts HyperspaceToLocationTask through LuaShipObject so these
+	station routes use the same client messages and staged scene transfer as normal
+	hyperspace travel.
 
 	Prestige spend uses the negative awardExperience idiom
 	(screenplays/village/convos/convohelpers/experience_converter.lua:305).
@@ -156,9 +155,8 @@ function DeepSpaceJumpScreenPlay:getPrestigeBalance(pPlayer, prestigeType)
 	return PlayerObject(pGhost):getExperience(prestigeType)
 end
 
--- Invoked from the jump station conversation handlers via
--- createEvent(3500, "DeepSpaceJumpScreenPlay", "beginJump", pPlayer, stationFaction)
--- (mirrors the SpaceStationScreenPlay:landShip createEvent idiom).
+-- Invoked from the jump station conversation handlers after their conversation
+-- close delay.
 function DeepSpaceJumpScreenPlay:beginJump(pPlayer, stationFaction)
 	if (pPlayer == nil or stationFaction == nil) then
 		return
@@ -187,50 +185,14 @@ function DeepSpaceJumpScreenPlay:beginJump(pPlayer, stationFaction)
 		return
 	end
 
-	-- Check the prestige balance up front (the deduction itself happens in
-	-- completeJump, after the in-ship recheck, so a bailed jump never costs prestige)
+	-- Check the prestige balance before asking the native task to begin. The fee
+	-- is deducted only if startHyperspace accepts the transfer.
 	local balance = self:getPrestigeBalance(pPlayer, prestigeType)
 
 	if (balance < self.DEEP_SPACE_JUMP_PRESTIGE_COST) then
 		self:sendNotEnoughPrestige(pPlayer, prestigeType)
 		return
 	end
-
-	ShipObject(pShip):setHyperspacing(true)
-	CreatureObject(pPlayer):sendSystemMessage("@space/space_interaction:hyperspace_route_begin")
-
-	createEvent(5000, self.screenplayName, "completeJump", pPlayer, stationFaction .. ":" .. prestigeType)
-end
-
-function DeepSpaceJumpScreenPlay:completeJump(pPlayer, args)
-	if (pPlayer == nil or args == nil) then
-		return
-	end
-
-	local stationFaction, prestigeType = string.match(args, "^([^:]+):(.+)$")
-
-	if (stationFaction == nil or prestigeType == nil) then
-		return
-	end
-
-	local pShip = SceneObject(pPlayer):getRootParent()
-
-	if (pShip == nil or not SceneObject(pShip):isShipObject()) then
-		return
-	end
-
-	-- Spend prestige NOW (negative awardExperience idiom), re-checking the balance:
-	-- if it no longer covers the cost, abort the jump instead of gouging.
-	local balance = self:getPrestigeBalance(pPlayer, prestigeType)
-
-	if (balance < self.DEEP_SPACE_JUMP_PRESTIGE_COST) then
-		ShipObject(pShip):setHyperspacing(false)
-		self:sendNotEnoughPrestige(pPlayer, prestigeType)
-		return
-	end
-
-	CreatureObject(pPlayer):awardExperience(prestigeType, self.DEEP_SPACE_JUMP_PRESTIGE_COST * -1, false)
-	self:sendPrestigeSpent(pPlayer, prestigeType)
 
 	local point = self.arrivalPoints[stationFaction]
 
@@ -238,27 +200,15 @@ function DeepSpaceJumpScreenPlay:completeJump(pPlayer, args)
 		point = self.arrivalPoints.rebel
 	end
 
-	-- Mirror HyperspaceToLocationTask case 9: randomize the arrival location
-	local x = point[1] + getRandomNumber(100)
-	local z = point[2] + getRandomNumber(100)
-	local y = point[3] + getRandomNumber(100)
-
-	-- Mirror HyperspaceToLocationTask case 10: switch the ships zone
-	SceneObject(pShip):switchZone(self.DEEP_SPACE_ZONE, x, z, y, 0)
-
-	-- Move the pilot with the ship so the client gets a scene reset
-	-- (SpaceZoneComponent::switchZone ship-parent branch handles
-	-- sendSceneResetToOwner + delayed sendObjectsToOwner)
-	local parentID = SceneObject(pPlayer):getParentID()
-	SceneObject(pPlayer):switchZone(self.DEEP_SPACE_ZONE, x, z, y, parentID)
-
-	-- Mirror HyperspaceToLocationTask case 11: clear the hyperspace flag after arrival
-	createEvent(6000, self.screenplayName, "clearHyperspace", pPlayer, "")
+	if (ShipObject(pShip):startHyperspace(pPlayer, self.DEEP_SPACE_ZONE, point[1], point[2], point[3])) then
+		CreatureObject(pPlayer):awardExperience(prestigeType, self.DEEP_SPACE_JUMP_PRESTIGE_COST * -1, false)
+		self:sendPrestigeSpent(pPlayer, prestigeType)
+	end
 end
 
--- Invoked from the jump station conversation handlers via
--- createEvent(3500, "DeepSpaceJumpScreenPlay", "beginKesselJump", pPlayer, "")
--- Same jump primitives as beginJump, but no prestige spend and no skill gate:
+-- Invoked from the jump station conversation handlers after their conversation
+-- close delay. Uses the same native jump as beginJump, but has no prestige spend
+-- and no skill gate:
 -- the Kessel option on all three battlefield entry stations has no prestige
 -- screen behind it in any of the three client string tables.
 function DeepSpaceJumpScreenPlay:beginKesselJump(pPlayer)
@@ -281,39 +231,9 @@ function DeepSpaceJumpScreenPlay:beginKesselJump(pPlayer)
 		return
 	end
 
-	ShipObject(pShip):setHyperspacing(true)
-	CreatureObject(pPlayer):sendSystemMessage("@space/space_interaction:hyperspace_route_begin")
-
-	createEvent(5000, self.screenplayName, "completeKesselJump", pPlayer, "")
-end
-
-function DeepSpaceJumpScreenPlay:completeKesselJump(pPlayer)
-	if (pPlayer == nil) then
-		return
-	end
-
-	local pShip = SceneObject(pPlayer):getRootParent()
-
-	if (pShip == nil or not SceneObject(pShip):isShipObject()) then
-		return
-	end
-
 	local point = self.kesselArrivalPoint
 
-	-- Mirror HyperspaceToLocationTask case 9: randomize the arrival location
-	local x = point[1] + getRandomNumber(100)
-	local z = point[2] + getRandomNumber(100)
-	local y = point[3] + getRandomNumber(100)
-
-	-- Mirror HyperspaceToLocationTask case 10: switch the ships zone
-	SceneObject(pShip):switchZone(self.KESSEL_ZONE, x, z, y, 0)
-
-	-- Move the pilot with the ship so the client gets a scene reset
-	local parentID = SceneObject(pPlayer):getParentID()
-	SceneObject(pPlayer):switchZone(self.KESSEL_ZONE, x, z, y, parentID)
-
-	-- Mirror HyperspaceToLocationTask case 11: clear the hyperspace flag after arrival
-	createEvent(6000, self.screenplayName, "clearHyperspace", pPlayer, "")
+	ShipObject(pShip):startHyperspace(pPlayer, self.KESSEL_ZONE, point[1], point[2], point[3])
 end
 
 -- UNREFERENCED as of the client-string rewrite of the three jump station
@@ -341,51 +261,7 @@ function DeepSpaceJumpScreenPlay:beginKashyyykJump(pPlayer)
 		return
 	end
 
-	ShipObject(pShip):setHyperspacing(true)
-	CreatureObject(pPlayer):sendSystemMessage("@space/space_interaction:hyperspace_route_begin")
-
-	createEvent(5000, self.screenplayName, "completeKashyyykJump", pPlayer, "")
-end
-
-function DeepSpaceJumpScreenPlay:completeKashyyykJump(pPlayer)
-	if (pPlayer == nil) then
-		return
-	end
-
-	local pShip = SceneObject(pPlayer):getRootParent()
-
-	if (pShip == nil or not SceneObject(pShip):isShipObject()) then
-		return
-	end
-
 	local point = self.kashyyykArrivalPoint
 
-	-- Mirror HyperspaceToLocationTask case 9: randomize the arrival location
-	local x = point[1] + getRandomNumber(100)
-	local z = point[2] + getRandomNumber(100)
-	local y = point[3] + getRandomNumber(100)
-
-	-- Mirror HyperspaceToLocationTask case 10: switch the ships zone
-	SceneObject(pShip):switchZone(self.KASHYYYK_ZONE, x, z, y, 0)
-
-	-- Move the pilot with the ship so the client gets a scene reset
-	local parentID = SceneObject(pPlayer):getParentID()
-	SceneObject(pPlayer):switchZone(self.KASHYYYK_ZONE, x, z, y, parentID)
-
-	-- Mirror HyperspaceToLocationTask case 11: clear the hyperspace flag after arrival
-	createEvent(6000, self.screenplayName, "clearHyperspace", pPlayer, "")
-end
-
-function DeepSpaceJumpScreenPlay:clearHyperspace(pPlayer)
-	if (pPlayer == nil) then
-		return
-	end
-
-	local pShip = SceneObject(pPlayer):getRootParent()
-
-	if (pShip == nil or not SceneObject(pShip):isShipObject()) then
-		return
-	end
-
-	ShipObject(pShip):setHyperspacing(false)
+	ShipObject(pShip):startHyperspace(pPlayer, self.KASHYYYK_ZONE, point[1], point[2], point[3])
 end
