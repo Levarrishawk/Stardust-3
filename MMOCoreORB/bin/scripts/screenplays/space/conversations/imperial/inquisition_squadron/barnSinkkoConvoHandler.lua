@@ -178,8 +178,9 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
 
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 4)
+		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "imperial_navy", 4)
 
-		-- Player has an active tier 4 mission from Sinkko
+		-- Player has an active tier 4 mission from Ja'ce Yiaso
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
 			(t4Duty1Started and not t4Duty1Complete) or (t4Duty2Started and not t4Duty2Complete) or (t4Duty3Started and not t4Duty3Complete) or (t4Duty4Started and not t4Duty4Complete) or
 			(masterStarted and not masterComplete)) then
@@ -214,7 +215,7 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
 			return convoTemplate:getScreen("ready_train_tier4")
 
-		-- Has not received the tier 4 briefing from Sinkko yet
+		-- Has not received the tier 4 briefing from Ja'ce Yiaso yet
 		elseif (getQuestStatus(playerID .. "InquisitionSquadronScreenplay:StartedSinkkoTier4") ~= "1") then
 			setQuestStatus(playerID .. "InquisitionSquadronScreenplay:StartedSinkkoTier4", 1)
 
@@ -223,28 +224,28 @@ function barnSinkkoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		-- Missions are not complete yet
 		elseif (not t4QuestFourComplete) then
 			-- Player is able to start fourth mission
-			if (t4QuestThreeComplete and not t4QuestFourStarted) then
+			if (t4QuestThreeComplete and tier4SkillCount >= 4 and not t4QuestFourStarted) then
 				if (getQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_fourth_mission")
 				else
 					return convoTemplate:getScreen("tier4_fourth_mission")
 				end
 			-- Player is able to start third mission
-			elseif (t4QuestTwoComplete and not t4QuestThreeStarted) then
+			elseif (t4QuestTwoComplete and tier4SkillCount >= 3 and not t4QuestThreeStarted) then
 				if (getQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_third_mission")
 				else
 					return convoTemplate:getScreen("tier4_third_mission")
 				end
 			-- Player is able to start second mission
-			elseif (t4QuestOneComplete and not t4QuestTwoStarted) then
+			elseif (t4QuestOneComplete and tier4SkillCount >= 2 and not t4QuestTwoStarted) then
 				if (getQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_second_mission")
 				else
 					return convoTemplate:getScreen("tier4_second_mission")
 				end
 			-- Player is ready for first mission, so either was not given it after training first box or failed
-			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "imperial_navy", 4)) then
+			elseif (not t4QuestOneComplete and tier4SkillCount >= 1) then
 				if (getQuestStatus(playerID .. InquisitionSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_first_mission")
 				else

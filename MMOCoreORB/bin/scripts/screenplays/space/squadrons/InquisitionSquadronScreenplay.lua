@@ -1328,7 +1328,7 @@ registerScreenPlay("recovery_naboo_imperial_tier4_2_c", true)
 survival_naboo_imperial_tier4_3 = SpaceSurvivalScreenplay:new {
 	className = "survival_naboo_imperial_tier4_3", questName = "naboo_imperial_tier4_3", questType = "survival", questZone = "space_dathomir", creditReward = 0,
 	sideQuest = true, sideQuestType = "delivery_no_pickup", sideQuestName = "naboo_imperial_tier4_3_a", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-	survivalTime = 420, survivalPoint = "space_dathomir:naboo_imperial_tier4_survival1", delayToFirstAttack = 5, attackDelay = 45,
+	survivalTime = 420, survivalUpdateInterval = 60, survivalPoint = "space_dathomir:naboo_imperial_tier4_survival1", delayToFirstAttack = 5, attackDelay = 45,
 	attackShips = {
 		{"coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4"},
 		{"coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4"},
