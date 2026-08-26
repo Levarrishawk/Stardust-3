@@ -865,7 +865,73 @@ end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Storm Squadron tier 1
 function SpaceHelpers:addStormNextWaypoint(pPlayer)
-	addFaZollWaypointImpl(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):addWaypoint("tatooine", "@npc_spawner_n:oberhaur", "@npc_spawner_n:oberhaur", -1125, 0, -3590, WAYPOINT_BLUE, true, true, 0)
+end
+
+function SpaceHelpers:addStormTier3Waypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:alozen", "@npc_spawner_n:alozen", 3996, 0, -6195, WAYPOINT_BLUE, true, true, 0)
+end
+
+function SpaceHelpers:addStormDennerWaypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:denner", "@npc_spawner_n:denner", 3996, 0, -6195, WAYPOINT_BLUE, true, true, 0)
+end
+
+function SpaceHelpers:addStormTier4Waypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):addWaypoint("endor", "@npc_spawner_n:kilnstrider", "@npc_spawner_n:kilnstrider", 3226, 0, -3435, WAYPOINT_BLUE, true, true, 0)
+end
+
+function SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:nial_declann", "@npc_spawner_n:nial_declann", -5500, 0, 4400, WAYPOINT_BLUE, true, true, 0)
 end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Black Epsilon Squadron tier 1

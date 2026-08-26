@@ -31,9 +31,9 @@ patrol_tatooine_imperial_1 = SpacePatrolScreenplay:new {
 	sideQuestDelay = 20,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_patrol_1", x = 6439, z = -5021, y = -2217, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_patrol_2", x = 6031, z = -4540, y = -1962, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_patrol_3", x = 4891, z = -3215, y = -1345, patrolNumber = 3, radius = 150},
+		{patrolPointName = "storm_tier1_mission1_patrol_1", x = 6439, z = -5021, y = -2217, patrolNumber = 1, radius = 150},
+		{patrolPointName = "storm_tier1_mission1_patrol_2", x = 6031, z = -4540, y = -1962, patrolNumber = 2, radius = 150},
+		{patrolPointName = "storm_tier1_mission1_patrol_3", x = 4891, z = -3215, y = -1345, patrolNumber = 3, radius = 150},
 	},
 }
 
@@ -56,7 +56,7 @@ destroy_surpriseattack_tatooine_imperial_1 = SpaceSurpriseAttackScreenplay:new {
 
 	surpriseAttackShips = {
 		zone = "space_tatooine",
-		spawns = {{count = 3, shipName = "borvo_fighter_tier1"}},
+		spawns = {{count = 3, shipName = "bestine_pirate_tier1"}},
 	},
 }
 
@@ -79,13 +79,14 @@ destroy_tatooine_imperial_2 = SpaceDestroyScreenplay:new {
 	killsRequired = 4,
 
 	shipLocations = {
-		{patrolPointName = "imperial_patrol_1", x = 590, z = -3500, y = -6000},
-		{patrolPointName = "imperial_patrol_2", x = -2500, z = 4000, y = 3500},
-		{patrolPointName = "imperial_patrol_3", x = -3800, z = 2500, y = 5000},
+		{patrolPointName = "storm_tier1_mission2_raiders_1", x = 896, z = 1268, y = -2850},
+		{patrolPointName = "storm_tier1_mission2_raiders_2", x = -3461, z = 775, y = -1259},
+		{patrolPointName = "storm_tier1_mission2_raiders_3", x = 2235, z = 1017, y = -388},
+		{patrolPointName = "storm_tier1_mission2_raiders_4", x = -519, z = 1650, y = -1372},
 	},
 
 	shipTypes = {
-		"borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1",
+		"bestine_pirate_tier1", "bestine_pirate_leader_tier1",
 	},
 }
 
@@ -104,22 +105,20 @@ patrol_tatooine_imperial_3 = SpacePatrolScreenplay:new {
 	itemReward = {
 		{species = {SPECIES_WOOKIEE}, item = "object/tangible/wearables/bandolier/multipocket_bandolier.iff"},
 		{species = {SPECIES_ITHORIAN}, item = "object/tangible/wearables/bandolier/ith_multipocket_bandolier.iff"},
-		{species = {-1}, item = "object/tangible/wearables/bodysuit/bodysuit_s14.iff"},
+		{species = {-1}, item = "object/tangible/wearables/bodysuit/bodysuit_tie_fighter.iff"},
 	},
 
 	sideQuest = true,
 	sideQuestType = "escort",
 	sideQuestName = "tatooine_imperial_3",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.PATROL_POINT,
-
-	sideQuestPatrolStart = 2,
-	sideQuestDelay = 20,
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	sideQuestDelay = 5,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_security_patrol_1", x = 5024, z = -3710, y = -1723, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_security_patrol_2", x = 3933, z = -3285, y = -3098, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_security_patrol_3", x = 3574, z = -2819, y = -4741, patrolNumber = 3, radius = 150},
-		{patrolPointName = "rebel_security_patrol_4", x = 4496, z = -1657, y = -6222, patrolNumber = 4, radius = 150},
+		{patrolPointName = "storm_tier1_mission3_patrol_1", x = 5024, z = -3710, y = -1723, patrolNumber = 1, radius = 150},
+		{patrolPointName = "storm_tier1_mission3_patrol_2", x = 3933, z = -3285, y = -3098, patrolNumber = 2, radius = 150},
+		{patrolPointName = "storm_tier1_mission3_patrol_3", x = 3574, z = -2819, y = -4741, patrolNumber = 3, radius = 150},
+		{patrolPointName = "storm_tier1_mission3_patrol_4", x = 4496, z = -1657, y = -6222, patrolNumber = 4, radius = 150},
 	},
 }
 
@@ -141,20 +140,20 @@ escort_tatooine_imperial_3 = SpaceEscortScreenplay:new {
 	parentQuestName = "tatooine_imperial_3",
 
 	escortShips = {"imp_freightermedium_tier1"},
+	escortSpeed = 60,
 
 	escortPoints = {
-		{patrolPointName = "rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
+		{patrolPointName = "storm_tier1_mission3_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "storm_tier1_mission3_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+		{patrolPointName = "storm_tier1_mission3_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
+		{patrolPointName = "storm_tier1_mission3_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
 
 	attackShips = {
-		{"borvo_fighter_tier1"},
-		{"borvo_fighter_tier1"},
-		{"borvo_fighter_tier1"},
+		{"bestine_pirate_tier1", "bestine_pirate_tier1"},
+		{"bestine_pirate_leader_tier2"},
 	}
 }
 
@@ -171,7 +170,7 @@ assassinate_tatooine_imperial_4 = SpaceAssassinateScreenplay:new {
 
 	creditReward = 1000,
 	itemReward = {
-		{species = {-1}, item = "object/tangible/ship/components/armor/arm_mission_reward_rebel_incom_ultralight.iff"},
+		{species = {-1}, item = "object/tangible/wearables/helmet/helmet_tie_fighter.iff"},
 	},
 
 	sideQuest = false,
@@ -181,16 +180,16 @@ assassinate_tatooine_imperial_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "borvo_boss_tier2",
-		escorts = {"borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1", "borvo_fighter_tier1"},
+		target = "bestine_pirate_leader_tier2",
+		escorts = {"bestine_pirate_tier1"},
 	},
 
 	targetPatrols = {
-		{patrolPointName = "rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},
-		{patrolPointName = "naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},
-		{patrolPointName = "trade_escort_4", x = 895, z = 210, y = 695},
-		{patrolPointName = "military_escort_2", x = 2915, z = 3828, y = 2887},
-		{patrolPointName = "corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},
+		{patrolPointName = "storm_tier1_mission4_target_1", x = 3933, z = -3285, y = -3098},
+		{patrolPointName = "storm_tier1_mission4_target_2", x = 1156, z = -7106, y = -2482},
+		{patrolPointName = "storm_tier1_mission4_target_3", x = 895, z = 210, y = 695},
+		{patrolPointName = "storm_tier1_mission4_target_4", x = 2915, z = 3828, y = 2887},
+		{patrolPointName = "storm_tier1_mission4_target_5", x = 752, z = -2678, y = -1479},
 	},
 }
 
@@ -217,9 +216,9 @@ destroy_duty_tatooine_imperial_6 = SpaceDutyDestroyScreenplay:new {
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "borvo_boss_tier2",
+	bossShip = "bestine_pirate_leader_tier2",
 	shipTypes = {
-		{"borvo_fighter_tier1"},
+		{"bestine_pirate_tier1"},
 	},
 }
 
@@ -252,9 +251,8 @@ escort_duty_tatooine_imperial_7 = SpaceDutyEscortScreenplay:new {
 	attackDelay = 100,
 
 	attackShips = {
-		{"borvo_fighter_tier1_naboo"},
-		{"borvo_fighter_tier1_naboo"},
-		{"borvo_fighter_tier1_naboo"},
+		{"bestine_pirate_tier1", "bestine_pirate_tier1"},
+		{"bestine_pirate_leader_tier2"},
 	},
 
 	creditKillBonus = 100,
@@ -266,7 +264,7 @@ registerScreenPlay("escort_duty_tatooine_imperial_7", true)
 	Tier 2 -- tatooine_imperial_tier2 Main Missions
 ]]
 
--- Mission 1: Inspect with surprise attack side quest
+-- Mission 1: Locate, disable, inspect, and dock with Nym's lieutenant.
 inspect_tatooine_imperial_tier2_1 = SpaceInspectScreenplay:new {
 	className = "inspect_tatooine_imperial_tier2_1",
 
@@ -276,161 +274,90 @@ inspect_tatooine_imperial_tier2_1 = SpaceInspectScreenplay:new {
 	questZone = "space_lok",
 
 	creditReward = 5000,
+	itemReward = {{species = {-1}, item = "object/tangible/ship/components/weapon/wpn_mission_reward_imperial_cygnus_starblaster.iff"}},
 
-	sideQuest = true,
-	sideQuestType = "destroy_surpriseattack",
-	sideQuestName = "tatooine_imperial_tier2_1",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	sideQuest = false,
+	sideQuestType = "",
 
-	inspectTargets = {"viopa_mission_1_shuttle"},
+	inspectTargets = {"nym_lieutenant_tier2"},
 	inspectCargo = "imperial_data",
 
-	targetLocation = {x = 1992, z = 800, y = 2716},
+	spawnInspectTarget = true,
+	targetLocation = {x = -3100, z = 642, y = 3067},
 }
 
 registerScreenPlay("inspect_tatooine_imperial_tier2_1", true)
 
-destroy_surpriseattack_tatooine_imperial_tier2_1 = SpaceSurpriseAttackScreenplay:new {
-	className = "destroy_surpriseattack_tatooine_imperial_tier2_1",
+-- Mission 2: Capture the hostage transport and escort it to Imperial custody.
+recovery_tatooine_imperial_tier2_2 = SpaceRecoveryScreenplay:new {
+	className = "recovery_tatooine_imperial_tier2_2",
 
-	questName = "tatooine_imperial_tier2_1",
-	questType = "destroy_surpriseattack",
+	questName = "tatooine_imperial_tier2_2",
+	-- Preserve the Live client quest table name; the gameplay is a capture/recovery.
+	questType = "escort",
 
 	questZone = "space_lok",
 
-	sideQuest = false,
-	sideQuestType = "",
-
-	parentQuest = "inspect_tatooine_imperial_tier2_1",
-	parentQuestType = "inspect",
-	parentQuestName = "tatooine_imperial_tier2_1",
-
-	surpriseAttackShips = {
-		zone = "space_lok",
-		spawns = {{count = 3, shipName = "bloodrazor_berzerker_tier1"}},
-	},
-}
-
-registerScreenPlay("destroy_surpriseattack_tatooine_imperial_tier2_1", true)
-
--- Mission 2: Escort (in Dantooine)
-escort_tatooine_imperial_tier2_2 = SpaceEscortScreenplay:new {
-	className = "escort_tatooine_imperial_tier2_2",
-
-	questName = "tatooine_imperial_tier2_2",
-	questType = "escort",
-
-	questZone = "space_dantooine",
-
 	creditReward = 5000,
+	itemReward = {{species = {-1}, item = "object/tangible/ship/components/armor/arm_mission_reward_imperial_sfs_light_military.iff"}},
 
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"imp_transport_tier3"},
+	arrivalDelay = 5,
+	recoveryDelay = 5,
+	recoverShip = "nym_freightermedium_tier2",
+	recoveryConversationMobile = "object/mobile/shared_dressed_nym_patrol_elite_nikto_m.iff",
+	escortShips = {"nym_fighter_tier2", "nym_fighter_tier2", "nym_fighter_tier2", "nym_fighter_tier2", "nym_bomber_tier2"},
+	escortSpeed = 60,
 
-	escortPoints = {
-		{patrolPointName = "tatooine_imperial_tier2_2_1", zoneName = "space_dantooine", x = 1000, z = -900, y = -2100, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_2_2", zoneName = "space_dantooine", x = -28, z = -908, y = -2207, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_2_3", zoneName = "space_dantooine", x = -1158, z = -952, y = -2363, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_2_4", zoneName = "space_dantooine", x = -2566, z = -1057, y = -2599, escortNumber = 4, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_2_5", zoneName = "space_dantooine", x = -2436, z = -1574, y = -3167, escortNumber = 5, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_2_6", zoneName = "space_dantooine", x = -2129, z = -1970, y = -3738, escortNumber = 6, radius = 250},
+	preRecoveryPoints = {
+		{patrolPointName = "storm_tier2_hostage_capture", zoneName = "space_lok", x = -5500, z = 3900, y = 3600, escortNumber = 1, radius = 250},
 	},
-
-	attackDelay = 70,
-
+	recoveryPoints = {
+		{patrolPointName = "storm_tier2_hostage_escort_1", zoneName = "space_lok", x = -4775, z = 3294, y = 3140, escortNumber = 1, radius = 250},
+		{patrolPointName = "storm_tier2_hostage_escort_2", zoneName = "space_lok", x = -3923, z = 2964, y = 2395, escortNumber = 2, radius = 250},
+		{patrolPointName = "storm_tier2_hostage_escort_3", zoneName = "space_lok", x = -3191, z = 2904, y = 1706, escortNumber = 3, radius = 250},
+	},
+	attackDelay = 60,
 	attackShips = {
-		{"borvo_bomber_tier2", "borvo_fighter_tier2", "borvo_fighter_tier2"},
-		{"borvo_bomber_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2"},
-		{"borvo_defender_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2"},
+		{"nym_fighter_tier2", "nym_fighter_tier2"},
+		{"nym_fighter_tier2", "nym_bomber_tier2"},
 	}
 }
 
-registerScreenPlay("escort_tatooine_imperial_tier2_2", true)
+registerScreenPlay("recovery_tatooine_imperial_tier2_2", true)
 
--- Mission 3: Recovery
-recovery_tatooine_imperial_tier2_3 = SpaceRecoveryScreenplay:new {
-	className = "recovery_tatooine_imperial_tier2_3",
+-- Mission 3: Destroy Kimogila's Claw after receiving the Lok technician's data.
+assassinate_tatooine_imperial_tier2_3 = SpaceAssassinateScreenplay:new {
+	className = "assassinate_tatooine_imperial_tier2_3",
 
 	questName = "tatooine_imperial_tier2_3",
+	-- Preserve the Live client quest table name; this final leg is an assassination.
 	questType = "recovery",
 
 	questZone = "space_lok",
 
 	creditReward = 5000,
+	itemReward = {{species = {-1}, item = "object/tangible/ship/components/booster/bst_mission_reward_imperial_rss_ion_booster.iff"}},
 
 	sideQuest = false,
 	sideQuestType = "",
 
-	arrivalDelay = 15,
-	recoveryDelay = 30,
-
-	recoverShip = "viopa_mission_3_shuttle",
-	recoveryConversationMobile = "object/mobile/shared_dressed_nym_patrol_elite_nikto_m.iff",
-
-	escortShips = {"borvo_fighter_tier2"},
-
-	preRecoveryPoints = {
-		{patrolPointName = "tatooine_imperial_tier2_3_target_1", zoneName = "space_lok", x = -5500, z = 3900, y = 3600, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_target_2", zoneName = "space_lok", x = -4775, z = 3294, y = 3140, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_target_3", zoneName = "space_lok", x = -3923, z = 2964, y = 2395, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_target_4", zoneName = "space_lok", x = -3191, z = 2904, y = 1706, escortNumber = 4, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_target_5", zoneName = "space_lok", x = -2496, z = 2865, y = 751, escortNumber = 5, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_target_6", zoneName = "space_lok", x = -1540, z = 2528, y = -1100, escortNumber = 6, radius = 250},
-	},
-
-	recoveryPoints = {
-		{patrolPointName = "tatooine_imperial_tier2_3_recover_1", zoneName = "space_lok", x = -3381, z = 2517, y = 877, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_recover_2", zoneName = "space_lok", x = -3512, z = 1885, y = -192, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_recover_3", zoneName = "space_lok", x = -3723, z = 1223, y = -989, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier2_3_recover_4", zoneName = "space_lok", x = -4257, z = -227, y = -2707, escortNumber = 4, radius = 250},
-	},
-
-	attackDelay = 80,
-
-	attackShips = {
-		{"borvo_fighter_tier2", "borvo_bomber_tier2"},
-		{"borvo_defender_tier2", "borvo_bomber_tier2"},
-	},
-}
-
-registerScreenPlay("recovery_tatooine_imperial_tier2_3", true)
-
--- Mission 4: Assassinate
-assassinate_tatooine_imperial_tier2_4 = SpaceAssassinateScreenplay:new {
-	className = "assassinate_tatooine_imperial_tier2_4",
-
-	questType = "assassinate",
-	questName = "tatooine_imperial_tier2_4",
-
-	questZone = "space_lok",
-
-	creditReward = 0,
-	itemReward = {},
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	arrivalDelay = 10,
+	arrivalDelay = 5,
 	failTimer = 20,
-
 	assassinateSpawns = {
-		target = "borvo_defender_tier2",
-		escorts = {"borvo_bomber_tier2", "borvo_bomber_tier2", "borvo_fighter_tier2", "borvo_fighter_tier2", "borvo_fighter_tier2", "borvo_defender_tier3"},
+		target = "nym_freightermedium_tier2",
+		escorts = {"nym_fighter_tier2", "nym_fighter_tier2", "nym_fighter_tier2"},
 	},
-
 	targetPatrols = {
-		{patrolPointName = "tatooine_imperial_tier2_four_1", x = 2800, z = 2400, y = 2800},
-		{patrolPointName = "tatooine_imperial_tier2_four_2", x = 1662, z = 2407, y = 2790},
-		{patrolPointName = "tatooine_imperial_tier2_four_3", x = 533, z = 2411, y = 3116},
-		{patrolPointName = "tatooine_imperial_tier2_four_4", x = -1109, z = 2414, y = 3581},
-		{patrolPointName = "tatooine_imperial_tier2_four_5", x = -2303, z = 2415, y = 4011},
-		{patrolPointName = "tatooine_imperial_tier2_four_6", x = -3674, z = 2416, y = 4444},
+		{patrolPointName = "storm_tier2_kimogilas_claw_1", x = 2800, z = 2400, y = 2800},
+		{patrolPointName = "storm_tier2_kimogilas_claw_2", x = 1662, z = 2407, y = 2790},
+		{patrolPointName = "storm_tier2_kimogilas_claw_3", x = 533, z = 2411, y = 3116},
 	},
 }
 
-registerScreenPlay("assassinate_tatooine_imperial_tier2_4", true)
+registerScreenPlay("assassinate_tatooine_imperial_tier2_3", true)
 
 -- Tier 2 Duty Missions
 destroy_duty_tatooine_imperial_tier2_destroyduty = SpaceDutyDestroyScreenplay:new {
@@ -549,6 +476,10 @@ registerScreenPlay("escort_duty_tatooine_imperial_tier2_escortduty", true)
 --[[
 	Tier 3 -- tatooine_imperial_tier3 Main Missions (missions-only tier)
 ]]
+
+--[[
+	Legacy placeholder tier 3 block. The live-compatible rewrite is loaded below;
+	keep this source disabled so its duplicate screenplay registrations cannot run.
 
 -- Mission 1: Recovery (Space Yavin4 - recover an Imperial agent carrying pirate fleet intelligence)
 recovery_tatooine_imperial_tier3_1 = SpaceRecoveryScreenplay:new {
@@ -1225,10 +1156,15 @@ survival_tatooine_imperial_tier3_4_d = SpaceSurvivalScreenplay:new {
 }
 
 registerScreenPlay("survival_tatooine_imperial_tier3_4_d", true)
+]]
+
+includeFile("screenplays/space/squadrons/StormSquadronTier3Screenplay.lua")
 
 --[[
 	Tier 4 -- tatooine_imperial_tier4 Main Missions
 ]]
+
+--[=[ Replaced by StormSquadronTier4Screenplay.lua.
 
 -- Mission 1: Survival (Space Dathomir - Hold off Borvo syndicate assault on Nym miners)
 survival_tatooine_imperial_tier4_1 = SpaceSurvivalScreenplay:new {
@@ -1804,13 +1740,15 @@ registerScreenPlay("space_battle_tatooine_imperial_tier4_4_c", true)
 -- Corellian Corvette command vessel) are defined in
 -- screenplays/space/squadrons/KesselMasterEncounterScreenplay.lua (loaded first).
 
+]=]
+
 -- Tier 4 Duty Missions
 
 -- Escort Duty (Space Dathomir - escort Imperial supply freighters through pirate territory)
 escort_duty_tatooine_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	className = "escort_duty_tatooine_imperial_tier4_1",
 
-	questName = "tatooine_imperial_tier4_1",
+	questName = "tatooine_imperial_tier4_escortduty_1",
 	questType = "escort_duty",
 
 	questZone = "space_dathomir",
@@ -1848,7 +1786,7 @@ registerScreenPlay("escort_duty_tatooine_imperial_tier4_1", true)
 rescue_duty_tatooine_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	className = "rescue_duty_tatooine_imperial_tier4_1",
 
-	questName = "tatooine_imperial_tier4_1",
+	questName = "tatooine_imperial_tier4_rescueduty_1",
 	questType = "rescue_duty",
 
 	questZone = "space_dantooine",
@@ -1886,7 +1824,7 @@ registerScreenPlay("rescue_duty_tatooine_imperial_tier4_1", true)
 recovery_duty_tatooine_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	className = "recovery_duty_tatooine_imperial_tier4_1",
 
-	questName = "tatooine_imperial_tier4_1",
+	questName = "tatooine_imperial_tier4_recoveryduty_1",
 	questType = "recovery_duty",
 
 	questZone = "space_endor",
@@ -1935,7 +1873,7 @@ registerScreenPlay("recovery_duty_tatooine_imperial_tier4_1", true)
 destroy_duty_tatooine_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_tatooine_imperial_tier4_1",
 
-	questName = "tatooine_imperial_tier4_1",
+	questName = "tatooine_imperial_tier4_destroyduty_1",
 	questType = "destroy_duty",
 
 	questZone = "space_dantooine",
@@ -1964,6 +1902,8 @@ destroy_duty_tatooine_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 
 registerScreenPlay("destroy_duty_tatooine_imperial_tier4_1", true)
 
+includeFile("screenplays/space/squadrons/StormSquadronTier4Screenplay.lua")
+
 --[[
 
 	StormSquadronScreenplay
@@ -1973,7 +1913,7 @@ registerScreenPlay("destroy_duty_tatooine_imperial_tier4_1", true)
 StormSquadronScreenplay = ScreenPlay:new {
 	screenplayName = "StormSquadronScreenplay",
 
-	-- Tier 1 (Lt. Barn Sinkko)
+	-- Tier 1 (Lt. Akal Colzet)
 	QUEST_STRING_1 = {type = "patrol", name = "tatooine_imperial_1"},
 	QUEST_STRING_1_SIDE = {type = "destroy_surpriseattack", name = "tatooine_imperial_1"},
 	QUEST_STRING_2 = {type = "destroy", name = "tatooine_imperial_2"},
@@ -1985,54 +1925,57 @@ StormSquadronScreenplay = ScreenPlay:new {
 
 	-- Tier 2
 	TIER2_QUEST_STRING_1 = {type = "inspect", name = "tatooine_imperial_tier2_1"},
-	TIER2_QUEST_STRING_1_SIDE = {type = "destroy_surpriseattack", name = "tatooine_imperial_tier2_1"},
 	TIER2_QUEST_STRING_2 = {type = "escort", name = "tatooine_imperial_tier2_2"},
 	TIER2_QUEST_STRING_3 = {type = "recovery", name = "tatooine_imperial_tier2_3"},
-	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_imperial_tier2_4"},
 	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_imperial_tier2_destroyduty"},
 	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "tatooine_imperial_tier2_recoveryduty"},
 	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "tatooine_imperial_tier2_escortduty"},
 
 	-- Tier 3
-	TIER3_QUEST_STRING_1 = {type = "recovery", name = "tatooine_imperial_tier3_1"},
-	TIER3_QUEST_STRING_1_SIDE1 = {type = "patrol", name = "tatooine_imperial_tier3_1_A"},
-	TIER3_QUEST_STRING_1_SIDE2 = {type = "destroy_surpriseattack", name = "tatooine_imperial_tier3_1_b"},
-	TIER3_QUEST_STRING_1_SIDE3 = {type = "assassinate", name = "tatooine_imperial_tier3_1_c"},
-	TIER3_QUEST_STRING_1_SIDE4 = {type = "space_battle", name = "tatooine_imperial_tier3_1_d"},
+	TIER3_QUEST_STRING_1 = {type = "escort", name = "tatooine_imperial_tier3_1"},
+	TIER3_QUEST_STRING_1_SIDE1 = {type = "recovery", name = "tatooine_imperial_tier3_1_a"},
+	TIER3_QUEST_STRING_1_SIDE2 = {type = "inspect", name = "tatooine_imperial_tier3_1_b"},
+	TIER3_QUEST_STRING_1_SIDE3 = {type = "rescue", name = "tatooine_imperial_tier3_1_c"},
+	TIER3_QUEST_STRING_1_SIDE4 = {type = "delivery_no_pickup", name = "tatooine_imperial_tier3_1_d"},
 	TIER3_QUEST_STRING_2 = {type = "inspect", name = "tatooine_imperial_tier3_2"},
-	TIER3_QUEST_STRING_2_SIDE1 = {type = "delivery", name = "tatooine_imperial_tier3_2_a"},
-	TIER3_QUEST_STRING_2_SIDE2 = {type = "survival", name = "tatooine_imperial_tier3_2_b"},
-	TIER3_QUEST_STRING_2_SIDE3 = {type = "escort", name = "tatooine_imperial_tier3_2_c"},
+	TIER3_QUEST_STRING_2_SIDE1 = {type = "destroy_surpriseattack", name = "tatooine_imperial_tier3_2_a"},
+	TIER3_QUEST_STRING_2_SIDE2 = {type = "inspect", name = "tatooine_imperial_tier3_2_b"},
+	TIER3_QUEST_STRING_2_SIDE3 = {type = "delivery_no_pickup", name = "tatooine_imperial_tier3_2_c"},
+	TIER3_QUEST_STRING_2_SIDE4 = {type = "patrol", name = "tatooine_imperial_tier3_2_d"},
+	TIER3_QUEST_STRING_2_SIDE5 = {type = "space_battle", name = "tatooine_imperial_tier3_2_e"},
 	TIER3_QUEST_STRING_3 = {type = "delivery", name = "tatooine_imperial_tier3_3"},
-	TIER3_QUEST_STRING_3_SIDE1 = {type = "assassinate", name = "tatooine_imperial_tier3_3_a"},
-	TIER3_QUEST_STRING_3_SIDE2 = {type = "space_battle", name = "tatooine_imperial_tier3_3_b"},
-	TIER3_QUEST_STRING_3_SIDE3 = {type = "escort", name = "tatooine_imperial_tier3_3_c"},
-	TIER3_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_imperial_tier3_4"},
-	TIER3_QUEST_STRING_4_SIDE1 = {type = "patrol", name = "tatooine_imperial_tier3_4_a"},
-	TIER3_QUEST_STRING_4_SIDE2 = {type = "destroy_surpriseattack", name = "tatooine_imperial_tier3_4_b"},
-	TIER3_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "tatooine_imperial_tier3_4_c"},
-	TIER3_QUEST_STRING_4_SIDE4 = {type = "survival", name = "tatooine_imperial_tier3_4_d"},
+	TIER3_QUEST_STRING_3_SIDE1 = {type = "escort", name = "tatooine_imperial_tier3_3_a"},
+	TIER3_QUEST_STRING_3_SIDE2 = {type = "destroy", name = "tatooine_imperial_tier3_3_b"},
+	TIER3_QUEST_STRING_3_SIDE3 = {type = "survival", name = "tatooine_imperial_tier3_3_c"},
+	TIER3_QUEST_STRING_3_SIDE4 = {type = "destroy_surpriseattack", name = "tatooine_imperial_tier3_3_d"},
+	TIER3_QUEST_STRING_4 = {type = "destroy", name = "tatooine_imperial_tier3_4"},
+	TIER3_QUEST_STRING_4_SIDE1 = {type = "rescue", name = "tatooine_imperial_tier3_4_a"},
+	TIER3_QUEST_STRING_4_SIDE2 = {type = "inspect", name = "tatooine_imperial_tier3_4_b"},
+	TIER3_QUEST_STRING_4_SIDE3 = {type = "assassinate", name = "tatooine_imperial_tier3_4_c"},
 
 	-- Tier 4
-	TIER4_QUEST_STRING_1 = {type = "survival", name = "tatooine_imperial_tier4_1"},
-	TIER4_QUEST_STRING_1_SIDE1 = {type = "space_battle", name = "tatooine_imperial_tier4_1_a"},
+	TIER4_QUEST_STRING_1 = {type = "patrol", name = "tatooine_imperial_tier4_1"},
+	TIER4_QUEST_STRING_1_SIDE1 = {type = "destroy_surpriseattack", name = "tatooine_imperial_tier4_1_a"},
 	TIER4_QUEST_STRING_1_SIDE2 = {type = "space_battle", name = "tatooine_imperial_tier4_1_b"},
-	TIER4_QUEST_STRING_2 = {type = "assassinate", name = "tatooine_imperial_tier4_2"},
-	TIER4_QUEST_STRING_2_SIDE1 = {type = "delivery_no_pickup", name = "tatooine_imperial_tier4_2_a"},
-	TIER4_QUEST_STRING_2_SIDE2 = {type = "rescue", name = "tatooine_imperial_tier4_2_b"},
-	TIER4_QUEST_STRING_3 = {type = "space_battle", name = "tatooine_imperial_tier4_3"},
-	TIER4_QUEST_STRING_3_SIDE1 = {type = "space_battle", name = "tatooine_imperial_tier4_3_a"},
-	TIER4_QUEST_STRING_3_SIDE2 = {type = "survival", name = "tatooine_imperial_tier4_3_b"},
-	TIER4_QUEST_STRING_4 = {type = "recovery", name = "tatooine_imperial_tier4_4"},
+	TIER4_QUEST_STRING_1_SIDE3 = {type = "inspect", name = "tatooine_imperial_tier4_1_c"},
+	TIER4_QUEST_STRING_1_SIDE4 = {type = "delivery_no_pickup", name = "tatooine_imperial_tier4_1_d"},
+	TIER4_QUEST_STRING_2 = {type = "recovery", name = "tatooine_imperial_tier4_2"},
+	TIER4_QUEST_STRING_2_SIDE1 = {type = "recovery", name = "tatooine_imperial_tier4_2_a"},
+	TIER4_QUEST_STRING_2_SIDE2 = {type = "delivery", name = "tatooine_imperial_tier4_2_b"},
+	TIER4_QUEST_STRING_2_SIDE3 = {type = "recovery", name = "tatooine_imperial_tier4_2_c"},
+	TIER4_QUEST_STRING_3 = {type = "escort", name = "tatooine_imperial_tier4_3"},
+	TIER4_QUEST_STRING_3_SIDE1 = {type = "rescue", name = "tatooine_imperial_tier4_3_a"},
+	TIER4_QUEST_STRING_3_SIDE2 = {type = "space_battle", name = "tatooine_imperial_tier4_3_b"},
+	TIER4_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_imperial_tier4_4"},
 	TIER4_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "tatooine_imperial_tier4_4_a"},
-	TIER4_QUEST_STRING_4_SIDE2 = {type = "rescue", name = "tatooine_imperial_tier4_4_b"},
-	TIER4_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "tatooine_imperial_tier4_4_c"},
+	TIER4_QUEST_STRING_4_SIDE2 = {type = "recovery", name = "tatooine_imperial_tier4_4_b"},
+	TIER4_QUEST_STRING_4_SIDE3 = {type = "assassinate", name = "tatooine_imperial_tier4_4_c"},
 	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "master_imperial_1"},
 	TIER4_QUEST_STRING_MASTER_2 = {type = "destroy", name = "master_imperial_2"},
-	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "tatooine_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "tatooine_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "tatooine_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_4 = {type = "destroy_duty", name = "tatooine_imperial_tier4_1"},
+	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "tatooine_imperial_tier4_escortduty_1"},
+	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "tatooine_imperial_tier4_rescueduty_1"},
+	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "tatooine_imperial_tier4_recoveryduty_1"},
+	TIER4_QUEST_STRING_DUTY_4 = {type = "destroy_duty", name = "tatooine_imperial_tier4_destroyduty_1"},
 }
 
 registerScreenPlay("StormSquadronScreenplay", false)
@@ -2041,6 +1984,20 @@ function StormSquadronScreenplay:start()
 end
 
 -- Reset functions for quest clearing
+
+function StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
+	if (pPlayer == nil) then
+		return
+	end
+
+	for i = #missionScreenplays, 1, -1 do
+		missionScreenplays[i]:resetQuest(pPlayer)
+	end
+
+	for i = 1, #missionQuests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, missionQuests[i].type, missionQuests[i].name, false)
+	end
+end
 
 function StormSquadronScreenplay:resetColzetQuests(pPlayer)
 	if (pPlayer == nil) then
@@ -2088,20 +2045,16 @@ function StormSquadronScreenplay:resetTier2Quests(pPlayer)
 	-- Mission 1
 	inspect_tatooine_imperial_tier2_1:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1.type, self.TIER2_QUEST_STRING_1.name, false)
-	destroy_surpriseattack_tatooine_imperial_tier2_1:resetQuest(pPlayer)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1_SIDE.type, self.TIER2_QUEST_STRING_1_SIDE.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, "destroy_surpriseattack", "tatooine_imperial_tier2_1", false)
 
 	-- Mission 2
-	escort_tatooine_imperial_tier2_2:resetQuest(pPlayer)
+	recovery_tatooine_imperial_tier2_2:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_2.type, self.TIER2_QUEST_STRING_2.name, false)
 
 	-- Mission 3
-	recovery_tatooine_imperial_tier2_3:resetQuest(pPlayer)
+	assassinate_tatooine_imperial_tier2_3:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_3.type, self.TIER2_QUEST_STRING_3.name, false)
-
-	-- Mission 4
-	assassinate_tatooine_imperial_tier2_4:resetQuest(pPlayer)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_4.type, self.TIER2_QUEST_STRING_4.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, "assassinate", "tatooine_imperial_tier2_4", false)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 
@@ -2109,12 +2062,15 @@ function StormSquadronScreenplay:resetTier2Quests(pPlayer)
 	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted")
 	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted")
 	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted")
-	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted")
 	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward")
 	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward")
 	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward")
-	removeQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward")
+	removeQuestStatus(playerID .. "tatooine_imperial_tier2_4:attempted")
+	removeQuestStatus(playerID .. "tatooine_imperial_tier2_4:reward")
 	removeQuestStatus(playerID .. "StormSquadron:tier2Smuggler")
+	removeQuestStatus(playerID .. "StormSquadronScreenplay:StartedColzetTier2")
+	removeQuestStatus(playerID .. "StormSquadronScreenplay:StartedOberhaurTier2")
+	removeQuestStatus(playerID .. "StormSquadronScreenplay:oberhaur_finished")
 end
 
 function StormSquadronScreenplay:resetTier3Quests(pPlayer)
@@ -2122,49 +2078,24 @@ function StormSquadronScreenplay:resetTier3Quests(pPlayer)
 		return
 	end
 
-	-- Mission 1
-	recovery_tatooine_imperial_tier3_1:resetQuest(pPlayer)
-	patrol_tatooine_imperial_tier3_1_A:resetQuest(pPlayer)
-	destroy_surpriseattack_tatooine_imperial_tier3_1_b:resetQuest(pPlayer)
-	assassinate_tatooine_imperial_tier3_1_c:resetQuest(pPlayer)
-	space_battle_tatooine_imperial_tier3_1_d:resetQuest(pPlayer)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1.type, self.TIER3_QUEST_STRING_1.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE1.type, self.TIER3_QUEST_STRING_1_SIDE1.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE2.type, self.TIER3_QUEST_STRING_1_SIDE2.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE3.type, self.TIER3_QUEST_STRING_1_SIDE3.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE4.type, self.TIER3_QUEST_STRING_1_SIDE4.name, false)
+	local missionScreenplays = {
+		escort_tatooine_imperial_tier3_1, recovery_tatooine_imperial_tier3_1_a, inspect_tatooine_imperial_tier3_1_b,
+		rescue_tatooine_imperial_tier3_1_c, delivery_no_pickup_tatooine_imperial_tier3_1_d,
+		inspect_tatooine_imperial_tier3_2, destroy_surpriseattack_tatooine_imperial_tier3_2_a, inspect_tatooine_imperial_tier3_2_b,
+		delivery_no_pickup_tatooine_imperial_tier3_2_c, patrol_tatooine_imperial_tier3_2_d, space_battle_tatooine_imperial_tier3_2_e,
+		delivery_tatooine_imperial_tier3_3, escort_tatooine_imperial_tier3_3_a, destroy_tatooine_imperial_tier3_3_b,
+		survival_tatooine_imperial_tier3_3_c, destroy_surpriseattack_tatooine_imperial_tier3_3_d,
+		destroy_tatooine_imperial_tier3_4, rescue_tatooine_imperial_tier3_4_a, inspect_tatooine_imperial_tier3_4_b,
+		assassinate_tatooine_imperial_tier3_4_c,
+	}
+	local missionQuests = {
+		self.TIER3_QUEST_STRING_1, self.TIER3_QUEST_STRING_1_SIDE1, self.TIER3_QUEST_STRING_1_SIDE2, self.TIER3_QUEST_STRING_1_SIDE3, self.TIER3_QUEST_STRING_1_SIDE4,
+		self.TIER3_QUEST_STRING_2, self.TIER3_QUEST_STRING_2_SIDE1, self.TIER3_QUEST_STRING_2_SIDE2, self.TIER3_QUEST_STRING_2_SIDE3, self.TIER3_QUEST_STRING_2_SIDE4, self.TIER3_QUEST_STRING_2_SIDE5,
+		self.TIER3_QUEST_STRING_3, self.TIER3_QUEST_STRING_3_SIDE1, self.TIER3_QUEST_STRING_3_SIDE2, self.TIER3_QUEST_STRING_3_SIDE3, self.TIER3_QUEST_STRING_3_SIDE4,
+		self.TIER3_QUEST_STRING_4, self.TIER3_QUEST_STRING_4_SIDE1, self.TIER3_QUEST_STRING_4_SIDE2, self.TIER3_QUEST_STRING_4_SIDE3,
+	}
 
-	-- Mission 2
-	inspect_tatooine_imperial_tier3_2:resetQuest(pPlayer)
-	delivery_tatooine_imperial_tier3_2_a:resetQuest(pPlayer)
-	survival_tatooine_imperial_tier3_2_b:resetQuest(pPlayer)
-	escort_tatooine_imperial_tier3_2_c:resetQuest(pPlayer)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_2.type, self.TIER3_QUEST_STRING_2.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_2_SIDE1.type, self.TIER3_QUEST_STRING_2_SIDE1.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_2_SIDE2.type, self.TIER3_QUEST_STRING_2_SIDE2.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_2_SIDE3.type, self.TIER3_QUEST_STRING_2_SIDE3.name, false)
-
-	-- Mission 3
-	delivery_tatooine_imperial_tier3_3:resetQuest(pPlayer)
-	assassinate_tatooine_imperial_tier3_3_a:resetQuest(pPlayer)
-	space_battle_tatooine_imperial_tier3_3_b:resetQuest(pPlayer)
-	escort_tatooine_imperial_tier3_3_c:resetQuest(pPlayer)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3.type, self.TIER3_QUEST_STRING_3.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE1.type, self.TIER3_QUEST_STRING_3_SIDE1.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE2.type, self.TIER3_QUEST_STRING_3_SIDE2.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE3.type, self.TIER3_QUEST_STRING_3_SIDE3.name, false)
-
-	-- Mission 4
-	assassinate_tatooine_imperial_tier3_4:resetQuest(pPlayer)
-	patrol_tatooine_imperial_tier3_4_a:resetQuest(pPlayer)
-	destroy_surpriseattack_tatooine_imperial_tier3_4_b:resetQuest(pPlayer)
-	space_battle_tatooine_imperial_tier3_4_c:resetQuest(pPlayer)
-	survival_tatooine_imperial_tier3_4_d:resetQuest(pPlayer)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4.type, self.TIER3_QUEST_STRING_4.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE1.type, self.TIER3_QUEST_STRING_4_SIDE1.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE2.type, self.TIER3_QUEST_STRING_4_SIDE2.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE3.type, self.TIER3_QUEST_STRING_4_SIDE3.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE4.type, self.TIER3_QUEST_STRING_4_SIDE4.name, false)
+	self:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 
@@ -2184,34 +2115,40 @@ function StormSquadronScreenplay:resetTier4Quests(pPlayer)
 	end
 
 	-- Mission 1
-	survival_tatooine_imperial_tier4_1:resetQuest(pPlayer)
-	space_battle_tatooine_imperial_tier4_1_a:resetQuest(pPlayer)
+	patrol_tatooine_imperial_tier4_1:resetQuest(pPlayer)
+	destroy_surpriseattack_tatooine_imperial_tier4_1_a:resetQuest(pPlayer)
 	space_battle_tatooine_imperial_tier4_1_b:resetQuest(pPlayer)
+	inspect_tatooine_imperial_tier4_1_c:resetQuest(pPlayer)
+	delivery_no_pickup_tatooine_imperial_tier4_1_d:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1.type, self.TIER4_QUEST_STRING_1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1_SIDE1.type, self.TIER4_QUEST_STRING_1_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1_SIDE2.type, self.TIER4_QUEST_STRING_1_SIDE2.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1_SIDE3.type, self.TIER4_QUEST_STRING_1_SIDE3.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_1_SIDE4.type, self.TIER4_QUEST_STRING_1_SIDE4.name, false)
 
 	-- Mission 2
-	assassinate_tatooine_imperial_tier4_2:resetQuest(pPlayer)
-	delivery_no_pickup_tatooine_imperial_tier4_2_a:resetQuest(pPlayer)
-	rescue_tatooine_imperial_tier4_2_b:resetQuest(pPlayer)
+	recovery_tatooine_imperial_tier4_2:resetQuest(pPlayer)
+	recovery_tatooine_imperial_tier4_2_a:resetQuest(pPlayer)
+	delivery_tatooine_imperial_tier4_2_b:resetQuest(pPlayer)
+	recovery_tatooine_imperial_tier4_2_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2.type, self.TIER4_QUEST_STRING_2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2_SIDE1.type, self.TIER4_QUEST_STRING_2_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2_SIDE2.type, self.TIER4_QUEST_STRING_2_SIDE2.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_2_SIDE3.type, self.TIER4_QUEST_STRING_2_SIDE3.name, false)
 
 	-- Mission 3
-	space_battle_tatooine_imperial_tier4_3:resetQuest(pPlayer)
-	space_battle_tatooine_imperial_tier4_3_a:resetQuest(pPlayer)
-	survival_tatooine_imperial_tier4_3_b:resetQuest(pPlayer)
+	escort_tatooine_imperial_tier4_3:resetQuest(pPlayer)
+	rescue_tatooine_imperial_tier4_3_a:resetQuest(pPlayer)
+	space_battle_tatooine_imperial_tier4_3_b:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_3.type, self.TIER4_QUEST_STRING_3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_3_SIDE1.type, self.TIER4_QUEST_STRING_3_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_3_SIDE2.type, self.TIER4_QUEST_STRING_3_SIDE2.name, false)
 
 	-- Mission 4
-	recovery_tatooine_imperial_tier4_4:resetQuest(pPlayer)
+	assassinate_tatooine_imperial_tier4_4:resetQuest(pPlayer)
 	assassinate_tatooine_imperial_tier4_4_a:resetQuest(pPlayer)
-	rescue_tatooine_imperial_tier4_4_b:resetQuest(pPlayer)
-	space_battle_tatooine_imperial_tier4_4_c:resetQuest(pPlayer)
+	recovery_tatooine_imperial_tier4_4_b:resetQuest(pPlayer)
+	assassinate_tatooine_imperial_tier4_4_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4.type, self.TIER4_QUEST_STRING_4.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE1.type, self.TIER4_QUEST_STRING_4_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE2.type, self.TIER4_QUEST_STRING_4_SIDE2.name, false)

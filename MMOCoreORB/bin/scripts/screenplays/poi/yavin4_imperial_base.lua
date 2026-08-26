@@ -30,6 +30,7 @@ Yavin4ImperialBaseScreenPlay = ScreenPlay:new {
 		{"imperial_medic", 300, 4.9, 0, 1.5, 90, 8735519, ""},
 		{"imperial_trooper", 300, 3.7, 0, 3.8, -90, 8735521, ""},
 		{"alozen", 300, 0.003, 0.125, -5.558, 0, 8735518, ""},
+		{"denner", 300, -2.5, 0.125, -5.558, 0, 8735518, ""},
 		{"barlow", 60, 4028.91, 37, -6201.62, 150, 0, "npc_imperial"}
 	}
 

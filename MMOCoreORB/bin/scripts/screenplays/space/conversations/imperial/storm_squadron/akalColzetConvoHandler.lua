@@ -41,6 +41,11 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("no_jtl")
 	end
 
+	local isOberhaur = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_tatooine_oberhaur.iff"
+	local isAlozen = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_tatooine_alozen.iff"
+	local isDenner = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier3_yavin.iff"
+	local isKilnstrider = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier4_tatooine_kilnstrider.iff"
+
 	-- Check if player is an imperial pilot
 	local isImperialPilot = SpaceHelpers:isImperialPilot(pPlayer)
 
@@ -50,6 +55,55 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player is Neutral Pilot
 	elseif (SpaceHelpers:isNeutralPilot(pPlayer)) then
 		return convoTemplate:getScreen("neutral_pilot")
+	end
+
+	if (SpaceHelpers:isStormSquadron(pPlayer) and ghost:getPilotTier() == 2 and not isOberhaur) then
+		return convoTemplate:getScreen("go_to_next")
+	elseif (isOberhaur and SpaceHelpers:isStormSquadron(pPlayer) and ghost:getPilotTier() >= 3) then
+		return convoTemplate:getScreen("tier2_completed")
+	elseif (isOberhaur and (not SpaceHelpers:isStormSquadron(pPlayer) or ghost:getPilotTier() < 2)) then
+		return convoTemplate:getScreen("go_to_next")
+	elseif (isAlozen and SpaceHelpers:isStormSquadron(pPlayer) and ghost:getPilotTier() >= 3) then
+		local alozenOneActive = SpaceHelpers:isSpaceQuestActive(pPlayer, "inspect", "imperial_ss_4")
+		local alozenTwoActive = SpaceHelpers:isSpaceQuestActive(pPlayer, "escort", "imperial_ss_5")
+		local alozenThreeActive = SpaceHelpers:isSpaceQuestActive(pPlayer, "recovery", "imperial_ss_6")
+		local alozenOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, "inspect", "imperial_ss_4")
+		local alozenTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, "escort", "imperial_ss_5")
+		local alozenThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, "recovery", "imperial_ss_6")
+
+		if (alozenOneActive or alozenTwoActive or alozenThreeActive) then
+			return convoTemplate:getScreen("tier3_on_mission")
+		elseif (alozenThreeComplete) then
+			if (getQuestStatus(playerID .. "imperial_ss_6:reward") ~= "1") then
+				setQuestStatus(playerID .. "imperial_ss_6:reward", 1)
+				recovery_imperial_ss_6:rewardPlayer(pPlayer)
+				ghost:increaseFactionStanding("imperial", 50)
+			end
+			SpaceHelpers:addStormDennerWaypoint(pPlayer)
+			return convoTemplate:getScreen("tier3_completed")
+		elseif (alozenTwoComplete) then
+			if (getQuestStatus(playerID .. "imperial_ss_5:reward") ~= "1") then
+				setQuestStatus(playerID .. "imperial_ss_5:reward", 1)
+				escort_imperial_ss_5:rewardPlayer(pPlayer)
+				ghost:increaseFactionStanding("imperial", 50)
+			end
+			return convoTemplate:getScreen("tier3_third_mission")
+		elseif (alozenOneComplete) then
+			if (getQuestStatus(playerID .. "imperial_ss_4:reward") ~= "1") then
+				setQuestStatus(playerID .. "imperial_ss_4:reward", 1)
+				inspect_imperial_ss_4:rewardPlayer(pPlayer)
+				ghost:increaseFactionStanding("imperial", 75)
+			end
+			return convoTemplate:getScreen("tier3_second_mission")
+		else
+			return convoTemplate:getScreen("tier3_first_mission")
+		end
+	elseif (isDenner and (not SpaceHelpers:isStormSquadron(pPlayer) or ghost:getPilotTier() < 3)) then
+		return convoTemplate:getScreen("go_to_next")
+	elseif (isKilnstrider and (not SpaceHelpers:isStormSquadron(pPlayer) or ghost:getPilotTier() < 4)) then
+		return convoTemplate:getScreen("go_to_next")
+	elseif (not isDenner and not isKilnstrider and SpaceHelpers:isStormSquadron(pPlayer) and ghost:getPilotTier() >= 3) then
+		return convoTemplate:getScreen("tier2_completed")
 	end
 
 	-- Check for a starter ship
@@ -95,10 +149,13 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (ghost:getPilotTier() >= 4) then
 		local t4QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE4.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE4.name)
 		local t4QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_2.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.type, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.type, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.name)
 		local t4QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_3.type, StormSquadronScreenplay.TIER4_QUEST_STRING_3.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.type, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.name)
@@ -107,8 +164,8 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
 
-		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
-		local t4QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name)
+		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE4.type, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE4.name)
+		local t4QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.type, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3.name)
 		local t4QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.name)
 		local t4QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.type, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3.name)
 
@@ -163,7 +220,7 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
 			return convoTemplate:getScreen("ready_train_tier4")
 
-		-- Has not received the tier 4 briefing from Colzet yet
+		-- Has not received the tier 4 briefing from Oberhaur yet
 		elseif (getQuestStatus(playerID .. "StormSquadronScreenplay:StartedColzetTier4") ~= "1") then
 			setQuestStatus(playerID .. "StormSquadronScreenplay:StartedColzetTier4", 1)
 
@@ -218,21 +275,23 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t3QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE5.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE5.name)
 		local t3QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.name)
 		local t3QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name)
 
 		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, StormSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
-		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
-		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
-		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE5.type, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE5.name)
+		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.type, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.name)
+		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name)
 
 		local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 3)
 
@@ -241,6 +300,8 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (ghost:getPilotTier() <= 3) then
 				ghost:incrementPilotTier()
 			end
+
+			SpaceHelpers:addStormTier4Waypoint(pPlayer)
 
 			return convoTemplate:getScreen("tier3_completed")
 		end
@@ -257,7 +318,7 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (getQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward") ~= "1") then
 				setQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward", 1)
 
-				assassinate_tatooine_imperial_tier3_4:rewardPlayer(pPlayer)
+				destroy_tatooine_imperial_tier3_4:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_fourth_mission_success")
@@ -281,7 +342,7 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (getQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward") ~= "1") then
 				setQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward", 1)
 
-				recovery_tatooine_imperial_tier3_1:rewardPlayer(pPlayer)
+				escort_tatooine_imperial_tier3_1:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_first_mission_success")
@@ -328,16 +389,13 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	--]]
 
 	if (ghost:getPilotTier() == 2) then
-		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1.name) or
-			SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.name)
+		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1.name)
 		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_2.type, StormSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_3.type, StormSquadronScreenplay.TIER2_QUEST_STRING_3.name)
-		local t2QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_4.type, StormSquadronScreenplay.TIER2_QUEST_STRING_4.name)
 
-		local t2QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1_SIDE.name)
+		local t2QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_1.type, StormSquadronScreenplay.TIER2_QUEST_STRING_1.name)
 		local t2QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_2.type, StormSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_3.type, StormSquadronScreenplay.TIER2_QUEST_STRING_3.name)
-		local t2QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_4.type, StormSquadronScreenplay.TIER2_QUEST_STRING_4.name)
 
 		local t2Duty1Started = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.type, StormSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.name)
 		local t2Duty2Started = SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.type, StormSquadronScreenplay.TIER2_QUEST_STRING_DUTY_2.name)
@@ -349,24 +407,27 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 2)
 
-		-- Player has an active tier 2 mission from Colzet
-		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or (t2QuestFourStarted and not t2QuestFourComplete) or
+		-- Player has an active Tier 2 mission from Oberhaur
+		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or
 			(t2Duty1Started and not t2Duty1Complete) or (t2Duty2Started and not t2Duty2Complete) or (t2Duty3Started and not t2Duty3Complete)) then
 
 			return convoTemplate:getScreen("tier2_on_mission")
 
 		-- Player finished the final tier 2 mission and has all the tier 2 skill boxes
-		elseif (t2QuestFourComplete and completedTier2) then
+		elseif (t2QuestThreeComplete and completedTier2) then
 			if (ghost:getPilotTier() <= 2) then
 				-- Increment pilot to Tier 3!
 				ghost:incrementPilotTier()
 			end
 
+			if (getQuestStatus(playerID .. "StormSquadronScreenplay:oberhaur_finished") ~= "1") then
+				setQuestStatus(playerID .. "StormSquadronScreenplay:oberhaur_finished", 1)
+				SpaceHelpers:addStormTier3Waypoint(pPlayer)
+			end
+
 			return convoTemplate:getScreen("tier2_completed")
 
 		-- Reward Checks
-		elseif (t2QuestFourComplete and getQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") ~= "1") then
-			return convoTemplate:getScreen("tier2_fourth_mission_success")
 		elseif (t2QuestThreeComplete and getQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier2_third_mission_success")
 		elseif (t2QuestTwoComplete and getQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward") ~= "1") then
@@ -378,23 +439,15 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
 			return convoTemplate:getScreen("ready_train_tier2")
 
-		-- Has not received the tier 2 briefing from Colzet yet
-		elseif (getQuestStatus(playerID .. "StormSquadronScreenplay:StartedColzetTier2") ~= "1") then
-			setQuestStatus(playerID .. "StormSquadronScreenplay:StartedColzetTier2", 1)
+		-- Has not received the tier 2 briefing from Oberhaur yet
+		elseif (getQuestStatus(playerID .. "StormSquadronScreenplay:StartedOberhaurTier2") ~= "1") then
+			setQuestStatus(playerID .. "StormSquadronScreenplay:StartedOberhaurTier2", 1)
 
 			return convoTemplate:getScreen("tier2_initial_briefing")
 
 		-- Missions are not complete yet
-		elseif (not t2QuestFourComplete) then
-			-- Player is able to start fourth mission
-			if (t2QuestThreeComplete and not t2QuestFourStarted) then
-				if (getQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted") == "1") then
-					return convoTemplate:getScreen("failed_tier2_fourth_mission")
-				else
-					return convoTemplate:getScreen("tier2_fourth_mission")
-				end
-			-- Player is able to start third mission
-			elseif (t2QuestTwoComplete and not t2QuestThreeStarted) then
+		elseif (not t2QuestThreeComplete) then
+			if (t2QuestTwoComplete and not t2QuestThreeStarted) then
 				if (getQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier2_third_mission")
 				else
@@ -608,16 +661,16 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		local skillManager = LuaSkillManager()
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_starships_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_imperial_navy_starships_02")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_trainer_2:s_594a07fa", "tier2_train_fighters")
+			clonedConversation:addOption("@conversation/tatooine_imperial_trainer_2:s_594a07fa", "tier2_train_fighters")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_weapons_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_imperial_navy_weapons_02")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_trainer_2:s_be30f309", "tier2_train_component")
+			clonedConversation:addOption("@conversation/tatooine_imperial_trainer_2:s_be30f309", "tier2_train_component")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_procedures_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_imperial_navy_procedures_02")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_trainer_2:s_e73e5d21", "tier2_train_basics")
+			clonedConversation:addOption("@conversation/tatooine_imperial_trainer_2:s_e73e5d21", "tier2_train_basics")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_droid_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_imperial_navy_droid_02")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_trainer_2:s_c76594d7", "tier2_train_droid")
+			clonedConversation:addOption("@conversation/tatooine_imperial_trainer_2:s_c76594d7", "tier2_train_droid")
 		end
 	-- Handle tier 2 skill box granting
 	elseif (string.find(screenID, "tier2_train_")) then
@@ -646,61 +699,55 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 			ghost:incrementPilotTier()
 		end
 
-		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2) or SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_4.type, StormSquadronScreenplay.TIER2_QUEST_STRING_4.name)) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2) or SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_3.type, StormSquadronScreenplay.TIER2_QUEST_STRING_3.name)) then
 			return self:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		end
 
 		return pClonedScreen
 	-- Tier 2 mission rewards
-	elseif (screenID == "tier2_fourth_mission_success") then
-		local playerID = CreatureObject(pPlayer):getObjectID()
-
-		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward", 1)
-
-		assassinate_tatooine_imperial_tier2_4:rewardPlayer(pPlayer)
 	elseif (screenID == "tier2_third_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)
 
-		recovery_tatooine_imperial_tier2_3:rewardPlayer(pPlayer)
+		assassinate_tatooine_imperial_tier2_3:rewardPlayer(pPlayer)
+		ghost:increaseFactionStanding("imperial", 75)
 	elseif (screenID == "tier2_second_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward", 1)
 
-		escort_tatooine_imperial_tier2_2:rewardPlayer(pPlayer)
+		recovery_tatooine_imperial_tier2_2:rewardPlayer(pPlayer)
+		ghost:increaseFactionStanding("imperial", 75)
 	elseif (screenID == "tier2_first_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward", 1)
 
 		inspect_tatooine_imperial_tier2_1:rewardPlayer(pPlayer)
+		ghost:increaseFactionStanding("imperial", 75)
 	-- Tier 2 mission starters
 	elseif (screenID == "accept_tier2_first_mission" or screenID == "failed_tier2_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_tatooine_imperial_tier2_1}, {StormSquadronScreenplay.TIER2_QUEST_STRING_1})
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 
 		inspect_tatooine_imperial_tier2_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier2_second_mission" or screenID == "failed_tier2_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_imperial_tier2_2}, {StormSquadronScreenplay.TIER2_QUEST_STRING_2})
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
 
-		escort_tatooine_imperial_tier2_2:startQuest(pPlayer, pNpc)
+		recovery_tatooine_imperial_tier2_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier2_third_mission" or screenID == "failed_tier2_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_imperial_tier2_3}, {StormSquadronScreenplay.TIER2_QUEST_STRING_3})
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
 
-		recovery_tatooine_imperial_tier2_3:startQuest(pPlayer, pNpc)
-	elseif (screenID == "accept_tier2_fourth_mission" or screenID == "failed_tier2_fourth_mission") then
-		local playerID = CreatureObject(pPlayer):getObjectID()
-
-		setQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
-
-		assassinate_tatooine_imperial_tier2_4:startQuest(pPlayer, pNpc)
+		assassinate_tatooine_imperial_tier2_3:startQuest(pPlayer, pNpc)
 	-- Tier 2 duty missions
 	elseif (screenID == "accept_tier2_duty1") then
 		destroy_duty_tatooine_imperial_tier2_destroyduty:startQuest(pPlayer, pNpc)
@@ -716,16 +763,16 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Tier 3 training options (missions only, no experience check)
 	elseif (screenID == "tier3_first_mission_success" or screenID == "tier3_second_mission_success" or screenID == "tier3_third_mission_success" or screenID == "tier3_fourth_mission_success") then
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_starships_03")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_tier3:s_40cda759", "tier3_train_fighters")
+			clonedConversation:addOption("@conversation/tatooine_imperial_tier3:s_40cda759", "tier3_train_fighters")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_weapons_03")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_tier3:s_a9aeb386", "tier3_train_component")
+			clonedConversation:addOption("@conversation/tatooine_imperial_tier3:s_a9aeb386", "tier3_train_component")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_procedures_03")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_tier3:s_ef7a2df5", "tier3_train_procedures")
+			clonedConversation:addOption("@conversation/tatooine_imperial_tier3:s_ef7a2df5", "tier3_train_procedures")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_imperial_navy_droid_03")) then
-			clonedConversation:addOption("@conversation/naboo_imperial_tier3:s_473d09d8", "tier3_train_droid")
+			clonedConversation:addOption("@conversation/tatooine_imperial_tier3:s_473d09d8", "tier3_train_droid")
 		end
 	-- Handle tier 3 skill box granting
 	elseif (string.find(screenID, "tier3_train_")) then
@@ -748,28 +795,64 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Tier 3 mission starters
 	elseif (screenID == "accept_tier3_first_mission" or screenID == "failed_tier3_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		local isAlozen = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_tatooine_alozen.iff"
+
+		if (isAlozen) then
+			inspect_imperial_ss_4:resetQuest(pPlayer)
+			SpaceHelpers:clearSpaceQuest(pPlayer, "inspect", "imperial_ss_4", false)
+			inspect_imperial_ss_4:startQuest(pPlayer, pNpc)
+			return pClonedScreen
+		end
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
-		recovery_tatooine_imperial_tier3_1:startQuest(pPlayer, pNpc)
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{escort_tatooine_imperial_tier3_1, recovery_tatooine_imperial_tier3_1_a, inspect_tatooine_imperial_tier3_1_b, rescue_tatooine_imperial_tier3_1_c, delivery_no_pickup_tatooine_imperial_tier3_1_d},
+			{StormSquadronScreenplay.TIER3_QUEST_STRING_1, StormSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1, StormSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2, StormSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3, StormSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4})
+		escort_tatooine_imperial_tier3_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier3_second_mission" or screenID == "failed_tier3_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		local isAlozen = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_tatooine_alozen.iff"
+
+		if (isAlozen) then
+			escort_imperial_ss_5:resetQuest(pPlayer)
+			SpaceHelpers:clearSpaceQuest(pPlayer, "escort", "imperial_ss_5", false)
+			escort_imperial_ss_5:startQuest(pPlayer, pNpc)
+			return pClonedScreen
+		end
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{inspect_tatooine_imperial_tier3_2, destroy_surpriseattack_tatooine_imperial_tier3_2_a, inspect_tatooine_imperial_tier3_2_b, delivery_no_pickup_tatooine_imperial_tier3_2_c, patrol_tatooine_imperial_tier3_2_d, space_battle_tatooine_imperial_tier3_2_e},
+			{StormSquadronScreenplay.TIER3_QUEST_STRING_2, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4, StormSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE5})
 		inspect_tatooine_imperial_tier3_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier3_third_mission" or screenID == "failed_tier3_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		local isAlozen = SceneObject(pNpc):getTemplateObjectPath() == "object/mobile/space_imperial_tier2_tatooine_alozen.iff"
+
+		if (isAlozen) then
+			recovery_imperial_ss_6:resetQuest(pPlayer)
+			SpaceHelpers:clearSpaceQuest(pPlayer, "recovery", "imperial_ss_6", false)
+			recovery_imperial_ss_6:startQuest(pPlayer, pNpc)
+			return pClonedScreen
+		end
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{delivery_tatooine_imperial_tier3_3, escort_tatooine_imperial_tier3_3_a, destroy_tatooine_imperial_tier3_3_b, survival_tatooine_imperial_tier3_3_c, destroy_surpriseattack_tatooine_imperial_tier3_3_d},
+			{StormSquadronScreenplay.TIER3_QUEST_STRING_3, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3, StormSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4})
 		delivery_tatooine_imperial_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier3_fourth_mission" or screenID == "failed_tier3_fourth_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
-		assassinate_tatooine_imperial_tier3_4:startQuest(pPlayer, pNpc)
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{destroy_tatooine_imperial_tier3_4, rescue_tatooine_imperial_tier3_4_a, inspect_tatooine_imperial_tier3_4_b, assassinate_tatooine_imperial_tier3_4_c},
+			{StormSquadronScreenplay.TIER3_QUEST_STRING_4, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2, StormSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3})
+		destroy_tatooine_imperial_tier3_4:startQuest(pPlayer, pNpc)
 
 	--[[
 			Tier 4 Screens
@@ -829,50 +912,58 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward", 1)
 
-		recovery_tatooine_imperial_tier4_4:rewardPlayer(pPlayer)
+		assassinate_tatooine_imperial_tier4_4:rewardPlayer(pPlayer)
 	elseif (screenID == "tier4_third_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward", 1)
 
-		space_battle_tatooine_imperial_tier4_3:rewardPlayer(pPlayer)
+		escort_tatooine_imperial_tier4_3:rewardPlayer(pPlayer)
 	elseif (screenID == "tier4_second_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward", 1)
 
-		assassinate_tatooine_imperial_tier4_2:rewardPlayer(pPlayer)
+		recovery_tatooine_imperial_tier4_2:rewardPlayer(pPlayer)
 	elseif (screenID == "tier4_first_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward", 1)
 
-		survival_tatooine_imperial_tier4_1:rewardPlayer(pPlayer)
+		patrol_tatooine_imperial_tier4_1:rewardPlayer(pPlayer)
 	-- Tier 4 mission starters
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
-
-		survival_tatooine_imperial_tier4_1:startQuest(pPlayer, pNpc)
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_tatooine_imperial_tier4_1, destroy_surpriseattack_tatooine_imperial_tier4_1_a, space_battle_tatooine_imperial_tier4_1_b, inspect_tatooine_imperial_tier4_1_c, delivery_no_pickup_tatooine_imperial_tier4_1_d},
+			{StormSquadronScreenplay.TIER4_QUEST_STRING_1, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3, StormSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE4})
+		patrol_tatooine_imperial_tier4_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
-
-		assassinate_tatooine_imperial_tier4_2:startQuest(pPlayer, pNpc)
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{recovery_tatooine_imperial_tier4_2, recovery_tatooine_imperial_tier4_2_a, delivery_tatooine_imperial_tier4_2_b, recovery_tatooine_imperial_tier4_2_c},
+			{StormSquadronScreenplay.TIER4_QUEST_STRING_2, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2, StormSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE3})
+		recovery_tatooine_imperial_tier4_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
-
-		space_battle_tatooine_imperial_tier4_3:startQuest(pPlayer, pNpc)
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{escort_tatooine_imperial_tier4_3, rescue_tatooine_imperial_tier4_3_a, space_battle_tatooine_imperial_tier4_3_b},
+			{StormSquadronScreenplay.TIER4_QUEST_STRING_3, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1, StormSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2})
+		escort_tatooine_imperial_tier4_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 
 		setQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
-
-		recovery_tatooine_imperial_tier4_4:startQuest(pPlayer, pNpc)
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{assassinate_tatooine_imperial_tier4_4, assassinate_tatooine_imperial_tier4_4_a, recovery_tatooine_imperial_tier4_4_b, assassinate_tatooine_imperial_tier4_4_c},
+			{StormSquadronScreenplay.TIER4_QUEST_STRING_4, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2, StormSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE3})
+		assassinate_tatooine_imperial_tier4_4:startQuest(pPlayer, pNpc)
 	-- Tier 4 duty missions
 	elseif (screenID == "accept_tier4_duty1") then
 		escort_duty_tatooine_imperial_tier4_1:startQuest(pPlayer, pNpc)
@@ -884,9 +975,10 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		destroy_duty_tatooine_imperial_tier4_1:startQuest(pPlayer, pNpc)
 	-- Master mission hand-off
 	elseif (screenID == "accept_master_mission") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, StormSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and not SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, StormSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
-			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
-		end
+		-- Kilnstrider transfers the pilot; Declann's dedicated conversation owns
+		-- acceptance of both Kessel master missions.
+		setQuestStatus(CreatureObject(pPlayer):getObjectID() .. "ImperialMasterPilot:DeclannHandoff", 1)
+		SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
 	elseif (screenID == "destroy_duty") then
 		destroy_duty_tatooine_imperial_6:startQuest(pPlayer, pNpc)
 	elseif (screenID == "escort_duty") then
@@ -922,18 +1014,29 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Missions
 	elseif (screenID == "yes_im_ready") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_tatooine_imperial_1, destroy_surpriseattack_tatooine_imperial_1},
+			{StormSquadronScreenplay.QUEST_STRING_1, StormSquadronScreenplay.QUEST_STRING_1_SIDE})
 
 		-- Track that quest was attempted
 		setQuestStatus(playerID .. StormSquadronScreenplay.QUEST_STRING_1.name .. ":attempted", 1)
 
 		patrol_tatooine_imperial_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest1") then
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_tatooine_imperial_1, destroy_surpriseattack_tatooine_imperial_1},
+			{StormSquadronScreenplay.QUEST_STRING_1, StormSquadronScreenplay.QUEST_STRING_1_SIDE})
 		patrol_tatooine_imperial_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest2") then
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_imperial_2}, {StormSquadronScreenplay.QUEST_STRING_2})
 		destroy_tatooine_imperial_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest3") then
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_tatooine_imperial_3, escort_tatooine_imperial_3},
+			{StormSquadronScreenplay.QUEST_STRING_3, StormSquadronScreenplay.QUEST_STRING_3_SIDE})
 		patrol_tatooine_imperial_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest4") then
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_imperial_4}, {StormSquadronScreenplay.QUEST_STRING_4})
 		assassinate_tatooine_imperial_4:startQuest(pPlayer, pNpc)
 	-- Quest 1 completion screens - give reward
 	elseif (screenID == "i_was_attacked" or screenID == "rebel_ambush" or screenID == "patrol_complete") then
@@ -951,10 +1054,14 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		end
 	elseif (screenID == "quest2_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_imperial_2}, {StormSquadronScreenplay.QUEST_STRING_2})
 		setQuestStatus(playerID .. StormSquadronScreenplay.QUEST_STRING_2.name .. ":attempted", 1)
 		destroy_tatooine_imperial_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
+			{patrol_tatooine_imperial_3, escort_tatooine_imperial_3},
+			{StormSquadronScreenplay.QUEST_STRING_3, StormSquadronScreenplay.QUEST_STRING_3_SIDE})
 		setQuestStatus(playerID .. StormSquadronScreenplay.QUEST_STRING_3.name .. ":attempted", 1)
 		patrol_tatooine_imperial_3:startQuest(pPlayer, pNpc)
 	-- Quest 3 Rewarded - give reward
@@ -974,9 +1081,10 @@ function akalColzetConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Quest 4 accepted - start the assassinate mission
 	elseif (screenID == "quest4_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		StormSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_imperial_4}, {StormSquadronScreenplay.QUEST_STRING_4})
 		setQuestStatus(playerID .. StormSquadronScreenplay.QUEST_STRING_4.name .. ":attempted", 1)
 		assassinate_tatooine_imperial_4:startQuest(pPlayer, pNpc)
-	-- Finished: completed all Tier 1 skills, reassigned to Under Inquisitor Fa'Zoll (next trainer)
+	-- Finished: completed all Tier 1 skills, reassigned to Commander Oberhaur.
 	elseif (screenID == "directions_to_next" or screenID == "report_to_fazoll") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. "StormSquadronScreenplay:colzet_finished", 1)
