@@ -211,6 +211,7 @@ includeFile("space/conversations/rebel/vortex_squadron/v3fxConvoHandler.lua")
 
 -- Imperial
 includeFile("space/conversations/imperial/imperialBrokerConvoHandler.lua")
+includeFile("space/conversations/imperial/nialDeclannConvoHandler.lua")
 
 -- Black Epsilon Squadron
 includeFile("space/squadrons/BlackEpsilonSquadronScreenplay.lua")

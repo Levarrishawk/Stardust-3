@@ -969,12 +969,9 @@ function barnSinkkoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		destroy_duty_naboo_imperial_tier4_1:startQuest(pPlayer, pNpc)
 	-- Master mission hand-off
 	elseif (screenID == "accept_master_mission") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and not SpaceHelpers:isSpaceQuestComplete(pPlayer, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
-			InquisitionSquadronScreenplay:prepareMissionChainAttempt(pPlayer,
-				{destroy_master_imperial_1, destroy_master_imperial_2},
-				{InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER, InquisitionSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2})
-			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
-		end
+		-- Ja'ce Yiaso only transfers the pilot to Grand Admiral Declann. Declann's
+		-- dedicated conversation owns acceptance of the Kessel master mission.
+		setQuestStatus(CreatureObject(pPlayer):getObjectID() .. "ImperialMasterPilot:DeclannHandoff", 1)
 	elseif (screenID == "destroy_duty") then
 		destroy_duty_naboo_imperial_6:startQuest(pPlayer, pNpc)
 	elseif (screenID == "escort_duty") then

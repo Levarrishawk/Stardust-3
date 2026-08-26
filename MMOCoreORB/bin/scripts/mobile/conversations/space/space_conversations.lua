@@ -148,6 +148,8 @@ includeFile("conversations/space/rebel/vortex_squadron/v3_fx_convo.lua")
 
 -- Imperial Pilot
 
+includeFile("conversations/space/imperial/nial_declann_convo.lua")
+
 -- Black Epsilon Squadron
 includeFile("conversations/space/imperial/black_epsilon_squadron/hakassha_sireen_convo.lua")
 
