@@ -723,6 +723,31 @@ space_lok = SpacePatrolPointTable:new {
 	{patrolPointName = "tatooine_rebel_tier2_recovery_duty_6", x = -5033, z = -4822, y = -3028},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:recovery_duty_tatooine_rebel_tier2_recoveryduty:recoveryPoints
 	{patrolPointName = "tatooine_rebel_tier2_recovery_duty_7", x = -4768, z = -3941, y = -3678},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:recovery_duty_tatooine_rebel_tier2_recoveryduty:recoveryPoints
 	{patrolPointName = "tatooine_rebel_tier2_recovery_duty_8", x = -4757, z = -3078, y = -3964},	-- src: screenplays/space/squadrons/CrimsonPhoenixSquadronScreenplay.lua:recovery_duty_tatooine_rebel_tier2_recoveryduty:recoveryPoints
+	-- Stardust-3: squadron-isolated patrol point registrations.
+	{patrolPointName = "black_epsilon_lok_imp_pirate_9", x = 1492, z = 662, y = -2814},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:535
+	{patrolPointName = "black_epsilon_vortex_mission_1_1", x = 2241, z = -1210, y = -2943},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:536
+	{patrolPointName = "black_epsilon_vortex_mission_1_4", x = -1009, z = -1075, y = -2900},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:534
+	{patrolPointName = "black_epsilon_vortex_mission_1_5", x = -2464, z = -1051, y = -2900},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:537
+	{patrolPointName = "crimson_phoenix_lok_imp_pirate_9", x = 1492, z = 662, y = -2814},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:531
+	{patrolPointName = "crimson_phoenix_vortex_mission_1_1", x = 2241, z = -1210, y = -2943},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:532
+	{patrolPointName = "crimson_phoenix_vortex_mission_1_4", x = -1009, z = -1075, y = -2900},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:530
+	{patrolPointName = "crimson_phoenix_vortex_mission_1_5", x = -2464, z = -1051, y = -2900},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:533
+	{patrolPointName = "havoc_lok_imp_pirate_9", x = 1492, z = 662, y = -2814},	-- squadron-isolated: HavocSquadronScreenplay.lua:531
+	{patrolPointName = "havoc_vortex_mission_1_1", x = 2241, z = -1210, y = -2943},	-- squadron-isolated: HavocSquadronScreenplay.lua:532
+	{patrolPointName = "havoc_vortex_mission_1_4", x = -1009, z = -1075, y = -2900},	-- squadron-isolated: HavocSquadronScreenplay.lua:530
+	{patrolPointName = "havoc_vortex_mission_1_5", x = -2464, z = -1051, y = -2900},	-- squadron-isolated: HavocSquadronScreenplay.lua:533
+	{patrolPointName = "smuggler_lok_imp_pirate_9", x = 1492, z = 662, y = -2814},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:497
+	{patrolPointName = "smuggler_vortex_mission_1_1", x = 2241, z = -1210, y = -2943},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:498
+	{patrolPointName = "smuggler_vortex_mission_1_4", x = -1009, z = -1075, y = -2900},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:496
+	{patrolPointName = "smuggler_vortex_mission_1_5", x = -2464, z = -1051, y = -2900},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:499
+	{patrolPointName = "storm_lok_imp_pirate_9", x = 1492, z = 662, y = -2814},	-- squadron-isolated: StormSquadronScreenplay.lua:458
+	{patrolPointName = "storm_vortex_mission_1_1", x = 2241, z = -1210, y = -2943},	-- squadron-isolated: StormSquadronScreenplay.lua:459
+	{patrolPointName = "storm_vortex_mission_1_4", x = -1009, z = -1075, y = -2900},	-- squadron-isolated: StormSquadronScreenplay.lua:457
+	{patrolPointName = "storm_vortex_mission_1_5", x = -2464, z = -1051, y = -2900},	-- squadron-isolated: StormSquadronScreenplay.lua:460
+	{patrolPointName = "vortex_lok_imp_pirate_9", x = 1492, z = 662, y = -2814},	-- squadron-isolated: VortexSquadronScreenplay.lua:531
+	{patrolPointName = "vortex_vortex_mission_1_1", x = 2241, z = -1210, y = -2943},	-- squadron-isolated: VortexSquadronScreenplay.lua:532
+	{patrolPointName = "vortex_vortex_mission_1_4", x = -1009, z = -1075, y = -2900},	-- squadron-isolated: VortexSquadronScreenplay.lua:530
+	{patrolPointName = "vortex_vortex_mission_1_5", x = -2464, z = -1051, y = -2900},	-- squadron-isolated: VortexSquadronScreenplay.lua:533
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_lok, "space_lok")

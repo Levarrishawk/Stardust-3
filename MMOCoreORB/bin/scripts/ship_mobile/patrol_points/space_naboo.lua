@@ -1058,6 +1058,36 @@ space_naboo = SpacePatrolPointTable:new {
 
 	-- Stardust-3 space port: registrations recovered from coordinates authored inline in the quest objects.
 	{patrolPointName = "naboo_privateer_tier1_4a_assassinate_1", x = 1500, z = 500, y = -1000},	-- src: screenplays/space/squadrons/RsfSquadronScreenplay.lua:assassinate_naboo_privateer_tier1_4a:targetPatrols
+	-- Stardust-3: squadron-isolated patrol point registrations.
+	{patrolPointName = "rsf_privateer_escort_1", x = 3200, z = -400, y = 2600},	-- squadron-isolated: RsfSquadronScreenplay.lua:155
+	{patrolPointName = "rsf_privateer_escort_2", x = 2800, z = -450, y = 3200},	-- squadron-isolated: RsfSquadronScreenplay.lua:156
+	{patrolPointName = "rsf_privateer_escort_3", x = 2400, z = -400, y = 4000},	-- squadron-isolated: RsfSquadronScreenplay.lua:157
+	{patrolPointName = "rsf_privateer_escort_4", x = 2000, z = -350, y = 4800},	-- squadron-isolated: RsfSquadronScreenplay.lua:158
+	{patrolPointName = "rsf_privateer_patrol_1", x = 752, z = 659, y = -2444},	-- squadron-isolated: RsfSquadronScreenplay.lua:228, RsfSquadronScreenplay.lua:35, RsfSquadronScreenplay.lua:86
+	{patrolPointName = "rsf_privateer_patrol_2", x = 2031, z = 887, y = -1759},	-- squadron-isolated: RsfSquadronScreenplay.lua:229, RsfSquadronScreenplay.lua:36, RsfSquadronScreenplay.lua:87
+	{patrolPointName = "rsf_privateer_patrol_3", x = 2466, z = 854, y = -505},	-- squadron-isolated: RsfSquadronScreenplay.lua:230, RsfSquadronScreenplay.lua:37, RsfSquadronScreenplay.lua:88
+	{patrolPointName = "rsf_privateer_security_patrol_1", x = 2479, z = -500, y = 1187},	-- squadron-isolated: RsfSquadronScreenplay.lua:127
+	{patrolPointName = "rsf_privateer_security_patrol_2", x = 3251, z = -414, y = 2349},	-- squadron-isolated: RsfSquadronScreenplay.lua:128
+	{patrolPointName = "rsf_privateer_security_patrol_3", x = 3039, z = -499, y = 3761},	-- squadron-isolated: RsfSquadronScreenplay.lua:129
+	{patrolPointName = "rsf_privateer_security_patrol_4", x = 2500, z = -400, y = 4500},	-- squadron-isolated: RsfSquadronScreenplay.lua:130
+	{patrolPointName = "vortex_corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- squadron-isolated: VortexSquadronScreenplay.lua:193
+	{patrolPointName = "vortex_imperial_patrol_1", x = 590, z = -3500, y = -6000},	-- squadron-isolated: VortexSquadronScreenplay.lua:82
+	{patrolPointName = "vortex_imperial_patrol_2", x = -2500, z = 4000, y = 3500},	-- squadron-isolated: VortexSquadronScreenplay.lua:83
+	{patrolPointName = "vortex_imperial_patrol_3", x = -3800, z = 2500, y = 5000},	-- squadron-isolated: VortexSquadronScreenplay.lua:84
+	{patrolPointName = "vortex_military_escort_2", x = 2915, z = 3828, y = 2887},	-- squadron-isolated: VortexSquadronScreenplay.lua:192
+	{patrolPointName = "vortex_naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},	-- squadron-isolated: VortexSquadronScreenplay.lua:190
+	{patrolPointName = "vortex_rebel_escort_1", x = 7188, z = 1899, y = -2831},	-- squadron-isolated: VortexSquadronScreenplay.lua:146, VortexSquadronScreenplay.lua:246
+	{patrolPointName = "vortex_rebel_escort_2", x = 6446, z = 2694, y = -5694},	-- squadron-isolated: VortexSquadronScreenplay.lua:147
+	{patrolPointName = "vortex_rebel_escort_3", x = 4453, z = 3127, y = -7150},	-- squadron-isolated: VortexSquadronScreenplay.lua:148
+	{patrolPointName = "vortex_rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- squadron-isolated: VortexSquadronScreenplay.lua:149, VortexSquadronScreenplay.lua:247
+	{patrolPointName = "vortex_rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- squadron-isolated: VortexSquadronScreenplay.lua:248, VortexSquadronScreenplay.lua:34
+	{patrolPointName = "vortex_rebel_patrol_2", x = 6031, z = -4540, y = -1962},	-- squadron-isolated: VortexSquadronScreenplay.lua:35
+	{patrolPointName = "vortex_rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- squadron-isolated: VortexSquadronScreenplay.lua:249, VortexSquadronScreenplay.lua:36
+	{patrolPointName = "vortex_rebel_security_patrol_1", x = 5024, z = -3710, y = -1723},	-- squadron-isolated: VortexSquadronScreenplay.lua:119
+	{patrolPointName = "vortex_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},	-- squadron-isolated: VortexSquadronScreenplay.lua:120, VortexSquadronScreenplay.lua:189
+	{patrolPointName = "vortex_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741},	-- squadron-isolated: VortexSquadronScreenplay.lua:121
+	{patrolPointName = "vortex_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222},	-- squadron-isolated: VortexSquadronScreenplay.lua:122
+	{patrolPointName = "vortex_trade_escort_4", x = 895, z = 210, y = 695},	-- squadron-isolated: VortexSquadronScreenplay.lua:191
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_naboo, "space_naboo")

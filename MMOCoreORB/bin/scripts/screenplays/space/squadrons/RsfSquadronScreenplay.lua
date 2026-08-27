@@ -32,9 +32,9 @@ patrol_naboo_privateer_1 = SpacePatrolScreenplay:new {
 
 	-- Screenplay Specific Variables
 	patrolPoints = {
-		{patrolPointName = "privateer_patrol_1", x = 752, z = 659, y = -2444, patrolNumber = 1, radius = 150},
-		{patrolPointName = "privateer_patrol_2", x = 2031, z = 887, y = -1759, patrolNumber = 2, radius = 150},
-		{patrolPointName = "privateer_patrol_3", x = 2466, z = 854, y = -505, patrolNumber = 3, radius = 150},
+		{patrolPointName = "rsf_privateer_patrol_1", x = 752, z = 659, y = -2444, patrolNumber = 1, radius = 150},
+		{patrolPointName = "rsf_privateer_patrol_2", x = 2031, z = 887, y = -1759, patrolNumber = 2, radius = 150},
+		{patrolPointName = "rsf_privateer_patrol_3", x = 2466, z = 854, y = -505, patrolNumber = 3, radius = 150},
 	},
 }
 
@@ -83,9 +83,9 @@ destroy_naboo_privateer_2 = SpaceDestroyScreenplay:new {
 	killsRequired = 4,
 
 	shipLocations = {
-		{patrolPointName = "privateer_patrol_1", x = 752, z = 659, y = -2444},
-		{patrolPointName = "privateer_patrol_2", x = 2031, z = 887, y = -1759},
-		{patrolPointName = "privateer_patrol_3", x = 2466, z = 854, y = -505},
+		{patrolPointName = "rsf_privateer_patrol_1", x = 752, z = 659, y = -2444},
+		{patrolPointName = "rsf_privateer_patrol_2", x = 2031, z = 887, y = -1759},
+		{patrolPointName = "rsf_privateer_patrol_3", x = 2466, z = 854, y = -505},
 	},
 
 	shipTypes = {
@@ -124,10 +124,10 @@ patrol_naboo_privateer_3 = SpacePatrolScreenplay:new {
 
 	-- Screenplay Specific Variables
 	patrolPoints = {
-		{patrolPointName = "privateer_security_patrol_1", x = 2479, z = -500, y = 1187, patrolNumber = 1, radius = 150},
-		{patrolPointName = "privateer_security_patrol_2", x = 3251, z = -414, y = 2349, patrolNumber = 2, radius = 150},
-		{patrolPointName = "privateer_security_patrol_3", x = 3039, z = -499, y = 3761, patrolNumber = 3, radius = 150},
-		{patrolPointName = "privateer_security_patrol_4", x = 2500, z = -400, y = 4500, patrolNumber = 4, radius = 150},
+		{patrolPointName = "rsf_privateer_security_patrol_1", x = 2479, z = -500, y = 1187, patrolNumber = 1, radius = 150},
+		{patrolPointName = "rsf_privateer_security_patrol_2", x = 3251, z = -414, y = 2349, patrolNumber = 2, radius = 150},
+		{patrolPointName = "rsf_privateer_security_patrol_3", x = 3039, z = -499, y = 3761, patrolNumber = 3, radius = 150},
+		{patrolPointName = "rsf_privateer_security_patrol_4", x = 2500, z = -400, y = 4500, patrolNumber = 4, radius = 150},
 	},
 }
 
@@ -152,10 +152,10 @@ escort_naboo_privateer_3 = SpaceEscortScreenplay:new {
 	escortShips = {"freighterheavy_tier1"},
 
 	escortPoints = {
-		{patrolPointName = "privateer_escort_1", zoneName = "space_naboo", x = 3200, z = -400, y = 2600, escortNumber = 1, radius = 250},
-		{patrolPointName = "privateer_escort_2", zoneName = "space_naboo", x = 2800, z = -450, y = 3200, escortNumber = 2, radius = 250},
-		{patrolPointName = "privateer_escort_3", zoneName = "space_naboo", x = 2400, z = -400, y = 4000, escortNumber = 3, radius = 250},
-		{patrolPointName = "privateer_escort_4", zoneName = "space_naboo", x = 2000, z = -350, y = 4800, escortNumber = 4, radius = 250},
+		{patrolPointName = "rsf_privateer_escort_1", zoneName = "space_naboo", x = 3200, z = -400, y = 2600, escortNumber = 1, radius = 250},
+		{patrolPointName = "rsf_privateer_escort_2", zoneName = "space_naboo", x = 2800, z = -450, y = 3200, escortNumber = 2, radius = 250},
+		{patrolPointName = "rsf_privateer_escort_3", zoneName = "space_naboo", x = 2400, z = -400, y = 4000, escortNumber = 3, radius = 250},
+		{patrolPointName = "rsf_privateer_escort_4", zoneName = "space_naboo", x = 2000, z = -350, y = 4800, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 90,
@@ -225,9 +225,9 @@ destroy_duty_naboo_privateer_6 = SpaceDutyDestroyScreenplay:new {
 	dutyMissionLevel = 1,
 
 	shipLocations = {
-		{patrolPointName = "privateer_patrol_1", x = 752, z = 659, y = -2444},
-		{patrolPointName = "privateer_patrol_2", x = 2031, z = 887, y = -1759},
-		{patrolPointName = "privateer_patrol_3", x = 2466, z = 854, y = -505},
+		{patrolPointName = "rsf_privateer_patrol_1", x = 752, z = 659, y = -2444},
+		{patrolPointName = "rsf_privateer_patrol_2", x = 2031, z = 887, y = -1759},
+		{patrolPointName = "rsf_privateer_patrol_3", x = 2466, z = 854, y = -505},
 	},
 
 	shipTypes = {

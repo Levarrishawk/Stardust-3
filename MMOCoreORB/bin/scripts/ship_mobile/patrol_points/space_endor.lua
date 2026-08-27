@@ -803,6 +803,31 @@ space_endor = SpacePatrolPointTable:new {
 	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_6", x = -5072, z = -429, y = 4719},
 	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_7", x = -4328, z = -938, y = 4625},
 	{patrolPointName = "tatooine_rebel_tier4_1_recovery_duty_8", x = -3661, z = -1468, y = 4180},
+	-- Stardust-3: squadron-isolated patrol point registrations.
+	{patrolPointName = "black_epsilon_rebel_tier3_2_c_escort_1", x = -239, z = 3935, y = 3280},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:878
+	{patrolPointName = "black_epsilon_rebel_tier3_2_c_escort_2", x = -549, z = 3180, y = 3238},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:879
+	{patrolPointName = "black_epsilon_rebel_tier3_2_c_escort_3", x = -1251, z = 1477, y = 3143},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:880
+	{patrolPointName = "black_epsilon_rebel_tier3_2_c_escort_4", x = -1996, z = -330, y = 3042},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:881
+	{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_1", x = -239, z = 3935, y = 3280},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:874
+	{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_2", x = -549, z = 3180, y = 3238},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:875
+	{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_3", x = -1251, z = 1477, y = 3143},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:876
+	{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_4", x = -1996, z = -330, y = 3042},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:877
+	{patrolPointName = "havoc_rebel_tier3_2_c_escort_1", x = -239, z = 3935, y = 3280},	-- squadron-isolated: HavocSquadronScreenplay.lua:874
+	{patrolPointName = "havoc_rebel_tier3_2_c_escort_2", x = -549, z = 3180, y = 3238},	-- squadron-isolated: HavocSquadronScreenplay.lua:875
+	{patrolPointName = "havoc_rebel_tier3_2_c_escort_3", x = -1251, z = 1477, y = 3143},	-- squadron-isolated: HavocSquadronScreenplay.lua:876
+	{patrolPointName = "havoc_rebel_tier3_2_c_escort_4", x = -1996, z = -330, y = 3042},	-- squadron-isolated: HavocSquadronScreenplay.lua:877
+	{patrolPointName = "smuggler_rebel_tier3_2_c_escort_1", x = -239, z = 3935, y = 3280},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:840
+	{patrolPointName = "smuggler_rebel_tier3_2_c_escort_2", x = -549, z = 3180, y = 3238},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:841
+	{patrolPointName = "smuggler_rebel_tier3_2_c_escort_3", x = -1251, z = 1477, y = 3143},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:842
+	{patrolPointName = "smuggler_rebel_tier3_2_c_escort_4", x = -1996, z = -330, y = 3042},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:843
+	{patrolPointName = "storm_rebel_tier3_2_c_escort_1", x = -239, z = 3935, y = 3280},	-- squadron-isolated: StormSquadronScreenplay.lua:805
+	{patrolPointName = "storm_rebel_tier3_2_c_escort_2", x = -549, z = 3180, y = 3238},	-- squadron-isolated: StormSquadronScreenplay.lua:806
+	{patrolPointName = "storm_rebel_tier3_2_c_escort_3", x = -1251, z = 1477, y = 3143},	-- squadron-isolated: StormSquadronScreenplay.lua:807
+	{patrolPointName = "storm_rebel_tier3_2_c_escort_4", x = -1996, z = -330, y = 3042},	-- squadron-isolated: StormSquadronScreenplay.lua:808
+	{patrolPointName = "vortex_rebel_tier3_2_c_escort_1", x = -239, z = 3935, y = 3280},	-- squadron-isolated: VortexSquadronScreenplay.lua:874
+	{patrolPointName = "vortex_rebel_tier3_2_c_escort_2", x = -549, z = 3180, y = 3238},	-- squadron-isolated: VortexSquadronScreenplay.lua:875
+	{patrolPointName = "vortex_rebel_tier3_2_c_escort_3", x = -1251, z = 1477, y = 3143},	-- squadron-isolated: VortexSquadronScreenplay.lua:876
+	{patrolPointName = "vortex_rebel_tier3_2_c_escort_4", x = -1996, z = -330, y = 3042},	-- squadron-isolated: VortexSquadronScreenplay.lua:877
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_endor, "space_endor")
