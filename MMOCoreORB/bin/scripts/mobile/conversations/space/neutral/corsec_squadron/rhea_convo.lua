@@ -120,7 +120,7 @@ ridiculous_great = ConvoScreen:new {
 rhea_convo_template:addScreen(ridiculous_great);
 
 maybe_great = ConvoScreen:new {
-	id = "maybe__42",
+	id = "maybe_great",
 	leftDialog = "@conversation/corellia_privateer_trainer:s_e0dfe067", -- Very well.  I'll go ahead and sign you up.  Do you have your own ship?
 	stopConversation = "false",
 	options = {
@@ -128,7 +128,7 @@ maybe_great = ConvoScreen:new {
 		{"@conversation/corellia_privateer_trainer:s_90ec63e0", "yes_ship"}, -- Yes, I do.
 	}
 }
-rhea_convo_template:addScreen(maybe__42);
+rhea_convo_template:addScreen(maybe_great);
 
 of_course = ConvoScreen:new {
 	id = "of_course",

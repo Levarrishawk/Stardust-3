@@ -38,6 +38,24 @@ function rheaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_3.type, CorsecSquadronScreenplay.QUEST_STRING_3.name) and SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_3_SIDE.type, CorsecSquadronScreenplay.QUEST_STRING_3_SIDE.name)
 	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_4.type, CorsecSquadronScreenplay.QUEST_STRING_4.name)
 
+	-- Some valid recruitment responses previously reached the first assignment
+	-- without granting the neutral novice skill or recording CorSec membership.
+	-- Repair only characters whose CorSec mission history proves enrollment.
+	local hasCorsecMissionProgress = questOneStarted or questOneComplete or questTwoStarted or questTwoComplete or questThreeStarted or questThreeComplete or questFourStarted or questFourComplete
+
+	if (hasCorsecMissionProgress and not isNeutralPilot) then
+		SpaceHelpers:grantNovicePilot(pPlayer, "neutralPilot")
+		SpaceHelpers:setSquadronType(pPlayer, CORSEC_SQUADRON)
+
+		local pPlayerGhost = CreatureObject(pPlayer):getPlayerObject()
+
+		if (pPlayerGhost ~= nil and LuaPlayerObject(pPlayerGhost):getPilotTier() < 1) then
+			LuaPlayerObject(pPlayerGhost):incrementPilotTier()
+		end
+
+		isNeutralPilot = true
+	end
+
 	local destroyDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_1.type, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_1.name)
 	local escortDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_2.type, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_2.name)
 
@@ -281,7 +299,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 	elseif (screenID == "positive_reject") then
 		CreatureObject(pPlayer):doAnimation("nod_head_multiple")
 		CreatureObject(pNpc):doAnimation("shrug_shoulders")
-	elseif (screenID == "maybe_great") then
+	elseif (screenID == "maybe_great" or screenID == "i_guess_so") then
 		CreatureObject(pPlayer):doAnimation("rub_chin_thoughtful")
 		CreatureObject(pNpc):doAnimation("nod_head_once")
 
