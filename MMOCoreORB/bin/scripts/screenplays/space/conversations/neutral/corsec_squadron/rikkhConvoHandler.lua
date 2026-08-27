@@ -85,6 +85,7 @@ function rikkhConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		if (ghost:getPilotTier() <= 2) then
 			-- Increment pilot to Tier 2!
 			ghost:incrementPilotTier()
+			SpaceHelpers:addCorsecRamnaWaypoint(pPlayer)
 		end
 
 		return convoTemplate:getScreen("completed_rikkh")
@@ -269,21 +270,25 @@ function rikkhConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
+		assassinate_corellia_privateer_tier2_4a:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier2_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_inspect" or screenID == "on_your_way" or screenID == "take_it_serious" or screenID == "bad_liar") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
 
 		--	Give third mission to player
+		inspect_corellia_privateer_15:resetQuest(pPlayer)
 		inspect_corellia_privateer_15:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_escort" or screenID == "back_to_yavin" or screenID == "now_is_good" or screenID == "be_smarter") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
 
 		--	Give second mission to player
+		escort_corellia_privateer_14:resetQuest(pPlayer)
 		escort_corellia_privateer_14:startQuest(pPlayer, pNpc)
 	elseif ((screenID == "start_first_mission") or (screenID == "try_first_mission") or (screenID == "cant_wait_first")) then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 
 		--	Give first mission to player
+		destroy_corellia_privateer_13a:resetQuest(pPlayer)
 		destroy_corellia_privateer_13a:startQuest(pPlayer, pNpc)
 	end
 

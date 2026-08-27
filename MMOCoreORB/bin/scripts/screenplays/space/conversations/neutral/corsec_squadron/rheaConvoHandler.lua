@@ -230,6 +230,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 1) and ghost:getPilotTier() == 1) then
 			-- Increment pilot to Tier 2!
 			ghost:incrementPilotTier()
+			SpaceHelpers:addCorsecRikkhWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -337,6 +338,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 
 	-- Missions
 	elseif (screenID == "yes_im_ready") then
+		patrol_corellia_privateer_1:resetQuest(pPlayer)
 		patrol_corellia_privateer_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "i_was_attacked") then
 		CreatureObject(pPlayer):doAnimation("pound_fist_palm")
@@ -345,6 +347,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		CreatureObject(pPlayer):doAnimation("nod_head_multiple")
 		CreatureObject(pNpc):doAnimation("rub_chin_thoughtful")
 	elseif (screenID == "train_me2") then
+		destroy_corellia_privateer_2:resetQuest(pPlayer)
 		destroy_corellia_privateer_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "whats_next") then
 		CreatureObject(pPlayer):doAnimation("shrug_hands")
@@ -355,11 +358,13 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		CreatureObject(pNpc):doAnimation("shake_head_no")
 		CreatureObject(pPlayer):doAnimation("belly_laugh")
 
+		patrol_corellia_privateer_3:resetQuest(pPlayer)
 		patrol_corellia_privateer_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me4") then
 		CreatureObject(pNpc):doAnimation("nod_head_once")
 		CreatureObject(pPlayer):doAnimation("belly_laugh")
 
+		assassinate_corellia_privateer_tier1_4a:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier1_4a:startQuest(pPlayer, pNpc)
 	end
 

@@ -85,6 +85,7 @@ function kaydineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		if (ghost:getPilotTier() <= 2) then
 			ghost:incrementPilotTier()
 		end
+		SpaceHelpers:addDuliosWaypoint(pPlayer)
 
 		return convoTemplate:getScreen("completed_kaydine")
 	-- Reward Checks
@@ -214,6 +215,7 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 
 		if (ghost:getPilotTier() <= 2 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
 			ghost:incrementPilotTier()
+			SpaceHelpers:addDuliosWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -245,15 +247,19 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 	-- Give Missions
 	elseif (screenID == "accept_assassinate" or screenID == "nonsense" or screenID == "let_me_know" or screenID == "report_back_success" or screenID == "key_to_success" or screenID == "just_malfunctioned") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
+		assassinate_naboo_privateer_tier2_4a:resetQuest(pPlayer)
 		assassinate_naboo_privateer_tier2_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_inspect" or screenID == "on_your_way" or screenID == "take_it_serious" or screenID == "bad_liar") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
+		inspect_naboo_privateer_15:resetQuest(pPlayer)
 		inspect_naboo_privateer_15:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_escort" or screenID == "back_to_escort" or screenID == "now_is_good" or screenID == "be_smarter") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
+		escort_naboo_privateer_14:resetQuest(pPlayer)
 		escort_naboo_privateer_14:startQuest(pPlayer, pNpc)
 	elseif ((screenID == "start_first_mission") or (screenID == "try_first_mission") or (screenID == "cant_wait_first")) then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
+		destroy_naboo_privateer_13a:resetQuest(pPlayer)
 		destroy_naboo_privateer_13a:startQuest(pPlayer, pNpc)
 	end
 

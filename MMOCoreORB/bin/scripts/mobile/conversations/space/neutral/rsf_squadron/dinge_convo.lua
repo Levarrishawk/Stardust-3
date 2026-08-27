@@ -458,6 +458,14 @@ completed_tier1 = ConvoScreen:new {
 }
 dinge_convo_template:addScreen(completed_tier1);
 
+go_to_next = ConvoScreen:new {
+	id = "go_to_next",
+	customDialogText = "Your current flight assignment is with another RSF officer. Report to the trainer identified in your waypoint list.",
+	stopConversation = "true",
+	options = {}
+}
+dinge_convo_template:addScreen(go_to_next);
+
 go_to_tier2 = ConvoScreen:new {
 	id = "go_to_tier2",
 	leftDialog = "@conversation/naboo_privateer_trainer_1:s_919029b", -- Go see Captain Kaydine. He is in one of the large meeting rooms upstairs here in the palace. Should be easy to find, just follow the ego.

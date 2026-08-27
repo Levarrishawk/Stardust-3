@@ -101,6 +101,12 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		-- Player has not earned the master box yet
 		if (not SpaceHelpers:hasMasterSkill(pPlayer, "neutral")) then
+			if (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke") == "1") then
+				return convoTemplate:getScreen("should_help_alliance")
+			elseif (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToDeclann") == "1") then
+				return convoTemplate:getScreen("decide_assist_empire")
+			end
+
 			return convoTemplate:getScreen("master_mission")
 		else
 			return convoTemplate:getScreen("here_for_work2")
@@ -296,39 +302,39 @@ function turoldineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, s
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
+		assassinate_corellia_privateer_tier4_4a:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier4_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_third_mission" or screenID == "accept_third_mission2" or screenID == "failed_third_mission") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
 		--	Give third mission to player
+		space_battle_corellia_privateer_tier4_3a:resetQuest(pPlayer)
 		space_battle_corellia_privateer_tier4_3a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_second_mission" or screenID == "failed_second_mission") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
 		--	Give second mission to player
+		assassinate_corellia_privateer_tier4_2a:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier4_2a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_first_mission" or screenID == "failed_first_mission") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
 		--	Give first mission to player
+		patrol_corellia_privateer_tier4_1a:resetQuest(pPlayer)
 		patrol_corellia_privateer_tier4_1a:startQuest(pPlayer, pNpc)
 
 	-- Master mission choice: player decided to help the Alliance (hunt the Imperial corvette)
 	elseif (screenID == "should_help_alliance") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
-				not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name)) then
-			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
+		if (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToDeclann") ~= "1") then
+			setQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke", 1)
+			SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 		end
 
 	-- Master mission choice: player decided to help the Empire (hunt the Rebel corvette)
 	elseif (screenID == "decide_assist_empire") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
-				not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name)) then
-			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
+		if (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke") ~= "1") then
+			setQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToDeclann", 1)
+			SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
 		end
 	end
 

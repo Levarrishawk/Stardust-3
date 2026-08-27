@@ -66,6 +66,7 @@ function duliosConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			-- Increment pilot to Tier 4
 			ghost:incrementPilotTier()
 		end
+		SpaceHelpers:addDinessImlerWaypoint(pPlayer)
 
 		return convoTemplate:getScreen("completed_dulios")
 	end
@@ -222,6 +223,7 @@ function duliosConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		if (ghost:getPilotTier() <= 3 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)) then
 			-- If player has all of the Tier 3 skills, increment their pilot tier
 			ghost:incrementPilotTier()
+			SpaceHelpers:addDinessImlerWaypoint(pPlayer)
 		end
 
 	-- Give Missions
@@ -229,21 +231,25 @@ function duliosConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
+		assassinate_naboo_privateer_tier3_4a:resetQuest(pPlayer)
 		assassinate_naboo_privateer_tier3_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_third_mission" or screenID == "i_was_better") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
 		--	Give third mission to player
+		inspect_naboo_privateer_tier3_3a:resetQuest(pPlayer)
 		inspect_naboo_privateer_tier3_3a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_second_mission" or screenID == "stories_about_me") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
 		--	Give second mission to player
+		escort_naboo_privateer_tier3_2a:resetQuest(pPlayer)
 		escort_naboo_privateer_tier3_2a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_first_mission" or screenID == "try_first_again") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
 		--	Give First mission to player
+		recovery_naboo_privateer_tier3_1a:resetQuest(pPlayer)
 		recovery_naboo_privateer_tier3_1a:startQuest(pPlayer, pNpc)
 	end
 

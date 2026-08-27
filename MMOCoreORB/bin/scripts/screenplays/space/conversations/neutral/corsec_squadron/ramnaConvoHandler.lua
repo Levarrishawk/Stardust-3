@@ -71,6 +71,7 @@ function ramnaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		if (ghost:getPilotTier() <= 3) then
 			-- Increment pilot to Tier 4
 			ghost:incrementPilotTier()
+			SpaceHelpers:addCorsecTuroldineWaypoint(pPlayer)
 		end
 
 		return convoTemplate:getScreen("completed_ramna")
@@ -237,21 +238,25 @@ function ramnaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
+		assassinate_corellia_privateer_tier3_4:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier3_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "dant_operations" or screenID == "go_back_get_some") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
 		--	Give third mission to player
+		delivery_corellia_privateer_tier3_3:resetQuest(pPlayer)
 		delivery_corellia_privateer_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "good_luck_mission2" or screenID == "good_luck_mission2_2" or screenID == "need_good_news" or screenID == "then_go_fight") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
 		--	Give second mission to player
+		inspect_corellia_privateer_tier3_2:resetQuest(pPlayer)
 		inspect_corellia_privateer_tier3_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "dont_care" or screenID == "keep_going" or screenID == "exactly1") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
 		--	Give First mission to player
+		recovery_corellia_privateer_tier3_1:resetQuest(pPlayer)
 		recovery_corellia_privateer_tier3_1:startQuest(pPlayer, pNpc)
 	end
 

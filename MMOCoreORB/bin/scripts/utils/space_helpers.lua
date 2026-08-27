@@ -834,11 +834,6 @@ function SpaceHelpers:addImperialInquisitionSquadWaypoint(pPlayer)
 	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:barn_sinkko", "@npc_spawner_n:barn_sinkko", 5182, 0, 6750, WAYPOINT_BLUE, true, true, 0)
 end
 
--- Tier-1 completion hand-off waypoints. All six recruiter conversations use the
--- Inquisition template dialogue ("report to Under Inquisitor Fa'Zoll in the
--- Emperor's Retreat"), so all six point at Fa'Zoll's spawn (emperors_retreat.lua).
--- Kept as per-squadron helpers so each can be retargeted individually if
--- squadron-specific tier-2 trainers are authored later.
 local function addFaZollWaypointImpl(pPlayer)
 	if (pPlayer == nil) then
 		return
@@ -855,7 +850,27 @@ end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Smuggler Squadron tier 1
 function SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
-	addFaZollWaypointImpl(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("tatooine", "@npc_spawner_n:shamdon_kree", "@npc_spawner_n:shamdon_kree", 3385, 0, -4604, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addBeissaWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("tatooine", "@npc_spawner_n:beissa", "@npc_spawner_n:beissa", -5892, 0, -6188, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addNirameSakuteWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("dathomir", "@npc_spawner_n:nirame_sakute", "@npc_spawner_n:nirame_sakute", 600, 0, 3028, WAYPOINT_BLUE, true, true, 0)
+	end
 end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Inquisition Squadron tier 1
@@ -899,6 +914,30 @@ function SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 	if (pGhost ~= nil) then
 		PlayerObject(pGhost):addWaypoint("corellia", "@npc_spawner_n:willham_burke", "@npc_spawner_n:willham_burke", 3083, 0, 5203, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addCorsecRikkhWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("corellia", "@npc_spawner_n:rikkh", "@npc_spawner_n:rikkh", -273, 0, -4733, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addCorsecRamnaWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("lok", "@npc_spawner_n:ramna", "@npc_spawner_n:ramna", 475, 0, 4779, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addCorsecTuroldineWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("dantooine", "@npc_spawner_n:adwan_turoldine", "@npc_spawner_n:adwan_turoldine", -596, 0, 2488, WAYPOINT_BLUE, true, true, 0)
 	end
 end
 
@@ -956,6 +995,30 @@ function SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
 	end
 
 	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:nial_declann", "@npc_spawner_n:nial_declann", -5500, 0, 4400, WAYPOINT_BLUE, true, true, 0)
+end
+
+function SpaceHelpers:addKaydineWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:kaydine", "@npc_spawner_n:kaydine", -5497, 0, 4629, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addDuliosWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:dulios", "@npc_spawner_n:dulios", -5536, 0, 4679, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addDinessImlerWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:diness_imler", "@npc_spawner_n:diness_imler", -5450, 0, 4679, WAYPOINT_BLUE, true, true, 0)
+	end
 end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Black Epsilon Squadron tier 1

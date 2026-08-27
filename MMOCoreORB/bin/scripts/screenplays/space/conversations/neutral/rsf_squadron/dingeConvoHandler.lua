@@ -66,6 +66,19 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("no_jtl")
 	end
 
+	local npcTemplate = SceneObject(pNpc):getTemplateObjectPath()
+	local isDinge = npcTemplate == "object/mobile/space_privateer_tier1_naboo.iff"
+	local isDiness = npcTemplate == "object/mobile/space_privateer_tier4_naboo_diness.iff"
+
+	if (SpaceHelpers:isRSFSquadron(pPlayer)) then
+		local pilotTier = ghost:getPilotTier()
+		local correctTrainer = (pilotTier <= 1 and isDinge) or (pilotTier == 4 and isDiness)
+
+		if ((pilotTier < 5 and not correctTrainer) or (pilotTier >= 5 and not isDiness)) then
+			return convoTemplate:getScreen("go_to_next")
+		end
+	end
+
 	-- Player destroyed their ship control device
 	if (not hasShip) then
 		grantStarterShip(pPlayer, "neutral")
@@ -126,6 +139,7 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
 			end
+			SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
 
 			-- Player has not earned the master box yet
 			if (not SpaceHelpers:hasMasterSkill(pPlayer, "neutral")) then
@@ -323,6 +337,7 @@ function dingeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 
 		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 1) and ghost:getPilotTier() == 1) then
 			ghost:incrementPilotTier()
+			SpaceHelpers:addKaydineWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -331,6 +346,7 @@ function dingeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 		if (ghost:getPilotTier() == 1) then
 			ghost:incrementPilotTier()
 		end
+		SpaceHelpers:addKaydineWaypoint(pPlayer)
 	elseif (screenID == "destroy_duty") then
 		destroy_duty_naboo_privateer_6:startQuest(pPlayer, pNpc)
 	elseif (screenID == "escort_duty") then
@@ -361,12 +377,16 @@ function dingeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 
 	-- Missions
 	elseif (screenID == "yes_im_ready") then
+		patrol_naboo_privateer_1:resetQuest(pPlayer)
 		patrol_naboo_privateer_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me2") then
+		destroy_naboo_privateer_2:resetQuest(pPlayer)
 		destroy_naboo_privateer_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me3") then
+		patrol_naboo_privateer_3:resetQuest(pPlayer)
 		patrol_naboo_privateer_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me4") then
+		assassinate_naboo_privateer_tier1_4a:resetQuest(pPlayer)
 		assassinate_naboo_privateer_tier1_4a:startQuest(pPlayer, pNpc)
 
 	-- Tier 4 Training
@@ -411,6 +431,7 @@ function dingeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 		if (ghost:getPilotTier() <= 4 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)) then
 			-- If player has all of the Tier 4 skills, increment their pilot tier
 			ghost:incrementPilotTier()
+			SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
 		end
 
 		-- Either the player is ready to train again or they have all of the missions finished, so send them back to the main screen
@@ -448,25 +469,29 @@ function dingeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
+		space_battle_naboo_privateer_tier4_4a:resetQuest(pPlayer)
 		space_battle_naboo_privateer_tier4_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
+		delivery_naboo_privateer_tier4_3a:resetQuest(pPlayer)
 		delivery_naboo_privateer_tier4_3a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
+		inspect_naboo_privateer_tier4_2a:resetQuest(pPlayer)
 		inspect_naboo_privateer_tier4_2a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
+		escort_naboo_privateer_tier4_1a:resetQuest(pPlayer)
 		escort_naboo_privateer_tier4_1a:startQuest(pPlayer, pNpc)
 
-	-- Master mission (RSF is Imperial-aligned - hunts the Rebel corvette in Kessel)
+	-- Tier 5 hand-off. Declann owns both Imperial finale mission starts.
 	elseif (screenID == "accept_master_mission") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.MASTER_QUEST_STRING.type, RsfSquadronScreenplay.MASTER_QUEST_STRING.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.MASTER_QUEST_STRING.type, RsfSquadronScreenplay.MASTER_QUEST_STRING.name)) then
-			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
+		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)) then
+			setQuestStatus(playerID .. "RsfSquadronScreenplay:reportToDeclann", 1)
+			SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
 		end
 	end
 

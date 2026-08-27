@@ -9,8 +9,12 @@ function willhamBurkeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	local isSmugglerPilot = pGhost ~= nil and SpaceHelpers:isNeutralPilot(pPlayer) and SpaceHelpers:isSmugglerSquadron(pPlayer)
+	local playerID = CreatureObject(pPlayer):getObjectID()
+	local isCorsecPilot = pGhost ~= nil and SpaceHelpers:isNeutralPilot(pPlayer) and SpaceHelpers:isCorsecSquadron(pPlayer) and
+		getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke") == "1"
 
-	if (not isJtlEnabled() or pGhost == nil or not SpaceHelpers:isRebelPilot(pPlayer)) then
+	if (not isJtlEnabled() or pGhost == nil or (not SpaceHelpers:isRebelPilot(pPlayer) and not isSmugglerPilot and not isCorsecPilot)) then
 		return convoTemplate:getScreen("not_eligible")
 	end
 
@@ -22,7 +26,7 @@ function willhamBurkeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	if (stageOneActive or stageTwoActive) then
 		return convoTemplate:getScreen("on_mission")
-	elseif (SpaceHelpers:hasMasterSkill(pPlayer, "rebel_navy")) then
+	elseif (SpaceHelpers:hasMasterSkill(pPlayer, (isSmugglerPilot or isCorsecPilot) and "neutral" or "rebel_navy")) then
 		return convoTemplate:getScreen("completed")
 	elseif (stageTwoComplete) then
 		return convoTemplate:getScreen("final_report")
@@ -46,9 +50,19 @@ function willhamBurkeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc
 		return pConvScreen
 	end
 
+	local isSmugglerPilot = SpaceHelpers:isNeutralPilot(pPlayer) and SpaceHelpers:isSmugglerSquadron(pPlayer)
+	local playerID = CreatureObject(pPlayer):getObjectID()
+	local isCorsecPilot = SpaceHelpers:isNeutralPilot(pPlayer) and SpaceHelpers:isCorsecSquadron(pPlayer) and
+		getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke") == "1"
+
+	if (not SpaceHelpers:isRebelPilot(pPlayer) and not isSmugglerPilot and not isCorsecPilot) then
+		return pConvScreen
+	end
+
 	local screen = LuaConversationScreen(pConvScreen)
 	local screenID = screen:getScreenID()
 	local pClonedScreen = screen:cloneScreen()
+	local masterFaction = (isSmugglerPilot or isCorsecPilot) and "neutral" or "rebel_navy"
 	LuaConversationScreen(pClonedScreen):setDialogTextTU(CreatureObject(pPlayer):getFirstName())
 
 	if (screenID == "accept_master_mission" and LuaPlayerObject(pGhost):getPilotTier() >= 5
@@ -68,7 +82,7 @@ function willhamBurkeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc
 		destroy_master_rebel_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "claim_master_rewards"
 			and SpaceHelpers:isSpaceQuestComplete(pPlayer, "destroy", "master_rebel_2")
-			and not SpaceHelpers:hasMasterSkill(pPlayer, "rebel_navy")) then
+			and not SpaceHelpers:hasMasterSkill(pPlayer, masterFaction)) then
 		destroy_master_rebel_2:rewardPlayer(pPlayer)
 		destroy_master_rebel_2:grantAcePilotReward(pPlayer)
 		destroy_master_rebel_2:grantPilotMastery(pPlayer)

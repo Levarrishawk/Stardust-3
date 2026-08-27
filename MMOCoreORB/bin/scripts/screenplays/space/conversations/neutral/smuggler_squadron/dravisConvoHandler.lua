@@ -41,6 +41,12 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("no_jtl")
 	end
 
+	local npcTemplate = SceneObject(pNpc):getTemplateObjectPath()
+	local isDravis = npcTemplate == "object/mobile/space_privateer_tier1_tatooine.iff"
+	local isShamdon = npcTemplate == "object/mobile/space_privateer_tier2_shamdon.iff"
+	local isBeissa = npcTemplate == "object/mobile/space_rebel_tier3_beissa.iff"
+	local isNirame = npcTemplate == "object/mobile/space_privateer_tier4_tatooine_nirame.iff"
+
 	-- Check if player is a neutral pilot
 	local isNeutralPilot = SpaceHelpers:isNeutralPilot(pPlayer)
 
@@ -50,6 +56,16 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player is a Rebel pilot and cannot join a neutral squadron concurrently
 	elseif (SpaceHelpers:isRebelPilot(pPlayer)) then
 		return convoTemplate:getScreen("rebel_pilot")
+	end
+
+	if (SpaceHelpers:isSmugglerSquadron(pPlayer)) then
+		local pilotTier = ghost:getPilotTier()
+		local correctTrainer = (pilotTier <= 1 and isDravis) or (pilotTier == 2 and isShamdon) or
+			(pilotTier == 3 and isBeissa) or (pilotTier == 4 and isNirame)
+
+		if (pilotTier < 5 and not correctTrainer) then
+			return convoTemplate:getScreen("go_to_next")
+		end
 	end
 
 	-- Check for a starter ship
@@ -158,6 +174,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
 			end
+			SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 
 			-- Player has not earned the master box yet (pilot_neutral_master is granted inside the Kessel screenplay)
 			if (not SpaceHelpers:hasMasterSkill(pPlayer, "neutral")) then
@@ -268,6 +285,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				-- Increment pilot to Tier 4
 				ghost:incrementPilotTier()
 			end
+			SpaceHelpers:addNirameSakuteWaypoint(pPlayer)
 
 			return convoTemplate:getScreen("tier3_completed_dulios")
 		end
@@ -394,6 +412,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (ghost:getPilotTier() <= 2) then
 				ghost:incrementPilotTier()
 			end
+			SpaceHelpers:addBeissaWaypoint(pPlayer)
 
 			return convoTemplate:getScreen("tier2_completed_kaydine")
 		-- Reward Checks
@@ -656,14 +675,19 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		-- Track that quest was attempted
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_1.name .. ":attempted", 1)
 
+		patrol_tatooine_privateer_1:resetQuest(pPlayer)
 		patrol_tatooine_privateer_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest1") then
+		patrol_tatooine_privateer_1:resetQuest(pPlayer)
 		patrol_tatooine_privateer_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest2") then
+		destroy_tatooine_privateer_2:resetQuest(pPlayer)
 		destroy_tatooine_privateer_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest3") then
+		patrol_tatooine_privateer_3:resetQuest(pPlayer)
 		patrol_tatooine_privateer_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest4") then
+		assassinate_tatooine_privateer_4:resetQuest(pPlayer)
 		assassinate_tatooine_privateer_4:startQuest(pPlayer, pNpc)
 	-- Quest 1 completion screens - give reward
 	elseif (screenID == "i_was_attacked" or screenID == "rebel_ambush" or screenID == "patrol_complete") then
@@ -680,10 +704,12 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	elseif (screenID == "quest2_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_2.name .. ":attempted", 1)
+		destroy_tatooine_privateer_2:resetQuest(pPlayer)
 		destroy_tatooine_privateer_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_3.name .. ":attempted", 1)
+		patrol_tatooine_privateer_3:resetQuest(pPlayer)
 		patrol_tatooine_privateer_3:startQuest(pPlayer, pNpc)
 	-- Quest 3 Rewarded - give reward
 	elseif (screenID == "quest3_rewarded") then
@@ -701,6 +727,7 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	elseif (screenID == "quest4_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_4.name .. ":attempted", 1)
+		assassinate_tatooine_privateer_4:resetQuest(pPlayer)
 		assassinate_tatooine_privateer_4:startQuest(pPlayer, pNpc)
 	-- Finished: completed all Tier 1 skills, reassigned to Under Inquisitor Fa'Zoll (next trainer)
 	elseif (screenID == "directions_to_next" or screenID == "report_to_fazoll") then
@@ -760,6 +787,7 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 
 		if (ghost:getPilotTier() <= 2 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
 			ghost:incrementPilotTier()
+			SpaceHelpers:addBeissaWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -794,18 +822,22 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	elseif (screenID == "tier2_accept_assassinate" or screenID == "tier2_nonsense" or screenID == "tier2_let_me_know" or screenID == "tier2_report_back_success" or screenID == "tier2_key_to_success" or screenID == "tier2_just_malfunctioned") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
+		assassinate_tatooine_privateer_tier2_4:resetQuest(pPlayer)
 		assassinate_tatooine_privateer_tier2_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_inspect" or screenID == "tier2_on_your_way" or screenID == "tier2_take_it_serious" or screenID == "tier2_bad_liar") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
+		recovery_tatooine_privateer_tier2_3:resetQuest(pPlayer)
 		recovery_tatooine_privateer_tier2_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_escort" or screenID == "tier2_back_to_escort" or screenID == "tier2_now_is_good" or screenID == "tier2_be_smarter") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
+		escort_tatooine_privateer_tier2_2:resetQuest(pPlayer)
 		escort_tatooine_privateer_tier2_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_start_first_mission" or screenID == "tier2_try_first_mission" or screenID == "tier2_cant_wait_first") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
+		inspect_tatooine_privateer_tier2_1:resetQuest(pPlayer)
 		inspect_tatooine_privateer_tier2_1:startQuest(pPlayer, pNpc)
 
 	-- Tier 3 Training (Dulios-pattern; one skill box per mission, no XP deduction)
@@ -848,6 +880,7 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		if (ghost:getPilotTier() <= 3 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)) then
 			-- If player has all of the Tier 3 skills, increment their pilot tier
 			ghost:incrementPilotTier()
+			SpaceHelpers:addNirameSakuteWaypoint(pPlayer)
 		end
 
 	-- Give Tier 3 Missions
@@ -856,24 +889,28 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
+		assassinate_tatooine_privateer_tier3_4:resetQuest(pPlayer)
 		assassinate_tatooine_privateer_tier3_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_third_mission" or screenID == "tier3_i_was_better") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
 		--	Give third mission to player
+		delivery_tatooine_privateer_tier3_3:resetQuest(pPlayer)
 		delivery_tatooine_privateer_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_second_mission" or screenID == "tier3_stories_about_me") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
 		--	Give second mission to player
+		inspect_tatooine_privateer_tier3_2:resetQuest(pPlayer)
 		inspect_tatooine_privateer_tier3_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_first_mission" or screenID == "tier3_try_first_again") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
 		--	Give First mission to player
+		recovery_tatooine_privateer_tier3_1:resetQuest(pPlayer)
 		recovery_tatooine_privateer_tier3_1:startQuest(pPlayer, pNpc)
 
 	-- Tier 4 Training (Dinge-pattern)
@@ -918,6 +955,7 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		if (ghost:getPilotTier() <= 4 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)) then
 			-- If player has all of the Tier 4 skills, increment their pilot tier
 			ghost:incrementPilotTier()
+			SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 		end
 
 		-- Either the player is ready to train again or they have all of the missions finished, so send them back to the main screen
@@ -959,31 +997,35 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
+		recovery_tatooine_privateer_tier4_4:resetQuest(pPlayer)
 		recovery_tatooine_privateer_tier4_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
+		space_battle_tatooine_privateer_tier4_3:resetQuest(pPlayer)
 		space_battle_tatooine_privateer_tier4_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
+		assassinate_tatooine_privateer_tier4_2:resetQuest(pPlayer)
 		assassinate_tatooine_privateer_tier4_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
+		survival_tatooine_privateer_tier4_1:resetQuest(pPlayer)
 		survival_tatooine_privateer_tier4_1:startQuest(pPlayer, pNpc)
 
-	-- Master mission: temporary Imperial service in lieu of imprisonment.
+	-- Tier 5 hand-off to Admiral Burke. Burke owns both finale mission starts.
 	elseif (screenID == "accept_master_mission") then
 		-- Player must hold the full tier 4 pilot training before the master hand-off;
 		-- pilot_neutral_master is granted inside the Kessel screenplay, never here.
-		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4) and
-				not SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
-			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
+		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)) then
+			local playerID = CreatureObject(pPlayer):getObjectID()
+			setQuestStatus(playerID .. "SmugglerSquadronScreenplay:reportToBurke", 1)
+			SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 		end
 	end
 
