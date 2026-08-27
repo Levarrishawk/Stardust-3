@@ -744,7 +744,7 @@ survival_corellia_privateer_tier3_2_a = SpaceSurvivalScreenplay:new {
 	questName = "corellia_privateer_tier3_2_a",
 	questType = "survival",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -763,7 +763,7 @@ survival_corellia_privateer_tier3_2_a = SpaceSurvivalScreenplay:new {
 	survivalTime = 600,
 	survivalUpdateInterval = 60,
 
-	survivalPoint = {x = 3250, z = 5631, y = 6980}, -- space_endor:corellia_privateer_tier3_endor_survival_1
+	survivalPoint = {x = 32, z = -5934, y = 4132}, -- space_dathomir:corellia_privateer_tier3_survival
 	survivalAreaRadius = 500,
 
 	delayToFirstAttack = 5,
