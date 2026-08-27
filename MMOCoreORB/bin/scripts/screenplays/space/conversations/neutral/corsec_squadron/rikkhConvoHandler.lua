@@ -68,6 +68,18 @@ function rikkhConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local recoveryDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.name)
 
 	local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)
+	local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 2)
+	local requiredTier2Skills = 0
+
+	if (questFourComplete) then
+		requiredTier2Skills = 4
+	elseif (questThreeComplete) then
+		requiredTier2Skills = 3
+	elseif (questTwoComplete) then
+		requiredTier2Skills = 2
+	elseif (questOneComplete) then
+		requiredTier2Skills = 1
+	end
 
 	--[[
 			Quests
@@ -79,16 +91,6 @@ function rikkhConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		return convoTemplate:getScreen("on_mission")
 
-	-- Check if players have all the tier2 skill boxes and finished the last mission, then send them to next trainer.
-	elseif (questFourComplete and completedTier2) then
-		-- Players has all the skill boxes, they should be a tier 3. Increment if not proper
-		if (ghost:getPilotTier() <= 2) then
-			-- Increment pilot to Tier 2!
-			ghost:incrementPilotTier()
-			SpaceHelpers:addCorsecRamnaWaypoint(pPlayer)
-		end
-
-		return convoTemplate:getScreen("completed_rikkh")
 	-- Reward Checks
 	elseif (questFourComplete and getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("complete_fourth_mission")
@@ -98,9 +100,24 @@ function rikkhConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("complete_second_mission")
 	elseif (questOneComplete and getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("complete_first_mission")
-	-- Pilot is able to train
-	elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-		return convoTemplate:getScreen("ready_train_pilot")
+	-- Each completed mission requires one Tier 2 skill before the campaign can
+	-- advance. Offer training when XP permits, otherwise keep the pilot on duty.
+	elseif (tier2SkillCount < requiredTier2Skills) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+			return convoTemplate:getScreen("ready_train_pilot")
+		end
+
+		return convoTemplate:getScreen("here_for_work")
+	-- Check if players have all the tier2 skill boxes and finished the last mission, then send them to next trainer.
+	elseif (questFourComplete and completedTier2) then
+		-- Players has all the skill boxes, they should be a tier 3. Increment if not proper
+		if (ghost:getPilotTier() <= 2) then
+			-- Increment pilot to Tier 3!
+			ghost:incrementPilotTier()
+			SpaceHelpers:addCorsecRamnaWaypoint(pPlayer)
+		end
+
+		return convoTemplate:getScreen("completed_rikkh")
 	elseif (not questFourComplete) then
 		-- Player is able to start fourth mission
 		if (questThreeComplete and not questFourStarted) then
@@ -125,7 +142,7 @@ function rikkhConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				return convoTemplate:getScreen("second_mission")
 			end
 		-- Player is ready for first mission, so either was not given it after training first box or failed
-		elseif (not questOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 2)) then
+		elseif (not questOneComplete) then
 			if (getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
 				return convoTemplate:getScreen("failed_first_mission")
 			else
@@ -246,6 +263,19 @@ function rikkhConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 
 		-- Grant Reward
 		assassinate_corellia_privateer_tier2_4a:rewardPlayer(pPlayer)
+
+		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
+			if (ghost:getPilotTier() <= 2) then
+				ghost:incrementPilotTier()
+				SpaceHelpers:addCorsecRamnaWaypoint(pPlayer)
+			end
+
+			clonedConversation:addOption("@conversation/corellia_privateer_trainer_2:s_1c8bddbb", "completed_rikkh") -- What is it?
+		elseif (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+			clonedConversation:addOption("@conversation/corellia_privateer_trainer_2:s_1c8bddbb", "ready_train_pilot") -- What is it?
+		else
+			clonedConversation:addOption("@conversation/corellia_privateer_trainer_2:s_1c8bddbb", "here_for_work") -- What is it?
+		end
 	elseif (screenID == "turnover_intelligence") then
 		-- Give player the reward and update that they received it
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)
