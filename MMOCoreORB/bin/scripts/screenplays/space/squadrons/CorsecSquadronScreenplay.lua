@@ -759,6 +759,20 @@ survival_corellia_privateer_tier3_2_a = SpaceSurvivalScreenplay:new {
 	sideQuestDelay = 4, -- Time in seconds to wait to trigger side quest
 
 	-- Screenplay Specific Variables
+
+	survivalTime = 600,
+	survivalUpdateInterval = 60,
+
+	survivalPoint = {x = 3250, z = 5631, y = 6980}, -- space_endor:corellia_privateer_tier3_endor_survival_1
+	survivalAreaRadius = 500,
+
+	delayToFirstAttack = 5,
+	attackDelay = 30,
+
+	attackShips = {
+		{"scavenger_hunter_tier3", "scavenger_hunter_tier3"},
+		{"scavenger_fanatic_tier3", "scavenger_fanatic_tier3", "scavenger_missileboat_tier3"},
+	},
 }
 
 registerScreenPlay("survival_corellia_privateer_tier3_2_a", true)
