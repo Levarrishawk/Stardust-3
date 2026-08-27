@@ -1366,16 +1366,23 @@ void ShipManager::reDeedShip(CreatureObject* player, ShipControlDevice* shipDevi
 
 	String chassisName = ship->getShipChassisName().replaceAll("player_", "");
 	bool isPrototypeTieFighter = chassisName == "prototype_tiefighter";
+	bool isPrototypeZ95 = chassisName == "prototype_z95";
+	bool isPrototypeHuttLight = chassisName == "prototype_hutt_light";
+	bool isPrototypeStarterShip = isPrototypeTieFighter || isPrototypeZ95 || isPrototypeHuttLight;
 	String deedChassisName = chassisName;
 
 	if (isPrototypeTieFighter) {
 		deedChassisName = "tiefighter";
+	} else if (isPrototypeZ95) {
+		deedChassisName = "z95";
+	} else if (isPrototypeHuttLight) {
+		deedChassisName = "hutt_light_s01";
 	}
 
 	String deedPath = "object/tangible/ship/crafted/chassis/" + deedChassisName + "_deed.iff";
 	String prototypeShipTemplate;
 
-	if (isPrototypeTieFighter) {
+	if (isPrototypeStarterShip) {
 		auto shipTemplate = ship->getObjectTemplate();
 
 		if (shipTemplate == nullptr) {
@@ -1438,7 +1445,7 @@ void ShipManager::reDeedShip(CreatureObject* player, ShipControlDevice* shipDevi
 
 	shipDeed->setControlDeviceTemplate(deviceStringName);
 
-	if (isPrototypeTieFighter) {
+	if (isPrototypeStarterShip) {
 		shipDeed->setGeneratedObjectTemplate(prototypeShipTemplate);
 	}
 
