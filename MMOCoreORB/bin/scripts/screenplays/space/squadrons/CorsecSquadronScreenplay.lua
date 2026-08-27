@@ -159,6 +159,7 @@ escort_corellia_privateer_3 = SpaceEscortScreenplay:new {
 	-- Screenplay Specific Variables
 
 	escortShips = {"freighterheavy_tier1"},
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "privateer_security_escort_1", zoneName = "space_corellia", x = -5034, z = -5439, y = -4558, escortNumber = 1, radius = 250},

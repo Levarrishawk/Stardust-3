@@ -28,6 +28,7 @@ SpaceEscortScreenplay = SpaceQuestLogic:new {
 
 	spawnAttackWaves = true,
 	checkPlayerDistance = true,
+	orderedEscortRoute = false,
 
 	attackDelay = 0, -- In Seconds
 	attackShips = {},
@@ -241,7 +242,12 @@ function SpaceEscortScreenplay:setupEscort(pPlayer)
 	-- Quest Progress update
 	SpaceHelpers:sendQuestProgess(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title")
 
-	local randomStart = getRandomNumber(1, #self.escortPoints)
+	local randomStart = 1
+
+	if (not self.orderedEscortRoute) then
+		randomStart = getRandomNumber(1, #self.escortPoints)
+	end
+
 	writeData(playerID .. self.className .. ":startPoint:", randomStart)
 
 	if (self.DEBUG_SPACE_ESCORT) then
@@ -420,35 +426,52 @@ function SpaceEscortScreenplay:assignEscortPoints(pShipAgent)
 	local startingPointName = readStringData(agentID .. ":" .. self.className .. ":startingPoint:")
 	deleteStringData(agentID .. ":" .. self.className .. ":startingPoint:")
 
-	-- Add escort points randomly
+	-- Build the route from the remaining escort points. Most legacy escort missions
+	-- randomize them; missions with a defined travel path can opt into sequential
+	-- order beginning with the point after the rendezvous.
 	local totalPoints = 0
-	local escortWaypoints = {}
 	local randomPoints = {}
 
-	for i = 1, #self.escortPoints do
-		table.insert(escortWaypoints, self.escortPoints[i])
-	end
+	if (self.orderedEscortRoute) then
+		local startingPointIndex = 0
 
-	if (self.DEBUG_SPACE_ESCORT) then
-		print(self.className .. ":assignEscortPoints -- Total Available escort Points: " .. #escortWaypoints)
-	end
-
-	while (#escortWaypoints > 0) do
-		local randomPoint = getRandomNumber(1, #escortWaypoints)
-		local pointName = escortWaypoints[randomPoint].patrolPointName
-
-		if (pointName ~= startingPointName) then
-			table.insert(randomPoints, pointName)
-
-			totalPoints = totalPoints + 1
-
-			if (self.DEBUG_SPACE_ESCORT) then
-				print(self.className .. ":assignEscortPoints -- Assining Point: " .. pointName)
+		for i = 1, #self.escortPoints do
+			if (self.escortPoints[i].patrolPointName == startingPointName) then
+				startingPointIndex = i
+				break
 			end
 		end
 
-		-- Drop the point from the table
-		table.remove(escortWaypoints, randomPoint)
+		if (startingPointIndex > 0) then
+			for offset = 1, #self.escortPoints - 1 do
+				local pointIndex = ((startingPointIndex + offset - 1) % #self.escortPoints) + 1
+				table.insert(randomPoints, self.escortPoints[pointIndex].patrolPointName)
+				totalPoints = totalPoints + 1
+			end
+		end
+	else
+		local escortWaypoints = {}
+
+		for i = 1, #self.escortPoints do
+			table.insert(escortWaypoints, self.escortPoints[i])
+		end
+
+		if (self.DEBUG_SPACE_ESCORT) then
+			print(self.className .. ":assignEscortPoints -- Total Available escort Points: " .. #escortWaypoints)
+		end
+
+		while (#escortWaypoints > 0) do
+			local randomPoint = getRandomNumber(1, #escortWaypoints)
+			local pointName = escortWaypoints[randomPoint].patrolPointName
+
+			if (pointName ~= startingPointName) then
+				table.insert(randomPoints, pointName)
+				totalPoints = totalPoints + 1
+			end
+
+			-- Drop the point from the table
+			table.remove(escortWaypoints, randomPoint)
+		end
 	end
 
 	-- Add the named escort points to the agent
