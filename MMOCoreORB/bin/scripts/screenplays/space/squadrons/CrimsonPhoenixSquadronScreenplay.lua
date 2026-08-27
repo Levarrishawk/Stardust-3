@@ -2042,6 +2042,18 @@ registerScreenPlay("CrimsonPhoenixSquadronScreenplay", false)
 function CrimsonPhoenixSquadronScreenplay:start()
 end
 
+function CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
+	if (pPlayer == nil) then return end
+
+	for i = #missionScreenplays, 1, -1 do
+		missionScreenplays[i]:resetQuest(pPlayer)
+	end
+
+	for i = 1, #missionQuests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, missionQuests[i].type, missionQuests[i].name, false)
+	end
+end
+
 -- Reset functions for quest clearing
 
 function CrimsonPhoenixSquadronScreenplay:resetSocunaQuests(pPlayer)

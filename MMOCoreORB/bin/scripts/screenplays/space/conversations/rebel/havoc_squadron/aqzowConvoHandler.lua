@@ -86,6 +86,7 @@ function aqzowConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			ghost:incrementPilotTier()
 		end
 
+		SpaceHelpers:addWarvogArkonWaypoint(pPlayer)
 		return convoTemplate:getScreen("completed_aqzow")
 	end
 
@@ -253,41 +254,45 @@ function aqzowConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 	-- Quest 1: Recovery mission (spy on Yavin)
 	elseif (screenID == "accept_quest1_a" or screenID == "accept_quest1_b" or screenID == "accept_quest1_c" or screenID == "accept_quest1_d") then
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_corellia_rebel_tier3_1, patrol_corellia_rebel_tier3_1_A, destroy_surpriseattack_corellia_rebel_tier3_1_b, assassinate_corellia_rebel_tier3_1_c, space_battle_corellia_rebel_tier3_1_d}, {{type="recovery", name="corellia_rebel_tier3_1"}, {type="patrol", name="corellia_rebel_tier3_1_A"}, {type="destroy_surpriseattack", name="corellia_rebel_tier3_1_b"}, {type="assassinate", name="corellia_rebel_tier3_1_c"}, {type="space_battle", name="corellia_rebel_tier3_1_d"}})
 		recovery_corellia_rebel_tier3_1:startQuest(pPlayer, pNpc)
 
 	-- Quest 1: Failed retry
 	elseif (screenID == "retry_quest1_a" or screenID == "retry_quest1_b") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_corellia_rebel_tier3_1, patrol_corellia_rebel_tier3_1_A, destroy_surpriseattack_corellia_rebel_tier3_1_b, assassinate_corellia_rebel_tier3_1_c, space_battle_corellia_rebel_tier3_1_d}, {{type="recovery", name="corellia_rebel_tier3_1"}, {type="patrol", name="corellia_rebel_tier3_1_A"}, {type="destroy_surpriseattack", name="corellia_rebel_tier3_1_b"}, {type="assassinate", name="corellia_rebel_tier3_1_c"}, {type="space_battle", name="corellia_rebel_tier3_1_d"}})
 		recovery_corellia_rebel_tier3_1:startQuest(pPlayer, pNpc)
 
 	-- Quest 2: Inspect mission (Endor smuggler data)
 	elseif (screenID == "accept_quest2_a" or screenID == "accept_quest2_b" or screenID == "accept_quest2_c" or screenID == "accept_quest2_d") then
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_corellia_rebel_tier3_2, delivery_corellia_rebel_tier3_2_a, survival_corellia_rebel_tier3_2_b, escort_corellia_rebel_tier3_2_c}, {{type="inspect", name="corellia_rebel_tier3_2"}, {type="delivery", name="corellia_rebel_tier3_2_a"}, {type="survival", name="corellia_rebel_tier3_2_b"}, {type="escort", name="corellia_rebel_tier3_2_c"}})
 		inspect_corellia_rebel_tier3_2:startQuest(pPlayer, pNpc)
 
 	-- Quest 2: Failed retry
 	elseif (screenID == "retry_quest2_a" or screenID == "retry_quest2_b") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_corellia_rebel_tier3_2, delivery_corellia_rebel_tier3_2_a, survival_corellia_rebel_tier3_2_b, escort_corellia_rebel_tier3_2_c}, {{type="inspect", name="corellia_rebel_tier3_2"}, {type="delivery", name="corellia_rebel_tier3_2_a"}, {type="survival", name="corellia_rebel_tier3_2_b"}, {type="escort", name="corellia_rebel_tier3_2_c"}})
 		inspect_corellia_rebel_tier3_2:startQuest(pPlayer, pNpc)
 
 	-- Quest 3: Delivery mission (Nym smuggler intel)
 	elseif (screenID == "accept_quest3_a" or screenID == "accept_quest3_b" or screenID == "accept_quest3_c" or screenID == "accept_quest3_d" or screenID == "accept_quest3_e") then
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {delivery_corellia_rebel_tier3_3, assassinate_corellia_rebel_tier3_3_a, space_battle_corellia_rebel_tier3_3_b, escort_corellia_rebel_tier3_3_c}, {{type="delivery", name="corellia_rebel_tier3_3"}, {type="assassinate", name="corellia_rebel_tier3_3_a"}, {type="space_battle", name="corellia_rebel_tier3_3_b"}, {type="escort", name="corellia_rebel_tier3_3_c"}})
 		delivery_corellia_rebel_tier3_3:startQuest(pPlayer, pNpc)
 
 	-- Quest 3: Failed retry
 	elseif (screenID == "retry_quest3_a" or screenID == "retry_quest3_b") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {delivery_corellia_rebel_tier3_3, assassinate_corellia_rebel_tier3_3_a, space_battle_corellia_rebel_tier3_3_b, escort_corellia_rebel_tier3_3_c}, {{type="delivery", name="corellia_rebel_tier3_3"}, {type="assassinate", name="corellia_rebel_tier3_3_a"}, {type="space_battle", name="corellia_rebel_tier3_3_b"}, {type="escort", name="corellia_rebel_tier3_3_c"}})
 		delivery_corellia_rebel_tier3_3:startQuest(pPlayer, pNpc)
 
 	-- Quest 4: Assassinate mission (Imperial pilot intercept)
 	elseif (screenID == "accept_quest4_a" or screenID == "accept_quest4_b" or screenID == "accept_quest4_c") then
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_corellia_rebel_tier3_4, patrol_corellia_rebel_tier3_4_a, destroy_surpriseattack_corellia_rebel_tier3_4_b, space_battle_corellia_rebel_tier3_4_c, survival_corellia_rebel_tier3_4_d}, {{type="assassinate", name="corellia_rebel_tier3_4"}, {type="patrol", name="corellia_rebel_tier3_4_a"}, {type="destroy_surpriseattack", name="corellia_rebel_tier3_4_b"}, {type="space_battle", name="corellia_rebel_tier3_4_c"}, {type="survival", name="corellia_rebel_tier3_4_d"}})
 		assassinate_corellia_rebel_tier3_4:startQuest(pPlayer, pNpc)
 
 	-- Quest 4: Failed retry
 	elseif (screenID == "retry_quest4_a" or screenID == "retry_quest4_b") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_corellia_rebel_tier3_4, patrol_corellia_rebel_tier3_4_a, destroy_surpriseattack_corellia_rebel_tier3_4_b, space_battle_corellia_rebel_tier3_4_c, survival_corellia_rebel_tier3_4_d}, {{type="assassinate", name="corellia_rebel_tier3_4"}, {type="patrol", name="corellia_rebel_tier3_4_a"}, {type="destroy_surpriseattack", name="corellia_rebel_tier3_4_b"}, {type="space_battle", name="corellia_rebel_tier3_4_c"}, {type="survival", name="corellia_rebel_tier3_4_d"}})
 		assassinate_corellia_rebel_tier3_4:startQuest(pPlayer, pNpc)
 	end
 

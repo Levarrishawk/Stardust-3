@@ -2042,6 +2042,20 @@ registerScreenPlay("VortexSquadronScreenplay", false)
 function VortexSquadronScreenplay:start()
 end
 
+function VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
+	if (pPlayer == nil) then
+		return
+	end
+
+	for i = #missionScreenplays, 1, -1 do
+		missionScreenplays[i]:resetQuest(pPlayer)
+	end
+
+	for i = 1, #missionQuests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, missionQuests[i].type, missionQuests[i].name, false)
+	end
+end
+
 -- Reset functions for quest clearing
 
 function VortexSquadronScreenplay:resetV3fxQuests(pPlayer)

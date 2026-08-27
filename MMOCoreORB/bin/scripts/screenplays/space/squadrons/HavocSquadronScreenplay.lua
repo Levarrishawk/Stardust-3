@@ -1996,7 +1996,7 @@ HavocSquadronScreenplay = ScreenPlay:new {
 	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "viopa_rebel_7"},
 	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "viopa_rebel_5"},
 
-	-- Tier 3 (Arkon)
+	-- Tier 3 (Lt. Colonel Aqzow)
 	TIER3_QUEST_STRING_1 = {type = "recovery", name = "corellia_rebel_tier3_1"},
 	TIER3_QUEST_STRING_1_SIDE1 = {type = "patrol", name = "corellia_rebel_tier3_1_A"},
 	TIER3_QUEST_STRING_1_SIDE2 = {type = "destroy_surpriseattack", name = "corellia_rebel_tier3_1_b"},
@@ -2016,7 +2016,7 @@ HavocSquadronScreenplay = ScreenPlay:new {
 	TIER3_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "corellia_rebel_tier3_4_c"},
 	TIER3_QUEST_STRING_4_SIDE4 = {type = "survival", name = "corellia_rebel_tier3_4_d"},
 
-	-- Tier 4 (Aqzow)
+	-- Tier 4 (Warvog Arkon)
 	TIER4_QUEST_STRING_1 = {type = "survival", name = "corellia_rebel_tier4_1"},
 	TIER4_QUEST_STRING_1_SIDE1 = {type = "space_battle", name = "corellia_rebel_tier4_1_a"},
 	TIER4_QUEST_STRING_1_SIDE2 = {type = "space_battle", name = "corellia_rebel_tier4_1_b"},
@@ -2041,6 +2041,20 @@ HavocSquadronScreenplay = ScreenPlay:new {
 registerScreenPlay("HavocSquadronScreenplay", false)
 
 function HavocSquadronScreenplay:start()
+end
+
+function HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
+	if (pPlayer == nil) then
+		return
+	end
+
+	for i = #missionScreenplays, 1, -1 do
+		missionScreenplays[i]:resetQuest(pPlayer)
+	end
+
+	for i = 1, #missionQuests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, missionQuests[i].type, missionQuests[i].name, false)
+	end
 end
 
 -- Reset functions for quest clearing

@@ -878,6 +878,30 @@ function SpaceHelpers:addStormNextWaypoint(pPlayer)
 	PlayerObject(pGhost):addWaypoint("tatooine", "@npc_spawner_n:oberhaur", "@npc_spawner_n:oberhaur", -1125, 0, -3590, WAYPOINT_BLUE, true, true, 0)
 end
 
+function SpaceHelpers:addAqzowWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:aqzow", "@npc_spawner_n:aqzow", -6888, 0, -5664, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addWarvogArkonWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("lok", "@npc_spawner_n:warvog_arkon", "@npc_spawner_n:warvog_arkon", 406, 0, 5091, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("corellia", "@npc_spawner_n:willham_burke", "@npc_spawner_n:willham_burke", 3083, 0, 5203, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
 function SpaceHelpers:addStormTier3Waypoint(pPlayer)
 	if (pPlayer == nil) then
 		return
@@ -970,12 +994,61 @@ end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Crimson Phoenix Squadron tier 1
 function SpaceHelpers:addCrimsonPhoenixNextWaypoint(pPlayer)
-	addFaZollWaypointImpl(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:eker", "@npc_spawner_n:eker", -6966, 0, -5658, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addArnecioWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("dathomir", "@npc_spawner_n:arnecio_ulvaw_op", "@npc_spawner_n:arnecio_ulvaw_op", -115, 0, -1580, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addUfwolWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("dathomir", "@npc_spawner_n:ufwol", "@npc_spawner_n:ufwol", -115, 0, -1580, WAYPOINT_BLUE, true, true, 0)
+	end
 end
 
 -- @param pPlayer pointer adds hand-off waypoint after finishing Vortex Squadron tier 1
 function SpaceHelpers:addVortexNextWaypoint(pPlayer)
-	addFaZollWaypointImpl(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("dantooine", "@npc_spawner_n:vrovel", "@npc_spawner_n:vrovel", -6799, 0, 5479, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addEzkielWaypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("dantooine", "@npc_spawner_n:ezkiel", "@npc_spawner_n:ezkiel", -6803, 0, 5479, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addExtokEvinWaypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("talus", "@npc_spawner_n:extok_evin", "@npc_spawner_n:extok_evin", 445, 0, -2925, WAYPOINT_BLUE, true, true, 0)
+	end
 end
 
 -- @param pPlayer pointer to check for skills

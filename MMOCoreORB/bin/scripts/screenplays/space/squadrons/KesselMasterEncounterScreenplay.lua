@@ -659,10 +659,10 @@ destroy_master_rebel_1 = SpaceDestroyScreenplay:new {
 
 	creditReward = 10000,
 
-	sideQuest = true,
-	sideQuestType = "destroy",
-	sideQuestName = "master_rebel_2",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	-- Burke debriefs the pilot after the fighter sweep and grants the
+	-- corvette assignment in a separate conversation.
+	sideQuest = false,
+	sideQuestType = "",
 
 	killsRequired = 30,
 
