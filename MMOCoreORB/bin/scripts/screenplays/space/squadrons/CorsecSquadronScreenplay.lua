@@ -352,7 +352,7 @@ escort_corellia_privateer_14 = SpaceEscortScreenplay:new {
 	attackDelay = 180, -- In Seconds
 
 	attackShips = {
-		{"reb_xwing_tier2", "reb_xwing_tier2", "reb_ywing_tier3", "reb_xwing_tier3", "reb_z95_tier2", "reb_z95_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s01_tier3", "blacksun_fighter_s01_tier3", "blacksun_fighter_s03_tier2", "blacksun_bomber_s02_tier2"},
 	}
 }
 
