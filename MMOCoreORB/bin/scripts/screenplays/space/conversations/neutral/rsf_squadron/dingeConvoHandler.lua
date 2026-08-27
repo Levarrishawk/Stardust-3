@@ -125,6 +125,8 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.MASTER_QUEST_STRING_2.type, RsfSquadronScreenplay.MASTER_QUEST_STRING_2.name)
 
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)
+		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 4)
+		local requiredTier4Skills = t4QuestFourComplete and 4 or t4QuestThreeComplete and 3 or t4QuestTwoComplete and 2 or t4QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 4 mission from Dinge
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
@@ -134,7 +136,7 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier4_on_mission")
 
 		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
-		elseif (t4QuestFourComplete and completedTier4) then
+		elseif (t4QuestFourComplete and completedTier4 and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 			if (ghost:getPilotTier() <= 4) then
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
@@ -158,9 +160,11 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t4QuestOneComplete and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier4_first_mission_success")
 
-		-- Pilot is able to train
-		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-			return convoTemplate:getScreen("ready_train_tier4")
+		elseif (tier4SkillCount < requiredTier4Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+				return convoTemplate:getScreen("ready_train_tier4")
+			end
+			return convoTemplate:getScreen("tier4_duty_repeat")
 
 		-- Has not received the tier 4 briefing from Dinge yet
 		elseif (getQuestStatus(playerID .. "RsfSquadronScreenplay:StartedDingeTier4") ~= "1") then
@@ -192,7 +196,7 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier4_second_mission")
 				end
 			-- Player is ready for first mission, so either was not given it after training first box or failed
-			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 4)) then
+			elseif (not t4QuestOneComplete) then
 				if (getQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_first_mission")
 				else

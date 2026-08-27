@@ -184,6 +184,8 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, StormSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
 
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 4)
+		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "imperial_navy", 4)
+		local requiredTier4Skills = t4QuestFourComplete and 4 or t4QuestThreeComplete and 3 or t4QuestTwoComplete and 2 or t4QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 4 mission from Colzet
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
@@ -193,7 +195,7 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier4_on_mission")
 
 		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
-		elseif (t4QuestFourComplete and completedTier4) then
+		elseif (t4QuestFourComplete and completedTier4 and getQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 			if (ghost:getPilotTier() <= 4) then
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
@@ -216,9 +218,11 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t4QuestOneComplete and getQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier4_first_mission_success")
 
-		-- Pilot is able to train
-		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-			return convoTemplate:getScreen("ready_train_tier4")
+		elseif (tier4SkillCount < requiredTier4Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+				return convoTemplate:getScreen("ready_train_tier4")
+			end
+			return convoTemplate:getScreen("tier4_duty_repeat")
 
 		-- Has not received the tier 4 briefing from Oberhaur yet
 		elseif (getQuestStatus(playerID .. "StormSquadronScreenplay:StartedColzetTier4") ~= "1") then
@@ -250,7 +254,7 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier4_second_mission")
 				end
 			-- Player is ready for first mission, so either was not given it after training first box or failed
-			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "imperial_navy", 4)) then
+			elseif (not t4QuestOneComplete) then
 				if (getQuestStatus(playerID .. StormSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_first_mission")
 				else
@@ -406,6 +410,10 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t2Duty3Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, StormSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, StormSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
 
 		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "imperial_navy", 2)
+		local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "imperial_navy", 2)
+		-- Oberhaur has three campaign missions. One initial skill plus one skill
+		-- after each mission supplies the four Tier 2 boxes.
+		local requiredTier2Skills = t2QuestThreeComplete and 4 or t2QuestTwoComplete and 3 or t2QuestOneComplete and 2 or 1
 
 		-- Player has an active Tier 2 mission from Oberhaur
 		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or
@@ -414,7 +422,7 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier2_on_mission")
 
 		-- Player finished the final tier 2 mission and has all the tier 2 skill boxes
-		elseif (t2QuestThreeComplete and completedTier2) then
+		elseif (t2QuestThreeComplete and completedTier2 and getQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward") == "1") then
 			if (ghost:getPilotTier() <= 2) then
 				-- Increment pilot to Tier 3!
 				ghost:incrementPilotTier()
@@ -435,9 +443,11 @@ function akalColzetConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t2QuestOneComplete and getQuestStatus(playerID .. StormSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier2_first_mission_success")
 
-		-- Pilot is able to train
-		elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-			return convoTemplate:getScreen("ready_train_tier2")
+		elseif (tier2SkillCount < requiredTier2Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+				return convoTemplate:getScreen("ready_train_tier2")
+			end
+			return convoTemplate:getScreen("tier2_duty_repeat")
 
 		-- Has not received the tier 2 briefing from Oberhaur yet
 		elseif (getQuestStatus(playerID .. "StormSquadronScreenplay:StartedOberhaurTier2") ~= "1") then

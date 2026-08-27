@@ -80,6 +80,18 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local duty4Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
 
 	local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)
+	local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 4)
+	local requiredTier4Skills = 0
+
+	if (questFourComplete) then
+		requiredTier4Skills = 4
+	elseif (questThreeComplete) then
+		requiredTier4Skills = 3
+	elseif (questTwoComplete) then
+		requiredTier4Skills = 2
+	elseif (questOneComplete) then
+		requiredTier4Skills = 1
+	end
 
 	--[[
 			Quests
@@ -92,7 +104,8 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("on_mission")
 
 	-- Check if players have all the tier4 skill boxes and finished the last mission, then send them to next trainer.
-	elseif (questFourComplete and completedTier4) then
+	elseif (questFourComplete and completedTier4 and
+			getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 		-- Players has all the skill boxes, they should be a tier 3. Increment if not proper
 		if (ghost:getPilotTier() <= 4) then
 			-- Increment pilot to Tier 5!
@@ -121,9 +134,14 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("second_mission_success")
 	elseif (questOneComplete and getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("first_mission_success")
-	-- Pilot is able to train
-	elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-		return convoTemplate:getScreen("ready_train_pilot")
+	-- Each completed mission requires one Tier 4 skill before the campaign can
+	-- advance. Offer training when XP permits, otherwise keep the pilot on duty.
+	elseif (tier4SkillCount < requiredTier4Skills) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+			return convoTemplate:getScreen("ready_train_pilot")
+		end
+
+		return convoTemplate:getScreen("here_for_work2")
 
 	-- Has not spoken to Turoldine yet
 	elseif (getQuestStatus(playerID .. "CorsecSquadronScreenplay:StartedTuroldine") ~= "1") then
@@ -155,7 +173,7 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				return convoTemplate:getScreen("second_mission")
 			end
 		-- Player is ready for first mission, so either was not given it after training first box or failed
-		elseif (not questOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 4)) then
+		elseif (not questOneComplete) then
 			if (getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 				return convoTemplate:getScreen("failed_first_mission")
 			else

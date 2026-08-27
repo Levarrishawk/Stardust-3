@@ -79,6 +79,8 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, HavocSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
 
 	local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 2)
+	local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 2)
+	local requiredTier2Skills = questFourComplete and 4 or questThreeComplete and 3 or questTwoComplete and 2 or questOneComplete and 1 or 0
 
 	-- viopaSmuggler flag states:
 	-- 0/nil = Not sent to Vrak yet
@@ -105,7 +107,7 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("has_mission")
 
 	-- Check if players have all the tier2 skill boxes and finished the last mission, then send them to next trainer
-	elseif (questFourComplete and completedTier2) then
+	elseif (questFourComplete and completedTier2 and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
 		-- Player has all the skill boxes, they should be tier 3. Increment if not proper
 		if (ghost:getPilotTier() <= 2) then
 			ghost:incrementPilotTier()
@@ -128,9 +130,11 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	elseif (questOneComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 		return convoTemplate:getScreen("excellent_work")
 
-	-- Pilot is able to train
-	elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-		return convoTemplate:getScreen("more_training")
+	elseif (tier2SkillCount < requiredTier2Skills) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+			return convoTemplate:getScreen("more_training")
+		end
+		return convoTemplate:getScreen("duty_missions")
 
 	elseif (not questFourComplete) then
 		-- Player has completed and been rewarded for mission 3
@@ -174,7 +178,7 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				end
 			end
 		-- Player is ready for first mission
-		elseif (not questOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 2)) then
+		elseif (not questOneComplete) then
 			if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
 				return convoTemplate:getScreen("failed_mission1")
 			else

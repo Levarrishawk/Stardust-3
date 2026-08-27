@@ -143,6 +143,8 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
 
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 4)
+		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 4)
+		local requiredTier4Skills = t4QuestFourComplete and 4 or t4QuestThreeComplete and 3 or t4QuestTwoComplete and 2 or t4QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 4 mission from Da'la Socuna
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
@@ -152,7 +154,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier4_on_mission")
 
 		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
-		elseif (t4QuestFourComplete and completedTier4) then
+		elseif (t4QuestFourComplete and completedTier4 and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 			if (ghost:getPilotTier() <= 4) then
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
@@ -176,9 +178,11 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t4QuestOneComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier4_first_mission_success")
 
-		-- Pilot is able to train
-		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-			return convoTemplate:getScreen("ready_train_tier4")
+		elseif (tier4SkillCount < requiredTier4Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+				return convoTemplate:getScreen("ready_train_tier4")
+			end
+			return convoTemplate:getScreen("tier4_duty_repeat")
 
 		-- Has not received the tier 4 briefing from Da'la Socuna yet
 		elseif (getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4") ~= "1") then
@@ -210,7 +214,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier4_second_mission")
 				end
 			-- Player is ready for first mission, so either was not given it after training first box or failed
-			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 4)) then
+			elseif (not t4QuestOneComplete) then
 				if (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_first_mission")
 				else
@@ -368,6 +372,8 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t2EscortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
 
 		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 2)
+		local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 2)
+		local requiredTier2Skills = t2QuestFourComplete and 4 or t2QuestThreeComplete and 3 or t2QuestTwoComplete and 2 or t2QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 2 mission
 		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or (t2QuestFourStarted and not t2QuestFourComplete) or
@@ -376,7 +382,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier2_has_mission")
 
 		-- Check if players have all the tier2 skill boxes and finished the last mission, ready for Tier 3
-		elseif (t2QuestFourComplete and completedTier2) then
+		elseif (t2QuestFourComplete and completedTier2 and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
 			-- Player has all the skill boxes, they should be tier 3. Increment if not proper
 			if (ghost:getPilotTier() <= 2) then
 				ghost:incrementPilotTier()
@@ -411,9 +417,11 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 			return convoTemplate:getScreen("tier2_mission1_rewarded")
 
-		-- Pilot is able to train
-		elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-			return convoTemplate:getScreen("tier2_training_menu")
+		elseif (tier2SkillCount < requiredTier2Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+				return convoTemplate:getScreen("tier2_training_menu")
+			end
+			return convoTemplate:getScreen("tier2_duty_missions")
 
 		elseif (not t2QuestFourComplete) then
 			-- Player is able to start fourth mission
@@ -438,7 +446,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier2_mission2_brief")
 				end
 			-- Player is ready for first mission
-			elseif (not t2QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 2)) then
+			elseif (not t2QuestOneComplete) then
 				if (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("tier2_failed_mission1")
 				else

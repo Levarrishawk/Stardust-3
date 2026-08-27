@@ -160,6 +160,8 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, SmugglerSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
 
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)
+		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 4)
+		local requiredTier4Skills = t4QuestFourComplete and 4 or t4QuestThreeComplete and 3 or t4QuestTwoComplete and 2 or t4QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 4 mission from Dravis
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
@@ -169,7 +171,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier4_on_mission")
 
 		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
-		elseif (t4QuestFourComplete and completedTier4) then
+		elseif (t4QuestFourComplete and completedTier4 and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 			if (ghost:getPilotTier() <= 4) then
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
@@ -193,9 +195,11 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t4QuestOneComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier4_first_mission_success")
 
-		-- Pilot is able to train
-		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-			return convoTemplate:getScreen("ready_train_tier4")
+		elseif (tier4SkillCount < requiredTier4Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+				return convoTemplate:getScreen("ready_train_tier4")
+			end
+			return convoTemplate:getScreen("tier4_duty_repeat")
 
 		-- Has not received the tier 4 briefing from Dravis yet
 		elseif (getQuestStatus(playerID .. "SmugglerSquadronScreenplay:StartedTier4") ~= "1") then
@@ -227,7 +231,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier4_second_mission")
 				end
 			-- Player is ready for first mission, so either was not given it after training first box or failed
-			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 4)) then
+			elseif (not t4QuestOneComplete) then
 				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_first_mission")
 				else
@@ -399,6 +403,8 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t2EscortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
 
 		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)
+		local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 2)
+		local requiredTier2Skills = t2QuestFourComplete and 4 or t2QuestThreeComplete and 3 or t2QuestTwoComplete and 2 or t2QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 2 mission from Dravis
 		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or (t2QuestFourStarted and not t2QuestFourComplete) or
@@ -407,7 +413,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier2_on_mission")
 
 		-- Check if players have all the tier2 skill boxes and finished the last mission, then move them on.
-		elseif (t2QuestFourComplete and completedTier2) then
+		elseif (t2QuestFourComplete and completedTier2 and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
 			-- Player has all the skill boxes, they should be tier 3. Increment if not proper
 			if (ghost:getPilotTier() <= 2) then
 				ghost:incrementPilotTier()
@@ -424,9 +430,11 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier2_complete_second_mission")
 		elseif (t2QuestOneComplete and getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier2_complete_first_mission")
-		-- Pilot is able to train
-		elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-			return convoTemplate:getScreen("tier2_ready_train_pilot")
+		elseif (tier2SkillCount < requiredTier2Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+				return convoTemplate:getScreen("tier2_ready_train_pilot")
+			end
+			return convoTemplate:getScreen("tier2_here_for_work")
 		elseif (not t2QuestFourComplete) then
 			-- Player is able to start fourth mission
 			if (t2QuestThreeComplete and not t2QuestFourStarted) then
@@ -450,7 +458,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier2_second_mission")
 				end
 			-- Player is ready for first mission
-			elseif (not t2QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 2)) then
+			elseif (not t2QuestOneComplete) then
 				if (getQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("tier2_failed_first_mission")
 				else
