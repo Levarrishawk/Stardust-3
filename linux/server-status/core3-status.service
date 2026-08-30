@@ -1,0 +1,16 @@
+[Unit]
+Description=Publish privacy-safe Core3 server status
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/python3 /opt/stardust/server-status/publish_status --source /opt/stardust/MMOCoreORB/bin/log/who.json --output /var/www/stardust/status/status.json --server-name TC --stale-seconds 120
+
+# The publisher only needs to read Core3's status and write the public status directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=read-only
+ProtectSystem=strict
+ReadOnlyPaths=/opt/stardust/MMOCoreORB/bin/log
+ReadWritePaths=/var/www/stardust/status
