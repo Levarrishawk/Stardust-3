@@ -60,3 +60,5 @@ SWGEmu.exe.planetmap.bin
 /effect
 /.codex-tmp
 *.inc
+/.tmp/binary-analysis
+/.tmp

@@ -1,5 +1,5 @@
 willham_burke_convo = ConvoTemplate:new {
-	initialScreen = "",
+	initialScreen = "briefing",
 	templateType = "Lua",
 	luaClassHandler = "willhamBurkeConvoHandler",
 	screens = {}
