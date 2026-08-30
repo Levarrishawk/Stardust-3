@@ -34,6 +34,7 @@
 #include "server/zone/objects/ship/ai/ShipAiAgent.h"
 #include "server/zone/objects/tangible/item/CreditChipObject.h"
 #include "server/zone/managers/loot/LootManager.h"
+#include "server/zone/managers/player/PlayerManager.h"
 #include "server/zone/managers/skill/SkillManager.h"
 #include "server/zone/packets/object/StartNpcConversation.h"
 #include "server/zone/managers/conversation/ConversationManager.h"
