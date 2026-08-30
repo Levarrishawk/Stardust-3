@@ -37,6 +37,7 @@
 #include "server/zone/managers/skill/SkillManager.h"
 #include "server/zone/packets/object/StartNpcConversation.h"
 #include "server/zone/managers/conversation/ConversationManager.h"
+#include "server/zone/managers/director/DirectorManager.h"
 #include "server/zone/objects/creature/conversation/ConversationObserver.h"
 #include "server/zone/managers/faction/FactionManager.h"
 #include "server/zone/objects/ship/transform/ShipObjectTransform.h"
@@ -1983,6 +1984,22 @@ void ShipObjectImplementation::resetShipFaction() {
 	int pilotSquadron = ghost->getPilotSquadron();
 	int pilotTier = ghost->getPilotTier();
 	String pilotFaction = FactionManager::instance()->getSpaceFactionBySquadron(pilotSquadron, pilotTier);
+	String playerID = String::valueOf(pilot->getObjectID());
+	auto directorManager = DirectorManager::instance();
+
+	if (pilotSquadron == PlayerManager::CORSEC_SQUADRON) {
+		if (directorManager->getQuestStatus(playerID + "CorsecSquadronScreenplay:reportToBurke") == "1") {
+			pilotFaction = "rebel";
+		} else if (directorManager->getQuestStatus(playerID + "CorsecSquadronScreenplay:reportToDeclann") == "1") {
+			pilotFaction = "imperial";
+		}
+	} else if (pilotSquadron == PlayerManager::SMUGGLER_SQUADRON
+			&& directorManager->getQuestStatus(playerID + "SmugglerSquadronScreenplay:reportToBurke") == "1") {
+		pilotFaction = "rebel";
+	} else if (pilotSquadron == PlayerManager::RSF_SQUADRON
+			&& directorManager->getQuestStatus(playerID + "RsfSquadronScreenplay:reportToDeclann") == "1") {
+		pilotFaction = "imperial";
+	}
 
 	setShipFactionString(pilotFaction);
 	setFactionStatus(0);
