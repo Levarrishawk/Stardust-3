@@ -129,7 +129,7 @@ space_dantooine = SpacePatrolPointTable:new {
 	{patrolPointName = "bh_path_bravo_05", x = 4681, z = -250, y = 1515},
 	{patrolPointName = "naboo_privateer_tier3_leg_1_patrol_3", x = 4816, z = 81, y = 1973},
 	{patrolPointName = "tatooine_privateer_tier4_leg_4_assassinate_three_3", x = 6047, z = 884, y = 1422},
-	{patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 7512, z = -5651, y = 1803},
+	{patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 5200, z = -4800, y = 1800},
 	{patrolPointName = "tatooine_privateer_tier4_recovery_duty_escort_3", x = 5562, z = -2901, y = -1410},
 	{patrolPointName = "corellia_imperial_tier4_recovery1_4", x = 6538, z = -1692, y = -3169},
 	{patrolPointName = "tatooine_privateer_tier4_recovery_duty_egress_1", x = 7453, z = -2650, y = -2621},

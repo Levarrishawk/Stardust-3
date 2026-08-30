@@ -1316,7 +1316,7 @@ space_battle_corellia_privateer_tier4_3c_win = SpaceBattleScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 7512, z = -5651, y = 1803},
+	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 5200, z = -4800, y = 1800},
 
 	supportShipsDelay = 30,
 	enemyShipsDelay = 90,
@@ -1350,14 +1350,14 @@ space_battle_corellia_privateer_tier4_3c_lose = SpaceBattleScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 7512, z = -5651, y = 1803},
+	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 5200, z = -4800, y = 1800},
 
 	supportShipsDelay = 60,
 	enemyShipsDelay = 90,
 
 	supportShips = {"corsec_gunship_tier4", "corsec_interdiction_craft_tier4", "corsec_lancer_tier4", "corsec_fighter_tier4"},
 
-	enemyShips = {"blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4S", "blacksun_bomber_s02_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4",
+	enemyShips = {"blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_bomber_s02_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4",
 		"blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4"
 	},
 }
