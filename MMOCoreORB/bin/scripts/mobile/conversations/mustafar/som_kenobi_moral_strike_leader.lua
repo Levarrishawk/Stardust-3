@@ -1,10 +1,17 @@
 --[[
 	The leader of the striking miners -- som_kenobi_moral_choice_1.
 
-	RECONSTRUCTED, not ported. som_kenobi_moral_strike_leader.stf shipped in the
-	client (string/en/conversation/); the SwgConversationEditor tree that wires
-	those strings into screens did not. Every leftDialog and option string below
-	is SOE's verbatim text; the edges between them are reconstructed.
+	RECONSTRUCTED, THEN CHECKED AGAINST THE LIVE TREE.
+	som_kenobi_moral_strike_leader.stf shipped in the client
+	(string/en/conversation/); the SwgConversationEditor tree that wires those
+	strings into screens did not. Every leftDialog and option string below is
+	SOE's verbatim text, and the edges were reconstructed from the numbering.
+
+	The live wiring has since been read, and the reconstruction holds: all 32
+	screens, every option, and both convergences on the duplicate confession are
+	live's, edge for edge. Nothing in the body of this file changed. What was
+	wrong was the standing lines -- see CORRECTING THE STANDING LINES -- and
+	where the two grants sit, which is recorded on the screens themselves.
 
 	THE WHOLE CONVERSATION IS WRITTEN TWICE, and the player's opening question
 	picks the copy. The two halves are numbered in different bands, which is
@@ -55,19 +62,49 @@
 	  s_110  "Be careful around here, friend. I wouldn't be surprised if the
 	         corporation will resort to violence against us strikers soon."
 	         -- no quest. Friendly, and to a stranger: he has no reason not to
-	         be. The tree proper is gated behind the executive's errand
-	         because every one of its branches assumes the player was sent.
+	         be. The tree proper is gated behind the sabotage task because
+	         every one of its branches assumes the player was sent.
 
 	  s_207  "The executive will get suspicious, friend..."   disk in hand
 	  s_208  "My friend! We have already heard the good news!..."  uploaded
-	  s_139  "I don't like your look. You should move along..."  the player
-	         took the corporation's reward. He tore out their power core and
-	         two of their miners came at him doing it, so by the time he comes
-	         back to gloat the camp knows exactly who he is.
+	  s_139  "I don't like your look. You should move along..."
 	  s_171  "Yes, we are still here and will be until this is solved."
-	         the miners' branch is finished; the trial has not happened yet.
 
 	s_2 is the empty string and is not a screen.
+
+	CORRECTING THE STANDING LINES -- two of the four were given to the wrong
+	player, and the tree was offered at three stages instead of one
+
+	This file used to say s_139 is what the player hears after taking the
+	corporation's reward, and s_171 is what he hears after finishing the miners'
+	branch. Live routes neither that way. Its six openings are tested in this
+	order, and each is one flag:
+
+	  hasCompletedQuest              -> s_171   BOTH endings, corp and miners
+	  isTaskActive talkLeader2       -> s_208   uploaded, back to collect
+	  isTaskActive switchedSides     -> s_207   disk in hand, not yet uploaded
+	  isTaskActive needDestroy       -> s_140   the tree -- and only here
+	  isQuestActive                  -> s_139   on the errand, cables already down
+	  default                        -> s_110   no quest
+
+	So s_139 is not a gloating player being turned away. It is the brush-off any
+	player gets once the cables are torn out and before the disk is taken -- the
+	stretch when he is visibly the executive's man and has not owned up. And
+	s_171 is neutral on purpose: it is the only line either finished player ever
+	gets, which is why it says nothing about a reward or a betrayal.
+
+	The reading it replaces was worse than wrong, it was self-defeating. A player
+	who took the corporation's money has no line at all under the old scheme once
+	you notice s_171 is spent on the miners' ending, and the camp being told who
+	tore out their core is a story this table never tells anywhere.
+
+	ROOT CAUSE: reading the four standing lines as a set that had to be spread
+	one-per-ending, and then writing fiction to justify the fit. The tone of a
+	line was taken as evidence of the state that triggers it -- s_139 sounds
+	hostile so it was given to the traitor, s_171 sounds warm so it was given to
+	the friend. Live does not test tone. It tests one task flag at a time, in one
+	order, and the first match wins; a line that reads oddly for one of the
+	players it can reach is live's problem to have, not a signal to re-route it.
 ]]
 
 som_kenobi_moral_strike_leader = ConvoTemplate:new {
@@ -195,8 +232,9 @@ moral_leader_p1_plan = ConvoScreen:new {
 }
 som_kenobi_moral_strike_leader:addScreen(moral_leader_p1_plan)
 
--- GRANT -- .qst signal talkedLeader, and the point of no return for the
--- corporation's half of the quest.
+-- NOT the grant, though it hands over the disk. Live fires nothing here; the
+-- talkedLeader signal comes one screen later, on p1_careful. See WHERE THE
+-- HOOKS SIT in moral_strike_leader_conv_handler.lua.
 moral_leader_p1_disk = ConvoScreen:new {
 	id = "p1_disk",
 	leftDialog = "@conversation/som_kenobi_moral_strike_leader:s_204", -- Good, here's the disk. You will find the computer terminal inside the main mining facility.
@@ -207,6 +245,8 @@ moral_leader_p1_disk = ConvoScreen:new {
 }
 som_kenobi_moral_strike_leader:addScreen(moral_leader_p1_disk)
 
+-- SWITCH SIDES -- the .qst's talkedLeader signal, and the point of no return
+-- for the corporation's half.
 moral_leader_p1_careful = ConvoScreen:new {
 	id = "p1_careful",
 	leftDialog = "@conversation/som_kenobi_moral_strike_leader:s_206", -- I look forward to it. Be careful of guards on the executive's payroll. They will try to stop you if they figure out what you are up to.
@@ -319,7 +359,7 @@ moral_leader_p2_plan = ConvoScreen:new {
 }
 som_kenobi_moral_strike_leader:addScreen(moral_leader_p2_plan)
 
--- GRANT -- .qst signal talkedLeader.
+-- Not the grant either; p2_careful is. See WHERE THE HOOKS SIT.
 moral_leader_p2_disk = ConvoScreen:new {
 	id = "p2_disk",
 	leftDialog = "@conversation/som_kenobi_moral_strike_leader:s_284", -- Good, here's the disk. You will find the computer terminal inside the main mining facility.
@@ -330,6 +370,7 @@ moral_leader_p2_disk = ConvoScreen:new {
 }
 som_kenobi_moral_strike_leader:addScreen(moral_leader_p2_disk)
 
+-- SWITCH SIDES -- the second half's talkedLeader signal.
 moral_leader_p2_careful = ConvoScreen:new {
 	id = "p2_careful",
 	leftDialog = "@conversation/som_kenobi_moral_strike_leader:s_288", -- I look forward to it. Be careful of guards on the executive's payroll. They will try to stop you if they figure out what you are up to.

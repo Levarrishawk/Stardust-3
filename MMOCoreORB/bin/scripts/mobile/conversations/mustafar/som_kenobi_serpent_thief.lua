@@ -2,48 +2,88 @@
 	The Dark Jedi Thief who took Ikt's shard -- the "Stakeout" beat of
 	som_kenobi_serpent_shard_1.
 
-	RECONSTRUCTED, not ported. som_kenobi_serpent_thief.stf shipped in the client
-	(string/en/conversation/), the SwgConversationEditor tree that wires those
-	strings into screens did not. Every leftDialog and option string below is
-	SOE's verbatim text; the edges between them are reconstructed.
+	THIS TREE IS NO LONGER A RECONSTRUCTION
 
-	The table is one encounter written twice over -- she flirts, the player says
-	what he is looking for, she claims to have seen it, admits it is in her
-	pocket, and it comes to blows. The two copies partition on the very first
-	answer the player gives her:
+	It is now read off Mustafar's server-side som_kenobi_serpent_thief conversation, which
+	names the same conversation id this file is named for. The client string table settles
+	the wording; the server conversation settles the edges.
 
-	  CHAIN B  the player is vague -- s_63 "I'm out looking for something a
-	           friend lost." Her line is s_64 "...I've been here for a while.
-	           If you tell me what it is, maybe I've seen it?" The suspicion
-	           beat is s_116 ("You can't trust little old me?"), the reveal is
-	           s_71 ("...it was in my pocket."), and it ends on s_91/s_93.
+	The two-chain reading was right and the strings were right. Four things about the SHAPE
+	were wrong, and each has the same root cause: the earlier revision inferred edges from
+	which strings read like replies to which, and that inference is unfalsifiable from a
+	string table alone.
 
-	  CHAIN A  the player is blunt -- s_120 "Fine! I'm here looking for a
-	           thief." Her line is s_121 "Oh my. What did they take?" The
-	           suspicion beat is s_135 ("Me? Now you're being silly."), the
-	           reveal is s_126 ("...it was in my pocket."), and it ends on
-	           s_127/s_128.
+	  1. s_43 IS NOT A SCREEN IN THE TREE. "You're a cute one, maybe too cute..." is what
+	     she says to a player who is NOT on the quest -- live chats it at him with a
+	     laugh_titter and never opens a conversation window at all. The earlier revision
+	     made it a screen called "coy", hung it off the flirt, and routed the whole of
+	     chain B through it. The gate that decides it now lives in
+	     serpent_thief_conv_handler.
 
-	s_116/s_135, s_71/s_126 and s_69/s_124 are the three duplicate pairs, one
-	per chain, and no line spans both -- that is what pins the split. The two
-	chains hang off her two replies to the same player option s_112 ("What am I
-	doing out here?! What about yourself?"): s_61 "True...but I do believe I
-	asked first" after the s_43 flirt, and s_62 "No fair. I asked first"
-	without it.
+	     It is still ONE screen here -- "brush_off", the last one in this file -- and that
+	     is a Core3 deviation, not a live screen. Core3 has already opened the conversation
+	     window by the time getInitialScreen runs, and returning nil from there drops the
+	     session with forceClose=false, which leaves the client sitting on an empty window.
+	     So the brush-off is a one-line terminal screen: same words, same animation, one
+	     extra click to dismiss. It is unreachable from any option in this tree.
 
-	FOUR WAYS INTO THE FIGHT
+	  2. THE CHAINS SPLIT ON THE GREETING, not one option later. Live's two openings are
+	     the greeting's own two options:
 
-	  s_101  she drops the act and claims the ground (chain B, plain)
-	  s_99   she answers a Force push (chain B)
-	  s_115  "We shall see how action works then!" (chain A, plain)
-	  s_133  she answers a Force push (chain A)
+	         s_111  "I could say the same to you, M'Lady..."  -> s_61  -> CHAIN B
+	         s_112  "What am I doing out here?! ..."          -> s_62  -> CHAIN A
 
-	All four stop the conversation and are the handler's fight hooks -- see
-	serpent_thief_conv_handler. s_97 and s_131 are the two [Use the Force]
-	options; the handler strips them for anyone without the Jedi rank, the same
-	way cursed_shard_sucker_conv_handler does.
+	     The earlier revision had s_112 appear twice -- once off the greeting and once off
+	     the invented "coy" screen -- so that both of her replies hung off the same player
+	     line. They do not. The flirt gets "True...but I do believe I asked first"; the
+	     blunt answer gets "No fair. I asked first". Reading the two lines next to their
+	     real prompts is the tell the string table could not give.
 
-	s_2 is the empty string and is deliberately unused.
+	  3. s_101 IS NOT AN ENDING. "Because I need it, sweetie... this will have to be your
+	     burial ground" is the second-to-last screen of chain B: it offers s_103 "Threats
+	     will get you nowhere", and s_115 is what she answers that with. So chain B's plain
+	     ending is s_115, not s_101. The earlier revision cut chain B one screen short and,
+	     having spent s_115, moved s_103/s_115 into chain A to fill the hole.
+
+	  4. s_134 IS AN ENDING. Live: s_129 "If you don't give it up right now" -> s_134 "No
+	     no, you got it all wrong... I will most definitely hurt you", and the fight starts
+	     there. The earlier revision made s_134 a middle screen leading to the borrowed
+	     s_103/s_115 pair.
+
+	  3 and 4 are one mistake, not two: s_103 and s_115 belong to CHAIN B and were moved to
+	  CHAIN A. Chain A's tail is one screen shorter than chain B's, and the numbering
+	  heuristic had no way to see that.
+
+	THE FOUR ENDINGS
+
+	    s_115  "We shall see how action works then!"      chain B, plain
+	    s_99   she answers a Force push                   chain B
+	    s_134  "you got it all wrong"                     chain A, plain
+	    s_133  she answers a Force push                   chain A
+
+	All four stop the conversation and all four fire live's action_talked AND action_attack
+	together -- see serpent_thief_conv_handler. s_97 and s_131 are the two [Use the Force]
+	options, one per chain; the handler strips them for a player who is not force sensitive.
+
+	s_2 is the empty string and is deliberately unused -- checked against the live
+	conversation, which never references it either.
+
+	THE COUNTS RECONCILE
+
+	Live uses 19 distinct NPC lines as conversation screens and 18 player responses laid
+	out as 20 option edges. This file is 20 screens and 20 options:
+
+	    19 live screens  + 1  brush_off, the Core3 deviation in note 1 above  = 20
+
+	The 19 are one for one with live -- no line is reused as two screens here, and no
+	screen is reached by two different lines except seen_that (s_69) and seen_that_a
+	(s_124), which live also reaches twice, from the direct answer and from the suspicion
+	detour. brush_off has no incoming option at all; only getInitialScreen names it.
+
+	Checked with /c/tmp/serpent-thief-check.lua, which loads this file and the handler
+	against a stubbed conversation API and asserts every edge, every option ORDER, every
+	terminal flag, that the only unreachable screen is brush_off, and that every
+	edgeAnimations key names a real edge.
 ]]
 
 som_kenobi_serpent_thief = ConvoTemplate:new {
@@ -54,61 +94,70 @@ som_kenobi_serpent_thief = ConvoTemplate:new {
 }
 
 --------------------------------------------------------------------------------
--- OPENING -- shared by both chains
+-- OPENING -- the greeting's two options are the two chains
 --------------------------------------------------------------------------------
 
+-- NO GESTURE HERE, AND THAT IS DELIBERATE. Live's curtsey is played by
+-- serpent_thief_conv_handler:getInitialScreen, next to the condition that picks
+-- this screen over brush_off, so that the gesture and the choice cannot drift
+-- apart. Same for brush_off's laugh_titter.
+--
+-- WITHDRAWN. An "animation = curtsey" line sat here, added with the note that
+-- "a GREETING has no inbound edge, so its gesture can only be a screen field --
+-- these two were missed". Both halves were wrong. A greeting's gesture can also
+-- be played from getInitialScreen, which is what four other handlers in this
+-- directory do; and it was not missed, it was already being played there. The
+-- line made the curtsey fire TWICE.
+--
+-- ROOT CAUSE: the animation checker only read screen fields, so a gesture in
+-- getInitialScreen looked like a gesture that was not there at all. I trusted
+-- the tool's silence over the handler I could have read, and "fixed" a file that
+-- was already correct. The checker now reads getInitialScreen too.
 serpent_thief_greeting = ConvoScreen:new {
 	id = "greeting",
 	leftDialog = "@conversation/som_kenobi_serpent_thief:s_110", -- Well, hello there, sweetie. What are you doing all the way out here?
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_serpent_thief:s_111", "coy"},           -- I could say the same to you, M'Lady...
-		{"@conversation/som_kenobi_serpent_thief:s_112", "asked_first_b"}, -- What am I doing out here?! What about yourself?
+		{"@conversation/som_kenobi_serpent_thief:s_111", "asked_first"}, -- I could say the same to you, M'Lady...
+		{"@conversation/som_kenobi_serpent_thief:s_112", "no_fair"},     -- What am I doing out here?! What about yourself?
 	}
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_greeting)
 
-serpent_thief_coy = ConvoScreen:new {
-	id = "coy",
-	leftDialog = "@conversation/som_kenobi_serpent_thief:s_43", -- You're a cute one, maybe too cute...
-	stopConversation = "false",
-	options = {
-		{"@conversation/som_kenobi_serpent_thief:s_112", "asked_first_a"}, -- What am I doing out here?! What about yourself?
-	}
-}
-som_kenobi_serpent_thief:addScreen(serpent_thief_coy)
-
-serpent_thief_asked_first_a = ConvoScreen:new {
-	id = "asked_first_a",
+-- Her answer to the flirt. Opens chain B.
+serpent_thief_asked_first = ConvoScreen:new {
+	id = "asked_first",
 	leftDialog = "@conversation/som_kenobi_serpent_thief:s_61", -- True...but I do believe I asked first.
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_serpent_thief:s_63", "seen_it"}, -- I guess so. I'm out looking for something a friend lost.
 	}
 }
-som_kenobi_serpent_thief:addScreen(serpent_thief_asked_first_a)
+som_kenobi_serpent_thief:addScreen(serpent_thief_asked_first)
 
-serpent_thief_asked_first_b = ConvoScreen:new {
-	id = "asked_first_b",
+-- Her answer to the blunt reply. Opens chain A.
+serpent_thief_no_fair = ConvoScreen:new {
+	id = "no_fair",
 	leftDialog = "@conversation/som_kenobi_serpent_thief:s_62", -- No fair. I asked first.
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_serpent_thief:s_120", "what_taken"}, -- Fine! I'm here looking for a thief.
 	}
 }
-som_kenobi_serpent_thief:addScreen(serpent_thief_asked_first_b)
+som_kenobi_serpent_thief:addScreen(serpent_thief_no_fair)
 
 --------------------------------------------------------------------------------
 -- CHAIN B -- "something a friend lost"
 --------------------------------------------------------------------------------
 
+-- Live lists the suspicion first and the straight answer second.
 serpent_thief_seen_it = ConvoScreen:new {
 	id = "seen_it",
 	leftDialog = "@conversation/som_kenobi_serpent_thief:s_64", -- Oh really? Well, I've been here for a while. If you tell me what it is, maybe I've seen it?
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_serpent_thief:s_68", "seen_that"}, -- It was a small crystal shard with a flaw of a snake on it.
 		{"@conversation/som_kenobi_serpent_thief:s_66", "trust_b"},   -- Well, it was stolen from him, so I'm not sure I can trust you.
+		{"@conversation/som_kenobi_serpent_thief:s_68", "seen_that"}, -- It was a small crystal shard with a flaw of a snake on it.
 	}
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_seen_it)
@@ -133,6 +182,7 @@ serpent_thief_specific = ConvoScreen:new {
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_specific)
 
+-- Both the straight answer and the suspicion detour land here.
 serpent_thief_seen_that = ConvoScreen:new {
 	id = "seen_that",
 	leftDialog = "@conversation/som_kenobi_serpent_thief:s_69", -- Oh really? Yeah, I've seen that.
@@ -153,22 +203,33 @@ serpent_thief_pocket_b = ConvoScreen:new {
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_pocket_b)
 
--- s_97 is a [Use the Force] option and is stripped for non-Jedi; see the handler.
+-- s_97 is a [Use the Force] option and is stripped for the non-sensitive; see the handler.
 serpent_thief_refuse_b = ConvoScreen:new {
 	id = "refuse_b",
 	leftDialog = "@conversation/som_kenobi_serpent_thief:s_93", -- I'm afraid I can't do that, cutie.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_serpent_thief:s_95", "fight_b"},       -- Why not? Don't make this any harder than it needs to be.
+		{"@conversation/som_kenobi_serpent_thief:s_95", "burial_ground"}, -- Why not? Don't make this any harder than it needs to be.
 		{"@conversation/som_kenobi_serpent_thief:s_97", "fight_b_force"}, -- [Use the Force] You will give it to me.
 	}
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_refuse_b)
 
+-- Chain B's extra screen. This is where the earlier revision stopped, one screen early.
+serpent_thief_burial_ground = ConvoScreen:new {
+	id = "burial_ground",
+	leftDialog = "@conversation/som_kenobi_serpent_thief:s_101", -- Because I need it, sweetie. I'm also afraid that I can't let you leave now. My apologies, but this will have to be your burial ground.
+	stopConversation = "false",
+	options = {
+		{"@conversation/som_kenobi_serpent_thief:s_103", "fight_b"}, -- Threats will get you nowhere.
+	}
+}
+som_kenobi_serpent_thief:addScreen(serpent_thief_burial_ground)
+
 -- Fight hook; see the handler.
 serpent_thief_fight_b = ConvoScreen:new {
 	id = "fight_b",
-	leftDialog = "@conversation/som_kenobi_serpent_thief:s_101", -- Because I need it, sweetie. I'm also afraid that I can't let you leave now...
+	leftDialog = "@conversation/som_kenobi_serpent_thief:s_115", -- Very well. We shall see how action works then!
 	stopConversation = "true",
 	options = {}
 }
@@ -185,6 +246,9 @@ som_kenobi_serpent_thief:addScreen(serpent_thief_fight_b_force)
 
 --------------------------------------------------------------------------------
 -- CHAIN A -- "I'm here looking for a thief"
+--
+-- Same beats as chain B, one screen shorter: she goes straight from the refusal
+-- to the threat. There is no chain-A counterpart to burial_ground.
 --------------------------------------------------------------------------------
 
 serpent_thief_what_taken = ConvoScreen:new {
@@ -228,32 +292,22 @@ serpent_thief_pocket_a = ConvoScreen:new {
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_pocket_a)
 
--- s_131 is a [Use the Force] option and is stripped for non-Jedi; see the handler.
+-- s_131 is a [Use the Force] option and is stripped for the non-sensitive; see the handler.
 serpent_thief_refuse_a = ConvoScreen:new {
 	id = "refuse_a",
 	leftDialog = "@conversation/som_kenobi_serpent_thief:s_128", -- Oh no, I couldn't do that, sweetie.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_serpent_thief:s_129", "wrong_a"},       -- If you don't give it up right now, I'm forced to hurt you.
+		{"@conversation/som_kenobi_serpent_thief:s_129", "fight_a"},       -- If you don't give it up right now, I'm forced to hurt you.
 		{"@conversation/som_kenobi_serpent_thief:s_131", "fight_a_force"}, -- [Use the Force] You will give it to me.
 	}
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_refuse_a)
 
-serpent_thief_wrong_a = ConvoScreen:new {
-	id = "wrong_a",
-	leftDialog = "@conversation/som_kenobi_serpent_thief:s_134", -- No no, you got it all wrong. Since you've come here, I can't let you leave and I will most definitely hurt you.
-	stopConversation = "false",
-	options = {
-		{"@conversation/som_kenobi_serpent_thief:s_103", "fight_a"}, -- Threats will get you nowhere.
-	}
-}
-som_kenobi_serpent_thief:addScreen(serpent_thief_wrong_a)
-
--- Fight hook; see the handler.
+-- Fight hook; see the handler. Chain A ends here -- there is no further screen.
 serpent_thief_fight_a = ConvoScreen:new {
 	id = "fight_a",
-	leftDialog = "@conversation/som_kenobi_serpent_thief:s_115", -- Very well. We shall see how action works then!
+	leftDialog = "@conversation/som_kenobi_serpent_thief:s_134", -- No no, you got it all wrong. Since you've come here, I can't let you leave and I will most definitely hurt you.
 	stopConversation = "true",
 	options = {}
 }
@@ -267,5 +321,22 @@ serpent_thief_fight_a_force = ConvoScreen:new {
 	options = {}
 }
 som_kenobi_serpent_thief:addScreen(serpent_thief_fight_a_force)
+
+--------------------------------------------------------------------------------
+-- THE BRUSH-OFF -- not a live screen. See note 1 in the header.
+--
+-- No option anywhere in this tree leads here. serpent_thief_conv_handler's
+-- getInitialScreen returns it, and only for a player who is not on the task.
+--------------------------------------------------------------------------------
+
+-- Its laugh_titter is in getInitialScreen with the condition that picks it; see
+-- the withdrawal note above greeting.
+serpent_thief_brush_off = ConvoScreen:new {
+	id = "brush_off",
+	leftDialog = "@conversation/som_kenobi_serpent_thief:s_43", -- You're a cute one, maybe too cute...
+	stopConversation = "true",
+	options = {}
+}
+som_kenobi_serpent_thief:addScreen(serpent_thief_brush_off)
 
 addConversationTemplate("som_kenobi_serpent_thief", som_kenobi_serpent_thief)

@@ -6,6 +6,13 @@
 	54 speaking ones are used below; s_2 is empty and is skipped. The English
 	text rides along as a trailing comment on every reference.
 
+	RECONSTRUCTED, THEN CHECKED AGAINST THE LIVE TREE. The .stf is a flat list
+	with no parent links, so the wiring below was first reconstructed by matching
+	each option to the screen its wording answers. The live conversation script
+	has since been read, and it disagreed in six places. Every one is corrected
+	here with what caused it, because the same reading habit will produce the
+	same mistake again on the next tree.
+
 	WHAT THE .qst NEEDS FROM THIS TREE. som_kenobi_main_quest_1 talks to him
 	twice, with a blistmok wave in between:
 	  task 6   Encounter som_kenobi_crazed_hermit, Count 1
@@ -23,35 +30,93 @@
 
 	TWO MEETINGS, ONE TREE. conversationTemplate binds per creature template, so
 	both meetings live in this one tree and the handler picks the root:
-	  stage before the wave -> "greeting" (s_93, the blistmok he was keeping)
-	  stage after the wave  -> "quiet"    (s_67, "No more fun left")
+	  before the wave -> "greeting" (s_93, the blistmok he was keeping)
+	  after the wave  -> "quiet"    (s_67, "No more fun left")
 	The second root is where every handover and every provocation hangs, so the
-	shard cannot be taken on the first meeting.
+	shard cannot be taken on the first meeting. Live splits it the same way --
+	condition_hermitChat1 opens on s_93, condition_hermitChat2 on s_67.
 
-	THE TWO HANDOVERS ARE SHIPPED, NOT INVENTED. s_82 and s_97 are both full
-	handover screens in the .stf, each ending with the same stage direction:
-	"< The hermit shakes as he holds out his hand and slowly lets go of the
-	crystal shard. As soon as it touches your palm, you can feel the terror
-	within. Whispers in your head. Screams of pain. >" They are kept as two
-	distinct endings because SOE wrote two: s_82 is reached by freeing him from
-	the voice, s_97 by promising to hunt the voice down. Their follow-ups are
-	shipped too -- s_83/s_84 and s_98/s_99.
+	CORRECTING THE BOUNDARY BETWEEN THE TWO MEETINGS. Four player lines were on
+	the wrong side of it. Live is:
 
-	THE REFUSALS ARE THE COMBAT TRIGGER. Seven screens end with the voice
-	winning and the hermit turning on the player: s_54, s_76, s_81, s_85, s_90,
-	s_91, s_96, plus the two hard-demand screens s_102 and s_106. The handler
-	makes him attackable and sets the player as his defender on those.
+	    s_69   "Please, I implore you, give me the crystal."  SECOND, off quiet
+	    s_100  "You're not going anywhere."                   FIRST, off nopain
+	    s_104  "[Use the Force] Hand me the gem, now!"        FIRST, off wants
+	    s_72   "Just let me hold the gem for a second."       SECOND, off tired
+
+	That moves `tired` (s_71) out of the first meeting entirely and makes it the
+	second meeting's second screen, and it turns `nopain` (s_66) from a dead end
+	into a screen with one option on it.
+
+	ROOT CAUSE: reading the two meetings as two separate conversations, when the
+	.stf is one flat list and does not say which meeting a line belongs to. Every
+	line above is a player pressing for the crystal, and pressing for the crystal
+	reads like the second meeting -- so s_69 and s_72 were put there and the two
+	that actually belong there were pulled back to the first. What the .stf could
+	not show is that SOE wrote the FIRST meeting with two demands in it as well.
+	They just do not work: the voice answers both with a threat and the meeting
+	ends. Nothing distinguishes a demand that fails from a demand that succeeds
+	except which screen answers it, and only the live script has that.
+
+	CORRECTING THE SECOND MEETING'S SPINE. It follows from the boundary fix and
+	is worth stating on its own, because the shape changed. Live runs one line
+	down from the greeting rather than fanning out of it:
+
+	    quiet -> tired -> hold -> sounds -> handover_free
+	    quiet -> yell  -> killhim -> handover_trade
+
+	`quiet` carries two options, not four. `hold` gained s_77 and now leads to
+	`sounds` on s_74 instead of straight to the handover, and `sounds` gained
+	s_80 as its handover and lost s_72. The gentle road is four screens long
+	before the shard changes hands, not two.
+
+	CORRECTING TWO SWAPPED PAIRS. Both are places where two screens answer the
+	same idea in nearly the same words, and the earlier revision paired them by
+	which reply sounded like a better fit.
+
+	  off `yell`   live answers s_87 with s_91 and s_89 with s_90. They were the
+	               other way round here.
+	  off `killhim` live answers s_94 with s_97 -- a handover -- and s_95 with
+	               s_96, the refusal. They were the other way round here.
+
+	ROOT CAUSE, both: the text reads the wrong way. s_90 opens "If I give you the
+	crystal, it will finally..." which is almost word for word s_87's "Give me the
+	crystal and it will stop!", so it was paired with it; live pairs s_87 with
+	s_91. And s_96 says "You don't know where he is", which answers s_94's "I can
+	find him and kill him" far better than it answers s_95's "I need the gem to
+	find him" -- but live sends s_94 to the handover and s_95 to the refusal. In
+	both pairs the closest echo is not the live edge. Note that the header of this
+	file already described the killhim pair correctly in prose -- "s_97 by
+	promising to hunt the voice down" is s_94 -- while the wiring underneath it
+	said the opposite. The prose was right and unread.
+
+	WHAT ENDS THE FIRST MEETING, AND WHAT STARTS THE FIGHT. These were run
+	together, and they are not the same list.
+
+	  fires 'talkedHermit1', ends the first meeting, no combat
+	      s_50  madness     s_54  mad_calm
+	      s_102 mad_demand  s_106 mad_force
+	  makes him hostile, all in the SECOND meeting
+	      s_76  s_81  s_85  s_90  s_91  s_96
+
+	The earlier revision called nine screens the combat trigger, on the grounds
+	that all nine end with the voice shouting "kill him". Six of them do that and
+	then he attacks. The other three -- s_54, s_102, s_106 -- are the voice
+	shouting the same thing in the FIRST meeting, where he cannot attack because
+	the blistmok wave has not happened yet, and where live fires signalTalked1
+	instead. Same words, different consequence.
+
+	ROOT CAUSE: reading the screen TEXT for what the screen does. "Kill him now!"
+	is a stage direction about the voice, not about the server. The four screens
+	that end the first meeting are named mad_* here rather than kill_* for exactly
+	this reason -- the old names invited the mistake back in.
 
 	NOTE ON THE FORCE OPTIONS. s_52, s_75, s_89 and s_104 are the four
-	[Use the Force] lines. Unlike the technician, every one of them fails here --
-	the shipped replies (s_54, s_76, s_91, s_106) are all the voice shouting the
-	suggestion down. That is SOE's writing, not a wiring choice; the crystal is
-	what is resisting.
-
-	RECONSTRUCTED. As with every other conversation in this arc, the .stf is a
-	flat list with no parent links, so the branch wiring below is reconstructed
-	by matching each option to the screen its wording answers. The screen text
-	and the option text are all shipped; only the edges between them are ours.
+	[Use the Force] lines, and live gates every one with condition_playerJedi.
+	Every one of them also fails: the shipped replies are s_54, s_76, s_90 and
+	s_106, all of them the voice shouting the suggestion down. That is SOE's
+	writing, not a wiring choice; the crystal is what is resisting. See the
+	handler for the gate itself.
 ]]
 
 som_kenobi_crazed_hermit = ConvoTemplate:new {
@@ -62,7 +127,9 @@ som_kenobi_crazed_hermit = ConvoTemplate:new {
 }
 
 --------------------------------------------------------------------------------
--- ambient. s_108 before the shard changes hands, s_110 after.
+-- the two one-liners. s_108 while the blistmok wave is on him, s_110 for
+-- everyone live has nothing else to say to -- which is both a character who
+-- already has the shard and a character who was never on the quest.
 --------------------------------------------------------------------------------
 
 kenobi_hermit_ambient = ConvoScreen:new {
@@ -82,8 +149,8 @@ kenobi_hermit_rest = ConvoScreen:new {
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_rest)
 
 --------------------------------------------------------------------------------
--- first meeting. Ends on any of madness / nopain / tired, all of which fire
--- 'talkedHermit1' and bring on the blistmok wave.
+-- first meeting. Two roads down from s_93, each ending twice: the pleading end
+-- and the demanding end. All four fire 'talkedHermit1' and bring on the wave.
 --------------------------------------------------------------------------------
 
 kenobi_hermit_greeting = ConvoScreen:new {
@@ -112,8 +179,8 @@ kenobi_hermit_gem = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_42", -- Gem? They are everywhere! Up, down, wherever they please! I can't stand them anymore. Always blabbing. Never quiet. I have to get away. Go where it's quiet!
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_crazed_hermit:s_44", "curse"},       -- You're not making any sense, friend. Please calm down.
-		{"@conversation/som_kenobi_crazed_hermit:s_52", "kill_calm"},   -- [Use the Force] Sssh, calm yourself.
+		{"@conversation/som_kenobi_crazed_hermit:s_44", "curse"},    -- You're not making any sense, friend. Please calm down.
+		{"@conversation/som_kenobi_crazed_hermit:s_52", "mad_calm"}, -- [Use the Force] Sssh, calm yourself.
 	}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_gem)
@@ -127,14 +194,6 @@ kenobi_hermit_curse = ConvoScreen:new {
 	}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_curse)
-
-kenobi_hermit_madness = ConvoScreen:new {
-	id = "madness",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_50", -- Help me? Help me?! You're the one that needs help! Accept your faith, puny one. Do not fight it!
-	stopConversation = "true",
-	options = {}
-}
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_madness)
 
 kenobi_hermit_critters = ConvoScreen:new {
 	id = "critters",
@@ -151,8 +210,8 @@ kenobi_hermit_wants = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_62", -- Everyone wants something. You, you want the gem. They all do. They don't know though, they don't understand!
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_crazed_hermit:s_64", "nopain"}, -- Yes, I want the gem and you will give it to me, or you might get hurt.
-		{"@conversation/som_kenobi_crazed_hermit:s_69", "tired"},  -- Please, I implore you, give me the crystal. It's hurting you.
+		{"@conversation/som_kenobi_crazed_hermit:s_64", "nopain"},    -- Yes, I want the gem and you will give it to me, or you might get hurt.
+		{"@conversation/som_kenobi_crazed_hermit:s_104", "mad_force"}, -- [Use the Force] Hand me the gem, now!
 	}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_wants)
@@ -160,22 +219,55 @@ som_kenobi_crazed_hermit:addScreen(kenobi_hermit_wants)
 kenobi_hermit_nopain = ConvoScreen:new {
 	id = "nopain",
 	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_66", -- No pain! I don't need more pain! Do you need pain? No, what am I saying. We can just walk away, always walk away.
-	stopConversation = "true",
-	options = {}
+	stopConversation = "false",
+	options = {
+		{"@conversation/som_kenobi_crazed_hermit:s_100", "mad_demand"}, -- You're not going anywhere. Now hand over the crystal.
+	}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_nopain)
 
-kenobi_hermit_tired = ConvoScreen:new {
-	id = "tired",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_71", -- Sssh, I'm tired. Tired of it all. Please, no more. I can't take any more of this...
+--------------------------------------------------------------------------------
+-- the four first-meeting endings. Named mad_* and not kill_* on purpose: the
+-- voice says "kill him" on three of them and he does not, because the wave has
+-- not happened yet. See WHAT ENDS THE FIRST MEETING.
+--------------------------------------------------------------------------------
+
+kenobi_hermit_madness = ConvoScreen:new {
+	id = "madness",
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_50", -- Help me? Help me?! You're the one that needs help! Accept your faith, puny one. Do not fight it!
 	stopConversation = "true",
 	options = {}
 }
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_tired)
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_madness)
+
+kenobi_hermit_mad_calm = ConvoScreen:new {
+	id = "mad_calm",
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_54", -- Your insolence will not go unpunished! Kneel before me and accept your fate as your life trickles down onto the molten ground!
+	stopConversation = "true",
+	options = {}
+}
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_mad_calm)
+
+kenobi_hermit_mad_demand = ConvoScreen:new {
+	id = "mad_demand",
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_102", -- No! You kneel before me and accept what's coming your way! This is your final moment. Welcome it with grace!
+	stopConversation = "true",
+	options = {}
+}
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_mad_demand)
+
+kenobi_hermit_mad_force = ConvoScreen:new {
+	id = "mad_force",
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_106", -- Where you're going, you won't need it! You're nothing but a puppet and it's time to cut the strings!
+	stopConversation = "true",
+	options = {}
+}
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_mad_force)
 
 --------------------------------------------------------------------------------
 -- second meeting, after the blistmok wave. This root is the only way to the
--- shard and the only way to provoke him.
+-- shard and the only way to provoke him. Two roads: pleading, through tired,
+-- and shouting, through yell.
 --------------------------------------------------------------------------------
 
 kenobi_hermit_quiet = ConvoScreen:new {
@@ -183,40 +275,48 @@ kenobi_hermit_quiet = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_67", -- No more fun left. They are quiet now. Finally, quiet...
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_crazed_hermit:s_77", "sounds"},      -- I can stop your torment. Give me the gem and it will go away.
-		{"@conversation/som_kenobi_crazed_hermit:s_70", "yell"},        -- Yes, and you will join them unless you hand over that gem!
-		{"@conversation/som_kenobi_crazed_hermit:s_100", "kill_demand"},-- You're not going anywhere. Now hand over the crystal.
-		{"@conversation/som_kenobi_crazed_hermit:s_104", "kill_force"}, -- [Use the Force] Hand me the gem, now!
+		{"@conversation/som_kenobi_crazed_hermit:s_69", "tired"}, -- Please, I implore you, give me the crystal. It's hurting you.
+		{"@conversation/som_kenobi_crazed_hermit:s_70", "yell"},  -- Yes, and you will join them unless you hand over that gem!
 	}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_quiet)
 
 --------------------------------------------------------------------------------
--- the gentle road, which reaches the first handover
+-- the gentle road: tired -> hold -> sounds -> handover_free
 --------------------------------------------------------------------------------
 
-kenobi_hermit_sounds = ConvoScreen:new {
-	id = "sounds",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_78", -- But who will keep the sounds away? They hurt so much and they keep coming back. I can't do this by myself.
+kenobi_hermit_tired = ConvoScreen:new {
+	id = "tired",
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_71", -- Sssh, I'm tired. Tired of it all. Please, no more. I can't take any more of this...
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_crazed_hermit:s_72", "hold"},          -- I can help you. Just let me hold the gem for a second.
-		{"@conversation/som_kenobi_crazed_hermit:s_79", "kill_promise"},  -- I promise they will go away when you give me the gem.
-		{"@conversation/som_kenobi_crazed_hermit:s_80", "kill_help"},     -- I will help you. I will make them go away.
+		{"@conversation/som_kenobi_crazed_hermit:s_72", "hold"}, -- I can help you. Just let me hold the gem for a second.
 	}
 }
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_sounds)
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_tired)
 
 kenobi_hermit_hold = ConvoScreen:new {
 	id = "hold",
 	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_73", -- Yes, that might be it. But no, I can't. He won't let me. He's mine and I'm his.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_crazed_hermit:s_74", "handover_free"}, -- You don't need him anymore. You can be truly free.
-		{"@conversation/som_kenobi_crazed_hermit:s_75", "kill_fade"},     -- [Use the Force] But the sounds will fade. You will be in peace.
+		{"@conversation/som_kenobi_crazed_hermit:s_74", "sounds"},       -- You don't need him anymore. You can be truly free.
+		{"@conversation/som_kenobi_crazed_hermit:s_77", "kill_torment"}, -- I can stop your torment. Give me the gem and it will go away.
+		{"@conversation/som_kenobi_crazed_hermit:s_75", "kill_fade"},    -- [Use the Force] But the sounds will fade. You will be in peace.
 	}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_hold)
+
+kenobi_hermit_sounds = ConvoScreen:new {
+	id = "sounds",
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_78", -- But who will keep the sounds away? They hurt so much and they keep coming back. I can't do this by myself.
+	stopConversation = "false",
+	options = {
+		{"@conversation/som_kenobi_crazed_hermit:s_79", "kill_promise"},  -- I promise they will go away when you give me the gem.
+		{"@conversation/som_kenobi_crazed_hermit:s_80", "handover_free"}, -- I will help you. I will make them go away.
+	}
+}
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_sounds)
 
 -- HANDOVER
 kenobi_hermit_handover_free = ConvoScreen:new {
@@ -238,7 +338,7 @@ kenobi_hermit_free_end = ConvoScreen:new {
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_free_end)
 
 --------------------------------------------------------------------------------
--- the shouting road, which reaches the second handover
+-- the shouting road: yell -> killhim -> handover_trade
 --------------------------------------------------------------------------------
 
 kenobi_hermit_yell = ConvoScreen:new {
@@ -258,8 +358,8 @@ kenobi_hermit_killhim = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_92", -- You know of him? You can make him go away? He says that he can make him go away, make the sounds stop. Yes I believe him. You've done nothing for me. But he, he can help!
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_crazed_hermit:s_94", "kill_find"},      -- Yes, I can find him and kill him. It will all be over.
-		{"@conversation/som_kenobi_crazed_hermit:s_95", "handover_trade"}, -- Yes, but I need the gem to find him. Hand it to me.
+		{"@conversation/som_kenobi_crazed_hermit:s_95", "kill_gem"},       -- Yes, but I need the gem to find him. Hand it to me.
+		{"@conversation/som_kenobi_crazed_hermit:s_94", "handover_trade"}, -- Yes, I can find him and kill him. It will all be over.
 	}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_killhim)
@@ -284,17 +384,17 @@ kenobi_hermit_trade_end = ConvoScreen:new {
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_trade_end)
 
 --------------------------------------------------------------------------------
--- the refusals. Every one of these ends the conversation with the voice
--- ordering him to kill; the handler turns him hostile on each.
+-- the six refusals. All six are on the second meeting, and only these six make
+-- him hostile. Each is named for the player line that reaches it.
 --------------------------------------------------------------------------------
 
-kenobi_hermit_kill_calm = ConvoScreen:new {
-	id = "kill_calm",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_54", -- Your insolence will not go unpunished! Kneel before me and accept your fate as your life trickles down onto the molten ground!
+kenobi_hermit_kill_torment = ConvoScreen:new {
+	id = "kill_torment",
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_85", -- Yes, yes, maybe you are right. Maybe he's right? No... NO! He's tricking you! Only I can make the sounds go away. Now kill him. Kill him!
 	stopConversation = "true",
 	options = {}
 }
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_calm)
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_torment)
 
 kenobi_hermit_kill_fade = ConvoScreen:new {
 	id = "kill_fade",
@@ -312,52 +412,30 @@ kenobi_hermit_kill_promise = ConvoScreen:new {
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_promise)
 
-kenobi_hermit_kill_help = ConvoScreen:new {
-	id = "kill_help",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_85", -- Yes, yes, maybe you are right. Maybe he's right? No... NO! He's tricking you! Only I can make the sounds go away. Now kill him. Kill him!
-	stopConversation = "true",
-	options = {}
-}
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_help)
-
+-- s_91 and not s_90 -- see CORRECTING TWO SWAPPED PAIRS.
 kenobi_hermit_kill_stop = ConvoScreen:new {
 	id = "kill_stop",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_90", -- If I give you the crystal, it will finally... No it won't! He's tricking you! Only I can make the sounds go away. Now kill him. Kill him!
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_91", -- It would stop? Finally be quiet? Yes! I need the silence. Please... No... NO! It's a trick. He only wants it for himself! Only I can make the sounds go away! Kill him. Kill him now!
 	stopConversation = "true",
 	options = {}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_stop)
 
+-- s_90 and not s_91 -- see CORRECTING TWO SWAPPED PAIRS.
 kenobi_hermit_kill_forcestop = ConvoScreen:new {
 	id = "kill_forcestop",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_91", -- It would stop? Finally be quiet? Yes! I need the silence. Please... No... NO! It's a trick. He only wants it for himself! Only I can make the sounds go away! Kill him. Kill him now!
+	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_90", -- If I give you the crystal, it will finally... No it won't! He's tricking you! Only I can make the sounds go away. Now kill him. Kill him!
 	stopConversation = "true",
 	options = {}
 }
 som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_forcestop)
 
-kenobi_hermit_kill_find = ConvoScreen:new {
-	id = "kill_find",
+kenobi_hermit_kill_gem = ConvoScreen:new {
+	id = "kill_gem",
 	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_96", -- Yes! No... No, you're lying. You don't know where he is! There's only one way left. Please. Kill me. Kill me now or I will kill you!
 	stopConversation = "true",
 	options = {}
 }
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_find)
-
-kenobi_hermit_kill_demand = ConvoScreen:new {
-	id = "kill_demand",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_102", -- No! You kneel before me and accept what's coming your way! This is your final moment. Welcome it with grace!
-	stopConversation = "true",
-	options = {}
-}
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_demand)
-
-kenobi_hermit_kill_force = ConvoScreen:new {
-	id = "kill_force",
-	leftDialog = "@conversation/som_kenobi_crazed_hermit:s_106", -- Where you're going, you won't need it! You're nothing but a puppet and it's time to cut the strings!
-	stopConversation = "true",
-	options = {}
-}
-som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_force)
+som_kenobi_crazed_hermit:addScreen(kenobi_hermit_kill_gem)
 
 addConversationTemplate("som_kenobi_crazed_hermit", som_kenobi_crazed_hermit)

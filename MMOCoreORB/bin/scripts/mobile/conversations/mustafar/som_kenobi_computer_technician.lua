@@ -13,19 +13,50 @@
 	him. So the only thing this tree has to do is reach a screen where he lets
 	the player at a computer, and the handler fires that signal there.
 
-	RECONSTRUCTED. The .stf stores screen text and option text in one flat list
-	with no parent links -- SwgConversationEditor numbers screens in creation
-	order, not tree order, so the branch wiring is not recoverable from the file.
-	The wiring below is reconstructed from the text itself: each option is placed
-	on the screen its wording answers, and each screen follows the option it
-	replies to. Three routes to the same grant are visible in the text and are
-	all kept:
+	RECONSTRUCTED, THEN CHECKED AGAINST THE LIVE TREE. The .stf stores screen text
+	and option text in one flat list with no parent links -- SwgConversationEditor
+	numbers screens in creation order, not tree order, so the branch wiring is not
+	recoverable from the file. The wiring below was first reconstructed from the
+	text itself: each option placed on the screen its wording answers, and each
+	screen following the option it replies to. Three routes to the same grant are
+	visible in the text and are all kept:
 	  intimidate  s_123 -> s_124 -> s_126 -> s_127 -> s_128 -> s_134 -> s_136/s_138
 	  the Force   s_146 -> s_147   and   s_144 -> s_145
 	  pay         s_143 -> s_148 (500) -> s_149, or s_151 -> s_153 (350) -> s_173,
 	              with s_176 -> s_177 as the free way out of the shakedown
 	s_178 and s_179 are his two "You don't even have that kind of cash" screens,
 	one per price; the handler picks them when the player cannot pay.
+
+	That reconstruction was then checked edge by edge against the server-side
+	conversation script, which does record the wiring. Every edge held except two.
+
+	CORRECTING A SWAPPED PAIR. s_178 and s_179 were the wrong way round. Live
+	answers s_149 -- the 500-credit fork -- with s_179, and s_173 -- the 350 fork
+	-- with s_178. They had been assigned the other way here.
+
+	ROOT CAUSE: the two strings are word for word identical, so nothing in the
+	text distinguishes them and the earlier revision paired them in numeric order,
+	500 before 350. That is invisible in play and would have stayed invisible --
+	but it also hid two gestures, because the animation checker keys each live
+	gesture to the string id of the reply it plays with. With the ids swapped it
+	looked up the wrong reply, found nothing, and reported both screens as needing
+	nothing. Correcting the ids is what surfaced the missing shake_head_disgust on
+	each. An invisible mistake is still a mistake, and this one was load-bearing.
+
+	CORRECTING A MISPLACED OPTION. s_146, "[Use the Force] You don't need to know
+	that.", used to hang off droids (s_140), next to the other Force push. Live
+	offers it off who (s_124) instead -- s_124 lists s_126 under _defaultCondition
+	and s_146 under playerJedi, while s_140 lists s_141 alone. Both screens are now
+	as live has them.
+
+	ROOT CAUSE: reading the option's TEXT for its parent. "You don't need to know
+	that." answers a question, and both s_124 ("Who are you?!") and s_140 ("You
+	were hoping one of our droids has spotted them?") are questions. The two Force
+	pushes were then grouped together because they read as a matched pair, which
+	put this one a branch away from where it belongs. Placing it on droids also
+	made it useless: droids already leads to the rental fee and the other Force
+	push, so a Jedi never needed it. On who it is what live meant it to be -- the
+	Jedi's shortcut out of the intimidation route.
 
 	NOT MODELLED. He has no idle chatter beyond s_93, so s_93 is used as the
 	ambient screen for a player who has already been granted access or who has
@@ -70,12 +101,16 @@ som_kenobi_computer_technician:addScreen(kenobi_tech_greeting)
 -- intimidate route
 --------------------------------------------------------------------------------
 
+-- THE FORCE OPTION LIVES HERE, not on droids.  Live's s_124 offers s_126 under
+-- _defaultCondition and s_146 under playerJedi; live's s_140 (droids) offers only
+-- s_141.  s_146 used to sit on droids -- see the correction note in the header.
 kenobi_tech_who = ConvoScreen:new {
 	id = "who",
 	leftDialog = "@conversation/som_kenobi_computer_technician:s_124", -- Say what?! Who are you?!
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_computer_technician:s_126", "notallowed"}, -- Who I am is not important. Now I need to borrow your computer.
+		{"@conversation/som_kenobi_computer_technician:s_146", "force_know"}, -- [Use the Force] You don't need to know that.
 	}
 }
 som_kenobi_computer_technician:addScreen(kenobi_tech_who)
@@ -141,12 +176,11 @@ kenobi_tech_droids = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_computer_technician:s_141", "rentalfee"}, -- Maybe I can use one of the computers for a minute?
-		{"@conversation/som_kenobi_computer_technician:s_146", "force_know"}, -- [Use the Force] You don't need to know that.
 	}
 }
 som_kenobi_computer_technician:addScreen(kenobi_tech_droids)
 
--- GRANT
+-- GRANT.  Reached from who, not from droids; see the header.
 kenobi_tech_force_know = ConvoScreen:new {
 	id = "force_know",
 	leftDialog = "@conversation/som_kenobi_computer_technician:s_147", -- I don't need to know that. You can go ahead and use that one over there. Just hurry up so I can get back to work.
@@ -187,7 +221,7 @@ kenobi_tech_price = ConvoScreen:new {
 	stopConversation = "false",
 	-- Options are added by the handler, because s_149 has to lead to a different
 	-- screen depending on whether the player is actually carrying 500 credits:
-	--   affordable  s_149 -> pay_full     can't pay  s_149 -> broke_full (s_178)
+	--   affordable  s_149 -> pay_full     can't pay  s_149 -> broke_full (s_179)
 	-- The same-text-different-target trick is corvetteTicketTakerConvoHandler's.
 	options = {}
 }
@@ -202,9 +236,12 @@ kenobi_tech_pay_full = ConvoScreen:new {
 }
 som_kenobi_computer_technician:addScreen(kenobi_tech_pay_full)
 
+-- s_179, NOT s_178.  The two strings are word for word identical, so this is
+-- invisible in play, but live pairs s_179 with the 500 fork and s_178 with the
+-- 350 fork and the pair used to be the other way round here.  See the header.
 kenobi_tech_broke_full = ConvoScreen:new {
 	id = "broke_full",
-	leftDialog = "@conversation/som_kenobi_computer_technician:s_178", -- You don't even have that kind of cash. Come back when you do.
+	leftDialog = "@conversation/som_kenobi_computer_technician:s_179", -- You don't even have that kind of cash. Come back when you do.
 	stopConversation = "true",
 	options = {}
 }
@@ -215,7 +252,7 @@ kenobi_tech_discount = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_computer_technician:s_153", -- I might be convinced to give you a discount. 350 is my final offer. Take it or leave it.
 	stopConversation = "false",
 	-- Same as price, at 350:
-	--   affordable  s_173 -> pay_discount   can't pay  s_173 -> broke_discount (s_179)
+	--   affordable  s_173 -> pay_discount   can't pay  s_173 -> broke_discount (s_178)
 	-- s_176, the supervisor threat, is added unconditionally.
 	options = {}
 }
@@ -230,9 +267,10 @@ kenobi_tech_pay_discount = ConvoScreen:new {
 }
 som_kenobi_computer_technician:addScreen(kenobi_tech_pay_discount)
 
+-- s_178, NOT s_179; see the note above broke_full.
 kenobi_tech_broke_discount = ConvoScreen:new {
 	id = "broke_discount",
-	leftDialog = "@conversation/som_kenobi_computer_technician:s_179", -- You don't even have that kind of cash. Come back when you do.
+	leftDialog = "@conversation/som_kenobi_computer_technician:s_178", -- You don't even have that kind of cash. Come back when you do.
 	stopConversation = "true",
 	options = {}
 }

@@ -2,39 +2,72 @@
 	Q4P3 -- Pann's protocol droid, quest giver for som_kenobi_collectors_business_1.
 
 	Every line below is an existing @conversation/som_kenobi_collectors_business_q4p3 entry,
-	so this works against a stock client with no new strings. As with som_pei_yi, SOE kept the
-	conversation trees server-side and only the string table shipped
-	(string/en/conversation/som_kenobi_collectors_business_q4p3.stf), so the tree is
-	reconstructed from the strings.
+	so this works against a stock client with no new strings. Only the string table shipped
+	to the client (string/en/conversation/som_kenobi_collectors_business_q4p3.stf); SOE kept
+	the tree itself server-side.
 
-	THE PAIRING IS NOT GUESSWORK
+	THIS TREE IS NO LONGER A RECONSTRUCTION
 
-	This table numbers a player line and the NPC line that answers it consecutively, which
-	pins almost every edge:
+	It was one. An earlier revision derived the whole graph from the string table alone, on
+	the observation that the table numbers a player line and the NPC line answering it
+	consecutively -- s_53 to s_57, s_58 to s_59, s_71 to s_74, and so on down. Q4P3's live
+	server-side conversation has since been read directly, and every screen and every edge
+	below now matches it.
 
-	    s_53 -> s_57, s_58 -> s_59, s_61 -> s_62, s_63 -> s_64, s_65 -> s_66, s_67 -> s_68,
-	    s_69 -> s_70, s_71 -> s_74, s_75 -> s_76, s_77 -> s_79,
-	    s_81 -> s_83, s_85 -> s_87, s_89 -> s_91, s_94 -> s_96, s_98 -> s_100,
-	    s_102 -> s_104, s_109 -> s_111, s_113 -> s_115, s_117 -> s_150, s_152 -> s_154,
-	    s_39 -> s_159, s_160 -> s_161, s_162 -> s_163, s_164 -> s_165,
-	    s_40 -> s_166, s_167 -> s_168, s_169 -> s_170, s_171 -> s_172,
-	    s_107 -> s_55, s_108 -> s_56, s_130 -> s_132, s_131 -> s_133,
-	    s_155 -> s_157, s_156 -> s_158
+	The method held up better than it deserved to. Both briefings, both declines, both
+	turn-in chains and all five openings came out right. What it could not see was ordering
+	and attachment, and it got three things wrong:
 
-	Two whole branches fall out of that: a civil one (s_57..s_76) and a hostile one
-	(s_83..s_150) that retell the same briefing in a ruder register and end at the same
-	accept. Each has its own decline (s_77/s_79 and s_152/s_154). Both accepts hand over the
-	same three things -- scanner, communicator, coordinates -- which is why the handler fires
-	the quest on either.
+	  * Option order on the opener. The live screen lists the two refusals first and the two
+	    ways in second. Consecutive numbering says nothing about the order options appear in,
+	    and the earlier revision sorted them by meaning instead.
+	  * Option order mid-quest. The live screen lists both rude lines, then both civil ones.
+	    The earlier revision paired them civil/rude by meaning. Same mistake, same cause.
+	  * The rude decline. s_152 hangs off "who is your master" (s_111), not off the task
+	    summary (s_104), mirroring where the civil decline s_77 hangs. Numbering put s_152
+	    near the wrong parent because it is numbered far from both.
 
-	The remaining lines are the four non-briefing greetings:
+	The lesson is narrow and worth keeping: consecutive numbering pins WHICH line answers
+	which. It says nothing about the order options are listed in, or about which screen an
+	option hangs off when the two numbers are far apart.
 
-	    s_106  the opener, before the quest is taken
-	    s_122  "you seem to lack the experience to assist me" -- the level gate. The .qst's
-	           [list] block says Level 75, so that is the number this checks.
-	    s_129  mid-quest, "How may I be of service?"
-	    s_5    the turn-in, "I'm getting the feeling that you have good news for me"
-	    s_93   after the quest, "Soon I will be on my way to the next planet"
+	Two whole branches: a civil one (s_57..s_76) and a hostile one (s_83..s_150) that retell
+	the same briefing in a ruder register and end at the same accept. Each has its own
+	decline (s_77/s_79 and s_152/s_154). Both accepts hand over the same three things --
+	scanner, communicator, coordinates -- which is why the handler fires the quest on either.
+
+	THE ANIMATIONS ARE LIVE DATA
+
+	Q4P3's conversation fires 30 animations, and they are in q4p3_conv_handler rather than
+	here. The reason given used to be that "a Core3 ConvoScreen has no animation field",
+	and that is false -- it has two, "animation" and "playerAnimation", and som_kenobi_obi_wan
+	next door uses them on 57 screens. They are in the handler because they were written
+	there and verified there, not because the tree could not hold them.
+
+	25 hang off player options, 4 are the "nod" on each opening that starts a conversation,
+	and 1 is Q4P3's own "greet". All but that last one animate the PLAYER, not the droid --
+	they are the player's own reactions. See THE ANIMATIONS in the handler.
+
+	The remaining lines are the five openings, tested live in this order -- first match wins:
+
+	    s_93   quest finished. "Soon I will be on my way to the next planet"
+	    s_5    holocube found. "I'm getting the feeling that you have good news for me"
+	    s_129  quest active. "How may I be of service?"
+	    s_106  the briefing offer, reached only by passing the level test
+	    s_122  "you seem to lack the experience to assist me" -- the level gate
+
+	Note where the gate sits: s_106 is guarded and s_122 is the unguarded fallback beneath
+	it, so s_122 is what an under-levelled player gets. The guard is a level test against
+	60, which makes 61 the first level that can take the job -- NOT the .qst's [list] 75,
+	which an earlier revision quoted. See THE LEVEL GATE in q4p3_conv_handler.lua.
+
+	TWO OF THESE ARE NOT CONVERSATIONS, AND THAT IS A DEVIATION
+
+	s_122 and s_93 are spoken live as spatial chat: Q4P3 says the line and no conversation
+	window ever opens. Every other opening starts a real conversation. Core3 routes through
+	a ConvoScreen either way, so both are rendered here as a screen with no options and
+	stopConversation true -- one line, then the window closes. That is as close as the
+	engine gets; the player sees a window SOE did not show them. Flagged, not hidden.
 
 	s_2 is empty in the shipped table and is not used.
 
@@ -65,10 +98,11 @@ q4p3_greeting = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_collectors_business_q4p3:s_106", -- Excuse me, friend. I'm terribly sorry for interrupting you, but I am in need of assistance. Are you skilled in the...'arts' of combat.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_collectors_business_q4p3:s_53", "ask_civil"},   -- I can hold my own if I'm forced to. Why?
-		{"@conversation/som_kenobi_collectors_business_q4p3:s_81", "ask_rude"},    -- Yes, why? Do you need a beating?
+		-- Live order: the two refusals are listed first, then the two ways in.
 		{"@conversation/som_kenobi_collectors_business_q4p3:s_107", "bye_not_me"}, -- No, I'm sorry. That's not what I do.
 		{"@conversation/som_kenobi_collectors_business_q4p3:s_108", "bye_leave"},  -- I don't have time for your nonsense, droid. Leave me be.
+		{"@conversation/som_kenobi_collectors_business_q4p3:s_53", "ask_civil"},   -- I can hold my own if I'm forced to. Why?
+		{"@conversation/som_kenobi_collectors_business_q4p3:s_81", "ask_rude"},    -- Yes, why? Do you need a beating?
 	}
 }
 som_kenobi_q4p3:addScreen(q4p3_greeting)
@@ -86,10 +120,12 @@ q4p3_in_progress = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_collectors_business_q4p3:s_129", -- It's %TU! Great to see you. How may I be of service?
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_collectors_business_q4p3:s_155", "still_on_it"},      -- I just wanted to let you know that I'm still working on your mission.
+		-- Live order: both rude lines first, then both civil ones. Not civil/rude
+		-- paired off by meaning, which is how an earlier revision had it.
 		{"@conversation/som_kenobi_collectors_business_q4p3:s_130", "still_on_it_rude"}, -- Save the pleasantries, wire brain. I'm working on your mission.
-		{"@conversation/som_kenobi_collectors_business_q4p3:s_156", "give_up"},          -- I'm sorry, Q4P3, but something has come up. I can't do this right now.
 		{"@conversation/som_kenobi_collectors_business_q4p3:s_131", "give_up_rude"},     -- You may not! I don't have time for your crazy mission!
+		{"@conversation/som_kenobi_collectors_business_q4p3:s_155", "still_on_it"},      -- I just wanted to let you know that I'm still working on your mission.
+		{"@conversation/som_kenobi_collectors_business_q4p3:s_156", "give_up"},          -- I'm sorry, Q4P3, but something has come up. I can't do this right now.
 	}
 }
 som_kenobi_q4p3:addScreen(q4p3_in_progress)
@@ -188,7 +224,7 @@ q4p3_the_master = ConvoScreen:new {
 }
 som_kenobi_q4p3:addScreen(q4p3_the_master)
 
--- The handler starts the quest on this screen.
+-- The handover, but NOT where the quest starts -- that is one screen on, at bye_all_set.
 q4p3_accept_civil = ConvoScreen:new {
 	id = "accept_civil",
 	leftDialog = "@conversation/som_kenobi_collectors_business_q4p3:s_74", -- This is fantastic news, %TU! Do you want a hug? No? Of course not. How stupid of me. Take this scanner and use that on the droid to find the 'Codex'. Also, you will need this communicator, so that we can stay in touch, and these coordinates to the last known location of the malfunctioned droid.
@@ -275,7 +311,6 @@ q4p3_the_task_rude = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_collectors_business_q4p3:s_109", "the_master_rude"}, -- Reward, eh? Who is your master anyway?
-		{"@conversation/som_kenobi_collectors_business_q4p3:s_152", "decline_rude"},    -- Sounds like a bunch of crap to me. I'm out of here, crazy droid.
 	}
 }
 som_kenobi_q4p3:addScreen(q4p3_the_task_rude)
@@ -285,12 +320,16 @@ q4p3_the_master_rude = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_collectors_business_q4p3:s_111", -- My master is the honorable Pann! Respected throughout the galaxy for his wisdom and chivalry!
 	stopConversation = "false",
 	options = {
+		-- The decline hangs here, not off the task summary -- exactly mirroring the
+		-- civil branch, where s_77 hangs off s_70. Both branches let the player walk
+		-- only after Q4P3 has named Pann.
 		{"@conversation/som_kenobi_collectors_business_q4p3:s_113", "accept_rude"}, -- Sounds like a wimp to me. Very well, I'll help you out.
+		{"@conversation/som_kenobi_collectors_business_q4p3:s_152", "decline_rude"}, -- Sounds like a bunch of crap to me. I'm out of here, crazy droid.
 	}
 }
 som_kenobi_q4p3:addScreen(q4p3_the_master_rude)
 
--- The handler starts the quest on this screen too.
+-- Same again: the quest starts one screen on, at bye_marvelous.
 q4p3_accept_rude = ConvoScreen:new {
 	id = "accept_rude",
 	leftDialog = "@conversation/som_kenobi_collectors_business_q4p3:s_115", -- This is fantastic news, %TU! Take this scanner and use that on the droid to find the 'Codex'. Also, you will need this communicator, so that we can stay in touch, and these coordinates to the last known location of the malfunctioned droid.
@@ -378,7 +417,7 @@ q4p3_fragment = ConvoScreen:new {
 }
 som_kenobi_q4p3:addScreen(q4p3_fragment)
 
--- The handler pays out on this screen.
+-- Where Q4P3 SAYS he is paying. The payout fires one screen on, at bye_kind.
 q4p3_reward = ConvoScreen:new {
 	id = "reward",
 	leftDialog = "@conversation/som_kenobi_collectors_business_q4p3:s_163", -- As am I, %TU. Nevertheless, you have performed your part flawlessly. I am obligated and honored to reward you for your services. You can keep this device and I will deposit 10,000 credits to your bank account immediately.
@@ -417,7 +456,7 @@ q4p3_fragment_rude = ConvoScreen:new {
 }
 som_kenobi_q4p3:addScreen(q4p3_fragment_rude)
 
--- The handler pays out on this screen too.
+-- Same again: the payout fires one screen on, at bye_money.
 q4p3_reward_rude = ConvoScreen:new {
 	id = "reward_rude",
 	leftDialog = "@conversation/som_kenobi_collectors_business_q4p3:s_170", -- Yes, of course. Since you did your part, I'm also obligated to pay you for your services, so 10,000 credits will be deposited to your account immediately.

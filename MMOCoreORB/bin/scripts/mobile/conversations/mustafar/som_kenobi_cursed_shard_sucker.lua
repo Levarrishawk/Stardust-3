@@ -1,13 +1,38 @@
 --[[
 	The Hungry Whiphid -- the "sucker" you can palm the cursed shard off on.
 
-	SOURCE OF RECORD
-	  string/en/conversation/som_kenobi_cursed_shard_sucker.stf, 30 strings.  As
-	  with every conversation in this arc the .stf shipped but SOE's editor tree
-	  did not, so the branching is reconstructed from the strings.  Every shipped
-	  string is used except s_2, which is empty.
+	SOURCE OF RECORD -- NO LONGER A RECONSTRUCTION
 
-	  The shape the strings dictate: he opens hostile-bored (s_4/s_8), the player
+	  It is now read off Mustafar's server-side som_kenobi_cursed_shard_sucker
+	  conversation, which names the same conversation id this file is named for.
+	  The client string table settles the wording; the server conversation
+	  settles the edges, the option ORDER and the conditions.  Every shipped
+	  string is used except s_2, which is empty -- live never references it either.
+
+	  The reconstruction was right about every edge.  It was wrong about the
+	  order of two option lists, and both were only findable from the server side:
+
+	    food_ask (branch 8)   live lists s_33, s_38, s_42.  This file had s_33,
+	                          s_42, s_38 -- the winning night-time lie was shown
+	                          ABOVE the failure instead of below it.
+	    luck_ask (branch 12)  live lists s_50, s_54, s_58.  This file had s_50,
+	                          s_58, s_54 -- same shape of error, the fall-back to
+	                          the food lie shown above the failure.
+
+	  Root cause: a string table records an option's TEXT but not its position.
+	  The earlier revision grouped each list as "Force option, then the way that
+	  works, then the way that fails", which reads sensibly and is not what SOE
+	  shipped -- live puts the failure second in both.  Option order is not
+	  cosmetic here: it is what the client renders and what the player's numbered
+	  reply maps onto.
+
+	  What the server side CONFIRMED, against the suspicion that it would not:
+	  action_signalGivenCrystal fires on exactly s_24, s_36, s_44 and s_52 --
+	  the four screens already in the handler's handover table.  s_35, s_40 and
+	  s_56 grant nothing.  s_56 in particular looks like it might ("No! Now get
+	  out of here...") and does not.
+
+	  The shape: he opens hostile-bored (s_4/s_8), the player
 	  shows him the crystal (s_10), he bites on "shiny" (s_12), and then asks the
 	  only question that matters -- s_16 "So...what it do?".  From there the
 	  player picks one of three lies, each with its own comeback:
@@ -27,10 +52,34 @@
 	  player out, and doubles as his line to anyone with no business with him.
 
 	FORCE GATING
-	  cursed_shard_sucker_conv_handler strips the three [Use the Force] options
-	  for a player without force_title_jedi_rank_01 (removeAllOptions + addOption
-	  rebuild).  A non-Jedi therefore has exactly one way through: the night-time
-	  lie under the food branch.
+	  Live guards s_22, s_33 and s_50 with condition_playerJedi, which is
+	  jedi.isForceSensitive -- force sensitive, NOT Padawan.
+	  cursed_shard_sucker_conv_handler strips those three (removeAllOptions +
+	  addOption rebuild) and tests force_title_jedi_novice; it used to test
+	  force_title_jedi_rank_01, which is Padawan and hid the options from every
+	  FS character below it.  See that file's canUseTheForce.
+
+	  A non-sensitive therefore has exactly one way through: the night-time lie
+	  under the food branch.
+
+	THE OPENING
+	  Live gates the whole conversation on condition_givingAwayCrystal, which is
+	  isTaskActive(player, "som_kenobi_cursed_shard_2", "givingUpShard").  Anyone
+	  else gets s_60 as a chat.chat bubble with no conversation window at all.
+	  Core3 cannot do that from getInitialScreen, so s_60 is a one-line terminal
+	  screen here -- same words, one extra click to dismiss.  Same deviation, and
+	  same reason, as the brush-off in som_kenobi_serpent_thief.
+
+	COUNTS RECONCILE
+	    14 live screens  + 1  rebuffed, the deviation in THE OPENING above  = 15
+	    14 options across the 7 screens that have any, in live's order
+	    24 animations hang off those 14 options; they land on 13 distinct
+	       destinations, which is what the handler's screenAnimations holds
+	     4 grants, 3 Force-guarded options
+	  Checked by tmp/sucker-check.lua against the server-side conversation. It
+	  also proves the thing the handler depends on rather than assuming it: no
+	  destination screen is reached by two edges carrying DIFFERENT animations,
+	  which is what makes keying by destination lossless here.
 
 	QUEST
 	  Every success screen fires the .qst's "gaveAwayShard" signal, which is
@@ -133,8 +182,8 @@ sucker_food_ask = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_cursed_shard_sucker:s_33", "take_fool"},     -- [Use the Force] You are a fool and will pay well for the crystal.
-		{"@conversation/som_kenobi_cursed_shard_sucker:s_42", "take_night"},    -- I can't. It only works during night time.
 		{"@conversation/som_kenobi_cursed_shard_sucker:s_38", "fail_water"},    -- Well, I don't think there's any water around here...
+		{"@conversation/som_kenobi_cursed_shard_sucker:s_42", "take_night"},    -- I can't. It only works during night time.
 	}
 }
 som_kenobi_cursed_shard_sucker:addScreen(sucker_food_ask)
@@ -173,8 +222,8 @@ sucker_luck_ask = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_cursed_shard_sucker:s_50", "take_fortune"},  -- [Use the Force] You could always use more fortune.
-		{"@conversation/som_kenobi_cursed_shard_sucker:s_58", "food_ask"},      -- Oh...and food. I forgot to mention it can make food of water!
 		{"@conversation/som_kenobi_cursed_shard_sucker:s_54", "fail_fortune"},  -- Well, couldn't you use some more luck and fortune?
+		{"@conversation/som_kenobi_cursed_shard_sucker:s_58", "food_ask"},      -- Oh...and food. I forgot to mention it can make food of water!
 	}
 }
 som_kenobi_cursed_shard_sucker:addScreen(sucker_luck_ask)

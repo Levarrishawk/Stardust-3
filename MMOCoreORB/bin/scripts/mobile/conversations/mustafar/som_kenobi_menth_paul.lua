@@ -5,8 +5,14 @@
 	  string/en/conversation/som_kenobi_menth_paul.stf ships in the SOE Mustafar
 	  content and carries 40 strings.  The .stf is a flat list -- SOE's
 	  SwgConversationEditor tree that wired those strings together was never
-	  shipped, so the branching below is reconstructed from the strings alone.
+	  shipped, so the branching below was reconstructed from the strings alone.
 	  The reconstruction uses every shipped string except s_2, which is empty.
+
+	  THE LIVE WIRING HAS SINCE BEEN READ.  The four story runs, the two pitches,
+	  the four price endings and the four free endings are all live's, beat for
+	  beat.  Four strings were in the wrong place and one screen was reachable
+	  five times over; see CORRECTING THE OPENER and CORRECTING s_232 AND s_135
+	  below.
 
 	  The strings come in four near-duplicate story blocks (s_142/146/150,
 	  s_127 group, s_165/169/173, s_213/217/221).  All four tell the same
@@ -30,14 +36,51 @@
 	  redirects to the matching no_money screen when the player is short, and
 	  subtracts on success.  See that file for the redirect list.
 
+	CORRECTING THE OPENER -- s_113 belongs on one screen, not five
+
+	  "I'm sorry. I have some things I have to attend to right now." used to be
+	  offered again on trying, lost_everything, pitch_sell, pitch_explain and
+	  in_progress.  Live offers it once, as the third of the opener's four
+	  options, and s_115 ("Please... I've lost everything...") ends the
+	  conversation on the spot rather than looping back into the pitch.
+
+	  ROOT CAUSE: treating a polite exit as something every screen ought to
+	  have.  A conversation editor gives an option one home; wanting a way out
+	  of every screen is a designer's instinct, not evidence.  The cost was
+	  real -- it made s_113 look like a shared utility line, which is what let
+	  the opener's own option order drift and hid that s_115 is an ending.
+
+	CORRECTING s_232 AND s_135 -- both were one beat off
+
+	  s_232 "I'm trying to..." was a screen of its own, reached by asking him
+	  why he doesn't just take the shuttle, and it led back into the pitch.  It
+	  is not.  It is his last word after the player says s_117, "Yeah, I might.
+	  You hang in there, friend." -- "you hang in there" / "I'm trying to..."
+	  is the whole exchange, and it ends there.  s_111 ("Why don't you just
+	  take the shuttle then friend?") goes straight to the long pitch, s_161,
+	  which answers it: he has lost everything and wants to sell the crystal.
+
+	  s_135 "Please, help me... I need to get off this planet." was used as his
+	  reply to s_117.  It is a root -- see plea below.
+
+	  ROOT CAUSE: reading the two near-identical pleas (s_110 and s_135) as one
+	  line and one echo, so one of them had to be spent inside the tree, and
+	  then needing a screen for s_232 once s_135 was gone.  Two strings that
+	  read alike in a table are usually two states, not a repeat.  The same
+	  mistake, in the same shape, as the byte-identical confession pairs in the
+	  strike leader's table.
+
 	QUEST
 	  Accepting the shard starts quest/som_kenobi_cursed_shard_1, run by
-	  screenplays/mustafar/quest/cursed_shard.lua.  That .qst is Level 75, so
-	  s_72 ("I wish you were more experienced...") is used as the level gate --
-	  it is the only string in the file that fits nothing else.
+	  screenplays/mustafar/quest/cursed_shard.lua.  s_72 ("I wish you were more
+	  experienced...") is the level gate, at 61 -- see THE LEVEL GATE in
+	  menth_paul_conv_handler.lua for why it is not the .qst's 75.
 
-	  s_136/s_137/s_138/s_139/s_140 are the mid-quest state: the player tries to
-	  hand the shard back and he refuses it.  s_67 is the post-quest state.
+	  s_136/s_137/s_138/s_139/s_140 are not "mid-quest" generally: live shows
+	  them only while the player is on som_kenobi_cursed_shard_2's givingUpShard
+	  task, looking for someone to palm the shard off on.  s_67 is the standing
+	  line for everyone else who has ever held it -- see WHOSE LINE IS s_67 in
+	  the handler.
 ]]
 
 som_kenobi_menth_paul = ConvoTemplate:new {
@@ -51,38 +94,42 @@ som_kenobi_menth_paul = ConvoTemplate:new {
 -- opening
 ------------------------------------------------------------------------------
 
+-- The four options are live's, in live's order. s_111 goes straight to the long
+-- pitch: s_161 IS the answer to "why don't you just take the shuttle".
 menth_greeting = ConvoScreen:new {
 	id = "greeting",
 	leftDialog = "@conversation/som_kenobi_menth_paul:s_110", -- Please, help me... I have to get off this planet.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_menth_paul:s_111", "trying"},         -- Why don't you just take the shuttle then friend?
+		{"@conversation/som_kenobi_menth_paul:s_111", "pitch_explain"},  -- Why don't you just take the shuttle then friend?
 		{"@conversation/som_kenobi_menth_paul:s_112", "pitch_sell"},     -- And what do you want from me?
-		{"@conversation/som_kenobi_menth_paul:s_114", "lost_everything"},-- What do I look like, a shuttle ticket vendor?
 		{"@conversation/som_kenobi_menth_paul:s_113", "come_back"},      -- I'm sorry. I have some things I have to attend to right now.
+		{"@conversation/som_kenobi_menth_paul:s_114", "lost_everything"},-- What do I look like, a shuttle ticket vendor?
 	}
 }
 som_kenobi_menth_paul:addScreen(menth_greeting)
 
-menth_trying = ConvoScreen:new {
-	id = "trying",
-	leftDialog = "@conversation/som_kenobi_menth_paul:s_232", -- I'm trying to...
+-- The second opener, word for word the same four options. See PLEA in the
+-- handler for who hears it.
+menth_plea = ConvoScreen:new {
+	id = "plea",
+	leftDialog = "@conversation/som_kenobi_menth_paul:s_135", -- Please, help me... I need to get off this planet.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_menth_paul:s_112", "pitch_explain"},  -- And what do you want from me?
+		{"@conversation/som_kenobi_menth_paul:s_111", "pitch_explain"},  -- Why don't you just take the shuttle then friend?
+		{"@conversation/som_kenobi_menth_paul:s_112", "pitch_sell"},     -- And what do you want from me?
 		{"@conversation/som_kenobi_menth_paul:s_113", "come_back"},      -- I'm sorry. I have some things I have to attend to right now.
+		{"@conversation/som_kenobi_menth_paul:s_114", "lost_everything"},-- What do I look like, a shuttle ticket vendor?
 	}
 }
-som_kenobi_menth_paul:addScreen(menth_trying)
+som_kenobi_menth_paul:addScreen(menth_plea)
 
+-- Ends the conversation. See CORRECTING THE OPENER.
 menth_lost_everything = ConvoScreen:new {
 	id = "lost_everything",
 	leftDialog = "@conversation/som_kenobi_menth_paul:s_115", -- Please... I've lost everything...
-	stopConversation = "false",
-	options = {
-		{"@conversation/som_kenobi_menth_paul:s_112", "pitch_explain"},  -- And what do you want from me?
-		{"@conversation/som_kenobi_menth_paul:s_113", "come_back"},      -- I'm sorry. I have some things I have to attend to right now.
-	}
+	stopConversation = "true",
+	options = {}
 }
 som_kenobi_menth_paul:addScreen(menth_lost_everything)
 
@@ -96,9 +143,10 @@ menth_come_back = ConvoScreen:new {
 }
 som_kenobi_menth_paul:addScreen(menth_come_back)
 
+-- His last word, and the only place s_232 goes. See CORRECTING s_232 AND s_135.
 menth_bye_plea = ConvoScreen:new {
 	id = "bye_plea",
-	leftDialog = "@conversation/som_kenobi_menth_paul:s_135", -- Please, help me... I need to get off this planet.
+	leftDialog = "@conversation/som_kenobi_menth_paul:s_232", -- I'm trying to...
 	stopConversation = "true",
 	options = {}
 }
@@ -115,7 +163,6 @@ menth_pitch_sell = ConvoScreen:new {
 	options = {
 		{"@conversation/som_kenobi_menth_paul:s_119", "story_c1"},       -- Interesting. It's all black. I might want it. Where'd you find it?
 		{"@conversation/som_kenobi_menth_paul:s_120", "haggle_500"},     -- A thousand credits for a piece of glass? I don't think so.
-		{"@conversation/som_kenobi_menth_paul:s_113", "come_back"},      -- I'm sorry. I have some things I have to attend to right now.
 	}
 }
 som_kenobi_menth_paul:addScreen(menth_pitch_sell)
@@ -267,7 +314,6 @@ menth_pitch_explain = ConvoScreen:new {
 	options = {
 		{"@conversation/som_kenobi_menth_paul:s_162", "story_a1"},       -- It looks very nice. Where did you find it?
 		{"@conversation/som_kenobi_menth_paul:s_163", "drop_500"},       -- A thousand credits is a little steep...
-		{"@conversation/som_kenobi_menth_paul:s_113", "come_back"},      -- I'm sorry. I have some things I have to attend to right now.
 	}
 }
 som_kenobi_menth_paul:addScreen(menth_pitch_explain)
@@ -402,7 +448,7 @@ som_kenobi_menth_paul:addScreen(menth_free_500b)
 -- states the handler opens on
 ------------------------------------------------------------------------------
 
--- below the .qst's Level 75 requirement
+-- below Level 61; see THE LEVEL GATE in the handler
 menth_too_low = ConvoScreen:new {
 	id = "too_low",
 	leftDialog = "@conversation/som_kenobi_menth_paul:s_72", -- I wish you were more experienced... I could really use some help.
@@ -411,7 +457,7 @@ menth_too_low = ConvoScreen:new {
 }
 som_kenobi_menth_paul:addScreen(menth_too_low)
 
--- player already carries the shard: he will not take it back
+-- the player is hunting for someone to take the shard: he will not take it back
 menth_in_progress = ConvoScreen:new {
 	id = "in_progress",
 	leftDialog = "@conversation/som_kenobi_menth_paul:s_136", -- What do you want..?
@@ -419,7 +465,6 @@ menth_in_progress = ConvoScreen:new {
 	options = {
 		{"@conversation/som_kenobi_menth_paul:s_137", "refuse_back"},    -- I was wondering if you would like your crystal back?
 		{"@conversation/som_kenobi_menth_paul:s_138", "refuse_evil"},    -- I'm here to give your crystal back.
-		{"@conversation/som_kenobi_menth_paul:s_113", "come_back"},      -- I'm sorry. I have some things I have to attend to right now.
 	}
 }
 som_kenobi_menth_paul:addScreen(menth_in_progress)
@@ -440,7 +485,7 @@ menth_refuse_evil = ConvoScreen:new {
 }
 som_kenobi_menth_paul:addScreen(menth_refuse_evil)
 
--- the shard is gone and his luck has turned
+-- the shard is out of his hands and his luck has turned; see WHOSE LINE IS s_67
 menth_finished = ConvoScreen:new {
 	id = "finished",
 	leftDialog = "@conversation/som_kenobi_menth_paul:s_67", -- Yeah, I know. I'm still here. Since you took the crystal, my luck sure has turned!...

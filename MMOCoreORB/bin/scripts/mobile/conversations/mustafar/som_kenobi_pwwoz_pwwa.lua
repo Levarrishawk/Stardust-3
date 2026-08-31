@@ -1,20 +1,27 @@
 --[[
 	Pwwoz Pwwa, Ithorian geologist -- som_kenobi_samaritan_1 and _2.
 
-	RECONSTRUCTED, not ported. som_kenobi_pwwoz_pwwa.stf shipped in the client
-	(string/en/conversation/), the SwgConversationEditor tree that wires those
-	strings into screens did not. Every leftDialog and option string below is
-	SOE's verbatim text; the edges between them are reconstructed.
+	RECONSTRUCTED, THEN CHECKED AGAINST THE LIVE TREE.
+	som_kenobi_pwwoz_pwwa.stf shipped in the client (string/en/conversation/),
+	the SwgConversationEditor tree that wires those strings into screens did not.
+	Every leftDialog and option string below is SOE's verbatim text.
 
-	FOUR THINGS THE PLAYER CAN BE WHEN HE HAILS PWWOZ, and the table has a
-	distinct opening line for each:
+	The live wiring has since been read, and the reconstruction holds everywhere
+	the player is talking rather than fighting: both halves of the offer, all
+	four attitudes on the decision, all four Force beats and both epilogue
+	chains are live's, edge for edge. One opening was missing -- see CORRECTING
+	THE BARKS.
 
-	  s_110  never spoken to him              -> the offer
-	  s_172  quest running, no crystal yet    -> "What are you doing back here?!"
-	  s_173  crystal in hand                  -> "You are back! Where is it?!"
+	SIX THINGS THE PLAYER CAN BE WHEN HE HAILS PWWOZ, in the order live tests
+	them, and the table has a distinct opening line for each:
+
+	  s_82   gave it and left the fight       -> "You will not escape my wrath!"
 	  s_225  kept the crystal                 -> "You better watch where you are
 	                                             going, thief!"
 	  s_226  gave it, then had to put him down -> the epilogue
+	  s_173  crystal in hand                  -> "You are back! Where is it?!"
+	  s_172  quest running, no crystal yet    -> "What are you doing back here?!"
+	  s_110  never spoken to him              -> the offer
 
 	s_226 is why the .qst's killIthorian step does not end him for good: "Yes,
 	I'm still alive, friend. The Mustafarians managed to save me despite the
@@ -65,9 +72,32 @@
 	Every screen that carries one also carries a plain give and a plain keep, so
 	a non-Jedi is never cornered.
 
-	s_2 is the empty string. s_82 ("You will not escape my wrath, %TU!"), s_84
-	and s_85 are combat barks -- %TU is the spatial-chat token -- and none of
-	them is a screen. All four are deliberately unused.
+	CORRECTING THE BARKS -- s_82, s_84 AND s_85 ARE A SCREEN, AN OPTION AND A
+	REPLY
+
+	They were written down here as combat barks: "none of them is a screen. All
+	four are deliberately unused." Live wires them as a sixth opening, with its
+	own one-option branch:
+
+	  s_82  You will not escape my wrath, %TU!            the opening
+	  s_84  If you think you can take me. Let's do this!   the one option
+	  s_85  Prepare yourself! I will not be denied.        the reply, and the fight
+
+	It is what a possessed Pwwoz says to a player who handed the crystal over,
+	walked out of the fight, and came back -- isTaskActive killIthorian on live,
+	STAGE_POSSESSED here. s_186 used to stand in for it. See THE POSSESSED
+	OPENING in the handler for what moved.
+
+	ROOT CAUSE: reading %TU as proof of a bark. %TU is a chat token, and a
+	conversation screen takes chat tokens too -- setDialogTextTU fills it in, and
+	a dozen handlers in this tree already do exactly that. What the token said
+	was "this line names the player". That was turned into "this line is not a
+	screen" only because no screen had been found for it, and a string with
+	nowhere to go is a hole in the reconstruction, never evidence that SOE left
+	it unused.
+
+	s_2 is the empty string, and it is the one string in this table that is
+	neither a screen nor an option.
 ]]
 
 som_kenobi_pwwoz_pwwa = ConvoTemplate:new {
@@ -369,6 +399,31 @@ pwwoz_keep = ConvoScreen:new {
 	options = {}
 }
 som_kenobi_pwwoz_pwwa:addScreen(pwwoz_keep)
+
+--------------------------------------------------------------------------------
+-- POSSESSED, AND HAILED AGAIN -- see CORRECTING THE BARKS
+--------------------------------------------------------------------------------
+
+-- %TU is the player's first name; the handler fills it in with setDialogTextTU.
+pwwoz_enraged = ConvoScreen:new {
+	id = "enraged",
+	leftDialog = "@conversation/som_kenobi_pwwoz_pwwa:s_82", -- You will not escape my wrath, %TU!
+	stopConversation = "false",
+	options = {
+		{"@conversation/som_kenobi_pwwoz_pwwa:s_84", "enraged_fight"}, -- If you think you can take me. Let's do this!
+	}
+}
+som_kenobi_pwwoz_pwwa:addScreen(pwwoz_enraged)
+
+-- Where the fight restarts. Live's removeInvuln2 + secondAttack sit here, not on
+-- s_82: hailing him is not accepting.
+pwwoz_enraged_fight = ConvoScreen:new {
+	id = "enraged_fight",
+	leftDialog = "@conversation/som_kenobi_pwwoz_pwwa:s_85", -- Prepare yourself! I will not be denied.
+	stopConversation = "true",
+	options = {}
+}
+som_kenobi_pwwoz_pwwa:addScreen(pwwoz_enraged_fight)
 
 --------------------------------------------------------------------------------
 -- AFTERWARDS

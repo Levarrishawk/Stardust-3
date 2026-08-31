@@ -10,6 +10,11 @@
 	is skipped. The English text rides along as a trailing comment on every
 	reference. %TU is SOE's own token and is left in place.
 
+	Each half has its own live conversation script, and BOTH are the authority
+	for their own screens -- som_obi_wan_kenobi for the pro_ ones, som_kenobi_obi_wan
+	for the rest. The two id spaces do not collide, so merging the text is safe;
+	the ids only look like one table because they are read side by side here.
+
 	WHY ONE TREE AND NOT TWO. conversationTemplate binds per creature template,
 	not per instance, so two trees would mean two Ben Kenobis standing on the
 	same shore. The shipped text names exactly one place to find him -- s_266 and
@@ -24,10 +29,60 @@
 	registered appearance -- the same thing som_kenobi_moral_exec does with
 	neimoidian.iff.
 
-	RECONSTRUCTED. Both .stf files are flat lists with no parent links;
-	SwgConversationEditor numbers screens in creation order. So the screen and
-	option text below is shipped, and the edges between them are reconstructed by
-	matching each option to the screen its wording answers.
+	WHERE THE EDGES COME FROM -- and what they used to come from.
+
+	Both .stf files are flat lists with no parent links; SwgConversationEditor
+	numbers screens in creation order. So the string table gives the text and
+	says nothing about the shape. This file used to say the edges were
+	"reconstructed by matching each option to the screen its wording answers",
+	and that is exactly what was wrong with them.
+
+	The edges are now taken from the live conversation itself, which states them
+	outright: every screen names its options, and every option names the screen
+	it leads to. 35 of the 91 screens here had at least one option in the wrong
+	place and were rewritten from it. Every one of them still reads perfectly
+	well the way it was -- that is the trap. A string table records an option's
+	TEXT but not its POSITION, so a fluent answer is not evidence of the right
+	answer. Coherence proves nothing; only the conversation says where an option
+	hangs.
+
+	The one edge live does NOT state flatly is s_97, which forks on whether the
+	player spared or killed the hermit. That is why s_96 appears twice below, as
+	shard_spared and shard_killed, with the handler picking between them.
+
+	THE PROLOGUE WAS CHECKED SEPARATELY, AND WAS ALREADY RIGHT. The count above
+	is the spine. The eleven pro_ screens answer to som_obi_wan_kenobi's own
+	script, and every edge, terminal and action in them already matched it: s_10
+	offers s_12 and s_30, s_14 offers s_16, s_18 offers s_22, s_20 offers s_24,
+	s_25 offers s_27; s_26 ends on grantQuest1 and s_28 on sendSignal2; s_32,
+	s_19 and s_34 end where they end. Nothing was moved. This is a checked
+	absence of defects, not an unchecked half.
+
+	Worth knowing because it read as a defect for a while: a checker pointed at
+	one source reports the OTHER half's edges as having no live screen, since it
+	is comparing them to a conversation they were never part of. Six edges here
+	looked unmatched for exactly that reason. "Not found in the source I loaded"
+	is a statement about the load, not about the edge -- the same trap as reading
+	a string's absence from a reconstruction as evidence SOE never used it. A
+	merged tree has to be checked against every source it names.
+
+	THE ANIMATIONS ARE HERE, NOT IN THE HANDLER.
+
+	Live plays 73 gestures across this conversation -- 72 hung off player answers
+	and one on the opening line. 69 of them are on the screens below, in
+	ConvoScreen's own "animation" (Ben's) and "playerAnimation" (the player's)
+	fields, which the engine plays when it sends the screen. 57 screens carry at
+	least one.
+
+	Live keys a gesture to the ANSWER, and the field keys it to the SCREEN. Four
+	screens are reached by two answers carrying different gestures, so a field on
+	them could hold only one of the two -- s_188 is a nod from one answer and
+	rub_chin_thoughtful from the other. Those five gestures are the only ones in
+	code, in obi_wan_conv_handler's edgeAnimations table, keyed by the answer.
+	The reasoning is written out there.
+
+	The screens with no animation field have none live. They are absent, not
+	defaulted.
 
 	ON THE DUPLICATE SUBTREES. som_kenobi_obi_wan.stf carries near-identical
 	twins of most of the long history -- s_178/s_204, s_182/s_208, s_188/s_214,
@@ -35,9 +90,19 @@
 	copies each of the conduit briefing and the chamber directions. That is what
 	the editor produces when an author duplicates a subtree under a second
 	branch. They are all kept rather than collapsed, because collapsing them
-	would throw away shipped text. Variant A hangs off the polite opening, B off
-	the impatient one; the four conduit and chamber variants hang off the four
-	ways the shard conversation can arrive.
+	would throw away shipped text.
+
+	WHICH TWIN HANGS OFF WHAT was also backwards here, for the same reason. The
+	split is not the opening line; both openings can reach either twin. It is
+	the player's SECOND answer that decides, and it splits on manners:
+
+	  A -- the curt answers. who_b s_176 "Fine, I'm all ears", ben_b s_354
+	       "Fine, what is it you need help with?"
+	  B -- the courteous ones. who_a s_200 and who_b s_174 "Please explain",
+	       ben_a s_202 "Of course. My apologies."
+
+	The four conduit and chamber variants hang off the four ways the shard
+	conversation can arrive.
 ]]
 
 som_kenobi_obi_wan = ConvoTemplate:new {
@@ -151,35 +216,39 @@ som_kenobi_obi_wan:addScreen(pro_nothing)
 
 greeting = ConvoScreen:new {
 	id = "greeting",
+	animation = "point_forward",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_106", -- I am in dire need of your assistance, %TU. I've been watching you for some time, hoping that you would be the one I could entrust with this difficult task.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_121", "who_a"},   -- What...who are you?
-		{"@conversation/som_kenobi_obi_wan:s_152", "who_b"},   -- Interesting. Who, or maybe I should say what, are you?
-		{"@conversation/som_kenobi_obi_wan:s_354", "hist_a"},  -- Fine, what is it you need help with?
+		{"@conversation/som_kenobi_obi_wan:s_121", "who_a"}, -- What...who are you?
+		{"@conversation/som_kenobi_obi_wan:s_152", "who_b"}, -- Interesting. Who, or maybe I should say what, are you?
 	}
 }
 som_kenobi_obi_wan:addScreen(greeting)
 
 who_a = ConvoScreen:new {
 	id = "who_a",
+	playerAnimation = "taken_aback",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_123", -- Who I am is not of any importance. What I need help with, on the other hand, may affect the future of the entire galaxy.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_198", "ben_a"},  -- Then, what would I call you?
-		{"@conversation/som_kenobi_obi_wan:s_199", "ben_b"},  -- I like to know who I'm doing favors for.
-		{"@conversation/som_kenobi_obi_wan:s_174", "hist_a"}, -- Please explain.
+		{"@conversation/som_kenobi_obi_wan:s_198", "ben_a"}, -- Then, what would I call you?
+		{"@conversation/som_kenobi_obi_wan:s_199", "ben_b"}, -- I like to know who I'm doing favors for.
+		{"@conversation/som_kenobi_obi_wan:s_200", "hist_b"}, -- Please explain.
 	}
 }
 som_kenobi_obi_wan:addScreen(who_a)
 
 who_b = ConvoScreen:new {
 	id = "who_b",
+	animation = "shake_head_no",
+	playerAnimation = "rub_chin_thoughtful",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_161", -- Who I am is not of any importance. What I need help with, on the other hand, may affect the future of the entire galaxy.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_346", "ben_b"},  -- I like to know who I'm doing favors for.
-		{"@conversation/som_kenobi_obi_wan:s_200", "hist_b"}, -- Please explain.
+		{"@conversation/som_kenobi_obi_wan:s_174", "hist_b"}, -- Please explain.
+		{"@conversation/som_kenobi_obi_wan:s_176", "hist_a"}, -- Fine, I'm all ears.
+		{"@conversation/som_kenobi_obi_wan:s_346", "ben_b"}, -- I like to know who I'm doing favors for.
 	}
 }
 som_kenobi_obi_wan:addScreen(who_b)
@@ -189,7 +258,7 @@ ben_a = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_201", -- You can call me Ben. Now let me continue, please.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_202", "hist_a"}, -- Of course. My apologies.
+		{"@conversation/som_kenobi_obi_wan:s_202", "hist_b"}, -- Of course. My apologies.
 	}
 }
 som_kenobi_obi_wan:addScreen(ben_a)
@@ -199,13 +268,13 @@ ben_b = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_348", -- I just told you, the entire galaxy. Very well, you can call me Ben. Now can I go on?
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_176", "hist_b"}, -- Fine, I'm all ears.
+		{"@conversation/som_kenobi_obi_wan:s_354", "hist_a"}, -- Fine, what is it you need help with?
 	}
 }
 som_kenobi_obi_wan:addScreen(ben_b)
 
 --------------------------------------------------------------------------------
--- HISTORY, variant A -- the polite opening
+-- HISTORY, variant A -- reached by the curt answer (s_176 / s_354)
 --------------------------------------------------------------------------------
 
 hist_a = ConvoScreen:new {
@@ -214,6 +283,7 @@ hist_a = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_obi_wan:s_180", "hist_a_sith"}, -- The Sith?
+		{"@conversation/som_kenobi_obi_wan:s_186", "hist_a_crystal"}, -- As I suspected.
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_a)
@@ -240,6 +310,8 @@ som_kenobi_obi_wan:addScreen(hist_a_crystal)
 
 hist_a_channel = ConvoScreen:new {
 	id = "hist_a_channel",
+	animation = "nod_head_once",
+	playerAnimation = "nod",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_192", -- Yes, I'm sure you can piece it together by now, but let me go on. The Jedi believed they could channel their powers through the crystal and dampen the Sith's powers while strengthening their own. As the Sith warships pierced the atmosphere, the Jedi Masters began channeling the Force through the crystal while the younger Jedi led the troops in battle.
 	stopConversation = "false",
 	options = {
@@ -260,21 +332,23 @@ som_kenobi_obi_wan:addScreen(hist_a_crack)
 
 hist_a_boom = ConvoScreen:new {
 	id = "hist_a_boom",
+	animation = "shake_head_no",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_207", -- No, and I'm not sure why. Some believe that the Sith Lord, facing certain defeat, somehow corrupted the vulnerable Jedi Masters as they were channeling. The result was catastrophic. When the crystal exploded, it sent the planet itself out of its orbit and wiped out all of the Sith and Jedi. All but one, that is.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_211", "hist_a_krow"},       -- Who?
-		{"@conversation/som_kenobi_obi_wan:s_272", "hist_a_vanquished"}, -- They couldn't have been unfortunate enough that the Sith Lord survived?
+		{"@conversation/som_kenobi_obi_wan:s_211", "hist_a_krow"}, -- Who?
+		{"@conversation/som_kenobi_obi_wan:s_311", "hist_b_assume"}, -- The Sith Lord I assume?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_a_boom)
 
 hist_a_vanquished = ConvoScreen:new {
 	id = "hist_a_vanquished",
+	animation = "shake_head_no",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_274", -- No, thankfully they weren't. All records point to the Sith Lord being vanquished.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_276", "hist_a_krow"}, -- Good. So who did survive?
+		{"@conversation/som_kenobi_obi_wan:s_276", "hist_b_krow"}, -- Good. So who did survive?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_a_vanquished)
@@ -284,7 +358,7 @@ hist_a_krow = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_215", -- The elder of the masters, Erg Krow. As the crystal exploded, he managed to shield himself from some of the destruction. Clinging onto life, he found a large shard of the crystal in front of the dead masters.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_232", "hist_a_shield"}, -- Amazing. What did he do?
+		{"@conversation/som_kenobi_obi_wan:s_219", "hist_a_shield"}, -- Very interesting.
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_a_krow)
@@ -294,7 +368,7 @@ hist_a_shield = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_223", -- Sensing that this large shard still had tremendous power, he dragged it with him into hiding. He then spent his remaining energy using the Force to put a protective shield around it, to make sure that no other Force wielder could sense its presence. Unfortunately, Krow, dying from his injuries, wasn't as strong as he had once been, and the power of his shield has diminished after several thousand years.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_236", "hist_a_unprotected"}, -- Then it is now unprotected and it's possible to find it?
+		{"@conversation/som_kenobi_obi_wan:s_229", "hist_b_unprotected"}, -- You mean that we can find it now?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_a_shield)
@@ -304,17 +378,19 @@ hist_a_unprotected = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_238", -- I already have, but the forces of evil are swiftly closing in to claim it. You have seen some of them yourself. That is why we must act quickly, %TU. We can't let it fall into their hands.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_239", "cheat_simple"}, -- I agree. So where is it? Let's go get it right away.
+		{"@conversation/som_kenobi_obi_wan:s_240", "cheat_state"}, -- Most definitely not. So why haven't you taken it?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_a_unprotected)
 
 cheat_simple = ConvoScreen:new {
 	id = "cheat_simple",
+	animation = "shake_head_no",
+	playerAnimation = "nod_head_multiple",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_243", -- I wish it was that simple. Even though the shielding is all but gone, Krow made sure that it wouldn't be easy to gain access. He made the entrance only passable by someone with great Force powers, and since you don't have that, we have to cheat.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_244", "key_a"}, -- Cheat how?
+		{"@conversation/som_kenobi_obi_wan:s_247", "key_b"}, -- Sounds good. What's the plan?
 	}
 }
 som_kenobi_obi_wan:addScreen(cheat_simple)
@@ -324,24 +400,25 @@ key_a = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_246", -- There's a shard of the crystal that has an unusually active soul of a Jedi trapped inside it. I'm fairly certain that we can use that shard as a key to gain entrance to Krow's chamber.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_247", "hermit_a"},  -- Sounds good. What's the plan?
-		{"@conversation/som_kenobi_obi_wan:s_248", "horrible"},  -- A soul trapped inside? That's horrible.
+		{"@conversation/som_kenobi_obi_wan:s_248", "horrible"}, -- A soul trapped inside? That's horrible.
 	}
 }
 som_kenobi_obi_wan:addScreen(key_a)
 
 horrible = ConvoScreen:new {
 	id = "horrible",
+	animation = "nod_head_once",
+	playerAnimation = "shrug_hands",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_250", -- I agree, but that's a problem that will have to wait.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_256", "hermit_a"}, -- I agree. So where do we find the 'key'?
+		{"@conversation/som_kenobi_obi_wan:s_252", "destroy"}, -- Understood. So where do we take the shard if we get it?
 	}
 }
 som_kenobi_obi_wan:addScreen(horrible)
 
 --------------------------------------------------------------------------------
--- HISTORY, variant B -- the impatient opening
+-- HISTORY, variant B -- reached by the courteous answer (s_200 / s_174 / s_202)
 --------------------------------------------------------------------------------
 
 hist_b = ConvoScreen:new {
@@ -350,6 +427,7 @@ hist_b = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_obi_wan:s_206", "hist_b_sith"}, -- Who are the Sith?
+		{"@conversation/som_kenobi_obi_wan:s_212", "hist_b_crystal"}, -- Yes, I've learned some of this, but please continue.
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b)
@@ -359,14 +437,14 @@ hist_b_sith = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_208", -- The Sith were an ancient race that, for the lack of a better term, were pure evil. Their leaders were great wielders of the Force; but they didn't wield it for great things. They became a danger to the rest of the galaxy when their powers corrupted Jedi that came to their planet.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_186", "hist_b_crystal"}, -- As I suspected.
-		{"@conversation/som_kenobi_obi_wan:s_212", "hist_b_crystal"}, -- Yes, I've learned some of this, but please continue.
+		{"@conversation/som_kenobi_obi_wan:s_210", "hist_b_crystal"}, -- I understand.
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b_sith)
 
 hist_b_crystal = ConvoScreen:new {
 	id = "hist_b_crystal",
+	playerAnimation = "nod",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_214", -- The Jedi on Mustafar uncovered a magnificent crystal of unknown origin. It was as tall as a tower, and the Jedi quickly discovered that it was attuned to the Force within them. When news of an impending Sith invasion reached them, they desperately began to experiment with the crystal, hoping to find a way to use it in their defense.
 	stopConversation = "false",
 	options = {
@@ -377,6 +455,7 @@ som_kenobi_obi_wan:addScreen(hist_b_crystal)
 
 hist_b_channel = ConvoScreen:new {
 	id = "hist_b_channel",
+	animation = "nod_head_once",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_218", -- You are correct, my friend. The Jedi believed they could channel their powers through the crystal and dampen the Sith's powers while strengthening their own. As the Sith warships pierced the atmosphere, the Jedi Masters began channeling the Force through the crystal while the younger Jedi led the troops in battle.
 	stopConversation = "false",
 	options = {
@@ -397,32 +476,36 @@ som_kenobi_obi_wan:addScreen(hist_b_crack)
 
 hist_b_boom = ConvoScreen:new {
 	id = "hist_b_boom",
+	animation = "nod_head_once",
+	playerAnimation = "shrug_hands",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_226", -- But they have their flaws like everyone else. Some believe that the Sith Lord, facing certain defeat, somehow corrupted the vulnerable Jedi Masters as they were channeling. The result was catastrophic. When the crystal exploded, it sent the planet itself out of its orbit and wiped out all of the Sith and Jedi. All but one, that is.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_228", "hist_b_krow"},   -- Who could possibly have survived that?
-		{"@conversation/som_kenobi_obi_wan:s_311", "hist_b_assume"}, -- The Sith Lord I assume?
+		{"@conversation/som_kenobi_obi_wan:s_228", "hist_b_krow"}, -- Who could possibly have survived that?
+		{"@conversation/som_kenobi_obi_wan:s_272", "hist_a_vanquished"}, -- They couldn't have been unfortunate enough that the Sith Lord survived?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b_boom)
 
 hist_b_assume = ConvoScreen:new {
 	id = "hist_b_assume",
+	animation = "rub_chin_thoughtful",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_323", -- No...why would you assume that?
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_obi_wan:s_327", "hist_b_weak"}, -- Well, he must have been very powerful...corrupting the Jedi Masters.
-		{"@conversation/som_kenobi_obi_wan:s_344", "hist_b_krow"}, -- Well, I wouldn't know. So who survived then?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b_assume)
 
 hist_b_weak = ConvoScreen:new {
 	id = "hist_b_weak",
+	animation = "nod_head_once",
+	playerAnimation = "shrug_hands",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_331", -- True, but when it comes to preserving life, the dark side of the Force will always be weak.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_344", "hist_b_krow"}, -- Well, I wouldn't know. So who survived then?
+		{"@conversation/som_kenobi_obi_wan:s_344", "hist_a_krow"}, -- Well, I wouldn't know. So who survived then?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b_weak)
@@ -432,8 +515,7 @@ hist_b_krow = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_230", -- The elder of the masters, Erg Krow. As the crystal exploded, he managed to shield himself from some of the destruction. Clinging onto life, he found a large shard of the crystal in front of the dead masters.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_219", "hist_b_shield"}, -- Very interesting.
-		{"@conversation/som_kenobi_obi_wan:s_210", "hist_b_shield"}, -- I understand.
+		{"@conversation/som_kenobi_obi_wan:s_232", "hist_b_shield"}, -- Amazing. What did he do?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b_krow)
@@ -443,7 +525,7 @@ hist_b_shield = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_234", -- Sensing that this large shard still had tremendous power, he dragged it with him into hiding. He then spent his remaining energy using the Force to put a protective shield around it, to make sure that no other Force wielder could sense its presence. Unfortunately, Krow, dying from his injuries, wasn't as strong as he had once been, and the power of his shield has diminished after several thousand years.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_229", "hist_b_unprotected"}, -- You mean that we can find it now?
+		{"@conversation/som_kenobi_obi_wan:s_236", "hist_a_unprotected"}, -- Then it is now unprotected and it's possible to find it?
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b_shield)
@@ -453,17 +535,19 @@ hist_b_unprotected = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_235", -- I already have, but the forces of evil are swiftly closing in to claim it. You have seen some of them yourself. That is why we must act quickly, %TU. We can't let it fall into their hands.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_240", "cheat_state"}, -- Most definitely not. So why haven't you taken it?
+		{"@conversation/som_kenobi_obi_wan:s_239", "cheat_simple"}, -- I agree. So where is it? Let's go get it right away.
 	}
 }
 som_kenobi_obi_wan:addScreen(hist_b_unprotected)
 
 cheat_state = ConvoScreen:new {
 	id = "cheat_state",
+	animation = "shake_head_no",
+	playerAnimation = "rub_chin_thoughtful",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_242", -- In my state, I can't, which is why I need you. I wish it were as easy as us just going there right now and getting it, but there are some problems. Even though the shielding is all but gone, Krow made sure that it wouldn't be easy to gain access. He made the entrance only passable by someone with great Force powers and since you don't have that, we have to cheat.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_244", "key_b"}, -- Cheat how?
+		{"@conversation/som_kenobi_obi_wan:s_244", "key_a"}, -- Cheat how?
 	}
 }
 som_kenobi_obi_wan:addScreen(cheat_state)
@@ -473,24 +557,25 @@ key_b = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_251", -- There's a shard of the crystal that has an unusually active soul of a Jedi trapped inside it. I'm fairly certain that we can use that shard as a key to gain entrance to Krow's chamber.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_252", "destroy"},    -- Understood. So where do we take the shard if we get it?
-		{"@conversation/som_kenobi_obi_wan:s_255", "mycrystal"},  -- Fairly certain? What if it doesn't work and someone takes my crystal?
+		{"@conversation/som_kenobi_obi_wan:s_255", "mycrystal"}, -- Fairly certain? What if it doesn't work and someone takes my crystal?
 	}
 }
 som_kenobi_obi_wan:addScreen(key_b)
 
 destroy = ConvoScreen:new {
 	id = "destroy",
+	playerAnimation = "nod",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_254", -- Nowhere. We will destroy it, which is what Krow should have done in the first place. I think that some of the Sith's taint had touched him and that's why he couldn't. The crystal is much too powerful to be entrusted to anyone. No one is immune to the corruption of the Dark Side. Trust me.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_256", "hermit_b"}, -- I agree. So where do we find the 'key'?
+		{"@conversation/som_kenobi_obi_wan:s_256", "hermit_a"}, -- I agree. So where do we find the 'key'?
 	}
 }
 som_kenobi_obi_wan:addScreen(destroy)
 
 mycrystal = ConvoScreen:new {
 	id = "mycrystal",
+	playerAnimation = "shrug_hands",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_259", -- Your crystal? We are not going there to take it. We are going to destroy it.
 	stopConversation = "false",
 	options = {
@@ -517,6 +602,7 @@ som_kenobi_obi_wan:addScreen(why_destroy)
 
 hermit_a = ConvoScreen:new {
 	id = "hermit_a",
+	playerAnimation = "rub_chin_thoughtful",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_258", -- That is the tricky part. It's currently in the possession of a crazed Mustafarian. I'm not sure what's driven him to insanity, but he's become a hermit, wandering the scorched lands erratically...making him hard to track, even for me. You need to find him.
 	stopConversation = "false",
 	options = {
@@ -537,6 +623,7 @@ som_kenobi_obi_wan:addScreen(droids_a)
 
 shore_a = ConvoScreen:new {
 	id = "shore_a",
+	animation = "shake_head_no",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_266", -- That is unlikely. They are mostly interested in profit and would probably shrug you off as a lunatic if you tried to explain to them. You will have to find another way. I'm afraid I have urgent matters to take care of, but I will see you again, %TU. Please be swift in solving this. We are rapidly running out of time. If you need my assistance, go to the northeastern shoreline between the old and new mining facilities and I will try to answer your call.
 	stopConversation = "false",
 	options = {
@@ -548,6 +635,7 @@ som_kenobi_obi_wan:addScreen(shore_a)
 -- GIVES som_kenobi_main_quest_1
 give_quest_a = ConvoScreen:new {
 	id = "give_quest_a",
+	animation = "laugh_cackle",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_270", -- Oh, this old man will be fine. You just worry about yourself, my friend. May the Force be with you, %TU.
 	stopConversation = "true",
 	options = {}
@@ -556,6 +644,7 @@ som_kenobi_obi_wan:addScreen(give_quest_a)
 
 hermit_b = ConvoScreen:new {
 	id = "hermit_b",
+	playerAnimation = "sigh_deeply",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_282", -- That is the tricky part. It's currently in the possession of a crazed Mustafarian. I'm not sure what's driven him to insanity, but he's become a hermit, wandering the scorched lands erratically...making him hard to track, even for me. You need to find him.
 	stopConversation = "false",
 	options = {
@@ -576,10 +665,11 @@ som_kenobi_obi_wan:addScreen(droids_b)
 
 shore_b = ConvoScreen:new {
 	id = "shore_b",
+	animation = "shake_head_no",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_302", -- Probably not, but I'm sure you can find a way. Now, I have urgent matters to take care of. I will see you again, %TU. Please be swift in solving this. We are rapidly running out of time. If you need my assistance, go to northeastern shoreline between the old and new mining facilities and I will try to answer your call.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_349", "give_quest_b"}, -- Alright. I will do as you have asked.
+		{"@conversation/som_kenobi_obi_wan:s_306", "give_quest_b"}, -- What could possibly be more important than helping with this?
 	}
 }
 som_kenobi_obi_wan:addScreen(shore_b)
@@ -587,15 +677,36 @@ som_kenobi_obi_wan:addScreen(shore_b)
 -- GIVES som_kenobi_main_quest_1
 give_quest_b = ConvoScreen:new {
 	id = "give_quest_b",
-	leftDialog = "@conversation/som_kenobi_obi_wan:s_351", -- Thank you. The fate of galaxy rests in your hands.
+	leftDialog = "@conversation/som_kenobi_obi_wan:s_309", -- The forces of evil are marching rapidly, %TU, and this old man needs to put a wrench in their cogs before it's too late. Farewell, for now.
 	stopConversation = "true",
 	options = {}
 }
 som_kenobi_obi_wan:addScreen(give_quest_b)
 
 --------------------------------------------------------------------------------
--- WHILE THE HERMIT HUNT IS RUNNING. s_350 is the shipped way out of a lost
--- trail: he sends the player back to the Mensix network for another search.
+-- WHILE THE HERMIT HUNT IS RUNNING. Two ways off s_227: take your leave, or say
+-- you have lost the trail and be sent back to the Mensix network.
+--
+-- TWO OPTIONS WERE ON THE WRONG SCREENS, AND THE STRING TABLE IS WHY.
+--
+-- s_306 used to hang here and s_349 used to hang on shore_b. It is the other way
+-- round: s_306 is shore_b's only option and s_349 is this screen's first. Both
+-- pairings read perfectly well, which is exactly the trap --
+--
+--   s_302 "I have urgent matters to take care of" -> s_306 "What could possibly
+--   be more important?" -> s_309 "The forces of evil are marching rapidly"
+--   s_227 "I can't assist you further right now" -> s_349 "Alright. I will do
+--   as you have asked." -> s_351 "Thank you. The fate of galaxy rests in your
+--   hands."
+--
+-- and so does the swap. The reconstruction matched options to screens by reading
+-- the string table, and a string table records an option's TEXT but not its
+-- POSITION. Coherence is not evidence; only the conversation says where an
+-- option hangs. Same defect class as the two already found in the sucker.
+--
+-- What it cost: the b-variant handed the quest over on s_351, which gives
+-- nothing, while s_309 -- the screen that actually gives it -- fired nothing at
+-- all. So give_quest_b is now s_309, and s_351 is the plain farewell below.
 --------------------------------------------------------------------------------
 
 busy = ConvoScreen:new {
@@ -603,11 +714,21 @@ busy = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_227", -- I can't assist you any further right now, %TU. I have things that have to be done if we are to succeed.
 	stopConversation = "false",
 	options = {
+		{"@conversation/som_kenobi_obi_wan:s_349", "will_do"},   -- Alright. I will do as you have asked.
 		{"@conversation/som_kenobi_obi_wan:s_350", "research"},  -- I have lost the hermit.
-		{"@conversation/som_kenobi_obi_wan:s_306", "marching"},  -- What could possibly be more important than helping with this?
 	}
 }
 som_kenobi_obi_wan:addScreen(busy)
+
+-- s_349 is ungated; s_350 is shown only while the hunt is running. The handler
+-- serves this screen at STAGE_HUNT and nowhere else, so both are always up.
+will_do = ConvoScreen:new {
+	id = "will_do",
+	leftDialog = "@conversation/som_kenobi_obi_wan:s_351", -- Thank you. The fate of galaxy rests in your hands.
+	stopConversation = "true",
+	options = {}
+}
+som_kenobi_obi_wan:addScreen(will_do)
 
 -- RE-ARMS the hermit search
 research = ConvoScreen:new {
@@ -617,14 +738,6 @@ research = ConvoScreen:new {
 	options = {}
 }
 som_kenobi_obi_wan:addScreen(research)
-
-marching = ConvoScreen:new {
-	id = "marching",
-	leftDialog = "@conversation/som_kenobi_obi_wan:s_309", -- The forces of evil are marching rapidly, %TU, and this old man needs to put a wrench in their cogs before it's too late. Farewell, for now.
-	stopConversation = "true",
-	options = {}
-}
-som_kenobi_obi_wan:addScreen(marching)
 
 aside = ConvoScreen:new {
 	id = "aside",
@@ -655,11 +768,13 @@ som_kenobi_obi_wan:addScreen(shard_spared)
 
 spared_soul = ConvoScreen:new {
 	id = "spared_soul",
+	animation = "nod_head_once",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_99", -- Yes, the Jedi trapped within is clearly in great pain and he must have been what drove the poor Mustafarian you saved insane. I will try to come up with a way to help free him later, but right now we have more pressing matters.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_108", "urgency_a"}, -- I've done alright so far. Now what is the next step?
-		{"@conversation/som_kenobi_obi_wan:s_160", "urgency_b"}, -- Yes, he can wait. What's the next step?
+		{"@conversation/som_kenobi_obi_wan:s_159", "urgency_d"}, -- Yes, I would like to get rid of this crystal sooner rather than later.
+		{"@conversation/som_kenobi_obi_wan:s_160", "urgency_c"}, -- Yes, he can wait. What's the next step?
 	}
 }
 som_kenobi_obi_wan:addScreen(spared_soul)
@@ -674,33 +789,44 @@ shard_killed = ConvoScreen:new {
 }
 som_kenobi_obi_wan:addScreen(shard_killed)
 
+-- NO NPC GESTURE, and that is live's asymmetry, not an omission here.  s_97 is
+-- one option with two replies: finishedQuestSpared answers s_99 with a nod, and
+-- finishedQuestKilled answers s_103 with nothing.  Only the player's twitch,
+-- which fires on picking the option, is common to both.  The nod that used to
+-- sit here was copied off spared_soul, its twin.  The animation checker could
+-- not see it because it collected every gesture under a response together
+-- instead of keying each one to the reply it belongs to.
 killed_soul = ConvoScreen:new {
 	id = "killed_soul",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_103", -- Yes, the Jedi trapped within is clearly in great pain and he must have been what drove the poor Mustafarian insane. I will try to come up with a way to help free him later, but right now, we have more pressing matters. I wish you hadn't killed the Mustafarian, though. He was as much a victim as the Jedi in the crystal and if he had been spared, he could have been a help in saving the Jedi...
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_104", "violence"},   -- I had no choice but to put the crazy fool out of his misery.
-		{"@conversation/som_kenobi_obi_wan:s_105", "compassion"}, -- I was trying to avoid it, but I couldn't save him.
+		{"@conversation/som_kenobi_obi_wan:s_104", "compassion"}, -- I had no choice but to put the crazy fool out of his misery.
+		{"@conversation/som_kenobi_obi_wan:s_105", "violence"}, -- I was trying to avoid it, but I couldn't save him.
 	}
 }
 som_kenobi_obi_wan:addScreen(killed_soul)
 
 violence = ConvoScreen:new {
 	id = "violence",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_114", -- I understand. Sometimes violence is the only outcome, my friend. At least you did your best. Now, let's focus on the task at hand.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_115", "urgency_c"}, -- Yes, I would like to get rid of this crystal sooner rather than later.
+		{"@conversation/som_kenobi_obi_wan:s_115", "urgency_b"}, -- Yes, I would like to get rid of this crystal sooner rather than later.
 	}
 }
 som_kenobi_obi_wan:addScreen(violence)
 
 compassion = ConvoScreen:new {
 	id = "compassion",
+	animation = "shake_head_no",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_107", -- There's almost always another way, %TU. You have to be more compassionate. All that anger can only cause you pain.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_159", "urgency_d"}, -- Yes, I would like to get rid of this crystal sooner rather than later.
+		{"@conversation/som_kenobi_obi_wan:s_108", "urgency_a"}, -- I've done alright so far. Now what is the next step?
 	}
 }
 som_kenobi_obi_wan:addScreen(compassion)
@@ -711,6 +837,7 @@ som_kenobi_obi_wan:addScreen(compassion)
 
 urgency_a = ConvoScreen:new {
 	id = "urgency_a",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_109", -- We are rapidly running out of time. A great evil has arrived and it's quickly making its way over to the chamber. Not only that, but your actions have drawn the attention of its minions and I fear that they are closing in on you as we speak.
 	stopConversation = "false",
 	options = {
@@ -721,6 +848,7 @@ som_kenobi_obi_wan:addScreen(urgency_a)
 
 urgency_b = ConvoScreen:new {
 	id = "urgency_b",
+	playerAnimation = "nod",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_116", -- Yes, time is against us, in more ways than one. A great evil has arrived and it's quickly making its way over to the chamber. Not only that, but your actions have drawn the attention of its minions and I fear that they are closing in on you as we speak.
 	stopConversation = "false",
 	options = {
@@ -731,6 +859,7 @@ som_kenobi_obi_wan:addScreen(urgency_b)
 
 urgency_c = ConvoScreen:new {
 	id = "urgency_c",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_314", -- We are rapidly running out of time. A great evil has arrived and it's quickly making its way over to the chamber. Not only that, but your actions have drawn the attention of its minions and I fear that they are closing in on you as we speak.
 	stopConversation = "false",
 	options = {
@@ -761,6 +890,7 @@ som_kenobi_obi_wan:addScreen(urgency_d)
 
 conduits_a = ConvoScreen:new {
 	id = "conduits_a",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_150", -- It's dangerous, but we need to forge a stronger bond between you and the crystal. That would probably happen over time if you kept it, but we can't wait. On this planet, there are three old enclaves, remains of the Jedi temples. At each of these, there is a conduit that was used to link the enclaves together.
 	stopConversation = "false",
 	options = {
@@ -771,6 +901,7 @@ som_kenobi_obi_wan:addScreen(conduits_a)
 
 conduits_b = ConvoScreen:new {
 	id = "conduits_b",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_154", -- It's dangerous, but we need to forge a stronger bond between you and the crystal. That would probably happen over time if you kept it, but we can't wait. On this planet, there are three old enclaves, remains of the Jedi temples. At each of these, there is a conduit that was used to link the enclaves together.
 	stopConversation = "false",
 	options = {
@@ -781,6 +912,7 @@ som_kenobi_obi_wan:addScreen(conduits_b)
 
 conduits_c = ConvoScreen:new {
 	id = "conduits_c",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_318", -- It's dangerous, but we need to forge a stronger bond between you and the crystal. That would probably happen over time if you kept it, but we can't wait. On this planet, there are three old enclaves, remains of the Jedi temples. At each of these there is a conduit that was used to link the enclaves together.
 	stopConversation = "false",
 	options = {
@@ -791,6 +923,7 @@ som_kenobi_obi_wan:addScreen(conduits_c)
 
 conduits_d = ConvoScreen:new {
 	id = "conduits_d",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_332", -- It's dangerous, but we need to forge a stronger bond between you and the crystal. That would probably happen over time if you kept it, but we can't wait. On this planet, there are three old enclaves, remains of the Jedi temples. At each of these, there is a conduit that was used to link the enclaves together.
 	stopConversation = "false",
 	options = {
@@ -801,26 +934,29 @@ som_kenobi_obi_wan:addScreen(conduits_d)
 
 dir_a = ConvoScreen:new {
 	id = "dir_a",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_156", -- Patience, %TU. I'm getting there. You will have to go to each of these three conduits, wedge the crystal into it and wait while the power channels through it. The first enclave is located in the northwest corner of the continent. The second is just west of the central volcano and the final one is straight east of the same volcano, all the way on the edge of the continent.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_286", "send_a"}, -- Very well, I will be on my way immediately.
+		{"@conversation/som_kenobi_obi_wan:s_288", "send_b"}, -- Alright, enough chatting. I'm on my way!
 	}
 }
 som_kenobi_obi_wan:addScreen(dir_a)
 
 dir_b = ConvoScreen:new {
 	id = "dir_b",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_158", -- I know, my friend, but we have no choice. You will have to go to each of these three conduits, wedge the crystal into it, and wait while the power channels through it. The first enclave is located in the northwest corner of the continent. The second is just west of the central volcano and the final one is straight east of the same volcano, all the way on the edge of the continent.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_288", "send_b"}, -- Alright, enough chatting. I'm on my way!
+		{"@conversation/som_kenobi_obi_wan:s_286", "send_a"}, -- Very well, I will be on my way immediately.
 	}
 }
 som_kenobi_obi_wan:addScreen(dir_b)
 
 dir_c = ConvoScreen:new {
 	id = "dir_c",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_322", -- Patience, %TU. I'm getting there. You will have to go to each of these three conduits, wedge the crystal into it, and wait while the power channels through it. The first enclave is located in the northwest corner of the continent. The second is just west of the central volcano and the final one is straight east of the same volcano, all the way on the edge of the continent.
 	stopConversation = "false",
 	options = {
@@ -831,6 +967,7 @@ som_kenobi_obi_wan:addScreen(dir_c)
 
 dir_d = ConvoScreen:new {
 	id = "dir_d",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_336", -- I know, my friend, but we have no choice. You will have to go to each of these three conduits, wedge the crystal into it, and wait while the power channels through it. The first enclave is located in the northwest corner of the continent. The second is just west of the central volcano and the final one is straight east of the same volcano, all the way on the edge of the continent.
 	stopConversation = "false",
 	options = {
@@ -843,6 +980,7 @@ som_kenobi_obi_wan:addScreen(dir_d)
 -- som_kenobi_main_quest_spared and som_kenobi_main_quest_killed.
 send_a = ConvoScreen:new {
 	id = "send_a",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_287", -- Be very careful, my friend. These are dangerous times indeed. May the Force be with you, %TU!
 	stopConversation = "true",
 	options = {}
@@ -851,6 +989,7 @@ som_kenobi_obi_wan:addScreen(send_a)
 
 send_b = ConvoScreen:new {
 	id = "send_b",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_289", -- Very well. Stay on your guard, %TU. Danger is everywhere now. May the Force be with you!
 	stopConversation = "true",
 	options = {}
@@ -859,6 +998,7 @@ som_kenobi_obi_wan:addScreen(send_b)
 
 send_c = ConvoScreen:new {
 	id = "send_c",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_326", -- Very well. Stay on your guard, %TU. Danger is everywhere now. May the Force be with you!
 	stopConversation = "true",
 	options = {}
@@ -867,6 +1007,7 @@ som_kenobi_obi_wan:addScreen(send_c)
 
 send_d = ConvoScreen:new {
 	id = "send_d",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_340", -- Be very careful, my friend. These are dangerous times indeed. May the Force be with you, %TU!
 	stopConversation = "true",
 	options = {}
@@ -888,8 +1029,8 @@ chamber_a = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_233", -- Everything is set, %TU. It is time to end this. You must quickly head to the hidden chamber, before it's too late.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_279", "where_a"}, -- Where is it?
-		{"@conversation/som_kenobi_obi_wan:s_265", "where_b"}, -- How do I get there?
+		{"@conversation/som_kenobi_obi_wan:s_265", "where_a"}, -- How do I get there?
+		{"@conversation/som_kenobi_obi_wan:s_279", "where_b"}, -- Where is it?
 	}
 }
 som_kenobi_obi_wan:addScreen(chamber_a)
@@ -899,14 +1040,15 @@ chamber_b = ConvoScreen:new {
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_291", -- Everything is set, %TU. Now you need to make it to the hidden chamber quickly.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_301", "where_c"}, -- Where is it?
-		{"@conversation/som_kenobi_obi_wan:s_293", "where_d"}, -- How do I get there?
+		{"@conversation/som_kenobi_obi_wan:s_293", "where_c"}, -- How do I get there?
+		{"@conversation/som_kenobi_obi_wan:s_301", "where_d"}, -- Where is it?
 	}
 }
 som_kenobi_obi_wan:addScreen(chamber_b)
 
 where_a = ConvoScreen:new {
 	id = "where_a",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_269", -- North of the central volcano is what's called the Burning Plains. In the northeast corner of the plains, you will find the entrance to the chamber. I can't come with you, but will meet you there. The minions of the dark are closing in on you. I will have to try and throw them off track.
 	stopConversation = "false",
 	options = {
@@ -917,6 +1059,7 @@ som_kenobi_obi_wan:addScreen(where_a)
 
 where_b = ConvoScreen:new {
 	id = "where_b",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_281", -- North of the central volcano is what's called the Burning Plains. In the northeast corner of the plains, you will find the entrance to the chamber. I can't come with you, but will meet you there. The minions of the dark are closing in on you. I will have to try and throw them off track.
 	stopConversation = "false",
 	options = {
@@ -927,6 +1070,7 @@ som_kenobi_obi_wan:addScreen(where_b)
 
 where_c = ConvoScreen:new {
 	id = "where_c",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_295", -- North of the central volcano is what's called the Burning Plains. In the northeast corner of the plains, you will find the entrance to the chamber. I can't come with you, but will meet you there. The minions of the dark are closing in on you. I will have to try and throw them off track.
 	stopConversation = "false",
 	options = {
@@ -937,6 +1081,7 @@ som_kenobi_obi_wan:addScreen(where_c)
 
 where_d = ConvoScreen:new {
 	id = "where_d",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_303", -- North of the central volcano is what's called the Burning Plains. In the northeast corner of the plains, you will find the entrance to the chamber. I can't come with you, but will meet you there. The minions of the dark are closing in on you. I will have to try and throw them off track.
 	stopConversation = "false",
 	options = {
@@ -948,6 +1093,7 @@ som_kenobi_obi_wan:addScreen(where_d)
 -- All four fire 'talkedKenobi2' and hand over the waypoint to the entrance.
 goluck_a = ConvoScreen:new {
 	id = "goluck_a",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_277", -- Good luck, my friend, and may the Force be with you. You will need it.
 	stopConversation = "true",
 	options = {}
@@ -956,6 +1102,7 @@ som_kenobi_obi_wan:addScreen(goluck_a)
 
 goluck_b = ConvoScreen:new {
 	id = "goluck_b",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_285", -- I hope you are right. May the Force be with you, %TU. You will need it.
 	stopConversation = "true",
 	options = {}
@@ -964,6 +1111,7 @@ som_kenobi_obi_wan:addScreen(goluck_b)
 
 goluck_c = ConvoScreen:new {
 	id = "goluck_c",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_299", -- Good luck, my friend and may the Force be with you. You will need it.
 	stopConversation = "true",
 	options = {}
@@ -972,6 +1120,7 @@ som_kenobi_obi_wan:addScreen(goluck_c)
 
 goluck_d = ConvoScreen:new {
 	id = "goluck_d",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_307", -- I hope you are right. May the Force be with you, %TU. You will need it.
 	stopConversation = "true",
 	options = {}
@@ -998,6 +1147,7 @@ som_kenobi_obi_wan:addScreen(chamber_meet)
 
 toomany = ConvoScreen:new {
 	id = "toomany",
+	playerAnimation = "point_accusingly",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_165", -- There's too many of them and they are closing in too fast! We have to get inside, now!
 	stopConversation = "false",
 	options = {
@@ -1008,21 +1158,21 @@ som_kenobi_obi_wan:addScreen(toomany)
 
 wedge = ConvoScreen:new {
 	id = "wedge",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_167", -- It's the crystal. It's playing tricks with your mind. Wedge it into one of the cracks on the pillar, then place your hands on it and focus on transferring yourself inside.
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_obi_wan:s_169", "hurry_a"}, -- This better work!
-		{"@conversation/som_kenobi_obi_wan:s_171", "hurry_b"}, -- Alright, I... I hope this works...
 	}
 }
 som_kenobi_obi_wan:addScreen(wedge)
 
 breakdown = ConvoScreen:new {
 	id = "breakdown",
+	playerAnimation = "squirm",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_168", -- The crystal is trying to break you down, but you will be free from it in a second, my friend. Take it and wedge it into one of the cracks of the pillar, then place your hands on it and focus on transferring yourself inside.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_kenobi_obi_wan:s_169", "hurry_a"}, -- This better work!
 		{"@conversation/som_kenobi_obi_wan:s_171", "hurry_b"}, -- Alright, I... I hope this works...
 	}
 }
@@ -1031,6 +1181,7 @@ som_kenobi_obi_wan:addScreen(breakdown)
 -- Both fire 'talkedKenobi3' and open the way into the lair.
 hurry_a = ConvoScreen:new {
 	id = "hurry_a",
+	playerAnimation = "squirm",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_170", -- I believe it will, %TU. Now hurry!
 	stopConversation = "true",
 	options = {}
@@ -1039,6 +1190,7 @@ som_kenobi_obi_wan:addScreen(hurry_a)
 
 hurry_b = ConvoScreen:new {
 	id = "hurry_b",
+	playerAnimation = "twitch",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_172", -- It will, my friend. Now hurry!
 	stopConversation = "true",
 	options = {}
@@ -1063,6 +1215,8 @@ som_kenobi_obi_wan:addScreen(ready_enter)
 
 ready_yes = ConvoScreen:new {
 	id = "ready_yes",
+	animation = "nod",
+	playerAnimation = "nod",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_321", -- Good, let us finish this, %TU.
 	stopConversation = "true",
 	options = {}
@@ -1071,6 +1225,8 @@ som_kenobi_obi_wan:addScreen(ready_yes)
 
 ready_no = ConvoScreen:new {
 	id = "ready_no",
+	animation = "nod",
+	playerAnimation = "shake_head_no",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_319", -- Very well, but don't take too long, %TU. We need to finish this.
 	stopConversation = "true",
 	options = {}
@@ -1090,6 +1246,7 @@ som_kenobi_obi_wan:addScreen(resume)
 
 resume_yes = ConvoScreen:new {
 	id = "resume_yes",
+	playerAnimation = "nod",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_341", -- Good. Make your way to the lair immediately. We haven't much time.
 	stopConversation = "true",
 	options = {}
@@ -1098,6 +1255,7 @@ som_kenobi_obi_wan:addScreen(resume_yes)
 
 resume_no = ConvoScreen:new {
 	id = "resume_no",
+	playerAnimation = "shake_head_no",
 	leftDialog = "@conversation/som_kenobi_obi_wan:s_342", -- Very well, but I hope you will be soon. We don't have much time.
 	stopConversation = "true",
 	options = {}

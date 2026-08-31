@@ -1,10 +1,15 @@
 --[[
 	The mining corporation executive -- som_kenobi_moral_choice_1.
 
-	RECONSTRUCTED, not ported. som_kenobi_moral_exec.stf shipped in the client
-	(string/en/conversation/); the SwgConversationEditor tree that wires those
-	strings into screens did not. Every leftDialog and option string below is
-	SOE's verbatim text; the edges between them are reconstructed.
+	RECONSTRUCTED, THEN CHECKED AGAINST THE LIVE TREE.
+
+	som_kenobi_moral_exec.stf shipped in the client (string/en/conversation/);
+	the SwgConversationEditor tree that wires those strings into screens did
+	not. Every leftDialog and option string below is SOE's verbatim text; the
+	edges between them were reconstructed, and have since been read back against
+	the server-side script. The two chains, both returns and all six openings
+	came out right. One screen's option list did not -- see CORRECTING THE
+	SECOND PITCH -- and the greeting's options were in the wrong order.
 
 	THE PITCH IS WRITTEN TWICE, and the player's first answer picks the copy:
 
@@ -23,8 +28,30 @@
 	pwwoz and serpent tables. Neither chain's lines appear in the other.
 
 	The second chain has one extra beat the first does not: s_116 "Is there
-	really no other way to solve the conflict?" and its answer s_127. It hands
-	the same accept/refuse pair back afterwards, so it is a detour, not a fork.
+	really no other way to solve the conflict?" and its answer s_127.
+
+	=====================================================================
+	CORRECTING THE SECOND PITCH -- the extra beat is the route, not a detour
+	=====================================================================
+	This file used to hang three options off s_103: s_116, plus the accept
+	s_128 and the refuse s_136, on the reading that s_116 was an optional
+	question that handed the same pair straight back. Live hangs ONE option off
+	s_103 -- s_116 -- and the accept/refuse pair lives on s_127 alone. There is
+	no way to take or turn down this job in chain B without asking whether there
+	is another way first.
+
+	ROOT CAUSE: making the two chains symmetrical. Chain A puts accept/refuse
+	directly on the plan (s_65), so chain B was assumed to do the same and s_116
+	became an extra the player could skip. The chains are not symmetrical; that
+	asymmetry is the whole point of writing the pitch twice. The player who
+	answered "That depends on what you need assistance with" is sold the job
+	flat, and the player who answered "Sure am. What did you have in mind?" is
+	made to ask about a peaceful outcome before he can say yes -- which is the
+	beat the entire moral choice turns on.
+
+	The old reading was also self-defeating on its own terms: an option that
+	hands the same pair back and changes nothing is dead weight, and SOE does
+	not write dead weight into a five-line chain.
 
 	TWO WAYS OUT OF THE GREETING that are neither chain: s_113 "No, sorry, not
 	right now." is answered by s_62 "I trust that you'll come back when you
@@ -70,9 +97,10 @@ moral_exec_greeting = ConvoScreen:new {
 	id = "greeting",
 	leftDialog = "@conversation/som_kenobi_moral_exec:s_110", -- You there. The corporation could use your assistance. Are you available at the moment?
 	stopConversation = "false",
+	-- Live's order: s_111 above s_112. It was the other way round here.
 	options = {
-		{"@conversation/som_kenobi_moral_exec:s_112", "pitch_a"},  -- That depends on what you need assistance with.
 		{"@conversation/som_kenobi_moral_exec:s_111", "pitch_b"},  -- Sure am. What did you have in mind?
+		{"@conversation/som_kenobi_moral_exec:s_112", "pitch_a"},  -- That depends on what you need assistance with.
 		{"@conversation/som_kenobi_moral_exec:s_113", "later"},    -- No, sorry, not right now.
 		{"@conversation/som_kenobi_moral_exec:s_114", "dismiss"},  -- No.
 	}
@@ -95,8 +123,9 @@ moral_exec_dismiss = ConvoScreen:new {
 }
 som_kenobi_moral_exec:addScreen(moral_exec_dismiss)
 
--- The .qst's [list] block says Level = 75. moral_exec_conv_handler routes here
--- instead of the greeting when the player is under it.
+-- moral_exec_conv_handler routes here instead of the greeting when the player is
+-- under the gate. The gate is 61, from this executive's own server-side level
+-- test, not the Level = 75 his .qst displays; see THE LEVEL GATE in that handler.
 moral_exec_toolow = ConvoScreen:new {
 	id = "toolow",
 	leftDialog = "@conversation/som_kenobi_moral_exec:s_47", -- I'm busy and you're too wet behind the ears. Come back when you've gained some experience and I may have a job for you.
@@ -175,15 +204,16 @@ moral_exec_plan_b = ConvoScreen:new {
 	id = "plan_b",
 	leftDialog = "@conversation/som_kenobi_moral_exec:s_103", -- We need you to go into their facility and destroy the power generator...
 	stopConversation = "false",
+	-- One option, not three. The accept and the refuse are on noother, and this
+	-- is the only way to reach them. See CORRECTING THE SECOND PITCH.
 	options = {
 		{"@conversation/som_kenobi_moral_exec:s_116", "noother"},  -- Is there really no other way to solve the conflict?
-		{"@conversation/som_kenobi_moral_exec:s_128", "grant_b"},  -- Alright, if there's no other way, I'll help you.
-		{"@conversation/som_kenobi_moral_exec:s_136", "refuse_b"}, -- This whole thing sounds fishy. I don't want to do it.
 	}
 }
 som_kenobi_moral_exec:addScreen(moral_exec_plan_b)
 
--- A detour, not a fork: it hands the same accept/refuse pair straight back.
+-- Chain B's accept/refuse fork. Chain A puts the same fork one screen earlier,
+-- on the plan itself; this chain makes the player ask first.
 moral_exec_noother = ConvoScreen:new {
 	id = "noother",
 	leftDialog = "@conversation/som_kenobi_moral_exec:s_127", -- Oh believe me, friend, we've tried everything, but I don't think they are interested in a peaceful outcome at all...

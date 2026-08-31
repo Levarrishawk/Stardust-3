@@ -2,33 +2,66 @@
 	Pei Yi -- the stranded dancer in the Mensix cantina.
 
 	Every line below is an existing @conversation/som_pei_yi entry, so this works against a
-	stock client with no new strings. The tree is reconstructed from the shipped string table
+	stock client with no new strings. The tree was reconstructed from the shipped string table
 	(string/en/conversation/som_pei_yi.stf, mtg_patch_019.tre); SOE kept the conversation trees
-	themselves server-side, so only the strings survive in the TREs. Their pairing is not
-	guesswork -- each player line answers the NPC line it follows, e.g. s_25 "Probably not.
-	Good bye." only makes sense after s_23 "...a troupe that you've probably never heard of",
-	and s_74 "That's true. Good bye." only after s_39 "I should be grateful, I suppose."
+	themselves server-side, so only the strings survive in the TREs.
+
+	The live tree has since been read, and the reconstruction holds screen for screen except
+	for two options; both are corrected below.
 
 	The renumbering in the middle of the table (s_15..s_41 and s_54..s_88 are odd-only, while
 	s_42..s_53 run consecutively) marks the return-visit branch as a later addition, which is
-	why it is a separate greeting here rather than a screen hanging off the first one.
+	why it is a separate greeting here rather than a screen hanging off the first one. Live
+	agrees -- s_42 is its own start-chain entry, gated on hasDance.
 
-	THE DANCE
+	THE TWO MISPLACED EXITS
 
-	The lesson is a conversation, not an ability grant, and that is not a shortcut -- there is
-	no dance here to grant. datatables/performance/performance.iff exists in exactly one TRE in
-	this tree (mtg_patch_013_configurable_02), so nothing masks it the way stardust_03 masks
-	mtg_patch_023's quests.iff; its 154 rows are 13 songs and 24 dances and none is peiyi. All
-	three copies of datatables/skill/skills.iff (stardust_01, stardust_03, mtg_patch_013) list
-	22 startDance+ abilities and none is startDance+peiyi. The pei yi animations that do ship
-	(appearance/animation/all_b_dnc_pei_yi_*.ans, mtg_patch_001_appearance_01.tre) have no
-	performance row pointing at them, which is what a player-usable dance requires; compare
-	western and theatrical, which have performance rows and get their abilities hardcoded in
-	SkillManager.cpp:154-159 precisely because skills.iff omits them.
+	s_25 "Probably not. Good bye." was on s_23; live branch 8 puts it on s_19, beside s_21.
+	s_50 "Oh, sorry. I've got to go." was on the s_42 greeting; live branch 2 puts it on s_47,
+	beside s_48 and s_49. Live's greeting offers only s_44 and s_45.
 
-	So the handler gates on social_dancer_novice -- a real skill, really checked -- and the
-	dancer gets the lesson line and the return-visit branch. It does not call addAbility for
-	something that cannot exist, and it does not leave a grant behind that quietly does nothing.
+	ROOT CAUSE: pairing each exit line with the NPC line it reads best against instead of with
+	the screen that offers it. This file used to argue the point outright -- 's_25 "Probably
+	not. Good bye." only makes sense after s_23 "...a troupe that you've probably never heard
+	of"'. It reads well there, and it is not where SOE put it. An exit option sits on the
+	screen the player is leaving, and that screen need not have set it up.
+
+	THE DANCE  --  live grants it; we cannot
+
+	Live does hand over a real command:
+
+	    action_grantDance -> sendSystemMessage(player, "som/som_quest:grant_dance")
+	                         grantCommand(player, "startDance+peiyi")
+
+	This file used to say the lesson was "a conversation, not an ability grant" and that "there
+	is no dance here to grant". The first half is wrong about SOE and the second half is right
+	about the data, and they are two different claims.
+
+	What is still true: datatables/performance/performance.iff has no peiyi row, and
+	datatables/skill/skills.iff lists no startDance+peiyi. The pei yi animations do ship
+	(appearance/animation/all_b_dnc_pei_yi_*.ans, mtg_patch_001_appearance_01.tre) with nothing
+	pointing at them. Core3 drives dances off performance.iff, so granting the command here
+	would hand the player a startDance that resolves to no row.
+
+	So the grant is not made, and the handler keeps its own flag where live tests
+	hasCommand("startDance+peiyi"). That is a deviation, and it is one because the row the
+	command needs is missing from the client this server runs against -- not because SOE never
+	wrote a grant.
+
+	ROOT CAUSE: searching for the dance where a player-learnable dance would live -- a
+	performance row and a skills.iff ability -- and reading its absence as SOE's intent. A
+	grantCommand needs neither, so absence from those two tables says nothing about whether a
+	grant was written. Only the conversation says that, and the conversation had not been read.
+
+	THE GATE  --  isEntertainer, not social_dancer_novice
+
+	Live gates both the "I'm a dancer myself" option (branch 13) and the grant itself
+	(branch 15) on one condition:
+
+	    condition_isEntertainer -> utils.isProfession(player, utils.ENTERTAINER) && level >= 46
+
+	It also defines condition_isDancer -> hasSkill(player, "social_dancer_novice") and never
+	calls it. That dead condition is exactly the skill this file used to gate on.
 --]]
 
 som_pei_yi = ConvoTemplate:new {
@@ -60,6 +93,9 @@ pei_yi_not_a_miner = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_pei_yi:s_21", "a_dancer"},  -- You're a dancer?
+		-- Live branch 8 -- the options on s_19 are s_21 and s_25. This was one
+		-- screen deeper, on s_23; see THE TWO MISPLACED EXITS.
+		{"@conversation/som_pei_yi:s_25", "bye_probably"},  -- Probably not. Good bye.
 	}
 }
 som_pei_yi:addScreen(pei_yi_not_a_miner)
@@ -70,7 +106,6 @@ pei_yi_a_dancer = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_pei_yi:s_33", "why_here"},      -- What brings you here?
-		{"@conversation/som_pei_yi:s_25", "bye_probably"},  -- Probably not. Good bye.
 	}
 }
 som_pei_yi:addScreen(pei_yi_a_dancer)
@@ -157,7 +192,6 @@ pei_yi_greeting_taught = ConvoScreen:new {
 	options = {
 		{"@conversation/som_pei_yi:s_44", "shown_yes"},  -- Yes, I did.
 		{"@conversation/som_pei_yi:s_45", "shown_no"},   -- No, not yet.
-		{"@conversation/som_pei_yi:s_50", "bye_got_go"}, -- Oh, sorry. I've got to go.
 	}
 }
 som_pei_yi:addScreen(pei_yi_greeting_taught)
@@ -177,6 +211,9 @@ pei_yi_shown_yes = ConvoScreen:new {
 	options = {
 		{"@conversation/som_pei_yi:s_48", "they_liked"},     -- They liked it.
 		{"@conversation/som_pei_yi:s_49", "they_disliked"},  -- They did not like it.
+		-- Live branch 2 -- the options on s_47 are s_48, s_49 and s_50. This was
+		-- one screen shallower, on the s_42 greeting.
+		{"@conversation/som_pei_yi:s_50", "bye_got_go"},     -- Oh, sorry. I've got to go.
 	}
 }
 som_pei_yi:addScreen(pei_yi_shown_yes)
