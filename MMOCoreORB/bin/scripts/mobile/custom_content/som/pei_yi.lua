@@ -33,9 +33,11 @@ pei_yi = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
 	conversationTemplate = "som_pei_yi",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(pei_yi, "pei_yi")

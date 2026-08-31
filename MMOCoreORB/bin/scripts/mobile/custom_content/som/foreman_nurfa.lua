@@ -33,9 +33,11 @@ foreman_nurfa = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
+	conversationTemplate = "striking_miners_nurfa",
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(foreman_nurfa, "foreman_nurfa")

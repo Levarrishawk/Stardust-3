@@ -33,9 +33,11 @@ reporter_jural = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
+	conversationTemplate = "som_storm_lord_jural",
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(reporter_jural, "reporter_jural")

@@ -1,9 +1,9 @@
 storm_lord_zealot = Creature:new {
 	customName = "a storm lord zealot",
-	socialGroup = "townsperson",
+	socialGroup = "storm_lord",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
+	level = 83,
 	chanceHit = 0.27,
 	damageMin = 550,
 	damageMax = 800,
@@ -21,7 +21,7 @@ storm_lord_zealot = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
+	pvpBitmask = ATTACKABLE + AGGRESSIVE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
@@ -33,9 +33,11 @@ storm_lord_zealot = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "imperial_sword",
+	secondaryWeapon = "force_sword_ranged",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord_zealot, "storm_lord_zealot")

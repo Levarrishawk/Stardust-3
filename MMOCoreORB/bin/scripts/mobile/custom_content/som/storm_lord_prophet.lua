@@ -1,9 +1,9 @@
 storm_lord_prophet = Creature:new {
-	customName = "storm_lord_prophet",
-	socialGroup = "townsperson",
+	customName = "Prophet of the Storm Lord",
+	socialGroup = "storm_lord",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
+	level = 87,
 	chanceHit = 0.27,
 	damageMin = 550,
 	damageMax = 800,
@@ -21,8 +21,8 @@ storm_lord_prophet = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + STALKER,
+	pvpBitmask = ATTACKABLE + AGGRESSIVE,
+	creatureBitmask = PACK + STALKER + KILLER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 
@@ -33,9 +33,11 @@ storm_lord_prophet = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "jedi_dark",
+	secondaryWeapon = "unarmed",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord_prophet, "storm_lord_prophet")

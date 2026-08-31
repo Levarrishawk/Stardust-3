@@ -28,9 +28,11 @@ storm_lord = Creature:new {
 
 	templates = {"object/mobile/som/storm_lord.iff"},
 	lootGroups = {},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord, "storm_lord")

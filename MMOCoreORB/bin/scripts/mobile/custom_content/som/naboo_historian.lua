@@ -33,9 +33,11 @@ naboo_historian = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
+	conversationTemplate = "som_glyph_hunt",
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(naboo_historian, "naboo_historian")

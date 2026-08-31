@@ -1,5 +1,15 @@
+-- The pilot who flies the player into the volcano crater in
+-- som_story_arc_chapter_three_03, "Talk to a Pilot".
+--
+-- THE NAME IS LIVE.  customName was the descriptive "Miner Pilot"; his own
+-- conversation script, conversation/story_arc_chapter_three_pilot, calls
+-- setName(self, "Master Pilot Menddle") in both OnInitialize and OnAttach, and
+-- his opening line introduces him: "Menddle is my name and flying is my game."
+-- He is a Mon Cal -- s_42 says so.
+--
+-- The same script sets invulnerable, which the bitmask below now carries.
 miner_pilot = Creature:new {
-	customName = "Miner Pilot",
+	customName = "Master Pilot Menddle",
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
@@ -23,14 +33,16 @@ miner_pilot = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = PACK + STALKER,
-	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
+	optionsBitmask = AIENABLED + INVULNERABLE + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/miner_pilot.iff"},
 	lootGroups = {},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
+	conversationTemplate = "story_arc_chapter_three_pilot",
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(miner_pilot, "miner_pilot")

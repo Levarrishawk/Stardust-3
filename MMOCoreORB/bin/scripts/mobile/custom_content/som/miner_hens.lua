@@ -28,9 +28,11 @@ miner_hens = Creature:new {
 
 	templates = {"object/mobile/som/miner_hens.iff"},
 	lootGroups = {},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
+	conversationTemplate = "xandank_trophy",
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(miner_hens, "miner_hens")

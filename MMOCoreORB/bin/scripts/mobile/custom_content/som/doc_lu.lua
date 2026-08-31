@@ -1,5 +1,8 @@
 doc_lu = Creature:new {
-	customName = "doc_lu",
+	-- "I am Doctor Mi Fon Lu of the Theed Academy" -- his own words, verbatim from
+	-- string/en/conversation/som_doctor_lu.stf s_74. Same sourcing as Sans'ii and
+	-- Vansk below him in this directory; not a coined name.
+	customName = "Doctor Mi Fon Lu",
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
@@ -33,9 +36,11 @@ doc_lu = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
+	conversationTemplate = "som_doctor_lu",
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(doc_lu, "doc_lu")

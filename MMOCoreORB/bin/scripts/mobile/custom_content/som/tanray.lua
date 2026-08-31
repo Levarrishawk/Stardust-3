@@ -29,9 +29,11 @@ tanray = Creature:new {
 	templates = {"object/mobile/som/tanray.iff"},
 	lootGroups = {},
 	scale = 0.18,
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmannovice,brawlernovice),
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(tanray, "tanray")
