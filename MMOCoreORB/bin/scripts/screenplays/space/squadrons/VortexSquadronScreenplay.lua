@@ -1014,10 +1014,10 @@ recovery_naboo_rebel_tier3_4_c = SpaceRecoveryScreenplay:new {
 	recoveryConversationMobile = "object/mobile/dressed_imperial_officer_m_1.iff",
 	escortShips = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
 	preRecoveryPoints = {
-		{patrolPointName = "naboo_rebel_tier3_recover_imperial_1", zoneName = "space_dathomir", x = 4749, z = 109, y = -464, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_rebel_tier3_recover_imperial_2", zoneName = "space_dathomir", x = 5198, z = -16, y = -1992, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_rebel_tier3_recover_imperial_3", zoneName = "space_dathomir", x = 5514, z = -172, y = -3083, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_rebel_tier3_recover_imperial_4", zoneName = "space_dathomir", x = 6221, z = -447, y = -4806, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_1", zoneName = "space_dathomir", x = 3000, z = 1500, y = -3000, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_2", zoneName = "space_dathomir", x = 3500, z = 900, y = -3200, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_3", zoneName = "space_dathomir", x = 4000, z = 100, y = -3450, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_4", zoneName = "space_dathomir", x = 4500, z = -700, y = -3650, escortNumber = 4, radius = 250},
 	},
 	recoveryPoints = {
 		{patrolPointName = "naboo_rebel_tier3_recover_imperial_5", zoneName = "space_dathomir", x = 4807, z = -1349, y = -3781, escortNumber = 1, radius = 250},
