@@ -244,11 +244,13 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t3QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4.name)
 		local t3QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name) or
+								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.name)
 		local t3QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_4.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
@@ -256,8 +258,8 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 								SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
 		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
-		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
-		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
+		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4.name)
+		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4.name)
 		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
 		local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 3)
@@ -284,7 +286,7 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (getQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward") ~= "1") then
 				setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward", 1)
 
-				assassinate_naboo_rebel_tier3_4:rewardPlayer(pPlayer)
+				space_battle_naboo_rebel_tier3_4:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work4")
@@ -292,7 +294,7 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (getQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward") ~= "1") then
 				setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward", 1)
 
-				delivery_naboo_rebel_tier3_3:rewardPlayer(pPlayer)
+				patrol_naboo_rebel_tier3_3:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work3")
@@ -300,7 +302,7 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (getQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":reward") ~= "1") then
 				setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":reward", 1)
 
-				inspect_naboo_rebel_tier3_2:rewardPlayer(pPlayer)
+				space_battle_naboo_rebel_tier3_2:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work2")
@@ -308,7 +310,7 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (getQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward") ~= "1") then
 				setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward", 1)
 
-				recovery_naboo_rebel_tier3_1:rewardPlayer(pPlayer)
+				assassinate_naboo_rebel_tier3_1:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work1")
@@ -353,7 +355,9 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	--]]
 
 	if (ghost:getPilotTier() == 2) then
-		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER2_QUEST_STRING_1.type, VortexSquadronScreenplay.TIER2_QUEST_STRING_1.name)
+		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, "escort", "vortex_mission_1") or
+			SpaceHelpers:isSpaceQuestActive(pPlayer, "inspect", "vortex_mission_1") or
+			SpaceHelpers:isSpaceQuestActive(pPlayer, "destroy_surpriseattack", "vortex_mission_1")
 		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER2_QUEST_STRING_2.type, VortexSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER2_QUEST_STRING_3.type, VortexSquadronScreenplay.TIER2_QUEST_STRING_3.name)
 		local t2QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, VortexSquadronScreenplay.TIER2_QUEST_STRING_4.type, VortexSquadronScreenplay.TIER2_QUEST_STRING_4.name)
@@ -395,25 +399,25 @@ function v3fxConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t2QuestFourComplete and getQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward", 1)
 
-			assassinate_naboo_rebel_tier2_4:rewardPlayer(pPlayer)
+			inspect_vortex_mission_4:rewardPlayer(pPlayer)
 
 			return convoTemplate:getScreen("tier2_mission4_rewarded")
 		elseif (t2QuestThreeComplete and getQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)
 
-			recovery_naboo_rebel_tier2_3:rewardPlayer(pPlayer)
+			recovery_vortex_mission_3:rewardPlayer(pPlayer)
 
 			return convoTemplate:getScreen("tier2_mission3_rewarded")
 		elseif (t2QuestTwoComplete and getQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward", 1)
 
-			escort_naboo_rebel_tier2_2:rewardPlayer(pPlayer)
+			escort_vortex_mission_2:rewardPlayer(pPlayer)
 
 			return convoTemplate:getScreen("tier2_mission2_rewarded")
 		elseif (t2QuestOneComplete and getQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward", 1)
 
-			inspect_naboo_rebel_tier2_1:rewardPlayer(pPlayer)
+			escort_vortex_mission_1:rewardPlayer(pPlayer)
 
 			return convoTemplate:getScreen("tier2_mission1_rewarded")
 
@@ -811,26 +815,26 @@ function v3fxConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_naboo_rebel_tier2_1}, {{type="inspect", name="naboo_rebel_tier2_1"}})
-		inspect_naboo_rebel_tier2_1:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_vortex_mission_1, inspect_vortex_mission_1, destroy_surpriseattack_vortex_mission_1}, {{type="escort", name="vortex_mission_1"}, {type="inspect", name="vortex_mission_1"}, {type="destroy_surpriseattack", name="vortex_mission_1"}})
+		escort_vortex_mission_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission2" or screenID == "tier2_failed_mission2") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_naboo_rebel_tier2_2}, {{type="escort", name="naboo_rebel_tier2_2"}})
-		escort_naboo_rebel_tier2_2:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_vortex_mission_2}, {{type="escort", name="vortex_mission_2"}})
+		escort_vortex_mission_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission3" or screenID == "tier2_failed_mission3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_naboo_rebel_tier2_3}, {{type="recovery", name="naboo_rebel_tier2_3"}})
-		recovery_naboo_rebel_tier2_3:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_vortex_mission_3}, {{type="recovery", name="vortex_mission_3"}})
+		recovery_vortex_mission_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission4" or screenID == "tier2_failed_mission4") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_naboo_rebel_tier2_4}, {{type="assassinate", name="naboo_rebel_tier2_4"}})
-		assassinate_naboo_rebel_tier2_4:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_vortex_mission_4}, {{type="inspect", name="vortex_mission_4"}})
+		inspect_vortex_mission_4:startQuest(pPlayer, pNpc)
 
 	-- Tier 3 Training - options added on excellent work screens, missions-only (no XP requirement)
 	elseif (string.find(screenID, "tier3_excellent_work")) then
@@ -872,26 +876,26 @@ function v3fxConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_naboo_rebel_tier3_1, patrol_naboo_rebel_tier3_1_A, destroy_surpriseattack_naboo_rebel_tier3_1_b, assassinate_naboo_rebel_tier3_1_c, space_battle_naboo_rebel_tier3_1_d}, {{type="recovery", name="naboo_rebel_tier3_1"}, {type="patrol", name="naboo_rebel_tier3_1_A"}, {type="destroy_surpriseattack", name="naboo_rebel_tier3_1_b"}, {type="assassinate", name="naboo_rebel_tier3_1_c"}, {type="space_battle", name="naboo_rebel_tier3_1_d"}})
-		recovery_naboo_rebel_tier3_1:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_naboo_rebel_tier3_1, escort_naboo_rebel_tier3_1_a, survival_naboo_rebel_tier3_1_b, inspect_naboo_rebel_tier3_1_c, delivery_no_pickup_naboo_rebel_tier3_1_d}, {VortexSquadronScreenplay.TIER3_QUEST_STRING_1, VortexSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1, VortexSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2, VortexSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3, VortexSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4})
+		assassinate_naboo_rebel_tier3_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission2" or screenID == "tier3_failed_mission2") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_naboo_rebel_tier3_2, delivery_naboo_rebel_tier3_2_a, survival_naboo_rebel_tier3_2_b, escort_naboo_rebel_tier3_2_c}, {{type="inspect", name="naboo_rebel_tier3_2"}, {type="delivery", name="naboo_rebel_tier3_2_a"}, {type="survival", name="naboo_rebel_tier3_2_b"}, {type="escort", name="naboo_rebel_tier3_2_c"}})
-		inspect_naboo_rebel_tier3_2:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {space_battle_naboo_rebel_tier3_2, rescue_naboo_rebel_tier3_2_a, patrol_naboo_rebel_tier3_2_b, destroy_surpriseattack_naboo_rebel_tier3_2_c, inspect_naboo_rebel_tier3_2_d}, {VortexSquadronScreenplay.TIER3_QUEST_STRING_2, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3, VortexSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE4})
+		space_battle_naboo_rebel_tier3_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission3" or screenID == "tier3_failed_mission3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {delivery_naboo_rebel_tier3_3, assassinate_naboo_rebel_tier3_3_a, space_battle_naboo_rebel_tier3_3_b, escort_naboo_rebel_tier3_3_c}, {{type="delivery", name="naboo_rebel_tier3_3"}, {type="assassinate", name="naboo_rebel_tier3_3_a"}, {type="space_battle", name="naboo_rebel_tier3_3_b"}, {type="escort", name="naboo_rebel_tier3_3_c"}})
-		delivery_naboo_rebel_tier3_3:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_naboo_rebel_tier3_3, destroy_surpriseattack_naboo_rebel_tier3_3_a, survival_naboo_rebel_tier3_3_b, patrol_naboo_rebel_tier3_3_c, assassinate_naboo_rebel_tier3_3_d}, {VortexSquadronScreenplay.TIER3_QUEST_STRING_3, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3, VortexSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE4})
+		patrol_naboo_rebel_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission4" or screenID == "tier3_failed_mission4") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. VortexSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
-		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_naboo_rebel_tier3_4, patrol_naboo_rebel_tier3_4_a, destroy_surpriseattack_naboo_rebel_tier3_4_b, space_battle_naboo_rebel_tier3_4_c, survival_naboo_rebel_tier3_4_d}, {{type="assassinate", name="naboo_rebel_tier3_4"}, {type="patrol", name="naboo_rebel_tier3_4_a"}, {type="destroy_surpriseattack", name="naboo_rebel_tier3_4_b"}, {type="space_battle", name="naboo_rebel_tier3_4_c"}, {type="survival", name="naboo_rebel_tier3_4_d"}})
-		assassinate_naboo_rebel_tier3_4:startQuest(pPlayer, pNpc)
+		VortexSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {space_battle_naboo_rebel_tier3_4, patrol_naboo_rebel_tier3_4_a, survival_naboo_rebel_tier3_4_b, recovery_naboo_rebel_tier3_4_c, delivery_naboo_rebel_tier3_4_d}, {VortexSquadronScreenplay.TIER3_QUEST_STRING_4, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3, VortexSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4})
+		space_battle_naboo_rebel_tier3_4:startQuest(pPlayer, pNpc)
 
 	-- Tier 4 Training
 	elseif (screenID == "ready_train_tier4") then

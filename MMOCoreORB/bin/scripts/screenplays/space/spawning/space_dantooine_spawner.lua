@@ -18,10 +18,6 @@ SpaceDantooineSpawner = SpaceSpawnerScreenPlay:new {
 		{spawnName = "warrens_guards_1", spawnType = SHIP_SPAWN_SINGLE, x = -5921, z = 1303, y = -4991, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, minPatrol = 80, maxPatrol = 370, totalSpawns = 3,
 			shipSpawns = {"warrens_fighter"}
 		},
-		{spawnName = "vortex_mission_4_shuttle", spawnType = SHIP_SPAWN_SQUADRON, x = -3273, z = -3335, y = -3027, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 10, maxRespawn = 30, minSpawnDistance = 10, maxSpawnDistance = 100, totalSpawns = 1,
-			patrolsToAssign = 5, fixedPatrolPoints = {"vortex_mission_4_shuttle_00", "vortex_mission_4_shuttle_01", "vortex_mission_4_shuttle_02", "vortex_mission_4_shuttle_03", "vortex_mission_4_shuttle_04", "vortex_mission_4_shuttle_05", "vortex_mission_4_shuttle_06", "vortex_mission_4_shuttle_07", "vortex_mission_4_shuttle_08", "vortex_mission_4_shuttle_09", "vortex_mission_4_shuttle_10", "vortex_mission_4_shuttle_11", "vortex_mission_4_shuttle_12"},
-			shipSpawns = {"squad_vortex_mission_4"}
-		},
 		{spawnName = "imperial_beacon_defense_3", spawnType = SHIP_SPAWN_SINGLE, x = -3592, z = -993, y = -3500, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 60, maxPatrol = 320, totalSpawns = 3,
 			shipSpawns = {"imp_tie_bomber_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3_dantooine", "imp_tie_interceptor_tier3_dantooine", "imp_tie_advanced_tier2", "imp_tie_aggressor_tier2", "imp_tie_interceptor_tier2", "imp_tie_oppressor_tier2"}
 		},
