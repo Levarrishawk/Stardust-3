@@ -820,7 +820,7 @@ survival_naboo_rebel_tier3_3_b = SpaceSurvivalScreenplay:new {
 	parentQuestType = "destroy_surpriseattack",
 	parentQuestName = "naboo_rebel_tier3_3_a",
 
-	survivalTime = 420, survivalPoint = "space_endor:naboo_rebel_tier3_blacklight_point", delayToFirstAttack = 5, attackDelay = 70,
+	survivalTime = 420, survivalUpdateInterval = 60, survivalPoint = "space_endor:naboo_rebel_tier3_blacklight_point", delayToFirstAttack = 5, attackDelay = 70,
 	attackShips = {{"blacklight_fighter_tier3", "blacklight_bomber_tier3"}, {"blacklight_fighter_tier3", "blacklight_assassin_tier3"}, {"blacklight_bomber_tier3", "blacklight_fighter_tier3"}, {"blacklight_assassin_tier3", "blacklight_assassin_tier3"}, {"blacklight_fighter_tier3", "blacklight_bomber_tier3"}, {"blacklight_fighter_tier3", "blacklight_assassin_tier3"}},
 
 	battlePoint = "space_endor:naboo_rebel_tier3_3_b_battlepoint",
