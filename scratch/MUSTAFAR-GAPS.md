@@ -552,6 +552,29 @@ register. `screenplays.lua` names 69 Mustafar files, all 69 resolve, and the onl
 Syntax gate after the weapon revert, `luac5.3 -p` over
 `mobile/custom_content/som` + `screenplays/mustafar`: **ok=230 fail=0**.
 
+### The one remaining TODO in the tree, and why it stays
+
+`regions/storm_lord_region.lua:77` reads:
+
+```lua
+-- Skar tower   -- TODO add suitable NPC for Skar -  Closest appearance would be blackguard wilder.
+```
+
+The tower is not empty — `pMinion9` through `pMinion13` spawn there at `:78-88`. The TODO asks
+for a *named* NPC called Skar. **SoM never shipped one.** A byte-exact search for `skar` in
+ASCII, UTF-16LE and UTF-16BE across all 516 files of `C:\swg-extract\_som` returns **0
+occurrences**, against controls of `sher_kar` in 9 files, `blackguard` in 8 and `storm_lord`
+in 7 — so the search works and the absence is real. No creature template, no string table
+entry, no `.qst` names Skar.
+
+Note the method: `grep -c -ia skar` on `creature_names.stf` reports a match, but `grep -o`
+prints nothing and a byte scan finds none in any encoding. That is a grep binary-mode artifact.
+The counts above are from the byte scan, not from grep.
+
+The comment's own suggestion — "closest appearance would be blackguard wilder" — is the author
+guessing at an appearance, not citing a source. Naming and statting a boss the source data does
+not contain is authoring, so the TODO stays where it is, unclosed and now explained.
+
 ### What this census does not do
 
 It does not place anything. Every item above needs a value — a coordinate, a taming chance, a
