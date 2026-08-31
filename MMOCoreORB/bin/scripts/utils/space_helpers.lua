@@ -1110,7 +1110,7 @@ function SpaceHelpers:addExtokEvinWaypoint(pPlayer)
 
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 	if (pGhost ~= nil) then
-		PlayerObject(pGhost):addWaypoint("talus", "@npc_spawner_n:extok_evin", "@npc_spawner_n:extok_evin", 445, 0, -2925, WAYPOINT_BLUE, true, true, 0)
+		PlayerObject(pGhost):addWaypoint("talus", "@npc_spawner_n:extok_evin", "@npc_spawner_n:extok_evin", 516, 0, -3076, WAYPOINT_BLUE, true, true, 0)
 	end
 end
 
