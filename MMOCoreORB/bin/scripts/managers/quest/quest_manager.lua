@@ -351,10 +351,12 @@ QuestManager.quests.FS_CRAFTING4_QUEST_FINISH 		= 185
 QuestManager.quests.FS_CRAFT_PUZZLE_QUEST_04 		= 186
 QuestManager.quests.FS_CS_QUEST_DONE_NOTIFYONLY 	= 187
 
--- Secrets of Mustafar: The Mining Field Markers (Surveyor Jo Keslev).
--- Per area: _MARKERS is the "go check this area" quest, _MARKERS_nn is one marker,
--- and the bare area quest is activated once all of that area's markers are checked
--- and is turned in to Keslev for the 5000cr / 290xp payout.
+-- Secrets of Mustafar: The Mining Field Markers (Surveyor Keslev -- no middle name; the
+-- "Jo" this used to carry came from the wiki, not from the shipped journals).
+-- Per area: _MARKERS is the "go check this area" quest, _MARKERS_nn is one marker, and the
+-- bare area quest is the .qst's Reward task -- it completes the moment that area's last
+-- marker is activated and pays 5000cr / 290xp on the spot. There is no hand-in; the earlier
+-- "turned in to Keslev" note here described a screen live never had.
 QuestManager.quests.SOM_BERKENS_FLOW_MARKERS		= 188
 QuestManager.quests.SOM_BERKENS_FLOW_MARKERS_01		= 189
 QuestManager.quests.SOM_BERKENS_FLOW_MARKERS_02		= 190

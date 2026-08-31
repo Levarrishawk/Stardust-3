@@ -752,9 +752,11 @@ includeFile("poi/naboo_memorial.lua")
 
 -- Mustafar
 -- Instances first: reunite_shard.lua and historian.lua read the ORF pool from
--- MustafarInstances.
+-- MustafarInstances. The dungeon populator goes second, for the same reason plus
+-- one more -- historian.lua asks it for the ORF security droid's template.
 includeFile("mustafar/mustafar_instances.lua")
-includeFile("mustafar/quest/conversation/jo_kelsev_conv_handler.lua")
+includeFile("mustafar/mustafar_dungeon_population.lua")
+includeFile("mustafar/quest/conversation/keslev_conv_handler.lua")
 includeFile("mustafar/quest/mining_field_markers.lua")
 includeFile("mustafar/quest/map_exploration.lua")
 includeFile("mustafar/quest/hidden_treasure.lua")
@@ -766,6 +768,7 @@ includeFile("mustafar/quest/conversation/menth_paul_conv_handler.lua")
 includeFile("mustafar/quest/conversation/cursed_shard_sucker_conv_handler.lua")
 includeFile("mustafar/quest/cursed_shard.lua")
 includeFile("mustafar/quest/conversation/epo_qetora_conv_handler.lua")
+includeFile("mustafar/quest/conversation/historian_dark_jedi_conv_handler.lua")
 includeFile("mustafar/quest/historian.lua")
 includeFile("mustafar/quest/conversation/ikt_conv_handler.lua")
 includeFile("mustafar/quest/conversation/serpent_thief_conv_handler.lua")
@@ -779,19 +782,31 @@ includeFile("mustafar/quest/conversation/computer_technician_conv_handler.lua")
 includeFile("mustafar/quest/conversation/crazed_hermit_conv_handler.lua")
 includeFile("mustafar/quest/conversation/obi_wan_conv_handler.lua")
 includeFile("mustafar/quest/kenobi_spine.lua")
+includeFile("mustafar/quest/conversation/xandank_trophy_conv_handler.lua")
 includeFile("mustafar/quest/trophy_hunts.lua")
 includeFile("mustafar/quest/bounty_hunts.lua")
 includeFile("mustafar/quest/hk_history.lua")
+includeFile("mustafar/quest/HkHistoryDatapadMenuComponent.lua")
+includeFile("mustafar/quest/conversation/miner_madness_chief_drono_conv_handler.lua")
 includeFile("mustafar/quest/som_poison_miners.lua")
+includeFile("mustafar/quest/conversation/cube_ithes_olok_conv_handler.lua")
 includeFile("mustafar/quest/jenha_tar_cube.lua")
+includeFile("mustafar/quest/conversation/glyph_hunt_conv_handler.lua")
 includeFile("mustafar/quest/glyph_hunt.lua")
+includeFile("mustafar/quest/conversation/striking_miners_urst_conv_handler.lua")
+includeFile("mustafar/quest/conversation/striking_miners_nurfa_conv_handler.lua")
 includeFile("mustafar/quest/som_striking_miners.lua")
 includeFile("mustafar/quest/som_sceismic_charges.lua")
+includeFile("mustafar/quest/conversation/doctor_lu_conv_handler.lua")
 includeFile("mustafar/quest/blackguard_problem.lua")
+includeFile("mustafar/quest/conversation/storm_lord_jural_conv_handler.lua")
 includeFile("mustafar/quest/storm_lord.lua")
+includeFile("mustafar/quest/conversation/maneater_ulon_conv_handler.lua")
 includeFile("mustafar/quest/maneater.lua")
+includeFile("mustafar/quest/conversation/lava_beetle_nest_destroy_donko_conv_handler.lua")
 includeFile("mustafar/quest/lava_beetle_nests.lua")
 includeFile("mustafar/quest/jedi_dog.lua")
+includeFile("mustafar/quest/conversation/chivos_conv_handler.lua")
 -- Last of the mustafar/quest block on purpose: som_prelude_obiwan_check reads the
 -- ten Kenobi side screenplays above through _G[name] to decide whether its gate has
 -- closed.  The lookup happens per call rather than at load, so this is ordering for
@@ -801,6 +816,15 @@ includeFile("mustafar/quest/story_arc_prelude.lua")
 -- storyArcPreludeScreenPlay (above) and somHkHistoryScreenPlay (784) through _G at
 -- call time.  Same deal: nil-guarded lookups, so this is reader ordering, not a
 -- load-order requirement.
+-- The story-arc conversation handlers go ahead of the screenplay they dispatch on,
+-- matching every other pair in this block. Chivos's is above story_arc_prelude.lua
+-- for the same reason.
+includeFile("mustafar/quest/conversation/cobar_conv_handler.lua")
+includeFile("mustafar/quest/conversation/scout_conv_handler.lua")
+includeFile("mustafar/quest/conversation/pilot_conv_handler.lua")
+includeFile("mustafar/quest/conversation/cruiser_computer_conv_handler.lua")
+includeFile("mustafar/quest/conversation/facility_computer_conv_handler.lua")
+includeFile("mustafar/quest/conversation/milo_conv_handler.lua")
 includeFile("mustafar/quest/story_arc_chapters.lua")
 includeFile("mustafar/boundaries/mustafar_boundaries.lua")
 includeFile("mustafar/mensix/conversation/pei_yi_conv_handler.lua")

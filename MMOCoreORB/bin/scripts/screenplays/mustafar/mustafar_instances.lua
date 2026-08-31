@@ -1,13 +1,18 @@
 --[[
 Mustafar instance pools  --  the six SOE dungeon pools
 
-WHAT THIS IS, AND WHOSE WORK IT IS NOT
+WHAT THIS IS, AND WHAT IT SITS ON TOP OF
 
-This file is Lua only. It does not touch Levarris's dungeon work: his contribution
-is the C++ POB ('0001') and CellPortal ('0002') parsing in the portal-layout
-reader, which is what makes these buildings load with working cells at all. That
-is already compiled into the server and is left exactly alone. What was missing on
-top of it was any script that lets a player reach the interiors. That is this file.
+Mustafar content in this tree is ours to write. We are sanctioned to do Mustafar
+for Levarris (Aaron, 2026-08-31), so nothing here is deferred to another owner and
+no part of this file is somebody else's to finish.
+
+What is genuinely his, and is true, is the layer underneath: the C++ POB ('0001')
+and CellPortal ('0002') parsing in the portal-layout reader, which is what makes
+these buildings load with working cells at all. That is already compiled into the
+server and is left exactly alone -- not because it belongs to someone else's
+scope, but because it works and this file is Lua. What was missing on top of it
+was any script that lets a player reach the interiors. That is this file.
 
 THE POOLS ARE SOE'S, AND THEY ARE ALREADY LOADED
 
@@ -88,26 +93,47 @@ passed. The slot is not leaked within a run either.
 
 WHAT IS WIRED, AND WHAT DELIBERATELY IS NOT
 
-Two of the six pools have an entry, not one -- this paragraph used to say only the
-Old Republic Facility did, and that was wrong.
+Five of the six pools have an entry. This paragraph has now been wrong twice: it
+first said only the Old Republic Facility had one, then it said two did. Both
+readings were written without checking the story arc that actually drives these
+dungeons, and the second one was used to justify leaving three pools unwired.
 
-  old_republic_facility   entry = { ... }         ungated
-  lair_of_the_crystal     entry = { ... }         gate = "kenobi_spine"
+  old_republic_facility   entry, own prop 12110161   ungated
+  lair_of_the_crystal     entry, own prop 12112106   gate = "kenobi_spine"
+  uplink_cave             entry, own prop 12111281   gate = "story_arc_uplink"
+  working_droid_factory   entry, NO prop             gate = "story_arc_factory"
+  decrepit_droid_factory  entry, NO prop             gate = "story_arc_factory"
 
-Both are the ones the arc needs. som_kenobi_historian_1 sends the player to the
-Old Republic Facility and reunite_shard_3's fusion machine stands inside it. The
-lair is the shard site; its gate string is resolved against the screenplay of that
-name, so the radial only appears once kenobiSpineScreenPlay:mayEnterLair
-(kenobi_spine.lua:1491) says the player is at that point in the spine.
+som_kenobi_historian_1 sends the player to the Old Republic Facility and
+reunite_shard_3's fusion machine stands inside it. The lair is the shard site; its
+gate string is resolved against the screenplay of that name, so the radial only
+appears once kenobiSpineScreenPlay:mayEnterLair (kenobi_spine.lua:1491) says the
+player is at that point in the spine.
 
-The remaining four -- monster_lair, uplink_cave, working_droid_factory and
-decrepit_droid_factory -- carry entry = nil. They have real exterior doors in the
-snapshot and they are recorded below, but they are NOT wired, and each one says why
-in its own entry. In every case the reason is the same shape: the door exists, the
-interior exists, but the quest or device that opened it in live did not ship in this
-tree, and opening them unconditionally would be inventing content rather than
-restoring it. A radial that teleports a player into an empty dungeon with no reason
-to be there is a grant that does nothing, which is worse than an honest gap.
+An entry whose nodeID is nil is the case this file did not have before, and it is
+the whole point of the seam. A pool needs a landing spot -- cell, x, z, y -- to be
+enterable at all, but it does not have to own a radial to get one.
+
+Both factories share exterior door 12112909, and story_arc_chapters.lua already
+owns that node's menu for "restart the main computer processor" (chapter two 01
+task 1) and "shut down the factory" (chapter three 01 task 16).
+setObjectMenuComponent REPLACES an object's menu wholesale, so attaching a prop
+here would silently destroy those two radials. So the factory pools carry
+nodeID = nil, attachEntryProp skips them, and storyArcChaptersScreenPlay's own
+radial calls MustafarInstances:enterInstance directly. One owner for the node, one
+owner for the pool, and no collision to leave behind as a warning.
+
+uplink_cave does NOT need that treatment, and the note that used to claim it did
+was wrong on the node numbers. The cave's door is 12111281; the node
+story_arc_chapters owns is 12111374, the bunker entrance standing beside it. Two
+different objects, so the cave keeps its own prop and its own radial.
+
+monster_lair is the only pool still carrying entry = nil, and its reason is
+unchanged and still holds: no .qst in this tree points at Sherkar's lair and no
+screenplay populates it, so a radial there would drop a player into an empty room.
+That is an honest gap. The other three were justified the same way and it was not
+true of them -- the arc drives all three. They were not gaps, they were unfinished
+connections, and the difference is the thing worth remembering here.
 
 STRINGS
 
@@ -174,11 +200,48 @@ MustafarInstances = ScreenPlay:new {
 			label = "Uplink Cave",
 			buildings = { 12114807, 12114801, 12114804, 12114798, 12114795, 12114792,
 				12114789, 12114786, 12114783 },
-			entry = nil,
-			-- NOT WIRED. The door is snapshot node 12111281
-			-- (shared_must_uplink_bunker_entrance_door.iff, -3591.53/3489.44) beside
-			-- entrance 12111374. This is the "establish uplink" quest's dungeon; that
-			-- quest is not wired in this tree yet. Wire the quest first, then the door.
+			-- Snapshot node 12111281,
+			-- shared_must_uplink_bunker_entrance_door.iff at (-3591.53, 3489.44).
+			-- This is the cave's OWN door. It is not node 12111374 -- that is the
+			-- bunker entrance standing 0.5 m away, and story_arc_chapters.lua owns
+			-- that one for the surface work site. Two nodes, two owners, no clash.
+			entry = {
+				nodeID = 12111281,
+				text = "Enter the cave",
+
+				-- INVENTED PLACEMENT, and the absence behind it is a checked one.
+				-- som_uplink_cave has NO dungeon spawn table. The five that ship are
+				-- som_mining_facility, som_old_republic_facility, som_crash_site_cruiser,
+				-- som_working_droid_factory and som_decrepit_droid_factory. So unlike
+				-- the ORF there is no live row to quote here, and the .ilf is the best
+				-- evidence that exists -- which is exactly the use of a .ilf this tree
+				-- already calls fair: Core3 never instantiates .ilf furniture, so these
+				-- coordinates are not "where the prop is", they are shipped evidence of
+				-- where SOE left open floor.
+				--
+				-- som_uplink_cave.ilf has one cell, mainroom, and 197 nodes. Within 20 m
+				-- of the cell origin the only ground-level fixtures are two
+				-- must_miner_tower, at (-3.879, h -2.012, -6.071) and
+				-- (-4.271, h -1.978, 5.125), so the floor there sits at h = -2.0.
+				-- Everything else near the origin is overhead -- cargo and death-star
+				-- debris from h +1.5 to +15. x = 0, z = 0 is open floor between the two
+				-- towers with the nearest fixture 5.5 m away.
+				cell = "mainroom",
+				x = 0.0, z = -2.0, y = 0.0,
+			},
+
+			-- Stepped 6 m out from the door toward the .qst's own work-site waypoint
+			-- (-3604 / 3483), which is the direction the player arrives from. The
+			-- door and the bunker entrance are only 0.5 m apart, so that pair is far
+			-- too short a baseline to take a direction from; the authored waypoint is
+			-- the one real bearing available. Lands 5.8 m clear of the bunker.
+			-- Height is resolved with getWorldFloor, never hardcoded.
+			exit = { x = -3596.9, y = 3486.7 },
+
+			-- Chapter one 03's work site. Entering before that chapter would put the
+			-- player in a cave with no droid, no relay and no reason to be there.
+			gate = "story_arc_uplink",
+
 			door = 12111281,
 		},
 		{
@@ -213,7 +276,7 @@ MustafarInstances = ScreenPlay:new {
 			-- with getWorldFloor, never hardcoded.
 			exit = { x = -2693.5, y = 6069.6 },
 
-			-- Only this pool has one. See isEntryAllowed.
+			-- One of four gated pools now, not the only one. See isEntryAllowed.
 			gate = "kenobi_spine",
 
 			door = 12112106,
@@ -223,14 +286,44 @@ MustafarInstances = ScreenPlay:new {
 			label = "Working Droid Factory",
 			buildings = { 12115385, 12115414, 12115356, 12115327, 12115298, 12115269,
 				12115240, 12115211, 12115182, 12115153, 12115124, 12115095 },
-			entry = nil,
-			-- NOT WIRED. The door is snapshot node 12112909
+			-- nodeID = nil ON PURPOSE. The door is snapshot node 12112909
 			-- (shared_droid_factory_exterior_door.iff, 532.71/1977.03), and beside it
 			-- the snapshot places a keypad (12112269) and a history terminal
-			-- (12112268). In live the keypad gated the door behind a code from the
-			-- factory quest line. Both factories share that one door, so which of the
-			-- two pools a player gets is itself part of that quest's logic. None of it
-			-- ships here.
+			-- (12112268). story_arc_chapters.lua owns 12112909's menu component for
+			-- its two factory tasks, and setObjectMenuComponent replaces a menu
+			-- wholesale -- so this pool takes a landing spot and no prop, and
+			-- storyArcChaptersScreenPlay:useFactoryDoor calls enterInstance for it.
+			--
+			-- In live the keypad gated the door behind a code from the factory quest
+			-- line, and both factories share the one door, so which pool a player got
+			-- was part of that quest's logic. That code puzzle does not ship here;
+			-- the arc stage decides instead, which is the deviation, not a gap.
+			entry = {
+				nodeID = nil,
+				text = "Enter the factory",
+
+				-- QUOTED, from the working factory's own dungeon spawn table. Its
+				-- interior door row is
+				-- object/building/mustafar/structures/droid_factory_interior_door.iff
+				-- in cell hall1 at loc_x 0.091872, loc_y 4.00E-06, loc_z 0.141262 --
+				-- the arrival door, effectively the cell origin. The player is put
+				-- 3 m inside it along hall1, clear of the door's own mass. hall1 also
+				-- carries the exit_terminal access_controller at (-1.99229, h 0.189741,
+				-- 2.81714), so the floor there is h = 0.19.
+				cell = "hall1",
+				x = 0.0, z = 0.19, y = 3.0,
+			},
+
+			-- Stepped 6 m out from the door along the vector from the factory
+			-- exterior (node 12112250, 538.25/1972.65) through the door, so the
+			-- player lands facing away from the building rather than inside its
+			-- mass -- the same construction the ORF exit uses. Height is resolved
+			-- with getWorldFloor, never hardcoded.
+			exit = { x = 528.0, y = 1980.8 },
+
+			-- Chapter two 01 task 1 onward. See storyArcChaptersScreenPlay:mayEnterDroidFactory.
+			gate = "story_arc_factory",
+
 			door = 12112909,
 		},
 		{
@@ -238,8 +331,26 @@ MustafarInstances = ScreenPlay:new {
 			label = "Decrepit Droid Factory",
 			buildings = { 12115066, 12115008, 12115037, 12114979, 12114950, 12114921,
 				12114892, 12114863, 12114834 },
-			entry = nil,
-			-- NOT WIRED. Same door and same reason as working_droid_factory above.
+			-- Same door, same seam, same reason as working_droid_factory above:
+			-- nodeID = nil because story_arc_chapters.lua owns 12112909's menu.
+			entry = {
+				nodeID = nil,
+				text = "Enter the factory",
+
+				-- QUOTED. The decrepit factory's own table carries the identical
+				-- interior door row -- droid_factory_interior_door.iff in hall1 at
+				-- 0.091872 / 4.00E-06 / 0.141262 -- and the identical hall1
+				-- exit_terminal at (-1.99229, h 0.189741, 2.81714). The two buildings
+				-- share a floor plan, so they share the arrival spot.
+				cell = "hall1",
+				x = 0.0, z = 0.19, y = 3.0,
+			},
+
+			-- The same door, so the same exit as working_droid_factory.
+			exit = { x = 528.0, y = 1980.8 },
+
+			gate = "story_arc_factory",
+
 			door = 12112909,
 		},
 	},
@@ -288,7 +399,18 @@ function MustafarInstances:prepareCopy(pool, buildingID)
 	createObserver(EXITEDBUILDING, "MustafarInstances", "onExitedInstance", pBuilding)
 end
 
+--[[ A pool may have an entry point without owning a prop's radial. entry.nodeID
+     nil means "somebody else owns the node that leads here" -- the two droid
+     factory pools share door 12112909 with story_arc_chapters.lua, which holds
+     that node's menu component for its own two tasks. setObjectMenuComponent
+     REPLACES a menu rather than stacking, so attaching here would destroy those
+     radials silently. Skipping is the whole mechanism that lets the factories be
+     entered without a collision; it is not a disabled pool. ]]
 function MustafarInstances:attachEntryProp(pool)
+	if (pool.entry.nodeID == nil) then
+		return
+	end
+
 	local pProp = getSceneObject(pool.entry.nodeID)
 
 	if (pProp == nil) then
@@ -340,17 +462,25 @@ end
 
 --[[ Entry ]]
 
---[[ Most of these dungeons are open ground with a door on them; whoever walks up
-     may go in. lair_of_the_crystal is not -- it is the last room of the Kenobi
-     spine, and walking into it early would put the player in front of Sinistro
-     with none of the arc behind them. So a pool may name a gate, and the gate is
-     asked in both places: the radial is not offered to a player who cannot enter,
-     and the selection is refused as well, because a radial the client already
-     drew can still be clicked.
+--[[ The Old Republic Facility is open ground with a door on it; whoever walks up
+     may go in. The other four wired pools are not. lair_of_the_crystal is the
+     last room of the Kenobi spine, and walking into it early would put the player
+     in front of Sinistro with none of the arc behind them. uplink_cave and the two
+     droid factories are story-arc work sites that are empty and meaningless before
+     their chapter. So a pool may name a gate, and the gate is asked in both places:
+     the radial is not offered to a player who cannot enter, and the selection is
+     refused as well, because a radial the client already drew can still be clicked.
 
-     kenobiSpineScreenPlay is a screenplay in this same Lua state, so calling it
-     directly is safe; the check is written as a lookup rather than a hardcoded
-     call so a second gated pool does not have to edit this function. ]]
+     Both screenplays named below live in this same Lua state, so calling them
+     directly is safe.
+
+     This block used to claim the lookup shape meant "a second gated pool does not
+     have to edit this function". That was wrong, and adding the second and third
+     gates is what proved it: the gate string is resolved by an if-chain here, so
+     every new gate costs a branch. The shape is still worth keeping -- it puts all
+     three gates in one readable place (three gate strings serve four pools, because
+     both factories share story_arc_factory) -- but it is not the extension point the
+     old comment advertised, and the next person should not plan around that. ]]
 
 function MustafarInstances:isEntryAllowed(pool, pPlayer)
 	if (pool == nil or pPlayer == nil) then
@@ -361,8 +491,32 @@ function MustafarInstances:isEntryAllowed(pool, pPlayer)
 		return true
 	end
 
+	-- Guards fail closed: a missing gate screenplay must refuse, never admit.
 	if (pool.gate == "kenobi_spine") then
+		if (kenobiSpineScreenPlay == nil) then
+			printLuaError("MustafarInstances: pool " .. pool.key .. " is gated on kenobi_spine.lua, which is not loaded; refusing entry")
+			return false
+		end
+
 		return kenobiSpineScreenPlay:mayEnterLair(pPlayer)
+	end
+
+	if (pool.gate == "story_arc_uplink") then
+		if (storyArcChaptersScreenPlay == nil) then
+			printLuaError("MustafarInstances: pool " .. pool.key .. " is gated on story_arc_chapters.lua, which is not loaded; refusing entry")
+			return false
+		end
+
+		return storyArcChaptersScreenPlay:mayEnterUplinkCave(pPlayer)
+	end
+
+	if (pool.gate == "story_arc_factory") then
+		if (storyArcChaptersScreenPlay == nil) then
+			printLuaError("MustafarInstances: pool " .. pool.key .. " is gated on story_arc_chapters.lua, which is not loaded; refusing entry")
+			return false
+		end
+
+		return storyArcChaptersScreenPlay:mayEnterDroidFactory(pPlayer)
 	end
 
 	printLuaError("MustafarInstances: pool " .. pool.key .. " names an unknown gate '" .. pool.gate .. "'; it cannot be entered")
@@ -378,6 +532,10 @@ function MustafarInstances:enterInstance(pPlayer, poolKey)
 	end
 
 	if (not self:isEntryAllowed(pool, pPlayer)) then
+		-- Say so. A silent return is indistinguishable from a broken radial, and that
+		-- is how a wrong gate threshold sat unnoticed: the task inside was refused at
+		-- the door and nothing reported it.
+		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:not_ready") -- You are not ready to enter that area.
 		return
 	end
 

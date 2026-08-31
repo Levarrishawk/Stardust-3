@@ -316,3 +316,21 @@ ShipAiAgent3 = function(pShipAiAgent)
 
   return _localLuaShipAiAgent3
 end
+
+-- Restored: the wrapper constructors above are consumed as globals by every file that
+-- requires this module, but the module returned nothing, so `local ObjectManager =
+-- require(...)` bound the boolean `true` and every ObjectManager.* call threw. Only
+-- withCreatureObject is used in this repo: 48 lexical references, of which the 47 in
+-- mustafar_boundaries.lua are live and the 48th (hutta_bilbousa_city.lua:669) sits inside
+-- a --[[ ]] block and never ran.
+ObjectManager = {}
+
+function ObjectManager.withCreatureObject(pCreatureObject, performImplementation)
+	if (pCreatureObject == nil) then
+		return nil
+	end
+
+	return performImplementation(CreatureObject(pCreatureObject))
+end
+
+return ObjectManager
