@@ -449,17 +449,53 @@ adding an include for a group nothing uses is not a fix. (`serverobjects.lua` al
 `weapon/groups/stormtrooper_weapons.lua` twice — harmless, `includeFile` is idempotent. 125
 include lines = 108 naming `groups/` (107 distinct) + 17 elsewhere under `weapon/`.)
 
-### Loot — 135 of 160 som creatures drop nothing, and that is upstream
+### Loot — every one of the 158 som creatures drops nothing, and that is upstream
 
-`groups = {}` with a live `lootChance`: the roll happens, resolves no group, drops nothing.
-`origin/unstable` ships 140 som templates in that state. This branch has 135 — the 8 that
-changed are the ones the quests actually need (the three treasure-hunter corpses, Epo Qetora,
-Menth Paul, the computer technician, Ikt, the Pann protocol droid).
+An earlier version of this heading said "135 of 160", which reads as though the other 25 drop
+something. They do not. The directory holds 160 `.lua` files, two of which are not creature
+templates at all (`serverobjects.lua` and the `surveyor_jo.lua` tombstone), leaving **158
+templates — and all 158 resolve to no loot.** They reach that state two ways:
 
-The remaining 135 are Levarris's ambient population. This is a SoM-import condition and not a
-Core3 convention: across all 9,172 files in `mobile/`, exactly **137** carry `groups = {}` and
-**135 of them are som** — the only two outside it are `hutta/hutt_battle_droid.lua` and
-`moraband/creatures/tukata.lua`. Filling in 135 loot tables is authoring, not repair.
+    grep -rl 'group = "'      mobile/custom_content/som/   ->   0 files
+    grep -rl 'groups = {}'    mobile/custom_content/som/   -> 135 files
+    grep -rl 'lootGroups = {},' mobile/custom_content/som/ ->  23 files
+
+135 + 23 = 158. The 135 carry `groups = {}` with a live `lootChance`, so the roll happens,
+resolves no group and drops nothing; the other 23 have no `lootGroups` body to roll at all. Not
+one som template names a single loot group anywhere in the tree — the first grep is the whole
+proof, and it returns nothing.
+
+`origin/unstable` ships 140 in the `groups = {}` state. This branch has 135, and the net −5 is two
+movements, not one. **Eight leave** it because the quests actually need their drops — the three
+treasure-hunter corpses, Epo Qetora, Menth Paul, the computer technician, Ikt and the Pann protocol
+droid. **Three enter** it, and those three are new files this branch adds
+(`som_kenobi_moral_corrupt_guard`, `som_kenobi_moral_exec`, `som_kenobi_moral_strike_leader`, none
+of which exists in `origin/unstable`), so they inherit the wave's own convention rather than
+regressing anything. 140 − 8 + 3 = 135.
+
+The rest are Levarris's ambient population. This is a SoM-import
+condition and not a Core3 convention: across all 9,172 files in `mobile/`, exactly **137** carry
+`groups = {}` and **135 of them are som** — the only two outside it are `hutta/hutt_battle_droid.lua`
+and `moraband/creatures/tukata.lua`.
+
+**Why filling them is authoring and not repair — the worked example.** The retail Storm Lord page
+(below) does list loot, for all five creatures: Credits, Mustafarian Junk, and the "glowing item"
+family (Faintly Glowing Camera, Dimly Glowing Pair of Binoculars, Faintly Glowing Chance Die,
+Faintly Glowing Powerpack, Dimly Glowing Recording Rod, Dimly Glowing Bone, Dimly Glowing Spool of
+Wire), plus Robes of the Storm Caller and Caller of Storms on the boss. So here is one case where
+the source names the drops exactly. It still cannot be wired, because **none of those items exist
+in this repo**:
+
+- no Mustafarian junk loot group — `loot/groups/` has no mustafar/mustafarian group at all; the
+  generic `loot/groups/junk.lua:45` holds unrelated items
+- no glowing-item family — every `glowing` hit in the tree is a collection rock, a TCG wearable or
+  a particle effect; there is no Chance Die, no Powerpack and no Spool of Wire under any name
+- no `storm_caller` / `caller_of_storms` anywhere in `MMOCoreORB/bin/scripts`
+
+Wiring retail loot for even these five would mean minting a loot group plus nine item templates
+that upstream never shipped. That is content authoring, and it is upstream's to do — which is the
+same conclusion this section reached before, now with a case where the source data was in hand and
+the answer did not change.
 
 ### Pet control devices — dead twice over
 
@@ -627,6 +663,128 @@ The counts above are from the byte scan, not from grep.
 The comment's own suggestion — "closest appearance would be blackguard wilder" — is the author
 guessing at an appearance, not citing a source. Naming and statting a boss the source data does
 not contain is authoring, so the TODO stays where it is, unclosed and now explained.
+
+### The Mensix page — an independent retail source, and the strongest check in this audit
+
+`C:\swg-extract\Mensix_Mining_Facility.wiki` is the second real page found in that folder, and it
+is more useful than the Storm Lord one, because it is a *list of positions*. It gives in-game
+`/way` coordinates for 16 quest NPCs, 3 other NPCs and 8 items of interest inside the facility —
+27 objects — and **not one of those coordinates was used when this wave placed anything.** Every
+placement here came from the facility's dungeon spawn table and the snapshot. So the page is a
+genuine held-out test: an independent source, produced by players in 2006, checked against work
+done without it.
+
+Run each `/way` through the Mensix cell-local transform already established above
+(`local_x = way_x − 459.50`, `local_y = way_y + 1208.92`) and compare to the repo's spawn:
+
+| retail object | repo | file:line | delta |
+| --- | --- | --- | --- |
+| Q4P3 | `som_pann_protocol_droid` | `collectors_business.lua:220` | 0.31 m |
+| Urup Fal'co | `urup_falco` | `mensix_mining_facility_main.lua:134` | 0.38 m |
+| Blistmok Skin Rug | `blistmok_rug.iff` | `trophy_hunts.lua:318` | 0.38 m |
+| Milo Mensix | `must_milo_mensix` | `story_arc_chapters.lua:1186` | 0.42 m |
+| Pei Yi | `pei_yi` | `mensix_mining_facility_main.lua:130` | 0.60 m |
+| Master Pilot Menddle | `miner_pilot` | `story_arc_chapters.lua:755` | 0.63 m |
+| Mining Network Terminal | `som_kenobi_network_computer.iff` | `moral_choice.lua:196` | 0.64 m |
+| Ithes Olok | `npc_ithes_olok` | `jenha_tar_cube.lua:325` | 0.80 m |
+| Ikt | `som_mustafarian_ikt` | `serpent_shard.lua:210` | 0.82 m |
+| Menth Paul | `som_kenobi_menth_paul` | `cursed_shard.lua:272` | 0.89 m |
+| Surveyor Jo Keslev | `som_surveyor_keslev` | `mining_field_markers.lua:469` | 0.90 m |
+| Foreman Donko Jen | `foreman_donko` | `mensix_mining_facility_main.lua:133` | 0.92 m |
+| Vat of Bleach | `bleach_vat.iff` | `trophy_hunts.lua:304` | 0.93 m |
+| Chief Ulon Glost | `chief_glost` | `mensix_mining_facility_main.lua:136` | 1.05 m |
+| Foreman Chivos | `must_foreman_chivos` | `story_arc_prelude.lua:417` | 1.49 m |
+| A Bleached Jundak Skull | `jundak_skull.iff` | `trophy_hunts.lua:311` | 1.6 m |
+| Epo Qetora | `som_kenobi_epo_qetora` | `historian.lua:466` | 1.72 m |
+| Diskret Stahn | `diskret_stahn` | `mensix_mining_facility_main.lua:131` | 2.04 m |
+| Chief Armstrong | `chief_armstrong` | `mensix_mining_facility_main.lua:135` | 2.4 m |
+| Pwwoz Pwwa | `som_pwwoz_pwwa` | `samaritan.lua:275` | 3.02 m |
+| Mensix Corp. Merchant | `must_junk` | `mensix_mining_facility_main.lua:108` | confirmed |
+
+**21 of 27 confirmed. Zero mismatches. Worst delta 3.02 m, median under 1 m** — which is inside
+the error of a player standing next to an NPC and reading their own coordinates off the map.
+Menddle's height checks too: cell-local `z = 31.5` on a facility floor of 199.40 gives 230.9
+against the page's 230.
+
+The six not confirmed are all absences, and none is a placement error:
+
+- **Mining Corporation Executive** (`/way 307 -1222`) and **Uggo** (`/way 383 -1168`) are not
+  modelled. Neither appears in the page's own quest list — they are ambient. The nearest thing
+  the repo puts at each spot is 4.3 m away in both cases (Urup Fal'co in Milo's office; a generic
+  `mustafarian_miner_01` in the cantina).
+- **Bounty Document: Lava Flea**, **Kubaza Beetle Beads**, **Medical Hologram** and **Plate of
+  Tanray Meat** are not placed as props. Their quests *are* modelled — `bounty_hunts.lua` runs all
+  seven — and `bounty_hunts.lua:99-107` already records why: these are "live server-side static
+  item names, not object templates", so there is nothing to spawn. Only `lava_beetle_beads.iff`
+  has a real template, and that file notes it "if real beads are wanted later".
+
+This section corrected two errors made while producing it, both worth recording because both were
+the same kind. A subagent reported all 8 items "NOT SPAWNED" and Menddle "NOT SPAWNED"; direct
+greps found 4 of the 8 placed and Menddle placed to 0.63 m. It had searched for the retail *display
+names* rather than the repo's template names (`miner_pilot` carries `customName = "Master Pilot
+Menddle"`). **The primary read caught it; the summary would not have.**
+
+### XP — the wiki's reward figures, and why this tree pays none
+
+The two quest walkthroughs give hard XP numbers: Miner Madness 91,383 and Skull of the Jundak
+78,265. The repo awards neither, and that is correct rather than missing.
+
+`bounty_hunts.lua:111-116` already states the rule from the shipped data: the Reward task's
+`Experience Amount` is **0** in every one of these `.qst` files, and the non-zero figure lives in
+the `[list]` block, which is *journal-level data that only the quest system awards*. This build has
+no quest-system row for any of these quests — `datatables/player/quests.iff` as loaded resolves to
+`stardust_03.tre`'s copy, whose only Mustafar rows are the 45 exploration markers. No row, no
+journal, no journal-level award. So the wiki's numbers **corroborate** that the `[list]` field was
+live; they do not show a gap here. Inventing an `awardExperience` call to match them would be
+paying out a value the loaded data does not carry.
+
+The one place this tree does award XP is `mining_field_markers.lua:607`, 290 per surveyed area,
+and that one is not journal-level.
+
+### The Kenobi finale — retail says what was in the room, still not where
+
+Publish 28's notes (26 April 2006) say, verbatim:
+
+> Trials of Obi-Wan: The Cursed Shard: The Dark Jedi at the end of the Kenobi trials can be killed
+> only once. If you kill him, make sure to finish the quest by destroying or taking the crystal
+> because once the Dark Jedi is dead, you can't go back into the lair.
+
+`kenobi_spine.lua:213-216` calls the two unplaced tangibles "an open question about what SOE meant
+the finale room to contain". This note answers **that** question — the room held a crystal the
+player destroys or takes — and it is the first source of any kind to say so. It still gives no
+coordinate, and the search behind that passage stands: `som_kenobi_final_crystal_pedestal` and
+`som_kenobi_final_force_crystal` appear in no `.qst`, no screenplay, no loot table and no dungeon
+table, Mustafar's five included. So the item narrows but does not close: **we now know what, and
+still not where.** Nothing is placed on the strength of it.
+
+Two things the note does *not* argue for changing:
+
+- The repo already sends the narrative the note describes —
+  `kenobi_spine.lua:1635` "The way into the chamber is open. Destroy the crystal, and whatever came
+  for it." and `:1660` "Sinistro is dead and the Soul Crystal is destroyed." The crystal's
+  destruction is told, not simulated, and that matches a room with nothing sourced to put in it.
+- "Killed only once … can't go back into the lair" is a live-era *constraint SOE warned players
+  about*, not a target to reproduce. The repo gives each player their own instance copy with the
+  boss on a 600 s respawn, and `kenobi_spine.lua:466-470` states why: `start()` runs once per
+  server lifetime, so without a timer the first kill empties that copy for good and `findFreeCopy`
+  hands the cleared copy to the next player, who then has nothing to kill and no route to
+  `STAGE_DONE`. Copying the retail behaviour here would strand players; the deviation is
+  deliberate and reasoned.
+
+### Open decision — the Ancient Jundak's level
+
+`Skull_of_the_Jundak.wiki` puts the Ancient Jundak at **CL 84, Elite**. `trophy_hunts.lua:429`
+spawns `jundak_devourer`, whose template carries `level = 70` (`jundak_devourer.lua:6`), renamed at
+spawn — a substitution the file documents, because `som_ancient_jundak` ships nowhere.
+
+This is **not** treated like the Storm Lord levels, and the difference is why it is left open. The
+storm_lord templates are dedicated: each is consumed only by `storm_lord_region.lua` and the arc's
+own kill lists, so raising them touches nothing else. `jundak_devourer` is shared — it is also one
+of three interchangeable kill targets in the "hunt 15 jundak" bounty
+(`bounty_hunts.lua:185`, alongside `jundak` and `orf_jundak`, both level 70). Raising it to 84
+would make one of three otherwise-equivalent bounty targets markedly harder, and Core3's
+`spawnMobile` has no per-spawn level argument to scope the change to the trophy hunt. Retail is
+clear on the number; what it costs elsewhere is a design call, so it is Levarris's.
 
 ### What this census does not do
 
