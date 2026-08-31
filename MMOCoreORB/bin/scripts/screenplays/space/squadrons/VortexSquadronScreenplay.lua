@@ -711,7 +711,7 @@ registerScreenPlay("destroy_surpriseattack_naboo_rebel_tier3_2_c", true)
 inspect_naboo_rebel_tier3_2_d = SpaceInspectScreenplay:new {
 	className = "inspect_naboo_rebel_tier3_2_d", questName = "naboo_rebel_tier3_2_d", questType = "inspect", questZone = "space_dantooine", creditReward = 0,
 	sideQuest = false, sideQuestType = "", parentQuest = "destroy_surpriseattack_naboo_rebel_tier3_2_c", parentQuestType = "destroy_surpriseattack", parentQuestName = "naboo_rebel_tier3_2_c",
-	inspectTargets = {"blacklight_pirate_fighter_quest", "blacklight_assassin_tier3", "blacklight_bomber_tier3", "blacklight_fighter_tier3", "blacklight_leader_tier3"}, inspectCargo = "naboo_rebel_tier3_2_d", targetLocation = {x = -711, z = -5678, y = 1064},
+	inspectTargets = {"blacklight_leader_tier3"}, inspectCargo = "naboo_rebel_tier3_2_d", targetLocation = {x = -711, z = -5678, y = 1064}, spawnInspectTarget = true,
 }
 registerScreenPlay("inspect_naboo_rebel_tier3_2_d", true)
 
