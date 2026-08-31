@@ -29,46 +29,51 @@
 	data and the .qst's journalEntryDescription lines go out as system messages
 	and waypoint descriptions instead.
 
-	WHO GRANTS THESE -- OPEN, DELIBERATELY NOT FILLED
-	-------------------------------------------------
-	The .qst files do not name a giver, and none of the three has a shipped
-	start hook:
+	WHO GRANTS THESE -- ANSWERED 2026-08-30.  WAS WRONG THREE WAYS.
+	---------------------------------------------------------------
+	This block used to say the givers were an open question because the props
+	"do not ship" and Renlo Hens "has no dialogue to hang a grant on".  All
+	three claims were wrong, and they were wrong for the same reason: I was
+	looking only at the client TREs and the snapshot.  The client never had this
+	data.  SOE's own SERVER-side tables did, and they survive.
 
-	  * som_xandank_trophey's [list] description says "Renlo Hens has told you
-	    about a pack of xandank".  mobile/custom_content/som/miner_hens.lua does
-	    ship ("Miner Renlo Hens", level 70, CONVERSABLE) and is already spawned
-	    by screenplays/mustafar/regions/smoking_forest_region.lua:32 at
-	    (-5406.1, 296.0, 4429.8) -- 29 m from this quest's own "Striking
-	    Miner's Camp" waypoint.  But his conversationTemplate is "" and no
-	    som_*renlo* / som_*hens* conversation ships anywhere.  He has no
-	    dialogue to hang a grant on.  That screenplay and that mobile file are
-	    not mine to edit.
+	  * THE PROPS SHIP AND SOE PLACED THEM.  Both are rows in
+	    datatables/spawning/dungeon/som_mining_facility.tab:
 
-	  * som_blistmok_rug's [list] says "You found a blistmok skin rug in the
-	    mining facility".  No trophey_blistmok_skin node exists anywhere in
-	    snapshot/mustafar.ws and no rug/skin/carpet prop exists anywhere in
-	    appearance/must_mining_facility.ilf.  The object the player is supposed
-	    to find does not ship.
+	        object/tangible/item/som/jundak_skull.iff   control_room_02   -87.5 23.2 -50.3
+	        object/tangible/item/som/blistmok_rug.iff   entrance_room_02  -16.3 10.8  84.6
 
-	  * som_jundak_skull's [list] says "You found a bleached skull of a jundak".
-	    appearance/must_mining_facility.ilf does place
-	    object/tangible/loot/mustafar/shared_bones_must_monster_jaw_small.iff in
-	    small_room_03 at cell-local (-133.647, 14.086, 39.545) -- that is the
-	    skull, and it is exactly the item this quest rewards.  But Core3 never
-	    calls InteriorLayoutTemplate, so .ilf furniture is client-side dressing
-	    only; there is no server object there to click.
+	    Neither is in snapshot/mustafar.ws or must_mining_facility.ilf, because
+	    live spawned both server-side -- exactly the way this screenplay now
+	    does.  The old claim that "no rug/skin/carpet prop exists" was a search
+	    of the wrong corpus.  Both server templates were already registered and
+	    unused in this repo: object/custom_content/tangible/item/som/
+	    jundak_skull.lua:5 and blistmok_rug.lua:5.
 
-	So this screenplay places all of the world content and drives all of the
-	progression, and exposes
+	    The old guess that the .ilf's shared_bones_must_monster_jaw_small.iff in
+	    small_room_03 was the skull is also dead.  That is client dressing; the
+	    real prop is a different template in a different room, 128 m away.
 
-		trophyHuntsScreenPlay:grantBlistmokRug(pPlayer)
-		trophyHuntsScreenPlay:grantJundakSkull(pPlayer)
+	  * THERE IS NO CONVERSATION GIVER FOR THESE TWO.  Inspecting the prop is
+	    the grant.  som_quest.stf ships the entire flow -- the radial label, the
+	    "Start A Quest?" box, its prompt, both button labels, the decline line
+	    and the already-active line.  A string set that specific is not
+	    incidental; it is the mechanism.  See THE TWO PROP GIVERS below.
+
+	  * RENLO HENS DOES HAVE DIALOGUE.  som_xandank_trophey is his, and his
+	    conversation is xandank_trophy -- the table ships as
+	    string/en/conversation/xandank_trophy.stf.  The earlier "no som_*renlo*
+	    / som_*hens* conversation ships anywhere" was a prefix-glob on the NPC's
+	    name; SOE named Mustafar conversation data after the QUEST.  That is the
+	    same false negative this port has now hit six times.
+
+	So: two of the three are wired here and start themselves.  The xandank one
+	is Renlo Hens's, and
+
 		trophyHuntsScreenPlay:grantXandankTrophey(pPlayer)
 		trophyHuntsScreenPlay:turnInXandank(pPlayer)
 
-	as the entry points a giver's conversation handler calls once Aaron rules
-	how these are handed out.  Nothing calls them yet.  This follows the same
-	precedent bounty_hunts.lua set for the same gap.
+	are the two entry points his conversation handler calls.
 
 	THE CREATURES -- FOUR SUBSTITUTED, ALL FLAGGED
 	----------------------------------------------
@@ -155,32 +160,99 @@
 	Nothing at all exists within 150 m of the Ura Jen site (-3791 / 2625) or the
 	Ancient Jundak site (-1616 / 4275).  Those two are bare terrain.
 
-	THE BLEACH VAT -- PLACED, NOT QUOTED
-	------------------------------------
-	som_jundak_skull task 5 says "you noticed a vat of bleach in the lab".  The
-	.qst gives no template, no coordinate and no cell.  So:
+	THE BLEACH VAT -- SOURCED 2026-08-30.  NO LONGER A PLACEMENT.
+	-------------------------------------------------------------
+	This block used to say the template, the cell and the coordinate were all
+	guesses, and that small_room_03 was "the one that reads as a lab".  All four
+	were wrong.  Corrected, with the evidence:
 
-	  * No cell in the mining facility is named "lab".  small_room_03 is the one
-	    that reads as one: 14 item_medic_bacta_tank_advanced, two
-	    must_mining_console_02, two floor consoles, a must_bandit_cooling_unit,
-	    and -- decisively -- the shared_bones_must_monster_jaw_small.iff the
-	    [list] says the player found in the mining facility.
-	  * small_room_03 is appearance/thm_must_mining_outpost.pob cell index 16.
-	    Facility building node 12112217 has 30 cell children whose ids are NOT
-	    contiguous (12112233 and 12112239 are absent), so buildingID + index is
-	    wrong; index 16 resolves to node 12112234.  resolveCell() prefers
-	    getNamedCell("small_room_03") and only falls back to that id.
-	  * object/tangible/quest/must_coolant_system.iff is registered
-	    (must_coolant_system.lua:5, serverobjects.lua:254) and is the closest
-	    thing to a vat the SOM quest set ships.
-	  * It is NOT placed on the .ilf's cooling-unit slot:
-	    shared_must_coolant_system.iff and shared_must_bandit_cooling_unit.iff
-	    share the same appearance (appearance/poi_all_force_bandit_cooling_unit.apt),
-	    so putting it there would double a mesh the client already draws.  It
-	    goes on clear floor 2.9 m clear of the nearest .ilf prop, at the cooling
-	    unit's height because it is the same appearance.
+	  * THE TEMPLATE SHIPS.  object/tangible/item/som/shared_bleach_vat.iff is in
+	    mtg_patch_022.tre (_TREINDEX_ALL49.txt:290872), and its display name is
+	    the quest's own noun -- string/en/som/som_item.stf bleach_vat_n =
+	    "Vat of Bleach" (_STF_EN_ALL.tsv:183930), bleach_vat_d = "A vat full of
+	    bleach that is useful for cleaning mining equipment."  The server
+	    template was already registered and unused:
+	    object/custom_content/tangible/item/som/bleach_vat.lua:5.
+	    must_coolant_system.iff was never the vat.
 
-	The template, the cell and the coordinate are all my placement.  OPEN.
+	  * THE POSITION IS LIVE-ATTESTED.  Three independent live-era sources give
+	    /way mustafar 442 -1220, the last two written while the game was running:
+	    SonGouki's "Trials of Obi-Wan Quests" guide (SOE official forums,
+	    Nov 2005), the SWG Wiki's Mensix "Items of Interest" list, and a 2008
+	    revision of the Skull of the Jundak page.
+	    Facility node 12112217 is at (-2420.50, 199.40, 1767.08) with an IDENTITY
+	    quaternion, so building-local is plain subtraction and the raw /way needs
+	    only this file's own Mustafar offset:
+	        world = (442 - 2880, -1220 + 2976) = (-2438, 1756)
+	        local = world - origin              = (-17.50, -11.08)
+
+	  * THE CELL FOLLOWS FROM THAT, and it is small_room_04, not small_room_03.
+	    small_room_04's object bounding box is the ONLY cell box in the facility
+	    containing (-17.50, -11.08); the next nearest cell object is 20 m away in
+	    hall_05.  small_room_04 is also the actual lab -- two
+	    frn_all_professor_desk, four tumble_blender, wall monitors and tank farms
+	    -- and Doctor Ithes Olok stands 6.4 m from this point.  The nearest .ilf
+	    prop to the converted waypoint is a shared_tankfarm_s01.iff, 2.3 m away.
+	    The old small_room_03 pick is 128 m from the live position.
+	  * small_room_04 is appearance/thm_must_mining_outpost.pob cell index 20
+	    (its mesh node is named _small_room_04_mesh_r20).  Facility node 12112217
+	    has 30 cell children whose ids are NOT contiguous -- 12112233 and 12112239
+	    are absent -- so buildingID + index is wrong; index 20 resolves to node
+	    12112238.  resolveCell() prefers getNamedCell("small_room_04") and only
+	    falls back to that id.
+	  * Height 19.07 is the small_room_04 floor plane: every floor-standing item
+	    in that cell sits at exactly 19.070 in must_mining_facility.ilf, and
+	    jenha_tar_cube.lua:277 already spawns Olok in this cell at that height.
+
+	  * The vat is in neither snapshot/mustafar.ws nor must_mining_facility.ilf.
+	    Live spawned it server-side, which is exactly what this screenplay does.
+
+	SUPERSEDED BY SOE'S OWN TABLE -- 2026-08-30, SAME DAY.
+	------------------------------------------------------
+	Everything above was derived.  It no longer has to be: SOE's own server-side
+	spawn table for this building survives, and it places the vat directly.
+
+	    datatables/spawning/dungeon/som_mining_facility.tab, row 28
+	    object/tangible/item/som/bleach_vat.iff   small_room_04   -16.6  19.1  -11.3
+
+	Columns are loc_x / loc_y / loc_z with loc_y the HEIGHT, so in this file's
+	field order that is x = -16.6, z = 19.1, y = -11.3.  The yaw column is empty,
+	so heading 0 is now sourced too, not arbitrary.  Nothing above is open any
+	more -- the cell, the template, the position, the height and the heading are
+	all SOE's.
+
+	Two things worth keeping from the derivation.  First, it landed 0.93 m from
+	SOE's number, which is as close as a community /way can get.  Second, and
+	more useful: that agreement is an INDEPENDENT, NON-CIRCULAR check on this
+	planet's /way offset.  A player-written waypoint pushed through
+	(x-2880, y+2976) and through node 12112217's identity quaternion lands within
+	a metre of a coordinate SOE wrote in a table no player ever saw.  Every other
+	confirmation of that offset came from snapshot landmarks; this one comes from
+	the other side of the pipeline entirely.
+
+	THE FACILITY OBJECTS -- ALL THREE, AND HOW THE CELL IDS WERE RESOLVED
+	---------------------------------------------------------------------
+	The same table places the two quest-start props.  facilityProps below is
+	these three rows and nothing else:
+
+	    bleach_vat.iff     small_room_04     -16.6  19.1  -11.3
+	    jundak_skull.iff   control_room_02   -87.5  23.2  -50.3
+	    blistmok_rug.iff   entrance_room_02  -16.3  10.8   84.6
+
+	resolveCell() matches on the cell NAME first, so the ids are only a fallback,
+	but they are exact.  Core3 builds a building's cells in .pob order, and
+	thm_must_mining_outpost.pob has 31 entries with index 0 being the exterior
+	r0, so pob index N (N >= 1) is the Nth cell child of facility node 12112217.
+	Those 30 children are 12112218..12112249 with 12112233 and 12112239 missing,
+	so the mapping is NOT buildingID + index and has to be read off the list:
+
+	    entrance_room_02   pob 7    12112224
+	    small_room_04      pob 20   12112238
+	    control_room_02    pob 26   12112245
+
+	The list is checked, not assumed: it independently reproduces both cell ids
+	this file already had from mesh node names -- small_room_03 (pob 16) at
+	12112234 and small_room_04 (pob 20) at 12112238.
 
 	REPEATS
 	-------
@@ -223,17 +295,37 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 	-- snapshot node 12112217, object/building/mustafar/structures/shared_must_new_mining_facility.iff
 	facilityID = 12112217,
 
-	bleachVat = {
-		template = "object/tangible/quest/must_coolant_system.iff",
-		cellName = "small_room_03",
-		cellID = 12112234,
-		x = -131.5,
-		z = 10.322,
-		y = 47.5,
-		heading = 0,
+	-- Every object this screenplay puts inside Mensix, in SOE's own numbers.
+	-- All three rows are som_mining_facility.tab verbatim; see THE FACILITY
+	-- OBJECTS above for the table, the column order and the cell-id mapping.
+	facilityProps = {
+		{
+			role = "bleachVat",
+			template = "object/tangible/item/som/bleach_vat.iff",
+			cellName = "small_room_04",
+			cellID = 12112238,
+			x = -16.6, z = 19.1, y = -11.3, heading = 0,
+		},
+		{
+			role = "jundakSkullProp",
+			template = "object/tangible/item/som/jundak_skull.iff",
+			cellName = "control_room_02",
+			cellID = 12112245,
+			x = -87.5, z = 23.2, y = -50.3, heading = 0,
+		},
+		{
+			role = "blistmokRugProp",
+			template = "object/tangible/item/som/blistmok_rug.iff",
+			cellName = "entrance_room_02",
+			cellID = 12112224,
+			x = -16.3, z = 10.8, y = 84.6, heading = 0,
+		},
 	},
 
 	respawnTimer = 300,
+
+	-- role -> objectID, filled by spawnFacilityProps.
+	propIDs = {},
 
 	areaByObjectID = {},
 	uraJenID = 0,
@@ -285,7 +377,9 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			preservativeDescription = "In order to make sure the rug stays in good condition it will need to be treated with a powerful preservative compound. Unfortunately all of the mining facility's stock is out in the field. You will need to travel to several field camps in order to gather the preservatives it will take to cure the rug. You should only take a little from each camp so that the miners do not run out. You will need to travel to at least three field camps to gather the supplies from the chemical lockers.",
 			preservativeItemName = "Preservative",
 			preservativesRequired = 3,
-			preservativeMenuText = "Take Preservative",	-- task 2, retrieveMenuText
+			-- task 2's retrieveMenuText is the chem locker's radial label.  It is
+			-- referenced live out of the .stf in getRadialText, not copied here:
+			-- @quest/ground/som_blistmok_rug:task02_retrieve_menu_text.
 
 			-- task 4, Destroy Multiple and Loot (blistmok_rug_five)
 			uraJenTitle = "Gather Skin of Ura Jen",
@@ -342,9 +436,15 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			-- task 6, Wait for Signal (jundak_skull_three), Signal Name jundak_skull_signal_two
 			soakTitle = "Bleaching the Skull",
 			soakDescription = "It will take a little bit of time for the skull to be completely cleansed. Wait for the skull to become completely bleached before removing it from the vat.",
-			-- The .qst says "a little bit of time" and gives no number.  180 s is
-			-- MINE, not the .qst's.  OPEN.
-			soakSeconds = 180,
+			-- 10 s, live-attested.  The .qst says only "a little bit of time",
+			-- but two independent live-era sources give the number:
+			-- SonGouki's ToOW guide (SOE official forums, Nov 2005) -- "Wait 10
+			-- seconds and then use the Vat of Bleach again to 'Remove Skull from
+			-- Vat'" -- and the Skull of the Jundak wiki page as of 2008: "You
+			-- must wait 10 seconds before getting the skull from the vat".
+			-- 10 s also fits task 5's own "it should clean it up rather
+			-- quickly", which the previous guess of 180 did not.
+			soakSeconds = 10,
 		},
 
 		-- ================================================================
@@ -472,7 +572,7 @@ function trophyHuntsScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachChemLockers()
 		self:attachPackTraces()
-		self:spawnBleachVat()
+		self:spawnFacilityProps()
 		self:spawnUniques()
 		self:spawnAreas()
 	end
@@ -533,32 +633,37 @@ function trophyHuntsScreenPlay:resolveCell(pBuilding, cellName, cellID)
 	return 0, "none"
 end
 
-function trophyHuntsScreenPlay:spawnBleachVat()
-	local vat = self.bleachVat
+-- The vat, the skull and the rug all live inside Mensix and all three come out
+-- of the same SOE table, so one loop places them.  Each gets the same menu
+-- component; the trophyRole string is what getRadialText switches on.
+function trophyHuntsScreenPlay:spawnFacilityProps()
 	local pBuilding = getSceneObject(self.facilityID)
 
 	if (pBuilding == nil) then
-		print("trophyHuntsScreenPlay: mining facility " .. self.facilityID .. " was not found; the bleach vat will not be spawned and som_jundak_skull cannot be finished")
+		print("trophyHuntsScreenPlay: mining facility " .. self.facilityID .. " was not found; none of the facility props will be spawned and som_jundak_skull and som_blistmok_rug cannot be started or finished")
 		return
 	end
 
-	local cellID, how = self:resolveCell(pBuilding, vat.cellName, vat.cellID)
+	for i = 1, #self.facilityProps do
+		local prop = self.facilityProps[i]
+		local cellID, how = self:resolveCell(pBuilding, prop.cellName, prop.cellID)
 
-	if (cellID == 0) then
-		print("trophyHuntsScreenPlay: cell " .. vat.cellName .. " of the mining facility was not found; the bleach vat will not be spawned and som_jundak_skull cannot be finished")
-		return
+		if (cellID == 0) then
+			print("trophyHuntsScreenPlay: cell " .. prop.cellName .. " of the mining facility was not found; " .. prop.role .. " will not be spawned")
+		else
+			local pProp = spawnSceneObject("mustafar", prop.template, prop.x, prop.z, prop.y, cellID, math.rad(prop.heading))
+
+			if (pProp == nil) then
+				print("trophyHuntsScreenPlay: " .. prop.role .. " failed to spawn in " .. prop.cellName .. " (cell resolved by " .. how .. ")")
+			else
+				local propID = SceneObject(pProp):getObjectID()
+
+				self.propIDs[prop.role] = propID
+				writeStringData(propID .. ":trophyRole", prop.role)
+				SceneObject(pProp):setObjectMenuComponent("TrophyHuntsMenuComponent")
+			end
+		end
 	end
-
-	local pVat = spawnSceneObject("mustafar", vat.template, vat.x, vat.z, vat.y, cellID, math.rad(vat.heading))
-
-	if (pVat == nil) then
-		print("trophyHuntsScreenPlay: the bleach vat failed to spawn in " .. vat.cellName .. " (cell resolved by " .. how .. "); som_jundak_skull cannot be finished")
-		return
-	end
-
-	self.bleachVatID = SceneObject(pVat):getObjectID()
-	writeStringData(self.bleachVatID .. ":trophyRole", "bleachVat")
-	SceneObject(pVat):setObjectMenuComponent("TrophyHuntsMenuComponent")
 end
 
 -- spawnMobile's 3rd argument must be > 0 or RespawnCreatureTask never fires.
@@ -835,6 +940,78 @@ function trophyHuntsScreenPlay:clearLockerFlags(pPlayer)
 end
 
 -- Entry point for whoever ends up granting this.  Nothing calls it yet.
+-- ====================================================================
+-- THE TWO PROP GIVERS
+--
+-- som_jundak_skull and som_blistmok_rug are both started by inspecting an
+-- object, not by talking to anyone.  Every string in the flow ships in
+-- som_quest.stf, which is why the whole thing can be quoted:
+--
+--   jundak_skull_examine   "Study Skull Closely"          the radial
+--   blistmok_rug_examine   "Study Rug Closely"            the radial
+--   begin_quest_title      "Start A Quest?"               the box title
+--   begin_quest_prompt     "Inspecting this object starts a quest. ..."
+--   quest_accept_ok        "Accept"                       the OK button
+--   quest_accept_cancel    "Decline"                      the Cancel button
+--   quest_decline          "You decline the quest."       on Cancel
+--   jundak_skull_already   "There is nothing more you can learn ..."
+--   blistmok_rug_already   "You cannot learn anything new from this rug."
+--
+-- _STF_EN_ALL.tsv:184070-184077, :184123-184126, :184143-184145.  The two
+-- _already lines are what the object says while its quest is already running,
+-- and both quests carry allowRepeats, so isActive is the right guard, not a
+-- completion flag.
+-- ====================================================================
+
+trophyHuntsScreenPlay.questAlreadyMessage = {
+	jundakSkull = "@som/som_quest:jundak_skull_already",
+	blistmokRug = "@som/som_quest:blistmok_rug_already",
+}
+
+function trophyHuntsScreenPlay:offerQuest(pPlayer, questKey)
+	local quest = self.quests[questKey]
+
+	if (pPlayer == nil or quest == nil) then
+		return
+	end
+
+	if (self:isActive(pPlayer, quest)) then
+		CreatureObject(pPlayer):sendSystemMessage(self.questAlreadyMessage[questKey])
+		return
+	end
+
+	writeScreenPlayData(pPlayer, self.screenplayName, "offer", questKey)
+
+	local sui = SuiMessageBox.new("trophyHuntsScreenPlay", "questOfferCallback")
+	sui.setTitle("@som/som_quest:begin_quest_title")
+	sui.setPrompt("@som/som_quest:begin_quest_prompt")
+	sui.setOkButtonText("@som/som_quest:quest_accept_ok")
+	sui.setCancelButtonText("@som/som_quest:quest_accept_cancel")
+	sui.sendTo(pPlayer)
+end
+
+-- eventIndex 0 is the OK button; anything else is Decline or a closed window.
+function trophyHuntsScreenPlay:questOfferCallback(pPlayer, pSui, eventIndex, args)
+	local questKey = readScreenPlayData(pPlayer, self.screenplayName, "offer")
+
+	deleteScreenPlayData(pPlayer, self.screenplayName, "offer")
+
+	if (questKey == nil or questKey == "") then
+		return
+	end
+
+	if (eventIndex ~= 0) then
+		CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:quest_decline")
+		return
+	end
+
+	if (questKey == "jundakSkull") then
+		self:grantJundakSkull(pPlayer)
+	elseif (questKey == "blistmokRug") then
+		self:grantBlistmokRug(pPlayer)
+	end
+end
+
 function trophyHuntsScreenPlay:grantBlistmokRug(pPlayer)
 	local quest = self.quests.blistmokRug
 
@@ -1020,6 +1197,7 @@ function trophyHuntsScreenPlay:placeSkullInVat(pPlayer)
 
 	self:setStage(pPlayer, quest, quest.STAGE_SOAK)
 	self:setNumber(pPlayer, quest, "until", getTimestamp() + quest.soakSeconds)
+	CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:jundak_skull_vat")
 	self:announce(pPlayer, quest.soakTitle, quest.soakDescription)
 
 	createEvent(quest.soakSeconds * 1000, "trophyHuntsScreenPlay", "finishBleaching", pPlayer, "")
@@ -1037,9 +1215,7 @@ function trophyHuntsScreenPlay:finishBleaching(pPlayer)
 	self:setStage(pPlayer, quest, quest.STAGE_READY)
 	deleteScreenPlayData(pPlayer, self.screenplayName, self:key(quest, "until"))
 
-	-- Written here, not quoted; task 6 describes the wait but gives no line for
-	-- the moment it ends.
-	CreatureObject(pPlayer):sendSystemMessage("The skull is completely bleached.")
+	CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:jundak_skull_bleach_done")
 end
 
 function trophyHuntsScreenPlay:takeBleachedSkull(pPlayer)
@@ -1049,6 +1225,7 @@ function trophyHuntsScreenPlay:takeBleachedSkull(pPlayer)
 		return
 	end
 
+	CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:jundak_skull_remove")
 	self:completeQuest(pPlayer, quest)
 end
 
@@ -1102,7 +1279,11 @@ function trophyHuntsScreenPlay:advanceXandank(pPlayer, stage)
 	end
 end
 
--- Entry point for whoever ends up granting this.  Nothing calls it yet.
+-- Renlo Hens grants this.  His tree is SOE's own conversation/xandank_trophy,
+-- rebuilt at mobile/conversations/mustafar/xandank_trophy.lua; the "accept"
+-- screen (s_32 -> s_34) is where SOE put groundquests.grantQuest, so that is
+-- where the handler calls this.  He is already placed outdoors at the strike
+-- camp -- smoking_forest_region.lua:32.
 function trophyHuntsScreenPlay:grantXandankTrophey(pPlayer)
 	local quest = self.quests.xandankTrophey
 
@@ -1126,10 +1307,20 @@ function trophyHuntsScreenPlay:searchTrace(pPlayer, role)
 	local quest = self.quests.xandankTrophey
 	local stage = self:getStage(pPlayer, quest)
 
+	-- The two result lines ship, and they corroborate the task coordinates:
+	-- track_one says "heading off to the east" and task 17's site is +419 x of
+	-- task 16's; track_two says "turned to the north" and task 20's den is
+	-- +630 y of task 17's.  _STF_EN_ALL.tsv:184163-184164.
 	if (role == "packTrace1" and stage == quest.STAGE_SEARCH_ONE) then
+		CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:xandank_trophy_track_one")
 		self:advanceXandank(pPlayer, quest.STAGE_SITE_TWO)
 	elseif (role == "packTrace2" and stage == quest.STAGE_SEARCH_TWO) then
+		CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:xandank_trophy_track_two")
 		self:advanceXandank(pPlayer, quest.STAGE_DEN)
+	else
+		-- xandank_trophy_track_complete only exists because live kept offering
+		-- the radial after the search was done.  _STF_EN_ALL.tsv:184162.
+		CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:xandank_trophy_track_complete")
 	end
 end
 
@@ -1209,8 +1400,11 @@ function trophyHuntsScreenPlay:checkPackFight(pPlayer)
 	self:advanceXandank(pPlayer, quest.STAGE_RETURN)
 end
 
--- task 25's signal.  Fired by the camp active area, and exposed so a Renlo
--- conversation can fire it instead once there is one.
+-- task 25's signal, xandank_trophy_signal_three.  SOE fires it from Renlo's
+-- "hand_in" reply (s_19 -> s_20), which is where the trophy is handed over,
+-- so xandank_trophy_conv_handler calls this from there.  The camp active area
+-- still calls it too: that is the fallback for a player who walks in without
+-- talking to him.
 function trophyHuntsScreenPlay:turnInXandank(pPlayer)
 	local quest = self.quests.xandankTrophey
 
@@ -1237,9 +1431,13 @@ function trophyHuntsScreenPlay:completeQuest(pPlayer, quest)
 		return
 	end
 
+	-- The full-inventory notice is the shipped row @error_message:inv_full, "Your
+	-- inventory is full."  There is no shipped row for the success case: in live
+	-- the trophy simply appeared, and base_player.stf's only item-arrival rows
+	-- are loot rows, which this is not.  So it is handed over silently.
 	if (giveItem(pInventory, quest.rewardItem, -1, true) == nil) then
 		print("trophyHuntsScreenPlay: failed to create " .. quest.rewardItem)
-		CreatureObject(pPlayer):sendSystemMessage("You have no room for the " .. quest.rewardName .. ".")
+		CreatureObject(pPlayer):sendSystemMessage("@error_message:inv_full")
 		return
 	end
 
@@ -1248,7 +1446,6 @@ function trophyHuntsScreenPlay:completeQuest(pPlayer, quest)
 	self:setNumber(pPlayer, quest, "runs", self:getNumber(pPlayer, quest, "runs") + 1)
 
 	CreatureObject(pPlayer):playMusicMessage(self.musicOnComplete)
-	CreatureObject(pPlayer):sendSystemMessage("You have received the " .. quest.rewardName .. ".")
 
 	self:refreshKillObserver(pPlayer)
 end
@@ -1262,11 +1459,24 @@ registered, and LuaObjectMenuComponent replaces the object's menu entirely --
 so fillObjectMenuResponse has to add every item we want to see, and adds
 nothing at all when this player has no business touching the object.
 
-Every radial label except one is the .qst's own wording: "Take Preservative" is
-task 2's retrieveMenuText, "Search the Area" is tasks 18 and 19's
-journalEntryTitle, "Bleach the Skull" is task 5's.  Only the label for taking
-the skull back out is written here -- task 6 describes the wait but never names
-that action.
+RADIAL LABELS -- ALL FOUR SHIP.  CORRECTED 2026-08-30.
+
+An earlier version of this block said one label ("take the skull back out") had
+to be written here because task 6 never names the action.  That was wrong, and
+so was the choice to reuse journal titles for the other three.  The .qst is not
+the only string source: som_quest.stf carries a dedicated radial/system string
+set for exactly these objects, and it has every label we need.
+
+  @som/som_quest:jundak_skull_bleach       "Bleach Skull"
+  @som/som_quest:jundak_skull_retrieve     "Remove Skull from Vat"
+  @som/som_quest:xandank_trophy_track      "Examine Tracks"
+  @quest/ground/som_blistmok_rug:task02_retrieve_menu_text   "Take Preservative"
+
+_STF_EN_ALL.tsv:184124, :184128, :184161, :170730.  Note the xandank one: the
+live radial on a trace is "Examine Tracks", NOT the task's journal title
+"Search the Area" -- the journal names the objective, the radial names the verb.
+
+Zero authored radial labels remain in this file.
 --]]
 
 TrophyHuntsMenuComponent = {}
@@ -1276,25 +1486,28 @@ function trophyHuntsScreenPlay:getRadialText(pPlayer, role)
 	local skull = self.quests.jundakSkull
 	local pack = self.quests.xandankTrophey
 
-	if (role == "chemLocker") then
+	if (role == "jundakSkullProp") then
+		return "@som/som_quest:jundak_skull_examine"
+	elseif (role == "blistmokRugProp") then
+		return "@som/som_quest:blistmok_rug_examine"
+	elseif (role == "chemLocker") then
 		if (self:getStage(pPlayer, rug) == rug.STAGE_GATHER and self:getNumber(pPlayer, rug, "pres") < rug.preservativesRequired) then
-			return rug.preservativeMenuText
+			return "@quest/ground/som_blistmok_rug:task02_retrieve_menu_text"
 		end
-	elseif (role == "packTrace1") then
-		if (self:getStage(pPlayer, pack) == pack.STAGE_SEARCH_ONE) then
-			return pack.searchOneTitle
-		end
-	elseif (role == "packTrace2") then
-		if (self:getStage(pPlayer, pack) == pack.STAGE_SEARCH_TWO) then
-			return pack.searchTwoTitle
+	elseif (role == "packTrace1" or role == "packTrace2") then
+		-- Offered for the whole life of the quest, not just at the one stage
+		-- that advances it -- xandank_trophy_track_complete is only reachable
+		-- that way.  searchTrace sorts out which of the three lines to send.
+		if (self:getStage(pPlayer, pack) > 0) then
+			return "@som/som_quest:xandank_trophy_track"
 		end
 	elseif (role == "bleachVat") then
 		local stage = self:getStage(pPlayer, skull)
 
 		if (stage == skull.STAGE_BLEACH) then
-			return skull.bleachTitle
+			return "@som/som_quest:jundak_skull_bleach"
 		elseif (stage == skull.STAGE_READY) then
-			return "Remove the skull from the vat"
+			return "@som/som_quest:jundak_skull_retrieve"
 		end
 	end
 
@@ -1326,7 +1539,11 @@ function TrophyHuntsMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, 
 	local objectID = SceneObject(pSceneObject):getObjectID()
 	local role = readStringData(objectID .. ":trophyRole")
 
-	if (role == "chemLocker") then
+	if (role == "jundakSkullProp") then
+		trophyHuntsScreenPlay:offerQuest(pPlayer, "jundakSkull")
+	elseif (role == "blistmokRugProp") then
+		trophyHuntsScreenPlay:offerQuest(pPlayer, "blistmokRug")
+	elseif (role == "chemLocker") then
 		trophyHuntsScreenPlay:takePreservative(pPlayer, objectID)
 	elseif (role == "packTrace1" or role == "packTrace2") then
 		trophyHuntsScreenPlay:searchTrace(pPlayer, role)

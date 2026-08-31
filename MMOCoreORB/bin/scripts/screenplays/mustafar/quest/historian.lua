@@ -30,10 +30,14 @@ the terminal again, go back to Epo. Only the middle differs.
                                 Max 45 -> task 4 "Success!" -> task 10
                                 "Download data"
 
-Which one a player gets is decided in the conversation handler, on slicing skill:
-the smuggler file's own message box says "with your skills, you will be able to
-crack it given a little time". Nothing else in either file differs, and the reward
-task is identical in both.
+Which one a player gets is decided in the conversation, and live decides it on the
+profession rather than on the skill box: som_kenobi_epo_qetora_condition_isSmuggler
+is the single call hasSkill(player, "class_smuggler_phase1_novice"). This file used
+to say slicing skill, read off the smuggler .qst's own message box -- "with your
+skills, you will be able to crack it given a little time". That line is about what
+the quest step does, not about who is offered it.
+
+Nothing else in either file differs, and the reward task is identical in both.
 
 WHERE THE OBJECTS COME FROM
 
@@ -52,46 +56,140 @@ The computer terminal is not a snapshot prop -- it is an interior object, and th
 interior is an instance. som_kenobi_orf_computer.iff is spawned into every copy of
 the Old Research Facility instead; see THE TERMINAL.
 
-THE TERMINAL  --  placed, not quoted
+THE TERMINAL  --  quoted. It used to be placed, and that was wrong.
 
 _1 task 0 puts the bunker at mustafar (-745, 87, 6048) Radius 65, and describes it
 as "an old bunker that used to belong to what was known as the Old Republic". The
 Old Research Facility instance's entry node, 12110161, stands at (-775.93, 89.14,
 6088.28) -- inside that ring -- so the bunker the .qst means is the ORF, and the
-terminal has to be inside it.
+terminal has to be inside it. That much still holds.
 
 MustafarInstances pools twelve copies of that building (key old_republic_facility),
 so the terminal is spawned into each one: a player who zones in gets his own.
 
-Cell smallroom6 is the computer room. som_old_republic_facility.ilf places exactly
-one floor_war_room_console_01 in the whole interior, in that cell, at ilf
-(101.064, -0.000, 39.194). Core3 never calls InteriorLayoutTemplate, so none of the
-.ilf furniture is actually spawned and that spot is empty floor -- putting the
-terminal there puts it exactly where SOE's own layout put a console, with nothing to
-collide with. ilf x -> x, ilf y -> height, ilf z -> y, the mapping
-mustafar_instances.lua's ORF entry already uses.
+This file used to say the terminal was PLACED, not quoted: cell smallroom6 was read
+off the interior layout, and the position was the one floor_war_room_console_01 the
+.ilf puts in that cell, at (101.064, -0.000, 39.194) with no heading. The argument
+was that Core3 never calls InteriorLayoutTemplate, so the .ilf furniture is not
+actually spawned and that spot is empty floor -- SOE's own console spot, nothing to
+collide with.
 
-The four security droids stand in the free aisle at x 96, spread down the same room.
+The ORF's server-side dungeon spawn table has since been read, and it spawns this
+exact object by template. It gives the room as smallroom6, the position as
+98.4149 / 0.442719 / 48.6985 and the yaw as -180, and it names the object "Log
+Access Terminal". So the terminal was never a placement problem: it is stated
+outright, ~9.5m further down the room than the console spot, off the floor, and
+facing the opposite way. The values below are now that row.
+
+ROOT CAUSE: reaching for the client-side layout because it was the file already
+open, without first asking whether anything server-side spawns the object. A .ilf
+says what the building was furnished with; a dungeon spawn table says what the
+server puts in it. Only the second one is a placement, and only the second one has
+a heading -- the missing heading should have been the tell that the .ilf was
+answering a different question. The one thing the old note got right it got by
+luck: smallroom6 is the correct room, and live agrees.
+
+THE DROIDS  --  RESOLVED. The invented picket line is gone.
+
+_1 task 3 is a kill task, so the quest needs killable targets in the facility.
+This screenplay used to spawn four of them itself, on an invented aisle at x 96 in
+smallroom6, because nothing else in this repo populated the ORF at all.
+
+That was wrong twice over. Live puts NO droid in smallroom6 -- the room holds a
+Main Computer Terminal, the Log Access Terminal above, and som_orf_ancient_xandank
+on a boss timer, so the room's guard is a boss, not a line of four sentries. And
+live's real security droids stand in the halls and stairwells on the lower floors,
+tens of metres below that room.
+
+An earlier revision of this note recorded all of that and then LEFT the picket
+line standing, on the argument that moving the droids would put the quest's only
+targets in cells this screenplay does not spawn into. That argument only held
+while this screenplay was the only thing spawning anything in the building. It
+isn't any more.
+
+mustafar_dungeon_population.lua now spawns the Old Republic Facility's whole live
+creature table -- 42 rows -- into every copy of the pool, so the six real
+som_orf_ancient_security_drone rows are standing in the building where live puts
+them. The four invented posts and spawnFacilityDroids are deleted. This file still
+spawns the terminal, and nothing else.
+
+THE ORF IS UNPOPULATED  --  RESOLVED, and it was resolved here rather than deferred
+
+An earlier revision of this note said "a proper ORF dungeon populator would make
+the stand-in above unnecessary and is the right place to fix it. That is a piece of
+missing content, not a defect in this file, so it is flagged and left."
+
+The flag was right and leaving it was not. That populator now exists:
+screenplays/mustafar/mustafar_dungeon_population.lua, included immediately after
+mustafar_instances.lua. It carries the ORF's 42 creature rows plus the two droid
+factories' 46, all quoted from the shipped dungeon spawn tables. Read that file for
+the axis mapping, the sixteen template substitutions and the boot cost.
+
+The count in the old note was also loose: the ORF table has 70 rows in total, of
+which 42 are creatures and the rest are terminals, doors and fittings. "68 spawn
+rows" was a whole-file number quoted as if it were a creature number.
 
 THE CREATURE NAMES  --  substituted
 
 _1 task 3 names its target by Social Group "orf_security". No creature in this tree
-carries that social group, and no template named orf_security exists either. The
-mobile that does exist and fits is union_sentry_droid
-(mobile/custom_content/som/union_sentry_droid.lua): a level 70 sentry droid, wired
-into no screenplay anywhere, which is what a decommissioned facility's security
-would be. som_ancient_guardian_droideka would have been the other candidate and is
-already claimed by hidden_treasure.lua:130.
+carries that social group, and no template named orf_security exists either. Live's
+own name for the facility's security is som_orf_ancient_security_drone, which has no
+template either -- it exists only as a string in the dungeon spawn table.
 
-_2 task 3 names "som_kenobi_enclave_scavenger". That name exists nowhere -- not as a
-mobile template, not as a client .iff. The six ruins_* humanoids in
-mobile/custom_content/som/ are what this tree has for a scavenger camp, and they had
-no spawn anywhere, so they are used and spawned around the camp the journal text
-describes. This wave also renamed them from "a townsperson" to scavengers and gave
+So the target is whatever the populator stands that name in as, and this file asks
+it rather than naming a template of its own: getSubstitute("som_orf_ancient_security
+_drone") returns union_sentry_droid (mobile/custom_content/som/union_sentry_droid.lua),
+a level 70 sentry droid, which is what a decommissioned facility's security would be.
+That is the same pick this file used to hardcode, so nothing about the encounter
+changes -- only who owns the choice. If the substitution is ever revisited it is
+revisited in one place.
+
+som_ancient_guardian_droideka would have been the other candidate; it is claimed by
+hidden_treasure.lua:130 and, in the populator, by the ORF's sentinel droid rows.
+
+_2 task 3 names "som_kenobi_enclave_scavenger". An earlier revision said that name
+"exists nowhere". It is a real live mobile name: the server-side spawn type table
+kenobi_historian_scavengers names exactly that template, with a group size of 4.
+What is genuinely missing is its APPEARANCE -- no shared_som_kenobi_enclave_
+scavenger.iff ships in any of the 49 TREs, so the template cannot be stood up here
+even though the name is now confirmed.
+
+The six ruins_* humanoids in mobile/custom_content/som/ are still what this tree
+stands in with, and the group size of 4 is now honoured rather than guessed: the
+camp spawns four, cycling that list, so only the first four of the six land on a
+given copy. The list stays six long because it is the substitution record, not a
+spawn count. This wave also renamed them from "a townsperson" to scavengers and gave
 them working weapons; before it they were unarmed townspeople with dead weapons and
 attacks fields.
 
-som_kenobi_historian_dark_jedi is quoted -- that template exists and is registered.
+som_kenobi_historian_dark_jedi is quoted -- that template exists, is registered, and
+ships an appearance (shared_som_kenobi_historian_dark_jedi.iff). Its own spawn type
+table gives a group size of 4, so she is an ambush party rather than a single
+duellist. She, not he: task 4's shipped message box is "In the robes of the slain
+woman, you find one of the tablet pieces for Epo!", which this file already quotes
+verbatim in notifyKilledCreature. An earlier revision of this header said "he".
+
+AND SHE IS AN AMBUSH IN THE LITERAL SENSE -- this was inverted
+
+Live ships a conversation for her, som_kenobi_historian_dark_jedi, and it is the
+only one in the arc with no tree: two openings, both ending in action_attack and a
+spatial line, and an OnNpcConversationResponse with no branches at all. She sits
+with BEHAVIOR_SENTINEL and the "npc_meditate" mood, CONDITION_CONVERSABLE, and a
+CONVERSE_START radial. She is bait. You hail her and she kills you for it.
+
+Her mobile had pvpBitmask AGGRESSIVE and conversationTemplate "", which turns the
+encounter inside out -- an aggressive agent charges on sight, so the player never
+reaches the hail and every line of that conversation is unreachable. Both are
+corrected, and the tree and handler are built:
+mobile/conversations/mustafar/som_kenobi_historian_dark_jedi.lua and
+quest/conversation/historian_dark_jedi_conv_handler.lua carry the detail.
+
+Root cause: the mobile was written from the spawn type table, which gives a group
+size and nothing else, plus the fact that she is an enemy. Being an enemy and being
+aggressive are different things, and only the conversation script says which. Her
+sibling som_kenobi_serpent_dark_jedi -- the same creature to the stat, and also a
+taunt-then-fight -- was already ATTACKABLE + ENEMY with CONVERSABLE and a
+conversation, so the correct shape was sitting in the next file the whole time.
 
 PROGRESS TRACKING
 
@@ -116,12 +214,26 @@ templates in object/custom_content/tangible/quest/story_loot/.
 
 Quest one's three reward signals also each carry lootName
 armor_tow_helmet_acc_{assault,battle,recon}_02_01 -- live server-side static-item
-names, not object templates. Nothing here resolves them: there is no
-armor_tow_helmet_acc path, no armor_attachment of any kind, and no Trials of
-Obi-Wan armour set anywhere in this tree. As with every other TOW reward in this arc
-they can only be matched by description, and what the name says is a helmet in the
-assault, battle or recon armour class. So each pick hands over a helmet from a
-neutral, non-faction set in that class:
+names, not object templates. Nothing here resolves them, and that is now checked
+rather than assumed: armor_tow appears nowhere in this repo except this comment,
+there is no armor_attachment of any kind outside the loot groups, and there is no
+Trials of Obi-Wan armour set. The live server scripts do not resolve them either --
+armor_tow matches nothing at all in them -- so these three names exist only as .qst
+lootName strings on the server side, with no template behind them to copy.
+
+The client is the one place they DO resolve. static_item_n.stf carries all three,
+and all three carry the SAME display name:
+
+    armor_tow_helmet_acc_assault_02_01   Target Enhancement Helm
+    armor_tow_helmet_acc_battle_02_01    Target Enhancement Helm
+    armor_tow_helmet_acc_recon_02_01     Target Enhancement Helm
+
+That is what _acc_ means: one accessory helm, offered in three armour classes so the
+player keeps the class they already wear. It is a name, not a template -- static
+items were built server-side from a datatable that did not ship in any form this
+tree can read. So the substitution stands, and the description it matches is now the
+shipped one: a helmet, in the assault, battle or recon class. Each pick hands over a
+helmet from a neutral, non-faction set in that class:
 
     assault  armor_composite_helmet.iff
     battle   armor_chitin_s01_helmet.iff
@@ -139,20 +251,26 @@ nothing (the defect hidden_treasure.lua's reward had to be corrected for).
 
 To restore the live items later, only rewardArmor and rewardWeapon below change.
 
-WHERE EPO STANDS  --  placed, not quoted
+WHERE EPO STANDS  --  live, quoted
 
-Nothing ships his position. He is a creature template
-(object/mobile/som/som_kenobi_epo_qetora.iff), not a snapshot node, so his absence
-from every .ws is expected -- in live he was a server-side spawn and that spawn data
-did not ship. No datatable, no Lua spawn, and no line of his dialogue states where
-he is.
+An earlier revision said "nothing ships his position" and put him in the cantina on
+a reading of his character. That was WRONG. The claim rested on a search of the
+client TREs and this repo that never covered the server-side spawn data; his row
+was there the whole time.
 
-He is placed in the Mensix mining facility cantina, cell 12112226, the same hub this
-arc already uses for Q4P3, Pei Yi and Diskret Stahn. He is a self-proclaimed famous
-historian who came to Mustafar to hire help and has no camp of his own anywhere in
-the world data; the cantina at the planet's only travel point is where a man
-recruiting strangers stands. His creature template's conversationTemplate was empty
-and is set to "som_kenobi_epo_qetora" by this wave.
+The Mensix Mining Facility's dungeon spawn table places som_kenobi_epo_qetora in
+room small_room_04 at -16.4 / 19.1 (height) / -20.4, heading -75. That is cell
+12112238 -- see THE CELL MAP in mensix_mining_facility_main.lua for how the 30 cell
+ids are derived from the .pob and the snapshot.
+
+small_room_04 is on the 19.1 floor and it is the arc's real hub: Q4P3
+(collectors_business.lua) is 12 m away in the same room, and Ithes Olok
+(jenha_tar_cube.lua) is 15 m away in it too. The cantina is medium_room_01, a
+different room on the 10.8 floor about 62 m off, and only Pei Yi, Diskret Stahn,
+Menth Paul, Ikt and the shard sucker stand there.
+
+His creature template's conversationTemplate was empty and is set to
+"som_kenobi_epo_qetora" by this wave.
 
 WHAT IS NOT MODELLED
 
@@ -173,53 +291,67 @@ historianScreenPlay = ScreenPlay:new {
 
 	screenplayName = "historianScreenPlay",
 
-	-- Both .qst [list] blocks. Nothing enforces it here: Epo's string table shipped
-	-- no refusal line, so there is no way to turn a player away in his own words.
-	-- See NO LEVEL GATE in the conversation handler.
+	-- Both .qst [list] blocks -- a client-side display value. Epo's live
+	-- conversation has now been read and defines seven conditions, none of them a
+	-- level test, so there is nothing server-side to replace it with and nothing
+	-- reads this field. Kept as the recorded .qst value; see NO LEVEL GATE in the
+	-- conversation handler.
 	requiredLevel = 75,
 
 	-- Snapshot nodes; see WHERE THE OBJECTS COME FROM.
 	corpseNodeID = 12110928,
 	rubbleNodeID = 12110929,
 
-	-- Placed, not quoted; see WHERE EPO STANDS. Cell 12112226 is the Mensix cantina,
-	-- and 10.8 is the floor Pei Yi (-77.1, 67.5) and Diskret Stahn (-75.4, 66.3)
-	-- stand on. Cell coordinates.
+	-- Live, quoted; see WHERE EPO STANDS. small_room_04 of the Mensix Mining
+	-- Facility is cell 12112238, and the live row is -16.4 / 19.1 / -20.4 at
+	-- heading -75. Cell coordinates, and 19.1 is the upper floor.
 	questGiver = {
 		template = "som_kenobi_epo_qetora",
-		cell = 12112226,
-		x = -77.5,
-		z = 10.8,
-		y = 70.5,
-		heading = 200,
+		cell = 12112238,
+		x = -16.4,
+		z = 19.1,
+		y = -20.4,
+		heading = -75,
 	},
 
 	-- _1 / _smuggler task 0, Go to Location: mustafar (-745, 87, 6048), Radius 65.
 	-- No waypointName ships, so the journalEntryTitle is used for it.
 	bunker = { x = -745, y = 6048, radius = 65, waypointName = "Ancient bunker" },
 
-	-- The terminal, and the four droids guarding it, one set per instance copy.
-	-- Cell coordinates out of som_old_republic_facility.ilf; see THE TERMINAL.
+	-- The terminal, one per instance copy. The droids are not here any more; the
+	-- populator places them, from live's own rows. See THE DROIDS.
 	facility = {
 		pool = "old_republic_facility",
 		cell = "smallroom6",
-		computer = { template = "object/tangible/quest/som_kenobi_orf_computer.iff", x = 101.06, z = 0.0, y = 39.19, heading = 0 },
-		droidTemplate = "union_sentry_droid",
-		droidRespawn = 300,
-		droidPosts = {
-			{ x = 96.0, z = 0.0, y = 31.5, heading = 90 },
-			{ x = 96.0, z = 0.0, y = 36.0, heading = 90 },
-			{ x = 96.0, z = 0.0, y = 43.0, heading = 90 },
-			{ x = 96.0, z = 0.0, y = 47.0, heading = 90 },
-		},
+
+		-- Live, quoted: the ORF dungeon spawn table's own row for this template,
+		-- named "Log Access Terminal". Was the .ilf console spot; see THE TERMINAL.
+		computer = { template = "object/tangible/quest/som_kenobi_orf_computer.iff", x = 98.4149, z = 0.442719, y = 48.6985, heading = -180 },
+
+		-- The LIVE name of _1 task 3's target, not a template. resolveDroidTemplate
+		-- turns it into one by asking the populator; see THE CREATURE NAMES.
+		droidLiveName = "som_orf_ancient_security_drone",
 	},
+
+	-- Filled at boot by resolveDroidTemplate. Empty means the kill step has no
+	-- targets, and start() says so rather than letting it fail silently. Empty
+	-- string rather than nil so the comparison in notifyKilledCreature can never
+	-- match a template name by accident.
+	droidTemplate = "",
 
 	-- _2 tasks 2 and 3. The camp is the watchtower cluster the corpse lies beside;
 	-- see THE CREATURE NAMES for why the scavengers are these six templates.
+	-- Both counts are the live server-side spawn type tables' group sizes:
+	-- kenobi_historian_dark_jedi and kenobi_historian_scavengers each carry 4.
+	-- Four is deliberate -- of the 78 Mustafar ground spawn type tables the
+	-- overwhelming default is 5, so these two were set by hand.
 	camp = { x = 370, y = 4340, spread = 40 },
-	darkJedi = { template = "som_kenobi_historian_dark_jedi", count = 1, respawn = 600 },
+	darkJedi = { template = "som_kenobi_historian_dark_jedi", count = 4, respawn = 600 },
 	scavengers = {
+		count = 4,
 		respawn = 300,
+		-- Six substitutes for one missing appearance, cycled to fill the four
+		-- posts.  The list stays six long so the substitution is visible.
 		templates = {
 			"ruins_leader",
 			"ruins_human",
@@ -281,12 +413,34 @@ registerScreenPlay("historianScreenPlay", true)
 
 function historianScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
+		self:resolveDroidTemplate()
 		self:attachSnapshotObjects()
 		self:spawnQuestGiver()
 		self:spawnBunkerArea()
 		self:spawnFacilityObjects()
 		self:spawnCampMobiles()
 	end
+end
+
+-- _1 task 3's kill target. The populator owns the substitution for every live
+-- creature name in the ORF, so this file asks it instead of keeping a second copy
+-- of the template string that could drift out of step with what is actually
+-- standing in the building. Guarded, because a screenplay that is not loaded is a
+-- nil global and this has to say what is lost rather than throw.
+function historianScreenPlay:resolveDroidTemplate()
+	if (MustafarDungeonPopulation == nil) then
+		print("historianScreenPlay: mustafar_dungeon_population.lua is not loaded; the Old Republic Facility has no droids and quest one's kill step cannot be finished")
+		return
+	end
+
+	local template = MustafarDungeonPopulation:getSubstitute(self.facility.droidLiveName)
+
+	if (template == nil) then
+		print("historianScreenPlay: the populator has no substitute for " .. self.facility.droidLiveName .. "; quest one's kill step cannot be finished")
+		return
+	end
+
+	self.droidTemplate = template
 end
 
 function historianScreenPlay:attachSnapshotObjects()
@@ -333,9 +487,15 @@ function historianScreenPlay:spawnBunkerArea()
 	createObserver(ENTEREDAREA, "historianScreenPlay", "notifyEnteredBunkerArea", pArea)
 end
 
--- One terminal and four droids per copy of the Old Research Facility; see
--- THE TERMINAL.
+-- One terminal per copy of the Old Republic Facility; see THE TERMINAL. The four
+-- droids that used to be spawned alongside it are the populator's now, and they
+-- stand where live's own rows put them rather than in this room.
 function historianScreenPlay:spawnFacilityObjects()
+	if (MustafarInstances == nil) then
+		print("historianScreenPlay: mustafar_instances.lua is not loaded; quest one cannot be finished")
+		return
+	end
+
 	local buildings = MustafarInstances:getPoolBuildings(self.facility.pool)
 
 	if (#buildings == 0) then
@@ -361,8 +521,6 @@ function historianScreenPlay:spawnFacilityObjects()
 				if (self:spawnFacilityComputer(cellID, buildings[i])) then
 					placed = placed + 1
 				end
-
-				self:spawnFacilityDroids(cellID, buildings[i])
 			end
 		end
 	end
@@ -383,24 +541,15 @@ function historianScreenPlay:spawnFacilityComputer(cellID, buildingID)
 
 	local computerID = SceneObject(pComputer):getObjectID()
 
+	-- The spawn table names it as well as places it, and the template carries no
+	-- name of its own, so the name is set here rather than left to the .iff.
+	SceneObject(pComputer):setCustomObjectName("Log Access Terminal")
+
 	writeStringData(computerID .. ":historianRole", "computer")
 	SceneObject(pComputer):setObjectMenuComponent("HistorianMenuComponent")
 	table.insert(self.terminalIDs, computerID)
 
 	return true
-end
-
--- _1 task 3's Social Group orf_security; see THE CREATURE NAMES.
-function historianScreenPlay:spawnFacilityDroids(cellID, buildingID)
-	local posts = self.facility.droidPosts
-
-	for i = 1, #posts do
-		local post = posts[i]
-
-		if (spawnMobile("mustafar", self.facility.droidTemplate, self.facility.droidRespawn, post.x, post.z, post.y, post.heading, cellID) == nil) then
-			print("historianScreenPlay: failed to spawn " .. self.facility.droidTemplate .. " in copy " .. buildingID)
-		end
-	end
 end
 
 -- _2 tasks 2 and 3. Neither creature has spawn data anywhere in this tree, so the
@@ -412,8 +561,10 @@ function historianScreenPlay:spawnCampMobiles()
 		self:spawnCampMobile(self.darkJedi.template, self.darkJedi.respawn)
 	end
 
-	for i = 1, #self.scavengers.templates do
-		self:spawnCampMobile(self.scavengers.templates[i], self.scavengers.respawn)
+	for i = 1, self.scavengers.count do
+		local template = self.scavengers.templates[((i - 1) % #self.scavengers.templates) + 1]
+
+		self:spawnCampMobile(template, self.scavengers.respawn)
 	end
 end
 
@@ -426,7 +577,10 @@ function historianScreenPlay:spawnCampMobile(template, respawn)
 	if (pMobile == nil) then
 		print("historianScreenPlay: failed to spawn " .. template .. "; quest two will be short a tablet piece")
 	else
-		self.campMobileIDs[template] = SceneObject(pMobile):getObjectID()
+		-- A list, not a map keyed by template: the dark jedi spawns four times
+		-- from one template and the scavenger list cycles, so a keyed store
+		-- would silently drop every duplicate but the last.
+		self.campMobileIDs[#self.campMobileIDs + 1] = SceneObject(pMobile):getObjectID()
 	end
 end
 
@@ -814,10 +968,23 @@ and _2 tasks 2 and 3's tablet pieces off the dark Jedi and the scavengers. It is
 created when quest one starts and dropped when quest two is turned in, so a player
 mid-arc keeps exactly one.
 
-The template match is enough on its own on all three: union_sentry_droid is spawned
-by nothing but this screenplay, som_kenobi_historian_dark_jedi exists nowhere else
-on Mustafar, and the six ruins_* humanoids had no spawn anywhere until this wave
-placed them at the camp.
+The template match is enough on its own on all three, and on the droid it is now
+enough for a better reason than it used to be. The old note here said
+"union_sentry_droid is spawned by nothing but this screenplay". That is no longer
+true and it did not need to be: the populator spawns it, and it spawns it ONLY as
+the Old Republic Facility's six som_orf_ancient_security_drone rows. So the
+template still identifies exactly one thing -- an ORF security droid -- which is
+what _1 task 3's Social Group orf_security asks for. The match went from being
+true by isolation to being true by meaning.
+
+Nothing else on Mustafar spawns union_sentry_droid; that was checked, not assumed.
+There is a near-miss name to not be caught by: union_sentry_droid_crafted is a
+separate craftable pet template with its own registration, and
+getCreatureTemplateName returns that string, not this one, so the two never
+collide.
+
+som_kenobi_historian_dark_jedi exists nowhere else on the planet, and the six
+ruins_* humanoids had no spawn anywhere until this wave placed them at the camp.
 --]]
 
 function historianScreenPlay:isScavenger(templateName)
@@ -850,7 +1017,9 @@ function historianScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 			return 0
 		end
 
-		if (victimTemplate ~= self.facility.droidTemplate) then
+		-- "" when the populator did not resolve, which matches no template name,
+		-- so an unpopulated facility fails closed instead of crediting every kill.
+		if (self.droidTemplate == "" or victimTemplate ~= self.droidTemplate) then
 			return 0
 		end
 

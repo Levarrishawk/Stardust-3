@@ -95,7 +95,7 @@
 	There is no mobile/custom_content/som template for it, so it cannot be spawned.
 
 	It is substituted with mobile/custom_content/som/orf_xandank (level 70,
-	registered at som/serverobjects.lua:91), renamed with
+	registered at som/serverobjects.lua:101), renamed with
 	setCustomObjectName("Cobak").
 
 	orf_xandank rather than the plain "xandank" for one concrete reason, not
@@ -108,7 +108,7 @@
 	trophy_hunts' set, so it avoids exactly that.
 
 	It does NOT avoid every counter, and saying so would be false.  Four xandank
-	templates are registered (som/serverobjects.lua:91 orf_xandank, :179 xandank,
+	templates are registered (som/serverobjects.lua:101 orf_xandank, :190 xandank,
 	:180 xandank_onyx_plated, :181 xandank_patriarch) and TWO other screenplays
 	count all four together:
 
@@ -152,7 +152,7 @@
 	1's own journalEntryTitle, exactly as hk_history.lua does for the same task
 	type.  The talking head is lost.  Nothing else about the task changes.
 
-	master_kah IS registered (som/serverobjects.lua:61) and no screenplay in this
+	master_kah IS registered (som/serverobjects.lua:65) and no screenplay in this
 	tree spawns him.  He is not stood up here either: task 1 borrows his face for
 	a twenty-year-old recording, it does not put him in the world, and the quest
 	is explicit that the Jedi who recorded it was hunted down during the Clone
@@ -188,15 +188,15 @@
 	is the one honoured.  Experience Amount 0 / quest_combat and Faction Amount 0
 	/ Rebel are honoured literally: no XP, no faction.
 
-	The 10000 credits are granted literally.  The loot name cannot be resolved:
-	item_tow_clothing_03_03 is a live server-side static-item name, not an object
-	template, and it appears in exactly one place in the entire extract -- this
-	.qst.  There is no string/en/static_item_n.stf in _som to look it up in and
-	no datatables/quest or datatables/loot table anywhere in the TREs here.  All
-	that can be read off the name is: one piece of clothing, from Trials of
-	Obi-Wan, third of a series.  (som_striking_miners.qst carries the sibling
-	item_tow_clothing_03_02 and is equally unresolvable; the screenplay for it
-	substituted a coverall on the same reasoning.)
+	The 10000 credits are granted literally.  The loot name cannot be resolved
+	to an object: item_tow_clothing_03_03 is a live server-side static-item name,
+	not an object template.  The name resolves to "Mustafarian Miner's Boots" in
+	string/en/static_item_n.stf, but an exhaustive sweep of every shipped
+	shared_*.iff finds no object template carrying that objectName, so granting
+	the live item would mean authoring an object.  (som_striking_miners.qst
+	carries the sibling item_tow_clothing_03_02, which resolves to "Mustafarian
+	Mining Suit" in the same STF and likewise has no shipped object; the
+	screenplay for it substituted a coverall on the same reasoning.)
 
 	The substitute granted here is object/tangible/wearables/robe/robe_s01.iff
 	(addTemplate at robe_s01.lua:99, included from that folder's

@@ -54,18 +54,25 @@ She is CONVERSABLE and is not AGGRESSIVE (pvpBitmask ATTACKABLE + ENEMY), which 
 exactly what task 5 needs: she has to be talkable, and she must not open on the
 player before he has spoken to her.
 
-WHERE IKT STANDS  --  placed, not quoted
+WHERE IKT STANDS  --  live position, recovered
 
-Nothing ships his position. He is a creature template
-(object/mobile/som/som_mustafarian_ikt.iff), not a snapshot node, so his absence from
-every .ws is expected -- in live he was a server-side spawn and that spawn data did
-not ship. No datatable, no Lua spawn, and no line of his dialogue states where he is.
+He is a creature template (object/mobile/som/som_mustafarian_ikt.iff), not a snapshot
+node, so his absence from every .ws is expected: in live he was a server-side spawn.
+An earlier revision read that as "nothing ships his position" and placed him by
+reasoning. That was wrong. The facility's dungeon spawn table is the position, and it
+posts him in medium_room_01 -- the Mensix cantina, cell 12112226 -- at (-94.3, 10.8,
+53.1) facing 90, at the far end of the room from the bar.
 
-He is placed in the Mensix mining facility cantina, cell 12112226, the hub this arc
-already uses for Q4P3 (-79.2, 68.9), Pei Yi (-77.1, 67.5), Diskret Stahn (-75.4,
-66.3) and Epo Qetora (-77.5, 70.5). He is a treasure hunter who was robbed and is
-looking to hire someone; the cantina at the planet's only travel point is where that
-happens. His creature template's conversationTemplate was empty and is set to
+The reasoning got the room right and the spot wrong: the cantina is the hub this arc
+already uses for Q4P3, Pei Yi, Diskret Stahn and Epo Qetora, and a treasure hunter
+looking to hire someone belongs at the planet's only travel point. But "the room is
+right" is not "the position is known", and the guessed (-83.5, 69.5) facing 160 put
+him about seventeen metres off and turned the wrong way.
+
+Live names him som_kenobi_serpent_ikt. This tree keeps som_mustafarian_ikt because
+that is the template with a shipped appearance -- shared_som_mustafarian_ikt.iff is
+in the extracted asset set and no serpent_ikt file exists anywhere in it. His
+creature template's conversationTemplate was empty and is set to
 "som_mustafarian_ikt"'s tree by this wave.
 
 PROGRESS TRACKING
@@ -131,15 +138,16 @@ serpentShardScreenPlay = ScreenPlay:new {
 	-- Snapshot node; see THE ALTAR.
 	altarNodeID = 12111381,
 
-	-- Placed, not quoted; see WHERE IKT STANDS. 10.8 is the floor the four NPCs
-	-- already in this cell stand on. Cell coordinates.
+	-- Live position, not placed; see WHERE IKT STANDS. Cell coordinates.
+	-- medium_room_01 is cell 12112226, which is where the earlier guess had him
+	-- too -- the room was reasoned correctly, the spot in it was not.
 	questGiver = {
 		template = "som_mustafarian_ikt",
 		cell = 12112226,
-		x = -83.5,
+		x = -94.3,
 		z = 10.8,
-		y = 69.5,
-		heading = 160,
+		y = 53.1,
+		heading = 90,
 	},
 
 	-- Task 1, Go to Location: mustafar (-4400, 83, 3300), Radius 200. No
@@ -429,6 +437,12 @@ function serpentShardScreenPlay:spawnThief(pPlayer)
 		return
 	end
 
+	-- She spawns invulnerable and talkedThief drops it. Live's action_talked ends with
+	-- setInvulnerable(npc, false), which only makes sense if she was invulnerable to
+	-- begin with -- and it is what stops a player killing her before the conversation,
+	-- which would leave task 5 unsignalled with the only thief in the quest dead.
+	TangibleObject(pThief):setOptionBit(INVULNERABLE)
+
 	writeScreenPlayData(pPlayer, self.screenplayName, "thief", tostring(SceneObject(pThief):getObjectID()))
 end
 
@@ -445,6 +459,10 @@ function serpentShardScreenPlay:talkedThief(pPlayer, pThief)
 		-- Task 6 opening: Destroy Multiple and Loot, NumberItemsRequired 1.
 		CreatureObject(pPlayer):sendSystemMessage("The thief has the shard on her. Take it back.")
 	end
+
+	-- live's action_talked, second half: setInvulnerable(npc, false). Must come before
+	-- the aggro, or the first swing lands on a mob that cannot be hurt.
+	TangibleObject(pThief):clearOptionBit(INVULNERABLE)
 
 	-- She is not AGGRESSIVE, so the fight has to be started for her. The bit is set
 	-- as well as the defender or she drops the player the moment he breaks line of
@@ -509,6 +527,48 @@ function serpentShardScreenPlay:insertShard(pPlayer, pAltar)
 	CreatureObject(pPlayer):sendSystemMessage("As you insert the shard in the indentation on the altar, a hidden compartment flips open. Inside you find another shard that looks almost exactly the same as the first. You should take it back to Ikt.")
 
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
+end
+
+--[[ Walking away.
+
+Live's action_removeQuest, fired from s_147 and s_143 -- the two mid-quest
+"Disappointing. Guess I will have to find someone else." screens in Ikt's tree.
+This handler used to fire nothing there, on the reading that the .qst models no
+abandon. The .qst does not, but the CONVERSATION does, and the conversation is
+what the player touches.
+
+Stage 0 is the same state as never having asked, so Ikt offers the job again --
+which is what live does too: with the quest gone, condition_onQuest stops
+matching and the tree falls back to its default root, s_110.
+
+The thief goes with it. She is a per-player world spawn with no despawn timer of
+her own, so abandoning while she is standing at the ruins would leave her there
+for good, and the next run would find isThiefWaiting true and never spawn one.
+--]]
+function serpentShardScreenPlay:abandonQuest(pPlayer)
+	local stage = self:getStage(pPlayer)
+
+	if (stage == 0 or stage > self.STAGE_INSERT) then
+		return
+	end
+
+	local pThief = self:getThief(pPlayer)
+
+	if (pThief ~= nil) then
+		SceneObject(pThief):destroyObjectFromWorld()
+	end
+
+	-- Created persistent by startQuest, so it has to be dropped by hand or it sits
+	-- in the database forever. Same reason finishQuest drops it.
+	dropObserver(KILLEDCREATURE, "serpentShardScreenPlay", "notifyKilledCreature", pPlayer)
+
+	self:removeWaypoint(pPlayer)
+
+	deleteScreenPlayData(pPlayer, self.screenplayName, "thief")
+	deleteScreenPlayData(pPlayer, self.screenplayName, "arrived")
+	deleteScreenPlayData(pPlayer, self.screenplayName, "stage")
+
+	CreatureObject(pPlayer):sendSystemMessage("You have abandoned Ikt's task.")
 end
 
 -- Both reward screens in Ikt's tree land here: task 11's Bank Credits and lootName,

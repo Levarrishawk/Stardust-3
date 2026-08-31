@@ -64,10 +64,11 @@ THE REWARD  --  SUBSTITUTED, and here is exactly why
 
 The .qst awards lootCount 1 / lootName item_tow_schematic_reactor_02_01, with Bank
 Credits 0 and Experience Amount 0. lootName is a live server-side static-item name;
-it is not an object template, and the client ships no table that maps it to one --
-there are no datatables/quest/* or datatables/loot/* entries in any TRE here, and no
-string/en STF row for it either. So the live item cannot be resolved, only matched by
-name.
+it is not an object template. The name resolves to "Modified Fusion Reactor
+Schematic" in string/en/static_item_n.stf, but an exhaustive sweep of every
+shipped shared_*.iff finds no object template carrying that objectName, so
+granting the live item would mean authoring an object. The live item cannot be
+resolved, only matched by name.
 
 The obvious match is object/draft_schematic/space/reactor/collection_reward_reactor_02_mk1
 -- same reactor family, same mark -- and this tree does declare it, in

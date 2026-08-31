@@ -1,7 +1,7 @@
 --[[
-	The Mining Field Markers -- Surveyor Jo Keslev, Mensix Mining Facility
+	The Mining Field Markers -- Surveyor Keslev, Mensix Mining Facility
 
-	  Start:   Surveyor Jo Keslev, /wp 313 -1267, inside the Mensix Mining Facility.
+	  Start:   Surveyor Keslev, /wp 313 -1267, inside the Mensix Mining Facility.
 	  Areas:   Berken's Flow (5), Burning Plains (5), Central Volcano (3),
 	           Crystal Flats (5), Mining Field (5), Smoking Forest (5),
 	           Tulrus Nesting Grounds (3) -- 31 markers total.
@@ -47,20 +47,64 @@
 	the snapshot placement agree with each other against that numbering, so both the
 	templates and the coordinates were re-derived from the shipped data.
 
-	REWARDS -- shipped vs wiki
+	REWARDS -- and a correction
 
 	The Reward task in each area quest grants Bank Credits 5000 and nothing else:
 	Experience Amount 0, Experience Type empty, Reward Badge empty, Item empty,
-	lootName empty. The wiki's "290 quest XP", the Master Mustafar Trailblazer badge
-	and the Tanray Heart Crystal have no backing in the shipped quest files. The 290
-	XP is still awarded below (areaXpReward) because that is what this file has always
-	done and combat_general is the only XP pool this screenplay tree uses -- flagged
-	here rather than changed, since dropping it is a reward-economy call.
+	lootName empty. That part still holds, and it is why the wiki's "290 quest XP" has
+	no backing. The 290 XP is still awarded below (areaXpReward) because that is what
+	this file has always done and combat_general is the only XP pool this screenplay tree
+	uses -- flagged here rather than changed, since dropping it is a reward-economy call.
 
-	Final conversation:
-	  "Hello again. my friend. You certainly have done a wonderful job and saved me all sorts
-	   of trouble trying to check all of those markers out. And as promised, here is your
-	   Tanray Heart Crystal. Thank you again."
+	The completion reward was the wrong call, and this is the root cause: it was looked
+	for in the .qst files, and it is not in them. It is in the conversation. Mustafar's
+	server-side som_exploration_marker grants all three of these at once, off the last
+	option of the last screen:
+
+	    static item  item_tow_trophey_02_05
+	    objvar       mustafar.tanray_heart
+	    badge        bdg_must_mustafar_exploration
+
+	So both of the reasons this file gave for not granting it were wrong:
+
+	  * "There is no Tanray Heart Crystal template." The grep that produced that looked
+	    for "tanray", and the item is not filed under that name.
+	    item_tow_trophey_02_05 is "Mounted Lava Lizard Heart" in static_item_n.stf --
+	    the fifth member of the same item_tow_trophey_02_NN family lava_beetle_nests.lua
+	    and trophy_hunts.lua already resolved four of. Its object ships:
+	    object/tangible/loot/mustafar/trophey_lava_lizard_heart.iff, registered at
+	    object/custom_content/tangible/loot/mustafar/trophey_lava_lizard_heart.lua and
+	    listed in that folder's serverobjects.lua. It is granted below.
+	  * "Badges have no screenplay-side API here." They do.
+	    PlayerObject:awardBadge is bound in LuaPlayerObject.cpp:43 and is used by ten
+	    screenplays already -- heroOfTatooine.lua:321 and coa2Screenplay.lua:685 among
+	    them. Badge keys are also exported to Lua as uppercase globals holding their
+	    index (DirectorManager.cpp:862-869), so the shipped key name is usable directly.
+	    The badge is granted below, guarded on the global existing so a .tre set without
+	    that badge row fails soft instead of erroring.
+
+	The wiki's "Master Mustafar Trailblazer" name for the badge is still unsupported. The
+	shipped key is bdg_must_mustafar_exploration; its display name is not readable here,
+	and neither is the badge row itself -- datatables/badge/badge_map.iff is in no .tre in
+	gamedev/tre or gamedev/client-play (a sweep of all 76 turned up no file with "badge"
+	in its name), because this working set is the Mustafar patch tres, not the base
+	install. So the key is live-sourced but UNVERIFIED against this server's badge list.
+	That is exactly what the guard below is for.
+
+	NO TURN-IN -- a deviation this file used to have, now removed
+
+	An earlier revision had the player walk each finished area back to Keslev to be paid,
+	through turn_in and in_progress conversation screens. Live has neither screen and
+	neither state: the 5000 credits come from the area quest's own Reward task, which
+	fires the moment its Wait-for-Tasks gate closes. Payment now happens in markerUsed,
+	where that gate closes, and the two invented screens are gone from the tree.
+
+	This also removes the deadlock the old turnInArea had to work around: an area whose
+	setQuest was left active pinned the conversation on an option-less screen forever.
+
+	Live also lets several areas run at once -- each area's option is hidden only by
+	!isQuestActiveOrComplete on its own quest, not by "some other area is active".
+	getRemainingAreas already matches that; nothing forces one at a time.
 --]]
 
 local QuestManager = require("managers.quest.quest_manager")
@@ -73,37 +117,29 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 
 	queststring = "miningfieldmarkerscreenplay",
 
-	-- Paid by Jo Keslev per completed area set. The 5000 is the shipped Reward task's
+	-- Paid per completed area set. The 5000 is the shipped Reward task's
 	-- Bank Credits; the 290 XP is the wiki figure and is not in the .qst (see the
 	-- REWARDS note in the header).
 	areaCreditReward = 5000,
 	areaXpReward = 290,
 
-	-- The wiki's completion reward is two things: the Tanray Heart Crystal and the
-	-- Master Mustafar Trailblazer badge. Neither is in the shipped quest files, and
-	-- neither can be granted from this tree as it stands anyway:
-	--
-	--   * There is no Tanray Heart Crystal template. Grepping "tanray" across object/ returns
-	--     only object/mobile/skeleton/tanray, the beast/pet intangibles and the beast draft
-	--     schematics -- no tangible item, client-side or server-side. Authoring an IFF for it
-	--     would put an object in this repo that no stock client has, which breaks the client
-	--     for everyone who is not running our TREs. So it stays unwired: set completionItem
-	--     to the real template path if one turns up in a fuller TRE set and the reward hands
-	--     it over with no other change.
-	--   * Badges have no screenplay-side API here -- only the grantBadge/revokeBadge admin
-	--     commands -- so the Trailblazer badge cannot be awarded from Lua at all.
-	--
-	-- The stock dialog line on finished_all still promises the crystal; that is client text
-	-- and is left alone. The seven area payouts (35,000 credits shipped, plus the 2,030 xp
-	-- this file adds) are what the tree actually delivers.
-	completionItem = nil,
+	-- The Tanray Heart Crystal Keslev promises on s_31 and hands over on s_6. Live grants
+	-- static item item_tow_trophey_02_05, which is "Mounted Lava Lizard Heart" in
+	-- static_item_n.stf and ships as this template. See REWARDS in the header for why an
+	-- earlier revision concluded it did not exist.
+	completionItem = "object/tangible/loot/mustafar/trophey_lava_lizard_heart.iff",
+
+	-- The shipped badge key. DirectorManager exports every badge key as an uppercase Lua
+	-- global holding its index, so this is looked up by name at grant time.
+	completionBadge = "BDG_MUST_MUSTAFAR_EXPLORATION",
 
 	-- Ordered list of the seven marker areas. Each area carries:
-	--   key        internal id, also the conversation option key in jo_kelsev_conv_handler
+	--   key        internal id, also the conversation option key in keslev_conv_handler
 	--   name       display name used in system messages
-	--   setQuest   quest handed out by Jo Keslev when the player picks the area
-	--   doneQuest  quest activated once every marker in the area has been touched;
-	--              turning it in to Jo Keslev pays the 5000cr / 290xp
+	--   setQuest   quest handed out by Keslev when the player picks the area
+	--   doneQuest  completed, and paid, the moment every marker in the area has been
+	--              touched -- this is the .qst's Wait-for-Tasks gate and its Reward task.
+	--              It is not a hand-in; see NO TURN-IN in the header.
 	--   markers    the marker objects, in NGE listing order
 	markerAreas = {
 		{
@@ -407,8 +443,30 @@ function miningFieldMarkersScreenPlay:start()
 end
 
 function miningFieldMarkersScreenPlay:spawnMobiles()
-	-- Surveyor Jo Keslev, inside the Mensix Mining Facility (/wp 313 -1267).
-	spawnMobile("mustafar", "surveyor_jo", 1, 145.6, 18.6, -58.0, -50, 12112243)
+	--[[ Surveyor Keslev, cell 12112243 (small_room_05) of the Mensix Mining
+	     Facility, world origin (-2420.50, 199.40, 1767.08). The template is now
+	     som_surveyor_keslev, matching the live spawn table row. "Jo" was never part
+	     of the name -- all seven shipped quest journals say "Surveyor Keslev" -- and
+	     the old surveyor_jo template is retired in place.
+
+	     x was +145.6 and is a sign error. Three sources give /way 313 -1267;
+	     through this file's own offset above that is world (-2567.00, 1709.00),
+	     so cell-local (-146.50, -58.08) against that origin. y already agreed to
+	     0.08 m and x agreed in magnitude to 0.9 m -- only the sign was wrong.
+	     +145.6 put him ~300 m outside the building shell. Everything else in
+	     small_room_05 sits at negative cell-local x: the sibling miner at
+	     mensix_mining_facility_main.lua:64 is at -154.4, the .ilf console at
+	     -154.887, and the room's own .ilf furniture box runs x -160.29 ..
+	     -138.19, y -69.66 .. -47.77 -- which contains both -145.6 and -146.5.
+	     (Do not quote -155.82 .. -138.26 here; that box is conference_room's.)
+
+	     The live facility spawn table settles it: som_surveyor_keslev,
+	     small_room_05, (-145.6, 18.6, -58.1) facing -80, carrying
+	     conversation.som_exploration_marker -- this screenplay's own conversation.
+	     The shipped magnitude was right to the tenth and the published /way was
+	     the 0.9 m out. Only the heading was wrong here: -50 was a guess and the
+	     real value is -80. y is snapped from -58.0 to the table's -58.1. ]]
+	spawnMobile("mustafar", "som_surveyor_keslev", 1, -145.6, 18.6, -58.1, -80, 12112243)
 end
 
 function miningFieldMarkersScreenPlay:spawnObjects()
@@ -432,6 +490,8 @@ function miningFieldMarkersScreenPlay:spawnObjects()
 end
 
 -- Returns the area table whose setQuest the player currently has active, or nil.
+-- Live allows more than one at a time, so this returns the first and is a convenience
+-- for callers that only need "is anything running" -- it is not a routing gate.
 function miningFieldMarkersScreenPlay:getActiveArea(pPlayer)
 	for i = 1, #self.markerAreas do
 		local area = self.markerAreas[i]
@@ -444,6 +504,13 @@ function miningFieldMarkersScreenPlay:getActiveArea(pPlayer)
 	return nil
 end
 
+-- True once the completion reward has been handed over. Live's equivalent is the objvar
+-- mustafar.tanray_heart that its grantReward sets; this is the flag
+-- grantCompletionReward writes, which is the same gate in the Core3 store.
+function miningFieldMarkersScreenPlay:hasTakenCompletionReward(pPlayer)
+	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "rewarded")) == 1
+end
+
 function miningFieldMarkersScreenPlay:hasCompletedArea(pPlayer, area)
 	for i = 1, #area.markers do
 		if (not QuestManager.hasCompletedQuest(pPlayer, QuestManager.quests[area.markers[i].quest])) then
@@ -454,7 +521,9 @@ function miningFieldMarkersScreenPlay:hasCompletedArea(pPlayer, area)
 	return true
 end
 
--- True once every one of the seven area sets has been turned in.
+-- True once every one of the seven area sets has been finished. This is live's
+-- condition_completeAll, which ANDs hasCompletedQuest over the seven som_exploration_*
+-- quests -- so it reads the done ids, not the search ids.
 function miningFieldMarkersScreenPlay:hasCompletedAllAreas(pPlayer)
 	for i = 1, #self.markerAreas do
 		if (not QuestManager.hasCompletedQuest(pPlayer, QuestManager.quests[self.markerAreas[i].doneQuest])) then
@@ -475,21 +544,9 @@ function miningFieldMarkersScreenPlay:getAreaByKey(key)
 	return nil
 end
 
--- The area whose set is finished and waiting to be turned in to Jo Keslev, or nil.
-function miningFieldMarkersScreenPlay:getAreaAwaitingTurnIn(pPlayer)
-	for i = 1, #self.markerAreas do
-		local area = self.markerAreas[i]
-
-		if (QuestManager.hasActiveQuest(pPlayer, QuestManager.quests[area.doneQuest])
-			and not QuestManager.hasCompletedQuest(pPlayer, QuestManager.quests[area.doneQuest])) then
-			return area
-		end
-	end
-
-	return nil
-end
-
--- Areas the player has neither started nor finished, in NGE listing order.
+-- Areas the player has neither started nor finished. This is live's per-area guard,
+-- !isQuestActiveOrComplete, over the seven area quests. The order is markerAreas' own;
+-- keslev_conv_handler.areaListOrder is what puts the options in live's listing order.
 function miningFieldMarkersScreenPlay:getRemainingAreas(pPlayer)
 	local remaining = {}
 
@@ -505,7 +562,7 @@ function miningFieldMarkersScreenPlay:getRemainingAreas(pPlayer)
 	return remaining
 end
 
--- Jo Keslev only ever gives out general directions -- "due to the shifting of our moon's
+-- Keslev only ever gives out general directions -- "due to the shifting of our moon's
 -- surface, I cannot give you precise locations" -- so the player gets one waypoint at the
 -- centroid of the area's markers, never a waypoint per marker.
 function miningFieldMarkersScreenPlay:startArea(pPlayer, area)
@@ -518,17 +575,18 @@ function miningFieldMarkersScreenPlay:startArea(pPlayer, area)
 		writeData(SceneObject(pPlayer):getObjectID() .. ":miningFieldMarkers:wp:" .. area.key, waypointID)
 	end
 
-	CreatureObject(pPlayer):sendSystemMessage("Find and activate every marker in " .. area.name .. ", then return to Surveyor Keslev.")
+	CreatureObject(pPlayer):sendSystemMessage("Find and activate every marker in " .. area.name .. ".")
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_accepted.snd")
 end
 
-function miningFieldMarkersScreenPlay:turnInArea(pPlayer, area)
+-- Called from markerUsed the moment an area's last marker is activated. This is the
+-- .qst's Wait-for-Tasks gate closing and its Reward task firing; there is no hand-in.
+function miningFieldMarkersScreenPlay:completeArea(pPlayer, area)
 	QuestManager.completeQuest(pPlayer, QuestManager.quests[area.doneQuest])
 
 	-- The search quest has to be closed as well. completeQuest clears the active bit only
-	-- for the id it is handed, so leaving setQuest active leaves getActiveArea matching this
-	-- finished area forever, which pins getInitialScreen on the option-less "in_progress"
-	-- screen and makes welcome_back unreachable -- the remaining areas can never be started.
+	-- for the id it is handed, so leaving setQuest active would keep this finished area
+	-- out of getRemainingAreas forever and Keslev would never offer it back.
 	QuestManager.completeQuest(pPlayer, QuestManager.quests[area.setQuest])
 
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
@@ -553,16 +611,16 @@ function miningFieldMarkersScreenPlay:turnInArea(pPlayer, area)
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_completed.snd")
 end
 
--- Fired when the player hails Jo Keslev with all seven sets paid off. runScreenHandlers runs
--- for the initial screen too, so this is guarded to fire once and only once per player.
+-- Fired from the reward screen -- the one the player reaches by ASKING for the reward, not
+-- the one that offers it. Live hangs action_grantReward off that option, so a player who
+-- opens the thank-you screen and walks away is not paid. Still guarded once per player via
+-- persistent screenplay data, because runScreenHandlers can be re-entered.
 function miningFieldMarkersScreenPlay:grantCompletionReward(pPlayer)
-	local playerID = SceneObject(pPlayer):getObjectID()
-
-	if (readData(playerID .. ":miningFieldMarkers:rewarded") == 1) then
+	if (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "rewarded")) == 1) then
 		return
 	end
 
-	writeData(playerID .. ":miningFieldMarkers:rewarded", 1)
+	writeScreenPlayData(pPlayer, self.screenplayName, "rewarded", 1)
 
 	if (self.completionItem ~= nil) then
 		local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
@@ -572,8 +630,22 @@ function miningFieldMarkersScreenPlay:grantCompletionReward(pPlayer)
 		else
 			CreatureObject(pPlayer):sendSystemMessage("@error_message:inv_full")
 			-- Let them collect it on the next hail rather than losing it to a full pack.
-			deleteData(playerID .. ":miningFieldMarkers:rewarded")
+			-- Must clear the same persistent key the guard above writes; clearing the old
+			-- shared-memory key here would leave the guard set and lock the reward for good.
+			deleteScreenPlayData(pPlayer, self.screenplayName, "rewarded")
 			return
+		end
+	end
+
+	-- Live's grantReward closes with badge.grantBadge(player, "bdg_must_mustafar_exploration").
+	-- Badge keys arrive in Lua as uppercase globals holding their index, so the guard is
+	-- "does this server's badge_map have that row" -- see the header; it could not be checked
+	-- from the tre set here, and an unknown badge index would be an error, not a no-op.
+	if (self.completionBadge ~= nil and _G[self.completionBadge] ~= nil) then
+		local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+		if (pGhost ~= nil) then
+			PlayerObject(pGhost):awardBadge(_G[self.completionBadge])
 		end
 	end
 
@@ -612,10 +684,11 @@ function miningFieldMarkersScreenPlay:markerUsed(pMarker, pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage(marker.tidbit)
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
 
+	-- The last marker in a set closes the set. Nothing to walk back for: completeArea is
+	-- the .qst's Wait-for-Tasks gate closing and its Reward task firing, and it sends its
+	-- own completion message and sound.
 	if (self:hasCompletedArea(pPlayer, area)) then
-		QuestManager.activateQuest(pPlayer, QuestManager.quests[area.doneQuest])
-		CreatureObject(pPlayer):sendSystemMessage("You have activated all of the markers in " .. area.name .. ". Please return to Surveyor Keslev.")
-		CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_completed.snd")
+		self:completeArea(pPlayer, area)
 	end
 
 	return 0

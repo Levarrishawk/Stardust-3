@@ -124,10 +124,10 @@ template name on the kill:
 
 	som_vansk_blackguard -> vansk_blackguard  customName "Vansk of the Blackguard"
 	                        mobile/custom_content/som/vansk_blackguard.lua,
-	                        serverobjects.lua:177
+	                        serverobjects.lua:188
 	som_sansii_kursk     -> sansii            customName "Sans'ii the Kursk"
 	                        mobile/custom_content/som/sansii.lua,
-	                        serverobjects.lua:101
+	                        serverobjects.lua:111
 
 One spelling difference, recorded and NOT normalised in either direction: the
 .qst and the .stf both write "San'sii the Kursk", and so does the shipped
@@ -159,40 +159,47 @@ nothing is invented to stand in for it. Faction Amount is 0 against Faction Name
 editor's default.
 
 lootCount 1 / lootName item_tow_proc_ranged_03_01 is NOT granted. lootName is a
-live server-side static-item name, not an object template. Nothing in this tree
-is called item_tow_proc_ranged_03_01, there is no datatables row anywhere in the
-extract that maps it to a template, and string/en in the extract holds only
-conversation/, quest/, dance_advancement.stf and performance.stf -- so there is
-not even a display name for it to be matched by. It is left unresolved rather
-than replaced with a guess. This is the same class of unresolvable reward already
-recorded in hidden_treasure.lua and bounty_hunts.lua.
+live server-side static-item name, not an object template. The name resolves to
+"Mustafarian Distance Globe" in string/en/static_item_n.stf, but an exhaustive
+sweep of every shipped shared_*.iff finds no object template carrying that
+objectName, so granting the live item would mean authoring an object. It is left
+unresolved rather than replaced with a guess. This is the same class of
+unresolvable reward already recorded in hidden_treasure.lua and bounty_hunts.lua.
 
 The Reward task's CountItem 1 / CountWeapon 1 / CountArmor 1 and its
 Speed / Damage / Efficiency / Elemental Value / Quality 0.1 are the loot-quality
 knobs that go with the unresolved lootName, so they are recorded here and go
 nowhere as well.
 
-NO GIVER  --  open question, deliberately not filled
+THE GIVER
 
 Dr. Lu is named in five of the six journal entries and the shipped conversation
 table string/en/conversation/som_doctor_lu.stf carries his entire dialogue tree,
 in which he introduces himself as "Doctor Mi Fon Lu of the Theed Academy" and
 walks the player through exactly this ladder -- minions, then Vansk, then
-San'sii, then the relic. None of that says where he stands or what starts the
-quest:
+San'sii, then the relic. That tree is now reconstructed and wired:
 
-  * doc_lu is a registered creature (mobile/custom_content/som/doc_lu.lua,
-    included at that directory's serverobjects.lua:48, customName "doc_lu") and
-    it is spawned NOWHERE in this tree.
-  * Its conversationTemplate is "" (doc_lu.lua:37) and there is no doctor-lu file
-    in mobile/conversations/mustafar/ for it to point at.
-  * There is no quest_start object for this quest in snapshot/mustafar.ws.
+  * mobile/conversations/mustafar/som_doctor_lu.lua is the tree, included at
+    mobile/conversations.lua. Every line is a shipped s_NN; nothing is invented.
+  * screenplays/mustafar/quest/conversation/doctor_lu_conv_handler.lua routes it
+    and calls the four seams below. Included in screenplays.lua just above this
+    file, so the handler global exists before anything can converse.
+  * doc_lu.lua:40 conversationTemplate is "som_doctor_lu".
 
-So this file spawns nobody, invents no position and writes no conversation.
+What the shipped data does NOT carry is a position for him. This quest's .qst
+plants no waypoint on him, and there is no quest_start object for it in
+snapshot/mustafar.ws.
+
+His standing point comes from a live-era community waypoint converted through the
+proven Mustafar offset (shipped = way_x - 2880, way_z + 2976). That offset was
+fixed by two shipped .qst waypoints and confirmed against ten independent
+community landmarks. The waypoint carries only X and Z, so floor height is
+resolved from terrain at spawn.
+
 grantQuest, signalMinionsDefeated, signalVanskDefeated and signalSansiiDefeated
-are the seams a giver's conversation handler calls once Aaron says where Dr. Lu
-stands. The three signal functions ARE blackguard_minion_defeated,
-blackguard_vansk_defeated and blackguard_sansii_defeated -- the .qst raises all
+are the seams the handler calls. The three signal functions ARE
+blackguard_minion_defeated, blackguard_vansk_defeated and
+blackguard_sansii_defeated -- the .qst raises all
 three from the hand-in and there is nothing else in the shipped data that can
 raise them.
 
@@ -314,17 +321,40 @@ somBlackguardProblemScreenPlay = ScreenPlay:new {
 	rewardLootName = "item_tow_proc_ranged_03_01",
 	rewardLootCount = 1,
 
+	-- THE GIVER. Converted from a live-era community waypoint through the proven
+	-- Mustafar offset (shipped = way_x - 2880, way_z + 2976). No height ships, so
+	-- the floor is resolved at spawn. See THE GIVER in the header.
+	questGiver = {
+		template = "doc_lu",
+		x = -4635,
+		y = 3296,
+		heading = 0,
+	},
+
 	-- The stage the ladder reaches when task 7 has paid out.
 	finishedStage = 7,
+	questGiverID = 0,
 }
 
 registerScreenPlay("somBlackguardProblemScreenPlay", true)
 
--- Nothing is placed in the world at boot: the .qst names no giver, no terminal
--- and no location, and inventing one is not this screenplay's call. start() still
--- exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
+-- start() exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
 -- calls "start" by name on every screenplay registered with true.
 function somBlackguardProblemScreenPlay:start()
+	if (isZoneEnabled("mustafar")) then
+		self:spawnGiver()
+	end
+end
+
+function somBlackguardProblemScreenPlay:spawnGiver()
+	local giver = self.questGiver
+	local pNpc = spawnMobile("mustafar", giver.template, 0, giver.x, getWorldFloor(giver.x, giver.y, "mustafar"), giver.y, giver.heading, 0)
+
+	if (pNpc == nil) then
+		print("somBlackguardProblemScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
+	else
+		self.questGiverID = SceneObject(pNpc):getObjectID()
+	end
 end
 
 --[[ State
@@ -384,11 +414,18 @@ end
 
 --[[ Entry points
 
-grantQuest and the three signal functions are what Dr. Lu's conversation handler
-calls once there is one. None of them sends a refusal: with no giver in the
-shipped data there is no voice to put a refusal in, so they only report whether
-they did anything and leave the wording to whoever ends up owning the
-conversation.
+grantQuest and the three signal functions are what doctor_lu_conv_handler calls.
+None of them sends a refusal: live's conversation has no refusal line anywhere
+in it, so they only report whether they did anything and say nothing to the
+player. The guards are what make an out-of-order call harmless.
+
+An earlier revision said instead that there was "no giver in the shipped data",
+so there was "no voice to put a refusal in". ROOT CAUSE: the .qst carries no
+position for Dr. Lu and no quest_start object, and that was read as no giver at
+all. It only means the giver is not placed by the QUEST data. He is placed by
+the dungeon spawn table and wired by doc_lu.lua, and the server-side
+conversation script exists and is what this handler is now built against. A
+quest datatable does not enumerate its own NPCs.
 
 	canGrantQuest(pPlayer)           may this character start it
 	grantQuest(pPlayer)              task 1 goes live
@@ -475,8 +512,8 @@ function somBlackguardProblemScreenPlay:raiseSignal(pPlayer, index)
 	return true
 end
 
--- Read-only; a giver can use it for "how am I doing", and it is the closest thing
--- to the journal page this quest does not have.
+-- Read-only. doctor_lu_conv_handler calls it on the three kill-stage check-ins,
+-- where it is the closest thing to the journal page this quest does not have.
 function somBlackguardProblemScreenPlay:reportProgress(pPlayer)
 	if (pPlayer == nil) then
 		return
@@ -592,7 +629,14 @@ function somBlackguardProblemScreenPlay:awardQuest(pPlayer)
 	-- task 7 musicOnComplete.
 	CreatureObject(pPlayer):playMusicMessage(self.musicOnComplete)
 
-	-- allowRepeats true: reset so Dr. Lu can hand it out again.
+	-- [list] allowRepeats is true, so the state is reset rather than frozen at
+	-- finishedStage. Nothing reaches it: live's conversation tests hasWonMission
+	-- FIRST, ahead of every stage check, so a player with a run behind them gets
+	-- the s_46 farewell and is never offered the quest again. Dr. Lu is the only
+	-- giver, so allowRepeats never fires. An earlier revision said this reset was
+	-- "so Dr. Lu can hand it out again" -- it cannot. Left as a reset anyway,
+	-- because that is the state live leaves behind and something else may one day
+	-- start the quest; the runs counter is what already_helped reads.
 	self:clearRunData(pPlayer)
 	self:setStage(pPlayer, 0)
 end

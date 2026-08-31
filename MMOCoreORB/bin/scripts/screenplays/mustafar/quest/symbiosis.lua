@@ -74,24 +74,29 @@ THE REWARD  --  SUBSTITUTED, and here is exactly why
 
 _1's Reward task pays Experience Amount 0 and Bank Credits 0, and awards
 lootCount 1 / lootName weapon_tow_sword_1h_03_02. As with the other TOW rewards in
-this arc, lootName is a live server-side static-item name, not an object template.
-Nothing resolves it here: no datatables/quest/* or datatables/loot/* in any TRE
-(checked across every .tre in the client), no string/en STF row, and no
-weapon_tow_* or sword_1h_03* path in any TRE or anywhere in this tree. It can only
-be matched by description, not resolved.
+this arc, lootName is a live server-side static-item name, not itself an
+object-template path. The name resolves to "Caller of Storms" in
+string/en/static_item_n.stf, and unlike most of this arc an object carrying that
+exact objectName does ship --
+object/tangible/collection/shared_rare_melee_caller_storms.iff (and its server
+pair) -- but it is a non-functional display tangible
+(SharedTangibleObjectTemplate, gameObjectType = 8211, no damage, no attackSpeed,
+no xpType, no cert). Swapping the working sword granted below for that display
+piece is an open decision for Aaron, not taken here. The live functional weapon
+is not granted; the reward stays a substitution matched by description.
 
 What the name says: a one-handed sword ("sword_1h"), from Trials of Obi-Wan
 ("tow"), and task 11 describes it as "a strange sword, wrapped up in cloth".
 
-What this tree actually has for that: object/weapon/melee/sword/som_sword_obsidian.iff
+What this tree actually grants for that: object/weapon/melee/sword/som_sword_obsidian.iff
 -- the Mustafar obsidian blade. It is a real, complete server weapon template
 (object/custom_content/weapon/melee/som_sword_obsidian.lua: MELEEATTACK, KINETIC,
 60-250 damage, 3.5 attack speed, xpType combat_meleespecialize_onehand, cert
 cert_sword_01), it is registered via ObjectTemplates:addTemplate and included from
 custom_content/weapon/melee/serverobjects.lua:130, and its appearance ships in the
 client (shared_som_sword_obsidian.iff, present in mtg_patch_010_object_01.tre and
-mtg_patch_022.tre). It is a one-handed sword, it is Mustafar's, and it exists --
-which the live-named item does not.
+mtg_patch_022.tre). It is a one-handed sword, it is Mustafar's, and it is
+functional -- unlike the exact-named collection display tangible above.
 
 It is handed over with giveItem() into the player's inventory, which creates the
 object for real. This is deliberately NOT addRewardedSchematic: that call fails
@@ -99,8 +104,8 @@ closed when the path is not in scripts/managers/crafting/schematics.lua and woul
 silently grant nothing (the defect this arc's hidden_treasure.lua reward already
 had to be corrected for).
 
-To restore the live item later, only rewardWeapon below changes -- once something
-in the tree resolves weapon_tow_sword_1h_03_02.
+To restore a live functional weapon later, only rewardWeapon below changes --
+Aaron's open call on the collection display tangible above is the other path.
 
 WHAT IS NOT MODELLED
 

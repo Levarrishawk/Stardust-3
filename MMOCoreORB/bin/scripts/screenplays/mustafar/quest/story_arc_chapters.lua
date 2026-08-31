@@ -51,9 +51,15 @@
 	grantQuestOnFail, prerequisiteQuest and exclusionQuest field in all seven files
 	is empty. The ordering used here is the one the journal prose states
 	("Return to Milo", "Return to the Ship's Computer", ...), not one the data
-	encodes. Milo Mensix as the giver of chapter one comes from the prelude's
-	closing line plus chapter one's own list prose ("Milo Mensix wants a permanent
-	solution ..."), not from a giver field. OPEN DECISION.
+	encodes.
+
+	MILO AS THE GIVER IS NO LONGER AN OPEN DECISION. It used to rest on the
+	prelude's closing line plus chapter one's own list prose. It now rests on
+	conversation/story_arc_chapter_one_milo, whose grantFirstMission action grants
+	som_story_arc_chapter_one_01 outright. The .qst still names no giver -- that
+	field is empty across all seven, and it always was -- because in this content
+	the giver lives in the conversation, not the quest. Same place the badge and
+	the reward rows turned out to live. See point 4 below.
 
 	THE TASK LISTS, TRANSCRIBED
 	---------------------------
@@ -170,69 +176,170 @@
 	text on those two objects -- they are sent as system messages instead. Stated,
 	not hidden.
 
-	must_orc_computer is placed inside the crashed cruiser. Node 12112205 is a
-	SharedBuildingObjectTemplate whose client iff points at
-	appearance/poi_must_crashed_republic_ship.pob, and that pob has cells literally
-	named "bridge" and "hallway". interiorlayout/crashed_republic_ship.ilf puts two
-	starship pilot chairs in the bridge at (1.151, h 1.658, z 12.430) and
-	(-1.224, h 1.658, z 12.152), and the bridge collision floor spans
-	x -2.85..2.85, h 1.66..2.04, z 3.84..12.26. The computer goes on the centreline
-	between the chairs. That satisfies the .qst's "return to the ship's bridge".
+	must_orc_computer is placed inside the crashed cruiser, and the placement is
+	QUOTED. Node 12112205 is a SharedBuildingObjectTemplate whose client iff points
+	at appearance/poi_must_crashed_republic_ship.pob, and that pob has cells
+	literally named "bridge" and "hallway". The crash site's own server-side dungeon
+	spawn table has one row and only one, and that row is this object: room "bridge",
+	position 2.2 / 1.9 / 8, yaw -90, carrying the two scripts the .qst implies. So
+	the computer was never a placement problem. It is stated outright.
 
-	The Old Republic Facility is already pooled by mustafar_instances.lua
-	(pool "old_republic_facility", 12 copies, entrance cell, ungated). Chapter one
-	task 2/3/5 and chapter two task 5 all happen there, so the three terminals are
-	spawned into EVERY copy in the pool -- the precedent is reunite_shard.lua,
-	which furnishes each building of a pool the same way. Their cell-local spots
-	come from som_old_republic_facility.ilf's own entrance fixtures: two wall
+	This paragraph used to derive the spot instead, and the derivation is recorded
+	here because it was wrong in a way worth remembering:
+	interiorlayout/crashed_republic_ship.ilf puts two starship pilot chairs in the
+	bridge at (1.151, h 1.658, z 12.430) and (-1.224, h 1.658, z 12.152), and the
+	bridge collision floor spans x -2.85..2.85, h 1.66..2.04, z 3.84..12.26 -- so
+	the computer went on the centreline between the chairs, at 0.0 / 1.66 / 11.3
+	facing 180. That is 3.4 m too far forward and facing the wrong way.
+
+	The same mistake had been made in the Old Republic Facility, and it is corrected
+	the same way. That building is already pooled by mustafar_instances.lua (pool
+	"old_republic_facility", 12 copies, entrance cell, ungated). Chapter one task
+	2/3/5 and chapter two task 5 all happen there, so the terminals are spawned into
+	EVERY copy in the pool -- the precedent is reunite_shard.lua, which furnishes
+	each building of a pool the same way. All three USED TO sit in cell "entrance",
+	on spots read off som_old_republic_facility.ilf's entrance fixtures: two wall
 	terminal banks at (23.430, -0.667, 4.268) and (23.432, -0.696, -4.164), and a
-	floor data terminal at (4.426, 0.0, -7.256).
+	floor data terminal at (4.426, 0.0, -7.256). The facility's dungeon spawn table
+	puts the two real ones in two different cells -- core_tower8 and smallroom12 --
+	nowhere near the entrance or each other, so each terminal now carries its own
+	cell. The third has no live counterpart at all and is labelled INVENTED at its
+	entry rather than dressed up as a reading.
 
+	ROOT CAUSE, one cause for both: the dungeon spawn tables were not in the searched
+	set. Only the .qst files and the interior layouts were, so the .ilf was the best
+	evidence available and got used as though it were the only evidence that existed.
+	A .ilf says what a building was FURNISHED with; a dungeon spawn table says what
+	the server actually PUTS in it. Only the second is a placement, and only the
+	second carries a heading -- the missing heading should have been the tell.
+
+	The .ilf reasoning is still sound where nothing server-side spawns the object:
 	Core3 never instantiates .ilf furniture, so those coordinates are not "where the
-	prop is" -- they are the shipped evidence of where SOE left open floor. That is
-	why they are used and why they are cited.
+	prop is", they are shipped evidence of where SOE left open floor. That is a fair
+	way to choose a spot for an INVENTED object. It is not a substitute for looking.
 
 	WHAT COULD NOT BE PLACED FROM DATA
 	----------------------------------
-	1. The uplink cavern interior. The .qst gives one coordinate for chapter one
-	   task 1 (-3604 / 157 / 3483) and mustafar_instances.lua has a nine-copy
-	   "uplink_cave" pool whose door node is 12111281 -- and its own comment says
-	   the pool is deliberately not wired ("Wire the quest first, then the door.").
-	   That file belongs to another agent this run, so it is NOT edited. This file
-	   exposes mayEnterUplinkCave(pPlayer) for it to call, and the report states the
-	   exact table it needs.
+	1. RESOLVED -- the uplink cavern interior is now entered. The .qst gives one
+	   coordinate for chapter one task 1 (-3604 / 157 / 3483) and
+	   mustafar_instances.lua has a nine-copy "uplink_cave" pool on door node
+	   12111281. That pool is now wired, gated "story_arc_uplink" against
+	   mayEnterUplinkCave(pPlayer) below, and it keeps its own radial because
+	   12111281 is a different node from the 12111374 bunker entrance this file
+	   owns.
+
+	   THE REASON THIS WAS LISTED AS UNPLACEABLE WAS NOT A FINDING. It read "that
+	   file belongs to another agent this run, so it is NOT edited", and this file
+	   then published a gate function for that other agent to call. There was no
+	   other agent and no other owner. The premise was assumed, never checked, and
+	   it was load-bearing: it turned work that was in scope into a hand-off, and
+	   the hand-off had no recipient. The pool's own "wire the quest first, then
+	   the door" comment was the instruction, not a prohibition -- the quest was
+	   already wired in this very file.
+
+	   ROOT CAUSE: an ownership boundary was inferred from a neighbouring file's
+	   comment and then treated as a fact about who may edit what. A comment
+	   explaining why something is unfinished is not a claim that somebody else
+	   will finish it.
+
 	   The repair droid, the relay it builds and the beetle wave count are not in
 	   the .qst at all. A Mark I Mining Droid stands in for the repair droid and
 	   must_satellite_uplink for the relay; the wave is four beetles. Both are
-	   labelled SUBSTITUTED / INFERRED at their table entries.
+	   labelled SUBSTITUTED / INFERRED at their table entries. The cave's interior
+	   arrival spot is INVENTED and mustafar_instances.lua records the checked
+	   absence behind it: som_uplink_cave has no dungeon spawn table at all.
 
-	2. The droid factory interior. Chapter two task 1 says "travel to the bottom of
-	   the factory and restart the main computer processor" and chapter three task 16
-	   says "find a way to shut down the factory". mustafar_instances.lua carries
-	   working_droid_factory and decrepit_droid_factory pools behind door 12112909,
-	   also deliberately unwired, and there is NO droid factory .ilf shipped -- only
-	   nine .ilf files exist and none of them is the factory. With no interior
-	   layout there is no defensible interior coordinate to invent, so both steps
-	   are driven from the exterior door node the snapshot does place. The report
-	   lists this as the largest single reduction in this port.
+	2. RESOLVED -- the droid factory interior is now entered. Chapter two task 1
+	   says "travel to the bottom of the factory and restart the main computer
+	   processor" and chapter three task 16 says "find a way to shut down the
+	   factory". Both now happen inside. mustafar_instances.lua's
+	   working_droid_factory and decrepit_droid_factory pools are wired, gated
+	   "story_arc_factory" against mayEnterDroidFactory(pPlayer) below, and they
+	   carry entry.nodeID = nil so this file keeps the radial on shared door
+	   12112909 while the pools supply the landing spot.
+
+	   THIS ENTRY HAS NOW BEEN WRONG TWICE, and both errors are recorded because
+	   they are the same error at different depths.
+
+	   The first version read "there is NO droid factory .ilf shipped -- only nine
+	   .ilf files exist and none of them is the factory. With no interior layout
+	   there is no defensible interior coordinate to invent." The .ilf part is true
+	   and the conclusion does not follow. Both factories have full server-side
+	   dungeon spawn tables, and those are better evidence than a .ilf would have
+	   been: rooms, positions, yaws, scripts and objvars for the entire interior
+	   population.
+	   ROOT CAUSE: the dungeon spawn tables were not in the searched set, so "no
+	   .ilf" was read as "no data". Absence in the file you happened to open is not
+	   absence.
+
+	   The second version fixed the evidence and then invented an owner to hand the
+	   work to. It said the interior was "documented and unwired, which is a
+	   different problem with a different owner", and left the terminal coordinates
+	   "for whoever wires the pools". There is no other owner for Mustafar content.
+	   The hand-off was addressed to nobody, and it converted a solved problem back
+	   into an open one -- which is worse than the first error, because the first
+	   error was at least an honest misreading of evidence.
+	   ROOT CAUSE: a premise asserted instead of checked. Nothing in the tree said
+	   another agent held mustafar_instances.lua; that was inferred from its own
+	   "wire the quest first, then the door" comment, which is a sequencing note,
+	   not a claim of ownership. Deferring approved work and dressing it as somebody
+	   else's scope is a false completion.
+
+	   The coordinates that were being left for that imaginary reader are now used.
+	   Both factory tables were read in full. The working factory's end terminal is
+	   a system_controller in centralroom28 and the decrepit factory's security
+	   controller and master power core are in mainroom27 and smallroom20; all three
+	   rows are quoted at the entries below and spawned by this file.
 
 	3. Chapter three chapter 03 carries NO coordinates whatsoever -- not for the
-	   volcano crater arena, not for HK-47's last stand, not for the pilot, not for
-	   the terminal "located in this room". Every position used for that chapter is
-	   INFERRED and labelled as such. HK-47 stands near node 12112130, the highest
-	   snapshot node in the whole central-volcano region (246.58, out of 45 nodes
-	   scanned across x -3400..-2300, z 2900..4800), because the list prose says
-	   "the highest point in the area, a nearby volcano crater". That is a reading
-	   of the prose, not a datum.
+	   volcano crater arena, not for HK-47's last stand, not for the terminal
+	   "located in this room". Every arena task carries LocationX/Y/Z 0.0,
+	   createWaypoint 0 and an empty waypointName.
 
-	4. No conversation table ships for Milo Mensix, for a pilot, or for a droid
-	   factory engineer. Twenty-five SOM conversation STFs were enumerated and none
-	   of them covers these three. Building a real conversation needs
-	   mobile/conversations.lua plus a creature template edit -- shared files owned
-	   by other agents this run, and repointing an existing conversationTemplate is
-	   forbidden outright. So every NPC beat here is a radial plus an SUI box, the
-	   same call story_arc_prelude.lua made for Foreman Chivos and for the same
-	   reason.
+	   That is not missing data. mustafar_volcano is a separate ZONE and the
+	   chapter happens inside it, which is why the ground map is never addressed;
+	   the pilot's conversation flies the player in. Core3 has no such zone, so
+	   HK-47 is stood on the open terrain instead -- the deviation
+	   story_arc_chapter_three_pilot.lua states in full.
+
+	   So his position is INVENTED, not inferred, and the entry says so. It used
+	   to be justified here as a reading of the prose "the highest point in the
+	   area, a nearby volcano crater" onto node 12112130, the highest snapshot
+	   node in the central-volcano region. The prose is real; what was wrong was
+	   treating it as pointing at a spot on this zone. See the hk47 entry for the
+	   three independent checks and the root cause.
+
+	   The pilot is no longer in this list either -- he is quoted, not inferred;
+	   see his own entry.
+
+	4. WITHDRAWN, AND IT WAS THE BIGGEST WRONG CALL IN THIS FILE. It read:
+
+	     "No conversation table ships for Milo Mensix, for a pilot, or for a droid
+	      factory engineer. Twenty-five SOM conversation STFs were enumerated and
+	      none of them covers these three. ... So every NPC beat here is a radial
+	      plus an SUI box."
+
+	   All of it ships. story_arc_chapter_one_milo (43 screens),
+	   story_arc_chapter_three_pilot, story_arc_chapter_three_cobar,
+	   story_arc_chapter_three_scout, story_arc_chapter_one_computer and
+	   story_arc_chapter_two_computer -- six real trees for this file's NPCs,
+	   plus story_arc_prelude_chivos next door.
+
+	   ROOT CAUSE: "twenty-five SOM conversation STFs were enumerated" is exactly
+	   the defect. The enumeration was scoped to the som_ name prefix, because
+	   that is how the quests, the mobiles and the datatables on this planet are
+	   named. These conversations are named story_arc_* and ship in the BASE
+	   string/en/conversation/ set. Nothing under that prefix was ever in the set
+	   being looked at, and "none of them covers these three" was a true statement
+	   about the wrong set, read as a fact about live.
+
+	   The second half of the claim was also wrong on its own terms: nothing
+	   forbids adding a NEW conversationTemplate to a mobile whose field is empty.
+	   The rule is that an EXISTING one may not be repointed, and none was.
+
+	   Every radial and every SUI box those three NPCs had is retired. What
+	   remains SUI-delivered is listed at 5 and 6 below, and those are real
+	   engine limits, not this.
 
 	5. The two Comm Player tasks (chapter two task 3, chapter three chapter 03
 	   task 7) cannot be rendered. There is no comm-player primitive exposed to Lua;
@@ -242,7 +349,7 @@
 	6. "Social Group must_bandit" is not usable as a discriminator: every ported SOM
 	   creature template carries socialGroup "townsperson" or "". The two concrete
 	   registered bandit templates are enumerated instead
-	   (mobile/custom_content/som/serverobjects.lua:72-73).
+	   (mobile/custom_content/som/serverobjects.lua:82-83).
 
 	PROGRESS TRACKING
 	-----------------
@@ -284,7 +391,16 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "storyArcChaptersScreenPlay",
 
-	-- Level 80 on all seven .qst files.
+	-- Level 80 on all seven .qst files -- re-read and confirmed in all seven, and
+	-- the prelude's three are 75, which is where story_arc_prelude.lua's number
+	-- comes from.
+	--
+	-- NOTHING GATES ON THIS ANY MORE. It is the level the JOURNAL DISPLAYS, not
+	-- an entry requirement, and live's Milo has no level test -- his fifteen
+	-- greeting conditions are pure quest state. offerArc used to refuse the arc
+	-- below it; that gate was invented here, back when Milo was a radial and
+	-- something had to stand in for a giver. Kept declared because the value is
+	-- real evidence about the content's intended tier.
 	requiredLevel = 80,
 
 	-- The prelude's terminal stage. story_arc_prelude.lua declares STAGE_DONE = 8
@@ -319,15 +435,18 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- included from object/custom_content/tangible/quest/serverobjects.lua:259.
 	orcComputerTemplate = "object/tangible/quest/must_orc_computer.iff",
 
-	-- The cruiser, node 12112205. Cell "bridge" comes from the pob; the local spot
-	-- is the centreline between the two shipped pilot chairs, on the bridge floor
-	-- (h 1.66) at forward 11.3, just short of the chairs at forward 12.15/12.43.
-	cruiser = { nodeID = 12112205, cell = "bridge", x = 0.0, z = 1.66, y = 11.3, heading = 180 },
+	-- The cruiser, node 12112205. LIVE POSITION. The crash-site dungeon spawn
+	-- table places must_orc_computer in room "bridge" at 2.2 / 1.9 / 8, yaw -90.
+	-- The old value here (0.0 / 1.66 / 11.3, heading 180) was INFERRED from the
+	-- .ilf's two pilot chairs and is superseded -- it was 3.4 m too far forward and
+	-- faced the wrong way. Root cause of the guess: the dungeon spawn tables were
+	-- not in the searched set, only the .qst files and the interior layouts.
+	cruiser = { nodeID = 12112205, cell = "bridge", x = 2.2, z = 1.9, y = 8, heading = -90 },
 
 	-- task 1: 4 circuit boards at 60 percent, from Salvage Bandits.
 	-- "Social Group must_bandit" is unusable (all SOM templates carry socialGroup
 	-- "townsperson" or ""), so the concrete registered templates are enumerated;
-	-- both are included from mobile/custom_content/som/serverobjects.lua:72-73.
+	-- both are included from mobile/custom_content/som/serverobjects.lua:82-83.
 	banditTemplates = { "must_salvage_bandit_01", "must_salvage_bandit_leader_01" },
 	boardsRequired = 4,
 	boardDropPercent = 60,
@@ -345,13 +464,16 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 
 	-- The uplink bunker entrance the snapshot places beside that coordinate.
 	-- 12111374 shared_must_uplink_bunker_entrance.iff  -3591.93 h 159.29 3489.73.
-	-- Node 12111281 is the door, and mustafar_instances.lua records it as the
-	-- uplink_cave pool door, deliberately unwired. Not touched here.
+	-- Node 12111281 is the door, half a metre away, and it is a DIFFERENT object:
+	-- mustafar_instances.lua's uplink_cave pool now owns it, with its own radial
+	-- and the "story_arc_uplink" gate. This file owns 12111374 only. Keeping the
+	-- two straight matters -- an earlier note in this file claimed a menu collision
+	-- between them, and there is none.
 	uplinkEntrance = { nodeID = 12111374 },
 
 	-- SUBSTITUTED: the .qst names "an automated repair droid" and "the relay it
 	-- makes" but gives no template for either. must_mining_droid_mark_01 is the only
-	-- registered SOM utility droid (mobile/custom_content/som/serverobjects.lua:69)
+	-- registered SOM utility droid (mobile/custom_content/som/serverobjects.lua:79)
 	-- and must_satellite_uplink is the one registered uplink prop
 	-- (object/custom_content/building/mustafar/items/serverobjects.lua:12).
 	repairDroid = { template = "must_mining_droid_mark_01", respawn = 300 },
@@ -359,7 +481,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 
 	-- INFERRED: the .qst states beetles attack the droid and the relay but gives no
 	-- count and no templates. All three registered kubaza templates are accepted as
-	-- kills (mobile/custom_content/som/serverobjects.lua:55-57); four is the
+	-- kills (mobile/custom_content/som/serverobjects.lua:59-61); four is the
 	-- authored wave size.
 	kubazaTemplates = { "kubaza_beetle", "kubaza_soldier_beetle", "kubaza_worker_beetle" },
 	kubazaRequired = 4,
@@ -372,19 +494,132 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	SIGNAL_UPLINK_FINISH = "mustafar_uplink_finish",
 
 	-- The Old Republic Facility pool, already declared by mustafar_instances.lua.
-	-- Three terminals go into the entrance cell of every copy. The local spots are
-	-- the .ilf's own entrance fixtures, cited in the header.
+	-- Every copy has to be furnished, so these three go into each one.
+	--
+	-- ALL THREE USED TO SIT IN CELL "entrance", at coordinates INFERRED from the
+	-- .ilf's entrance fixtures. Root cause of that guess: the dungeon spawn tables
+	-- were not in the searched set, only the .qst files and the interior layouts.
+	--
+	-- The live table has now been read, and it settles TWO of the three. It has a
+	-- row for Delta Five (core_tower8) and a row for the power terminal
+	-- (smallroom12) -- two different cells, neither of them the entrance. It has
+	-- NO row for the third; orfContact is INVENTED and its own entry says so and
+	-- says why. So each terminal now carries its own cell and
+	-- spawnFacilityTerminals resolves one per terminal, instead of a single
+	-- orfCell shared by all three.
+	--
+	-- Stated this way on purpose: "the table places all three" would be an
+	-- overclaim, and it is exactly the kind that made the original guess look
+	-- like a reading.
 	orfPool = "old_republic_facility",
-	orfCell = "entrance",
-	orfContact = { x = 22.4, z = 0.0, y = -4.16, heading = 270 },
-	orfPower = { x = 4.43, z = 0.0, y = -7.26, heading = 0 },
-	orfDeltaFive = { x = 22.4, z = 0.0, y = 4.27, heading = 270 },
+
+	-- LIVE ROW, verbatim. terminal_bank_floor_on_02.iff, named "Terminal Delta
+	-- Five", room core_tower8, yaw 123.759, carrying the one script
+	-- conversation.story_arc_chapter_two_computer. This is the AI's terminal and
+	-- it now runs the real shipped conversation; see must_facility_ai.lua and
+	-- mobile/conversations/mustafar/story_arc_chapter_two_computer.lua.
+	-- The old value -- entrance, 22.4 / 0.0 / 4.27, heading 270, wearing
+	-- must_orc_computer -- was wrong in cell, position, facing and appearance.
+	orfDeltaFive = { cell = "core_tower8", x = 70.0275, z = -34.106, y = 14.0088, heading = 123.759 },
+	deltaFiveTemplate = "object/tangible/furniture/terminal/terminal_bank_floor_on_02.iff",
+
+	-- LIVE PLACEMENT, BORROWED BEHAVIOUR. Chapter one 03 task 3 says "find a power
+	-- access terminal" and names no template and no position, but the facility
+	-- ships one object called exactly that: terminal_bank_floor_on_01.iff, "Power
+	-- Access Terminal", room smallroom12, yaw 90. That object belongs to the
+	-- eight-object mustafar_trials puzzle (script quest_object_01) which this repo
+	-- does not implement, so the SPOT is live's and the behaviour is this file's.
+	-- The appearance stays must_control_computer, which is the repo's own choice
+	-- and not a claim about what stands there on live.
+	orfPower = { cell = "smallroom12", x = 2.48938, z = 0.0, y = -24.9179, heading = 90 },
+
+	-- NO LIVE ROW EXISTS FOR THIS ONE, and that is the honest version. Live has no
+	-- separate "contact the ship's AI" terminal: Delta Five is the AI's terminal
+	-- for both visits, and the conversation's own greeting covers the before-power
+	-- case with its s_72 screen. The repo still needs a discrete trigger to move
+	-- STAGE_TRAVEL_ORF -> STAGE_ORF_POWER, so this stand-in stays, in the entrance
+	-- where the player arrives. INVENTED PLACEMENT -- the only one of the three.
+	orfContact = { cell = "entrance", x = 22.4, z = 0.0, y = -4.16, heading = 270 },
 
 	-- The power terminal template: object/tangible/quest/must_control_computer.iff,
 	-- registered by addTemplate in
 	-- object/custom_content/tangible/quest/must_control_computer.lua:5, included
 	-- from object/custom_content/tangible/quest/serverobjects.lua:253.
 	controlComputerTemplate = "object/tangible/quest/must_control_computer.iff",
+
+	--------------------------------------------------------------------------
+	-- THE TWO DROID FACTORIES
+	--------------------------------------------------------------------------
+	-- Both pools are wired and both are REACHABLE. They share exterior door
+	-- 12112909, which has exactly one radial, so the door has to choose:
+	--
+	--     stage 13 (repair) and stage 20 (shutdown)  ->  working_droid_factory
+	--     stage 19                                   ->  the keypad, door sealed
+	--     any other stage                            ->  decrepit_droid_factory
+	--
+	-- Earlier stages fall into the same branch and are refused by
+	-- mayEnterDroidFactory at the gate, so the door never opens for them.
+	--
+	-- The two arc tasks both target the operational factory. Nothing in the tree
+	-- states a rule for reaching the decrepit one -- in live the keypad code
+	-- decided, and that puzzle only covers the arc -- so the rule above is ours,
+	-- ruled by Aaron 2026-08-31 as part of completing Mustafar rather than left as
+	-- an open question. It is the same class of deviation as using arc stage in
+	-- place of the code, and it is what makes the decrepit interior reachable
+	-- instead of furnished-and-sealed.
+	--
+	-- ⚠ TWO EARLIER CLAIMS HERE WERE FALSE and are withdrawn. This comment said
+	-- "the decrepit one is enterable" and the note above useFactoryDoor said "both
+	-- interiors CAN now be entered", while useFactoryDoor passed self.factoryPool
+	-- unconditionally and nothing ever named decrepitPool. The prose described the
+	-- intent; the code did not implement it. Caught by review, not by testing,
+	-- which is the argument for reading a claim against the line it describes.
+	factoryPool = "working_droid_factory",
+	decrepitPool = "decrepit_droid_factory",
+
+	-- QUOTED, and it is the ONLY end-of-dungeon terminal row in
+	-- som_working_droid_factory.tab: room centralroom28, loc_x 63.738,
+	-- loc_y -22.7667, loc_z 7.09469, yaw -92.8192, script
+	-- theme_park.dungeon.mustafar_trials.decrepit_droid_factory.exit_terminal.
+	-- Chapter two 01 task 1 wants the player "at the bottom of the factory" to
+	-- "restart the main computer processor" and chapter three 01 task 16 wants it
+	-- shut down; live has one system_controller, so both tasks use it.
+	factorySystem = { cell = "centralroom28", x = 63.738, z = -22.7667, y = 7.09469, heading = -92.8192 },
+
+	-- The template on that row really is the DECREPIT factory's system_controller.
+	-- The working factory's table borrows it rather than shipping its own -- the
+	-- working_droid_factory template directory registers only four objects and no
+	-- controller at all. Quoted as live has it, not tidied. Registered by
+	-- addTemplate in object/custom_content/tangible/dungeon/mustafar/
+	-- decrepit_droid_factory/system_controller.lua:1, included from that
+	-- directory's serverobjects.lua and reached from object/serverobjects.lua:90.
+	factorySystemTemplate = "object/tangible/dungeon/mustafar/decrepit_droid_factory/system_controller.iff",
+
+	-- QUOTED, som_decrepit_droid_factory.tab: master_power_core in smallroom20 at
+	-- 7.15079 / -24 / -1.20436 yaw 90.5273 (script ...decrepit_droid_factory.power_core),
+	-- and security_controller in mainroom27 at 69.2167 / -23.6592 / 3.87901 yaw
+	-- 117.639 (script ...final_security_terminal). Both are scenery here: this repo
+	-- does not implement the factory's own trial, so they are placed where live
+	-- places them and carry no radial. Stated so the next reader does not mistake
+	-- a correct position for an implemented puzzle.
+	decrepitPowerCore = { cell = "smallroom20", x = 7.15079, z = -24, y = -1.20436, heading = 90.5273 },
+	decrepitSecurity = { cell = "mainroom27", x = 69.2167, z = -23.6592, y = 3.87901, heading = 117.639 },
+
+	decrepitPowerCoreTemplate = "object/tangible/dungeon/mustafar/decrepit_droid_factory/master_power_core.iff",
+	decrepitSecurityTemplate = "object/tangible/dungeon/mustafar/decrepit_droid_factory/security_controller.iff",
+
+	-- Live's completeChapterOne closes with badge.grantBadge(player,
+	-- "bdg_must_victory_orf") -- collection_n.stf calls it "Old Republic Seeker",
+	-- collection_d.stf "You have activated the Old Republic Facility." It is
+	-- granted nowhere else in the seven story-arc scripts and it was missing from
+	-- this port entirely. Root cause: the arc was built from the .qst files, and
+	-- the .qst files carry no reward rows -- the badge lives in the conversation.
+	-- Exactly the same miss, for the same reason, as the Keslev exploration badge.
+	--
+	-- Badge keys arrive in Lua as uppercase globals holding their index, so this
+	-- is looked up by name at grant time and skipped if this server's badge_map
+	-- has no such row. Same guarded idiom as mining_field_markers.lua:644.
+	completionBadge = "BDG_MUST_VICTORY_ORF",
 
 	--------------------------------------------------------------------------
 	-- CHAPTER TWO 01 -- "Wrong Place, Wrong Time"
@@ -406,17 +641,41 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 
 	-- task 6 createWaypoint TRUE, waypoint name "Mustafarian Scout",
 	-- mustafar LocationX 550 LocationY 157 LocationZ -154. No radius on this task.
-	-- must_scout is included from mobile/custom_content/som/serverobjects.lua:74,
-	-- but its own template carries customName = "must_scout"
-	-- (must_scout.lua:2) -- an unresolved placeholder, so he will display as
-	-- "must_scout" in game. That is a template defect, not a screenplay one, and
-	-- the template is not this file's to edit. OPEN DECISION.
+	-- must_scout is included from mobile/custom_content/som/serverobjects.lua:84.
+	-- Its customName was once the raw placeholder "must_scout" and this comment
+	-- recorded that as an open decision. It is resolved: must_scout.lua:17 now
+	-- carries customName = "Scout Olon Lono", the name his own live conversation
+	-- script sets through setName in both OnInitialize and OnAttach. That file's
+	-- header documents the find. Nothing is open here.
 	scoutPost = { x = 550, y = -154, waypointName = "Mustafarian Scout", respawn = 300 },
 
-	-- INFERRED: the .qst says "an army of droids" with no roster and no count.
+	-- INFERRED, and now a CHECKED inference rather than an unchecked one. The
+	-- .qst says "an army of droids" with no roster and no count -- and the live
+	-- spawn tables do not supply them either, because this army is not a dungeon
+	-- population. The .qst is explicit that HK-47 "has sent out an army of droids
+	-- FROM the factory towards the Mining Facility": it marches in the open, so
+	-- there is no room for it to be a row in. Both factory tables were read to be
+	-- sure. The operational factory holds one mob in total; the decrepit factory
+	-- is a different dungeon with its own roster.
+	--
+	-- That roster would be the more faithful substitution if it were available --
+	-- SOE populates its own factories with som_decrepit_battle_droid,
+	-- som_decrepit_super_battle_droid and som_decrepit_cww8_combat_droid -- but
+	-- none of those templates is registered in this repo, so they cannot be used.
 	-- These are the three registered SOM battle droid templates
-	-- (mobile/custom_content/som/serverobjects.lua:41-43); six is the authored
+	-- (mobile/custom_content/som/serverobjects.lua:43-45); six is the authored
 	-- wave size.
+	--
+	-- mustafar_dungeon_population.lua now stands those three live names in as
+	-- exactly these three templates, so the army and the decrepit factory's own
+	-- garrison are made of the same mobiles. That is not a collision: countDroid
+	-- fires only at STAGE_DROID_ARMY (16), and mayEnterDroidFactory admits exactly
+	-- STAGE_REPAIR_FACTORY (13) and stage >= STAGE_ENTER_FACTORY (19). 16 is
+	-- neither, so both factory pools are shut at the one stage that counts these
+	-- kills and nobody can be inside to farm them. Checked, not assumed --
+	-- re-checked when that gate was corrected, because the gate is the whole
+	-- argument: it previously read ">= 19" alone, and widening it to admit 13 does
+	-- not admit 16.
 	droidArmy = {
 		{ template = "cww8_battle_droid", count = 3 },
 		{ template = "cww8a_battle_droid", count = 2 },
@@ -462,22 +721,89 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- task 1 signal. The misspelling "recieved" is shipped and is reproduced as-is.
 	SIGNAL_OVERRIDE_TOOL = "mustafar_droid_factory_tool_recieved",
 
+	-- Engineer Cobar hands the tool over. He is NOT inferred: SOE's
+	-- conversation/story_arc_chapter_three_cobar ships, renames the mob "Engineer
+	-- Cobar", and fires SIGNAL_OVERRIDE_TOOL as its only action. His tree is in
+	-- mobile/conversations/mustafar/story_arc_chapter_three_cobar.lua and his
+	-- mobile in mobile/custom_content/som/engineer_cobar.lua.
+	--
+	-- HIS POSITION IS THE ONE INFERRED THING ABOUT HIM. He is the only story-arc
+	-- NPC with no row in any dungeon spawn table. The .qst task says "Talk to one
+	-- of the engineers located at the Mensix Mining Facility" and his own default
+	-- line puts him at a computer terminal inside it; small_room_05, cell
+	-- 12112243, is that facility's technician room in the live table -- it carries
+	-- the technician patrol markers, Chief Drono and the exploration marker -- so
+	-- he stands in the free corner of it. The ROOM is reasoned from live evidence.
+	-- The coordinate inside it is not.
+	cobar = { template = "engineer_cobar", cellID = 12112243, x = -147.5, z = 19.1, y = -64.8, heading = 45, respawn = 300 },
+
 	--------------------------------------------------------------------------
 	-- CHAPTER THREE 03 -- "Destroy HK-47"
 	--------------------------------------------------------------------------
 
-	-- INFERRED, every position in this block. This .qst carries no coordinates.
-	-- miner_pilot is included from mobile/custom_content/som/serverobjects.lua:65
-	-- and carries pvpBitmask NONE, so he is safe to stand in the open.
-	-- The spot is beside the two travellers mensix_mining_facility_main.lua already
-	-- places outdoors at (-2481, 230.1, 1633.7) and (-2483.1, 230.1, 1635.7);
-	-- 230.1 is their proven standing height there.
-	pilot = { template = "miner_pilot", x = -2476, z = 230.1, y = 1627, heading = 45, respawn = 300 },
+	-- The .qst carries no coordinates, but the pilot is not inferred: the facility
+	-- spawn table has a som_volcano_pilot row carrying
+	-- conversation.story_arc_chapter_three_pilot -- this task's own conversation --
+	-- in landing_deck_room, cell 12112248, at (-41.9, 31.5, -106.9) facing -145.
+	-- A pilot on the landing deck. miner_pilot is included from
+	-- mobile/custom_content/som/serverobjects.lua:69 and carries pvpBitmask NONE.
+	--
+	-- An earlier revision stood him outdoors at (-2476, 230.1, 1627), beside the
+	-- two travellers mensix_mining_facility_main.lua moves out of the deck. Those
+	-- travellers are outdoors only because Levarris moved them there for
+	-- spatialChat; borrowing their height was borrowing a workaround's position.
+	pilot = { template = "miner_pilot", cellID = 12112248, x = -41.9, z = 31.5, y = -106.9, heading = -145, respawn = 300 },
 
-	-- INFERRED. "the highest point in the area, a nearby volcano crater" -- node
-	-- 12112130 (must_power_rod, -2742.13 h 246.58 3636.59) is the highest snapshot
-	-- node in the whole central-volcano region. hk47 is included from
-	-- mobile/custom_content/som/serverobjects.lua:50.
+	-- INVENTED, and it has to be. There is no live position for THIS HK-47 -- the
+	-- one the player fights in the volcano arena -- to be read from.
+	--
+	-- This used to read "INFERRED" and offer node 12112130 (must_power_rod,
+	-- -2742.13 h 246.58 3636.59) as the highest snapshot node in the central-volcano
+	-- region, as though live had a ground position that was merely hard to locate.
+	-- It does not, and four things say so independently:
+	--   - hk47 appears nowhere in mustafar.ws. He is not a snapshot node.
+	--   - He has no creature row in ANY dungeon spawn table, not just the SOM ones.
+	--     The whole dungeon set was searched for him, not only the five Mustafar
+	--     tables, and he is in none of them.
+	--   - No volcano spawn table ships at all. The SOM dungeon tables are the mining
+	--     facility, the ORF, the crash-site cruiser and the two droid factories.
+	--   - som_story_arc_chapter_three_03.qst carries LocationX/Y/Z 0.0,
+	--     createWaypoint 0 and an empty waypointName on EVERY arena task --
+	--     volcano_arena_one, _three, _four, _five. All five. That is not an
+	--     omission, it is the shape of a task that happens somewhere the ground
+	--     map cannot address.
+	--
+	-- ONE THING THAT LOOKS LIKE A COUNTEREXAMPLE AND IS NOT, recorded so it is not
+	-- re-litigated: the operational droid factory's spawn table does contain an
+	-- HK-47 beat, as a set of patrol_waypoint objects in mainroom27 and smallroom20
+	-- tagged by an hk_sequence objvar -- hk_spawn, hk_moveto, fire1/2/3, and two
+	-- player trigger points running the factory's hk_final_trigger script. That is
+	-- a scripted appearance inside a dungeon: marks for where a cutscene stands him
+	-- and moves him, not a spawn of the creature and not the arena.
+	--
+	-- This file DOES own that pool now, so the old sign-off -- "it is real content
+	-- for whoever wires that pool" -- is withdrawn; there was never another owner
+	-- to hand it to. Owning it does not change the conclusion, and that is what
+	-- makes it worth keeping: the hk_sequence marks are a cutscene the engine
+	-- cannot play, seven waypoint objects with no creature row behind them. They
+	-- still give the arena fight no coordinate. They are deliberately NOT spawned
+	-- -- reproducing the marks for a cutscene that cannot run would be scenery
+	-- pretending to be content.
+	--
+	-- mustafar_volcano is its own ZONE, not a place on this one: zone_n.stf calls
+	-- it "Mustafar Volcano" and instance.stf calls it "Mustafar: The Volcano
+	-- Crater". Menddle flies the player into it. Core3 has no such zone, so
+	-- HK-47 stands on the open terrain instead and the player walks to a waypoint
+	-- -- the deviation story_arc_chapter_three_pilot.lua already states in full.
+	-- The coordinate below is a consequence of that deviation, not a reading.
+	--
+	-- ROOT CAUSE: searching the ground zone for a position without first asking
+	-- whether the encounter is ON the ground zone. The five all-zero task
+	-- locations were the answer and were read as missing data. A .qst that
+	-- carries no coordinates anywhere is telling you something; it is not a gap
+	-- to be filled from the nearest plausible landmark.
+	--
+	-- hk47 is included from mobile/custom_content/som/serverobjects.lua:54.
 	hk47 = { template = "hk47", x = -2748, y = 3642, heading = 0, respawn = 300 },
 
 	-- task 4 Reward: object/tangible/hologram/hologram_hk47.iff, CountItem 1,
@@ -497,19 +823,34 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	--------------------------------------------------------------------------
 
 	-- must_milo_mensix is included from
-	-- mobile/custom_content/som/serverobjects.lua:68, customName
+	-- mobile/custom_content/som/serverobjects.lua:78, customName
 	-- "Milo Mensix", level 70, conversationTemplate "" -- so he has no shipped
-	-- conversation and is driven by radial. Cell 12112226 is medium_room_01 of the
-	-- Mensix mining facility (confirmed against must_mining_facility.ilf's own
-	-- bounding box, x -100.12..-67.41 / h 10.39..142.84 / z 35.41..72.12), the same
-	-- cell story_arc_prelude.lua and mensix_mining_facility_main.lua already use.
-	-- The spot clears all seven existing occupants of that room by 8 m or more and
-	-- the nearest .ilf clutter by 5.66 m.
-	milo = { template = "must_milo_mensix", cellID = 12112226, x = -87, z = 10.8, y = 62, heading = 180, respawn = 300 },
+	-- conversation and is driven by radial.
+	--
+	-- LIVE position, not inferred. The facility's dungeon spawn table puts him in
+	-- conference_room -- cell 12112241 -- at (-158.1, 22.6, -15.2) facing 90, and
+	-- names conversation.story_arc_chapter_one_milo on the row, which is what
+	-- identifies it as this Milo. He is the head of the company; his room is the
+	-- boardroom, not the bar. Urup Falco stands in the same room at h 19.1 and
+	-- Milo at 22.6, so he is up on the dais at the head of it.
+	--
+	-- An earlier revision put him in the cantina, cell 12112226, at (-87, 10.8,
+	-- 62). The reasoning was that the cantina is where the arc's other NPCs are
+	-- and the spot cleared all seven of them by 8 m. Both statements were true
+	-- and neither was evidence; story_arc_prelude.lua records the same mistake
+	-- made about Chivos, one room over.
+	milo = { template = "must_milo_mensix", cellID = 12112241, x = -158.1, z = 22.6, y = -15.2, heading = 90, respawn = 300 },
 
 	-- "the terminal located in this room" -- chapter three chapter 03 task 6.
-	-- INFERRED position, same cell, beside Milo.
-	miloTerminal = { x = -89.5, z = 10.8, y = 62.5, heading = 90 },
+	-- LIVE. The spawn table carries exactly one object row for conference_room:
+	-- object/tangible/item/som/communication_console.iff at (-140.5, 19, -10.2),
+	-- on the room's own floor plane rather than Milo's dais. A communication
+	-- console in the room the player is told to check messages in is the terminal
+	-- that line means, so both the template and the spot are the live ones now.
+	-- The template is registered at
+	-- object/custom_content/tangible/item/som/communication_console.lua:5.
+	miloTerminalTemplate = "object/tangible/item/som/communication_console.iff",
+	miloTerminal = { x = -140.5, z = 19.0, y = -10.2, heading = 0 },
 
 	--------------------------------------------------------------------------
 	-- STAGES
@@ -555,7 +896,12 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	STAGE_CHECK_MESSAGE = 25,
 	STAGE_DONE = 26,
 
-	-- Runtime handles, filled by start(). Never persisted.
+	-- Runtime handles, filled by start(). Never persisted -- and, as it turns out,
+	-- never read either: all four are assigned once and used nowhere. They are the
+	-- leftovers of the radial and menu-component code that did read them. Kept
+	-- rather than removed, and labelled so the next reader does not go looking for
+	-- the consumer. story_arc_prelude.lua's crashAreaID / arrivalAreaID / chivosID
+	-- are the same three-of-a-kind.
 	wreckAreaID = 0,
 	factoryAreaID = 0,
 	orfReturnAreaID = 0,
@@ -569,7 +915,9 @@ function storyArcChaptersScreenPlay:start()
 		self:attachSnapshotObjects()
 		self:spawnCruiserComputer()
 		self:spawnFacilityTerminals()
+		self:spawnFactoryTerminals()
 		self:spawnMilo()
+		self:spawnCobar()
 		self:spawnScout()
 		self:spawnPilot()
 		self:spawnHk47()
@@ -633,9 +981,15 @@ function storyArcChaptersScreenPlay:snapshotObjectUsed(pObject, pPlayer)
 	return 0
 end
 
--- must_orc_computer goes on the bridge of the crashed cruiser, node 12112205.
--- resolveCell prefers the pob's own named cell and never invents a cell id; the
--- shape is kenobi_spine.lua:resolveCell.
+-- must_orc_computer goes on the bridge of the crashed cruiser, node 12112205, at
+-- the live spawn-table spot. resolveCell prefers the pob's own named cell and
+-- never invents a cell id; the shape is kenobi_spine.lua:resolveCell.
+--
+-- TWO objects go on that spot, and the reason is in must_cruiser_ai.lua's header.
+-- Live hangs two scripts on the one tangible: retrieve_item_on_item, which is the
+-- "Install Circuit Boards" step, and the conversation. Core3 can only start a
+-- conversation from an AiAgent, so the terminal keeps the radial and an invisible
+-- carrier standing on it keeps the talk.
 function storyArcChaptersScreenPlay:spawnCruiserComputer()
 	local pShip = getSceneObject(self.cruiser.nodeID)
 
@@ -660,6 +1014,15 @@ function storyArcChaptersScreenPlay:spawnCruiserComputer()
 
 	writeStringData(SceneObject(pComputer):getObjectID() .. ":storyArcChaptersRole", "shipComputer")
 	SceneObject(pComputer):setObjectMenuComponent("StoryArcChaptersMenuComponent")
+
+	-- The conversation carrier, on the same coordinate. If it fails to spawn the
+	-- terminal still works for the circuit-board step, so this is a warning and
+	-- not a return -- but the briefing would be unreachable, so say which.
+	local pAI = spawnMobile("mustafar", "must_cruiser_ai", 0, self.cruiser.x, self.cruiser.z, self.cruiser.y, self.cruiser.heading, cellID)
+
+	if (pAI == nil) then
+		print("storyArcChaptersScreenPlay: must_cruiser_ai failed to spawn on the cruiser bridge; the ship AI's conversation will be unreachable")
+	end
 end
 
 function storyArcChaptersScreenPlay:resolveCell(pBuilding, cellName)
@@ -694,23 +1057,86 @@ function storyArcChaptersScreenPlay:spawnFacilityTerminals()
 
 	for i = 1, #buildings do
 		local pBuilding = getSceneObject(buildings[i])
-		local cellID = self:resolveCell(pBuilding, self.orfCell)
 
-		if (cellID == 0) then
-			print("storyArcChaptersScreenPlay: facility " .. buildings[i] .. " has no cell named '" .. self.orfCell .. "'")
-		else
-			self:spawnFacilityTerminal(cellID, self.orcComputerTemplate, self.orfContact, "facilityContact")
-			self:spawnFacilityTerminal(cellID, self.controlComputerTemplate, self.orfPower, "facilityPower")
-			self:spawnFacilityTerminal(cellID, self.orcComputerTemplate, self.orfDeltaFive, "facilityDelta")
-		end
+		-- Each terminal names its own cell now; the live table puts them in three
+		-- different rooms. See the orf* block for the rows.
+		self:spawnFacilityTerminal(pBuilding, self.orcComputerTemplate, self.orfContact, "facilityContact")
+		self:spawnFacilityTerminal(pBuilding, self.controlComputerTemplate, self.orfPower, "facilityPower")
+
+		-- Terminal Delta Five carries NO role and NO menu component. Live hangs a
+		-- single script on it, conversation.story_arc_chapter_two_computer, so the
+		-- conversation is the whole object -- there is nothing left for a radial to
+		-- do. The invisible carrier beside it is what the player actually talks to;
+		-- must_facility_ai.lua carries the DEVIATION and the C++ citation.
+		self:spawnFacilityTerminal(pBuilding, self.deltaFiveTemplate, self.orfDeltaFive, nil)
+		self:spawnFacilityCarrier(pBuilding, "must_facility_ai", self.orfDeltaFive)
 	end
 end
 
-function storyArcChaptersScreenPlay:spawnFacilityTerminal(cellID, template, spot, role)
+-- Both factories are instance POOLS, so every copy is furnished, exactly as the
+-- Old Republic Facility above is. The working factory gets the system_controller
+-- the arc uses; the decrepit one gets the two live tangibles that stand in its
+-- own table. Cell names come from the dungeon tables, not from a .ilf -- no droid
+-- factory .ilf ships, which is true and, as the header now records, irrelevant.
+--
+-- CELLS UNVERIFIED, and said plainly rather than discovered later: centralroom28,
+-- smallroom20 and mainroom27 are read off the live spawn tables, and there is no
+-- .ilf and no .pob in this tree to check them against. If a copy has no cell by
+-- that name, resolveCell returns 0 and the print below names the missing cell.
+-- That is the check, and it runs at boot rather than being assumed.
+function storyArcChaptersScreenPlay:spawnFactoryTerminals()
+	if (MustafarInstances == nil) then
+		print("storyArcChaptersScreenPlay: mustafar_instances.lua is not loaded; the droid factory terminals will not be placed")
+		return
+	end
+
+	local working = MustafarInstances:getPoolBuildings(self.factoryPool)
+
+	if (working == nil or #working == 0) then
+		print("storyArcChaptersScreenPlay: instance pool '" .. self.factoryPool .. "' is empty; the droid factory terminals will not be placed")
+	else
+		for i = 1, #working do
+			local pBuilding = getSceneObject(working[i])
+
+			self:spawnFacilityTerminal(pBuilding, self.factorySystemTemplate, self.factorySystem, "factorySystem")
+		end
+	end
+
+	local decrepit = MustafarInstances:getPoolBuildings(self.decrepitPool)
+
+	if (decrepit == nil or #decrepit == 0) then
+		print("storyArcChaptersScreenPlay: instance pool '" .. self.decrepitPool .. "' is empty; the decrepit factory fittings will not be placed")
+		return
+	end
+
+	for i = 1, #decrepit do
+		local pBuilding = getSceneObject(decrepit[i])
+
+		-- No role on either: they are live's own fittings, not arc triggers.
+		self:spawnFacilityTerminal(pBuilding, self.decrepitPowerCoreTemplate, self.decrepitPowerCore, nil)
+		self:spawnFacilityTerminal(pBuilding, self.decrepitSecurityTemplate, self.decrepitSecurity, nil)
+	end
+end
+
+function storyArcChaptersScreenPlay:spawnFacilityTerminal(pBuilding, template, spot, role)
+	-- Shared by the facility and both factories now, so the message names the cell
+	-- and the template rather than assuming which building it was called for.
+	local cellID = self:resolveCell(pBuilding, spot.cell)
+
+	if (cellID == 0) then
+		print("storyArcChaptersScreenPlay: no cell named '" .. spot.cell .. "' in this building; " .. template .. " will not be placed")
+		return
+	end
+
 	local pTerminal = spawnSceneObject("mustafar", template, spot.x, spot.z, spot.y, cellID, math.rad(spot.heading))
 
 	if (pTerminal == nil) then
-		print("storyArcChaptersScreenPlay: " .. template .. " (" .. role .. ") failed to spawn in cell " .. cellID)
+		print("storyArcChaptersScreenPlay: " .. template .. " failed to spawn in cell " .. spot.cell)
+		return
+	end
+
+	-- A terminal whose whole job is to be talked to gets no radial; see above.
+	if (role == nil) then
 		return
 	end
 
@@ -718,8 +1144,44 @@ function storyArcChaptersScreenPlay:spawnFacilityTerminal(cellID, template, spot
 	SceneObject(pTerminal):setObjectMenuComponent("StoryArcChaptersMenuComponent")
 end
 
--- Milo Mensix. He has conversationTemplate "" in his own template, so he is
--- radial-driven; see the header for why no conversation table is authored here.
+-- The conversation carrier, on the terminal's own coordinate. Nothing else in the
+-- facility depends on it, but the chapter one 03 finish, the chapter two 01 grant
+-- and bdg_must_victory_orf all hang off its conversation, so say plainly what is
+-- lost if it fails rather than printing a generic spawn error.
+function storyArcChaptersScreenPlay:spawnFacilityCarrier(pBuilding, template, spot)
+	local cellID = self:resolveCell(pBuilding, spot.cell)
+
+	if (cellID == 0) then
+		return
+	end
+
+	local pAI = spawnMobile("mustafar", template, 0, spot.x, spot.z, spot.y, spot.heading, cellID)
+
+	if (pAI == nil) then
+		print("storyArcChaptersScreenPlay: " .. template .. " failed to spawn in cell " .. spot.cell .. "; chapter one 03 cannot be finished")
+	end
+end
+
+-- Milo Mensix. No radial and no menu component on the man himself: he carries a
+-- real shipped conversation, story_arc_chapter_one_milo, and talking to him is
+-- the interaction.
+--
+-- This block used to read "He has conversationTemplate "" in his own template,
+-- so he is radial-driven; see the header for why no conversation table is
+-- authored here." The first half was true and the second did not follow -- the
+-- empty conversationTemplate was THIS REPO's gap, not evidence about live. Live
+-- ships a 43-screen tree for him, the longest in the arc.
+--
+-- ROOT CAUSE: the enumeration that built the arc searched conversation scripts
+-- and string tables whose name begins som_, because that is how the quests, the
+-- mobiles and the datatables are named. These conversations are named
+-- story_arc_* and ship in the base string/en/conversation/ set, so nothing under
+-- that prefix was ever in the set being searched, and "no rows found" was read
+-- as "did not ship". Same root cause as Cobar, the scout, the pilot and both
+-- computers.
+--
+-- His message console keeps its radial. That is a different object with its own
+-- live script; see useMiloTerminal.
 function storyArcChaptersScreenPlay:spawnMilo()
 	local pMilo = spawnMobile("mustafar", self.milo.template, self.milo.respawn, self.milo.x, self.milo.z, self.milo.y, self.milo.heading, self.milo.cellID)
 
@@ -728,13 +1190,20 @@ function storyArcChaptersScreenPlay:spawnMilo()
 		return
 	end
 
-	-- He has no snapshot node, so keep the id the spawn just handed back --
-	-- story_arc_prelude.lua:379 keeps Foreman Chivos's the same way.
+	-- DEAD, and left that way deliberately. This assignment is the only thing that
+	-- touches self.miloID; nothing in this file or any other reads it. It used to
+	-- be justified as "keep the id the spawn just handed back -- story_arc_prelude
+	-- keeps Foreman Chivos's the same way", but that precedent is dead too:
+	-- chivosID is written once there and read nowhere either. A dead field cited
+	-- as the warrant for a dead field.
+	--
+	-- It survived because the role write and menu component that used to follow it
+	-- did read it, and they went with the radial while the handle stayed. Left in
+	-- place rather than removed -- it costs one assignment, and taking it out is a
+	-- deletion, not a correction. See the runtime-handle note on the field itself.
 	self.miloID = SceneObject(pMilo):getObjectID()
-	writeStringData(self.miloID .. ":storyArcChaptersRole", "milo")
-	SceneObject(pMilo):setObjectMenuComponent("StoryArcChaptersMenuComponent")
 
-	local pTerminal = spawnSceneObject("mustafar", self.controlComputerTemplate, self.miloTerminal.x, self.miloTerminal.z, self.miloTerminal.y, self.milo.cellID, math.rad(self.miloTerminal.heading))
+	local pTerminal = spawnSceneObject("mustafar", self.miloTerminalTemplate, self.miloTerminal.x, self.miloTerminal.z, self.miloTerminal.y, self.milo.cellID, math.rad(self.miloTerminal.heading))
 
 	if (pTerminal == nil) then
 		print("storyArcChaptersScreenPlay: the message terminal in Milo's room failed to spawn")
@@ -743,6 +1212,17 @@ function storyArcChaptersScreenPlay:spawnMilo()
 
 	writeStringData(SceneObject(pTerminal):getObjectID() .. ":storyArcChaptersRole", "miloTerminal")
 	SceneObject(pTerminal):setObjectMenuComponent("StoryArcChaptersMenuComponent")
+end
+
+-- Engineer Cobar. No radial and no menu component: he carries a real shipped
+-- conversation, so talking to him is the interaction. See the cobar block above
+-- for why his room is evidence and his coordinate is not.
+function storyArcChaptersScreenPlay:spawnCobar()
+	local pCobar = spawnMobile("mustafar", self.cobar.template, self.cobar.respawn, self.cobar.x, self.cobar.z, self.cobar.y, self.cobar.heading, self.cobar.cellID)
+
+	if (pCobar == nil) then
+		print("storyArcChaptersScreenPlay: " .. self.cobar.template .. " failed to spawn; the terminal override side quest will be uncompletable")
+	end
 end
 
 -- The Mustafarian Scout stands at the exact coordinate chapter three 01 task 6
@@ -758,27 +1238,27 @@ function storyArcChaptersScreenPlay:spawnScout()
 
 	if (pScout == nil) then
 		print("storyArcChaptersScreenPlay: must_scout failed to spawn at the droid army waypoint")
-		return
 	end
 
-	writeStringData(SceneObject(pScout):getObjectID() .. ":storyArcChaptersRole", "scout")
-	SceneObject(pScout):setObjectMenuComponent("StoryArcChaptersMenuComponent")
+	-- No role and no menu component. He carries story_arc_chapter_three_scout on
+	-- his mobile template, so the converse radial is the stock one and everything
+	-- he does runs through scout_conv_handler.
 end
 
--- INFERRED position -- chapter three 03 gives no coordinates at all.
+-- Live position, cell-local on the landing deck; see the pilot block above.
 function storyArcChaptersScreenPlay:spawnPilot()
-	local pPilot = spawnMobile("mustafar", self.pilot.template, self.pilot.respawn, self.pilot.x, self.pilot.z, self.pilot.y, self.pilot.heading, 0)
+	local pPilot = spawnMobile("mustafar", self.pilot.template, self.pilot.respawn, self.pilot.x, self.pilot.z, self.pilot.y, self.pilot.heading, self.pilot.cellID)
 
 	if (pPilot == nil) then
 		print("storyArcChaptersScreenPlay: " .. self.pilot.template .. " failed to spawn; the 'Talk to a Pilot' step will be unreachable")
-		return
 	end
 
-	writeStringData(SceneObject(pPilot):getObjectID() .. ":storyArcChaptersRole", "pilot")
-	SceneObject(pPilot):setObjectMenuComponent("StoryArcChaptersMenuComponent")
+	-- No role and no menu component; see spawnScout. He carries
+	-- story_arc_chapter_three_pilot and runs through pilot_conv_handler.
 end
 
--- INFERRED position -- see the header. HK-47 is hostile and is left standing;
+-- INVENTED position -- live fights him in the mustafar_volcano zone, not on this
+-- one, so there is nothing to quote. See the hk47 entry. HK-47 is hostile and is left standing;
 -- his kill is caught by the shared KILLEDCREATURE observer, not by a radial.
 function storyArcChaptersScreenPlay:spawnHk47()
 	local z = getWorldFloor(self.hk47.x, self.hk47.y, "mustafar")
@@ -839,6 +1319,34 @@ end
 
 function storyArcChaptersScreenPlay:setFlag(pPlayer, key)
 	writeScreenPlayData(pPlayer, self.screenplayName, key, "1")
+end
+
+-- som_story_arc_chapter_three_02 is the solo side quest and it holds exactly one
+-- task, mustafar_droid_factory_slicing, so "the quest is active" and "that task
+-- is active" are the same test. It has no stage integer of its own because it
+-- runs ALONGSIDE STAGE_FACTORY_TERMINAL rather than after it: the factory
+-- terminal refusing the player is what opens it (sliceQuest), and Cobar handing
+-- the tool over is what closes it (overrideTool).
+--
+-- This is what cobar_conv_handler dispatches on. It is the repo's translation of
+-- SOE's groundquests.isTaskActive(player, "som_story_arc_chapter_three_02",
+-- "mustafar_droid_factory_slicing").
+function storyArcChaptersScreenPlay:isSlicingTaskActive(pPlayer)
+	return self:hasFlag(pPlayer, "sliceQuest") and not self:hasFlag(pPlayer, "overrideTool")
+end
+
+-- SOE's story_arc_chapter_three_cobar_action_grantTool is a single sendSignal of
+-- "mustafar_droid_factory_tool_recieved" -- the misspelling is SOE's and it is
+-- what the .qst's Wait for Signal task listens for. There is no groundquests
+-- journal here for that signal to land in, so the flag is the signal.
+function storyArcChaptersScreenPlay:grantOverrideTool(pPlayer)
+	if (self:hasFlag(pPlayer, "overrideTool")) then
+		return
+	end
+
+	self:setFlag(pPlayer, "overrideTool")
+	CreatureObject(pPlayer):sendSystemMessage("You have received a terminal override tool.")
+	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
 end
 
 -- The prelude is read through _G so this file loads and runs whether or not
@@ -1103,9 +1611,10 @@ function storyArcChaptersScreenPlay:handleUse(pPlayer, role, objectID)
 		return
 	end
 
-	if (role == "milo") then
-		self:useMilo(pPlayer)
-	elseif (role == "crashTerminal") then
+	-- "milo" used to be handled here. Milo Mensix carries the shipped conversation
+	-- story_arc_chapter_one_milo, so he now runs through milo_conv_handler and has
+	-- no role and no radial.
+	if (role == "crashTerminal") then
 		self:useCrashTerminal(pPlayer)
 	elseif (role == "shipComputer") then
 		self:useShipComputer(pPlayer)
@@ -1115,18 +1624,20 @@ function storyArcChaptersScreenPlay:handleUse(pPlayer, role, objectID)
 		self:useFacilityContact(pPlayer)
 	elseif (role == "facilityPower") then
 		self:useFacilityPower(pPlayer)
-	elseif (role == "facilityDelta") then
-		self:useFacilityDelta(pPlayer)
+	-- "facilityDelta" used to be handled here. Terminal Delta Five carries the
+	-- shipped conversation story_arc_chapter_two_computer, so it now runs through
+	-- facility_computer_conv_handler and has no role and no radial.
 	elseif (role == "factoryDoor") then
 		self:useFactoryDoor(pPlayer)
+	elseif (role == "factorySystem") then
+		self:useFactorySystem(pPlayer)
 	elseif (role == "factoryTerminal") then
 		self:useFactoryTerminal(pPlayer, objectID)
 	elseif (role == "factoryKeypad") then
 		self:useFactoryKeypad(pPlayer)
-	elseif (role == "scout") then
-		self:useScout(pPlayer)
-	elseif (role == "pilot") then
-		self:usePilot(pPlayer)
+	-- "scout" and "pilot" used to be handled here. Both ship real conversations
+	-- -- story_arc_chapter_three_scout and story_arc_chapter_three_pilot -- so
+	-- they now run through their conv_handlers and carry no role and no radial.
 	elseif (role == "miloTerminal") then
 		self:useMiloTerminal(pPlayer)
 	end
@@ -1136,52 +1647,92 @@ end
 -- MILO MENSIX -- giver, and the turn-in for three of the seven quests
 --------------------------------------------------------------------------------
 
-function storyArcChaptersScreenPlay:useMilo(pPlayer)
-	local stage = self:getStage(pPlayer)
+-- useMilo and offerArc used to live here. Between them they were a four-branch
+-- radial and an SUI box that read out chapter one 01's journal prose, standing
+-- in for a giver that was believed not to ship. It ships:
+-- conversation/story_arc_chapter_one_milo, fifteen greeting conditions and
+-- forty-three screens, and every one of those four radial branches is one of its
+-- greetings. See spawnMilo above for the root cause of the wrong claim, and
+-- milo_conv_handler.lua for the dispatch that replaced it.
+--
+-- Two things the stand-in did that live does not, both dropped on purpose:
+--
+--   THE SUI BOX. Live never shows chapter one 01's list description in a window
+--   -- it is the journal entry, and the player reads it in the journal. The box
+--   was a way to say "you have a mission now" when there was no conversation to
+--   say it. Milo says it himself now, at length.
+--
+--   THE LEVEL GATE. offerArc refused the arc below requiredLevel (80). Live's
+--   Milo has no level test; his fifteen conditions are pure quest state. The 80
+--   is the "Level" row of the seven .qst files, verified in all seven -- that is
+--   the level the JOURNAL DISPLAYS, not an entry requirement. requiredLevel
+--   stays declared above because the value is real evidence, but nothing gates
+--   on it any more.
+--
+-- What is left below is SOE's five actions, one function each.
 
-	if (stage == self.STAGE_NONE) then
-		self:offerArc(pPlayer)
-	elseif (stage == self.STAGE_WARN_MILO) then
-		-- chapter two 01 task 4 turn-in; chapter three 01 opens.
-		self:advance(pPlayer, self.STAGE_DROID_ARMY)
-		self:startKillWatch(pPlayer)
-	elseif (stage == self.STAGE_REPORT_MILO) then
-		-- chapter three 01 task 14 turn-in; chapter three 03 opens.
-		self:advance(pPlayer, self.STAGE_FIND_PILOT)
-	elseif (stage == self.STAGE_REPORT_SUCCESS) then
-		-- chapter three 03 task 5 turn-in; task 6 goes live.
-		self:advance(pPlayer, self.STAGE_CHECK_MESSAGE)
-	elseif (stage == self.STAGE_FACTORY_TERMINAL and not self:hasFlag(pPlayer, "overrideTool")) then
-		-- som_story_arc_chapter_three_02 task 1: "Talk to one of the engineers
-		-- located at the Mensix Mining Facility." No engineer template ships and
-		-- no engineer is named, so Milo hands the tool over. SUBSTITUTED.
-		self:setFlag(pPlayer, "overrideTool")
-		CreatureObject(pPlayer):sendSystemMessage("You have received a terminal override tool.")
-		CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
-		-- signal mustafar_droid_factory_tool_recieved (misspelling shipped).
-	else
-		CreatureObject(pPlayer):sendSystemMessage("Milo Mensix has nothing further for you at the moment.")
-	end
-end
-
--- The .qst names no giver and no prerequisite quest; the prelude's closing line
--- and chapter one's own list prose are the only evidence, so both gates are
--- soft-failed with an explanation rather than silently doing nothing.
-function storyArcChaptersScreenPlay:offerArc(pPlayer)
-	if (CreatureObject(pPlayer):getLevel() < self.requiredLevel) then
-		CreatureObject(pPlayer):sendSystemMessage("You are not yet experienced enough for this task.")
+-- ACTION grantFirstMission -- s_92 -> s_103, the option that starts the arc.
+-- The prelude check is live's own condition 14, re-tested here so the grant
+-- cannot outrun the greeting that offered it.
+function storyArcChaptersScreenPlay:grantFirstMission(pPlayer)
+	if (self:getStage(pPlayer) ~= self.STAGE_NONE or not self:isPreludeComplete(pPlayer)) then
 		return
 	end
 
-	if (not self:isPreludeComplete(pPlayer)) then
-		CreatureObject(pPlayer):sendSystemMessage("Milo Mensix is busy. Perhaps Foreman Chivos has work for you first.")
-		return
-	end
-
-	-- som_story_arc_chapter_one_01 list description, verbatim.
-	self:showMessageBox(pPlayer, "The Downed Ship", "Milo Mensix wants a permanent solution to the problems the facility is facing. The recently uncovered Old Republic cruiser might have information that the miners could use to increase their station's productivity. Mensix has asked you to investigate the downed ship in more detail and see if you can find a terminal that can be used to access the ship's memory banks.")
 	self:advance(pPlayer, self.STAGE_TRAVEL_WRECK)
 	self:startKillWatch(pPlayer)
+end
+
+-- ACTION grantFinalChapter -- s_87 -> s_90. Live opens with a sendSignal of
+-- mustafar_factory_finish and then grants chapter three 01; the signal was the
+-- cross-script wake-up this repo does not need.
+function storyArcChaptersScreenPlay:grantFinalChapter(pPlayer)
+	if (self:getStage(pPlayer) ~= self.STAGE_WARN_MILO) then
+		return
+	end
+
+	self:advance(pPlayer, self.STAGE_DROID_ARMY)
+	self:startKillWatch(pPlayer)
+end
+
+-- ACTION startVolcanoQuest -- s_112 -> s_113. Live signals
+-- mustafar_droidfactory_victory, then grants chapter three 03.
+function storyArcChaptersScreenPlay:startVolcanoQuest(pPlayer)
+	if (self:getStage(pPlayer) ~= self.STAGE_REPORT_MILO) then
+		return
+	end
+
+	self:advance(pPlayer, self.STAGE_FIND_PILOT)
+end
+
+-- ACTION grantFinalReward -- s_115 -> s_116, the last action in the whole arc.
+-- Live's whole body is sendSignal(hk_story_arc_completed), which is what puts
+-- the encoded message on the console in this room.
+function storyArcChaptersScreenPlay:grantFinalReward(pPlayer)
+	if (self:getStage(pPlayer) ~= self.STAGE_REPORT_SUCCESS) then
+		return
+	end
+
+	self:advance(pPlayer, self.STAGE_CHECK_MESSAGE)
+end
+
+-- ACTION checkForError -- fires at six places in Milo's tree and does nothing at
+-- any of them, on purpose.
+--
+-- Live's body is: if som_story_arc_chapter_one_01 is still active, complete it.
+-- It is a repair. SOE's journal can hold a quest active and its tasks finished
+-- at the same time, so a player could walk around with a done mission still
+-- showing, and this quietly closes it whenever they next talk to Milo.
+--
+-- The repo cannot reach that state. Progress here is ONE stage integer, and a
+-- stage is either past chapter one 01 or it is not -- there is no second copy of
+-- the state to fall out of step with the first. So there is nothing to repair.
+--
+-- It is kept, and called at all six sites, because deleting it would make SOE's
+-- tree look like it has four actions instead of five, and the next person to
+-- read the java would file this reconstruction as incomplete. An empty function
+-- with the reason attached is the honest version.
+function storyArcChaptersScreenPlay:checkForError(pPlayer)
 end
 
 --------------------------------------------------------------------------------
@@ -1194,20 +1745,34 @@ end
 function storyArcChaptersScreenPlay:useCrashTerminal(pPlayer)
 	local stage = self:getStage(pPlayer)
 
-	if (stage == self.STAGE_FIND_TERMINAL) then
-		-- chapter one 01 task 2 satisfied. Chapter one 02's list prose says the
-		-- terminal's circuit boards are destroyed, so task 0 opens next.
-		self:showMessageBox(pPlayer, "Activating the Terminal", "You have located a terminal on the bridge of the crashed Old Republic cruiser but its circuit boards are destroyed. You will have to salvage some more circuit boards from around the crash site to replace the damaged ones.")
-		self:advance(pPlayer, self.STAGE_SALVAGE_BOARDS)
-	elseif (stage == self.STAGE_SALVAGE_BOARDS) then
+	-- STAGE_FIND_TERMINAL used to be handled here, with an SUI box carrying
+	-- chapter one 02's list prose. That was a stand-in. Live closes chapter one 01
+	-- task 2 on must_orc_computer itself, from the greeting of the shipped
+	-- conversation story_arc_chapter_one_computer: condition ChapOneFirstStep,
+	-- screen s_80, action fixTerminal = signal mustafar_orc_complete + grant
+	-- chapter one 02. It now runs there -- see cruiser_computer_conv_handler. The
+	-- salvage branch below is a different task on a different object and stays.
+	if (stage == self.STAGE_SALVAGE_BOARDS) then
 		-- chapter one 02 task 0, ItemName verbatim from the .qst.
 		CreatureObject(pPlayer):sendSystemMessage("All the circuit boards have been removed already. Damaged terminal")
 		self:advance(pPlayer, self.STAGE_SEARCH_BANDITS)
 	end
 end
 
--- must_orc_computer on the cruiser bridge: chapter one 02 task 2 and task 6, and
--- chapter one 03 task 6.
+-- must_orc_computer on the cruiser bridge. THE RADIAL KEEPS ONLY THE CIRCUIT
+-- BOARDS. Live hangs two scripts on this one object, and only one of them is the
+-- conversation: quest.task.ground.retrieve_item_on_item is chapter one 02 task 2,
+-- "Install Circuit Boards", and that is what is left here. It is also why no
+-- condition in story_arc_chapter_one_computer ever tests mustafar_motor_three.
+--
+-- STAGE_ACTIVATE_COMPUTER and STAGE_UPLINK_REPORT used to be handled here too,
+-- each with an SUI box. Both were stand-ins written while the claim stood that
+-- the ship's AI had no shipped conversation. It DOES:
+-- conversation/story_arc_chapter_one_computer, six greeting conditions, a
+-- fourteen-screen briefing and five actions. Root cause of the wrong claim: the
+-- enumeration behind it searched conversation scripts and string tables whose
+-- name begins som_, and this one is named story_arc_*, so it was never in the set
+-- that was looked at. Both now run through cruiser_computer_conv_handler.
 function storyArcChaptersScreenPlay:useShipComputer(pPlayer)
 	local stage = self:getStage(pPlayer)
 
@@ -1215,17 +1780,22 @@ function storyArcChaptersScreenPlay:useShipComputer(pPlayer)
 		-- chapter one 02 task 2, ItemName verbatim.
 		CreatureObject(pPlayer):sendSystemMessage("The view screen flickers briefly and then comes to life.")
 		self:advance(pPlayer, self.STAGE_ACTIVATE_COMPUTER)
-	elseif (stage == self.STAGE_ACTIVATE_COMPUTER) then
-		-- chapter one 02 task 6 satisfied; chapter one 03's list prose is the
-		-- AI's answer, and its task 1 opens.
-		self:showMessageBox(pPlayer, "The Transfer of the AI", "The capital ship's AI has informed you that the ship's systems are too damaged in order to find the information you require. It does have knowledge of an Old Republic facility not far from the crash site that is no longer in use but probably has the information. With your help the AI will be able to use the information stored within the facility to find out how to help the miners. Establish a remote link between the downed cruiser and the facility.")
-		self:advance(pPlayer, self.STAGE_UPLINK)
-	elseif (stage == self.STAGE_UPLINK_REPORT) then
-		-- chapter one 03 task 6 satisfied.
-		self:advance(pPlayer, self.STAGE_TRAVEL_ORF)
 	elseif (stage == self.STAGE_SEARCH_BANDITS) then
 		CreatureObject(pPlayer):sendSystemMessage("You still need " .. (self.boardsRequired - self:getCount(pPlayer, "boards")) .. " more circuit boards.")
 	end
+end
+
+-- ACTION makeUpLink, from the last screen of the briefing -- SOE's grant of
+-- som_story_arc_chapter_one_03. Guarded because the briefing is re-reachable at
+-- STAGE_TRAVEL_ORF..STAGE_DELTA_FIVE, exactly as it is on live, and a re-hear
+-- must not walk the player backwards. Past STAGE_ACTIVATE_COMPUTER it is a no-op,
+-- which is what SOE's grantQuest on an already-granted quest does.
+function storyArcChaptersScreenPlay:makeUpLink(pPlayer)
+	if (self:getStage(pPlayer) ~= self.STAGE_ACTIVATE_COMPUTER) then
+		return
+	end
+
+	self:advance(pPlayer, self.STAGE_UPLINK)
 end
 
 --------------------------------------------------------------------------------
@@ -1282,9 +1852,11 @@ function storyArcChaptersScreenPlay:spawnUplinkWorkSite(pPlayer)
 	end
 end
 
--- Public gate, for mustafar_instances.lua to call once its uplink_cave pool is
--- wired. That file is another agent's this run and is NOT edited here; the report
--- states the exact branch it needs.
+-- Public gate. mustafar_instances.lua calls this from isEntryAllowed for the
+-- uplink_cave pool, gate string "story_arc_uplink". The pool is wired; the branch
+-- that calls this exists. The comment here used to say that file was "another
+-- agent's this run and is NOT edited here" -- there was no other agent, and both
+-- halves of the seam are now written.
 function storyArcChaptersScreenPlay:mayEnterUplinkCave(pPlayer)
 	if (pPlayer == nil) then
 		return false
@@ -1293,13 +1865,31 @@ function storyArcChaptersScreenPlay:mayEnterUplinkCave(pPlayer)
 	return self:getStage(pPlayer) >= self.STAGE_UPLINK
 end
 
--- Public gate, same reason, for working_droid_factory / decrepit_droid_factory.
+-- Public gate, same seam, for working_droid_factory / decrepit_droid_factory,
+-- gate string "story_arc_factory". Those two pools carry entry.nodeID = nil, so
+-- this file keeps the radial on door 12112909 and useFactoryDoor below calls
+-- MustafarInstances:enterInstance itself. isEntryAllowed asks this as well, since
+-- a radial the client already drew can still be clicked.
+-- ⚠ THIS GATE WAS WRONG AND LOCKED A TASK OUT OF ITS OWN BUILDING. It read
+-- "stage >= STAGE_ENTER_FACTORY", and STAGE_ENTER_FACTORY is 19 while
+-- STAGE_REPAIR_FACTORY is 13. Chapter two 01 task 1 -- restart the main computer
+-- processor, which happens at stage 13 INSIDE the working factory -- was let
+-- through useFactoryDoor and then refused here, silently, because isEntryAllowed
+-- returns false with no message. The task was unfinishable and nothing said so.
+-- The stage numbers are not in narrative order: the repair visit (13) comes long
+-- before the keypad (19) and the shutdown (20), so a single >= threshold cannot
+-- express "these three moments".
 function storyArcChaptersScreenPlay:mayEnterDroidFactory(pPlayer)
 	if (pPlayer == nil) then
 		return false
 	end
 
-	return self:getStage(pPlayer) >= self.STAGE_ENTER_FACTORY
+	local stage = self:getStage(pPlayer)
+
+	-- Chapter two's repair visit, then everything from the keypad onward. Stage 16
+	-- (STAGE_DROID_ARMY) is deliberately NOT admitted, which is what keeps
+	-- countDroid's template overlap with the decrepit factory unreachable.
+	return stage == self.STAGE_REPAIR_FACTORY or stage >= self.STAGE_ENTER_FACTORY
 end
 
 -- must_orc_computer in the facility entrance: chapter one 03 task 2.
@@ -1332,44 +1922,151 @@ function storyArcChaptersScreenPlay:useFacilityPower(pPlayer)
 	self:advance(pPlayer, self.STAGE_DELTA_FIVE)
 end
 
--- Terminal Delta-Five: chapter one 03 task 5. The .qst gives it a name and no
--- template and no position; the second wall terminal bank in the entrance is the
--- placement, cited in the header.
-function storyArcChaptersScreenPlay:useFacilityDelta(pPlayer)
+-- Terminal Delta-Five: chapter one 03 task 5.
+--
+-- useFacilityDelta USED TO LIVE HERE. It was a radial plus an SUI box that
+-- paraphrased the AI by quoting the chapter two 01 journal description, written
+-- on the claim that no conversation shipped for this terminal. THAT CLAIM WAS
+-- FALSE. conversation/story_arc_chapter_two_computer ships, and the live spawn
+-- table hangs it on this exact object. Root cause of the false claim: the search
+-- was scoped to the som_ name prefix and the som_ string tables, and this
+-- conversation is named story_arc_* and ships in the base string/en/conversation
+-- set -- the same miss that hid the scout, the pilot and the cruiser AI.
+--
+-- The ten-screen briefing the box was standing in for is now the real thing, in
+-- mobile/conversations/mustafar/story_arc_chapter_two_computer.lua, and the two
+-- functions below are the two actions that conversation actually fires. The role,
+-- the radial and the branch in handleUse are all gone with it.
+
+-- ACTION completeChapterOne, java:511 -- the last option of the arrival chain.
+-- Live sends mustafar_uplink_finish, grants som_story_arc_chapter_two_01 and pays
+-- bdg_must_victory_orf. The signal closes chapter one 03 and the grant opens
+-- chapter two 01; in the repo that is one edge, STAGE_DELTA_FIVE ->
+-- STAGE_FIND_FACTORY, so the advance carries both.
+--
+-- No message box. advance() already announces the task text and refreshes the
+-- waypoint, and the AI has just said all of it in its own words.
+function storyArcChaptersScreenPlay:completeChapterOne(pPlayer)
+	-- Guarded so a re-hear cannot walk the player backwards, which is what SOE's
+	-- grantQuest on an already-granted quest does.
 	if (self:getStage(pPlayer) ~= self.STAGE_DELTA_FIVE) then
 		return
 	end
 
-	-- chapter two 01 list description, verbatim -- this is the AI's answer.
-	self:showMessageBox(pPlayer, "Wrong Place, Wrong Time", "The ship's AI seems to be upset that something is missing from the abandoned facility. But after searching the database of the facility it has discovered another abandoned factory where all the information needed was moved too sometime after it crashed and lost track of its surroundings. The AI has asked you to travel to the newly found Neimodian droid factory and make sure it is in working order. Once this is done the AI will transfer itself down there and get all the necessary information.")
 	self:advance(pPlayer, self.STAGE_FIND_FACTORY)
+	self:grantCompletionBadge(pPlayer)
+end
+
+-- ACTION grantMission, java:192 -- the last option of the nag chain. The grant
+-- alone: no signal and no badge. That chain hangs off hasCompleteChapterOne,
+-- which is unreachable in the repo (see facility_computer_conv_handler.lua), so
+-- this is wired and will not fire today. Written because the action is real.
+function storyArcChaptersScreenPlay:grantChapterTwo(pPlayer)
+	if (self:getStage(pPlayer) >= self.STAGE_FIND_FACTORY) then
+		return
+	end
+
+	self:advance(pPlayer, self.STAGE_FIND_FACTORY)
+end
+
+-- Badge keys arrive in Lua as uppercase globals holding their index, so the guard
+-- is "does this server's badge_map have that row". It could not be checked from
+-- the tre set here, and an unknown badge index would be an error, not a no-op.
+-- Same shape as mining_field_markers.lua:644.
+function storyArcChaptersScreenPlay:grantCompletionBadge(pPlayer)
+	if (self.completionBadge == nil or _G[self.completionBadge] == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):awardBadge(_G[self.completionBadge])
 end
 
 --------------------------------------------------------------------------------
 -- THE DROID FACTORY -- chapter two 01 task 1, chapter three 01 tasks 9/11/16
 --------------------------------------------------------------------------------
 
--- ⚠ LATENT COLLISION, for whoever wires the factory pools next.
--- mustafar_instances.lua:267 calls attachEntryProp only under
--- "if (pool.entry ~= nil)", and working_droid_factory / decrepit_droid_factory /
--- uplink_cave all carry entry = nil today, so nothing else claims this node's
--- menu and the radials below work. The moment an entry = { nodeID = 12112909 }
--- table is added to either factory pool, attachEntryProp will call
--- setObjectMenuComponent("MustafarInstanceMenuComponent") on this same node and
--- REPLACE this file's component -- silently killing "Restart the main computer
--- processor" and "Shut down the factory". Same hazard on 12111374 for
--- uplink_cave. If those pools are wired, give them a DIFFERENT entry node, or
--- fold these roles into MustafarInstanceMenuComponent. Verified 2026-08-18.
+-- COLLISION RESOLVED -- this used to be a ⚠ LATENT COLLISION warning addressed to
+-- "whoever wires the factory pools next". That was this file's own work, and
+-- wiring the pools is what dissolved the hazard rather than triggering it.
+--
+-- The mechanism it warned about was real: attachEntryProp calls
+-- setObjectMenuComponent("MustafarInstanceMenuComponent"), which REPLACES a menu
+-- rather than stacking, so a factory pool holding entry = { nodeID = 12112909 }
+-- would have silently killed "Restart the main computer processor" and "Shut down
+-- the factory". The fix is the third option the old note listed: both factory
+-- pools now carry entry.nodeID = nil, mustafar_instances.lua's attachEntryProp
+-- returns early on a nil nodeID, and this file's radial calls
+-- MustafarInstances:enterInstance directly. One owner for the node, one for the
+-- pool.
+--
+-- ONE CLAIM IN THAT WARNING WAS WRONG and is withdrawn rather than carried
+-- forward: "Same hazard on 12111374 for uplink_cave." There is no such hazard.
+-- The uplink_cave pool's door is node 12111281; 12111374 is the bunker entrance
+-- standing about half a metre from it, and it is the node THIS file owns. Two
+-- distinct objects, so the cave keeps its own prop and its own radial and nothing
+-- is overwritten. The two node ids were conflated because they sit at almost the
+-- same coordinate -- the pool's own comment states both, and it was not read.
 --
 -- Node 12112909, the exterior door. Chapter two 01 task 1 wants the player at
 -- "the bottom of the factory" to "restart the main computer processor", and
--- chapter three 01 task 16 wants the factory shut down from the inside. Neither
--- interior can be entered: mustafar_instances.lua keeps both factory pools
--- deliberately unwired behind this same door node, and NO droid factory .ilf
--- ships, so there is no defensible interior coordinate to invent. Both steps are
--- therefore resolved at the door. This is the largest reduction in the port and
--- it is stated, not hidden.
+-- chapter three 01 task 16 wants the factory shut down from the inside. Both
+-- interiors can now be entered -- the working one at the two arc stages, the
+-- decrepit one at every later stage, see THE TWO DROID FACTORIES above -- and
+-- both arc steps happen inside at the terminal live puts them on.
+-- The old text here -- "Neither interior can be entered ...
+-- NO droid factory .ilf ships, so there is no defensible interior coordinate to
+-- invent ... the largest reduction in the port" -- is withdrawn on both counts:
+-- the .ilf absence was true but irrelevant, because both factories ship full
+-- dungeon spawn tables, and the pools were unwired rather than unwirable.
+-- The door now opens the dungeon instead of standing in for it. This is the half
+-- of the seam that lives on this side: the working_droid_factory pool carries
+-- entry.nodeID = nil precisely so this file keeps 12112909's menu component, so
+-- nothing attaches a competing radial and this call is the only way in.
 function storyArcChaptersScreenPlay:useFactoryDoor(pPlayer)
+	local stage = self:getStage(pPlayer)
+
+	if (stage == self.STAGE_ENTER_FACTORY) then
+		CreatureObject(pPlayer):sendSystemMessage("The door is sealed. The keypad beside it wants a code.")
+		return
+	end
+
+	if (MustafarInstances == nil) then
+		print("storyArcChaptersScreenPlay: mustafar_instances.lua is not loaded; the droid factory cannot be entered")
+		return
+	end
+
+	-- WHICH FACTORY THE SHARED DOOR OPENS. In live the keypad code decided this;
+	-- that puzzle does ship here (role "factoryKeypad" at STAGE_ENTER_FACTORY), but
+	-- it only opens the operational factory for the arc. Nothing in the tree states
+	-- a rule for reaching the decrepit one, so the rule is ours: the arc owns the
+	-- door while the arc needs it, and outside those two moments the door opens the
+	-- decrepit factory. That is the same class of deviation as using arc stage in
+	-- place of the keypad code, and it is what makes the decrepit interior -- fully
+	-- furnished and populated from its own live table -- reachable at all.
+	--
+	-- enterInstance asks mayEnterDroidFactory again through each pool's
+	-- "story_arc_factory" gate. Asking twice is deliberate and matches the pattern
+	-- that file already uses: a radial the client has drawn can still be clicked
+	-- after the stage moves on. That gate is also what refuses a player who has not
+	-- reached the factory at all, so no stage check is needed here for them.
+	if (stage == self.STAGE_REPAIR_FACTORY or stage == self.STAGE_SHUTDOWN_FACTORY) then
+		MustafarInstances:enterInstance(pPlayer, self.factoryPool)
+	else
+		MustafarInstances:enterInstance(pPlayer, self.decrepitPool)
+	end
+end
+
+-- Chapter two 01 task 1 and chapter three 01 task 16, both at the terminal live
+-- puts them on rather than at the door. som_working_droid_factory.tab has exactly
+-- one end-of-dungeon terminal -- the system_controller in centralroom28 -- so both
+-- tasks resolve on the same object, and the stage decides which.
+function storyArcChaptersScreenPlay:useFactorySystem(pPlayer)
 	local stage = self:getStage(pPlayer)
 
 	if (stage == self.STAGE_REPAIR_FACTORY) then
@@ -1378,8 +2075,6 @@ function storyArcChaptersScreenPlay:useFactoryDoor(pPlayer)
 	elseif (stage == self.STAGE_SHUTDOWN_FACTORY) then
 		CreatureObject(pPlayer):sendSystemMessage("The assembly lines grind to a halt. The droid factory is shut down.")
 		self:advance(pPlayer, self.STAGE_REPORT_MILO)
-	elseif (stage == self.STAGE_ENTER_FACTORY) then
-		CreatureObject(pPlayer):sendSystemMessage("The door is sealed. The keypad beside it wants a code.")
 	end
 end
 
@@ -1399,7 +2094,14 @@ function storyArcChaptersScreenPlay:useFactoryTerminal(pPlayer, objectID)
 	-- side quest exists precisely because the first attempt fails.
 	if (not self:hasFlag(pPlayer, "overrideTool")) then
 		self:showMessageBox(pPlayer, self.boxText.terminalReport[1], self.boxText.terminalReport[2])
-		self:announceTask(pPlayer, self.overrideToolText[1], self.overrideToolText[2])
+
+		-- The refusal IS the grant of som_story_arc_chapter_three_02. Announce it
+		-- once and set the flag Engineer Cobar reads -- see isSlicingTaskActive.
+		if (not self:hasFlag(pPlayer, "sliceQuest")) then
+			self:setFlag(pPlayer, "sliceQuest")
+			self:announceTask(pPlayer, self.overrideToolText[1], self.overrideToolText[2])
+		end
+
 		return
 	end
 
@@ -1427,7 +2129,7 @@ function storyArcChaptersScreenPlay:useFactoryKeypad(pPlayer)
 	local sui = SuiInputBox.new("storyArcChaptersScreenPlay", "keypadCallback")
 
 	sui.setTitle("Droid Factory Entrance")
-	sui.setPrompt("Enter the door passcode.")
+	sui.setPrompt("@som/som_quest:df_keypad_code")
 	sui.sendTo(pPlayer)
 end
 
@@ -1440,12 +2142,24 @@ function storyArcChaptersScreenPlay:keypadCallback(pPlayer, pSui, eventIndex, ar
 		return
 	end
 
-	if (args ~= self.factoryPasscode) then
-		CreatureObject(pPlayer):sendSystemMessage("The keypad rejects the code.")
+	-- The code is not knowledge the character has until it has been read. It lives
+	-- in the factory's own history log, entry 7, which useFactoryTerminal hands over
+	-- with the datapad. Guessing 37323 out of character is refused here.
+	-- hk_history.lua is reached through _G so this file does not hard-depend on it.
+	local history = _G["somHkHistoryScreenPlay"]
+
+	if (history ~= nil and history.hasPlayedEntry ~= nil
+			and not history:hasPlayedEntry(pPlayer, self.factoryHistoryEntry)) then
+		CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:df_keypad_unknown")
 		return
 	end
 
-	CreatureObject(pPlayer):sendSystemMessage("The passcode is accepted and the factory door grinds open.")
+	if (args ~= self.factoryPasscode) then
+		CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:df_keypad_incorrect")
+		return
+	end
+
+	CreatureObject(pPlayer):sendSystemMessage("@som/som_quest:df_keypad_unlocked")
 	self:advance(pPlayer, self.STAGE_SHUTDOWN_FACTORY)
 end
 
@@ -1453,10 +2167,16 @@ end
 -- CHAPTER THREE 01 / 03 -- the scout, the pilot, the last message
 --------------------------------------------------------------------------------
 
--- must_scout stands at the exact coordinate chapter three 01 task 6 puts its
+-- Scout Olon Lono stands at the exact coordinate chapter three 01 task 6 puts its
 -- waypoint on. Talking to him is what releases the droid army; the .qst gives no
 -- roster and no count, so both are INFERRED.
-function storyArcChaptersScreenPlay:useScout(pPlayer)
+--
+-- This is called from scout_conv_handler, not from a radial. It is the repo's
+-- stand-in for SOE's sendGroupToBattlefield, whose entire body is
+-- instance.requestInstanceMovement(player, "mustafar_droid_army") -- there is no
+-- signal and no group walk in it, so nothing else is being dropped here. Core3
+-- has no such instance, so the army comes to the player instead. See the tree.
+function storyArcChaptersScreenPlay:sendToBattlefield(pPlayer)
 	if (self:getStage(pPlayer) ~= self.STAGE_DROID_ARMY) then
 		return
 	end
@@ -1492,9 +2212,36 @@ function storyArcChaptersScreenPlay:spawnDroidArmy()
 	end
 end
 
--- chapter three 03 task 0, "Talk to a Pilot". The .qst gives no position for him
--- and no template; miner_pilot is the only registered SOM pilot.
-function storyArcChaptersScreenPlay:usePilot(pPlayer)
+-- chapter three 03 task 0, "Talk to a Pilot". Called from pilot_conv_handler on
+-- the two go-ahead screens, not from a radial.
+--
+-- SOE fires two actions there. sendGroupToVolcano is nothing but
+-- instance.requestInstanceMovement(player, "mustafar_volcano") and has no repo
+-- counterpart -- see the tree's DEVIATION block. sendFirstSignal is the one that
+-- carries the quest, and it is GROUP-AWARE: if the player is grouped it walks
+-- group.getPCMembersInRange(player, 80f) and sends volcano_arena_pilot to every
+-- member with the task active, so one person talking advances the whole party.
+-- Ungrouped, it signals the player alone. That is what is reproduced below; the
+-- 80m radius and the per-member task test are SOE's, not chosen here.
+function storyArcChaptersScreenPlay:sendPartyToVolcano(pPlayer)
+	if (not CreatureObject(pPlayer):isGrouped()) then
+		self:sendOneToVolcano(pPlayer)
+		return
+	end
+
+	local groupSize = CreatureObject(pPlayer):getGroupSize()
+
+	for i = 0, groupSize - 1, 1 do
+		local pMember = CreatureObject(pPlayer):getGroupMember(i)
+
+		if (pMember ~= nil and SceneObject(pMember):isPlayerCreature() and CreatureObject(pMember):isInRangeWithObject(pPlayer, 80)) then
+			self:sendOneToVolcano(pMember)
+		end
+	end
+end
+
+-- The per-member half. The stage test is SOE's isTaskActive(volcano_arena_one).
+function storyArcChaptersScreenPlay:sendOneToVolcano(pPlayer)
 	if (self:getStage(pPlayer) ~= self.STAGE_FIND_PILOT) then
 		return
 	end
@@ -1599,6 +2346,13 @@ function storyArcChaptersScreenPlay:countBandit(pPlayer, template)
 end
 
 -- INFERRED count -- the .qst names no beetle count and no beetle template.
+--
+-- These three templates now also stand in for the Old Republic Facility's eight
+-- kubaza rows (mustafar_dungeon_population.lua), and the ORF is ungated, so a
+-- player at this stage can satisfy the step on beetles indoors. Left as it is on
+-- purpose: task 1 matches a live Social Group, not a template, and a social group
+-- credits the species wherever it stands. Tightening this to the four spawned
+-- beetles by objectID would be LESS faithful, not more.
 function storyArcChaptersScreenPlay:countKubaza(pPlayer, template)
 	if (not self:hasFlag(pPlayer, "uplinkStarted") or not self:isOneOf(template, self.kubazaTemplates)) then
 		return
@@ -1702,29 +2456,23 @@ function storyArcChaptersScreenPlay:getRadialText(pPlayer, role)
 
 	local stage = self:getStage(pPlayer)
 
-	if (role == "milo") then
-		if (stage == self.STAGE_NONE) then
-			return "Ask Milo Mensix about the facility"
-		elseif (stage == self.STAGE_WARN_MILO or stage == self.STAGE_REPORT_MILO or stage == self.STAGE_REPORT_SUCCESS) then
-			return "Report to Milo Mensix"
-		elseif (stage == self.STAGE_FACTORY_TERMINAL and not self:hasFlag(pPlayer, "overrideTool")) then
-			-- som_story_arc_chapter_three_02 task 1's own title.
-			return "Get a Terminal Override"
-		end
-
-		return nil
-	end
+	-- The "milo" block used to be here: "Ask Milo Mensix about the facility",
+	-- "Report to Milo Mensix", and before that "Get a Terminal Override". All
+	-- three were stand-ins. The first two are greetings of the shipped
+	-- conversation story_arc_chapter_one_milo, and the third was Engineer Cobar's
+	-- all along. Milo has no role and no radial now.
 
 	if (role == "shipComputer") then
 		if (stage == self.STAGE_FIX_TERMINAL) then
-			-- chapter one 02 task 2 retrieveMenuText, verbatim.
+			-- chapter one 02 task 2 retrieveMenuText, verbatim. This is the whole
+			-- radial now: it is live's retrieve_item_on_item script, the other of
+			-- the two scripts on this object, and it is meant to be here.
 			return "Install Circuit Boards"
-		elseif (stage == self.STAGE_ACTIVATE_COMPUTER) then
-			return "Activate Computer"
-		elseif (stage == self.STAGE_UPLINK_REPORT) then
-			return "Report the uplink to the ship's computer"
 		end
 
+		-- "Activate Computer" and "Report the uplink to the ship's computer" used
+		-- to be returned here. Both are the shipped conversation's work now; see
+		-- useShipComputer for the claim they rested on and why it was wrong.
 		return nil
 	end
 
@@ -1740,11 +2488,41 @@ function storyArcChaptersScreenPlay:getRadialText(pPlayer, role)
 		return "Restore facility power"
 	end
 
-	if (role == "facilityDelta" and stage == self.STAGE_DELTA_FIVE) then
-		return "Access Terminal Delta-Five"
+	-- "Access Terminal Delta-Five" used to be returned here. Retired: the terminal
+	-- carries a shipped conversation and gets no role, so nothing can ask for its
+	-- radial text any more. See useFacilityDelta's headstone for the false claim
+	-- it rested on and why it was wrong.
+
+	-- The door is a door again. It used to carry "Restart the main computer
+	-- processor" and "Shut down the factory" itself, because neither interior
+	-- could be entered; both pools are wired now, so the door offers entry and the
+	-- two task radials moved inside onto the system_controller where live's own
+	-- table puts them. The .qst wording for task 1 is "travel to the bottom of the
+	-- factory and restart the main computer processor" -- performing it at the
+	-- threshold was the reduction, and it is gone.
+	if (role == "factoryDoor") then
+		if (stage == self.STAGE_REPAIR_FACTORY or stage == self.STAGE_SHUTDOWN_FACTORY) then
+			return "Enter the factory"
+		end
+
+		-- The keypad owns the door at STAGE_ENTER_FACTORY; useFactoryDoor says so
+		-- with the "sealed" message, so the option stays visible there rather than
+		-- vanishing and reading as a broken door.
+		if (stage == self.STAGE_ENTER_FACTORY) then
+			return "Enter the factory"
+		end
+
+		-- Outside the arc's own moments the door leads to the decrepit factory --
+		-- see useFactoryDoor. mayEnterDroidFactory still refuses anyone who has not
+		-- reached stage 13, so this does not open the building to a fresh player.
+		if (self:mayEnterDroidFactory(pPlayer)) then
+			return "Enter the derelict factory"
+		end
+
+		return nil
 	end
 
-	if (role == "factoryDoor") then
+	if (role == "factorySystem") then
 		if (stage == self.STAGE_REPAIR_FACTORY) then
 			return "Restart the main computer processor"
 		elseif (stage == self.STAGE_SHUTDOWN_FACTORY) then
@@ -1762,14 +2540,12 @@ function storyArcChaptersScreenPlay:getRadialText(pPlayer, role)
 		return "Enter the door passcode"
 	end
 
-	if (role == "scout" and stage == self.STAGE_DROID_ARMY) then
-		return "Ask the scout about the droid army"
-	end
-
-	if (role == "pilot" and stage == self.STAGE_FIND_PILOT) then
-		return "Ask the pilot to fly into the crater"
-	end
-
+	-- "Ask the scout about the droid army" and "Ask the pilot to fly into the
+	-- crater" used to be returned here. Both were stand-ins written while the
+	-- claim stood that neither NPC had a shipped conversation. Both DO ship one;
+	-- see the two tree files. Root cause of the wrong claim: the search was
+	-- scoped to som_-prefixed names and som_ string tables, and these are named
+	-- story_arc_* and ship in the base string/en/conversation set.
 	if (role == "miloTerminal" and stage == self.STAGE_CHECK_MESSAGE) then
 		return "Check your messages"
 	end

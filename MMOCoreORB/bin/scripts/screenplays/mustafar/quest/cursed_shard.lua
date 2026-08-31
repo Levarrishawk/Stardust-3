@@ -5,8 +5,9 @@ SOURCE OF RECORD
 
 quest/som_kenobi_cursed_shard_1.qst and quest/som_kenobi_cursed_shard_2.qst in the
 client TREs. Every location and radius, every message box title and body, both
-encounter creature counts and distances, all four timer ranges and the Level 75
-gate are quoted from them. The two conversation trees are
+encounter creature counts and distances and all four timer ranges are quoted from
+them. The level gate is NOT the .qst's -- see THE LEVEL GATE. The two conversation
+trees are
 mobile/conversations/mustafar/som_kenobi_menth_paul.lua and
 som_kenobi_cursed_shard_sucker.lua.
 
@@ -31,53 +32,63 @@ a location. That one does get a waypoint, for the reason under PROGRESS TRACKING
 The two branches of _2 are alternatives -- destroy the shard in the volcano, or
 palm it off on someone else -- and either completes the quest.
 
-WHERE THE NPCs STAND  --  placed, not quoted
+THE LEVEL GATE  --  61, not 75
 
-Nothing ships either position. Both are creature templates
-(object/mobile/som/som_kenobi_menth_paul.iff, som_kenobi_sucker.iff), not snapshot
-nodes, so their absence from every .ws is expected: in live they were server-side
-spawns and that spawn data did not ship. No datatable, no Lua spawn, no line of
-dialogue that names a place.
+Both .qst files carry [list] Level 75 and an earlier revision quoted it. The giver
+does not enforce it. Menth Paul's server-side conversation gates his opening screen
+on a condition of its own, and that condition is a level test against 60: the offer
+screen s_110 is only reached when the player's level is greater than 60. So the real
+minimum is 61 and requiredLevel below says 61.
 
-Menth Paul stands at the Mensix Mining Facility. His opening line is s_110 "Please,
-help me... I have to get off this planet", and the player's first reply is s_111
-"Why don't you just take the shuttle then friend?" -- that exchange only works where
-players arrive. Mensix is the only entry in mustafar's planetTravelPoints
-(scripts/managers/planet/planet_manager.lua:726), so there is exactly one place on
-the planet where that conversation makes sense.
+The condition is named levelTooLow and it returns TRUE for the players who ARE high
+enough. The name is inverted relative to what it does. Read the body, not the name --
+this trips anyone who greps for the gate and stops at the identifier.
 
-Which ground, though, is measured rather than assumed. The travel point is
-(x -2471, z 230, y 1620), but a live boot sampling the server's own terrain returns
-getWorldFloor(-2471, 1620) = 100.68 -- its height matches the settlement while its
-x/y sits off the shelf edge, over a 130 m drop. That mismatch is pre-existing Core3
-data and is NOT touched here (moving an arrival point moves every player), but it is
-why his height may not be resolved at that coordinate. His first placement, (-2462,
-1611), resolved to 97.47 and put him at the bottom of the chasm.
+The .qst Level field is a client-side display value. Where it and the server-side
+conversation disagree, the conversation is what the player experiences, so that is
+what this tree honours.
 
-The shelf is corroborated twice over: snapshot/mustafar.ws puts the mining cantina
-marker at (-2514.28, h 225.00, 1659.31) and the cloning marker at (-2511.81,
-h 225.00, 1644.58), and a 10 m terrain grid returns exactly 225.0 across
-x -2521..-2481, y 1650..1660. Marker height and terrain height agree to the
-centimetre. He is set at (-2506, 1652), between the two markers and about 10 m clear
-of each, on that flat -- which also puts him near the Q4P3 / Pei Yi / Diskret Stahn
-hub. Pwwoz (samaritan) is at (-2492, 1660), 16 m off, so the two do not overlap.
+WHERE THE NPCs STAND  --  live positions, recovered
 
-Height is still resolved with getWorldFloor rather than hardcoded -- the coordinate
-was the defect, not the call.
+Both are creature templates (object/mobile/som/som_kenobi_menth_paul.iff,
+som_kenobi_sucker.iff), not snapshot nodes, so their absence from every .ws is
+expected: in live they were server-side spawns. An earlier revision read that as
+"nothing ships either position" and placed both by reasoning. That was wrong, and it
+was wrong in a way worth recording, because the two errors are different.
 
-The Hungry Whiphid stands at the smuggler outpost in the north-east, by snapshot
-node 12110169 floor_travel_01 (185.87, 207.77, 4250.08) -- the cluster that holds
-must_smuggler_bunker x3, must_smuggler_landing_pad x2 and four orbital turrets.
-Three things put him there rather than at Mensix: his socialGroup is thug and his
-creatureBitmask is STALKER; his own line is s_8 "I have job to do", which is a job
-a smuggler outpost has and a travel point does not; and he is ATTACKABLE + ENEMY,
-so he does not belong standing in the hub every player passes through. His
-pvpBitmask has no AGGRESSIVE, so he will not jump anyone who walks past him. The
-outpost's floor_travel_01 is a snapshot prop only -- the server's real travel point
-is Mensix -- so there is no player traffic to conflict with.
+The facility's dungeon spawn table is the position. Both stand INSIDE the Mensix
+mining facility, in medium_room_01 -- the cantina, cell 12112226 -- not outdoors:
+
+  Menth Paul    (-73.6, 10.8, 53.8) facing -90
+  the sucker    (-75.7, 10.8, 40.4) facing -95
+
+Menth Paul's error was small and the reasoning behind it was sound. His opening line
+is s_110 "Please, help me... I have to get off this planet" and the player's reply is
+s_111 "Why don't you just take the shuttle then friend?", which only works where
+players arrive; Mensix is the only entry in mustafar's planetTravelPoints
+(scripts/managers/planet/planet_manager.lua:726). That got him to the right
+settlement. It then put him on the terrain shelf outside at (-2506, 1652) instead of
+in the cantina thirteen metres in. Right building, wrong side of the door.
+
+The sucker's error was large. He was placed at the smuggler outpost in the far
+north-east, by snapshot node 12110169 floor_travel_01 (185.87, 207.77, 4250.08),
+roughly 2.7 km from where he actually stands. The argument for it read his
+socialGroup thug, his STALKER creatureBitmask, his ATTACKABLE + ENEMY flags and his
+line s_8 "I have job to do", and concluded a hostile with a job belongs at an
+outpost rather than in the hub every player walks through. Every one of those facts
+is true. The conclusion was still wrong -- SOE put him in the cantina anyway. This
+is the lesson the whole position sweep turns on: a chain of correct observations
+about a character is not evidence about that character's coordinates.
 
 Both creature templates had an empty conversationTemplate and are wired by this
 wave, the same way pei_yi carries "som_pei_yi".
+
+Live names the second one som_kenobi_cursed_shard_sucker. This tree keeps
+som_kenobi_sucker, which is the registered template with the shipped appearance.
+
+One consequence of moving them indoors: the outdoor placements resolved height with
+getWorldFloor, which is right for terrain and meaningless in a cell. Cell-local
+height is the table's own 10.8, the floor every NPC in that room stands on.
 
 THE VOLCANO BRIDGE  --  corroboration, not invention
 
@@ -117,9 +128,10 @@ THE REWARD  --  substituted
 
 Both Reward tasks award Bank Credits 0 and Experience Amount 0, so the item is the
 whole reward. Both name lootCount 1 / lootName item_tow_gloves_microsensory_02_01,
-a live server-side static-item name rather than an object template. Nothing here
-resolves it: no datatables/quest/* or datatables/loot/* row in any TRE, no
-string/en STF row, and no tow_gloves or microsensory path anywhere in this tree. As
+a live server-side static-item name rather than an object template. The name
+resolves to "Microsensory Mesh Gloves" in string/en/static_item_n.stf, but an
+exhaustive sweep of every shipped shared_*.iff finds no object template carrying
+that objectName, so granting the live item would mean authoring an object. As
 with every other TOW reward in this arc it can only be matched by description.
 
 What the .qst says it is: task 11's message box, "It looks to be a pair of strange
@@ -165,26 +177,27 @@ cursedShardScreenPlay = ScreenPlay:new {
 
 	screenplayName = "cursedShardScreenPlay",
 
-	-- .qst [list] Level, on both files.
-	requiredLevel = 75,
+	-- The gate the giver actually enforces, not the .qst's; see THE LEVEL GATE.
+	requiredLevel = 61,
 
-	-- Placed, not quoted; see WHERE THE NPCs STAND. The Mensix settlement shelf,
-	-- between the cantina and cloning markers -- NOT the travel point's own
-	-- coordinate, where the terrain is 130 m lower.
+	-- Live positions; see WHERE THE NPCs STAND. Both are cell-local coordinates
+	-- inside the Mensix cantina, medium_room_01 = cell 12112226.
 	menthPaul = {
 		template = "som_kenobi_menth_paul",
-		x = -2506,
-		y = 1652,
-		heading = 225,
+		cell = 12112226,
+		x = -73.6,
+		z = 10.8,
+		y = 53.8,
+		heading = -90,
 	},
 
-	-- Placed, not quoted. Snapshot node 12110169 floor_travel_01 is at
-	-- (185.87, 4250.08); he stands beside it, not on it.
 	sucker = {
 		template = "som_kenobi_sucker",
-		x = 191,
-		y = 4243,
-		heading = 140,
+		cell = 12112226,
+		x = -75.7,
+		z = 10.8,
+		y = 40.4,
+		heading = -95,
 	},
 
 	--[[ _1: the two ambushes. Both Go to Location, both Radius 300, both
@@ -254,8 +267,9 @@ function cursedShardScreenPlay:spawnQuestNpcs()
 
 	for i = 1, #npcs do
 		local npc = npcs[i]
-		local z = getWorldFloor(npc.x, npc.y, "mustafar")
-		local pNpc = spawnMobile("mustafar", npc.template, 0, npc.x, z, npc.y, npc.heading, 0)
+		-- Cell-local, so no getWorldFloor: npc.z is the cantina floor the table
+		-- gives, and a terrain sample inside a building means nothing.
+		local pNpc = spawnMobile("mustafar", npc.template, 0, npc.x, npc.z, npc.y, npc.heading, npc.cell)
 
 		if (pNpc == nil) then
 			print("cursedShardScreenPlay: failed to spawn " .. npc.template .. "; that half of the quest is unreachable")
@@ -333,7 +347,8 @@ end
      Reading the stage settles an overdue brood as well, so a restart during those
      180-560 s cannot strand a player on a quest with nothing left in it. Both
      paths funnel into endBrood, which is guarded, so whichever arrives first wins
-     and the other does nothing. ]]
+     and the other does nothing. Reading the stage also picks up a brood whose
+     delayed springAmbush never reached the gate. ]]
 function cursedShardScreenPlay:getStage(pPlayer)
 	local stage = self:rawStage(pPlayer)
 
@@ -345,6 +360,12 @@ function cursedShardScreenPlay:getStage(pPlayer)
 
 			return self:rawStage(pPlayer)
 		end
+	end
+
+	if (stage == self.STAGE_SHARD) then
+		self:checkBroodGate(pPlayer)
+
+		return self:rawStage(pPlayer)
 	end
 
 	return stage
@@ -482,7 +503,12 @@ function cursedShardScreenPlay:springAmbush(pPlayer, key)
 
 	-- Task 10 is a Wait for Tasks on both goto1 and goto2, so the brood only
 	-- starts once the second one has fired.
-	if (self:hasFlag(pPlayer, "event1") and self:hasFlag(pPlayer, "event2") and self:rawStage(pPlayer) == self.STAGE_SHARD) then
+	self:checkBroodGate(pPlayer)
+end
+
+-- Both event flags set, still in STAGE_SHARD, brood not yet started.
+function cursedShardScreenPlay:checkBroodGate(pPlayer)
+	if (self:hasFlag(pPlayer, "event1") and self:hasFlag(pPlayer, "event2") and self:rawStage(pPlayer) == self.STAGE_SHARD and not self:hasFlag(pPlayer, "brood")) then
 		self:startBrood(pPlayer)
 	end
 end
@@ -510,6 +536,12 @@ end
 -- _1 task 11: Timer Min 180 / Max 560. The due time is stored as well as timed so
 -- a restart cannot swallow it; see getStage.
 function cursedShardScreenPlay:startBrood(pPlayer)
+	if (self:hasFlag(pPlayer, "brood")) then
+		return
+	end
+
+	self:setFlag(pPlayer, "brood")
+
 	local delay = getRandomNumber(self.broodMin, self.broodMax)
 
 	self:setStage(pPlayer, self.STAGE_BROOD)

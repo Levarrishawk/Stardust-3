@@ -141,20 +141,31 @@ exists.
 The count and the distances are quoted exactly: 10 miners, spawned 20 to 50 m from
 the player, which is what Encounter Count / Min Distance / Max Distance say.
 
-NO GIVER  --  Chief Armstrong does not exist, and is not invented here
+THE GIVER  --  Chief Armstrong, found and placed
 
-The .qst names him twice ("Armstrong has given you directions to the main camp",
-"Report back to Chief Armstrong") and the [list] a third time, and that is the
-entire shipped record of him. There is no Chief Armstrong creature template in this
-tree, no conversation table for him in _som/string/en/conversation/ (the folder has
-23 SOM tables and none is his), no snapshot node, no datatable row, and no position
-anywhere in the .qst -- task 7 carries createWaypoint 0 and no location, which is
-this format's "unset".
+An earlier pass of this file said he "does not exist" and left grantQuest and turnIn
+hanging with nobody to call them. That was wrong, and it was wrong because the search
+was done by name. SOE named this quest's data after the QUEST, not the NPC: his
+conversation is miner_madness_chief_drono, and the live spawn row that places him
+carries the script name, not "armstrong". Both were there the whole time.
 
-So this screenplay spawns nobody and guesses no position. grantQuest and turnIn
-below are the two entry points a giver's conversation handler calls once Aaron says
-who and where Chief Armstrong is. That is the same shape bounty_hunts.lua uses for
-its seven giver-less hunts, and for the same reason.
+He is now built and placed:
+
+    mobile/custom_content/som/chief_armstrong.lua        the creature template
+    mobile/conversations/mustafar/miner_madness_chief_drono.lua   SOE's tree
+    .../quest/conversation/miner_madness_chief_drono_conv_handler.lua
+    screenplays/mustafar/mensix/mensix_mining_facility_main.lua   the spawn
+
+The spawn is in small_room_05 of the Mensix Mining Facility, cell 12112243, at the
+position and heading the live data gives. His display name "Chief Armstrong" is
+som_poison_miners.stf task06. His appearance is the one repo choice in the set --
+no chief_armstrong model ships anywhere and the live spawn data carries no appearance
+column at all, so he wears mustafarian_m_01, the same model this repo already gives
+his crew. That single substitution is documented in chief_armstrong.lua itself.
+
+grantQuest and turnIn below are the two entry points his handler calls. Task 7 still
+carries createWaypoint 0 and no location, so nothing in this screenplay guesses a
+position -- the position came from the live spawn data, not from us.
 
 Everything between those two ends is fully wired and playable: the camp waypoint,
 the arrival, the computer, the track, the beacon waypoint, the arrival, the ten
@@ -175,10 +186,17 @@ THE REWARD  --  substituted, and the obvious substitute is deliberately refused
 
 Task 8 pays Bank Credits 0 and Experience Amount 0, so the item is the whole
 reward: lootCount 1, lootName weapon_tow_pistol_02_01. As with every other TOW
-reward in this arc, that is a live server-side static-item name and not an object
-template; nothing in this tree resolves it -- no weapon_tow_ path, no
-pistol_02_01 path, no datatables/loot row, no string/en STF row. It can only be
-matched by description: a pistol, from Trials of Obi-Wan.
+reward in this arc, that is a live server-side static-item name and not itself an
+object-template path. The name resolves to "Mustafarian Modified Disruptor Pistol"
+in string/en/static_item_n.stf, and unlike most of this arc an object carrying
+that exact objectName does ship --
+object/tangible/collection/shared_rare_pistol_mustafarian_modified_disruptor.iff
+(and its server pair) -- but it is a non-functional display tangible
+(SharedTangibleObjectTemplate, gameObjectType = 8211, no damage, no attackSpeed,
+no xpType, no cert). Swapping the working pistol granted below for that display
+piece is an open decision for Aaron, not taken here. The live functional weapon
+is not granted; the reward stays a substitution matched by description: a pistol,
+from Trials of Obi-Wan.
 
 The obvious Mustafar-flavoured match is object/weapon/ranged/pistol/
 som_disruptor_pistol.iff or som_ion_relic_pistol.iff, and both are refused here on
@@ -204,7 +222,8 @@ for real. This is deliberately NOT addRewardedSchematic, which fails closed when
 the path is not in scripts/managers/crafting/schematics.lua and would silently
 grant nothing -- the defect hidden_treasure.lua's reward had to be corrected for.
 
-To restore the live item later, only rewardItem below changes.
+To restore a live functional weapon later, only rewardItem below changes --
+Aaron's open call on the collection display tangible above is the other path.
 
 REPEATS
 
@@ -214,9 +233,19 @@ refuses a second run.
 
 THE LEVEL GATE
 
-[list] Level 70. grantQuest refuses a player below it, which is what
-moral_choice.lua does with its own [list] Level 75. If Aaron would rather the level
-be advisory, minimumLevel below is the single number to change.
+[list] Level 70, and grantQuest refuses a player below it -- because for this quest
+the .qst number is the only number there is.
+
+A .qst [list] level is a client-side display value, not a gate. The Mustafar quests
+that are really gated -- collectors_business, cursed_shard, moral_choice -- are each
+gated in the giver's server-side conversation, which tests level against 60, so all
+three enforce 61 and ignore the 75 their .qst displays. This quest has no giver
+carrying a level test, so nothing contradicts the 70 and there is nothing better to
+put in its place.
+
+That makes this the fallback case, not a precedent for trusting a [list] level. If
+Aaron would rather the level be advisory, minimumLevel below is the single number to
+change.
 
 WHAT IS NOT MODELLED
 
@@ -403,10 +432,21 @@ function somPoisonMinersScreenPlay:removeWaypoint(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "wp")
 end
 
---[[ Entry points for a giver
+--[[ Entry points for the giver
 
-Chief Armstrong does not exist in this tree; see NO GIVER. These two are what his
-conversation handler calls once Aaron says who and where he is.
+Chief Armstrong.  He is live-sourced on all three counts:
+
+  * NAME -- som_poison_miners.stf task06 calls him "Chief Armstrong".
+  * TREE -- SOE's own conversation/miner_madness_chief_drono.java, rebuilt node
+    for node at mobile/conversations/mustafar/miner_madness_chief_drono.lua.
+  * PLACE -- the live spawn table puts som_chief_armstrong in small_room_05 of
+    the Mensix Mining Facility at -150, 18.6, -61, facing 0.  He is spawned
+    there by mensix_mining_facility_main.lua.
+
+miner_madness_chief_drono_conv_handler calls the three functions below, from
+exactly the screens SOE hung the side effects on.  Only his APPEARANCE is a repo
+choice -- no chief_armstrong.iff ships; see the header of
+mobile/custom_content/som/chief_armstrong.lua.
 --]]
 
 -- Task 0 firing: musicOnActivate, then task 2 becomes the live step.
@@ -447,6 +487,26 @@ function somPoisonMinersScreenPlay:turnIn(pPlayer)
 	self:giveReward(pPlayer)
 
 	return true
+end
+
+--[[ The stuck player's retry, s_54 -> s_55
+
+SOE's script runs groundquests.clearQuest then groundquests.grantQuest on
+"som_poison_miners" back to back, which drops the player to un-started and hands
+the job straight back so the tracking computer can be used again from the top.
+This is that pair, in that order.  It is deliberately NOT a partial rewind: the
+kill counter and the waypoint go with it, exactly as a clear would take them.
+--]]
+function somPoisonMinersScreenPlay:regrantQuest(pPlayer)
+	if (pPlayer == nil or self:getStage(pPlayer) == self.STAGE_NONE) then
+		return false
+	end
+
+	self:removeWaypoint(pPlayer)
+	self:setStage(pPlayer, self.STAGE_NONE)
+	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
+
+	return self:grantQuest(pPlayer)
 end
 
 --[[ task 2  --  Go to Location, Radius 50 ]]

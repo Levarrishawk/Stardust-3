@@ -113,33 +113,45 @@
 	distinguishes the two .qst names from each other, because nothing shipped
 	says how they differed.
 
-	NO GIVER -- "Donko Jen" DOES NOT EXIST ANYWHERE
-	-----------------------------------------------
-	Task 9's journalEntryTitle is "Return to Donko Jen".  Donko Jen is named
-	nowhere else: no mobile/custom_content/som/*donko*, no conversation table in
-	string/en/conversation, no row in any string table in the extract, and no
-	snapshot node.  Neither .qst names a giver either -- there is no start hook,
-	no quest_start object and no conversation reference in either file.
+	THE GIVER -- Donko Jen, found and placed
+	----------------------------------------
+	An earlier pass of this file said he "DOES NOT EXIST ANYWHERE", drove the
+	grant off nothing, and made the return leg fire its own reward signal so the
+	player would not be stranded.  That was wrong on every count, and it was
+	wrong because the search was done by his display name.  SOE named this
+	quest's data after the QUEST, not the NPC: his conversation script is
+	lava_beetle_nest_destroy_donko, and the live spawn row that places him
+	carries that script name.  Searching for "donko jen" found nothing; searching
+	the conversation scripts found him at once.
 
-	So this screenplay places nothing for him and drives the whole thing itself.
-	It exposes
+	He is now built and placed:
+
+		mobile/custom_content/som/foreman_donko.lua                the creature
+		mobile/conversations/mustafar/lava_beetle_nest_destroy_donko.lua
+		.../quest/conversation/lava_beetle_nest_destroy_donko_conv_handler.lua
+		screenplays/mustafar/mensix/mensix_mining_facility_main.lua the spawn
+
+	The spawn is in entrance_room_01 of the Mensix Mining Facility, cell
+	12112222, at the position and heading the live data gives.  His appearance is
+	the one repo choice -- the live spawn data carries no appearance column and
+	no donko model ships -- and that is documented in foreman_donko.lua itself.
+
+	The four entry points
 
 		lavaBeetleNestsScreenPlay:grantNestQuest(pPlayer, "one")
 		lavaBeetleNestsScreenPlay:grantNestQuest(pPlayer, "two")
 		lavaBeetleNestsScreenPlay:signalReward(pPlayer)
 		lavaBeetleNestsScreenPlay:failQuest(pPlayer)
 
-	as the entry points a giver's conversation handler calls once there is one.
-	Nothing calls grantNestQuest yet.  This is the same seam bounty_hunts.lua and
-	trophy_hunts.lua left for the same gap.
+	are now called from his handler, from exactly the screens SOE hung the side
+	effects on.  Note that BOTH of SOE's grant sites pass variant "two"; variant
+	"one" has no giver in SOE's own script and is left exposed but uncalled,
+	which is SOE's shape, not a gap in this port.
 
-	The return leg is the one real DEVIATION in this file.  Task 9 is a Wait for
-	Signal on "mustafar_lava_beetle_nest_reward" and Wait for Signal tasks carry
-	no location, so there is no coordinate to walk back to and no NPC to talk to.
-	Rather than strand the player at a stage nothing can clear, the cleanup leg
-	sends task 9's shipped text and then calls signalReward() itself.  When a
-	Donko Jen exists, delete that one call from finishCleanup() and have his
-	conversation call signalReward() instead; nothing else changes.
+	The DEVIATION is gone with him.  finishCleanup no longer fires
+	mustafar_lava_beetle_nest_reward itself; it sets STAGE_RETURN, sends task 9's
+	shipped text, and stops.  The player walks back to Donko Jen and his hand-in
+	screen fires the signal, which is what the Wait for Signal task always meant.
 
 	NO JOURNAL / PROGRESS TRACKING
 	------------------------------
@@ -152,39 +164,33 @@
 	message and a waypoint name, its journalEntryDescription as a system message
 	and a waypoint description.
 
-	THE REWARD -- SUBSTITUTED
-	-------------------------
+	THE REWARD -- RESOLVED
+	----------------------
 	Both [list] blocks pay Bank Credits 10000, Experience Amount 0, Faction
 	Amount 0, and lootCount 1 of lootName "item_tow_trophey_02_01".
 
-	The 10000 credits are granted literally.  The loot name cannot be resolved:
-	item_tow_trophey_02_01 is a live server-side static-item name, not an object
-	template, and it appears in exactly two places in the entire extract -- these
-	two .qst files.  There is no string/en/static_item_n.stf in _som to look it
-	up in and no datatables/quest or datatables/loot table anywhere in the TREs
-	here.
+	The 10000 credits are granted literally.  The loot name is resolved:
+	item_tow_trophey_02_01 is "Mounted Kubaza Beetle Head" in
+	string/en/static_item_n.stf, and the shipped client template
+	object/tangible/loot/mustafar/shared_trophey_lava_beetle.iff carries exactly
+	that as its objectName (static_item_n : item_tow_trophey_02_01).  The server
+	template is registered -- trophey_lava_beetle.lua:3 addTemplate,
+	serverobjects.lua:15 -- and giveItem grants trophey_lava_beetle.iff.
 
-	What it IS is a member of a family this tree has already decoded.
-	trophy_hunts.lua:102-118 resolved three of its siblings by name:
+	It is a member of the same family trophy_hunts.lua:102-118 already resolved
+	by name.  With this file the four that resolve are:
 
 		item_tow_trophey_02_06 -> trophey_blistmok_skin.iff
 		item_tow_trophey_02_04 -> bones_must_monster_jaw_small.iff
 		item_tow_trophey_02_03 -> trophey_xandank.iff
+		item_tow_trophey_02_01 -> trophey_lava_beetle.iff
 
-	object/tangible/loot/mustafar/ ships six trophey_* templates, all six
-	registered in object/custom_content/tangible/loot/mustafar/serverobjects.lua.
-	trophy_hunts had already spoken for two of them by name (trophey_blistmok_skin
-	:47 and trophey_xandank :17; its third resolution, _02_04, went to
-	bones_must_monster_jaw_small, which is not in the trophey_ prefix at all).
-	That left four unspoken-for -- trophey_lava_beetle, trophey_lava_flea,
-	trophey_lava_lizard_heart and trophey_tulrus_spine -- and exactly one of the
-	four is a lava beetle trophy: trophey_lava_beetle.iff (registered at
-	serverobjects.lua:15).  A lava beetle trophy for the lava beetle nest quest is
-	the obvious match, and it is the one granted here.  It is a SUBSTITUTE picked
-	on that reasoning, not a resolution of item_tow_trophey_02_01 -- OPEN.
-
-	(maneater.lua takes trophey_tulrus_spine out of that same set of four on the
-	same reasoning.  The two picks do not collide.)
+	(maneater.lua still grants trophey_tulrus_spine.iff for item_tow_trophey_02_02,
+	but that stays a SUBSTITUTE: the wanted name resolves to "Mounted Tulrus Spine"
+	in static_item_n.stf with no shipped object carrying that objectName, and
+	shared_trophey_tulrus_spine.iff has an empty string table and the key
+	trophey_tulrus_spine_n, which appears in no shipped STF.  The two grants do
+	not collide.)
 
 	REPEATS
 	-------
@@ -283,13 +289,15 @@ lavaBeetleNestsScreenPlay = ScreenPlay:new {
 	cleanupMaxDistance = 35,
 	cleanupTemplate = "kubaza_soldier_beetle",
 
-	-- task 9, Wait for Signal (mustafar_lava_beetle_nest_four).
-	-- Signal Name mustafar_lava_beetle_nest_reward.  No giver ships -- header.
+	-- task 9, Wait for Signal (mustafar_lava_beetle_nest_four).  Signal Name
+	-- mustafar_lava_beetle_nest_reward, fired by Donko Jen's hand-in screen.
+	-- Wait for Signal carries no location, so no waypoint is handed out for the
+	-- walk back; the description below is the only direction live gave.
 	returnTitle = "Return to Donko Jen",
 	returnDescription = "Return to Donko Jen and report that the nest has been destroyed.",
 
 	-- [list], identical in both files: Bank Credits 10000, lootCount 1,
-	-- lootName item_tow_trophey_02_01 (SUBSTITUTED -- header), Level 75, Tier 4,
+	-- lootName item_tow_trophey_02_01 (RESOLVED -- header), Level 75, Tier 4,
 	-- Experience Amount 0, Faction Amount 0.
 	rewardCredits = 10000,
 	rewardItem = "object/tangible/loot/mustafar/trophey_lava_beetle.iff",
@@ -495,9 +503,27 @@ end
 -- ====================================================================
 -- Grant  --  task 0 (Nothing) into task 5 (Go to Location)
 --
--- Entry point for whoever ends up granting this.  Nothing calls it yet.
+-- The giver is Donko Jen, and he is live-sourced on all three counts:
+--
+--   * NAME -- som_lava_beetle_nest_destroy.stf names "Donko Jen" in task02
+--     and task04.
+--   * TREE -- SOE's own conversation/lava_beetle_nest_destroy_donko.java,
+--     rebuilt node for node at
+--     mobile/conversations/mustafar/lava_beetle_nest_destroy_donko.lua.
+--   * PLACE -- the live spawn table puts som_foreman_donko in entrance_room_01
+--     of the Mensix Mining Facility at -13.5, 10.8, 35, facing 180.  He is
+--     spawned there by mensix_mining_facility_main.lua.
+--
+-- Only his APPEARANCE is a repo choice; see the header of
+-- mobile/custom_content/som/foreman_donko.lua.
+--
 -- variantKey is "one" for som_lava_beetle_nest_destroy and "two" for
--- som_lava_beetle_nest_destroy_2.
+-- som_lava_beetle_nest_destroy_2.  BOTH of SOE's grant sites in Donko's tree
+-- pass "two" -- s_44 -> s_46 on the first meeting and s_38 -> s_40 on the
+-- restart.  Variant one is never granted by him; it has no giver in any
+-- shipped script, which is consistent with _2 being the later revision of the
+-- same job.  "one" stays wired so a character who already carries it from a
+-- pre-existing save still runs and still turns in.
 -- ====================================================================
 
 function lavaBeetleNestsScreenPlay:grantNestQuest(pPlayer, variantKey)
@@ -528,6 +554,27 @@ function lavaBeetleNestsScreenPlay:grantNestQuest(pPlayer, variantKey)
 	self:announce(pPlayer, self.travelTitle, self.travelDescription)
 	-- task 5, createWaypoint true, waypointName "Kubaza Beetle Infested Mining Camp"
 	self:setWaypoint(pPlayer, self.campWaypointName, self.travelDescription, self.campX, self.campY)
+
+	return true
+end
+
+--[[ Donko's clear, s_37 -> s_39 and the first half of s_38 -> s_40
+
+SOE runs groundquests.clearQuest on BOTH quest names and then drops the
+beetle_nest scriptvar tree if the player still carries one.  Our port keeps the
+whole run under one variant key, so clearing both names is clearing the variant,
+and the scriptvar tree is the per-nest progress data.  This is that, and it is
+NOT failQuest: no fail signal is involved and the player is told nothing.
+--]]
+function lavaBeetleNestsScreenPlay:clearQuest(pPlayer)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	self:clearWaypoint(pPlayer)
+	self:resetProgress(pPlayer)
+	deleteScreenPlayData(pPlayer, self.screenplayName, "variant")
+	self:setNumber(pPlayer, "stage", 0)
 
 	return true
 end
@@ -869,18 +916,15 @@ end
 
 -- task 9, Wait for Signal, mustafar_lava_beetle_nest_reward.
 --
--- DEVIATION, and the only one in this file.  No Donko Jen ships, and a Wait for
--- Signal task carries no location, so there is nobody to return to and nowhere
--- to return to.  The shipped text still goes out, and then the signal is fired
--- here so the player is not parked at a stage nothing can clear.  When a giver
--- exists, delete the signalReward call below and have his conversation call it.
+-- This used to fire signalReward itself, because no giver had been found and the
+-- player would otherwise have been parked at a stage nothing could clear.  Donko
+-- Jen has been found and placed, so that deviation is gone: this sets the stage,
+-- sends task 9's shipped text and stops.  His hand-in screen fires the signal.
 function lavaBeetleNestsScreenPlay:finishCleanup(pPlayer)
 	self:setStage(pPlayer, self.STAGE_RETURN)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "cleanupmobs")
 
 	self:announce(pPlayer, self.returnTitle, self.returnDescription)
-
-	self:signalReward(pPlayer)
 end
 
 -- ====================================================================
@@ -911,12 +955,15 @@ function lavaBeetleNestsScreenPlay:signalReward(pPlayer)
 
 	local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
 
+	-- The full-inventory notice is the shipped row @error_message:inv_full, "Your
+	-- inventory is full." -- the same one the base server's own reward handlers
+	-- use.  There is no shipped row for the success case: in live the item simply
+	-- appeared, and base_player.stf's only item-arrival rows are loot rows, which
+	-- this is not.  So the item is handed over silently, exactly as it was.
 	if (pInventory == nil) then
 		print("lavaBeetleNestsScreenPlay: player has no inventory; " .. self.rewardName .. " could not be handed over")
 	elseif (giveItem(pInventory, self.rewardItem, -1, true) == nil) then
-		CreatureObject(pPlayer):sendSystemMessage("You have no room for the " .. self.rewardName .. ".")
-	else
-		CreatureObject(pPlayer):sendSystemMessage("You have received the " .. self.rewardName .. ".")
+		CreatureObject(pPlayer):sendSystemMessage("@error_message:inv_full")
 	end
 
 	CreatureObject(pPlayer):playMusicMessage(self.musicOnComplete)

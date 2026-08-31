@@ -53,20 +53,43 @@ cells; a boot probe resolved 22 of 22 of the facility's named cells on copy
 looking on the playable map. The pool, and how a player gets into a copy, live in
 screenplays/mustafar/mustafar_instances.lua.
 
-So the machine goes where it stood in live: inside, in mediumroom28. That room is
-the facility's power hall -- som_old_republic_facility.ilf puts 25 barrels, 14
-Corellian power box nodes, 12 power connectors, 9 bandit cooling units, a tank farm
-and sixteen terminal banks in it, and no other room in the building reads anything
-like it. _3's own journal line asks for "a machine with an extreme heat and energy
-output"; the pick is made on the .ilf contents, not on taste.
+So the machine goes inside, in mediumroom28 -- and the position is now QUOTED. The
+facility's server-side dungeon spawn table carries a row for this exact template:
+room mediumroom28, 24.0179 / -67.2 / -12.6178, yaw 89.9999. That is where it stood
+in live, and the table is the authority. The entry below rounds that yaw to 90 and
+says so; everything else is the table's to the digit.
 
-The position (x=34, floor y=-67.2, z=-19 in .ilf axes) is bracketed by real objects
-rather than picked out of a gap in the listing: at that z band the .ilf places floor
-terminals at x=27.67 and x=42.33, so x=34 lies between them, and the floor height
-is those same terminals' own.
+SECOND CORRECTION, and the room was the only part of the old note that survived it.
+This section used to open "So the machine goes where it stood in live" and then
+DERIVE the spot, which is not the same thing as reading it. The derivation went:
+mediumroom28 is the facility's power hall -- som_old_republic_facility.ilf puts 25
+barrels, 14 Corellian power box nodes, 12 power connectors, 9 bandit cooling units,
+a tank farm and sixteen terminal banks in it, and no other room in the building
+reads anything like it, while _3's journal line asks for "a machine with an extreme
+heat and energy output". Then the coordinate was bracketed between real objects
+rather than picked out of a gap: at that z band the .ilf places floor terminals at
+x=27.67 and x=42.33, so x=34 went between them, at those terminals' own floor
+height, facing 0.
+
+The room pick was right and the floor height was right -- -67.2 is live's value to
+the decimal. Everything else was wrong: x by 10 m, z by 6.4 m, and the heading by a
+full 90 degrees.
+
+ROOT CAUSE: the dungeon spawn tables were not in the searched set, so the .ilf was
+treated as the best available evidence when it is not evidence of placement at all.
+A .ilf says what the building was FURNISHED with; the dungeon spawn table says what
+the server PUTS in it. Only the second is a placement, and only the second carries a
+yaw -- and the yaw is the tell, because a derivation cannot produce one and this
+entry had to default it to 0. A heading of 0 sitting next to two hard-won position
+values is the shape of a guess.
+
+Worth keeping straight, because the two corrections here are easy to conflate: the
+CORRECTION above is about the BUILDING and it was sound. This one is about the SPOT
+INSIDE it. Getting the first one right is what kept the second error hidden -- the
+machine was in the right room, so nothing ever looked wrong.
 
 _3's tasks give no location at all (Planet tatooine, 0/0/0 -- this format's
-"unset"), so there is no shipped coordinate this overrides.
+"unset"), so the .qst was never going to settle this either way.
 
 One machine is spawned per pool copy, because each copy is a separate building.
 They are stateless furniture -- progress lives on the player, so which copy a
@@ -153,11 +176,12 @@ THE REWARD  --  SUBSTITUTED, and it is cosmetic
 
 _3's Reward task pays Experience Amount 0 and Bank Credits 0 and awards lootCount 1
 / lootName item_tow_buff_crystal_02_02. As with the other TOW rewards in this arc,
-lootName is a live server-side static-item name, not an object template. Nothing
-resolves it here: no datatables/quest/* or datatables/loot/* row in any TRE, no
-string/en STF row, and an exhaustive scan of every .tre in the client found zero
-item_tow_* and zero force_shard_* paths. Live wikis name it "Wild Force Shard
-(Defensive Burst)", which can only be matched by description.
+lootName is a live server-side static-item name, not an object template. The name
+resolves to "Wild Force Shard" in string/en/static_item_n.stf, but an exhaustive
+sweep of every shipped shared_*.iff finds no object template carrying that
+objectName, so granting the live item would mean authoring an object. Live wikis
+name it "Wild Force Shard (Defensive Burst)", which can only be matched by
+description.
 
 The substitute is object/tangible/dungeon/mustafar/obiwan_finale/obiwan_finale_buff_crystal_usable.iff
 -- a real server template registered via ObjectTemplates:addTemplate in
@@ -251,7 +275,20 @@ reuniteShardScreenPlay = ScreenPlay:new {
 
 		pool = "old_republic_facility",
 		cell = "mediumroom28",
-		x = 34.0, z = -67.2, y = -19.0, heading = 0,
+
+		-- LIVE ROW: the facility's dungeon spawn table places this exact template
+		-- here. Was 34.0 / -67.2 / -19.0 heading 0, derived off the .ilf's floor
+		-- terminals -- right room, right height, 10 m and 6.4 m and 90 degrees out.
+		-- See the SECOND CORRECTION under THE FUSION MACHINE.
+		--
+		-- The three positions are the table's to the digit. The heading is the one
+		-- value that is NOT verbatim: live stores 89.9999, which is a right angle
+		-- that has been through a float. It is rounded to 90 deliberately, and the
+		-- rounding is written down rather than done silently, because "quoted" has
+		-- to mean quoted -- the difference is 1.7e-6 radians after math.rad and
+		-- cannot matter, but a label that is loosely true is how the old guesses
+		-- survived as long as they did.
+		x = 24.0179, z = -67.2, y = -12.6178, heading = 90,
 
 		minTime = 10,                                           -- _3 task 3, Min Time
 		maxTime = 15,                                           -- _3 task 3, Max Time

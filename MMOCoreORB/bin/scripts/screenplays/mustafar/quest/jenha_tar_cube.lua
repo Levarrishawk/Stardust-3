@@ -136,22 +136,29 @@ THE REWARD  --  one shipped path does not resolve, and it is not silently swappe
 	  registered path, and this is flagged rather than swapped: the one-line fix
 	  is in cube_loot_0a/0b/0c.lua, which is not this port's file to change.
 
-None of the four reward items has a display name anywhere in the extract --
-string/en carries only conversation/, quest/, dance_advancement.stf and
-performance.stf, no item table -- so nothing here claims to know what they are
-called. The hand-over messages name the quest, not the items.
+All four reward items have a shipped display name. They are not tow items, so
+they are not in static_item_n.stf; each one's shared client template names the
+table string/en/som/som_cube.stf, which ships in mtg_patch_019.tre and
+mtg_planets.tre:
 
-NO GIVER  --  open question, deliberately not filled
+    som_cube      -> cube_n          "Chu-Gon Dar Cube"
+    cube_loot_0a  -> cube_loot_0a_n  "a barely glowing old cup"
+    cube_loot_0b  -> cube_loot_0b_n  "a barely glowing datapad"
+    cube_loot_0c  -> cube_loot_0c_n  "a barely glowing worklight"
+
+Nothing here needs to name them itself -- the client resolves each object's own
+objectName. The hand-over messages name the quest, not the items.
+
+THE GIVER
 
 The .qst names Doctor Olok in three of its descriptions and its waypoint, and
-string/en/conversation/som_cube_ithes_olok.stf carries his whole dialogue tree,
-but nothing that shipped says where he stands or what starts the quest:
+string/en/conversation/som_cube_ithes_olok.stf carries his whole dialogue tree.
+The tree and handler are wired; this file places him:
 
   * npc_ithes_olok is a registered creature (mobile/custom_content/som/
-    npc_ithes_olok.lua, included at that directory's serverobjects.lua:79,
-    customName "Ithes Olok") and it is spawned NOWHERE in this tree.
-  * Its conversationTemplate is "" and there is no ithes_olok file in
-    mobile/conversations/mustafar/.
+    npc_ithes_olok.lua, included at that directory's serverobjects.lua:89,
+    customName "Ithes Olok"). conversationTemplate is "som_cube_ithes_olok";
+    the tree ships at mobile/conversations/mustafar/som_cube_ithes_olok.lua.
   * There is no quest_start object for this quest in snapshot/mustafar.ws. The
     moon carries exactly three quest_start nodes, the same three in stardust_03
     and in mtg_patch_023, and all three belong to Kenobi quests:
@@ -159,12 +166,24 @@ but nothing that shipped says where he stands or what starts the quest:
       12111454  shared_som_kenobi_reunite_shard             (-4385.03, 3165.60)
       12112643  shared_som_kenobi_symbiosis_fluid_container  (-1551.38,  467.68)
     mtg_planets and mtg_patch_022 carry none.
+  * His cell and position are the live server's. The facility's dungeon spawn
+    table posts him in small_room_04 at (-23.7, 19.1, -6.1) facing 79, and that
+    is what questGiver now carries. The room name is resolved by name rather
+    than by cellID arithmetic, because +N node arithmetic is wrong for this
+    building -- the cell node run has gaps at 12112233 and 12112239 -- but for
+    the record small_room_04 is 12112238.
+  * An earlier revision derived the position instead: it subtracted the .qst
+    return waypoint (-2444, 218, 1760) from snapshot building 12112217's origin
+    (-2420.500, 199.403, 1767.080), which is valid arithmetic because that
+    building has an identity quaternion, and took floor height 19.07 off
+    must_mining_facility.ilf. It landed within a tenth on x, a metre out on y,
+    and guessed heading 0. The derivation is kept here because it is the method
+    to fall back on for any NPC the live table does not cover; it is not the
+    source for this one.
 
-So this file spawns nobody and invents no position. grantQuest and
-signalReturnNotes are the seams a giver's conversation handler calls once Aaron
-says where Doctor Olok stands. signalReturnNotes IS the somCubeSuccess signal --
-the .qst raises it from the hand-in conversation, and there is no other way for
-it to be raised.
+grantQuest and signalReturnNotes are the seams the giver's conversation handler
+calls. signalReturnNotes IS the somCubeSuccess signal -- the .qst raises it from
+the hand-in conversation, and there is no other way for it to be raised.
 
 NO JOURNAL
 
@@ -254,11 +273,27 @@ somJenhaTarCubeScreenPlay = ScreenPlay:new {
 		"object/tangible/loot/mustafar/cube/loot/cube_loot_0c.iff",
 	},
 
+	-- THE GIVER. Cell and position are the live server's, not derived: the facility
+	-- dungeon spawn table posts him in small_room_04 facing 79. An earlier revision
+	-- subtracted the .qst waypoint from the building origin and guessed heading 0;
+	-- it was close on x but a metre out on y and had him facing the wrong way.
+	-- small_room_04 is cell 12112238. See THE GIVER in the header.
+	questGiver = {
+		template = "npc_ithes_olok",
+		buildingID = 12112217,
+		cellName = "small_room_04",
+		x = -23.7,
+		z = 19.1,
+		y = -6.1,
+		heading = 79,
+	},
+
 	-- Built by attachTablets on every boot. In-memory only, which is correct: it
 	-- is derived from placements and the placements are re-attached each start.
 	tabletIndex = {},
 
 	ruinsAreaID = 0,
+	questGiverID = 0,
 }
 
 registerScreenPlay("somJenhaTarCubeScreenPlay", true)
@@ -267,6 +302,32 @@ function somJenhaTarCubeScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachTablets()
 		self:spawnRuinsArea()
+		self:spawnGiver()
+	end
+end
+
+function somJenhaTarCubeScreenPlay:spawnGiver()
+	local giver = self.questGiver
+	local pBuilding = getSceneObject(giver.buildingID)
+
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		print("somJenhaTarCubeScreenPlay: building " .. giver.buildingID .. " is missing; Doctor Olok cannot be placed and the quest cannot be started")
+		return
+	end
+
+	local pCell = BuildingObject(pBuilding):getNamedCell(giver.cellName)
+
+	if (pCell == nil) then
+		print("somJenhaTarCubeScreenPlay: building " .. giver.buildingID .. " has no cell named " .. giver.cellName .. "; Doctor Olok cannot be placed")
+		return
+	end
+
+	local pNpc = spawnMobile("mustafar", giver.template, 0, giver.x, giver.z, giver.y, giver.heading, SceneObject(pCell):getObjectID())
+
+	if (pNpc == nil) then
+		print("somJenhaTarCubeScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
+	else
+		self.questGiverID = SceneObject(pNpc):getObjectID()
 	end
 end
 
@@ -338,10 +399,11 @@ end
 
 --[[ Entry points
 
-grantQuest and signalReturnNotes are what Doctor Olok's conversation handler
-calls once there is one. Neither sends a refusal: with no giver in the shipped
-data there is no voice to put a refusal in, so both just report whether they did
-anything and leave the wording to whoever ends up owning the conversation.
+grantQuest and signalReturnNotes are what Doctor Olok's conversation handler --
+conversation/cube_ithes_olok_conv_handler.lua -- calls. Neither sends a refusal
+of its own: the refusal wording lives in the tree, where the shipped .stf lines
+are, so these two just report whether they did anything and let the screen the
+handler picks say it in Olok's voice.
 
 	canGrantQuest(pPlayer)      may this character start it
 	grantQuest(pPlayer)         task 0 goes live
@@ -525,8 +587,9 @@ function somJenhaTarCubeScreenPlay:awardQuest(pPlayer)
 	CreatureObject(pPlayer):playMusicMessage(self.musicOnComplete)
 end
 
--- No reward item has a display name anywhere in the extract, so a failure names
--- the template and a success says nothing beyond the completion line above.
+-- The four reward items carry their own display names from som_cube.stf (see the
+-- header), so the client names them on receipt. A failure names the template,
+-- and a success says nothing beyond the completion line above.
 function somJenhaTarCubeScreenPlay:giveReward(pPlayer, template)
 	local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
 
@@ -536,6 +599,59 @@ function somJenhaTarCubeScreenPlay:giveReward(pPlayer, template)
 		print("somJenhaTarCubeScreenPlay: failed to create " .. template)
 		CreatureObject(pPlayer):sendSystemMessage("You have no room for the rest of Doctor Olok's findings.")
 	end
+end
+
+-- Ithes Olok's s_194 -- "I suppose I can let you have another" -- is a shipped line,
+-- so the server has to be able to honour it. Live's own gate has now been read; it is
+-- the condition on the s_193 option, not on the handover:
+--
+--   condition_lostCube -> !utils.playerHasItemByTemplateInBankOrInventory(player,
+--                             "object/tangible/container/loot/som_cube.iff")
+--
+-- This comment used to say live did "a BASE inventory check ... did not recurse into
+-- containers, which is why players learned to drop the cube in a backpack and ask
+-- again", and to keep that as a deliberate quirk. The name of live's helper says bank
+-- OR inventory, so the first half was wrong; and utils.java is not in the extract, so
+-- whether it recursed cannot be read at all. The backpack story was not sourced from
+-- anything and is withdrawn.
+--
+-- ROOT CAUSE: describing a mechanism from how the bug was remembered rather than from
+-- the code, and then defending the memory as fidelity.
+--
+-- What this does: scans the inventory and the bank, top level only, because that is
+-- what Core3's Lua container API reaches without a recursive walk. If the helper turns
+-- out to recurse, this is narrower than live and a player with a cube in a backpack
+-- gets a second one.
+function somJenhaTarCubeScreenPlay:hasCube(pPlayer)
+	local slots = { "inventory", "bank" }
+
+	for s = 1, #slots do
+		local pContainer = SceneObject(pPlayer):getSlottedObject(slots[s])
+
+		if (pContainer ~= nil) then
+			for i = 1, SceneObject(pContainer):getContainerObjectsSize() do
+				local pItem = SceneObject(pContainer):getContainerObject(i - 1)
+
+				if (pItem ~= nil and SceneObject(pItem):getTemplateObjectPath() == self.rewardItems[1]) then
+					return true
+				end
+			end
+		end
+	end
+
+	return false
+end
+
+-- Only ever reachable from the finished state, and only hands over the cube itself --
+-- rewardItems[1]. The three loot objects are the hand-in payout and are not reissued.
+function somJenhaTarCubeScreenPlay:replaceCube(pPlayer)
+	if (pPlayer == nil or self:getStage(pPlayer) ~= 4 or self:hasCube(pPlayer)) then
+		return false
+	end
+
+	self:giveReward(pPlayer, self.rewardItems[1])
+
+	return true
 end
 
 --[[ Radial dispatch

@@ -96,20 +96,30 @@ power" is _03, and s_29 pays the last one out. The .qst names him too: _03's
 journal prose says "Foreman Chivos seems convinced that extra power rods can be
 found around the crashed capital ship".
 
-must_foreman_chivos is registered (mobile/custom_content/som/serverobjects.lua:66,
+must_foreman_chivos is registered (mobile/custom_content/som/serverobjects.lua:76,
 customName "Foreman Chivos") and its conversationTemplate is empty, so he is given
 a radial here and answers in his own shipped strings. The 60-string tree itself is
 not reconstructed in this file -- see WHAT IS NOT MODELLED.
 
-WHERE CHIVOS STANDS  --  placed, not quoted
+Live names him som_foreman_chivos and hangs conversation.story_arc_prelude_chivos
+off him. This tree keeps must_foreman_chivos, the registered template that ships
+an appearance; the live name is recorded here because it is what identifies his
+row in the facility spawn table.
 
-Nothing places him. s_68 "Welcome to Mensix Corp." puts him inside the company's
-own facility, and mensix_mining_facility_main.lua already stands both of the
-facility's other quest givers -- pei_yi (-77.1, 10.8, 67.5) and diskret_stahn
-(-75.4, 10.8, 66.3) -- in cell 12112226 of that POB, along with four background
-miners at (-88.3, 49.4), (-86.8, 41.9), (-80.6, 42.2) and (-81.1, 39.7), all at
-cell height 10.8. He is set at (-82, 10.8, 55), inside the ground those seven
-occupants bound and at least 8 m clear of every one of them.
+WHERE CHIVOS STANDS  --  live position, recovered
+
+The facility's dungeon spawn table places him: small_room_02, cell 12112232, at
+(-125.7, 10.3, 82.8) facing 180. His row also names his conversation script, which
+is what confirms this row is the quest-giving Chivos and not a lookalike.
+
+An earlier revision read s_68 "Welcome to Mensix Corp." as putting him in the
+facility -- correct -- and then put him in the cantina at (-82, 10.8, 55) because
+that is where the other two givers stand: pei_yi (-77.1, 10.8, 67.5) and
+diskret_stahn (-75.4, 10.8, 66.3), both in cell 12112226, with four background
+miners around them. The room reasoning was "the givers cluster here, so he does
+too". He does not. A foreman has an office, and small_room_02 is about 45 m and
+one room away from the bar. Right building, wrong room, for the second time in
+this wave -- see cursed_shard.lua for the same mistake made bigger.
 
 His respawn timer is 300 rather than the 0 the neighbouring spawns use, because
 his pvpBitmask is ATTACKABLE and he is the only way into all three quests:
@@ -117,11 +127,18 @@ AiAgentImplementation.cpp:2283 only builds a RespawnCreatureTask when the timer 
 greater than 0, so at 0 a player who kills him closes the prelude for everyone
 until the next restart.
 
-THE SALVAGE LEADERS  --  placed, not quoted
+THE SALVAGE LEADERS  --  placed, not quoted, and the absence is CHECKED
+
+The crash site has a server-side dungeon spawn table of its own, and it was read
+before this claim was left standing. It contains exactly one row -- the ship's
+computer on the bridge -- and no creatures at all, so there is no live position
+for a salvage leader to be quoted from. This is a checked absence, not an
+unchecked one. Anywhere else in the Mustafar set that a spawn table exists, it
+won and the guess was replaced; here there is nothing to lose to.
 
 _03 task 13 wants som_mustafarian_salvage_leader. The template that shipped in
 this tree is must_salvage_bandit_leader_01 (registered at
-mobile/custom_content/som/serverobjects.lua:73, customName "Salvage Bandit
+mobile/custom_content/som/serverobjects.lua:83, customName "Salvage Bandit
 Leader") -- the same som_ prefix the .qst files carry on lava_flea_smoldering and
 tulrus. It is spawned nowhere: mensix_facility_region.lua's south-west camp is
 twelve must_salvage_bandit_01 and boss_uruli, 3400 m from the wreck and with no
@@ -177,9 +194,10 @@ THE REWARD  --  substituted
 _01 and _02 award Bank Credits 5000 and nothing else, which is quoted as it
 stands. _03 awards Bank Credits 5000 plus lootCount 1 / lootName
 item_tow_necklace_03_01 -- a live server-side static-item name rather than an
-object template. Nothing here resolves it: no datatables/quest/* or
-datatables/loot/* row in any TRE, no string/en STF row, and no item_tow or
-tow_necklace path anywhere in this tree. Every other TOW reward in this arc has
+object template. The name resolves to "Miners Medallion" in
+string/en/static_item_n.stf, but an exhaustive sweep of every shipped
+shared_*.iff finds no object template carrying that objectName, so granting the
+live item would mean authoring an object. Every other TOW reward in this arc has
 the same problem and is handled the same way, by matching on what the name says
 it is.
 
@@ -201,13 +219,35 @@ this tree -- not in bin/scripts and not in src -- so the comm cannot be rendered
 with its portrait. Its Comm Message Text is delivered verbatim in a message box
 titled with the task's own journalEntryTitle instead, and the appearance is lost.
 
-Chivos's conversation tree is not reconstructed. story_arc_prelude_chivos.stf's
-do_not_edit row says the file "is automatically generated by the
-SwgConversationEditor", so a real branching tree existed, but wiring one needs a
-new mobile/conversations/mustafar/ file, a handler, an include in
-mobile/conversations.lua and a conversationTemplate on the creature -- two of them
-shared files this file is not the owner of. His lines are quoted into the radial
-and its message boxes so that nothing he says is lost in the meantime.
+WITHDRAWN -- CHIVOS'S TREE IS RECONSTRUCTED
+
+This section used to read, verbatim:
+
+    "Chivos's conversation tree is not reconstructed. story_arc_prelude_chivos.stf's
+    do_not_edit row says the file "is automatically generated by the
+    SwgConversationEditor", so a real branching tree existed, but wiring one needs a
+    new mobile/conversations/mustafar/ file, a handler, an include in
+    mobile/conversations.lua and a conversationTemplate on the creature -- two of them
+    shared files this file is not the owner of. His lines are quoted into the radial
+    and its message boxes so that nothing he says is lost in the meantime."
+
+It was wrong twice.
+
+ROOT CAUSE 1 -- the tree was looked for under the som_ name prefix, because every
+quest in this arc is som_story_arc_prelude_NN and their strings are in som_ tables.
+The conversation carries no som_: it is conversation/story_arc_prelude_chivos, in
+the BASE string/en/conversation/ set. All 32 screens and 26 options were recoverable
+the whole time, along with SOE's own eight-condition greeting order, its five
+actions and all 23 of its gestures.
+
+ROOT CAUSE 2 -- "a conversationTemplate on the creature" was treated as work the
+brief forbids. What the brief forbids is REPOINTING an existing conversationTemplate.
+must_foreman_chivos.lua's field was the empty string; filling an empty field with a
+new template repoints nothing and was never forbidden.
+
+The tree is mobile/conversations/mustafar/story_arc_prelude_chivos.lua and the
+handler is screenplays/mustafar/quest/conversation/chivos_conv_handler.lua. The
+radial and its message boxes are retired; see the headstone above getRadialText.
 
 som_prelude_obiwan_check's own reward is nothing: its [list] is journalVisible
 false, allowRepeats true, with journalEntryTitle "Welcome to Mustafar!" and
@@ -222,18 +262,25 @@ storyArcPreludeScreenPlay = ScreenPlay:new {
 
 	screenplayName = "storyArcPreludeScreenPlay",
 
-	-- .qst [list] Level, on all three preludes. obiwan_check carries none.
+	-- .qst [list] Level, on all three preludes -- re-read and confirmed in all
+	-- three. obiwan_check carries none.
+	--
+	-- NOTHING GATES ON THIS ANY MORE. It is the level the JOURNAL DISPLAYS, not an
+	-- entry requirement, and live's Chivos has no level test anywhere: not in his
+	-- eight conditions, not in his five actions, not in OnStartNpcConversation. The
+	-- refusal that used to sit in startSupplies was the retired radial's invention,
+	-- and it went with the radial. Kept as the recorded .qst value.
 	requiredLevel = 75,
 
-	-- Placed, not quoted; see WHERE CHIVOS STANDS. Cell 12112226 of the Mensix
-	-- mining facility POB, the room pei_yi and diskret_stahn already stand in.
+	-- Live position; see WHERE CHIVOS STANDS. small_room_02 = cell 12112232 of
+	-- the Mensix mining facility POB -- his own office, not the cantina.
 	chivos = {
 		template = "must_foreman_chivos",
-		cellID = 12112226,
-		x = -82,
-		z = 10.8,
-		y = 55,
-		heading = 0,
+		cellID = 12112232,
+		x = -125.7,
+		z = 10.3,
+		y = 82.8,
+		heading = 180,
 		respawn = 300,
 	},
 
@@ -376,10 +423,12 @@ function storyArcPreludeScreenPlay:spawnChivos()
 
 	-- He has no snapshot node, so nothing else in the world knows an id to find
 	-- him by; keep the one the spawn just handed back, as cursed_shard.lua does.
+	-- Nothing reads it today -- he is reached through his conversation now, not by
+	-- id -- but it is the only handle on him that exists, so it stays.
+	--
+	-- The role write and the menu component that used to follow are gone with the
+	-- radial. The snapshot props still get both; only Chivos does not.
 	self.chivosID = SceneObject(pChivos):getObjectID()
-
-	writeStringData(self.chivosID .. ":storyArcPreludeRole", "chivos")
-	SceneObject(pChivos):setObjectMenuComponent("StoryArcPreludeMenuComponent")
 end
 
 function storyArcPreludeScreenPlay:spawnSalvageLeaders()
@@ -515,16 +564,13 @@ end
 
 --[[ som_story_arc_prelude_01 -- "Supplies for the Miners" ]]
 
--- Chivos's radial at stage 0. His pitch is s_93 -> s_95 -> s_97 -> s_99, and s_108
--- "You said you would pay? Sure, I would like a job." is the acceptance.
+--[[ ACTION grantMissionOne, on screen ill_take_the_job (s_110). His pitch is
+     s_87 -> s_91 -> s_95 -> s_99 and s_108 "You said you would pay? Sure, I would
+     like a job." is the acceptance -- all of it a real conversation now, not a
+     radial. The level refusal that used to stand here was the radial's own
+     invention; see requiredLevel. ]]
 function storyArcPreludeScreenPlay:startSupplies(pPlayer)
 	if (self:getStage(pPlayer) ~= 0) then
-		return
-	end
-
-	if (CreatureObject(pPlayer):getLevel() < self.requiredLevel) then
-		CreatureObject(pPlayer):sendSystemMessage("Foreman Chivos will not trust a company contract to someone of your experience. (Requires combat level "
-			.. self.requiredLevel .. ".)")
 		return
 	end
 
@@ -533,9 +579,8 @@ function storyArcPreludeScreenPlay:startSupplies(pPlayer)
 	-- .qst _01 task 0, musicOnActivate.
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_exception.snd")
 
-	-- s_110, his handout.
-	self:showMessageBox(pPlayer, "Supplies for the Miners",
-		"That is great news. Here are the supplies that need to be delivered, and I will put the location of the camp that they need to be delivered to in your datapad. All you need to do is find the supply locker and put the goods directly in there. If you do a good enough job, maybe I will have another job for you. Oh, watch your step out there. Mustafar is not a gentle world, but I guess you could tell that just by looking around.")
+	-- s_110 used to be repeated into a message box here. He is saying it in the
+	-- conversation window that called this, so the copy is gone.
 
 	-- _01's [list] journalEntryDescription, then task 4's.
 	CreatureObject(pPlayer):sendSystemMessage("Normally, droids bring necessary supplies to the miners in the field. Recently, the droids have not been recharging correctly and all deliveries have fallen behind. The miners are in need of their supplies and the company is hiring couriers to bring them shipments of goods.")
@@ -582,6 +627,30 @@ function storyArcPreludeScreenPlay:sendCompanyComm(pPlayer)
 end
 
 --[[ som_story_arc_prelude_02 -- "Replace Air Filters" ]]
+
+--[[ ACTION grantVentQuest, on screen ill_do_it (s_107): live's
+     "if (!isQuestActive(som_story_arc_prelude_02)) grantQuest(...)".
+
+     It is a REPAIR path. On live prelude_01 and prelude_02 are separate grants, so
+     a player can finish the supply run and never pick the vent job up; greeting 7
+     and this action exist to put him back on track.
+
+     This file cannot produce that state. sendCompanyComm sets STAGE_FILTERS and
+     calls startFilters in the same breath, so finishing the supply run IS starting
+     the vent job -- the two stages are adjacent with nothing between them, which is
+     what the guard below says out loud. Reconstructed and wired anyway so that if
+     the stage machine is ever split the repair comes back on its own. Its greeting
+     is unreachable for the same reason; see chivos_conv_handler.lua. ]]
+function storyArcPreludeScreenPlay:grantVentQuest(pPlayer)
+	local stage = self:getStage(pPlayer)
+
+	if (stage <= self.STAGE_SUPPLIES or stage >= self.STAGE_FILTERS) then
+		return
+	end
+
+	self:setStage(pPlayer, self.STAGE_FILTERS)
+	self:startFilters(pPlayer)
+end
 
 function storyArcPreludeScreenPlay:startFilters(pPlayer)
 	-- _02's [list] journalEntryDescription, then task 1's.
@@ -641,15 +710,13 @@ function storyArcPreludeScreenPlay:signalFilterReward(pPlayer)
 	self:setStage(pPlayer, self.STAGE_REACTOR_OFFER)
 	self:removeWaypoint(pPlayer, "chivos")
 
-	self:showMessageBox(pPlayer, "Return to Foreman Chivos",
-		"Miners restocked...check. Vents nice and clean...check. Good work out there. I knew you were the type of person to get things done. Mensix has need of good people like you. Granted, our company bylaws forbid us to officially hire anyone who isn't a Mustafarian, but we do occasionally hire freelancers.")
+	-- s_20 (the greeting that opened this) and s_36 (the briefing two options
+	-- later) used to be repeated here, into a message box and a system message. He
+	-- is saying both in the conversation window now, so both copies are gone.
 
 	-- task 6: Bank Credits 5000, musicOnComplete.
 	self:payCredits(pPlayer, self.rewardCredits)
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
-
-	-- s_36, the freelance offer that leads straight into the reactor briefing.
-	CreatureObject(pPlayer):sendSystemMessage("Whew! I am glad you said that because we have a major problem that needs to be solved immediately. The way you took care of the other jobs makes me sure that you are just the person we need.")
 end
 
 --[[ som_story_arc_prelude_03 -- "Salvage or Die" ]]
@@ -666,8 +733,8 @@ function storyArcPreludeScreenPlay:startSalvage(pPlayer)
 	-- .qst _03 task 1, musicOnActivate.
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_exception.snd")
 
-	self:showMessageBox(pPlayer, "Salvage or Die",
-		"You have not only my thanks but the company's thanks as well. Look around the wreckage of the crash on the slopes of the central volcano. When our crew was there, they reported seeing a bunch of salvage bandits crawling all over the ship, so watch your back. Those Mustafarians don't work for any company and will do anything to make a buck...including shooting anyone they don't know.")
+	-- s_120 used to be repeated into a message box here; it is the screen that
+	-- called this, so the copy is gone.
 
 	-- _03's [list] journalEntryDescription, then task 15's.
 	CreatureObject(pPlayer):sendSystemMessage("Foreman Chivos has informed you that the core to the mining facility is being overworked. The power rods have already been replaced several times and the core will not last long enough to get a new shipment of the rods before it completely shuts down. The miners recently uncovered the remains of an Old Republic cruiser that crashed into the central volcano which uses the same power rods as the facility. Chivos wants you to scour the area and see if you can salvage some power rods that are in good enough shape to hold the reactor over until a shipment of new rods come in.")
@@ -788,8 +855,8 @@ function storyArcPreludeScreenPlay:signalRodReward(pPlayer)
 	-- drops its own for the same reason.
 	dropObserver(KILLEDCREATURE, "storyArcPreludeScreenPlay", "notifyKilledCreature", pPlayer)
 
-	self:showMessageBox(pPlayer, "Return to Foreman Chivos",
-		"You did a great job. As promised, here is your payment for saving us all. I knew you were going places when we first talked...Milo Mensix wants to talk to you.")
+	-- s_29 used to be repeated into a message box here; it is the screen that
+	-- called this, so the copy is gone.
 
 	-- task 14: Bank Credits 5000, lootCount 1, musicOnComplete.
 	self:payCredits(pPlayer, self.rewardCredits)
@@ -812,16 +879,13 @@ function storyArcPreludeScreenPlay:giveReward(pPlayer)
 	end
 end
 
--- s_84 / s_85, the only thing left to ask him once the prelude is over. Milo
--- Mensix is not in this batch, so this is flavour and grants nothing.
-function storyArcPreludeScreenPlay:askAboutMensix(pPlayer)
-	if (self:getStage(pPlayer) ~= self.STAGE_DONE) then
-		return
-	end
+--[[ RETIRED: askAboutMensix.
 
-	self:showMessageBox(pPlayer, "Who is Milo Mensix?",
-		"Only the head of Mensix Corp. If he wants to see you, it is about something big. You should go see him right away. Thanks again for coming through.")
-end
+     It put s_85 in a message box behind a radial the player could re-open forever
+     at STAGE_DONE. Live does not work that way: s_84 / s_85 sit in branch 3, one
+     step after handing the rods over, and once prelude_03 is complete Chivos barks
+     s_27 and the tree gives no way back to them. Both are screens in
+     story_arc_prelude_chivos.lua now, in that shape. ]]
 
 --[[ som_prelude_obiwan_check
 
@@ -907,17 +971,34 @@ end
 
 --[[ Radial dispatch
 
-One component table serves Chivos and all eight snapshot props.
+One component table serves all eight snapshot props.
 SceneObjectImplementation::setObjectMenuComponent() falls through to
 LuaObjectMenuComponent when no C++ component of that name is registered, and
 LuaObjectMenuComponent replaces the object's menu entirely -- so
 fillObjectMenuResponse has to add every item we want to see, and adds nothing at
 all when this player has no business touching the object.
+
+CHIVOS IS NO LONGER ONE OF THEM.
+
+He used to be, because his conversation was believed lost -- see WITHDRAWN in the
+header for why that was wrong. Three things went when the tree arrived:
+
+  * his seven radial labels in getRadialText, two of which ("Report the air filters
+    replaced" and "Ask Foreman Chivos about the job") were invented because nothing
+    shipped them;
+  * talkToChivos, which answered by pushing his lines out as system messages and
+    SUI boxes, and which turned s_101 / s_103 -- live's REPAIR path for a player who
+    never picked the vent job up -- into a routine mid-task reminder it is not;
+  * the level 75 refusal in front of startSupplies, which live has nowhere.
+
+All of it is a real conversation now:
+mobile/conversations/mustafar/story_arc_prelude_chivos.lua, dispatched by
+screenplays/mustafar/quest/conversation/chivos_conv_handler.lua. The five functions
+those radials used to call are unchanged and are what the tree's five actions call.
 --]]
 
--- Which radial, if any, this player should be offered on a given object. The prop
--- texts are the .qst's own retrieveMenuText; Chivos's are his own shipped player
--- lines except the two marked, which nothing ships.
+-- Which radial, if any, this player should be offered on a given prop. The texts
+-- are the .qst's own retrieveMenuText.
 function storyArcPreludeScreenPlay:getRadialText(pPlayer, role, objectID)
 	local stage = self:getStage(pPlayer)
 
@@ -933,56 +1014,26 @@ function storyArcPreludeScreenPlay:getRadialText(pPlayer, role, objectID)
 		if (stage == self.STAGE_SALVAGE and not self:hasFlag(pPlayer, "rod" .. objectID)) then
 			return "Remove Power Rod from Core"                -- _03 task 12
 		end
-	elseif (role == "chivos") then
-		if (stage == 0) then
-			return "You mentioned that you needed some help?"  -- s_93
-		elseif (stage == self.STAGE_FILTERS) then
-			return "Yeah, where were those vents again?"       -- s_102
-		elseif (stage == self.STAGE_FILTERS_DONE) then
-			return "Report the air filters replaced"           -- not a shipped string
-		elseif (stage == self.STAGE_REACTOR_OFFER) then
-			return "Yeah, I can use the work now."             -- s_21
-		elseif (stage == self.STAGE_RODS_DONE) then
-			return "Yes, here they are."                       -- s_28
-		elseif (stage == self.STAGE_DONE) then
-			return "Who is Milo Mensix?"                       -- s_84
-		end
-
-		return "Ask Foreman Chivos about the job"              -- not a shipped string
 	end
 
 	return nil
 end
 
--- Chivos answering. Everything he says is quoted; the two reminders are the
--- exchanges SOE wrote for a player who comes back mid-task.
-function storyArcPreludeScreenPlay:talkToChivos(pPlayer)
-	local stage = self:getStage(pPlayer)
+--[[ RETIRED: talkToChivos. See CHIVOS IS NO LONGER ONE OF THEM above.
 
-	if (stage == 0) then
-		self:startSupplies(pPlayer)
-	elseif (stage == self.STAGE_SUPPLIES) then
-		-- s_55 and s_59.
-		CreatureObject(pPlayer):sendSystemMessage("Have you finish those tasks I asked you to do?")
-		CreatureObject(pPlayer):sendSystemMessage("Ok, you should get back to work then. Come back and talk to me when you are done. Thanks again.")
-	elseif (stage == self.STAGE_FILTERS) then
-		-- s_101 and s_103.
-		CreatureObject(pPlayer):sendSystemMessage("You shouldn't be back here. I thought I asked you to clean out those air vents which are around the facility.")
-		CreatureObject(pPlayer):sendSystemMessage("There are four of them that surround the facility. None of them are very far from here, so you shouldn't have that much trouble finding them.")
-	elseif (stage == self.STAGE_FILTERS_DONE) then
-		self:signalFilterReward(pPlayer)
-	elseif (stage == self.STAGE_REACTOR_OFFER) then
-		self:startSalvage(pPlayer)
-	elseif (stage == self.STAGE_TRAVEL or stage == self.STAGE_SALVAGE) then
-		-- s_11 and s_26.
-		CreatureObject(pPlayer):sendSystemMessage("Did you manage to get all of my power rods yet?")
-		CreatureObject(pPlayer):sendSystemMessage("Ok, keep up the good work.")
-	elseif (stage == self.STAGE_RODS_DONE) then
-		self:signalRodReward(pPlayer)
-	elseif (stage == self.STAGE_DONE) then
-		self:askAboutMensix(pPlayer)
-	end
-end
+     Its stage-by-stage answers are chivos_conv_handler:getInitialScreen now, in
+     SOE's own eight-condition order, and the lines it pushed out as pairs of system
+     messages are screens with the player's shipped replies attached. Two of its
+     stage arms were also wrong about what they were quoting:
+
+       * STAGE_SUPPLIES said s_55 then s_59 in one breath. Live makes s_59 the
+         answer to the player choosing s_57 "Not yet." -- it is an exchange, not a
+         monologue.
+       * STAGE_FILTERS said s_101 then s_103. Those belong to live's condition 7,
+         hasCompletedSupply -- the REPAIR greeting for a player whose vent job was
+         never granted, ending in grantVentQuest. Using them as the routine
+         mid-filters reminder put a repair path in front of a player who did not
+         need one. Live's routine reminder at that point is condition 6's s_55. ]]
 
 StoryArcPreludeMenuComponent = {}
 
@@ -1021,8 +1072,6 @@ function StoryArcPreludeMenuComponent:handleObjectMenuSelect(pSceneObject, pPlay
 		storyArcPreludeScreenPlay:replaceFilter(pPlayer, objectID)
 	elseif (role == "rod") then
 		storyArcPreludeScreenPlay:takeRod(pPlayer, objectID)
-	elseif (role == "chivos") then
-		storyArcPreludeScreenPlay:talkToChivos(pPlayer)
 	end
 
 	return 0

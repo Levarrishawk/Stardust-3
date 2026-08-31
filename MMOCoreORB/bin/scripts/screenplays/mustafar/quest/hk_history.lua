@@ -1,6 +1,12 @@
 --[[
 INFO:
 
+The playback is reached two ways, both of them live-sourced. The factory terminal
+hands over entry 7 with the datapad (story_arc_chapters.lua:2113), and the datapad
+itself lists all ten (HkHistoryDatapadMenuComponent.lua). registerTrigger and the
+trigger index remain for a placed-object trigger, and still have no caller, because
+nothing in the shipped data says which placed object carries which entry.
+
 The HK-47 history playback -- ten recovered log entries read in sequence. Six are
 the Neimoidian facility log (Entry #64951 through #64956, the last one written as
 the Trade Federation dies on Mustafar); four are HK-47's own entries once the AI
@@ -91,17 +97,24 @@ The quest <list> carries allowRepeats = true on all ten, so a playback is
 re-readable; `playEntry` therefore always shows the text and only records the
 first read.
 
-OPEN QUESTION -- WHAT TRIGGERS EACH PLAYBACK. Nothing in the shipped `.qst`
-says. There is no Target Server Template, no Server Object Template, no
-retrieveMenuText, no location, and no prerequisiteQuests / exclusionQuests
-chaining them into an order; grepping the whole extract for "hk_history" finds
-only misc/quest_crc_string_table.iff, which is just the name-to-CRC map. In the
-shipped game these were consoles or terminals found around the map. This file
-places nothing and invents no coordinates. It exposes the playback as entry
-points keyed by entry number -- `playEntry`, plus `registerTrigger` /
-`terminalUsed` for the OBJECTRADIALUSED shape -- so that once Aaron says where the
-consoles are, `start()` attaches to them the way map_exploration.lua:227-237
-attaches to the world-snapshot terminals it was given.
+HOW THE PLAYBACK IS REACHED. There were never ten placed objects. One exterior
+terminal grants one datapad and the datapad holds all ten behind a list -- which is
+what string/en/som/som_quest.stf says in its own vocabulary:
+
+	df_terminal_use           Access Factory Memory Banks
+	df_terminal_datapad       You downloaded the factory recordings to a datapad.
+	hk_history_datapad        Access Record Archives
+	hk_history_datapad_01     Entry #64951
+	  ..
+	hk_history_datapad_10     Entry #64960
+	hk_history_datapad_select Invalid Record: Please select a valid entry.
+
+The terminal half is story_arc_chapters.lua (useFactoryTerminal, node 12112268). The
+datapad half is HkHistoryDatapadMenuComponent.lua, attached declaratively to
+object/tangible/item/som/droid_factory_history_datapad.iff. registerTrigger /
+terminalUsed stay for the OBJECTRADIALUSED shape in case a placed object is ever
+identified; nothing in the shipped data identifies one, so nothing calls them and
+this file still places nothing and invents no coordinate.
 --]]
 
 somHkHistoryScreenPlay = ScreenPlay:new {

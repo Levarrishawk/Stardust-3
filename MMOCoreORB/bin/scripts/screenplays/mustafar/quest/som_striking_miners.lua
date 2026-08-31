@@ -92,8 +92,8 @@ strike. It is NOT this quest and nothing here duplicates or repoints it:
     quotes a waypoint and nothing else -- so the 20 m area this file puts at
     (-5380, 4440) touches nothing of its.
 
-The one thing genuinely shared is the scenery: smoking_forest_region.lua:37-57
-already stands nine miner_on_strike and two miner_foreman_on_strike around both
+The one thing genuinely shared is the scenery: smoking_forest_region.lua:37-59
+already stands eight miner_on_strike and two miner_foreman_on_strike around both
 camps, and both quests read as happening among them. That file is not edited
 here either.
 
@@ -111,32 +111,28 @@ dy 7.8. He is the right NPC, in the right place, put there by another wave's
 file. This screenplay therefore spawns nobody: doing so would put a second
 Foreman Nurfa Laz'op in the same clearing.
 
-HOW THE PLAYER "TALKS" TO HIM, AND WHY IT IS AN AREA
+HOW THE PLAYER TALKS TO HIM  --  his real conversation, and the area now off
 
 Tasks 1 and 3 are Wait for Signal. They carry no Target Server Template and no
-menu text; in the shipped game the signals came out of a conversation tree that
-did not ship as data this port can read. foreman_nurfa.lua's own
-conversationTemplate is the empty string, so there is no conversation to run and
-none to repoint.
+menu text, because in the shipped game the signals came out of his conversation
+tree. An earlier pass of this file could not find that tree and drove both legs
+off a 20 m proximity area instead, with a note saying to switch the area off the
+day he got a real conversation. That day has come.
 
-Two things were checked before settling for proximity:
+The tree is SOE's own, transcribed node for node:
 
-  * Giving him a conversation would mean editing
-    mobile/custom_content/som/foreman_nurfa.lua and adding a row to a shared
-    conversations include. That is outside this additive, this-folder-only wave,
-    and both files are being touched by other work right now.
-  * Finding him from Lua at runtime is not possible. DirectorManager.cpp's
-    registerFunction list exposes getSceneObject / getCreatureObject by object
-    id and nothing that searches the world by name, template or position, and
-    his object id is assigned at spawn, not fixed like a snapshot node's.
+    mobile/conversations/mustafar/striking_miners_nurfa.lua
+    .../quest/conversation/striking_miners_nurfa_conv_handler.lua
 
-So the two legs are driven by an active area centred on the .qst's own waypoint.
-The CENTRE is quoted; the RADIUS, 20 m, is this file's, and it is the smallest
-round number that contains foreman_nurfa's shipped spawn 18.2 m away. Walking
-into that circle is what stands in for talking to him. Both shipped signal names
-are also exposed as functions -- signalNurfa and signalNurfaWin -- so that the
-day he gets a real conversation, the handler calls those two and the area can be
-switched off by setting campArea.radius to 0.
+and foreman_nurfa.lua:37 now carries conversationTemplate = "striking_miners_nurfa".
+The handler calls signalNurfa on his "It's a deal" reply and signalNurfaWin on the
+hand-over of the eggs -- the two places SOE put mustafar_striking_miners_nurfa and
+mustafar_striking_miners_win.
+
+So campArea.radius is 0 and spawnCampArea returns without spawning anything. The
+area code is left in place, unused, because the centre is the .qst's own waypoint
+and the same table still supplies both legs' waypoints. Nothing is deleted; the
+mechanism substitution is simply switched off now that the real one exists.
 
 THE TEN EGGS  --  attached snapshot nodes, not spawns
 
@@ -183,19 +179,32 @@ object, and the count that drives the quest is kept in screenplay data rather
 than read back off the inventory -- so selling or dropping an egg cannot strand
 the player mid-job.
 
-NO GIVER  --  Urup Fal'co does not exist, and is not invented here
+THE GIVER  --  Urup Fal'co, found and placed
 
-The [list] names him ("Urup Fal'co needs an outsider to convince the miners...")
-and task 4 names him twice more, and that is the entire shipped record of him.
-There is no Urup Fal'co creature template in this tree, no conversation table for
-him in _som/string/en/conversation/ (that folder has 23 SOM tables and none is
-his), no snapshot node, no datatable row, and no position anywhere in the .qst --
-task 4 carries createWaypoint 0 and no location, which is this format's "unset".
+An earlier pass of this file said he "does not exist" and left grantQuest and
+turnIn hanging with nobody to call them. That was wrong, and it was wrong because
+the search was done by his display name. SOE named this quest's data after the
+QUEST, not the NPC: his conversation script is striking_miners_urst, and the live
+spawn row that places him carries that script name, not "fal'co". Both were there
+the whole time. That is why this file keeps SOE's "urst" in the tree filename even
+though every string on screen says Urup Fal'co (som_striking_miners.stf task04).
 
-So this screenplay guesses no position for him. grantQuest and turnIn below are
-the two entry points his conversation handler calls once Aaron says who and where
-he is. That is the same shape bounty_hunts.lua uses for its seven giver-less
-hunts, and for the same reason.
+He is now built and placed:
+
+    mobile/custom_content/som/urup_falco.lua                    the creature
+    mobile/conversations/mustafar/striking_miners_urst.lua      SOE's tree
+    .../quest/conversation/striking_miners_urst_conv_handler.lua
+    screenplays/mustafar/mensix/mensix_mining_facility_main.lua the spawn
+
+The spawn is in the conference room of the Mensix Mining Facility, cell 12112241,
+at the position and heading the live data gives. His appearance is the one repo
+choice: no urup_falco model ships anywhere and the live spawn data carries no
+appearance column, so he wears the generic Mustafarian model, documented in
+urup_falco.lua itself.
+
+grantQuest and turnIn below are the two entry points his handler calls. Task 4
+still carries createWaypoint 0 and no location, so this screenplay guesses no
+position -- the position came from the live spawn data, not from us.
 
 Everything between those two ends is fully wired and playable: the camp
 waypoint, the arrival at Nurfa, the ten eggs, the count, the return leg and its
@@ -219,10 +228,11 @@ THE REWARD  --  half quoted, half substituted
 Task 7 pays Bank Credits 10000. That is quoted exactly and paid exactly.
 
 The item is not recoverable. lootCount 1, lootName item_tow_clothing_03_02 --
-a live server-side static-item name, not an object template. Nothing in this
-tree resolves it: no item_tow_ path, no clothing_03_02 path, no datatables/loot
-row, no string/en STF row. It can only be matched by description: one piece of
-clothing, from Trials of Obi-Wan.
+a live server-side static-item name, not an object template. The name resolves to
+"Mustafarian Mining Suit" in string/en/static_item_n.stf, but an exhaustive sweep
+of every shipped shared_*.iff finds no object template carrying that objectName,
+so granting the live item would mean authoring an object. It can only be matched
+by description: one piece of clothing, from Trials of Obi-Wan.
 
 Unlike som_poison_miners' pistol there is no SOM-flavoured wearable to fall back
 on -- there is no som_ or mustafar_ wearable template anywhere in
@@ -251,18 +261,26 @@ them back, and destroying a player's items on a guess is not a thing to invent.
 
 THE LEVEL GATE
 
-[list] Level 75. grantQuest refuses a player below it, which is what
-moral_choice.lua does with its own [list] Level 75. If Aaron would rather the
-level be advisory, minimumLevel below is the single number to change.
+[list] Level 75, and grantQuest refuses a player below it -- because for this
+quest the .qst number is the only number there is.
+
+That wants saying plainly, because a .qst [list] level is a client-side display
+value, not a gate. Three Mustafar quests turned out to be really gated, and each
+one was gated in its giver's server-side conversation rather than in its .qst:
+collectors_business, cursed_shard and moral_choice all test level against 60, so
+all three enforce 61 and all three ignore the 75 their .qst displays. This quest
+has no such conversation -- no giver of it carries a level test -- so nothing
+contradicts the 75 and nothing better is available to replace it with.
+
+Do not read this as precedent for trusting a [list] level. It is the fallback
+when the real gate is absent. If Aaron would rather the level be advisory,
+minimumLevel below is the single number to change.
 
 WHAT IS NOT MODELLED
 
-  * The conversation with Foreman Nurfa Laz'op. See HOW THE PLAYER "TALKS" TO
-    HIM. Proximity is a mechanism substitution, not a transcription.
-  * campArea.radius = 20 is this file's number and the only unquoted number in
-    this file. Tasks 1 and 3 are Wait for Signal and carry no Radius field.
-  * Task 0's musicOnActivate cannot play on grant if no giver calls grantQuest,
-    so it plays inside grantQuest itself rather than at some invented trigger.
+  * Task 0's musicOnActivate. The .qst plays it on task activation, which the
+    quest system does; with no quest-system row it plays inside grantQuest
+    instead, which is the same moment from the player's side.
   * Faction Name "Rebel" appears on the Reward task and in the [list], but
     Faction Amount is 0, so no faction is awarded. The name is the .qst editor's
     default with nothing behind it.
@@ -300,12 +318,11 @@ somStrikingMinersScreenPlay = ScreenPlay:new {
 	-- The LocationY of the .qst is the HEIGHT, so it goes in as z; the rule is
 	-- documented in map_exploration.lua.
 	--
-	-- radius is NOT from the .qst -- see HOW THE PLAYER "TALKS" TO HIM. 20 m is
-	-- the smallest round number that contains foreman_nurfa's spawn at
-	-- (-5396.5, 4447.8), 18.2 m away. Set it to 0 to switch the proximity
-	-- stand-in off once he has a real conversation.
+	-- radius 0 means the proximity stand-in is OFF; Nurfa has his real
+	-- conversation now. See HOW THE PLAYER TALKS TO HIM. The rest of this table
+	-- is still live: it is where both legs' waypoints come from.
 	campArea = {
-		x = -5380, z = 294, y = 4440, radius = 20,
+		x = -5380, z = 294, y = 4440, radius = 0,
 		waypointName = "Striking Miner's Camp",
 	},
 
@@ -356,8 +373,9 @@ function somStrikingMinersScreenPlay:attachEggs()
 	end
 end
 
--- The proximity stand-in for the conversation with Foreman Nurfa Laz'op. A
--- radius of 0 means "off"; see HOW THE PLAYER "TALKS" TO HIM.
+-- The proximity stand-in for the conversation with Foreman Nurfa Laz'op. It is
+-- OFF -- campArea.radius is 0, so this returns immediately. Kept because the
+-- centre it reads is also the waypoint centre. See HOW THE PLAYER TALKS TO HIM.
 function somStrikingMinersScreenPlay:spawnCampArea()
 	if (self.campArea.radius <= 0) then
 		return
@@ -452,10 +470,26 @@ function somStrikingMinersScreenPlay:removeWaypoint(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "wp")
 end
 
---[[ Entry points for a giver
+--[[ Entry points for the two givers
 
-Urup Fal'co does not exist in this tree; see NO GIVER. These two are what his
-conversation handler calls once Aaron says who and where he is.
+Urup Fal'co starts and ends this job; Foreman Nurfa Laz'op is the middle of it.
+Both are live-sourced on all three counts:
+
+  * NAMES -- som_striking_miners.stf names "Urup Fal'co" in the journal entry
+    and task04, and "Foreman Nurfa Laz'op" in task01.
+  * TREES -- SOE's own conversation/striking_miners_urst.java and
+    conversation/striking_miners_nurfa.java, rebuilt node for node at
+    mobile/conversations/mustafar/striking_miners_urst.lua and
+    .../striking_miners_nurfa.lua.
+  * PLACES -- the live spawn table puts som_urup_falco in the conference room of
+    the Mensix Mining Facility at -152.7, 19.1, -17.4, facing -68; he is spawned
+    there by mensix_mining_facility_main.lua.  Nurfa was already outdoors at the
+    strike camp, smoking_forest_region.lua:34.
+
+The four functions below are what the two conversation handlers call, from
+exactly the screens SOE hung the side effects on.  Only Urup's APPEARANCE is a
+repo choice -- no urup_falco.iff ships; see the header of
+mobile/custom_content/som/urup_falco.lua.
 --]]
 
 -- Task 0 firing: musicOnActivate, then task 1 becomes the live step.
@@ -500,9 +534,9 @@ end
 
 --[[ tasks 1 and 3  --  the two legs at Foreman Nurfa Laz'op
 
-Both are Wait for Signal on the same waypoint. The shipped signal names are
-exposed directly so a real conversation handler can drive them; the area below
-calls the same two functions.
+Both are Wait for Signal on the same waypoint. Nurfa's conversation handler calls
+these two by their shipped signal names, from the screens SOE hung them on. The
+area below is off and calls nothing.
 --]]
 
 -- Signal Name mustafar_striking_miners_nurfa.

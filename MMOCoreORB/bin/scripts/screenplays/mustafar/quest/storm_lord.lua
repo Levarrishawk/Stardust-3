@@ -83,7 +83,7 @@ serverobjects.lua -- but only two of the four are placed in the world, and that
 is the single biggest open item in this port. Nothing is spawned or substituted
 to paper over it.
 
-	som_storm_lord_minion  -> storm_lord_minion   serverobjects.lua:160
+	som_storm_lord_minion  -> storm_lord_minion   serverobjects.lua:170
 	                          customName "a storm lord minion", socialGroup ""
 	                          PLACED x13 in screenplays/mustafar/regions/
 	                          storm_lord_region.lua lines 43, 45, 64, 66, 68, 70,
@@ -95,13 +95,17 @@ to paper over it.
 	                          and managers/planet/mustafar_regions.lua:138 hangs
 	                          that group off the storm_lord_ruins spawn region at
 	                          (193, 4163) radius 500.
-	som_storm_lord_touched -> storm_lord_touched  serverobjects.lua:162
-	                          customName "storm_lord_touched"
-	                          PLACED NOWHERE. See OPEN DECISION 1.
-	som_storm_lord_prophet -> storm_lord_prophet  serverobjects.lua:161
-	                          customName "storm_lord_prophet"
-	                          PLACED NOWHERE. See OPEN DECISION 2.
-	som_storm_lord         -> storm_lord          serverobjects.lua:158
+	som_storm_lord_touched -> storm_lord_touched  serverobjects.lua:172
+	                          customName "a storm lord zealot", level 83
+	                          PLACED x10 in screenplays/mustafar/regions/
+	                          storm_lord_region.lua lines 105-124, the Zealot Camp
+	                          on the West Shelf, respawn 120 s. See ZEALOT CAMP.
+	som_storm_lord_prophet -> storm_lord_prophet  serverobjects.lua:171
+	                          customName "Prophet of the Storm Lord", level 87
+	                          PLACED x1, storm_lord_region.lua:151, the last spawn
+	                          in spawnMobiles(), at (315, floor, 3746), respawn
+	                          1200 s. See THE PROPHET.
+	som_storm_lord         -> storm_lord          serverobjects.lua:168
 	                          customName "Storm Lord", level 70
 	                          PLACED x1, storm_lord_region.lua:90 at
 	                          (194.4, 266.7, 4096.3), respawn 1200 s, with five
@@ -111,47 +115,75 @@ The 13 static minions each pass 120 as the third argument to spawnMobile, which
 DirectorManager::spawnMobile (DirectorManager.cpp:2656-2677) reads as the respawn
 timer in seconds, and the storm_lord_ruins lairs keep producing more, so Count 15
 is reachable even though only 13 are hand-placed. Task 7's Count 1 against one
-Storm Lord on a 1200 s respawn is reachable too. Tasks 3 and 5 are not reachable
-at all as the world stands.
+Storm Lord on a 1200 s respawn is reachable too. Tasks 3 and 5 were unreachable
+until R8 placed their targets; all four legs are now reachable.
 
-OPEN DECISION 1  --  som_storm_lord_touched has no placement
+ZEALOT CAMP  --  what "touched" and "zealot" are, and where they now stand
 
-Task 3 wants ten of them. storm_lord_touched is registered and can be spawned,
-but a scoped grep of every .lua in scripts/ for the quoted name finds it in
-exactly one place: its own template file and the includeFile line that loads it.
-Nothing spawns it. So this leg counts kills of storm_lord_touched and only
-storm_lord_touched, exactly as the .qst names it, and today it will sit at 0 of
-10 forever. That is reported rather than worked around, because the alternatives
-are both changes this port is not allowed to make on its own:
+Task 3 wants ten kills of som_storm_lord_touched. For a long time this repo
+placed none of them and the leg counted 0 of 10 forever. Two things were true
+and had to be settled before it could be closed, and both have been.
 
-  * Spawning ten of them would mean editing storm_lord_region.lua, which is
-    another agent's file this port must not touch, and it would mean inventing
-    ten positions that nothing in the shipped data supplies.
-  * Counting storm_lord_zealot instead would be a silent substitution.
-    storm_lord_zealot IS a separate registered creature (serverobjects.lua:163,
-    customName "a storm lord zealot") and it IS placed, once, at
-    storm_lord_region.lua:47 -- one against a required ten. Its templates entry
-    (storm_lord_zealot.lua:29) points at object/mobile/som/storm_lord_touched.iff
-    rather than a zealot of its own, which is a known open item elsewhere and is
-    NOT touched or relied on here. Note also that the task's own title and
-    description call the target "zealots" while the .qst's Target Server Template
-    says touched, so the two names really are the same creature in the fiction --
-    but fiction is not a template match, and the .qst is the source of record.
+First, "touched" and "zealot" are ONE creature. The live creature table carries
+a single row -- creatureName som_storm_lord_touched, display name "a storm lord
+zealot", template som/storm_lord_touched.iff -- and carries no storm_lord_zealot
+row at all. No zealot .iff exists in the client either. So this repo's
+storm_lord_zealot is a repo-side duplicate of storm_lord_touched, which is why
+its own templates entry (storm_lord_zealot.lua:29) already pointed at
+object/mobile/som/storm_lord_touched.iff: there was nothing else to point at.
+That is why killTemplates on the stage 3 leg holds BOTH names. It is not a
+substitution and not a widening of the target; it is one creature that this repo
+happens to carry under two registration names, and the single pre-existing spawn
+at storm_lord_region.lua:47 is that creature standing under the other name.
 
-killTemplates below is a table for exactly this reason: if Aaron rules that the
-zealot counts, adding one name to one table is the whole change.
+Second, the arrangement. The live-era wording for this leg is "found all around
+the ruins", and the wiki gives the zealot location as literally "(area)" while
+giving the Prophet and the Storm Lord exact points. So this is an area
+population, not a cluster of ten, and ten is the kill requirement rather than
+the population. The area itself is sourced: the live point lands on a built camp
+the repo left empty -- two must_smuggler_bunker at (188.21, h 207.25, 4247.13)
+and (165.98, h 207.25, 4226.39), snapshot/mustafar.ws nodes 12110937 and
+12110938, footprint roughly x 162-201, y 4214-4252. It is a different camp from
+the repo's Scavenger Camp: the live minion point resolves to the lower east
+bench at h ~130, nodes 12110946/47/48, which is exactly where
+storm_lord_region.lua:51-75 already puts the minions. Live had minions low-east
+and zealots high-west, about 130 m apart and about 78 m of elevation.
 
-OPEN DECISION 2  --  som_storm_lord_prophet has no placement
+What is NOT sourced, and is ours: the simultaneous count, the individual
+positions inside that footprint, the headings, and the respawn interval. None of
+those are recorded anywhere -- not in the shipped data, not in the live spawn
+tables, not in any live-era account. Ten bodies on a 120 s respawn is a judgment
+call made to match the shape of the minion leg beside it, and it is marked as
+ours in the comment on the spawn block itself. Aaron can retune any of the four
+numbers without touching anything else.
 
-Same situation, one target instead of ten. storm_lord_prophet is registered
-(serverobjects.lua:161) with customName "storm_lord_prophet", which is a
-placeholder name rather than a display name, and the same scoped grep finds no
-spawn for it anywhere. The shipped conversation table
-string/en/conversation/som_storm_lord_jural.stf describes him -- "Dr. Namdaot no
-longer directly speaks to his followers. Instead, he only talks to his most
-devoted follower, who then preaches to all the others" -- and Jural warns that
-"the Prophet is nearly as strong as Dr. Namdaot is", but nothing that shipped
-says where he stands. No position is invented.
+THE PROPHET  --  where he stands
+
+Task 5 wants one som_storm_lord_prophet and nothing placed him either. His point
+IS sourced, unlike the zealots' arrangement: the live-era point (315, 3746) sits
+5.2 m from must_jeditemple_watchtower at (313.49, h 171.49, 3750.96),
+snapshot/mustafar.ws node 12110949, and nothing else is built within 39 m of it.
+That watchtower is a SharedStaticObjectTemplate with no cells and no children,
+so he stands outdoors beside it on cellID 0; there is no interior to put him in.
+The shipped conversation table string/en/conversation/som_storm_lord_jural.stf
+is consistent with a single standing figure -- "Dr. Namdaot no longer directly
+speaks to his followers. Instead, he only talks to his most devoted follower,
+who then preaches to all the others" -- and Jural warns that "the Prophet is
+nearly as strong as Dr. Namdaot is", which is why his level is 87 against the
+Storm Lord's own.
+
+What is NOT sourced, and is ours: his heading and his respawn interval. 1200 s
+is borrowed from the Storm Lord's own timer on storm_lord_region.lua:90 because
+the Prophet is the tier directly below him. Nothing ships a heading.
+
+WHY THIS FILE DOES NOT DO THE SPAWNING
+
+Both placements went into storm_lord_region.lua rather than here, because that
+file already owns every placement in this valley -- the minions, the guards and
+the Storm Lord himself. An earlier revision of this header said that file was
+another agent's and must not be touched. Aaron has ruled otherwise: there is no
+other owner for Mustafar content. That constraint is retired and is recorded
+here only so the change of course is legible.
 
 NO WAYPOINTS  --  the shipped data has none
 
@@ -176,12 +208,11 @@ is false.
 
 lootCount 1 / lootName item_tow_proc_generic_03_01 is NOT granted, and it is the
 only thing this quest actually pays. lootName is a live server-side static-item
-name, not an object template. Nothing in this tree is called
-item_tow_proc_generic_03_01, there is no datatables row anywhere in the extract
-that maps it to a template, and string/en in the extract holds only
-conversation/, quest/, dance_advancement.stf and performance.stf -- so there is
-not even a display name for it to be matched by. It is left unresolved rather
-than replaced with a guess. This is the same class of unresolvable reward already
+name, not an object template. The name resolves to "Mustafarian Injector" in
+string/en/static_item_n.stf, but an exhaustive sweep of every shipped
+shared_*.iff finds no object template carrying that objectName, so granting the
+live item would mean authoring an object. It is left unresolved rather than
+replaced with a guess. This is the same class of unresolvable reward already
 recorded in hidden_treasure.lua and bounty_hunts.lua, and it means that until
 Aaron rules on the item, completing this quest pays nothing but the completion
 message. That is stated plainly rather than hidden behind a stand-in reward.
@@ -191,7 +222,7 @@ Speed / Damage / Efficiency / Elemental Value / Quality 0.1 are the loot-quality
 knobs that go with the unresolved lootName, so they are recorded here and go
 nowhere as well.
 
-NO GIVER  --  open question, deliberately not filled
+THE GIVER
 
 Jural is named in all four hand-in entries and in the first task's description,
 and the shipped conversation table string/en/conversation/som_storm_lord_jural.stf
@@ -199,25 +230,40 @@ carries her entire dialogue tree -- she introduces herself as "Jural, a reporter
 for the Corellian Times", her dying brother is Talper, and the Storm Lord is
 "Dr. Namdaot" -- and it walks the player through exactly this ladder: minions,
 then zealots, then the Prophet, then the Storm Lord, then "take this as payment
-for saving the life of my brother". None of that says where she stands or what
-starts the quest:
+for saving the life of my brother". The tree and handler are wired; this file
+places her and Talper:
 
   * reporter_jural is a registered creature (mobile/custom_content/som/
-    reporter_jural.lua, included at that directory's serverobjects.lua:93,
-    customName "Reporter Jural") and it is spawned NOWHERE in this tree.
-    Neither is reporter_talper (serverobjects.lua:94), the sick brother the whole
-    quest is about.
-  * Her conversationTemplate is "" (reporter_jural.lua:37) and there is no jural
-    file in mobile/conversations/mustafar/ for it to point at.
+    reporter_jural.lua, included at that directory's serverobjects.lua:103,
+    customName "Reporter Jural"). conversationTemplate is "som_storm_lord_jural";
+    the tree ships at mobile/conversations/mustafar/som_storm_lord_jural.lua.
+    reporter_talper (serverobjects.lua:104) is the sick brother the whole quest
+    is about; his conversationTemplate remains "" -- no tree ships for him.
   * There is no quest_start object for this quest in snapshot/mustafar.ws.
 
-So this file spawns nobody, invents no position and writes no conversation.
-grantQuest and the four signal functions are the seams a giver's conversation
-handler calls once Aaron says where Jural stands. The four signal functions ARE
+Their standing point comes from a live-era community waypoint converted through
+the proven Mustafar offset (shipped = way_x - 2880, way_z + 2976). No height
+ships, so floor height is resolved from terrain at spawn. Talper stands 3 m east
+of her; that gap is nominal and is the one unsourced number in the placement --
+one waypoint cannot hold two bodies.
+
+Placing the giver does not place the targets. All four targets are spawned from
+storm_lord_region.lua, which owns that valley's placements; see ZEALOT CAMP and
+THE PROPHET above.
+
+grantQuest and the four signal functions are the seams the giver's conversation
+handler calls. The four signal functions ARE
 storm_lord_minions_defeated, storm_lord_zealots_defeated,
 storm_lord_prophet_defeated and storm_lord_defeated -- the .qst raises all four
 from the hand-in and there is nothing else in the shipped data that can raise
 them.
+
+SOE's own conversation script for Jural is in hand and settles where each of
+those five calls hangs. Every signal rides the ACCEPT of the NEXT job rather
+than the report screen before it, and the three decline branches raise nothing
+at all, so declining parks the player on the finished wait task instead of
+advancing it. The tree and the handler both carry that layout; see the SIDE
+EFFECTS block in either file.
 
 NO JOURNAL
 
@@ -273,10 +319,12 @@ somStormLordScreenPlay = ScreenPlay:new {
 	The even stages between them are the hand-ins: the kill leg is done and the
 	quest is waiting on its signal.
 
-	killTemplates is a set rather than a single name on purpose. Each one holds
-	exactly the template the .qst's Target Server Template resolves to and nothing
-	else, so no substitution is happening -- but OPEN DECISION 1 is a one-name
-	change to one of these tables if Aaron rules that way.
+	killTemplates is a set rather than a single name on purpose. Three of the four
+	hold exactly the template the .qst's Target Server Template resolves to. The
+	stage 3 leg holds two names because storm_lord_touched and storm_lord_zealot
+	are one live creature carried under two registration names in this repo, so
+	counting both is counting one creature, not widening the target. See ZEALOT
+	CAMP in the header.
 	--]]
 	legs = {
 		{
@@ -303,13 +351,14 @@ somStormLordScreenPlay = ScreenPlay:new {
 			waitStage = 4,
 
 			-- task 3, Destroy Multiple. Target Server Template
-			-- som_storm_lord_touched, which is registered and placed nowhere;
-			-- see OPEN DECISION 1. storm_lord_zealot is deliberately absent.
+			-- som_storm_lord_touched. The live row som_storm_lord_touched is
+			-- displayed as "a storm lord zealot" -- one creature, which this repo
+			-- carries under two registration names, so both are counted.
 			taskName = "storm_lord_three",
 			title = "Destroy the Storm Lord Zealots",
 			description = "It would seem that defeating the Storm Lord's minions didn't have any effect on his power. Perhaps if you were to destroy ten of his zealots that would have some effect.",
 			targetServerTemplate = "som_storm_lord_touched",
-			killTemplates = { ["storm_lord_touched"] = true },
+			killTemplates = { ["storm_lord_touched"] = true, ["storm_lord_zealot"] = true },
 			count = 10,
 			rewardCredits = 0,
 
@@ -324,8 +373,8 @@ somStormLordScreenPlay = ScreenPlay:new {
 			waitStage = 6,
 
 			-- task 5, Destroy Multiple. Target Server Template
-			-- som_storm_lord_prophet, registered and placed nowhere; see
-			-- OPEN DECISION 2.
+			-- som_storm_lord_prophet, placed beside the jedi temple watchtower
+			-- from storm_lord_region.lua; see THE PROPHET in the header.
 			taskName = "storm_lord_five",
 			title = "Defeat the Prophet of the Storm Lord",
 			description = "Jural's brother is showing signs of recovery but is still very sick. The Storm Lord has a man who calls himself the Prophet of the Storm Lord and is the most faithful of all followers. Without his support the Storm Lord should lose a great deal of strength.",
@@ -367,19 +416,59 @@ somStormLordScreenPlay = ScreenPlay:new {
 	rewardLootName = "item_tow_proc_generic_03_01",
 	rewardLootCount = 1,
 
+	-- THE GIVER. Converted from a live-era community waypoint through the proven
+	-- Mustafar offset (shipped = way_x - 2880, way_z + 2976). No height ships, so
+	-- the floor is resolved at spawn. Talper is placed beside her because her
+	-- shipped dialogue is about him standing there; the 3 m gap is nominal, not
+	-- shipped -- one waypoint cannot hold two bodies. See THE GIVER in the header.
+	questGiver = {
+		template = "reporter_jural",
+		x = 440,
+		y = 5115,
+		heading = 0,
+	},
+
+	brother = {
+		template = "reporter_talper",
+		x = 443,
+		y = 5115,
+		heading = 0,
+	},
+
 	-- The stage the ladder reaches when task 9 has paid out.
 	finishedStage = 9,
+	questGiverID = 0,
+	brotherID = 0,
 }
 
 registerScreenPlay("somStormLordScreenPlay", true)
 
--- Nothing is placed in the world at boot: the .qst names no giver, no terminal
--- and no location, and inventing one is not this screenplay's call. The two
--- unplaced targets are reported as open decisions rather than spawned from here,
--- because storm_lord_region.lua owns that valley's placements. start() still
--- exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
+-- start() exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
 -- calls "start" by name on every screenplay registered with true.
 function somStormLordScreenPlay:start()
+	if (isZoneEnabled("mustafar")) then
+		self:spawnGiver()
+	end
+end
+
+function somStormLordScreenPlay:spawnGiver()
+	local giver = self.questGiver
+	local pNpc = spawnMobile("mustafar", giver.template, 0, giver.x, getWorldFloor(giver.x, giver.y, "mustafar"), giver.y, giver.heading, 0)
+
+	if (pNpc == nil) then
+		print("somStormLordScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
+	else
+		self.questGiverID = SceneObject(pNpc):getObjectID()
+	end
+
+	local brother = self.brother
+	local pBrother = spawnMobile("mustafar", brother.template, 0, brother.x, getWorldFloor(brother.x, brother.y, "mustafar"), brother.y, brother.heading, 0)
+
+	if (pBrother == nil) then
+		print("somStormLordScreenPlay: failed to spawn " .. brother.template .. "; Talper cannot be placed")
+	else
+		self.brotherID = SceneObject(pBrother):getObjectID()
+	end
 end
 
 --[[ State
@@ -442,10 +531,10 @@ end
 --[[ Entry points
 
 grantQuest and the four signal functions are what Jural's conversation handler
-calls once there is one. None of them sends a refusal: with no giver in the
-shipped data there is no voice to put a refusal in, so they only report whether
-they did anything and leave the wording to whoever ends up owning the
-conversation.
+calls. None of them sends a refusal, and that matches SOE rather than working
+around it: her tree has no refusal line anywhere in it. Each one simply reports
+whether it did anything, and an out-of-order call is a no-op -- which is what
+lets the handler call them unconditionally, exactly as SOE's script does.
 
 	canGrantQuest(pPlayer)            may this character start it
 	grantQuest(pPlayer)               task 1 goes live

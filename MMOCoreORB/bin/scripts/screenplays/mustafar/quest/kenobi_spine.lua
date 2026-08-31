@@ -112,19 +112,37 @@ WHERE EVERYTHING IS, MEASURED
   KENOBI ROLES.
 
   The mining computer.  som_kenobi_mining_computer has zero snapshot nodes, so
-  it is spawned. The new mining facility is node 12112217; its cells are nodes
-  12112218..12112249 and a cell's object id IS its .ws node id, so small_room_04
-  (POB cell index 20) is node 12112237. must_mining_facility.ilf puts six
-  shared_must_mining_console_02 spots in that room, all on floor h 19.070:
+  it is spawned, and the facility's dungeon spawn table says where. Both it and
+  the technician who stands by it are in small_room_03 -- cell 12112234, on the
+  lower floor:
+
+    the technician   (-117.4, 10.8, 39.6)  heading 91
+    the computer     (-132.2, 10.8, 44.6)  heading 90
+
+  An earlier revision put both in small_room_04 and called that cell 12112237.
+  Both halves were wrong, and the second is the one to learn from. It read the
+  cell run as 12112218..12112249 contiguous and did POB index 20 -> 12112218 + 19
+  = 12112237. The run is NOT contiguous: it has gaps at 12112233 and 12112239,
+  so index 20 is 12112238, and 12112237 is hall_05. mensix_mining_facility_main.lua
+  carries the resolved map and is the only thing to read cell ids off. +N
+  arithmetic on this building is wrong every time.
+
+  The room was wrong too. The reasoning picked small_room_04 because
+  must_mining_facility.ilf puts six shared_must_mining_console_02 slots there,
+  all on floor h 19.070, and took the first of them:
 
     (-33.220, -18.510)  (-33.214, -22.234)  (-25.420, -5.952)
     (-25.403, -24.902)  (-22.071, -5.942)   (-22.054, -24.892)
 
-  Core3 never instantiates .ilf furniture, so every one of them is empty floor at
-  runtime. The computer goes in the first, against the room's -x wall run at
-  x -33.2, hence heading 90 -- facing into the room. The room is otherwise
-  unused; moral_choice's network computer is in small_room_05 (12112243) and the
-  two do not collide.
+  Core3 never instantiates .ilf furniture, so those really are empty floor at
+  runtime -- the observation is true. It is just not evidence: a console slot in
+  the layout is where a console COULD stand, and SOE put this one two floors of
+  the map away. small_room_04 is not "otherwise unused" either; it is the room
+  Epo Qetora, the Q4P3 droid and Ithes Olok stand in.
+
+  moral_choice's network computer does not collide with this one, but the old
+  note gave the wrong reason: that computer is in hub_room (12112236), not
+  small_room_05.
 
   The three conduits.  All three ship in the snapshot, and their positions match
   s_156's three directions exactly:
@@ -191,10 +209,22 @@ WHAT IS NOT MODELLED, AND WHY
   relaxed, and this is the one place in this file where that is done.
 
   som_kenobi_final_crystal_pedestal and som_kenobi_final_force_crystal are
-  registered tangibles that no .qst in this tree references and that the lair's
-  own .ilf does not place. They are left unplaced rather than guessed at -- an
-  open question about what SOE meant the finale room to contain, not a gap this
-  file should fill.
+  registered tangibles that no .qst in this tree references. They are left
+  unplaced rather than guessed at -- an open question about what SOE meant the
+  finale room to contain, not a gap this file should fill.
+
+  The absence is CHECKED, and the check is not the one this note used to cite.
+  It used to rest on "the lair's own .ilf does not place them", which proves
+  nothing: a .ilf lists what a building was furnished with, and the server
+  spawns quest objects from dungeon spawn tables instead. Those tables are the
+  place to look, and they have now been searched -- every dungeon table, not
+  just Mustafar's five. Neither template appears in any of them. So there is
+  genuinely nothing to quote, which is what this note claimed on weaker grounds
+  than it had.
+
+  The same search DID overturn the sibling claim in reunite_shard.lua, where
+  som_kenobi_fusion_machine turned out to have a live row all along. That is why
+  this one was re-checked rather than left standing.
 
   allowRepeats: stage stops at done, as everywhere else in this wave.
 
@@ -210,8 +240,10 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 
 	screenplayName = "kenobiSpineScreenPlay",
 
-	-- som_kenobi_main_quest_1's Level 75. Quoted; enforced in obi_wan_conv_handler.
-	requiredLevel = 75,
+	-- som_kenobi_main_quest_1's Level 75 is NOT a gate and is not kept here. There
+	-- is no level test anywhere in this arc; the gate is the nine finished side
+	-- quests in hasCompletedPrerequisites below. See THE GATE in
+	-- obi_wan_conv_handler for what was wrong and why.
 
 	--[[ Obi-Wan's two stands. See WHERE EVERYTHING IS. ]]
 
@@ -237,25 +269,26 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		y = 1767.08,
 	},
 
-	-- Cell-local, from must_mining_facility.ilf. cellID is the snapshot node,
-	-- used only if the name does not resolve.
+	-- Both are the live facility spawn table's, cell-local. small_room_03 is
+	-- cell 12112234, on the lower floor at h 10.8 -- NOT small_room_04, and not
+	-- 12112237, which is hall_05. See THE MINING COMPUTER for what went wrong.
 	technician = {
 		template = "som_mustafarian_computer_technician",
-		cellName = "small_room_04",
-		cellID = 12112237,
-		x = -27.5,
-		z = 19.07,
-		y = -15.0,
-		heading = 270,
+		cellName = "small_room_03",
+		cellID = 12112234,
+		x = -117.4,
+		z = 10.8,
+		y = 39.6,
+		heading = 91,
 	},
 
 	computer = {
 		template = "object/tangible/quest/som_kenobi_mining_computer.iff",
-		cellName = "small_room_04",
-		cellID = 12112237,
-		x = -33.22,
-		z = 19.07,
-		y = -18.51,
+		cellName = "small_room_03",
+		cellID = 12112234,
+		x = -132.2,
+		z = 10.8,
+		y = 44.6,
 		heading = 90,
 	},
 
@@ -266,23 +299,28 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 
 	     This used to read x -47.0, z 19.07, y 6.0, and the comment here used to
 	     claim no shipped line pinned the spot down. That was wrong on both counts.
-	     mensix/mensix_mining_facility_main.lua:38-40 records the original NGE
-	     positions of the two travelers, in this exact cell 12112248:
+	     mensix/mensix_mining_facility_main.lua:87-89 records the original NGE
+	     positions of the two travelers, in this exact cell 12112248, and the live
+	     facility spawn table carries the same two rows:
 
 	         traveler_m   -55.1, 31.5, -120.3
-	         traveler_f   -56.7, 31.5, -118.9
+	         traveler_f   -56.5, 31.5, -119.1
 
-	     Two independent lines agree the floor plane of landing_deck_room is
-	     z = 31.5. The old z of 19.07 is byte-identical to the technician's
-	     small_room_04 value at :247 -- that is the copy-paste this came from --
-	     and it put the miner about twelve metres beneath the deck and outside
-	     every room in the POB. Since STAGE_REPORT is set at exactly one site
-	     (:844, inside examineMiner) and :1574 gates on isInRangeWithObject(..., 8),
-	     no player could reach him and som_obi_wan_signal_1 was uncompletable.
+	     Two independent sources agree the floor plane of landing_deck_room is
+	     z = 31.5. The old z of 19.07 was the upper-floor height this file was
+	     using everywhere else at the time -- a copy-paste off the technician
+	     block, which has since turned out to be wrong itself and now reads 10.8.
+	     It put the miner about twelve metres beneath the deck and outside every
+	     room in the POB. Since STAGE_REPORT is set at exactly one site (inside
+	     examineMiner) and the report gates on isInRangeWithObject(..., 8), no
+	     player could reach him and som_obi_wan_signal_1 was uncompletable.
 
 	     The coordinates below are traveler_m's recorded position, reused because
-	     it is a proven in-cell point on that floor; traveler_m itself now spawns
-	     outdoors, so the spot is unoccupied. ]]
+	     it is a proven in-cell point on that floor. traveler_m itself does not
+	     stand there on this server: mensix_mining_facility_main.lua:87 moves both
+	     travelers outdoors, Levarris's own change, because spatialChat does not
+	     carry inside a cell. So the spot is unoccupied here even though live had
+	     someone in it. ]]
 
 	miner = {
 		template = "som_kenobi_dying_miner",
@@ -832,8 +870,9 @@ end
 --[[ The prologue -- som_obi_wan_signal_1 and som_obi_wan_signal_2
 
 Two one-task quests with a 2500 credit reward each. The first waits on the signal
-'dyingMiner', the second on 'returnToObiWan'. Neither carries a level, so neither
-is gated; the level gate belongs to main_quest_1 and lives in the handler.
+'dyingMiner', the second on 'returnToObiWan'. Neither is gated on anything. The
+prologue's own conversation gates only on those two quests' own state, and the
+nine-quest gate belongs to main_quest_1 -- see THE GATE below.
 --]]
 
 -- Screen pro_task, s_26: "Go seek out a dying miner who is at the new mining
@@ -894,13 +933,75 @@ end
 
 Talk the technician into the Mensix mainframe, run a search on the mining
 computer, wait for it, read the result, go where it points, and meet the hermit.
-The level gate is the handler's; by the time anything here runs it has passed.
+The gate is the handler's; by the time anything here runs it has passed.
 
 The sub-state is two counters on top of STAGE_HUNT:
   mainframe  1 once the technician has given way ('talkedToTechnician')
   search     0 not begun, 1 running (task 2's timer), 2 results waiting,
              3 read, the site is marked and the hermit leg is live
 --]]
+
+--[[ THE GATE -- live's condition_startFirstQuest
+
+Nine side quests, all completed, ANDed together. This is the only thing standing
+between a player and the main quest; there is no level test anywhere in the
+conversation. Live's list, verbatim:
+
+  som_kenobi_collectors_business_1   som_kenobi_reunite_shard_3
+  som_kenobi_cursed_shard_2          som_kenobi_samaritan_1
+  som_kenobi_hidden_treasure_2       som_kenobi_serpent_shard_1
+  som_kenobi_historian_2             som_kenobi_symbiosis_1
+  som_kenobi_moral_choice_1
+
+Live also lets isGod(player) through ahead of the nine. There is no equivalent
+here, and a staff bypass is not something to invent, so it is left out.
+
+None of the nine is a groundquest in this tree -- each is a screenplay carrying
+its own stage -- so the equivalent test is each one's terminal stage. The terminal
+stage of seven of the nine is that screenplay's highest, so >= is safe there; the
+other two end two ways, and taking the lower ending keeps >= correct for both
+endings because the higher one also satisfies it. That was checked against every
+setStage call in all nine files, not assumed. The two that end two ways take the
+lower ending, which covers both:
+moral_choice DONE_CORP 6 / DONE_MINERS 7, samaritan DONE_KEPT 5 / DONE_KILLED 6.
+
+Three of the nine number their stages with bare integers and have no constant to
+name, so the number is written out with the file it came from.
+
+The globals are read inside the function rather than in the table above, because
+screenplays.lua loads this file before some of the nine and a table built at load
+time would capture nils. A missing global fails the gate closed. ]]
+function kenobiSpineScreenPlay:hasCompletedPrerequisites(pPlayer)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	local required = {
+		{ collectorsBusinessScreenPlay, collectorsBusinessScreenPlay.STAGE_DONE },  -- collectors_business_1
+		{ cursedShardScreenPlay,        cursedShardScreenPlay.STAGE_DONE },         -- cursed_shard_2
+		{ hiddenTreasureScreenPlay,     6 },                                        -- hidden_treasure_2, awardQuest
+		{ historianScreenPlay,          historianScreenPlay.STAGE_DONE },           -- historian_2
+		{ moralChoiceScreenPlay,        moralChoiceScreenPlay.STAGE_DONE_CORP },    -- moral_choice_1
+		{ reuniteShardScreenPlay,       7 },                                        -- reunite_shard_3, retrieveCrystal
+		{ samaritanScreenPlay,          samaritanScreenPlay.STAGE_DONE_KEPT },      -- samaritan_1
+		{ serpentShardScreenPlay,       serpentShardScreenPlay.STAGE_DONE },        -- serpent_shard_1
+		{ symbiosisScreenPlay,          6 },                                        -- symbiosis_1, clearAmbush
+	}
+
+	for i = 1, #required do
+		local screenPlay, doneStage = required[i][1], required[i][2]
+
+		if (screenPlay == nil or doneStage == nil) then
+			return false
+		end
+
+		if (screenPlay:getStage(pPlayer) < doneStage) then
+			return false
+		end
+	end
+
+	return true
+end
 
 -- Screens give_quest_a / give_quest_b. The hunt opens at the technician, which is
 -- back inside the new mining facility.
@@ -1031,6 +1132,19 @@ function kenobiSpineScreenPlay:notifyEnteredHermitSite(pArea, pPlayer)
 
 	-- task 6: Encounter som_kenobi_crazed_hermit, Count 1, 10-20. He is
 	-- CONVERSABLE and ATTACKABLE both, so nothing engages for him.
+	-- The observer goes up WITH the spawn, not at the first conversation. He is
+	-- conversable and attackable both, so a player may simply kill him on sight;
+	-- when this was created in hermitFirstMeetingDone instead, that kill landed with
+	-- nothing listening, notifyKilledCreature never ran, and STAGE_HUNT had no other
+	-- exit. Persistence 1 so the credit survives a logout, same as the wave observer.
+	-- Once only. restartHermitSearch resets search to 0, so a player who is sent
+	-- back around the loop re-enters this site and reaches this line again; with
+	-- persistence 1 that would leave two live observers and count every wave kill
+	-- twice. The flag is cleared in closeHermitLeg, next to the dropObserver.
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "killObserver")) or 0) == 0) then
+		writeScreenPlayData(pPlayer, self.screenplayName, "killObserver", "1")
+		createObserver(KILLEDCREATURE, "kenobiSpineScreenPlay", "notifyKilledCreature", pPlayer, 1)
+	end
 	self:spawnEncounter(pPlayer, self.hermit.template, 1, self.hermit.minDistance, self.hermit.maxDistance, false)
 
 	-- task 7's Timer, Min 20 / Max 35.
@@ -1070,9 +1184,9 @@ function kenobiSpineScreenPlay:hermitFirstMeetingDone(pPlayer, pNpc)
 	self:setHermitStage(pPlayer, self.HERMIT_MET)
 	writeScreenPlayData(pPlayer, self.screenplayName, "waveKills", "0")
 
-	-- Persistence 1 so kill credit survives a logout; see reunite_shard, which
-	-- makes the same call for the same reason.
-	createObserver(KILLEDCREATURE, "kenobiSpineScreenPlay", "notifyKilledCreature", pPlayer, 1)
+	-- The KILLEDCREATURE observer is already up: it goes on at hermit spawn, because
+	-- he can be killed before this conversation ever happens. Creating a second one
+	-- here would double-count every wave kill.
 
 	self:spawnEncounter(pPlayer, self.secondWave.template, self.secondWave.count, self.secondWave.minDistance, self.secondWave.maxDistance, true)
 
@@ -1148,8 +1262,10 @@ function kenobiSpineScreenPlay:hermitHandsOverShard(pPlayer, pNpc)
 	CreatureObject(pPlayer):sendSystemMessage("The hermit hands you the Soul Crystal. Take it back to Obi-Wan.")
 end
 
--- Any of the nine screens that end with the voice telling him to kill. He is
--- ATTACKABLE from the start; this only aims him.
+-- Any of the six second-meeting screens live answers with removeInvuln + attack.
+-- Not the three first-meeting screens that end with the same "kill him" line --
+-- those fire talkedHermit1 instead; see the handler. He is ATTACKABLE from the
+-- start, so this only aims him.
 function kenobiSpineScreenPlay:hermitTurnsHostile(pPlayer, pNpc)
 	if (pNpc == nil or self:getStage(pPlayer) ~= self.STAGE_HUNT) then
 		return
@@ -1177,6 +1293,7 @@ end
 
 function kenobiSpineScreenPlay:closeHermitLeg(pPlayer)
 	dropObserver(KILLEDCREATURE, "kenobiSpineScreenPlay", "notifyKilledCreature", pPlayer)
+	writeScreenPlayData(pPlayer, self.screenplayName, "killObserver", "0")
 
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
 
@@ -1423,6 +1540,42 @@ function kenobiSpineScreenPlay:talkedKenobi2(pPlayer)
 		local hunt = self.hunts[i]
 		createEvent(getRandomNumber(hunt.delayMin, hunt.delayMax) * 1000, "kenobiSpineScreenPlay", "sendHunt", pPlayer, tostring(i))
 	end
+end
+
+--[[ Screen resume_yes, s_341: "Make your way to the lair immediately."
+
+WHY THIS EXISTS, AND WHY IT IS NOT talkedKenobi2 AGAIN. Live fires two actions on
+s_341 -- regiveQuest3, which re-grants som_kenobi_main_quest_3_visible, and
+talkNumber2, which re-sends 'talkedKenobi2'. Its gate, condition_abandonedQuest3,
+is exact: the hidden quest 3 is still running but the VISIBLE one is not. That is
+a player who dropped the journal entry, and the pair of actions puts it back.
+
+This tree has no visible/hidden split -- one stage machine, and a stage cannot be
+dropped -- so that state has no equivalent here and nothing is invented for it.
+What survives the translation is the recoverable half: give the player back the
+line and the waypoint they lost. So this re-issues, and does not re-run. It does
+not touch the stage and it does not re-arm the three hunts, which talkedKenobi2
+schedules once; re-running those would stack a second set of ambushes on a player
+whose only mistake was walking back to ask the way.
+
+s_341 was previously unwired, so this screen did nothing at all.
+--]]
+function kenobiSpineScreenPlay:resumeJourney(pPlayer)
+	local stage = self:getStage(pPlayer)
+
+	if (stage ~= self.STAGE_ENTRANCE and stage ~= self.STAGE_LAIR) then
+		return
+	end
+
+	if (stage == self.STAGE_LAIR) then
+		-- talkedKenobi3 already opened the way and dropped the waypoint. The
+		-- entrance stone is still where he is sending them.
+		CreatureObject(pPlayer):sendSystemMessage("The way into the chamber is open. Destroy the crystal, and whatever came for it.")
+	else
+		CreatureObject(pPlayer):sendSystemMessage("Make your way to the hidden chamber beneath the Burning Plains. Obi-Wan will meet you at the entrance.")
+	end
+
+	self:giveWaypoint(pPlayer, self.chamberSite.waypointName, "Fate of the Galaxy, III", self.chamberSite.x, self.chamberSite.y)
 end
 
 -- tasks 5, 7, 8, 9 and 10. Every one is Count 1, Min Distance 20, Max Distance

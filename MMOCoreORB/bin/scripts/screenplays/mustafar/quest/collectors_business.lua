@@ -7,9 +7,9 @@ quest/som_kenobi_collectors_business_1.qst in the client TREs. Both locations an
 their radii, both waypoint names, the two radial texts ("Plug in scanner",
 "Search rubble"), both message box titles and bodies, the comm text, the three
 encounter creature names with their counts and distances, the 120-180 s timer and
-the 10,000 bank credits are all quoted from it. The Level 75 gate is its [list]
-block, and the conversation tree is
-mobile/conversations/mustafar/som_kenobi_q4p3.lua.
+the 10,000 bank credits are all quoted from it. The level gate is NOT the .qst's
+75 -- the droid enforces 61; see the requiredLevel note below. The conversation
+tree is mobile/conversations/mustafar/som_kenobi_q4p3.lua.
 
 WHERE THE OBJECTS COME FROM
 
@@ -27,21 +27,27 @@ sits 83 m from task 0's waypoint, inside its Radius 100, and both rubble piles s
 within 6 m of task 3's waypoint, inside its Radius 10. rubble_2 is the one task 4
 names, so rubble_2 is the Codex pile and rubble_1 is the empty one.
 
-WHERE Q4P3 STANDS  --  placed, not quoted
+WHERE Q4P3 STANDS  --  live, quoted
 
-Nothing ships his position. He is a creature template
-(object/mobile/som/som_pann_protocol_droid.iff), not a snapshot node, so his
-absence from every .ws is expected -- in live he was a server-side spawn and that
-spawn data did not ship. No datatable, no Lua spawn, and no line of his dialogue
-states where he is.
+An earlier revision of this header said "nothing ships his position" and placed
+him in the cantina on a reading of one of his own jokes. That was WRONG, and the
+reason it was wrong is worth recording: the search behind it covered the client
+TREs and this repo, and never covered the server-side spawn data. His row has
+been there the whole time.
 
-He is therefore placed in the Mensix mining facility cantina, cell 12112226,
-beside Pei Yi and Diskret Stahn. The reasoning: his own rude-decline line (s_154)
-is "A thousand apologies for keeping you from squandering all your credits in the
-Cantina...I mean from your important business!", which is a joke that only lands if
-he is standing where the player's credits are about to go. The cantina is also the
-only interior on Mustafar this tree already uses as an NPC hub, and it is where the
-other two hand-placed Mustafar conversation NPCs stand.
+The Mensix Mining Facility's dungeon spawn table places som_kenobi_pann_protocol_
+droid in room small_room_04 at -28.8 / 19.1 (height) / -22, heading 29. That is
+cell 12112238 -- see THE CELL MAP in mensix_mining_facility_main.lua for how the
+30 cell ids are derived from the .pob and the snapshot.
+
+The row names the template, not the character, so the identification is worth
+showing: his own briefing line (s_70) is "My master is the honorable Pann!", and
+the template is som_kenobi_pann_protocol_droid. He is Pann's protocol droid.
+
+small_room_04 is upstairs on the 19.1 floor and it is a shared room: Epo Qetora
+(historian.lua) and Ithes Olok (jenha_tar_cube.lua) stand in it too, all three
+within 16 m of each other. It is not the cantina, which is medium_room_01 on the
+10.8 floor about 62 m away.
 
 His creature template's conversationTemplate was empty and is set to
 "som_kenobi_q4p3" by this wave, the same way pei_yi carries "som_pei_yi".
@@ -75,10 +81,11 @@ immediately"). That half is exact.
 
 The item is not. Task 19 awards lootCount 1 / lootName
 item_tow_holocron_ab_immune_02_01, which is a live server-side static-item name,
-not an object template. Nothing here resolves it: no datatables/quest/* or
-datatables/loot/* row in any TRE, no string/en STF row, and no tow_holocron or
-ab_immune path anywhere in this tree. As with every other TOW reward in this arc it
-can only be matched by description.
+not an object template. The name resolves to "Sith Holocron" in
+string/en/static_item_n.stf, but an exhaustive sweep of every shipped
+shared_*.iff finds no object template carrying that objectName, so granting the
+live item would mean authoring an object. As with every other TOW reward in this
+arc it can only be matched by description.
 
 What the name and the dialogue say: a holocron from Trials of Obi-Wan; "a little
 pyramid-shaped trinket"; "an information storage device"; "Something odd about
@@ -118,24 +125,34 @@ collectorsBusinessScreenPlay = ScreenPlay:new {
 
 	screenplayName = "collectorsBusinessScreenPlay",
 
-	-- .qst [list] Level.
-	requiredLevel = 75,
+	-- The gate Q4P3 actually applies.  His conversation tests
+	-- getLevel(player) > 60 and opens the briefing only when that is true, so
+	-- 61 is the first level that can take the job.  requiredLevel is compared
+	-- with "<" in q4p3_conv_handler, so it holds the first QUALIFYING level.
+	--
+	-- (SOE named that condition "levelTooLow" and then used it as the pass
+	-- test.  The name is backwards; the arithmetic is what runs.)
+	--
+	-- The .qst [list] Level field says 75.  That is the journal's difficulty
+	-- label, not an entry check -- nothing reads it at grant time.  An earlier
+	-- revision enforced the 75 because the conversation had not been found yet.
+	requiredLevel = 61,
 
 	-- Snapshot nodes; see the header.
 	droidNodeID = 12112927,
 	codexRubbleNodeID = 12111383,
 	emptyRubbleNodeID = 12111384,
 
-	-- Placed, not quoted; see WHERE Q4P3 STANDS. Cell 12112226 is the Mensix
-	-- cantina, the same cell mensix_mining_facility_main puts Pei Yi (-77.1, 67.5)
-	-- and Diskret Stahn (-75.4, 66.3) in. Cell coordinates, and 10.8 is their floor.
+	-- Live, quoted; see WHERE Q4P3 STANDS. small_room_04 of the Mensix Mining
+	-- Facility is cell 12112238, and the live row is -28.8 / 19.1 / -22 at
+	-- heading 29. Cell coordinates, and 19.1 is the upper floor.
 	questGiver = {
 		template = "som_pann_protocol_droid",
-		cell = 12112226,
-		x = -79.2,
-		z = 10.8,
-		y = 68.9,
-		heading = 40,
+		cell = 12112238,
+		x = -28.8,
+		z = 19.1,
+		y = -22,
+		heading = 29,
 	},
 
 	-- .qst task 0, Go to Location: mustafar (-4335, 90, 1669), Radius 100,

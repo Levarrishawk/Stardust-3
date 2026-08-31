@@ -38,13 +38,39 @@ object/tangible/quest/som_kenobi_power_generator.iff, with LootDropPercent 100 -
 one object, two radials, in the order the .qst lists them. That is why the
 generator's radial text changes rather than a second object appearing.
 
-Task 10 hanging off root task 1 rather than off task 0 is what makes switching
-sides legal at any point before the core is handed over, and it is honoured here:
-STAGE_CABLES, STAGE_CORE and STAGE_RETURN all still let the player take the disk.
-Taking it is what closes branch A -- there is no signal that reopens it.
+Task 10 hanging off root task 1 rather than off task 0 means the .qst PERMITS
+switching sides at any point before the core is handed over. switchSides below
+accepts STAGE_CABLES, STAGE_CORE and STAGE_RETURN for that reason, and taking
+the disk is what closes branch A -- there is no signal that reopens it.
+
+WHAT THE .QST PERMITS IS NOT WHAT THE LEADER OFFERS. His live conversation puts
+the whole switch tree behind isTaskActive "needDestroy" -- STAGE_CABLES alone.
+Once the cables are torn out that task is no longer active, and every later
+stage of branch A falls through to the isQuestActive brush-off, s_139 "I don't
+like your look. You should move along...". So in practice the disk can only be
+taken before the cables come down, and switchSides' STAGE_CORE / STAGE_RETURN
+arms are unreachable through the only thing that calls it.
+
+ROOT CAUSE of the old claim: reading permission out of the task tree and writing
+it down as behaviour. The .qst says what MAY be signalled, never who offers to
+signal it -- that lives in the conversation, and the conversation had not been
+found when this was written. The arms stay: they are correct if anything ever
+reaches them, and they are what the .qst allows.
 
 [list]: Level 75, Tier 4, Type solo, category Mustafar, allowRepeats true,
 completeWhenTasksComplete true, Bank Credits 0, Experience Amount 0.
+
+THE LEVEL GATE  --  61, not 75
+
+The .qst's Level 75 is a client-side display value and the exec does not enforce
+it. His server-side conversation gates the offer on a level test against 60: the
+offer is only reached when the player's level is greater than 60, so the real
+minimum is 61 and requiredLevel below says 61.
+
+The condition is named levelTooLow and it returns TRUE for the players who ARE
+high enough -- the name is inverted relative to what it does. Read the body, not
+the identifier. Menth Paul's tree has the same condition, the same way round;
+cursed_shard.lua records it too.
 
 THE TWO THINGS THE PLAYER CLICKS, AND WHERE THEY ARE
 
@@ -54,41 +80,39 @@ z 4495.92). That is 8 m from the .qst's own waypoint (-5267, 316, 4491), inside
 the striking miners' fenced compound, so the radial is attached to the world
 object rather than a copy being spawned next to it.
 
-The network computer does not ship -- zero nodes -- so it is spawned, and where
-it goes is measured rather than picked:
+The network computer does not ship as a snapshot node -- zero nodes -- so it is
+spawned. Both it and the executive have live positions, and this file now uses
+them. The facility's dungeon spawn table carries a row for each:
 
-  The building is snapshot node 12112217,
-  object/building/mustafar/structures/shared_must_new_mining_facility.iff, at
-  (-2420.50, h 199.40, z 1767.08). Its cells are nodes 12112218 through 12112249:
-  PlanetManagerImplementation::loadSnapshotObject() instantiates each node with
-  objectID == nodeID, and a cell node carries its POB cell number in cellIndex,
-  so a cell's object id IS its .ws node id. mensix_mining_facility_main.lua
-  already spawns into those raw ids, which is the precedent.
+  the computer   hub_room         cell 12112236  (-87.9, 14.4, -6.3)  heading 0
+  the executive  conference_room  cell 12112241  (-152.4, 19.1, -13.3)  heading -116
 
-  must_mining_facility.ilf names the rooms and gives their bounding boxes but
-  carries no ids. Matching the two against the live spawns pins four pairs:
+The room-to-id map is mensix_mining_facility_main.lua's, which resolves all 30
+cells off the .pob record order against node 12112217's 30 snapshot children.
 
-    node 12112226  medium_room_01  the cantina      pei_yi        (-77.1, 10.8, 67.5)
-    node 12112227  control_room_01                  buff terminal (-83.7, 10.3, 122)
-    node 12112243  small_room_05                    a miner       (-154.4, 19.1, -66.4)
-                                                    with mood npc_use_terminal_high
-    node 12112245  control_room_02                  must_junk     (-90, 22.7, -47.8)
+An earlier revision placed both by reasoning, and it is worth recording how each
+one went wrong, because they failed differently.
 
-  The terminal goes in small_room_05 at (-154.887, h 19.070, -69.109), which is
-  where the .ilf puts a console: flush against that room's -y wall, hence
-  heading 0. Core3 never calls InteriorLayoutTemplate, so none of the .ilf
-  furniture is actually spawned and that spot is empty floor at runtime -- SOE's
-  own console position, with nothing standing in it.
+  The executive was near-miss. conference_room was correct -- the .ilf box is
+  x -155.82..-138.26, y -20.01..-10.93, with a conference table and twelve chairs
+  -- and "he stands at the head of it" put him about two metres from where SOE
+  did. The heading was the real error: 90 versus -116, so he faced across the
+  table instead of down it. Its cellID field was left 0 and leaned entirely on
+  the name lookup; it is filled in now.
 
-  The executive goes in conference_room, whose .ilf box is x -155.82..-138.26,
-  h 19.07..153.12, y -20.01..-10.93, with a conference table and twelve chairs
-  at h 19.070. He stands at the head of it.
+  The computer was in the wrong room. It went to small_room_05 at
+  (-154.887, 19.070, -69.109), which is a real console position in the .ilf --
+  flush against that room's -y wall, hence heading 0 -- and which is about 90 m
+  from the hub_room floor where it belongs. The .ilf furniture argument was
+  sound as far as it went: Core3 never calls InteriorLayoutTemplate, so no .ilf
+  furniture spawns and that spot is empty floor at runtime. But an .ilf console
+  slot is a place a console COULD go, not the place this quest's computer does
+  go, and the quest calls it the mining network computer -- hub_room is the
+  mining network floor.
 
-Cells are resolved by name off the building first and fall back to the recorded
-snapshot node id, and the boot probe prints which one answered. Nothing was
-extracted that maps cell names to numbers directly, so the names are the .ilf's
-and the ids are the snapshot's, and the two are checked against each other at
-run time rather than one of them being trusted blind.
+Cells are still resolved by name off the building first and fall back to the
+recorded snapshot node id, with the boot probe printing which one answered. That
+belt-and-braces stays: it costs nothing and it catches a re-cut snapshot.
 
 THE CREATURES  --  all three substituted
 
@@ -96,7 +120,7 @@ som_mustafarian_striking_miner, som_mustafarian_corrupt_security_guard and the
 strike leader are all named by the .qst and none of them exists.
 
   the strikers   miner_on_strike, used as it ships. It is the template
-                 smoking_forest_region.lua:38-49 already spawns nine of at this
+                 smoking_forest_region.lua:37-59 already spawns eight of at this
                  camp, it is level 70, and the .qst's Encounter is two more of
                  the same. ATTACKABLE only, so the fight is started for them.
   the leader     som_kenobi_moral_strike_leader, new
@@ -118,8 +142,9 @@ so the .qst quotes exactly one waypoint -- "Striking miners camp" at
 that says "head back to the new mining facility" with no journal and no marker
 is unfinishable by anyone who did not read the coordinates out of the file.
 
-THE LEVEL GATE is the .qst's Level 75 and is enforced in the executive's
-conversation handler, on his own shipped s_47. No invented text.
+The gate itself is 61, not the .qst's 75 -- see THE LEVEL GATE above. It is
+enforced in the executive's conversation handler, on his own shipped s_47. No
+invented text; only the number changed.
 
 WHAT IS NOT MODELLED
 
@@ -141,8 +166,9 @@ moralChoiceScreenPlay = ScreenPlay:new {
 
 	screenplayName = "moralChoiceScreenPlay",
 
-	-- Quoted; enforced in moral_exec_conv_handler.
-	requiredLevel = 75,
+	-- The gate the exec actually enforces, not the .qst's 75; see THE LEVEL GATE.
+	-- Enforced in moral_exec_conv_handler.
+	requiredLevel = 61,
 
 	-- The new mining facility, snapshot node 12112217; see THE TWO THINGS THE
 	-- PLAYER CLICKS.
@@ -152,25 +178,27 @@ moralChoiceScreenPlay = ScreenPlay:new {
 		y = 1767.08,
 	},
 
-	-- Cell-local, from must_mining_facility.ilf. cellID is the snapshot node,
-	-- used only if the name does not resolve.
+	-- Both are the live facility spawn table's, cell-local; see THE TWO THINGS
+	-- THE PLAYER CLICKS. cellID is the snapshot node, used only if the name
+	-- does not resolve -- and it is now filled in for both, which it was not.
 	exec = {
 		template = "som_kenobi_moral_exec",
 		cellName = "conference_room",
-		cellID = 0,
-		x = -153.5,
-		z = 19.07,
-		y = -15.45,
-		heading = 90,
+		cellID = 12112241,
+		x = -152.4,
+		z = 19.1,
+		y = -13.3,
+		heading = -116,
 	},
 
+	-- NOT small_room_05. The computer is on the mining network floor.
 	terminal = {
 		template = "object/tangible/quest/som_kenobi_network_computer.iff",
-		cellName = "small_room_05",
-		cellID = 12112243,
-		x = -154.887,
-		z = 19.07,
-		y = -69.109,
+		cellName = "hub_room",
+		cellID = 12112236,
+		x = -87.9,
+		z = 14.4,
+		y = -6.3,
 		heading = 0,
 	},
 
@@ -536,8 +564,10 @@ end
 function moralChoiceScreenPlay:switchSides(pPlayer)
 	local stage = self:getStage(pPlayer)
 
-	-- Task 10 is a sibling of task 0 under root task 1, so every stage of branch
-	-- A is still allowed to switch. Taking the disk closes branch A for good.
+	-- Task 10 is a sibling of task 0 under root task 1, so the .qst allows every
+	-- stage of branch A to switch. The leader only OFFERS it at STAGE_CABLES --
+	-- see WHAT THE .QST PERMITS IS NOT WHAT THE LEADER OFFERS -- so the other
+	-- two arms are unreachable in practice. Taking the disk closes branch A.
 	if (stage ~= self.STAGE_CABLES and stage ~= self.STAGE_CORE and stage ~= self.STAGE_RETURN) then
 		return
 	end

@@ -98,37 +98,54 @@
 	[list] block also credits the "Mensix Mining Company" while task 6 credits
 	the "Mustafar Mining Company"; both are reproduced as shipped too.
 
-	NO GIVER -- "Chief Glost" DOES NOT EXIST ANYWHERE
-	-------------------------------------------------
-	Tasks 8 and 7 name Chief Glost.  He is named nowhere else: no
-	mobile/custom_content/som/*glost*, no conversation table in
-	string/en/conversation, no string-table row anywhere in the extract, and no
-	snapshot node.  The .qst names no giver and has no start hook, no quest_start
-	object and no conversation reference.
+	THE GIVER -- CHIEF ULON GLOST, AND THE CORRECTION THAT FOUND HIM
+	----------------------------------------------------------------
+	An earlier revision of this header said Chief Glost "DOES NOT EXIST
+	ANYWHERE" -- no template, no conversation table, no string row, no snapshot
+	node -- and this screenplay was written to drive the whole quest itself with
+	no giver.  That was WRONG, and the reason it was wrong matters more than the
+	fact: the search that produced it covered the client TREs and this repo only.
+	It never covered SOE's own server scripts.  Every one of the four "does not
+	exist" claims falls the moment they are searched.
 
-	must_foreman_chivos, the template task 8 borrows a face from, IS registered
-	(som/serverobjects.lua:66) and IS already stood up in the world -- but by
-	another screenplay, story_arc_prelude.lua:231, inside the Mensix facility,
-	as its own three quests' giver.  He is not Chief Glost and he is not mine to
-	repoint.
+	What live actually has:
 
-	So this screenplay places nothing for a giver and drives the whole thing
-	itself.  It exposes
+	  * A conversation script, conversation/maneater_ulon, which renames the mob
+	    it is attached to "Chief Ulon Glost" -- the full name the .qst clips to
+	    "Chief Glost".  It is the giver AND the turn-in, and it is ported node
+	    for node in mobile/conversations/mustafar/maneater_ulon.lua.
+	  * A shipped string table, string/en/conversation/maneater_ulon.stf,
+	    15 rows.  It has been in the TREs the whole time.
+	  * A spawn row in the Mensix Mining Facility's live spawn table: room
+	    entrance_room_01, -9.5 / 10.8 / 52.6, heading 90, script column
+	    conversation.maneater_ulon.  That is cell 12112222.
+	    mensix_mining_facility_main.lua stands him up there.
+	  * The four conditions the conversation dispatches on are this quest's own
+	    tasks: mustafar_maneater_four (the Encounter) and mustafar_maneater_five
+	    (the Wait for Signal), plus quest-active and quest-completed.
 
-		maneaterScreenPlay:grantManeater(pPlayer)
-		maneaterScreenPlay:signalReward(pPlayer)
+	He is a distinct NPC from must_foreman_chivos.  The .qst borrowing Chivos's
+	template for task 8's comm portrait is a shipped inconsistency and stays
+	recorded as one above; it is not evidence about who the giver is.
 
-	as the entry points a giver's conversation handler calls once there is one.
-	Nothing calls grantManeater yet.  Same seam bounty_hunts.lua and
-	trophy_hunts.lua left for the same gap.
+	The appearance is still a repo choice -- no chief_glost model ships and the
+	spawn table carries no appearance column.  mobile/custom_content/som/
+	chief_glost.lua says so in as many words.
 
-	The return leg is the one real DEVIATION in this file.  Task 7 is a Wait for
-	Signal on "mustafar_maneater_reward"; Wait for Signal tasks carry no location,
-	so there is nobody to return to and nowhere to return to.  Rather than strand
-	the player at a stage nothing can clear, killing Foehorn sends task 7's
-	shipped text and then fires the signal here.  When a Chief Glost exists,
-	delete the signalReward call from notifyFoehornKilled() and have his
-	conversation call it instead; nothing else changes.
+	THE RETURN LEG -- DEVIATION RETIRED
+	-----------------------------------
+	Task 7 is a Wait for Signal on "mustafar_maneater_reward" and carries no
+	location, so while there was no giver, killing Foehorn had to fire the signal
+	itself or strand the player at a stage nothing could clear.  That deviation
+	is gone.  The signal now fires exactly where live fires it: in the
+	conversation, when the player walks back up to Chief Glost with task five
+	live.  notifyFoehornKilled sets STAGE_RETURN and stops there.
+
+	The three entry points the conversation handler calls:
+
+		maneaterScreenPlay:grantManeater(pPlayer)     s_26, the grant
+		maneaterScreenPlay:regrantManeater(pPlayer)   s_17, the lost-it retry
+		maneaterScreenPlay:signalReward(pPlayer)      s_6,  the turn-in
 
 	NO JOURNAL / PROGRESS TRACKING
 	------------------------------
@@ -149,26 +166,23 @@
 	is the one honoured.  Experience Amount 0 / quest_combat and Faction Amount 0
 	/ Rebel are honoured literally: no XP, no faction.
 
-	The 5000 credits are granted literally.  The loot name cannot be resolved:
-	item_tow_trophey_02_02 is a live server-side static-item name, not an object
-	template, and it appears in exactly one place in the entire extract -- this
-	.qst.  There is no string/en/static_item_n.stf in _som to look it up in and
-	no datatables/quest or datatables/loot table anywhere in the TREs here.
+	The 5000 credits are granted literally.  The loot stays a SUBSTITUTE.
+	item_tow_trophey_02_02 resolves to "Mounted Tulrus Spine" in
+	string/en/static_item_n.stf, but an exhaustive sweep of every shipped
+	shared_*.iff finds no object template carrying that objectName, so granting
+	the live item would mean authoring an object.
 
-	What it IS is a member of a family this tree has already decoded.
-	trophy_hunts.lua:102-118 resolved three of its siblings by name
-	(item_tow_trophey_02_06/_02_04/_02_03).  object/tangible/loot/mustafar/ ships
-	six trophey_* templates, all six registered in
-	object/custom_content/tangible/loot/mustafar/serverobjects.lua; trophy_hunts
-	had already spoken for two of them by name (trophey_blistmok_skin :47 =
-	_02_06, trophey_xandank :17 = _02_03; its third, _02_04, resolved to
-	bones_must_monster_jaw_small, which is not in the trophey_ prefix at all).
-	That left four unspoken-for -- trophey_lava_beetle, trophey_lava_flea,
-	trophey_lava_lizard_heart and trophey_tulrus_spine -- and exactly one of the
-	four is a tulrus trophy: trophey_tulrus_spine.iff (registered at
-	serverobjects.lua:49).  A tulrus trophy for the man-eating tulrus is the
-	obvious match, and it is the one granted here.  It is a SUBSTITUTE picked on
-	that reasoning, not a resolution of item_tow_trophey_02_02 -- OPEN.
+	What is granted instead is trophey_tulrus_spine.iff (registered at
+	serverobjects.lua:49) -- a tulrus trophy for the man-eating tulrus, and the
+	obvious thematic match from object/tangible/loot/mustafar/.  That substitute
+	has the opposite defect: its shared template's objectName record carries an
+	empty string table and the key trophey_tulrus_spine_n, which appears in no
+	shipped STF (som_item.stf ships and does not contain it).  So the wanted item
+	has a display name but no object, and the substitute has an object but no
+	resolvable display name.  It is a SUBSTITUTE -- OPEN.
+
+	lava_beetle_nests.lua resolved the sibling item_tow_trophey_02_01 to
+	trophey_lava_beetle.iff by objectName; the two grants do not collide.
 
 	REPEATS
 	-------
@@ -189,8 +203,11 @@
 	    would mean inventing a boundary the .qst does not give.
 	  * The Reward task's CountItem / CountWeapon / CountArmor fields are all 1
 	    with empty Item / lootName2 / exclusivelootName slots, and are unused.
-	  * "Level 70", "Type solo" and "Tier 4" are recorded on the table for a giver
-	    to gate on; nothing here enforces them, because nothing here grants it.
+	  * "Level 70", "Type solo" and "Tier 4" are recorded on the table but not
+	    enforced.  That is live's behaviour, not an omission: conversation/
+	    maneater_ulon has four dispatch conditions and none of them is a level
+	    test.  Chief Glost hands the job to anyone who asks.  (Contrast the
+	    Kenobi givers, which DO carry an explicit getLevel test.)
 	  * The double space in task 6's shipped description ("only way to be
 	    certain.  You'll find some") is reproduced as shipped.
 --]]
@@ -399,7 +416,8 @@ end
 -- ====================================================================
 -- Grant  --  task 0 (Nothing) into task 6 (Destroy Multiple and Loot)
 --
--- Entry point for whoever ends up granting this.  Nothing calls it yet.
+-- Called from maneater_ulon_conv_handler on screen "accept" (s_26), which is
+-- where SOE's conversation calls startMission.
 -- ====================================================================
 
 function maneaterScreenPlay:grantManeater(pPlayer)
@@ -419,6 +437,38 @@ function maneaterScreenPlay:grantManeater(pPlayer)
 	-- task 6 has createWaypoint 0 and no coordinate; see WHAT IS NOT MODELLED.
 
 	return true
+end
+
+-- ====================================================================
+-- Retry  --  the "I had it and I lost it" path
+--
+-- SOE's branch 3 on s_15 calls clearMission then startMission, both on
+-- som_maneater.  It is offered only while the Encounter task is live, which is
+-- STAGE_HUNT: Foehorn was spawned and got away.  clearQuest wipes the task
+-- tree, grantQuest lays it down again from the top, so the whole hunt reruns.
+--
+-- grantManeater refuses while isActive, so the clear has to happen first.  It
+-- also has to take down the live Foehorn's back-link, or a stale entry sits in
+-- the non-persistent store pointing this player at a mob that no longer counts.
+-- ====================================================================
+
+function maneaterScreenPlay:regrantManeater(pPlayer)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	local foehornID = self:getNumber(pPlayer, "foehorn")
+
+	if (foehornID ~= 0) then
+		deleteData(foehornID .. ":maneaterPlayer")
+		deleteScreenPlayData(pPlayer, self.screenplayName, "foehorn")
+	end
+
+	self:clearWaypoint(pPlayer)
+	self:detachKillObserver(pPlayer)
+	self:setStage(pPlayer, 0)
+
+	return self:grantManeater(pPlayer)
 end
 
 -- ====================================================================
@@ -589,10 +639,8 @@ end
 -- Returns 1 on every path so the observer is dropped with the object;
 -- hidden_treasure.lua:389-417 is the same shape.
 --
--- DEVIATION: task 7's shipped text goes out and then the signal is fired here,
--- because no Chief Glost ships and a Wait for Signal task carries no location.
--- When a giver exists, delete the signalReward call below and have his
--- conversation call it instead.
+-- The kill closes task 4 and opens task 7, and stops there.  The signal is
+-- Chief Glost's to fire, in the conversation -- see THE RETURN LEG above.
 function maneaterScreenPlay:notifyFoehornKilled(pFoehorn, pKiller)
 	if (pFoehorn == nil) then
 		return 1
@@ -619,7 +667,12 @@ function maneaterScreenPlay:notifyFoehornKilled(pFoehorn, pKiller)
 	CreatureObject(pPlayer):sendSystemMessage(self.huntTitle .. " 1/" .. self.foehornCount)
 	self:announce(pPlayer, self.returnTitle, self.returnDescription)
 
-	self:signalReward(pPlayer)
+	-- task 7 opens here and waits.  Chief Glost fires the signal, in his
+	-- conversation, exactly as live does.  No waypoint is set for the return:
+	-- task 7 is a Wait for Signal and carries no location, and the attack-site
+	-- waypoint was already cleared on arrival (notifyEnteredAttackSite).  Live
+	-- pointed nowhere either -- returnDescription names him and that is all
+	-- the .qst gives.
 
 	return 1
 end

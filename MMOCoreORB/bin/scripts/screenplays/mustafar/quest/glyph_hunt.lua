@@ -132,11 +132,11 @@ and both are matched by template name on the kill:
 
 	som_coyn_captain    -> coyn_captain    customName "Captain Relgon Starkill"
 	                       mobile/custom_content/som/coyn_captain.lua,
-	                       included at that directory's serverobjects.lua:36
+	                       included at that directory's serverobjects.lua:38
 	                       spawned screenplays/mustafar/regions/
 	                       north_west_region.lua:53 at (-5432.8, 130.6, 6016.4)
 	som_coyn_commander  -> coyn_commander  customName "Commander Hal Razor"
-	                       .../coyn_commander.lua, serverobjects.lua:37
+	                       .../coyn_commander.lua, serverobjects.lua:39
 	                       spawned north_west_region.lua:96
 	                       at (-5301.4, 266.9, 5992.1)
 
@@ -163,38 +163,39 @@ system awards -- there is no quest system row here, so nothing is invented to
 stand in for it.
 
 lootCount 1 / lootName weapon_tow_rifle_03_01 is NOT granted. lootName is a live
-server-side static-item name, not an object template; the client ships no table
-that maps it to one, there is no datatables/quest or datatables/loot entry for it
-in any TRE here, and there is no string/en row for it either. Nothing in this
-tree is called weapon_tow_rifle_03_01 and no rifle in the tree is identifiably
-the same weapon, so it is left unresolved rather than replaced with a guess.
-This is the same class of unresolvable reward already recorded in
-hidden_treasure.lua and bounty_hunts.lua.
+server-side static-item name, not an object template. The name resolves to
+"DP-23 Rifle" in string/en/static_item_n.stf, but an exhaustive sweep of every
+shipped shared_*.iff finds no object template carrying that objectName, so
+granting the live item would mean authoring an object. Nothing in this tree is
+called weapon_tow_rifle_03_01 and no rifle in the tree is identifiably the same
+weapon, so it is left unresolved rather than replaced with a guess. This is the
+same class of unresolvable reward already recorded in hidden_treasure.lua and
+bounty_hunts.lua.
 
-NO GIVER  --  open question, deliberately not filled
+THE GIVER
 
 The historian is named in every description and in both waypoint names, and
 string/en/conversation/som_glyph_hunt.stf carries his entire dialogue tree
-(Pletus Croix of the Nabooian Historical Archives), but nothing that shipped says
-where he stands or what starts the quest:
+(Pletus Croix of the Nabooian Historical Archives). The tree and handler are
+wired; this file places him:
 
   * naboo_historian is a registered creature (mobile/custom_content/som/
-    naboo_historian.lua, included at that directory's serverobjects.lua:78,
-    customName "Historian") and it is spawned NOWHERE in this tree.
-  * Its conversationTemplate is "" and there is no historian file in
-    mobile/conversations/mustafar/ for it to point at.
+    naboo_historian.lua, included at that directory's serverobjects.lua:88,
+    customName "Historian"). conversationTemplate is "som_glyph_hunt"; the tree
+    ships at mobile/conversations/mustafar/som_glyph_hunt.lua.
   * There is no quest_start object for this quest in snapshot/mustafar.ws.
 
-So this file spawns nobody and invents no position. grantQuest, signalGlyphsFound
-and signalGlyphFinish are the seams a giver's conversation handler calls once
-Aaron says where the historian stands. The two signal functions ARE glyph_hunt_
-found and glyph_hunt_finish -- the .qst raises both from the hand-in, and there is
+grantQuest, signalGlyphsFound and signalGlyphFinish are the seams the giver's
+conversation handler calls. The two signal functions ARE glyph_hunt_found and
+glyph_hunt_finish -- the .qst raises both from the hand-in, and there is
 nothing else in the shipped data that can raise them.
 
-Note the waypoint the .qst plants for both hand-ins, mustafar (-5791, 106, 5808),
+The waypoint the .qst plants for both hand-ins, mustafar (-5791, 106, 5808),
 is where the historian was standing in live. It is used as a waypoint exactly as
-shipped; it is NOT used to spawn anything, because a waypoint target is not a
-placement and the .qst never says it is one.
+shipped. It is now also used as the placement: the Mustafar offset work
+established that this is where he stood in live, and the .qst waypoint is the
+only 3D position the shipped data carries for him. That reverses the earlier
+ruling that a waypoint target is not a placement.
 
 NO JOURNAL
 
@@ -339,9 +340,20 @@ somGlyphHuntScreenPlay = ScreenPlay:new {
 	rewardLootName = "weapon_tow_rifle_03_01",
 	rewardLootCount = 1,
 
+	-- THE GIVER. The .qst's own hand-in waypoint, mustafar (-5791, 106, 5808) --
+	-- full 3D, so nothing is derived. See THE GIVER in the header.
+	questGiver = {
+		template = "naboo_historian",
+		x = -5791,
+		z = 106,
+		y = 5808,
+		heading = 0,
+	},
+
 	-- Built by attachGlyphs on every boot. In-memory only, which is correct: it is
 	-- derived from placements and the placements are re-attached each start.
 	glyphIndex = {},
+	questGiverID = 0,
 }
 
 registerScreenPlay("somGlyphHuntScreenPlay", true)
@@ -349,6 +361,29 @@ registerScreenPlay("somGlyphHuntScreenPlay", true)
 function somGlyphHuntScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachGlyphs()
+		self:spawnGiver()
+	end
+end
+
+function somGlyphHuntScreenPlay:spawnGiver()
+	local giver = self.questGiver
+	-- z off the .qst is a WAYPOINT altitude -- where the map marker floats -- not
+	-- ground level, and this is an outdoor spawn. Take the terrain height and keep
+	-- the quoted value only as a fallback.
+	local groundZ = getWorldFloor(giver.x, giver.y, "mustafar")
+
+	-- Not `or` -- 0 is truthy in Lua, so an `or` fallback would keep a zero floor
+	-- and bury him. Zero is treated as failure here: no point on Mustafar's terrain
+	-- in this tree is at height 0.
+	if (groundZ == nil or groundZ == 0) then
+		groundZ = giver.z
+	end
+	local pNpc = spawnMobile("mustafar", giver.template, 0, giver.x, groundZ, giver.y, giver.heading, 0)
+
+	if (pNpc == nil) then
+		print("somGlyphHuntScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
+	else
+		self.questGiverID = SceneObject(pNpc):getObjectID()
 	end
 end
 

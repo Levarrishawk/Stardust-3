@@ -48,38 +48,31 @@ both flea templates instead. That is a deviation, and it is the smallest one tha
 makes the .qst's own step work: SOE's group and this tree's two templates name the
 same animal.
 
-WHERE PWWOZ STANDS  --  placed, not quoted
+WHERE PWWOZ STANDS  --  live position, recovered
 
-Nothing ships his position. He is a creature template
-(object/mobile/som/som_pwwoz_pwwa.iff), not a snapshot node, so his absence from every
-.ws is expected -- in live he was a server-side spawn and that spawn data did not ship.
-No datatable, no Lua spawn, and no line of his dialogue states where he is.
+He is a creature template (object/mobile/som/som_pwwoz_pwwa.iff), not a snapshot node,
+so his absence from every .ws is expected: in live he was a server-side spawn. An
+earlier revision read that as "nothing ships his position" and placed him outdoors on
+the Mensix settlement shelf at (-2492, 1660). That was wrong.
 
-He is placed at the Mensix Mining Facility, the planet's only arrival point and the
-hub this arc already uses -- but on the settlement shelf, not at the travel point's
-own coordinate. That distinction is measured, not assumed:
+The facility's dungeon spawn table is the position. He stands INSIDE the facility, in
+entrance_room_02 -- cell 12112224 -- at (-9.7, 10.8, 90.8) facing 86, with a respawn
+of 120 seconds. The reasoning that put him outdoors was half right: it identified
+Mensix as the place, because Mensix is the planet's only arrival point
+(planet_manager.lua:726) and this arc's hub. It then stopped at the settlement instead
+of going through the door.
 
-  planet_manager.lua:726 gives the travel point as (x -2471, z 230, y 1620). A live
-  boot sampling the server's own terrain returns getWorldFloor(-2471, 1620) = 100.68.
-  The travel point's height matches the settlement; its x/y sits off the shelf edge,
-  over a 130 m drop. That mismatch is pre-existing Core3 data and is NOT touched here
-  -- moving an arrival point moves every player -- but it is why nothing in this quest
-  may resolve its height at that coordinate.
+His row carries two more fields worth recording, neither of which this screenplay acts
+on. His death script is the generic dungeon death handler, and his ROOM -- the landing
+deck, not his own -- carries the script that grants the Obi-Wan prelude. The prelude
+grant is a trigger on the room a player walks into, not something Pwwoz hands over.
+That belongs to the spine, and it is noted here only so the next reader of this row
+does not mistake it for a seam of this quest's.
 
-  The shelf itself is corroborated twice over. snapshot/mustafar.ws puts the mining
-  cantina marker at (-2514.28, h 225.00, 1659.31) and the cloning marker at
-  (-2511.81, h 225.00, 1644.58); a 10 m terrain grid returns exactly 225.0 across
-  x -2521..-2481, y 1650..1660. Marker height and terrain height agree to the
-  centimetre, so that flat is real standable ground, and it is where the settlement's
-  two facilities are.
-
-So Pwwoz stands at (-2492, 1660), one metre from a sampled 225.0 point and well clear
-of the debris tongue (55 nodes of crates, engines and gas containers at h 230, spanning
-x -2483..-2492, y 1627..1642). Menth Paul (cursed_shard) is moved to (-2506, 1652) by
-the same evidence, 16 m off, so the two quest givers do not overlap.
-
-Height is still resolved with getWorldFloor rather than hardcoded -- the coordinate was
-the defect, not the call.
+The outdoor derivation is dropped rather than kept, because unlike jenha_tar_cube's it
+was not a method -- it was a guess dressed in measurements. The shelf really is flat
+at h 225.0 and the travel point really does sample 100.68; both facts are true and
+neither was ever evidence about where SOE put this NPC.
 
 THE CAMP IS IN THE SNAPSHOT
 
@@ -110,8 +103,14 @@ back, without this file having to remember to do it.
 That leaves one case the engine does not cover: a player who takes the give branch and
 then walks away leaves an aggressive NPC standing at the planet's travel pad forever,
 because nothing kills him. So possessing him also schedules calmQuestGiver, which
-clears the bit if he is still alive when the window closes. Hailing him again re-arms
-both -- see the conversation handler, which routes STAGE_POSSESSED back to s_186.
+clears the bit if he is still alive when the window closes.
+
+Coming back re-arms both, but not on sight. This used to say the handler "routes
+STAGE_POSSESSED back to s_186", the give screen. Live gives that player a screen of
+his own -- s_82, "You will not escape my wrath, %TU!" -- and puts the re-aggro on the
+one option under it rather than on the greeting. So he can be hailed and left alone
+again, and only picking s_84 restarts the fight. See THE POSSESSED OPENING in the
+conversation handler for the root cause.
 
 The cost of possessing the shared NPC instead of a private copy is that he will swing
 at bystanders for as long as the fight lasts. That is accepted: the .qst names this
@@ -129,8 +128,15 @@ instead, which is where the player would otherwise have read them.
 
 THE LEVEL GATE
 
-The [list] block says Level = 75 and it is enforced, in the conversation handler. That
-file also carries the one piece of invented text in this quest and says why.
+The [list] block says Level = 75 and it is enforced, in the conversation handler.
+
+It is enforced for want of anything better, not because the .qst is authoritative. A
+[list] level is a client-side display value; the Mustafar quests that are really gated
+take their number from the giver's server-side conversation, and those test against 60
+rather than 75. Pwwoz's live conversation has since been read: six conditions, none of
+them a level test. So his 75 stands unopposed, and that is now checked rather than
+inferred from his having no refusal line. The handler carries the full note, along with
+the one piece of invented text in this quest and why it exists.
 
 THE REWARD  --  substituted
 
@@ -182,15 +188,19 @@ samaritanScreenPlay = ScreenPlay:new {
 	-- Quoted; see THE LEVEL GATE.
 	requiredLevel = 75,
 
-	-- Placed, not quoted; see WHERE PWWOZ STANDS. respawn is in seconds --
-	-- DirectorManager::spawnMobile passes it to AiAgent::setRespawnTimer, and
-	-- notifyDespawn multiplies by 1000 for the RespawnCreatureTask.
+	-- Live position; see WHERE PWWOZ STANDS. Cell-local, inside the facility:
+	-- entrance_room_02 = cell 12112224. respawn is the table's own 120, and it
+	-- is in seconds -- DirectorManager::spawnMobile passes it to
+	-- AiAgent::setRespawnTimer, and notifyDespawn multiplies by 1000 for the
+	-- RespawnCreatureTask.
 	questGiver = {
 		template = "som_pwwoz_pwwa",
-		x = -2492,
-		y = 1660,
-		heading = 250,
-		respawn = 60,
+		cell = 12112224,
+		x = -9.7,
+		z = 10.8,
+		y = 90.8,
+		heading = 86,
+		respawn = 120,
 	},
 
 	-- Task 0, Go to Location: mustafar (-5385, 224, 1744), Radius 50.
@@ -260,8 +270,9 @@ end
 
 function samaritanScreenPlay:spawnQuestGiver()
 	local giver = self.questGiver
-	local z = getWorldFloor(giver.x, giver.y, "mustafar")
-	local pNpc = spawnMobile("mustafar", giver.template, giver.respawn, giver.x, z, giver.y, giver.heading, 0)
+	-- Cell-local, so no getWorldFloor: giver.z is the entrance room's own floor
+	-- and a terrain sample inside a building means nothing.
+	local pNpc = spawnMobile("mustafar", giver.template, giver.respawn, giver.x, giver.z, giver.y, giver.heading, giver.cell)
 
 	if (pNpc == nil) then
 		print("samaritanScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
@@ -533,9 +544,10 @@ end
 
 --[[ The decision ]]
 
--- Task 8's Signal Name giveCrystal, then task 9. The give screen in Pwwoz's tree
--- lands here, and so does hailing him again while he is still possessed; see the
--- conversation handler. Idempotent on purpose -- the second call only re-aggros.
+-- Task 8's Signal Name giveCrystal, then task 9. Two screens in Pwwoz's tree land
+-- here: give, which hands the crystal over, and enraged_fight, which is the player
+-- accepting the fight a second time. Idempotent on purpose -- the second call only
+-- re-aggros. See THE POSSESSED OPENING in the conversation handler.
 function samaritanScreenPlay:giveCrystal(pPlayer, pNpc)
 	if (pPlayer == nil or pNpc == nil) then
 		return
@@ -570,6 +582,16 @@ end
 
 function samaritanScreenPlay:calmQuestGiver(pNpc)
 	if (pNpc == nil or CreatureObject(pNpc):isDead()) then
+		return
+	end
+
+	-- Hailing Pwwoz again re-arms this timer, so an earlier arm can land in the middle
+	-- of the fight it was meant to clean up after. Leave a live fight alone and come back
+	-- for it: a bare return would strand him AGGRESSIVE for good when the player walks
+	-- away and the fight ends without anyone finishing him, since only giveCrystal arms
+	-- this and respawn only clears the bit if he actually dies.
+	if (AiAgent(pNpc):isInCombat()) then
+		createEvent(self.calmSeconds * 1000, "samaritanScreenPlay", "calmQuestGiver", pNpc, "")
 		return
 	end
 

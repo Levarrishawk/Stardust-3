@@ -97,11 +97,14 @@ exploreMustafarScreenPlay = ScreenPlay:new {
 	rewardItem = "object/tangible/item/som/mustafar_damaged_map.iff",
 	minimumLevel = 70,
 
-	-- Mensix starport entrance, interior cell. Placement carried forward from the
-	-- SD1 port.
+	-- QUOTED, som_mining_facility.tab: object/tangible/item/som/mustafar_damaged_map.iff
+	-- in landing_deck_room at loc_x -48.9 / loc_y 31 / loc_z -112.9, yaw 180. Under the
+	-- axis mapping that is x -48.9, z 31 (height), y -112.9, heading 180. An earlier
+	-- revision carried -113 and heading 0 from the SD1 port; both are corrected here
+	-- against the shipped row.
 	mapConsole = {
 		template = "object/tangible/item/som/mustafar_damaged_map.iff",
-		x = -48.9, z = 31, y = -113, cell = 12112248, heading = 0,
+		x = -48.9, z = 31, y = -112.9, cell = 12112248, heading = 180,
 	},
 
 	-- Old Republic Cruiser Crash Site. Task 21 of the .qst, "Examine the Crash
@@ -211,7 +214,10 @@ end
 
 function exploreMustafarScreenPlay:spawnObjects()
 	local console = self.mapConsole
-	local pMap = spawnSceneObject("mustafar", console.template, console.x, console.z, console.y, console.cell, console.heading)
+	-- spawnSceneObject takes RADIANS -- DirectorManager's spawnSceneObject passes the
+	-- angle straight through, while spawnMobile deg2rads it first. Every heading in
+	-- this tree is stored in degrees, as the live tables write it, so it converts here.
+	local pMap = spawnSceneObject("mustafar", console.template, console.x, console.z, console.y, console.cell, math.rad(console.heading))
 
 	if (pMap == nil) then
 		print("exploreMustafarScreenPlay: failed to spawn the map console")
