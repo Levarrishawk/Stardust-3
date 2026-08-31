@@ -646,7 +646,7 @@ survival_naboo_rebel_tier3_1_b = SpaceSurvivalScreenplay:new {
 	className = "survival_naboo_rebel_tier3_1_b", questName = "naboo_rebel_tier3_1_b", questType = "survival", questZone = "space_dantooine", creditReward = 0,
 	sideQuest = true, sideQuestType = "inspect", sideQuestName = "naboo_rebel_tier3_1_c", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION, sideQuestDelay = 5,
 	parentQuest = "escort_naboo_rebel_tier3_1_a", parentQuestType = "escort", parentQuestName = "naboo_rebel_tier3_1_a",
-	survivalTime = 420, survivalPoint = "space_dantooine:naboo_rebel_tier3_survival_point", delayToFirstAttack = 5, attackDelay = 70,
+	survivalTime = 420, survivalUpdateInterval = 60, survivalPoint = "space_dantooine:naboo_rebel_tier3_survival_point", delayToFirstAttack = 5, attackDelay = 70,
 	attackShips = {{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3"}, {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"}, {"imp_tie_fighter_tier3", "imp_tie_bomber_tier3"}, {"imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"}, {"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"}, {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"}},
 }
 registerScreenPlay("survival_naboo_rebel_tier3_1_b", true)

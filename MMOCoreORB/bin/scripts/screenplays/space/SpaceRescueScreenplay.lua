@@ -419,6 +419,12 @@ function SpaceRescueScreenplay:spawnRescueShip(pPlayer)
 
 	-- Set up the ship
 	ShipAiAgent(pRescueShip):setMissionOwner(pPlayer)
+	ShipObject(pRescueShip):setShipFactionString(SpaceHelpers:getPlayerShipFactionString(pPlayer))
+
+	local playerFactionHash = SpaceHelpers:getPlayerShipFactionHash(pPlayer)
+
+	ShipAiAgent(pRescueShip):addSpaceFactionAlly(playerFactionHash)
+	ShipAiAgent(pRescueShip):removeSpaceFactionEnemy(playerFactionHash)
 
 	-- Make ship stationary (damaged, not moving)
 	ShipAiAgent(pRescueShip):setFixedPatrol()
