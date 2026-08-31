@@ -1,0 +1,141 @@
+Round M3 — grok report
+Branch: mustafar-content. No commit. No push. Exactly four files touched.
+
+All four parse: luac5.3 -p OK on each.
+
+================================================================================
+F1 — managers/object/object_manager.lua
+Lines changed: 320–335 (appended after former EOF at line 318)
+
+Final text of changed region:
+
+-- Restored: the wrapper constructors above are consumed as globals by every file that
+-- requires this module, but the module returned nothing, so `local ObjectManager =
+-- require(...)` bound the boolean `true` and every ObjectManager.* call threw. Only
+-- withCreatureObject is used in this repo (48 call sites).
+ObjectManager = {}
+
+function ObjectManager.withCreatureObject(pCreatureObject, performImplementation)
+	if (pCreatureObject == nil) then
+		return nil
+	end
+
+	return performImplementation(CreatureObject(pCreatureObject))
+end
+
+return ObjectManager
+
+================================================================================
+F2 — screenplays/mustafar/quest/cursed_shard.lua
+Lines changed:
+  - notifyEnteredEventArea: 441–445 (catch-up call before early-return)
+  - springAmbush: 490–492 (inline gate replaced with checkBroodGate call)
+  - checkBroodGate: 495–500 (new method)
+  - startBrood: 524–529 (brood flag guard + set)
+
+Final text of changed regions:
+
+-- Catch-up: both event flags may already be set from a prior visit where the
+-- delayed springAmbush never reached startBrood (logout / zone-off).
+if (self:isPresent(pPlayer)) then
+	self:checkBroodGate(pPlayer)
+end
+
+-- Task 10 is a Wait for Tasks on both goto1 and goto2, so the brood only
+-- starts once the second one has fired.
+self:checkBroodGate(pPlayer)
+
+-- Both event flags set, still in STAGE_SHARD, brood not yet started.
+function cursedShardScreenPlay:checkBroodGate(pPlayer)
+	if (self:hasFlag(pPlayer, "event1") and self:hasFlag(pPlayer, "event2") and self:rawStage(pPlayer) == self.STAGE_SHARD and not self:hasFlag(pPlayer, "brood")) then
+		self:startBrood(pPlayer)
+	end
+end
+
+function cursedShardScreenPlay:startBrood(pPlayer)
+	if (self:hasFlag(pPlayer, "brood")) then
+		return
+	end
+
+	self:setFlag(pPlayer, "brood")
+
+	local delay = getRandomNumber(self.broodMin, self.broodMax)
+
+	self:setStage(pPlayer, self.STAGE_BROOD)
+	writeScreenPlayData(pPlayer, self.screenplayName, "broodUntil", tostring(getTimestamp() + delay))
+
+	createEvent(delay * 1000, "cursedShardScreenPlay", "endBrood", pPlayer, "")
+end
+
+Note: brief said "notifyEnteredArea"; the real handler is notifyEnteredEventArea.
+Catch-up is wired there, before the stage/flag early-return, guarded by isPresent.
+
+================================================================================
+F3 — screenplays/mustafar/quest/samaritan.lua
+Lines changed: 571–586 (calmQuestGiver)
+
+Final text of changed region:
+
+function samaritanScreenPlay:calmQuestGiver(pNpc)
+	if (pNpc == nil or CreatureObject(pNpc):isDead()) then
+		return
+	end
+
+	-- Hailing Pwwoz again re-arms this timer, so an earlier arm can land in the middle
+	-- of the fight it was meant to clean up after. Leave a live fight alone; a later
+	-- arm, or his respawn, still clears the bit.
+	if (AiAgent(pNpc):isInCombat()) then
+		return
+	end
+
+	TangibleObject(pNpc):clearPvpStatusBit(AGGRESSIVE)
+	TangibleObject(pNpc):broadcastPvpStatusBitmask()
+	AiAgent(pNpc):clearCombatState(true)
+end
+
+================================================================================
+F4 — screenplays/mustafar/quest/mining_field_markers.lua
+Lines changed: 556–565 (comment + rewarded guard)
+
+Final text of changed region:
+
+-- Fired when the player hails Jo Keslev with all seven sets paid off. runScreenHandlers runs
+-- for the initial screen too, so this is guarded once per player via persistent screenplay data.
+function miningFieldMarkersScreenPlay:grantCompletionReward(pPlayer)
+	local playerID = SceneObject(pPlayer):getObjectID()
+
+	if (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "rewarded")) == 1) then
+		return
+	end
+
+	writeScreenPlayData(pPlayer, self.screenplayName, "rewarded", 1)
+
+================================================================================
+Could not do
+
+Nothing. All four fixes applied as written. luac5.3 -p passed on all four files.
+
+================================================================================
+Noticed but fenced off from
+
+1. F4 inventory-full rollback is now broken. Line 575 still does
+   deleteData(playerID .. ":miningFieldMarkers:rewarded") — the old shared-memory
+   key. The write is now writeScreenPlayData(... "rewarded" ...). On a full pack the
+   persistent flag stays 1, deleteData clears nothing useful, and the next hail
+   early-returns forever. Brief said "Change ONLY this guard" and leave every other
+   readData/writeData alone, so I left :575 alone. Needs a follow-up:
+   deleteScreenPlayData(pPlayer, self.screenplayName, "rewarded").
+
+2. F2 catch-up only fires when the player re-enters an event area
+   (notifyEnteredEventArea). A stranded player who never walks back into either
+   event area stays stranded until they do. Brief specified that hook; no LOGGEDIN
+   observer added.
+
+3. F3 stacked calmQuestGiver timers still fire; they just no-op while in combat.
+   After combat ends, a stale arm can still clear AGGRESSIVE before the player
+   finishes a re-hail fight that also armed a later timer — if they are briefly
+   not in combat between. Brief forbade cancelling queued events. Left as specified.
+
+4. surveyor_jo spawn at mining_field_markers.lua:411 — deliberately out of scope.
+5. Prior Round M1/M2 dirty tree left untouched. conf/, conversations, etc. not touched.
+6. Did not edit mustafar_boundaries.lua or hutta_bilbousa_city.lua (F1 repairs both).

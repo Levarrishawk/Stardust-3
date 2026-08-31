@@ -1,0 +1,12 @@
+No FATAL findings.
+
+- Speaker direction is correct throughout: Jural’s Talper-status check-ins are `s_72`, `s_32`, `s_18`, and `s_8` as `leftDialog`; player hand-ins are options `s_37`, `s_45`, `s_56`, and `s_63`. `s_55` and `s_64` are correctly Jural lines; decline `s_124` is correctly a player option. [tree:184, 211, 226, 277, 292, 350, 365, 403, 415, 425]
+- Stage routing and signals match the screenplay’s kill/wait legs 1/2, 3/4, 5/6, 7/8. Each hand-in is reachable only on its matching wait stage and calls the matching signal. [handler:15-34, 57-72; screenplay:281-361, 512-537]
+- The claimed pairings are supported by the actual dialogue progression: minions → zealots → Prophet → Storm Lord. No unsupported leg assignment found. [tree:19-42]
+- No external-project, wiki, or playthrough provenance was found.
+- House style matches siblings: Lua template/handler names, string boolean `stopConversation`, tab indentation, and `pClonedScreen` return are correct. [tree:59-60, 431; handler:75]
+
+UNCHECKED: `luac5.3 -p` re-run; the read-only sandbox command policy blocked invocation. Source inspection found no syntax concern.
+
+VERDICT: ACCEPT
+EXIT:0
