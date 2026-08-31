@@ -747,29 +747,43 @@ greps found 4 of the 8 placed and Menddle placed to 0.63 m. It had searched for 
 names* rather than the repo's template names (`miner_pilot` carries `customName = "Master Pilot
 Menddle"`). **The primary read caught it; the summary would not have.**
 
-### XP — the wiki's reward figures, and why this tree pays none
+### XP — the tree pays none, the shipped data says none, and the wiki's figures match neither
 
 The two quest walkthroughs give hard XP numbers: Miner Madness 91,383 and Skull of the Jundak
-78,265. The repo awards neither. That is consistent with the shipped data rather than a gap — but
-the argument rests on two facts that live outside this tree, so they are named here rather than
-assumed.
+78,265. The repo awards neither. **Where those two figures came from is unresolved, and this
+section does not close it.**
 
-`bounty_hunts.lua:111-116` already states the rule from the shipped data: the Reward task's
-`Experience Amount` is **0** in every one of these `.qst` files, and the non-zero figure lives in
-the `[list]` block, which is *journal-level data that only the quest system awards*. This build has
-no quest-system row for any of these quests — `datatables/player/quests.iff` as loaded resolves to
-`stardust_03.tre`'s copy, whose only Mustafar rows are the 45 exploration markers. No row, no
-journal, no journal-level award.
+An earlier version of this section claimed the wiki numbers "corroborate that the `[list]` field
+was live" and cited `bounty_hunts.lua:111-116` for the rule. The gate refuted both halves and it
+is withdrawn. `bounty_hunts.lua` covers the seven *bounty* quests; Miner Madness is
+`som_poison_miners.lua` and Skull of the Jundak is `trophy_hunts.lua`, and those two record zero
+in *both* places, not a non-zero `[list]`:
 
-The two external facts, so a reader can retest them: (1) that `Experience Amount` is 0 on the
-Reward task in the seven `.qst` files — read out of the `.qst` data, restated at
-`bounty_hunts.lua:111-116`, not verifiable from the `.lua` alone; and (2) that the loaded
-`quests.iff` is the `stardust_03.tre` copy with only the 45 exploration rows — a property of the
-server's mounted `.tre` set, which the fences here forbid editing and which can change without
-this tree changing. If either turns out otherwise, this conclusion moves. On the data as it stands,
-the wiki's numbers **corroborate** that the `[list]` field was live; they do not show a gap here,
-and inventing an `awardExperience` call to match them would pay out a value the loaded data does
-not carry.
+    som_poison_miners.lua:40   task 8 Reward   Bank Credits 0, Experience Amount 0
+    som_poison_miners.lua:46   [list]          quest_combat, Experience Amount 0, Bank Credits 0
+    trophy_hunts.lua:277       "Bank Credits 0 and Experience Amount 0 are honoured literally"
+
+Grepping `Experience Amount` across the whole of `screenplays/mustafar/` settles the shape of it.
+Every recorded value in the tree is **0** — on Reward tasks and in `[list]` blocks alike, across
+the 22 files that record one — with exactly one exception: `bounty_hunts.lua:113`, where the seven bounties'
+`[list]` carries `Experience Amount 1000 / quest_combat`. One non-zero figure in the entire
+Mustafar quest set, and it is 1000, which is not 91,383 either.
+
+So the honest reading is narrower than the one it replaces:
+
+- **Why the repo pays no XP** — because every `Experience Amount` in the shipped data it works
+  from is 0. That part needs no external fact and is not in doubt.
+- **The single exception** — the bounties' `[list] 1000` is journal-level data the quest system
+  awards, and this build has no quest-system row for it: `datatables/player/quests.iff` as loaded
+  resolves to `stardust_03.tre`'s copy, whose only Mustafar rows are the 45 exploration markers.
+  That is a property of the server's mounted `.tre` set, which the fences forbid editing and which
+  can change without this tree changing — so it is a dependency, not a proof.
+- **The 91,383 and the 78,265** — these are in the shipped `.qst` data nowhere, in either field,
+  for either quest. They may be a player's measured session gain, a different publish's values, or
+  a wiki error. This audit cannot tell which, and guesses nothing. **OPEN.**
+
+Nothing is changed on the strength of it. Inventing an `awardExperience` call to hit a number the
+loaded data does not carry would be authoring a reward, not restoring one.
 
 The one place this tree does award XP is `mining_field_markers.lua:607`, 290 per surveyed area,
 and that one is not journal-level.
