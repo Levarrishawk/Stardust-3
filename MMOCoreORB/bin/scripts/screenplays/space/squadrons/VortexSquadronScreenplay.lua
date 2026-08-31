@@ -267,6 +267,30 @@ registerScreenPlay("escort_duty_naboo_rebel_7", true)
 	Tier 2 -- naboo_rebel_tier2 Main Missions
 ]]
 
+-- Compatibility cleanup for characters holding the obsolete placeholder tier-2
+-- quests. Persisted observers resolve their screenplay by global class name, so
+-- removing these objects caused a Lua panic before the replacement mission could
+-- clean the character's journal.
+local function clearLegacyVortexTier2Quest(pPlayer, questType, questName, className)
+	if (pPlayer == nil) then
+		return 0
+	end
+
+	dropObserver(ZONESWITCHED, className, "enteredZone", pPlayer)
+	dropObserver(INSPECTEDSHIP, className, "inspectedShip", pPlayer)
+	dropObserver(SHIPDOCKED, className, "dockedShip", pPlayer)
+	SpaceHelpers:clearQuestWaypoint(pPlayer, className)
+	SpaceHelpers:clearSpaceQuest(pPlayer, questType, questName, false)
+
+	return 1
+end
+
+inspect_naboo_rebel_tier2_1 = {enteredZone = function(self, pPlayer) return clearLegacyVortexTier2Quest(pPlayer, "inspect", "naboo_rebel_tier2_1", "inspect_naboo_rebel_tier2_1") end}
+destroy_surpriseattack_naboo_rebel_tier2_1 = {enteredZone = function(self, pPlayer) return clearLegacyVortexTier2Quest(pPlayer, "destroy_surpriseattack", "naboo_rebel_tier2_1", "destroy_surpriseattack_naboo_rebel_tier2_1") end}
+escort_naboo_rebel_tier2_2 = {enteredZone = function(self, pPlayer) return clearLegacyVortexTier2Quest(pPlayer, "escort", "naboo_rebel_tier2_2", "escort_naboo_rebel_tier2_2") end}
+recovery_naboo_rebel_tier2_3 = {enteredZone = function(self, pPlayer) return clearLegacyVortexTier2Quest(pPlayer, "recovery", "naboo_rebel_tier2_3", "recovery_naboo_rebel_tier2_3") end}
+assassinate_naboo_rebel_tier2_4 = {enteredZone = function(self, pPlayer) return clearLegacyVortexTier2Quest(pPlayer, "assassinate", "naboo_rebel_tier2_4", "assassinate_naboo_rebel_tier2_4") end}
+
 -- Mission 1: Escort Finn Darktrin, inspect the Imperial shuttle, then escape the trap
 escort_vortex_mission_1 = SpaceEscortScreenplay:new {
 	className = "escort_vortex_mission_1",
@@ -1921,6 +1945,13 @@ function VortexSquadronScreenplay:resetTier2Quests(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+
+	-- Remove journal entries and observers left by the former placeholder chain.
+	clearLegacyVortexTier2Quest(pPlayer, "inspect", "naboo_rebel_tier2_1", "inspect_naboo_rebel_tier2_1")
+	clearLegacyVortexTier2Quest(pPlayer, "destroy_surpriseattack", "naboo_rebel_tier2_1", "destroy_surpriseattack_naboo_rebel_tier2_1")
+	clearLegacyVortexTier2Quest(pPlayer, "escort", "naboo_rebel_tier2_2", "escort_naboo_rebel_tier2_2")
+	clearLegacyVortexTier2Quest(pPlayer, "recovery", "naboo_rebel_tier2_3", "recovery_naboo_rebel_tier2_3")
+	clearLegacyVortexTier2Quest(pPlayer, "assassinate", "naboo_rebel_tier2_4", "assassinate_naboo_rebel_tier2_4")
 
 	-- Mission 1
 	escort_vortex_mission_1:resetQuest(pPlayer)
