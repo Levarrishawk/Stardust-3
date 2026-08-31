@@ -982,13 +982,8 @@ survival_naboo_rebel_tier3_4_b = SpaceSurvivalScreenplay:new {
 	parentQuest = "patrol_naboo_rebel_tier3_4_a",
 	parentQuestType = "patrol",
 	parentQuestName = "naboo_rebel_tier3_4_a",
-	survivalTime = 180, survivalPoint = "space_dathomir:naboo_rebel_tier3_inquisition_point", delayToFirstAttack = 5, attackDelay = 45,
+	survivalTime = 180, survivalUpdateInterval = 60, survivalPoint = {x = 609, z = -5349, y = -7366}, delayToFirstAttack = 5, attackDelay = 45,
 	attackShips = {{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"}, {"imp_tie_bomber_tier3", "imp_tie_interceptor_tier3"}, {"imp_tie_fighter_tier3", "imp_tie_fighter_tier3"}},
-
-	surpriseAttackShips = {
-		zone = "space_endor",
-		spawns = {{count = 6, shipName = "imp_tie_interceptor_tier3"}},
-	},
 }
 
 registerScreenPlay("survival_naboo_rebel_tier3_4_b", true)
