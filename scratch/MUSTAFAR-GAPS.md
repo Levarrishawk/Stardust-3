@@ -433,7 +433,8 @@ weapon **value** on three of them. It should have changed only the key. All thre
 
 `jedi_dark` was the live one: `mobile/weapon/groups/jedi_dark.lua` exists and calls
 `addWeapon("jedi_dark", ...)`, but `mobile/weapon/serverobjects.lua` never includes it, so the
-group never registers and the Prophet — a level 70 boss — spawned with no weapon at all. All
+group never registers and the Prophet — level 87, retail difficulty Elite — spawned with no
+weapon at all. All
 three are reverted to the shipped value. `mobile/weapon/` itself is untouched by this branch:
 `git diff origin/unstable...HEAD -- mobile/weapon/` is empty.
 
@@ -551,6 +552,58 @@ register. `screenplays.lua` names 69 Mustafar files, all 69 resolve, and the onl
 
 Syntax gate after the weapon revert, `luac5.3 -p` over
 `mobile/custom_content/som` + `screenplays/mustafar`: **ok=230 fail=0**.
+
+### The Storm Lord table — a real retail source, found late, and what it settled
+
+⚠ **CORRECTING AN EARLIER CALL OF MINE.** An earlier pass looked at
+`C:\swg-extract\Prophet_of_the_Storm_Lord.wiki`, found a Cloudflare "Just a moment..."
+challenge page, and concluded the `.wiki` files there were worthless. **That generalised from one
+file and was wrong.** 20 of the 27 are real; only 7 are challenge pages. The 7 happen to include
+the individual creature pages, which is what made the sample misleading.
+
+`Storm_Lord.wiki` is real and it is a datatable in prose:
+
+| creature | Natural CL | Difficulty | Combat | Location | Respawn |
+| --- | --- | --- | --- | --- | --- |
+| Storm Lord Minion | 80 | Normal | Ranged weapons | — | — |
+| Storm Lord Guard | 82 | Normal | Melee weapons | — | — |
+| Storm Lord Zealot | 83 | Normal | Melee weapons | — | — |
+| Prophet of the Storm Lord | 87 | Elite | Lightsaber | `3195, 770` | — |
+| The Storm Lord | 90 | Boss | Lightsaber | `3069, 1131` | 10 minutes |
+
+**It self-verifies against the transform.** Run the Prophet's listed `/way` through
+`world_x = way_x - 2880`, `world_y = way_y + 2976` from the section above:
+`3195 - 2880 = 315` and `770 + 2976 = 3746`. The repo spawns him at
+`storm_lord_region.lua:151` as `spawnMobile("mustafar", "storm_lord_prophet", 1200, 315, ..., 3746, 0, 0)`
+— **exact, to the metre, on both axes.** That is a new independent anchor for the transform, and it
+identifies this page as the source an earlier round already used without naming it. (The Storm
+Lord's own listing converts to `189, 4107` against a spawn at `194.4, 4096.3` — 12 m, inside the
+precision a prose location page offers. Left alone.)
+
+**Levels applied from it.** The SoM import flattened every som creature to `level = 70`; upstream
+`origin/unstable` carries that on all 158. An earlier round corrected three from this page
+(touched 83, zealot 83, prophet 87) and stopped. The other three are now corrected too — minion
+80, guard 82, **the Storm Lord himself 90**, the arc's own boss, who was sitting 20 levels under
+his retail value. The Storm Lord's respawn also moves `1200 → 600` at
+`storm_lord_region.lua:127`, from the page's "Spawn Timer: 10 minutes".
+
+**Weapons deliberately NOT changed, and this is the open decision.** The page gives a combat
+*category*, never a weapon or a group name, and all five carry the shipped
+`primaryWeapon = "pirate_weapons_light"` — which is one pistol plus four melee, so it fits none
+of the three categories cleanly:
+
+| creature | retail combat | what would fit | status |
+| --- | --- | --- | --- |
+| minion | Ranged weapons | a ranged group | mismatched |
+| guard / zealot | Melee weapons | `imperial_sword` (registered, melee-only) | mismatched |
+| prophet / storm lord | Lightsaber | `jedi_dark` — **unregistered** | mismatched |
+
+**No registered weapon group anywhere on this server contains a lightsaber.** Both saber groups,
+`jedi_dark` and `jedi_light`, are among the four that `mobile/weapon/serverobjects.lua` omits.
+That reads as an upstream policy rather than an oversight, and reversing it is Levarris's call,
+not a Mustafar repair. `mobile/weapon/groups/pirate_weapons_light.lua:9-13` also states the
+repo's own rule for this: a group assignment needs a source that *shows the weapon*, and a prose
+category is not one. So the three mismatches are recorded here and left for a decision.
 
 ### The one remaining TODO in the tree, and why it stays
 

@@ -124,7 +124,7 @@ function storm_lord_region:spawnMobiles()
   self:setMoodString(pTouched10, "neutral")
 
 -- Storm Lord Promentory
-  local pStormlord = spawnMobile("mustafar", "storm_lord",1200,194.4,266.7,4096.3,-22,0)  
+  local pStormlord = spawnMobile("mustafar", "storm_lord",600,194.4,266.7,4096.3,-22,0)  
   self:setMoodString(pStormlord, "angry")
   local pGuard1 = spawnMobile("mustafar", "storm_lord_guard",300,191.3,264.5,4096.3,-37,0)  
   self:setMoodString(pGuard1, "neutral")
