@@ -507,7 +507,12 @@ end
 function KesselCorvetteEncounter:completeQuest(pPlayer, notifyClient)
 	self:clearEncounterState(pPlayer)
 	SpaceDestroyScreenplay.completeQuest(self, pPlayer, notifyClient)
-	CreatureObject(pPlayer):sendSystemMessage("Return to Grand Admiral Nial Declann on Naboo to report your victory.")
+
+	if (self.questName == "master_rebel_2") then
+		CreatureObject(pPlayer):sendSystemMessage("Return to Admiral Willham Burke on Corellia to report your victory.")
+	else
+		CreatureObject(pPlayer):sendSystemMessage("Return to Grand Admiral Nial Declann on Naboo to report your victory.")
+	end
 end
 
 function KesselCorvetteEncounter:failQuest(pPlayer, notifyClient)
