@@ -1000,7 +1000,7 @@ v3_fx_convo:addScreen(v3_fx_convo_tier3_train_droid)
 -- All tier 3 skills earned, tier incremented
 v3_fx_convo_tier3_completed = ConvoScreen:new {
 	id = "tier3_completed",
-	leftDialog = "@conversation/naboo_rebel_tier3:s_cbc2d68c",
+	leftDialog = "Your work with me is complete. Report to Brother Extok Evin in Dearic on Talus for your next assignment. I have uploaded his location to your datapad.",
 	stopConversation = "true",
 	options = {}
 }
