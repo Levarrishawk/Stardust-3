@@ -86,6 +86,43 @@ function storm_lord_region:spawnMobiles()
   local pMinion13 = spawnMobile("mustafar", "storm_lord_minion",120,186,160.3,4558,56,0)
   self:setMoodString(pMinion13, "idlewander")
   
+-- Zealot Camp on the West Shelf
+-- The .qst's task 3 target is som_storm_lord_touched. Nothing in the repo placed
+-- it, so that leg counted 0 of 10 forever. The camp is sourced: two
+-- must_smuggler_bunker at (188.21, h 207.25, 4247.13) and (165.98, h 207.25,
+-- 4226.39) -- snapshot/mustafar.ws nodes 12110937 and 12110938 -- a built camp
+-- the repo left empty. It is a different camp from the Scavenger Camp above,
+-- which sits on the lower east bench at h ~130 (nodes 12110946/47/48).
+-- The live-era wording for this leg is "found all around the ruins", and the
+-- wiki gives the zealot location as literally "(area)", so this is an area
+-- population, not a cluster.
+-- OURS, NOT SOURCED: the count of ten, the individual positions, the headings
+-- and the 120 s respawn. No shipped or live data records any of them. Ten
+-- matches the kill requirement the way the thirteen static minions match theirs;
+-- 120 s is the interval every other static in this file uses.
+-- No height ships for these points, so the floor is resolved at spawn -- the
+-- same pattern storm_lord.lua:438 uses for the quest giver.
+  local pTouched1 = spawnMobile("mustafar", "storm_lord_touched",120,185.4,getWorldFloor(185.4,4243.8,"mustafar"),4243.8,143,0)
+  self:setMoodString(pTouched1, "neutral")
+  local pTouched2 = spawnMobile("mustafar", "storm_lord_touched",120,192.6,getWorldFloor(192.6,4250.1,"mustafar"),4250.1,-37,0)
+  self:setMoodString(pTouched2, "neutral")
+  local pTouched3 = spawnMobile("mustafar", "storm_lord_touched",120,183.1,getWorldFloor(183.1,4251.6,"mustafar"),4251.6,56,0)
+  self:setMoodString(pTouched3, "idlewander")
+  local pTouched4 = spawnMobile("mustafar", "storm_lord_touched",120,178.6,getWorldFloor(178.6,4240.2,"mustafar"),4240.2,-110,0)
+  self:setMoodString(pTouched4, "neutral")
+  local pTouched5 = spawnMobile("mustafar", "storm_lord_touched",120,172.3,getWorldFloor(172.3,4234.7,"mustafar"),4234.7,23,0)
+  self:setMoodString(pTouched5, "idlewander")
+  local pTouched6 = spawnMobile("mustafar", "storm_lord_touched",120,169.4,getWorldFloor(169.4,4229.8,"mustafar"),4229.8,165,0)
+  self:setMoodString(pTouched6, "neutral")
+  local pTouched7 = spawnMobile("mustafar", "storm_lord_touched",120,162.9,getWorldFloor(162.9,4222.1,"mustafar"),4222.1,-73,0)
+  self:setMoodString(pTouched7, "idlewander")
+  local pTouched8 = spawnMobile("mustafar", "storm_lord_touched",120,168.7,getWorldFloor(168.7,4219.4,"mustafar"),4219.4,43,0)
+  self:setMoodString(pTouched8, "neutral")
+  local pTouched9 = spawnMobile("mustafar", "storm_lord_touched",120,176.0,getWorldFloor(176.0,4224.9,"mustafar"),4224.9,-29,0)
+  self:setMoodString(pTouched9, "idlewander")
+  local pTouched10 = spawnMobile("mustafar", "storm_lord_touched",120,196.8,getWorldFloor(196.8,4241.3,"mustafar"),4241.3,147,0)
+  self:setMoodString(pTouched10, "neutral")
+
 -- Storm Lord Promentory
   local pStormlord = spawnMobile("mustafar", "storm_lord",1200,194.4,266.7,4096.3,-22,0)  
   self:setMoodString(pStormlord, "angry")
@@ -99,5 +136,19 @@ function storm_lord_region:spawnMobiles()
   self:setMoodString(pGuard4, "neutral")
   local pGuard5 = spawnMobile("mustafar", "storm_lord_guard",300,204.6,263.7,4085.8,147,0)  
   self:setMoodString(pGuard5, "neutral")
+
+-- Prophet of the Storm Lord
+-- The .qst's task 5 target is som_storm_lord_prophet, and nothing placed it, so
+-- that leg was unreachable. The point is sourced: the live-era point (315, 3746)
+-- is 5.2 m from must_jeditemple_watchtower at (313.49, h 171.49, 3750.96),
+-- snapshot/mustafar.ws node 12110949. That watchtower is a
+-- SharedStaticObjectTemplate (object/custom_content/building/mustafar/
+-- structures/objects.lua:146) with no cells and no children, so cellID 0 is
+-- right and there is no interior to place him in.
+-- OURS, NOT SOURCED: the heading and the 1200 s respawn. 1200 s is the interval
+-- the Storm Lord himself uses on line 90; the Prophet is the tier below him.
+-- No height ships for this point, so the floor is resolved at spawn.
+  local pProphet = spawnMobile("mustafar", "storm_lord_prophet",1200,315,getWorldFloor(315,3746,"mustafar"),3746,0,0)
+  self:setMoodString(pProphet, "angry")
    
 end

@@ -61,7 +61,11 @@ function north_west_region:spawnMobiles()
   -- Barracks
   local pCoyn13 = spawnMobile("mustafar", "coyn_commando",120,-5402.2,114.9,6072.7,-49,0)
   self:setMoodString(pCoyn13, "neutral") 
-  local pCoyn14 = spawnMobile("mustafar", "coyn_commando",120,-5402.2,114.9,6072.7,-49,0)
+  -- pCoyn14 used to share pCoyn13's exact point -- the only duplicated spawn point in
+  -- this tree. It was stepped one interval further along the same barracks line, the
+  -- same remedy smoking_forest_region.lua:50-51 used. The coordinate is ours; no live
+  -- table covers this outdoor camp.
+  local pCoyn14 = spawnMobile("mustafar", "coyn_commando",120,-5398.6,114.9,6077.3,-49,0)
   self:setMoodString(pCoyn14, "idlewander") 
   local pCoyn15 = spawnMobile("mustafar", "coyn_commando",120,-5405.8,114.7,6068.1,-57,0)
   self:setMoodString(pCoyn15, "neutral") 
@@ -93,8 +97,8 @@ function north_west_region:spawnMobiles()
   local pCoyn28 = spawnMobile("mustafar", "coyn_shock",120,-5293.4,138.6,6074.6,-95,0)
   self:setMoodString(pCoyn28, "neutral")
   -- Promentory
-  local pCoyn29= spawnMobile("mustafar", "coyn_commander",600,-5301.4,266.9,5992.1,-179,0)
+  local pCoyn29 = spawnMobile("mustafar", "coyn_commander",600,-5301.4,266.9,5992.1,-179,0)
   self:setMoodString(pCoyn29, "neutral")
-  local pCoyn27= spawnMobile("mustafar", "coyn_shock",120,-5306.2,266.9,5991.6,95,0)
-  self:setMoodString(pCoyn27, "neutral")
+  local pCoyn30 = spawnMobile("mustafar", "coyn_shock",120,-5306.2,266.9,5991.6,95,0)
+  self:setMoodString(pCoyn30, "neutral")
 end
