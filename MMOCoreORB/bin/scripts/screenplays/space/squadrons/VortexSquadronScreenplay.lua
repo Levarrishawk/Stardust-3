@@ -682,7 +682,12 @@ rescue_naboo_rebel_tier3_2_a = SpaceRescueScreenplay:new {
 	sideQuest = true, sideQuestType = "patrol", sideQuestName = "naboo_rebel_tier3_2_b", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION, sideQuestDelay = 5,
 	parentQuest = "space_battle_naboo_rebel_tier3_2", parentQuestType = "space_battle", parentQuestName = "naboo_rebel_tier3_2",
 	rescueShip = "spynet_runner_tier3", rescueLocation = {x = -2257, z = -3938, y = -1441}, repairDelay = 20, escortSpeed = 60, orderedEscortRoute = true,
-	escortPoints = {{patrolPointName = "naboo_rebel_tier3_rescue_1", zoneName = "space_dantooine", escortNumber = 1, radius = 250}, {patrolPointName = "naboo_rebel_tier3_rescue_2", zoneName = "space_dantooine", escortNumber = 2, radius = 250}, {patrolPointName = "naboo_rebel_tier3_rescue_3", zoneName = "space_dantooine", escortNumber = 3, radius = 250}, {patrolPointName = "naboo_rebel_tier3_rescue_4", zoneName = "space_dantooine", escortNumber = 4, radius = 250}},
+	escortPoints = {
+		{patrolPointName = "naboo_rebel_tier3_rescue_1", zoneName = "space_dantooine", x = -2257, z = -3938, y = -1441, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_rescue_2", zoneName = "space_dantooine", x = -1722, z = -2498, y = 1940, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_rescue_3", zoneName = "space_dantooine", x = -996, z = -2105, y = 4791, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_rescue_4", zoneName = "space_dantooine", x = 378, z = -1904, y = 6544, escortNumber = 4, radius = 250},
+	},
 	attackDelay = 55, attackShips = {{"blacklight_fighter_tier3", "blacklight_bomber_tier3"}, {"blacklight_fighter_tier3", "blacklight_assassin_tier3"}},
 }
 registerScreenPlay("rescue_naboo_rebel_tier3_2_a", true)
