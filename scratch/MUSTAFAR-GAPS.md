@@ -747,7 +747,7 @@ greps found 4 of the 8 placed and Menddle placed to 0.63 m. It had searched for 
 names* rather than the repo's template names (`miner_pilot` carries `customName = "Master Pilot
 Menddle"`). **The primary read caught it; the summary would not have.**
 
-### XP — the tree pays none, the shipped data says none, and the wiki's figures match neither
+### XP — no *quest reward* pays any, and the wiki's figures match nothing in the shipped data
 
 The two quest walkthroughs give hard XP numbers: Miner Madness 91,383 and Skull of the Jundak
 78,265. The repo awards neither. **Where those two figures came from is unresolved, and this
@@ -759,9 +759,13 @@ is withdrawn. `bounty_hunts.lua` covers the seven *bounty* quests; Miner Madness
 `som_poison_miners.lua` and Skull of the Jundak is `trophy_hunts.lua`, and those two record zero
 in *both* places, not a non-zero `[list]`:
 
-    som_poison_miners.lua:40   task 8 Reward   Bank Credits 0, Experience Amount 0
-    som_poison_miners.lua:46   [list]          quest_combat, Experience Amount 0, Bank Credits 0
-    trophy_hunts.lua:277       "Bank Credits 0 and Experience Amount 0 are honoured literally"
+    som_poison_miners.lua:40   Bank Credits 0, Experience Amount 0
+    som_poison_miners.lua:46   Experience Type quest_combat with Experience Amount 0, Bank Credits 0.
+    trophy_hunts.lua:277         * Bank Credits 0 and Experience Amount 0 are honoured literally
+
+(Those three are verbatim; :40 is the task 8 Reward line and :46 is the `[list]` line, and
+`trophy_hunts.lua:277` continues "…: no credits and no XP are granted, because that is what the
+`.qst` says.")
 
 Grepping `Experience Amount` across the whole of `screenplays/mustafar/` settles the shape of it.
 Every recorded value in the tree is **0** — on Reward tasks and in `[list]` blocks alike, across
@@ -771,8 +775,10 @@ Mustafar quest set, and it is 1000, which is not 91,383 either.
 
 So the honest reading is narrower than the one it replaces:
 
-- **Why the repo pays no XP** — because every `Experience Amount` in the shipped data it works
-  from is 0. That part needs no external fact and is not in doubt.
+- **Why no quest *reward* pays XP** — because every `Experience Amount` in the shipped data those
+  rewards are built from is 0. That part needs no external fact and is not in doubt. It is a
+  statement about the quest-reward path only; see the last paragraph for the one award this tree
+  does make outside it.
 - **The single exception** — the bounties' `[list] 1000` is journal-level data the quest system
   awards, and this build has no quest-system row for it: `datatables/player/quests.iff` as loaded
   resolves to `stardust_03.tre`'s copy, whose only Mustafar rows are the 45 exploration markers.
@@ -785,8 +791,13 @@ So the honest reading is narrower than the one it replaces:
 Nothing is changed on the strength of it. Inventing an `awardExperience` call to hit a number the
 loaded data does not carry would be authoring a reward, not restoring one.
 
-The one place this tree does award XP is `mining_field_markers.lua:607`, 290 per surveyed area,
-and that one is not journal-level.
+**The tree does award XP in exactly one place, and it is not a quest reward.**
+`mining_field_markers.lua:607` calls
+`CreatureObject(pPlayer):awardExperience("combat_general", self.areaXpReward, true)` with
+`areaXpReward = 290` (`:124`), per surveyed area. That is a screenplay award on a survey action,
+not a `.qst` Reward task and not journal-level, so it sits outside everything above rather than
+contradicting it. An earlier heading here read "the tree pays none", which this line falsifies;
+the claim is now scoped to quest rewards.
 
 ### The Kenobi finale — retail says what was in the room, still not where
 
