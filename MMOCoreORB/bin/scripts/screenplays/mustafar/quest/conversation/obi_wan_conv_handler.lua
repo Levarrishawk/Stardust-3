@@ -30,14 +30,92 @@
 	follows the same split: chamber_a (which feeds where_a/where_b) for a player
 	who spared the hermit, chamber_b (where_c/where_d) for one who killed him.
 
-	THE LEVEL GATE IS SOE'S NUMBER. som_kenobi_main_quest_1 is Level 75, Tier 4,
-	so a player under that gets pro_nothing, s_34, "I have nothing more for you
-	at this time". The prologue itself carries no level, so it is not gated.
+	THE GATE -- this was wrong, and the .qst is why.
+
+	This file used to gate the main quest on som_kenobi_main_quest_1's Level 75
+	and say so out loud: "nothing contradicts the 75 and there is nothing better
+	to put in its place." Both halves were false.
+
+	Obi-Wan's conversation does carry a gate, and it is not a level. Live's
+	condition_startFirstQuest ANDs nine completed side quests -- collectors
+	business, cursed shard, hidden treasure, historian, moral choice, reunite
+	shard, samaritan, serpent shard, symbiosis. Finish Mustafar's side content
+	and he talks to you; miss one and he does not. There is no level test
+	anywhere in the file: grep it for "level" and nothing comes back.
+
+	The root cause is the same one this arc keeps producing. A [list] Level is a
+	client-side display value; the real gate lives in the giver's server-side
+	conversation. That much the old note had right -- Menth Paul, the mining
+	executive and Q4P3 each test level against 60 and so enforce 61. What it got
+	wrong was the next step: not finding a level test in Obi-Wan's conversation,
+	it kept the .qst's number as a fallback instead of reading the rest of the
+	file. The gate was sitting three conditions further down. Absence of the
+	thing being looked for is not absence of a gate.
+
+	So the number is gone, not corrected. kenobiSpineScreenPlay.requiredLevel is
+	deleted rather than re-valued, and the test is
+	kenobiSpineScreenPlay:hasCompletedPrerequisites, which carries the nine and
+	the mapping onto this tree's screenplay stages.
+
+	What a player who has not finished the nine hears is unchanged: pro_nothing,
+	s_34, "I have nothing more for you at this time". That is still right, and
+	for a reason worth writing down, because the merged template makes it look
+	wrong. In live the spine's own fall-through is s_356, not s_34. But s_34 is
+	the PROLOGUE conversation's _defaultCondition, and a player who has finished
+	the prologue and nothing else is exactly who reaches it there. Since the two
+	tables are merged here, s_34 is the faithful line for that player and s_356
+	stays where it is, on the stages that have no business with him.
+
+	THE ONE ACTION DELIBERATELY NOT WIRED. Live fires action_finalScriptVar on
+	three screens -- s_170, s_172 and s_321 -- and all it does is set the objvar
+	sawObiwanAtLauncher to 1. Nothing reads it. Not this conversation, not any
+	other conversation, not a screenplay, not a quest: the whole shipped script
+	tree writes that name once and reads it never. It is a dead flag, so nothing
+	here writes one. This is a checked absence, not a missed action.
+
+	THE ANIMATIONS, AND THE FIVE THAT COULD NOT GO IN THE TREE.
+
+	Live plays 73 animations across this conversation: 72 hung off player
+	responses and one on the opening line. They are not decoration. The shipped
+	script is specific about which gesture goes where -- Obi-Wan shakes his head
+	at one answer and nods at another, and the player twitches at bad news.
+
+	ConvoScreen already has a slot for this. The engine reads "animation" and
+	"playerAnimation" off each screen and plays them when the screen is sent
+	(ConversationScreen.h, sendTo). Seven other Mustafar trees here use it. So
+	that is where 69 of them went: in the tree, declaratively, no code.
+
+	It does not fit all of them, because live keys an animation to the OPTION
+	and the engine field keys it to the SCREEN. Almost always that is the same
+	thing. Five times it is not, because two different answers reach the same
+	screen carrying different gestures. s_188 is the clearest: reached from
+	s_186 it plays nod, reached from s_184 it plays rub_chin_thoughtful. A field
+	on s_188 can only hold one of the two, and would then play it on both paths.
+
+	The four screens whose inbound answers disagree are hist_a_crystal,
+	hist_a_krow, hist_b and hist_b_krow. Their five gestures are the
+	edgeAnimations table below, keyed by the screen the player was LOOKING AT
+	and the option they picked, and played from here instead.
+
+	WHY THAT KEY WORKS. runScreenHandlers runs before the new screen is sent
+	(ConversationObserverImplementation.cpp:133, then :136), and the session's
+	last screen is only updated on the send path (ConversationScreen.h:232). So
+	inside this function getLastConversationScreen() still returns the screen
+	the option was picked FROM. selectedOption is the engine's index into that
+	screen's option list and it is 0-based (ConversationScreen.h, options.get),
+	which is the +1 in playEdgeAnimation.
+
+	The split is deliberate: the tree holds everything the tree can hold, and
+	code holds only the five it cannot.
 
 	NOT GATED ON BEING A JEDI. Every prologue line calls the player "young
-	Jedi", but neither .qst carries a Jedi requirement -- only the level -- so
-	none is imposed here. If that gate is wanted it is one line in
-	getInitialScreen; it is flagged rather than invented.
+	Jedi", but no .qst carries a Jedi requirement and neither conversation tests
+	for one -- all thirteen of the spine's conditions are quest-state tests. So
+	none is imposed here.
+
+	NO STAFF BYPASS. Live's condition_startFirstQuest opens with isGod(player).
+	Nothing equivalent is wired here; a staff bypass is a decision, not a
+	reconstruction, so it is flagged rather than invented.
 ]]
 
 obi_wan_conv_handler = conv_handler:new {}
@@ -66,10 +144,32 @@ obi_wan_conv_handler.hurryScreens = {
 	hurry_b = true,  -- s_172
 }
 
--- The two farewells that hand over som_kenobi_main_quest_1.
+-- The two farewells that hand over som_kenobi_main_quest_1. give_quest_b used to
+-- be s_351, which gives nothing; see the swap note in the tree for why it moved.
 obi_wan_conv_handler.questScreens = {
 	give_quest_a = true,  -- s_270
-	give_quest_b = true,  -- s_351
+	give_quest_b = true,  -- s_309
+}
+
+-- The five gestures that could not live on a screen, because another answer
+-- reaches the same screen carrying a different one. Keyed by the screen being
+-- looked at, then by the option picked. See THE ANIMATIONS above.
+obi_wan_conv_handler.edgeAnimations = {
+	who_b = {
+		[1] = { {"player", "nod"} },  -- s_174, into hist_b
+	},
+	hist_a = {
+		[2] = { {"player", "nod"} },  -- s_186, into hist_a_crystal
+	},
+	hist_a_sith = {
+		[1] = { {"player", "rub_chin_thoughtful"} },  -- s_184, into hist_a_crystal
+	},
+	hist_a_vanquished = {
+		[1] = { {"player", "nod"} },  -- s_276, into hist_b_krow
+	},
+	hist_b_weak = {
+		[1] = { {"player", "shrug_shoulders"} },  -- s_344, into hist_a_krow
+	},
 }
 
 --------------------------------------------------------------------------------
@@ -115,7 +215,8 @@ function obi_wan_conv_handler:getShoreScreen(pPlayer, convoTemplate)
 
 	-- spine -- som_kenobi_obi_wan.stf
 	if (stage == kenobiSpineScreenPlay.STAGE_WEST) then
-		if (CreatureObject(pPlayer):getLevel() < kenobiSpineScreenPlay.requiredLevel) then
+		-- Live's condition_startFirstQuest. See THE GATE.
+		if (not kenobiSpineScreenPlay:hasCompletedPrerequisites(pPlayer)) then
 			return convoTemplate:getScreen("pro_nothing")
 		end
 
@@ -156,10 +257,51 @@ function obi_wan_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	return self:getShoreScreen(pPlayer, convoTemplate)
 end
 
+--------------------------------------------------------------------------------
+-- The handful of animations that belong to an option rather than to a screen.
+--------------------------------------------------------------------------------
+
+function obi_wan_conv_handler:playEdgeAnimation(pPlayer, pNpc, selectedOption)
+	local pSession = CreatureObject(pPlayer):getConversationSession()
+
+	if (pSession == nil) then
+		return
+	end
+
+	-- Still the screen the option was picked FROM. See WHY THAT KEY WORKS.
+	local pLastScreen = LuaConversationSession(pSession):getLastConversationScreen()
+
+	if (pLastScreen == nil) then
+		return
+	end
+
+	local fromScreen = self.edgeAnimations[LuaConversationScreen(pLastScreen):getScreenID()]
+
+	if (fromScreen == nil) then
+		return
+	end
+
+	local animations = fromScreen[selectedOption + 1]
+
+	if (animations == nil) then
+		return
+	end
+
+	for i = 1, #animations do
+		if (animations[i][1] == "npc") then
+			CreatureObject(pNpc):doAnimation(animations[i][2])
+		else
+			CreatureObject(pPlayer):doAnimation(animations[i][2])
+		end
+	end
+end
+
 function obi_wan_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
 	local screen = LuaConversationScreen(pConvScreen)
 	local screenID = screen:getScreenID()
 	local pClonedScreen = screen:cloneScreen()
+
+	self:playEdgeAnimation(pPlayer, pNpc, selectedOption)
 
 	if (screenID == "pro_task") then
 		-- s_26 sends him after the dying miner. som_obi_wan_signal_1.
@@ -188,6 +330,11 @@ function obi_wan_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, se
 	elseif (self.hurryScreens[screenID]) then
 		-- 'talkedKenobi3' -- the way into the lair opens.
 		kenobiSpineScreenPlay:talkedKenobi3(pPlayer)
+
+	elseif (screenID == "resume_yes") then
+		-- s_341. Live's regiveQuest3 + talkNumber2, less the half that has no
+		-- meaning here. See resumeJourney for what survives and why.
+		kenobiSpineScreenPlay:resumeJourney(pPlayer)
 	end
 
 	return pClonedScreen

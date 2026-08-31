@@ -1,3 +1,52 @@
+--[[
+	THE CELL MAP -- the one place Mustafar's facility cell ids are derived.
+
+	Every Mensix placement in this tree is a cell id, and the ids are not
+	guessable: the building is snapshot node 12112217 and its 30 cell children
+	run 12112218..12112249 with 12112233 and 12112239 absent, so
+	buildingID + cellIndex drifts by one past index 15 and by two past index 20.
+
+	The map below is not inferred. It is the join of two files:
+
+	  * appearance/thm_must_mining_outpost.pob -- the portal layout the building
+	    template points at. Its CELS form holds 31 CELL records in order; record
+	    0 is the exterior r0 and records 1..30 carry the cell names.
+	  * snapshot/mustafar.ws -- node 12112217's 30 child NODE records, each
+	    carrying its own object id and its cell index.
+
+	PlanetManagerImplementation::loadSnapshotObject is what ties them: it creates
+	each cell with objectID = the .ws node id and files it under the node's cell
+	index, so POB record N is snapshot child index N is the id in this table.
+
+	  1  main_entrance_01  12112218      16  small_room_03      12112234
+	  2  main_entrance_02  12112219      17  hall_ramp_01       12112235
+	  3  hall_junction_01  12112220      18  hub_room           12112236
+	  4  hall_01           12112221      19  hall_05            12112237
+	  5  entrance_room_01  12112222      20  small_room_04      12112238
+	  6  connecting_hall   12112223      21  hall_06            12112240
+	  7  entrance_room_02  12112224      22  conference_room    12112241
+	  8  hall_junction_02  12112225      23  hall_07            12112242
+	  9  medium_room_01    12112226      24  small_room_05      12112243
+	 10  control_room_01   12112227      25  hall_08            12112244
+	 11  small_room_01     12112228      26  control_room_02    12112245
+	 12  hall_02           12112229      27  hall_09            12112246
+	 13  hall_03           12112230      28  hall_10            12112247
+	 14  hall_04           12112231      29  landing_deck_room  12112248
+	 15  small_room_02     12112232      30  mountain_entrance  12112249
+
+	medium_room_01 is the cantina, conference_room is Milo's office, and
+	hub_room is the mining network floor. BuildingObject(pBuilding):getNamedCell
+	resolves the same names at runtime and is the cross-check if the snapshot is
+	ever re-cut; the ids are written out here so a spawn line stays one line.
+
+	The building sits at (-2420.50, h 199.40, 1767.08) with an identity rotation,
+	so a cell-local coordinate is simply world minus that origin. That is what
+	makes the published Mensix waypoints line up with the table this file is
+	placed from -- e.g. Chief Ulon Glost at /way 449 -1156 is cell-local
+	(-9.5, 52.6) in entrance_room_01, and the junk dealer's /way height of 222
+	is 199.40 + 22.7.
+--]]
+
 local ObjectManager = require("managers.object.object_manager")
 
 mensix_mining_facility_main = ScreenPlay:new {
@@ -35,9 +84,9 @@ end
 
 function mensix_mining_facility_main:spawnMobiles()
 
-    local pTraveler_m = spawnMobile("mustafar", "traveler_m",0,-2481,230.1,1633.7,-51,0)  -- -55.1,31.5,-120.3,-33,12112248  Original NGE Position (changed to outdoors due to spatialChat not working in cell)
+    local pTraveler_m = spawnMobile("mustafar", "traveler_m",0,-2481,230.1,1633.7,-51,0)  -- -55.1,31.5,-120.3,-53,12112248  Original NGE Position (changed to outdoors due to spatialChat not working in cell)
       self:setMoodString(pTraveler_m, "npc_consoling")    
-    local pTraveler_f = spawnMobile("mustafar", "traveler_f",0,-2483.1,230.1,1635.7,-90,0)  -- -56.7,31.5,-118.9,-90,12112248 Original NGE Position (changed to outdoors due to spatialChat not working in cell)
+    local pTraveler_f = spawnMobile("mustafar", "traveler_f",0,-2483.1,230.1,1635.7,-90,0)  -- -56.5,31.5,-119.1,135,12112248 Original NGE Position (changed to outdoors due to spatialChat not working in cell)
       self:setMoodString(pTraveler_f, "angry")    
       
      writeData("mensix_mining_facility_main:traveler_m_objectID", SceneObject(pTraveler_m):getObjectID() )
@@ -55,7 +104,8 @@ function mensix_mining_facility_main:spawnMobiles()
      -- CreatureTemplateManager would fail the lookup and the facility's junk dealer simply
      -- never appeared. The Mustafar junk dealer template is must_junk
      -- (mobile/custom_content/som/must_junk.lua, customName "Junk Dealer").
-     spawnMobile("mustafar", "must_junk",0,-90,22.7,-47.8,23,12112245)
+     -- Live row: som_mustafarian_junk, control_room_02, -90 / 22.7 / -47.9, yaw 49.
+     spawnMobile("mustafar", "must_junk",0,-90,22.7,-47.9,49,12112245)
      
      
      -- Background NPCs
@@ -74,9 +124,16 @@ function mensix_mining_facility_main:spawnMobiles()
      local pMiner_b7 = spawnMobile("mustafar", "mustafarian_miner_01",0,-81.1,10.8,39.7,1,12112226)
      self:setMoodString(pMiner_b7, "npc_accusing")
      
-     -- Quest Givers
-     spawnMobile("mustafar", "pei_yi",0,-77.1,10.8,67.5,-138,12112226)
-     spawnMobile("mustafar", "diskret_stahn",0,-75.4,10.8,66.3,-112,12112226)
+     -- Quest Givers.  Positions and headings are the live ones (see THE CELL MAP
+     -- below for where the numbers come from); the mood column is empty on every
+     -- one of these rows, so none of them gets a setMoodString.
+     spawnMobile("mustafar", "pei_yi",0,-77.2,10.8,67.4,117,12112226)
+     spawnMobile("mustafar", "diskret_stahn",0,-75.5,10.8,66.3,-85,12112226)
+
+     spawnMobile("mustafar", "foreman_donko",0,-13.5,10.8,35,180,12112222)
+     spawnMobile("mustafar", "urup_falco",0,-152.7,19.1,-17.4,-68,12112241)
+     spawnMobile("mustafar", "chief_armstrong",0,-150,18.6,-61,0,12112243)
+     spawnMobile("mustafar", "chief_glost",0,-9.5,10.8,52.6,90,12112222)
      
    
 end
