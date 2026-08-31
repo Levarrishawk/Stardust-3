@@ -631,8 +631,13 @@ escort_naboo_rebel_tier3_1_a = SpaceEscortScreenplay:new {
 	className = "escort_naboo_rebel_tier3_1_a", questName = "naboo_rebel_tier3_1_a", questType = "escort", questZone = "space_dantooine", creditReward = 0,
 	sideQuest = true, sideQuestType = "survival", sideQuestName = "naboo_rebel_tier3_1_b", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION, sideQuestDelay = 5,
 	parentQuest = "assassinate_naboo_rebel_tier3_1", parentQuestType = "assassinate", parentQuestName = "naboo_rebel_tier3_1",
-	escortShips = {"lambdashuttle_rebel_tier3_1_officer"}, orderedEscortRoute = true,
-	escortPoints = {{patrolPointName = "naboo_rebel_tier3_point_1", zoneName = "space_dantooine", escortNumber = 1, radius = 250}, {patrolPointName = "naboo_rebel_tier3_point_2", zoneName = "space_dantooine", escortNumber = 2, radius = 250}, {patrolPointName = "naboo_rebel_tier3_point_3", zoneName = "space_dantooine", escortNumber = 3, radius = 250}, {patrolPointName = "naboo_rebel_tier3_point_4", zoneName = "space_dantooine", escortNumber = 4, radius = 250}},
+	escortShips = {"lambdashuttle_rebel_tier3_1_officer"}, escortSpeed = 60, orderedEscortRoute = true,
+	escortPoints = {
+		{patrolPointName = "naboo_rebel_tier3_point_1", zoneName = "space_dantooine", x = 4957, z = 3250, y = 4698, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_point_2", zoneName = "space_dantooine", x = 2568, z = 3857, y = 2000, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_point_3", zoneName = "space_dantooine", x = -15, z = 4452, y = -618, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_point_4", zoneName = "space_dantooine", x = -2585, z = 5075, y = -3250, escortNumber = 4, radius = 250},
+	},
 	attackDelay = 60, attackShips = {{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"}, {"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"}},
 }
 registerScreenPlay("escort_naboo_rebel_tier3_1_a", true)
