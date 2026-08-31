@@ -943,7 +943,7 @@ patrol_naboo_rebel_tier3_4_a = SpacePatrolScreenplay:new {
 	creditReward = 0,
 
 	sideQuest = true,
-	sideQuestType = "destroy_surpriseattack",
+	sideQuestType = "survival",
 	sideQuestName = "naboo_rebel_tier3_4_b",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.PATROL_POINT,
 
