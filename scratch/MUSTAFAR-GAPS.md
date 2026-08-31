@@ -449,7 +449,7 @@ adding an include for a group nothing uses is not a fix. (`serverobjects.lua` al
 `weapon/groups/stormtrooper_weapons.lua` twice — harmless, `includeFile` is idempotent. 125
 include lines = 108 naming `groups/` (107 distinct) + 17 elsewhere under `weapon/`.)
 
-### Loot — every one of the 158 som creatures drops nothing, and that is upstream
+### Loot — every one of the 158 som creatures drops nothing, and 145 of them arrived that way
 
 An earlier version of this heading said "135 of 160", which reads as though the other 25 drop
 something. They do not. The directory holds 160 `.lua` files, two of which are not creature
@@ -465,13 +465,32 @@ resolves no group and drops nothing; the other 23 have no `lootGroups` body to r
 one som template names a single loot group anywhere in the tree — the first grep is the whole
 proof, and it returns nothing.
 
+The heading says "145 arrived that way" rather than "that is upstream", because 13 of the 158 are
+files this branch adds and so cannot be attributed to upstream at all: `chief_armstrong`,
+`chief_glost`, `engineer_cobar`, `foreman_donko`, `must_cruiser_ai`, `must_facility_ai`,
+`som_kenobi_dying_miner`, the three `som_kenobi_moral_*`, `som_kenobi_obi_wan`,
+`som_surveyor_keslev`, `urup_falco` — none exists in `origin/unstable`. Those 13 are this wave's
+own, and they follow the wave's convention. The upstream claim covers the other **145**.
+
 `origin/unstable` ships 140 in the `groups = {}` state. This branch has 135, and the net −5 is two
-movements, not one. **Eight leave** it because the quests actually need their drops — the three
-treasure-hunter corpses, Epo Qetora, Menth Paul, the computer technician, Ikt and the Pann protocol
-droid. **Three enter** it, and those three are new files this branch adds
-(`som_kenobi_moral_corrupt_guard`, `som_kenobi_moral_exec`, `som_kenobi_moral_strike_leader`, none
-of which exists in `origin/unstable`), so they inherit the wave's own convention rather than
-regressing anything. 140 − 8 + 3 = 135.
+movements — neither of which changes what anything drops.
+
+**Eight leave** the `groups = {}` string: the three treasure-hunter corpses, Epo Qetora, Menth Paul,
+the computer technician, Ikt and the Pann protocol droid. They leave it by *representation*, not by
+gaining loot. Each was rewritten from
+
+    lootGroups = { { groups = {}, lootChance = 2100000 } }      -- origin/unstable
+    lootGroups = {},                                            -- HEAD
+
+and `grep -c 'group = "'` returns **0** on all eight at HEAD, exactly as at `origin/unstable`. An
+earlier version of this paragraph said the eight left "because the quests actually need their
+drops". The diff does not show that and it is withdrawn — all eight are conversation NPCs or
+corpses whose quest items come from screenplay code, not from a loot roll.
+
+**Three enter** it: `som_kenobi_moral_corrupt_guard`, `som_kenobi_moral_exec` and
+`som_kenobi_moral_strike_leader`, all three new files this branch adds, so they follow the wave's
+own convention rather than regressing anything. 140 − 8 + 3 = 135, and the no-loot total is 158
+before and after.
 
 The rest are Levarris's ambient population. This is a SoM-import
 condition and not a Core3 convention: across all 9,172 files in `mobile/`, exactly **137** carry
@@ -664,15 +683,19 @@ The comment's own suggestion — "closest appearance would be blackguard wilder"
 guessing at an appearance, not citing a source. Naming and statting a boss the source data does
 not contain is authoring, so the TODO stays where it is, unclosed and now explained.
 
-### The Mensix page — an independent retail source, and the strongest check in this audit
+### The Mensix page — a retail position list, and the strongest check in this audit
 
 `C:\swg-extract\Mensix_Mining_Facility.wiki` is the second real page found in that folder, and it
 is more useful than the Storm Lord one, because it is a *list of positions*. It gives in-game
 `/way` coordinates for 16 quest NPCs, 3 other NPCs and 8 items of interest inside the facility —
-27 objects — and **not one of those coordinates was used when this wave placed anything.** Every
-placement here came from the facility's dungeon spawn table and the snapshot. So the page is a
-genuine held-out test: an independent source, produced by players in 2006, checked against work
-done without it.
+27 objects.
+
+One caveat on how much weight this carries, stated plainly because the repo cannot settle it. The
+page was read *after* these placements were made, and the placements were derived from the
+facility's dungeon spawn table and the snapshot — that is my record of the sequence, not something
+a reader can verify from the tree. A provenance claim of that shape is unfalsifiable from the repo
+alone, so it should not be leaned on. What *is* checkable, by anyone, is the agreement below: two
+sources produced by different means, at different times, land on the same positions.
 
 Run each `/way` through the Mensix cell-local transform already established above
 (`local_x = way_x − 459.50`, `local_y = way_y + 1208.92`) and compare to the repo's spawn:
@@ -727,16 +750,26 @@ Menddle"`). **The primary read caught it; the summary would not have.**
 ### XP — the wiki's reward figures, and why this tree pays none
 
 The two quest walkthroughs give hard XP numbers: Miner Madness 91,383 and Skull of the Jundak
-78,265. The repo awards neither, and that is correct rather than missing.
+78,265. The repo awards neither. That is consistent with the shipped data rather than a gap — but
+the argument rests on two facts that live outside this tree, so they are named here rather than
+assumed.
 
 `bounty_hunts.lua:111-116` already states the rule from the shipped data: the Reward task's
 `Experience Amount` is **0** in every one of these `.qst` files, and the non-zero figure lives in
 the `[list]` block, which is *journal-level data that only the quest system awards*. This build has
 no quest-system row for any of these quests — `datatables/player/quests.iff` as loaded resolves to
 `stardust_03.tre`'s copy, whose only Mustafar rows are the 45 exploration markers. No row, no
-journal, no journal-level award. So the wiki's numbers **corroborate** that the `[list]` field was
-live; they do not show a gap here. Inventing an `awardExperience` call to match them would be
-paying out a value the loaded data does not carry.
+journal, no journal-level award.
+
+The two external facts, so a reader can retest them: (1) that `Experience Amount` is 0 on the
+Reward task in the seven `.qst` files — read out of the `.qst` data, restated at
+`bounty_hunts.lua:111-116`, not verifiable from the `.lua` alone; and (2) that the loaded
+`quests.iff` is the `stardust_03.tre` copy with only the 45 exploration rows — a property of the
+server's mounted `.tre` set, which the fences here forbid editing and which can change without
+this tree changing. If either turns out otherwise, this conclusion moves. On the data as it stands,
+the wiki's numbers **corroborate** that the `[list]` field was live; they do not show a gap here,
+and inventing an `awardExperience` call to match them would pay out a value the loaded data does
+not carry.
 
 The one place this tree does award XP is `mining_field_markers.lua:607`, 290 per surveyed area,
 and that one is not journal-level.
@@ -752,10 +785,15 @@ Publish 28's notes (26 April 2006) say, verbatim:
 `kenobi_spine.lua:213-216` calls the two unplaced tangibles "an open question about what SOE meant
 the finale room to contain". This note answers **that** question — the room held a crystal the
 player destroys or takes — and it is the first source of any kind to say so. It still gives no
-coordinate, and the search behind that passage stands: `som_kenobi_final_crystal_pedestal` and
-`som_kenobi_final_force_crystal` appear in no `.qst`, no screenplay, no loot table and no dungeon
-table, Mustafar's five included. So the item narrows but does not close: **we now know what, and
-still not where.** Nothing is placed on the strength of it.
+coordinate, and the search behind that passage stands, stated at the width the search actually
+supports: `som_kenobi_final_crystal_pedestal` and `som_kenobi_final_force_crystal` have no *live*
+reference anywhere in `MMOCoreORB/bin/scripts` — no screenplay code, no loot table, no dungeon
+table, Mustafar's five included. Every hit on either name is one of three kinds: the object
+declaration, the `serverobjects.lua` include that registers it, and the comment at
+`kenobi_spine.lua:211` that raises the question in the first place. (An earlier version said "no
+`.qst`, no screenplay, no loot table and no dungeon table"; that phrasing is falsified by its own
+comment, and the `.qst` half was never searched here at all.) So the item narrows but does not
+close: **we now know what, and still not where.** Nothing is placed on the strength of it.
 
 Two things the note does *not* argue for changing:
 
