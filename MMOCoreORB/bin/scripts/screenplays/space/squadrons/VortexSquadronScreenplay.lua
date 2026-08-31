@@ -148,6 +148,7 @@ escort_naboo_rebel_3 = SpaceEscortScreenplay:new {
 		{patrolPointName = "vortex_rebel_escort_3", zoneName = "space_naboo", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
 		{patrolPointName = "vortex_rebel_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
 	},
+	orderedEscortRoute = true,
 
 	attackDelay = 80,
 
