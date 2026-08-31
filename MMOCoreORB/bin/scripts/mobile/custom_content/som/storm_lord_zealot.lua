@@ -33,8 +33,8 @@ storm_lord_zealot = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	primaryWeapon = "imperial_sword",
-	secondaryWeapon = "force_sword_ranged",
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "unarmed",
 	conversationTemplate = "",
 	primaryAttacks = merge(marksmannovice,brawlernovice),
 	secondaryAttacks = { }

@@ -33,7 +33,7 @@ storm_lord_prophet = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	primaryWeapon = "jedi_dark",
+	primaryWeapon = "pirate_weapons_light",
 	secondaryWeapon = "unarmed",
 	conversationTemplate = "",
 	primaryAttacks = merge(marksmannovice,brawlernovice),

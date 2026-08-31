@@ -418,6 +418,48 @@ instead; `xandank.lua:38` and `orf_xandank.lua:36` both say `pirate_weapons_ligh
 `som_lance_xandank` sits unused. The name pairings are suggestive and that is all they are:
 nothing on disk says which creature was meant to carry which weapon.
 
+### One defect of my own, found by the same check and fixed
+
+The commit that moved 111 som templates off the dead `weapons` / `attacks` keys onto the live
+`primaryWeapon` / `secondaryWeapon` / `primaryAttacks` / `secondaryAttacks` also changed the
+weapon **value** on three of them. It should have changed only the key. All three shipped
+`weapons = {"pirate_weapons_light"}` in `origin/unstable`:
+
+| file | was written as | shipped value |
+| --- | --- | --- |
+| `storm_lord_prophet.lua:36` | `jedi_dark` | `pirate_weapons_light` |
+| `storm_lord_touched.lua:36-37` | `imperial_sword` + `force_sword_ranged` | `pirate_weapons_light` |
+| `storm_lord_zealot.lua:36-37` | `imperial_sword` + `force_sword_ranged` | `pirate_weapons_light` |
+
+`jedi_dark` was the live one: `mobile/weapon/groups/jedi_dark.lua` exists and calls
+`addWeapon("jedi_dark", ...)`, but `mobile/weapon/serverobjects.lua` never includes it, so the
+group never registers and the Prophet — a level 70 boss — spawned with no weapon at all. All
+three are reverted to the shipped value. `mobile/weapon/` itself is untouched by this branch:
+`git diff origin/unstable...HEAD -- mobile/weapon/` is empty.
+
+`jedi_dark` is one of **4 groups in `mobile/weapon/groups/` that no `includeFile` names** —
+`carbine_weapons`, `geonosian_carbine`, `jedi_dark`, `jedi_light`. All four are upstream, and
+after the revert all four have zero consumers: searching the **quoted whole string** `"jedi_dark"`
+across `scripts/` returns only `addWeapon("jedi_dark", jedi_dark)` in the group's own file, and
+the same holds for the other three. Search the bare substring instead and you get 52 unrelated
+names — robes, furniture, an amulet, draft schematics — none of them a weapon group. Left alone
+deliberately:
+adding an include for a group nothing uses is not a fix. (`serverobjects.lua` also names
+`weapon/groups/stormtrooper_weapons.lua` twice — harmless, `includeFile` is idempotent. 125
+include lines = 108 naming `groups/` (107 distinct) + 17 elsewhere under `weapon/`.)
+
+### Loot — 135 of 160 som creatures drop nothing, and that is upstream
+
+`groups = {}` with a live `lootChance`: the roll happens, resolves no group, drops nothing.
+`origin/unstable` ships 140 som templates in that state. This branch has 135 — the 8 that
+changed are the ones the quests actually need (the three treasure-hunter corpses, Epo Qetora,
+Menth Paul, the computer technician, Ikt, the Pann protocol droid).
+
+The remaining 135 are Levarris's ambient population. This is a SoM-import condition and not a
+Core3 convention: across all 9,172 files in `mobile/`, exactly **137** carry `groups = {}` and
+**135 of them are som** — the only two outside it are `hutta/hutt_battle_droid.lua` and
+`moraband/creatures/tukata.lua`. Filling in 135 loot tables is authoring, not repair.
+
 ### Pet control devices — dead twice over
 
 7 devices ship under `object/custom_content/intangible/pet/som/` (blistmok, jundak,
@@ -472,6 +514,43 @@ orphaned `serverobjects.lua` trees holding 12,767 files** across all of `custom_
 `custom_content/weapon` (351), `custom_content/ship` (316), `draft_schematic/weapon` (468) and so
 on, almost none of them duplicated by a reachable file. That is a Stardust-wide loader condition,
 not Mustafar's, and it is Levarris's call whether it is intentional. Mustafar's 27 are 0.2% of it.
+
+### The final cross-reference — every string Mustafar hands the engine
+
+The check: take every `spawnMobile`, `spawnSceneObject`, `createObject`, `giveItem`,
+`conversationTemplate`, `primaryWeapon` / `secondaryWeapon` and `lootGroups` string in the live
+Mustafar tree, and look each one up in a registration set built from the load-chain walk above —
+so a template that exists on disk but never loads counts as missing, which is the whole point.
+
+Two corrections had to be made to the checker before its output could be trusted:
+
+- **It did not strip Lua comments.** That produced 4 false hits on
+  `object/tangible/terminal/terminal_elysium_crystal_01.iff` at line 21 of all four region
+  screenplays. Every one is commented out, identical, and passes zone `"yavin4"` — copy-paste
+  boilerplate from an Elysium region stub, never a live call. Of 17 commented-out lines in the
+  tree matching a spawn verb, 13 are prose explaining the API and 4 are that stub. No real
+  content is commented out anywhere under Mustafar.
+- **It walked only three of the chain roots**, so `loot/` was unreachable and the loot-group
+  check silently compared against an empty set. `LootGroupMap.cpp:56-66` registers its own
+  `includeFile` base of `scripts/loot/` and roots at `loot/lootgroup.lua` + `loot/serverobjects.lua`
+  (`:38-39`); `CreatureTemplateManager.cpp:107` adds `managers/creature_manager.lua` under the
+  `scripts/mobile/` base. With all six roots the set is 659 loot groups and the check runs for real.
+
+Result over 807 live Mustafar/som files, against 6,066 creatures · 24,578 objects · 374
+conversations · 659 loot groups · 124 weapon groups:
+
+```
+CONVERSATIONTEMPLATE -> UNREGISTERED CONVERSATION  (1)
+   mobile\custom_content\som\obi_wan_ghost.lua:32  obi_wan_elysium
+```
+
+That one is pre-existing in `origin/unstable` at the same line and is inside the fence. Nothing
+else in the tree names a creature, object, conversation, weapon group or loot group that does not
+register. `screenplays.lua` names 69 Mustafar files, all 69 resolve, and the only `.lua` under
+`screenplays/mustafar/` it does not name is the documented `jo_kelsev_conv_handler.lua` tombstone.
+
+Syntax gate after the weapon revert, `luac5.3 -p` over
+`mobile/custom_content/som` + `screenplays/mustafar`: **ok=230 fail=0**.
 
 ### What this census does not do
 
