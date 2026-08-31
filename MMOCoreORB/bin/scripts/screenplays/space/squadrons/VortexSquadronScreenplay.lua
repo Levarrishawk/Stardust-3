@@ -931,14 +931,14 @@ space_battle_naboo_rebel_tier3_4 = SpaceBattleScreenplay:new {
 
 registerScreenPlay("space_battle_naboo_rebel_tier3_4", true)
 
--- Mission 4 Side Quest A: Patrol (Space Endor - Search for missing Magenta squadron)
+-- Mission 4 Side Quest A: Patrol (Space Dathomir - Search for lone Imperial ships)
 patrol_naboo_rebel_tier3_4_a = SpacePatrolScreenplay:new {
 	className = "patrol_naboo_rebel_tier3_4_a",
 
 	questName = "naboo_rebel_tier3_4_a",
 	questType = "patrol",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -993,7 +993,7 @@ survival_naboo_rebel_tier3_4_b = SpaceSurvivalScreenplay:new {
 
 registerScreenPlay("survival_naboo_rebel_tier3_4_b", true)
 
--- Mission 4 Side Quest C: Space Battle (Space Endor - Assist Blue Squadron attacking TIE bomber wing)
+-- Mission 4 Side Quest C: Recovery (Space Dathomir - Capture the experimental fighter)
 recovery_naboo_rebel_tier3_4_c = SpaceRecoveryScreenplay:new {
 	className = "recovery_naboo_rebel_tier3_4_c",
 
@@ -1014,32 +1014,26 @@ recovery_naboo_rebel_tier3_4_c = SpaceRecoveryScreenplay:new {
 	parentQuest = "survival_naboo_rebel_tier3_4_b",
 	parentQuestType = "survival",
 	parentQuestName = "naboo_rebel_tier3_4_b",
-	arrivalDelay = 15, recoveryDelay = 30, recoverShip = "imp_tie_experimental_fighter_tier3", recoveryConversationMobile = "object/mobile/dressed_imperial_officer_m_1.iff", escortShips = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
-	preRecoveryPoints = {{patrolPointName = "naboo_rebel_tier3_recover_imperial_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250}, {patrolPointName = "naboo_rebel_tier3_recover_imperial_2", zoneName = "space_dathomir", escortNumber = 2, radius = 250}},
-	recoveryPoints = {{patrolPointName = "naboo_rebel_tier3_recover_imperial_5", zoneName = "space_dathomir", escortNumber = 1, radius = 250}, {patrolPointName = "naboo_rebel_tier3_recover_imperial_6", zoneName = "space_dathomir", escortNumber = 2, radius = 250}, {patrolPointName = "naboo_rebel_tier3_recover_imperial_7", zoneName = "space_dathomir", escortNumber = 3, radius = 250}, {patrolPointName = "naboo_rebel_tier3_recover_imperial_8", zoneName = "space_dathomir", escortNumber = 4, radius = 250}},
-
-	battlePoint = "space_endor:naboo_rebel_tier3_4_c_battlepoint",
-	allyArrivalDelay = 60,
-	enemyArrivalDelay = 80,
-	allyOriginDist = 800,
-	enemyOriginDist = -800,
-	allyArrivalDist = 100,
-	enemyArrivalDist = -50,
-
-	alliedShips = {
-		{"reb_bwing_tier3"},
-		{"reb_bwing_tier3"},
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
+	arrivalDelay = 15, recoveryDelay = 30, escortSpeed = 60,
+	recoverShip = "imp_tie_experimental_fighter_tier3",
+	recoveryConversationMobile = "object/mobile/dressed_imperial_officer_m_1.iff",
+	escortShips = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+	preRecoveryPoints = {
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_1", zoneName = "space_dathomir", x = 4749, z = 109, y = -464, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_2", zoneName = "space_dathomir", x = 5198, z = -16, y = -1992, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_3", zoneName = "space_dathomir", x = 5514, z = -172, y = -3083, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_4", zoneName = "space_dathomir", x = 6221, z = -447, y = -4806, escortNumber = 4, radius = 250},
 	},
-
-	enemyShips = {
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
+	recoveryPoints = {
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_5", zoneName = "space_dathomir", x = 4807, z = -1349, y = -3781, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_6", zoneName = "space_dathomir", x = 2150, z = -3082, y = -1761, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_7", zoneName = "space_dathomir", x = 111, z = -4412, y = -211, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier3_recover_imperial_8", zoneName = "space_dathomir", x = -2691, z = -6240, y = 1919, escortNumber = 4, radius = 250},
+	},
+	attackDelay = 45,
+	attackShips = {
+		{"imp_tie_fighter_tier3", "imp_tie_bomber_tier3"},
+		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
 	},
 }
 
