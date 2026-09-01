@@ -152,13 +152,14 @@ end
      comes out at 3.22 m -- same room, same wall, looser.  Reported rather than
      hidden, because it is the one that does not tighten.
 
-     WHAT THIS DOES NOT DO.  Three of these five -- the beads, the hologram and the
-     lava_flea_bounty -- are the props a player would plausibly click to start the
-     matching hunt in quest/bounty_hunts.lua, and that arc is still waiting on a
-     giver (see its NO GIVER header).  Placing them does NOT wire them to it.  The
-     table's `script` column is EMPTY on all five rows, so nothing in the shipped
-     data says a click does anything, and grantHunt stays uncalled until Aaron says
-     what the giver is.  These are props standing where SOE put them, no more. ]]
+     WHAT THIS DOES.  Four of these five -- the beads, the hologram, the
+     lava_flea_bounty and the lava_lizard_food -- are the static props a player
+     clicks to start the matching hunt in quest/bounty_hunts.lua.  The table's
+     `script` column is EMPTY on all five rows; that was a red herring.  On live
+     the script is attached at the TEMPLATE level (.tpf), not the spawn-table
+     level, and BountyHuntGiverMenuComponent.lua is that attach in this tree.
+     Placement here is still just placement -- the click wiring lives on the
+     templates. ]]
 function mensix_mining_facility_main:spawnSceneObjects()
 
 	-- Stardust Specific Droid:  Remove for other servers.

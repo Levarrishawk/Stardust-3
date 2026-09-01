@@ -32,14 +32,20 @@ There is no Wait for Signal anywhere in these seven and therefore no hand-in ste
 in the shipped data; turnInHunt below is that payout, exposed so a giver can also
 drive it if one is ever built.
 
-NO GIVER  --  open question, deliberately not filled
+GIVERS  --  radials on tangible objects, found in the live SERVER source
 
 Nothing in any of the seven .qst files, nor in their .stf files, names a quest
 giver, a terminal, a conversation or a location. Every task carries Planet
 "tatooine" with LocationX/Y/Z 0,0,0 and createWaypoint 0, which is the .qst
-editor's empty default rather than a place. So this screenplay spawns nothing and
-hands out no waypoints; grantHunt / turnInHunt are the entry points a giver's
-conversation handler calls once Aaron says who the giver is.
+editor's empty default rather than a place. So this screenplay still spawns
+nothing and hands out no waypoints; that part of the open question was right.
+
+The givers are not a conversation NPC. They were found in the live SERVER source
+(github.com/SWG-Source/dsrc): each object's .tpf attaches a quest.som.* script
+that grants from OnObjectMenuSelect. Four are static Mensix props; three are
+loot items that open a confirm SUI and destroy themselves on accept.
+BountyHuntGiverMenuComponent.lua is the Core3 port of those seven scripts and is
+what calls grantHunt.
 
 NO JOURNAL
 
