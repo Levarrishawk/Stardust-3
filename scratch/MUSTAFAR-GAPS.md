@@ -1918,19 +1918,55 @@ than accepted.
 Collected in one place so they stop being scattered. Each is a real fork where the shipped data
 does not decide the answer, so none has been filled in.
 
-1. **Creature tiers vs live `difficultyClass`.** The retune assigned tiers by reading the tree; live
-   ships an explicit difficulty column. Whether to re-key on it is a call.
-2. **`pvpBitmask = ATTACKABLE` on the four quest givers.** They are currently attackable. Live
-   behaviour for quest NPCs is usually not.
-3. **Quest XP policy.** No transcribed source for the reward amounts.
-4. **The five `som_sceismic_charges` fields** — see *Seismic charges*, a confirmed negative.
-5. **The Kenobi pedestal height.**
+1. **Creature tiers vs live `difficultyClass`.** ⚠ **NOT A CALL ANY MORE — live decides it.**
+   `creatures.tab` col 7, typed `e(NORMAL=0,ELITE=1,BOSS=2)`. There is no fourth value. The 292
+   `som_*` rows split **203 NORMAL / 58 ELITE / 31 BOSS**. Note this is *not* what scales stats —
+   cols 3–6 (`Damagelevelmodifier`, `StatLevelModifier`, `ToHitLevelModifier`,
+   `ArmorLevelModifier`) are explicit and separate. Re-keying the retune on col 7 is now mechanical.
+2. **`pvpBitmask = ATTACKABLE` on the four quest givers.** ⚠ **MOSTLY ANSWERED, and the answer is
+   "leave three alone."** Live has an explicit `invulnerable` column (`creatures.tab` col 56). Only
+   **18 of 292** `som_*` rows set it to 1. Of our four:
+   `som_cube_ithes_olok` = **1** (invulnerable); `som_naboo_historian`, `som_doctor_lu` and
+   `som_reporter_jural` are all **blank** — attackable on live, exactly as we ship them.
+   `som_foreman_nurfa`, the sibling that pinned the `optionsBitmask` fix, is also blank, yet our
+   tree gives it `pvpBitmask = NONE`. So the only real item here is `npc_ithes_olok`, plus an
+   unexplained `NONE` on nurfa. The remaining call is whether to encode col 56 at all.
+3. **Quest XP policy.** Still genuinely open. `datatables/quest/` in the server source has
+   `crafting / crowd_pleaser / force_sensitive / ground / hero_of_tatooine / jedi_collection /
+   nova_orion / restuss_event` and no SoM quest-reward XP table. Searched for one; there isn't one.
+4. **The five `som_sceismic_charges` fields** — see *Seismic charges*, a confirmed negative. To be
+   exact about what the five are: every `LocationX/Y/Z` is 0.0, the Encounter task has no Creature
+   Type, the Wait for Signal task has no Signal Name, and Reward is 0 XP / 0 credits. The server
+   source has nothing either — every "seismic" hit in it is a **space** missile launcher.
+5. **The Kenobi pedestal height.** Still open. The object exists
+   (`object/tangible/quest/som_kenobi_final_crystal_pedestal.tpf`); no placement or elevation
+   figure is recorded anywhere in the server source.
 6. **Two unimplemented battlefield instances:** `mustafar_droid_army`, `mustafar_volcano`.
-7. **The `som_poison_miners` task-8 reward** — whether to swap it to a SoM pistol.
-8. **The `experimental*` crafting curves on the two rewritten heavy weapons.** Both still carry
-   their stock anchor's curve, so the crafted path is not live-accurate while the looted path is.
-9. **Which creature drops which of the 23 SoM weapon templates.** Still the largest block of
-   finished-but-undelivered content; the extract ships no loot or creature table to quote.
+   ⚠ **NOT "cut content" — both ship complete in the server source.** `instance_datatable.tab` has
+   a row for each, with entry and exit coordinates and a daily lockout:
+   `mustafar_droid_army` enters at `-79,12,-152` and exits to `541,155,-160,mustafar`;
+   `mustafar_volcano` enters at `-256,-1,233` and exits to `-2397,210,1850,mustafar` with player
+   script `theme_park.dungeon.mustafar_trials.volcano_battlefield.volcano_player`.
+   The script trees are `valley_battleground/` (**20 files** — turrets, demolition packs, droid and
+   mining squads, Foreman Koseyet) and `volcano_battlefield/` (**29 files** — five numbered events
+   each with a boss and guards, the HK-47 arc, an exit terminal, an event manager).
+   `mustafar_trials/` is 200 files total. This is the largest implementable block on the list, and
+   it is a scope decision, not a design one.
+7. **The `som_poison_miners` task-8 reward** — whether to swap it to a SoM pistol. Still open. The
+   server source has `script/quest/som/miner_tracking_computer.java` and the tracking-computer
+   template, but I did not find a reward table for the step.
+8. **The `experimental*` crafting curves on the two rewritten heavy weapons.** ⚠ **The source
+   exists — this is transcription, not design.** `datatables/crafting/weapon_schematics.tab` has one
+   row per SoM weapon with the full crafted spread. Example, `som_lance_xandank`: complexity 36,
+   xp 450, hit points 800–1100, min damage 334–667, max damage 1000–1333, kinetic.
+9. **Which creature drops which of the 23 SoM weapon templates.** ⚠ **FALSE PREMISE — live does not
+   drop them at all.** Thirteen of the fourteen distinct SoM weapons have exactly one
+   `weapon_schematics.tab` row and a `draft_schematic`; **zero** appear in any loot table anywhere
+   in the server source. They are **crafted**, not looted. The fourteenth,
+   `som_2h_sword_massassi`, has neither — it exists only in `master_item.tab` and its own `.tpf`.
+   The three trophy tabs are the only mustafar loot files that reference a `som/` path at all, and
+   those are already wired (Round C). This item is closed as asked and reopens as "wire the
+   fourteen draft schematics", which is item 8's work.
 10. **Whether to widen the three trophy loot pools to live's full 9 items**, which first needs the
     `cube_loot` path defect fixed and the ToW junk names mapped.
 
@@ -1938,3 +1974,29 @@ One item that was on this list and should not have been: the `som_xandank_trophe
 recorded as a deviation from the click-to-start pattern. It is not — Miner Renlo Hens is the live
 design, with a full grant and turn-in transcript, and he is wired. Removed rather than left to be
 "fixed" into a defect later.
+
+## Where the answers in that list came from — 2026-09-01
+
+Aaron passed in a second agent's report on the ten items. **Six of its ten answers did not survive a
+check against the server source**, so none of the text above is taken from it. Every figure in the
+list is from a direct read of `SWG-Source/dsrc`, and the checks are re-runnable
+(`C:\tmp\verify3.sh`, `verify11.sh`, `verify13.sh`, `verify15.sh`).
+
+What failed, recorded so it is not re-imported later:
+
+- A shared loot sub-table named `som_weapon_loot` — **zero occurrences in the entire server
+  source.** The real answer is the opposite of the premise: the weapons are crafted.
+- `difficultyClass = 3 (WorldBoss)` — the enum is `NORMAL=0, ELITE=1, BOSS=2`. There is no 3.
+- All four quest givers being invulnerable on live — three of the four are not.
+- Five named seismic-charge fields (`charge_location`, `detonation_timer`, `blast_radius`,
+  `damage_amount`, `charge_state`) — none of those exist; the quest is a stub with 0.0 locations.
+- A 1.25 m Kenobi pedestal elevation offset — no such figure anywhere.
+- Both battlefields being cut before Publish 25 — 49 script files and two `instance_datatable.tab`
+  rows say otherwise.
+
+Three of its weapon names (Searing Blade, Mustafarian Disruptor, V-1 Thermal Rifle) return zero hits
+in the server source. Every claim carried a wiki citation.
+
+**The standing rule this earns, alongside the two at the top of this file:** a report with citations
+is still a claim. Check it against `dsrc` before it enters this document. It cost one pass to check
+and the pass closed four items, so the checking is worth doing rather than skipping.
