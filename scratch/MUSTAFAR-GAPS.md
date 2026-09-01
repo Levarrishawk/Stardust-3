@@ -34,6 +34,43 @@ nothing. Always run a control before believing a negative.
 
 ---
 
+## ⚠⚠ ROOT CAUSE 2 — the client TREs are not the source of record. The SERVER source survives.
+
+**Added 2026-09-01, after it produced the second false "open question" on this project.**
+
+Every "nothing in the shipped data says what this does" verdict written here before 08-30 was
+searching the client TREs and the world snapshot. Those never contained behaviour. Quest logic,
+loot tables, creature stats and spawn scripts lived server-side, and SOE's server source leaked:
+**`github.com/SWG-Source/dsrc`**, under `sku.0/sys.server/compiled/game/`. Raw fetch pattern:
+
+```
+https://raw.githubusercontent.com/SWG-Source/dsrc/master/sku.0/sys.server/compiled/game/<path>
+```
+
+It holds `datatables/mob/creatures.tab` (2.2 MB, **292 `som_*` rows** with base level, difficulty
+class, loot table and aggression), the whole `datatables/loot/` tree,
+`datatables/spawning/dungeon/*.tab`, `script/quest/som/*.java`, `script/library/*.java`, and the
+`.tpf` object templates. None of it shipped in a client TRE, which is why every earlier audit
+missed all of it.
+
+Two proven false negatives from this habit, both of which had been written down as decisions
+waiting on Aaron:
+
+1. **Trophy hunts** — closed 2026-08-30. Its own header records the lesson: *"I was looking only
+   at the client TREs and the snapshot. The client never had this data. SOE's own SERVER-side
+   tables did, and they survive."*
+2. **Bounty-hunt givers** — closed 2026-09-01, commit `5b93aac7bf`. The blocking belief was that
+   the spawn table's `script` column is empty so nothing says a click does anything. **Live
+   attaches object scripts at the TEMPLATE level, in the `.tpf`, not at the spawn-table level.**
+   The column is empty on every row of every dungeon table for that reason. All seven giver
+   scripts exist and were transcribed.
+
+**Before writing "this is unknowable from the shipped data", fetch it from dsrc and prove it
+isn't.** The corollary matters as much: an empty column in a spawn table is not evidence of
+absent behaviour. Check where that engine attaches behaviour before reading a blank as a no.
+
+---
+
 ## How a community `/way` becomes a coordinate
 
 `quest/mining_field_markers.lua:41`, verified against 30 marker rows in that file:
@@ -251,7 +288,7 @@ returns *before* the wrong-code branch. Typing `37323` cold is refused now.
 
 ---
 
-## Bounty hunts — all seven mapped, no NPC giver by design
+## Bounty hunts — all seven mapped and WIRED; no NPC giver by design, now proven
 
 Three loot-drops, four clickable props. Confirmed by live-era guides.
 
@@ -286,10 +323,54 @@ inventing the answer:
   quest** on live. So a behaviour existed; it lived in a server script SOE had and this extract
   does not.
 
-So: the shipped data does not tell us what a click does, and a live server plainly did something.
-`grantHunt` stays uncalled until Aaron rules on the giver — writing the click myself would be
-inventing a mechanism and calling it a port. **This is the open decision for this arc**, and it is
-now the only one; the props are no longer part of it.
+✅ **CLOSED 2026-09-01. The mechanism was found, not decided. Commit `5b93aac7bf`.** The two facts
+above never actually conflicted — the empty `script` column was a red herring. On live, quest
+scripts attach at the **template** level, in the `.tpf`, not at the spawn-table level. That is why
+the column is empty on every row and why every audit that looked at the table concluded there was
+nothing there.
+
+The server script SOE had is not lost. `github.com/SWG-Source/dsrc` is the leaked live SWG
+**server** source and it carries both halves — each `.tpf` naming its script, and the
+`script/quest/som/*.java` bodies themselves. All seven were read directly:
+
+| template | live script |
+|---|---|
+| `lava_flea_bounty` | `quest.som.lava_flea_bounty` |
+| `lava_lizard_food` | `quest.som.lava_lizard_food` |
+| `lava_beetle_beads` | `quest.som.lava_beetle_beads` |
+| `jundak_hunter_hologram` | `quest.som.jundak_hunter_hologram` |
+| `blistmok_heart` | `quest.som.blistmok_heart` |
+| `tulrus_parts` | `quest.som.tulrus_mandible` |
+| `xandank_jaw` | `quest.som.xandank_jaw` |
+
+Note the tulrus row — template `tulrus_parts`, script `tulrus_mandible`, strings keyed
+`tulrus_horn_*`. Three names for one object, and there is no `tulrus_mandible.tpf` (404).
+
+The bodies split two ways. **Shape A**, the four static props: add an `ITEM_USE` radial, grant on
+select if not already active, else send the ALREADY string. No containment check, no confirm box,
+no destroy — furniture you click, exactly as the SOE publish note describes. **Shape B**, the three
+loot items: radial only while the item is in the player's possession, then
+`mustafar.activateQuestAcceptSUI` (`script/library/mustafar.java:307-316`), a plain YES/NO box;
+OK grants, sends DESTROY and destroys the object, CANCEL sends DECLINE.
+
+Ported as `screenplays/mustafar/quest/BountyHuntGiverMenuComponent.lua` — one component for all
+seven, keyed by template path, attached with `objectMenuComponent` on the seven templates. Not one
+spawn line was added, moved or touched.
+
+**This was closed from the source of record, not by a ruling.** It sat here as an open decision for
+Aaron; the answer turned out to exist and be quotable, so it was transcribed rather than decided.
+The one place the port knowingly departs from live is a `isInRangeWithObject(pSceneObject, 8)`
+guard on shape A, which live has no equivalent of — it matches the in-tree sibling
+`trophy_hunts.lua:1580` instead. Both are noted in the commit so either can be reversed.
+
+This is the second arc to hit the same trap. `trophy_hunts.lua` climbed out of it on 2026-08-30
+with the same lesson in its own header: the client never had this data, SOE's server-side tables
+did, and they survive. **Any future "nothing in the shipped data says what this does" finding on
+this project should check `SWG-Source/dsrc` before it is written down as open.**
+
+⚠ **Still open, and not silently patched:** the three shape-B items are loot drops on live and this
+tree has no loot wiring for them, so today only the four static props are reachable in game. See
+*Loot* below.
 
 **The props are wireable with zero authored strings.** None of the six Mensix interior props exists
 as a snapshot node — the whole Mensix building (node 12112217, 30 cells) contains exactly **two**
@@ -411,17 +492,60 @@ ever recorded doing it.
   (droid factory exterior door) which `stardust_03` has; `stardust_03` lacks 12112211 and 12112916.
   The port reads `stardust_03`, which is the right choice.
 - **The custom weapon templates are all one stencil, and the som ones inherit its faults.**
-  `som_disruptor_pistol.lua` and `som_ion_relic_pistol.lua` are **byte-identical to
+  `som_disruptor_pistol.lua` and `som_ion_relic_pistol.lua` were **byte-identical to
   `custom_content/weapon/ranged/carbine_bothan_bola.lua` except two lines** — the object name and
-  the `addTemplate` path. Verified by `diff`, not inferred. So both pistols carry the stencil's
+  the `addTemplate` path. Verified by `diff`, not inferred. So both pistols carried the stencil's
   carbine identity unedited: `xpType = "combat_rangedspecialize_carbine"`,
   `certificationsRequired = { "cert_carbine_cdef" }`, `carbine_accuracy` / `carbine_aim` /
   `carbine_speed`, and the placeholder `minDamage = 99999999998` / `maxDamage = 99999999999`.
-  **This is not a Mustafar fact.** 32 files in `custom_content/weapon/ranged` carry that
-  placeholder damage and **zero** files in stock `object/weapon` do; 26 of the 32 have nothing to
-  do with this planet. Repairing it means deciding the stat line for a whole fork-wide weapon set,
-  which is Aaron's call and not a Mustafar retune. Recorded here so it is not re-found as a
-  Mustafar defect. Relates to *The SoM weapons* below, which counts these two among the 22 orphans.
+
+  **The cert half WAS a Mustafar defect, and the paragraph that used to sit here was wrong.**
+  It said "this is not a Mustafar fact" and filed the whole thing under fork-wide. That
+  conclusion did not survive a count. Certs across the 12 distinct SoM weapons, read off the
+  files rather than assumed:
+
+  | class | weapons | cert | xpType |
+  | --- | --- | --- | --- |
+  | 2h sword | massassi, obsidian, tulrus | `cert_sword_2h_axe` | `meleespecialize_twohand` |
+  | lance | obsidian, xandank | `cert_lance_vibro_axe` | `meleespecialize_polearm` |
+  | sword | mustafar_bandit, obsidian | `cert_sword_01` | `meleespecialize_onehand` |
+  | carbine | republic_sfor | `cert_carbine_cdef` | `rangedspecialize_carbine` |
+  | rifle | dp23, mustafar_disruptor | `cert_rifle_cdef` | `rangedspecialize_rifle` |
+  | pistol | disruptor, ion_relic | was `cert_carbine_cdef` | was `rangedspecialize_carbine` |
+
+  **10 of 12 already carried the correct certification for their own class.** Only the two
+  pistols were missed. A stencil that 10 siblings were corrected off of is not a fork-wide
+  policy — it is two files nobody finished. Fixed in `3f787292ca`: five lines each, `carbine` →
+  `pistol` across `xpType`, `certificationsRequired`, `creatureAccuracyModifiers`,
+  `creatureAimModifiers` and `speedModifiers`. Gate `ok=264 fail=0`, boot READY 40s. All 12 now
+  certify correctly.
+
+  **The damage half is still open and is still Aaron's call, for a narrower reason than
+  originally stated.** The two pistols keep `minDamage = 99999999998` / `maxDamage = 99999999999`
+  / `attackSpeed = 1` deliberately — they were not touched by that commit. The split is clean,
+  and it is a Mustafar split rather than a fork one:
+
+  - **All 7 melee SoM weapons ship real authored damage** — 2h swords 75/125, lances 100/375,
+    swords 60/250. Consistent within each class, and every `_generic` variant matches its parent
+    exactly.
+  - **All 5 ranged SoM weapons sit on placeholder damage**, and on *two different* placeholders:
+    the carbine and both pistols on `99999999998`/`99999999999`, both rifles on
+    `9999998`/`9999999`. Two magnitudes means two stencils, so the ranged set was never costed
+    by anyone at any point — not once, not partially.
+
+  Naming those numbers is a design decision about how hard a SoM ranged weapon hits, and I am
+  not making it. Recorded so it is not re-found as a bug. Relates to *The SoM weapons* below,
+  which counts the pistols among the 22 orphans.
+
+  ⚠ **`ranged/heavy/som_republic_flamer.lua` reads like a third instance of this defect and is
+  not one. Do not "fix" its cert.** It reports `cert_sword_2h_axe` /
+  `combat_meleespecialize_twohand` on a file whose name says flamethrower, which looks exactly
+  like the pistol bug. It isn't: the file is a verbatim copy of stock `2h_sword_kashyyk`, object
+  name and `addTemplate` path included, confirmed by `diff --no-index`. Editing the cert would
+  make an unauthored stock copy *look* finished. See *The SoM weapons* below, which already owns
+  this — all four `ranged/heavy/` files, why no art exists for either, and why
+  `custom_content/weapon/serverobjects.lua` must never be included. Those four are excluded from
+  the 12 above for that reason.
 
 ## The full content census — what ships, what is reachable, and the proof for the rest
 
