@@ -82,27 +82,70 @@
 	appear in zero files in this repo, and string/en/mob/creature_names.stf has
 	no row for any of them in any of its six shipped copies.  Substitutes:
 
-	  som_blistmok_ura_jen    -> blistmok_trampler, setCustomObjectName("Ura Jen")
-	  som_ancient_jundak      -> jundak_devourer,   setCustomObjectName("Ancient Jundak")
-	  som_xandank_packleader  -> xandank_patriarch, setCustomObjectName("Xandank Packleader")
+	  som_blistmok_ura_jen    -> blistmok_trampler,    setCustomObjectName("Ura Jen")
+	  som_ancient_jundak      -> jundak_devourer,      setCustomObjectName("Ancient Jundak")
+	  som_xandank_packleader  -> xandank_onyx_plated,  setCustomObjectName("Xandank Packleader")
 	  som_xandank_pack        -> xandank
 
-	som_xandank_pack -> xandank is the only one with in-repo evidence:
+	som_xandank_pack -> xandank has in-repo evidence:
 	mobile/lair/creature_dynamic/mustafar_xandank_pack.lua:2 is the sole place
 	the string "xandank_pack" appears in this repo and its roster is
 	{{"xandank",2},{"xandank",1}}.
 
-	The other three are my pick of the closest shipped variant and are OPEN
-	QUESTIONS, not findings.  Note in particular that blistmok, blistmok_shrieker
-	and blistmok_trampler are stat-identical, so choosing trampler for Ura Jen is
-	flavour only -- it does not make her the "exceptional blistmok" the .qst
-	describes.  If these four should be authored as real creature templates
-	instead, that is mobile/ work nobody has assigned.
+	TWO OF THE OTHER THREE NOW HAVE AN OUT-OF-REPO SOURCE.  When this block was
+	written it said all three were unevidenced picks.  That was true of the repo
+	and not of C:\swg-extract\ngecore_mustafar.md, which lists both:
 
-	All four substitutes are registered and reachable:
-	blistmok_trampler.lua:40 + som/serverobjects.lua:32,
-	jundak_devourer.lua:40 + :54, xandank_patriarch.lua:40 + :181,
-	xandank.lua:40 + :179.
+	  :202  "* Ura Jen (CL80 Elite Blistmok) [-903,-334]"
+	  :198  "* The Xandank Packleader (CL79 Elite) [-1704,2133]"
+	  :205  "* Xandank Pack Mate (CL75) [-1706,2128]"
+
+	Those coordinates check out through the proven Mustafar offset
+	(world_x = way_x - 2880, world_y = way_y + 2976, scratch/MUSTAFAR-GAPS.md),
+	against placements this file made independently from other sources before
+	the list was consulted.  Pack Mate [-1706,2128] -> (-4586, 5104) is the
+	EXACT den coordinate at :519.  Packleader [-1704,2133] -> (-4584, 5109) sits
+	5.4 m off it.  Ura Jen [-903,-334] -> (-3783, 2642) is 18.8 m from her spawn
+	at :390.  Three independent agreements, so the tier words in the same rows
+	are worth reading too.
+
+	Read the tier word, not the CL number -- the same rule mobile/custom_content/
+	som/skar.lua applies to its own row.  The list distinguishes Elite from Boss
+	deliberately (compare :179 "Malfosa (CL80 Boss Scorpion)"), so "Elite" is a
+	signal and not a synonym.  Against the ladder that is ELITE = 85.
+
+	  Ura Jen, "Elite Blistmok" -> blistmok_trampler is level 85.  CONFIRMED.
+	  Packleader, "Elite"       -> xandank_patriarch is level 100, which is the
+	                               NAMED tier, one above.  CHANGED to
+	                               xandank_onyx_plated, the ELITE-85 xandank.
+
+	Nothing is lost by that swap.  spawnNamed (:681) calls setCustomObjectName
+	over whatever the template ships, so "a Xandank Patriarch" was never on
+	screen and the display name is "Xandank Packleader" either way; the template
+	only ever contributed stats and appearance, and stats are what the source
+	speaks to.  Both templates were already accepted by the kill set at :534-535,
+	so detection is unaffected.
+
+	CORRECTION -- this block used to claim blistmok, blistmok_shrieker and
+	blistmok_trampler are stat-identical, and conclude that picking trampler for
+	Ura Jen was "flavour only".  Both halves are wrong.  Diffing the three files:
+	shrieker and trampler are identical to each other apart from name, appearance
+	and harvest amounts, but blistmok is a full tier below both -- level 70 vs 85,
+	chanceHit 0.65 vs 0.75, damage 430/570 vs 555/820, baseXp 6747 vs 8130.  So
+	trampler DOES make her the "exceptional blistmok" the .qst describes, and the
+	source calling her Elite says the same thing from outside.
+
+	som_ancient_jundak is the one that stays an OPEN QUESTION: it appears nowhere
+	in the extract list, so jundak_devourer (ELITE 85, against jundak and
+	orf_jundak at 70) remains my pick of the closest shipped variant.  If any of
+	these four should be authored as real creature templates instead, that is
+	mobile/ work nobody has assigned.
+
+	All four substitutes are registered and reachable (line numbers re-verified,
+	the previous set had drifted):
+	blistmok_trampler.lua:47 + som/serverobjects.lua:32,
+	jundak_devourer.lua:47 + :58, xandank_onyx_plated.lua:47 + :192,
+	xandank.lua:41 + :191.
 
 	THE REWARDS -- ALL THREE RESOLVED, NOTHING SUBSTITUTED
 	------------------------------------------------------
@@ -541,7 +584,9 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			leaderDescription = "Renlo Hens has asked you to gather the head of the xandank packleader to bring back to him as proof that the pack is taken care of.",
 			leaderItemName = "Head of the Packleader",
 			-- som_xandank_packleader does not ship anywhere.  SUBSTITUTE -- see header.
-			leaderTemplate = "xandank_patriarch",
+			-- ELITE-85, matching "The Xandank Packleader (CL79 Elite)" in
+			-- ngecore_mustafar.md:198.  Was xandank_patriarch, which is NAMED-100.
+			leaderTemplate = "xandank_onyx_plated",
 			leaderName = "Xandank Packleader",
 
 			-- task 25, Wait for Signal (xandank_trophy_nine), Signal Name xandank_trophy_signal_three

@@ -150,6 +150,34 @@ function smoking_forest_region:spawnMobiles()
   local pBlackguard18 = spawnMobile("mustafar", "blackguard",120,-4415.5,83.3,3205.0,66,0)
   self:setMoodString(pBlackguard18, "idlewander") 
   local pBlackguard19 = spawnMobile("mustafar", "blackguard",120,-4407.4,82.6,3194.2,151,0)
-  self:setMoodString(pBlackguard19, "idlewander") 
-  
+  self:setMoodString(pBlackguard19, "idlewander")
+
+  -- Voakar Duset. THE COORDINATE IS SOURCED, which makes him the only unplaced
+  -- named unique in the som set that did not need one invented:
+  --   C:\swg-extract\ngecore_mustafar.md:204  "* Voakar Duset (CL84 Elite) [-2358,1475]"
+  -- Through the proven Mustafar offset (world_x = way_x - 2880, world_y =
+  -- way_y + 2976, scratch/MUSTAFAR-GAPS.md) that /way is world (-5238, 4451),
+  -- which lands inside this file's own footprint (x -5417..-4218, y 3154..4492)
+  -- and no other region's, so this is where he belongs.
+  --
+  -- He also has his own live spawn table -- elite_voakar_duset.tab is a single
+  -- row, "som_voakar_duset 5" -- so live treated him as a named unique too. No
+  -- spawn_lists table references that group, which is why it gives existence
+  -- but never a position; the position above comes from the extract list.
+  --
+  -- Respawn 600 and "idlewander" are this tree's named-unique convention
+  -- (mensix_facility_region.lua:73, Deathsting), against 120 and "neutral" for
+  -- the rank-and-file above. Height is resolved with getWorldFloor and never
+  -- hardcoded, same as storm_lord_region.lua:93.
+  --
+  -- OPEN, DELIBERATELY NOT FIXED HERE: the source calls him "CL84 Elite" and
+  -- voakar_duset.lua is level 100, which is NAMED on the retune ladder, one
+  -- tier above. The retune set all four som named uniques -- cinderclaw,
+  -- scorching_terror, tremor_foot, voakar_duset -- to 100 as a set, and only
+  -- this one appears in the extract list at all. Re-tiering one of four on a
+  -- single line would make the set incoherent, so the number is left alone and
+  -- the disagreement is recorded rather than resolved.
+  local pVoakar = spawnMobile("mustafar", "voakar_duset",600,-5238,getWorldFloor(-5238,4451,"mustafar"),4451,0,0)
+  self:setMoodString(pVoakar, "idlewander")
+
 end
