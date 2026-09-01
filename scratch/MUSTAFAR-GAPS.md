@@ -224,6 +224,14 @@ node IDs to find. So `registerTrigger` should **not** be wired to ten objects. T
 a radial on the datapad opening a `SuiListBox` of the ten labels, calling the existing
 `playEntry`. **Every string needed already ships.**
 
+⚠ **CLOSED — that surface was built and is wired.** `HkHistoryDatapadMenuComponent.lua` is exactly
+the described thing: `fillObjectMenuResponse` adds the radial (`:17`), `handleObjectMenuSelect`
+opens `SuiListBox.new("HkHistoryDatapadMenuComponent", "entryCallback")` (`:39`), and
+`entryCallback` calls `history:playEntry` (`:82`). It is attached declaratively —
+`object/custom_content/tangible/item/som/droid_factory_history_datapad.lua:2` sets
+`objectMenuComponent = "HkHistoryDatapadMenuComponent"` — and loaded at
+`screenplays/screenplays.lua:789`. Read "the missing surface" as history, not as a gap.
+
 **Entry 7 is the only gate.** `37323` appears nowhere else in any TRE. "Access port AG4" is
 decorative. Entries 1–6, 8–10 are lore. Ten `.stf` strings verified 40/40 byte-identical to the
 repo's transcriptions, and the repo picked the correct one of the two shipped copies (the
@@ -235,6 +243,11 @@ reproduces its typos).
 7. `useFactoryKeypad` (`story_arc_chapters.lua:1422`) has only the wrong-code path, so today any
 player can type `37323` cold. `hk_history.lua:336` already exposes `hasPlayedEntry(pPlayer, 7)`,
 which is exactly that predicate.
+
+⚠ **CLOSED — filled, using exactly that predicate.** `story_arc_chapters.lua:2149-2155` reaches
+`hk_history` through `_G["somHkHistoryScreenPlay"]` so this file keeps no hard dependency, checks
+`hasPlayedEntry(pPlayer, self.factoryHistoryEntry)`, sends `@som/som_quest:df_keypad_unknown` and
+returns *before* the wrong-code branch. Typing `37323` cold is refused now.
 
 ---
 
@@ -258,6 +271,25 @@ Flea Hunt document can simply be clicked on to complete the quest, instead of re
 the radial menu."* ⚠ That is **direct SOE proof for one hunt and for the mechanism class** — the
 08-29 framing of it as corroboration for "all seven" overstated it. It is the only Mustafar-quest hit
 in the entire 1,192-folder scrapbook.
+
+⚠ **Updated 2026-08-31 — the four props now STAND, and none of them is WIRED.** Rows 16/23/28/29
+of `som_mining_facility.tab` were placed in `mensix_mining_facility_main.lua` (commit
+`8c2c93a99a`), each within a metre of the `/way` in the table above. That closes the *placement*
+half of every row in this table and leaves the *mechanism* half exactly where it was.
+
+Two facts pull in opposite directions here and both are kept, because picking one would be
+inventing the answer:
+
+- The `script` column of `som_mining_facility.tab` is **empty on all four rows**. The spawn table
+  attaches no behaviour to any of them.
+- The SOE publish note above is **direct proof that clicking the Lava Flea document completed the
+  quest** on live. So a behaviour existed; it lived in a server script SOE had and this extract
+  does not.
+
+So: the shipped data does not tell us what a click does, and a live server plainly did something.
+`grantHunt` stays uncalled until Aaron rules on the giver — writing the click myself would be
+inventing a mechanism and calling it a port. **This is the open decision for this arc**, and it is
+now the only one; the props are no longer part of it.
 
 **The props are wireable with zero authored strings.** None of the six Mensix interior props exists
 as a snapshot node — the whole Mensix building (node 12112217, 30 cells) contains exactly **two**
@@ -288,7 +320,23 @@ the repo (`object/custom_content/tangible/item/som/`), and every name and descri
 **All the repo's snapshot node IDs verify** against `stardust_03.tre` — both resting stones, five den
 lairs, all five chem lockers.
 
-### Two candidate repo defects here
+### Two candidate repo defects here — ⚠ BOTH ARE CLOSED. The text below is the original finding.
+
+**Both say "Not changed" and both were changed afterwards. Do not read them as live.** They are
+kept because the reasoning is still the record of how each was decided.
+
+- **Bleach vat — CLOSED, and the waypoint was right.** It now sits in `small_room_04`, cell
+  **12112238**, at `(-16.6, 19.1, -11.3)` — `trophy_hunts.lua:343-350`. What settled it was not the
+  waypoint but `som_mining_facility.tab` row 26, which gives that room and those coordinates
+  verbatim. The table and the live `/way` agree with each other and against the old placement, so
+  this stopped being a judgment call the moment the table was read.
+- **`soakSeconds` — CLOSED at 10, and not on the weak source.** It is `10` at
+  `trophy_hunts.lua:490`. The SWG Legends figure was correctly refused; what replaced it was two
+  independent live-era sources — SonGouki's ToOW guide (SOE official forums, Nov 2005) and the
+  *Skull of the Jundak* wiki page as of 2008 — which agree on 10 s and match the quest's own task
+  text, "it should clean it up rather quickly". 180 never fitted that sentence.
+
+*Original finding, unedited:*
 
 - **The bleach vat may be ~120 m out.** `trophy_hunts.lua:226-234` puts it in `small_room_03`, cell
   12112234, local `(-131.5, 47.5)` — internally consistent, that is inside `small_room_03`'s box
@@ -482,8 +530,14 @@ weight — which is precisely why it slipped through.
 - **34** are neither referenced nor in the snapshot: 7 pet control devices, 2 doors, 8 items,
   the 3 final-chamber objects, 14 weapons.
 
-  Two of those five groups have moved since:
+  Three of those five groups have moved since:
 
+  - **4 of the 8 items are in**, placed 2026-08-31 from `som_mining_facility.tab` rows 16/23/28/29
+    (`mensix_mining_facility_main.lua`, commit `8c2c93a99a`): `lava_beetle_beads`,
+    `jundak_hunter_hologram`, `lava_flea_bounty`, `lava_lizard_food`. Checked against the tree at
+    the previous commit `e19d400b1b`, three had zero references and the fourth had exactly one —
+    a *comment* in `bounty_hunts.lua`, not a placement. All four now stand where SOE put them, and
+    all four agree with a player `/way` to under a metre. See *The Mensix page* below.
   - **The 7 pet control devices are in.** `object/custom_content/serverobjects.lua:50` includes
     `custom_content/intangible/pet/som/serverobjects.lua`, because the retune gave 7 families a
     `tamingChance` and a `controlDeviceTemplate`. See the loader section below.
@@ -1026,28 +1080,127 @@ Run each `/way` through the Mensix cell-local transform already established abov
 | Pwwoz Pwwa | `som_pwwoz_pwwa` | `samaritan.lua:275` | 3.02 m |
 | Mensix Corp. Merchant | `must_junk` | `mensix_mining_facility_main.lua:108` | confirmed |
 
-**21 of 27 confirmed. Zero mismatches. Worst delta 3.02 m, median under 1 m** — which is inside
-the error of a player standing next to an NPC and reading their own coordinates off the map.
-Menddle's height checks too: cell-local `z = 31.5` on a facility floor of 199.40 gives 230.9
+**Now 25 of 27 confirmed. Zero mismatches. Worst delta 3.02 m, median under 1 m** — which is
+inside the error of a player standing next to an NPC and reading their own coordinates off the
+map. Menddle's height checks too: cell-local `z = 31.5` on a facility floor of 199.40 gives 230.9
 against the page's 230.
 
-The six not confirmed are all absences, and none is a placement error:
+⚠ It read **21 of 27** when this section was written, and the four-prop bullet below explained
+the shortfall wrongly. Both are corrected here. The four props are now placed
+(`mensix_mining_facility_main.lua`, commit `8c2c93a99a`), from `som_mining_facility.tab` — not
+from this page — and each lands on its `/way`:
+
+| retail object | repo | tab row | delta |
+| --- | --- | --- | --- |
+| Bounty Document: Lava Flea | `lava_flea_bounty.iff` | row 28 | 0.49 m |
+| Kubaza Beetle Beads | `lava_beetle_beads.iff` | row 16 | 0.59 m |
+| Medical Hologram | `jundak_hunter_hologram.iff` | row 23 | 0.84 m |
+| Plate of Tanray Meat | `lava_lizard_food.iff` | row 29 | 0.94 m |
+
+That last row is the one worth keeping. Nothing in the filename `lava_lizard_food.iff` says
+"Plate of Tanray Meat" — the only reason we know which object the page means is that the tanray
+`/way` lands on it. Four independent agreements under a metre, from a shipped datatable and
+players in the room years later.
+
+The two still not confirmed are absences, and neither is a placement error:
 
 - **Mining Corporation Executive** (`/way 307 -1222`) and **Uggo** (`/way 383 -1168`) are not
   modelled. Neither appears in the page's own quest list — they are ambient. The nearest thing
   the repo puts at each spot is 4.3 m away in both cases (Urup Fal'co in Milo's office; a generic
   `mustafarian_miner_01` in the cantina).
-- **Bounty Document: Lava Flea**, **Kubaza Beetle Beads**, **Medical Hologram** and **Plate of
-  Tanray Meat** are not placed as props. Their quests *are* modelled — `bounty_hunts.lua` runs all
-  seven — and `bounty_hunts.lua:99-107` already records why: these are "live server-side static
-  item names, not object templates", so there is nothing to spawn. Only `lava_beetle_beads.iff`
-  has a real template, and that file notes it "if real beads are wanted later".
+
+**Why the four-prop bullet was wrong, since the mistake is the reusable part.** It read:
+
+> **Bounty Document: Lava Flea**, **Kubaza Beetle Beads**, **Medical Hologram** and **Plate of
+> Tanray Meat** are not placed as props. Their quests *are* modelled — `bounty_hunts.lua` runs
+> all seven — and `bounty_hunts.lua:99-107` already records why: these are "live server-side
+> static item names, not object templates", so there is nothing to spawn.
+
+`bounty_hunts.lua:99-107` says nothing about these four props. It is about the **loot legs** of
+two hunts — the drop items "Jagged Jundak Tooth" and "Kubaza Beetle Bead" (singular; the item a
+corpse yields), not "Kubaza Beetle Beads" the object on the floor. Two different things with
+almost the same name, and the citation crossed them. The source file was right and stayed right;
+it even says `lava_beetle_beads.iff` "does exist and is registered … if real beads are wanted
+later". This document misread it into a reason not to place anything, and the real reason nothing
+was placed was simpler: nobody had read rows 16/23/28/29 out of the table yet.
+
+**These are props, not quest starters.** The `script` column is empty on all four rows, so the
+shipped data attaches no behaviour to clicking them. `grantHunt` is still uncalled and the bounty
+arc still has no giver — that is unchanged and remains Aaron's call. See "Bounty hunts — all
+seven mapped, no NPC giver by design".
 
 This section corrected two errors made while producing it, both worth recording because both were
 the same kind. A subagent reported all 8 items "NOT SPAWNED" and Menddle "NOT SPAWNED"; direct
 greps found 4 of the 8 placed and Menddle placed to 0.63 m. It had searched for the retail *display
 names* rather than the repo's template names (`miner_pilot` carries `customName = "Master Pilot
 Menddle"`). **The primary read caught it; the summary would not have.**
+
+### `som_mining_facility.tab` — now fully reconciled: 49 rows, 49 accounted for
+
+The four props above were part of a larger gap. The facility's *quest* NPCs had been placed from
+`datatables/spawning/dungeon/som_mining_facility.tab` long ago, so the table was always trusted —
+but sixteen of its rows had never been read out of it. Not ruled out, just missed. Placed
+2026-08-31 in `mensix_mining_facility_main.lua` (commit `8c2c93a99a`, plus row 47 after the
+reconciliation below):
+
+- **5 props** via `spawnSceneObject` — the four above, plus row 22 `cloning_tube` in
+  `small_room_01`.
+- **8 background miners** via `spawnMobile` — rows 44/45/46 (`hall_08`), 47 (`hub_room`),
+  52 (`hall_04`), 53 (`hall_03`), 68/71 (`medium_room_01`).
+- **2 mining droids** — rows 62/63, `small_room_03`.
+- **1 `clone_droid`** — row 79, `small_room_01`, beside the cloning tube from row 22.
+
+**The whole table was then reconciled, and that is what makes this closed rather than improved.**
+Every one of the 49 non-`npe_node` rows was matched against every coordinate this tree declares
+inside a Mensix cell — both literal `spawnMobile`/`spawnSceneObject` calls and the data-table
+declaration form `trophy_hunts.lua` and `story_arc_chapters.lua` use. **47 of 49 matched within
+3 m.** The two that did not:
+
+- **Row 47**, `som_mustafarian_miner_a` in `hub_room` at (-94, 14.9, 3) — a **real gap**, and the
+  first pass here missed it. Rows 44/45/46 are the `hall_08` group and row 47 is the next line in
+  the file; the pass walked the block and moved on. Now placed. Note what did *not* catch it: the
+  boot counter read "15 of 15" because 15 was what the file asked for. **A counter proves the
+  placements ran; it does not prove the table was finished.** Only the reconciliation could.
+- **Row 78**, `communication_console` in `conference_room` — **not a gap**. It is spawned at
+  `story_arc_chapters.lua:1206` at exactly the table's coordinates. The reconciler missed it
+  because the field is named `miloTerminalTemplate`, not `template`. A tool artifact, checked by
+  direct read before it was believed.
+
+**A useful thing fell out of the sweep: the `script` column is not empty everywhere.** Every one
+of the twelve miner rows carries one — `joker_one/two/three` in `hall_08`, `patrol1/2` in the
+corridors, `cantina1/2` and `patron1/2` in the bar, `working_miner1` in `hub_room`. They are
+`content_tools` sequencer entries, and Core3 has no sequencer, so the behaviour cannot be ported;
+a mood string is the nearest this engine has and is used as a disclosed approximation. **This
+also strengthens the prop argument above.** The four bounty props' `script` column is empty — and
+now we know that column is *populated where SOE attached behaviour*, so its emptiness on those
+rows is a real signal rather than an unused column.
+
+**Boot-proven, not gate-proven.** `spawnSceneObject` and `spawnMobile` both return `nil` on failure
+and print nothing — an unregistered server template, a wrong cell id or a typo'd creature name all
+fail *silently*. This tree has been bitten by that exact silence three times (the Symbiosis sword,
+the Chu-Gon Dar cube, the som pet control devices — all unregistered server templates whose client
+halves resolved fine). So every placement here goes through a `:placed()` helper that logs a FAILED
+line naming the row, and `start()` prints the tally, following
+`mustafar_dungeon_population.lua:456`. Boot log:
+
+    MensixMiningFacility: 16 of 16 som_mining_facility.tab rows placed
+
+Zero FAILED lines. That is positive proof of placement, which "no errors in the log" is not — but
+see the row 47 miss below for what it still does not prove.
+
+**One substitution, disclosed.** The table asks for `som_mining_droid_fork` and
+`som_mining_droid_claw`. Neither exists as a template here or anywhere in the extract. Live has
+three variants (`ground_spawning/types/mustafar/mining_droids.tab`: bucket, claw, fork) and this
+repo ships three marks (`must_mining_droid_mark_01/02/03`) — three for three, but the two schemes
+describe different things, an attachment versus a model generation, and nothing supplies a mapping.
+So the **placement is sourced verbatim** and **which mark is ours**, by a stated alphabetical rule
+rather than an undocumented coin toss. Same trade `mustafar_dungeon_population.lua` makes out loud
+for seventeen other names.
+
+**The 30 `npe_node.iff` rows are deliberately NOT placed**, recorded here so it is not re-derived
+as a gap. They are NPE anchor markers, each sitting on a creature row to the centimetre (rows 47
+and 48 are the same point). Core3 has no NPE node consumer, so 30 invisible objects would add
+nothing visible and nothing any code reads.
 
 ### XP — no *quest reward* pays any, and the wiki's figures match nothing in the shipped data
 
