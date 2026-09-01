@@ -113,6 +113,45 @@ That is a real number and it is stated here rather than left to be discovered in
 a profile. If it has to come down, the honest lever is the pool depth in
 mustafar_instances.lua, not a quiet cull of rows in this file.
 
+THE PROPS COST ANOTHER 366, added 2026-08-31
+
+The same tables carry non-creature rows, and until now this file read only the
+creature ones. The props tables below place the rest:
+
+    old_republic_facility    21 rows x 12 copies  =  252
+    decrepit_droid_factory   10 rows x  9 copies  =   90
+    working_droid_factory     2 rows x 12 copies  =   24
+                                                    ----
+                                                     366
+
+Same lever if it has to come down, and the same rule: pool depth, not a quiet cull.
+
+WHAT IS DELIBERATELY NOT PLACED, so the difference between the tables and this
+file is a decision and not a gap. Every one of these was read before it was
+skipped:
+
+  - The 59 patrol_waypoint rows across the three tables. They are invisible
+    pathing markers for live's sequencer, which Core3 does not have -- the same
+    case as the npe_node rows in som_mining_facility.tab, and the same call.
+    THE PATROL PATHS ARE NOT HONOURED, above, is the reason; spawning the markers
+    would not make them honoured, it would just put 59 invisible objects per copy
+    in the world.
+
+  - ORF table line 23, object/tangible/dungeon/avatar_platform/avatar_lockbox.iff.
+    NOT PLACEABLE: no server template exists for it anywhere in this tree. A
+    find for avatar_lockbox.lua under bin/scripts/object returns nothing and no
+    addTemplate names it, so spawnSceneObject would return nil. This is the one
+    row of the 34 that is a genuine missing asset rather than a decision.
+
+  - ORF table line 17, terminal_bank_floor_on_01.iff in smallroom12. The SPOT is
+    already occupied: story_arc_chapters.lua:533 puts its power terminal on
+    exactly these coordinates, deliberately, and that entry says so -- it borrows
+    live's position and wears must_control_computer instead. Placing the live
+    template too would stack two objects on one point.
+
+  - Five decrepit rows and three working rows already placed elsewhere; the props
+    tables name them individually, with the file and line that owns each.
+
 WHAT IT DOES TO THE KILL COUNTERS  --  checked, one by one, before writing
 
 Substituting means these creatures answer to template names that other Mustafar
@@ -311,6 +350,47 @@ MustafarDungeonPopulation = ScreenPlay:new {
 				-- Terminal share the room with him.
 				{ "som_orf_ancient_xandank", "smallroom6", 90.9704, -4.77e-07, 31.9041, 91.3982 },
 			},
+
+			--[[ The non-creature rows of the same table. Added 2026-08-31.
+
+			     Same row shape as the creature rows above -- template, cell, x, z,
+			     y, heading in DEGREES -- but row[1] is a full template path rather
+			     than a live creature name, so nothing is substituted and nothing is
+			     looked up. These are transcribed straight across; see THE AXIS
+			     MAPPING for why the columns read in that order.
+
+			     Rows 3-16 are the facility's own terminals; 18-24 are stock
+			     furniture. Table line numbers are given so each row can be read back
+			     against som_old_republic_facility.tab. ]]
+			props = {
+				-- core_room_terminal, table lines 3-10.
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall2", 43.9517, 4.93316, 17.231, -180 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall16", 65.3722, -28.6669, -3.66235, 90 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall15", 66.2821, -28.6669, 37.2615, -90 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall29", 65.3563, -62.2668, -3.66889, 90 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall26", 43.9561, -62.2784, 17.2767, -180 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall25", 87.6775, -62.2668, 16.336, 0 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall30", 66.2638, -62.2668, 37.2672, -89.9999 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/core_room_terminal.iff", "hall10", 87.6878, 4.93316, 16.3464, 0 },
+				-- door_terminal, table lines 11-16.
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/door_terminal.iff", "hall11", 43.9489, -0.0632455, -31.6957, -90 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/door_terminal.iff", "hall19", 45.7174, -33.6633, 32.9905, -180 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/door_terminal.iff", "hall15", 74.7514, -33.6632, 43.9072, -90 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/door_terminal.iff", "hall32", 48.4885, -67.2536, -10.3049, 90 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/door_terminal.iff", "hall33", 83.1517, -67.2632, 43.9046, -90 },
+				{ "object/tangible/dungeon/mustafar/old_republic_facility/door_terminal.iff", "hall25", 98.9155, -67.2632, 32.7319, -180 },
+				-- Stock furniture, table lines 18-22 and 24.
+				{ "object/tangible/furniture/cheap/chest_s01.iff", "mediumroom13", 75.6987, -32.6513, -46.0712, -93.4377 },
+				{ "object/tangible/furniture/decorative/diagnostic_screen.iff", "smallroom22", 33.9066, -32.8727, 77.0979, 147.823 },
+				{ "object/tangible/furniture/decorative/professor_desk.iff", "smallroom20", 95.9049, -33.6, 54.5825, -132.353 },
+				{ "object/tangible/furniture/terminal/terminal_bank_wall_on_02.iff", "mediumroom28", 31.8932, -68.0538, -30.9565, 90 },
+				{ "object/tangible/furniture/terminal/terminal_bank_wall_on_01.iff", "smallroom34", 47.6444, -67.5795, 78.9949, -180 },
+				{ "object/tangible/furniture/terminal/terminal_bank_wall_on_01.iff", "smallroom6", 95.2071, -0.411096, 49.6319, -180 },
+				-- Table line 68. The entrance wall terminal. storyArcChapters' own
+				-- orfContact stand-in also sits in this cell, at 22.4 / 0.0 / -4.16;
+				-- it is a different object at a different spot and both stand.
+				{ "object/tangible/dungeon/wall_terminal_s4.iff", "entrance", 2.0015, 0, 4.22289, 90 },
+			},
 		},
 		{
 			key = "decrepit_droid_factory",
@@ -368,6 +448,27 @@ MustafarDungeonPopulation = ScreenPlay:new {
 				{ "som_decrepit_cww8_combat_droid", "mediumroom18", -11.0435, -28, 7.27548, -179.47 },
 				{ "som_decrepit_blastromech", "mainroom27", 32.0532, -24, 15.171, 85.9483 },
 			},
+
+			--[[ Table lines 45-54. The five rows this table has that are NOT here --
+			     66 master_power_core, 67 system_controller, 75 the exit_terminal
+			     access_controller, 76 security_controller, 77 the interior door --
+			     are all already placed elsewhere and must not be doubled:
+			     story_arc_chapters.lua:1101/1116/1117 furnishes the first, second and
+			     fourth in every copy, and mustafar_instances.lua:374-408 owns the
+			     door and the exit terminal because they are the instance's own
+			     entrance furniture. ]]
+			props = {
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "hall1", 20.1561, -11.6521, 32.9993, 179.909 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/data_terminal.iff", "smallroom26", 87.6575, -11.7154, -35.2566, -89.9544 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/data_terminal.iff", "smallroom21", 105.696, -12, 31.2636, -91.1002 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "mainroom27", 88.0126, -11.7154, -14.1607, -89.9543 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/data_terminal.iff", "smallroom23", 31.9562, -12, 56.6959, -179.909 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "smallroom4", 93.0999, -19.6205, -0.983778, 89.3814 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/security_scanner.iff", "smallroom4", 99, -19.6703, -9.11545, -90.5273 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/security_scanner.iff", "smallroom4", 99, -19.6205, 7.12086, 90.7094 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "smallroom11", 79.8117, -38, -86.8533, 0 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/environmental_controller.iff", "smallroom12", 48.0129, -38, -86.9426, 0 },
+			},
 		},
 		{
 			key = "working_droid_factory",
@@ -380,6 +481,21 @@ MustafarDungeonPopulation = ScreenPlay:new {
 				-- decrepit table is the same geometry with the fight in it.
 				-- Spawned static; its obsBotOne..obsBotFour route is not walked.
 				{ "som_decrepit_patrol_bot", "mainroom27", 26.3758, -12, 23.2726, 109.317 },
+			},
+
+			--[[ Table lines 3 and 43. Both name the DECREPIT factory's
+			     access_controller at coordinates the decrepit table also carries --
+			     the same duplication the header describes, and not a mistake in
+			     either file. They are still placed from here, because a working
+			     factory copy is a different building from a decrepit one and gets
+			     its own furniture.
+
+			     Line 4's system_controller is placed by
+			     story_arc_chapters.lua:1101, line 9's exit_terminal and line 44's
+			     interior door by mustafar_instances.lua. Those three are not here. ]]
+			props = {
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "mainroom27", 88.0126, -11.7154, -14.1607, -89.9543 },
+				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "hall1", 20.1561, -11.6521, 32.9993, 179.909 },
 			},
 		},
 	},
@@ -433,6 +549,7 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	-- of it up by afterwards.
 	spawnedCount = 0,
 	bossCount = 0,
+	propCount = 0,
 }
 
 registerScreenPlay("MustafarDungeonPopulation", true)
@@ -454,6 +571,7 @@ function MustafarDungeonPopulation:start()
 	self:populateLairBosses()
 
 	print("MustafarDungeonPopulation: " .. self.spawnedCount .. " creatures placed across the Mustafar dungeon pools, plus " .. self.bossCount .. " lair bosses")
+	print("MustafarDungeonPopulation: " .. self.propCount .. " non-creature objects placed from the same tables")
 end
 
 -- Separate from populatePool because these have no live table and no substitute
@@ -552,6 +670,27 @@ function MustafarDungeonPopulation:populateCopy(pool, buildingID)
 			self:spawnRow(pool, row, cells[cellName], buildingID)
 		end
 	end
+
+	-- The non-creature rows of the same table, through the same cell cache. Pools
+	-- that declare no props skip this entirely.
+	if (pool.props ~= nil) then
+		for i = 1, #pool.props do
+			local row = pool.props[i]
+			local cellName = row[2]
+
+			if (cells[cellName] == nil) then
+				cells[cellName] = self:resolveCell(pBuilding, cellName)
+
+				if (cells[cellName] == 0) then
+					print("MustafarDungeonPopulation: " .. pool.key .. " copy " .. buildingID .. " has no cell named '" .. cellName .. "'; its rows from " .. pool.table .. " are skipped")
+				end
+			end
+
+			if (cells[cellName] ~= 0) then
+				self:spawnProp(pool, row, cells[cellName], buildingID)
+			end
+		end
+	end
 end
 
 function MustafarDungeonPopulation:resolveCell(pBuilding, cellName)
@@ -583,4 +722,23 @@ function MustafarDungeonPopulation:spawnRow(pool, row, cellID, buildingID)
 	end
 
 	self.spawnedCount = self.spawnedCount + 1
+end
+
+--[[ The prop half of spawnRow, and the one difference that matters is the last
+     argument. spawnMobile takes its heading in DEGREES; spawnSceneObject takes it
+     in RADIANS, and it takes the cell id BEFORE the heading rather than after it.
+     Two conventions, one file -- so the conversion is done here, once, and the
+     tables above stay in the table's own units.
+
+     No substitutes lookup: row[1] is already a full template path, because these
+     rows name objects rather than live creature names. ]]
+function MustafarDungeonPopulation:spawnProp(pool, row, cellID, buildingID)
+	local pObject = spawnSceneObject("mustafar", row[1], row[3], row[4], row[5], cellID, math.rad(row[6]))
+
+	if (pObject == nil) then
+		print("MustafarDungeonPopulation: failed to place " .. row[1] .. " in " .. row[2] .. " of " .. pool.key .. " copy " .. buildingID)
+		return
+	end
+
+	self.propCount = self.propCount + 1
 end
