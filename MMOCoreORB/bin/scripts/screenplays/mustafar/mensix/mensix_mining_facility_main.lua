@@ -56,7 +56,7 @@ mensix_mining_facility_main = ScreenPlay:new {
 
 	-- Counters for the boot-log line at the end of start().  See placed() below.
 	placedCount = 0,
-	expectedCount = 15
+	expectedCount = 16
 }
 
 registerScreenPlay("mensix_mining_facility_main", true)
@@ -260,6 +260,36 @@ function mensix_mining_facility_main:spawnMobiles()
      local pMiner_b10 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-124.3,19.1,-44,-95,12112244), "row 46 miner_a hall_08")
      self:setMoodString(pMiner_b10, "entertained")
 
+     --[[ row 47  hub_room 12112236, yaw -90.  ADDED 2026-08-31, after the first pass
+          of this block missed it.
+
+          The miss and how it was caught, because the method is the reusable part.
+          Rows 44/45/46 are the hall_08 group and row 47 is the next line in the
+          file; the first pass walked the hall_08 block and moved on to hall_04.
+          Nothing flagged it -- the counter said 15 of 15 because 15 was what this
+          file asked for, so it proved the placements ran, not that the table was
+          finished.  What caught it was reconciling all 49 non-npe rows against
+          every coordinate this tree declares.  47 of 49 matched inside 3 m; this
+          was one of the two that did not.  (The other, row 78's
+          communication_console, is placed at story_arc_chapters.lua:1206 and was
+          a false alarm from the reconciler, not a gap.)
+
+          pMiner_b3 stands in this same room at the same height, 15.3 m away at
+          -78.8/14.9/1.7.  That is a free-hand ambient miner, not this row moved --
+          it predates this work and cites no row.  Both stand.
+
+          MOOD IS OURS, and the table gives better grounds for it than a guess.
+          The mood column is empty on all twelve miner rows, but the script column
+          is not: it names the behaviour SOE attached to each one -- joker_one/two/
+          three in hall_08, patrol1/2 in the corridors, cantina1/2 and patron1/2 in
+          the bar, and working_miner1 here.  Those are content_tools sequencer
+          entries; Core3 has no sequencer, so the behaviour cannot be ported.  A
+          mood is the closest thing this engine has, and "a miner working" is what
+          pMiner_b1/b2/b3 already use npc_use_terminal_high for.  Sourced intent,
+          our approximation, said out loud. ]]
+     local pMiner_b13 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-94,14.9,3,-90,12112236), "row 47 miner_a hub_room")
+     self:setMoodString(pMiner_b13, "npc_use_terminal_high")
+
      -- rows 52, 53  the two corridor miners.  hall_04 12112231, hall_03 12112230.
      self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-107.8,10.8,32.5,0,12112231), "row 52 miner_a hall_04")
      self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-59.7,10.8,32.5,0,12112230), "row 53 miner_b hall_03")
@@ -306,7 +336,8 @@ function mensix_mining_facility_main:spawnMobiles()
      --[[ NOT PLACED, and deliberately: the 30 object/tangible/npe/npe_node.iff rows.
           They are the NPE system's anchor markers, not content -- each one sits on
           top of a creature row to the centimetre (row 47 miner_a hub_room -94/14.9/3
-          and row 48 npe_node hub_room -94/14.9/3 are the same point).  Core3 has no
+          and row 48 npe_node hub_room -94/14.9/3 are the same point -- row 47 is
+          the miner placed above, so the marker is standing inside him).  Core3 has no
           NPE node consumer, so placing 30 invisible objects would add nothing a
           player can see and nothing any code reads.  Skipped on purpose, recorded
           here so the next person does not re-derive it as a gap. ]]
