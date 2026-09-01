@@ -150,26 +150,26 @@ object_weapon_ranged_carbine_som_carbine_republic_sfor_generic = object_weapon_r
 
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 0,
-	actionAttackCost = 0,
-	mindAttackCost = 0,
+	healthAttackCost = 50,
+	actionAttackCost = 65,
+	mindAttackCost = 40,
 	forceCost = 0,
 
 	pointBlankRange = 0,
-	pointBlankAccuracy = 100,
+	pointBlankAccuracy = -20,
 
-	idealRange = 50,
-	idealAccuracy = 100,
+	idealRange = 22,
+	idealAccuracy = 20,
 
-	maxRange = 200,
-	maxRangeAccuracy = 100,
+	maxRange = 50,
+	maxRangeAccuracy = -80,
 
-	minDamage = 99999999998,
-	maxDamage = 99999999999,
+	minDamage = 395,
+	maxDamage = 790,
 
-	attackSpeed = 1,
+	attackSpeed = 4,
 
-	woundsRatio = 80,
+	woundsRatio = 25,
 
 	numberExperimentalProperties = {1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2},
 	experimentalProperties = {"XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "XX", "XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ"},

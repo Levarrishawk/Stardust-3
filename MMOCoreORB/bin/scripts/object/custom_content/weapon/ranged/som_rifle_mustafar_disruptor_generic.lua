@@ -150,26 +150,26 @@ object_weapon_ranged_rifle_som_rifle_mustafar_disruptor_generic = object_weapon_
 
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 0,
-	actionAttackCost = 0,
-	mindAttackCost = 0,
+	healthAttackCost = 80,
+	actionAttackCost = 25,
+	mindAttackCost = 25,
 	forceCost = 0,
 
 	pointBlankRange = 0,
-	pointBlankAccuracy = 100,
+	pointBlankAccuracy = 12,
 
 	idealRange = 50,
-	idealAccuracy = 100,
+	idealAccuracy = -45,
 
-	maxRange = 150,
-	maxRangeAccuracy = 100,
+	maxRange = 65,
+	maxRangeAccuracy = 0,
 
-	minDamage = 9999998,
-	maxDamage = 9999999,
+	minDamage = 527,
+	maxDamage = 1054,
 
-	attackSpeed = 1,
+	attackSpeed = 5,
 
-	woundsRatio = 95,
+	woundsRatio = 20,
 
 	numberExperimentalProperties = {1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2},
 	experimentalProperties = {"XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "XX", "XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ"},

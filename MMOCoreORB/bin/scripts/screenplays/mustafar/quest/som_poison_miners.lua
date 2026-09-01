@@ -199,16 +199,23 @@ is not granted; the reward stays a substitution matched by description: a pistol
 from Trials of Obi-Wan.
 
 The obvious Mustafar-flavoured match is object/weapon/ranged/pistol/
-som_disruptor_pistol.iff or som_ion_relic_pistol.iff, and both are refused here on
-the data. Their templates
-(object/custom_content/weapon/ranged/som_disruptor_pistol.lua:167-170 and
-som_ion_relic_pistol.lua:167-170, plus both _generic variants) carry
-minDamage 99999999998 / maxDamage 99999999999 / attackSpeed 1 -- the blue-frog
-placeholder values Core3 ships for templates whose real numbers are meant to come
-out of loot generation. giveItem() creates the object exactly as the template
-describes it, so handing one of those over would put a one-shot god pistol in a
-player's inventory. They also declare xpType combat_rangedspecialize_carbine and
-cert_carbine_cdef on a pistol. That is a defect to report, not a reward to ship.
+som_disruptor_pistol.iff or som_ion_relic_pistol.iff. When this arc was written
+both were refused on the data: their templates carried minDamage 99999999998 /
+maxDamage 99999999999 / attackSpeed 1 -- the blue-frog placeholder values Core3
+ships for templates whose real numbers are meant to come out of loot generation --
+and they declared xpType combat_rangedspecialize_carbine and cert_carbine_cdef on
+a pistol. giveItem() creates the object exactly as the template describes it, so
+handing one of those over would have put a one-shot god pistol in a player's
+inventory.
+
+Both defects have since been corrected: the cert and xpType in commit 3f787292ca,
+and the stats in the SoM ranged weapon pass (som_disruptor_pistol 257-513,
+som_ion_relic_pistol 264-527, attackSpeed 3, maxRange 35, taken from the live
+weapon_stats.tab rows weapon_tow_pistol_04_03 and
+weapon_tow_pistol_ion_relic_05_01). So the original grounds for the refusal are
+gone. Whether this reward should now be swapped to a SoM pistol is an open
+decision for Aaron, and is deliberately not taken here -- the same standing as the
+display-tangible swap noted above.
 
 What is handed over instead is object/weapon/ranged/pistol/pistol_dl44.iff, a
 registered base template with real numbers (object/weapon/ranged/pistol/
