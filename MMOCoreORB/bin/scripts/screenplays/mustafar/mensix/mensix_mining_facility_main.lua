@@ -52,34 +52,136 @@ local ObjectManager = require("managers.object.object_manager")
 mensix_mining_facility_main = ScreenPlay:new {
 	numberOfActs = 1,
 
-	screenplayName = "mensix_mining_facility_main"
+	screenplayName = "mensix_mining_facility_main",
+
+	-- Counters for the boot-log line at the end of start().  See placed() below.
+	placedCount = 0,
+	expectedCount = 15
 }
 
 registerScreenPlay("mensix_mining_facility_main", true)
 
+--[[ THE PROOF THAT A PLACEMENT LANDED.
+
+     spawnSceneObject and spawnMobile both return nil on failure and say nothing.
+     An unregistered server template, a cell id that is not a cell, or a creature
+     name with a typo all fail exactly that way -- silently, at boot, months before
+     anyone walks into the room and notices the prop is missing.  This tree has
+     already been bitten by the silent half of that three times (the Symbiosis
+     sword, the Chu-Gon Dar cube and the som pet control devices were all
+     unregistered server templates whose client halves resolved fine).
+
+     So every placement added below goes through this, and start() prints the
+     tally.  A shortfall is visible in the boot log on the line it happens, which
+     is the same convention mustafar_dungeon_population.lua:456 uses and the same
+     line that proved Sher Kar's twelve lair copies actually spawned. ]]
+function mensix_mining_facility_main:placed(pObject, label)
+	if (pObject == nil) then
+		print("mensix_mining_facility_main: FAILED to place " .. label)
+		return nil
+	end
+
+	self.placedCount = self.placedCount + 1
+	return pObject
+end
+
 function mensix_mining_facility_main:start()
 	if (isZoneEnabled("mustafar")) then
-		writeData("mensix_mining_facility_main:travelerConvoInProgress", 0) 
-		writeData("mensix_mining_facility_main:travelerConvoState", 0)   
-		
-		writeData("mensix_mining_facility_main:minerConvoInProgress", 0) 
-    writeData("mensix_mining_facility_main:minerConvoState", 0)  
-    
+		writeData("mensix_mining_facility_main:travelerConvoInProgress", 0)
+		writeData("mensix_mining_facility_main:travelerConvoState", 0)
+
+		writeData("mensix_mining_facility_main:minerConvoInProgress", 0)
+    writeData("mensix_mining_facility_main:minerConvoState", 0)
+
 		self:spawnMobiles()
 		self:spawnSceneObjects()
 		self:startMinerConvo()
 		self:startTravelerConvo()
+
+		print("MensixMiningFacility: " .. self.placedCount .. " of " .. self.expectedCount .. " som_mining_facility.tab rows placed")
 	end
 end
 
 
 
+--[[ THE PROPS -- five rows of som_mining_facility.tab this file never consumed.
+
+     The table is the same one the NPCs above are placed from, and these rows sit
+     in it alongside them.  They were left out, not ruled out: bleach_vat (row 26),
+     mustafar_damaged_map (row 27), jundak_skull (row 24) and blistmok_rug (row 25)
+     are all placed elsewhere in this tree from this same table, so the table was
+     always trusted for props.  These five just had no arc asking for them.
+
+     AXIS MAPPING, and it is the opposite of the one next door.  The table columns
+     are loc_x / loc_y / loc_z / yaw, and loc_y is HEIGHT.  spawnSceneObject takes
+     (zone, template, x, z, y, cellID, RADIANS) with z as height, so:
+
+         repo x  <- loc_x        repo z  <- loc_y (height)
+         repo y  <- loc_z        radians <- math.rad(yaw)
+
+     math.rad is required here.  spawnMobile below takes DEGREES and the yaw goes
+     across raw; spawnSceneObject does not.  Mixing the two is the single easiest
+     mistake to make in this file, which is why both halves say so.
+
+     Cell ids are from THE CELL MAP in the header -- control_room_01 12112227,
+     control_room_02 12112245, small_room_01 12112228, medium_room_01 12112226.
+
+     yaw is BLANK on four of the five rows.  Blank is not zero-by-guess: the .tab
+     column is a float and an empty float field reads as 0, which is what the four
+     unrotated props get.  Only the beads carry a real yaw (58).
+
+     THE CROSS-CHECK, and it is a good one.  Three of these props were sighted by
+     players and their /way figures are recorded in scratch/MUSTAFAR-GAPS.md.  Run
+     those through the header's transform -- cell_x = way_x - 459.50 and
+     cell_y = way_y + 1208.92, which is the Mustafar waypoint offset
+     (-2880 / +2976) folded into the building origin (-2420.50, 1767.08) -- and
+     they land on SOE's own rows:
+
+         row 23  hologram     /way 386 -1080  ->  (-73.50, 128.92)  vs (-73.3, 128.1)  0.84 m
+         row 29  tanray meat  /way 388 -1167  ->  (-71.50,  41.92)  vs (-71.3,  41.0)  0.94 m
+         row 28  flea bounty  /way 379 -1245  ->  (-80.50, -36.08)  vs (-80.1, -35.8)  0.49 m
+
+     Two independent sources -- a shipped datatable and players standing in the
+     room years later -- agreeing under a metre, with /way rounded to whole metres
+     in the first place.  That is what makes these placements transcription rather
+     than a reading.  It also settles an identification that no filename gives:
+     row 29 is `lava_lizard_food.iff`, and the only reason we know it is the Plate
+     of Tanray Meat is that the tanray /way lands on it.
+
+     The same check on row 24 (`jundak_skull`, already placed by trophy_hunts.lua)
+     comes out at 3.22 m -- same room, same wall, looser.  Reported rather than
+     hidden, because it is the one that does not tighten.
+
+     WHAT THIS DOES NOT DO.  Three of these five -- the beads, the hologram and the
+     lava_flea_bounty -- are the props a player would plausibly click to start the
+     matching hunt in quest/bounty_hunts.lua, and that arc is still waiting on a
+     giver (see its NO GIVER header).  Placing them does NOT wire them to it.  The
+     table's `script` column is EMPTY on all five rows, so nothing in the shipped
+     data says a click does anything, and grantHunt stays uncalled until Aaron says
+     what the giver is.  These are props standing where SOE put them, no more. ]]
 function mensix_mining_facility_main:spawnSceneObjects()
 
 	-- Stardust Specific Droid:  Remove for other servers.
   spawnSceneObject("mustafar", "object/tangible/terminal/terminal_event_buffs.iff", -83.7, 10.3, 122, 12112227, math.rad(173) )
-  
- 
+
+  -- row 16  control_room_02   -93 / 23.2 / -47.4  yaw 58.  Three metres from the
+  -- junk dealer spawned below, which is the cross-check that 12112245 is right.
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_beetle_beads.iff", -93, 23.2, -47.4, 12112245, math.rad(58) ), "row 16 lava_beetle_beads")
+
+  -- row 22  small_room_01     -120.7 / 10.8 / 122.1   yaw blank
+  self:placed(spawnSceneObject("mustafar", "object/static/structure/general/cloning_tube.iff", -120.7, 10.8, 122.1, 12112228, 0 ), "row 22 cloning_tube")
+
+  -- row 23  control_room_01   -73.3 / 10.8 / 128.1    yaw blank
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/jundak_hunter_hologram.iff", -73.3, 10.8, 128.1, 12112227, 0 ), "row 23 jundak_hunter_hologram")
+
+  -- row 28  control_room_02   -80.1 / 23.96 / -35.8   yaw blank
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_flea_bounty.iff", -80.1, 23.96, -35.8, 12112245, 0 ), "row 28 lava_flea_bounty")
+
+  -- row 29  medium_room_01    -71.3 / 11.53 / 41      yaw blank.  This is the
+  -- "Plate of Tanray Meat" -- see the cross-check in the header for why that
+  -- identification is sourced and not a guess at the filename.
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_lizard_food.iff", -71.3, 11.53, 41, 12112226, 0 ), "row 29 lava_lizard_food")
+
 end
 
 function mensix_mining_facility_main:spawnMobiles()
@@ -134,8 +236,81 @@ function mensix_mining_facility_main:spawnMobiles()
      spawnMobile("mustafar", "urup_falco",0,-152.7,19.1,-17.4,-68,12112241)
      spawnMobile("mustafar", "chief_armstrong",0,-150,18.6,-61,0,12112243)
      spawnMobile("mustafar", "chief_glost",0,-9.5,10.8,52.6,90,12112222)
-     
-   
+
+     --[[ THE REST OF THE TABLE.  Everything above came out of
+          som_mining_facility.tab; so does everything below.  The rows below were
+          simply never transcribed.  Nothing here is placed by eye and nothing here
+          is read off a .ilf -- same standard as the block above it.
+
+          spawnMobile takes heading in DEGREES, so yaw crosses unconverted.  That is
+          the opposite of spawnSceneObjects() above.  Blank yaw reads 0.
+
+          miner_a -> mustafarian_miner_01 and miner_b -> mustafarian_miner_02 is not
+          a new mapping.  It is the one the seven background miners above already
+          use: row 39 (miner_a, control_room_02, -82.3/23.2/-35.2) is pMiner_b1 and
+          row 34 (miner_a, small_room_05) is pMiner_b2, both spawned as _01.  These
+          seven rows are the ones that mapping never got applied to. ]]
+
+     -- rows 44-46  hall_08  12112244.  The only three rows in the table with a real
+     -- yaw on a background miner; the rest are blank.
+     local pMiner_b8  = self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-126.9,19.1,-44.6,50,12112244), "row 44 miner_b hall_08")
+     self:setMoodString(pMiner_b8, "npc_accusing")
+     local pMiner_b9  = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-126,19.1,-41.8,-161,12112244), "row 45 miner_a hall_08")
+     self:setMoodString(pMiner_b9, "npc_accusing")
+     local pMiner_b10 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-124.3,19.1,-44,-95,12112244), "row 46 miner_a hall_08")
+     self:setMoodString(pMiner_b10, "entertained")
+
+     -- rows 52, 53  the two corridor miners.  hall_04 12112231, hall_03 12112230.
+     self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-107.8,10.8,32.5,0,12112231), "row 52 miner_a hall_04")
+     self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-59.7,10.8,32.5,0,12112230), "row 53 miner_b hall_03")
+
+     -- rows 68, 71  medium_room_01 12112226 -- the cantina.  Rows 69 and 70 of the
+     -- same group are already up as pMiner_b6 and pMiner_b5; these two are the
+     -- pair that was missed.
+     local pMiner_b11 = self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-85.6,10.8,39.6,0,12112226), "row 68 miner_b medium_room_01")
+     self:setMoodString(pMiner_b11, "entertained")
+     local pMiner_b12 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-94.3,10.8,55,0,12112226), "row 71 miner_a medium_room_01")
+     self:setMoodString(pMiner_b12, "entertained")
+
+     --[[ THE TWO MINING DROIDS -- rows 62 and 63, small_room_03 12112234.
+
+          SUBSTITUTED, and this is the disclosure.  The table asks for
+          som_mining_droid_fork and som_mining_droid_claw.  Neither exists as a
+          template in this repo or anywhere in the extracted source; like the
+          seventeen names in mustafar_dungeon_population.lua, they are strings in a
+          table and nothing else.
+
+          What this repo ships is must_mining_droid_mark_01 / _02 / _03 -- "Mark I /
+          II / III Mining Droid".  Live has exactly three mining droid variants too:
+          ground_spawning/types/mustafar/mining_droids.tab lists bucket, claw and
+          fork.  Three for three.  But the two naming schemes describe different
+          things -- an attachment versus a model generation -- so there is no
+          mapping between them, and nothing in either tree supplies one.
+
+          So: THE PLACEMENT IS SOURCED (room, coordinates, both rows verbatim) and
+          WHICH MARK STANDS IN IS OURS.  The rule used is alphabetical against the
+          live list, bucket/claw/fork -> mark_01/_02/_03, which is arbitrary but
+          stated and reproducible rather than a coin toss left undocumented.  Same
+          trade dungeon_population makes and says out loud: the encounter is real,
+          the exact droid is not. ]]
+     self:placed(spawnMobile("mustafar", "must_mining_droid_mark_03",0,-120.9,10.8,38.6,0,12112234), "row 62 mining_droid_fork -> mark_03")
+     self:placed(spawnMobile("mustafar", "must_mining_droid_mark_02",0,-125.4,10.8,46.7,0,12112234), "row 63 mining_droid_claw -> mark_02")
+
+     -- row 79  small_room_01 12112228, yaw -121.  clone_droid is a real registered
+     -- template (mobile/custom_content/mobile/clone_droid.lua, included at
+     -- mobile/custom_content/mobile/serverobjects.lua:166) -- no substitution.  It
+     -- stands beside the cloning tube placed from row 22 in the same room.
+     -- conversationTemplate is "" on the template, so it is silent by design.
+     self:placed(spawnMobile("mustafar", "clone_droid",0,-104,10.8,126.6,-121,12112228), "row 79 clone_droid")
+
+     --[[ NOT PLACED, and deliberately: the 30 object/tangible/npe/npe_node.iff rows.
+          They are the NPE system's anchor markers, not content -- each one sits on
+          top of a creature row to the centimetre (row 47 miner_a hub_room -94/14.9/3
+          and row 48 npe_node hub_room -94/14.9/3 are the same point).  Core3 has no
+          NPE node consumer, so placing 30 invisible objects would add nothing a
+          player can see and nothing any code reads.  Skipped on purpose, recorded
+          here so the next person does not re-derive it as a gap. ]]
+
 end
 
 
