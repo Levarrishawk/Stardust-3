@@ -217,3 +217,8 @@ includeFile("custom_content/weapon/ranged/som_rifle_mustafar_disruptor_generic.l
 -- Post 14 Heavy
 --includeFile("custom_content/weapon/ranged/ep3_loot_corellian.lua")
 --includeFile("custom_content/weapon/ranged/ep3_loot_void.lua")
+
+-- SoM heavy weapons. Live master_item.tab resolves 13 static items to
+-- object/weapon/ranged/heavy/som_lava_cannon_generic.iff and
+-- .../som_republic_flamer_generic.iff, so the client carries both appearances.
+includeFile("custom_content/weapon/ranged/heavy/serverobjects.lua")

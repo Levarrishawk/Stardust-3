@@ -1205,6 +1205,20 @@ object_weapon_ranged_heavy_shared_ep3_loot_void = SharedWeaponObjectTemplate:new
 
 ObjectTemplates:addClientTemplate(object_weapon_ranged_heavy_shared_ep3_loot_void, "object/weapon/ranged/heavy/shared_ep3_loot_void.iff")
 --****************************************************************************************************************************************************************************
+object_weapon_ranged_heavy_shared_som_lava_cannon_generic = SharedWeaponObjectTemplate:new {
+	clientTemplateFileName = "object/weapon/ranged/heavy/shared_som_lava_cannon_generic.iff"
+
+}
+
+ObjectTemplates:addClientTemplate(object_weapon_ranged_heavy_shared_som_lava_cannon_generic, "object/weapon/ranged/heavy/shared_som_lava_cannon_generic.iff")
+--****************************************************************************************************************************************************************************
+object_weapon_ranged_heavy_shared_som_republic_flamer_generic = SharedWeaponObjectTemplate:new {
+	clientTemplateFileName = "object/weapon/ranged/heavy/shared_som_republic_flamer_generic.iff"
+
+}
+
+ObjectTemplates:addClientTemplate(object_weapon_ranged_heavy_shared_som_republic_flamer_generic, "object/weapon/ranged/heavy/shared_som_republic_flamer_generic.iff")
+--****************************************************************************************************************************************************************************
 
 
 
