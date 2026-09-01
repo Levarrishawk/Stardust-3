@@ -410,6 +410,18 @@ ever recorded doing it.
 - The two live snapshots are **not supersets of each other**: `mtg_patch_023` omits node 12112909
   (droid factory exterior door) which `stardust_03` has; `stardust_03` lacks 12112211 and 12112916.
   The port reads `stardust_03`, which is the right choice.
+- **The custom weapon templates are all one stencil, and the som ones inherit its faults.**
+  `som_disruptor_pistol.lua` and `som_ion_relic_pistol.lua` are **byte-identical to
+  `custom_content/weapon/ranged/carbine_bothan_bola.lua` except two lines** — the object name and
+  the `addTemplate` path. Verified by `diff`, not inferred. So both pistols carry the stencil's
+  carbine identity unedited: `xpType = "combat_rangedspecialize_carbine"`,
+  `certificationsRequired = { "cert_carbine_cdef" }`, `carbine_accuracy` / `carbine_aim` /
+  `carbine_speed`, and the placeholder `minDamage = 99999999998` / `maxDamage = 99999999999`.
+  **This is not a Mustafar fact.** 32 files in `custom_content/weapon/ranged` carry that
+  placeholder damage and **zero** files in stock `object/weapon` do; 26 of the 32 have nothing to
+  do with this planet. Repairing it means deciding the stat line for a whole fork-wide weapon set,
+  which is Aaron's call and not a Mustafar retune. Recorded here so it is not re-found as a
+  Mustafar defect. Relates to *The SoM weapons* below, which counts these two among the 22 orphans.
 
 ## The full content census — what ships, what is reachable, and the proof for the rest
 
@@ -518,6 +530,11 @@ snapshot is the correct place to look and 30 of 127 were found there. Same words
 weight — which is precisely why it slipped through.
 
 ### Non-creature objects — 127 defined
+
+⚠ **127 is not the whole set — it was scoped by filename prefix and misses 53 templates.** The
+dungeon interior objects have no `som_` / `must_` prefix, so none of them were ever in this count.
+Full accounting under *A census scope hole* below. The 127 figure and its three buckets are still
+correct for what they cover; they just do not cover everything.
 
 - **30** are not referenced by iff path but ARE placed in `snapshot/mustafar.ws`. **28 of those
   are correctly wired by snapshot node ID** — which is why an iff-path search calls them dead and
@@ -1201,6 +1218,109 @@ for seventeen other names.
 as a gap. They are NPE anchor markers, each sitting on a creature row to the centimetre (rows 47
 and 48 are the same point). Core3 has no NPE node consumer, so 30 invisible objects would add
 nothing visible and nothing any code reads.
+
+### The other three dungeon tables — the same miss, found by the same reconciliation
+
+The Mensix sweep above was run on one table. Run on the other four, it found the same class of
+gap in the three instanced ones: `mustafar_dungeon_population.lua` read only the **creature** rows
+and never the rest. The dungeons were geometry with monsters in them and no fittings at all.
+Placed 2026-08-31, commit `fdd0c9e972`:
+
+    old_republic_facility    21 rows x 12 copies  =  252
+    decrepit_droid_factory   10 rows x  9 copies  =   90
+    working_droid_factory     2 rows x 12 copies  =   24
+                                                    ----
+                                                     366
+
+33 distinct objects, transcribed straight across — template, cell, x, z, y, yaw. Nothing invented
+and nothing substituted: unlike the creature rows, `row[1]` here is already a full template path,
+so there is no substitutes lookup and no naming judgement to make.
+
+**One real code difference, and it is the kind that is silently wrong if missed.** `spawnMobile`
+takes heading in DEGREES and the cell id LAST; `spawnSceneObject` takes RADIANS and the cell id
+BEFORE the heading. Both conventions now live in that one file, so `spawnProp` does the `math.rad`
+conversion in a single place and the tables stay in the table's own units.
+
+**How the row set was decided**, because "place the rest" would have doubled things. The three
+tables hold 34 non-creature non-waypoint rows, and each was read before it was placed or skipped:
+
+- **33 placed.**
+- **1 not placeable** — ORF line 23, `avatar_platform/avatar_lockbox.iff`. No server template
+  exists for it anywhere in this tree, so `spawnSceneObject` would return `nil`. A genuine missing
+  asset, not a decision.
+- **8 further rows are placed by other files** and are deliberately absent, each named in the
+  props table that would otherwise carry it: `story_arc_chapters.lua:1071/1101/1116/1117` owns
+  Delta Five, the `system_controller`, the `master_power_core` and the `security_controller` in
+  every copy; `mustafar_instances.lua:374-408` owns the interior door and the exit terminal
+  because they are the instance's own entrance furniture; `historian.lua:329` and
+  `reunite_shard.lua:274` own the two Kenobi quest objects.
+- **ORF line 17 is the subtle one.** `terminal_bank_floor_on_01` in `smallroom12` is NOT placed,
+  because `story_arc_chapters.lua:533` already puts its power terminal on exactly those
+  coordinates and its own comment says it is borrowing live's spot while wearing
+  `must_control_computer`. Placing the live template too would stack two objects on one point.
+
+**The 59 `patrol_waypoint` rows stay unplaced**, same call as the 30 `npe_node` rows above and
+recorded for the same reason. They are invisible pathing markers for live's sequencer, which Core3
+does not have. Spawning them would not make the paths walked; it would put 59 invisible objects in
+every copy.
+
+**Boot proof, and it is worth more than the count.** Every cell name resolved in every copy —
+`resolveCell` returning 0 prints the missing cell *by name*, and the log has no such line. Sixteen
+of these cell names had never been exercised by any row in this file before: `hall2`, `hall16`,
+`hall26`, `hall29`, `hall30`, `hall11`, `hall19`, `hall32`, `hall33`, `mediumroom13`,
+`mediumroom28`, `smallroom22`, `smallroom23`, `smallroom26`, `smallroom34` and `entrance`. They
+are read off the live tables with **no `.ilf` and no `.pob` in this tree to check them against**,
+so the boot IS the check. Gate `ok=264 fail=0` / `ok=14022 fail=0`; boot READY in 40s:
+
+    MustafarDungeonPopulation: 921 creatures placed across the Mustafar dungeon pools,
+                               plus 12 lair bosses
+    MustafarDungeonPopulation: 366 non-creature objects placed from the same tables
+    MensixMiningFacility: 16 of 16 som_mining_facility.tab rows placed
+
+Zero `failed to place`, zero `no cell named`, zero `failed to spawn`. 202 ERROR lines, unchanged
+from the previous boot and all off-planet (corellia 48 / naboo 14 snapshot failures); **0 touching
+mustafar, som or mensix.**
+
+**The five dungeon tables are now fully reconciled.** With this and the Mensix pass above, every
+content row of all five `som_*.tab` files is either placed or has a written reason not to be.
+
+### ⚠ A census scope hole this found: 53 dungeon-interior templates were never in the count
+
+The "127 non-creature objects" count above was scoped by `som_*` / `must_*` filename prefix —
+which is the exact mistake this document opens by warning against. The dungeon interior objects
+are named `core_room_terminal.lua`, `access_controller.lua`, `workstation.lua`; no prefix, so none
+of them were ever counted. There are **53** of them, under
+`object/custom_content/tangible/dungeon/mustafar/`. Checked by iff path across all of `scripts/`,
+after the commit above: **10 referenced, 43 not.** Eight of the 43 are `objects.iff` directory
+manifests, not objects. That leaves **35 real templates that nothing places**, and the buckets say
+why this is smaller than it looks:
+
+| bucket | n | what it is |
+| --- | --- | --- |
+| `valley_battlefield` | 20 | the GCW valley battlefield — turrets, demo charges, bunkers, fences |
+| `obiwan_finale` | 5 | the final chamber, already an open item below |
+| `working_droid_factory` | 4 | `inhibitor_storage`, `radioactive_pile`, `rapid_assembly_station`, `reactive_repair_module` |
+| `uplink_trial` | 3 | `beetle_lair`, `exit_door`, `relay_object` |
+| `volcano_battlefield` | 1 | `launch_mechanism` |
+| `decrepit_droid_factory` | 1 | `workstation` |
+| `old_republic_facility` | 1 | `terminal_delta_five` |
+
+**Nine of these were checked against the tables and none has a row.** `workstation`,
+`inhibitor_storage`, `radioactive_pile`, `rapid_assembly_station`, `reactive_repair_module`,
+`beetle_lair`, `exit_door`, `relay_object` and `launch_mechanism` appear in **no row of any of the
+23 tables in `spawning/dungeon/`**. So the prop batch above is complete with respect to the
+tables; these are art with no table-side placement source, which is a different question and needs
+a different source to answer.
+
+**`terminal_delta_five` is not a gap at all** and is the clearest case of why the count misleads.
+Live's own ORF table names `terminal_bank_floor_on_02.iff` for Delta Five, and
+`story_arc_chapters.lua:516-524` places that verbatim with the row cited. The custom
+`terminal_delta_five.iff` is client art the live table does not use. Placing it would be *less*
+faithful, not more.
+
+The remaining 26 — valley battlefield, volcano battlefield, uplink trial, obiwan finale — are
+whole content systems this port does not implement, not loose props. **Recorded, not counted as
+closed.** Nothing here was placed on the strength of this section.
 
 ### XP — no *quest reward* pays any, and the wiki's figures match nothing in the shipped data
 
