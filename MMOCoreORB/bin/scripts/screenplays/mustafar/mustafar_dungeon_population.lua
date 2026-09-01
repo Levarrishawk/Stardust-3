@@ -384,10 +384,55 @@ MustafarDungeonPopulation = ScreenPlay:new {
 		},
 	},
 
+	--[[ Lair bosses -- DELIBERATELY NOT A POOL ENTRY ABOVE.
+
+	     Every pool in `pools` carries a `table` field naming the live .tab its rows
+	     came from, and every row is keyed by a live creature name that `substitutes`
+	     maps to a template. Sher Kar has neither. There is no monster_lair dungeon
+	     table at all -- the only SoM ones are som_crash_site_cruiser,
+	     som_decrepit_droid_factory, som_mining_facility, som_old_republic_facility
+	     and som_working_droid_factory -- and the single row anywhere in the live
+	     datatables that mentions him at all is "som_sherkar_consort 5" in
+	     ground_spawning/types/mustafar/malfosa.tab, which is his consort and not
+	     him. Putting him in `pools` would mean writing a `table` field that names a
+	     file that does not exist, and inventing a live name for `substitutes` to
+	     key on. Both would be lies in the shape of evidence, so he gets his own
+	     list and his own loop instead.
+
+	     THE CREATURE IS FINISHED AND SHIPPED. sher_kar.lua is level 200 (RAID on
+	     the ladder), baseHAM 160000/195000, damage 1145/2000, baseXp 19008,
+	     PACK + STALKER + KILLER, loot dark_jedi_tier_5 / force_tier_4 / crystals at
+	     lootChance 10000000. Nothing about it needed authoring; it was simply
+	     unreachable, because mustafar_instances.lua had `entry = nil` and nothing
+	     placed him. Both halves are fixed together or neither is worth doing.
+
+	     THE POINT IS OURS, and the derivation is written out in full at the
+	     monster_lair pool in mustafar_instances.lua. Short version: no .pob is
+	     available, so the floor was fitted from the 44 ground-resting props of the
+	     nest in must_monster_lair.ilf (residual 0.24 m mean). This point is the
+	     deep end of that attested floor; the player arrives ~9.5 m away at its near
+	     edge. Cell "r1" is the building's only cell, all 456 .ilf nodes are in it.
+
+	     KNOWN INCOMPLETE, not a defect: malfosa.tab shows the live lair held a
+	     consort population, not a solo boss. som_sherkar_consort has no template in
+	     this repo -- grepping the tree for "consort" returns only spider_queen and
+	     beast-master items -- so shipping one would mean authoring a creature
+	     outright. He stands alone until someone decides what the consort is. ]]
+	lairBosses = {
+		{
+			poolKey = "monster_lair",
+			label = "Sherkar's Lair",
+			template = "sher_kar",
+			cell = "r1",
+			x = -86.3, z = -3.22, y = -205.0, heading = 0,
+		},
+	},
+
 	-- What actually got placed, so a boot check can tell a silent failure from a
 	-- success. Nothing here is snapshot data, so there is no world id to look any
 	-- of it up by afterwards.
 	spawnedCount = 0,
+	bossCount = 0,
 }
 
 registerScreenPlay("MustafarDungeonPopulation", true)
@@ -406,7 +451,55 @@ function MustafarDungeonPopulation:start()
 		self:populatePool(self.pools[i])
 	end
 
-	print("MustafarDungeonPopulation: " .. self.spawnedCount .. " creatures placed across the Mustafar dungeon pools")
+	self:populateLairBosses()
+
+	print("MustafarDungeonPopulation: " .. self.spawnedCount .. " creatures placed across the Mustafar dungeon pools, plus " .. self.bossCount .. " lair bosses")
+end
+
+-- Separate from populatePool because these have no live table and no substitute
+-- key; see the lairBosses comment for why that distinction is kept honest rather
+-- than papered over. One boss per copy of the pool, the same per-copy shape
+-- populatePool uses -- twelve Sher Kars against the 921 creatures the pools above
+-- already place.
+function MustafarDungeonPopulation:populateLairBosses()
+	for i = 1, #self.lairBosses do
+		local boss = self.lairBosses[i]
+		local buildings = MustafarInstances:getPoolBuildings(boss.poolKey)
+
+		if (buildings == nil or #buildings == 0) then
+			print("MustafarDungeonPopulation: instance pool '" .. boss.poolKey .. "' is empty; " .. boss.label .. " gets no boss")
+		else
+			for j = 1, #buildings do
+				self:spawnLairBoss(boss, buildings[j])
+			end
+		end
+	end
+end
+
+function MustafarDungeonPopulation:spawnLairBoss(boss, buildingID)
+	local pBuilding = getSceneObject(buildingID)
+
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		print("MustafarDungeonPopulation: " .. boss.poolKey .. " copy " .. buildingID .. " is missing; it gets no boss")
+		return
+	end
+
+	local cellID = self:resolveCell(pBuilding, boss.cell)
+
+	if (cellID == 0) then
+		print("MustafarDungeonPopulation: " .. boss.poolKey .. " copy " .. buildingID .. " has no cell named '" .. boss.cell .. "'; " .. boss.template .. " is skipped")
+		return
+	end
+
+	-- Heading is DEGREES here, same as spawnRow -- see THE AXIS MAPPING.
+	local pBoss = spawnMobile("mustafar", boss.template, self.respawn, boss.x, boss.z, boss.y, boss.heading, cellID)
+
+	if (pBoss == nil) then
+		print("MustafarDungeonPopulation: failed to spawn " .. boss.template .. " in " .. boss.cell .. " of " .. boss.poolKey .. " copy " .. buildingID)
+		return
+	end
+
+	self.bossCount = self.bossCount + 1
 end
 
 -- The template a live creature name is standing in as, or nil if the name is not

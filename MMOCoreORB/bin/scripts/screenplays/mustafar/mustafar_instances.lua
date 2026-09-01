@@ -128,12 +128,16 @@ was wrong on the node numbers. The cave's door is 12111281; the node
 story_arc_chapters owns is 12111374, the bunker entrance standing beside it. Two
 different objects, so the cave keeps its own prop and its own radial.
 
-monster_lair is the only pool still carrying entry = nil, and its reason is
-unchanged and still holds: no .qst in this tree points at Sherkar's lair and no
-screenplay populates it, so a radial there would drop a player into an empty room.
-That is an honest gap. The other three were justified the same way and it was not
-true of them -- the arc drives all three. They were not gaps, they were unfinished
-connections, and the difference is the thing worth remembering here.
+monster_lair used to be the only pool still carrying entry = nil. Its note gave
+two reasons -- no .qst in this tree points at Sherkar's lair, and no screenplay
+populates it -- and called the pair an honest gap. They were one blocker, not
+two. old_republic_facility has no .qst either and has always been enterable, so
+the missing .qst never blocked anything on its own; the empty room did. So the
+room was populated (mustafar_dungeon_population's lairBosses table puts Sher Kar
+in cell r1 of all 12 copies) and the entry was wired. Every pool is now
+enterable. The lesson the old note half-learned still stands: the other three
+nil entries were justified the same way and it was not true of them either --
+the arc drives all three. They were not gaps, they were unfinished connections.
 
 STRINGS
 
@@ -187,12 +191,75 @@ MustafarInstances = ScreenPlay:new {
 			label = "Sherkar's Lair",
 			buildings = { 12115929, 12115932, 12115926, 12115923, 12115920, 12115917,
 				12115914, 12115911, 12115908, 12115905, 12115902, 12115899 },
-			entry = nil,
-			-- NOT WIRED. The door is snapshot node 12110143
-			-- (shared_must_sherkar_door.iff, -2077.07/4276.08) beside exterior 12110517.
-			-- In live this was the Sherkar boss lair, opened by the Mustafarian
-			-- bandit chain. No .qst in this tree points at it and no screenplay here
-			-- populates it, so an entry would drop the player into an empty room.
+
+			--[[ WIRED. This block used to read `entry = nil` with a note saying an
+			     entry "would drop the player into an empty room". That was true when
+			     it was written and is no longer: the room is furnished by
+			     MustafarDungeonPopulation:populateLairBosses(), which puts the
+			     finished level-200 sher_kar in every copy. The two reasons that note
+			     gave for holding off -- nothing populates it, no .qst points at it --
+			     were one blocker, not two. The second never mattered;
+			     old_republic_facility has no .qst pointing at it either and has been
+			     enterable all along.
+
+			     THE DOOR IS SOURCED. Snapshot node 12110143,
+			     shared_must_sherkar_door.iff at (-2077.07, h 87.16, 4276.08), beside
+			     exterior 12110517 shared_must_sherkar_lair_exterior.iff at
+			     (-2128.27, h 86.79, 4356.34). Both re-read from
+			     snapshot/mustafar.ws (stardust_03) rather than copied.
+
+			     THE CELL NAME IS CERTAIN. must_monster_lair.ilf holds 456 nodes and
+			     every single one is in cell "r1" -- there is no second cell to pick
+			     wrong. master_index.txt agrees: the only interior collision floor
+			     shipped is thm_must_monster_lair_s01_r1_collision_floor.flr.
+
+			     THE ARRIVAL POINT IS OURS. It has to be: there is no monster_lair
+			     dungeon spawn table (the only SoM ones are crash_site_cruiser,
+			     decrepit_droid_factory, mining_facility, old_republic_facility and
+			     working_droid_factory), and thm_must_monster_lair_s01.pob is listed
+			     in master_index.txt but is not present in any TRE available here, so
+			     the collision floor cannot be read.
+
+			     What it IS derived from, rather than guessed: the .ilf's only
+			     furnished area is the nest at the far end -- 44 ground-resting props
+			     (nine trash piles, eight human skeletons, bith and ithorian
+			     skeletons, poi_ev9d9head, r2_head, r5_torso, AT-AT/AT-ST and Death
+			     Star debris) spanning x -94.96..-69.08, z -207.24..-194.86. Fitting
+			     a plane to those 44 heights gives floor h = -3.74 + -0.1966*(z +
+			     202.35), mean residual 0.24 m, max 1.30 m. That is a well-attested
+			     26 m x 12 m floor, and BOTH points below sit inside it, so neither
+			     relies on extrapolating into the unmapped tunnel.
+
+			       arrival  x -86.3, z(height) -5.19, y -195.5   (near edge of the nest)
+			       boss     x -86.3, z(height) -3.22, y -205.0   (deep end -- population file)
+
+			     ~9.5 m apart, so the player lands looking at him across the bone
+			     field. sher_kar.lua is pvpBitmask ATTACKABLE and not AGGRESSIVE, so
+			     that distance does not force an instant pull.
+
+			     Field order is (x, height, y) per switchZone at :567 -- .ilf y (up)
+			     becomes the middle argument, .ilf z becomes the last, the same
+			     mapping old_republic_facility's entry above already uses.
+
+			     NO GATE, deliberately. isEntryAllowed is an if-chain on pool.gate and
+			     the header at :476 warns every new gate costs a branch. Live opened
+			     this lair through the Mustafarian bandit chain, which this tree does
+			     not have, so there is nothing faithful to gate on -- and a level-200
+			     boss gates itself by difficulty. ]]
+			entry = {
+				nodeID = 12110143,
+				text = "Enter the lair",
+				cell = "r1",
+				x = -86.3, z = -5.19, y = -195.5,
+			},
+
+			-- Stepped 7 m past the door along the exterior->door vector, the same
+			-- convention as the other pools: exterior (-2128.27, 4356.34) -> door
+			-- (-2077.07, 4276.08) is (51.20, -80.26), length 95.20, unit
+			-- (0.5378, -0.8431). Height is resolved by sendToExit with getWorldFloor
+			-- and is never stored here.
+			exit = { x = -2073.3, y = 4270.2 },
+
 			door = 12110143,
 		},
 		{

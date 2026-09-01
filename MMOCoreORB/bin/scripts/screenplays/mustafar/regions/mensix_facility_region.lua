@@ -71,8 +71,30 @@ function mensix_facility_region:spawnMobiles()
   
   -- Deathsting
   local pDeathsting = spawnMobile("mustafar", "deathsting",600,-5591,134,2172.5,-95,0)
-  self:setMoodString(pDeathsting, "idlewander") 
-  
+  self:setMoodString(pDeathsting, "idlewander")
+
+  -- Scorching Terror.  THE PAIRING IS SOURCED, THE COORDINATE IS OURS.
+  --
+  -- creature/spawn/mustafar/elite_beetle.tab holds exactly two rows:
+  --   som_scorching_terror 5
+  --   som_deathsting       5
+  -- so live grouped the two beetles together and gave the group no position --
+  -- no spawn_lists table references elite_beetle, and scorching_terror is absent
+  -- from the extract list (ngecore_mustafar.md), which is where Voakar Duset's
+  -- coordinate came from.  The group therefore proves he exists and that he
+  -- belongs beside Deathsting; it never says where.
+  --
+  -- Deathsting is already placed at :73.  This point is stepped 23.6 m off him,
+  -- which is the nearest existing spawn of any kind -- the other candidates I
+  -- measured sat 27.6 m and 31.3 m out, and 23.6 m is the tightest that still
+  -- clears his aggro fight space.  Same disclosure shape as
+  -- north_west_region.lua:64-67.  Respawn 600 + idlewander is the named-unique
+  -- convention this file set at :73.  Height comes from getWorldFloor rather
+  -- than a hardcoded number because I have no terrain sample here.
+  local pScorchingTerror = spawnMobile("mustafar", "scorching_terror",600,-5571,getWorldFloor(-5571,2185,"mustafar"),2185,-95,0)
+  self:setMoodString(pScorchingTerror, "idlewander")
+
+
   -- Southwest salvage bandit camp
   local pBandit1 = spawnMobile("mustafar", "must_salvage_bandit_01",120,-6006,81,44.4,33,0)
   self:setMoodString(pBandit1, "neutral") 
