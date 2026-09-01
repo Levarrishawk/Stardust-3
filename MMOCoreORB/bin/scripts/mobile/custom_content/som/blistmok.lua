@@ -28,7 +28,14 @@ blistmok = Creature:new {
 
 	templates = {"object/mobile/som/blistmok.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/blistmok.iff",
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "som_blistmok_trophy", chance = 10000000}
+			},
+			lootChance = 1250000
+		}
+	},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
 	conversationTemplate = "",

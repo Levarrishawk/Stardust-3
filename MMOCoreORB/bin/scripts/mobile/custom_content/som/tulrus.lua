@@ -28,7 +28,14 @@ tulrus = Creature:new {
 
 	templates = {"object/mobile/som/tulrus.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/tulrus.iff",
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "som_tulrus_trophy", chance = 10000000}
+			},
+			lootChance = 1250000
+		}
+	},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
 	conversationTemplate = "",

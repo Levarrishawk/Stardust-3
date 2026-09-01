@@ -30,7 +30,14 @@ xandank = Creature:new {
 
 	templates = {"object/mobile/som/xandank.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/xandank.iff",
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "som_xandank_trophy", chance = 10000000}
+			},
+			lootChance = 1250000
+		}
+	},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
 	conversationTemplate = "",
