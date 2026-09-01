@@ -28,3 +28,23 @@ includeFile("custom_content/weapon/melee/som_sword_obsidian.lua")
      both test. One file rather than the whole container tree, for the same reason
      as the sword above. ]]
 includeFile("custom_content/tangible/container/loot/som_cube.lua")
+
+--[[ Third instance of the same shape, and the widest of the three.
+     custom_content/intangible/serverobjects.lua includes only vehicle/, so
+     custom_content/intangible/pet/serverobjects.lua is never reached from anywhere --
+     nothing in the tree includes it. That strands every custom_content pet control
+     device: ~45 at the top level, 30 under beast_master/, and the 7 under som/. Their
+     client halves ARE loaded (allobjects.lua:1128-1130 pulls all three objects.lua
+     files), which is why the paths resolve and createObject still returns nil.
+
+     This matters now because the som creature retune set tamingChance = 0.25 and
+     controlDeviceTemplate = "object/intangible/pet/som/<x>.iff" on exactly the 7
+     families that ship a device (blistmok, jundak, kubaza_beetle, lava_flea, tanray,
+     tulrus, xandank). Without this line a successful tame calls createObject on an
+     unregistered template.
+
+     Pulling in the 7 som devices only, not custom_content/intangible/pet/serverobjects.lua,
+     for the same reason as the sword and the cube above: the other ~75 devices are not
+     this arc's to switch on, and whether they should be is upstream's call. Ordering is
+     safe -- main.lua runs allobjects.lua before serverobjects.lua. ]]
+includeFile("custom_content/intangible/pet/som/serverobjects.lua")

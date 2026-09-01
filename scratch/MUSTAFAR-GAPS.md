@@ -570,13 +570,23 @@ others:
       blistmok.lua  jundak.lua  kubaza_beetle.lua  lava_flea.lua
       tanray.lua    tulrus.lua  xandank.lua
 
-**The device half is still dead, and this made it urgent rather than fixed.** Those seven
-`controlDeviceTemplate` values now point at object templates that have no registered SERVER half,
-because `object/custom_content/intangible/serverobjects.lua` never includes
-`custom_content/intangible/pet/som/serverobjects.lua`. Until that one include line lands, a
-successful tame calls `createObject` on an unregistered template. This is the third instance of a
-loader gap already documented twice in `object/custom_content/serverobjects.lua:1-29`, and the fix
-recorded there is a targeted single-file include, not pulling in the whole tree.
+**The device half is now fixed too, and the gap was wider than first recorded.** An earlier
+version of this paragraph said `object/custom_content/intangible/serverobjects.lua` never includes
+`custom_content/intangible/pet/som/serverobjects.lua`. That is technically true but points at the
+wrong seam: `custom_content/intangible/pet/serverobjects.lua` *already* includes the som file at
+its line 2. The break is one level higher — `custom_content/intangible/serverobjects.lua` includes
+only `vehicle/`, so the pet loader is never reached from anywhere in the tree. That strands every
+custom_content pet control device, roughly 82 of them: ~45 at the top level, 30 under
+`beast_master/`, and the 7 under `som/`. Their client halves are loaded
+(`allobjects.lua:1128-1130`), which is exactly why the paths resolve and `createObject` still
+returns nil.
+
+This is the third instance of the loader gap documented in
+`object/custom_content/serverobjects.lua`, after the Symbiosis sword and the Chu-Gon Dar cube, and
+it is fixed the same way: a targeted `includeFile("custom_content/intangible/pet/som/serverobjects.lua")`
+that switches on the 7 som devices only. The other ~75 are not this arc's to switch on and whether
+they should be is upstream's call — the same reasoning the sword comment gives for not pulling the
+whole weapon tree.
 
 ### The load chain — walked from the engine's own roots
 
@@ -590,11 +600,13 @@ The three `includeFile` bases and the three chain roots, read out of the C++ rat
 
 Walking all three transitively reaches 866 + 9044 + 27081 files. **Every live Mustafar file is
 reached** — the region screenplays, `mustafar_instances.lua`, `jedi_dog.lua`, the R7 radial
-component, `mobile/custom_content/som/serverobjects.lua`, and the two direct includes at
-`object/custom_content/serverobjects.lua:19` and `:30`. Mustafar's own wiring is intact and there
-are no unresolved include paths anywhere under it.
+component, `mobile/custom_content/som/serverobjects.lua`, and the three direct includes at
+`object/custom_content/serverobjects.lua:19`, `:30` and `:50`. Mustafar's own wiring is intact and
+there are no unresolved include paths anywhere under it.
 
-33 Mustafar/som `.lua` files are NOT reached. Every one is accounted for:
+33 Mustafar/som `.lua` files were NOT reached when this walk was made. Every one is accounted for
+below; 7 of them — the pet control devices — have since been switched on and are reached now, so
+the current figure is 26.
 
 - **2 are tombstones, correctly out.** `mobile/custom_content/som/surveyor_jo.lua` and
   `screenplays/mustafar/quest/conversation/jo_kelsev_conv_handler.lua` — both say MOVED in their
@@ -607,12 +619,21 @@ are no unresolved include paths anywhere under it.
   `custom_content/tangible/serverobjects.lua` never names `component/`, and
   `custom_content/intangible/serverobjects.lua` never names `pet/`.
 
-**Those two missing lines are deliberately NOT added.** Nothing creates any of the 27 — a search
-for all 20 component names across `loot/`, `screenplays/`, and both `draft_schematic/` trees
-returns zero hits, and the 7 devices are unreachable for the taming reason above. Adding the two
-lines would register 355 templates to serve 27 that nothing can reach, which is precisely the
-trade the comment at `object/custom_content/serverobjects.lua:12-18` already rules against for the
-Symbiosis sword. The convention there is to pull in the one file an arc needs. No arc needs these.
+**The 20 components stay out. The 7 pet devices are now in — that half of this ruling is
+reversed.** The original reasoning held that nothing could reach either set, and for the devices
+the stated reason was that no som creature was tameable. The retune changed that fact: seven
+creatures now carry `tamingChance = 0.25` and a `controlDeviceTemplate`, so the devices are
+reachable and a tame would hit `createObject` on an unregistered template. They are switched on by
+a targeted `includeFile("custom_content/intangible/pet/som/serverobjects.lua")` at
+`object/custom_content/serverobjects.lua` — 7 templates, not the ~82 that adding `pet/` to
+`custom_content/intangible/serverobjects.lua` would have registered.
+
+For the 20 components nothing changed and they stay out: a search for all 20 component names
+across `loot/`, `screenplays/`, and both `draft_schematic/` trees still returns zero hits. Adding
+`component/` would register 355 templates to serve 20 that nothing can reach, which is precisely
+the trade the comment at `object/custom_content/serverobjects.lua:12-18` rules against for the
+Symbiosis sword. The convention there is to pull in the one file an arc needs — which is also
+exactly what was done for the devices.
 
 For scale, and so this is not mistaken for a Mustafar defect: the same shape covers **192
 orphaned `serverobjects.lua` trees holding 12,767 files** across all of `custom_content` —
