@@ -1,23 +1,23 @@
 orf_tulrus = Creature:new {
 	customName = "Tulrus",
-	socialGroup = "townsperson",
+	socialGroup = "tulrus",
 	faction = "",
 	mobType = MOB_HERBIVORE,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	meatType = "meat_herbivore",
+	meatAmount = 300,
+	hideType = "hide_leathery",
+	hideAmount = 200,
+	boneType = "bone_mammal",
+	boneAmount = 150,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
@@ -27,16 +27,11 @@ orf_tulrus = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/orf_tulrus.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
 	secondaryAttacks = { }
 }
 

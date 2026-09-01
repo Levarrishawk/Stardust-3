@@ -1,23 +1,23 @@
 tremor_foot = Creature:new {
-	customName = "tremor_foot",
-	socialGroup = "townsperson",
+	customName = "Tremor Foot",
+	socialGroup = "orf_fauna",
 	faction = "",
 	mobType = MOB_HERBIVORE,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	level = 100,
+	chanceHit = 1,
+	damageMin = 645,
+	damageMax = 1000,
+	baseXp = 9429,
+	baseHAM = 24000,
+	baseHAMmax = 30000,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
+	meatType = "meat_herbivore",
+	meatAmount = 600,
+	hideType = "hide_bristley",
+	hideAmount = 450,
+	boneType = "bone_mammal",
+	boneAmount = 400,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
@@ -29,14 +29,18 @@ tremor_foot = Creature:new {
 	templates = {"object/mobile/som/tremor_foot.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "resource_creature", chance = 5000000},
+				{group = "armor_attachments", chance = 2500000},
+				{group = "clothing_attachments", chance = 2500000}
+			},
+			lootChance = 7000000
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
+	primaryAttacks = { {"creatureareaattack",""}, {"creatureareaknockdown",""} },
 	secondaryAttacks = { }
 }
 

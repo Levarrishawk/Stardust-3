@@ -3,14 +3,14 @@ asn_121 = Creature:new {
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_DROID,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -29,15 +29,17 @@ asn_121 = Creature:new {
 	templates = {"object/mobile/som/asn_121.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "technician_tier_1", chance = 7000000},
+				{group = "junk", chance = 3000000}
+			}
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "ranged_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(marksmanmaster,bountyhuntermaster),
+	secondaryAttacks = bountyhuntermaster
 }
 
 CreatureTemplates:addCreatureTemplate(asn_121, "asn_121")

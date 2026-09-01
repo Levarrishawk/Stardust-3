@@ -3,13 +3,13 @@ battlefield_foreman = Creature:new {
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	level = 45,
+	chanceHit = 0.44,
+	damageMin = 345,
+	damageMax = 400,
+	baseXp = 4461,
+	baseHAM = 9300,
+	baseHAMmax = 11300,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -29,14 +29,16 @@ battlefield_foreman = Creature:new {
 	templates = {"object/mobile/som/battlefield_foreman.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "technician_tier_1", chance = 7000000},
+				{group = "junk", chance = 3000000}
+			}
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
+	primaryAttacks = { },
 	secondaryAttacks = { }
 }
 

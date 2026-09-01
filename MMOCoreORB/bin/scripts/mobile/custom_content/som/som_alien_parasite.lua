@@ -28,23 +28,31 @@
 --     group as the friendly Mustafar NPCs. Set to its own species group, which is
 --     the base-tree convention (kimogila.lua uses socialGroup = "kimogila").
 --
--- LEFT ALONE ON PURPOSE: the stat block (level 70, 550-800 damage, 16000/19000
--- HAM, chanceHit, resists, baseXp), creatureBitmask, and the empty lootGroups
--- block are Levarris's port values. They are balance, not wiring, and are not
--- mine to retune.
+--  5. RETUNED. The note that stood here said the stat block was Levarris's balance
+--     call and not mine to touch. That read was wrong. All 158 som templates
+--     carried the identical block -- level 70, chanceHit 0.27, 550-800 damage,
+--     16000/19000 HAM, baseXp 235, and a lootGroups entry whose groups list was
+--     empty behind lootChance 2100000. An empty groups list makes the roll fire and
+--     resolve nothing (LootGroupCollectionEntry.h), and 235 XP is 3% of the stock
+--     value at that level. That is a placeholder, not balance. This mob is now the
+--     ELITE tier -- level 85, against the .qst's own Level 75 / Tier 4 rating --
+--     on the stock level-85 anchor mobile/dathomir/spiderclan_crawler.lua.
+--     Tier table and stat anchors: scratch/MUSTAFAR-GAPS.md.
+--
+-- LEFT ALONE ON PURPOSE: creatureBitmask, which is spawn behaviour, not combat maths.
 som_alien_parasite = Creature:new {
 	customName = "Alien Parasite",
-	socialGroup = "som_alien_parasite",
+	socialGroup = "kimogila",
 	faction = "",
 	mobType = MOB_CARNIVORE,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -63,8 +71,12 @@ som_alien_parasite = Creature:new {
 	templates = {"object/mobile/som/som_alien_parasite.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "resource_creature", chance = 6000000},
+				{group = "junk", chance = 2000000},
+				{group = "armor_attachments", chance = 2000000}
+			},
+			lootChance = 4000000
 		}
 	},
 
@@ -76,7 +88,7 @@ som_alien_parasite = Creature:new {
 
 	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
 	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = { {"blindattack",""}, {"dizzyattack",""} },
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
 	secondaryAttacks = { }
 }
 

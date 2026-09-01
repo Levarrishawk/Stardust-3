@@ -3,14 +3,14 @@ master_kah = Creature:new {
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 100,
+	chanceHit = 1,
+	damageMin = 645,
+	damageMax = 1000,
+	baseXp = 9429,
+	baseHAM = 24000,
+	baseHAMmax = 30000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -29,15 +29,19 @@ master_kah = Creature:new {
 	templates = {"object/mobile/som/master_kah.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "townsperson_tier_1", chance = 6000000},
+				{group = "armor_attachments", chance = 2000000},
+				{group = "clothing_attachments", chance = 2000000}
+			},
+			lootChance = 7000000
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "light_jedi_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(lightsabermaster,forcepowermaster),
+	secondaryAttacks = forcepowermaster
 }
 
 CreatureTemplates:addCreatureTemplate(master_kah, "master_kah")

@@ -11,14 +11,14 @@ som_kenobi_sucker = Creature:new {
 	socialGroup = "thug",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -37,8 +37,9 @@ som_kenobi_sucker = Creature:new {
 	templates = {"object/mobile/som/som_kenobi_sucker.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "thug_tier_1", chance = 10000000}
+			}
 		}
 	},
 
@@ -50,8 +51,8 @@ som_kenobi_sucker = Creature:new {
 
 	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
 	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(brawlermaster,tkamaster),
-	secondaryAttacks = { }
+	primaryAttacks = merge(brawlermaster,swordsmanmaster),
+	secondaryAttacks = brawlermaster
 }
 
 CreatureTemplates:addCreatureTemplate(som_kenobi_sucker, "som_kenobi_sucker")

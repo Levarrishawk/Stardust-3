@@ -1,21 +1,21 @@
 kubaza_worker_beetle = Creature:new {
 	customName = "a Kubaza Worker Beetle",
-	socialGroup = "townsperson",
+	socialGroup = "kubaza",
 	faction = "",
 	mobType = MOB_CARNIVORE,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
+	level = 50,
+	chanceHit = 0.47,
+	damageMin = 370,
+	damageMax = 450,
+	baseXp = 4825,
+	baseHAM = 9700,
+	baseHAMmax = 11900,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
+	meatType = "meat_insect",
+	meatAmount = 80,
+	hideType = "hide_scaley",
+	hideAmount = 60,
 	boneType = "",
 	boneAmount = 0,
 	milk = 0,
@@ -27,16 +27,11 @@ kubaza_worker_beetle = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/kubaza_beetle.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
+	primaryAttacks = { {"creatureareaattack",""} },
 	secondaryAttacks = { }
 }
 

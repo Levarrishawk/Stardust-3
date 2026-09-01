@@ -8,13 +8,13 @@ som_pwwoz_pwwa = Creature:new {
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	level = 45,
+	chanceHit = 0.44,
+	damageMin = 345,
+	damageMax = 400,
+	baseXp = 4461,
+	baseHAM = 9300,
+	baseHAMmax = 11300,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -32,12 +32,7 @@ som_pwwoz_pwwa = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/som_pwwoz_pwwa.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
+	lootGroups = {},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary

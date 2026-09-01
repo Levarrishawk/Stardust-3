@@ -6,12 +6,12 @@ ruins_rodian = Creature:new {
 	faction = "",
 	mobType = MOB_NPC,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -31,8 +31,9 @@ ruins_rodian = Creature:new {
 	templates = {"object/mobile/som/ruins_rodian.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "thug_tier_1", chance = 10000000}
+			}
 		}
 	},
 	-- weapons/attacks are dead fields. CreatureTemplate.cpp reads defaultWeapon (:138),
@@ -40,11 +41,11 @@ ruins_rodian = Creature:new {
 	-- weapons or attacks, so this mobile used to spawn unarmed. Pairing follows
 	-- corellia/corellia_times_investigator.lua, which uses the same weapon group.
 	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
 
-	primaryAttacks = merge(brawlernovice,marksmannovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(marksmanmaster,pistoleermaster),
+	secondaryAttacks = pistoleermaster
 }
 
 CreatureTemplates:addCreatureTemplate(ruins_rodian, "ruins_rodian")

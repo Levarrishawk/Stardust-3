@@ -5,12 +5,12 @@ som_pwwoz_thug_2 = Creature:new {
 	faction = "",
 	mobType = MOB_NPC,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -30,21 +30,22 @@ som_pwwoz_thug_2 = Creature:new {
 	templates = {"object/mobile/som/som_pwwoz_thug_2.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "thug_tier_1", chance = 10000000}
+			}
 		}
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
 	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
 
 	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
 	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = merge(marksmanmid,brawlermid),
-	secondaryAttacks = { }
+	primaryAttacks = merge(marksmanmaster,pistoleermaster),
+	secondaryAttacks = pistoleermaster
 }
 
 CreatureTemplates:addCreatureTemplate(som_pwwoz_thug_2, "som_pwwoz_thug_2")

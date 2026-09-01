@@ -1,15 +1,15 @@
 thunter_arkona_m_01 = Creature:new {
-	customName = "thunter_arkona_m_01",
-	socialGroup = "townsperson",
+	customName = "an Arkonan treasure hunter",
+	socialGroup = "mercenary",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -29,15 +29,16 @@ thunter_arkona_m_01 = Creature:new {
 	templates = {"object/mobile/som/thunter_arkona_m_01.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "mercenary_tier_1", chance = 10000000}
+			}
 		}
 	},
 	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(marksmanmaster,pistoleermaster),
+	secondaryAttacks = pistoleermaster
 }
 
 CreatureTemplates:addCreatureTemplate(thunter_arkona_m_01, "thunter_arkona_m_01")

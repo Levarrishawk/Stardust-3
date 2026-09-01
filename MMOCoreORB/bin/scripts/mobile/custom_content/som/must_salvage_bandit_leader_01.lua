@@ -1,16 +1,16 @@
 must_salvage_bandit_leader_01 = Creature:new {
 	customName = "Salvage Bandit Leader",
-	socialGroup = "townsperson",
+	socialGroup = "thug",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -29,15 +29,16 @@ must_salvage_bandit_leader_01 = Creature:new {
 	templates = {"object/mobile/som/must_salvage_bandit_leader_01.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "thug_tier_1", chance = 10000000}
+			}
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "pirate_weapons_heavy",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(marksmanmaster,carbineermaster),
+	secondaryAttacks = carbineermaster
 }
 
 CreatureTemplates:addCreatureTemplate(must_salvage_bandit_leader_01, "must_salvage_bandit_leader_01")

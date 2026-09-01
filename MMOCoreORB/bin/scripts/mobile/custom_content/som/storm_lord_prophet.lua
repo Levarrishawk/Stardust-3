@@ -3,15 +3,15 @@ storm_lord_prophet = Creature:new {
 	socialGroup = "storm_lord",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 87,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
+	level = 120,
+	chanceHit = 4.0,
+	damageMin = 745,
+	damageMax = 1200,
+	baseXp = 11390,
+	baseHAM = 44000,
+	baseHAMmax = 54000,
+	armor = 2,
+	resists = {90,90,90,90,90,90,90,90,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -29,15 +29,21 @@ storm_lord_prophet = Creature:new {
 	templates = {"object/mobile/som/storm_lord_prophet.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "dark_jedi_tier_5", chance = 4000000},
+				{group = "holocron_dark", chance = 1500000},
+				{group = "color_crystals", chance = 2000000},
+				{group = "power_crystals", chance = 1500000},
+				{group = "armor_attachments", chance = 1000000}
+			},
+			lootChance = 7000000
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "melee_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(brawlermaster,swordsmanmaster,forcepowermaster),
+	secondaryAttacks = forcepowermaster
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord_prophet, "storm_lord_prophet")

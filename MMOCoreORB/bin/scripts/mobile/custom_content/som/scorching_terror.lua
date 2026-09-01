@@ -1,23 +1,23 @@
 scorching_terror = Creature:new {
 	customName = "Scorching Terror",
-	socialGroup = "townsperson",
+	socialGroup = "orf_fauna",
 	faction = "",
 	mobType = MOB_CARNIVORE,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	level = 100,
+	chanceHit = 1,
+	damageMin = 645,
+	damageMax = 1000,
+	baseXp = 9429,
+	baseHAM = 24000,
+	baseHAMmax = 30000,
+	armor = 1,
+	resists = {130,130,-1,160,160,160,-1,-1,-1},
+	meatType = "meat_carnivore",
+	meatAmount = 500,
+	hideType = "hide_leathery",
+	hideAmount = 400,
+	boneType = "bone_mammal",
+	boneAmount = 375,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
@@ -29,14 +29,18 @@ scorching_terror = Creature:new {
 	templates = {"object/mobile/som/scorching_terror.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "resource_creature", chance = 5000000},
+				{group = "armor_attachments", chance = 2500000},
+				{group = "clothing_attachments", chance = 2500000}
+			},
+			lootChance = 7000000
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
+	primaryAttacks = { {"creatureareaattack",""}, {"creatureareaknockdown",""} },
 	secondaryAttacks = { }
 }
 

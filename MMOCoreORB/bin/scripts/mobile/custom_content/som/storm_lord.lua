@@ -1,17 +1,17 @@
 storm_lord = Creature:new {
 	customName = "Storm Lord",
-	socialGroup = "townsperson",
+	socialGroup = "storm_lord",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 90,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
+	level = 140,
+	chanceHit = 7,
+	damageMin = 845,
+	damageMax = 1400,
+	baseXp = 13273,
+	baseHAM = 68000,
+	baseHAMmax = 83000,
+	armor = 2,
+	resists = {90,90,90,90,90,90,90,90,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -27,12 +27,24 @@ storm_lord = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/storm_lord.iff"},
-	lootGroups = {},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	lootGroups = {
+		{
+			groups = {
+				{group = "dark_jedi_tier_5", chance = 3000000},
+				{group = "force_tier_4", chance = 2000000},
+				{group = "holocron_dark", chance = 1500000},
+				{group = "color_crystals", chance = 1500000},
+				{group = "power_crystals", chance = 1000000},
+				{group = "armor_attachments", chance = 1000000}
+			},
+			lootChance = 7000000
+		}
+	},
+	primaryWeapon = "melee_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(brawlermaster,swordsmanmaster,forcepowermaster),
+	secondaryAttacks = forcepowermaster
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord, "storm_lord")

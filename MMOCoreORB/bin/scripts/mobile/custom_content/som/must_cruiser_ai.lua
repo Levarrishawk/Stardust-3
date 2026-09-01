@@ -43,13 +43,13 @@ must_cruiser_ai = Creature:new {
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 80,
-	chanceHit = 0.0,
-	damageMin = 0,
-	damageMax = 0,
-	baseXp = 0,
-	baseHAM = 20000,
-	baseHAMmax = 20000,
+	level = 45,
+	chanceHit = 0.44,
+	damageMin = 345,
+	damageMax = 400,
+	baseXp = 4461,
+	baseHAM = 9300,
+	baseHAMmax = 11300,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -71,8 +71,7 @@ must_cruiser_ai = Creature:new {
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
 	conversationTemplate = "story_arc_chapter_one_computer",
-	primaryAttacks = {
-	},
+	primaryAttacks = { },
 	secondaryAttacks = { }
 }
 

@@ -12,13 +12,13 @@ som_crazed_mustafarian_hermit = Creature:new {
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	level = 45,
+	chanceHit = 0.44,
+	damageMin = 345,
+	damageMax = 400,
+	baseXp = 4461,
+	baseHAM = 9300,
+	baseHAMmax = 11300,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -36,16 +36,11 @@ som_crazed_mustafarian_hermit = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/som_crazed_mustafarian_hermit.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "som_kenobi_crazed_hermit",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
+	primaryAttacks = { },
 	secondaryAttacks = { }
 }
 

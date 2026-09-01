@@ -1,16 +1,16 @@
 djedi_twk_f_01 = Creature:new {
 	customName = "Dark Jedi",
-	socialGroup = "townsperson",
+	socialGroup = "dark_jedi",
 	faction = "",
 	mobType = MOB_NPC,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -29,15 +29,20 @@ djedi_twk_f_01 = Creature:new {
 	templates = {"object/mobile/som/djedi_twk_f_01.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "dark_jedi_tier_4", chance = 6000000},
+				{group = "color_crystals", chance = 2000000},
+				{group = "power_crystals", chance = 1000000},
+				{group = "holocron_dark", chance = 1000000}
+			},
+			lootChance = 5000000
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "dark_jedi_weapons_gen3",
+	secondaryWeapon = "dark_jedi_weapons_ranged",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
-	secondaryAttacks = { }
+	primaryAttacks = merge(lightsabermaster,forcepowermaster),
+	secondaryAttacks = forcepowermaster
 }
 
 CreatureTemplates:addCreatureTemplate(djedi_twk_f_01, "djedi_twk_f_01")

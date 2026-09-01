@@ -414,9 +414,13 @@ all of `_som` for `final_chamber` / `final_crystal` / `som_kenobi_final` returns
 **The 14 SoM weapons.** `primaryWeapon` resolves a *group* name registered by `addWeapon()` in
 `mobile/weapon/groups/*.lua`. **No group contains any `som_*` weapon and no loot table
 references one** — so all 14 are unreachable in play. The som creatures carry stock groups
-instead; `xandank.lua:38` and `orf_xandank.lua:36` both say `pirate_weapons_light` while
-`som_lance_xandank` sits unused. The name pairings are suggestive and that is all they are:
-nothing on disk says which creature was meant to carry which weapon.
+instead, and the retune below kept it that way: it assigns only groups that
+`mobile/weapon/serverobjects.lua` actually includes, so `som_lance_xandank` still sits unused
+while `xandank.lua:34` and `orf_xandank.lua:31` carry `unarmed` as beasts. The name pairings are
+suggestive and that is all they are: nothing on disk says which creature was meant to carry which
+weapon. (An earlier version of this paragraph cited both xandank files as saying
+`pirate_weapons_light`. That was true when written and is not now — the value moved, the finding
+did not.)
 
 ### One defect of my own, found by the same check and fixed
 
@@ -435,8 +439,10 @@ weapon **value** on three of them. It should have changed only the key. All thre
 `addWeapon("jedi_dark", ...)`, but `mobile/weapon/serverobjects.lua` never includes it, so the
 group never registers and the Prophet — level 87, retail difficulty Elite — spawned with no
 weapon at all. All
-three are reverted to the shipped value. `mobile/weapon/` itself is untouched by this branch:
-`git diff origin/unstable...HEAD -- mobile/weapon/` is empty.
+three were reverted to the shipped value at the time. The retune below has since moved all three
+to `melee_weapons` on their tier, so `pirate_weapons_light` is no longer what they carry — the
+defect and its cause stand as written, the current value does not. `mobile/weapon/` itself is
+still untouched by this branch: `git diff origin/unstable...HEAD -- mobile/weapon/` is empty.
 
 `jedi_dark` is one of **4 groups in `mobile/weapon/groups/` that no `includeFile` names** —
 `carbine_weapons`, `geonosian_carbine`, `jedi_dark`, `jedi_light`. All four are upstream, and
@@ -449,12 +455,31 @@ adding an include for a group nothing uses is not a fix. (`serverobjects.lua` al
 `weapon/groups/stormtrooper_weapons.lua` twice — harmless, `includeFile` is idempotent. 125
 include lines = 108 naming `groups/` (107 distinct) + 17 elsewhere under `weapon/`.)
 
-### Loot — every one of the 158 som creatures drops nothing, and 145 of them arrived that way
+### Loot — all 158 som creatures shipped dropping nothing; 96 now drop, 62 deliberately do not
+
+**Status: the finding below is the diagnosis, and it has been acted on.** The retune (see *The
+157-template retune* at the end of this document) filled loot on every som template that should
+have it. Current state of the same three greps:
+
+    grep -rl 'group = "'        mobile/custom_content/som/   ->  96 files
+    grep -rl 'groups = {}'      mobile/custom_content/som/   ->   0 files
+    grep -rl 'lootGroups = {},' mobile/custom_content/som/   ->  62 files
+
+96 + 62 = 158. The broken `groups = {}`-behind-a-live-`lootChance` state is gone from the
+directory entirely. The remaining 62 carry an empty `lootGroups = {}` on purpose: they are the
+plain fauna and the conversation NPCs, which in the base tree do not carry a loot table either.
+That is a real empty, not a roll that resolves nothing.
+
+Everything from here to the end of this section is the original finding, kept because it is the
+evidence for *why* the retune was repair and not authoring. Its counts describe the shipped state,
+not the current tree.
+
+---
 
 An earlier version of this heading said "135 of 160", which reads as though the other 25 drop
-something. They do not. The directory holds 160 `.lua` files, two of which are not creature
+something. They did not. The directory holds 160 `.lua` files, two of which are not creature
 templates at all (`serverobjects.lua` and the `surveyor_jo.lua` tombstone), leaving **158
-templates — and all 158 resolve to no loot.** They reach that state two ways:
+templates — and as shipped, all 158 resolved to no loot.** They reached that state two ways:
 
     grep -rl 'group = "'      mobile/custom_content/som/   ->   0 files
     grep -rl 'groups = {}'    mobile/custom_content/som/   -> 135 files
@@ -497,7 +522,14 @@ condition and not a Core3 convention: across all 9,172 files in `mobile/`, exact
 `groups = {}` and **135 of them are som** — the only two outside it are `hutta/hutt_battle_droid.lua`
 and `moraband/creatures/tukata.lua`.
 
-**Why filling them is authoring and not repair — the worked example.** The retail Storm Lord page
+**Why reproducing *retail* loot is authoring, even though the retune filled these tables.** The
+two are different jobs, and only the second was done. The retune assigns loot groups that already
+exist and are already registered in `loot/groups/` — `thug_tier_1`, `technician_tier_1`,
+`dark_jedi_tier_5` and so on. Nothing was minted. Matching what the retail page actually lists is
+the other job, and it remains upstream's; the worked example is below and its conclusion is
+unchanged.
+
+The retail Storm Lord page
 (below) does list loot, for all five creatures: Credits, Mustafarian Junk, and the "glowing item"
 family (Faintly Glowing Camera, Dimly Glowing Pair of Binoculars, Faintly Glowing Chance Die,
 Faintly Glowing Powerpack, Dimly Glowing Recording Rod, Dimly Glowing Bone, Dimly Glowing Spool of
@@ -516,18 +548,35 @@ that upstream never shipped. That is content authoring, and it is upstream's to 
 same conclusion this section reached before, now with a case where the source data was in hand and
 the answer did not change.
 
-### Pet control devices — dead twice over
+### Pet control devices — one of the two deaths is fixed, the other is not
 
 7 devices ship under `object/custom_content/intangible/pet/som/` (blistmok, jundak,
-kubaza_beetle, lava_flea, tanray, tulrus, xandank). **All 158 som creature templates carry
-`tamingChance = 0`, and not one sets `controlDeviceTemplate`** — the field every wired pet uses
-(`mobile/corellia/bageraset.lua:31` is the pattern). SOE shipping a device for exactly those
+kubaza_beetle, lava_flea, tanray, tulrus, xandank). As shipped, **all 158 som creature templates
+carried `tamingChance = 0` and not one set `controlDeviceTemplate`** — the field every wired pet
+uses (`mobile/corellia/bageraset.lua:31` is the pattern). SOE shipping a device for exactly those
 seven families is a strong signal they were tameable; the taming chance itself is a number
 nothing on disk records.
 
-Correcting an earlier version of this section, which said "dead by data, not by search": they are
-dead by BOTH. The load-chain walk below shows the directory holding them never runs, so the
-templates are not even registered. Either half alone is fatal; both are true.
+Correcting an earlier version of this section, which said "dead by data, not by search": they were
+dead by BOTH. The load-chain walk below shows the directory holding the devices never runs, so the
+device templates are not even registered. Either half alone is fatal; both were true.
+
+**The creature half is now fixed.** The retune sets `tamingChance = 0.25` (the stock
+plain-creature value, `mobile/corellia/bageraset.lua`) and the matching
+`controlDeviceTemplate = "object/intangible/pet/som/<x>.iff"` on exactly those seven, and no
+others:
+
+    grep -rl controlDeviceTemplate  mobile/custom_content/som/
+      blistmok.lua  jundak.lua  kubaza_beetle.lua  lava_flea.lua
+      tanray.lua    tulrus.lua  xandank.lua
+
+**The device half is still dead, and this made it urgent rather than fixed.** Those seven
+`controlDeviceTemplate` values now point at object templates that have no registered SERVER half,
+because `object/custom_content/intangible/serverobjects.lua` never includes
+`custom_content/intangible/pet/som/serverobjects.lua`. Until that one include line lands, a
+successful tame calls `createObject` on an unregistered template. This is the third instance of a
+loader gap already documented twice in `object/custom_content/serverobjects.lua:1-29`, and the fix
+recorded there is a targeted single-file include, not pulling in the whole tree.
 
 ### The load chain — walked from the engine's own roots
 
@@ -635,30 +684,82 @@ identifies this page as the source an earlier round already used without naming 
 Lord's own listing converts to `189, 4107` against a spawn at `194.4, 4096.3` — 12 m, inside the
 precision a prose location page offers. Left alone.)
 
-**Levels applied from it.** The SoM import flattened every som creature to `level = 70`; upstream
-`origin/unstable` carries that on all 158. An earlier round corrected three from this page
-(touched 83, zealot 83, prophet 87) and stopped. The other three are now corrected too — minion
-80, guard 82, **the Storm Lord himself 90**, the arc's own boss, who was sitting 20 levels under
-his retail value. The Storm Lord's respawn also moves `1200 → 600` at
-`storm_lord_region.lua:127`, from the page's "Spawn Timer: 10 minutes".
+⚠ **THE LEVEL COLUMN OF THAT TABLE IS NGE, AND IT NO LONGER APPLIES.** An earlier round took
+80 / 82 / 83 / 87 / 90 straight off this page and wrote them into the six Storm Lord templates.
+Aaron ruled against it: *"ensure you are aligned with stardust combat and levels rather than
+nge swg."* "Natural CL" is an NGE combat-level column. This is a Pre-CU server whose own
+Mustafar content states its intended band, in shipped code, in six places:
 
-**Weapons deliberately NOT changed, and this is the open decision.** The page gives a combat
-*category*, never a weapon or a group name, and all five carry the shipped
-`primaryWeapon = "pirate_weapons_light"` — which is one pistol plus four melee, so it fits none
-of the three categories cleanly:
+| gate | file:line | value |
+| --- | --- | --- |
+| `requiredLevel` | `mensix/conversation/pei_yi_conv_handler.lua:37` | 46 |
+| `requiredLevel` | `quest/collectors_business.lua:139`, `quest/cursed_shard.lua:181`, `quest/moral_choice.lua:171` | 61 |
+| `minimumLevel` | `quest/map_exploration.lua:98`, `quest/som_poison_miners.lua:276` | 70 |
+| `requiredLevel` | `quest/historian.lua:299`, `quest/samaritan.lua:189` | 75 |
+| storyArcChapters `requiredLevel` | `quest/conversation/milo_conv_handler.lua:59` | 80 |
 
-| creature | retail combat | what would fit | status |
+Those gates are the design speaking for itself, and they say Mustafar is a 45–105 planet.
+The server's own level histogram agrees — the real clusters under `mobile/` are 4, 30, 45, 50,
+70, 85, 100, 105, 300. So the whole pack is now tiered on **this server's** ladder, not the
+NGE one: CIV 45 / FAUNA_L 50 / STD 70 / ELITE 85 / NAMED 100 / BOSS 120 / APEX 140 / RAID 200,
+with every stat block copied verbatim from a stock creature at that level rather than derived.
+The Storm Lord lands at 140 (APEX), the Prophet at 120 (BOSS), and the touched / zealot /
+guard / minion at 85 / 85 / 100 / 70. The retail table survives as evidence for *ordering* and
+for the Prophet's coordinates, which is what it is actually good for.
+
+The Storm Lord's respawn stays at the `1200 → 600` this page justified
+(`storm_lord_region.lua:127`); a spawn timer is not a combat level and is not affected.
+
+⚠ **CORRECTING A FALSE CLAIM THIS DOCUMENT MADE.** The line that stood here read: *"No
+registered weapon group anywhere on this server contains a lightsaber."* **That is wrong**, and
+it was used to justify leaving lightsabers off the Storm Lord and the Prophet. Ten groups that
+`mobile/weapon/serverobjects.lua` **does** load carry lightsabers:
+
+```
+dark_jedi_weapons_gen2         dark_jedi_weapons_gen3_ranged   light_jedi_weapons
+dark_jedi_weapons_gen2_ranged  dark_jedi_weapons_gen4          light_jedi_weapons_ranged
+dark_jedi_weapons_gen3         dark_jedi_weapons_ranged        darth_vader_weapons
+                                                               luke_skywalker_weapons
+```
+
+`mobile/weapon/groups/dark_jedi_weapons_gen4.lua:1-5` is three `crafted_saber` `.iff`s and
+nothing else. The true, narrower fact is the one the sentence over-generalised from: `jedi_dark`
+and `jedi_light` specifically are not in `serverobjects.lua`. Those two being absent says
+nothing about the other ten, and `mobile/thug/dark_jedi_master.lua:42-49` is the shipped
+house pattern for a saber-carrying NPC — `dark_jedi_weapons_gen4` primary,
+`dark_jedi_weapons_ranged` secondary, `merge(lightsabermaster,forcepowermaster)`.
+
+**Weapons are now changed.** Every one of the six Storm Lord templates shipped
+`primaryWeapon = "pirate_weapons_light"` — a blaster pistol and four melee weapons — which is
+what the retail categories were being measured against. The assignments follow this server's
+own registered groups:
+
+| creature | tier | primaryWeapon | attacks |
 | --- | --- | --- | --- |
-| minion | Ranged weapons | a ranged group | mismatched |
-| guard / zealot | Melee weapons | `imperial_sword` (registered, melee-only) | mismatched |
-| prophet / storm lord | Lightsaber | `jedi_dark` — **unregistered** | mismatched |
+| minion | STD 70 | `pirate_weapons_light` | `merge(marksmanmaster,pistoleermaster)` |
+| touched / zealot | ELITE 85 | `melee_weapons` | `merge(brawlermaster,swordsmanmaster,forcewielder)` |
+| guard | NAMED 100 | `melee_weapons` | `merge(brawlermaster,swordsmanmaster,forcewielder)` |
+| prophet | BOSS 120 | `melee_weapons` | `merge(brawlermaster,swordsmanmaster,forcepowermaster)` |
+| storm lord | APEX 140 | `melee_weapons` | `merge(brawlermaster,swordsmanmaster,forcepowermaster)` |
 
-**No registered weapon group anywhere on this server contains a lightsaber.** Both saber groups,
-`jedi_dark` and `jedi_light`, are among the four that `mobile/weapon/serverobjects.lua` omits.
-That reads as an upstream policy rather than an oversight, and reversing it is Levarris's call,
-not a Mustafar repair. `mobile/weapon/groups/pirate_weapons_light.lua:9-13` also states the
-repo's own rule for this: a group assignment needs a source that *shows the weapon*, and a prose
-category is not one. So the three mismatches are recorded here and left for a decision.
+Sabers stay off this family on purpose, and now for a real reason rather than the false one:
+nothing in SoM's own data shows a Storm Lord cultist holding one, and
+`mobile/weapon/groups/pirate_weapons_light.lua:9-13` states the repo's rule that a group
+assignment needs a source that *shows the weapon*. `forcewielder` and `forcepowermaster` give
+the family its force-user character without inventing a saber the source does not show.
+`creatureskills.lua:57` describes `forcewielder` as exactly this: *"npc force wielders use
+standard profession mastery with the addition of this command."*
+
+⚠ **A SECOND FALSE CLAIM, CORRECTED.** An earlier commit message called the Prophet
+`prophet_of_the_storm_lord`. **No such template exists** — `grep -rn prophet_of_the_storm_lord .`
+returns nothing. The registered name is `storm_lord_prophet`, and the family is **six**
+creatures, not five: this document's own table above omits `storm_lord_touched`, which is a
+separate registered template spawned ten times at `storm_lord_region.lua:105-123`. Both it and
+`storm_lord_zealot` shipped the same `customName`, "a storm lord zealot"; `storm_lord_touched`
+is now "a storm-touched acolyte". Its `templates` entry pointing at `storm_lord_touched.iff`
+while `storm_lord_zealot.lua:29` points at the same file is **correct and must stay** — there
+is no `storm_lord_zealot.iff` in `object/custom_content/mobile/som/`, only five object
+templates for the six creatures.
 
 ### The one remaining TODO in the tree, and why it stays
 
@@ -834,10 +935,25 @@ Two things the note does *not* argue for changing:
   `STAGE_DONE`. Copying the retail behaviour here would strand players; the deviation is
   deliberate and reasoned.
 
-### Open decision — the Ancient Jundak's level
+### ⚠ Open decision — the Ancient Jundak's level — CLOSED BY THE SWEEP, NEEDS A RULING
+
+**Read this before trusting the section below.** This was written as an open design call that was
+Levarris's to make. The retune then made it, as a side effect of a tier sweep rather than as a
+decision anyone took: `jundak_devourer` was assigned the ELITE tier and is now `level = 85`
+(`jundak_devourer.lua:6`). The consequence the section warned about is now live in the tree —
+`jundak` and `orf_jundak` are still `level = 70`, so the "hunt 15 jundak" bounty now has a 70/70/85
+spread across its three interchangeable targets.
+
+85 is not a considered answer to the question below; it is where the ELITE tier lands. It happens
+to sit one level off the retail CL 84, which is the argument *for* keeping it. The argument against
+is unchanged and is the whole reason this was left open. **Either outcome is defensible and neither
+has been chosen — the options are: keep 85, revert `jundak_devourer` to 70, or raise all three.**
+Flagging rather than filling.
+
+The original finding follows, unedited.
 
 `Skull_of_the_Jundak.wiki` puts the Ancient Jundak at **CL 84, Elite**. `trophy_hunts.lua:429`
-spawns `jundak_devourer`, whose template carries `level = 70` (`jundak_devourer.lua:6`), renamed at
+spawns `jundak_devourer`, whose template carried `level = 70` (`jundak_devourer.lua:6`), renamed at
 spawn — a substitution the file documents, because `som_ancient_jundak` ships nowhere.
 
 This is **not** treated like the Storm Lord levels, and the difference is why it is left open. The
@@ -851,6 +967,103 @@ clear on the number; what it costs elsewhere is a design call, so it is Levarris
 
 ### What this census does not do
 
-It does not place anything. Every item above needs a value — a coordinate, a taming chance, a
-weapon-to-creature mapping, an encounter design — that no shipped file contains. Those are
-authoring calls, not findings.
+It does not place anything. Every item above needs a value — a coordinate, an encounter design —
+that no shipped file contains. Those are authoring calls, not findings. (Two items that used to be
+on this list, taming chance and the weapon-to-creature mapping, were resolved by the retune below
+against stock anchors rather than invented; the *retail* weapon mapping is still unrecoverable.)
+
+## The 157-template retune — the tier table every som header comment points at
+
+Every retuned file carries a header note ending "Tier table: `scratch/MUSTAFAR-GAPS.md`". This is
+that table. It is the authority for what the numbers are and where each one came from.
+
+**Why this was repair, not rebalancing.** All 158 som templates shipped carrying one identical
+placeholder block — `level = 70`, `chanceHit = 0.27`, 550–800 damage, 16000/19000 HAM,
+`baseXp = 235`, and a `lootGroups` entry whose `groups` list was empty behind
+`lootChance = 2100000`, which fires a roll that resolves nothing
+(`LootGroupCollectionEntry.h`). One block on a beetle and on the arc's final boss alike is not a
+balance pass anyone made; it is an unfilled field. Several earlier header comments in this
+directory described that block as a tuned port value not to be touched — those notes were wrong
+and have been corrected in place.
+
+**157 of 160 files changed.** Three are fenced and untouched: `obi_wan_ghost.lua` (Elysium /
+World Beyond Worlds content, another project's), `surveyor_jo.lua` (a deliberate comment-only
+tombstone that defines nothing) and `serverobjects.lua` (the loader).
+
+**The level band is the planet's own.** Mustafar's shipped gates run 46
+(`mensix/conversation/pei_yi_conv_handler.lua:37`), 61 (`quest/collectors_business.lua:139`,
+`quest/cursed_shard.lua:181`, `quest/moral_choice.lua:171`), 70 (`quest/map_exploration.lua:98`,
+`quest/som_poison_miners.lua:276`), 75 (`quest/historian.lua:299`, `quest/samaritan.lua:189`) and
+80 (`quest/conversation/milo_conv_handler.lua:59`) — a 45–105 band, which is what the ladder
+targets.
+
+### The tier ladder
+
+Every row is anchored on a stock base-tree template at that level. `level`, `chanceHit`,
+`damageMin`, `damageMax`, `baseXp`, `baseHAM` and `baseHAMmax` are copied from the anchor exactly —
+verified by direct read of all eight files.
+
+**`armor` is the one exception and is a deliberate ladder, not a copy.** It diverges from the
+anchor on three rows: `ancient_graul` and `gronda_juggernaut` both carry `armor = 1` where the
+table uses 0, and `acun_solari` carries `armor = 0` where the table uses 1. The anchors are
+inconsistent with each other on this field — a level-50 graul out-armouring a level-100 named NPC
+is not a progression — so the column was smoothed to monotone 0/0/0/1/1/2/2/3 instead. The other
+five rows happen to match their anchor. Calling this out because it is the only authored number in
+the table.
+
+| tier | level | chanceHit | dmgMin | dmgMax | baseXp | HAM | HAMmax | armor | stock anchor |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CIV     | 45  | 0.44 | 345  | 400  | 4461  | 9300   | 11300  | 0 | `mobile/corellia/gronda_patriarch.lua` |
+| FAUNA_L | 50  | 0.47 | 370  | 450  | 4825  | 9700   | 11900  | 0 | `mobile/dantooine/ancient_graul.lua` |
+| STD     | 70  | 0.65 | 430  | 570  | 6747  | 12000  | 15000  | 0 | `mobile/corellia/gronda_juggernaut.lua` |
+| ELITE   | 85  | 0.75 | 555  | 820  | 8130  | 12000  | 15000  | 1 | `mobile/dathomir/spiderclan_crawler.lua` |
+| NAMED   | 100 | 1    | 645  | 1000 | 9429  | 24000  | 30000  | 1 | `mobile/corellia/acun_solari.lua` |
+| BOSS    | 120 | 4.0  | 745  | 1200 | 11390 | 44000  | 54000  | 2 | `.../corellian_corvette/neutral/corsec_security_specialist.lua` |
+| APEX    | 140 | 7    | 845  | 1400 | 13273 | 68000  | 83000  | 2 | `.../corsec_special_ops_master_sergeant.lua` |
+| RAID    | 200 | 16   | 1145 | 2000 | 19008 | 160000 | 195000 | 3 | `.../imperial/rebel_rear_admiral.lua` |
+
+### Resists
+
+| key | value | source |
+| --- | --- | --- |
+| R_BASE / R_DROID | `{0,0,0,0,0,0,0,-1,-1}` | `mobile/thug/thug.lua:16` |
+| R_HEAT_L | `{5,5,5,30,-1,30,-1,-1,-1}` | `mobile/tatooine/tusken_raider.lua:14` |
+| R_HEAT_H | `{130,130,-1,160,160,160,-1,-1,-1}` | `mobile/dathomir/rancor.lua:14` |
+
+Tier overrides the key in two cases: `BOSS`/`APEX` take `{90,90,90,90,90,90,90,90,-1}`
+(`mobile/thug/dark_jedi_master.lua:16`) and `RAID` takes `{165,145,35,35,35,35,35,35,-1}`
+(`mobile/endor/gorax.lua:14`).
+
+### Weapons
+
+Only groups that `mobile/weapon/serverobjects.lua` actually includes are used — that is the
+constraint that killed the `jedi_dark` attempt recorded earlier in this document. `"unarmed"` and
+`"none"` are engine literals, not groups. Attack identifiers all resolve in
+`mobile/creatureskills.lua`; `merge` is variadic (`mobile/creatures.lua:72`).
+
+Three files keep `defaultWeapon` / `defaultAttack` instead of the group form, because they are
+droids and follow the shipped droid templates (`mobile/lok/ig_assassin_droid.lua`,
+`mobile/lok/droideka.lua`): `som_ancient_guardian_droideka`, `som_ancient_guardian_ig`,
+`union_sentry_droid`.
+
+### Loot
+
+Every group named is one that already exists and is already registered by
+`addLootGroupTemplate()` in `loot/groups.lua`. Nothing was minted. `lootChance` values follow the
+stock bands: creature 2000000 (`mobile/dathomir/rancor.lua`), elite 7000000
+(`mobile/tatooine/canyon_krayt_dragon.lua`), boss 7000000 (`mobile/endor/gorax.lua`), custom boss
+10000000 (`mobile/kaas/creatures/vitiate.lua`). Counts after the pass: 96 templates name at least
+one group, 62 carry a genuinely empty `lootGroups = {}`, and 0 remain in the broken
+`groups = {}`-behind-a-live-`lootChance` state.
+
+### What the retune deliberately did not touch
+
+`pvpBitmask` and `creatureBitmask` — spawn and aggression behaviour is region design, not combat
+maths, and changing it would alter how Levarris's placed populations play. `milk` stays 0.
+
+### Verification
+
+    som + mustafar scope:          ok=230   fail=0
+    object/custom_content scope:   ok=14022 fail=0
+
+Both under Lua 5.3.6. The applier is idempotent — a third run reported `files changed: 0`.

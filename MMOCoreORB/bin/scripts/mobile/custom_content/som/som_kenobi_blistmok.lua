@@ -12,24 +12,24 @@
 -- ENEMY, PACK + STALKER, posturedownattack/stunattack.
 som_kenobi_blistmok = Creature:new {
 	customName = "Blistmok",
-	socialGroup = "",
+	socialGroup = "blistmok",
 	faction = "",
 	mobType = MOB_CARNIVORE,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
+	meatType = "meat_carnivore",
+	meatAmount = 250,
+	hideType = "hide_leathery",
+	hideAmount = 180,
+	boneType = "bone_mammal",
+	boneAmount = 120,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
@@ -39,12 +39,7 @@ som_kenobi_blistmok = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/som_kenobi_blistmok.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
+	lootGroups = {},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
@@ -54,7 +49,7 @@ som_kenobi_blistmok = Creature:new {
 
 	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
 	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
-	primaryAttacks = { {"posturedownattack",""}, {"stunattack",""} },
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
 	secondaryAttacks = { }
 }
 

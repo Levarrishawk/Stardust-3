@@ -15,20 +15,28 @@
 -- pvpBitmask gains AGGRESSIVE + ENEMY: the player has to fight these to get the
 -- decryption key, and a facility's security does not wait to be hit first.
 --
--- Stats, and the empty lootGroups block, are Levarris's port values, unchanged.
+-- Stats and loot are RETUNED; an earlier note here called them unchanged port
+-- values. They were the placeholder every som template shared -- level 70,
+-- chanceHit 0.27, 550-800 damage, 16000/19000 HAM, baseXp 235, and a lootGroups
+-- entry whose groups list was empty behind lootChance 2100000, which fires a roll
+-- that resolves nothing (LootGroupCollectionEntry.h). Now the ELITE tier on the
+-- stock level-85 anchor. Tier table: scratch/MUSTAFAR-GAPS.md.
+--
+-- defaultWeapon and defaultAttack are deliberately kept in preference to the
+-- weapon-group form, for the same reason as the droideka above.
 union_sentry_droid = Creature:new {
 	customName = "an Old Republic security droid",
 	socialGroup = "orf_security",
 	faction = "",
 	mobType = MOB_DROID,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -47,8 +55,10 @@ union_sentry_droid = Creature:new {
 	templates = {"object/mobile/som/union_sentry_droid.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "technician_tier_1", chance = 7000000},
+				{group = "junk", chance = 3000000}
+			}
 		}
 	},
 

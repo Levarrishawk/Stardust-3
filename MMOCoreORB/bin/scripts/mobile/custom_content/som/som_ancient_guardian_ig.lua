@@ -16,24 +16,32 @@
 -- that the player must then kill (task 25, Destroy Multiple). Plain ATTACKABLE
 -- would have left it standing there passively.
 --
--- Stats are Levarris's port values, unchanged. The .qst rates the encounter Level
--- 75 Tier 4 while these are the pack's stock level 70 block; retuning is a balance
--- call, not a wiring fix, so it is left alone. The lootGroups block is likewise
--- carried over as-is -- an empty "groups" list drops nothing, but the .qst awards
--- this quest's reward through the Reward task, not through loot.
+-- Stats are RETUNED. The note that stood here said the level-70 block was a port
+-- value and retuning it was a balance call, not a wiring fix. That was wrong: it
+-- was not a tuned value at all, it was the one placeholder block all 158 som
+-- templates shared (level 70, chanceHit 0.27, 550-800 damage, 16000/19000 HAM,
+-- baseXp 235). The note's own next sentence made the point -- the .qst rates this
+-- encounter Level 75 Tier 4 and the mob was not near it. It is now the ELITE tier,
+-- level 85, on the stock level-85 anchor mobile/dathomir/spiderclan_crawler.lua.
+--
+-- lootGroups is retuned too. The old block was not "carried over as-is"; it was
+-- actively broken -- an empty groups list behind lootChance 2100000 fires a roll
+-- that resolves nothing (LootGroupCollectionEntry.h). The .qst still pays the quest
+-- reward through its Reward task; this is the corpse drop, which is separate.
+-- Tier table and stat anchors: scratch/MUSTAFAR-GAPS.md.
 som_ancient_guardian_ig = Creature:new {
 	customName = "an Ancient Guardian",
-	socialGroup = "",
+	socialGroup = "orf_security",
 	faction = "",
 	mobType = MOB_ANDROID,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -52,8 +60,10 @@ som_ancient_guardian_ig = Creature:new {
 	templates = {"object/mobile/som/som_ancient_guardian_ig.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "technician_tier_1", chance = 7000000},
+				{group = "junk", chance = 3000000}
+			}
 		}
 	},
 

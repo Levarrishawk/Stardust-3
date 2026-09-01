@@ -1,17 +1,17 @@
 sher_kar = Creature:new {
 	customName = "Sher Kar",
-	socialGroup = "townsperson",
+	socialGroup = "sher_kar",
 	faction = "",
 	mobType = MOB_CARNIVORE,
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
+	level = 200,
+	chanceHit = 16,
+	damageMin = 1145,
+	damageMax = 2000,
+	baseXp = 19008,
+	baseHAM = 160000,
+	baseHAMmax = 195000,
+	armor = 3,
+	resists = {165,145,35,35,35,35,35,35,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -29,14 +29,21 @@ sher_kar = Creature:new {
 	templates = {"object/mobile/som/sher_kar.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "dark_jedi_tier_5", chance = 2500000},
+				{group = "force_tier_4", chance = 2000000},
+				{group = "color_crystals", chance = 2000000},
+				{group = "power_crystals", chance = 1500000},
+				{group = "armor_attachments", chance = 1000000},
+				{group = "clothing_attachments", chance = 1000000}
+			},
+			lootChance = 10000000
 		}
 	},
-	primaryWeapon = "pirate_weapons_light",
-	secondaryWeapon = "unarmed",
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	primaryAttacks = merge(marksmannovice,brawlernovice),
+	primaryAttacks = { {"creatureareaattack",""}, {"creatureareaknockdown",""} },
 	secondaryAttacks = { }
 }
 
