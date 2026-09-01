@@ -936,7 +936,13 @@ items at non-uniform weights. It is blocked on the cube path defect below and on
 junk static-item names to templates. Their absence is the status quo (these creatures dropped
 nothing at all before), so nothing regressed — but the pool is narrower than live.
 
-#### ⚠ NEW, unfixed: all 72 `cube_loot` server templates register under the wrong directory
+#### ~~⚠ NEW, unfixed~~: all 72 `cube_loot` server templates register under the wrong directory
+
+> ⚠ **"NEW" IS WRONG — corrected 2026-09-01.** This was already found, explained and deliberately
+> scoped out by an earlier round, in `jenha_tar_cube.lua:112-137`. I re-discovered this port's own
+> record and wrote it up as a fresh finding. The paragraph below is otherwise accurate and the counts
+> hold, but see item 10 in the closing section for what the earlier round established — in
+> particular that the objects still resolve and **the cube quest is not broken**.
 
 `object/custom_content/tangible/loot/mustafar/cube_loot/*.lua` — every one of the 72 `addTemplate`
 calls registers under `object/tangible/loot/mustafar/cube/loot/<name>.iff`, with `cube/loot/` where
@@ -946,9 +952,12 @@ it should be `cube_loot/`. The shared client templates in the sibling `objects.l
     grep -c 'mustafar/cube/loot/' -> 72
     grep -c 'mustafar/cube_loot/' ->  0
 
-Nothing is broken *today* because no loot group references a cube — they are entirely orphaned. But
-any attempt to wire the live Mustafar cube drops will silently resolve nothing until this is fixed.
-Left alone deliberately: it is 72 files and outside the Round C question.
+No loot group references a cube, so no *drop* is affected. Three of them **are** referenced as quest
+rewards — `som_jenha_tar_cube`'s Reward tasks 4, 5 and 6 grant `cube_loot_0a/0b/0c.iff` — and that
+quest works, because `jenha_tar_cube.lua` addresses them by their registered path rather than the
+`.qst`'s. Any *future* wiring that uses the live path will silently resolve nothing until this is
+fixed. Left alone deliberately, by that earlier round's call and again here: 72 files, and the
+one-line fix is in another port's file.
 
 #### The loot lane mechanism — read this before writing any loot file
 
@@ -1913,10 +1922,26 @@ report is **not** the basis for the table above; every row there was re-run and 
 because a sweep that reports "clean" is exactly the kind of claim that has to be checked rather
 than accepted.
 
-## Open design calls — Aaron's, not mine
+## The ten "design calls" — mostly mislabelled, corrected 2026-09-01
 
-Collected in one place so they stop being scattered. Each is a real fork where the shipped data
-does not decide the answer, so none has been filled in.
+⚠ **This section used to be headed "Open design calls — Aaron's, not mine". That framing was wrong
+and Aaron rejected it:** *"these are not design questions for me. they are gaps you didn't do or
+didn't research well enough."* He is right, and the proof is that one pass over `dsrc` and
+`_allqst_dump.txt` settled six of the ten without needing him at all.
+
+The corrected split:
+
+- **Four were real gaps — research not done:** 1 (tiers), 6 (battlefields), 8 and 9 (weapons).
+- **One is a small real gap:** 2 (`invulnerable` on `npc_ithes_olok`).
+- **Three were never gaps.** The port had already handled 3, 7 and 10 correctly, with the reasoning
+  written into the screenplay files. Listing them here as open questions misrepresented finished
+  work as unfinished. Each is marked below.
+- **One is genuinely unknown:** 5 (pedestal height).
+- **One is a confirmed negative:** 4 (seismic charges) — recorded, not open.
+
+**The rule that earns:** before anything goes on a list addressed to Aaron, check whether the answer
+is already in the shipped data or already in this port's own files. "I have not looked yet" is not a
+design question. Neither is "a previous round already decided this and wrote down why."
 
 1. **Creature tiers vs live `difficultyClass`.** ⚠ **NOT A CALL ANY MORE — live decides it.**
    `creatures.tab` col 7, typed `e(NORMAL=0,ELITE=1,BOSS=2)`. There is no fourth value. The 292
@@ -1931,9 +1956,24 @@ does not decide the answer, so none has been filled in.
    `som_foreman_nurfa`, the sibling that pinned the `optionsBitmask` fix, is also blank, yet our
    tree gives it `pvpBitmask = NONE`. So the only real item here is `npc_ithes_olok`, plus an
    unexplained `NONE` on nurfa. The remaining call is whether to encode col 56 at all.
-3. **Quest XP policy.** Still genuinely open. `datatables/quest/` in the server source has
-   `crafting / crowd_pleaser / force_sensitive / ground / hero_of_tatooine / jedi_collection /
-   nova_orion / restuss_event` and no SoM quest-reward XP table. Searched for one; there isn't one.
+3. **Quest XP policy.** ⚠ **NOT A GAP — the port already got this right, and listing it was the
+   error.** `bounty_hunts.lua:117-122` reads the `.qst` correctly: the **Reward task** pays Bank
+   Credits and `Experience Amount = 0`; the `1000 / quest_combat` sits on the quest-list block, which
+   only the live quest system awards, and there is no quest-system row in this port to award it from.
+   Raw proof, `som_lava_flea_hunt`:
+
+   ```
+   34:      [task id=2 type='Reward']
+   47:        Experience Amount   = 0
+   50:        Bank Credits        = 7000     <- what the task pays
+   91:  Bank Credits              = 0
+   94:  Experience Amount         = 1000     <- quest-list level, not the task
+   ```
+
+   I wrote two extraction scripts trying to show seven quests were missing a 1000 XP award. **Both
+   were wrong** — they conflated the indent-2 quest-list block with the Reward task. The raw read
+   settles it and the existing code is correct. The amounts were never untranscribed either: they
+   are all in `_allqst_dump.txt`, which this very file cites by line number elsewhere.
 4. **The five `som_sceismic_charges` fields** — see *Seismic charges*, a confirmed negative. To be
    exact about what the five are: every `LocationX/Y/Z` is 0.0, the Encounter task has no Creature
    Type, the Wait for Signal task has no Signal Name, and Reward is 0 XP / 0 credits. The server
@@ -1952,9 +1992,18 @@ does not decide the answer, so none has been filled in.
    each with a boss and guards, the HK-47 arc, an exit terminal, an event manager).
    `mustafar_trials/` is 200 files total. This is the largest implementable block on the list, and
    it is a scope decision, not a design one.
-7. **The `som_poison_miners` task-8 reward** — whether to swap it to a SoM pistol. Still open. The
-   server source has `script/quest/som/miner_tracking_computer.java` and the tracking-computer
-   template, but I did not find a reward table for the step.
+7. **The `som_poison_miners` task-8 reward** — whether to swap it to a SoM pistol. ⚠ **NOT A GAP —
+   already exact.** The live Reward task pays nothing at all:
+
+   ```
+   128:                [task id=8 type='Reward']
+   140:                  Experience Amount   = 0
+   143:                  Bank Credits        = 0
+   ```
+
+   No `Item` line either. Our `som_poison_miners.lua:325` carries `rewardCredits = 0` and guards the
+   grant behind `if (self.rewardCredits > 0)`. That matches live exactly. There was nothing to
+   decide; swapping in a pistol would have *introduced* a deviation, not fixed one.
 8. **The `experimental*` crafting curves on the two rewritten heavy weapons.** ⚠ **The source
    exists — this is transcription, not design.** `datatables/crafting/weapon_schematics.tab` has one
    row per SoM weapon with the full crafted spread. Example, `som_lance_xandank`: complexity 36,
@@ -1967,8 +2016,14 @@ does not decide the answer, so none has been filled in.
    The three trophy tabs are the only mustafar loot files that reference a `som/` path at all, and
    those are already wired (Round C). This item is closed as asked and reopens as "wire the
    fourteen draft schematics", which is item 8's work.
-10. **Whether to widen the three trophy loot pools to live's full 9 items**, which first needs the
-    `cube_loot` path defect fixed and the ToW junk names mapped.
+10. **Whether to widen the three trophy loot pools to live's full 9 items.** Still a real question,
+    but the `cube_loot` half of it was ⚠ **not a new finding and I should not have written it up as
+    one.** `jenha_tar_cube.lua:112-137` already found the split path, traced why the objects still
+    resolve (`TemplateManager.cpp:456` reads `clientTemplateFileName` off the Lua table and uses the
+    registration string only as a lookup key), addressed the reward items by their registered path so
+    the quest works, and deliberately left the one-line fix alone as "not this port's file to change."
+    My "⚠ NEW, unfixed" subsection above re-discovered our own record. **The cube quest is not
+    broken.** Corrected in place rather than deleted, since the earlier text is what was committed.
 
 One item that was on this list and should not have been: the `som_xandank_trophey` NPC giver was
 recorded as a deviation from the click-to-start pattern. It is not — Miner Renlo Hens is the live
