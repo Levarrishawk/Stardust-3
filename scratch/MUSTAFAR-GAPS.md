@@ -1099,3 +1099,80 @@ maths, and changing it would alter how Levarris's placed populations play. `milk
     object/custom_content scope:   ok=14022 fail=0
 
 Both under Lua 5.3.6. The applier is idempotent — a third run reported `files changed: 0`.
+
+## The first boot — runtime evidence, which this port had never had
+
+Everything above this section was proved by reading files. A Lua syntax gate proves a file parses;
+it does not prove the server can load it, and nothing in this round had ever been run. On
+2026-08-31 the branch was booted. It reached `READY` in 40 seconds.
+
+Recipe, matching the space round's: sync the branch into the built WSL tree (CRLF→LF), then boot
+and read the log.
+
+    wsl -d StardustDev bash -lc "bash /mnt/c/stardust-3-space-port/_setup/sync-mustafar.sh"
+    wsl -d StardustDev -u root bash -lc "bash /mnt/c/stardust-3-space-port/_setup/boot-mustafar.sh 900"
+    wsl -d StardustDev -u root bash -lc "bash /mnt/c/stardust-3-space-port/_setup/triage-mustafar-boot.sh"
+
+Two things about that lane are not obvious and cost real time:
+
+- **Distro.** The build lives in `StardustDev` (user `ciiv`), not the default `Ubuntu` distro.
+  `Ubuntu` has no `/home/ciiv` at all, so every build and boot command needs `-d StardustDev`.
+- **User.** It must boot as root. The earlier space-round boots ran as root — `service mysql start`
+  needs it — so `bin/log/*` and all 32 files in `bin/databases/` are `root:root`, and the object
+  database is mode 640. Booted as `ciiv` the server dies in under five seconds, before it reads a
+  single script, with `FileWriterOpenException` and then a Berkeley DB `DB_RUNRECOVERY` panic. That
+  is a file-ownership artifact of how the tree was staged. It is not a defect in this content, and
+  reading it as one wasted a cycle.
+
+`boot-mustafar.sh` rotates the six root-owned files in `bin/log/` aside (renamed `*.pre-mustafar`,
+never deleted — the 6.3 MB `core3.log` from 2026-08-28 is the only other runtime record this tree
+holds) and stops the server once it sees `READY`, so it never leaves one running.
+
+### What Mustafar did at runtime
+
+    (18 s) [ZoneServer Core3] Ground Zone: Mustafar deployed.
+    (23 s) [PlanetManager mustafar] Loaded 71 total regions.
+    (26 s) [PlanetManager mustafar] Loaded 5947 client objects from world snapshot.
+    (39 s) [DirectorManager] Started 925 global screenplays in 7.895 s
+           MustafarDungeonPopulation: 921 creatures placed across the Mustafar dungeon pools
+
+That last line is the one worth having. The 921 is the placement layer actually running against
+the retuned templates, not a count derived from reading spawn tables.
+
+### Every residual error, attributed
+
+The boot emitted 202 `ERROR` lines and 46 `WARNING`s, and 0 `FATAL`. **None of them are this
+port's.** Attribution, so the claim is checkable rather than asserted:
+
+| count | error | owner |
+| --- | --- | --- |
+| 62 | `could not create snapshot object` | upstream: 48 corellia (meatlump quest props — `meatlump_hideout_map_location.iff` ×10, safes, maps, palettes), 14 naboo (elevator click terminals ×9, `carbine_e11_mark2`) |
+| 62 | `could not create object CRC` | same 62 events, logged twice |
+| 62 | `Failed to create object with unknown CRC` | same 62 events, logged a third time |
+| 10 | `ObjectMenuComponent not found` | upstream FS village: `FsCrafting1AnalyzerMenuComponent`, `FsCrafting1CalibratorMenuComponent`, `SensorArrayAccessTerminalMenuComponent` |
+| 3 | `Could not create command` | upstream: `findStructure`, `regrantSkills`, `village` |
+| 2 | `InvalidChunkTypeException` / `Could not open chunk` | upstream TRE: `appearance/defaultappearance.msh` |
+
+The 62 snapshot failures are three log lines per event, which is why 62 × 3 + 10 + 3 + 2 + 1
+(`setStringFromFile Core3.Revision`, a missing `conf/rev.txt`) accounts for all 202.
+
+The test that matters: filtering all 202 error lines and all 46 warnings for `som`, `mustafar` or
+`custom_content` returns **nothing**. Not one template in this port failed to create, and there is
+not a single Lua error, stack traceback, or `unknown template key` in the log.
+
+The warnings are likewise all upstream and all pre-existing: corellia's `*_white` skyscraper and
+filler buildings missing from the TREs, `snapshot/tutorial.ws`, the `space_kashyyyk` nebula table,
+`bm_mobile.iff` derv failures on beast-master templates, and `expecting SHOT got SSHP` on the space
+station shared templates — that last group is the space round's, already known there.
+
+### What this boot does and does not prove
+
+It proves the branch loads: every som template parses, resolves, and instantiates; the zone
+deploys; the regions load; the screenplays start; the dungeon population layer runs and places 921
+creatures. That is the whole load-and-register question, closed.
+
+It does not prove behaviour. A boot cannot tame a creature, open a lair, fire a conversation
+branch, or roll a loot table. The pet-control-device fix in `a1b872598e` is proved *registered* by
+this boot and still unproved *in play* — that needs a client. Same for the conversation trees, the
+bounty and trophy chains, and every `lootChance` this round set. Those stay open, and the sections
+above that mark them open still mark them open.
