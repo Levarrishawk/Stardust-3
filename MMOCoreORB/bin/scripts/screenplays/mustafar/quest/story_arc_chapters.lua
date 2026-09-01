@@ -649,39 +649,11 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- header documents the find. Nothing is open here.
 	scoutPost = { x = 550, y = -154, waypointName = "Mustafarian Scout", respawn = 300 },
 
-	-- INFERRED, and now a CHECKED inference rather than an unchecked one. The
-	-- .qst says "an army of droids" with no roster and no count -- and the live
-	-- spawn tables do not supply them either, because this army is not a dungeon
-	-- population. The .qst is explicit that HK-47 "has sent out an army of droids
-	-- FROM the factory towards the Mining Facility": it marches in the open, so
-	-- there is no room for it to be a row in. Both factory tables were read to be
-	-- sure. The operational factory holds one mob in total; the decrepit factory
-	-- is a different dungeon with its own roster.
-	--
-	-- That roster would be the more faithful substitution if it were available --
-	-- SOE populates its own factories with som_decrepit_battle_droid,
-	-- som_decrepit_super_battle_droid and som_decrepit_cww8_combat_droid -- but
-	-- none of those templates is registered in this repo, so they cannot be used.
-	-- These are the three registered SOM battle droid templates
-	-- (mobile/custom_content/som/serverobjects.lua:43-45); six is the authored
-	-- wave size.
-	--
-	-- mustafar_dungeon_population.lua now stands those three live names in as
-	-- exactly these three templates, so the army and the decrepit factory's own
-	-- garrison are made of the same mobiles. That is not a collision: countDroid
-	-- fires only at STAGE_DROID_ARMY (16), and mayEnterDroidFactory admits exactly
-	-- STAGE_REPAIR_FACTORY (13) and stage >= STAGE_ENTER_FACTORY (19). 16 is
-	-- neither, so both factory pools are shut at the one stage that counts these
-	-- kills and nobody can be inside to farm them. Checked, not assumed --
-	-- re-checked when that gate was corrected, because the gate is the whole
-	-- argument: it previously read ">= 19" alone, and widening it to admit 13 does
-	-- not admit 16.
-	droidArmy = {
-		{ template = "cww8_battle_droid", count = 3 },
-		{ template = "cww8a_battle_droid", count = 2 },
-		{ template = "cww8a_eradicator", count = 1 },
-	},
-	droidArmyRequired = 6,
+	-- The droidArmy roster / droidArmyRequired / countDroid stand-in lived here.
+	-- It was an INFERRED six-kill counter invented because Core3 had no outdoor
+	-- instance for mustafar_droid_army. Round F1(c) replaced it with the real
+	-- ValleyBattlefield encounter (screenplays/mustafar/battlefields/
+	-- valley_battlefield.lua); the roster and counter are gone.
 
 	-- task 17 Go to Location, createWaypoint TRUE,
 	-- waypoint name "Operational Droid Factory",
@@ -1887,8 +1859,8 @@ function storyArcChaptersScreenPlay:mayEnterDroidFactory(pPlayer)
 	local stage = self:getStage(pPlayer)
 
 	-- Chapter two's repair visit, then everything from the keypad onward. Stage 16
-	-- (STAGE_DROID_ARMY) is deliberately NOT admitted, which is what keeps
-	-- countDroid's template overlap with the decrepit factory unreachable.
+	-- (STAGE_DROID_ARMY) is deliberately NOT admitted -- the player is on the
+	-- Valley Battlefield at that stage, not inside either factory pool.
 	return stage == self.STAGE_REPAIR_FACTORY or stage >= self.STAGE_ENTER_FACTORY
 end
 
@@ -2168,48 +2140,45 @@ end
 --------------------------------------------------------------------------------
 
 -- Scout Olon Lono stands at the exact coordinate chapter three 01 task 6 puts its
--- waypoint on. Talking to him is what releases the droid army; the .qst gives no
--- roster and no count, so both are INFERRED.
+-- waypoint on. Talking to him is what releases the droid army.
 --
--- This is called from scout_conv_handler, not from a radial. It is the repo's
--- stand-in for SOE's sendGroupToBattlefield, whose entire body is
--- instance.requestInstanceMovement(player, "mustafar_droid_army") -- there is no
--- signal and no group walk in it, so nothing else is being dropped here. Core3
--- has no such instance, so the army comes to the player instead. See the tree.
+-- This is called from scout_conv_handler, not from a radial. Live's
+-- sendGroupToBattlefield is instance.requestInstanceMovement(player,
+-- "mustafar_droid_army"). Core3 has no outdoor instance system, so the hand-off
+-- is ValleyBattlefield:enter -- one off-map arena at (600, -1600).
 function storyArcChaptersScreenPlay:sendToBattlefield(pPlayer)
 	if (self:getStage(pPlayer) ~= self.STAGE_DROID_ARMY) then
 		return
 	end
 
-	if (self:hasFlag(pPlayer, "armyReleased")) then
-		CreatureObject(pPlayer):sendSystemMessage("Droids are still marching on the facility. " .. (self.droidArmyRequired - self:getCount(pPlayer, "droids")) .. " remain.")
+	if (ValleyBattlefield == nil) then
+		printLuaError("storyArcChaptersScreenPlay: ValleyBattlefield is not loaded; refusing battlefield entry")
 		return
 	end
 
-	self:setFlag(pPlayer, "armyReleased")
-	self:spawnDroidArmy()
-	CreatureObject(pPlayer):sendSystemMessage("The scout points down the trail. HK-47's droid army is on the march.")
+	ValleyBattlefield:enter(pPlayer)
 end
 
-function storyArcChaptersScreenPlay:spawnDroidArmy()
-	local index = 0
-
-	for i = 1, #self.droidArmy do
-		local wave = self.droidArmy[i]
-
-		for n = 1, wave.count do
-			index = index + 1
-
-			local x = self.scoutPost.x + 10 + (index * 3)
-			local y = self.scoutPost.y + 10
-			local z = getWorldFloor(x, y, "mustafar")
-			local pDroid = spawnMobile("mustafar", wave.template, 300, x, z, y, 0, 0)
-
-			if (pDroid == nil) then
-				print("storyArcChaptersScreenPlay: " .. wave.template .. " failed to spawn in the droid army")
-			end
-		end
+function storyArcChaptersScreenPlay:mayEnterValleyBattlefield(pPlayer)
+	if (pPlayer == nil) then
+		return false
 	end
+
+	return self:getStage(pPlayer) == self.STAGE_DROID_ARMY
+end
+
+-- ValleyBattlefield calls this on victory for every player still inside.
+-- Same transition countDroid used to make: chapter three 01 task 6 -> task 17.
+function storyArcChaptersScreenPlay:onBattlefieldVictory(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	if (self:getStage(pPlayer) ~= self.STAGE_DROID_ARMY) then
+		return
+	end
+
+	self:advance(pPlayer, self.STAGE_SCOUT_FACTORY)
 end
 
 -- chapter three 03 task 0, "Talk to a Pilot". Called from pilot_conv_handler on
@@ -2312,8 +2281,6 @@ function storyArcChaptersScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		self:countBandit(pPlayer, template)
 	elseif (stage == self.STAGE_UPLINK) then
 		self:countKubaza(pPlayer, template)
-	elseif (stage == self.STAGE_DROID_ARMY) then
-		self:countDroid(pPlayer, template)
 	elseif (stage == self.STAGE_KILL_HK47 and template == self.hk47.template) then
 		-- chapter three 03 task 3.
 		self:advance(pPlayer, self.STAGE_REPORT_SUCCESS)
@@ -2368,36 +2335,6 @@ function storyArcChaptersScreenPlay:countKubaza(pPlayer, template)
 	-- chapter one 03 task 1 satisfied, task 6 goes live.
 	CreatureObject(pPlayer):sendSystemMessage("The repair droid finishes the relay. The uplink is established.")
 	self:advance(pPlayer, self.STAGE_UPLINK_REPORT)
-end
-
--- INFERRED count -- the .qst names no roster and no count for the droid army.
-function storyArcChaptersScreenPlay:countDroid(pPlayer, template)
-	if (not self:hasFlag(pPlayer, "armyReleased")) then
-		return
-	end
-
-	local match = false
-
-	for i = 1, #self.droidArmy do
-		if (self.droidArmy[i].template == template) then
-			match = true
-		end
-	end
-
-	if (not match) then
-		return
-	end
-
-	local count = self:addCount(pPlayer, "droids")
-
-	if (count < self.droidArmyRequired) then
-		CreatureObject(pPlayer):sendSystemMessage("Droid destroyed. (" .. count .. "/" .. self.droidArmyRequired .. ")")
-		CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
-		return
-	end
-
-	-- chapter three 01 task 6 satisfied, task 17 goes live.
-	self:advance(pPlayer, self.STAGE_SCOUT_FACTORY)
 end
 
 function storyArcChaptersScreenPlay:isOneOf(template, list)

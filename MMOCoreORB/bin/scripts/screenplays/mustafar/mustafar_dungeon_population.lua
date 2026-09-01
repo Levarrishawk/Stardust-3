@@ -172,12 +172,13 @@ all; the six that do are below.
 An earlier revision of this section called itself "the whole list" and was not. It
 omitted historian.lua and maneater.lua. Both are named now.
 
-  UNREACHABLE, so no effect. story_arc_chapters countDroid credits
+  GONE. This slot used to describe story_arc_chapters countDroid, which credited
   cww8_battle_droid, cww8a_battle_droid and cww8a_eradicator -- the same three
-  templates the decrepit factory uses -- but only at exactly STAGE_DROID_ARMY (16),
-  and both factory pools are gated by mayEnterDroidFactory at STAGE_ENTER_FACTORY
-  (19). A player who could kill these droids cannot be at the stage that counts
-  them. The overlap exists on paper and cannot be walked into.
+  templates the decrepit factory uses -- and argued the overlap was unreachable
+  because both factory pools are shut at STAGE_DROID_ARMY (16). Round F1(c)
+  deleted countDroid outright: stage 16 is now the Valley Battlefield, an off-map
+  arena with its own eleven-wave roster, and nothing in this tree counts kills at
+  that stage any more. There is no overlap left to argue about.
 
   REACHABLE and left alone, because live worked this way. The Old Republic
   Facility is ungated, and it now holds fleas and kubaza beetles. So its kills feed

@@ -13,13 +13,21 @@
 	  default                                                        -> busy
 
 	SOE's order is kept even though the repo's first two tests are mutually
-	exclusive.  "Flagged for the instance" is the repo's armyReleased flag: on
-	live, a player who had already been sent in got the "want to head back in?"
-	screen forever after, and that is what armyReleased reproduces.
+	exclusive.  "Flagged for the instance" is the repo's armyReleased flag.  The
+	live conditions were read line by line (story_arc_chapter_three_scout.java
+	:18-43) and the flag is set by the CONDITION, not by the action: on the first
+	visit readyToEnterAgain is false, readyToEnterOne sees the task active, calls
+	instance.flagPlayerForInstance, and returns true -- so visit one is the
+	briefing and every visit after it is "want to head back in?", forever.  That
+	is why the flag is set here in getInitialScreen and not in sendToBattlefield;
+	setting it on entry instead would give the briefing twice to anyone who
+	talked to the scout and walked away.
 
-	sendGroupToBattlefield is the screenplay's sendToBattlefield, which spawns the
-	army once and reports the remaining count on any later visit -- the repo has
-	no instance to move the player into.  See the tree's DEVIATION block.
+	sendGroupToBattlefield is instance.requestInstanceMovement(player,
+	"mustafar_droid_army").  Round F1(c) gave that a real destination: the
+	screenplay's sendToBattlefield now hands off to ValleyBattlefield:enter.  It
+	used to spawn a six-droid stand-in army in the open world; it does not any
+	more.  See the tree's DEVIATION block.
 --]]
 
 scout_conv_handler = conv_handler:new {}
@@ -32,6 +40,9 @@ function scout_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (storyArcChaptersScreenPlay:hasFlag(pPlayer, "armyReleased") or stage > storyArcChaptersScreenPlay.STAGE_DROID_ARMY) then
 		return convoTemplate:getScreen("return")
 	elseif (stage == storyArcChaptersScreenPlay.STAGE_DROID_ARMY) then
+		-- live's readyToEnterOne flags the player the moment it sees the task
+		-- active, before the screen is handed back.  Same here.
+		storyArcChaptersScreenPlay:setFlag(pPlayer, "armyReleased")
 		return convoTemplate:getScreen("briefing")
 	end
 

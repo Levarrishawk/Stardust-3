@@ -756,6 +756,7 @@ includeFile("poi/naboo_memorial.lua")
 -- one more -- historian.lua asks it for the ORF security droid's template.
 includeFile("mustafar/mustafar_instances.lua")
 includeFile("mustafar/mustafar_dungeon_population.lua")
+includeFile("mustafar/battlefields/valley_battlefield.lua")
 includeFile("mustafar/quest/conversation/keslev_conv_handler.lua")
 includeFile("mustafar/quest/mining_field_markers.lua")
 includeFile("mustafar/quest/map_exploration.lua")

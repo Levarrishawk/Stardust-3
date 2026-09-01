@@ -1574,7 +1574,26 @@ function mustafar_boundaries:notifySpawnAreaSe(pActiveArea, pMovingObject)
   return ObjectManager.withCreatureObject(pMovingObject, function(player)
     if (player:isAiAgent()) then
       return 0
-    end    
+    end
+
+    -- Chapter Three 01's scout post is SOE's own coordinate (550, -154): the .qst
+    -- task, story_arc_chapters.lua:650 and the live instance exit all agree on it.
+    -- It sits 55.97 m inside Se1 and 270.01 m inside Se2, so the wall's inward
+    -- apron made the step unreachable, and it made the Valley Battlefield's exit
+    -- at (541, -160) a bounce pad. A 60 m pocket is opened around it.
+    --
+    -- This cannot open the map. Every point in the pocket is at most
+    -- 55.97 + 60 = 115.97 m from Se1's centre, and Se1's radius is 256, so the
+    -- whole pocket lies deep inside the wall. Walk 60 m in any direction and Se1
+    -- takes over again.
+    local px = SceneObject(pMovingObject):getPositionX()
+    local py = SceneObject(pMovingObject):getPositionY()
+    local dx = px - 550
+    local dy = py + 154
+
+    if ((dx * dx + dy * dy) <= 3600) then
+        return 0
+    end
     
     if not (player:isAiAgent()) then
       player:sendSystemMessage("An invisible force prevents you from travelling further in that direction.")
