@@ -368,9 +368,13 @@ with the same lesson in its own header: the client never had this data, SOE's se
 did, and they survive. **Any future "nothing in the shipped data says what this does" finding on
 this project should check `SWG-Source/dsrc` before it is written down as open.**
 
-⚠ **Still open, and not silently patched:** the three shape-B items are loot drops on live and this
+~~⚠ **Still open, and not silently patched:** the three shape-B items are loot drops on live and this
 tree has no loot wiring for them, so today only the four static props are reachable in game. See
-*Loot* below.
+*Loot* below.~~
+
+**CLOSED 2026-09-01, commit `7e84038385`.** All three now drop. See *Loot — the three trophy items*
+below for the rate derivation and the mechanism. The line above is kept so the closure is visible
+rather than the finding just vanishing.
 
 **The props are wireable with zero authored strings.** None of the six Mensix interior props exists
 as a snapshot node — the whole Mensix building (node 12112217, 30 cells) contains exactly **two**
@@ -779,6 +783,48 @@ there is no lava cannon and no republic flamer — no art, no template, nothing 
 They are not this branch's: `git log` puts all four in `b126156cac [merge] Additional MtG Object
 Scripts`, and `git diff origin/unstable...HEAD` does not touch `custom_content/weapon/`.
 
+> ### ⚠ CORRECTION — the "no art" half of that paragraph is WRONG. Round B disproved it.
+>
+> The paragraph above concluded "no art, no template, nothing but the filenames" from the absence
+> of `shared_som_lava_cannon.iff` and `shared_som_republic_flamer.iff`. It checked the two
+> **non-generic** names and generalised to all four files. The **`_generic`** appearances do ship.
+>
+> Round B (2026-08-31, commit `b67c6415e1`) wired both, and proved the art present at runtime:
+>
+> - `TemplateManager.cpp:474` — when a shared template sets a non-empty `clientTemplateFileName`,
+>   `addTemplate` calls `openIffFile` on it, and a miss produces a `TreeArchive.h:85`
+>   `<path> not found.` warning. **That is the only reliable positive test for a client iff.**
+>   (`addClientTemplate` at `TemplateManager.cpp:1095` does no file I/O and can never warn.)
+> - The boot after Round B produced **20 `not found.` warnings for unrelated Corellia filler iffs
+>   and ZERO for either new shared iff** — so both resolved out of the TRE. The mechanism was
+>   demonstrably live in that same boot, which is what makes the zero meaningful.
+>
+> **Do not grep TRE binaries for filenames to answer this question.** The filename tables are
+> compressed; a known-good control (`shared_som_rifle_dp23_generic.iff`) also returns nothing. That
+> method produces false negatives, and this correction exists partly because of it.
+>
+> Current state of the four files:
+>
+> | file | state |
+> | --- | --- |
+> | `som_lava_cannon_generic.lua` | **REWRITTEN + wired.** Anchored on stock `heavy_rocket_launcher.lua`, damage/range from live `weapon_stats.tab`, registers `.../heavy/som_lava_cannon_generic.iff` |
+> | `som_republic_flamer_generic.lua` | **REWRITTEN + wired.** Anchored on stock `rifle_flame_thrower.lua`, same rule, registers `.../heavy/som_republic_flamer_generic.iff` |
+> | `som_lava_cannon.lua` | **still a stock copy, deliberately left orphaned** — it registers the stock `heavy_rocket_launcher.iff`, so including it would overwrite the galaxy-wide rocket launcher |
+> | `som_republic_flamer.lua` | **still the 2h-sword copy, deliberately left orphaned** |
+>
+> The galaxy-wide-overwrite warning below is therefore still fully in force for the two non-generic
+> files. A new `custom_content/weapon/ranged/heavy/serverobjects.lua` (chained from
+> `custom_content/weapon/ranged/serverobjects.lua:224`) names **only** the two rewritten files.
+> Counted 2026-09-01: the directory holds **23 files — `serverobjects.lua` plus 22 weapon
+> templates. 2 are now wired; the other 20 stay orphaned on purpose.**
+>
+> **Still weak, and disclosed rather than hidden:** both rewritten heavies keep their stock anchor's
+> `experimental*` min/max curve, so the **crafted** path is not live-accurate. Only the looted /
+> `giveItem()` path (`minDamage`/`maxDamage`) carries transcribed live numbers. Whether to retune
+> the crafting curves is an open call for Aaron. Also disclosed: the draft schematic points at
+> `object/weapon/ranged/rifle/rifle_som_lava_cannon.iff`, which is not a live path and is registered
+> nowhere.
+
 **This is the strongest argument yet for the one-file convention at
 `object/custom_content/serverobjects.lua:12-19`.** If anyone ever "fixes" the unreachable som
 weapons by adding `includeFile("custom_content/weapon/serverobjects.lua")`, those four files run,
@@ -830,20 +876,101 @@ adding an include for a group nothing uses is not a fix. (`serverobjects.lua` al
 `weapon/groups/stormtrooper_weapons.lua` twice — harmless, `includeFile` is idempotent. 125
 include lines = 108 naming `groups/` (107 distinct) + 17 elsewhere under `weapon/`.)
 
-### Loot — all 158 som creatures shipped dropping nothing; 96 now drop, 62 deliberately do not
+### Loot — all som creatures shipped dropping nothing; 100 now drop, 59 deliberately do not
 
 **Status: the finding below is the diagnosis, and it has been acted on.** The retune (see *The
 157-template retune* at the end of this document) filled loot on every som template that should
-have it. Current state of the same three greps:
+have it. Re-counted 2026-09-01, after Round C:
 
-    grep -rl 'group = "'        mobile/custom_content/som/   ->  96 files
+    grep -rl 'group = "'        mobile/custom_content/som/   -> 100 files
     grep -rl 'groups = {}'      mobile/custom_content/som/   ->   0 files
-    grep -rl 'lootGroups = {},' mobile/custom_content/som/   ->  62 files
+    grep -rl 'lootGroups = {},' mobile/custom_content/som/   ->  59 files
+    ls -1                       mobile/custom_content/som/*.lua -> 161 files
 
-96 + 62 = 158. The broken `groups = {}`-behind-a-live-`lootChance` state is gone from the
-directory entirely. The remaining 62 carry an empty `lootGroups = {}` on purpose: they are the
-plain fauna and the conversation NPCs, which in the base tree do not carry a loot table either.
-That is a real empty, not a roll that resolves nothing.
+161 files, two of which are not creature templates (`serverobjects.lua` and the `surveyor_jo.lua`
+tombstone), so **159 creature templates; 100 + 59 = 159.** ⚠ An earlier version of this block said
+96 / 62 / 158 — that was correct when written and is now stale, because this branch has since added
+14 creature files to the directory and Round C moved three files between the buckets. The numbers
+above are the re-counted current state, not an edit of the old ones.
+
+The broken `groups = {}`-behind-a-live-`lootChance` state is gone from the directory entirely. The
+remaining 59 carry an empty `lootGroups = {}` on purpose: they are the plain fauna and the
+conversation NPCs, which in the base tree do not carry a loot table either. That is a real empty,
+not a roll that resolves nothing.
+
+#### Loot — the three trophy items (CLOSED 2026-09-01, commit `7e84038385`)
+
+`blistmok`, `tulrus` and `xandank` were three of that deliberate-empty set. They should not have
+been. Each is the sole live source of a bounty-hunt giver item, and with `lootGroups = {}` the
+three shape-B hunts (`som_blistmok_hunt_25`, `som_tulrus_hunt_20`, `som_xandank_hunt_25`) had no
+entry point at all — the giver templates were registered and carried
+`objectMenuComponent = "BountyHuntGiverMenuComponent"`, but nothing in the tree ever created one.
+
+**The rate is transcribed, not chosen.** Four hops in `SWG-Source/dsrc`, each read directly:
+
+| hop | file | what it establishes |
+|---|---|---|
+| A | `object/tangible/item/som/blistmok_heart.tpf:9` | `scripts = +["quest.som.blistmok_heart"]` — the consume side only; nothing here creates the item |
+| B | `datatables/loot/loot_items/mustafar/blistmok.tab` | 4 rows, row 4 is `object/tangible/item/som/blistmok_heart.iff` |
+| C | `datatables/loot/loot_types/mustafar/mustafar_blistmok.tab` | exactly 2 pools: `mustafar/blistmok`, `mustafar/creature` |
+| D | `datatables/mob/creatures.tab` col 44/45/46 | `intLootRolls=1`, `intRollPercent=100`, `lootTable=mustafar/mustafar_blistmok` |
+
+`script/library/create.java:735-740` rolls `rand(1,99) < intRollPercent`; at 100 that always passes,
+so exactly one item is made per kill. `script/library/loot.java:1155-1166` then picks one pool
+uniformly (`rand(0, len-1)`) and one item from it uniformly. **No weights anywhere in that path.**
+So `0.5 × 0.25 = 12.5% per kill`. Same shape for tulrus (`tulrus_parts`) and xandank (`xandank_jaw`).
+
+Encoded in Core3 as `lootChance = 1250000` on the creature, a single group at `chance = 10000000`,
+and a single item at `weight = 10000000`. `10000000 == 100%` is not an assumption —
+`LootGroupCollectionEntry.h:42` computes a default of `2000000 + (level * 20000)` and comments it as
+`20% + (0.2% * level)`.
+
+**Applied to the three base species defs only.** Live explicitly routes the variants to loot types
+that do not include these pools, so `blistmok_shrieker`, `blistmok_trampler`, `orf_tulrus`,
+`orf_xandank`, `xandank_patriarch`, `xandank_onyx_plated` and `tulrus_magma_drenched` are
+deliberately untouched, as are the named/quest creatures.
+
+**Not included, and this is a real remainder:** the live companion drops — 5 ToW junk rows in
+`mustafar/creature.tab` and the four `cube_loot` cubes per species. A faithful full pool would be 9
+items at non-uniform weights. It is blocked on the cube path defect below and on mapping the ToW
+junk static-item names to templates. Their absence is the status quo (these creatures dropped
+nothing at all before), so nothing regressed — but the pool is narrower than live.
+
+#### ⚠ NEW, unfixed: all 72 `cube_loot` server templates register under the wrong directory
+
+`object/custom_content/tangible/loot/mustafar/cube_loot/*.lua` — every one of the 72 `addTemplate`
+calls registers under `object/tangible/loot/mustafar/cube/loot/<name>.iff`, with `cube/loot/` where
+it should be `cube_loot/`. The shared client templates in the sibling `objects.lua` are correct
+(`.../mustafar/cube_loot/shared_<name>.iff`), so it is the server path alone that is wrong.
+
+    grep -c 'mustafar/cube/loot/' -> 72
+    grep -c 'mustafar/cube_loot/' ->  0
+
+Nothing is broken *today* because no loot group references a cube — they are entirely orphaned. But
+any attempt to wire the live Mustafar cube drops will silently resolve nothing until this is fixed.
+Left alone deliberately: it is 72 files and outside the Round C question.
+
+#### The loot lane mechanism — read this before writing any loot file
+
+Three facts, all verified in C++, each of which fails **silently** if violated:
+
+1. `LootGroupMap.cpp:63` — `includeFile` is `Lua::runFile("scripts/loot/" + filename)`. The loot
+   lane root is **always `scripts/loot/`**, never relative-to-the-current-file. This is why
+   `loot/serverobjects.lua` reaches the custom lane as `../custom_scripts/loot/serverobjects.lua`,
+   and why files *inside* that custom lane must still climb out with `../`. It is the opposite
+   convention from the object lane, which is rooted at `object/`.
+2. `LootGroupMap.cpp:81-82` and `:97-98` — the template name must equal the file basename, or the
+   server warns. `blistmok_heart.lua` must define `blistmok_heart`.
+3. `LuaMobileTest.cpp:441` — `EXPECT_EQ(10000000, totalChance)`: within one `lootGroups` entry the
+   `chance` values across `groups` must sum to exactly 10000000.
+
+`custom_scripts/loot/serverobjects.lua` is the purpose-built custom lane and was **0 bytes** until
+Round C; `loot/serverobjects.lua` includes it last, commented `-- Custom content - Loads last to
+allow for overrides`.
+
+**Positive runtime proof, not absence-of-error:** `[LootManager]` reported **659 → 662 Loot Groups**
+and **2194 → 2197 Loot Items** across the before/after boots — exactly the three groups and three
+items — with zero `does not match file name` warnings in either log.
 
 Everything from here to the end of this section is the original finding, kept because it is the
 evidence for *why* the retune was repair and not authoring. Its counts describe the shipped state,
@@ -1662,6 +1789,11 @@ stock bands: creature 2000000 (`mobile/dathomir/rancor.lua`), elite 7000000
 one group, 62 carry a genuinely empty `lootGroups = {}`, and 0 remain in the broken
 `groups = {}`-behind-a-live-`lootChance` state.
 
+⚠ Those 96 / 62 counts describe the retune, which is what this section is about — leave them.
+The **current** directory counts are 100 / 59 / 159; see *Loot — the three trophy items*. Round C
+also introduced the first `lootChance` in this tree that is **not** from the stock bands above:
+`1250000`, which is a transcription of live's 12.5%, not a band choice.
+
 ### What the retune deliberately did not touch
 
 `pvpBitmask` and `creatureBitmask` — spawn and aggression behaviour is region design, not combat
@@ -1750,3 +1882,59 @@ branch, or roll a loot table. The pet-control-device fix in `a1b872598e` is prov
 this boot and still unproved *in play* — that needs a client. Same for the conversation trees, the
 bounty and trophy chains, and every `lootChance` this round set. Those stay open, and the sections
 above that mark them open still mark them open.
+
+---
+
+## Final completeness sweep — 2026-09-01
+
+Run after Rounds A, B and C, to answer one question: **is anything in this port still broken or
+unreachable for a mechanical reason?** Four checks, each run directly against the tree, each
+mechanical enough that the result is a count rather than an opinion. Script: `C:\tmp\sweep.sh`.
+
+| # | check | result |
+| --- | --- | --- |
+| 1 | `registerScreenPlay("X")` vs the object actually defined in that same file, across `screenplays/mustafar/**` | **35 checked, 0 mismatches** |
+| 2 | every distinct `conversationTemplate` on a som mobile resolves to a definition under `mobile/conversations/` | **34 checked, 0 unresolved** |
+| 3 | every mobile name passed to `spawnMobile` by a mustafar screenplay is a registered creature template | **51 checked, 0 unregistered** |
+| 4 | every `screenplays/mustafar/**` file is reachable from an include | **71 files, 71 matching lines in `screenplays.lua`, 1 not named** |
+
+Check 4's single hit is `screenplays/mustafar/quest/conversation/jo_kelsev_conv_handler.lua`. **It
+is not a defect.** The file is a deliberate tombstone — its own header says the handler moved to
+`keslev_conv_handler.lua`, that the NPC is Surveyor Keslev with no "Jo" in his name, that it is
+intentionally out of `screenplays.lua`, and that it defines nothing so it loads as a no-op. It is
+also on the fenced list and was not touched.
+
+**So: no new mechanical defects.** The remaining Mustafar work is not repair. It is the design
+questions below, plus the two genuine remainders already written up — the narrower-than-live loot
+pool for the three trophy species, and the 72 mis-pathed `cube_loot` registrations.
+
+An independent sweep agent was also run over the same question and returned no new findings. Its
+report is **not** the basis for the table above; every row there was re-run and counted directly,
+because a sweep that reports "clean" is exactly the kind of claim that has to be checked rather
+than accepted.
+
+## Open design calls — Aaron's, not mine
+
+Collected in one place so they stop being scattered. Each is a real fork where the shipped data
+does not decide the answer, so none has been filled in.
+
+1. **Creature tiers vs live `difficultyClass`.** The retune assigned tiers by reading the tree; live
+   ships an explicit difficulty column. Whether to re-key on it is a call.
+2. **`pvpBitmask = ATTACKABLE` on the four quest givers.** They are currently attackable. Live
+   behaviour for quest NPCs is usually not.
+3. **Quest XP policy.** No transcribed source for the reward amounts.
+4. **The five `som_sceismic_charges` fields** — see *Seismic charges*, a confirmed negative.
+5. **The Kenobi pedestal height.**
+6. **Two unimplemented battlefield instances:** `mustafar_droid_army`, `mustafar_volcano`.
+7. **The `som_poison_miners` task-8 reward** — whether to swap it to a SoM pistol.
+8. **The `experimental*` crafting curves on the two rewritten heavy weapons.** Both still carry
+   their stock anchor's curve, so the crafted path is not live-accurate while the looted path is.
+9. **Which creature drops which of the 23 SoM weapon templates.** Still the largest block of
+   finished-but-undelivered content; the extract ships no loot or creature table to quote.
+10. **Whether to widen the three trophy loot pools to live's full 9 items**, which first needs the
+    `cube_loot` path defect fixed and the ToW junk names mapped.
+
+One item that was on this list and should not have been: the `som_xandank_trophey` NPC giver was
+recorded as a deviation from the click-to-start pattern. It is not — Miner Renlo Hens is the live
+design, with a full grant and turn-in transcript, and he is wired. Removed rather than left to be
+"fixed" into a defect later.
