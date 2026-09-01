@@ -277,7 +277,11 @@ the repo (`object/custom_content/tangible/item/som/`), and every name and descri
 - **`som_xandank_trophey` = "A Whole Pack of Trouble"** — giver **Miner Renlo Hens**, confirmed, with
   a full grant + turn-in transcript. `/way -2522 1452` → world `(-5402, 4428)`; the existing spawn at
   `regions/smoking_forest_region.lua:32` is **4.5 m** away. His conversation table
-  (`xandank_trophy.stf`) ships. Only `conversationTemplate ""` blocks him.
+  (`xandank_trophy.stf`) ships. ~~Only `conversationTemplate ""` blocks him.~~
+  **CLOSED — he is wired.** `mobile/custom_content/som/miner_hens.lua:33` now reads
+  `conversationTemplate = "xandank_trophy"`, and `trophy_hunts.lua:64-65` records the same finding
+  in its own header. Nothing blocks him; this line is kept only so the strikethrough shows the
+  item was closed rather than dropped.
 - **`som_blistmok_rug` = "Skin the Blistmoks"** — clicked prop, `/way 443 -1124`. No giver.
 - **`som_jundak_skull` = "Skull of the Jundak"** — clicked prop, `/way 372 -1256`. No giver.
 
@@ -365,12 +369,19 @@ Run after R8. Every number below is from a script over the tree, not an estimate
 "nothing exists" is a search that was actually run. Three of these started as subagent findings
 and all three were wrong on first report; the numbers here are the primary reads.
 
-### Creatures — 158 registered, 127 reachable, 31 not
+### Creatures — 159 registered, 131 referenced, 28 not
 
-`addCreatureTemplate(obj, "name")` second argument over `mobile/custom_content/som/*.lua`, then
-each name searched as a quoted string across all 47,367 `.lua` files in `scripts/`.
+`addCreatureTemplate(obj, "name")` second argument over the 161 `mobile/custom_content/som/*.lua`
+files, then each name searched as a quoted string across all 47,367 `.lua` files in `scripts/`.
 
-**Two of the 31 are correctly unplaced, and placing them would be the bug.** Both are
+⚠ **This heading used to read "158 registered, 127 reachable, 31 not". Both halves were stale.**
+159 is the registered count — `skar.lua` is the 159th file and was missed. 28 is the unreferenced
+count, and it dropped by two because this port placed them: `sher_kar` now spawns in all 12
+`must_monster_lair` copies via `mustafar_dungeon_population.lua`, and `scorching_terror` sits
+beside his sourced partner at `mensix_facility_region.lua:73`. Re-run the two commands in the
+paragraph above before quoting any of these numbers again.
+
+**Two of the 28 are correctly unplaced, and placing them would be the bug.** Both are
 `NPC Appearance Server Template` values on Comm Player tasks — a portrait for a recorded
 message, not a world spawn:
 
@@ -380,11 +391,83 @@ message, not a world spawn:
 
 `obi_wan_ghost` is fenced and untouched.
 
-**The other 28 have no placement source anywhere.** All 31 names were searched byte-wise across
+**The other 25 have no placement source anywhere.** All 28 names were searched byte-wise across
 all 516 files of `C:\swg-extract\_som`. Outside the two above, not one is named by any `.qst`,
 any datatable or any snapshot. Every one of them ships client art
 (`shared/object/mobile/som/shared_<name>.iff`) and nothing else. Art without a placement is not
 a placement.
+
+**Seven of the 25 are ORF fauna, and their own dungeon table is the proof.**
+`datatables/spawning/dungeon/som_old_republic_facility.tab` is a real, live, fully-populated
+table — it carries `room` / `loc_x` / `loc_y` / `loc_z` / `yaw` / `respawn_time` rows for
+`som_orf_ancient_patrol_drone`, `som_orf_ancient_security_drone` and `som_orf_flea_hatchling`.
+So the ORF dungeon is not a table that was never written; it was written, and these seven were
+left out of it:
+
+```
+orf_angler               NOT FOUND    orf_vesp                 NOT FOUND
+orf_mawgax               NOT FOUND    orf_vir_vur              NOT FOUND
+orf_reptilian_flier      NOT FOUND    orf_whisper_bird         NOT FOUND
+orf_torton               NOT FOUND
+```
+
+NOT FOUND = the name appears nowhere in any file under `datatables/spawning/`, not just nowhere
+in the ORF table. This is the strongest form of the same shape as the other 25 — existence
+without placement — because here the placement file for their own building exists, is complete
+for their siblings, and still does not name them. Inventing rows for them would be inventing
+content, not transcribing it. Left unplaced.
+
+**Two more, `cinderclaw` and `tremor_foot`, have a sourced partner but no anchor to step off.**
+These are the two that came closest to being placed and were deliberately not. Each sits in a
+two-row `ground_spawning/types/mustafar/*.tab` — the same shape that let `scorching_terror` be
+placed beside Deathsting — but in both cases the partner turns out to have no fixed world point
+to measure from:
+
+| creature | table (2 rows) | partner | where the partner actually is |
+|---|---|---|---|
+| `cinderclaw` | `elite_jundak.tab` | `jundak_devourer` | a quest hunt target at (-1616, h 40, 4275), `trophy_hunts.lua:467-472`. No region file covers that area. |
+| `tremor_foot` | `elite_tulrus.tab` | `tulrus_magma_drenched` | spawned **player-relative** as Foehorn — `maneater.lua:274-278`, `foehornMinDistance 25` / `foehornMaxDistance 50`. It has no fixed anchor at all. |
+
+That is the whole difference from Scorching Terror. His partner, Deathsting, is standing at a
+literal coordinate in a region file, so stepping 23.6 m off it is a measurement. These two have
+a sourced *pairing* and no sourced *place*, so a coordinate for them would be invented outright.
+Left unplaced.
+
+Both tables read the same way — `strItem` / `fltSize`, two rows, weight 5 each:
+
+```
+elite_jundak.tab            elite_tulrus.tab
+  som_jundak_devourer  5      som_tulrus_magma_drenched  5
+  som_jundak_cinderclaw 5     som_tremor_foot            5
+```
+
+`ground_spawning` groups them; it does not position them. Nothing under `datatables/spawning/`
+references either table by name, which is why the group never reaches the world.
+
+⚠ **STRIKE "or any snapshot" FROM THAT SENTENCE, AND FROM EVERY OTHER CREATURE CLAIM IN THIS
+DOCUMENT. It is not evidence of anything.** A world snapshot cannot hold a creature. Reading
+`snapshot/mustafar.ws` from `stardust_03.tre` directly:
+
+```
+OTNL names: 354   NODE placements: 5947
+  object/static      161
+  object/building    121
+  object/tangible     71
+  object/cell          1
+  object/mobile        0
+```
+
+Zero `object/mobile` templates out of 354, and therefore zero of the 5947 placements. That is not
+a Mustafar fact — it is what a `.ws` file *is*. Creatures come from `datatables/spawning/`, from
+dungeon tables, and from screenplays; the snapshot is terrain furniture and buildings. So
+"`<creature>` is not in the snapshot" carries exactly no information, and this document leans on
+it in 19 places. The **conclusion** for these 28 still stands, because the `.qst` and datatable
+halves of the search were real and did the work. The snapshot half never did. Every future
+"nothing places this creature" claim needs the first two and must not cite the third.
+
+The same phrase IS meaningful for the non-creature objects in the next section, where the
+snapshot is the correct place to look and 30 of 127 were found there. Same words, opposite
+weight — which is precisely why it slipped through.
 
 ### Non-creature objects — 127 defined
 
@@ -399,31 +482,125 @@ a placement.
 - **34** are neither referenced nor in the snapshot: 7 pet control devices, 2 doors, 8 items,
   the 3 final-chamber objects, 14 weapons.
 
-### Three clusters that ship complete but unconnected
+  Two of those five groups have moved since:
 
-**Sher Kar's lair.** `mustafar_instances.lua:185-197` carries the pool — 12 building copies and
-door node 12110143 (`shared_must_sherkar_door.iff`) — with `entry = nil` and the reason written
-in. The creature `sher_kar` is registered. The item `sher_kar_syringe` is registered. Four
-shipped pieces that name each other, and **no `.qst` on disk connects them**: `sher_kar` /
-`sherkar` hits only the appearance iff, the snapshot, and the item string tables. What happens
-in that room is not recorded anywhere, so it cannot be quoted.
+  - **The 7 pet control devices are in.** `object/custom_content/serverobjects.lua:50` includes
+    `custom_content/intangible/pet/som/serverobjects.lua`, because the retune gave 7 families a
+    `tamingChance` and a `controlDeviceTemplate`. See the loader section below.
+  - **"14 weapons" is 12, and 4 of the files are not weapons of this planet at all** —
+    `som_lava_cannon{,_generic}` and `som_republic_flamer{,_generic}` are verbatim copies of the
+    stock `heavy_rocket_launcher` and `2h_sword_kashyyk`, saved under som filenames, with no
+    `shared_som_*` client half anywhere. Full table under *The SoM weapons* below. The real
+    figure is 12 distinct weapons in 23 templates, and `som_sword_obsidian` is already reachable
+    (`serverobjects.lua:19`, the Symbiosis reward), so 22 of the 23 are the live orphan count.
+
+### Three clusters that shipped complete but unconnected — one is now connected
+
+⚠ Updated 2026-08-31. Sher Kar's lair is wired and boot-proven. The other two are open
+decisions for Aaron, each reduced to a single question rather than a survey.
+
+**Sher Kar's lair. — CLOSED, the room is open and populated.** The finding as written: the pool
+carried 12 building copies and door node 12110143 (`shared_must_sherkar_door.iff`) with
+`entry = nil`; `sher_kar` and `sher_kar_syringe` both registered; and **no `.qst` on disk
+connecting them** — `sher_kar` / `sherkar` hits only the appearance iff, the snapshot and the
+item string tables.
+
+The missing `.qst` was never the blocker, and treating it as one is what kept the room shut for
+three rounds. `old_republic_facility` has no `.qst` either and has always been enterable. The
+real blocker was the second half — a radial into an empty room — and that is a thing you fix by
+putting something in the room, not a thing you wait for a source to fix.
+
+Both halves are now wired: `mustafar_instances.lua` gives the pool a real `entry` (cell `r1`,
+certain — 456 of 456 nodes in `must_monster_lair.ilf` sit in it) and
+`mustafar_dungeon_population.lua` gets a `lairBosses` table that puts `sher_kar` in all 12
+copies. The arrival point is OURS and says so: no `monster_lair` dungeon table exists and the
+`.pob` is unavailable, so the floor was fitted from 44 nest props
+(`h = -3.74 + -0.1966*(z + 202.35)`, mean residual 0.24 m) and both points land inside it.
+Boot evidence, 2026-08-31:
+
+```
+MustafarDungeonPopulation: 921 creatures placed across the Mustafar dungeon pools, plus 12 lair bosses
+```
+
+Still open and recorded in the file: `som_sherkar_consort` appears in `malfosa.tab` and has no
+template anywhere in the repo. Authoring a creature outright is not a placement decision.
 
 **The final chamber.** `som_kenobi_final_chamber_entrance_item`, `_crystal_pedestal` and
 `_force_crystal` are registered, in no snapshot, in no dungeon table, in no `.qst`. Searching
-all of `_som` for `final_chamber` / `final_crystal` / `som_kenobi_final` returns nothing at all.
-`kenobi_spine.lua:211-227` already reached this and recorded it; the finale runs in
-`lair_of_the_crystal` without them.
+all of `_som` for `final_chamber` / `final_crystal` / `som_kenobi_final` returns nothing at all,
+and there is no dungeon table for this building at all — `spawning/dungeon/` holds 23 tables,
+five of them `som_*`, none a crystal lair. The finale runs in `lair_of_the_crystal` without them.
 
-**The 14 SoM weapons.** `primaryWeapon` resolves a *group* name registered by `addWeapon()` in
+**The location is now known even though the source still is not.** `som_obiwan_crystal_lair.ilf`
+has TWO statue galleries, not the one the earlier note described:
+
+- **gallery 1**, x 21..40, h ≈ 0 — 16 relic statues on the floor in two rows (z 2.50, z 7.65).
+  The aisle between them is the arrival point (24.0, 5.1) and the boss's spot (37.0, 5.1).
+- **gallery 2**, x 74..86, h ≈ 4.13 — 8 relic statues in a ring, each raised on its own
+  `pillar_pristine_tall` at h -4.10. Eight statues, eight pillars, paired within a metre.
+
+Gallery 2's ring centre is **(79.83, 5.29)**. `jeditemple_dome` sits at (79.81, 5.30) and
+`jeditemple_platform_lrg` at (79.96, 5.19) — three objects agreeing on that centre to within
+0.15 m, with nothing standing in it. A domed rotunda ringed by eight raised relic statues, empty
+at the middle, next to two homeless tangibles called `final_crystal_pedestal` and
+`final_force_crystal`.
+
+It stays unplaced for one reason and it is not the old one: **the walkable height cannot be
+derived.** The `.ilf` gives `platform_lrg`'s origin at h -0.79, not its mesh top, and
+`som_obiwan_crystal_lair` exists in the extract only as that `.ilf` — no `.pob`, no `.msh`. The
+x/z are as good as sourced; the h would be invented, and a pedestal sunk into or floating over
+its own dais is worse than an empty shrine. Full working in `kenobi_spine.lua`, under
+WHAT IS NOT MODELLED. **This is a one-line decision waiting on Aaron, not a survey waiting on
+anyone.**
+
+**The SoM weapons — 12, not 14, and four of the files are not SoM weapons at all.**
+`primaryWeapon` resolves a *group* name registered by `addWeapon()` in
 `mobile/weapon/groups/*.lua`. **No group contains any `som_*` weapon and no loot table
-references one** — so all 14 are unreachable in play. The som creatures carry stock groups
-instead, and the retune below kept it that way: it assigns only groups that
+references one** — so every one of them is unreachable in play. The som creatures carry stock
+groups instead, and the retune below kept it that way: it assigns only groups that
 `mobile/weapon/serverobjects.lua` actually includes, so `som_lance_xandank` still sits unused
 while `xandank.lua:34` and `orf_xandank.lua:31` carry `unarmed` as beasts. The name pairings are
 suggestive and that is all they are: nothing on disk says which creature was meant to carry which
 weapon. (An earlier version of this paragraph cited both xandank files as saying
 `pirate_weapons_light`. That was true when written and is not now — the value moved, the finding
 did not.)
+
+**CORRECTION to the count, made by counting both halves instead of one.**
+`object/custom_content/weapon/` holds **27** files named `som_*.lua` — 13 melee, 10 ranged,
+4 ranged/heavy. The client side holds **23** `shared_som_*` weapon halves. The two sets agree
+exactly once the four `ranged/heavy/` files are set aside, and they have to be set aside,
+because **they do not define som weapons**:
+
+| file | actually defines | actually registers |
+| --- | --- | --- |
+| `som_lava_cannon.lua` | `object_weapon_ranged_heavy_heavy_rocket_launcher` | `object/weapon/ranged/heavy/heavy_rocket_launcher.iff` |
+| `som_lava_cannon_generic.lua` | `object_weapon_melee_2h_sword_2h_sword_kashyyk` | `object/weapon/melee/2h_sword/2h_sword_kashyyk.iff` |
+| `som_republic_flamer.lua` | `object_weapon_melee_2h_sword_2h_sword_kashyyk` | `object/weapon/melee/2h_sword/2h_sword_kashyyk.iff` |
+| `som_republic_flamer_generic.lua` | `object_weapon_melee_2h_sword_2h_sword_kashyyk` | `object/weapon/melee/2h_sword/2h_sword_kashyyk.iff` |
+
+Four verbatim copies of two stock weapons, saved under som filenames. Neither
+`shared_som_lava_cannon.iff` nor `shared_som_republic_flamer.iff` exists anywhere in the tree, so
+there is no lava cannon and no republic flamer — no art, no template, nothing but the filenames.
+They are not this branch's: `git log` puts all four in `b126156cac [merge] Additional MtG Object
+Scripts`, and `git diff origin/unstable...HEAD` does not touch `custom_content/weapon/`.
+
+**This is the strongest argument yet for the one-file convention at
+`object/custom_content/serverobjects.lua:12-19`.** If anyone ever "fixes" the unreachable som
+weapons by adding `includeFile("custom_content/weapon/serverobjects.lua")`, those four files run,
+and `addTemplate` **overwrites the stock `heavy_rocket_launcher` and `2h_sword_kashyyk` server
+templates for the whole galaxy** — not a Mustafar bug, a live-server-wide one. Pull in the one
+file an arc needs. Never the tree.
+
+So the real figure is **12 distinct SoM weapons in 23 templates** (each has a `_generic` loot
+variant except `som_2h_sword_massassi`): three 2h swords (massassi, obsidian, tulrus), two swords
+(obsidian, mustafar_bandit), two lances (obsidian, xandank), two rifles (dp23,
+mustafar_disruptor), two pistols (disruptor, ion_relic) and one carbine (republic_sfor).
+All 23 have art, have a server template, and are reachable by nothing.
+Only `som_sword_obsidian` is even registered, and only because the Symbiosis reward needed it
+(`:19`). **Which creature drops which is an open design question for Aaron** — the extract's
+server dsrc ships `datatables/spawning/` and nothing else, so there is no loot table and no
+creature table to quote from. This is the largest remaining piece of Mustafar content that is
+finished but undelivered.
 
 ### One defect of my own, found by the same check and fixed
 

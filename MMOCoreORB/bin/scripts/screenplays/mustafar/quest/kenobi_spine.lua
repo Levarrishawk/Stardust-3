@@ -218,13 +218,46 @@ WHAT IS NOT MODELLED, AND WHY
   nothing: a .ilf lists what a building was furnished with, and the server
   spawns quest objects from dungeon spawn tables instead. Those tables are the
   place to look, and they have now been searched -- every dungeon table, not
-  just Mustafar's five. Neither template appears in any of them. So there is
-  genuinely nothing to quote, which is what this note claimed on weaker grounds
-  than it had.
+  just Mustafar's five. Neither template appears in any of them, and there is no
+  dungeon table for this building at all: spawning/dungeon/ holds 23 tables,
+  five of them som_*, and none is a crystal lair. So there is genuinely nothing
+  to quote, which is what this note claimed on weaker grounds than it had.
 
   The same search DID overturn the sibling claim in reunite_shard.lua, where
   som_kenobi_fusion_machine turned out to have a live row all along. That is why
   this one was re-checked rather than left standing.
+
+  WHERE THEY WOULD GO, IF THEY GO ANYWHERE. This is geometry, not a source, and
+  it is written down so the decision is one line of work rather than another
+  survey. The 141-node .ilf has TWO statue galleries, not one:
+
+    gallery 1   x 21..40    h -0.2..0.8  16 relic statues standing on the floor,
+                                         mostly in two rows -- 7 at z 2.50 and
+                                         6 at z ~7.65. The aisle between them is
+                                         where the player arrives (24.0, 5.1)
+                                         and where the boss waits (37.0, 5.1).
+
+    gallery 2   x 74..86    h ~ 4.13      8 relic statues in a ring, each one
+                                         raised on its own pillar_pristine_tall
+                                         at h -4.10 -- 8 statues, 8 pillars,
+                                         paired within a metre of each other.
+
+  Gallery 2's ring centre is (79.83, 5.29), mean statue h 4.13. The
+  jeditemple_dome sits at (79.81, 5.30) and the jeditemple_platform_lrg at
+  (79.96, 5.19). Three separate objects agree on that centre to within 0.15 m,
+  and there is nothing standing in it. A domed rotunda ringed by eight raised
+  relic statues, empty at the middle, is the only spot in the building shaped
+  like a place for a pedestal, and the two homeless tangibles are named
+  "final_crystal_pedestal" and "final_force_crystal".
+
+  WHAT IS STILL UNKNOWN, and why that is enough to keep it unplaced: the
+  walkable height. The .ilf gives platform_lrg's ORIGIN at h -0.79, not its mesh
+  top, and som_obiwan_crystal_lair exists in the extract ONLY as that .ilf --
+  no .pob, no .msh -- so the surface a pedestal would stand on cannot be
+  derived, only guessed. Placing it means inventing a height, and a pedestal
+  sunk into or floating over its own dais is worse than an empty shrine. The
+  x/z are as good as sourced; the h is not. That is the whole decision, and it
+  is Aaron's.
 
   allowRepeats: stage stops at done, as everywhere else in this wave.
 
