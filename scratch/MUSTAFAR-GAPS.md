@@ -47,8 +47,11 @@ Mensix Mining Facility cell-local, closed form: `local_x = way_x - 459.50`,
 
 ⚠ **CORRECTED — do not cite Jural as the calibration proof.** An earlier version of this file, and
 two verbal reports, claimed `storm_lord.lua:382`'s `(440, 5115)` was an *independent* 1 m match
-against `/way 3321 2139`. **It is circular.** `storm_lord.lua:377-378` says in its own words that
-the value was "converted from a live-era community waypoint through the proven Mustafar offset".
+against `/way 3321 2139`. **It is circular.** The file says in its own words, twice, that the value
+was "converted from a live-era community waypoint through the proven Mustafar offset" — in the
+header at `storm_lord.lua:244-246` and again above the giver table at `:419-421`. (The citation
+here read `:377-378` until this sweep; that line pair holds a `taskName` and is unrelated. The
+correction stands, only its pointer was wrong.)
 
 The transform is still well established, but from these genuinely independent anchors:
 
@@ -995,8 +998,16 @@ against stock anchors rather than invented; the *retail* weapon mapping is still
 
 ## The 157-template retune — the tier table every som header comment points at
 
-Every retuned file carries a header note ending "Tier table: `scratch/MUSTAFAR-GAPS.md`". This is
-that table. It is the authority for what the numbers are and where each one came from.
+This is the table, and it is the authority for what the numbers are and where each one came from.
+
+Six of the 157 files carry a header note pointing here by name —
+`som_alien_parasite`, `som_ancient_guardian_droideka`, `som_ancient_guardian_ig`,
+`som_dark_jedi_boss`, `som_mustafarian_phantom_bandit`, `union_sentry_droid`. Those six are the
+ones whose existing header comments asserted the old block was tuned and untouchable, so each had
+to be corrected in place and pointed here. **The other 151 carry no note.** They were retuned by
+the same table and are equally covered by it; the absence of a comment is not a sign a file was
+skipped. To see whether a given file was retuned, compare it against `origin/unstable` — the
+placeholder is unmistakable (`chanceHit = 0.27`, `baseXp = 235`).
 
 **Why this was repair, not rebalancing.** All 158 som templates shipped carrying one identical
 placeholder block — `level = 70`, `chanceHit = 0.27`, 550–800 damage, 16000/19000 HAM,
