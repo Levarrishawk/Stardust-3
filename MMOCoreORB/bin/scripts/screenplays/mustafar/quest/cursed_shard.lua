@@ -383,6 +383,45 @@ function cursedShardScreenPlay:setFlag(pPlayer, key)
 	writeScreenPlayData(pPlayer, self.screenplayName, key, "1")
 end
 
+function cursedShardScreenPlay:clearFlag(pPlayer, key)
+	deleteScreenPlayData(pPlayer, self.screenplayName, key)
+end
+
+--[[ Every key this screenplay ever writes, in one place.
+
+     The screenplay sets five flags -- event1/event2 (:467), brood (:543), approach
+     (:604), tossed (:630) -- and until now cleared none of them. That is safe only
+     while the arc is strictly one-shot, which today it is: startQuest returns early
+     on stage ~= 0 and nothing anywhere sets the stage back to 0. The header at
+     :123-125 explains why -- Menth Paul refuses to take the shard back (s_139,
+     s_140), so there is no abandon path in either .qst.
+
+     The exposure is that the shipped [list] block says allowRepeats true on both
+     .qst files, which invites a reset being added later. The moment one exists
+     without this, "brood" stays set, the gate at :511 never opens again, and the
+     player deadlocks in STAGE_SHARD with the quest silently unfinishable.
+
+     No caller today, deliberately -- same shape as the seam at bounty_hunts.lua:287
+     and som_sceismic_charges.lua:326, which also exist ahead of their callers with
+     the reason written in. A reset path must call this. ]]
+function cursedShardScreenPlay:resetProgress(pPlayer)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	self:clearFlag(pPlayer, "event1")
+	self:clearFlag(pPlayer, "event2")
+	self:clearFlag(pPlayer, "brood")
+	self:clearFlag(pPlayer, "approach")
+	self:clearFlag(pPlayer, "tossed")
+
+	deleteScreenPlayData(pPlayer, self.screenplayName, "broodUntil")
+	self:removeWaypoint(pPlayer)
+	self:setStage(pPlayer, 0)
+
+	return true
+end
+
 function cursedShardScreenPlay:showMessageBox(pPlayer, title, prompt)
 	local sui = SuiMessageBox.new("cursedShardScreenPlay", "messageBoxCallback")
 	sui.setTitle(title)

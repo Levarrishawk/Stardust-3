@@ -548,11 +548,16 @@ function exploreMustafarScreenPlay:awardQuest(pPlayer)
 	-- are the whole of it.
 	CreatureObject(pPlayer):addCashCredits(self.rewardCredits, true)
 
+	-- Same discarded-return defect as mining_field_markers.lua had: the full-pack check
+	-- does not cover createObject or transferObject failing, and giveItem returns nil for
+	-- both (DirectorManager.cpp:2461-2479). Unlike that file there is no flag to unwind --
+	-- setState(pPlayer, 2) above IS the completion and re-awarding is not wanted -- so the
+	-- correct shape here is report-and-continue, not retry.
 	local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
 
-	if (pInventory ~= nil and SceneObject(pInventory):isContainerFullRecursive() == false) then
-		giveItem(pInventory, self.rewardItem, -1)
-	else
+	if (pInventory == nil) then
+		print("exploreMustafarScreenPlay: player has no inventory; the redrawn map could not be handed over")
+	elseif (SceneObject(pInventory):isContainerFullRecursive() or giveItem(pInventory, self.rewardItem, -1, true) == nil) then
 		CreatureObject(pPlayer):sendSystemMessage("Your inventory is full. The redrawn map could not be given to you.")
 	end
 

@@ -622,16 +622,34 @@ function miningFieldMarkersScreenPlay:grantCompletionReward(pPlayer)
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "rewarded", 1)
 
+	--[[ Every failure path must clear the same persistent key the guard above writes.
+	     `rewarded` is set at :623 BEFORE the item is handed over, so any path that
+	     leaves without the item and without clearing it costs the player the reward
+	     permanently. Clearing the old shared-memory key instead would leave the guard
+	     set and lock it for good.
+
+	     The full-pack check is not sufficient on its own: giveItem returns nil when
+	     either createObject or transferObject fails (DirectorManager.cpp:2461-2479),
+	     neither of which isContainerFullRecursive() can see. Discarding that return was
+	     the defect. It is not latent -- completionItem is a real template at :130 and
+	     keslev_conv_handler.lua:208 reaches this function -- so it could fire in play.
+
+	     Shape and the 4th `true` (overload) copied from the nearest sibling,
+	     maneater.lua:702-710. ]]
 	if (self.completionItem ~= nil) then
 		local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
 
-		if (pInventory ~= nil and not SceneObject(pInventory):isContainerFullRecursive()) then
-			giveItem(pInventory, self.completionItem, -1)
-		else
+		if (pInventory == nil) then
+			print("miningFieldMarkersScreenPlay: player has no inventory; the lava lizard heart could not be handed over")
+			deleteScreenPlayData(pPlayer, self.screenplayName, "rewarded")
+			return
+		elseif (SceneObject(pInventory):isContainerFullRecursive()) then
 			CreatureObject(pPlayer):sendSystemMessage("@error_message:inv_full")
 			-- Let them collect it on the next hail rather than losing it to a full pack.
-			-- Must clear the same persistent key the guard above writes; clearing the old
-			-- shared-memory key here would leave the guard set and lock the reward for good.
+			deleteScreenPlayData(pPlayer, self.screenplayName, "rewarded")
+			return
+		elseif (giveItem(pInventory, self.completionItem, -1, true) == nil) then
+			CreatureObject(pPlayer):sendSystemMessage("You have no room for the lava lizard heart.")
 			deleteScreenPlayData(pPlayer, self.screenplayName, "rewarded")
 			return
 		end

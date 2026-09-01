@@ -97,9 +97,16 @@ journal prose says "Foreman Chivos seems convinced that extra power rods can be
 found around the crashed capital ship".
 
 must_foreman_chivos is registered (mobile/custom_content/som/serverobjects.lua:76,
-customName "Foreman Chivos") and its conversationTemplate is empty, so he is given
-a radial here and answers in his own shipped strings. The 60-string tree itself is
-not reconstructed in this file -- see WHAT IS NOT MODELLED.
+customName "Foreman Chivos").
+
+CORRECTED: this paragraph used to read "its conversationTemplate is empty, so he is
+given a radial here", and to say the 60-string tree was not reconstructed. Both were
+overtaken by the WITHDRAWN -- CHIVOS'S TREE IS RECONSTRUCTED section at :222-250.
+must_foreman_chivos.lua:51 now carries conversationTemplate "story_arc_prelude_chivos"
+and the tree exists, so he converses rather than answering a radial. The radial was
+correctly retired for Chivos only -- see :430, "The snapshot props still get both;
+only Chivos does not" -- so there was never a double UI, and this was stale prose
+rather than a defect.
 
 Live names him som_foreman_chivos and hangs conversation.story_arc_prelude_chivos
 off him. This tree keeps must_foreman_chivos, the registered template that ships

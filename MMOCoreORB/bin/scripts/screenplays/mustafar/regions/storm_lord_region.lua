@@ -74,7 +74,25 @@ function storm_lord_region:spawnMobiles()
   local pMinion8 = spawnMobile("mustafar", "storm_lord_minion",120,297,129.9,4336,43,0)
   self:setMoodString(pMinion8, "idlewander")
   
--- Skar tower   -- TODO add suitable NPC for Skar -  Closest appearance would be blackguard wilder.
+-- Skar tower
+-- TODO CLOSED. The point is sourced: ngecore_mustafar.md:190 gives Skar at
+-- /way (3068, 1613), which through the Mustafar offset is world (188, 4589),
+-- 4.45 m from must_jeditemple_watchtower at (183.96, h 176.87, 4587.14) --
+-- snapshot/mustafar.ws node 12110953, unclaimed. That is a tighter anchor than
+-- the 5.18 m one the Prophet ships on below, it is the same watchtower template,
+-- and it sits inside the minion ring that follows -- which is what "Skar tower"
+-- means. The same source's positions land on two placements this repo already
+-- made from other sources: its Storm Lord Minion (156, 4574) on the centroid of
+-- pMinion9-13, and its Vansk (-4412, 3159) 4.4 m from smoking_forest_region.lua:131.
+-- The TODO's appearance call is kept and its template guess is not -- see the
+-- header of mobile/custom_content/som/skar.lua, which records both.
+-- OURS, NOT SOURCED: the heading and the 600 s respawn. 600 s is what the Storm
+-- Lord himself uses at :127; Skar is ELITE, two tiers below him.
+-- No height ships for this point, so the floor is resolved at spawn, as with the
+-- Prophet and the zealot camp above.
+  local pSkar = spawnMobile("mustafar", "skar",600,188,getWorldFloor(188,4589,"mustafar"),4589,0,0)
+  self:setMoodString(pSkar, "angry")
+
   local pMinion9 = spawnMobile("mustafar", "storm_lord_minion",120,147,159.9,4562,43,0)
   self:setMoodString(pMinion9, "idlewander")
   local pMinion10 = spawnMobile("mustafar", "storm_lord_minion",120,135,159.8,4573,56,0)
@@ -145,8 +163,11 @@ function storm_lord_region:spawnMobiles()
 -- SharedStaticObjectTemplate (object/custom_content/building/mustafar/
 -- structures/objects.lua:146) with no cells and no children, so cellID 0 is
 -- right and there is no interior to place him in.
--- OURS, NOT SOURCED: the heading and the 1200 s respawn. 1200 s is the interval
--- the Storm Lord himself uses on line 90; the Prophet is the tier below him.
+-- OURS, NOT SOURCED: the heading and the 1200 s respawn. The Storm Lord himself
+-- is the tier above and respawns on 600 s (see his spawn above); the Prophet is
+-- the tier below him and takes twice that. (This note used to cite "line 90" for
+-- the Storm Lord and to call 1200 s his interval; both were wrong -- he is spawned
+-- under "Storm Lord Promentory" on 600, not 1200.)
 -- No height ships for this point, so the floor is resolved at spawn.
   local pProphet = spawnMobile("mustafar", "storm_lord_prophet",1200,315,getWorldFloor(315,3746,"mustafar"),3746,0,0)
   self:setMoodString(pProphet, "angry")
