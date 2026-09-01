@@ -115,6 +115,16 @@ includeFile("custom_content/som/skar.lua")
 includeFile("custom_content/som/som_alien_parasite.lua")
 includeFile("custom_content/som/som_ancient_guardian_droideka.lua")
 includeFile("custom_content/som/som_ancient_guardian_ig.lua")
+includeFile("custom_content/som/som_battlefield_ak_1a.lua")
+includeFile("custom_content/som/som_battlefield_ak_3.lua")
+includeFile("custom_content/som/som_battlefield_commander.lua")
+includeFile("custom_content/som/som_battlefield_droid_soldier.lua")
+includeFile("custom_content/som/som_battlefield_droid_squad_leader.lua")
+includeFile("custom_content/som/som_battlefield_elite_guard.lua")
+includeFile("custom_content/som/som_battlefield_gk_5.lua")
+includeFile("custom_content/som/som_battlefield_miner.lua")
+includeFile("custom_content/som/som_battlefield_mining_droid.lua")
+includeFile("custom_content/som/som_battlefield_mining_leader.lua")
 -- The commented-out line in the "To Fix" block at the top of this file blamed a
 -- tre error; it was a path error -- it read "som/..." instead of
 -- "custom_content/som/...", the same wrongness miner_pilot.lua had.
