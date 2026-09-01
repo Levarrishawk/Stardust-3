@@ -125,7 +125,14 @@ function glyph_hunt_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pNpc,
 		end
 	end
 
-	if (screenID == "accept_glyphs") then
+	if (screenID == "glyphs_checkin") then
+		-- mirrors cube_ithes_olok_conv_handler.lua:55 — list what is still outstanding
+		somGlyphHuntScreenPlay:reportProgress(pPlayer)
+
+	elseif (screenID == "sections_checkin") then
+		somGlyphHuntScreenPlay:reportProgress(pPlayer)
+
+	elseif (screenID == "accept_glyphs") then
 		if (somGlyphHuntScreenPlay:canGrantQuest(pPlayer)) then
 			somGlyphHuntScreenPlay:grantQuest(pPlayer)
 		end
