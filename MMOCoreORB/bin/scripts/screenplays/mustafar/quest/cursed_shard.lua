@@ -127,7 +127,9 @@ back (s_139, s_140) -- so nothing here resets a player mid-arc.
 THE REWARD  --  substituted
 
 Both Reward tasks award Bank Credits 0 and Experience Amount 0, so the item is the
-whole reward. Both name lootCount 1 / lootName item_tow_gloves_microsensory_02_01,
+whole reward. The stored Experience Amount 0 is real; live still paid, because the
+server recomputed from quest_experience (see mustafar_quest_xp.lua). Both name
+lootCount 1 / lootName item_tow_gloves_microsensory_02_01,
 a live server-side static-item name rather than an object template. The name
 resolves to "Microsensory Mesh Gloves" in string/en/static_item_n.stf, but an
 exhaustive sweep of every shipped shared_*.iff finds no object template carrying
@@ -700,14 +702,17 @@ function cursedShardScreenPlay:giveAwayShard(pPlayer)
 	self:completeQuest(pPlayer)
 end
 
--- Both branches award the same thing: lootCount 1 of one item, no credits and no
--- experience.
+-- Both branches award the same thing: lootCount 1 of one item, no credits.
+-- Experience Amount 0 is the stored field; live still paid via quest_experience
+-- (see mustafar_quest_xp.lua).
 function cursedShardScreenPlay:completeQuest(pPlayer)
 	if (self:rawStage(pPlayer) ~= self.STAGE_DISPOSE) then
 		return
 	end
 
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_cursed_shard_2")
 	self:removeWaypoint(pPlayer)
 
 	local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")

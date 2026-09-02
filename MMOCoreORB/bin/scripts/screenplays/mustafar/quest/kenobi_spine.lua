@@ -165,6 +165,27 @@ WHERE EVERYTHING IS, MEASURED
   at y 0; the player arrives at (24.0, 5.1) and the boss waits at (37.0, 5.1),
   down the aisle between the statues.
 
+  OVERTURNED -- ROUND G(b1). The boss fighting stand is (31, 0, 6), not
+  (37.0, 5.1); see lair.x/y and the OVERTURNED block under WHAT IS NOT
+  MODELLED. furnishLair now places the full setpiece per copy -- boss, Obi-Wan
+  at hangBackLocation (33, 0, 4.7), pedestal and buff crystal at (57, *, 6),
+  exit stone at (4.38, 0, 2.34). Per-player keys crystal (0/1/2) and usedCrystal
+  gate the finale radials; see STATE.
+
+  ROUND G(b2a). The lair is a scripted six-beat encounter (beats 0-4 in this
+  round; beat 5 remains bossKilled for G(b2b)), not a static boss. The ladder,
+  waves, and movers live in the event block after furnishLair, sourced from
+  obiwan_event_manager.java (lightsCameraAction and its handlers) and
+  obiwan_lair_boss.java (OnAttach / startFighting). The boss is spawned into
+  the event on entry, not by furnishLair -- see the OVERTURNED block under
+  lair.respawn.
+
+  ROUND G(b2b). The two fights, the force-power attack cycle, the interrupt,
+  fight-one's health-floor ending, banter, and beat 5's crystal nag live after
+  the G(b2a) ladder, sourced from obiwan_lair_boss.java (startFighting,
+  stopFighting, the windup/execute/taunt/praise handlers) and
+  obiwan_event_manager.java (obiSaysDestroyCrystal / obiRepeatsDestroyCrystal).
+
 THE CREATURES  --  four substituted, one exact
 
   som_kenobi_crazed_hermit           -> som_crazed_mustafarian_hermit
@@ -258,6 +279,28 @@ WHAT IS NOT MODELLED, AND WHY
   sunk into or floating over its own dais is worse than an empty shrine. The
   x/z are as good as sourced; the h is not. That is the whole decision, and it
   is Aaron's.
+
+  OVERTURNED -- ROUND G(b1). The two tangibles were found. They are not in any
+  .qst and not in any dungeon spawn table; they are in the building's own
+  server template. _dsrc-full/sku.0/sys.server/.../lair_of_the_crystal.tpf
+  names four scripts, one of them
+  theme_park.dungeon.mustafar_trials.obiwan_finale.obiwan_event_manager, and
+  that manager reads
+  _dsrc-full/sku.0/sys.server/compiled/game/datatables/dungeon/mustafar_trials/
+  obiwan_finale/obiwan_event_data.tab. The pedestal row is
+  object/tangible/quest/som_kenobi_final_crystal_pedestal.iff at SOE
+  (locx, locy, locz) = (57, 0, 6), yaw -90 -- repo (x, z, y) = (57, 0, 6).
+  The gallery-2 centre guess of (79.83, 5.29) is retracted; it was wrong by
+  about 23 m. The height was never unknowable: it is 0. The closing claim that
+  the placement "is Aaron's" decision was a research gap, not a design
+  question -- the table was sitting in the server template that earlier
+  searches had not opened. The two statue galleries above still describe the
+  room (gallery 1 is where the player arrives and where the boss fights; gallery
+  2 is the empty rotunda further in); they are no longer a guess about where
+  the pedestal goes. Shared template
+  _dsrc-full/sku.0/sys.shared/.../shared_lair_of_the_crystal.tpf names the
+  interior as interiorlayout/som_obiwan_crystal_lair.ilf. Cell name "mainroom"
+  is confirmed by obiwan_event_manager.java:539 getCellId(self, "mainroom").
 
   allowRepeats: stage stops at done, as everywhere else in this wave.
 
@@ -485,16 +528,24 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		waypointName = "Entrance to the hidden chamber",
 	},
 
-	--[[ The lair. Cell-local, from som_obiwan_crystal_lair.ilf; the pool and the
-	     entry point are mustafar_instances.lua's. ]]
+	--[[ The lair. Cell-local; the pool and the entry point are
+	     mustafar_instances.lua's. Positions below are from
+	     obiwan_event_data.tab via obiwan_event_manager (see OVERTURNED -- ROUND
+	     G(b1) above). SOE columns are locx/locy/locz with locy = height; this
+	     repo's spawn order is x, z, y with z = height. ]]
 
 	lair = {
 		poolKey = "lair_of_the_crystal",
 		cellName = "mainroom",
 		boss = "som_dark_jedi_boss",
-		x = 37.0,
+		-- Old guessed position was x = 37.0, y = 5.1 (gallery-1 aisle centre from
+		-- the .ilf). Replaced by moveBossToHomeLoc's fighting stand at (31, 0, 6)
+		-- -- obiwan_event_manager.java:179, :199, :254 message that mover before
+		-- every minionWaveLaunch; the posture stand at (53, 0, 5) is the monologue
+		-- spot and is not used here (no intermission ladder in G(b1)).
+		x = 31,
 		z = 0.0,
-		y = 5.1,
+		y = 6,
 		heading = 90,  -- facing back up the aisle, at the arriving player
 		-- One boss is placed per copy at start() and start() runs once per server
 		-- lifetime, so without a timer the first kill empties that copy for good and
@@ -502,7 +553,222 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		-- has nothing to kill and no other way to reach STAGE_DONE. Matches the arc's
 		-- own dark jedi timer, historian.lua:220.
 		respawn = 600,
+
+		--[[ OVERTURNED -- ROUND G(b2). furnishLair no longer spawns the boss, and
+		     the ladder spawns it on entry with respawn 0 (see startLair). Two
+		     reasons: (1) the boss must be INVULNERABLE for most of the encounter,
+		     and a 600 s respawn would drop a fresh attackable mobile with a clean
+		     options bitmask -- killable with no ladder running; (2) live does not
+		     place the boss statically either -- spawnBossDelay at
+		     obiwan_event_manager.java:239-246 calls mustafar.spawnContents(self,
+		     "boss", 1) into the event. clearLair despawns any leftover before the
+		     next run, so the empty-copy problem the timer papered over is gone. ]]
+
+		-- obiwan_event_data.tab setpiece row; yaw transcribed, positions cross-checked.
+		pedestal = {
+			template = "object/tangible/quest/som_kenobi_final_crystal_pedestal.iff",
+			x = 57,
+			z = 0,
+			y = 6,
+			heading = -90,
+		},
+
+		-- Same table's buff-crystal setpiece. Height 1.5 is not a typo -- it floats
+		-- one and a half metres above the pedestal at height 0, same x and y.
+		-- Yaw -92 transcribed from the table; yaw convention was not cross-checked.
+		crystal = {
+			template = "object/tangible/dungeon/mustafar/obiwan_finale/obiwan_finale_buff_crystal.iff",
+			x = 57,
+			z = 1.5,
+			y = 6,
+			heading = -92,
+		},
+
+		-- Same table's exit-stone setpiece; script obiwan_exit_object.
+		exitStone = {
+			template = "object/tangible/dungeon/mustafar/obiwan_finale/obiwan_finale_exit_stone.iff",
+			x = 4.38,
+			z = 0,
+			y = 2.34,
+			heading = 0,
+		},
+
+		-- hangBackLocation from the same table -- the only Obi-Wan mover without a
+		-- hardcoded new location (moveObiwanHomeAfterCommenting,
+		-- obiwan_event_manager.java:589). Yaw 88 transcribed; not cross-checked.
+		obiwan = {
+			template = "som_kenobi_obi_wan",
+			x = 33,
+			z = 0,
+			y = 4.7,
+			heading = 88,
+		},
+
+		--[[ The scripted event. Beats and timings are obiwan_event_manager.java's
+		     lightsCameraAction ladder (:141-238) and the handlers it messages.
+		     Positions are cell-local, same axis mapping as the setpiece above. ]]
+
+		-- moveBossToHomeLoc, obiwan_event_manager.java:486. The fighting stand.
+		bossHome = { x = 31, z = 0, y = 6 },
+		-- moveBossToPostureLoc, :473. Where the boss retreats to monologue between waves.
+		bossPosture = { x = 53, z = 0, y = 5 },
+		-- moveObiwanToPostureLocation :554 and moveObiwanForCrystalComment :582.
+		obiwanPosture = { x = 53.8, z = -0.4, y = 5.9 },
+		-- moveObiwanOuttaTheWay, :568. Where he stands while minions are up.
+		obiwanClear = { x = 48, z = 0, y = 9 },
+		-- moveMinionIntoRoom, :540 -- every minion paths here, then
+		-- utils.getRandomAwayLocation(home, 1.0f, 4.0f) scatters it 1-4 m off.
+		minionMuster = { x = 55, z = 0, y = 6 },
+		minionScatterMin = 1,
+		minionScatterMax = 4,
+
+		--[[ Wave sizes are minionWaveLaunch's switch, obiwan_event_manager.java:352-382:
+		     wave 1 = spawnContents("minionA", 1); wave 2 = ("minionA", 2) + ("minionB", 1);
+		     wave 3 = ("minionB", 2) + ("minionB", 3). So 1, 3, 5.
+
+		     Live splits them by template -- minionA is som_kenobi_finale_minion_mix and
+		     minionB is som_kenobi_finale_minion_melee (obiwan_event_data.tab). This tree
+		     has neither. It has som_dark_jedi_minion_1..8, and all eight are the SAME
+		     stat block -- level 85, baseHAM 12000/15000, PACK + STALKER, primary
+		     dark_jedi_weapons_gen3 and secondary dark_jedi_weapons_ranged (verified
+		     across all eight files). They differ only in appearance .iff. So live's
+		     mix/melee split has no analogue here and carries no mechanical meaning;
+		     only the wave SIZES survive the port. The eight variants are cycled purely
+		     so the player does not fight the same face nine times. ]]
+		waves = { 1, 3, 5 },
+		minionTemplates = {
+			"som_dark_jedi_minion_1", "som_dark_jedi_minion_2",
+			"som_dark_jedi_minion_3", "som_dark_jedi_minion_4",
+			"som_dark_jedi_minion_5", "som_dark_jedi_minion_6",
+			"som_dark_jedi_minion_7", "som_dark_jedi_minion_8",
+		},
+
+		--[[ Live delivers these through mustafar/obiwan_finale.stf (mustafar.java:12).
+		     This repo ships no .stf files -- strings are TRE-side -- so whether that
+		     file is present cannot be determined here, and a missing key would print
+		     raw in the chat window. Authored instead, with the live key each line
+		     stands in for. Swap them for "@mustafar/obiwan_finale:<key>" if the stf is
+		     ever confirmed. ]]
+		lines = {
+			-- som_dark_jedi_crystal_speech1
+			bossOpening = "So. Another one comes crawling to the crystal. It is mine, and you are nothing.",
+			-- som_dark_jedi_attack_minions_1 / _2 / _3
+			bossWave = {
+				"Kill this one. I have waited long enough.",
+				"More of you! Tear the fool apart!",
+				"All of you! I will not be denied!",
+			},
+			-- som_dark_jedi_cannot_defeat_me
+			bossCannotDefeat = "You cannot defeat me. Better than you have tried and been broken.",
+			-- som_dark_jedi_destroy_you_myself
+			bossDestroyYou = "Enough. If it must be done, I will destroy you myself.",
+			-- som_dark_jedi_snap_you_half
+			bossSnapYouHalf = "I am going to snap you in half.",
+			-- som_dark_jedi_nooo
+			bossNooo = "No! The crystal is MINE!",
+			-- som_obi_be_careful
+			obiBeCareful = "Careful. He is stronger than he looks, and he is not fighting alone.",
+			-- som_obi_be_careful2
+			obiBeCareful2 = "The crystal behind him -- draw on it if you must. It will not last.",
+			--[[ som_dark_jedi_you_die_1 .. _15, rolled by randomTaunter
+			     (obiwan_lair_boss.java:263). Eight authored rather than fifteen --
+			     the point of the list is that he does not repeat himself inside one
+			     fight, and at rand(10,30) seconds a fight will not draw eight. ]]
+			bossTaunts = {
+				"You fight well. It will not be enough.",
+				"Is that all the Force gave you?",
+				"You are already tired. I can hear it.",
+				"Every one of you dies the same way.",
+				"The crystal is watching you fail.",
+				"Kneel, and I may make it quick.",
+				"You should have stayed on the shore.",
+				"I have killed better and forgotten them.",
+			},
+			--[[ som_obiwan_sayings_1 .. _10, rolled by randomPraiser (:302). Six
+			     authored, same reasoning. Obi-Wan is a ghost giving encouragement,
+			     not a combatant -- he never intervenes. ]]
+			obiSayings = {
+				"Steady. Do not let his anger become yours.",
+				"Good. You see the opening before he does.",
+				"He is stronger than you. That is not the same as better.",
+				"Breathe. The Force is not in a hurry.",
+				"He fights to be feared. You fight to be finished.",
+				"You are doing well. Do not stop.",
+			},
+			-- som_obi_lookout_special, obiwan_event_manager.java:295.
+			obiLookoutSpecial = "Look out -- he is gathering something. Break his focus!",
+			-- som_obi_block_special, :311.
+			obiBlockSpecial = "Yes! You broke it. He cannot hold that and take a hit.",
+			-- som_obi_won_congrats, :224.
+			obiWonCongrats = "It is over. You did what I could not ask anyone else to do.",
+			-- som_obi_destroy_crystal, :496.
+			obiDestroyCrystal = "The crystal is what he came for. Destroy it, and none of this happens again.",
+			-- som_obi_destroy_crystal_short, :525.
+			obiDestroyCrystalShort = "The crystal. Deal with it.",
+		},
+
+		--[[ The special force-power attack. Four rows, obiwan_event_data.tab's
+		     forcePowerAttack entries -- name, the animation the boss plays on
+		     execute, the client effect played on the PLAYER, and the damage band.
+		     The band is the whole difficulty curve of the attack: a multiStoneThrow
+		     that lands is 3000-4000, which is why blocking it matters. ]]
+		forceAttacks = {
+			{ name = "singleStoneThrow", animation = "force_push",     effect = "clienteffect/mustafar/dark_jedi_rock_attack_1.cef",  minDamage = 500,  maxDamage = 1000 },
+			{ name = "doubleStoneThrow", animation = "force_strength", effect = "clienteffect/mustafar/dark_jedi_rock_attack_2.cef",  minDamage = 1000, maxDamage = 2000 },
+			{ name = "tripleStoneThrow", animation = "force_strength", effect = "clienteffect/mustafar/dark_jedi_rock_attack_3.cef",  minDamage = 2000, maxDamage = 3000 },
+			{ name = "multiStoneThrow",  animation = "force_choke",    effect = "clienteffect/mustafar/dark_jedi_rock_attack_10.cef", minDamage = 3000, maxDamage = 4000 },
+		},
+
+		--[[ The WINDUP is deliberately not the same effect as the execute. On windup
+		     the boss plays one of three animations and one of four client effects on
+		     HIMSELF, all picked at random and none of them tied to the row that will
+		     actually fire (obiwan_lair_boss.java:348-352 rolls the row, the anim and
+		     the cef independently). That is the tell the player has to read: something
+		     is coming, but not what. Lists are FORCE_ATTACK_ANIMS :15-20 and
+		     FORCE_ATTACK_CEFS :21-27. ]]
+		forceWindupAnims = { "force_push", "force_strength", "force_choke" },
+		forceWindupEffects = {
+			"clienteffect/pl_force_tangle.cef",
+			"clienteffect/pl_force_lightning_begin.cef",
+			"clienteffect/pl_force_weaken.cef",
+			"clienteffect/pl_force_blast.cef",
+		},
+
+		-- FORCE_ATTACK_ABORT_DAMAGE_REQUIRED, obiwan_lair_boss.java:35. One hit over
+		-- this while he is winding up cancels the attack.
+		forceInterruptDamage = 2000,
+		-- messageTo "specialForcePowerAttackWindup", rand(10, 20) -- :233, :365, :433.
+		forceWindupMin = 10,
+		forceWindupMax = 20,
+		-- messageTo "specialForcePowerAttackExecute", 15 -- :351. Fixed, not a roll.
+		forceExecuteDelay = 15,
+		-- randomTaunter rand(10, 30) :231 / :267; randomPraiser rand(15, 30) :232 / :306.
+		tauntMin = 10,
+		tauntMax = 30,
+		praiseMin = 15,
+		praiseMax = 30,
+		--[[ Fight one ends here instead of at zero. See notifyLairBossDamaged for why
+		     a health floor replaces live's OnAboutToBeIncapacitated + SCRIPT_OVERRIDE. ]]
+		fightOneFloor = 0.25,
+		-- obiRepeatsDestroyCrystal, obiwan_event_manager.java:501, :529.
+		nagMin = 20,
+		nagMax = 40,
 	},
+
+	--[[ Live badge.grantBadge keys, from obiCongratulatesPlayer
+	     (obiwan_event_manager.java:445) and playerGetsCrystal (:428).
+
+	     UPPERCASE because that is the only form that can resolve. The badge list
+	     is not in this repo at all -- BadgeList.cpp:46 reads
+	     datatables/badge/badge_map.iff out of the TREs, and
+	     DirectorManager.cpp:863-869 then registers each row as a Lua global under
+	     badge->getKey().toUpperCase(). So whether these two exist is a property of
+	     the TRE set, not of the scripts, and it cannot be settled by grepping the
+	     repo. That is exactly why the award goes through the nil-guard at
+	     grantFinaleBadge: on a TRE set that carries them the player gets the
+	     badge, and on one that does not, nothing happens and nothing errors. ]]
+	goodBadge = "BDG_MUST_OBIWAN_STORY_GOOD",
+	badBadge = "BDG_MUST_OBIWAN_STORY_BAD",
 
 	-- som_obi_wan_signal_1 task 1 and som_obi_wan_signal_2 task 1.
 	prologueReward = 2500,
@@ -550,7 +816,13 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	hermitAreaID = 0,
 	chamberAreaID = 0,
 	conduitsAttached = 0,
+	-- Written by startLair (the ladder), not by furnishLair.
 	bossCopies = 0,
+	pedestalCopies = 0,
+	crystalCopies = 0,
+	exitStoneCopies = 0,
+	obiwanLairCopies = 0,
+	lairObserverCopies = 0,
 }
 
 registerScreenPlay("kenobiSpineScreenPlay", true)
@@ -576,7 +848,7 @@ function kenobiSpineScreenPlay:start()
 		self:spawnFacilityObjects()
 		self:spawnAreas()
 		self:attachConduits()
-		self:spawnBosses()
+		self:furnishLair()
 	end
 end
 
@@ -747,15 +1019,24 @@ function kenobiSpineScreenPlay:attachConduits()
 	end
 end
 
--- Every copy of the instance gets its own boss, because the pool hands a free
--- copy to whoever asks; reunite_shard furnishes its fusion machine the same way.
-function kenobiSpineScreenPlay:spawnBosses()
+--[[ Every copy of the instance gets the full setpiece -- boss, Obi-Wan, pedestal,
+     buff crystal, exit stone -- because the pool hands a free copy to whoever
+     asks; reunite_shard furnishes its fusion machine the same way. Was
+     spawnBosses(); renamed when the room contents from obiwan_event_data.tab
+     were wired in. Crystal and exit stone carry KenobiSpineMenuComponent; the
+     pedestal and Obi-Wan do not. ]]
+function kenobiSpineScreenPlay:furnishLair()
 	local buildings = MustafarInstances:getPoolBuildings(self.lair.poolKey)
 
 	if (#buildings == 0) then
-		printLuaError("kenobiSpineScreenPlay: no " .. self.lair.poolKey .. " pool; the finale has no boss")
+		printLuaError("kenobiSpineScreenPlay: no " .. self.lair.poolKey .. " pool; the finale has no room")
 		return
 	end
+
+	local pedestal = self.lair.pedestal
+	local crystal = self.lair.crystal
+	local exitStone = self.lair.exitStone
+	local obiwan = self.lair.obiwan
 
 	for i = 1, #buildings do
 		local pBuilding = getSceneObject(buildings[i])
@@ -766,14 +1047,915 @@ function kenobiSpineScreenPlay:spawnBosses()
 			local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
 
 			if (cellID == 0) then
-				printLuaError("kenobiSpineScreenPlay: copy " .. buildings[i] .. " has no cell named " .. self.lair.cellName .. "; it has no boss")
-			elseif (spawnMobile("mustafar", self.lair.boss, self.lair.respawn, self.lair.x, self.lair.z, self.lair.y, self.lair.heading, cellID) == nil) then
-				printLuaError("kenobiSpineScreenPlay: failed to spawn " .. self.lair.boss .. " in copy " .. buildings[i])
+				printLuaError("kenobiSpineScreenPlay: copy " .. buildings[i] .. " has no cell named " .. self.lair.cellName .. "; it has no setpiece")
 			else
-				self.bossCopies = self.bossCopies + 1
+				local pObiwan = spawnMobile("mustafar", obiwan.template, 0, obiwan.x, obiwan.z, obiwan.y, obiwan.heading, cellID)
+
+				if (pObiwan == nil) then
+					printLuaError("kenobiSpineScreenPlay: failed to spawn " .. obiwan.template .. " in the lair copy " .. buildings[i])
+				else
+					writeData(self:lairKey(buildings[i], "obiwan"), SceneObject(pObiwan):getObjectID())
+					self.obiwanLairCopies = self.obiwanLairCopies + 1
+				end
+
+				local pPedestal = spawnSceneObject("mustafar", pedestal.template, pedestal.x, pedestal.z, pedestal.y, cellID, math.rad(pedestal.heading))
+
+				if (pPedestal == nil) then
+					printLuaError("kenobiSpineScreenPlay: failed to spawn the crystal pedestal in copy " .. buildings[i])
+				else
+					self.pedestalCopies = self.pedestalCopies + 1
+				end
+
+				local pCrystal = spawnSceneObject("mustafar", crystal.template, crystal.x, crystal.z, crystal.y, cellID, math.rad(crystal.heading))
+
+				if (pCrystal == nil) then
+					printLuaError("kenobiSpineScreenPlay: failed to spawn the finale crystal in copy " .. buildings[i])
+				else
+					writeStringData(SceneObject(pCrystal):getObjectID() .. ":kenobiSpineRole", "finaleCrystal")
+					SceneObject(pCrystal):setObjectMenuComponent("KenobiSpineMenuComponent")
+					self.crystalCopies = self.crystalCopies + 1
+				end
+
+				local pStone = spawnSceneObject("mustafar", exitStone.template, exitStone.x, exitStone.z, exitStone.y, cellID, math.rad(exitStone.heading))
+
+				if (pStone == nil) then
+					printLuaError("kenobiSpineScreenPlay: failed to spawn the exit stone in copy " .. buildings[i])
+				else
+					writeStringData(SceneObject(pStone):getObjectID() .. ":kenobiSpineRole", "exitStone")
+					SceneObject(pStone):setObjectMenuComponent("KenobiSpineMenuComponent")
+					self.exitStoneCopies = self.exitStoneCopies + 1
+				end
+
+				if (createObserver(ENTEREDBUILDING, "kenobiSpineScreenPlay", "notifyEnteredLair", pBuilding) ~= nil) then
+					self.lairObserverCopies = self.lairObserverCopies + 1
+				end
 			end
 		end
 	end
+end
+
+function kenobiSpineScreenPlay:lairKey(buildingID, field)
+	return "kenobiLair:" .. buildingID .. ":" .. field
+end
+
+-- Splits a "buildingID:session" event args string and verifies the session is still
+-- the live one for that copy. Returns the buildingID, or 0 if the chain is stale.
+-- Pattern tolerates a trailing ":waveIndex" so lairWave can carry its index.
+function kenobiSpineScreenPlay:liveLair(args)
+	local buildingID, session = string.match(tostring(args), "^(%d+):(%d+)")
+
+	if (buildingID == nil) then
+		return 0
+	end
+
+	buildingID = tonumber(buildingID)
+
+	if (readData(self:lairKey(buildingID, "session")) ~= tonumber(session)) then
+		return 0
+	end
+
+	return buildingID
+end
+
+--[[ Live moves everyone with ai_lib.aiPathTo + setHomeLocation
+     (obiwan_event_manager.java:474-475 and friends). This tree binds
+     AiAgent:setNextPosition(x, z, y, cellID) -- LuaAiAgent.cpp:45, and the cellID is a
+     NUMERIC id, which is what an in-cell move needs. The sequence around it is
+     fs_cs_commander.lua:321-327's.
+
+     setHomeLocation is deliberately NOT called. Its binding takes the cell as
+     lightuserdata, not as an id, and every screenplay in the tree passes a literal 0 --
+     which for an in-cell mob would pin its home to an outdoor position and make it try
+     to leash out of the building. setNextPosition alone is the correct in-cell move. ]]
+function kenobiSpineScreenPlay:moveLairActor(pActor, where, cellID)
+	if (pActor == nil or where == nil or cellID == 0) then
+		return
+	end
+
+	AiAgent(pActor):stopWaiting()
+	AiAgent(pActor):setWait(0)
+	AiAgent(pActor):setNextPosition(where.x, where.z, where.y, cellID)
+	AiAgent(pActor):executeBehavior()
+end
+
+--[[ The ladder starts when a STAGE_LAIR player walks into a lair copy.
+
+     Live starts it from the boss's own OnAttach (obiwan_lair_boss.java:37-52), which
+     fires when the event manager spawns the boss into the freshly-created instance --
+     i.e. on arrival. Arrival is therefore the faithful trigger, and it is also the only
+     workable one: the boss is INVULNERABLE for most of the encounter, and an
+     INVULNERABLE agent is not attackable at all (AiAgentImplementation.cpp:4358 --
+     isAttackableBy returns false on the bit), so "the player swung at the boss" could
+     never fire.
+
+     Observer contract: return 0 to stay attached, 1 to drop
+     (ScreenPlayObserverImplementation.cpp:40). This one stays -- the copy is reused. ]]
+function kenobiSpineScreenPlay:notifyEnteredLair(pBuilding, pPlayer)
+	if (pBuilding == nil or pPlayer == nil) then
+		return 0
+	end
+
+	if (not SceneObject(pPlayer):isPlayerCreature()) then
+		return 0
+	end
+
+	if (self:getStage(pPlayer) ~= self.STAGE_LAIR) then
+		return 0
+	end
+
+	local buildingID = SceneObject(pBuilding):getObjectID()
+
+	-- Same player re-entering an in-progress ladder must not restart it.
+	if (readData(self:lairKey(buildingID, "player")) == SceneObject(pPlayer):getObjectID()) then
+		if (readData(self:lairKey(buildingID, "phase")) >= 0) then
+			return 0
+		end
+	end
+
+	self:startLair(buildingID, pPlayer)
+	return 0
+end
+
+function kenobiSpineScreenPlay:startLair(buildingID, pPlayer)
+	self:clearLair(buildingID)
+
+	local session = readData(self:lairKey(buildingID, "session")) + 1
+	writeData(self:lairKey(buildingID, "session"), session)
+	writeData(self:lairKey(buildingID, "player"), SceneObject(pPlayer):getObjectID())
+	writeData(self:lairKey(buildingID, "phase"), 0)
+	writeData(self:lairKey(buildingID, "minions"), 0)
+	writeData(self:lairKey(buildingID, "fight"), 0)
+
+	local pBuilding = getSceneObject(buildingID)
+	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
+
+	if (cellID == 0) then
+		printLuaError("kenobiSpineScreenPlay: lair copy " .. buildingID .. " has no cell named " .. self.lair.cellName .. "; the ladder cannot start")
+		return
+	end
+
+	local pBoss = spawnMobile("mustafar", self.lair.boss, 0, self.lair.x, self.lair.z, self.lair.y, self.lair.heading, cellID)
+
+	if (pBoss == nil) then
+		printLuaError("kenobiSpineScreenPlay: failed to spawn " .. self.lair.boss .. " in lair copy " .. buildingID)
+		return
+	end
+
+	-- Live holds the boss with setInvulnerable(true) (obiwan_lair_boss.java:40). There is
+	-- no setInvulnerable binding in this tree; the substitution is the INVULNERABLE
+	-- option bit (DirectorManager.cpp:737 registers the global,
+	-- LuaTangibleObject.cpp:49-51 binds the setters), which zeroes all damage
+	-- (CreatureObjectImplementation.cpp:1199) and makes the agent untargetable
+	-- (AiAgentImplementation.cpp:4358). Same substitution the volcano arena already
+	-- ruled and uses -- volcano_battlefield.lua:448 and :2214.
+	TangibleObject(pBoss):setOptionBit(INVULNERABLE)
+	writeData(self:lairKey(buildingID, "boss"), SceneObject(pBoss):getObjectID())
+	self.bossCopies = self.bossCopies + 1
+
+	-- bossKilled arrives through notifyKilledCreature, which has no building. Record
+	-- the copy on the player so the ending can find the ladder it has to shut down.
+	writeScreenPlayData(pPlayer, self.screenplayName, "lairCopy", tostring(buildingID))
+
+	-- Live delays the first lightsCameraAction by 16 s from the boss's OnAttach
+	-- (obiwan_lair_boss.java:51).
+	createEvent(16 * 1000, "kenobiSpineScreenPlay", "lairBeat", pPlayer, buildingID .. ":" .. session)
+end
+
+--[[ A copy is reused. Whatever the previous occupant left standing -- a boss they never
+     killed, a half-cleared wave -- has to go before a new ladder starts, or the next
+     player walks into someone else's fight. Bumping the session in startLair kills the
+     old timer chain; this kills the old bodies.
+
+     Minions are not individually recorded. They are left to their own
+     OBJECTDESTRUCTION / despawn handling. The session bump stops them counting toward
+     the new ladder: the minions counter is reset to 0, and a stale minion killed later
+     hits notifyLairMinionKilled, which floors at 0 and finds no live session (each
+     minion carries the session it was spawned under), so it cannot advance the new
+     ladder. ]]
+function kenobiSpineScreenPlay:clearLair(buildingID)
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+
+	if (pBoss ~= nil) then
+		SceneObject(pBoss):destroyObjectFromWorld()
+	end
+
+	writeData(self:lairKey(buildingID, "boss"), 0)
+	writeData(self:lairKey(buildingID, "minions"), 0)
+	writeData(self:lairKey(buildingID, "phase"), 0)
+	writeData(self:lairKey(buildingID, "player"), 0)
+	writeData(self:lairKey(buildingID, "fight"), 0)
+	writeData(self:lairKey(buildingID, "fightNum"), 0)
+	writeData(self:lairKey(buildingID, "forceAtk"), 0)
+	writeData(self:lairKey(buildingID, "noForce"), 0)
+	-- dmgObs is the "have I already attached the damage observer" flag, and it is
+	-- attached to the boss object, which clearLair destroys. Leaving it set would
+	-- mean the next run's boss never gets one and fight one would never end.
+	writeData(self:lairKey(buildingID, "dmgObs"), 0)
+end
+
+-- lightsCameraAction, obiwan_event_manager.java:141-238.
+function kenobiSpineScreenPlay:lairBeat(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	local phase = readData(self:lairKey(buildingID, "phase"))
+
+	-- obiwan_event_manager.java:147-150 clears readyToUseCrystal on entry to every beat.
+	-- Only beat 2 re-sets it below, so the buff crystal is a fight-one lifeline only --
+	-- beat 3 fires from lairEndFightOne, which is what takes it away again.
+	writeScreenPlayData(pPlayer, self.screenplayName, "crystalReady", "0")
+
+	if (phase == 0) then
+		-- obiwan_event_manager.java:159-169, then darkJediThrowsDownPartOne :247-257
+		CreatureObject(pPlayer):playEffect("clienteffect/mustafar/som_dark_jedi_laugh.cef", "")
+		CreatureObject(pBoss):doAnimation("threaten")
+		spatialChat(pBoss, self.lair.lines.bossOpening)
+		-- :168 messages darkJediThrowsDownPartOne at +10 s, which then schedules the
+		-- wave at +10 s (:255) and the boss's walk home at +14 s (:254).
+		createEvent(20 * 1000, "kenobiSpineScreenPlay", "lairWave", pPlayer, buildingID .. ":" .. session .. ":1")
+		createEvent(24 * 1000, "kenobiSpineScreenPlay", "lairBossHome", pPlayer, args)
+	elseif (phase == 1) then
+		-- :170-183
+		CreatureObject(pBoss):doAnimation("point_forward")
+		spatialChat(pBoss, self.lair.lines.bossCannotDefeat)
+		createEvent(3 * 1000, "kenobiSpineScreenPlay", "lairObiWarns", pPlayer, args)
+		createEvent(6 * 1000, "kenobiSpineScreenPlay", "lairWave", pPlayer, buildingID .. ":" .. session .. ":2")
+		createEvent(10 * 1000, "kenobiSpineScreenPlay", "lairBossHome", pPlayer, args)
+	elseif (phase == 2) then
+		-- :184-195. :191 sets readyToUseCrystal on the player.
+		spatialChat(pBoss, self.lair.lines.bossDestroyYou)
+		writeScreenPlayData(pPlayer, self.screenplayName, "crystalReady", "1")
+		createEvent(1 * 1000, "kenobiSpineScreenPlay", "lairObiToCrystal", pPlayer, args)
+		createEvent(17 * 1000, "kenobiSpineScreenPlay", "lairBossThrowsDown", pPlayer, args)
+		createEvent(23 * 1000, "kenobiSpineScreenPlay", "lairStartFight", pPlayer, args)
+	elseif (phase == 3) then
+		-- :196-203
+		createEvent(1 * 1000, "kenobiSpineScreenPlay", "lairBossHome", pPlayer, args)
+		createEvent(10 * 1000, "kenobiSpineScreenPlay", "lairWave", pPlayer, buildingID .. ":" .. session .. ":3")
+	elseif (phase == 4) then
+		-- :204-213
+		spatialChat(pBoss, self.lair.lines.bossNooo)
+		createEvent(10 * 1000, "kenobiSpineScreenPlay", "lairStartFight", pPlayer, args)
+	else
+		-- phase 5+: beat 5 is bossKilled, which round G(b2b) owns; the ladder does not drive it.
+		return
+	end
+
+	writeData(self:lairKey(buildingID, "phase"), phase + 1)
+end
+
+function kenobiSpineScreenPlay:lairWave(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	local waveIndex = tonumber(string.match(tostring(args), "^%d+:%d+:(%d+)$")) or 0
+	local size = self.lair.waves[waveIndex] or 0
+	local pBuilding = getSceneObject(buildingID)
+	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
+
+	if (cellID == 0 or size == 0) then
+		return
+	end
+
+	-- minionWaveLaunch :344-347
+	spatialChat(pBoss, self.lair.lines.bossWave[waveIndex])
+	writeData(self:lairKey(buildingID, "minions"), size)
+
+	--[[ Live spawns minions at the tab's (9, 0, -3.5) doorway and then paths each one to
+	     (55, 0, 6) with utils.getRandomAwayLocation(home, 1.0f, 4.0f)
+	     (obiwan_event_manager.java:532-544, moveMinionIntoRoom). Collapsed here into a
+	     direct spawn at the destination with the same 1-4 m scatter: this tree has no
+	     in-cell aiPathTo, and setNextPosition gives no arrival guarantee inside a
+	     building, so pathing them from the doorway risks a wave that never reaches the
+	     player and a ladder that never advances. The end state -- a scattered wave at
+	     (55, 0, 6) attacking the player -- is identical.
+
+	     OBJECTDESTRUCTION per minion rather than counting through the player's
+	     KILLEDCREATURE observer: this fires whoever lands the kill, so a minion that
+	     dies to anything else still advances the ladder. Same pattern as
+	     lava_beetle_nests.lua:692-720, in this same directory. ]]
+	for i = 1, size do
+		local muster = self.lair.minionMuster
+		local dx = getRandomNumber(self.lair.minionScatterMin, self.lair.minionScatterMax)
+		local dy = getRandomNumber(self.lair.minionScatterMin, self.lair.minionScatterMax)
+		local template = self.lair.minionTemplates[((waveIndex * 3 + i) % #self.lair.minionTemplates) + 1]
+		local pMinion = spawnMobile("mustafar", template, 0, muster.x + dx, muster.z, muster.y + dy, getRandomNumber(0, 359), cellID)
+
+		if (pMinion == nil) then
+			printLuaError("kenobiSpineScreenPlay: failed to spawn " .. template .. " in lair copy " .. buildingID)
+		else
+			writeData(SceneObject(pMinion):getObjectID() .. ":kenobiLairSession", session)
+			createObserver(OBJECTDESTRUCTION, "kenobiSpineScreenPlay", "notifyLairMinionKilled", pMinion)
+			AiAgent(pMinion):setDefender(pPlayer)
+		end
+	end
+
+	-- minionWaveLaunch :383
+	createEvent(5 * 1000, "kenobiSpineScreenPlay", "lairObiClear", pPlayer, args)
+end
+
+function kenobiSpineScreenPlay:notifyLairMinionKilled(pMinion, pKiller)
+	if (pMinion == nil) then
+		return 1
+	end
+
+	local pBuilding = SceneObject(pMinion):getRootParent()
+
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		return 1
+	end
+
+	local buildingID = SceneObject(pBuilding):getObjectID()
+	local minionID = SceneObject(pMinion):getObjectID()
+	local session = readData(minionID .. ":kenobiLairSession")
+
+	deleteData(minionID .. ":kenobiLairSession")
+
+	-- Stale minion from a previous run: session bump in startLair makes this safe.
+	if (readData(self:lairKey(buildingID, "session")) ~= session) then
+		return 1
+	end
+
+	local before = readData(self:lairKey(buildingID, "minions"))
+	local remaining = before - 1
+
+	if (remaining < 0) then
+		remaining = 0
+	end
+
+	writeData(self:lairKey(buildingID, "minions"), remaining)
+
+	-- minionDied, obiwan_event_manager.java:386-396
+	if (before > 0 and remaining == 0) then
+		local pPlayer = getSceneObject(readData(self:lairKey(buildingID, "player")))
+		local args = buildingID .. ":" .. session
+
+		if (pPlayer ~= nil) then
+			createEvent(1 * 1000, "kenobiSpineScreenPlay", "lairBossPosture", pPlayer, args)
+			createEvent(8 * 1000, "kenobiSpineScreenPlay", "lairBeat", pPlayer, args)
+		end
+	end
+
+	return 1
+end
+
+-- obiSaysBeCareful, obiwan_event_manager.java:258-268
+function kenobiSpineScreenPlay:lairObiWarns(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	if (pObiwan == nil) then
+		return
+	end
+
+	spatialChat(pObiwan, self.lair.lines.obiBeCareful)
+end
+
+-- moveObiwanForCrystalComment, obiwan_event_manager.java:574-588
+function kenobiSpineScreenPlay:lairObiToCrystal(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	local pBuilding = getSceneObject(buildingID)
+	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
+
+	self:moveLairActor(pObiwan, self.lair.obiwanPosture, cellID)
+	-- :585 messages obiSaysBeCareful2 at +4 s
+	createEvent(4 * 1000, "kenobiSpineScreenPlay", "lairObiWarns2", pPlayer, args)
+end
+
+-- obiSaysBeCareful2, obiwan_event_manager.java:269-280
+function kenobiSpineScreenPlay:lairObiWarns2(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	if (pObiwan == nil) then
+		return
+	end
+
+	spatialChat(pObiwan, self.lair.lines.obiBeCareful2)
+	-- :278 moveObiwanHomeAfterCommenting at +5 s
+	createEvent(5 * 1000, "kenobiSpineScreenPlay", "lairObiHome", pPlayer, args)
+end
+
+function kenobiSpineScreenPlay:lairObiHome(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	local pBuilding = getSceneObject(buildingID)
+	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
+
+	self:moveLairActor(pObiwan, self.lair.obiwan, cellID)
+end
+
+-- moveObiwanOuttaTheWay, obiwan_event_manager.java:560-573
+function kenobiSpineScreenPlay:lairObiClear(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	local pBuilding = getSceneObject(buildingID)
+	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
+
+	self:moveLairActor(pObiwan, self.lair.obiwanClear, cellID)
+end
+
+-- darkJediThrowsDownPartTwo, obiwan_event_manager.java:317-328
+function kenobiSpineScreenPlay:lairBossThrowsDown(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	spatialChat(pBoss, self.lair.lines.bossSnapYouHalf)
+end
+
+-- moveBossToHomeLoc, obiwan_event_manager.java:478-490
+function kenobiSpineScreenPlay:lairBossHome(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	local pBuilding = getSceneObject(buildingID)
+	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
+
+	self:moveLairActor(pBoss, self.lair.bossHome, cellID)
+end
+
+-- moveBossToPostureLoc, obiwan_event_manager.java:465-477
+function kenobiSpineScreenPlay:lairBossPosture(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	local pBuilding = getSceneObject(buildingID)
+	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
+
+	self:moveLairActor(pBoss, self.lair.bossPosture, cellID)
+end
+
+--[[ The session token says "this ladder run is still the live one". The fight token
+     says "this is still the same FIGHT". Both are needed: fight one and fight two are
+     the same ladder run, so a taunt timer left over from fight one would otherwise
+     re-arm itself inside fight two and the player would face two overlapping chains of
+     force attacks. Bumped in lairStartFight, checked here. ]]
+function kenobiSpineScreenPlay:liveFight(buildingID, args)
+	local fightNum = tonumber(string.match(tostring(args), "^%d+:%d+:(%d+)$"))
+
+	if (fightNum == nil) then
+		return false
+	end
+
+	if (readData(self:lairKey(buildingID, "fight")) ~= 1) then
+		return false
+	end
+
+	return readData(self:lairKey(buildingID, "fightNum")) == fightNum
+end
+
+--[[ obiwan_lair_boss.java:208-235, startFighting. Round G(b2b) adds the force-power
+     attack cycle and the fight-end detection; this is the part both fights share. ]]
+function kenobiSpineScreenPlay:lairStartFight(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	TangibleObject(pBoss):clearOptionBit(INVULNERABLE)
+	writeData(self:lairKey(buildingID, "fight"), 1)
+	AiAgent(pBoss):setDefender(pPlayer)
+
+	local fightNum = readData(self:lairKey(buildingID, "fightNum")) + 1
+	writeData(self:lairKey(buildingID, "fightNum"), fightNum)
+	writeData(self:lairKey(buildingID, "noForce"), 0)
+	writeData(self:lairKey(buildingID, "forceAtk"), 0)
+	-- Live calls startCombat(self, target) (:229); engageCombat is the binding
+	-- (LuaCreatureObject.cpp:87).
+	CreatureObject(pBoss):engageCombat(pPlayer)
+
+	-- Attach the damage observer once per ladder run, not once per fight.
+	if (readData(self:lairKey(buildingID, "dmgObs")) ~= 1) then
+		createObserver(DAMAGERECEIVED, "kenobiSpineScreenPlay", "notifyLairBossDamaged", pBoss)
+		writeData(self:lairKey(buildingID, "dmgObs"), 1)
+	end
+
+	local fightArgs = buildingID .. ":" .. session .. ":" .. fightNum
+
+	createEvent(getRandomNumber(self.lair.forceWindupMin, self.lair.forceWindupMax) * 1000, "kenobiSpineScreenPlay", "lairForceWindup", pPlayer, fightArgs)
+	createEvent(getRandomNumber(self.lair.tauntMin, self.lair.tauntMax) * 1000, "kenobiSpineScreenPlay", "lairTaunt", pPlayer, fightArgs)
+	createEvent(getRandomNumber(self.lair.praiseMin, self.lair.praiseMax) * 1000, "kenobiSpineScreenPlay", "lairPraise", pPlayer, fightArgs)
+end
+
+--[[ Fight-one ending: a health floor instead of live's OnAboutToBeIncapacitated.
+
+     Live. The boss has 155000 HP (obiwan_lair_boss.java:41) and fight one runs the
+     whole bar down to zero. At the moment of death OnAboutToBeIncapacitated (:54-87)
+     returns SCRIPT_OVERRIDE, which cancels the incapacitation, and stopFighting
+     (:192-207) re-locks him, plays a heal effect, and puts 150000 health back
+     (addToHealth(self, 150000)). So live's encounter is two full bars of boss.
+
+     Here. There is no pre-death hook. OBJECTDESTRUCTION fires after posture DEAD is
+     already set, so returning from its handler cannot un-kill anything. Nothing in
+     this tree corresponds to SCRIPT_OVERRIDE.
+
+     Ruling: end fight one at a health floor instead of at zero. A DAMAGERECEIVED
+     observer on the boss watches health after every hit; when it crosses 25 % of
+     max, fight one ends -- full heal, re-lock, ladder advances. Chosen over the
+     volcano arena's polling timer (volcano_battlefield.lua) because a poll can be
+     outrun: a 3000 ms tick against a boss losing health every swing can find him
+     already dead. DAMAGERECEIVED fires on the swing itself, so the only way to skip
+     the floor is one hit for 25 % of the bar.
+
+     Why 25 % and not lower. This tree's boss is som_dark_jedi_boss, baseHAM = 44000,
+     baseHAMmax = 54000 (mobile/custom_content/som/som_dark_jedi_boss.lua:27-28). A
+     25 % floor leaves 11000-13500 health in the pool -- far above any single player
+     hit at this level, so the floor cannot be jumped. Use the fraction, not a
+     literal: read getMaxHAM(0) so the check is correct whatever the roll gave him.
+
+     What it costs. Live asks for 155000 + 150000 ≈ two full bars. This asks for
+     0.75 of a bar, then a full one -- 1.75 bars. The encounter is slightly shorter
+     than live's and the shape is identical: fight, interrupted, wave, fight again
+     to the death.
+
+     And if he dies anyway. He degrades into the normal ending. bossKilled is the
+     existing beat-5 handler and it does not care which fight killed him, so a freak
+     one-shot gives the player a correct, completed quest instead of a hung
+     instance. That is deliberate.
+
+     Signature fixed by the engine: (pObservable, pArg1, arg2) -- for DAMAGERECEIVED
+     that is the boss, the attacker, and the damage (ObserverEventType.h:43,
+     CombatManager.cpp:2002). Same shape as deathWatchBunker.lua's haldoDamage. ]]
+function kenobiSpineScreenPlay:notifyLairBossDamaged(pBoss, pAttacker, damage)
+	if (pBoss == nil) then
+		return 1
+	end
+
+	local pBuilding = SceneObject(pBoss):getRootParent()
+
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		return 1
+	end
+
+	local buildingID = SceneObject(pBuilding):getObjectID()
+
+	-- Locked between fights; keep the observer, do nothing.
+	if (readData(self:lairKey(buildingID, "fight")) ~= 1) then
+		return 0
+	end
+
+	local pPlayer = getSceneObject(readData(self:lairKey(buildingID, "player")))
+
+	if (pPlayer == nil) then
+		return 0
+	end
+
+	-- The interrupt first -- live checks it first (obiwan_lair_boss.java:124-138).
+	if (damage ~= nil and damage > self.lair.forceInterruptDamage and readData(self:lairKey(buildingID, "forceAtk")) ~= 0) then
+		--[[ obiwan_lair_boss.java:124-138. One hit over 2000 while he is winding up
+		     cancels the attack outright -- the queued row is dropped, he takes the
+		     heavy-hit stagger, and the execute timer finds noForce set and re-winds
+		     instead of firing. This is the encounter's only real mechanic: the player
+		     is meant to save a hard hit for the windup tell. ]]
+		writeData(self:lairKey(buildingID, "forceAtk"), 0)
+		writeData(self:lairKey(buildingID, "noForce"), 1)
+		CreatureObject(pBoss):doAnimation("anims.HUMAN_REA_STAND_COMBAT_GET_HIT_HEAVY")
+
+		local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+		if (pObiwan ~= nil) then
+			SceneObject(pObiwan):faceObject(pPlayer, true)
+			spatialChat(pObiwan, self.lair.lines.obiBlockSpecial)
+		end
+	end
+
+	--[[ The floor. Only during fight one. G(b2a)'s ladder makes phase a clean
+	     discriminator: lairStartFight is scheduled from the phase-2 block, and
+	     lairBeat increments after the block, so phase is 3 for the whole of fight
+	     one and 5 for the whole of fight two. ]]
+	if (readData(self:lairKey(buildingID, "phase")) == 3) then
+		local maxHealth = CreatureObject(pBoss):getMaxHAM(0)
+
+		if (maxHealth > 0 and CreatureObject(pBoss):getHAM(0) <= (maxHealth * self.lair.fightOneFloor)) then
+			self:lairEndFightOne(buildingID, pPlayer, pBoss)
+		end
+	end
+
+	-- Observer must survive fight one to police fight two.
+	return 0
+end
+
+-- stopFighting, obiwan_lair_boss.java:192-207, plus the lightsCameraAction message
+-- OnAboutToBeIncapacitated sends at :84.
+function kenobiSpineScreenPlay:lairEndFightOne(buildingID, pPlayer, pBoss)
+	-- That alone kills the taunt, praise and force chains at their next tick.
+	writeData(self:lairKey(buildingID, "fight"), 0)
+	writeData(self:lairKey(buildingID, "forceAtk"), 0)
+	writeData(self:lairKey(buildingID, "noForce"), 1)
+	-- clearCombatState takes a clearDefenders boolean (LuaAiAgent.cpp:103); live
+	-- calls stopCombat(self) at :201.
+	AiAgent(pBoss):clearCombatState(true)
+	-- So he does not immediately re-acquire the player and swing at someone he
+	-- cannot hurt.
+	AiAgent(pBoss):setOblivious()
+	SceneObject(pBoss):playEffect("clienteffect/pl_force_healing.cef", "")
+
+	--[[ Live adds a flat 150000 (addToHealth(self, 150000)). Here that is a full
+	     restore -- the pool is 44000-54000 and a flat number tuned to a 155000 boss
+	     is meaningless against it. Same loop useCrystal already uses; stands in for
+	     live's flat 150000. ]]
+	local pools = { 0, 3, 6 }
+
+	for i = 1, #pools do
+		local pool = pools[i]
+		local missing = CreatureObject(pBoss):getMaxHAM(pool) - CreatureObject(pBoss):getHAM(pool)
+
+		if (missing > 0) then
+			CreatureObject(pBoss):healDamage(missing, pool)
+		end
+	end
+
+	TangibleObject(pBoss):setOptionBit(INVULNERABLE)
+	spatialChat(pBoss, self.lair.lines.bossCannotDefeat)
+	-- Advance the ladder at +2 s, live's delay (:84).
+	createEvent(2 * 1000, "kenobiSpineScreenPlay", "lairBeat", pPlayer, buildingID .. ":" .. readData(self:lairKey(buildingID, "session")))
+end
+
+-- specialForcePowerAttackWindup, obiwan_lair_boss.java:311-355.
+function kenobiSpineScreenPlay:lairForceWindup(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	if (not self:liveFight(buildingID, args)) then
+		return
+	end
+
+	-- Live :314-318 -- the flag is consumed by whichever of windup/execute reaches
+	-- it first. Clear and return without re-arming.
+	if (readData(self:lairKey(buildingID, "noForce")) == 1) then
+		writeData(self:lairKey(buildingID, "noForce"), 0)
+		return
+	end
+
+	-- One queued attack at a time (:325-329).
+	if (readData(self:lairKey(buildingID, "forceAtk")) ~= 0) then
+		return
+	end
+
+	local row = getRandomNumber(1, #self.lair.forceAttacks)
+	writeData(self:lairKey(buildingID, "forceAtk"), row)
+
+	-- The tell -- anim and effect rolled independently of the row.
+	CreatureObject(pBoss):doAnimation(self.lair.forceWindupAnims[getRandomNumber(1, #self.lair.forceWindupAnims)])
+	SceneObject(pBoss):playEffect(self.lair.forceWindupEffects[getRandomNumber(1, #self.lair.forceWindupEffects)], "")
+
+	-- obiwanWarnsOfSpecialAttack, obiwan_event_manager.java:281-300, messaged at
+	-- delay 0 (obiwan_lair_boss.java:353).
+	if (pObiwan ~= nil) then
+		SceneObject(pObiwan):faceObject(pPlayer, true)
+		spatialChat(pObiwan, self.lair.lines.obiLookoutSpecial)
+	end
+
+	createEvent(self.lair.forceExecuteDelay * 1000, "kenobiSpineScreenPlay", "lairForceExecute", pPlayer, args)
+end
+
+-- specialForcePowerAttackExecute, obiwan_lair_boss.java:356-438.
+function kenobiSpineScreenPlay:lairForceExecute(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	if (not self:liveFight(buildingID, args)) then
+		return
+	end
+
+	-- Player interrupted him. Clear and re-arm the windup. Live at :359-368.
+	-- This is what the player earns by breaking the windup: the attack is lost.
+	if (readData(self:lairKey(buildingID, "noForce")) == 1) then
+		writeData(self:lairKey(buildingID, "noForce"), 0)
+		createEvent(getRandomNumber(self.lair.forceWindupMin, self.lair.forceWindupMax) * 1000, "kenobiSpineScreenPlay", "lairForceWindup", pPlayer, args)
+		return
+	end
+
+	local row = readData(self:lairKey(buildingID, "forceAtk"))
+
+	if (row == 0) then
+		return
+	end
+
+	writeData(self:lairKey(buildingID, "forceAtk"), 0)
+
+	local attack = self.lair.forceAttacks[row]
+	local damage = getRandomNumber(attack.minDamage, attack.maxDamage)
+
+	--[[ Live builds a hit_result by hand and calls doDamage
+	     (obiwan_lair_boss.java:421-430) so the attack bypasses the combat roll --
+	     it is scripted, it always lands. inflictDamage is the equivalent here:
+	     inflictDamage(pAttacker, damageType, damage, destroy), attacker read as
+	     lightuserdata (LuaCreatureObject.cpp:46). damageType 0 is HEALTH
+	     (DirectorManager.cpp:700); destroy 0, because the death path is the
+	     player's normal one, not this call's. Same shape as
+	     deathWatchBunker.lua:1427. ]]
+	CreatureObject(pPlayer):inflictDamage(pBoss, 0, damage, 0)
+	CreatureObject(pPlayer):playEffect(attack.effect, "")
+	CreatureObject(pBoss):doAnimation(attack.animation)
+
+	-- Re-arm the windup (:433).
+	createEvent(getRandomNumber(self.lair.forceWindupMin, self.lair.forceWindupMax) * 1000, "kenobiSpineScreenPlay", "lairForceWindup", pPlayer, args)
+end
+
+-- randomTaunter, obiwan_lair_boss.java:236-276.
+function kenobiSpineScreenPlay:lairTaunt(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	if (not self:liveFight(buildingID, args)) then
+		return
+	end
+
+	-- Live rolls rand(1,10) and plays the laugh on > 5 (:258-262).
+	if (getRandomNumber(1, 10) > 5) then
+		CreatureObject(pPlayer):playEffect("clienteffect/mustafar/som_dark_jedi_laugh.cef", "")
+	end
+
+	spatialChat(pBoss, self.lair.lines.bossTaunts[getRandomNumber(1, #self.lair.lines.bossTaunts)])
+	createEvent(getRandomNumber(self.lair.tauntMin, self.lair.tauntMax) * 1000, "kenobiSpineScreenPlay", "lairTaunt", pPlayer, args)
+end
+
+-- randomPraiser, obiwan_lair_boss.java:277-310. Live gates the praiser on the boss's
+-- ignoreTaunt flag (:281) -- i.e. Obi-Wan goes quiet whenever the boss does. The
+-- liveFight check covers the same ground here, because both chains die the moment
+-- fight goes to 0.
+function kenobiSpineScreenPlay:lairPraise(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local session = readData(self:lairKey(buildingID, "session"))
+	local pBoss = getSceneObject(readData(self:lairKey(buildingID, "boss")))
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+		return
+	end
+
+	if (not self:liveFight(buildingID, args)) then
+		return
+	end
+
+	if (pObiwan == nil) then
+		return
+	end
+
+	spatialChat(pObiwan, self.lair.lines.obiSayings[getRandomNumber(1, #self.lair.lines.obiSayings)])
+	createEvent(getRandomNumber(self.lair.praiseMin, self.lair.praiseMax) * 1000, "kenobiSpineScreenPlay", "lairPraise", pPlayer, args)
 end
 
 --[[ State
@@ -782,12 +1964,16 @@ Persistent screenplay data on the player's ghost, so the arc survives a restart.
 readScreenPlayData returns "" for a key that was never written and tonumber("")
 is nil, hence the "or 0" on every read.
 
-	stage    the STAGE_* ladder above, 0 = nothing started
-	hermit   the HERMIT_* sub-state, only meaningful inside STAGE_HUNT
-	spared   1 if the hermit handed the shard over, absent if he was killed for it
-	<key>    per-conduit: 0 not begun, 1 charging, 2 charged
-	tries    how many times an off-planet ambush has been re-armed
-	wp       waypoint id currently handed out, absent if none
+	stage         the STAGE_* ladder above, 0 = nothing started
+	hermit        the HERMIT_* sub-state, only meaningful inside STAGE_HUNT
+	spared        1 if the hermit handed the shard over, absent if he was killed for it
+	<key>         per-conduit: 0 not begun, 1 charging, 2 charged
+	tries         how many times an off-planet ambush has been re-armed
+	wp            waypoint id currently handed out, absent if none
+	crystal       finale choice: 0 unset, 1 destroyed, 2 taken (once)
+	usedCrystal   1 if the player drew on the crystal during the fight
+	crystalReady  1 once beat 2 unlocks the buff crystal (live readyToUseCrystal)
+	lairCopy      building id of the lair copy the ladder is running in
 --]]
 
 function kenobiSpineScreenPlay:getStage(pPlayer)
@@ -1288,6 +2474,8 @@ function kenobiSpineScreenPlay:hermitHandsOverShard(pPlayer, pNpc)
 
 	self:setHermitStage(pPlayer, self.HERMIT_GAVE)
 	self:setStage(pPlayer, self.STAGE_SHARD_SPARED)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_main_quest_1")
 	writeScreenPlayData(pPlayer, self.screenplayName, "spared", "1")
 
 	self:closeHermitLeg(pPlayer)
@@ -1317,6 +2505,8 @@ function kenobiSpineScreenPlay:hermitKilled(pPlayer)
 
 	self:setHermitStage(pPlayer, self.HERMIT_GAVE)
 	self:setStage(pPlayer, self.STAGE_SHARD_KILLED)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_main_quest_1")
 	deleteScreenPlayData(pPlayer, self.screenplayName, "spared")
 
 	self:closeHermitLeg(pPlayer)
@@ -1537,6 +2727,12 @@ function kenobiSpineScreenPlay:takeCrystal(pPlayer, key)
 	end
 
 	self:setStage(pPlayer, self.STAGE_CHAMBER)
+	-- Quest XP: quest_experience[80][TIER_5]. See mustafar_quest_xp.lua.
+	if (self:sparedTheHermit(pPlayer)) then
+		MustafarQuestXp:award(pPlayer, "som_kenobi_main_quest_spared")
+	else
+		MustafarQuestXp:award(pPlayer, "som_kenobi_main_quest_killed")
+	end
 
 	CreatureObject(pPlayer):sendSystemMessage("All three conduits are charged. Return to Obi-Wan.")
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
@@ -1680,31 +2876,295 @@ end
 
 -- task 15: Destroy Multiple som_kenobi_dark_jedi_boss, Count 1, taskName
 -- killSinistro, then task 13's Immediately Complete Quest. The _visible file's
--- musicOnComplete is the success sting.
+-- musicOnComplete is the success sting. The crystal choice is an epilogue after
+-- this -- SOE unlocked dealWithCrystal at intermission 5, after the boss was
+-- finished (obiwan_event_manager.java:221), and the .qst completes on the kill.
 function kenobiSpineScreenPlay:bossKilled(pPlayer)
 	if (self:getStage(pPlayer) ~= self.STAGE_LAIR) then
 		return
 	end
 
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[80][TIER_5]. See mustafar_quest_xp.lua.
+	if (self:sparedTheHermit(pPlayer)) then
+		MustafarQuestXp:award(pPlayer, "som_kenobi_main_quest_3_b_visible")
+	else
+		MustafarQuestXp:award(pPlayer, "som_kenobi_main_quest_3_visible")
+	end
 
 	dropObserver(KILLEDCREATURE, "kenobiSpineScreenPlay", "notifyKilledCreature", pPlayer)
 
-	CreatureObject(pPlayer):sendSystemMessage("Sinistro is dead and the Soul Crystal is destroyed.")
+	CreatureObject(pPlayer):sendSystemMessage("Sinistro is dead. The Soul Crystal stands unguarded.")
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
+
+	--[[ Event teardown. obiwan_event_manager.java:214-229 and obiSaysDestroyCrystal
+	     :491-503. Live's buff.removeAllBuffs(player) at :222 is a no-op here, for the
+	     reason the finale header block already records -- this tree has no Lua buff
+	     API. ]]
+	local buildingID = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "lairCopy")) or 0
+
+	if (buildingID ~= 0) then
+		-- Bump session -- that one write kills every pending timer in the run,
+		-- including any left over from the fight the player just won.
+		writeData(self:lairKey(buildingID, "session"), readData(self:lairKey(buildingID, "session")) + 1)
+		writeData(self:lairKey(buildingID, "fight"), 0)
+		writeData(self:lairKey(buildingID, "forceAtk"), 0)
+		writeData(self:lairKey(buildingID, "phase"), 6)
+		-- Live strips readyToUseCrystal at beat 5 (:217-220) -- the crystal was a
+		-- lifeline for the fight and the fight is over.
+		writeScreenPlayData(pPlayer, self.screenplayName, "crystalReady", "0")
+		-- Obi-Wan congratulates at +10 s. Live's delay is the one OnIncapacitated
+		-- sends (obiwan_lair_boss.java:97), deliberately long so the death animation
+		-- plays out first.
+		createEvent(10 * 1000, "kenobiSpineScreenPlay", "lairObiCongratulates", pPlayer, buildingID .. ":" .. readData(self:lairKey(buildingID, "session")))
+	end
+end
+
+-- Do not use the shared preamble's pBoss == nil or isDead bail: the boss is dead;
+-- that is the point. liveLair, then the Obi-Wan pointer, nothing about the boss.
+function kenobiSpineScreenPlay:lairObiCongratulates(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pObiwan == nil) then
+		return
+	end
+
+	SceneObject(pObiwan):faceObject(pPlayer, true)
+	spatialChat(pObiwan, self.lair.lines.obiWonCongrats)
+	-- :228
+	createEvent(3 * 1000, "kenobiSpineScreenPlay", "lairObiDestroyCrystal", pPlayer, args)
+end
+
+-- obiSaysDestroyCrystal, obiwan_event_manager.java:491-503.
+function kenobiSpineScreenPlay:lairObiDestroyCrystal(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pObiwan == nil) then
+		return
+	end
+
+	SceneObject(pObiwan):faceObject(pPlayer, true)
+	spatialChat(pObiwan, self.lair.lines.obiDestroyCrystal)
+	-- Live's playMusic at :500; playMusicMessage is the binding
+	-- (LuaCreatureObject.cpp:36), and bossKilled already uses it.
+	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_obi_wan_quest.snd")
+	createEvent(getRandomNumber(self.lair.nagMin, self.lair.nagMax) * 1000, "kenobiSpineScreenPlay", "lairObiNag", pPlayer, args)
+end
+
+-- obiRepeatsDestroyCrystal, obiwan_event_manager.java:504-531. Live repeats until
+-- the player deals with the crystal.
+function kenobiSpineScreenPlay:lairObiNag(pPlayer, args)
+	local buildingID = self:liveLair(args)
+
+	if (buildingID == 0) then
+		return
+	end
+
+	local pObiwan = getSceneObject(readData(self:lairKey(buildingID, "obiwan")))
+
+	if (pObiwan == nil) then
+		return
+	end
+
+	-- Stop if the player has already dealt with it. Key is 1 for destroyed and 2
+	-- for taken (destroyCrystal, takeCrystal_finale). Live's equivalent is the
+	-- dealWithCrystal scriptvar check at :516-519.
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "crystal")) or 0) ~= 0) then
+		return
+	end
+
+	-- Stop if the player has left the building -- live checks
+	-- mustafar.stillWithinDungeonCheck (:520). Compare root parent against the copy.
+	local pBuilding = SceneObject(pPlayer):getRootParent()
+
+	if (pBuilding == nil or SceneObject(pBuilding):getObjectID() ~= buildingID) then
+		return
+	end
+
+	spatialChat(pObiwan, self.lair.lines.obiDestroyCrystalShort)
+	createEvent(getRandomNumber(self.lair.nagMin, self.lair.nagMax) * 1000, "kenobiSpineScreenPlay", "lairObiNag", pPlayer, args)
+end
+
+--[[ Finale crystal and exit stone
+
+Sourced from obiwan_crystal_object.java / obiwan_exit_object.java /
+obiwan_event_manager.java via obiwan_event_data.tab. The crystal is a three-state
+object in live (readyToUseCrystal / dealWithCrystal / drainedCrystal). Here the
+fight-time use is a full HAM restore and the post-boss choice is destroy-or-take,
+each once. See R1-R6 in ROUND-GB1-SPEC.
+
+Live crystal_buff (datatables/buff/buff.tab:378) cannot be ported: this tree has
+no Lua buff API (valley_battlefield.lua:63-80; grep of LuaCreatureObject.cpp /
+LuaPlayerObject.cpp finds no addBuff / applyBuff / hasBuff / removeBuff). Four of
+its five effects (expertise_healing_all, expertise_damage_all,
+combat_divide_damage_taken, expertise_glancing_blow_all) have no Core3 analogue
+and are omitted. The fifth, health 90000, is approximated by a full heal rather
+than by raising max HAM -- setMaxHAM exists (LuaCreatureObject.cpp:49, :436) but
+a raise needs a guaranteed revert, and a logout, a death or a server restart
+inside the 500 s window would leave the player permanently 90000 health over
+cap. A missed revert is worse than a missing buff. Live's
+buff.removeAllBuffs(player) at obiwan_event_manager.java:222 is a no-op here for
+the same reason.
+--]]
+
+-- Live: theBigCrystalBuff / som_force_crystal_buff.cef
+-- (obiwan_crystal_object.java:87). Once per player during the fight.
+function kenobiSpineScreenPlay:useCrystal(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	if (self:getStage(pPlayer) ~= self.STAGE_LAIR) then
+		return
+	end
+
+	--[[ Live sets readyToUseCrystal on the player at beat 2 only
+	     (obiwan_event_manager.java:191) and strips it at the top of every other beat
+	     (:147-150), so the crystal is a lifeline for the two fights and nothing else.
+	     Without this gate the player could drain it before the first minion lands. ]]
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "crystalReady")) or 0) ~= 1) then
+		CreatureObject(pPlayer):sendSystemMessage("The crystal is dark. Whatever power it holds, it is not yours to take yet.")
+		return
+	end
+
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "usedCrystal")) or 0) ~= 0) then
+		return
+	end
+
+	writeScreenPlayData(pPlayer, self.screenplayName, "usedCrystal", "1")
+
+	local pools = { 0, 3, 6 }
+
+	for i = 1, #pools do
+		local pool = pools[i]
+		local missing = CreatureObject(pPlayer):getMaxHAM(pool) - CreatureObject(pPlayer):getHAM(pool)
+
+		if (missing > 0) then
+			CreatureObject(pPlayer):healDamage(missing, pool)
+		end
+	end
+
+	CreatureObject(pPlayer):playEffect("clienteffect/mustafar/som_force_crystal_buff.cef", "")
+	CreatureObject(pPlayer):sendSystemMessage("You draw on the crystal's power and feel your strength restored.")
+end
+
+-- Live destroyTheCrystal -> blowUpCrystal / obiCongratulatesPlayer
+-- (obiwan_crystal_object.java, obiwan_event_manager.java:433-447). Grants
+-- item_tow_crystal_uber_05_02 in live -- a static-item name with no object
+-- template here, same situation collectors_business.lua:82-92 already ruled for
+-- item_tow_holocron_ab_immune_02_01. Badge and scene only; item recorded for a
+-- later static-item pass.
+function kenobiSpineScreenPlay:destroyCrystal(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	if (self:getStage(pPlayer) ~= self.STAGE_DONE) then
+		return
+	end
+
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "crystal")) or 0) ~= 0) then
+		return
+	end
+
+	writeScreenPlayData(pPlayer, self.screenplayName, "crystal", "1")
+
+	self:grantFinaleBadge(pPlayer, self.goodBadge)
+
+	CreatureObject(pPlayer):playEffect("clienteffect/mustafar/som_force_crystal_destruction.cef", "")
+	CreatureObject(pPlayer):sendSystemMessage("Obi-Wan congratulates you. The Soul Crystal is destroyed.")
+end
+
+-- Named takeCrystal_finale so it does not shadow takeCrystal at the conduits.
+-- Live takeTheCrystal -> playerGetsCrystal (obiwan_event_manager.java:414-431).
+-- Grants item_tow_cystal_buff_drained_05_01 in live -- SOE's own typo, preserved.
+-- Same static-item ruling as destroyCrystal / collectors_business.lua:82-92;
+-- badge and scene only.
+function kenobiSpineScreenPlay:takeCrystal_finale(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	if (self:getStage(pPlayer) ~= self.STAGE_DONE) then
+		return
+	end
+
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "crystal")) or 0) ~= 0) then
+		return
+	end
+
+	writeScreenPlayData(pPlayer, self.screenplayName, "crystal", "2")
+
+	self:grantFinaleBadge(pPlayer, self.badBadge)
+
+	CreatureObject(pPlayer):playEffect("clienteffect/pl_force_healing.cef", "")
+	CreatureObject(pPlayer):sendSystemMessage("Obi-Wan is disappointed. You take the drained crystal for yourself.")
+end
+
+-- Live obiwan_exit_object.java:26-42 calls
+-- instance.requestExitPlayer("obiwan_crystal_cave", player). Equivalent here is
+-- MustafarInstances:sendToExit (mustafar_instances.lua:708); the building is the
+-- stone's root parent (LuaSceneObject.cpp:25, :451).
+function kenobiSpineScreenPlay:leaveLair(pPlayer, pStone)
+	if (pPlayer == nil or pStone == nil) then
+		return
+	end
+
+	local pBuilding = SceneObject(pStone):getRootParent()
+
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		printLuaError("kenobiSpineScreenPlay: exit stone has no building parent; the player cannot leave the lair")
+		return
+	end
+
+	MustafarInstances:sendToExit(pPlayer, pBuilding)
+end
+
+-- Badge keys arrive in Lua as uppercase globals holding their index
+-- (DirectorManager.cpp:863-869), so the guard is "does this server's TRE set have
+-- that badge_map row". Same shape as volcano_battlefield.lua:2984 and
+-- story_arc_chapters.lua:1941. See goodBadge / badBadge above for why this cannot
+-- be settled by grepping the repo.
+function kenobiSpineScreenPlay:grantFinaleBadge(pPlayer, badgeKey)
+	if (badgeKey == nil or _G[badgeKey] == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	PlayerObject(pGhost):awardBadge(_G[badgeKey])
 end
 
 --[[ Radial dispatch
 
-One component table serves four kinds of object: the dying miner, the spawned
-mining computer, and the three snapshot conduits. LuaObjectMenuComponent replaces
-the object's menu entirely, so fillObjectMenuResponse has to add every item that
-should be there and add nothing at all when this player has no business with the
-object. Each object's role was written at start(); see getKenobiRole and the
-writeStringData calls in the spawn functions.
+One component table serves six kinds of object: the dying miner, the spawned
+mining computer, the three snapshot conduits, the finale crystal and the exit
+stone. LuaObjectMenuComponent replaces the object's menu entirely, so
+fillObjectMenuResponse has to add every item that should be there and add
+nothing at all when this player has no business with the object. Each object's
+role was written at start(); see getKenobiRole and the writeStringData calls in
+the spawn functions.
 
 Every string below is the .qst's own retrieveMenuText, except the miner's, which
-is authored -- SOE gave him no menu text because they gave him nothing at all.
+is authored -- SOE gave him no menu text because they gave him nothing at all --
+and the finale crystal / exit stone strings, which are authored from the live
+menu keys (obiwan_finale_use_crystal / destroy / take / eject).
 --]]
 
 function kenobiSpineScreenPlay:getRadialText(pPlayer, role)
@@ -1736,6 +3196,37 @@ function kenobiSpineScreenPlay:getRadialText(pPlayer, role)
 		return nil
 	end
 
+	if (role == "exitStone") then
+		if (self:getStage(pPlayer) >= self.STAGE_LAIR) then
+			return "Leave the chamber of the crystal"
+		end
+
+		return nil
+	end
+
+	if (role == "finaleCrystal") then
+		local stage = self:getStage(pPlayer)
+
+		if (stage ~= self.STAGE_LAIR and stage ~= self.STAGE_DONE) then
+			return nil
+		end
+
+		if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "crystal")) or 0) ~= 0) then
+			return nil
+		end
+
+		-- STAGE_DONE is the two-item case; see getRadialItems.
+		if (stage == self.STAGE_DONE) then
+			return nil
+		end
+
+		if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "usedCrystal")) or 0) ~= 0) then
+			return nil
+		end
+
+		return "Draw on the crystal's power"
+	end
+
 	if (self:getConduit(role) ~= nil) then
 		if (self:getStage(pPlayer) ~= self.STAGE_CONDUITS) then
 			return nil
@@ -1755,6 +3246,37 @@ function kenobiSpineScreenPlay:getRadialText(pPlayer, role)
 	return nil
 end
 
+--[[ Sibling of getRadialText for roles that need more than one menu item.
+     getRadialText still serves every single-item role.
+
+     THE IDS ARE 68 AND 69, NOT 21 AND 22. RadialOptions.h:15-92 is an enum, and
+     20 is ITEM_USE -- which is why every single-item radial in this tree uses 20
+     and why the exit stone keeps it (live used ITEM_USE for the stone too,
+     obiwan_exit_object.java:29). But 21 and 22 are ITEM_USE_SELF and
+     ITEM_USE_OTHER, real client menu types with their own meaning, not free
+     slots. The free slots are SERVER_MENU1..10 at 68..77
+     (RadialOptions.h:83-92). Live put the two crystal choices on SERVER_MENU1
+     and SERVER_MENU2 (obiwan_crystal_object.java:34-35), so 68 and 69 are both
+     correct here and the same pair SOE used. ]]
+function kenobiSpineScreenPlay:getRadialItems(pPlayer, role)
+	if (role ~= "finaleCrystal") then
+		return nil
+	end
+
+	if (self:getStage(pPlayer) ~= self.STAGE_DONE) then
+		return nil
+	end
+
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "crystal")) or 0) ~= 0) then
+		return nil
+	end
+
+	return {
+		{ id = 68, text = "Destroy the Soul Crystal" },  -- SERVER_MENU1
+		{ id = 69, text = "Take the Soul Crystal" },     -- SERVER_MENU2
+	}
+end
+
 KenobiSpineMenuComponent = {}
 
 function KenobiSpineMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResponse, pPlayer)
@@ -1763,6 +3285,16 @@ function KenobiSpineMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResp
 	end
 
 	local role = readStringData(SceneObject(pSceneObject):getObjectID() .. ":kenobiSpineRole")
+	local items = kenobiSpineScreenPlay:getRadialItems(pPlayer, role)
+
+	if (items ~= nil) then
+		for i = 1, #items do
+			LuaObjectMenuResponse(pMenuResponse):addRadialMenuItem(items[i].id, 3, items[i].text)
+		end
+
+		return
+	end
+
 	local text = kenobiSpineScreenPlay:getRadialText(pPlayer, role)
 
 	if (text ~= nil) then
@@ -1771,7 +3303,13 @@ function KenobiSpineMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResp
 end
 
 function KenobiSpineMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, selectedID)
-	if (pSceneObject == nil or pPlayer == nil or selectedID ~= 20) then
+	if (pSceneObject == nil or pPlayer == nil) then
+		return 0
+	end
+
+	-- 20 = ITEM_USE, 68/69 = SERVER_MENU1/2. See getRadialItems for why the two
+	-- crystal choices are not 21 and 22.
+	if (selectedID ~= 20 and selectedID ~= 68 and selectedID ~= 69) then
 		return 0
 	end
 
@@ -1791,6 +3329,20 @@ function KenobiSpineMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, 
 			kenobiSpineScreenPlay:startSearch(pPlayer, pSceneObject)
 		elseif (search == 2) then
 			kenobiSpineScreenPlay:readResults(pPlayer, pSceneObject)
+		end
+
+	elseif (role == "exitStone") then
+		if (selectedID == 20) then
+			kenobiSpineScreenPlay:leaveLair(pPlayer, pSceneObject)
+		end
+
+	elseif (role == "finaleCrystal") then
+		if (selectedID == 20) then
+			kenobiSpineScreenPlay:useCrystal(pPlayer)
+		elseif (selectedID == 68) then
+			kenobiSpineScreenPlay:destroyCrystal(pPlayer)
+		elseif (selectedID == 69) then
+			kenobiSpineScreenPlay:takeCrystal_finale(pPlayer)
 		end
 
 	elseif (kenobiSpineScreenPlay:getConduit(role) ~= nil) then

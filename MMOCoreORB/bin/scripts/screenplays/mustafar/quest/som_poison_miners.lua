@@ -44,6 +44,8 @@ The whole task tree is one nested chain, so it is strictly sequential:
 [list]: journalEntryTitle "Miner Madness", category Mustafar, journalVisible true,
 allowRepeats true, completeWhenTasksComplete true, Level 70, Tier 4, Type solo,
 Experience Type quest_combat with Experience Amount 0, Bank Credits 0.
+The stored Experience Amount 0 is real; live still paid, because the server
+recomputed from quest_experience (see mustafar_quest_xp.lua).
 
 THREE JOBS, NOT ONE CHAIN
 
@@ -268,6 +270,8 @@ WHAT IS NOT MODELLED
   * The [list] Experience Type quest_combat with Experience Amount 0 is journal-level
     data that only the quest system awards. There is no quest system row here and
     the amount is zero either way, so nothing is invented to stand in for it.
+    The stored Experience Amount 0 is real; live still paid, because the server
+    recomputed from quest_experience (see mustafar_quest_xp.lua).
 --]]
 
 somPoisonMinersScreenPlay = ScreenPlay:new {
@@ -677,6 +681,10 @@ function somPoisonMinersScreenPlay:giveReward(pPlayer)
 	end
 
 	CreatureObject(pPlayer):playMusicMessage(self.musicOnComplete)
+
+	-- Quest XP: quest_experience[70][TIER_4]. See mustafar_quest_xp.lua.
+	-- Before closeOut: closeOut resets the stage.
+	MustafarQuestXp:award(pPlayer, "som_poison_miners")
 
 	self:closeOut(pPlayer)
 end

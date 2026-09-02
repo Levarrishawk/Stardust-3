@@ -865,6 +865,14 @@ function historianScreenPlay:finishQuest1(pPlayer, armorType)
 		self:giveReward(pPlayer, armor, "the helmet Epo Qetora gave you")
 	end
 
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	-- Two quests, one function -- discriminator is hasFlag("slice").
+	if (self:hasFlag(pPlayer, "slice")) then
+		MustafarQuestXp:award(pPlayer, "som_kenobi_historian_smuggler")
+	else
+		MustafarQuestXp:award(pPlayer, "som_kenobi_historian_1")
+	end
+
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 	CreatureObject(pPlayer):sendSystemMessage("You have completed Epo Qetora's task.")
 end
@@ -956,6 +964,9 @@ function historianScreenPlay:finishQuest2(pPlayer, weaponType)
 	if (weapon ~= nil) then
 		self:giveReward(pPlayer, weapon, "the weapon Epo Qetora gave you")
 	end
+
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_historian_2")
 
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 	CreatureObject(pPlayer):sendSystemMessage("You have completed Epo Qetora's task.")

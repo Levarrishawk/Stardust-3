@@ -590,6 +590,9 @@ function serpentShardScreenPlay:finishQuest(pPlayer)
 
 	self:giveReward(pPlayer, self.rewardCrystal, "the crystal Ikt gave you")
 
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_serpent_shard_1")
+
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 	CreatureObject(pPlayer):sendSystemMessage("You have completed Ikt's task.")
 end

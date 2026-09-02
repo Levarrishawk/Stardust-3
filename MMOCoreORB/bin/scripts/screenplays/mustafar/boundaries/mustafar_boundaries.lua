@@ -19,6 +19,7 @@ registerScreenPlay("mustafar_boundaries", true)
 function mustafar_boundaries:start()
   if (isZoneEnabled("mustafar")) then
       --southeast
+      self:spawnActiveAreaSe0()
       self:spawnActiveAreaSe1()
       self:spawnActiveAreaSe2()
       self:spawnActiveAreaSe3()
@@ -102,6 +103,7 @@ function mustafar_boundaries:start()
       self:spawnActiveAreaNo14()
       self:spawnActiveAreaNo15()
       self:spawnActiveAreaNo16()
+      self:spawnActiveAreaNo16b()
       self:spawnActiveAreaNo17()
       self:spawnActiveAreaNo18()
       self:spawnActiveAreaNo19()
@@ -158,9 +160,35 @@ function mustafar_boundaries:start()
 end
 
 --southeast
-  
+
+--[[ Se0 is OURS, not Levarris's. It bridges the corner that opens when Se1 moves out to
+     clear Chapter Three 01's scout post. Without it, Ea24 (679,186) r256 and the new Se1
+     (825,-300) r256 sit 490.7 m apart against a 512 m radii sum, and the wall pinches to a
+     21 m overlap. Se0 at (860,-57) puts 209.0 m of overlap on the Ea24 side and 266.5 m on
+     the Se1 side.
+
+     It is placed outboard of the scout on purpose: at the scout's latitude Se0's inner face
+     is x 623.1 and Se1's is x 614.7, so the scout at x 550 keeps a 65 m eastern apron.
+
+     Height 170 copies Se1. containsPoint(float, float) at
+     src/server/zone/objects/area/ActiveAreaImplementation.cpp:24-34 tests x and y only, so
+     the height argument does not affect containment. ]]
+function mustafar_boundaries:spawnActiveAreaSe0()
+  local pAreaSe0 = spawnSceneObject("mustafar", "object/active_area.iff", 860, 170, -57, 0, 0, 0, 0, 0)
+
+  if (pAreaSe0 ~= nil) then
+    local activeArea = LuaActiveArea(pAreaSe0)
+          activeArea:setCellObjectID(0)
+          activeArea:setRadius(256)
+          createObserver(ENTEREDAREA, "mustafar_boundaries", "notifySpawnAreaSe", pAreaSe0)
+      end
+end
+
 function mustafar_boundaries:spawnActiveAreaSe1()
-  local pAreaSe1 = spawnSceneObject("mustafar", "object/active_area.iff", 587, 170, -196, 0, 0, 0, 0, 0)
+  -- MOVED. Levarris drew Se1 at (587, -196), which put its 256 m radius 200.03 m inboard
+  -- of Chapter Three 01's live scout post at (550, -154) and made the quest step
+  -- unreachable. Moved out to (825, -300), which leaves the scout 55.4 m clear.
+  local pAreaSe1 = spawnSceneObject("mustafar", "object/active_area.iff", 825, 170, -300, 0, 0, 0, 0, 0)
     
   if (pAreaSe1 ~= nil) then
     local activeArea = LuaActiveArea(pAreaSe1)
@@ -171,7 +199,10 @@ function mustafar_boundaries:spawnActiveAreaSe1()
 end
 
 function mustafar_boundaries:spawnActiveAreaSe2()
-  local pAreaSe2 = spawnSceneObject("mustafar", "object/active_area.iff", 448, 226, -404, 0, 0, 0, 0, 0)
+  -- MOVED, same reason as Se1. At (448, -404) the scout post sat 4.99 m inside Se2's 275 m
+  -- radius -- a near miss, but a miss is a bounce. (477, -500) leaves it 78.6 m clear and
+  -- also clears the approach from the push-back point at (197, -214).
+  local pAreaSe2 = spawnSceneObject("mustafar", "object/active_area.iff", 477, 226, -500, 0, 0, 0, 0, 0)
     
   if (pAreaSe2 ~= nil) then
     local activeArea = LuaActiveArea(pAreaSe2)
@@ -217,7 +248,9 @@ function mustafar_boundaries:spawnActiveAreaSo2()
 end
 
 function mustafar_boundaries:spawnActiveAreaSo3()
-  local pAreaSo3 = spawnSceneObject("mustafar", "object/active_area.iff", -374, 251, -604, 0, 0, 0, 0, 0)
+  -- G(d): was stacked on So2's exact coordinate (-374, 251, -604) and walled nothing.
+  -- Spread along the So2 -> So6 run; overlaps So2 by 260 m and So4 by 257 m.
+  local pAreaSo3 = spawnSceneObject("mustafar", "object/active_area.iff", -630, 281, -599, 0, 0, 0, 0, 0)
     
   if (pAreaSo3 ~= nil) then
     local activeArea = LuaActiveArea(pAreaSo3)
@@ -228,7 +261,8 @@ function mustafar_boundaries:spawnActiveAreaSo3()
 end
 
 function mustafar_boundaries:spawnActiveAreaSo4()
-  local pAreaSo4 = spawnSceneObject("mustafar", "object/active_area.iff", -374, 251, -604, 0, 0, 0, 0, 0)
+  -- G(d): was stacked on So2's exact coordinate. Overlaps So3 by 257 m and So5 by 256 m.
+  local pAreaSo4 = spawnSceneObject("mustafar", "object/active_area.iff", -885, 312, -594, 0, 0, 0, 0, 0)
     
   if (pAreaSo4 ~= nil) then
     local activeArea = LuaActiveArea(pAreaSo4)
@@ -239,7 +273,9 @@ function mustafar_boundaries:spawnActiveAreaSo4()
 end
 
 function mustafar_boundaries:spawnActiveAreaSo5()
-  local pAreaSo5 = spawnSceneObject("mustafar", "object/active_area.iff", -374, 251, -604, 0, 0, 0, 0, 0)
+  -- G(d): was stacked on So2's exact coordinate, which left a 510 m hole between here
+  -- and So6 (-1396, -583). Overlaps So4 by 256 m and So6 by 257 m; the hole is closed.
+  local pAreaSo5 = spawnSceneObject("mustafar", "object/active_area.iff", -1141, 342, -588, 0, 0, 0, 0, 0)
     
   if (pAreaSo5 ~= nil) then
     local activeArea = LuaActiveArea(pAreaSo5)
@@ -1022,6 +1058,21 @@ function mustafar_boundaries:spawnActiveAreaNo16()
       end
 end
 
+-- G(d): new segment. No16 (-2199, 5865) and No17 (-2040, 6567) are 719.8 m apart with
+-- r256 each, which left a 207.8 m hole in the north wall. This sits at the midpoint and
+-- overlaps both by 152 m. Unlike the So and Ea runs there was no stacked duplicate in
+-- this chain to spend here, so the segment is new -- same as Se0 earlier this round.
+function mustafar_boundaries:spawnActiveAreaNo16b()
+  local pAreaNo16b = spawnSceneObject("mustafar", "object/active_area.iff", -2120, 698, 6216, 0, 0, 0, 0, 0)
+
+  if (pAreaNo16b ~= nil) then
+    local activeArea = LuaActiveArea(pAreaNo16b)
+          activeArea:setCellObjectID(0)
+          activeArea:setRadius(256)
+          createObserver(ENTEREDAREA, "mustafar_boundaries", "notifySpawnAreaNo7", pAreaNo16b)
+      end
+end
+
 function mustafar_boundaries:spawnActiveAreaNo17()
   local pAreaNo17 = spawnSceneObject("mustafar", "object/active_area.iff", -2040, 1109, 6567, 0, 0, 0, 0, 0)
     
@@ -1333,7 +1384,9 @@ function mustafar_boundaries:spawnActiveAreaEa15()
 end
 
 function mustafar_boundaries:spawnActiveAreaEa16()
-  local pAreaEa16 = spawnSceneObject("mustafar", "object/active_area.iff", 813, 94, 2432, 0, 0, 0, 0, 0)
+  -- G(d): was stacked on Ea15's exact coordinate (813, 94, 2432) and walled nothing.
+  -- Spread along the Ea15 -> Ea18 run; overlaps Ea15 by 265 m and Ea17 by 264 m.
+  local pAreaEa16 = spawnSceneObject("mustafar", "object/active_area.iff", 810, 212, 2185, 0, 0, 0, 0, 0)
     
   if (pAreaEa16 ~= nil) then
     local activeArea = LuaActiveArea(pAreaEa16)
@@ -1344,7 +1397,9 @@ function mustafar_boundaries:spawnActiveAreaEa16()
 end
 
 function mustafar_boundaries:spawnActiveAreaEa17()
-  local pAreaEa17 = spawnSceneObject("mustafar", "object/active_area.iff", 813, 94, 2432, 0, 0, 0, 0, 0)
+  -- G(d): was stacked on Ea15's exact coordinate, which left a 230 m hole between here
+  -- and Ea18 (805, 1690). Overlaps Ea16 by 264 m and Ea18 by 265 m; the hole is closed.
+  local pAreaEa17 = spawnSceneObject("mustafar", "object/active_area.iff", 808, 330, 1937, 0, 0, 0, 0, 0)
     
   if (pAreaEa17 ~= nil) then
     local activeArea = LuaActiveArea(pAreaEa17)
@@ -1576,25 +1631,24 @@ function mustafar_boundaries:notifySpawnAreaSe(pActiveArea, pMovingObject)
       return 0
     end
 
-    -- Chapter Three 01's scout post is SOE's own coordinate (550, -154): the .qst
-    -- task, story_arc_chapters.lua:650 and the live instance exit all agree on it.
-    -- It sits 55.97 m inside Se1 and 270.01 m inside Se2, so the wall's inward
-    -- apron made the step unreachable, and it made the Valley Battlefield's exit
-    -- at (541, -160) a bounce pad. A 60 m pocket is opened around it.
+    -- NO EXEMPTION HERE, AND DO NOT ADD ONE. F1(c) put a 60 m pocket around the scout
+    -- post in this handler. It was wrong twice over, and round G(d) took it out.
     --
-    -- This cannot open the map. Every point in the pocket is at most
-    -- 55.97 + 60 = 115.97 m from Se1's centre, and Se1's radius is 256, so the
-    -- whole pocket lies deep inside the wall. Walk 60 m in any direction and Se1
-    -- takes over again.
-    local px = SceneObject(pMovingObject):getPositionX()
-    local py = SceneObject(pMovingObject):getPositionY()
-    local dx = px - 550
-    local dy = py + 154
+    -- It could not work: ENTEREDAREA fires only on the transition into an area.
+    -- GroundZoneImplementation.cpp:253 guards the enter event with
+    -- !tano->hasActiveArea(activeArea), and a player already inside gets only
+    -- notifyPositionUpdate (:245), which notifies nobody. The file has no EXITEDAREA
+    -- observer and no periodic task. So an exemption is not a hole in a wall -- it is a
+    -- one-way door. A player dropped into the pocket by the Valley Battlefield exit
+    -- became a registered member of Se1 and Se2 and was never checked again; walking due
+    -- east from (541, -160) they left the ring at x 840.5, 299.5 m, no re-trigger.
+    --
+    -- And it never fixed what it was for. The pocket lay entirely inside Se1, so a player
+    -- walking to the scout crossed Se1's edge 140 m outside it and was bounced anyway.
+    --
+    -- The scout is reachable now because Se0/Se1/Se2 were moved. Geometry is the only
+    -- thing this event model can express.
 
-    if ((dx * dx + dy * dy) <= 3600) then
-        return 0
-    end
-    
     if not (player:isAiAgent()) then
       player:sendSystemMessage("An invisible force prevents you from travelling further in that direction.")
       player:teleport(197, 121, -214, 0)

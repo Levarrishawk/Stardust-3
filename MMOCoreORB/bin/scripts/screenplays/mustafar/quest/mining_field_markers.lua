@@ -55,6 +55,9 @@
 	no backing. The 290 XP is still awarded below (areaXpReward) because that is what
 	this file has always done and combat_general is the only XP pool this screenplay tree
 	uses -- flagged here rather than changed, since dropping it is a reward-economy call.
+	CORRECTION: the stored 0 was never what live paid. SOE recomputed from
+	quest_experience[60][TIER_1] = 319 (see mustafar_quest_xp.lua / som_exploration_area).
+	areaXpReward is now 319; combat_general still carries it.
 
 	The completion reward was the wrong call, and this is the root cause: it was looked
 	for in the .qst files, and it is not in them. It is in the conversation. Mustafar's
@@ -118,10 +121,10 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 	queststring = "miningfieldmarkerscreenplay",
 
 	-- Paid per completed area set. The 5000 is the shipped Reward task's
-	-- Bank Credits; the 290 XP is the wiki figure and is not in the .qst (see the
-	-- REWARDS note in the header).
+	-- Bank Credits; the 319 XP is quest_experience[60][TIER_1] (see
+	-- mustafar_quest_xp.lua / som_exploration_area). The wiki's 290 had no backing.
 	areaCreditReward = 5000,
-	areaXpReward = 290,
+	areaXpReward = 319,
 
 	-- The Tanray Heart Crystal Keslev promises on s_31 and hands over on s_6. Live grants
 	-- static item item_tow_trophey_02_05, which is "Mounted Lava Lizard Heart" in
@@ -601,9 +604,10 @@ function miningFieldMarkersScreenPlay:completeArea(pPlayer, area)
 		end
 	end
 
-	-- 290 quest XP + 5000 credits per area set. Live NGE awards "Quest XP"; Core3's
+	-- 319 quest XP + 5000 credits per area set. Live NGE awards "Quest XP"; Core3's
 	-- experience table has no such type, so combat_general carries the value -- the same
-	-- mapping map_exploration.lua makes.
+	-- mapping map_exploration.lua makes. 319 is quest_experience[60][TIER_1]; see
+	-- mustafar_quest_xp.lua.
 	CreatureObject(pPlayer):awardExperience("combat_general", self.areaXpReward, true)
 	CreatureObject(pPlayer):addCashCredits(self.areaCreditReward, true)
 

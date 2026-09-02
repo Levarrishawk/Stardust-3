@@ -141,7 +141,9 @@ the one piece of invented text in this quest and why it exists.
 THE REWARD  --  substituted
 
 Both Reward tasks award Bank Credits 0, Experience Amount 0 and lootName
-item_tow_buff_crystal_02_01. That is a live server-side static-item name, not an object
+item_tow_buff_crystal_02_01. The stored Experience Amount 0 is real; live still
+paid, because the server recomputed from quest_experience (see
+mustafar_quest_xp.lua). That is a live server-side static-item name, not an object
 template, and nothing in this tree resolves it -- there is no item_tow_buff_crystal path
 of any kind. What the name says is a Trials of Obi-Wan buff crystal, and the one buff
 crystal this tree ships is object/tangible/dungeon/mustafar/obiwan_finale/
@@ -531,6 +533,9 @@ function samaritanScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		-- Task 10's lootName.
 		self:giveReward(pPlayer, self.rewardCrystal, "the crystal you took from Pwwoz Pwwa")
 
+		-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+		MustafarQuestXp:award(pPlayer, "som_kenobi_samaritan_1")
+
 		-- Task 14's musicOnComplete.
 		CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 		CreatureObject(pPlayer):sendSystemMessage("You have completed Pwwoz Pwwa's task.")
@@ -620,6 +625,9 @@ function samaritanScreenPlay:keepCrystal(pPlayer)
 
 	-- Task 11's lootName.
 	self:giveReward(pPlayer, self.rewardCrystal, "the crystal you kept from Pwwoz Pwwa")
+
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_samaritan_1")
 
 	-- Task 12's musicOnComplete.
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")

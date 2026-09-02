@@ -158,7 +158,9 @@ Task 11's ItemName "Uploaded data" the same.
 
 The Reward tasks' CountItem/CountWeapon/CountArmor, Faction Name and quality
 floats are that task type's unused columns; the file grants no faction points,
-no weapon and no armour. Experience Amount is 0 in the .qst and 0 here.
+no weapon and no armour. Experience Amount is 0 in the .qst. The stored Experience
+Amount 0 is real; live still paid, because the server recomputed from
+quest_experience (see mustafar_quest_xp.lua).
 --]]
 
 moralChoiceScreenPlay = ScreenPlay:new {
@@ -545,6 +547,8 @@ function moralChoiceScreenPlay:finishForCorporation(pPlayer)
 	end
 
 	self:setStage(pPlayer, self.STAGE_DONE_CORP)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_moral_choice_1")
 	self:removeWaypoint(pPlayer)
 
 	-- Task 8.
@@ -657,6 +661,8 @@ function moralChoiceScreenPlay:finishForMiners(pPlayer)
 	end
 
 	self:setStage(pPlayer, self.STAGE_DONE_MINERS)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_moral_choice_1")
 	self:removeWaypoint(pPlayer)
 
 	-- Task 13.

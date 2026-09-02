@@ -508,6 +508,9 @@ includeFile("items/loot_schematic/throw_pillow_schematic.lua")
 includeFile("items/misc/casual_rug.lua")
 includeFile("items/misc/majestic_rug.lua")
 
+-- mustafar sub-folder
+includeFile("items/mustafar/cube_loot_3r.lua")
+
 --npc sub-folder
 includeFile("items/npc/aakuan_belt.lua")
 includeFile("items/npc/aakuan_ring.lua")

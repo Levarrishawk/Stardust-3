@@ -72,7 +72,9 @@ THE TASK TREE, transcribed
 
 The quest <list> says journalEntryTitle "Unlocking the Secrets", category
 Mustafar, Level 75, Tier 4, allowRepeats true, Experience Type quest_combat,
-Experience Amount 0, completeWhenTasksComplete true.
+Experience Amount 0, completeWhenTasksComplete true. The stored Experience
+Amount 0 is real; live still paid, because the server recomputed from
+quest_experience (see mustafar_quest_xp.lua).
 
 One shipped inconsistency, quoted and left alone: task 5's description says
 "Bring the two glyphs back to the historian" when task 1 above it required three.
@@ -160,7 +162,8 @@ THE REWARD
 Bank Credits 10000, awarded. Experience Amount is 0 on the Reward task, and the
 <list>'s Experience Type quest_combat is journal-level data that only the quest
 system awards -- there is no quest system row here, so nothing is invented to
-stand in for it.
+stand in for it. The stored Experience Amount 0 is real; live still paid,
+because the server recomputed from quest_experience (see mustafar_quest_xp.lua).
 
 lootCount 1 / lootName weapon_tow_rifle_03_01 is NOT granted. lootName is a live
 server-side static-item name, not an object template. The name resolves to
@@ -746,6 +749,8 @@ end
 
 function somGlyphHuntScreenPlay:awardQuest(pPlayer)
 	self:setStage(pPlayer, 5)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_glyph_hunt")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 
 	-- Bank Credits 10000. Experience Amount is 0 and lootName cannot be resolved;

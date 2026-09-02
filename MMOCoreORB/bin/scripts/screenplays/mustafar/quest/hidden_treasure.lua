@@ -63,7 +63,9 @@ journal entry.
 THE REWARD  --  SUBSTITUTED, and here is exactly why
 
 The .qst awards lootCount 1 / lootName item_tow_schematic_reactor_02_01, with Bank
-Credits 0 and Experience Amount 0. lootName is a live server-side static-item name;
+Credits 0 and Experience Amount 0. The stored Experience Amount 0 is real; live
+still paid, because the server recomputed from quest_experience (see
+mustafar_quest_xp.lua). lootName is a live server-side static-item name;
 it is not an object template. The name resolves to "Modified Fusion Reactor
 Schematic" in string/en/static_item_n.stf, but an exhaustive sweep of every
 shipped shared_*.iff finds no object template carrying that objectName, so
@@ -332,6 +334,8 @@ function hiddenTreasureScreenPlay:clickHolocron(pPlayer, pHolocron)
 	end
 
 	self:setStage(pPlayer, 4)
+	-- Quest XP: quest_experience[75][TIER_1]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_hidden_treasure_1")
 
 	self:showMessageBox(pPlayer, pHolocron, "No more clues",
 		"That was all the help you got out of the tablet. There's two levers on the wall, which one to pull is up to you...")
@@ -419,6 +423,8 @@ end
 
 function hiddenTreasureScreenPlay:awardQuest(pPlayer)
 	self:setStage(pPlayer, 6)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_hidden_treasure_2")
 
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 

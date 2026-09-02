@@ -119,8 +119,11 @@ ValleyBattlefield = ScreenPlay:new {
 	entryY = -1752,        -- -1600 + (-152)
 
 	-- live exit_one 541,155,-160,mustafar -> a REAL Mustafar world coordinate,
-	-- 10.8 m from Chapter Three 01's scout post. Reachable only because of the
-	-- boundary pocket this round also opens (see mustafar_boundaries.lua).
+	-- 10.8 m from Chapter Three 01's scout post. This used to depend on a 60 m
+	-- exemption inside mustafar_boundaries:notifySpawnAreaSe. That exemption was a
+	-- one-way door out of the map and round G(d) deleted it; the exit point is free
+	-- ground now because Se0/Se1/Se2 were moved instead. Nearest wall is Se1 at
+	-- (825,-300) r256, 60.6 m away.
 	exitX = 541,
 	exitY = -160,
 
@@ -138,7 +141,11 @@ ValleyBattlefield = ScreenPlay:new {
 	leakLimit = 4,         -- escalation 4 == loseTrial
 	rezRange = 22,         -- forward_commander.java:702
 	rezMax = 3,            -- forward_commander.java:704
-	victoryBadge = "bdg_must_victory_army",
+	-- UPPERCASE, and it has to be. DirectorManager.cpp:863-869 registers every
+	-- badge as a Lua global under badge->getKey().toUpperCase(), so a lowercase
+	-- key makes the _G[] guard a permanent no-op. Corrected in round G(b1);
+	-- volcano_battlefield.lua:256 had the same defect.
+	victoryBadge = "BDG_MUST_VICTORY_ARMY",
 	victoryMusic = "sound/mus_mustafar_quest_success.snd",
 	introMusic = "sound/mus_mustafar_droid_invasion_intro.snd",
 

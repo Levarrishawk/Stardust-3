@@ -169,7 +169,10 @@ includeFile("custom_content/som/som_pann_protocol_droid.lua")
 includeFile("custom_content/som/som_pwwoz_pwwa.lua")
 includeFile("custom_content/som/som_pwwoz_thug_1.lua")
 includeFile("custom_content/som/som_pwwoz_thug_2.lua")
--- The old commented-out line above blamed a tre error; it was a path error. It read
+includeFile("custom_content/som/som_sherkar_consort.lua")
+
+-- The next line, som_trinity_assassin_ithorian_male, used to be commented out. That
+-- comment blamed a tre error; it was a path error. It read
 -- "som/..." instead of "custom_content/som/...", the same wrongness miner_pilot.lua had.
 -- shared_som_trinity_assassin_ithorian_male.iff ships in mtg_patch_010_object_01.tre, the
 -- same TRE as its two siblings below, and its object template is already registered from

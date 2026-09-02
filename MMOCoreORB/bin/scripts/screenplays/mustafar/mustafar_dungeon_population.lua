@@ -530,11 +530,20 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	     deep end of that attested floor; the player arrives ~9.5 m away at its near
 	     edge. Cell "r1" is the building's only cell, all 456 .ilf nodes are in it.
 
-	     KNOWN INCOMPLETE, not a defect: malfosa.tab shows the live lair held a
-	     consort population, not a solo boss. som_sherkar_consort has no template in
-	     this repo -- grepping the tree for "consort" returns only spider_queen and
-	     beast-master items -- so shipping one would mean authoring a creature
-	     outright. He stands alone until someone decides what the consort is. ]]
+	     THE CONSORT IS NOT MISSING FROM HERE, and the note that used to stand in
+	     this spot was wrong on its premise. It read malfosa.tab as evidence that
+	     the live lair held a consort population. It is not: malfosa.tab sits under
+	     datatables/spawning/ground_spawning/types/mustafar/, which is the
+	     open-world spawn system, not a dungeon table. Live spawns the lair from
+	     monster_manager.java -- som_sherkar, som_sherkar_praetorian,
+	     som_sherkar_karling and som_sherkar_symbiot -- and never a consort. Sher
+	     Kar standing alone in here is what live does.
+
+	     som_sherkar_consort now ships, as the open-world boss it actually is:
+	     mobile/custom_content/som/som_sherkar_consort.lua, placed by
+	     screenplays/mustafar/regions/malfosa_region.lua at (-3080.66, 5353.76),
+	     which is buildout row mustafar_main_nw.tab:13 resolved through the
+	     areas_mustafar.tab offset. The derivation is written out in full there. ]]
 	lairBosses = {
 		{
 			poolKey = "monster_lair",

@@ -138,7 +138,10 @@
 
 	Verified across all seven: every "Time To Complete", "CountdownTimer",
 	"Bank Credits" and "Experience Amount" field is 0, so this arc pays no credits,
-	no XP and runs no timers. The only radii in the whole arc are 300, 50 and 50.
+	no XP and runs no timers. CORRECTION: the stored Experience Amount 0 was never
+	what live paid -- SOE's groundquests.java recomputed from quest_experience
+	using each quest's LEVEL/TIER (see mustafar_quest_xp.lua). The stored fields
+	ARE 0; the live award was not. The only radii in the whole arc are 300, 50 and 50.
 	Every quest is level 80.
 
 	THE SIGNALS ARE THE STATE MACHINE
@@ -645,6 +648,9 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- carries customName = "Scout Olon Lono", the name his own live conversation
 	-- script sets through setName in both OnInitialize and OnAttach. That file's
 	-- header documents the find. Nothing is open here.
+	-- Reachable since round G(d): Levarris's Se1 boundary sphere was drawn 56 m from this
+	-- point and projected 256 m inward over it. Se0/Se1/Se2 moved out; see
+	-- screenplays/mustafar/boundaries/mustafar_boundaries.lua.
 	scoutPost = { x = 550, y = -154, waypointName = "Mustafarian Scout", respawn = 300 },
 
 	-- The droidArmy roster / droidArmyRequired / countDroid stand-in lived here.
@@ -1298,6 +1304,8 @@ function storyArcChaptersScreenPlay:grantOverrideTool(pPlayer)
 	end
 
 	self:setFlag(pPlayer, "overrideTool")
+	-- Quest XP: quest_experience[80][TIER_1]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_chapter_three_02")
 	CreatureObject(pPlayer):sendSystemMessage("You have received a terminal override tool.")
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
 end
@@ -1645,6 +1653,8 @@ function storyArcChaptersScreenPlay:grantFinalChapter(pPlayer)
 	end
 
 	self:advance(pPlayer, self.STAGE_DROID_ARMY)
+	-- Quest XP: quest_experience[80][TIER_6]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_chapter_two_01")
 	self:startKillWatch(pPlayer)
 end
 
@@ -1656,6 +1666,8 @@ function storyArcChaptersScreenPlay:startVolcanoQuest(pPlayer)
 	end
 
 	self:advance(pPlayer, self.STAGE_FIND_PILOT)
+	-- Quest XP: quest_experience[80][TIER_6]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_chapter_three_01")
 end
 
 -- ACTION grantFinalReward -- s_115 -> s_116, the last action in the whole arc.
@@ -1907,6 +1919,8 @@ function storyArcChaptersScreenPlay:completeChapterOne(pPlayer)
 	end
 
 	self:advance(pPlayer, self.STAGE_FIND_FACTORY)
+	-- Quest XP: quest_experience[80][TIER_6]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_chapter_one_03")
 	self:grantCompletionBadge(pPlayer)
 end
 
@@ -2249,6 +2263,8 @@ function storyArcChaptersScreenPlay:useMiloTerminal(pPlayer)
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_story_arc_complete.snd")
 
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[80][TIER_6]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_chapter_three_03")
 	self:removeWaypoint(pPlayer, "task")
 	self:stopKillWatch(pPlayer)
 end

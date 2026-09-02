@@ -125,6 +125,9 @@ includeFile("groups/geonosian_lab/geonosian_relic.lua")
 -- hero_of_tatooine sub-folder
 includeFile("groups/hero_of_tatooine/hero_of_tat_mark_of_courage.lua")
 
+-- mustafar sub-folder
+includeFile("groups/mustafar/sher_kar_consort.lua")
+
 -- npc/corellia sub-folder
 includeFile("groups/npc/corellia/afarathu_tier_1.lua")
 includeFile("groups/npc/corellia/beldonnas_league_tier_1.lua")

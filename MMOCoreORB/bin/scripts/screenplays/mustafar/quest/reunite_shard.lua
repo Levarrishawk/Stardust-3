@@ -175,7 +175,9 @@ behaviour; the humming messages fire either way.
 THE REWARD  --  SUBSTITUTED, and it is cosmetic
 
 _3's Reward task pays Experience Amount 0 and Bank Credits 0 and awards lootCount 1
-/ lootName item_tow_buff_crystal_02_02. As with the other TOW rewards in this arc,
+/ lootName item_tow_buff_crystal_02_02. The stored Experience Amount 0 is real;
+live still paid, because the server recomputed from quest_experience (see
+mustafar_quest_xp.lua). As with the other TOW rewards in this arc,
 lootName is a live server-side static-item name, not an object template. The name
 resolves to "Wild Force Shard" in string/en/static_item_n.stf, but an exhaustive
 sweep of every shipped shared_*.iff finds no object template carrying that
@@ -210,8 +212,9 @@ minting inventory copies would be content authoring, not wiring. Those steps
 advance the stage and show their message box without minting an item. Nothing
 downstream in any of the three .qst files reads them; they were progress markers.
 
-_2's Faction Amount and Experience Amount are 0 on every task, so there is nothing
-to pay out between _1 and _3.
+_2's Faction Amount and Experience Amount are 0 on every task. Faction stays unpaid;
+the stored Experience Amount 0 is real, but live still paid because the server
+recomputed from quest_experience (see mustafar_quest_xp.lua).
 --]]
 
 reuniteShardScreenPlay = ScreenPlay:new {
@@ -620,6 +623,8 @@ function reuniteShardScreenPlay:gatherFirstSplinters(pPlayer, pSplinters)
 	end
 
 	self:setStage(pPlayer, 3)
+	-- Quest XP: quest_experience[75][TIER_1]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_reunite_shard_1")
 
 	self:showMessageBox(pPlayer, pSplinters, "More splinters",
 		"You've found some more crystal splinters. As soon as you put them in your backpack with the others, the old ones stop vibrating and glowing...")
@@ -751,6 +756,8 @@ function reuniteShardScreenPlay:collectSplinter(pPlayer, leg)
 	-- Show Message Box "Done?", then task 12: Immediately Complete Quest,
 	-- grantQuestOnComplete som_kenobi_reunite_shard_3.
 	self:setStage(pPlayer, 4)
+	-- Quest XP: quest_experience[75][TIER_1]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_reunite_shard_2")
 
 	-- Dropped here rather than left to the observer's own "return 1" -- it was
 	-- created persistent, so an unfired one would sit in the database forever on a
@@ -828,6 +835,9 @@ function reuniteShardScreenPlay:awardQuest(pPlayer)
 	else
 		CreatureObject(pPlayer):sendSystemMessage("You have taken the reunited crystal.")
 	end
+
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_reunite_shard_3")
 
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 end

@@ -383,7 +383,11 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 		-- ================================================================
 		blistmokRug = {
 			dataPrefix = "rug",
-			questKey = "blistmokRug",
+			-- soeQuest is the shipped .qst name, used only to look up the XP award.
+			-- It is NOT the questKey that offerQuest/questOfferCallback pass around --
+			-- that one is this table's own index ("blistmokRug"). Two different
+			-- vocabularies; keeping the names apart so they cannot be conflated.
+			soeQuest = "som_blistmok_rug",
 
 			-- [list]
 			title = "Skin the Blistmoks",
@@ -443,7 +447,7 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 		-- ================================================================
 		jundakSkull = {
 			dataPrefix = "skull",
-			questKey = "jundakSkull",
+			soeQuest = "som_jundak_skull",
 
 			-- [list]
 			title = "Skull of the Jundak",
@@ -495,7 +499,7 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 		-- ================================================================
 		xandankTrophey = {
 			dataPrefix = "pack",
-			questKey = "xandankTrophey",
+			soeQuest = "som_xandank_trophey",
 
 			-- [list]
 			title = "A Whole Pack of Trouble",
@@ -1464,8 +1468,10 @@ end
 -- The Reward tasks
 --
 -- Bank Credits 0 and Experience Amount 0 in all three .qst files, so no
--- credits and no XP are granted.  [list] allowRepeats is true everywhere, so
--- STAGE_DONE is a record, not a lock -- the grant entry points reset from it.
+-- credits and no XP are granted.  CORRECTION: the stored 0 was never what live
+-- paid -- SOE recomputed from quest_experience (see mustafar_quest_xp.lua).
+-- [list] allowRepeats is true everywhere, so STAGE_DONE is a record, not a
+-- lock -- the grant entry points reset from it.
 -- ====================================================================
 
 function trophyHuntsScreenPlay:completeQuest(pPlayer, quest)
@@ -1488,6 +1494,8 @@ function trophyHuntsScreenPlay:completeQuest(pPlayer, quest)
 
 	self:clearWaypoint(pPlayer, quest)
 	self:setStage(pPlayer, quest, quest.STAGE_DONE)
+	-- Quest XP: quest_experience[<level>][TIER_<tier>]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, quest.soeQuest)
 	self:setNumber(pPlayer, quest, "runs", self:getNumber(pPlayer, quest, "runs") + 1)
 
 	CreatureObject(pPlayer):playMusicMessage(self.musicOnComplete)

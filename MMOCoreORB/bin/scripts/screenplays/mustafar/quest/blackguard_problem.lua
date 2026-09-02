@@ -59,7 +59,8 @@ completeWhenTasksComplete true. There is no grantGcwPoints attribute in this
 file at all -- grep finds zero occurrences of the name -- so nothing GCW-related
 is done here. (som_storm_lord, the sibling quest, does carry the attribute and
 says false. This one simply predates it or was authored without it; either way
-there is nothing to honour.)
+there is nothing to honour.) The stored Experience Amount 0 is real; live still
+paid, because the server recomputed from quest_experience (see mustafar_quest_xp.lua).
 
 CHAINED OR INDEPENDENT
 
@@ -154,7 +155,9 @@ THE REWARD
 Bank Credits 5000, awarded. Experience Amount is 0 on the Reward task, and the
 <list>'s Experience Type quest_combat with Experience Amount 0 is journal-level
 data that only the quest system awards -- there is no quest system row here, so
-nothing is invented to stand in for it. Faction Amount is 0 against Faction Name
+nothing is invented to stand in for it. CORRECTION: the stored 0 was never what
+live paid; SOE recomputed from quest_experience (see mustafar_quest_xp.lua).
+Faction Amount is 0 against Faction Name
 "Rebel", so there is no faction award either; the name with a zero amount is the
 editor's default.
 
@@ -616,12 +619,15 @@ end
 
 function somBlackguardProblemScreenPlay:awardQuest(pPlayer)
 	self:setStage(pPlayer, self.finishedStage)
+	-- Quest XP: quest_experience[70][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_blackguard_problem")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 
 	self:detachKillObserver(pPlayer)
 
 	-- Bank Credits 5000. Experience Amount is 0, Faction Amount is 0 and lootName
-	-- cannot be resolved; see THE REWARD.
+	-- cannot be resolved; see THE REWARD. CORRECTION: live still paid XP -- see
+	-- mustafar_quest_xp.lua.
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)
 	CreatureObject(pPlayer):sendSystemMessage("You have received " .. self.rewardCredits .. " credits.")
 	CreatureObject(pPlayer):sendSystemMessage("You have completed " .. self.questTitle .. ".")

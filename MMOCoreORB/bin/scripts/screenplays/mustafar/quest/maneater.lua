@@ -164,7 +164,9 @@
 	item_tow_trophey_02_02.  Note that the [list] block's own Bank Credits field
 	is 0 and its lootName is empty; the payout lives on the Reward task, and that
 	is the one honoured.  Experience Amount 0 / quest_combat and Faction Amount 0
-	/ Rebel are honoured literally: no XP, no faction.
+	/ Rebel are honoured literally: no XP, no faction.  The stored Experience
+	Amount 0 is real; live still paid, because the server recomputed from
+	quest_experience (see mustafar_quest_xp.lua).
 
 	The 5000 credits are granted literally.  The loot stays a SUBSTITUTE.
 	item_tow_trophey_02_02 resolves to "Mounted Tulrus Spine" in
@@ -693,6 +695,8 @@ function maneaterScreenPlay:signalReward(pPlayer)
 	self:clearWaypoint(pPlayer)
 	self:detachKillObserver(pPlayer)
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[70][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_maneater")
 	self:setNumber(pPlayer, "runs", self:getNumber(pPlayer, "runs") + 1)
 
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

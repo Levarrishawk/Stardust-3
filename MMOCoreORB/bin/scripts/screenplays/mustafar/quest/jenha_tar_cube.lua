@@ -571,6 +571,8 @@ end
 
 function somJenhaTarCubeScreenPlay:awardQuest(pPlayer)
 	self:setStage(pPlayer, 4)
+	-- Quest XP: quest_experience[1][TIER_1]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_jenha_tar_cube")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 
 	-- Every one of the four Reward tasks says Bank Credits 0 and Experience

@@ -48,6 +48,8 @@ The whole task tree is one nested chain, so it is strictly sequential:
 [list]: journalEntryTitle "The Strike", category Mustafar, journalVisible true,
 allowRepeats true, completeWhenTasksComplete true, Level 75, Tier 4, Type solo,
 Experience Type quest_combat with Experience Amount 0, Bank Credits 0.
+The stored Experience Amount 0 is real; live still paid, because the server
+recomputed from quest_experience (see mustafar_quest_xp.lua).
 
 (Note that task 4's taskName is mustafar_striking_miners_five, not _four. There
 is no _four anywhere in the file. That is SOE's own numbering, quoted as it
@@ -287,7 +289,8 @@ WHAT IS NOT MODELLED
   * The [list] Experience Type quest_combat with Experience Amount 0 is
     journal-level data that only the quest system awards. There is no quest
     system row here and the amount is zero either way, so nothing is invented to
-    stand in for it.
+    stand in for it. The stored Experience Amount 0 is real; live still paid,
+    because the server recomputed from quest_experience (see mustafar_quest_xp.lua).
   * The eggs' snapshot props are not removed or re-dressed when taken. Snapshot
     objects are the client's own geometry; hiding one is not something a
     screenplay can do without touching the .ws.
@@ -655,6 +658,9 @@ function somStrikingMinersScreenPlay:giveReward(pPlayer)
 		CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)
 		CreatureObject(pPlayer):sendSystemMessage("You have received " .. self.rewardCredits .. " credits.")
 	end
+
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_striking_miners")
 
 	local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
 

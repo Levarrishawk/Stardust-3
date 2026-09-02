@@ -73,7 +73,9 @@ player's ghost: waypoints, message boxes and system messages, but no journal ent
 THE REWARD  --  SUBSTITUTED, and here is exactly why
 
 _1's Reward task pays Experience Amount 0 and Bank Credits 0, and awards
-lootCount 1 / lootName weapon_tow_sword_1h_03_02. As with the other TOW rewards in
+lootCount 1 / lootName weapon_tow_sword_1h_03_02. The stored Experience Amount 0
+is real; live still paid, because the server recomputed from quest_experience
+(see mustafar_quest_xp.lua). As with the other TOW rewards in
 this arc, lootName is a live server-side static-item name, not itself an
 object-template path. The name resolves to "Caller of Storms" in
 string/en/static_item_n.stf, and unlike most of this arc an object carrying that
@@ -416,6 +418,9 @@ function symbiosisScreenPlay:awardQuest(pPlayer)
 	else
 		CreatureObject(pPlayer):sendSystemMessage("You have taken the sword wrapped in cloth.")
 	end
+
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_symbiosis_1")
 
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 

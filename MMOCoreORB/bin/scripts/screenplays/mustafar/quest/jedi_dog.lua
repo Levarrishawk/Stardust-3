@@ -186,7 +186,9 @@
 	item_tow_clothing_03_03.  Note that the [list] block's own Bank Credits field
 	is 0 and its lootName is empty; the payout lives on the Reward task, and that
 	is the one honoured.  Experience Amount 0 / quest_combat and Faction Amount 0
-	/ Rebel are honoured literally: no XP, no faction.
+	/ Rebel are honoured literally: no XP, no faction.  The stored Experience
+	Amount 0 is real; live still paid, because the server recomputed from
+	quest_experience (see mustafar_quest_xp.lua).
 
 	The 10000 credits are granted literally.  The loot name cannot be resolved
 	to an object: item_tow_clothing_03_03 is a live server-side static-item name,
@@ -538,6 +540,8 @@ function jediDogScreenPlay:signalReward(pPlayer)
 	end
 
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[75][TIER_3]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_jedi_dog")
 	self:setNumber(pPlayer, "runs", self:getNumber(pPlayer, "runs") + 1)
 	self:detachKillObserver(pPlayer)
 

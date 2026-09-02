@@ -436,6 +436,8 @@ function collectorsBusinessScreenPlay:awardQuest(pPlayer)
 	end
 
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_kenobi_collectors_business_1")
 	self:removeWaypoint(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "emptyRubble")
 

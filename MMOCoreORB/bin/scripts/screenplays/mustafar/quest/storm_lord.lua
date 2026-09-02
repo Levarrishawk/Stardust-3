@@ -63,7 +63,9 @@ The quest <list> says journalEntryTitle "Sickness of the Storm Lord", category
 Mustafar, journalVisible true, Level 80, Tier 4, Type solo, allowRepeats true,
 Experience Type quest_combat, Experience Amount 0, Bank Credits 0,
 completeWhenTasksComplete true, grantGcwPoints false. grantGcwPoints false is
-honoured by doing nothing GCW-related, which is what this file does.
+honoured by doing nothing GCW-related, which is what this file does. The stored
+Experience Amount 0 is real; live still paid, because the server recomputed from
+quest_experience (see mustafar_quest_xp.lua).
 
 CHAINED OR INDEPENDENT
 
@@ -202,7 +204,9 @@ Bank Credits is 0 on the Reward task and 0 in the <list>, so there is no credit
 payout, and none is invented. Experience Amount is 0 and the <list>'s Experience
 Type quest_combat with Experience Amount 0 is journal-level data that only the
 quest system awards -- there is no quest system row here, so nothing stands in
-for it. Faction Amount is 0 against Faction Name "Rebel", so there is no faction
+for it. The stored Experience Amount 0 is real; live still paid, because the
+server recomputed from quest_experience (see mustafar_quest_xp.lua). Faction
+Amount is 0 against Faction Name "Rebel", so there is no faction
 award either; the name with a zero amount is the editor's default. grantGcwPoints
 is false.
 
@@ -730,6 +734,8 @@ end
 
 function somStormLordScreenPlay:awardQuest(pPlayer)
 	self:setStage(pPlayer, self.finishedStage)
+	-- Quest XP: quest_experience[80][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_storm_lord")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 
 	self:detachKillObserver(pPlayer)

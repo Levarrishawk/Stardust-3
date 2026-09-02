@@ -620,6 +620,8 @@ end
      both start here. ]]
 function storyArcPreludeScreenPlay:sendCompanyComm(pPlayer)
 	self:setStage(pPlayer, self.STAGE_FILTERS)
+	-- Quest XP: quest_experience[75][TIER_3]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_prelude_01")
 
 	CreatureObject(pPlayer):sendSystemMessage("Foreman Chivos has contacted you with an message about a new job.")
 
@@ -627,6 +629,7 @@ function storyArcPreludeScreenPlay:sendCompanyComm(pPlayer)
 		"Nice work on resupplying those miners. While you are outside of the main facility, I need you to do another job for me. We are having a problem with our ventilation cleaning system. Normally the vents around the facility clean themselves but the automatic system has completely gone offline. I need you to head to the four main ventilation shafts located just south of the mining facility and clean the debris off of the filters. Once you are done with that come back and talk to me.")
 
 	-- task 3: Bank Credits 5000, Experience Amount 0, musicOnComplete.
+	-- CORRECTION: the stored 0 was never what live paid -- see mustafar_quest_xp.lua.
 	self:payCredits(pPlayer, self.rewardCredits)
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 
@@ -715,6 +718,8 @@ function storyArcPreludeScreenPlay:signalFilterReward(pPlayer)
 	end
 
 	self:setStage(pPlayer, self.STAGE_REACTOR_OFFER)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_prelude_02")
 	self:removeWaypoint(pPlayer, "chivos")
 
 	-- s_20 (the greeting that opened this) and s_36 (the briefing two options
@@ -855,6 +860,8 @@ function storyArcPreludeScreenPlay:signalRodReward(pPlayer)
 	end
 
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_story_arc_prelude_03")
 	self:removeWaypoint(pPlayer, "chivos")
 
 	-- The observer was created persistent, so an unfired one would sit in the

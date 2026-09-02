@@ -89,6 +89,10 @@ exploreMustafarScreenPlay = ScreenPlay:new {
 	-- item_tow_painting_02_01 x1, Experience Amount 0, no badge, Faction Amount 0.
 	-- The guide above quotes "Quest XP: 31930"; the shipped reward task carries no
 	-- experience at all, so nothing is awarded here rather than inventing a type.
+	-- CORRECTION: the stored 0 was never what live paid. SOE recomputed from
+	-- quest_experience[60][TIER_2] = 35123 (see mustafar_quest_xp.lua). The guide's
+	-- 31930 matches neither 35123 nor any cell of the table -- same publish-drift
+	-- shape as the Skull of the Jundak walkthrough figure.
 	rewardCredits = 10000,
 	-- item_tow_painting_02_01 is a Trials of Obi-Wan loot item that was never
 	-- ported into this tree (no template, no loot entry). The damaged map is the
@@ -545,7 +549,9 @@ function exploreMustafarScreenPlay:awardQuest(pPlayer)
 	dropObserver(KILLEDCREATURE, "exploreMustafarScreenPlay", "notifyKilledCreature", pPlayer)
 
 	-- The .qst reward task carries Experience Amount 0, so credits and the item
-	-- are the whole of it.
+	-- are the whole of it. CORRECTION: the stored 0 was never what live paid.
+	-- Award is quest_experience[60][TIER_2] = 35123; see mustafar_quest_xp.lua.
+	MustafarQuestXp:award(pPlayer, "som_mustafar_exploration")
 	CreatureObject(pPlayer):addCashCredits(self.rewardCredits, true)
 
 	-- Same discarded-return defect as mining_field_markers.lua had: the full-pack check

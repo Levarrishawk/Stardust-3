@@ -221,7 +221,9 @@
 	    everybody on the shard, and both quests are repeatable.
 	  * Faction Amount 0 / Faction Name Rebel and Experience Amount 0 /
 	    quest_combat are honoured literally: no faction, no XP, because that is
-	    what the .qst says.
+	    what the .qst says. The stored Experience Amount 0 is real; live still
+	    paid, because the server recomputed from quest_experience (see
+	    mustafar_quest_xp.lua).
 	  * "Level 75" and "Tier 4" are recorded on the table for a giver to gate on;
 	    nothing here enforces them, because nothing here grants the quest.
 	  * The typo in task 6's shipped description ("The nests are destoyed") is
@@ -944,6 +946,13 @@ function lavaBeetleNestsScreenPlay:signalReward(pPlayer)
 
 	self:clearWaypoint(pPlayer)
 	self:setStage(pPlayer, self.STAGE_DONE)
+	-- Quest XP: quest_experience[75][TIER_4]. See mustafar_quest_xp.lua.
+	-- Two quests, one function -- discriminator is getVariant.
+	if (variant ~= nil and variant.key == "one") then
+		MustafarQuestXp:award(pPlayer, "som_lava_beetle_nest_destroy")
+	elseif (variant ~= nil and variant.key == "two") then
+		MustafarQuestXp:award(pPlayer, "som_lava_beetle_nest_destroy_2")
+	end
 
 	if (variant ~= nil) then
 		self:setNumber(pPlayer, "runs_" .. variant.key, self:getNumber(pPlayer, "runs_" .. variant.key) + 1)

@@ -253,7 +253,13 @@ VolcanoBattlefield = ScreenPlay:new {
 	-- off message passing; this port replaces that with polled createEvent
 	-- re-arms.
 	winPoll = 30,
-	victoryBadge = "bdg_must_victory_volcano",
+	-- UPPERCASE, and it has to be. DirectorManager.cpp:863-869 walks BadgeList
+	-- and registers each badge as a Lua global under badge->getKey().toUpperCase(),
+	-- so the _G[self.victoryBadge] guard below can only ever resolve an uppercase
+	-- key. This was written lowercase, which made the guard a permanent no-op --
+	-- the badge would have been silently skipped even on a server whose TREs do
+	-- carry it. Corrected in round G(b1).
+	victoryBadge = "BDG_MUST_VICTORY_VOLCANO",
 	victoryMusic = "sound/mus_mustafar_quest_success.snd",
 	hkIntroMusic = "sound/mus_mustafar_hk47_intro.snd", -- trial.java:199 MUS_VOLCANO_HK_INTRO
 

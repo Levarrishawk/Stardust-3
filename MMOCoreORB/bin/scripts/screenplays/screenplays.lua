@@ -751,6 +751,8 @@ includeFile("cities/hutta_bilbousa_city.lua")
 includeFile("poi/naboo_memorial.lua")
 
 -- Mustafar
+-- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.
+includeFile("mustafar/mustafar_quest_xp.lua")
 -- Instances first: reunite_shard.lua and historian.lua read the ORF pool from
 -- MustafarInstances. The dungeon populator goes second, for the same reason plus
 -- one more -- historian.lua asks it for the ORF security droid's template.
@@ -834,6 +836,7 @@ includeFile("mustafar/boundaries/mustafar_boundaries.lua")
 includeFile("mustafar/mensix/conversation/pei_yi_conv_handler.lua")
 includeFile("mustafar/mensix/conversation/diskret_stahn_conv_handler.lua")
 includeFile("mustafar/mensix/mensix_mining_facility_main.lua")
+includeFile("mustafar/regions/malfosa_region.lua")
 includeFile("mustafar/regions/mensix_facility_region.lua")
 includeFile("mustafar/regions/north_west_region.lua")
 includeFile("mustafar/regions/smoking_forest_region.lua")
