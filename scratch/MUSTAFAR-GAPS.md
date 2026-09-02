@@ -1947,7 +1947,22 @@ design question. Neither is "a previous round already decided this and wrote dow
    `creatures.tab` col 7, typed `e(NORMAL=0,ELITE=1,BOSS=2)`. There is no fourth value. The 292
    `som_*` rows split **203 NORMAL / 58 ELITE / 31 BOSS**. Note this is *not* what scales stats —
    cols 3–6 (`Damagelevelmodifier`, `StatLevelModifier`, `ToHitLevelModifier`,
-   `ArmorLevelModifier`) are explicit and separate. Re-keying the retune on col 7 is now mechanical.
+   `ArmorLevelModifier`) are explicit and separate.
+
+   ⚠ **RETRACTED — the sentence that used to end this item said "re-keying the retune on col 7 is
+   now mechanical." That was wrong, and two later rounds proved it wrong in code.** Col 7 carries
+   **three** values. The retune ladder from commit `189d4f1622` has **eight** rungs — CIV 45,
+   FAUNA_L 50, STD 70, ELITE 85, NAMED 100, BOSS 120, APEX 140, RAID 200. Three values cannot key
+   eight rungs; every mapping from one to the other is a judgement, not a lookup. Rounds F1(a)
+   (`852e2074b4`) and F2(a) (`34dccdf96c`) both had to make that judgement by hand and both said so
+   in their own commit messages: the valley took live BOSS → 120 and live ELITE → 85, the volcano
+   took live BOSS → 140 and live ELITE → 120, because the volcano is gated behind the valley and
+   live encodes that gap in raw HP that the ladder replaced. The autopilot broke the mapping again —
+   live level 100, placed at CIV 45, because live's number is not a difficulty rating.
+
+   **So: not mechanical, and ROUND D(a) is closed as NOT-A-GAP rather than as done work.** The port
+   does not re-key on col 7 and should not. The ladder IS the tuning; col 7 is one input to a
+   per-row decision. Live's split is recorded above as reference data, which is all it ever was.
 2. **`pvpBitmask = ATTACKABLE` on the four quest givers.** ⚠ **MOSTLY ANSWERED, and the answer is
    "leave three alone."** Live has an explicit `invulnerable` column (`creatures.tab` col 56). Only
    **18 of 292** `som_*` rows set it to 1. Of our four:

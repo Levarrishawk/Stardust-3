@@ -298,19 +298,17 @@
 
 	   That is not missing data. mustafar_volcano is a separate ZONE and the
 	   chapter happens inside it, which is why the ground map is never addressed;
-	   the pilot's conversation flies the player in. Core3 has no such zone, so
-	   HK-47 is stood on the open terrain instead -- the deviation
-	   story_arc_chapter_three_pilot.lua states in full.
+	   the pilot's conversation flies the player in. Core3 has no such zone.
+	   An earlier revision of this file stood an invented HK-47 on the open
+	   terrain and pointed a waypoint at him -- that was the wrong call, and
+	   story_arc_chapter_three_pilot.lua still records the history. Round F2(b)
+	   answers it the same way the valley answers mustafar_droid_army: an
+	   off-map arena at (-292, -1680) entered by teleport from the pilot's
+	   conversation (screenplays/mustafar/battlefields/volcano_battlefield.lua).
+	   The chapter still carries no coordinates; the arena is the counterpart.
 
-	   So his position is INVENTED, not inferred, and the entry says so. It used
-	   to be justified here as a reading of the prose "the highest point in the
-	   area, a nearby volcano crater" onto node 12112130, the highest snapshot
-	   node in the central-volcano region. The prose is real; what was wrong was
-	   treating it as pointing at a spot on this zone. See the hk47 entry for the
-	   three independent checks and the root cause.
-
-	   The pilot is no longer in this list either -- he is quoted, not inferred;
-	   see his own entry.
+	   See the former hk47 entry site below for the three independent checks
+	   that proved there was never a ground position to invent from.
 
 	4. WITHDRAWN, AND IT WAS THE BIGGEST WRONG CALL IN THIS FILE. It read:
 
@@ -726,57 +724,46 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- spatialChat; borrowing their height was borrowing a workaround's position.
 	pilot = { template = "miner_pilot", cellID = 12112248, x = -41.9, z = 31.5, y = -106.9, heading = -145, respawn = 300 },
 
-	-- INVENTED, and it has to be. There is no live position for THIS HK-47 -- the
-	-- one the player fights in the volcano arena -- to be read from.
+	-- The invented HK-47 spawn lived here. There was no live position for him --
+	-- chapter three 03 carries no coordinates at all, because live fights him in
+	-- the mustafar_volcano ZONE, and Core3 has no such zone. Round F2(b)
+	-- replaced the stand-in with the real encounter (screenplays/mustafar/
+	-- battlefields/volcano_battlefield.lua); the entry, spawnHk47 and the
+	-- kill-counter branch are gone.
 	--
-	-- This used to read "INFERRED" and offer node 12112130 (must_power_rod,
-	-- -2742.13 h 246.58 3636.59) as the highest snapshot node in the central-volcano
-	-- region, as though live had a ground position that was merely hard to locate.
-	-- It does not, and four things say so independently:
+	-- THE EVIDENCE IS KEPT HERE, not deleted with the coordinate. Four checks,
+	-- each run independently, are why "there is no ground position" is a finding
+	-- and not an excuse. The DEVIATION block at the top of this file points at
+	-- these:
 	--   - hk47 appears nowhere in mustafar.ws. He is not a snapshot node.
-	--   - He has no creature row in ANY dungeon spawn table, not just the SOM ones.
-	--     The whole dungeon set was searched for him, not only the five Mustafar
+	--   - He has no creature row in ANY dungeon spawn table, not just the SOM
+	--     ones. The whole dungeon set was searched, not only the five Mustafar
 	--     tables, and he is in none of them.
-	--   - No volcano spawn table ships at all. The SOM dungeon tables are the mining
-	--     facility, the ORF, the crash-site cruiser and the two droid factories.
+	--   - No volcano spawn table ships at all. The SOM dungeon tables are the
+	--     mining facility, the ORF, the crash-site cruiser and the two droid
+	--     factories.
 	--   - som_story_arc_chapter_three_03.qst carries LocationX/Y/Z 0.0,
 	--     createWaypoint 0 and an empty waypointName on EVERY arena task --
 	--     volcano_arena_one, _three, _four, _five. All five. That is not an
 	--     omission, it is the shape of a task that happens somewhere the ground
 	--     map cannot address.
 	--
-	-- ONE THING THAT LOOKS LIKE A COUNTEREXAMPLE AND IS NOT, recorded so it is not
+	-- ONE THING THAT LOOKS LIKE A COUNTEREXAMPLE AND IS NOT, kept so it is not
 	-- re-litigated: the operational droid factory's spawn table does contain an
-	-- HK-47 beat, as a set of patrol_waypoint objects in mainroom27 and smallroom20
-	-- tagged by an hk_sequence objvar -- hk_spawn, hk_moveto, fire1/2/3, and two
-	-- player trigger points running the factory's hk_final_trigger script. That is
-	-- a scripted appearance inside a dungeon: marks for where a cutscene stands him
-	-- and moves him, not a spawn of the creature and not the arena.
+	-- HK-47 beat, as patrol_waypoint objects in mainroom27 and smallroom20 tagged
+	-- by an hk_sequence objvar -- hk_spawn, hk_moveto, fire1/2/3, and two player
+	-- trigger points running the factory's hk_final_trigger script. That is a
+	-- scripted cutscene inside a dungeon: marks for where it stands him and moves
+	-- him, not a spawn of the creature and not the arena. Seven waypoint objects
+	-- with no creature row behind them. They are deliberately NOT spawned --
+	-- reproducing the marks for a cutscene the engine cannot play would be
+	-- scenery pretending to be content.
 	--
-	-- This file DOES own that pool now, so the old sign-off -- "it is real content
-	-- for whoever wires that pool" -- is withdrawn; there was never another owner
-	-- to hand it to. Owning it does not change the conclusion, and that is what
-	-- makes it worth keeping: the hk_sequence marks are a cutscene the engine
-	-- cannot play, seven waypoint objects with no creature row behind them. They
-	-- still give the arena fight no coordinate. They are deliberately NOT spawned
-	-- -- reproducing the marks for a cutscene that cannot run would be scenery
-	-- pretending to be content.
-	--
-	-- mustafar_volcano is its own ZONE, not a place on this one: zone_n.stf calls
-	-- it "Mustafar Volcano" and instance.stf calls it "Mustafar: The Volcano
-	-- Crater". Menddle flies the player into it. Core3 has no such zone, so
-	-- HK-47 stands on the open terrain instead and the player walks to a waypoint
-	-- -- the deviation story_arc_chapter_three_pilot.lua already states in full.
-	-- The coordinate below is a consequence of that deviation, not a reading.
-	--
-	-- ROOT CAUSE: searching the ground zone for a position without first asking
-	-- whether the encounter is ON the ground zone. The five all-zero task
-	-- locations were the answer and were read as missing data. A .qst that
-	-- carries no coordinates anywhere is telling you something; it is not a gap
-	-- to be filled from the nearest plausible landmark.
-	--
-	-- hk47 is included from mobile/custom_content/som/serverobjects.lua:54.
-	hk47 = { template = "hk47", x = -2748, y = 3642, heading = 0, respawn = 300 },
+	-- ROOT CAUSE of the original wrong call: searching the ground zone for a
+	-- position without first asking whether the encounter is ON the ground zone.
+	-- The five all-zero task locations were the answer and were read as missing
+	-- data. A .qst that carries no coordinates anywhere is telling you something;
+	-- it is not a gap to be filled from the nearest plausible landmark.
 
 	-- task 4 Reward: object/tangible/hologram/hologram_hk47.iff, CountItem 1,
 	-- lootCount 1. Registered by addTemplate in
@@ -892,7 +879,6 @@ function storyArcChaptersScreenPlay:start()
 		self:spawnCobar()
 		self:spawnScout()
 		self:spawnPilot()
-		self:spawnHk47()
 		self:spawnAreas()
 	end
 end
@@ -1229,17 +1215,12 @@ function storyArcChaptersScreenPlay:spawnPilot()
 	-- story_arc_chapter_three_pilot and runs through pilot_conv_handler.
 end
 
--- INVENTED position -- live fights him in the mustafar_volcano zone, not on this
--- one, so there is nothing to quote. See the hk47 entry. HK-47 is hostile and is left standing;
--- his kill is caught by the shared KILLEDCREATURE observer, not by a radial.
-function storyArcChaptersScreenPlay:spawnHk47()
-	local z = getWorldFloor(self.hk47.x, self.hk47.y, "mustafar")
-	local pHk = spawnMobile("mustafar", self.hk47.template, self.hk47.respawn, self.hk47.x, z, self.hk47.y, self.hk47.heading, 0)
-
-	if (pHk == nil) then
-		print("storyArcChaptersScreenPlay: " .. self.hk47.template .. " failed to spawn at the crater; 'Defeat HK-47' will be uncompletable")
-	end
-end
+-- The invented HK-47 spawn lived here. There was no live position for him --
+-- chapter three 03 carries no coordinates at all, because live fights him in
+-- the mustafar_volcano ZONE, and Core3 has no such zone. Round F2(b)
+-- replaced the stand-in with the real encounter (screenplays/mustafar/
+-- battlefields/volcano_battlefield.lua); the entry, spawnHk47 and the
+-- kill-counter branch are gone.
 
 function storyArcChaptersScreenPlay:spawnAreas()
 	self.wreckAreaID = self:spawnRing(self.wreckArea, "wreck")
@@ -2184,10 +2165,13 @@ end
 -- chapter three 03 task 0, "Talk to a Pilot". Called from pilot_conv_handler on
 -- the two go-ahead screens, not from a radial.
 --
--- SOE fires two actions there. sendGroupToVolcano is nothing but
--- instance.requestInstanceMovement(player, "mustafar_volcano") and has no repo
--- counterpart -- see the tree's DEVIATION block. sendFirstSignal is the one that
--- carries the quest, and it is GROUP-AWARE: if the player is grouped it walks
+-- SOE fires two actions there. sendGroupToVolcano is
+-- instance.requestInstanceMovement(player, "mustafar_volcano"). Its repo
+-- counterpart is VolcanoBattlefield:enter
+-- (screenplays/mustafar/battlefields/volcano_battlefield.lua) -- one off-map
+-- arena at (-292, -1680), the same model ValleyBattlefield uses for
+-- mustafar_droid_army. sendFirstSignal is the one that carries the quest, and
+-- it is GROUP-AWARE: if the player is grouped it walks
 -- group.getPCMembersInRange(player, 80f) and sends volcano_arena_pilot to every
 -- member with the task active, so one person talking advances the whole party.
 -- Ungrouped, it signals the player alone. That is what is reproduced below; the
@@ -2217,7 +2201,36 @@ function storyArcChaptersScreenPlay:sendOneToVolcano(pPlayer)
 
 	CreatureObject(pPlayer):sendSystemMessage("The pilot agrees to fly you into the crater.")
 	self:advance(pPlayer, self.STAGE_KILL_HK47)
-	self:giveWaypoint(pPlayer, "task", "Defeat HK-47", self.taskText[self.STAGE_KILL_HK47][2], self.hk47.x, self.hk47.y)
+
+	if (VolcanoBattlefield == nil) then
+		printLuaError("storyArcChaptersScreenPlay: VolcanoBattlefield is not loaded; refusing volcano entry")
+		return
+	end
+
+	VolcanoBattlefield:enter(pPlayer)
+end
+
+function storyArcChaptersScreenPlay:mayEnterVolcanoBattlefield(pPlayer)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	return self:getStage(pPlayer) == self.STAGE_KILL_HK47
+end
+
+-- VolcanoBattlefield calls this on victory for every player still inside.
+-- Same transition the killed-creature branch used to make: chapter three 03
+-- task 3 -> task 4, STAGE_KILL_HK47 -> STAGE_REPORT_SUCCESS.
+function storyArcChaptersScreenPlay:onVolcanoVictory(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	if (self:getStage(pPlayer) ~= self.STAGE_KILL_HK47) then
+		return
+	end
+
+	self:advance(pPlayer, self.STAGE_REPORT_SUCCESS)
 end
 
 -- chapter three 03 task 6, "the terminal located in this room", then task 7's
@@ -2281,10 +2294,9 @@ function storyArcChaptersScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		self:countBandit(pPlayer, template)
 	elseif (stage == self.STAGE_UPLINK) then
 		self:countKubaza(pPlayer, template)
-	elseif (stage == self.STAGE_KILL_HK47 and template == self.hk47.template) then
-		-- chapter three 03 task 3.
-		self:advance(pPlayer, self.STAGE_REPORT_SUCCESS)
 	end
+	-- The invented HK-47 kill-counter branch lived here. Round F2(b) moved the
+	-- STAGE_KILL_HK47 -> STAGE_REPORT_SUCCESS advance to onVolcanoVictory.
 
 	return 0
 end
