@@ -277,8 +277,8 @@ ValleyBattlefield.stage1Creatures = {
 }
 
 ValleyBattlefield.stage1Props = {
-	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/demo_pack.iff", locx = -3, locz = 2, yaw = 0 },
-	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/demo_pack.iff", locx = -4, locz = 0, yaw = 0 },
+	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/demo_pack.iff", locx = -3, locz = 2, yaw = 0, isDemoPack = true },
+	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/demo_pack.iff", locx = -4, locz = 0, yaw = 0, isDemoPack = true },
 	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/power_generator.iff", locx = 26, locz = -22, yaw = 25, isGenerator = true },
 	{ template = "object/tangible/collection/rare_heavy_oppressor_flame_thrower.iff", locx = 10, locz = -35, yaw = 0 },
 	-- lower camp
@@ -389,10 +389,85 @@ function ValleyBattlefield:getTrack(session)
 			commanderID = 0,
 			paths = {},
 			rezzable = {},
+			demo = {},
 		}
 	end
 
 	return self.tracked[session]
+end
+
+--------------------------------------------------------------------------------
+-- Accessors for the demolition tool
+--
+-- demolition_pack.lua goes through these three rather than reaching into
+-- self.tracked, so the session bookkeeping stays owned by one file.
+--------------------------------------------------------------------------------
+
+-- One flat list of every object id the arena is tracking that a blast could
+-- reach: the droid army, the allies fighting for you, and the players. This
+-- stands in for live's getObjectsInRange, which Core3 Lua has no equivalent of.
+-- Range and liveness filtering is the caller's job. Returns nil when there is no
+-- live session -- a charge fired outside one hits nobody.
+function ValleyBattlefield:getBlastCandidates()
+	if (readData("valleyBattlefield:active") ~= 1) then
+		return nil
+	end
+
+	local track = self.tracked[self:currentSession()]
+
+	if (track == nil) then
+		return nil
+	end
+
+	local out = {}
+
+	for i = 1, #track.army do
+		table.insert(out, track.army[i])
+	end
+
+	for i = 1, #track.allies do
+		table.insert(out, track.allies[i])
+	end
+
+	for i = 1, #track.players do
+		table.insert(out, track.players[i])
+	end
+
+	return out
+end
+
+-- Stands in for live's utils.verifyLocationBasedDestructionAnchor. Live anchors
+-- each item at the spot it was made; this anchors on the arena origin instead.
+-- The difference cannot matter: the whole arena is well under 500 m across, so
+-- anything inside the fight passes either way, and the only thing this has to
+-- catch is demo gear carried out of it.
+function ValleyBattlefield:isNearArena(pPlayer, range)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	local dx = SceneObject(pPlayer):getWorldPositionX() - self.anchorX
+	local dy = SceneObject(pPlayer):getWorldPositionY() - self.anchorY
+
+	return (dx * dx + dy * dy) <= (range * range)
+end
+
+-- Demo gear made mid-fight joins the session's demo list so resetArena reaps it.
+-- That reaping is what makes the runtime-only radial safe -- see SUBSTITUTION E
+-- in demolition_pack.lua. Silently ignores calls with no live session rather
+-- than calling getTrack, which would build a phantom track for a dead session.
+function ValleyBattlefield:trackDemoObject(oid)
+	if (oid == nil or oid == 0) then
+		return
+	end
+
+	local track = self.tracked[self:currentSession()]
+
+	if (track == nil or track.demo == nil) then
+		return
+	end
+
+	table.insert(track.demo, oid)
 end
 
 --------------------------------------------------------------------------------
@@ -712,14 +787,29 @@ function ValleyBattlefield:runStage1(session)
 			local track = self:getTrack(session)
 			local oid = SceneObject(pObj):getObjectID()
 
-			table.insert(track.props, oid)
-
 			if (row.isGenerator) then
+				table.insert(track.props, oid)
 				TangibleObject(pObj):setMaxCondition(self.generatorHp)
 				TangibleObject(pObj):setConditionDamage(0)
 				writeData("valleyBattlefield:generatorID", oid)
 				createObserver(OBJECTDESTRUCTION, "ValleyBattlefield", "generatorDestroyed", pObj)
 				createObserver(OBJECTDISABLED, "ValleyBattlefield", "generatorDestroyed", pObj)
+			elseif (row.isDemoPack and DemolitionPack ~= nil) then
+				-- track.demo, not track.props: the demo list is the one resetArena
+				-- clears writeData keys for, and these rows carry three of them.
+				-- Object ids get reused, so a pack left in props would leave
+				-- demoInWorld/demoMines/demoSession behind on a recycled id.
+				table.insert(track.demo, oid)
+				writeData(oid .. ":demoInWorld", 1)
+				writeData(oid .. ":demoMines", DemolitionPack.startingMines)
+				writeData(oid .. ":demoSession", session)
+				SceneObject(pObj):setObjectMenuComponent("SomDemoPackMenuComponent")
+			else
+				table.insert(track.props, oid)
+
+				if (row.isDemoPack) then
+					printLuaError("ValleyBattlefield: DemolitionPack is not loaded; demo pack radial not attached")
+				end
 			end
 		end
 	end
@@ -1531,6 +1621,17 @@ function ValleyBattlefield:resetArena(reason)
 		self:destroyIDList(track.army)
 		self:destroyIDList(track.allies)
 		self:destroyIDList(track.props)
+
+		-- Demo gear is reaped through DemolitionPack, not destroyIDList: some of it
+		-- is sitting in a player's inventory, so it needs the database destroy as
+		-- well as the world one, and its writeData keys have to be cleared first
+		-- because object ids get reused. This reaping is what makes the runtime-only
+		-- radial safe -- see SUBSTITUTION E in demolition_pack.lua.
+		if (track.demo ~= nil and DemolitionPack ~= nil) then
+			for i = 1, #track.demo do
+				DemolitionPack:destroyDemoObject(getSceneObject(track.demo[i]))
+			end
+		end
 	end
 
 	self.tracked[session] = nil
@@ -1539,6 +1640,7 @@ function ValleyBattlefield:resetArena(reason)
 	self:clearSessionKeys()
 	writeData("valleyBattlefield:session", session + 1)
 end
+
 function ValleyBattlefield:destroyIDList(list)
 	if (list == nil) then
 		return
