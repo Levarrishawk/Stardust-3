@@ -229,28 +229,24 @@ WHAT IS NOT MODELLED, AND WHY
   spawn and the signal are both honoured; only the ordering between them is
   relaxed, and this is the one place in this file where that is done.
 
-  som_kenobi_final_crystal_pedestal and som_kenobi_final_force_crystal are
-  registered tangibles that no .qst in this tree references. They are left
-  unplaced rather than guessed at -- an open question about what SOE meant the
-  finale room to contain, not a gap this file should fill.
+  som_kenobi_final_crystal_pedestal and som_kenobi_final_force_crystal ARE
+  placed, from datatables/dungeon/mustafar_trials/obiwan_finale/obiwan_event_data.tab,
+  which lair_of_the_crystal.tpf reaches through
+  theme_park.dungeon.mustafar_trials.obiwan_finale.obiwan_event_manager. The
+  pedestal row is object/tangible/quest/som_kenobi_final_crystal_pedestal.iff at
+  live (locx, locy, locz) = (57, 0, 6), yaw -90, which is repo (x, z, y) =
+  (57, 0, 6). It lands in the finale section of this file (self.lair.pedestal).
+  Shared template shared_lair_of_the_crystal.tpf names the interior as
+  interiorlayout/som_obiwan_crystal_lair.ilf. Cell name "mainroom" is confirmed
+  by obiwan_event_manager.java:539 getCellId(self, "mainroom").
 
-  The absence is CHECKED, and the check is not the one this note used to cite.
-  It used to rest on "the lair's own .ilf does not place them", which proves
-  nothing: a .ilf lists what a building was furnished with, and the server
-  spawns quest objects from dungeon spawn tables instead. Those tables are the
-  place to look, and they have now been searched -- every dungeon table, not
-  just Mustafar's five. Neither template appears in any of them, and there is no
-  dungeon table for this building at all: spawning/dungeon/ holds 23 tables,
-  five of them som_*, and none is a crystal lair. So there is genuinely nothing
-  to quote, which is what this note claimed on weaker grounds than it had.
+  Why an earlier note was wrong: it searched .qst files and
+  datatables/spawning/dungeon/ and concluded from two empty directories that
+  nothing shipped. The table was in the building's own server template all
+  along. That is a research gap, not a design question, and the sentence
+  calling the placement Aaron's decision is withdrawn.
 
-  The same search DID overturn the sibling claim in reunite_shard.lua, where
-  som_kenobi_fusion_machine turned out to have a live row all along. That is why
-  this one was re-checked rather than left standing.
-
-  WHERE THEY WOULD GO, IF THEY GO ANYWHERE. This is geometry, not a source, and
-  it is written down so the decision is one line of work rather than another
-  survey. The 141-node .ilf has TWO statue galleries, not one:
+  The 141-node .ilf has TWO statue galleries, and they still describe the room:
 
     gallery 1   x 21..40    h -0.2..0.8  16 relic statues standing on the floor,
                                          mostly in two rows -- 7 at z 2.50 and
@@ -262,45 +258,12 @@ WHAT IS NOT MODELLED, AND WHY
                                          raised on its own pillar_pristine_tall
                                          at h -4.10 -- 8 statues, 8 pillars,
                                          paired within a metre of each other.
-
-  Gallery 2's ring centre is (79.83, 5.29), mean statue h 4.13. The
-  jeditemple_dome sits at (79.81, 5.30) and the jeditemple_platform_lrg at
-  (79.96, 5.19). Three separate objects agree on that centre to within 0.15 m,
-  and there is nothing standing in it. A domed rotunda ringed by eight raised
-  relic statues, empty at the middle, is the only spot in the building shaped
-  like a place for a pedestal, and the two homeless tangibles are named
-  "final_crystal_pedestal" and "final_force_crystal".
-
-  WHAT IS STILL UNKNOWN, and why that is enough to keep it unplaced: the
-  walkable height. The .ilf gives platform_lrg's ORIGIN at h -0.79, not its mesh
-  top, and som_obiwan_crystal_lair exists in the extract ONLY as that .ilf --
-  no .pob, no .msh -- so the surface a pedestal would stand on cannot be
-  derived, only guessed. Placing it means inventing a height, and a pedestal
-  sunk into or floating over its own dais is worse than an empty shrine. The
-  x/z are as good as sourced; the h is not. That is the whole decision, and it
-  is Aaron's.
-
-  OVERTURNED -- ROUND G(b1). The two tangibles were found. They are not in any
-  .qst and not in any dungeon spawn table; they are in the building's own
-  server template. _dsrc-full/sku.0/sys.server/.../lair_of_the_crystal.tpf
-  names four scripts, one of them
-  theme_park.dungeon.mustafar_trials.obiwan_finale.obiwan_event_manager, and
-  that manager reads
-  _dsrc-full/sku.0/sys.server/compiled/game/datatables/dungeon/mustafar_trials/
-  obiwan_finale/obiwan_event_data.tab. The pedestal row is
-  object/tangible/quest/som_kenobi_final_crystal_pedestal.iff at SOE
-  (locx, locy, locz) = (57, 0, 6), yaw -90 -- repo (x, z, y) = (57, 0, 6).
-  The gallery-2 centre guess of (79.83, 5.29) is retracted; it was wrong by
-  about 23 m. The height was never unknowable: it is 0. The closing claim that
-  the placement "is Aaron's" decision was a research gap, not a design
-  question -- the table was sitting in the server template that earlier
-  searches had not opened. The two statue galleries above still describe the
-  room (gallery 1 is where the player arrives and where the boss fights; gallery
-  2 is the empty rotunda further in); they are no longer a guess about where
-  the pedestal goes. Shared template
-  _dsrc-full/sku.0/sys.shared/.../shared_lair_of_the_crystal.tpf names the
-  interior as interiorlayout/som_obiwan_crystal_lair.ilf. Cell name "mainroom"
-  is confirmed by obiwan_event_manager.java:539 getCellId(self, "mainroom").
+                                         Gallery 2's ring centre is (79.83, 5.29);
+                                         the jeditemple_dome and
+                                         jeditemple_platform_lrg agree on that
+                                         centre to within 0.15 m. Gallery 2 is no
+                                         longer a guess about where the pedestal
+                                         goes; the guess was wrong by about 23 m.
 
   allowRepeats: stage stops at done, as everywhere else in this wave.
 

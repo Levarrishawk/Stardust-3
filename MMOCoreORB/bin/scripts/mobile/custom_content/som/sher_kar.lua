@@ -1,3 +1,8 @@
+-- Sher Kar open-world / lair boss.
+-- Loot: live table mustafar/sher_kar_loot (loot group sher_kar_loot). creatures.tab
+-- intLootRolls = 2, so two identical lootGroups blocks. master_loot.tab chance
+-- 10000/10000 so lootChance = 10000000 on each. Previous dark_jedi_tier_5 /
+-- force_tier_4 / crystal / attachment groups were filler, not a tuned choice.
 sher_kar = Creature:new {
 	customName = "Sher Kar",
 	socialGroup = "sher_kar",
@@ -30,12 +35,13 @@ sher_kar = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "dark_jedi_tier_5", chance = 2500000},
-				{group = "force_tier_4", chance = 2000000},
-				{group = "color_crystals", chance = 2000000},
-				{group = "power_crystals", chance = 1500000},
-				{group = "armor_attachments", chance = 1000000},
-				{group = "clothing_attachments", chance = 1000000}
+				{group = "sher_kar_loot", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "sher_kar_loot", chance = 10000000}
 			},
 			lootChance = 10000000
 		}

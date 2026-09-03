@@ -3,8 +3,10 @@
 -- som_dark_jedi_boss.lua, not live's 84. resists, socialGroup, and aggression
 -- are live; weapon/attacks come from hk77.lua because live's droid_hk77_boss
 -- is unregistered. customName is authored -- no .stf ships in the extract.
--- Live loot mustafar_npc_loot_b:forward_commander is absent from the extract;
--- the tree's hk77 boss loot block stands in.
+-- Loot: live table mustafar_npc_loot_b:forward_commander (loot group
+-- forward_commander). creatures.tab intLootRolls = 1; master_loot.tab chance
+-- 10000/10000 so lootChance = 10000000. Previous technician_tier_1 /
+-- armor_attachments / clothing_attachments were filler, not a tuned choice.
 som_battlefield_commander = Creature:new {
 	customName = "a Droid Army Forward Commander",
 	socialGroup = "droid_army",
@@ -37,11 +39,9 @@ som_battlefield_commander = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "technician_tier_1", chance = 6000000},
-				{group = "armor_attachments", chance = 2000000},
-				{group = "clothing_attachments", chance = 2000000}
+				{group = "forward_commander", chance = 10000000}
 			},
-			lootChance = 7000000
+			lootChance = 10000000
 		}
 	},
 	primaryWeapon = "ranged_weapons",

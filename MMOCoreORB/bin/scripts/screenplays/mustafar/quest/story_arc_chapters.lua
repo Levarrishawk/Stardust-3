@@ -472,13 +472,27 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- between them, and there is none.
 	uplinkEntrance = { nodeID = 12111374 },
 
-	-- SUBSTITUTED: the .qst names "an automated repair droid" and "the relay it
-	-- makes" but gives no template for either. must_mining_droid_mark_01 is the only
-	-- registered SOM utility droid (mobile/custom_content/som/serverobjects.lua:79)
-	-- and must_satellite_uplink is the one registered uplink prop
-	-- (object/custom_content/building/mustafar/items/serverobjects.lua:12).
+	-- SUBSTITUTED (repairDroid only): the .qst names "an automated repair droid"
+	-- and "the relay it makes" but gives no template for either.
+	-- must_mining_droid_mark_01 is the only registered SOM utility droid
+	-- (mobile/custom_content/som/serverobjects.lua:79) and is still a substitution
+	-- -- live's som_link_relay_droid belongs to the cave trial rather than to this
+	-- surface work site. The relay half of this note is RETIRED: the shipped
+	-- template was found. trial.java:124 names
+	-- RELAY_OBJECT = "object/tangible/dungeon/mustafar/uplink_trial/relay_object.iff";
+	-- droid_patrol_script.java:141 createObject(trial.RELAY_OBJECT, playLoc) is the
+	-- droid building it (also :152, :158; bug_spawner_tracker.java:104;
+	-- link_event_manager.java:135, :162). It is registered here at
+	-- object/custom_content/tangible/dungeon/mustafar/uplink_trial/relay_object.lua:1
+	-- (included from .../uplink_trial/serverobjects.lua:4) and is a
+	-- SharedStaticObjectTemplate (objects.lua:12), which is what spawnSceneObject
+	-- wants. must_satellite_uplink.iff was a BUILDING template, and
+	-- DirectorManager::spawnSceneObject calls createCellObjects() on anything that
+	-- reports isBuildingObject() -- so the old value was creating a cell-bearing
+	-- building as scenery. Do not go looking for a relay substitution; there is
+	-- none any more.
 	repairDroid = { template = "must_mining_droid_mark_01", respawn = 300 },
-	uplinkRelayTemplate = "object/building/mustafar/items/must_satellite_uplink.iff",
+	uplinkRelayTemplate = "object/tangible/dungeon/mustafar/uplink_trial/relay_object.iff",
 
 	-- INFERRED: the .qst states beetles attack the droid and the relay but gives no
 	-- count and no templates. All three registered kubaza templates are accepted as

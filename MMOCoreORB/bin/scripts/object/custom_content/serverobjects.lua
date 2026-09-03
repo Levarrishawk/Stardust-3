@@ -48,3 +48,42 @@ includeFile("custom_content/tangible/container/loot/som_cube.lua")
      this arc's to switch on, and whether they should be is upstream's call. Ordering is
      safe -- main.lua runs allobjects.lua before serverobjects.lua. ]]
 includeFile("custom_content/intangible/pet/som/serverobjects.lua")
+
+--[[ Fourth instance of the same shape. Walking the include closure from
+     object/serverobjects.lua (25,782 files, 24,633 templates) showed that none of
+     the 23 SoM boss-drop weapon server templates the Mustafar loot chain needs are
+     in it. Their client halves load from allobjects.lua
+     (allobjects.lua:1262-1264 pulls the custom_content weapon objects.lua files),
+     which is why the paths resolve everywhere and createObject still returns nil.
+     Without these lines every boss loot roll that names one of those 23 silently
+     drops the item.
+
+     Ranged is included wholesale: custom_content/weapon/ranged/serverobjects.lua
+     closes over 163 files / 157 templates with zero collisions against any path
+     registered elsewhere in the tree, so it is safe.
+
+     Melee is included file-by-file, never via custom_content/weapon/melee/
+     serverobjects.lua. That wholesale closure is 138 files / 137 templates with
+     three collisions, one of which overwrites a stock crafted saber
+     (object/weapon/melee/polearm/crafted_saber/sword_lightsaber_polearm_gen5.iff)
+     and another a quest 2h sword. Include order would decide which wins galaxy-
+     wide. The eleven named files below carry none of the colliding paths.
+     custom_content/weapon/melee/som_sword_obsidian.lua above is a different file
+     from som_sword_obsidian_generic.lua and stays as it is.
+
+     custom_content/draft_schematic/serverobjects.lua is already included at line
+     10; SchematicMap is populated only from managers/crafting/schematics.lua, so
+     registering an object template grants no Mustafar schematic and nothing here
+     depends on it. ]]
+includeFile("custom_content/weapon/ranged/serverobjects.lua")
+includeFile("custom_content/weapon/melee/blacksun_razor_generic.lua")
+includeFile("custom_content/weapon/melee/lance_kashyyk_generic.lua")
+includeFile("custom_content/weapon/melee/massassiknuckler_generic.lua")
+includeFile("custom_content/weapon/melee/som_2h_sword_massassi.lua")
+includeFile("custom_content/weapon/melee/som_2h_sword_obsidian_generic.lua")
+includeFile("custom_content/weapon/melee/som_2h_sword_tulrus_generic.lua")
+includeFile("custom_content/weapon/melee/som_lance_obsidian_generic.lua")
+includeFile("custom_content/weapon/melee/som_lance_xandank_generic.lua")
+includeFile("custom_content/weapon/melee/som_sword_mustafar_bandit_generic.lua")
+includeFile("custom_content/weapon/melee/som_sword_obsidian_generic.lua")
+includeFile("custom_content/weapon/melee/sword_mace_junti_generic.lua")

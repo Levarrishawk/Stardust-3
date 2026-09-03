@@ -552,6 +552,161 @@ MustafarDungeonPopulation = ScreenPlay:new {
 			cell = "r1",
 			x = -86.3, z = -3.22, y = -205.0, heading = 0,
 		},
+		--[[ Doom Bringer. datatables/spawning/dungeon/som_working_droid_factory.tab, the
+		     row boss_wp=doom_bringer at mediumroom18 / -28.058 / -28 / 6.81914, yaw 0.
+		     working_droid_factory/working_controller.java:197-226 reads the boss_wp
+		     objvar, takes getLocation of the one named doom_bringer, and calls
+		     create.object("som_working_doom_bringer", doomBringerLoc). The waypoint IS
+		     the spawn point. ]]
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_doom_bringer",
+			cell = "mediumroom18",
+			x = -28.058, z = -28, y = 6.81914, heading = 0,
+		},
+		--[[ Super Repair Droid. Three hops, all in shipped code. rapid_assembly_unit.java
+		     STAGE_REPAIR spawns an mde_repair_droid at a cloner waypoint;
+		     mde_repair_droid.java:251-262 completeTranx then does
+		     create.object(FIXER_ONE, getLocation(self)) -- at its own location. So the
+		     nearest attested point is the cloner waypoint itself: the boss_wp=cloner1
+		     row, smallroom11 / 80.0664 / -38 / -84.7532, yaw 0. This is the cloner's
+		     point, not a separately-shipped boss point. ]]
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_super_repair_droid",
+			cell = "smallroom11",
+			x = 80.0664, z = -38, y = -84.7532, heading = 0,
+		},
+	},
+
+	--[[ Uplink Cave -- Establish the Link trial population.
+
+	     THE TABLE EXISTS, and an earlier note in this repo said it did not.
+	     mustafar_instances.lua:279-281 reads "som_uplink_cave has NO dungeon spawn
+	     table", and that was true only of datatables/spawning/dungeon/. The cave's
+	     placement table is in a different tree:
+	     datatables/dungeon/mustafar_trials/link_establish/link_event_data.tab,
+	     reached from the building's own server template through link_event_manager.
+	     That note is corrected in the instances file; this block is what reads it.
+
+	     THE AXIS MAPPING is the same one at lines 25-37: live locy is HEIGHT, so
+	     repo x <- locx, repo z <- locy, repo y <- locz. spawnMobile takes heading
+	     in DEGREES; spawnProp / spawnSceneObject take RADIANS.
+
+	     THE FOREMAN AND ITS FOUR GUARDS ARE ONE LIVE SCRIPT. foreman_spawner.java
+	     does create.object(FOREMAN, getLocation(self)) at the line-23 waypoint,
+	     then loops offSet = { "-10:-10", "-10:10", "10:-10", "10:10" } adding each
+	     pair to live spawnLoc.x and spawnLoc.z -- which are repo x and repo y --
+	     while keeping the height. Then ai_lib.establishAgroLink(foreman, eventMobs),
+	     which Core3 has no binding for; the four defenders carry PACK instead, the
+	     same substitution valley_battlefield.lua records for its commander's
+	     guards. They used to sit split across lairBosses (foreman alone) and a
+	     missing guard spawn; they are together here so the one live script stays
+	     one block.
+
+	     THE .ILF CORROBORATION, carried over from the deleted lairBosses comment:
+	     the foreman point sits inside the som_uplink_cave.ilf footprint
+	     (x -200.8..8.6, z -108.5..178.2), the nearest fixture is a
+	     must_jeditemple_wall_long 13.8 m away, and the local ground band runs
+	     h -4.2 to -7.7, which brackets live's -5. That is a check on the axis
+	     mapping, not the source of the coordinate.
+
+	     THE 32 LAIR BEETLES, and exactly what is ported and what is not.
+	     bug_spawner.java is attached to each beetle_lair.iff. It has BUG_MAX = 8,
+	     spawns one every 20 s at getLocation(self) -- the lair's own point -- and
+	     re-spawns on droneDied until the cap. Each roll is DRONE unless
+	     rand(0, 9) > 7, so 8 in 10 drones and 2 in 10 workers. Ported: the cap of
+	     8 per lair, at the lair point, split 6 drones / 2 workers, which is that
+	     ratio applied to 8. Not ported: the 20 s stagger, the re-spawn on death,
+	     the lair's 50000 hit points and self-repair, and the soldier_spawner
+	     marker the lair drops when destroyed. So live's 8 is a ceiling a player
+	     climbs toward and this is 8 standing there from the start. Stated, not
+	     hidden. Count: 40 creatures and 5 props per copy, across the 9 copies in
+	     the uplink_cave pool.
+
+	     WHAT THE TABLE PLACES THAT THIS DOES NOT:
+	       - the 15 patrol_waypoint.iff rows (11 named, 4 randomN) -- not a
+	         registered server template in this tree, checked by grep across
+	         object/; the same call valley_battlefield.lua:96-100 already makes.
+	       - the single stage-2 droid_spawner row and its eleven-waypoint path --
+	         an escort, and this port has no stage machine to walk it.
+	         som_link_relay_droid is therefore not created.
+	       - must_uplink_bunker_entrance.iff on line 27 -- a building, and the
+	         copies are already instantiated by mustafar_instances.lua; spawning
+	         it inside a cell would nest cells.
+	       - som_link_lava_beetle_soldier -- reachable only through the lair's
+	         OnDestroy (soldier_spawner.java, which bug_spawner.java:33 attaches
+	         to a marker created when a lair is destroyed). It has no row in
+	         link_event_data.tab. Nothing here would place it.
+
+	     RESPAWN is self.respawn (600), for the reason already given at lines
+	     57-69. ]]
+	uplinkCave = {
+		poolKey = "uplink_cave",
+		label = "Uplink Cave",
+		table = "dungeon/mustafar_trials/link_establish/link_event_data.tab",
+		cell = "mainroom",
+
+		-- { template, x, z, y, heading }   z is HEIGHT, heading is DEGREES
+		creatures = {
+			-- foreman_spawner (table line 23) and its four offSet defenders
+			{ "som_link_lava_beetle_foreman", -58, -5, 11, 0 },
+			{ "som_link_lava_beetle_defender", -68, -5, 1, 0 },
+			{ "som_link_lava_beetle_defender", -68, -5, 21, 0 },
+			{ "som_link_lava_beetle_defender", -48, -5, 1, 0 },
+			{ "som_link_lava_beetle_defender", -48, -5, 21, 0 },
+			-- foreman_drone_spawner (table lines 24-26)
+			{ "som_link_lava_beetle_drone", -74, 0, 75, 0 },
+			{ "som_link_lava_beetle_drone", -6, -1, 0, 0 },
+			{ "som_link_lava_beetle_drone", -102, 0, -87, 0 },
+			-- lair line 15: 6 drones + 2 workers at the beetle_lair point
+			{ "som_link_lava_beetle_drone", -100, -6, 37, 0 },
+			{ "som_link_lava_beetle_drone", -100, -6, 37, 0 },
+			{ "som_link_lava_beetle_drone", -100, -6, 37, 0 },
+			{ "som_link_lava_beetle_drone", -100, -6, 37, 0 },
+			{ "som_link_lava_beetle_drone", -100, -6, 37, 0 },
+			{ "som_link_lava_beetle_drone", -100, -6, 37, 0 },
+			{ "som_link_lava_beetle_worker", -100, -6, 37, 0 },
+			{ "som_link_lava_beetle_worker", -100, -6, 37, 0 },
+			-- lair line 16: 6 drones + 2 workers at the beetle_lair point
+			{ "som_link_lava_beetle_drone", -71, -1, -1, 0 },
+			{ "som_link_lava_beetle_drone", -71, -1, -1, 0 },
+			{ "som_link_lava_beetle_drone", -71, -1, -1, 0 },
+			{ "som_link_lava_beetle_drone", -71, -1, -1, 0 },
+			{ "som_link_lava_beetle_drone", -71, -1, -1, 0 },
+			{ "som_link_lava_beetle_drone", -71, -1, -1, 0 },
+			{ "som_link_lava_beetle_worker", -71, -1, -1, 0 },
+			{ "som_link_lava_beetle_worker", -71, -1, -1, 0 },
+			-- lair line 17: 6 drones + 2 workers at the beetle_lair point
+			{ "som_link_lava_beetle_drone", -36, -3, -27, 0 },
+			{ "som_link_lava_beetle_drone", -36, -3, -27, 0 },
+			{ "som_link_lava_beetle_drone", -36, -3, -27, 0 },
+			{ "som_link_lava_beetle_drone", -36, -3, -27, 0 },
+			{ "som_link_lava_beetle_drone", -36, -3, -27, 0 },
+			{ "som_link_lava_beetle_drone", -36, -3, -27, 0 },
+			{ "som_link_lava_beetle_worker", -36, -3, -27, 0 },
+			{ "som_link_lava_beetle_worker", -36, -3, -27, 0 },
+			-- lair line 18: 6 drones + 2 workers at the beetle_lair point
+			{ "som_link_lava_beetle_drone", -93, -3, -44, 0 },
+			{ "som_link_lava_beetle_drone", -93, -3, -44, 0 },
+			{ "som_link_lava_beetle_drone", -93, -3, -44, 0 },
+			{ "som_link_lava_beetle_drone", -93, -3, -44, 0 },
+			{ "som_link_lava_beetle_drone", -93, -3, -44, 0 },
+			{ "som_link_lava_beetle_drone", -93, -3, -44, 0 },
+			{ "som_link_lava_beetle_worker", -93, -3, -44, 0 },
+			{ "som_link_lava_beetle_worker", -93, -3, -44, 0 },
+		},
+
+		-- { template, x, z, y, yaw }       z is HEIGHT, yaw is DEGREES (spawnProp converts)
+		props = {
+			{ "object/tangible/dungeon/mustafar/uplink_trial/beetle_lair.iff", -100, -6, 37, 0 },
+			{ "object/tangible/dungeon/mustafar/uplink_trial/beetle_lair.iff", -71, -1, -1, 0 },
+			{ "object/tangible/dungeon/mustafar/uplink_trial/beetle_lair.iff", -36, -3, -27, 0 },
+			{ "object/tangible/dungeon/mustafar/uplink_trial/beetle_lair.iff", -93, -3, -44, 0 },
+			{ "object/tangible/dungeon/mustafar/uplink_trial/exit_door.iff", -90, 0, 117, 4 },
+		},
 	},
 
 	-- What actually got placed, so a boot check can tell a silent failure from a
@@ -579,6 +734,7 @@ function MustafarDungeonPopulation:start()
 	end
 
 	self:populateLairBosses()
+	self:populateUplinkCave()
 
 	print("MustafarDungeonPopulation: " .. self.spawnedCount .. " creatures placed across the Mustafar dungeon pools, plus " .. self.bossCount .. " lair bosses")
 	print("MustafarDungeonPopulation: " .. self.propCount .. " non-creature objects placed from the same tables")
@@ -628,6 +784,65 @@ function MustafarDungeonPopulation:spawnLairBoss(boss, buildingID)
 	end
 
 	self.bossCount = self.bossCount + 1
+end
+
+function MustafarDungeonPopulation:populateUplinkCave()
+	local cave = self.uplinkCave
+	local buildings = MustafarInstances:getPoolBuildings(cave.poolKey)
+
+	if (buildings == nil or #buildings == 0) then
+		print("MustafarDungeonPopulation: instance pool '" .. cave.poolKey .. "' is empty; " .. cave.label .. " will not be populated")
+		return
+	end
+
+	for i = 1, #buildings do
+		self:populateUplinkCopy(cave, buildings[i])
+	end
+end
+
+-- cave.creatures rows are { template, x, z, y, heading } (5 fields, no cell name,
+-- because the cell is constant); pool.rows are { liveName, cell, x, z, y, heading }
+-- (6 fields). That is why this does not reuse spawnRow/spawnProp.
+function MustafarDungeonPopulation:populateUplinkCopy(cave, buildingID)
+	local pBuilding = getSceneObject(buildingID)
+
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		print("MustafarDungeonPopulation: " .. cave.poolKey .. " copy " .. buildingID .. " is missing; it gets no creatures")
+		return
+	end
+
+	local cellID = self:resolveCell(pBuilding, cave.cell)
+
+	if (cellID == 0) then
+		print("MustafarDungeonPopulation: " .. cave.poolKey .. " copy " .. buildingID .. " has no cell named '" .. cave.cell .. "'; its rows from " .. cave.table .. " are skipped")
+		return
+	end
+
+	for i = 1, #cave.creatures do
+		local row = cave.creatures[i]
+
+		-- Heading is DEGREES here -- see THE AXIS MAPPING.
+		local pMobile = spawnMobile("mustafar", row[1], self.respawn, row[2], row[3], row[4], row[5], cellID)
+
+		if (pMobile == nil) then
+			print("MustafarDungeonPopulation: failed to spawn " .. row[1] .. " in " .. cave.cell .. " of " .. cave.poolKey .. " copy " .. buildingID)
+		else
+			self.spawnedCount = self.spawnedCount + 1
+		end
+	end
+
+	for i = 1, #cave.props do
+		local row = cave.props[i]
+
+		-- spawnSceneObject takes RADIANS and takes the cell id before the heading.
+		local pObject = spawnSceneObject("mustafar", row[1], row[2], row[3], row[4], cellID, math.rad(row[5]))
+
+		if (pObject == nil) then
+			print("MustafarDungeonPopulation: failed to place " .. row[1] .. " in " .. cave.cell .. " of " .. cave.poolKey .. " copy " .. buildingID)
+		else
+			self.propCount = self.propCount + 1
+		end
+	end
 end
 
 -- The template a live creature name is standing in as, or nil if the name is not

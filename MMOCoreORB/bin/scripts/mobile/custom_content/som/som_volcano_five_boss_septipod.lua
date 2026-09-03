@@ -2,10 +2,13 @@
 -- Live row som_volcano_five_boss_septipod, level 82 BOSS; level here is APEX tier 140, not live's 82 -- see
 -- the note below.
 -- Live weapon droid_union_sentry_02.iff is unregistered, so this falls back to the defaultWeapon /
--- defaultAttack shape from union_sentry_droid.lua. Live loot mustafar/mustafar_trial_oppressor and
--- its chronicle relic are absent, so the union_sentry loot block stands in. Live setHp of 220000 is
+-- defaultAttack shape from union_sentry_droid.lua. Live setHp of 220000 is
 -- dropped for the APEX tier's baseHAM/baseHAMmax. Live scale 1.3 is dropped because Core3 Creature
 -- templates have no scale field.
+-- Loot: live table mustafar/mustafar_trial_oppressor (loot group gk_oppressor_loot).
+-- creatures.tab intLootRolls = 1; master_loot.tab chance 10000/10000 so lootChance =
+-- 10000000. Previous technician_tier_1 / junk were filler, not a tuned choice. The
+-- chronicle relic remains absent.
 -- The volcano sits one rung above the valley battlefield on the same tier ladder
 -- (scratch/MUSTAFAR-GAPS.md): live BOSS -> APEX 140, live ELITE -> BOSS 120. The valley
 -- is Chapter Three task 6 and the volcano is the campaign's last content, gated behind
@@ -46,9 +49,9 @@ som_volcano_five_boss_septipod = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "technician_tier_1", chance = 7000000},
-				{group = "junk", chance = 3000000}
-			}
+				{group = "gk_oppressor_loot", chance = 10000000}
+			},
+			lootChance = 10000000
 		}
 	},
 

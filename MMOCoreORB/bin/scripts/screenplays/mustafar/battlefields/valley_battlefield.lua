@@ -43,9 +43,33 @@ lands. For Foreman Koseyet it means he faces -133 here and 0 in live. Cosmetic.
 
 SCOPED OMISSIONS / SUBSTITUTIONS
 
-- Demo-pack radial (pick up / plant charge / detonator) is round F1(d), not
-  built here. The two packs still place as props at stage 1; they have no
-  radial yet. Stated, not silently skipped, and no fake radial is stubbed.
+- Demo-pack radial ships: SomDemoPackMenuComponent is attached at lines 828-837
+  when a demo-pack prop is placed, and demoInWorld / demoMines / demoSession are
+  seeded there.
+
+- The ten turret templates under object/tangible/dungeon/mustafar/valley_battlefield/
+  are not placed because live never places them either. valley_event_data.tab has
+  zero turret rows -- there is no shipped placement. turret_controller_object.iff
+  is created in exactly one place in the whole extract, turret_controller.java:139
+  inside regenerateInPlayerInventory, and nothing calls that method (the only other
+  regenerateInPlayerInventory in the tree is demolition_generator.java:37 and :54,
+  the demo pack's own separate method). turret_droid_controller.java is the sole
+  owner of buildTurret (line 21) and the sole caller of createObject on a turret
+  template (lines 38-40); no .java and no .tpf in the extract attaches that script
+  to anything. turret_controller.java gates on a constructionDroid objvar that
+  nothing in the tree ever writes, and getConstructionDroid() destroyObjects the
+  controller when it is absent. mining_droid.java never receives
+  turret_droid_controller and has no buildTurret handler. Repo cross-check: of the
+  twenty templates under valley_battlefield/, the ten turret ones have zero
+  references anywhere in this repo and the other ten -- the three demo charges, the
+  detonator, the demo pack, the bunker, the cooling unit, the two fence spans and
+  the power generator -- are all placed by this file. The split is exact. One
+  honest note: the first grep that looked at this was truncated at 40 lines and
+  filled entirely with turret_controller.java hits, which hid
+  turret_droid_controller.java and turret_operations.java. The conclusion survived
+  the re-check, but the evidence above is the rebuilt one, not the truncated one.
+  scratch/LIVE-VALLEY.md:11 asserted "Turrets are unreachable dead code" with no
+  citation; this bullet is that claim's citation.
 
 - Generator hate-on-tangible: live's 40 m trigger volume adds 1 hate to any
   isArmy droid on the generator (power_generator.java:56-58). Core3 AI cannot

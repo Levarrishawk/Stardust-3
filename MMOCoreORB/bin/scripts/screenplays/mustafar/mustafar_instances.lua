@@ -277,14 +277,21 @@ MustafarInstances = ScreenPlay:new {
 				text = "Enter the cave",
 
 				-- INVENTED PLACEMENT, and the absence behind it is a checked one.
-				-- som_uplink_cave has NO dungeon spawn table. The five that ship are
-				-- som_mining_facility, som_old_republic_facility, som_crash_site_cruiser,
-				-- som_working_droid_factory and som_decrepit_droid_factory. So unlike
-				-- the ORF there is no live row to quote here, and the .ilf is the best
-				-- evidence that exists -- which is exactly the use of a .ilf this tree
-				-- already calls fair: Core3 never instantiates .ilf furniture, so these
-				-- coordinates are not "where the prop is", they are shipped evidence of
-				-- where SOE left open floor.
+				-- som_uplink_cave has NO table under datatables/spawning/dungeon/ --
+				-- the five that ship there are som_mining_facility,
+				-- som_old_republic_facility, som_crash_site_cruiser,
+				-- som_working_droid_factory and som_decrepit_droid_factory. Its
+				-- placement table lives elsewhere:
+				-- datatables/dungeon/mustafar_trials/link_establish/link_event_data.tab
+				-- (26 content rows), reached from the building's own server template
+				-- through link_event_manager, and read by
+				-- mustafar_dungeon_population.lua. That table has no ENTRY row, so
+				-- the entry coordinate below is still invented -- the .ilf is the
+				-- best evidence that exists for where the player lands -- which is
+				-- exactly the use of a .ilf this tree already calls fair: Core3
+				-- never instantiates .ilf furniture, so these coordinates are not
+				-- "where the prop is", they are shipped evidence of where SOE left
+				-- open floor.
 				--
 				-- som_uplink_cave.ilf has one cell, mainroom, and 197 nodes. Within 20 m
 				-- of the cell origin the only ground-level fixtures are two

@@ -126,7 +126,16 @@ includeFile("groups/geonosian_lab/geonosian_relic.lua")
 includeFile("groups/hero_of_tatooine/hero_of_tat_mark_of_courage.lua")
 
 -- mustafar sub-folder
+includeFile("groups/mustafar/blackguard_vansk_drop.lua")
+includeFile("groups/mustafar/doombringer_loot.lua")
+includeFile("groups/mustafar/forward_commander.lua")
+includeFile("groups/mustafar/gk_oppressor_loot.lua")
+includeFile("groups/mustafar/hk47_loot.lua")
+includeFile("groups/mustafar/kubaza_foreman.lua")
+includeFile("groups/mustafar/master_droid_loot.lua")
 includeFile("groups/mustafar/sher_kar_consort.lua")
+includeFile("groups/mustafar/sher_kar_loot.lua")
+includeFile("groups/mustafar/storm_lord_drop.lua")
 
 -- npc/corellia sub-folder
 includeFile("groups/npc/corellia/afarathu_tier_1.lua")

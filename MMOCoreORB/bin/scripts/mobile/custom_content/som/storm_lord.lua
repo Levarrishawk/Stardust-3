@@ -1,3 +1,9 @@
+-- Storm Lord open-world boss.
+-- Loot: live table mustafar/storm_lord_drop (loot group storm_lord_drop).
+-- creatures.tab intLootRolls = 3, so three identical lootGroups blocks.
+-- master_loot.tab chance 10000/10000 so lootChance = 10000000 on each.
+-- Previous dark_jedi_tier_5 / force_tier_4 / holocron / crystal / attachment
+-- groups were filler, not a tuned choice.
 storm_lord = Creature:new {
 	customName = "Storm Lord",
 	socialGroup = "storm_lord",
@@ -30,14 +36,21 @@ storm_lord = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "dark_jedi_tier_5", chance = 3000000},
-				{group = "force_tier_4", chance = 2000000},
-				{group = "holocron_dark", chance = 1500000},
-				{group = "color_crystals", chance = 1500000},
-				{group = "power_crystals", chance = 1000000},
-				{group = "armor_attachments", chance = 1000000}
+				{group = "storm_lord_drop", chance = 10000000}
 			},
-			lootChance = 7000000
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "storm_lord_drop", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "storm_lord_drop", chance = 10000000}
+			},
+			lootChance = 10000000
 		}
 	},
 	primaryWeapon = "melee_weapons",

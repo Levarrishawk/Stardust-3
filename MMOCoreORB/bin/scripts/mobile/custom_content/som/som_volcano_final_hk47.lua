@@ -2,8 +2,11 @@
 -- Live row som_volcano_final_hk47, level 83 BOSS; level here is APEX tier 140, not live's 83 -- see
 -- the note below.
 -- Live has no separate registered weapon path for this row in the nine-weapon gap list; attacks follow
--- the hk47.lua / HK weapon-group shape with ranged_weapons. Live loot mustafar/mustafar_trial_hk47,
--- col_shattered_shard_02, and the chronicle relic are absent, so the hk47 loot block stands in.
+-- the hk47.lua / HK weapon-group shape with ranged_weapons.
+-- Loot: live table mustafar/mustafar_trial_hk47 (loot group hk47_loot). creatures.tab
+-- intLootRolls = 1; master_loot.tab chance 10000/10000 so lootChance = 10000000.
+-- Previous technician_tier_1 / armor_attachments / clothing_attachments were filler, not a
+-- tuned choice. col_shattered_shard_02 and the chronicle relic remain absent.
 -- Live setHp of 545852 is dropped for the APEX tier's baseHAM/baseHAMmax. Live scale 1.3 is dropped
 -- because Core3 Creature templates have no scale field. creatureBitmask is STALKER alone -- the
 -- campaign's final boss stands alone.
@@ -47,11 +50,9 @@ som_volcano_final_hk47 = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "technician_tier_1", chance = 6000000},
-				{group = "armor_attachments", chance = 2000000},
-				{group = "clothing_attachments", chance = 2000000}
+				{group = "hk47_loot", chance = 10000000}
 			},
-			lootChance = 7000000
+			lootChance = 10000000
 		}
 	},
 

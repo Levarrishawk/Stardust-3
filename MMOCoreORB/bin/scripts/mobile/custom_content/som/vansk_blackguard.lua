@@ -1,3 +1,9 @@
+-- Vansk of the Blackguard.
+-- Loot: live table mustafar/blackguard_vansk_drop (loot group blackguard_vansk_drop).
+-- creatures.tab intLootRolls = 2, so two identical lootGroups blocks.
+-- master_loot.tab chance 10000/10000 so lootChance = 10000000 on each.
+-- Previous wilder_tier_1 / armor_attachments / clothing_attachments were filler,
+-- not a tuned choice.
 vansk_blackguard = Creature:new {
 	customName = "Vansk of the Blackguard",
 	socialGroup = "wilder",
@@ -30,11 +36,15 @@ vansk_blackguard = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "wilder_tier_1", chance = 6000000},
-				{group = "armor_attachments", chance = 2000000},
-				{group = "clothing_attachments", chance = 2000000}
+				{group = "blackguard_vansk_drop", chance = 10000000}
 			},
-			lootChance = 7000000
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "blackguard_vansk_drop", chance = 10000000}
+			},
+			lootChance = 10000000
 		}
 	},
 	primaryWeapon = "pirate_weapons_heavy",
