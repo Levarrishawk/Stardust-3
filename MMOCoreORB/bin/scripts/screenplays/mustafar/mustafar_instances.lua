@@ -213,12 +213,24 @@ MustafarInstances = ScreenPlay:new {
 			     wrong. master_index.txt agrees: the only interior collision floor
 			     shipped is thm_must_monster_lair_s01_r1_collision_floor.flr.
 
-			     THE ARRIVAL POINT IS OURS. It has to be: there is no monster_lair
-			     dungeon spawn table (the only SoM ones are crash_site_cruiser,
-			     decrepit_droid_factory, mining_facility, old_republic_facility and
-			     working_droid_factory), and thm_must_monster_lair_s01.pob is listed
-			     in master_index.txt but is not present in any TRE available here, so
-			     the collision floor cannot be read.
+			     THE ARRIVAL POINT IS OURS. There is no monster_lair entry in
+			     datatables/spawning/dungeon/ (the only SoM ones are
+			     crash_site_cruiser, decrepit_droid_factory, mining_facility,
+			     old_republic_facility and working_droid_factory), and
+			     thm_must_monster_lair_s01.pob is listed in master_index.txt but is
+			     not present in any TRE available here, so the collision floor cannot
+			     be read. Live has no arrival point of its own to copy either -- it
+			     opened this lair through the Mustafarian bandit chain, not a portal
+			     drop -- so this one stays ours.
+
+			     THE BOSS POINT IS NOT OURS ANY MORE. This block used to give a
+			     second fitted point for Sher Kar himself and call it ours on the
+			     same reasoning. That was a wrong-tree search: the SoM trials keep
+			     their spawn data in datatables/dungeon/mustafar_trials/<system>/,
+			     a different tree from datatables/spawning/dungeon/, and
+			     sher_kar/sher_kar_data.tab does exist there. It gives Sher Kar and
+			     his four guards, and mustafar_dungeon_population.lua now uses those
+			     rows. Only the arrival point below is still a fit.
 
 			     What it IS derived from, rather than guessed: the .ilf's only
 			     furnished area is the nest at the far end -- 44 ground-resting props
@@ -227,15 +239,26 @@ MustafarInstances = ScreenPlay:new {
 			     Star debris) spanning x -94.96..-69.08, z -207.24..-194.86. Fitting
 			     a plane to those 44 heights gives floor h = -3.74 + -0.1966*(z +
 			     202.35), mean residual 0.24 m, max 1.30 m. That is a well-attested
-			     26 m x 12 m floor, and BOTH points below sit inside it, so neither
-			     relies on extrapolating into the unmapped tunnel.
+			     26 m x 12 m floor, and the arrival point sits inside it, so it does
+			     not rely on extrapolating into the unmapped tunnel.
 
 			       arrival  x -86.3, z(height) -5.19, y -195.5   (near edge of the nest)
-			       boss     x -86.3, z(height) -3.22, y -205.0   (deep end -- population file)
 
-			     ~9.5 m apart, so the player lands looking at him across the bone
-			     field. sher_kar.lua is pvpBitmask ATTACKABLE and not AGGRESSIVE, so
-			     that distance does not force an instant pull.
+			     THAT PLANE IS CORROBORATED BY LIVE, which is worth recording because
+			     it is what confirms the axis mapping in the line below. Applied to
+			     the sher_kar_data.tab rows -- which were found later and were not
+			     available when it was fitted -- it predicts -18.29 at guard0
+			     (y -128.367) against live's -18.2924, and -17.37 at guard4
+			     (y -133.004) against live's -17.1073. It only breaks far up the
+			     tunnel where the floor flattens out, so it is trustworthy exactly
+			     where it is used: the nest.
+
+			     Sher Kar himself now stands at his own sourced point about 43 m up
+			     the tunnel, so the player lands in the bone field and sees him and
+			     his guards down its length rather than face to face. sher_kar.lua is
+			     pvpBitmask ATTACKABLE and not AGGRESSIVE, so that distance does not
+			     force an instant pull -- and it is now a longer distance, not a
+			     shorter one.
 
 			     Field order is (x, height, y) per switchZone at :567 -- .ilf y (up)
 			     becomes the middle argument, .ilf z becomes the last, the same

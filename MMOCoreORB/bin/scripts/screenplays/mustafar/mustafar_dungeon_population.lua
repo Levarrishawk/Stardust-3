@@ -493,28 +493,49 @@ MustafarDungeonPopulation = ScreenPlay:new {
 
 			     Line 4's system_controller is placed by
 			     story_arc_chapters.lua:1101, line 9's exit_terminal and line 44's
-			     interior door by mustafar_instances.lua. Those three are not here. ]]
+			     interior door by mustafar_instances.lua. Those three are not here.
+
+			     The five rows below are the fight furniture of the three boss
+			     encounters -- the Devistator's repair module and inhibitor supply,
+			     the MDE's two cloners, and the Doom Bringer's destruction pile.
+			     Live creates them from working_controller.java at the same boss_wp
+			     waypoints as their bosses, not from a separate table. The cloner1
+			     waypoint is also where som_working_super_repair_droid already stands
+			     (existing lairBosses entry); the station and the droid share the
+			     point in live too, so that is not a collision to fix. ]]
 			props = {
 				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "mainroom27", 88.0126, -11.7154, -14.1607, -89.9543 },
 				{ "object/tangible/dungeon/mustafar/decrepit_droid_factory/access_controller.iff", "hall1", 20.1561, -11.6521, 32.9993, 179.909 },
+				{ "object/tangible/dungeon/mustafar/working_droid_factory/reactive_repair_module.iff", "smallroom6", 119.986, -28, 73.0647, 180 },
+				{ "object/tangible/dungeon/mustafar/working_droid_factory/inhibitor_storage.iff", "smallroom4", 95.4285, -20, -0.959162, 0 },
+				{ "object/tangible/dungeon/mustafar/working_droid_factory/rapid_assembly_station.iff", "smallroom11", 80.0664, -38, -84.7532, 0 },
+				{ "object/tangible/dungeon/mustafar/working_droid_factory/rapid_assembly_station.iff", "smallroom12", 47.9865, -38, -84.7016, 0 },
+				{ "object/tangible/dungeon/mustafar/working_droid_factory/radioactive_pile.iff", "mediumroom18", -20.0197, -28, 40.8667, 0 },
 			},
 		},
 	},
 
-	--[[ Lair bosses -- DELIBERATELY NOT A POOL ENTRY ABOVE.
+	--[[ Lair bosses -- fixed-point, one-per-copy spawns whose position is a
+	     single attested point rather than a table row set.
 
-	     Every pool in `pools` carries a `table` field naming the live .tab its rows
-	     came from, and every row is keyed by a live creature name that `substitutes`
-	     maps to a template. Sher Kar has neither. There is no monster_lair dungeon
-	     table at all -- the only SoM ones are som_crash_site_cruiser,
-	     som_decrepit_droid_factory, som_mining_facility, som_old_republic_facility
-	     and som_working_droid_factory -- and the single row anywhere in the live
-	     datatables that mentions him at all is "som_sherkar_consort 5" in
-	     ground_spawning/types/mustafar/malfosa.tab, which is his consort and not
-	     him. Putting him in `pools` would mean writing a `table` field that names a
-	     file that does not exist, and inventing a live name for `substitutes` to
-	     key on. Both would be lies in the shape of evidence, so he gets his own
-	     list and his own loop instead.
+	     spawnLairBoss places one spawn per copy of a named pool, cell resolved
+	     by name, spawnMobile with a direct template name and degrees. Most of
+	     the entries below come straight from
+	     datatables/spawning/dungeon/som_working_droid_factory.tab boss_wp rows
+	     (read through working_droid_factory/working_controller.java) or from
+	     hardcoded live java in the decrepit factory. Sher Kar and his four
+	     guards are the exception: there is no monster_lair dungeon table.
+
+	     SHER KAR HAS NEITHER A POOL TABLE NOR A SUBSTITUTE KEY. There is no
+	     monster_lair dungeon table at all -- the only SoM ones are
+	     som_crash_site_cruiser, som_decrepit_droid_factory, som_mining_facility,
+	     som_old_republic_facility and som_working_droid_factory -- and the
+	     single row anywhere in the live datatables that mentions him at all is
+	     "som_sherkar_consort 5" in ground_spawning/types/mustafar/malfosa.tab,
+	     which is his consort and not him. Putting him in `pools` would mean
+	     writing a `table` field that names a file that does not exist, and
+	     inventing a live name for `substitutes` to key on. Both would be lies
+	     in the shape of evidence, so he and his guards stay in this list.
 
 	     THE CREATURE IS FINISHED AND SHIPPED. sher_kar.lua is level 200 (RAID on
 	     the ladder), baseHAM 160000/195000, damage 1145/2000, baseXp 19008,
@@ -523,12 +544,35 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	     unreachable, because mustafar_instances.lua had `entry = nil` and nothing
 	     placed him. Both halves are fixed together or neither is worth doing.
 
-	     THE POINT IS OURS, and the derivation is written out in full at the
-	     monster_lair pool in mustafar_instances.lua. Short version: no .pob is
-	     available, so the floor was fitted from the 44 ground-resting props of the
-	     nest in must_monster_lair.ilf (residual 0.24 m mean). This point is the
-	     deep end of that attested floor; the player arrives ~9.5 m away at its near
-	     edge. Cell "r1" is the building's only cell, all 456 .ilf nodes are in it.
+	     THE POINT IS NOW SOURCED, and it used to be ours. It is corrected here.
+	     The old note said "THE POINT IS OURS ... there is no monster_lair dungeon
+	     spawn table", and put him at x -86.3 / h -3.22 / y -205.0, a point fitted
+	     from the 44 ground-resting props of the nest in must_monster_lair.ilf.
+	     That search was in the wrong tree. The SoM trials keep their spawn data in
+	     datatables/dungeon/mustafar_trials/<system>/, NOT in
+	     datatables/spawning/dungeon/, and
+	     datatables/dungeon/mustafar_trials/sher_kar/sher_kar_data.tab does exist.
+	     Its first row is
+	         area_spawner.iff  r1  locx -103.559  locy -10.1731  locz -164.703
+	         string:spawn_point=sher_kar
+	     which monster_manager.java:54-67 reads to place som_sherkar, then
+	     setYaw(sherKar, -10). That is the point and the heading used below.
+
+	     THE OLD FIT WAS NOT WRONG, WHICH IS WHY IT IS WORTH SAYING SO. The plane
+	     it produced, floor h = -3.74 + -0.1966*(y + 202.35), predicts live's own
+	     attested heights outside the region it was fitted on: at guard0
+	     (y -128.367) it gives -18.29 against live's -18.2924, and at guard4
+	     (y -133.004) it gives -17.37 against live's -17.1073. It only diverges far
+	     up the tunnel, where the floor flattens -- at guard1 (y -62.5382) it says
+	     -31.23 and live says -17.7027. So the axis mapping and the units in this
+	     file are independently confirmed, and live's own numbers are used wherever
+	     they exist because they are measurements and the plane is an inference.
+
+	     The player still arrives at x -86.3 / h -5.19 / y -195.5, the near edge of
+	     the nest -- that point is still ours and is unchanged. Sher Kar now stands
+	     about 43 m up the tunnel from it with his four guards spread between 38 m
+	     and 120 m out, which is the shape live's own table gives. Cell "r1" is the
+	     building's only cell, all 456 .ilf nodes are in it.
 
 	     THE CONSORT IS NOT MISSING FROM HERE, and the note that used to stand in
 	     this spot was wrong on its premise. It read malfosa.tab as evidence that
@@ -536,8 +580,9 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	     datatables/spawning/ground_spawning/types/mustafar/, which is the
 	     open-world spawn system, not a dungeon table. Live spawns the lair from
 	     monster_manager.java -- som_sherkar, som_sherkar_praetorian,
-	     som_sherkar_karling and som_sherkar_symbiot -- and never a consort. Sher
-	     Kar standing alone in here is what live does.
+	     som_sherkar_karling and som_sherkar_symbiot -- and never a consort. The
+	     four guards are now placed alongside him, which is what
+	     monster_manager.java:54-95 does.
 
 	     som_sherkar_consort now ships, as the open-world boss it actually is:
 	     mobile/custom_content/som/som_sherkar_consort.lua, placed by
@@ -550,7 +595,67 @@ MustafarDungeonPopulation = ScreenPlay:new {
 			label = "Sherkar's Lair",
 			template = "sher_kar",
 			cell = "r1",
-			x = -86.3, z = -3.22, y = -205.0, heading = 0,
+			x = -103.559, z = -10.1731, y = -164.703, heading = -10,
+		},
+		--[[ Sher Kar's four guards. Source:
+		     datatables/dungeon/mustafar_trials/sher_kar/sher_kar_data.tab, the
+		     four minefield_spawner.iff rows carrying
+		     string:spawn_point=guard0/1/3/4, read through
+		     sher_kar/monster_manager.java:54-95, which allocates
+		     obj_id[] guards = new obj_id[4] and assigns by index: type 0 and 1
+		     -> som_sherkar_praetorian, type 2 -> som_sherkar_karling, type 3 ->
+		     som_sherkar_symbiot.
+
+		     The table has guard0, guard1, guard3 and guard4 -- there is no
+		     guard2. That gap is live's own and is not a transcription error
+		     here. The table also carries seven karling0..karling6 markers.
+		     Nothing in live reads them -- monster_manager.java only ever looks
+		     for sher_kar and guard*. They are dead markers, and the four
+		     spawnAdd / praetorianDied / lifeSapperDied messages that would have
+		     used them are never sent. Not ported, on purpose.
+
+		     Live calls ai_lib.establishAgroLink(guards[0], guards); Core3 has
+		     no binding, so the four carry PACK instead -- the same substitution
+		     recorded elsewhere in this tree.
+
+		     THE HEADINGS ARE COMPUTED, NOT COPIED, and that is deliberate. Every
+		     guard row in the table carries yaw 0, but live never uses it: each
+		     branch of spawnGuards ends in
+		     faceTo(guards[type], utils.getObjIdScriptVar(self, trial.MONSTER_SHER_KAR)),
+		     so all four turn to look at Sher Kar the moment they exist. Taking
+		     the table's 0 would face all four due north, away from him. The
+		     values below are atan2(sherKarX - guardX, sherKarY - guardY) in
+		     degrees against his own sourced point (-103.559, -164.703) -- the
+		     same convention spawnMobile's heading argument already uses in this
+		     file. Distances from him, for the record: guard0 39.7 m, guard1
+		     102.2 m, guard3 119.7 m, guard4 38.0 m. ]]
+		{
+			poolKey = "monster_lair",
+			label = "Sherkar's Lair",
+			template = "som_sherkar_praetorian",
+			cell = "r1",
+			x = -87.4726, z = -18.2924, y = -128.367, heading = -156.120,
+		},
+		{
+			poolKey = "monster_lair",
+			label = "Sherkar's Lair",
+			template = "som_sherkar_praetorian",
+			cell = "r1",
+			x = -103.436, z = -17.7027, y = -62.5382, heading = -179.931,
+		},
+		{
+			poolKey = "monster_lair",
+			label = "Sherkar's Lair",
+			template = "som_sherkar_karling",
+			cell = "r1",
+			x = -155.967, z = -18.7049, y = -57.0598, heading = 154.040,
+		},
+		{
+			poolKey = "monster_lair",
+			label = "Sherkar's Lair",
+			template = "som_sherkar_symbiot",
+			cell = "r1",
+			x = -124.443, z = -17.1073, y = -133.004, heading = 146.622,
 		},
 		--[[ Doom Bringer. datatables/spawning/dungeon/som_working_droid_factory.tab, the
 		     row boss_wp=doom_bringer at mediumroom18 / -28.058 / -28 / 6.81914, yaw 0.
@@ -578,6 +683,122 @@ MustafarDungeonPopulation = ScreenPlay:new {
 			template = "som_working_super_repair_droid",
 			cell = "smallroom11",
 			x = 80.0664, z = -38, y = -84.7532, heading = 0,
+		},
+		--[[ Working Droid Factory bosses from
+		     datatables/spawning/dungeon/som_working_droid_factory.tab boss_wp
+		     rows, read through working_droid_factory/working_controller.java.
+		     beginSpawn at :28-36 fires spawnGuardians, spawnDevistator,
+		     spawnDroidEngineer and spawnDoomBringer unconditionally;
+		     spawnDoomBringer at :225 then fires spawnDoomGuards. So every one
+		     of these is placed on entry, not gated.
+
+		     The six Hands of Doom ring the Doom Bringer's room --
+		     boss_wp=doom_bringer is tab line 41, mediumroom18 / -28.058 / -28 /
+		     6.81914, and that boss is already placed by the existing lairBosses
+		     entry above. Do not double it. ]]
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hk_58_aurek",
+			cell = "smallroom21",
+			x = 100.881, z = -12, y = 30.9766, heading = 270,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hk_58_besh",
+			cell = "smallroom24",
+			x = 11.1364, z = -12, y = -17.0658, heading = 90,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_devistator",
+			cell = "smallroom6",
+			x = 119.999, z = -28, y = 67.5402, heading = 180,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_master_droid_engineer",
+			cell = "mediumroom10",
+			x = 44.0914, z = -38, y = -41.7914, heading = 121,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hand_of_doom",
+			cell = "mediumroom18",
+			x = -19.9774, z = -28, y = 52.3294, heading = 0,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hand_of_doom",
+			cell = "mediumroom18",
+			x = -31.498, z = -28, y = 52.415, heading = 0,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hand_of_doom",
+			cell = "mediumroom18",
+			x = -31.3043, z = -28, y = 41.041, heading = 0,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hand_of_doom",
+			cell = "mediumroom18",
+			x = -31.5005, z = -28, y = 29.5312, heading = 0,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hand_of_doom",
+			cell = "mediumroom18",
+			x = -19.9949, z = -28, y = 29.6682, heading = 0,
+		},
+		{
+			poolKey = "working_droid_factory",
+			label = "Working Droid Factory",
+			template = "som_working_hand_of_doom",
+			cell = "mediumroom18",
+			x = -8.74025, z = -28, y = 29.6619, heading = 0,
+		},
+		--[[ Decrepit Droid Factory bosses. Neither comes from a table; both
+		     positions are hardcoded in live java.
+
+		     Colonel OR-5: decrepit_droid_factory/decrepit_controller.java:106-113,
+		     new location(63, -67, -50, ...), setYaw(colonel, 90).
+
+		     Factory Guardian: DERIVED. power_core.java:59-82 finds the
+		     patrol_wp object named controlFour, takes its location, then does
+		     spawnLoc.x -= 3.4 and spawnLoc.z -= 1.4 before
+		     create.object("som_decrepit_guardian", spawnLoc) and
+		     setYaw(guardian, -90). In live's axes that .z is the horizontal,
+		     which is repo y. controlFour is at mainroom27 / 69.1 / -24 / 0.1,
+		     so 69.1 - 3.4 = 65.7 and 0.1 - 1.4 = -1.3; the guardian lands at
+		     65.7 / -24 / -1.3.
+
+		     Live gates the guardian behind the power-core objective
+		     (power_core.java fires spawnGuardian after the core is worked) and
+		     the colonel behind spawnOr5. This port has no objective machine, so
+		     both stand from the start -- the same static conversion the uplink
+		     comment already records for the beetle cap. ]]
+		{
+			poolKey = "decrepit_droid_factory",
+			label = "Decrepit Droid Factory",
+			template = "som_decrepit_colonel_or5",
+			cell = "mediumroom10",
+			x = 63, z = -67, y = -50, heading = 90,
+		},
+		{
+			poolKey = "decrepit_droid_factory",
+			label = "Decrepit Droid Factory",
+			template = "som_decrepit_guardian",
+			cell = "mainroom27",
+			x = 65.7, z = -24, y = -1.3, heading = -90,
 		},
 	},
 
@@ -623,23 +844,29 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	     the lair's 50000 hit points and self-repair, and the soldier_spawner
 	     marker the lair drops when destroyed. So live's 8 is a ceiling a player
 	     climbs toward and this is 8 standing there from the start. Stated, not
-	     hidden. Count: 40 creatures and 5 props per copy, across the 9 copies in
+	     hidden. Count: 52 creatures and 5 props per copy, across the 9 copies in
 	     the uplink_cave pool.
 
 	     WHAT THE TABLE PLACES THAT THIS DOES NOT:
 	       - the 15 patrol_waypoint.iff rows (11 named, 4 randomN) -- not a
 	         registered server template in this tree, checked by grep across
 	         object/; the same call valley_battlefield.lua:96-100 already makes.
-	       - the single stage-2 droid_spawner row and its eleven-waypoint path --
-	         an escort, and this port has no stage machine to walk it.
-	         som_link_relay_droid is therefore not created.
+	       - the eleven-waypoint patrol path the stage-2 relay droid would walk
+	         -- still not walked; this port has no pathing sequencer. The droid
+	         itself IS placed (see the relay-droid block below): link_event_manager
+	         beginSpawn at :17-23 calls spawnActors(self, 1) and then
+	         messageTo(self, "beginEvent", null, 20, false); beginEvent at
+	         :108-112 is nothing but spawnActors(self, 2). Stage 2 is
+	         unconditional, twenty seconds in. Meanwhile the foreman and its
+	         three drone spawners are stage 3 rows (table lines 22-25), and
+	         stage 3 only fires from validateRelays at :123-141 once eleven
+	         relay objects are counted -- and this port places those already.
+	         So an earlier note here that skipped the relay droid as "gated"
+	         was wrong: it was placing the gated content and skipping the
+	         ungated content.
 	       - must_uplink_bunker_entrance.iff on line 27 -- a building, and the
 	         copies are already instantiated by mustafar_instances.lua; spawning
 	         it inside a cell would nest cells.
-	       - som_link_lava_beetle_soldier -- reachable only through the lair's
-	         OnDestroy (soldier_spawner.java, which bug_spawner.java:33 attaches
-	         to a marker created when a lair is destroyed). It has no row in
-	         link_event_data.tab. Nothing here would place it.
 
 	     RESPAWN is self.respawn (600), for the reason already given at lines
 	     57-69. ]]
@@ -697,6 +924,49 @@ MustafarDungeonPopulation = ScreenPlay:new {
 			{ "som_link_lava_beetle_drone", -93, -3, -44, 0 },
 			{ "som_link_lava_beetle_worker", -93, -3, -44, 0 },
 			{ "som_link_lava_beetle_worker", -93, -3, -44, 0 },
+			--[[ Relay droid. link_event_data.tab line 2 -- the
+			     patrol_waypoint.iff row at locx -81, locy 0, locz 128 carrying
+			     script establish_the_link.droid_spawner. droid_spawner.java:22-29
+			     spawnRelayDroid does create.object(RELAY_DROID, getLocation(self))
+			     -- at the waypoint itself. Stage 2 is unconditional (see the
+			     uplinkCave header above); the eleven-waypoint path is still not
+			     walked. ]]
+			{ "som_link_relay_droid", -81, 0, 128, 0 },
+			--[[ Eleven lava beetle soldiers -- one at each named waypoint
+			     (link_event_data.tab lines 3-13, the eleven stage-1 rows
+			     carrying a wp_name).
+
+			     Live never places these from the table. bug_spawner.java:21-36
+			     OnDestroy creates a marker in mainroom and attaches
+			     soldier_spawner. soldier_spawner.java:24-60 then collects every
+			     object in the room carrying a WP_NAME script var -- which is
+			     exactly these eleven -- and spawnNewBug picks one at random,
+			     jitters it by rand(-6,6) on both axes, and spawns a soldier
+			     there, up to BUG_MAX = 3, re-spawning on death.
+
+			     So live's guaranteed total is 3 per destroyed lair across 4
+			     lairs = 12 soldiers, drawn from these eleven points. This port
+			     places eleven, one per point, from the start.
+
+			     Not ported: the trigger on lair destruction, the +-6 jitter,
+			     the re-spawn, and link_event_manager.stopRandomSoldiers at
+			     :164-176, which destroys the spawners once the relay objective
+			     completes. So live's soldiers are a wave that arrives and later
+			     stops; these stand throughout.
+
+			     This is the same static conversion already applied to the
+			     beetle lairs' 8-cap two blocks above. One decision, not two. ]]
+			{ "som_link_lava_beetle_soldier", -105, -1, 124, 0 },   -- firstCorner
+			{ "som_link_lava_beetle_soldier", -106, -2,  79, 0 },   -- secondCorner
+			{ "som_link_lava_beetle_soldier",  -78, -2,  71, 0 },   -- oppositeSide
+			{ "som_link_lava_beetle_soldier",  -56,  0,  40, 0 },   -- firstSpawn
+			{ "som_link_lava_beetle_soldier",  -70, -1,   0, 0 },   -- tSection
+			{ "som_link_lava_beetle_soldier",  -54, -1, -30, 0 },   -- firstLegBend
+			{ "som_link_lava_beetle_soldier",   -8, -2,  -1, 0 },   -- firstRelay
+			{ "som_link_lava_beetle_soldier",  -82,  0,  -5, 0 },   -- secondLegBend
+			{ "som_link_lava_beetle_soldier",  -99, -3, -45, 0 },   -- secondSpawn
+			{ "som_link_lava_beetle_soldier", -101, -2, -73, 0 },   -- finalEncounter
+			{ "som_link_lava_beetle_soldier", -102, -3, -26, 0 },   -- finalRelay
 		},
 
 		-- { template, x, z, y, yaw }       z is HEIGHT, yaw is DEGREES (spawnProp converts)
@@ -712,6 +982,21 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	-- What actually got placed, so a boot check can tell a silent failure from a
 	-- success. Nothing here is snapshot data, so there is no world id to look any
 	-- of it up by afterwards.
+	--
+	-- Expected counts after ROUND H(e) (checked against mustafar_instances.lua
+	-- pool depths: old_republic_facility 12, monster_lair 12, uplink_cave 9,
+	-- lair_of_the_crystal 12, working_droid_factory 12, decrepit_droid_factory 9):
+	--   lairBosses: 19 entries (was 3).
+	--   Per-pool boss placements: monster_lair 12 x 5 (Sher Kar + 4 guards) = 60;
+	--     working_droid_factory 12 x 12 (doom bringer, super repair droid, aurek,
+	--     besh, devistator, MDE, 6 hands) = 144; decrepit_droid_factory 9 x 2 = 18.
+	--     Total lair bosses 222 (was 36). Corrected from a draft that assumed 12
+	--     decrepit copies; mustafar_instances.lua gives decrepit 9, and the pool
+	--     table wins.
+	--   Props: working_droid_factory props 2 -> 7 rows, so +5 x 12 = +60. Uplink
+	--     props unchanged. Total props 471 (was 411).
+	--   Uplink creatures per copy 40 -> 52, x 9 = 468 (was 360).
+	--     Total pool creatures (pools + uplink) 1389 (was 1281).
 	spawnedCount = 0,
 	bossCount = 0,
 	propCount = 0,
