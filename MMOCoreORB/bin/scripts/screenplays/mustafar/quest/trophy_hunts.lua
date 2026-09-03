@@ -75,15 +75,21 @@
 
 	are the two entry points his conversation handler calls.
 
-	THE CREATURES -- FOUR SUBSTITUTED, ALL FLAGGED
+	THE CREATURES -- THREE SUBSTITUTED, ALL FLAGGED
 	----------------------------------------------
-	The .qst names four creature templates.  None of the four exists: a full
-	name-table scan of every client .tre returns no file for any of them, they
-	appear in zero files in this repo, and string/en/mob/creature_names.stf has
-	no row for any of them in any of its six shipped copies.  Substitutes:
+	The .qst names four creature templates.  Three of the four have no server
+	template: a full name-table scan of every client .tre returns no file for
+	them, they appear in zero files in this repo, and string/en/mob/
+	creature_names.stf has no row for them in any of its six shipped copies.
+
+	The fourth, som_ancient_jundak, DOES have a retail definition -- see the
+	paragraph below.  It was listed here as a substitute for several rounds
+	because the scan above never covered the retail server datatables, only the
+	client .tre set and this repo.  An absence is only evidence once you know
+	you have read the whole list.  Substitutes:
 
 	  som_blistmok_ura_jen    -> blistmok_trampler,    setCustomObjectName("Ura Jen")
-	  som_ancient_jundak      -> jundak_devourer,      setCustomObjectName("Ancient Jundak")
+	  som_ancient_jundak      -- substitution retired; now its own template (CL 84 ELITE, som/jundak.iff)
 	  som_xandank_packleader  -> xandank_onyx_plated,  setCustomObjectName("Xandank Packleader")
 	  som_xandank_pack        -> xandank
 
@@ -135,17 +141,21 @@
 	trampler DOES make her the "exceptional blistmok" the .qst describes, and the
 	source calling her Elite says the same thing from outside.
 
-	som_ancient_jundak is the one that stays an OPEN QUESTION: it appears nowhere
-	in the extract list, so jundak_devourer (ELITE 85, against jundak and
-	orf_jundak at 70) remains my pick of the closest shipped variant.  If any of
-	these four should be authored as real creature templates instead, that is
-	mobile/ work nobody has assigned.
+	som_ancient_jundak is NOT an open question.  It appears in creatures.tab at CL 84 ELITE
+	on som/jundak.iff.  The reason it looked absent is that the extract list consulted when
+	this block was written did not include that table.  It now has its own creature template
+	in mobile/custom_content/som/som_ancient_jundak.lua and the substitution is retired.
 
-	All four substitutes are registered and reachable (line numbers re-verified,
-	the previous set had drifted):
+	All three substitutes, and the ancient jundak's own new template, are
+	registered and reachable (line numbers re-verified, the previous set had
+	drifted):
 	blistmok_trampler.lua:47 + som/serverobjects.lua:32,
-	jundak_devourer.lua:47 + :58, xandank_onyx_plated.lua:47 + :192,
-	xandank.lua:41 + :191.
+	xandank_onyx_plated.lua:47 + :245, xandank.lua:55 + :244,
+	som_ancient_jundak.lua:63 + :118.
+
+	(The previous version of this list gave xandank_onyx_plated + :192,
+	xandank.lua:41 + :191.  Both were wrong before this round touched the file
+	-- they had drifted again.  These four pairs were re-read directly.)
 
 	THE REWARDS -- ALL THREE RESOLVED, NOTHING SUBSTITUTED
 	------------------------------------------------------
@@ -472,8 +482,9 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			huntX = -1616,
 			huntZ = 40,
 			huntY = 4275,
-			-- som_ancient_jundak does not ship anywhere.  SUBSTITUTE -- see header.
-			huntTemplate = "jundak_devourer",
+			-- substitution retired: som_ancient_jundak is in creatures.tab at CL 84 ELITE on
+			-- som/jundak.iff.  jundak_devourer was both the wrong creature and the wrong model.
+			huntTemplate = "som_ancient_jundak",
 			huntName = "Ancient Jundak",
 
 			-- task 5, Wait for Signal (jundak_skull_two), Signal Name jundak_skull_signal_one

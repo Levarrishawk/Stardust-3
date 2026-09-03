@@ -1677,9 +1677,28 @@ closed.** Nothing here was placed on the strength of this section.
 
 ### XP — no *quest reward* pays any, and the wiki's figures match nothing in the shipped data
 
-The two quest walkthroughs give hard XP numbers: Miner Madness 91,383 and Skull of the Jundak
-78,265. The repo awards neither. **Where those two figures came from is unresolved, and this
-section does not close it.**
+> ⚠ **THIS WHOLE SECTION IS SUPERSEDED. Read `screenplays/mustafar/mustafar_quest_xp.lua` instead.**
+> Round G answered it and this text was never updated. The reasoning below — including the
+> "**OPEN**" verdict at the end of it — is stale, and the conclusion it reaches is wrong.
+>
+> The stored `Experience Amount 0` is not what live paid. SOE's server **threw the stored amount
+> away** and recomputed from `datatables/quest/quest_experience.iff` using the quest's own LEVEL and
+> TIER — `groundquests.java:1018` and `:1379-1409`. So a zero in the `.qst` proves nothing about the
+> award, which is exactly the inference this section makes.
+>
+> And the wiki figure is not unexplained. Miner Madness is LEVEL 70 / TIER 4;
+> `quest_experience.tab` row 70, column `TIER_4_EXPERIENCE`, is **91383**. The walkthrough says
+> 91,383. Exact, to the digit. Skull of the Jundak is LEVEL 75 / TIER 3 = 86092 against the wiki's
+> 78,265, and 86092 / 78265 = 1.10000 — this extract is a much later publish than the Pub 27 capture
+> the wiki describes, so the table was retuned between them. (Checked whether that was a table-wide
+> 1.1 rescale: it is not. 246 of 540 cells are non-integer after dividing by 1.1.) Use the table.
+>
+> The level pair is what should have killed this section's reading on sight: a stored reward rises
+> with quest level, and here the **LEVEL 70** quest lists 91,383 while the **LEVEL 75** one lists
+> 78,265. That inversion is a symptom of two different publishes, not of a missing award.
+>
+> The one thing below that survives is the `bounty_hunts.lua:113` exception — TIER -1 is a
+> passthrough in `groundquests.java:1379`, so those seven keep their stored 1000.
 
 An earlier version of this section claimed the wiki numbers "corroborate that the `[list]` field
 was live" and cited `bounty_hunts.lua:111-116` for the rule. The gate refuted both halves and it
@@ -1762,7 +1781,16 @@ Two things the note does *not* argue for changing:
   `STAGE_DONE`. Copying the retail behaviour here would strand players; the deviation is
   deliberate and reasoned.
 
-### ⚠ Open decision — the Ancient Jundak's level — CLOSED BY THE SWEEP, NEEDS A RULING
+### ⚠ VOID — the Ancient Jundak's level — see ROUND H(g) at the end of this file
+
+> **Nothing in this section is safe to act on.** It argues about which level to give a *substitute*
+> creature, on the stated ground that `som_ancient_jundak` "ships nowhere" and "appears nowhere in
+> the extract list". Both are false. It is in the retail master creature table at **CL 84, ELITE, on
+> `som/jundak.iff`** — `_dsrc-full\...\datatables\mob\creatures.tab`, the file none of the rounds
+> that wrote the text below had read. There was never a decision here to make, and this sat in this
+> document as an open call for Aaron across several rounds because an unsuccessful search was
+> written down as an absence in the data. Closed in H(g). The original text is kept below only so
+> the mistake stays legible.
 
 **Read this before trusting the section below.** This was written as an open design call that was
 Levarris's to make. The retune then made it, as a side effect of a tier sweep rather than as a
@@ -2338,3 +2366,208 @@ tooling was wrong and the tree was fine, and here the tree was fine, the tooling
 registration.* A file on disk, a template in a folder, a key that reads like every other key — none
 of those mean the thing is wired. Check the **declared string against the load closure**, or against
 the shipped table, never against what exists on disk.
+
+## ROUND H(g) — the retail creature table nobody in this document had read
+
+### The file
+
+```
+C:\swg-extract\_dsrc-full\sku.0\sys.server\compiled\game\datatables\mob\creatures.tab
+2,281,571 bytes    6713 rows    292 of them som_*
+```
+
+Its own header declares the columns:
+`creatureName / BaseLevel / Damagelevelmodifier / StatLevelModifier / ToHitLevelModifier /
+ArmorLevelModifier / difficultyClass e(NORMAL=0,ELITE=1,BOSS=2) / ... / template / minScale /
+maxScale / ... / lootTable / ...`
+
+**This is a per-creature retail level and difficulty for 292 Mustafar creatures, and the
+157-template retune was carried out without it.** The retune instead used an authored eight-rung
+tier ladder anchored on this server's own stock templates. That is recorded honestly in the retune
+section above — every rung names its anchor — but the ladder was chosen believing no per-creature
+retail source existed. One did.
+
+### What it says about the tree, measured
+
+Comparing all 209 som templates that declare a `level` against the table, and accepting a match only
+where the creature name AND the declared `.iff` both agree (name similarity alone gives false hits —
+our `jundak` maps by name to retail `som_jundak`, which is `BaseLevel 1`, the pet/beast baseline, not
+the creature players fight):
+
+```
+our som templates        : 209
+name AND iff both match  : 103   <- trustworthy
+name matched, iff did not:  12   <- rejected, different creature
+no retail row at all     :  94   <- the ladder is the only source, and stays
+
+of the 103 trustworthy: 4 agree, 99 differ
+delta (retail - ours): min -84  max +55  mean -18.9
+ours HIGHER than retail: 75 of 99
+retail band across the matched set : 1 .. 100
+our    band across the same set    : 45 .. 140
+```
+
+The shape of the disagreement is systematic, not scattered — it is the top of the ladder:
+
+| our rung | our level | retail for the same creatures |
+| --- | --- | --- |
+| NAMED | 100 | 80 – 89 |
+| BOSS  | 120 | 80 – 88 |
+| APEX  | 140 | 82 – 90 |
+
+`storm_lord` is ours 140, retail 90. `som_volcano_five_boss_septipod` is ours 140, retail 82.
+`storm_lord_prophet` is ours 120, retail 87. Retail Mustafar tops out around 90; the ladder's
+top three rungs are above everything the planet actually shipped — and above the 45–105 band the
+retune section itself states as its target.
+
+### Why this is recorded and not acted on
+
+Aaron's standing note on this work is *"Mustafar done and complete and generally right (stardust
+combat does change things a bit) but otherwise 100%."* The parenthesis is the point. The ladder is
+anchored on **this server's** stock creatures, so it is already an adaptation to Stardust combat
+rather than an attempt at retail parity, and levels drive difficulty. Re-levelling 99 combat
+templates onto retail numbers is a combat-balance change across the whole planet, and it is the one
+axis he flagged as legitimately different here.
+
+So: **the 94 templates with no retail row keep the ladder, and the 99 that disagree are left as
+they are.** What changes is that the disagreement is now measured and written down instead of
+unknown. The comparison is `C:\tmp\leveldiff2.py` and it re-runs in seconds.
+
+**The one thing that IS changed on the strength of this table is content, not tuning** — see below.
+
+### The Ancient Jundak — the "open decision" was never a decision
+
+The section above headed *"⚠ Open decision — the Ancient Jundak's level"* is void. It framed a
+choice between 85, 70 and 84 for a substitute creature, on the stated ground that
+`som_ancient_jundak` "ships nowhere" and "appears nowhere in the extract list". That was false, and
+it was false because the extract list consulted did not include `creatures.tab`. Every jundak row:
+
+```
+  som_ancient_jundak                  lvl  84  ELITE    som/jundak.iff            scale 1.5/1.5
+  som_jundak                          lvl   1  NORMAL   som/jundak.iff            scale 0.8/1.4
+  som_jundak_devourer                 lvl  88  NORMAL   som/jundak_devourer.iff   scale 1.7/1.7
+  som_nesting_grounds_jundak          lvl  78  NORMAL   som/jundak.iff            scale 0.8/1.2
+  som_nesting_grounds_jundak_bloated  lvl  84  NORMAL   som/jundak.iff            scale 1.1/1.5
+  som_nesting_grounds_jundak_shrieker lvl  80  NORMAL   som/jundak.iff            scale 0.9/1.3
+  som_nesting_grounds_jundak_stalker  lvl  82  NORMAL   som/jundak.iff            scale 1/1.4
+```
+
+Corroborated three ways: `_som\quest\som_jundak_skull.qst:52` carries
+`<data value="som_ancient_jundak" name="CreatureType" />`; the retail buildout
+`datatables\buildout\mustafar\mustafar_main_ne.tab:969` spawns `mustafar/ancient_jundak`, which
+resolves through `spawning\ground_spawning\types\mustafar\ancient_jundak.tab:3`; and the community
+page this document already cites says CL 84 Elite, which now matches the shipped row exactly.
+
+The substitution was therefore wrong twice: the creature exists, and `jundak_devourer` is a
+*different* creature on a *different appearance* (`som/jundak_devourer.iff`), so the trophy target
+has been wearing the wrong model as well as the wrong stats. Closed by giving it its own template at
+CL 84 on `som/jundak.iff` and pointing `trophy_hunts.lua` at it. `jundak_devourer` is left alone —
+retail has it at 88, the highest jundak of all, so this tree's ELITE 85 is nearer the mark than the
+70 the old section proposed reverting it to, and the 70/70/85 spread across the bounty's three
+targets is retail-faithful: retail's own jundak family runs 78, 80, 82, 84, 88.
+
+**The rule this round earns:** *an absence is only evidence once you know you have read the whole
+list.* "Appears nowhere in the extract" was a claim about my search, stated as a claim about the
+data, and it stood in this document as an open design question for Aaron for several rounds.
+
+### What H(g) changed
+
+- NEW `mobile/custom_content/som/som_ancient_jundak.lua` — the ELITE rung, on
+  `object/mobile/som/jundak.iff`, at `level = 84`. 84 is retail's own number and is the second
+  deliberate exception to "level is copied from the anchor exactly"; the header says so in place so
+  nobody "fixes" it back to 85.
+- `mobile/custom_content/som/serverobjects.lua:118` — one `includeFile` line, alphabetical.
+- `quest/trophy_hunts.lua:476` — `huntTemplate` moved off `jundak_devourer` onto the new template.
+- `quest/trophy_hunts.lua` header — the substitution table, the OPEN QUESTION paragraph, the
+  "None of the four exists" premise, and the registered-and-reachable line-number list, all
+  corrected. Two of those line numbers (`xandank_onyx_plated` :192, `xandank.lua:41` + :191) were
+  already wrong before this round touched the file; the real pairs are :245 and :55 + :244.
+
+### H(g) verification
+
+```
+gate-mustafar.sh    som + mustafar 321 ok / 0 fail      (320 before, +1 file)
+                    object/custom_content 14023 / 0
+                    custom_scripts 10 / 0
+                    mustafar loot 93 / 0
+                    custom weapon 327 / 0
+sync                800 files, missing: 0               (799 before, +1 file)
+boot                READY, 0 'Lua] ERROR', 200 all-ERROR (baseline, unchanged)
+                    creature templates 6120             (6119 before, +1 exactly)
+                    676 Loot Groups, 2274 Loot Items    (both unchanged, as predicted)
+non-ASCII           0 in all three touched files; whole-scope sweep of 379 files finds
+                    exactly the five known pre-existing files, unchanged, at
+                    180 / 10 / 9 / 3 / 3 bytes
+```
+
+Every one of those numbers was predicted in advance of the boot and matched.
+
+## ROUND H(g2) — the placements were never unverified, and now they are proven
+
+The section *"What this census does not do"* says: *"It does not place anything. Every item above
+needs a value -- a coordinate, an encounter design -- that no shipped file contains."* **That is
+superseded.** The coordinates exist, retail ships them, and this tree already matches them.
+
+`datatables/buildout/mustafar/*.tab` holds 178 `area_spawner.iff` rows across four area tables. Each
+carries `strSpawns|4|mustafar/<type>`, which resolves through
+`datatables/spawning/ground_spawning/types/mustafar/<type>.tab` to one or more `creatures.tab`
+names. The rows are in area-local coordinates.
+
+**The conversion, and the trap in it.** `sys.shared/.../buildout/areas_mustafar.tab` has
+`useOrigin`/`originX`/`originZ` columns. For all four `mustafar_main_*` areas those read
+`1 / -2304 / 2848`. That is the **composite** origin, shared by the set -- it is *not* the per-area
+offset. The per-area offset is the area's own lower-left corner (`x1`, `z1`). Reading the origin
+columns as the offset happens to be correct for `mustafar_main_ne`, whose corner is also
+(-2304, 2848), and wrong for the other three.
+
+I made exactly that mistake and it produced a fake 4.4 km defect across two whole regions. The
+self-check that caught it: **convert every row and require it to land inside its own area's declared
+bounds.** Wrong reading: 1055/1055 for `ne`, 3/1402 for `nw`, 31/753 for `se`, 0/612 for `sw`.
+Corner-based reading: **4111 of 4113 rows inside their own area.** So:
+
+```
+world_x = area.x1 + px      world_y = area.z1 + pz      height = py
+```
+
+**The result.** Of the 178 retail spawners, 90 name a creature this tree also places:
+
+```
+  within  25 m of the retail spot   58
+  within 100 m                       8   (same encounter, spread differently)
+  within 400 m                      22   (retail has more spawners than we do;
+                                          the extras collapse onto our nearest one)
+  beyond 400 m                       2   (both explained below, neither a defect)
+```
+
+Spot checks that land on the number:
+
+```
+  malfosa            retail (-3080.7, 5353.8)  ours malfosa_region.lua:67  (-3080.66, 5353.76)   0.06 m
+  storm_lord         retail (  194.4, 4096.3)  ours storm_lord_region.lua:145                    0.00 m
+  storm_lord_prophet retail (  316.1, 3742.0)  ours storm_lord_region.lua:172 (315, 3746)        4.1 m
+  ancient_jundak     retail (-1624.5, 4276.1)  ours trophy_hunts.lua:475 (-1616, 4275)           8.6 m
+  xandank_trophy_pack   retail (-4586.0, 5104.8)  ours trophy_hunts.lua:519                      1.3 m
+  xandank_trophy_leader retail (-4582.9, 5111.7)  ours trophy_hunts.lua                          5.4 m
+  blistmok_ura_jen   retail (-3781.6, 2646.6)  ours trophy_hunts.lua:390                        18.8 m
+```
+
+The last three matter most: `trophy_hunts.lua`'s header derived those three coordinates from the
+community list through the offset `world = (way_x - 2880, way_y + 2976)` and recorded the agreements
+as 1.3 m, 5.4 m and 18.8 m against placements made independently. **Retail's own buildout rows now
+confirm all three from a fourth, unrelated source.** The offset is proven, the community list is
+trustworthy on coordinates, and the placements in this tree are retail-accurate.
+
+The two cases beyond 400 m are both artifacts of the comparison, not of the tree:
+
+- `elite_flea` -- retail runs an ambient elite spawner at (-4438, 684); `cursed_shard.lua:223`
+  places the same creature at its own quest location. Two different spawns of one creature.
+- one `jedi_three_storm_lord_minion` -- retail has 16 minion spawners, this tree has fewer, so the
+  furthest retail one is 461 m from our nearest. Coverage, not misplacement.
+
+**A second trap, recorded because it nearly became a third fake defect.** My first scanner read
+`template = "..."` and then searched *forward* for `x`/`y`. `reunite_shard.lua` writes
+`x=, z=, y=` *before* `template=`, so the scanner paired each creature with the **next** entry's
+coordinates and reported three 400 m+ misplacements in the Kenobi shard legs. Reading
+`reunite_shard.lua:236-270` directly showed all three are right: tulrus 61.9 m, dark jedi 5.9 m,
+phantom bandits 7.3 m from their retail spawners. *Read the primary source before believing your own
+checker* -- the rule applies to tools I write, not just to subagents.
