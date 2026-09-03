@@ -36,23 +36,44 @@ spawnMobile takes heading in DEGREES, so yaw goes across unconverted. This is
 the opposite of spawnSceneObject, which takes radians and is why the terminals
 in story_arc_chapters.lua are wrapped in math.rad and these creatures are not.
 
-THE TEMPLATES ARE SUBSTITUTED  --  every single one
+THE TEMPLATES ARE THIS TREE'S OWN
 
-Not one of the seventeen creature names in those tables exists as a template. This
-is a CHECKED absence, not an assumption: no som_orf_* and no som_decrepit_*
-creature definition appears anywhere in this repo or anywhere in the extracted
-source tree. They exist only as the strings in these tables. So each live name is
-mapped to the closest thing this tree actually ships, and the mapping is written
-out in full below with its reason.
+Every one of the seventeen names is defined in retail's
+sys.server/compiled/game/datatables/mob/creatures.tab at BaseLevel 80-87:
 
-What that buys and what it does not: the ENCOUNTER is real -- the right kind of
-creature, in the right room, on the right spot, facing the right way, in the
-right numbers. The CREATURE is not. Combat stats, loot tables, special attacks
-and faction are whatever the substitute already had. Nobody should read a kill
-in here as a reproduction of the live fight.
+    som_orf_ancient_security_drone   BaseLevel 85  NORMAL
+    som_orf_ancient_patrol_drone     BaseLevel 84  NORMAL
+    som_orf_ancient_sentinel_droid   BaseLevel 86  NORMAL
+    som_orf_ancient_guard_droid      BaseLevel 87  ELITE
+    som_orf_flea_hatchling           BaseLevel 83  NORMAL
+    som_orf_flea_juvenile            BaseLevel 84  NORMAL
+    som_orf_flea_starving            BaseLevel 85  NORMAL
+    som_orf_beetle_hatchling         BaseLevel 84  NORMAL
+    som_orf_beetle_worker            BaseLevel 85  NORMAL
+    som_orf_beetle_soldier           BaseLevel 86  NORMAL
+    som_orf_ancient_tulrus           BaseLevel 85  BOSS
+    som_orf_ancient_xandank          BaseLevel 87  BOSS
+    som_decrepit_battle_droid        BaseLevel 83  ELITE
+    som_decrepit_super_battle_droid  BaseLevel 85  BOSS
+    som_decrepit_cww8_combat_droid   BaseLevel 83  BOSS
+    som_decrepit_blastromech         BaseLevel 81  ELITE
+    som_decrepit_patrol_bot          BaseLevel 80  ELITE
 
-The one thing that is uniform: all fifteen substitute templates are level 70, so the
-difficulty band across the three buildings is at least consistent.
+The earlier "CHECKED absence" was checked against the client TRE set and this
+repo and never against the retail server datatable, which is where creature
+definitions actually live. An absence is only evidence once you know you have
+read the whole list.
+
+The seventeen are now authored as their own templates in
+mobile/custom_content/som/, on this tree's STD 70 / ELITE 85 / BOSS 120 rungs,
+mapped from retail's difficultyClass (NORMAL -> STD 70, ELITE -> ELITE 85,
+BOSS -> BOSS 120). Retail's BaseLevel is recorded in each file's header and is
+not copied into level.
+
+The old claim that "all fifteen substitute templates are level 70" was also
+wrong -- of those fifteen, five were level 70, seven were 85 and three were 50.
+So the "consistent difficulty band" that sentence claimed the substitution
+bought never existed. The band is consistent now, for the first time.
 
 RESPAWN  --  one number, and it is a substitution of application, not of value
 
@@ -244,49 +265,31 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	-- See RESPAWN in the header for why this is one number and why it is 600.
 	respawn = 600,
 
-	--[[ The substitution table.
-
-	     Keyed by the live creature name so it reads against the .tab rows, and so
-	     historian.lua can ask for one by the live name instead of duplicating a
-	     template string. Every value is a real registered mobile in
-	     mobile/custom_content/som/ and every one is level 70.
-
-	     The reasons are short on purpose: the long version is that none of these
-	     seventeen names has a definition to copy, so each pick is the nearest
-	     shipped creature of the same kind, and there is no better evidence than
-	     the name itself. Seventeen live names map onto fifteen distinct templates
-	     because lava_flea covers two flea stages and asn_121 covers both patrol
-	     droids -- so the two counts are different on purpose and neither is a
-	     typo. ]]
+	--[[ Every one of the seventeen now has its own template in
+	     mobile/custom_content/som/. The mapping is identity. The
+	     seventeen-onto-fifteen collapse is retired, and with it the three flea
+	     stages sharing one body and the two patrol droids sharing asn_121.
+	     Keyed by the live creature name so historian.lua can still ask by live
+	     name; leave the table in place so a future substitution can be
+	     reintroduced without call-site changes. ]]
 	substitutes = {
-		-- The four ancient droid classes of the Old Republic Facility.
-		som_orf_ancient_security_drone = "union_sentry_droid",       -- a facility's security, and quest one's "orf_security" target
-		som_orf_ancient_patrol_drone = "asn_121",                    -- a mobile probe droid; a patrol rather than a post
-		som_orf_ancient_sentinel_droid = "som_ancient_guardian_droideka",
-		som_orf_ancient_guard_droid = "som_ancient_guardian_ig",
-
-		-- The flea and beetle broods. Same species, different life stage, and this
-		-- tree ships two fleas and three beetles, so the stages collapse where it
-		-- has no separate mobile for them.
-		som_orf_flea_hatchling = "lava_flea",
-		som_orf_flea_juvenile = "lava_flea",                         -- no juvenile mobile ships; same creature as the hatchling
-		som_orf_flea_starving = "lava_flea_smoldering",
-		som_orf_beetle_hatchling = "kubaza_beetle",
-		som_orf_beetle_worker = "kubaza_worker_beetle",
-		som_orf_beetle_soldier = "kubaza_soldier_beetle",
-
-		-- The two ORF bosses. Both already exist under the orf_ prefix in this
-		-- tree, so these two are the closest to quoted the file gets.
-		som_orf_ancient_tulrus = "orf_tulrus",
-		som_orf_ancient_xandank = "orf_xandank",
-
-		-- The droid factory. The CWW8 line is what this tree ships for clone-war
-		-- battle droids, and the eradicator is its heavy.
-		som_decrepit_battle_droid = "cww8_battle_droid",
-		som_decrepit_super_battle_droid = "cww8a_eradicator",
-		som_decrepit_cww8_combat_droid = "cww8a_battle_droid",       -- the live name says CWW8 outright
-		som_decrepit_blastromech = "ig106",                          -- an assassin droid; the nearest thing to a hunting astromech
-		som_decrepit_patrol_bot = "asn_121",                         -- the observation droid, same pick as the ORF patrol
+		som_orf_ancient_security_drone = "som_orf_ancient_security_drone",
+		som_orf_ancient_patrol_drone = "som_orf_ancient_patrol_drone",
+		som_orf_ancient_sentinel_droid = "som_orf_ancient_sentinel_droid",
+		som_orf_ancient_guard_droid = "som_orf_ancient_guard_droid",
+		som_orf_flea_hatchling = "som_orf_flea_hatchling",
+		som_orf_flea_juvenile = "som_orf_flea_juvenile",
+		som_orf_flea_starving = "som_orf_flea_starving",
+		som_orf_beetle_hatchling = "som_orf_beetle_hatchling",
+		som_orf_beetle_worker = "som_orf_beetle_worker",
+		som_orf_beetle_soldier = "som_orf_beetle_soldier",
+		som_orf_ancient_tulrus = "som_orf_ancient_tulrus",
+		som_orf_ancient_xandank = "som_orf_ancient_xandank",
+		som_decrepit_battle_droid = "som_decrepit_battle_droid",
+		som_decrepit_super_battle_droid = "som_decrepit_super_battle_droid",
+		som_decrepit_cww8_combat_droid = "som_decrepit_cww8_combat_droid",
+		som_decrepit_blastromech = "som_decrepit_blastromech",
+		som_decrepit_patrol_bot = "som_decrepit_patrol_bot",
 	},
 
 	--[[ The rows.
