@@ -2,10 +2,11 @@
 -- template mobile/custom_content/som/blistmok.lua and the client's
 -- @monster_name:blistmok.
 --
--- mobType was MOB_HERBIVORE, which looks like it was read off diet = HERBIVORE
--- below. That field is not a mobType signal in this set -- blackguard.lua:26 is
--- diet = HERBIVORE on a humanoid -- and every sibling blistmok (blistmok,
--- blistmok_shrieker, blistmok_trampler, trained_blistmok) is MOB_CARNIVORE.
+-- mobType was MOB_HERBIVORE, which looked like it was read off the former
+-- diet = HERBIVORE (now diet = CARNIVORE to match MOB_CARNIVORE). That field
+-- is not a mobType signal in this set -- blackguard.lua:26 is diet = HERBIVORE
+-- on a humanoid -- and every sibling blistmok (blistmok, blistmok_shrieker,
+-- blistmok_trampler, trained_blistmok) is MOB_CARNIVORE.
 -- The mismatch was not cosmetic: AiAgentImplementation.cpp:4272 makes a carnivore
 -- treat any herbivore as attackable, so the wild packs would have hunted this
 -- quest spawn on sight. The profile here is a predator's anyway -- AGGRESSIVE +
@@ -36,7 +37,7 @@ som_kenobi_blistmok = Creature:new {
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/som_kenobi_blistmok.iff"},
 	lootGroups = {},

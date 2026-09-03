@@ -24,7 +24,7 @@ must_mining_droid_mark_01 = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/must_mining_droid_mark_01.iff"},
 	lootGroups = {

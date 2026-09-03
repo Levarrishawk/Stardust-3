@@ -38,7 +38,7 @@ som_volcano_five_midguard = Creature:new {
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/union_sentry_droid.iff"},
 	lootGroups = {

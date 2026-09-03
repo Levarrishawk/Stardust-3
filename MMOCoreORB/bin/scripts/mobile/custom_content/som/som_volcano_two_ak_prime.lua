@@ -39,7 +39,7 @@ som_volcano_two_ak_prime = Creature:new {
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/cww8a_battle_droid.iff"},
 	lootGroups = {

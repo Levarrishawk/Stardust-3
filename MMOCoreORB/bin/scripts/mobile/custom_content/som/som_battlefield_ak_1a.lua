@@ -30,7 +30,7 @@ som_battlefield_ak_1a = Creature:new {
 	pvpBitmask = ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/cww8_battle_droid.iff"},
 	lootGroups = {

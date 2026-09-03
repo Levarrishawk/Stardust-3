@@ -26,7 +26,7 @@ xandank = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/xandank.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/xandank.iff",

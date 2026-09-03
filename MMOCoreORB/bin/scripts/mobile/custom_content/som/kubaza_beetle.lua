@@ -24,7 +24,7 @@ kubaza_beetle = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/kubaza_beetle.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/kubaza_beetle.iff",

@@ -26,7 +26,7 @@ som_pann_protocol_droid = Creature:new {
 	pvpBitmask = NONE,
 	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED + INVULNERABLE + CONVERSABLE + INTERESTING,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/som_pann_protocol_droid.iff"},
 	lootGroups = {},

@@ -24,12 +24,12 @@
        loot group colonel_or5_loot x2, lootChance 10000000 each -- live
          intLootRolls 2 / intRollPercent 100; same two-block shape
          sher_kar.lua:39-52 uses.
-       weapons {"battle_droid_weapons"} -- live primary_weapon battledroid
-         resolves to the registered battle_droid_weapons group
-         (mobile/weapon/serverobjects.lua). Form matches
-         ep3_clone_relics_super_battle_droid_01.lua:31.
-       attacks = merge(pistoleermaster,carbineermaster,marksmanmaster) --
-         same line as ep3_clone_relics_super_battle_droid_01.lua:33.
+       primaryWeapon = "battle_droid_weapons" -- live primary_weapon
+         battledroid resolves to the registered battle_droid_weapons group
+         (mobile/weapon/serverobjects.lua). Field is primaryWeapon /
+         primaryAttacks because CreatureTemplate.cpp:191-233 reads only
+         those; the earlier weapons / attacks form was dead and left this
+         boss spawning unarmed.
 
      No specials authored beyond the weapon-group merge above. Live's
      droid_special_6 profile row contains no actions at all. ]]
@@ -76,9 +76,11 @@ som_decrepit_colonel_or5 = Creature:new {
 			lootChance = 10000000
 		}
 	},
-	weapons = {"battle_droid_weapons"},
+	primaryWeapon = "battle_droid_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(pistoleermaster,carbineermaster,marksmanmaster)
+	primaryAttacks = merge(pistoleermaster,carbineermaster,marksmanmaster),
+	secondaryAttacks = marksmanmaster
 }
 
 CreatureTemplates:addCreatureTemplate(som_decrepit_colonel_or5, "som_decrepit_colonel_or5")

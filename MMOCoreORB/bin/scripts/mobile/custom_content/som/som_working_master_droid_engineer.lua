@@ -25,12 +25,12 @@
          master_droid_loot belongs to som_working_super_repair_droid
          (creatures.tab lootTable mustafar/mustafar_trial_engineer), which
          already ships; it is NOT re-pointed at the MDE.
-       weapons {"pirate_carbine"} -- live primary_weapon pirate_carbine
+       primaryWeapon = "pirate_carbine" -- live primary_weapon pirate_carbine
          resolves to the registered pirate_carbine group
-         (mobile/weapon/serverobjects.lua). Form matches
-         ep3_clone_relics_super_battle_droid_01.lua:31.
-       attacks = merge(pistoleermaster,carbineermaster,marksmanmaster) --
-         same line as ep3_clone_relics_super_battle_droid_01.lua:33.
+         (mobile/weapon/serverobjects.lua). Field is primaryWeapon /
+         primaryAttacks because CreatureTemplate.cpp:191-233 reads only
+         those; the earlier weapons / attacks form was dead and left this
+         boss spawning unarmed.
 
      No specials authored beyond the weapon-group merge above. Live's droid_5
      profile is not ported as named specials this round. ]]
@@ -64,9 +64,11 @@ som_working_master_droid_engineer = Creature:new {
 
 	templates = {"object/mobile/ev_9d9.iff"},
 	lootGroups = {},
-	weapons = {"pirate_carbine"},
+	primaryWeapon = "pirate_carbine",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(pistoleermaster,carbineermaster,marksmanmaster)
+	primaryAttacks = merge(pistoleermaster,carbineermaster,marksmanmaster),
+	secondaryAttacks = carbineermaster
 }
 
 CreatureTemplates:addCreatureTemplate(som_working_master_droid_engineer, "som_working_master_droid_engineer")

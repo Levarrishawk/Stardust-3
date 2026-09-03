@@ -30,7 +30,7 @@ som_battlefield_gk_5 = Creature:new {
 	pvpBitmask = ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/union_sentry_droid.iff"},
 	lootGroups = {

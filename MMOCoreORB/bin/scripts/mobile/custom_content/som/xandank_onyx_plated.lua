@@ -24,7 +24,7 @@ xandank_onyx_plated = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/xandank_onyx_plated.iff"},
 	lootGroups = {

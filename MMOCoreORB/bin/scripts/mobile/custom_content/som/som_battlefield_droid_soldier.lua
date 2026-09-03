@@ -30,7 +30,7 @@ som_battlefield_droid_soldier = Creature:new {
 	pvpBitmask = ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/hk77.iff"},
 	lootGroups = {

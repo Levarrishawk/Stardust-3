@@ -24,7 +24,7 @@ cww8a_eradicator = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/cww8a_eradicator.iff"},
 	lootGroups = {

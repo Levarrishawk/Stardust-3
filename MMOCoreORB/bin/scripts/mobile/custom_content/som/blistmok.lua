@@ -24,7 +24,7 @@ blistmok = Creature:new {
 	pvpBitmask = ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/blistmok.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/blistmok.iff",

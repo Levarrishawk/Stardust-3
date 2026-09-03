@@ -24,7 +24,7 @@ blistmok_shrieker = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/blistmok_shrieker.iff"},
 	lootGroups = {

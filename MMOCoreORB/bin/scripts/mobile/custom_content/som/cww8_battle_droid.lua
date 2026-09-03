@@ -30,7 +30,7 @@ cww8_battle_droid = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/cww8_battle_droid.iff"},
 	lootGroups = {

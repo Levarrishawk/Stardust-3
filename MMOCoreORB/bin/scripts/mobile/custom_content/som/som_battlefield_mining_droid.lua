@@ -30,7 +30,7 @@ som_battlefield_mining_droid = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/probot.iff"},
 	lootGroups = {

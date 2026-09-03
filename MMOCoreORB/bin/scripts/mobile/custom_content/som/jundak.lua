@@ -24,7 +24,7 @@ jundak = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/jundak.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/jundak.iff",
