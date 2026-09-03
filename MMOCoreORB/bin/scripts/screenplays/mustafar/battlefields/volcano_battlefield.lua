@@ -258,7 +258,9 @@ VolcanoBattlefield = ScreenPlay:new {
 	-- so the _G[self.victoryBadge] guard below can only ever resolve an uppercase
 	-- key. This was written lowercase, which made the guard a permanent no-op --
 	-- the badge would have been silently skipped even on a server whose TREs do
-	-- carry it. Corrected in round G(b1).
+	-- carry it. Corrected in round G(b1). This server's badge_map.iff carries no
+	-- bdg_must_* row, so the guard is currently a no-op by data rather than by
+	-- defect.
 	victoryBadge = "BDG_MUST_VICTORY_VOLCANO",
 	victoryMusic = "sound/mus_mustafar_quest_success.snd",
 	hkIntroMusic = "sound/mus_mustafar_hk47_intro.snd", -- trial.java:199 MUS_VOLCANO_HK_INTRO
@@ -622,7 +624,7 @@ function VolcanoBattlefield:enter(pPlayer)
 	end
 
 	if (not storyArcChaptersScreenPlay:mayEnterVolcanoBattlefield(pPlayer)) then
-		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:not_ready")
+		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:not_authorized") -- You do not have the proper authorization to be in this area.
 		return
 	end
 

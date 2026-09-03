@@ -132,8 +132,10 @@ miningFieldMarkersScreenPlay = ScreenPlay:new {
 	-- earlier revision concluded it did not exist.
 	completionItem = "object/tangible/loot/mustafar/trophey_lava_lizard_heart.iff",
 
-	-- The shipped badge key. DirectorManager exports every badge key as an uppercase Lua
-	-- global holding its index, so this is looked up by name at grant time.
+	-- Live badge key name. DirectorManager exports every badge key as an uppercase Lua
+	-- global holding its index, so this is looked up by name at grant time. This
+	-- server's badge_map.iff has no row for it, so the _G[...] guard skips the award
+	-- silently; the fix is a TRE row, not a script change.
 	completionBadge = "BDG_MUST_MUSTAFAR_EXPLORATION",
 
 	-- Ordered list of the seven marker areas. Each area carries:

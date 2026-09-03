@@ -632,7 +632,7 @@ function MustafarInstances:enterInstance(pPlayer, poolKey)
 		-- Say so. A silent return is indistinguishable from a broken radial, and that
 		-- is how a wrong gate threshold sat unnoticed: the task inside was refused at
 		-- the door and nothing reported it.
-		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:not_ready") -- You are not ready to enter that area.
+		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:not_authorized") -- You do not have the proper authorization to be in this area.
 		return
 	end
 

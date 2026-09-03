@@ -726,10 +726,11 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	     datatables/badge/badge_map.iff out of the TREs, and
 	     DirectorManager.cpp:863-869 then registers each row as a Lua global under
 	     badge->getKey().toUpperCase(). So whether these two exist is a property of
-	     the TRE set, not of the scripts, and it cannot be settled by grepping the
-	     repo. That is exactly why the award goes through the nil-guard at
-	     grantFinaleBadge: on a TRE set that carries them the player gets the
-	     badge, and on one that does not, nothing happens and nothing errors. ]]
+	     the TRE set, not of the scripts. Reading badge_map.iff from this server's
+	     TRE set shows neither row is present, so both awards are currently no-ops
+	     and the nil-guard at grantFinaleBadge is doing exactly the job it was
+	     written for: on a TRE set that carries them the player gets the badge,
+	     and on one that does not, nothing happens and nothing errors. ]]
 	goodBadge = "BDG_MUST_OBIWAN_STORY_GOOD",
 	badBadge = "BDG_MUST_OBIWAN_STORY_BAD",
 

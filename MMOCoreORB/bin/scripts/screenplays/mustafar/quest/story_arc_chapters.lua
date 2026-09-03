@@ -634,6 +634,8 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- Badge keys arrive in Lua as uppercase globals holding their index, so this
 	-- is looked up by name at grant time and skipped if this server's badge_map
 	-- has no such row. Same guarded idiom as mining_field_markers.lua:644.
+	-- This server's badge_map.iff carries no bdg_must_* row, so the guard is
+	-- currently a no-op by data rather than by defect.
 	completionBadge = "BDG_MUST_VICTORY_ORF",
 
 	--------------------------------------------------------------------------

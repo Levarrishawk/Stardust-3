@@ -28,12 +28,19 @@ tulrus = Creature:new {
 
 	templates = {"object/mobile/som/tulrus.iff"},
 	controlDeviceTemplate = "object/intangible/pet/som/tulrus.iff",
+	-- Live rolls once at 100% and then picks one of two pools evenly, so this
+	-- creature drops something on every kill. The trophy is one of four in its
+	-- own pool, so it is still 12.5% per kill -- the same rate the previous
+	-- encoding produced. The old lootChance = 1250000 was that 12.5% collapsed
+	-- onto the roll itself, which delivered the trophy at the right rate but
+	-- dropped nothing the other 87.5% of the time.
 	lootGroups = {
 		{
 			groups = {
-				{group = "som_tulrus_trophy", chance = 10000000}
+				{group = "som_tulrus_trophy", chance = 5000000},
+				{group = "som_mustafar_creature", chance = 5000000}
 			},
-			lootChance = 1250000
+			lootChance = 10000000
 		}
 	},
 	primaryWeapon = "unarmed",

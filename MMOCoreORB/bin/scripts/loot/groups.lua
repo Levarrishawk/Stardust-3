@@ -138,6 +138,7 @@ includeFile("groups/mustafar/kubaza_foreman.lua")
 includeFile("groups/mustafar/master_droid_loot.lua")
 includeFile("groups/mustafar/sher_kar_consort.lua")
 includeFile("groups/mustafar/sher_kar_loot.lua")
+includeFile("groups/mustafar/som_mustafar_creature.lua")
 includeFile("groups/mustafar/storm_lord_drop.lua")
 
 -- npc/corellia sub-folder

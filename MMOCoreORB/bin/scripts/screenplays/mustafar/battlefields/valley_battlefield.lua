@@ -168,7 +168,9 @@ ValleyBattlefield = ScreenPlay:new {
 	-- UPPERCASE, and it has to be. DirectorManager.cpp:863-869 registers every
 	-- badge as a Lua global under badge->getKey().toUpperCase(), so a lowercase
 	-- key makes the _G[] guard a permanent no-op. Corrected in round G(b1);
-	-- volcano_battlefield.lua:256 had the same defect.
+	-- volcano_battlefield.lua:256 had the same defect. This server's
+	-- badge_map.iff carries no bdg_must_* row, so the guard is currently a
+	-- no-op by data rather than by defect.
 	victoryBadge = "BDG_MUST_VICTORY_ARMY",
 	victoryMusic = "sound/mus_mustafar_quest_success.snd",
 	introMusic = "sound/mus_mustafar_droid_invasion_intro.snd",
@@ -629,7 +631,7 @@ function ValleyBattlefield:enter(pPlayer)
 	end
 
 	if (not storyArcChaptersScreenPlay:mayEnterValleyBattlefield(pPlayer)) then
-		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:not_ready")
+		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:not_authorized") -- You do not have the proper authorization to be in this area.
 		return
 	end
 

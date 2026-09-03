@@ -71,6 +71,77 @@ absent behaviour. Check where that engine attaches behaviour before reading a bl
 
 ---
 
+## ⚠⚠ ROOT CAUSE 3 — one subdirectory is not the tree. Never conclude "empty" from one look.
+
+**Added 2026-09-03, round H(e). This is ROOT CAUSE 2's own failure mode repeating one level down.**
+
+ROOT CAUSE 2 fixed *which repository* to search. It did not fix *how far* to search inside it, and
+the same verdict came back in a smaller box. Line 841 of this file used to read:
+
+> the extract's server dsrc ships `datatables/spawning/` and nothing else, so there is no loot
+> table and no creature table to quote from
+
+Every clause of that is false, and each falsifier was one `find` away:
+
+| claimed absent | actually at |
+|---|---|
+| creature table | `datatables/mob/creatures.tab` — 6,714 lines, 292 `som_` rows |
+| loot tables | `datatables/loot/loot_types/mustafar/*.tab` and `loot_items/mustafar/*.tab` |
+| item -> template map | `datatables/item/master_item/master_item.tab` |
+| trial spawn data | `datatables/dungeon/mustafar_trials/<system>/*.tab` |
+
+The last row is the sharpest one, because **`datatables/dungeon/` and `datatables/spawning/dungeon/`
+are two different trees** and the SoM trials use both. Looking in `spawning/dungeon/`, finding no
+`monster_lair` entry, and concluding no Sher Kar spawn data exists is exactly the mistake — the
+data was in `dungeon/mustafar_trials/sher_kar/sher_kar_data.tab` the whole time. That single wrong
+conclusion put Sher Kar at an invented coordinate for several rounds and cost his four guards
+entirely. H(e) corrects both.
+
+The script paths carry the same trap: live scripts sit under
+`script/theme_park/dungeon/mustafar_trials/<system>/`, and the folder names do not match the
+datatable folder names (`volcano_battlefield` vs `valley_battleground`; the uplink is
+`establish_the_link` as a script folder and `link_establish` as a datatable folder).
+
+**Rule: "I did not find it" is only evidence after enumerating the whole tree.** `find <root> -name
+'*<term>*'` from the top, once, costs seconds. Reading one plausible subdirectory and generalising
+costs rounds.
+
+---
+
+## ⚠⚠ ROOT CAUSE 4 — check template presence by DECLARED iff string, not by file path
+
+**Added 2026-09-03, round H(e).**
+
+A repo object template declares what it *is* with
+`ObjectTemplates:addTemplate(var, "object/....iff")`. The path of the `.lua` that declares it is
+unrelated. In this tree most Mustafar weapons live under `object/custom_content/weapon/...` while
+declaring stock `object/weapon/...` paths. So a presence check that globs for a file path produces
+false MISSes. It reported five weapons absent that are all present and correctly declared
+(`som_lava_cannon_generic`, `carbine_e5_generic`, `sword_rsf_generic`,
+`rifle_lightning_heavy_static`, `blasterfist_generic`).
+
+Two further things only a declaration-level scan will show:
+
+- **The split-path defect is systematic, not incidental.** Live paths with an underscore segment
+  get re-split on the underscore in this repo:
+  `loot/mustafar/cube_loot/X.iff` -> `loot/mustafar/cube/loot/X.iff`;
+  `loot/generic_usable/X.iff` -> `loot/generic/usable/X.iff`;
+  `loot/loot_schematic/X.iff` -> `loot/loot/schematic/X.iff`. Confirmed on `cube_loot_3j`,
+  `cube_loot_3a` and `building_repair_device_generic_lt_4`. A live path will therefore not match;
+  the split form is the one that exists. Earlier rounds recorded several of these as "missing loot
+  templates". **That was wrong** — they were present under the split path.
+- **36 files declare `2h_sword_kashyyk.iff` instead of their own path** — a copy-paste defect,
+  pre-existing, not introduced here. It is inert: the load closure built from
+  `object/serverobjects.lua` (25,950 of the 31,609 `.lua` under `object/`) contains none of the 36.
+  But it does mean `heavy_acid_beam_static.iff` genuinely does not resolve, which is why
+  `weapon_tow_heavy_acid_beam_04_01` is deliberately not delivered in H(e).
+
+**Build the closure before calling anything reachable or unreachable.** Follow
+`^\s*includeFile\("([^"]+)"\)` recursively from `object/serverobjects.lua`; those paths are
+relative to `bin/scripts/object/`. Presence on disk is not presence in the game.
+
+---
+
 ## How a community `/way` becomes a coordinate
 
 `quest/mining_field_markers.lua:41`, verified against 30 marker rows in that file:
@@ -838,10 +909,32 @@ variant except `som_2h_sword_massassi`): three 2h swords (massassi, obsidian, tu
 mustafar_disruptor), two pistols (disruptor, ion_relic) and one carbine (republic_sfor).
 All 23 have art, have a server template, and are reachable by nothing.
 Only `som_sword_obsidian` is even registered, and only because the Symbiosis reward needed it
-(`:19`). **Which creature drops which is an open design question for Aaron** — the extract's
-server dsrc ships `datatables/spawning/` and nothing else, so there is no loot table and no
-creature table to quote from. This is the largest remaining piece of Mustafar content that is
-finished but undelivered.
+(`:19`).
+
+> **CORRECTED 2026-09-03 (round H(e)).** This paragraph used to end: *"Which creature drops which
+> is an open design question for Aaron — the extract's server dsrc ships `datatables/spawning/` and
+> nothing else, so there is no loot table and no creature table to quote from."*
+>
+> **Both halves were wrong.** It was never a design question and there was never a shortage of
+> data; it was a search that stopped at one directory. See ROOT CAUSE 3. The drop tables are
+> `datatables/loot/loot_types/mustafar/*.tab` and `loot_items/mustafar/*.tab`, the creature side is
+> `datatables/mob/creatures.tab`, and the item-to-template map is
+> `datatables/item/master_item/master_item.tab`. Which creature drops which is a **four-hop lookup**
+> that live answers exactly:
+>
+> ```
+> creatures.tab  intLootRolls / intRollPercent / lootTable
+>   -> loot_types/mustafar/<type>.tab      (strItems column)
+>     -> loot_items/mustafar/*.tab
+>       -> master_item.tab                 (template_name column)
+>         -> object iff
+> ```
+>
+> Rounds H(a) and H(e) walked that chain and delivered on it. Note the key shape while reading it:
+> live's SoM item keys are `weapon_tow_*` / `item_tow_*` (ToW = Trials of Obi-Wan), **not** `som_*` —
+> which is ROOT CAUSE 1 wearing a different hat.
+
+This is the largest remaining piece of Mustafar content that is finished but undelivered.
 
 ### One defect of my own, found by the same check and fixed
 
@@ -2031,8 +2124,12 @@ design question. Neither is "a previous round already decided this and wrote dow
    The three trophy tabs are the only mustafar loot files that reference a `som/` path at all, and
    those are already wired (Round C). This item is closed as asked and reopens as "wire the
    fourteen draft schematics", which is item 8's work.
-10. **Whether to widen the three trophy loot pools to live's full 9 items.** Still a real question,
-    but the `cube_loot` half of it was ⚠ **not a new finding and I should not have written it up as
+10. **Whether to widen the three trophy loot pools to live's full 9 items.** ⚠ **CLOSED IN H(f), and
+    calling it "a real question" was the same mislabelling this whole section exists to correct.**
+    Aaron's ruling covers it: it was a gap, not a call. Live's mechanism was read out of the tables
+    and transcribed; see *ROUND H(f)* below for the four-hop derivation and the numbers. The trophy
+    rate is unchanged at 12.5% — what was missing is that the other 87.5% of kills dropped nothing.
+    The `cube_loot` half of it was ⚠ **not a new finding and I should not have written it up as
     one.** `jenha_tar_cube.lua:112-137` already found the split path, traced why the objects still
     resolve (`TemplateManager.cpp:456` reads `clientTemplateFileName` off the Lua table and uses the
     registration string only as a lookup key), addressed the reward items by their registered path so
@@ -2070,3 +2167,174 @@ in the server source. Every claim carried a wiki citation.
 **The standing rule this earns, alongside the two at the top of this file:** a report with citations
 is still a claim. Check it against `dsrc` before it enters this document. It cost one pass to check
 and the pass closed four items, so the checking is worth doing rather than skipping.
+
+---
+
+## ROUND H(f) — the last four gaps, and the tool that should have found them earlier
+
+Four parts. Two were real defects that made content silently not happen, one was a real defect that
+showed the player a raw token, and one was a comment telling a lie. All four are the same shape:
+**something was present, so I assumed it was wired.**
+
+### H(f) part 1 — two weapon templates registered as loot but never loaded
+
+H(e) registered `weapon_tow_blasterfist_04_01` and `weapon_tow_sword_rsf_04_01` as loot items
+without adding their server templates to the object include closure. Both `.lua` files were sitting
+in `custom_content/weapon/melee/` the whole time. The loot item existed, the object template did
+not load, so the roll produced nothing.
+
+Fixed by two `includeFile` lines in `object/custom_content/serverobjects.lua`, in alphabetical
+position, with the collision check re-run for those two specifically — each declares one path, and
+neither is registered anywhere else in the tree.
+
+### H(f) part 2 — the trophy pools, closing item 10
+
+Live's four-hop chain, read directly, not inferred:
+
+```
+datatables/mob/creatures.tab      som_blistmok / som_tulrus / som_xandank
+                                  intLootRolls = 1, intRollPercent = 100  -> one item EVERY kill
+loot_types/mustafar/mustafar_<species>.tab   2 rows: mustafar/<species> 50%, mustafar/creature 50%
+loot_items/mustafar/<species>.tab            4 rows, uniform -> 25% each
+loot_items/mustafar/creature.tab             5 rows, uniform -> 20% each
+```
+
+Trophy = 0.50 x 0.25 = **12.5%**, which is exactly the rate the old encoding produced. The old
+`lootChance = 1250000` was that 12.5% collapsed onto the roll itself: right trophy rate, but
+nothing at all the other 87.5% of the time. Now: 14 new loot items, one new shared group
+`som_mustafar_creature`, the three trophy groups widened in place, and the three creatures pointed
+at both pools 50/50.
+
+### H(f) part 3 — an STF key that never existed
+
+`@dungeon/space_dungeon:not_ready` was invented on this branch and sent at three entry gates
+(`mustafar_instances.lua:635`, `valley_battlefield.lua:632`, `volcano_battlefield.lua:625`). The
+player saw the raw token instead of a refusal.
+
+Settled by extracting `string/en/dungeon/space_dungeon.stf` from the client TRE set and reading its
+key list. **32 keys. `not_ready` is not one of them.** `not_authorized` is, and its shipped text is
+"You do not have the proper authorization to be in this area." — which is precisely this case, and
+stays distinct from the `unable_to_find_dungeon` each of those functions sends a few lines later for
+the area-busy case. Changed to `not_authorized` at all three sites.
+
+### H(f) part 4 — six badges that can never be awarded
+
+Six `BDG_MUST_*` globals are read through `_G[...] ~= nil` guards. `badge_map.iff` extracted from
+this server's own TRE set (**stardust_03.tre**, searchTree_01, 10517 bytes) has **58 `bdg_*` rows and
+not one containing "must", "ep3" or "tow"**. Families present: `bdg_accolade_*`,
+`bdg_axkva_min_dungeon`, `bdg_corvette_*`, `bdg_exar_kun_dungeon`, `bdg_exp_*`,
+`bdg_library_trivia`, `bdg_racing_*`, `bdg_thm_park_*`.
+
+So all six awards are silent no-ops. Nothing errors — the guards are doing exactly the job they were
+written for. **The Lua is correct and was not changed.** Adding the rows means rebuilding a TRE, and
+there is no TRE packing tool in this project, only readers. This is the one Mustafar item that lives
+outside `MMOCoreORB` and it is recorded here rather than pretended closed.
+
+Two comments were asserting otherwise and were corrected: `mining_field_markers.lua` called it
+"the shipped badge key" (it is not shipped), and `kenobi_spine.lua` said the question "cannot be
+settled by grepping the repo" — true, but it can be settled by reading the TRE, and now has been.
+
+### The tool: a full STF sweep, and a TRE reader that was quietly broken
+
+`_treprobe2.py` decompressed a TRE's index block only when the compression type was `1`. **Every TRE
+in this server's set uses type `2`**, so the index was never decompressed and the record loop ran off
+the end of a raw buffer — it errored on all 27 files and had done so all along. One-character class
+of fix (`!= 0` instead of `== 1`), and the TREs opened.
+
+That unlocked the check that should have existed rounds ago. `C:\tmp\mustafar-stf-sweep.py` — widened
+from `_setup/stf-check-all.py`, which did this for the space convos only — resolves every
+`"@table:token"` in the Mustafar tree against the real client TRE set:
+
+```
+indexed 5575 string/en/* tables across 49 TREs
+
+references checked : 1719
+table not found    : 0
+token missing      : 0
+TOTAL BROKEN STF REFERENCES: 0
+```
+
+One apparent hit was a false positive of my own regex:
+`HkHistoryDatapadMenuComponent.lua:47` builds `hk_history_datapad_` .. `%02d` at runtime. The ten
+keys `hk_history_datapad_01..10` were then read out of `som/som_quest.stf` and all ten exist, along
+with `hk_history_datapad_select`. The file's header comment was accurate.
+
+### Corrections to earlier sections of this file
+
+- **The strict closure supersedes every earlier closure count here.** A loose regex closure follows
+  commented-out `includeFile` lines and counts `addTemplate` paths that only ever appear on
+  commented-out lines. Loose: 26,087 files / 24,928 paths. **Strict: 25,904 / 24,752.** The
+  difference is **176 ghost paths that exist only inside comments** — `object/mobile/bm_mobile.iff`,
+  `object/mobile/toydarian_m_greeter.iff` and the empire_day crates among them. Any earlier
+  "template is present" claim in this file that was made against a loose closure is not evidence.
+- **The split-path defect has two more families than recorded.** Alongside
+  `cube_loot/` -> `cube/loot/`, `generic_usable/` -> `generic/usable/` and
+  `loot_schematic/` -> `loot/schematic/`, add `creature_loot/generic/` -> `creature/loot/generic/`
+  and `npc_loot/` -> `npc/loot/`. **And it is not uniform:** `carnivore_tooth.iff` is registered at
+  the UNSPLIT live path while its immediate neighbours are split. Every path has to be checked
+  individually; there is no rule to apply.
+- **`itemTemplate` in a loot group may name an item OR another group** — LootGroupMap resolves
+  nested groups recursively. A check that tests against items alone reports 11 false missing items.
+- **Three false positives this round were produced by my own checking scripts, not by the tree.**
+  A directory-walk over `loot/groups/` that never saw `custom_scripts/loot/groups/`; a non-greedy
+  brace regex that read only the first entry of a `groups = { ... }` block and produced 84 fake
+  chance-total violations; and the STF regex above. In all three the tree was fine and the tool was
+  wrong. A failing check is a claim too.
+- **The sync list must be cut from the merge-base, not from `origin/unstable`.** Regenerating it this
+  round gave 1048 lines against 784 at H(e), and H(f) added fifteen files. The cause is that
+  `git diff --name-only origin/unstable..HEAD` is a **two-dot** diff — it compares the two tips, so
+  everything upstream has landed since the branch was cut comes back *inverted*, as though this
+  branch had changed it. `origin/unstable` has moved on with the space work, so the list picked up
+  100 `ship_mobile/` files, the space squadron screenplays and the space convos, twenty of which do
+  not exist on disk at all. None of the sixty-nine commits on this branch touches `ship_mobile/`.
+  The correct form is three-dot, or equivalently the merge-base:
+
+  ```
+  MB=$(git merge-base origin/unstable HEAD)
+  { git diff --name-only $MB..HEAD -- MMOCoreORB/;
+    git status --porcelain -uall -- MMOCoreORB/ | sed 's/^...//'; } \
+    | sed 's|^MMOCoreORB/||' | sort -u > /c/tmp/mustafar-sync-list.txt
+  ```
+
+  Three-dot gives 784 committed, 0 deletions, no `ship_mobile/`, and 798 after the union with the
+  working tree — every entry present on disk. The H(e) figure was right; the regeneration was wrong.
+
+### The file `.gitignore` ate
+
+The first H(f) boot came back READY in 35s with one `Lua] ERROR`:
+
+```
+(13 s) [Lua] ERROR - file:scripts/loot/items/mustafar/item_tow_junk_creature_intestines_02_01.lua
+       ERROR cannot open scripts/loot/items/mustafar/item_tow_junk_creature_intestines_02_01.lua:
+       No such file or directory
+[LootManager] Loaded 676 Loot Groups.
+[LootManager] Loaded 2273 Loot Items.
+```
+
+676 groups was right and 2273 items was one short. The file was on disk in the repo, written and
+read back and correct. It was not in `git status`, not in the sync list, and therefore never copied
+into the build tree:
+
+```
+$ git check-ignore -v MMOCoreORB/bin/scripts/loot/items/mustafar/item_tow_junk_creature_intestines_02_01.lua
+MMOCoreORB/.gitignore:25:*test*   .../item_tow_junk_creature_intestines_02_01.lua
+```
+
+`*test*` is unanchored, and `in`**`test`**`ines` matches it. The rule is meant to drop test files;
+it silently swallowed a content file whose live name happens to contain the substring. Recovered
+with `git add -f`. Once tracked, ignore rules no longer apply to it, so this does not recur for this
+file. Swept the other 17,482 files under `loot/`, `mobile/custom_content/som/`,
+`screenplays/mustafar/`, `mobile/conversations/mustafar/`, `custom_scripts/` and
+`object/custom_content/` through `git check-ignore --stdin`: **this was the only match.**
+
+Two things this is worth. First, the gate and the strict closure both passed this file -- they read
+the repo, and in the repo it was fine. Only the boot could see it, because only the boot reads the
+tree the sync produced. **A check that reads the source tree cannot find a defect in the transport
+between trees.** Second, it is the counter-example to the rest of this round: everywhere else the
+tooling was wrong and the tree was fine, and here the tree was fine, the tooling was fine, and the
+*plumbing between them* dropped a file on the floor.
+
+**The rule this round earns, and it is the same one three times over:** *presence is not
+registration.* A file on disk, a template in a folder, a key that reads like every other key — none
+of those mean the thing is wired. Check the **declared string against the load closure**, or against
+the shipped table, never against what exists on disk.

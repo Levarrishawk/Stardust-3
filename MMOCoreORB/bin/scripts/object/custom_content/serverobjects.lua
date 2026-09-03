@@ -67,9 +67,22 @@ includeFile("custom_content/intangible/pet/som/serverobjects.lua")
      three collisions, one of which overwrites a stock crafted saber
      (object/weapon/melee/polearm/crafted_saber/sword_lightsaber_polearm_gen5.iff)
      and another a quest 2h sword. Include order would decide which wins galaxy-
-     wide. The eleven named files below carry none of the colliding paths.
+     wide. The thirteen named files below carry none of the colliding paths.
      custom_content/weapon/melee/som_sword_obsidian.lua above is a different file
      from som_sword_obsidian_generic.lua and stays as it is.
+
+     These last two were added a round later than the other eleven, because H(e)
+     registered weapon_tow_blasterfist_04_01 and weapon_tow_sword_rsf_04_01 as
+     loot items without adding their server templates here. The loot item
+     existed, the object template did not load, so the roll produced nothing.
+     It was caught by checking each registered loot item's
+     directObjectTemplate against the object include closure, rather than
+     against what is present on disk. Both files were sitting in
+     custom_content/weapon/melee/ the whole time. Presence is not registration.
+     The collision check was re-run for these two specifically. Each declares
+     one path, object/weapon/melee/special/blasterfist_generic.iff and
+     object/weapon/melee/sword/sword_rsf_generic.iff, and neither is registered
+     anywhere else in the tree.
 
      custom_content/draft_schematic/serverobjects.lua is already included at line
      10; SchematicMap is populated only from managers/crafting/schematics.lua, so
@@ -77,6 +90,7 @@ includeFile("custom_content/intangible/pet/som/serverobjects.lua")
      depends on it. ]]
 includeFile("custom_content/weapon/ranged/serverobjects.lua")
 includeFile("custom_content/weapon/melee/blacksun_razor_generic.lua")
+includeFile("custom_content/weapon/melee/blasterfist_generic.lua")
 includeFile("custom_content/weapon/melee/lance_kashyyk_generic.lua")
 includeFile("custom_content/weapon/melee/massassiknuckler_generic.lua")
 includeFile("custom_content/weapon/melee/som_2h_sword_massassi.lua")
@@ -87,3 +101,4 @@ includeFile("custom_content/weapon/melee/som_lance_xandank_generic.lua")
 includeFile("custom_content/weapon/melee/som_sword_mustafar_bandit_generic.lua")
 includeFile("custom_content/weapon/melee/som_sword_obsidian_generic.lua")
 includeFile("custom_content/weapon/melee/sword_mace_junti_generic.lua")
+includeFile("custom_content/weapon/melee/sword_rsf_generic.lua")
