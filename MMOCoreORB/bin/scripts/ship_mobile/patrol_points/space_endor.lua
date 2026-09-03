@@ -1,4 +1,13 @@
 space_endor = SpacePatrolPointTable:new {
+	-- Vortex Squadron tier 4 recovery duty route.
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_1", x = -3500, z = 4500, y = -3500},
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_2", x = -2500, z = 5000, y = -2500},
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_3", x = -1500, z = 5500, y = -1500},
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_4", x = -500, z = 6000, y = -500},
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_5", x = 500, z = 5500, y = 500},
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_6", x = 1500, z = 5000, y = 1500},
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_7", x = 2500, z = 4500, y = 2500},
+	{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_8", x = 3500, z = 4000, y = 3500},
 	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_1", x = -778, z = 1426, y = -905},
 	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_2", x = -1454, z = 3074, y = -1580},
 	{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_3", x = -2232, z = 4616, y = -2283},

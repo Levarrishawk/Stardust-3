@@ -242,12 +242,14 @@ escort_duty_naboo_rebel_7 = SpaceDutyEscortScreenplay:new {
 	sideQuestType = "",
 
 	escortShips = {"reb_transport_tier1", "reb_freightermedium_tier1", "reb_freighterlight_tier1", "reb_freighterheavy_tier1"},
+	escortSpeed = 60,
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "vortex_rebel_escort_1", zoneName = "space_naboo", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "vortex_rebel_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
-		{patrolPointName = "vortex_rebel_patrol_1", zoneName = "space_naboo", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
-		{patrolPointName = "vortex_rebel_patrol_3", zoneName = "space_naboo", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
+		{patrolPointName = "vortex_rebel_escort_2", zoneName = "space_naboo", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+		{patrolPointName = "vortex_rebel_escort_3", zoneName = "space_naboo", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
+		{patrolPointName = "vortex_rebel_escort_4", zoneName = "space_naboo", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 100,
@@ -546,10 +548,11 @@ recovery_duty_naboo_rebel_tier2_recoveryduty = SpaceDutyRecoveryScreenplay:new {
 	arrivalDelay = 15,
 	recoveryDelay = 30,
 
-	recoverShips = {"corsair_manowar_tier2", "corsair_behemoth_tier2"},
+	recoverShip = "corsair_manowar_tier2",
 	recoveryConversationMobile = "object/mobile/shared_dressed_nym_patrol_elite_nikto_m.iff",
 
 	escortShips = {"corsair_sloop_tier2"},
+	escortSpeed = 60,
 
 	preRecoveryPoints = {
 		{patrolPointName = "naboo_rebel_tier2_recovery_duty_1", zoneName = "space_lok", x = -5007, z = -5499, y = -3499, escortNumber = 1, radius = 250},
@@ -591,6 +594,8 @@ escort_duty_naboo_rebel_tier2_escortduty = SpaceDutyEscortScreenplay:new {
 	sideQuestType = "",
 
 	escortShips = {"nym_smuggle_vessel", "reb_smuggler_ykl37r_tier2", "reb_smuggler_yt1300_tier2"},
+	escortSpeed = 60,
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "vortex_vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
@@ -1669,12 +1674,14 @@ escort_duty_naboo_rebel_tier4_1 = SpaceDutyEscortScreenplay:new {
 	sideQuestType = "",
 
 	escortShips = {"nym_freighterheavy_tier4", "nym_freighterlight_tier4", "nym_freightermedium_tier4"},
+	escortSpeed = 70,
+	orderedEscortRoute = true,
 
 	escortPoints = {
-		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_2", zoneName = "space_dathomir", escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_3", zoneName = "space_dathomir", escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_4", zoneName = "space_dathomir", escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_1", zoneName = "space_dathomir", x = 2096, z = 3236, y = -6065, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_2", zoneName = "space_dathomir", x = 2494, z = 3767, y = -5614, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_3", zoneName = "space_dathomir", x = 3491, z = 4797, y = -4904, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_escort_duty_4", zoneName = "space_dathomir", x = 4619, z = 5351, y = -4806, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 50,
@@ -1704,16 +1711,17 @@ rescue_duty_naboo_rebel_tier4_1 = SpaceDutyRescueScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	targetShips = {"reb_xwing_tier4", "reb_transport_tier4", "reb_ywing_tier4", "reb_ykl37r_tier4", "reb_freightermedium_tier4", "reb_freighterheavy_tier4", "reb_freighterlight_tier4"},
+	rescueShip = "reb_transport_tier4",
+	rescueLocation = {x = 2685, z = 6536, y = -6727},
+	arrivalDelay = 3,
+	repairDelay = 20,
+	escortSpeed = 70,
 
-	targetArrivalDelay = 3,
-
-	recoveryPoints = {
-		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_1", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_2", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_3", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_4", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_5", zoneName = "space_dantooine", radius = 250},
+	escortPoints = {
+		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_2", zoneName = "space_dantooine", x = 2490, z = 5986, y = -6356, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_3", zoneName = "space_dantooine", x = 2160, z = 5246, y = -5746, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_4", zoneName = "space_dantooine", x = 1936, z = 4693, y = -5265, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_rescue_duty_5", zoneName = "space_dantooine", x = 1513, z = 3657, y = -4302, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 60,
@@ -1743,26 +1751,27 @@ recovery_duty_naboo_rebel_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	sideQuestType = "",
 
 	recoverShip = "lambdashuttle_troop_transport_ace",
-	targetArrivalDelay = 10,
+	arrivalDelay = 10,
 	recoveryDelay = 30,
 
 	recoveryFaction = "nym",
 	recoveryConversationMobile = "object/mobile/dressed_nym_brawler_tran_m.iff",
 
 	escortShips = {"imp_tie_interceptor_tier4"},
+	escortSpeed = 70,
 
 	preRecoveryPoints = {
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_1", zoneName = "space_endor", escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_2", zoneName = "space_endor", escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_3", zoneName = "space_endor", escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_4", zoneName = "space_endor", escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_1", zoneName = "space_endor", x = -3500, z = 4500, y = -3500, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_2", zoneName = "space_endor", x = -2500, z = 5000, y = -2500, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_3", zoneName = "space_endor", x = -1500, z = 5500, y = -1500, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_4", zoneName = "space_endor", x = -500, z = 6000, y = -500, escortNumber = 4, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_5", zoneName = "space_endor", escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_6", zoneName = "space_endor", escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_7", zoneName = "space_endor", escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_8", zoneName = "space_endor", escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_5", zoneName = "space_endor", x = 500, z = 5500, y = 500, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_6", zoneName = "space_endor", x = 1500, z = 5000, y = 1500, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_7", zoneName = "space_endor", x = 2500, z = 4500, y = 2500, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_rebel_tier4_1_recovery_duty_8", zoneName = "space_endor", x = 3500, z = 4000, y = 3500, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 45,
