@@ -34,8 +34,27 @@
        pvpBitmask AGGRESSIVE + ATTACKABLE + ENEMY -- live aggressive 6 /
          assist 6.
 
-     No specials authored. Live's spider_5 profile is not ported this round;
-     say so here rather than invent actions. ]]
+       primaryAttacks { strongpoison, creatureareaattack }. Live specials come
+         from AI profile spider_5 (ai_combat_profiles.tab:308) =
+         bm_defensive_5 (once), bm_damage_poison_5 x2, bm_puncture_3. Mapped by
+         the method som_link_lava_beetle_foreman.lua already records.
+         bm_damage_poison_5 is the dominant action -- two of the four slots --
+         and maps to Core3 poison. The tier picks the strength: the shipped
+         spider family runs mildpoison at level 8-27
+         (dathomir/cavern_spider.lua, gaping_spider.lua), mediumpoison at 44-46
+         (cavern_spider_hunter.lua, cavern_spider_queen.lua) and strongpoison
+         from 31 up (dathomir/chasmal_spider.lua:level 31). These guards are
+         level 85, and the live action is tier 5, so strongpoison.
+         bm_puncture_3 has no direct Core3 creature-command analogue, so the
+         family's own verb is used -- sher_kar.lua ships
+         creatureareaattack + creatureareaknockdown, and these three carry the
+         same sher_kar.iff body at scale 0.3. bm_defensive_5 is a self-buff
+         with no Core3 creature-command analogue and is dropped.
+         The pairing is a judgement; what is sourced is "a tier-5 spider
+         profile exists".
+         CORRECTED IN H(h3): this file previously said spider_5 was "not ported
+         this round". The row was readable all along at
+         ai_combat_profiles.tab:308. ]]
 som_sherkar_symbiot = Creature:new {
 	customName = "Sher Kar Symbiot",
 	socialGroup = "sherkar",
@@ -73,7 +92,7 @@ som_sherkar_symbiot = Creature:new {
 	secondaryWeapon = "none",
 	conversationTemplate = "",
 
-	primaryAttacks = { },
+	primaryAttacks = { {"strongpoison",""}, {"creatureareaattack",""} },
 	secondaryAttacks = { }
 }
 

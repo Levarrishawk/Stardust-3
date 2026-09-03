@@ -27,8 +27,21 @@
        pvpBitmask AGGRESSIVE + ATTACKABLE + ENEMY -- live aggressive 6 /
          assist 6.
 
-     No specials authored. Live's roach_5 profile is not ported this round;
-     say so here rather than invent actions. ]]
+       primaryAttacks { intimidationattack, creatureareaattack }. Live specials
+         come from AI profile roach_5 (ai_combat_profiles.tab:258) =
+         bm_bolster_armor_5 (once), bm_bite_5, bm_enfeeble_5 x2 -- the same
+         profile the foreman and the defender carry. This is their mapping,
+         applied here for consistency rather than minting a second answer:
+         bm_enfeeble_5 is the dominant action and maps to Core3's
+         intimidationattack; bm_bite_5 has no direct Core3 creature-command
+         analogue, so the shipped kubaza family's own creatureareaattack is used
+         (kubaza_beetle.lua:35); bm_bolster_armor_5 is a self-buff with no Core3
+         creature-command analogue and is dropped. The pairing is a judgement;
+         what is sourced is "a tier-5 roach profile exists".
+         CORRECTED IN H(h3): this file previously said the roach_5 profile was
+         "not ported this round". That was wrong twice over -- the profile row
+         was readable all along at ai_combat_profiles.tab:258, and the two
+         siblings sharing it already shipped the mapping. ]]
 som_link_lava_beetle_soldier = Creature:new {
 	customName = "Lava Beetle Soldier",
 	socialGroup = "link_beetle",
@@ -66,7 +79,7 @@ som_link_lava_beetle_soldier = Creature:new {
 	secondaryWeapon = "none",
 	conversationTemplate = "",
 
-	primaryAttacks = { },
+	primaryAttacks = { {"intimidationattack",""}, {"creatureareaattack",""} },
 	secondaryAttacks = { }
 }
 

@@ -33,7 +33,14 @@
          boss spawning unarmed.
 
      No specials authored beyond the weapon-group merge above. Live's droid_5
-     profile is not ported as named specials this round. ]]
+     row (ai_combat_profiles.tab:181) carries no actions at all -- only the
+     profile_id -- so there is nothing to port. Empty here is live's data, not
+     an omission. This matches what som_working_hk_58_aurek.lua and
+     som_working_doom_bringer.lua already record for droid_special_6
+     (ai_combat_profiles.tab:188), which is empty in the same way.
+     CORRECTED IN H(h3): the previous wording, "not ported as named specials
+     this round", read as deferred work. It was not deferred; there was never
+     anything in the row. ]]
 som_working_master_droid_engineer = Creature:new {
 	customName = "Master Droid Engineer",
 	socialGroup = "droid_army",

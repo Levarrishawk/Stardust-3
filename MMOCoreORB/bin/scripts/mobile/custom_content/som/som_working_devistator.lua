@@ -34,8 +34,21 @@
        droid_droideka_ranged.iff. Following that precedent rather than minting a
        second answer.
 
-     No specials authored. Live's som_working_devistator specials profile is
-     not ported this round; say so here rather than invent actions. ]]
+     No specials authored, and this one is resolved rather than deferred. Live's
+     profile is its own row, som_working_devistator
+     (ai_combat_profiles.tab:126), and it carries exactly one action:
+     devastating_strike, use_time 6, use_chance 100, use_count infinite. There
+     is no Core3 command of that name -- MMOCoreORB/bin/scripts/commands/ has no
+     devast* or *strike* entry -- and devastating_strike is not part of the bm_*
+     creature-ability vocabulary the other Mustafar profiles draw on, so the
+     tier-mapping method used for roach_5 and spider_5 has nothing to map onto.
+     Inventing a Core3 verb here would be a guess with no sourced tier behind
+     it, so none is authored. The Devistator is not left unable to fight: it
+     carries defaultWeapon/defaultAttack under the droid schema
+     (CreatureTemplate.cpp:138,143), which is what drives its combat.
+     CORRECTED IN H(h3): the previous wording said "not ported this round",
+     which read as deferred work. It is not deferrable -- there is no Core3
+     command to port it to. ]]
 som_working_devistator = Creature:new {
 	customName = "the Devistator",
 	socialGroup = "droid_army",
