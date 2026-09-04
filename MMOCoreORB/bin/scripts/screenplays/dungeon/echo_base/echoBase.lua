@@ -13,6 +13,10 @@
 -- wampaBossKilled / leash / adds). grep -n wampa_boss over commands/ and src/
 -- = 0 hits. Barks: wampa_boss.java has none; no @sequencer_spam / @theme_park/heroic
 -- keys are used here. DNA item_cs_dna_wampa 5% NOT PORTED (no SD3 template).
+--
+-- Round EB-c adds the encounter: phase machine, both factional chains, the
+-- 20-flag scoreboard, spine spawns, sourced barks, and the token / painting
+-- award. Methods live in echoBasePhases.lua (included after this file).
 
 echoBase = ScreenPlay:new {
 
@@ -30,6 +34,7 @@ function echoBase:start()
     writeData("echoBase:wampa_boss_dead", 0)
     writeData("echoBase:wampaAddSeq", 0)
     writeData("echoBase:wampaLeashRunning", 0)
+    self:clearPhaseKeys()
 	end
 end
 
@@ -85,6 +90,7 @@ function echoBase:activate(pPlayer)
   end
 
   writeData("echoBaseStartTime", os.time())
+  self:clearPhaseKeys()
 
   -- OURS, NOT SOURCED (the 120-minute wording). SOE time_limit = 7200
   -- (instance_datatable.tab echo_base row). Lev's @dungeon/corvette:timer_N keys
@@ -106,6 +112,7 @@ function echoBase:activate(pPlayer)
 	end
 
 	createEvent(100, "echoBase", "spawnWampaCaveCheck", pPlayer, "")
+	createEvent(200, "echoBase", "spawnSpineCheck", pPlayer, "")
 
 	writeData("echoBase:occupiedState", 1)
 	createEvent(1000, "echoBase", "checkIfActiveForTimer", pPlayer, "")
@@ -279,6 +286,7 @@ function echoBase:clearEncounterKeys()
   writeData("echoBase:wampa_boss_dead", 0)
   writeData("echoBase:wampaAddSeq", 0)
   writeData("echoBase:wampaLeashRunning", 0)
+  self:clearPhaseKeys()
 end
 
 -- OURS, NOT SOURCED. Shape taken from starDestroyer.lua:706-729 /
@@ -287,6 +295,7 @@ end
 -- observer would survive.
 function echoBase:destroyArenaContents()
   self:destroyWampaOutdoor()
+  self:destroySpineOutdoor()
   local pBuilding = self:getBuildingObject()
   if (pBuilding == nil) then
     return

@@ -844,6 +844,7 @@ includeFile("mustafar/regions/storm_lord_region.lua")
 
 -- Echo Base heroic
 includeFile("dungeon/echo_base/echoBase.lua")
+includeFile("dungeon/echo_base/echoBasePhases.lua")
 includeFile("dungeon/echo_base/echoBaseEntryWay.lua")
 includeFile("events/echoBaseEntryMenuComponent.lua")
 
