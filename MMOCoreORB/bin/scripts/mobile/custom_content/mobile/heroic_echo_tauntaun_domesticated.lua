@@ -58,7 +58,15 @@ heroic_echo_tauntaun_domesticated = Creature:new {
 
 	templates = {"object/mobile/tauntaun_hue.iff"},
 	hues = { 7 },
-	lootGroups = {},
+	-- SOURCED (creatures.tab:6141 lootTable); EB-f
+	lootGroups = {
+		{
+			groups = {
+				{group = "echo_base_tauntaun_generic", chance = 10000000}
+			},
+			lootChance = 500000
+		}
+	},
 
 	conversationTemplate = "",
 	primaryWeapon = "unarmed",

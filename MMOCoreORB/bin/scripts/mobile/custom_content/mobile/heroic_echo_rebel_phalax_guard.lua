@@ -51,7 +51,15 @@ heroic_echo_rebel_phalax_guard = Creature:new {
 	scale = 1.05,
 
 	templates = {"object/mobile/rebel_mandalorian_grey.iff"},
-	lootGroups = {},
+	-- SOURCED (creatures.tab:6160 lootTable); EB-f
+	lootGroups = {
+		{
+			groups = {
+				{group = "echo_base_rebel_soldier", chance = 10000000}
+			},
+			lootChance = 2000000
+		}
+	},
 
 	conversationTemplate = "",
 	primaryWeapon = "rebel_rifle",

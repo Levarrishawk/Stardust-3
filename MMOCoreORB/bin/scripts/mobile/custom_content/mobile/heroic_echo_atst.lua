@@ -49,7 +49,24 @@ heroic_echo_atst = Creature:new {
 	diet = NONE,
 
 	templates = {"object/mobile/atst.iff"},
-	lootGroups = {},
+	-- SOURCED (creatures.tab:6152 lootTable); EB-f
+	-- lootTable droid/droid_81_90; intLootRolls/intRollPercent blank so SOE
+	-- defaults i[2]/i[20] apply. Nearest existing SD3 droid group is
+	-- lok_droid_tier_1 (groups/npc/lok/lok_droid_tier_1.lua). Two 20% rolls.
+	lootGroups = {
+		{
+			groups = {
+				{group = "lok_droid_tier_1", chance = 10000000}
+			},
+			lootChance = 2000000
+		},
+		{
+			groups = {
+				{group = "lok_droid_tier_1", chance = 10000000}
+			},
+			lootChance = 2000000
+		}
+	},
 
 	conversationTemplate = "",
 	primaryWeapon = "unarmed",

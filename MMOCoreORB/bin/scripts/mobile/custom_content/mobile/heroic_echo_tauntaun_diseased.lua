@@ -52,7 +52,15 @@ heroic_echo_tauntaun_diseased = Creature:new {
 	scale = 0.9,
 
 	templates = {"object/mobile/tauntaun_hue.iff"},
-	lootGroups = {},
+	-- SOURCED (creatures.tab:6142 lootTable); EB-f
+	lootGroups = {
+		{
+			groups = {
+				{group = "echo_base_tauntaun_generic", chance = 10000000}
+			},
+			lootChance = 1000000
+		}
+	},
 
 	conversationTemplate = "",
 	primaryWeapon = "unarmed",

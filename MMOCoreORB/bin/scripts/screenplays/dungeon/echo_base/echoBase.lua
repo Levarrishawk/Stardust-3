@@ -21,6 +21,15 @@
 -- adds the turret loop, mines, and Rebel snowspeeder AI (also in
 -- echoBasePhases.lua). Ice blocks / barricades / placeable props / theater
 -- executions are NOT PORTED (D-EBd5).
+--
+-- Round EB-f wires the loot chain (7 groups + items). NOT PORTED this round:
+-- the two launch-NPC token vendors (Core3 vendors are player vendors; an NPC
+-- token shop needs a conversation + custom SUI -- shop round; data sheet in
+-- scratch/round-ebf/grok-report.txt from
+-- datatables/item/vendor/echo_base_{rebel,imperial}_items.tab); the 9
+-- quest-journal tables (journal C++ bridge, R13); heroic_echo_collector and
+-- every col_hoth_* (collections, R4); champion_of_hoth (badge row absent
+-- from badge_map.iff); bdg_hoth_planet.
 
 echoBase = ScreenPlay:new {
 

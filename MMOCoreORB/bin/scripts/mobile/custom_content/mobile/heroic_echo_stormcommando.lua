@@ -50,7 +50,15 @@ heroic_echo_stormcommando = Creature:new {
 	scale = 1.15,
 
 	templates = {"object/mobile/shocktrooper_blue.iff"},
-	lootGroups = {},
+	-- SOURCED (creatures.tab:6156 lootTable); EB-f
+	lootGroups = {
+		{
+			groups = {
+				{group = "echo_base_imperial_soldier", chance = 10000000}
+			},
+			lootChance = 500000
+		}
+	},
 
 	conversationTemplate = "",
 	primaryWeapon = "stormtrooper_rifle",

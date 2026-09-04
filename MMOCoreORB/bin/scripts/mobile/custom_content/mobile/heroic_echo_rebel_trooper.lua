@@ -49,7 +49,15 @@ heroic_echo_rebel_trooper = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_rebel_snow_echo_base_m_01.iff"},
-	lootGroups = {},
+	-- SOURCED (creatures.tab:6158 lootTable); EB-f
+	lootGroups = {
+		{
+			groups = {
+				{group = "echo_base_rebel_soldier", chance = 10000000}
+			},
+			lootChance = 2000000
+		}
+	},
 
 	conversationTemplate = "",
 	primaryWeapon = "rebel_rifle",

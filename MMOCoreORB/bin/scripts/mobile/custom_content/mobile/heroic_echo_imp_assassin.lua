@@ -48,7 +48,15 @@ heroic_echo_imp_assassin = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/snowtrooper_s01.iff"},
-	lootGroups = {},
+	-- SOURCED (creatures.tab:6157 lootTable); EB-f
+	lootGroups = {
+		{
+			groups = {
+				{group = "echo_base_imperial_soldier", chance = 10000000}
+			},
+			lootChance = 500000
+		}
+	},
 
 	conversationTemplate = "",
 	primaryWeapon = "stormtrooper_rifle",
