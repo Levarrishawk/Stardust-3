@@ -841,3 +841,9 @@ includeFile("mustafar/regions/mensix_facility_region.lua")
 includeFile("mustafar/regions/north_west_region.lua")
 includeFile("mustafar/regions/smoking_forest_region.lua")
 includeFile("mustafar/regions/storm_lord_region.lua")
+
+-- Echo Base heroic
+includeFile("dungeon/echo_base/echoBase.lua")
+includeFile("dungeon/echo_base/echoBaseEntryWay.lua")
+includeFile("events/echoBaseEntryMenuComponent.lua")
+
