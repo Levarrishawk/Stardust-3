@@ -130,6 +130,8 @@ Task 10 is a Wait for Signal on givenShard: that is the turn-in conversation, no
 task.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 serpentShardScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -181,6 +183,17 @@ serpentShardScreenPlay = ScreenPlay:new {
 	-- and the only way a boot check can tell a silent failure from a success.
 	questGiverID = 0,
 	ruinsAreaID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §serpent_shard. Screenplay data stays truth.
+serpentShardScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_serpent_shard_1", complete = {0}, activate = {1, 3} }, -- 1→t1+t3 live (root t16 OOR)
+	[2] = { quest = "som_kenobi_serpent_shard_1", activate = {5} }, -- 2→t18 OOR + t5 Wait for Signal + t17 OOR
+	[3] = { quest = "som_kenobi_serpent_shard_1", complete = {5}, activate = {4} }, -- 3→t4 Encounter
+	[4] = { quest = "som_kenobi_serpent_shard_1", complete = {4, 6}, activate = {7} }, -- 4→t6 + t8 box + t7 Retrieve
+	[5] = { quest = "som_kenobi_serpent_shard_1", complete = {7}, activate = {10, 15} }, -- 5→t15 box + t10 Wait for Signal
+	[6] = { quest = "som_kenobi_serpent_shard_1", complete = {10, 11, 13}, finish = true }, -- 6→t11 Reward + t13 Complete
 }
 
 registerScreenPlay("serpentShardScreenPlay", true)
@@ -255,6 +268,7 @@ end
 
 function serpentShardScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function serpentShardScreenPlay:hasFlag(pPlayer, key)

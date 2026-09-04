@@ -296,6 +296,8 @@ WHAT IS NOT MODELLED
     screenplay can do without touching the .ws.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 somStrikingMinersScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -351,6 +353,15 @@ somStrikingMinersScreenPlay = ScreenPlay:new {
 	rewardItem = "object/tangible/wearables/bodysuit/bodysuit_sarlacc_coverall.iff",
 
 	campAreaID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §som_striking_miners. Screenplay data stays truth.
+somStrikingMinersScreenPlay.journalMap = {
+	[1] = { quest = "som_striking_miners", complete = {0}, activate = {1} }, -- 1→t1 Wait for Signal _nurfa
+	[2] = { quest = "som_striking_miners", complete = {1}, activate = {2} }, -- 2→t2 Retrieve Item ×10
+	[3] = { quest = "som_striking_miners", complete = {2}, activate = {3} }, -- 3→t3 Wait for Signal _win
+	[4] = { quest = "som_striking_miners", complete = {3, 4}, activate = {4}, finish = true }, -- 4→t4 live; t7 Reward on closeOut→0
 }
 
 registerScreenPlay("somStrikingMinersScreenPlay", true)
@@ -425,6 +436,7 @@ end
 
 function somStrikingMinersScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function somStrikingMinersScreenPlay:getEggs(pPlayer)

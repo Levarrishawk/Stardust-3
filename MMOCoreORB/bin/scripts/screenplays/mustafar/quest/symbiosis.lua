@@ -122,6 +122,8 @@ without minting an item. Nothing downstream in either .qst reads them; they were
 progress markers.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 symbiosisScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -161,6 +163,17 @@ symbiosisScreenPlay = ScreenPlay:new {
 	rewardWeapon = "object/weapon/melee/sword/som_sword_obsidian.iff",
 
 	lavaAreaID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §symbiosis. Screenplay data stays truth.
+symbiosisScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_symbiosis_1", complete = {0}, activate = {1, 2, 3} }, -- 1→_1 t1+t2 under t3
+	[2] = { quest = "som_kenobi_symbiosis_1", complete = {1, 2, 3}, activate = {6} }, -- 2→_1 t13 OOR; t6 live
+	[3] = { quest = "som_kenobi_symbiosis_1", complete = {6} }, -- 3→_1 t15 Go to Location (t15 OOR)
+	[4] = { quest = "som_kenobi_symbiosis_1", activate = {7} }, -- 4→_1 t12 OOR; t7 Retrieve
+	[5] = { quest = "som_kenobi_symbiosis_1", complete = {7, 9, 10}, finish = true }, -- 5→_1 t9 Reward / t10 Complete; _2 journalVisible false
+	-- 6 unmapped: _2 is journalVisible false (delayed ambush), no journal bit
 }
 
 registerScreenPlay("symbiosisScreenPlay", true)
@@ -236,6 +249,7 @@ end
 
 function symbiosisScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function symbiosisScreenPlay:isExamined(pPlayer, role)

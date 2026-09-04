@@ -106,6 +106,8 @@ LOOT 1, QUEST 2) with an unlimited use count, matching the other quest schematic
 rewards in this tree (sivarra_phase1_conv_handler.lua:62, ris_armor_quest.lua:146).
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 hiddenTreasureScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -137,6 +139,20 @@ hiddenTreasureScreenPlay = ScreenPlay:new {
 	rewardSchematic = "object/draft_schematic/space/reactor/fusion_reactor_mk5.iff",
 
 	vaultAreaID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §hidden_treasure. Screenplay data stays truth.
+hiddenTreasureScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_hidden_treasure_1", complete = {0}, activate = {14} }, -- 1→_1 t14 Go to Location vault
+	[2] = { quest = "som_kenobi_hidden_treasure_1", complete = {14} }, -- 2→_1 t17 live (t17 OOR, no bit)
+	[3] = { quest = "som_kenobi_hidden_treasure_1" }, -- 3→_1 t16 live (t16 OOR, no bit)
+	[4] = { -- 4→_1 complete + _2 t9/t7 live
+		{ quest = "som_kenobi_hidden_treasure_1", finish = true },
+		{ quest = "som_kenobi_hidden_treasure_2", complete = {0}, activate = {7, 9} },
+	},
+	[5] = { quest = "som_kenobi_hidden_treasure_2", complete = {7, 9}, activate = {12} }, -- 5→_2 t25/t24 OOR; t12 encounter in range
+	[6] = { quest = "som_kenobi_hidden_treasure_2", finish = true }, -- 6→_2 Reward t15/t19 OOR
 }
 
 registerScreenPlay("hiddenTreasureScreenPlay", true)
@@ -223,6 +239,7 @@ end
 
 function hiddenTreasureScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 -- Which radial, if any, this player should be offered on a given object.

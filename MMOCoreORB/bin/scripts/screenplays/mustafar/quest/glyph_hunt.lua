@@ -214,6 +214,8 @@ showSystemMessages is true on every task that has journal text, and 0 only on
 task 0, which has none, so the flag is honoured as written.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 somGlyphHuntScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -359,6 +361,16 @@ somGlyphHuntScreenPlay = ScreenPlay:new {
 	questGiverID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §glyph_hunt. Screenplay data stays truth.
+somGlyphHuntScreenPlay.journalMap = {
+	[1] = { quest = "som_glyph_hunt", complete = {0}, activate = {1} }, -- 1→t1 Wait for Tasks (t4/t3/t2 sub-flags)
+	[2] = { quest = "som_glyph_hunt", complete = {1}, activate = {5} }, -- 2→t5 Wait for Signal glyph_hunt_found
+	[3] = { quest = "som_glyph_hunt", complete = {5}, activate = {7} }, -- 3→t7 Wait for Tasks (t8/t9 sub-flags)
+	[4] = { quest = "som_glyph_hunt", complete = {7}, activate = {10} }, -- 4→t10 Wait for Signal glyph_hunt_finish
+	[5] = { quest = "som_glyph_hunt", complete = {10}, activate = {11}, finish = true }, -- 5→t11 Reward (then reset 0)
+}
+
 registerScreenPlay("somGlyphHuntScreenPlay", true)
 
 function somGlyphHuntScreenPlay:start()
@@ -434,6 +446,7 @@ end
 
 function somGlyphHuntScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function somGlyphHuntScreenPlay:getRuns(pPlayer)

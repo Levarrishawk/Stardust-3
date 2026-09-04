@@ -182,6 +182,8 @@ four 0.1 quality floats are the Reward task's unused columns -- the file grants 
 faction points, no weapon and no armour. Nothing here reads them.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 samaritanScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -261,6 +263,17 @@ samaritanScreenPlay = ScreenPlay:new {
 	campAreaID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §samaritan. Screenplay data stays truth.
+samaritanScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_samaritan_1", activate = {0} }, -- 1→t0 Go to Location
+	[2] = { quest = "som_kenobi_samaritan_1", complete = {0}, activate = {2, 3, 4, 5} }, -- 2→t2/t4/t5/t3 flea hunt
+	[3] = { quest = "som_kenobi_samaritan_1", complete = {2, 3, 4, 5}, activate = {6, 7, 8} }, -- 3→t6 box + t7/t8 fork
+	[4] = { quest = "som_kenobi_samaritan_1", complete = {6, 7, 8}, activate = {9} }, -- 4→t9 Destroy Multiple Pwwoz
+	[5] = { quest = "som_kenobi_samaritan_1", complete = {7, 11, 12}, finish = true }, -- 5→t7/t11/t12 keep branch
+	[6] = { quest = "som_kenobi_samaritan_1", complete = {9, 10, 13, 14}, finish = true }, -- 6→t13/t10/t14 kill branch
+}
+
 registerScreenPlay("samaritanScreenPlay", true)
 
 function samaritanScreenPlay:start()
@@ -324,6 +337,7 @@ end
 
 function samaritanScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function samaritanScreenPlay:hasFlag(pPlayer, key)

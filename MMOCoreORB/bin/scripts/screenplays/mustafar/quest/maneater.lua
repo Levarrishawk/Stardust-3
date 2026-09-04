@@ -216,6 +216,8 @@
 	    certain.  You'll find some") is reproduced as shipped.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 maneaterScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "maneaterScreenPlay",
@@ -295,6 +297,16 @@ maneaterScreenPlay = ScreenPlay:new {
 	attackAreaID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §maneater. Screenplay data stays truth.
+maneaterScreenPlay.journalMap = {
+	[1] = { quest = "som_maneater", complete = {0}, activate = {6} }, -- 1→t6 Destroy+Loot stomachs
+	[2] = { quest = "som_maneater", complete = {6}, activate = {8, 3} }, -- 2→t8 Comm + t3 Go to Location
+	[3] = { quest = "som_maneater", complete = {8, 3}, activate = {4} }, -- 3→t4 Encounter Foehorn
+	[4] = { quest = "som_maneater", complete = {4}, activate = {7} }, -- 4→t7 Wait for Signal
+	[5] = { quest = "som_maneater", complete = {7}, activate = {5}, finish = true }, -- 5→t5 Reward
+}
+
 registerScreenPlay("maneaterScreenPlay", true)
 
 -- ====================================================================
@@ -347,6 +359,7 @@ end
 
 function maneaterScreenPlay:setStage(pPlayer, stage)
 	self:setNumber(pPlayer, "stage", stage)
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function maneaterScreenPlay:isActive(pPlayer)

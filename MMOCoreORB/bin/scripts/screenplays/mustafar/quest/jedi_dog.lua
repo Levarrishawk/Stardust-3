@@ -254,6 +254,8 @@
 	    ("...might help. ") is reproduced as shipped.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 jediDogScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "jediDogScreenPlay",
@@ -314,6 +316,14 @@ jediDogScreenPlay = ScreenPlay:new {
 	chestNodeID = 12110930,
 
 	cobakID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §jedi_dog. Screenplay data stays truth.
+jediDogScreenPlay.journalMap = {
+	[1] = { quest = "som_jedi_dog", complete = {0, 1}, activate = {5} }, -- 1→t5 kill Cobak (t0+t1 fire)
+	[2] = { quest = "som_jedi_dog", complete = {5}, activate = {3} }, -- 2→t3 Wait for Signal
+	[3] = { quest = "som_jedi_dog", complete = {3}, activate = {6}, finish = true }, -- 3→t6 Reward
 }
 
 registerScreenPlay("jediDogScreenPlay", true)
@@ -398,6 +408,7 @@ end
 
 function jediDogScreenPlay:setStage(pPlayer, stage)
 	self:setNumber(pPlayer, "stage", stage)
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function jediDogScreenPlay:isActive(pPlayer)
