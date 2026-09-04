@@ -3539,30 +3539,27 @@ void PlayerObjectImplementation::setCompletedQuestsBit(int bitIndex, byte value,
 }
 
 void PlayerObjectImplementation::setPlayerQuestData(uint32 questCrc, PlayerQuestData& data, bool notifyClient) {
-	// A key the client does not hold yet must go out as ADD, not SET: the client keeps only the last SET for an
-	// unknown key (every earlier journal row vanishes until a relog rebuilds the map from the baseline, which sends
-	// ADD per entry). Measured on the live client 2026-09-04 with 10 staggered grants: 1 row via SET, all via baseline.
-	bool isNew = !playerQuestsData.contains(questCrc);
+	// The client's quest journal (PlayerObject delta 8, view 6) is a PACKED map: every delta it receives replaces the
+	// whole container, exactly like the login baseline. A one-entry ADD/SET delta therefore leaves the client with one
+	// quest. Measured on the live client 2026-09-04 (staggered fresh grants -> only the last row; relog -> all rows).
+	// So every change sends the entire map, in the baseline's shape (size, updateCounter, ADD+key+value per entry).
+	if (playerQuestsData.contains(questCrc))
+		playerQuestsData.set(questCrc, data);
+	else
+		playerQuestsData.add(questCrc, data);
 
-	if (notifyClient) {
-		PlayerObjectDeltaMessage8* dplay8 = new PlayerObjectDeltaMessage8(this);
+	if (notifyClient)
+		sendPlayerQuestsDataMap();
+}
 
-		dplay8->startUpdate(0x06);
+void PlayerObjectImplementation::sendPlayerQuestsDataMap() {
+	PlayerObjectDeltaMessage8* dplay8 = new PlayerObjectDeltaMessage8(this);
 
-		if (isNew)
-			playerQuestsData.add(questCrc, data, dplay8, 1);
-		else
-			playerQuestsData.set(questCrc, data, dplay8, 1);
+	dplay8->startUpdate(0x06);
+	playerQuestsData.insertToMessage(dplay8);
+	dplay8->close();
 
-		dplay8->close();
-
-		sendMessage(dplay8);
-	} else {
-		if (isNew)
-			playerQuestsData.add(questCrc, data);
-		else
-			playerQuestsData.set(questCrc, data);
-	}
+	sendMessage(dplay8);
 }
 
 void PlayerObjectImplementation::setQuestCounter(unsigned int questCrc, int n) {
@@ -3577,18 +3574,14 @@ int PlayerObjectImplementation::getQuestCounter(unsigned int questCrc) {
 }
 
 void PlayerObjectImplementation::clearPlayerQuestData(uint32 questCrc, bool notifyClient) {
-	//This works but client has to log out and back in to see the journal update
-	if (notifyClient) {
-		PlayerObjectDeltaMessage8* dplay8 = new PlayerObjectDeltaMessage8(this);
+	// Packed map (see setPlayerQuestData): drop locally, then send the whole container.
+	if (!playerQuestsData.contains(questCrc))
+		return;
 
-		dplay8->startUpdate(0x06);
-		playerQuestsData.drop(questCrc, dplay8, 1);
-		dplay8->close();
+	playerQuestsData.drop(questCrc);
 
-		sendMessage(dplay8);
-	} else {
-		playerQuestsData.drop(questCrc);
-	}
+	if (notifyClient)
+		sendPlayerQuestsDataMap();
 }
 
 PlayerQuestData PlayerObjectImplementation::getQuestData(uint32 questCrc) const {
