@@ -9,7 +9,7 @@
 -- ig88_factory_arena (PART 6 / finding 0.1). getBuildingObject therefore reads a
 -- writeData id, not a hardcoded snapshot id.
 --
--- EXITEDBUILDING vs the fail-and-restart loop (flagged for Aaron): Lev's
+-- EXITEDBUILDING vs the fail-and-restart loop (flagged as an open ruling): Lev's
 -- resetInstanceA ejects everybody the moment one member steps out. SOE's
 -- ig88_failure_check restarts the encounter in-place when r1 has no live
 -- players. On SD3 a wipe leaves incapacitated players in-cell, so
@@ -34,7 +34,7 @@
 -- InteriorLayoutTemplate parser is unused. The room loads as empty geometry.
 --
 -- Kick radial: replaced with an ENTEREDAREA active area (OURS, NOT SOURCED).
--- Flag for Aaron -- the kick is a charming beat and losing it is a real loss,
+-- Flag for the maintainer -- the kick is a charming beat and losing it is a real loss,
 -- but a radial on a dynamically spawned mob is not a shape Lev ever used.
 --
 -- Alarm CONDITION_ON visual: skipped. setConditionBitmask is not bound in
@@ -400,7 +400,7 @@ function ig88:spawnPhaseZero()
   end
 
   -- OURS, NOT SOURCED -- ENTEREDAREA replaces SOE's kick radial (ig88_mouse_droid_coward.java:49-86).
-  -- Flag for Aaron: the kick is a charming beat; a radial on a dynamically spawned mob is not Lev's shape.
+  -- Flag for the maintainer: the kick is a charming beat; a radial on a dynamically spawned mob is not Lev's shape.
   local pActiveArea = spawnSceneObject("lok", "object/active_area.iff", 0, 0, 10, cellID, 0)
   if (pActiveArea ~= nil) then
     local activeArea = LuaActiveArea(pActiveArea)

@@ -1,5 +1,5 @@
 -- IG-88 factory entry panel radial. Copied from Lev's axkvaMinEntryMenuComponent.lua (the template,
--- Aaron 2026-09-04): radial ids (20, 3) = axkvaMinEntryMenuComponent.lua:7, the 6 m range check =
+-- ruling 2026-09-04): radial ids (20, 3) = axkvaMinEntryMenuComponent.lua:7, the 6 m range check =
 -- :16, the mount guard = exarKunEntryMenuComponent.lua:23-26. Only the label text is OURS.
 local ObjectManager = require("managers.object.object_manager")
 

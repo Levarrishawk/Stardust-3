@@ -36,7 +36,7 @@ heroic_ig88_ig88_rocket = Creature:new {
 	socialGroup = "ig88",
 	faction = "",
 	mobType = MOB_ANDROID,
-	-- R18 (Aaron 2026-09-04, close-out): the boss now carries the SAME RAID 200 ladder row as the Star Destroyer, Tusken
+	-- R18 (ruling 2026-09-04): the boss now carries the SAME RAID 200 ladder row as the Star Destroyer, Tusken
 	-- and Echo Base bosses (MUSTAFAR-GAPS.md:2003, rebel_rear_admiral: chanceHit 16 / 1145-2000 / xp 19008 / HAM 160000-195000 /
 	-- armor 3). H(ig) round 1 had folded SOE's x4 HP into HAM = 610000 (the header above records it). One ladder. OURS.
 	level = 200,
