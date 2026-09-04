@@ -414,3 +414,17 @@ uint32 MissionObjectImplementation::getQuestCRC() const {
 
 	return questCRC;
 }
+
+uint32 MissionObjectImplementation::getGroundQuestCRC() const {
+	uint32 questCRC = 0;
+
+	if (questName.isEmpty()) {
+		return questCRC;
+	}
+
+	String questString = "mission/" + questName;
+
+	questCRC = questString.hashCode();
+
+	return questCRC;
+}

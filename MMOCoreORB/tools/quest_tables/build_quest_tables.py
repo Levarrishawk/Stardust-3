@@ -8,7 +8,7 @@ client overlay directory (searchPath_00_50=<dir> in swgemu_live.cfg; the client 
 
     python build_quest_tables.py --src <SOE datatables root> --server <MMOCoreORB/bin/datatables> --client <overlay/datatables> som_ mtp_hideout_access_
 
-Prefixes select the quest names (default: som_ mtp_hideout_access_). Every table is round-tripped after packing
+Prefixes select the quest names, matched against <name> or <dir>/<name> (default: som_ mtp_hideout_access_; `mission/` selects the nine terminal-mission rows). Every table is round-tripped after packing
 (pack -> unpack -> byte compare) and the run refuses to leave a table that does not round-trip.
 """
 import argparse, glob, os, subprocess, sys
@@ -22,12 +22,15 @@ def main():
     a = ap.parse_args()
     tool = os.path.join(HERE, 'tab_to_iff.py'); built = []
     for kind in ('questlist', 'questtask'):
-        for tab in sorted(glob.glob(os.path.join(a.src, kind, 'quest', '*.tab'))):
-            name = os.path.basename(tab)[:-4]
-            if not any(name.startswith(p) for p in a.prefixes): continue
+        # <kind>/<dir>/<name>.tab -> <kind>/<dir>/<name>.iff. The quest NAME the CRC table carries is "<dir>/<name>"
+        # (PlayerManagerImplementation.cpp:663 opens datatables/questtask/<crc-table string>.iff), so ground quests sit
+        # under quest/ and the generic terminal-mission rows under mission/ (journal-4-missions).
+        for tab in sorted(glob.glob(os.path.join(a.src, kind, '*', '*.tab'))):
+            sub = os.path.basename(os.path.dirname(tab)); name = os.path.basename(tab)[:-4]; qname = sub + '/' + name
+            if not any(name.startswith(p) or qname.startswith(p) for p in a.prefixes): continue
             targets = []
-            if a.client: targets.append(os.path.join(a.client, kind, 'quest', name + '.iff'))
-            if a.server and kind == 'questtask': targets.append(os.path.join(a.server, kind, 'quest', name + '.iff'))
+            if a.client: targets.append(os.path.join(a.client, kind, sub, name + '.iff'))
+            if a.server and kind == 'questtask': targets.append(os.path.join(a.server, kind, sub, name + '.iff'))
             for out in targets:
                 os.makedirs(os.path.dirname(out), exist_ok=True)
                 subprocess.check_call([sys.executable, tool, 'pack', tab, out]); built.append(out)

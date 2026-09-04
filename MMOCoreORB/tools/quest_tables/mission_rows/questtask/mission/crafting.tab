@@ -1,0 +1,5 @@
+PREREQUISITE_TASKS	EXCLUSION_TASKS	ATTACH_SCRIPT	JOURNAL_ENTRY_TITLE	JOURNAL_ENTRY_DESCRIPTION	TASKS_ON_COMPLETE	TASKS_ON_FAIL	IS_VISIBLE	SHOW_SYSTEM_MESSAGES	ALLOW_REPEATS	TARGET	PARAMETER
+s	s	s	s	s	s	s	b	b	b	s	s
+		quest.task.ground.nothing	@ui_mission:accept	@kb/kb_missions_d:crafting			1	0	1		
+		quest.task.ground.nothing	@mission/mission_generic:crafting_components_received	@kb/kb_missions_d:crafting			1	0	1		
+		quest.task.ground.nothing	@ui_mission:deliver_end	@kb/kb_missions_d:crafting			1	0	1		

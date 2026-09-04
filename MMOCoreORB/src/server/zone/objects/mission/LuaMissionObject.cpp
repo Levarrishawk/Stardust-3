@@ -32,6 +32,20 @@ Luna<LuaMissionObject>::RegType LuaMissionObject::Register[] = {
 
 	{ "getQuestCRC", &LuaMissionObject::getQuestCRC },
 	{ "isSpaceDutyMission", &LuaMissionObject::isSpaceDutyMission },
+	{ "getTypeCRC", &LuaMissionObject::getTypeCRC },
+	{ "getMissionTitle", &LuaMissionObject::getMissionTitle },
+	{ "getMissionDescription", &LuaMissionObject::getMissionDescription },
+	{ "getTargetName", &LuaMissionObject::getTargetName },
+	{ "getRewardCredits", &LuaMissionObject::getRewardCredits },
+	{ "getDifficultyLevel", &LuaMissionObject::getDifficultyLevel },
+	{ "getStartPositionX", &LuaMissionObject::getStartPositionX },
+	{ "getStartPositionY", &LuaMissionObject::getStartPositionY },
+	{ "getEndPositionX", &LuaMissionObject::getEndPositionX },
+	{ "getEndPositionY", &LuaMissionObject::getEndPositionY },
+	{ "getStartPlanet", &LuaMissionObject::getStartPlanet },
+	{ "getEndPlanet", &LuaMissionObject::getEndPlanet },
+	{ "getQuestType", &LuaMissionObject::getQuestType },
+	{ "getQuestName", &LuaMissionObject::getQuestName },
 	{ 0, 0}
 };
 
@@ -350,6 +364,104 @@ int LuaMissionObject::isSpaceDutyMission(lua_State* L) {
 	bool val = realObject->isSpaceDutyMission();
 
 	lua_pushboolean(L, val);
+
+	return 1;
+}
+
+int LuaMissionObject::getTypeCRC(lua_State* L) {
+	lua_pushnumber(L, realObject->getTypeCRC());
+
+	return 1;
+}
+
+int LuaMissionObject::getMissionTitle(lua_State* L) {
+	const StringId* title = realObject->getMissionTitle();
+
+	if (title == nullptr) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+
+	lua_pushstring(L, title->getFullPath().toCharArray());
+
+	return 1;
+}
+
+int LuaMissionObject::getMissionDescription(lua_State* L) {
+	const StringId* description = realObject->getMissionDescription();
+
+	if (description == nullptr) {
+		lua_pushstring(L, "");
+		return 1;
+	}
+
+	lua_pushstring(L, description->getFullPath().toCharArray());
+
+	return 1;
+}
+
+int LuaMissionObject::getTargetName(lua_State* L) {
+	lua_pushstring(L, realObject->getTargetName().toCharArray());
+
+	return 1;
+}
+
+int LuaMissionObject::getRewardCredits(lua_State* L) {
+	lua_pushnumber(L, realObject->getRewardCredits());
+
+	return 1;
+}
+
+int LuaMissionObject::getDifficultyLevel(lua_State* L) {
+	lua_pushnumber(L, realObject->getDifficultyLevel());
+
+	return 1;
+}
+
+int LuaMissionObject::getStartPositionX(lua_State* L) {
+	lua_pushnumber(L, realObject->getStartPositionX());
+
+	return 1;
+}
+
+int LuaMissionObject::getStartPositionY(lua_State* L) {
+	lua_pushnumber(L, realObject->getStartPositionY());
+
+	return 1;
+}
+
+int LuaMissionObject::getEndPositionX(lua_State* L) {
+	lua_pushnumber(L, realObject->getEndPositionX());
+
+	return 1;
+}
+
+int LuaMissionObject::getEndPositionY(lua_State* L) {
+	lua_pushnumber(L, realObject->getEndPositionY());
+
+	return 1;
+}
+
+int LuaMissionObject::getStartPlanet(lua_State* L) {
+	lua_pushstring(L, realObject->getStartPlanet().toCharArray());
+
+	return 1;
+}
+
+int LuaMissionObject::getEndPlanet(lua_State* L) {
+	lua_pushstring(L, realObject->getEndPlanet().toCharArray());
+
+	return 1;
+}
+
+int LuaMissionObject::getQuestType(lua_State* L) {
+	lua_pushstring(L, realObject->getQuestType().toCharArray());
+
+	return 1;
+}
+
+int LuaMissionObject::getQuestName(lua_State* L) {
+	lua_pushstring(L, realObject->getQuestName().toCharArray());
 
 	return 1;
 }

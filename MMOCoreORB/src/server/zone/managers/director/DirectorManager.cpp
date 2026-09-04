@@ -571,6 +571,10 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->setGlobalInt("CONVERSE", ObserverEventType::CONVERSE);
 	luaEngine->setGlobalInt("KILLEDCREATURE", ObserverEventType::KILLEDCREATURE);
 	luaEngine->setGlobalInt("QUESTKILL", ObserverEventType::QUESTKILL);
+	luaEngine->setGlobalInt("MISSIONACTIVATED", ObserverEventType::MISSIONACTIVATED);
+	luaEngine->setGlobalInt("MISSIONCOMPLETED", ObserverEventType::MISSIONCOMPLETED);
+	luaEngine->setGlobalInt("MISSIONABORTED", ObserverEventType::MISSIONABORTED);
+	luaEngine->setGlobalInt("MISSIONFAILED", ObserverEventType::MISSIONFAILED);
 	luaEngine->setGlobalInt("OBJECTREMOVEDFROMZONE", ObserverEventType::OBJECTREMOVEDFROMZONE);
 	luaEngine->setGlobalInt("ENTEREDAREA", ObserverEventType::ENTEREDAREA);
 	luaEngine->setGlobalInt("EXITEDAREA", ObserverEventType::EXITEDAREA);

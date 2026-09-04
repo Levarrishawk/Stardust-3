@@ -3552,6 +3552,17 @@ void PlayerObjectImplementation::setPlayerQuestData(uint32 questCrc, PlayerQuest
 	}
 }
 
+void PlayerObjectImplementation::setQuestCounter(unsigned int questCrc, int n) {
+	PlayerQuestData questData = getQuestData(questCrc);
+
+	questData.setQuestCounter(n);
+	setPlayerQuestData(questCrc, questData, true);
+}
+
+int PlayerObjectImplementation::getQuestCounter(unsigned int questCrc) {
+	return getQuestData(questCrc).getQuestCounter();
+}
+
 void PlayerObjectImplementation::clearPlayerQuestData(uint32 questCrc, bool notifyClient) {
 	//This works but client has to log out and back in to see the journal update
 	if (notifyClient) {

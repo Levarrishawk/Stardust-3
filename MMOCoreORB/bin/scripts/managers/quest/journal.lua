@@ -258,4 +258,52 @@ function Journal.clearWaypoint(pPlayer, questKey)
 	return true
 end
 
+-- Default counter label: @quest/groundquests:destroy_counter ("Killed").
+-- Also shipped: destroy_and_loot_counter "Found", retrieve_item_counter "Retrieved".
+function Journal.count(pPlayer, questKey, n, current, max, stfKey)
+	if (not validTask(n)) then
+		print("[journal] task out of range")
+		return false
+	end
+
+	local pGhost = getGhost(pPlayer)
+
+	if (pGhost == nil) then
+		return false
+	end
+
+	local crc = Journal.crc(questKey)
+
+	if (not PlayerObject(pGhost):isJournalQuestActive(crc) and not PlayerObject(pGhost):isJournalQuestComplete(crc)) then
+		return false
+	end
+
+	stfKey = stfKey or "@quest/groundquests:destroy_counter"
+
+	PlayerObject(pGhost):setQuestCounter(crc, current)
+	PlayerObject(pGhost):sendQuestTaskCounter(questKey, n, stfKey, current, max)
+
+	return true
+end
+
+-- Default timer label: @quest/groundquests:timer_timertext ("Time Remaining").
+function Journal.timer(pPlayer, questKey, n, seconds, stfKey)
+	if (not validTask(n)) then
+		print("[journal] task out of range")
+		return false
+	end
+
+	local pGhost = getGhost(pPlayer)
+
+	if (pGhost == nil) then
+		return false
+	end
+
+	stfKey = stfKey or "@quest/groundquests:timer_timertext"
+
+	PlayerObject(pGhost):sendQuestTaskTimer(questKey, n, stfKey, seconds)
+
+	return true
+end
+
 return Journal

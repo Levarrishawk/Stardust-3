@@ -29,6 +29,7 @@ require("sui.custom.SuiReceiverPuzzle")
 
 includeFile("helperfuncs.lua")
 includeFile("playerTriggers.lua")
+includeFile("missions/mission_journal.lua")
 
 -- Theme parks
 includeFile("themepark/conversations/goru_conv_handler.lua")

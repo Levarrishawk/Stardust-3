@@ -1,0 +1,5 @@
+PREREQUISITE_TASKS	EXCLUSION_TASKS	ATTACH_SCRIPT	JOURNAL_ENTRY_TITLE	JOURNAL_ENTRY_DESCRIPTION	TASKS_ON_COMPLETE	TASKS_ON_FAIL	IS_VISIBLE	SHOW_SYSTEM_MESSAGES	ALLOW_REPEATS	TARGET	PARAMETER
+s	s	s	s	s	s	s	b	b	b	s	s
+		quest.task.ground.nothing	@ui_mission:accept	@kb/kb_missions_d:dancer			1	0	1		
+		quest.task.ground.nothing	@quest/ground/crash_site_01_imp_domestics:task00_journal_entry_title	@kb/kb_missions_d:dancer			1	0	1		
+		quest.task.ground.nothing	@ui_mission:dancer_tab	@kb/kb_missions_d:dancer			1	0	1		

@@ -848,6 +848,10 @@ class PlayerObject extends IntangibleObject {
 
 	public native boolean isJournalQuestTaskComplete(unsigned int questCrc, int taskNum);
 
+	public native void setQuestCounter(unsigned int questCrc, int n);
+
+	public native int getQuestCounter(unsigned int questCrc);
+
 	/**
 	 * Sends a badges response message
 	 * @pre { }

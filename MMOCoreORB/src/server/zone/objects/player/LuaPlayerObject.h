@@ -68,6 +68,10 @@ namespace player {
 		int isJournalQuestComplete(lua_State* L);
 		int isJournalQuestTaskActive(lua_State* L);
 		int isJournalQuestTaskComplete(lua_State* L);
+		int sendQuestTaskCounter(lua_State* L);
+		int sendQuestTaskTimer(lua_State* L);
+		int setQuestCounter(lua_State* L);
+		int getQuestCounter(lua_State* L);
 		int setActiveQuestsBit(lua_State* L);
 		int clearActiveQuestsBit(lua_State* L);
 		int hasActiveQuestBitSet(lua_State* L);
