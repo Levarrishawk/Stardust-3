@@ -101,7 +101,15 @@ DemolitionPack = ScreenPlay:new {
 	startingMines = 6,     -- valley_event_data.tab rows 11-12, scriptVar currentMineCount=6
 }
 
-registerScreenPlay("DemolitionPack", true)
+-- false, not true: this screenplay is entirely radial-driven and defines no
+-- start(). DirectorManager::startGlobalScreenPlays (DirectorManager.cpp:376-379)
+-- calls start on every screenplay registered true, so true threw
+-- "Error running function start attempt to call a nil value" at boot.
+-- registerScreenPlay stores name->start in the screenPlays map either way
+-- (DirectorManager.cpp:1332), so the screenplay stays registered and reachable;
+-- false only skips the boot-time call. 41 base-tree screenplays register false
+-- for the same reason.
+registerScreenPlay("DemolitionPack", false)
 
 -- datatables/combat/npc_landmines.tab rows 10-15 (tiers 0..5).
 -- Columns used: mineTemplate, blastRadius, minDamage, maxDamage, effectOnExplode.
