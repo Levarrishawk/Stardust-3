@@ -17,6 +17,10 @@
 -- Round EB-c adds the encounter: phase machine, both factional chains, the
 -- 20-flag scoreboard, spine spawns, sourced barks, and the token / painting
 -- award. Methods live in echoBasePhases.lua (included after this file).
+-- Round EB-d replaces EB-c's static AT-ATs with the checkpoint chain and
+-- adds the turret loop, mines, and Rebel snowspeeder AI (also in
+-- echoBasePhases.lua). Ice blocks / barricades / placeable props / theater
+-- executions are NOT PORTED (D-EBd5).
 
 echoBase = ScreenPlay:new {
 
@@ -290,9 +294,9 @@ function echoBase:clearEncounterKeys()
 end
 
 -- OURS, NOT SOURCED. Shape taken from starDestroyer.lua:706-729 /
--- ig88.lua:346-361. Empty on EB-a (zero mobiles); keeps later rounds from
--- leaking props across a reset. Active areas skipped so a future ENTEREDAREA
--- observer would survive.
+-- ig88.lua:346-361. Indoor active_area.iff rows are skipped (clone / cell
+-- observers). Outdoor AT-AT death-watch and mine volumes are trackSpine'd
+-- and destroyed by destroySpineOutdoor.
 function echoBase:destroyArenaContents()
   self:destroyWampaOutdoor()
   self:destroySpineOutdoor()

@@ -1,15 +1,27 @@
 -- Echo Base round EB-c: phase machine, factional chains, scoreboard, barks, token.
+-- Round EB-d: AT-AT checkpoint chain, turret loop, mines, snowspeeder AI.
 -- Methods hang off the echoBase table (echoBase.lua). Include AFTER echoBase.lua.
 --
 -- Shape: starDestroyer.lua (OBJECTDESTRUCTION objectives, handleVictory ->
 -- awardTokenToAll) + ig88.lua (timing ladder) + axkvaMin.lua (Lev skeleton).
+-- AT-AT chain: no Lev analogue (research-echo-base.md §2.4). Nearest shape is
+-- a createEvent respawn after OBJECTDESTRUCTION (D-EBd1), plus ENTEREDAREA
+-- 150 m death-watch areas.
 -- Content: echo_controller.java, echo_quest_tracker.java:183-311,
--- player_instance.java:677-727, datatables/spawning/heroic/echo_base.tab.
+-- player_instance.java:677-727, datatables/spawning/heroic/echo_base.tab,
+-- at_at.java, rebel_turret.java, snowspeeder.java, vehicle_mine.java.
 --
 -- D-EBc1: faction = readData("echoBase:faction") 1 Rebel / 2 Imperial, set by
 -- the entrance terminal (echoBaseEntryMenuComponent.lua:32-34).
--- D-EBc7: AT-AT checkpoint advance, turret firing, mines, snowspeeder AI are
--- EB-d. Quest journal / collector are EB-f. Player vehicles cut.
+-- D-EBd1..5 this round. Quest journal / collector are EB-f. Player vehicles cut.
+--
+-- NOT PORTED this round (D-EBd5):
+--   ice_block.java (44 lines) -- 90 s self-cleanup + debuff link
+--   echo_barricade.java (141) -- player-movable cover, barricade_defender
+--   echo_placeable_object.java (110) -- deployable props
+--   echo_theater.java (232) -- posture setter; kill_scott :98-118 /
+--     kill_downey :119-139 flamethrower executions
+-- Height keeper (snowspeeder.java:143-164 vehicle.setHoverHeight) -- no Core3 analogue.
 
 -- ---------------------------------------------------------------------------
 -- Scoreboard keys. D-EBc2: writeData("echoBase:<flag>", 1), cleared in reset.
@@ -62,6 +74,22 @@ function echoBase:clearPhaseKeys()
   writeData("echoBase:xport_major", 0)
   writeData("echoBase:p3_minor", 0)
   writeData("echoBase:p3_major", 0)
+  writeData("echoBase:atatArrived", 0)
+  for i = 1, 6 do
+    writeData("echoBase:atat" .. i, 0)
+    writeData("echoBase:atatCp" .. i, 0)
+    writeData("echoBase:atatForce" .. i, 0)
+    writeData("echoBase:atatMineSeq" .. i, 0)
+    writeData("echoBase:atatArea" .. i, 0)
+    -- Stamp a fresh gen so in-flight createEvent respawns no-op.
+    writeData("echoBase:atatGen" .. i, self:nextAtatClock())
+  end
+end
+
+function echoBase:nextAtatClock()
+  local n = readData("echoBase:atatClock") + 1
+  writeData("echoBase:atatClock", n)
+  return n
 end
 
 -- Transcribed VERBATIM from echo_controller.java:713-762 getRebelTokenCountByVictory.
@@ -191,6 +219,19 @@ function echoBase:trackSpine(pObj)
 end
 
 function echoBase:destroySpineOutdoor()
+  local pBuilding = self:getBuildingObject()
+  if (pBuilding ~= nil) then
+    local players = SceneObject(pBuilding):getPlayersInRange(2500)  -- OURS, NOT SOURCED: reset sweep radius covering the ~2.3 x 2.4 km battlefield footprint (research-echo-base.md 1.4)
+    if (players ~= nil) then
+      for i = 1, #players do
+        local pNear = players[i]
+        if (pNear ~= nil and CreatureObject(pNear):isPlayerCreature()) then
+          dropObserver(OBJECTDESTRUCTION, "echoBase", "atatNearbyPlayerDied", pNear)
+          writeData(SceneObject(pNear):getObjectID() .. ":echoBaseAtatDeath", 0)
+        end
+      end
+    end
+  end
   local seq = readData("echoBase:spineSeq")
   for i = 1, seq do
     local id = readData("echoBase:spine" .. i)
@@ -226,69 +267,511 @@ function echoBase:spawnSpine(pPlayer)
   self:spawnTurrets()
   self:spawnTrenchLine()
   self:spawnLiveGenerator()
+  -- 11 heroic_echo_snowspeeder_ai, Rebel run only (D-EBd4).
+  if (self:isRebel()) then
+    self:spawnSnowspeeders()
+  end
   -- tab:5911 triggerId=imperial and tab:6045 triggerId=rebel spawn at
   -- beginSpawn (sequence_controller.java:184-190 defaultTrigger), not P3.
   self:spawnFactionExitShuttle()
 end
 
--- 6 AT-ATs at at1..at6 START rows only. Checkpoint ADVANCE is EB-d.
--- tab:37 at1 / at1_start  1227, 55, 1548, yaw -178
--- tab:40 at3 / at2        1191.5281, 55, 1468.4258, yaw -178
--- tab:43 at5 / at3        1130.4219, 55, 1377.852, yaw -178
--- tab:46 at7 / at4        1060, 55, 1519, yaw -178
--- tab:49 at9 / at5        982.4407, 55, 1425.4258, yaw -178
--- tab:52 at11 / at6       908, 55, 1487, yaw -178
-function echoBase:spawnAtats()
-  local rows = {
-    {1227, 55, 1548, -178, 37},
-    {1191.5281, 55, 1468.4258, -178, 40},
-    {1130.4219, 55, 1377.852, -178, 43},
-    {1060, 55, 1519, -178, 46},
-    {982.4407, 55, 1425.4258, -178, 49},
-    {908, 55, 1487, -178, 52}
+-- 24 heroic_echo_atat rows = 6 walkers x 4 checkpoints (start + forwardSpawn1..3).
+-- Index 5 is the generator finish (pathPoint at_finishN, tab:605-610), not a
+-- spawn row: force-advance from checkpoint 4 lands there and starts
+-- atatGeneratorShoot. Room is blank on every row (outdoor).
+-- SOE (x, y, z, yaw) as stored; spawnOutdoorMobile maps to Core3 (x, z, y).
+echoBaseAtatChains = {
+  { -- walker 1 atatNumber=at1 spawn_id=at1
+    {1227, 55, 1548, -178, 37, "at1_start"},
+    {1224, 55, 1350, -178, 60, "at1_forwardSpawn1"},
+    {1220, 55, 1205, -178, 69, "at1_forwardSpawn2"},
+    {1198, 55, 982, -178, 78, "at1_forwardSpawn3"},
+    {826.5, 55, 194, -178, 605, "at_finish1"}
+  },
+  { -- walker 2 atatNumber=at2 spawn_id=at3
+    {1191.5281, 55, 1468.4258, -178, 40, "at2"},
+    {1175, 55, 1350, -178, 93, "at2_forwardSpawn1"},
+    {1155, 55, 1205, -178, 102, "at2_forwardSpawn2"},
+    {1124, 55, 988, -178, 111, "at2_forwardSpawn3"},
+    {784, 55, 198, -178, 606, "at_finish2"}
+  },
+  { -- walker 3 atatNumber=at3 spawn_id=at5
+    {1130.4219, 55, 1377.852, -178, 43, "at3"},
+    {1124, 55, 1348, -178, 126, "at3_forwardSpawn1"},
+    {1104, 55, 1206, -178, 135, "at3_forwardSpawn2"},
+    {1072, 55, 988, -178, 144, "at3_forwardSpawn3"},
+    {735, 55, 238, -178, 607, "at_finish3"}
+  },
+  { -- walker 4 atatNumber=at4 spawn_id=at7
+    {1060, 55, 1519, -178, 46, "at4"},
+    {1045, 55, 1350, -178, 159, "at4_forwardSpawn1"},
+    {1027, 55, 1206, -178, 168, "at4_forwardSpawn2"},
+    {1000, 55, 988, -178, 177, "at4_forwardSpawn3"},
+    {687, 55, 277, -178, 608, "at_finish4"}
+  },
+  { -- walker 5 atatNumber=at5 spawn_id=at9
+    {982.4407, 55, 1425.4258, -178, 49, "at5"},
+    {977, 55, 1350, -178, 192, "at5_forwardSpawn1"},
+    {962, 55, 1203, -178, 201, "at5_forwardSpawn2"},
+    {940, 55, 991, -178, 210, "at5_forwardSpawn3"},
+    {650, 55, 306, -178, 609, "at_finish5"}
+  },
+  { -- walker 6 atatNumber=at6 spawn_id=at11
+    {908, 55, 1487, -178, 52, "at6"},
+    {887, 55, 1330, -178, 225, "at6_forwardSpawn1"},
+    {868, 55, 1200, -178, 234, "at6_forwardSpawn2"},
+    {839, 55, 989, -178, 243, "at6_forwardSpawn3"},
+    {609, 55, 337, -178, 610, "at_finish6"}
   }
-  for i = 1, #rows do
-    local r = rows[i]
-    local pAtat = self:spawnOutdoorMobile("heroic_echo_atat", r[1], r[2], r[3], r[4])
-    if (pAtat ~= nil) then
-      self:trackSpine(pAtat)
-      createObserver(OBJECTDESTRUCTION, "echoBase", "atatKilled", pAtat)
+}
+
+-- Last of the 24 tab rows. A kill here (or at the generator finish) counts.
+echoBaseAtatLastKillCp = 4
+
+-- Stagger from delayAction:at1_start:1 / at2:10 / at3:20 / at4:30 / at5:40 / at6:50
+-- (tab:35, 38, 41, 44, 47, 50). Respawn delay 8 s from delayAction:*_forwardSpawn*:8
+-- and delayAction:atN_start:8 triggerId atN_respawn (tab:36, 39, ...).
+function echoBase:spawnAtats()
+  for i = 1, 6 do
+    local delay = 1
+    if (i > 1) then
+      delay = (i - 1) * 10
+    end
+    local gen = self:nextAtatClock()
+    writeData("echoBase:atatGen" .. i, gen)
+    createEvent(delay * 1000, "echoBase", "spawnAtatWalker", nil, i .. ":1:" .. gen)
+  end
+end
+
+function echoBase:parseAtatArgs(args)
+  local w, c, g = string.match(tostring(args), "^(%d+):(%d+):(%d+)$")
+  if (w == nil) then
+    return 0, 0, 0
+  end
+  return tonumber(w), tonumber(c), tonumber(g)
+end
+
+function echoBase:spawnAtatWalker(pDummy, args)
+  if (readData("echoBase:occupiedState") ~= 1 or readData("echoBase:p1_ended") == 1) then
+    return
+  end
+  local walker, cp, gen = self:parseAtatArgs(args)
+  if (walker < 1 or walker > 6) then
+    return
+  end
+  if (gen ~= readData("echoBase:atatGen" .. walker)) then
+    return
+  end
+  local chain = echoBaseAtatChains[walker]
+  if (chain == nil or cp < 1 or cp > #chain) then
+    return
+  end
+  local r = chain[cp]
+  local pAtat = self:spawnOutdoorMobile("heroic_echo_atat", r[1], r[2], r[3], r[4])
+  if (pAtat == nil) then
+    return
+  end
+  self:trackSpine(pAtat)
+  local oid = SceneObject(pAtat):getObjectID()
+  writeData("echoBase:atat" .. walker, oid)
+  writeData("echoBase:atatCp" .. walker, cp)
+  writeData("echoBase:atatForce" .. walker, 0)
+  writeData(oid .. ":echoAtatWalker", walker)
+  -- at_at.java:28-34: Rebel instance (team == 1) +20% HP.
+  if (self:isRebel()) then
+    for i = 0, 8, 3 do
+      local ham = CreatureObject(pAtat):getMaxHAM(i)
+      ham = ham + math.floor(ham / 5)
+      CreatureObject(pAtat):setMaxHAM(i, ham)
+      CreatureObject(pAtat):setHAM(i, ham)
+    end
+  end
+  createObserver(OBJECTDESTRUCTION, "echoBase", "atatKilled", pAtat)
+  createObserver(DAMAGERECEIVED, "echoBase", "atatDamaged", pAtat)
+  self:spawnAtatDeathArea(pAtat, walker)
+  if (cp == 5) then
+    local arrived = readData("echoBase:atatArrived") + 1
+    writeData("echoBase:atatArrived", arrived)
+    -- D-EBd1: Imperial flags on 1 / 4 walkers arriving at the generator.
+    -- echo_controller.java:189-190 CS-logs those same 1 / 4 thresholds as
+    -- "Lost 1 AT-AT" / "Lost 4 AT-AT" keyed off at_died (tab:5884-5887).
+    -- Arrival is the Imperial P1 fail condition this round (D-EBd1).
+    if (readData("echoBase:p1_ended") ~= 1) then
+      if (arrived >= 1) then
+        writeData("echoBase:fail_major", 1)
+      end
+      if (arrived >= 4) then
+        writeData("echoBase:fail_minor", 1)
+      end
+    end
+    createEvent(12000, "echoBase", "atatGeneratorShoot", pAtat, tostring(walker))
+  end
+end
+
+function echoBase:spawnAtatDeathArea(pAtat, walker)
+  local oldId = readData("echoBase:atatArea" .. walker)
+  if (oldId ~= 0) then
+    local pOld = getSceneObject(oldId)
+    if (pOld ~= nil) then
+      SceneObject(pOld):destroyObjectFromWorld()
+    end
+    writeData("echoBase:atatArea" .. walker, 0)
+  end
+  if (pAtat == nil) then
+    return
+  end
+  -- 150 m (D-EBd1). at_at.java ATATforceCheck has no radius; 150 is OURS.
+  local wx = SceneObject(pAtat):getWorldPositionX()
+  local wz = SceneObject(pAtat):getWorldPositionZ()
+  local wy = SceneObject(pAtat):getWorldPositionY()
+  local pArea = spawnActiveArea("dungeon1", "object/active_area.iff", wx, wz, wy, 150, 0)
+  if (pArea == nil) then
+    return
+  end
+  self:trackSpine(pArea)
+  local areaId = SceneObject(pArea):getObjectID()
+  writeData("echoBase:atatArea" .. walker, areaId)
+  writeData(areaId .. ":echoAtatWalker", walker)
+  createObserver(ENTEREDAREA, "echoBase", "atatDeathAreaEntered", pArea)
+  local already = SceneObject(pAtat):getPlayersInRange(150)
+  if (already ~= nil) then
+    for i = 1, #already do
+      self:armAtatPlayerDeath(already[i])
     end
   end
 end
 
+function echoBase:atatDeathAreaEntered(pArea, pCreature)
+  if (pCreature ~= nil and CreatureObject(pCreature):isPlayerCreature()) then
+    self:armAtatPlayerDeath(pCreature)
+  end
+  return 0
+end
+
+-- Core3 player-death hook: OBJECTDESTRUCTION on the player (village
+-- sith_shadow_encounter.lua:103 / mellichae_outro_theater.lua). PLAYERKILLED
+-- exists (ObserverEventType.h:54) but no Lua heroic uses it; this is the
+-- clean Core3 equivalent of D-EBd1's DEATH observer.
+function echoBase:armAtatPlayerDeath(pPlayer)
+  if (pPlayer == nil or not CreatureObject(pPlayer):isPlayerCreature()) then
+    return
+  end
+  local oid = SceneObject(pPlayer):getObjectID()
+  if (readData(oid .. ":echoBaseAtatDeath") == 1) then
+    return
+  end
+  writeData(oid .. ":echoBaseAtatDeath", 1)
+  createObserver(OBJECTDESTRUCTION, "echoBase", "atatNearbyPlayerDied", pPlayer)
+end
+
+function echoBase:atatNearbyPlayerDied(pPlayer, pKiller)
+  if (pPlayer == nil or readData("echoBase:occupiedState") ~= 1 or readData("echoBase:p1_ended") == 1) then
+    return 0
+  end
+  for w = 1, 6 do
+    local id = readData("echoBase:atat" .. w)
+    if (id ~= 0) then
+      local pAtat = getSceneObject(id)
+      if (pAtat ~= nil and not CreatureObject(pAtat):isDead()
+          and SceneObject(pPlayer):isInRangeWithObject(pAtat, 150)) then
+        local n = readData("echoBase:atatForce" .. w) + 1
+        writeData("echoBase:atatForce" .. w, n)
+        -- at_at.java:235-258 ATATforceCheck maxDeathCount = 5.
+        if (n >= 5) then
+          writeData("echoBase:atatForce" .. w, 0)
+          self:atatForceAdvance(w)
+        end
+      end
+    end
+  end
+  return 0
+end
+
+function echoBase:atatForceAdvance(walker)
+  local id = readData("echoBase:atat" .. walker)
+  if (id == 0) then
+    return
+  end
+  local pAtat = getSceneObject(id)
+  local cp = readData("echoBase:atatCp" .. walker)
+  local chain = echoBaseAtatChains[walker]
+  if (chain == nil or cp >= #chain) then
+    return
+  end
+  writeData("echoBase:atatSkip" .. id, 1)
+  writeData("echoBase:atat" .. walker, 0)
+  local gen = self:nextAtatClock()
+  writeData("echoBase:atatGen" .. walker, gen)
+  if (pAtat ~= nil) then
+    SceneObject(pAtat):destroyObjectFromWorld()
+  end
+  -- tab delayAction 8 s (same as death-advance).
+  createEvent(8000, "echoBase", "spawnAtatWalker", nil, walker .. ":" .. (cp + 1) .. ":" .. gen)
+end
+
 function echoBase:atatKilled(pAtat, pPlayer)
+  if (pAtat == nil) then
+    return 1
+  end
+  local oid = SceneObject(pAtat):getObjectID()
+  local walker = readData(oid .. ":echoAtatWalker")
+  if (walker < 1 or walker > 6) then
+    return 1
+  end
+  writeData("echoBase:atat" .. walker, 0)
+  if (readData("echoBase:atatSkip" .. oid) == 1) then
+    writeData("echoBase:atatSkip" .. oid, 0)
+    return 1
+  end
   if (readData("echoBase:occupiedState") ~= 1) then
     return 1
   end
-  local n = readData("echoBase:atatKilled") + 1
-  writeData("echoBase:atatKilled", n)
-  -- P1 scoring frozen after generator destruction (echo_controller.java:68-70 p1_ended).
-  if (readData("echoBase:p1_ended") == 1) then
+  local cp = readData("echoBase:atatCp" .. walker)
+  local gen = self:nextAtatClock()
+  writeData("echoBase:atatGen" .. walker, gen)
+  local chain = echoBaseAtatChains[walker]
+  -- Kill at last tab checkpoint (4) or the generator finish (5) counts.
+  -- Intermediate deaths respawn at the next row (at_at.java:215-230 OnDeath
+  -- -> atatNumber_spawnPoint_advancePoint / atatNumber_respawn).
+  if (cp >= echoBaseAtatLastKillCp or (chain ~= nil and cp >= #chain)) then
+    local n = readData("echoBase:atatKilled") + 1
+    writeData("echoBase:atatKilled", n)
+    -- P1 scoring frozen after generator destruction (echo_controller.java:68-70 p1_ended).
+    if (readData("echoBase:p1_ended") ~= 1) then
+      if (self:isRebel()) then
+        -- tab:5875-5876 waitForComplete 4 / 6 at_died
+        if (n >= 4) then
+          writeData("echoBase:at_minor", 1)
+        end
+        if (n >= 6) then
+          writeData("echoBase:at_major", 1)
+        end
+      end
+    end
     return 1
   end
-  if (self:isRebel()) then
-    -- rebel: destroy 4 / 6 AT-ATs
-    if (n >= 4) then
-      writeData("echoBase:at_minor", 1)
-    end
-    if (n >= 6) then
-      writeData("echoBase:at_major", 1)
-    end
-  else
-    -- imperial: lost 1 / lost 4 AT-ATs (fail_major / fail_minor)
-    if (n >= 1) then
-      writeData("echoBase:fail_major", 1)
-    end
-    if (n >= 4) then
-      writeData("echoBase:fail_minor", 1)
-    end
+  if (chain ~= nil and cp < #chain) then
+    createEvent(8000, "echoBase", "spawnAtatWalker", nil, walker .. ":" .. (cp + 1) .. ":" .. gen)
   end
   return 1
 end
 
+-- at_at.java:117-126 OnCreatureDamaged: mine every 12 s. Cap 10 live per
+-- walker is OURS, NOT SOURCED.
+function echoBase:atatDamaged(pAtat, pAttacker)
+  if (pAtat == nil or CreatureObject(pAtat):isDead() or readData("echoBase:occupiedState") ~= 1) then
+    return 0
+  end
+  local oid = SceneObject(pAtat):getObjectID()
+  local walker = readData(oid .. ":echoAtatWalker")
+  if (walker < 1) then
+    return 0
+  end
+  local now = os.time()
+  if (now < readData(oid .. ":echoAtatMineAt")) then
+    return 0
+  end
+  writeData(oid .. ":echoAtatMineAt", now + 12)
+  if (self:atatLiveMineCount(walker) >= 10) then
+    return 0
+  end
+  self:spawnAtatMine(pAtat, walker)
+  return 0
+end
+
+function echoBase:atatLiveMineCount(walker)
+  local n = 0
+  local seq = readData("echoBase:atatMineSeq" .. walker)
+  for i = 1, seq do
+    local id = readData("echoBase:atatMine" .. walker .. "_" .. i)
+    if (id ~= 0) then
+      local pMine = getSceneObject(id)
+      if (pMine ~= nil and not CreatureObject(pMine):isDead()) then
+        n = n + 1
+      end
+    end
+  end
+  return n
+end
+
+function echoBase:spawnAtatMine(pAtat, walker)
+  if (pAtat == nil) then
+    return
+  end
+  local wx = SceneObject(pAtat):getWorldPositionX()
+  local wz = SceneObject(pAtat):getWorldPositionZ()
+  local wy = SceneObject(pAtat):getWorldPositionY()
+  local pMine = spawnMobile("dungeon1", "heroic_echo_vehicle_mine", 0, wx, wz, wy, 0, 0)
+  if (pMine == nil) then
+    return
+  end
+  self:trackSpine(pMine)
+  -- vehicle_mine.java:13 createTriggerVolume("hoth_vehicle_mine", 10.0f, true)
+  local pArea = spawnActiveArea("dungeon1", "object/active_area.iff", wx, wz, wy, 10, 0)
+  local seq = readData("echoBase:atatMineSeq" .. walker) + 1
+  writeData("echoBase:atatMineSeq" .. walker, seq)
+  local mineId = SceneObject(pMine):getObjectID()
+  writeData("echoBase:atatMine" .. walker .. "_" .. seq, mineId)
+  writeData(mineId .. ":echoAtatWalker", walker)
+  writeData(mineId .. ":echoAtatMineSlot", seq)
+  if (pArea ~= nil) then
+    self:trackSpine(pArea)
+    local areaId = SceneObject(pArea):getObjectID()
+    writeData("echoBase:atatMineArea" .. walker .. "_" .. seq, areaId)
+    writeData(areaId .. ":echoAtatMine", mineId)
+    createObserver(ENTEREDAREA, "echoBase", "atatMineEntered", pArea)
+  end
+end
+
+function echoBase:atatMineEntered(pArea, pCreature)
+  if (pArea == nil or pCreature == nil or not CreatureObject(pCreature):isPlayerCreature()
+      or CreatureObject(pCreature):isDead()) then
+    return 0
+  end
+  local areaId = SceneObject(pArea):getObjectID()
+  local mineId = readData(areaId .. ":echoAtatMine")
+  local pMine = getSceneObject(mineId)
+  -- 14000: combat_data.tab:1223 hoth_atat_mine ELEMENTAL_HEAT. vehicle_mine.java
+  -- has no damage constant (queues CRC -1220440242). Inflicted on the player.
+  -- Binding: LuaCreatureObject.cpp:46, :613-629
+  -- CreatureObject:inflictDamage(attacker, damageType, damage, destroy)
+  -- damageType 0 = HEALTH (DirectorManager.cpp:700).
+  if (pMine ~= nil) then
+    CreatureObject(pCreature):inflictDamage(pMine, 0, 14000, 0)
+  else
+    CreatureObject(pCreature):inflictDamage(pCreature, 0, 14000, 0)
+  end
+  self:despawnAtatMine(mineId)
+  SceneObject(pArea):destroyObjectFromWorld()
+  return 1
+end
+
+function echoBase:despawnAtatMine(mineId)
+  if (mineId == nil or mineId == 0) then
+    return
+  end
+  local pMine = getSceneObject(mineId)
+  if (pMine ~= nil) then
+    local walker = readData(mineId .. ":echoAtatWalker")
+    local slot = readData(mineId .. ":echoAtatMineSlot")
+    writeData("echoBase:atatMine" .. walker .. "_" .. slot, 0)
+    local areaId = readData("echoBase:atatMineArea" .. walker .. "_" .. slot)
+    if (areaId ~= 0) then
+      local pArea = getSceneObject(areaId)
+      if (pArea ~= nil) then
+        SceneObject(pArea):destroyObjectFromWorld()
+      end
+      writeData("echoBase:atatMineArea" .. walker .. "_" .. slot, 0)
+    end
+    SceneObject(pMine):destroyObjectFromWorld()
+  end
+end
+
+-- at_at.java:128-158 atatGeneratorShoot fires client projectiles only -- no HP.
+-- D-EBd1: scripted amount every 12 s until phase 2. 12500 is OURS, NOT SOURCED
+-- (12 shots exhaust the 150000 generator HP from the_bomb.java / EB-c).
+-- TangibleObject:inflictDamage is not Lua-bound (valley_battlefield.lua:1405-1407);
+-- setConditionDamage + manual generatorDestroyed matches that file.
+function echoBase:atatGeneratorShoot(pAtat, walkerStr)
+  local walker = tonumber(walkerStr)
+  if (walker == nil or readData("echoBase:occupiedState") ~= 1 or readData("echoBase:phase") ~= 1
+      or readData("echoBase:p1_ended") == 1) then
+    return
+  end
+  if (pAtat == nil or CreatureObject(pAtat):isDead()) then
+    return
+  end
+  if (readData("echoBase:atatCp" .. walker) ~= 5) then
+    return
+  end
+  local genId = readData("echoBase:generatorId")
+  local pGen = getSceneObject(genId)
+  if (pGen == nil) then
+    return
+  end
+  local damage = TangibleObject(pGen):getConditionDamage() + 12500
+  TangibleObject(pGen):setConditionDamage(damage)
+  if (damage >= 150000) then
+    self:generatorDestroyed(pGen, nil)
+    return
+  end
+  createEvent(12000, "echoBase", "atatGeneratorShoot", pAtat, walkerStr)
+end
+
+function echoBase:pickLiveAtatInRange(pFrom, range)
+  if (pFrom == nil) then
+    return nil
+  end
+  local live = {}
+  for i = 1, 6 do
+    local id = readData("echoBase:atat" .. i)
+    if (id ~= 0) then
+      local pAtat = getSceneObject(id)
+      if (pAtat ~= nil and not CreatureObject(pAtat):isDead()
+          and SceneObject(pFrom):isInRangeWithObject(pAtat, range)) then
+        live[#live + 1] = pAtat
+      end
+    end
+  end
+  if (#live == 0) then
+    return nil
+  end
+  return live[getRandomNumber(1, #live)]
+end
+
+-- 11 heroic_echo_snowspeeder_ai, Rebel only. tab:652-659, 663-665.
+function echoBase:spawnSnowspeeders()
+  local rows = {
+    {-153, 71, 608, 90, 652},
+    {-173, 71, 610, 90, 653},
+    {-192, 71, 611, 90, 654},
+    {-200, 71, 631, 90, 655},
+    {-183, 71, 631, 90, 656},
+    {-156, 71, 631, 90, 657},
+    {-164, 71, 646, 90, 658},
+    {-185, 71, 645, 90, 659},
+    {494, 108, 1193, 150, 663},
+    {81.26, 96.43, 867.58, 133, 664},
+    {271.61, 81.45, 965.58, 133, 665}
+  }
+  for i = 1, #rows do
+    local r = rows[i]
+    local pSp = self:spawnOutdoorMobile("heroic_echo_snowspeeder_ai", r[1], r[2], r[3], r[4])
+    if (pSp ~= nil) then
+      self:trackSpine(pSp)
+      -- snowspeeder.java:23 trial.setHp(self, rand(400000, 500000))
+      local hp = getRandomNumber(400000, 500000)
+      for h = 0, 8, 3 do
+        CreatureObject(pSp):setMaxHAM(h, hp)
+        CreatureObject(pSp):setHAM(h, hp)
+      end
+      -- snowspeeder.java:24 findTarget first tick rand(10, 20) s.
+      createEvent(getRandomNumber(10, 20) * 1000, "echoBase", "snowspeederStrafe", pSp, "")
+    end
+  end
+end
+
+-- Cone-target loop (snowspeeder.java:56-141, 96 m / 30 deg) approximated as
+-- normal AI aggro + a periodic tick against the nearest walker. 15000 from
+-- combat_data.tab:1215 hoth_ai_speeder_shoot (the command snowspeeder.java:139
+-- queues). Height keeper (snowspeeder.java:143-164) NOT PORTED -- no Core3 analogue.
+function echoBase:snowspeederStrafe(pSp)
+  if (pSp == nil or CreatureObject(pSp):isDead() or readData("echoBase:occupiedState") ~= 1) then
+    return
+  end
+  local pAtat = self:pickLiveAtatInRange(pSp, 700)
+  if (pAtat ~= nil) then
+    CreatureObject(pAtat):inflictDamage(pSp, 0, 15000, 0)
+  end
+  -- java findTarget rearms at 1 s; 4 s is OURS, NOT SOURCED (spam cap).
+  createEvent(4000, "echoBase", "snowspeederStrafe", pSp, "")
+end
+
 -- 25 heroic_echo_rebel_turret_s1 + 15 heroic_echo_rebel_turret_s2.
--- Firing loop is EB-d; this round they stand. tab:2181-2743.
+-- boredHothTurrets (rebel_turret.java:32-84). HP per D-EBb (ELITE 85 rung; SOE
+-- rand(100000,150000) is recorded on the mobile and is NOT applied here).
+-- tab:2181-2743.
 function echoBase:spawnTurrets()
   local s1 = {
     {774.3, 55, 1007.5, 38, 2181},
@@ -339,6 +822,8 @@ function echoBase:spawnTurrets()
     local pTur = self:spawnOutdoorMobile("heroic_echo_rebel_turret_s1", r[1], r[2], r[3], r[4])
     if (pTur ~= nil) then
       self:trackSpine(pTur)
+      -- rebel_turret.java:38-39 min 2.5 / max 7.5 s
+      createEvent(getRandomNumber(2500, 7500), "echoBase", "turretBoredLoop", pTur, "")
     end
   end
   for i = 1, #s2 do
@@ -346,8 +831,36 @@ function echoBase:spawnTurrets()
     local pTur = self:spawnOutdoorMobile("heroic_echo_rebel_turret_s2", r[1], r[2], r[3], r[4])
     if (pTur ~= nil) then
       self:trackSpine(pTur)
+      createEvent(getRandomNumber(2500, 7500), "echoBase", "turretBoredLoop", pTur, "")
     end
   end
+end
+
+-- rebel_turret.java:32-133 boredHothTurrets / hothTurretShotApplyDamage.
+-- Binding: LuaCreatureObject.cpp:46, :613-629
+-- CreatureObject:inflictDamage(attacker, damageType, damage, destroy)
+-- called on the AT-AT, attacker = turret, damageType 0 = HEALTH.
+function echoBase:turretBoredLoop(pTur)
+  if (pTur == nil or CreatureObject(pTur):isDead() or readData("echoBase:occupiedState") ~= 1
+      or readData("echoBase:p1_ended") == 1) then
+    return
+  end
+  -- java:42-43, 77-80: if the turret already has a combat target, skip the AT-AT shot.
+  if (not CreatureObject(pTur):isInCombat()) then
+    local pAtat = self:pickLiveAtatInRange(pTur, 700)
+    if (pAtat ~= nil) then
+      local dmg
+      if (self:isRebel()) then
+        -- java:118-120 isRebelInstance rand(1500, 3000)
+        dmg = getRandomNumber(1500, 3000)
+      else
+        -- java:122-124 imperial rand(15000, 20000)
+        dmg = getRandomNumber(15000, 20000)
+      end
+      CreatureObject(pAtat):inflictDamage(pTur, 0, dmg, 0)
+    end
+  end
+  createEvent(getRandomNumber(2500, 7500), "echoBase", "turretBoredLoop", pTur, "")
 end
 
 -- ~60 trench troopers. snowtrooper_pathing rows are trigger: opcodes (not
