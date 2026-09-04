@@ -164,6 +164,11 @@ includeFile("dungeon/corellian_corvette/ticket_takers/klaatu.lua")
 includeFile("dungeon/corellian_corvette/ticket_takers/lt_lance.lua")
 
 
+-- IG-88
+includeFile("dungeon/ig88/ig88.lua")
+includeFile("dungeon/ig88/ig88EntryWay.lua")
+includeFile("events/ig88EntryMenuComponent.lua")
+
 -- Village
 
 --[[

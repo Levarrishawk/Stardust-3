@@ -230,3 +230,11 @@ ObjectTemplates:addClientTemplate(object_tangible_loot_loot_schematic_shared_yt1
 ------------------------------------------------------------------------------------------------------------------------------------
 
 
+object_tangible_loot_loot_schematic_shared_generic_limited_use = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/loot/loot_schematic/shared_generic_limited_use.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_loot_loot_schematic_shared_generic_limited_use, "object/tangible/loot/loot_schematic/shared_generic_limited_use.iff")
+------------------------------------------------------------------------------------------------------------------------------------
+
+
