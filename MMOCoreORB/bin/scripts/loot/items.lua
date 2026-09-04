@@ -2372,3 +2372,9 @@ includeFile("items/heroic/ig88/wp_comp_heroic_enhancement_ranged_slot_one_s09.lu
 includeFile("items/heroic/ig88/wp_comp_heroic_enhancement_ranged_slot_two_s09.lua")
 includeFile("items/heroic/ig88/wp_comp_heroic_enhancement_melee_slot_one_s18.lua")
 includeFile("items/heroic/ig88/wp_comp_heroic_enhancement_ranged_slot_one_s18.lua")
+
+-- IG-88 heroic: the four drops unblocked by the X-1 registration fix (H(ig) fix-4)
+includeFile("items/heroic/ig88/item_heroic_schematic_saber_03_01.lua")
+includeFile("items/heroic/ig88/item_limited_use_schematic_commando_ice_gun_04_01.lua")
+includeFile("items/heroic/ig88/item_heroic_ig88_sm_generator.lua")
+includeFile("items/heroic/ig88/item_heroic_ig88_wall_lamp.lua")
