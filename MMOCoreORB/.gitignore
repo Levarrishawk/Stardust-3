@@ -22,7 +22,18 @@ bin/*.log
 bin/*.xml
 bin/*sh
 bin/*out
-*test*
+# Anchored 2026-09-03. The unanchored form of this rule swallowed a content file whose
+# LIVE name happens to contain the substring:
+#   bin/scripts/loot/items/mustafar/item_tow_junk_creature_intestines_02_01.lua
+# It passed the syntax gate and the load closure (both read the repo, where it was fine)
+# and only the boot could see it. Recovered with `git add -f`. 162 tracked files under
+# bin/scripts match *test* today (100 particle_test_*, 15 stock JTL ship components,
+# 6 pure substring accidents: intestines, protestor x2, testimony x3). All are tracked,
+# so this change ignores nothing currently in the repo; it only stops the rule firing
+# on the NEXT new file.
+/build/test/
+/src/**/test/
+*.test
 *.sh
 build_temp
 *_includes
