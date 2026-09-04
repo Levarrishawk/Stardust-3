@@ -3539,16 +3539,29 @@ void PlayerObjectImplementation::setCompletedQuestsBit(int bitIndex, byte value,
 }
 
 void PlayerObjectImplementation::setPlayerQuestData(uint32 questCrc, PlayerQuestData& data, bool notifyClient) {
+	// A key the client does not hold yet must go out as ADD, not SET: the client keeps only the last SET for an
+	// unknown key (every earlier journal row vanishes until a relog rebuilds the map from the baseline, which sends
+	// ADD per entry). Measured on the live client 2026-09-04 with 10 staggered grants: 1 row via SET, all via baseline.
+	bool isNew = !playerQuestsData.contains(questCrc);
+
 	if (notifyClient) {
 		PlayerObjectDeltaMessage8* dplay8 = new PlayerObjectDeltaMessage8(this);
 
 		dplay8->startUpdate(0x06);
-		playerQuestsData.set(questCrc, data, dplay8, 1);
+
+		if (isNew)
+			playerQuestsData.add(questCrc, data, dplay8, 1);
+		else
+			playerQuestsData.set(questCrc, data, dplay8, 1);
+
 		dplay8->close();
 
 		sendMessage(dplay8);
 	} else {
-		playerQuestsData.set(questCrc, data);
+		if (isNew)
+			playerQuestsData.add(questCrc, data);
+		else
+			playerQuestsData.set(questCrc, data);
 	}
 }
 
