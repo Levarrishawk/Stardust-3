@@ -275,7 +275,7 @@ has no such conversation -- no giver of it carries a level test -- so nothing
 contradicts the 75 and nothing better is available to replace it with.
 
 Do not read this as precedent for trusting a [list] level. It is the fallback
-when the real gate is absent. If Aaron would rather the level be advisory,
+when the real gate is absent. If the maintainer would rather the level be advisory,
 minimumLevel below is the single number to change.
 
 WHAT IS NOT MODELLED

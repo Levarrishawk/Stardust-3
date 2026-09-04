@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the client/server quest tables (questlist + questtask .iff) from a LOCAL SOE datatable source.
 
-Ruling R16 (Aaron 2026-09-04): SOE-compiled datatables never live in this repo; only the compiler and this build
+Ruling R16 (ruling 2026-09-04): SOE-compiled datatables never live in this repo; only the compiler and this build
 script do. Run it against your own copy of the source tables to produce the files the server reads loose under
 MMOCoreORB/bin/datatables/questtask/quest/ (a loose file shadows the TRE copy, DataArchiveStore.cpp:20-46) and the
 client overlay directory (searchPath_00_50=<dir> in swgemu_live.cfg; the client needs BOTH questlist and questtask).

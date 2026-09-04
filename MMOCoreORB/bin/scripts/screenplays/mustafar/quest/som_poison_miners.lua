@@ -218,7 +218,7 @@ weapon_stats.tab rows weapon_tow_pistol_04_03 and
 weapon_tow_pistol_ion_relic_05_01). So the original grounds for the refusal are
 gone, and the reward is now som_disruptor_pistol.
 
-That used to read "an open decision for Aaron". It was not a decision -- it was a
+That used to read "an open decision for the maintainer". It was not a decision -- it was a
 measurement nobody had taken. Taken now, against the live table
 datatables/item/master_item/weapon_stats.tab:
 
@@ -276,7 +276,7 @@ carrying a level test, so nothing contradicts the 70 and there is nothing better
 put in its place.
 
 That makes this the fallback case, not a precedent for trusting a [list] level. If
-Aaron would rather the level be advisory, minimumLevel below is the single number to
+the maintainer would rather the level be advisory, minimumLevel below is the single number to
 change.
 
 WHAT IS NOT MODELLED
@@ -700,7 +700,7 @@ end
 
 function somPoisonMinersScreenPlay:giveReward(pPlayer)
 	-- Bank Credits 0 on the Reward task, so nothing is paid. The branch is kept so
-	-- that correcting rewardCredits is the only change needed if Aaron rules
+	-- that correcting rewardCredits is the only change needed if the maintainer rules
 	-- otherwise.
 	if (self.rewardCredits > 0) then
 		CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

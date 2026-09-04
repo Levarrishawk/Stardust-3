@@ -7,6 +7,6 @@ need their tables delivered: server side as loose files under `MMOCoreORB/bin/da
 `DataArchiveStore.cpp:20-46`; `questTasksCache` is never invalidated, so a changed table needs a full restart), client side
 through a `searchPath_00_N=<dir>` overlay in `swgemu_live.cfg` (priorities 49-59 are free).
 
-Ruling (Aaron 2026-09-04, R16): the compiled tables are SOE data and do not live in the repo. This directory holds the
+Ruling (ruling 2026-09-04): the compiled tables are SOE data and do not live in the repo. This directory holds the
 compiler (`tab_to_iff.py`, round-trips all 2,077 shipped datatables byte-identically) and `build_quest_tables.py`, which
 builds and verifies the tables from your local source. The built files are git-ignored by their location.
