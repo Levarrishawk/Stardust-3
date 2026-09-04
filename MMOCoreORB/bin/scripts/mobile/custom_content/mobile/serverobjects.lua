@@ -1854,3 +1854,5 @@ includeFile("custom_content/mobile/zozpheratu_static.lua")
 
 includeFile("custom_content/mobile/respec_npc.lua")
 includeFile("custom_content/mobile/ahsoka_tano.lua")
+includeFile("custom_content/mobile/heroic_sd_stormtrooper.lua")
+includeFile("custom_content/mobile/heroic_sd_darktrooper.lua")

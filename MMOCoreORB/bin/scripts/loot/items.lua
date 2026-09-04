@@ -2360,3 +2360,10 @@ includeFile("items/wearables/wookiee/wke_skirt_s01.lua")
 includeFile("items/wearables/wookiee/wke_skirt_s02.lua")
 includeFile("items/wearables/wookiee/wke_skirt_s03.lua")
 includeFile("items/wearables/wookiee/wke_skirt_s04.lua")
+
+-- Star Destroyer heroic
+includeFile("items/npc_loot/heroic_destroyer_cooling_coil.lua")
+includeFile("items/npc_loot/heroic_destroyer_power_transformer.lua")
+includeFile("items/npc_loot/heroic_destroyer_reactor_console.lua")
+includeFile("items/npc_loot/heroic_destroyer_space_beacon.lua")
+includeFile("items/npc_loot/costume_darktrooper_3.lua")

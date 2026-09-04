@@ -841,3 +841,8 @@ includeFile("mustafar/regions/mensix_facility_region.lua")
 includeFile("mustafar/regions/north_west_region.lua")
 includeFile("mustafar/regions/smoking_forest_region.lua")
 includeFile("mustafar/regions/storm_lord_region.lua")
+
+-- Star Destroyer heroic
+includeFile("dungeon/star_destroyer/starDestroyer.lua")
+includeFile("dungeon/star_destroyer/starDestroyerEntryWay.lua")
+includeFile("events/starDestroyerEntryMenuComponent.lua")

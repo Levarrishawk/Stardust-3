@@ -747,3 +747,9 @@ includeFile("groups/wearables/wearables_common.lua")
 includeFile("groups/wearables/wearables_rare.lua")
 includeFile("groups/wearables/wearables_scarce.lua")
 includeFile("groups/wearables/wearables_uncommon.lua")
+
+-- Star Destroyer heroic
+includeFile("groups/dungeon/star_destroyer/sd_boss.lua")
+includeFile("groups/dungeon/star_destroyer/sd_sub_1.lua")
+includeFile("groups/dungeon/star_destroyer/sd_sub_2.lua")
+includeFile("groups/dungeon/star_destroyer/sd_sub_3.lua")
