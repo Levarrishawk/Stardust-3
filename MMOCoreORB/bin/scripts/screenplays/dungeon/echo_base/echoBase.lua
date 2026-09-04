@@ -1,6 +1,6 @@
 -- Echo Base Instanced Dungeon: authored for Stardust 3, round EB-a.
 -- Structure copied from starDestroyer.lua (which copies Levarris' exarKun.lua /
--- axkvaMin.lua). Host is dungeon1 (D1): Aaron 2026-09-04, hoth snapshot is a relic.
+-- axkvaMin.lua). Host is dungeon1 (D1): ruling 2026-09-04, hoth snapshot is a relic.
 -- Skeleton only: start / activate / authorization SUI / transportPlayer /
 -- handleTimer / reset / eject. Zero mobiles, zero phase logic, zero loot, zero barks.
 -- Instance system messages ("That area is currently unavailable", "currently occupied",
