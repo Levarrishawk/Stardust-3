@@ -8,6 +8,11 @@
 -- "have left the dungeon", "has been reset") are classification (c): Lev's own English,
 -- copied verbatim from axkvaMin.lua:29,34,43,94,1016,1031,1038 (via starDestroyer.lua) and
 -- exarKun.lua:122 (the mount line). (fix-1 citations)
+--
+-- Round EB-e adds the wampa cave (spawnWampaCave / wampaBoss_damage /
+-- wampaBossKilled / leash / adds). grep -n wampa_boss over commands/ and src/
+-- = 0 hits. Barks: wampa_boss.java has none; no @sequencer_spam / @theme_park/heroic
+-- keys are used here. DNA item_cs_dna_wampa 5% NOT PORTED (no SD3 template).
 
 echoBase = ScreenPlay:new {
 
@@ -20,6 +25,11 @@ function echoBase:start()
 	if (isZoneEnabled("dungeon1")) then
     self:spawnTheShip()
     writeData("echoBase:occupiedState", 0)
+    writeData("echoBase:wampaSpawnState", 0)
+    writeData("echoBase:wampaFightState", 0)
+    writeData("echoBase:wampa_boss_dead", 0)
+    writeData("echoBase:wampaAddSeq", 0)
+    writeData("echoBase:wampaLeashRunning", 0)
 	end
 end
 
@@ -94,6 +104,8 @@ function echoBase:activate(pPlayer)
 			end
 		end
 	end
+
+	createEvent(100, "echoBase", "spawnWampaCaveCheck", pPlayer, "")
 
 	writeData("echoBase:occupiedState", 1)
 	createEvent(1000, "echoBase", "checkIfActiveForTimer", pPlayer, "")
@@ -262,6 +274,11 @@ end
 -- OURS, NOT SOURCED (the key list). Shape taken from starDestroyer.lua:688-701.
 function echoBase:clearEncounterKeys()
   writeData("echoBase:occupiedState", 0)
+  writeData("echoBase:wampaSpawnState", 0)
+  writeData("echoBase:wampaFightState", 0)
+  writeData("echoBase:wampa_boss_dead", 0)
+  writeData("echoBase:wampaAddSeq", 0)
+  writeData("echoBase:wampaLeashRunning", 0)
 end
 
 -- OURS, NOT SOURCED. Shape taken from starDestroyer.lua:706-729 /
@@ -269,6 +286,7 @@ end
 -- leaking props across a reset. Active areas skipped so a future ENTEREDAREA
 -- observer would survive.
 function echoBase:destroyArenaContents()
+  self:destroyWampaOutdoor()
   local pBuilding = self:getBuildingObject()
   if (pBuilding == nil) then
     return
@@ -366,3 +384,216 @@ function echoBase:resetInstance(pPlayer)
     self:clearEncounterKeys()
     self:destroyArenaContents()
 end
+
+-- EB-e: wampa cave. Indoor rows use getNamedCell on the stored building id
+-- (D-EBe5). Outdoor rows are relative to the POB: world = (4000,0,3500) +
+-- (loc_x, loc_y+32.48, loc_z). The +32.48 cancels SOE's adventure2 building
+-- y (research-echo-base.md §0.3 / echo_base.tab:213). Coordinate mapping
+-- SOE (x,y,z) -> Core3 (x, z, y) per BINDING B4.
+
+function echoBase:spawnWampaCaveCheck()
+  if (readData("echoBase:wampaSpawnState") == 1) then
+    return
+  end
+  self:spawnWampaCave()
+  writeData("echoBase:wampaSpawnState", 1)
+end
+
+function echoBase:spawnWampaInCell(templateName, cellName, locX, locY, locZ, yaw)
+  local cell = self:cellId(cellName)
+  if (cell == 0) then
+    return nil
+  end
+  return spawnMobile("dungeon1", templateName, 0, locX, locY, locZ, yaw, cell)
+end
+
+function echoBase:spawnWampaOutdoor(templateName, locX, locY, locZ, yaw)
+  local wx = 4000 + locX
+  local wz = locY + 32.48
+  local wy = 3500 + locZ
+  return spawnMobile("dungeon1", templateName, 0, wx, wz, wy, yaw, 0)
+end
+
+function echoBase:spawnWampaCave()
+  -- tauntaun_grounds ("The Grotto"), echo_base.tab:1102-1109. Empty yaw -> 0.
+  self:spawnWampaInCell("heroic_echo_tauntaun_domesticated", "tauntaun_grounds", -163.48706, 20.477892, 161.9953, 0)
+  self:spawnWampaInCell("heroic_echo_tauntaun_diseased", "tauntaun_grounds", -184.43279, 20.351288, 170.02417, 0)
+  self:spawnWampaInCell("heroic_echo_tauntaun_bull", "tauntaun_grounds", -208.54852, 20.377186, 174.23012, 0)
+  self:spawnWampaInCell("heroic_echo_tauntaun_feral", "tauntaun_grounds", -219.8739, 20.255919, 156.92752, 0)
+  self:spawnWampaInCell("heroic_echo_tauntaun_agitator", "tauntaun_grounds", -227.60887, 20.355186, 134.38223, 0)
+  self:spawnWampaInCell("heroic_echo_tauntaun_domesticated", "tauntaun_grounds", -209.11362, 20.462584, 112.63185, 0)
+  self:spawnWampaInCell("heroic_echo_tauntaun_bull", "tauntaun_grounds", -194.63141, 20.710222, 116.234634, 0)
+  self:spawnWampaInCell("heroic_echo_tauntaun_agitator", "tauntaun_grounds", -182.3405, 20.59968, 135.09642, 0)
+
+  -- wampa_rm, echo_base.tab:4720.
+  self:spawnWampaInCell("heroic_echo_wampa_berzerker", "wampa_rm", 10.7, -17.1, 341.3, 104)
+
+  -- Uncle Joe, echo_base.tab:4733, blank room (outdoor), mission_critical 1.
+  -- Bodyguards are the summon_wampas set (tab:4736-4738), not standing adds.
+  local pBoss = self:spawnWampaOutdoor("heroic_echo_wampa_boss", -978.39, -32.48, 684.86, -146)
+  if (pBoss ~= nil) then
+    writeData("echoBase:wampaBossId", SceneObject(pBoss):getObjectID())
+    createObserver(OBJECTDESTRUCTION, "echoBase", "wampaBossKilled", pBoss)
+    createObserver(DAMAGERECEIVED, "echoBase", "wampaBoss_damage", pBoss)
+    createObserver(STARTCOMBAT, "echoBase", "wampaBossEnteredCombat", pBoss)
+    writeData("echoBase:wampaFightState", 0)
+  end
+end
+
+-- SOE wampa_boss.java:28-42 OnEnteredCombat: getPlayerCreaturesInRange 250,
+-- addHate 1000 + startCombat on each living player. Core3 has no hate API
+-- (D-EBe3); approximated by engageCombat on every player in 250 m.
+function echoBase:wampaBossEnteredCombat(pBoss, pPlayer)
+  if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+    return 1
+  end
+  local players = SceneObject(pBoss):getPlayersInRange(250)
+  if (players ~= nil) then
+    for i = 1, #players do
+      local pNear = players[i]
+      if (pNear ~= nil and CreatureObject(pNear):isPlayerCreature() and not CreatureObject(pNear):isDead() and not CreatureObject(pNear):isIncapacitated()) then
+        CreatureObject(pBoss):engageCombat(pNear)
+      end
+    end
+  end
+  if (readData("echoBase:wampaLeashRunning") ~= 1) then
+    writeData("echoBase:wampaLeashRunning", 1)
+    createEvent(3000, "echoBase", "wampaBossLeashCheck", pBoss, "")
+  end
+  return 0
+end
+
+-- SOE wampa_boss.java:44-60, UNCLE_JOE_MAX_DISTANCE = 104. On breach: full
+-- HEALTH heal, setInvulnerable(true), stopCombat. Java then stops the 3 s
+-- loop and never restores; D-EBe3 asks invulnerable until back, so the loop
+-- keeps running and INVULNERABLE is cleared on return (no setInvulnerable
+-- Lua binding -- TangibleObject option bit, same as kenobi_spine.lua:1169).
+function echoBase:wampaBossLeashCheck(pBoss)
+  if (pBoss == nil or CreatureObject(pBoss):isDead() or readData("echoBase:wampa_boss_dead") == 1 or readData("echoBase:occupiedState") ~= 1) then
+    writeData("echoBase:wampaLeashRunning", 0)
+    return
+  end
+
+  local homeX = 4000 + (-978.39)
+  local homeY = 3500 + 684.86
+  local x2 = SceneObject(pBoss):getPositionX()
+  local y2 = SceneObject(pBoss):getPositionY()
+  local distSq = ((x2 - homeX) * (x2 - homeX)) + ((y2 - homeY) * (y2 - homeY))
+  local maxDist = 104
+
+  if (distSq > (maxDist * maxDist)) then
+    CreatureObject(pBoss):setHAM(0, CreatureObject(pBoss):getMaxHAM(0))
+    TangibleObject(pBoss):setOptionBit(INVULNERABLE)
+    forcePeace(pBoss)
+  else
+    if (TangibleObject(pBoss):hasOptionBit(INVULNERABLE)) then
+      TangibleObject(pBoss):clearOptionBit(INVULNERABLE)
+    end
+  end
+
+  createEvent(3000, "echoBase", "wampaBossLeashCheck", pBoss, "")
+end
+
+-- SOE wampa_boss.java:145-175 OnCreatureDamaged: adds at 80/60/40/20/10 %.
+-- Lev's fightState ladder (axkvaMin.lua:244-312) so a spike cannot skip a
+-- wave the way SOE's else-if chain can. Each gate fires summon_wampas
+-- (tab:4736-4738, three heroic_echo_wampa_boss_bodyguard).
+function echoBase:wampaBoss_damage(pBoss, pPlayer)
+  if (pBoss == nil or CreatureObject(pBoss):isDead()) then
+    return 0
+  end
+
+  local bossHealth = CreatureObject(pBoss):getHAM(0)
+  local bossMaxHealth = CreatureObject(pBoss):getMaxHAM(0)
+
+  if ((bossHealth <= (bossMaxHealth * 0.8)) and readData("echoBase:wampaFightState") == 0) then
+    self:spawnWampaAdds(pBoss, pPlayer)
+    writeData("echoBase:wampaFightState", 1)
+  end
+
+  if ((bossHealth <= (bossMaxHealth * 0.6)) and readData("echoBase:wampaFightState") == 1) then
+    self:spawnWampaAdds(pBoss, pPlayer)
+    writeData("echoBase:wampaFightState", 2)
+  end
+
+  if ((bossHealth <= (bossMaxHealth * 0.4)) and readData("echoBase:wampaFightState") == 2) then
+    self:spawnWampaAdds(pBoss, pPlayer)
+    writeData("echoBase:wampaFightState", 3)
+  end
+
+  if ((bossHealth <= (bossMaxHealth * 0.2)) and readData("echoBase:wampaFightState") == 3) then
+    self:spawnWampaAdds(pBoss, pPlayer)
+    writeData("echoBase:wampaFightState", 4)
+  end
+
+  if ((bossHealth <= (bossMaxHealth * 0.1)) and readData("echoBase:wampaFightState") == 4) then
+    self:spawnWampaAdds(pBoss, pPlayer)
+    writeData("echoBase:wampaFightState", 5)
+  end
+
+  return 0
+end
+
+-- SOE summon_adds -> trigger summon_wampas, then establishAgroLink(self, 250)
+-- (wampa_boss.java:176-200). Adds themselves pick a random target in 125 m
+-- (wampa_boss_add.java:22-29). Core3 has no agro-link / hate API: each add
+-- engageCombat's the damager, then every player in 125 m.
+function echoBase:spawnWampaAdds(pBoss, pPlayer)
+  local spots = {
+    {-960.68, -32.48, 648.67, -90},
+    {-1031.72, -32.48, 632.95, 67},
+    {-1003.85, -32.48, 682.08, 151}
+  }
+  for i = 1, #spots do
+    local pAdd = self:spawnWampaOutdoor("heroic_echo_wampa_boss_bodyguard", spots[i][1], spots[i][2], spots[i][3], spots[i][4])
+    if (pAdd ~= nil) then
+      local n = readData("echoBase:wampaAddSeq") + 1
+      writeData("echoBase:wampaAddSeq", n)
+      writeData("echoBase:wampaAdd" .. n, SceneObject(pAdd):getObjectID())
+      if (pPlayer ~= nil and CreatureObject(pPlayer):isPlayerCreature() and not CreatureObject(pPlayer):isDead()) then
+        CreatureObject(pAdd):engageCombat(pPlayer)
+      end
+      local near = SceneObject(pAdd):getPlayersInRange(125)
+      if (near ~= nil) then
+        for j = 1, #near do
+          local pNear = near[j]
+          if (pNear ~= nil and CreatureObject(pNear):isPlayerCreature() and not CreatureObject(pNear):isDead() and not CreatureObject(pNear):isIncapacitated()) then
+            CreatureObject(pAdd):engageCombat(pNear)
+          end
+        end
+      end
+    end
+  end
+end
+
+-- Optional objective. echo_controller.java:123-127 wampa_boss_died sets
+-- quest_tracker.wampa_boss_dead, worth zero tokens (research-echo-base.md §2.2).
+-- EB-c reads echoBase:wampa_boss_dead. No token here (D-EBe5).
+function echoBase:wampaBossKilled(pBoss, pPlayer)
+  writeData("echoBase:wampa_boss_dead", 1)
+  writeData("echoBase:wampaLeashRunning", 0)
+  return 0
+end
+
+function echoBase:destroyWampaOutdoor()
+  local bossId = readData("echoBase:wampaBossId")
+  if (bossId ~= 0) then
+    local pBoss = getSceneObject(bossId)
+    if (pBoss ~= nil) then
+      SceneObject(pBoss):destroyObjectFromWorld()
+    end
+    writeData("echoBase:wampaBossId", 0)
+  end
+  local seq = readData("echoBase:wampaAddSeq")
+  for i = 1, seq do
+    local id = readData("echoBase:wampaAdd" .. i)
+    if (id ~= 0) then
+      local pAdd = getSceneObject(id)
+      if (pAdd ~= nil) then
+        SceneObject(pAdd):destroyObjectFromWorld()
+      end
+      writeData("echoBase:wampaAdd" .. i, 0)
+    end
+  end
+end
+

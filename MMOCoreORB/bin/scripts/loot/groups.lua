@@ -747,3 +747,8 @@ includeFile("groups/wearables/wearables_common.lua")
 includeFile("groups/wearables/wearables_rare.lua")
 includeFile("groups/wearables/wearables_scarce.lua")
 includeFile("groups/wearables/wearables_uncommon.lua")
+
+-- echo base (EB-e)
+includeFile("groups/dungeon/echo_base/echo_base_wampa_boss.lua")
+includeFile("groups/dungeon/echo_base/echo_base_wampa_generic.lua")
+includeFile("groups/dungeon/echo_base/echo_base_wampa_berserker.lua")
