@@ -764,10 +764,31 @@ correct for what they cover; they just do not cover everything.
     figure is 12 distinct weapons in 23 templates, and `som_sword_obsidian` is already reachable
     (`serverobjects.lua:19`, the Symbiosis reward), so 22 of the 23 are the live orphan count.
 
-### Three clusters that shipped complete but unconnected — one is now connected
+### Three clusters that shipped complete but unconnected — ALL THREE ARE NOW CONNECTED
 
-⚠ Updated 2026-08-31. Sher Kar's lair is wired and boot-proven. The other two are open
-decisions for Aaron, each reduced to a single question rather than a survey.
+⚠ **CORRECTED 2026-09-03. All three are closed, and the "open decisions for Aaron" framing this
+heading used to carry is withdrawn.** The previous wording read: *"Sher Kar's lair is wired and
+boot-proven. The other two are open decisions for Aaron, each reduced to a single question rather
+than a survey."* Both halves of that second sentence were wrong, and they were wrong in the same
+way — each was a research gap I had not finished, dressed up as a question for Aaron. Verified
+against the tree, not against this file:
+
+- **`som_sherkar_consort` ships.** `mobile/custom_content/som/som_sherkar_consort.lua:55` defines
+  it and `:103` registers it; `mobile/custom_content/som/serverobjects.lua:198` includes it; and
+  `screenplays/mustafar/regions/malfosa_region.lua:67` spawns it as Malfosa, the open-world boss.
+  Its loot group (`loot/groups/mustafar/sher_kar_consort.lua`) and its one drop
+  (`loot/items/mustafar/cube_loot_3r.lua`) both exist. The paragraph below that still says it
+  "has no template anywhere in the repo" is stale — see the strike-through on it.
+- **The final chamber is placed, from source, not from a guess.** `kenobi_spine.lua:232-247`
+  found the placement in `datatables/dungeon/mustafar_trials/obiwan_finale/obiwan_event_data.tab`,
+  which `lair_of_the_crystal.tpf` reaches through the obiwan_event_manager, giving the pedestal
+  at live `(locx, locy, locz) = (57, 0, 6)`, yaw -90. The height did not have to be invented after
+  all, so the reason this item was held — *"the walkable height cannot be derived"* — no longer
+  applies. `kenobi_spine.lua:246-247` states it plainly: *"That is a research gap, not a design
+  question, and the sentence calling the placement Aaron's decision is withdrawn."*
+
+This file lagged the tree by several rounds on both. Where this file and the tree disagree, the
+tree is the record.
 
 **Sher Kar's lair. — CLOSED, the room is open and populated.** The finding as written: the pool
 carried 12 building copies and door node 12110143 (`shared_must_sherkar_door.iff`) with
@@ -792,8 +813,12 @@ Boot evidence, 2026-08-31:
 MustafarDungeonPopulation: 921 creatures placed across the Mustafar dungeon pools, plus 12 lair bosses
 ```
 
-Still open and recorded in the file: `som_sherkar_consort` appears in `malfosa.tab` and has no
-template anywhere in the repo. Authoring a creature outright is not a placement decision.
+~~Still open and recorded in the file: `som_sherkar_consort` appears in `malfosa.tab` and has no
+template anywhere in the repo. Authoring a creature outright is not a placement decision.~~
+
+⚠ **STALE — struck 2026-09-03.** It was authored in a later round and ships:
+`som_sherkar_consort.lua:55/:103`, `som/serverobjects.lua:198`,
+`malfosa_region.lua:67`. See the corrected heading above.
 
 **The final chamber.** `som_kenobi_final_chamber_entrance_item`, `_crystal_pedestal` and
 `_force_crystal` are registered, in no snapshot, in no dungeon table, in no `.qst`. Searching
@@ -820,8 +845,16 @@ derived.** The `.ilf` gives `platform_lrg`'s origin at h -0.79, not its mesh top
 `som_obiwan_crystal_lair` exists in the extract only as that `.ilf` — no `.pob`, no `.msh`. The
 x/z are as good as sourced; the h would be invented, and a pedestal sunk into or floating over
 its own dais is worse than an empty shrine. Full working in `kenobi_spine.lua`, under
-WHAT IS NOT MODELLED. **This is a one-line decision waiting on Aaron, not a survey waiting on
-anyone.**
+WHAT IS NOT MODELLED. ~~**This is a one-line decision waiting on Aaron, not a survey waiting on
+anyone.**~~
+
+⚠ **STALE — struck 2026-09-03.** Nothing was waiting on Aaron. The height never had to be
+derived from the `.ilf` at all, because the placement ships in
+`datatables/dungeon/mustafar_trials/obiwan_finale/obiwan_event_data.tab`, inside the building's
+own server template `lair_of_the_crystal.tpf` — a directory the earlier search never opened. The
+pedestal is at live `(57, 0, 6)`, yaw -90, and is placed at `kenobi_spine.lua:532`. The gallery-2
+reasoning above is left standing as the record of how the room was read, but it is no longer
+load-bearing: it was superseded by an actual source row. See `kenobi_spine.lua:232-247`.
 
 **The SoM weapons — 12, not 14, and four of the files are not SoM weapons at all.**
 `primaryWeapon` resolves a *group* name registered by `addWeapon()` in
