@@ -56,8 +56,8 @@ Core3 = {
 
 	------Main Database Config------
 	DBHost = "127.0.0.1",
-	DBPort = 3307,
-	DBName = "swgemu_sd3",
+	DBPort = 3306,
+	DBName = "swgemu",
 	DBUser = "swgemu",
 	DBPass = "123456",
 	DBInstances = 2,
@@ -71,8 +71,8 @@ Core3 = {
 
 	------Mantis Database Config------
 	MantisHost = "127.0.0.1",
-	MantisPort = 3307,
-	MantisName = "swgemu_sd3",
+	MantisPort = 3306,
+	MantisName = "swgemu",
 	MantisUser = "swgemu",
 	MantisPass = "123456",
 	MantisPrfx = "mantis_", -- The prefix for your mantis tables.
@@ -106,13 +106,7 @@ Core3 = {
 	"tatooine",
 	"tutorial",
 	"yavin4",
-	"chandrila",
-	"coruscant",
-	"jakku",
-	"kaas",
-	"moraband",
-	"hutta",
-	"mustafar"
+	"alderaan"
 	-------- TEST ZONES -------
 	--"09",
 	--"10",
@@ -133,25 +127,17 @@ Core3 = {
 	--"watertabletest",
 	},
 	-------- SPACE ZONES -------
-	-- Master JTL switch: pilot-trainer conversations gate on isJtlEnabled()
-	-- (ConfigManager.h defaults it FALSE; without this every recruiter
-	-- routes to their "no_jtl" brush-off screen).
-	JTL = {
-		JTLEnabled = true,
-	},
-
 	SpaceZonesEnabled = {
-		"space_corellia",
-		"space_dantooine",
-		"space_dathomir",
-		"space_endor",
-		"space_heavy1",
-		"space_kashyyyk",
-		"space_light1",
-		"space_lok",
-		"space_naboo",
-		"space_tatooine",
-		"space_yavin4",
+--		"space_corellia",
+--		"space_dantooine",
+--		"space_dathomir",
+--		"space_endor",
+--		"space_heavy1",
+--		"space_light1",
+--		"space_lok",
+--		"space_naboo",
+--		"space_tatooine",
+--		"space_yavin4"
 		---- TEST ZONES ----
 		--"space_09",
 		--"space_corellia_2",
@@ -162,14 +148,11 @@ Core3 = {
 	},
 
 	------TRE config------
-	TrePath = "/home/ciiv/stardust/tre",
+	TrePath = "/home/swgemu/workspace/tre",
   TreFiles = {
-
-    "stardust_s.tre",
-    "stardust_03.tre",
-    "stardust_02.tre",
-    "stardust_01.tre",
-    "mtg_patch_023.tre",
+    
+    "stardust_3_01.tre",
+    "stardust_3_00.tre",
     "mtg_patch_022.tre",
     "mtg_planets.tre",
     "mtg_patch_021.tre",
@@ -191,7 +174,7 @@ Core3 = {
     "mtg_patch_004_appearance_04.tre",
     "mtg_patch_003_appearance_03.tre",
     "mtg_patch_002_appearance_02.tre",
-    "mtg_patch_001_appearance_01.tre"
+    "mtg_patch_001_appearance_01.tre" 
   },
 
 	------Status Server Config------
