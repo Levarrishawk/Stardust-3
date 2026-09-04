@@ -698,6 +698,11 @@ includeFile("static_spawns/dathomir_static_spawns_ne.lua")
 includeFile("static_spawns/dathomir_static_spawns_nw.lua")
 includeFile("static_spawns/dathomir_static_spawns_se.lua")
 includeFile("static_spawns/dathomir_static_spawns_sw.lua")
+-- Echo Base heroic
+includeFile("dungeon/echo_base/echoBase.lua")
+includeFile("dungeon/echo_base/echoBasePhases.lua")
+includeFile("dungeon/echo_base/echoBaseEntryWay.lua")
+includeFile("events/echoBaseEntryMenuComponent.lua")
 includeFile("static_spawns/endor_static_spawns.lua")
 includeFile("static_spawns/lok_static_spawns.lua")
 includeFile("static_spawns/naboo_static_spawns_north.lua")
@@ -841,10 +846,3 @@ includeFile("mustafar/regions/mensix_facility_region.lua")
 includeFile("mustafar/regions/north_west_region.lua")
 includeFile("mustafar/regions/smoking_forest_region.lua")
 includeFile("mustafar/regions/storm_lord_region.lua")
-
--- Echo Base heroic
-includeFile("dungeon/echo_base/echoBase.lua")
-includeFile("dungeon/echo_base/echoBasePhases.lua")
-includeFile("dungeon/echo_base/echoBaseEntryWay.lua")
-includeFile("events/echoBaseEntryMenuComponent.lua")
-
