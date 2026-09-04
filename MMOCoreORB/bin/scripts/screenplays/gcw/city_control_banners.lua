@@ -157,16 +157,9 @@ function CityControlBanners:manageSceneObjects(location, num, planetName)
 		deleteData(planetName .. ":control:banner" .. num)
 	end
 
-	local controllingFaction = getControllingFaction(planetName)
 	local sceneObjectTable = location[num]
 	local pSceneObject = nil
-	local objectTemplate = ""
-
-	if controllingFaction == FACTIONREBEL then
-		objectTemplate = "object/tangible/gcw/flip_banner_onpole_rebel.iff"
-	else
-		objectTemplate = "object/tangible/gcw/flip_banner_onpole_imperial.iff"
-	end
+	local objectTemplate = "object/tangible/gcw/flip_banner_onpole_imperial.iff"
 
 	pSceneObject = spawnSceneObject(planetName, objectTemplate, sceneObjectTable[1], sceneObjectTable[2], sceneObjectTable[3], sceneObjectTable[4], math.rad(sceneObjectTable[5]))
 

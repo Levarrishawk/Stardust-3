@@ -7,6 +7,7 @@
 
 #include "SpaceQueueCommand.h"
 #include "server/zone/objects/ship/events/ShipDockingTask.h"
+#include "server/zone/objects/ship/ai/ShipAiAgent.h"
 
 class DockCommand : public SpaceQueueCommand {
 private:
@@ -92,6 +93,14 @@ private:
 
 		if (ghost != nullptr && ghost->hasGodMode()) { // for testing
 			return true;
+		}
+
+		if (target->isShipAiAgent()) {
+			auto targetAgent = target->asShipAiAgent();
+
+			if (targetAgent != nullptr && targetAgent->getMissionOwnerID() == pilot->getObjectID()) {
+				return true;
+			}
 		}
 
 		return false; // target->getDockingPermission(ship);

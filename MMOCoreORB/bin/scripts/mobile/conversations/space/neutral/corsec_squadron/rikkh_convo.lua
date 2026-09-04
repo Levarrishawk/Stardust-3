@@ -1115,9 +1115,7 @@ fourth_mission_success = ConvoScreen:new {
 	leftDialog = "@conversation/corellia_privateer_trainer_2:s_c16a57f5", -- Good job!  Nothing more satisfying than that, right?  I've got your pay right here.... along with some news.
 	animation = "",
 	stopConversation = "false",
-	options = {
-		{"@conversation/corellia_privateer_trainer_2:s_1c8bddbb", "completed_rikkh"}, -- What is it?
-	}
+	options = {} -- Response added by the conversation handler after checking training progress.
 }
 rikkh_convo_template:addScreen(fourth_mission_success)
 

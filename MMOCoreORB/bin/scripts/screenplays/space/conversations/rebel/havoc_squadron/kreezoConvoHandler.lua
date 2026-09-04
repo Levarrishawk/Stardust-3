@@ -29,6 +29,9 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("no_jtl")
 	end
 
+	local npcTemplate = SceneObject(pNpc):getTemplateObjectPath()
+	local isWarvog = npcTemplate == "object/mobile/space_rebel_tier4_warvog.iff"
+
 	-- Reset test
 	--SpaceHelpers:surrenderPilot(pPlayer)
 
@@ -41,6 +44,14 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player is Neutral Pilot
 	elseif (SpaceHelpers:isNeutralPilot(pPlayer)) then
 		return convoTemplate:getScreen("neutral_pilot")
+	end
+
+	if (SpaceHelpers:isHavocSquadron(pPlayer)) then
+		local pilotTier = ghost:getPilotTier()
+
+		if ((pilotTier >= 4 and not isWarvog) or (isWarvog and pilotTier < 4)) then
+			return convoTemplate:getScreen("go_to_next")
+		end
 	end
 
 	-- Check for a starter ship
@@ -118,6 +129,8 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
 
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 4)
+		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 4)
+		local requiredTier4Skills = t4QuestFourComplete and 4 or t4QuestThreeComplete and 3 or t4QuestTwoComplete and 2 or t4QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 4 mission from Kreezo
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
@@ -127,7 +140,7 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier4_on_mission")
 
 		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
-		elseif (t4QuestFourComplete and completedTier4) then
+		elseif (t4QuestFourComplete and completedTier4 and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 			if (ghost:getPilotTier() <= 4) then
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
@@ -135,6 +148,7 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 			-- Player has not earned the master box yet
 			if (not SpaceHelpers:hasMasterSkill(pPlayer, "rebel_navy")) then
+				SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 				return convoTemplate:getScreen("master_mission")
 			else
 				return convoTemplate:getScreen("tier4_completed")
@@ -150,9 +164,11 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t4QuestOneComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier4_first_mission_success")
 
-		-- Pilot is able to train
-		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-			return convoTemplate:getScreen("ready_train_tier4")
+		elseif (tier4SkillCount < requiredTier4Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+				return convoTemplate:getScreen("ready_train_tier4")
+			end
+			return convoTemplate:getScreen("tier4_duty_repeat")
 
 		-- Has not received the tier 4 briefing from Kreezo yet
 		elseif (getQuestStatus(playerID .. "HavocSquadronScreenplay:StartedKreezoTier4") ~= "1") then
@@ -184,7 +200,7 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier4_second_mission")
 				end
 			-- Player is ready for first mission, so either was not given it after training first box or failed
-			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 4)) then
+			elseif (not t4QuestOneComplete) then
 				if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_first_mission")
 				else
@@ -711,30 +727,28 @@ function kreezoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_corellia_rebel_tier4_4, assassinate_corellia_rebel_tier4_4_a, rescue_corellia_rebel_tier4_4_b, space_battle_corellia_rebel_tier4_4_c}, {{type="recovery", name="corellia_rebel_tier4_4"}, {type="assassinate", name="corellia_rebel_tier4_4_a"}, {type="rescue", name="corellia_rebel_tier4_4_b"}, {type="space_battle", name="corellia_rebel_tier4_4_c"}})
 		recovery_corellia_rebel_tier4_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {space_battle_corellia_rebel_tier4_3, space_battle_corellia_rebel_tier4_3_a, survival_corellia_rebel_tier4_3_b}, {{type="space_battle", name="corellia_rebel_tier4_3"}, {type="space_battle", name="corellia_rebel_tier4_3_a"}, {type="survival", name="corellia_rebel_tier4_3_b"}})
 		space_battle_corellia_rebel_tier4_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_corellia_rebel_tier4_2, delivery_no_pickup_corellia_rebel_tier4_2_a, rescue_corellia_rebel_tier4_2_b}, {{type="assassinate", name="corellia_rebel_tier4_2"}, {type="delivery_no_pickup", name="corellia_rebel_tier4_2_a"}, {type="rescue", name="corellia_rebel_tier4_2_b"}})
 		assassinate_corellia_rebel_tier4_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {survival_corellia_rebel_tier4_1, space_battle_corellia_rebel_tier4_1_a, space_battle_corellia_rebel_tier4_1_b}, {{type="survival", name="corellia_rebel_tier4_1"}, {type="space_battle", name="corellia_rebel_tier4_1_a"}, {type="space_battle", name="corellia_rebel_tier4_1_b"}})
 		survival_corellia_rebel_tier4_1:startQuest(pPlayer, pNpc)
 
-	-- Master mission (hunts the Imperial corvette in Kessel)
+	-- Arkon transfers the pilot to Burke; Burke owns the Kessel missions.
 	elseif (screenID == "accept_master_mission") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, HavocSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
-			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
-		end
+		setQuestStatus(CreatureObject(pPlayer):getObjectID() .. "RebelMasterPilot:BurkeHandoff", 1)
+		SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 	end
 
 	return pClonedScreen

@@ -59,6 +59,9 @@ SWGEmu.exe.planetmap.bin
 /object
 /effect
 /.codex-tmp
+*.inc
+/.tmp/binary-analysis
+/.tmp
 
 # Mustafar port working notes -- kept on disk, out of the repo.
 /scratch/

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Stardust Server Status</title>
+	<style>
+		:root {
+			color-scheme: dark;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			background: #0d1117;
+			color: #e6edf3;
+		}
+		body {
+			display: grid;
+			min-height: 100vh;
+			margin: 0;
+			place-items: center;
+		}
+		.status-card {
+			width: min(28rem, calc(100% - 3rem));
+			padding: 2rem;
+			border: 1px solid #30363d;
+			border-radius: 0.75rem;
+			background: #161b22;
+			box-shadow: 0 1rem 3rem rgb(0 0 0 / 30%);
+		}
+		h1 {
+			margin: 0 0 1.5rem;
+			font-size: 1.5rem;
+		}
+		.state {
+			display: flex;
+			align-items: center;
+			gap: 0.65rem;
+			margin-bottom: 1.5rem;
+			font-size: 1.25rem;
+			font-weight: 700;
+		}
+		.indicator {
+			width: 0.8rem;
+			height: 0.8rem;
+			border-radius: 50%;
+			background: #8c959f;
+		}
+		[data-status="online"] .indicator { background: #3fb950; }
+		[data-status="loading"] .indicator { background: #d29922; }
+		[data-status="locked"] .indicator { background: #d29922; }
+		[data-status="shutting_down"] .indicator { background: #f85149; }
+		[data-status="offline"] .indicator { background: #f85149; }
+		dl {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			gap: 0.75rem 1.5rem;
+			margin: 0;
+		}
+		dt { color: #8c959f; }
+		dd { margin: 0; text-align: right; }
+		.error { color: #f85149; }
+	</style>
+</head>
+<body>
+	<main class="status-card" id="status-card" data-status="unknown">
+		<h1><span id="server-name">TC</span> Server Status</h1>
+		<div class="state">
+			<span class="indicator" aria-hidden="true"></span>
+			<span id="server-state">Checking…</span>
+		</div>
+		<dl>
+			<dt>Players online</dt>
+			<dd id="players-online">—</dd>
+			<dt>Uptime</dt>
+			<dd id="uptime">—</dd>
+			<dt>Last checked</dt>
+			<dd id="last-checked">—</dd>
+		</dl>
+		<p class="error" id="error" hidden>Status information is currently unavailable.</p>
+	</main>
+	<script>
+		const refreshMilliseconds = 30000;
+		const stateLabels = {
+			online: "Online",
+			loading: "Loading",
+			locked: "Locked",
+			shutting_down: "Shutting down",
+			offline: "Offline"
+		};
+
+		function formatDuration(totalSeconds) {
+			const seconds = Math.max(0, Number(totalSeconds) || 0);
+			const days = Math.floor(seconds / 86400);
+			const hours = Math.floor((seconds % 86400) / 3600);
+			const minutes = Math.floor((seconds % 3600) / 60);
+			return [days ? `${days}d` : "", hours ? `${hours}h` : "", `${minutes}m`]
+				.filter(Boolean)
+				.join(" ");
+		}
+
+		async function refreshStatus() {
+			const error = document.getElementById("error");
+
+			try {
+				const response = await fetch("status.json", { cache: "no-store" });
+				if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+				const status = await response.json();
+				const state = stateLabels[status.status] ? status.status : "offline";
+				document.getElementById("status-card").dataset.status = state;
+				document.getElementById("server-name").textContent = status.server || "TC";
+				document.getElementById("server-state").textContent = stateLabels[state];
+				document.getElementById("players-online").textContent = status.playersOnline ?? 0;
+				document.getElementById("uptime").textContent = formatDuration(status.uptimeSeconds);
+				document.getElementById("last-checked").textContent = new Date(status.updatedAt).toLocaleString();
+				error.hidden = true;
+			} catch (requestError) {
+				document.getElementById("status-card").dataset.status = "offline";
+				document.getElementById("server-state").textContent = "Unavailable";
+				error.hidden = false;
+			}
+		}
+
+		refreshStatus();
+		setInterval(refreshStatus, refreshMilliseconds);
+	</script>
+</body>
+</html>

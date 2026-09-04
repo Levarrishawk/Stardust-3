@@ -1,5 +1,5 @@
 vylukh_clan_ace_tier3 = ShipAgent:new {
-	template = "xwing_tier3",
+	template = "z95_tier3",
 	pilotTemplate = "medium_fighter_tier4",
 	shipType = "fighter",
 

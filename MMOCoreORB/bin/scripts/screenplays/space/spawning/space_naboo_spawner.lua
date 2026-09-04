@@ -6,6 +6,15 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 	spaceZone = "space_naboo",
 
 	shipSpawns = {
+		{spawnName = "inquisition_mission_2_droids_1", spawnType = SHIP_SPAWN_SINGLE, x = 590, z = -3500, y = -6000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 16, maxSpawnDistance = 48, minPatrol = 40, maxPatrol = 160, totalSpawns = 4,
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo"}
+		},
+		{spawnName = "inquisition_mission_2_droids_2", spawnType = SHIP_SPAWN_SINGLE, x = -2500, z = 4000, y = 3500, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 16, maxSpawnDistance = 48, minPatrol = 40, maxPatrol = 160, totalSpawns = 4,
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo"}
+		},
+		{spawnName = "inquisition_mission_2_droids_3", spawnType = SHIP_SPAWN_SINGLE, x = -3800, z = 2500, y = 5000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 16, maxSpawnDistance = 48, minPatrol = 40, maxPatrol = 160, totalSpawns = 4,
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo"}
+		},
 		{spawnName = "rogue_droid_generator", spawnType = SHIP_SPAWN_SINGLE, x = -7133, z = 1932, y = -977, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 5,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rogue_droid_generator_00", "rogue_droid_generator_01", "rogue_droid_generator_02", "rogue_droid_generator_03", "rogue_droid_generator_04", "rogue_droid_generator_05", "rogue_droid_generator_06", "rogue_droid_generator_07", "rogue_droid_generator_08", "rogue_droid_generator_09", "rogue_droid_generator_10", "rogue_droid_generator_11", "rogue_droid_generator_12", "rogue_droid_generator_13", "rogue_droid_generator_14", "rogue_droid_generator_15", "rogue_droid_generator_16", "rogue_droid_generator_17", "rogue_droid_generator_18"},
 			shipSpawns = {"rogue_droid_bomber", "rogue_droid_defender_tier1", "rogue_droid_defender_tier1_naboo", "rogue_droid_fighter_tier1", "rogue_droid_fighter_tier1_naboo", "rogue_droid_scrapper_tier1_naboo"}
@@ -97,7 +106,7 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"blacksun_ace_s04_tier1", "blacksun_bomber_ace_s04_tier1", "blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1", "blacksun_fighter_s02_tier1", "blacksun_fighter_s02_tier1", "blacksun_fighter_s02_tier1"}
 		},
 		{spawnName = "rebel_attack_1", spawnType = SHIP_SPAWN_SINGLE, x = -476, z = 1137, y = -971, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 10, maxRespawn = 20, minSpawnDistance = 8, maxSpawnDistance = 64, minPatrol = 80, maxPatrol = 180, totalSpawns = 3,
-			shipSpawns = {"imp_freightermedium_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1"}
+			shipSpawns = {"imp_freightermedium_tier1", "droid_fighter", "droid_fighter"}
 		},
 		{spawnName = "hutt_generic_1", spawnType = SHIP_SPAWN_SINGLE, x = -16, z = 942, y = -1260, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 32, minPatrol = 100, maxPatrol = 400, totalSpawns = 3,
 			shipSpawns = {"hutt_bomber_s01_tier1", "hutt_fighter_s01_tier1", "hutt_fighter_s01_tier1", "hutt_pirate_s02_tier1"}
@@ -113,7 +122,7 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"rogue_droid_defender_tier1", "rogue_droid_fighter_tier1", "rogue_droid_alpha_tier1", "rogue_droid_alpha_tier1_naboo", "rogue_droid_defender", "rogue_droid_defender_tier1", "rogue_droid_defender_tier1_naboo", "rogue_droid_fighter", "rogue_droid_fighter_tier1", "rogue_droid_scrapper", "rogue_droid_scrapper_tier1", "rogue_droid_scrapper_tier1_naboo"}
 		},
 		{spawnName = "rebel_cadet_1", spawnType = SHIP_SPAWN_SINGLE, x = -6416, z = -2568, y = -4512, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 64, minPatrol = 50, maxPatrol = 380, totalSpawns = 3,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1"}
+			shipSpawns = {"droid_fighter", "rogue_droid_fighter_tier2_naboo", "droid_fighter"}
 		},
 		{spawnName = "comm_ship_twinstar_shipping_01", spawnType = SHIP_SPAWN_SINGLE, x = -5000, z = -3200, y = -5000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 4, maxRespawn = 120, minSpawnDistance = 32, maxSpawnDistance = 128, minPatrol = 100, maxPatrol = 400, totalSpawns = 3,
 			shipSpawns = {"blacksun_fighter_s02_tier1", "blacksun_marauder_tier1"}
@@ -128,20 +137,20 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"imp_tie_bomber_tier1", "imp_tie_bomber_tier1_naboo", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1_naboo"}
 		},
 		{spawnName = "rebel_defense_3", spawnType = SHIP_SPAWN_SINGLE, x = -5233, z = 6658, y = 6405, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 50, maxPatrol = 300, totalSpawns = 3,
-			shipSpawns = {"reb_xwing_cadet_tier1"}
+			shipSpawns = {"rogue_droid_fighter_tier2_naboo"}
 		},
 		{spawnName = "rebel_defense_4", spawnType = SHIP_SPAWN_SINGLE, x = -4892, z = 6147, y = 6901, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 50, maxPatrol = 300, totalSpawns = 4,
-			shipSpawns = {"reb_xwing_tier1", "reb_xwing_tier1", "reb_ywing_tier2", "reb_ywing_tier2", "rebel_raider_captain"}
+			shipSpawns = {"rogue_droid_fighter_tier2_naboo", "droid_fighter", "rogue_droid_fighter_tier1_naboo", "droid_fighter", "rogue_droid_fighter_tier1_naboo"}
 		},
 		{spawnName = "imperial_fluff_spawns_4", spawnType = SHIP_SPAWN_SINGLE, x = -5221, z = 5646, y = 5880, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 100, maxPatrol = 300, totalSpawns = 3,
 			shipSpawns = {"imp_tie_bomber_tier1", "imp_tie_bomber_tier1_naboo", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1_naboo"}
 		},
 		{spawnName = "rebel_boss", spawnType = SHIP_SPAWN_SINGLE, x = -5569, z = 5792, y = 6386, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 7200, maxRespawn = 10800, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_boss_00", "rebel_boss_01", "rebel_boss_02", "rebel_boss_03", "rebel_boss_04", "rebel_boss_05", "rebel_boss_06", "rebel_boss_07", "rebel_boss_08", "rebel_boss_09", "rebel_boss_10", "rebel_boss_11", "rebel_boss_12", "rebel_boss_13", "rebel_boss_14", "rebel_boss_15", "rebel_boss_16", "rebel_boss_17", "rebel_boss_18", "rebel_boss_19", "rebel_boss_20"},
-			shipSpawns = {"rebel_boss"}
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo"}
 		},
 		{spawnName = "rebel_defense_2", spawnType = SHIP_SPAWN_SINGLE, x = -5998, z = 5792, y = 6563, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 50, maxPatrol = 300, totalSpawns = 4,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_tier1", "reb_ywing_tier1", "reb_z95_tier1"}
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "droid_fighter", "droid_fighter", "droid_fighter", "droid_fighter"}
 		},
 		{spawnName = "imperial_naboo_squad_3", spawnType = SHIP_SPAWN_SQUADRON, x = -6004, z = 5601, y = 5836, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 300, maxRespawn = 420, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_naboo_squad_3_00", "imperial_naboo_squad_3_01", "imperial_naboo_squad_3_02", "imperial_naboo_squad_3_03", "imperial_naboo_squad_3_04", "imperial_naboo_squad_3_05"},
@@ -149,7 +158,7 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "rebel_base_defense_1", spawnType = SHIP_SPAWN_SINGLE, x = -5667, z = 6271, y = 6288, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 3,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_base_defense_1_00", "rebel_base_defense_1_01", "rebel_base_defense_1_02", "rebel_base_defense_1_03", "rebel_base_defense_1_04", "rebel_base_defense_1_05", "rebel_base_defense_1_06", "rebel_base_defense_1_07", "rebel_base_defense_1_08", "rebel_base_defense_1_09", "rebel_base_defense_1_10", "rebel_base_defense_1_11", "rebel_base_defense_1_12", "rebel_base_defense_1_13", "rebel_base_defense_1_14", "rebel_base_defense_1_15", "rebel_base_defense_1_16", "rebel_base_defense_1_17", "rebel_base_defense_1_18", "rebel_base_defense_1_19", "rebel_base_defense_1_20"},
-			shipSpawns = {"reb_z95_tier1", "reb_xwing_tier1"}
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo"}
 		},
 		{spawnName = "rsf_station_guards_6", spawnType = SHIP_SPAWN_SINGLE, x = 4741, z = -6195, y = 2118, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, minPatrol = 100, maxPatrol = 300, totalSpawns = 3,
 			shipSpawns = {"rsf_rawl_tier1", "rsf_rawl_tier1_naboo", "rsf_stinger_tier1", "rsf_stinger_tier2_naboo"}
@@ -212,7 +221,7 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"imp_imperial_gunboat_tier1"}
 		},
 		{spawnName = "rebel_cadet_3", spawnType = SHIP_SPAWN_SINGLE, x = 5492, z = 64, y = 2804, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 64, minPatrol = 50, maxPatrol = 380, totalSpawns = 3,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1"}
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo"}
 		},
 		{spawnName = "rsf_patrol_4", spawnType = SHIP_SPAWN_SINGLE, x = 1297, z = 4803, y = -4375, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 30, maxSpawnDistance = 50, minPatrol = 70, maxPatrol = 310, totalSpawns = 3,
 			shipSpawns = {"rsf_ace_tier1", "rsf_hunter_tier1"}
@@ -266,7 +275,7 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"borvo_bomber_tier1", "borvo_bomber_tier1_naboo", "borvo_defender_tier1", "borvo_defender_tier1_naboo", "borvo_fighter_tier1", "borvo_fighter_tier1_naboo"}
 		},
 		{spawnName = "rebel_cadet_2", spawnType = SHIP_SPAWN_SINGLE, x = 4480, z = -4132, y = -6180, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 64, minPatrol = 50, maxPatrol = 380, totalSpawns = 3,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1"}
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo"}
 		},
 		{spawnName = "rsf_station_patrol_1", spawnType = SHIP_SPAWN_SINGLE, x = 6928, z = -4258, y = -320, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, totalSpawns = 7,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rsf_station_patrol_1_00", "rsf_station_patrol_1_01", "rsf_station_patrol_1_02", "rsf_station_patrol_1_03", "rsf_station_patrol_1_04", "rsf_station_patrol_1_05"},
@@ -307,7 +316,7 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"borvo_bomber_tier1", "borvo_bomber_tier1_naboo", "borvo_defender_tier1", "borvo_defender_tier1", "borvo_defender_tier1_naboo"}
 		},
 		{spawnName = "rebel_generic_1", spawnType = SHIP_SPAWN_SINGLE, x = -172, z = -2813, y = -425, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 8, maxSpawnDistance = 64, minPatrol = 50, maxPatrol = 380, totalSpawns = 3,
-			shipSpawns = {"reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1", "reb_xwing_cadet_tier1"}
+			shipSpawns = {"rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo", "rogue_droid_fighter_tier1_naboo"}
 		},
 		{spawnName = "naboo_privateer_12", spawnType = SHIP_SPAWN_SINGLE, x = 3142, z = -3591, y = -492, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 16, maxSpawnDistance = 64, minPatrol = 140, maxPatrol = 612, totalSpawns = 3,
 			shipSpawns = {"aynat_enforcer_tier1", "aynat_ghost_tier1", "aynat_intimidator_tier1"}

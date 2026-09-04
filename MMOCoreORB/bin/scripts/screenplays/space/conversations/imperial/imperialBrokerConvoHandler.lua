@@ -14,8 +14,8 @@ function imperialBrokerConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplat
 		return convoTemplate:getScreen("no_jtl")
 	end
 
-	-- Player is a Imperial pilot and is not on leave
-	if (SpaceHelpers:isImperialPilot(pPlayer) and faction == FACTIONIMPERIAL and playerFactionStatus > ONLEAVE) then
+	-- Pilot retirement is independent of the player's current ground GCW status.
+	if (SpaceHelpers:isImperialPilot(pPlayer)) then
 		CreatureObject(pNpc):doAnimation("salute2")
 
 		return convoTemplate:getScreen("hello_imperial_pilot")

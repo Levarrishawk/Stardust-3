@@ -59,10 +59,10 @@ SpaceEndorSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"hutt_bomber_s02_tier3", "hutt_fighter_s02_tier3", "hutt_fighter_s02_tier3", "huttsmuggler", "huttsmuggler", "huttsmuggler"}
 		},
 		{spawnName = "rebel_generator_defense_3", spawnType = SHIP_SPAWN_SINGLE, x = 1501, z = 6494, y = 4192, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 50, maxPatrol = 300, totalSpawns = 3,
-			shipSpawns = {"reb_bwing_boss", "reb_xwing_tier4", "reb_xwing_tier4", "reb_xwing_tier4", "reb_xwing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4"}
+			shipSpawns = {"reb_ywing_tier4", "reb_xwing_tier4", "reb_xwing_tier4", "reb_xwing_tier4", "reb_xwing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4"}
 		},
 		{spawnName = "tatooine_imperial_tier3_destroy2_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 1207, z = 4306, y = 3989, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier4", "reb_bwing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4", "rebel_raider_bomber_tier3", "rebel_raider_captain_tier3", "rebel_raider_fast_attack_tier3"}
+			shipSpawns = {"reb_awing_tier4", "reb_ywing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4", "rebel_raider_bomber_tier3", "rebel_raider_captain_tier3", "rebel_raider_fast_attack_tier3"}
 		},
 		{spawnName = "tatooine_imperial_tier3_inspect4escort", spawnType = SHIP_SPAWN_SINGLE, x = 1897, z = 6480, y = 1174, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
 			shipSpawns = {"reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4", "reb_z95_tier4", "reb_z95_tier4", "reb_z95_tier4"}
@@ -105,16 +105,16 @@ SpaceEndorSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"imp_tie_aggressor_tier4", "imp_tie_bomber_tier4", "imp_tie_fighter_tier4"}
 		},
 		{spawnName = "rebel_spies_1", spawnType = SHIP_SPAWN_SINGLE, x = -7378, z = -1321, y = 6649, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 80, maxPatrol = 160, totalSpawns = 6,
-			shipSpawns = {"reb_bwing_tier4", "reb_xwing_tier4", "reb_z95_tier4", "reb_ywing_tier4", "reb_awing_tier4"}
+			shipSpawns = {"reb_ywing_tier4", "reb_xwing_tier4", "reb_z95_tier4", "reb_ywing_tier4", "reb_awing_tier4"}
 		},
 		{spawnName = "rebel_spy_nebulon_guard", spawnType = SHIP_SPAWN_SINGLE, x = -6624, z = -1310, y = 7333, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 80, maxPatrol = 160, totalSpawns = 4,
-			shipSpawns = {"reb_bwing_tier4", "reb_xwing_tier4", "reb_awing_tier4", "reb_z95_tier4", "reb_ywing_tier4"}
+			shipSpawns = {"reb_ywing_tier4", "reb_xwing_tier4", "reb_awing_tier4", "reb_z95_tier4", "reb_ywing_tier4"}
 		},
 		{spawnName = "rebel_generator_defense_2", spawnType = SHIP_SPAWN_SINGLE, x = -3581, z = 2443, y = 4804, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 50, maxPatrol = 300, totalSpawns = 4,
-			shipSpawns = {"reb_awing_tier4", "reb_bwing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
+			shipSpawns = {"reb_awing_tier4", "reb_ywing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
 		},
 		{spawnName = "rebel_generator_defense_1", spawnType = SHIP_SPAWN_SINGLE, x = -3506, z = 2756, y = 4747, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 50, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier4", "reb_bwing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
+			shipSpawns = {"reb_awing_tier4", "reb_ywing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
 		},
 		{spawnName = "tatooine_imperial_tier3_inspect2escort", spawnType = SHIP_SPAWN_SINGLE, x = -5003, z = 4079, y = 6079, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 25, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
 			shipSpawns = {"reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4", "reb_z95_tier4", "reb_z95_tier4"}
@@ -155,7 +155,7 @@ SpaceEndorSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"endor_trader_freighter"}
 		},
 		{spawnName = "tatooine_imperial_tier3_destroy1_spawner", spawnType = SHIP_SPAWN_SINGLE, x = -3250, z = -4500, y = -1200, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 60, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier4", "reb_bwing_tier4", "rebel_raider_bomber_tier3", "rebel_raider_captain_tier3", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
+			shipSpawns = {"reb_awing_tier4", "reb_ywing_tier4", "rebel_raider_bomber_tier3", "rebel_raider_captain_tier3", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
 		},
 		{spawnName = "trader_mercenaries_1", spawnType = SHIP_SPAWN_SINGLE, x = -2927, z = -5157, y = 411, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, totalSpawns = 4,
 			patrolsToAssign = 5, fixedPatrolPoints = {"trader_mercenaries_1_00", "trader_mercenaries_1_01", "trader_mercenaries_1_02", "trader_mercenaries_1_03", "trader_mercenaries_1_04", "trader_mercenaries_1_05", "trader_mercenaries_1_06", "trader_mercenaries_1_07", "trader_mercenaries_1_08", "trader_mercenaries_1_09", "trader_mercenaries_1_10", "trader_mercenaries_1_11", "trader_mercenaries_1_12", "trader_mercenaries_1_13"},
@@ -179,7 +179,7 @@ SpaceEndorSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"death_watch_prowler_tier4", "death_watch_eradicator_tier4", "death_watch_assassin_tier4"}
 		},
 		{spawnName = "corellia_imperial_tier3_leg_3_destroy_aces", spawnType = SHIP_SPAWN_SINGLE, x = -5313, z = -5183, y = 2462, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 25, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_awing_tier4", "reb_bwing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
+			shipSpawns = {"reb_awing_tier4", "reb_ywing_tier4", "reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"}
 		},
 		{spawnName = "droid_guards_2", spawnType = SHIP_SPAWN_SINGLE, x = -6063, z = 276, y = -553, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 80, maxPatrol = 360, totalSpawns = 3,
 			shipSpawns = {"junk_droid_fighter"}
@@ -199,7 +199,7 @@ SpaceEndorSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"endor_smuggler_fighter"}
 		},
 		{spawnName = "corellia_imperial_tier3_leg_3_destroy_bwing", spawnType = SHIP_SPAWN_SINGLE, x = -1500, z = 5000, y = -2430, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 25, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 6,
-			shipSpawns = {"reb_bwing_tier4"}
+			shipSpawns = {"reb_ywing_tier4"}
 		},
 		{spawnName = "smuggler_fighter_guards_1", spawnType = SHIP_SPAWN_SINGLE, x = -1905, z = 3818, y = -1292, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, minPatrol = 80, maxPatrol = 300, totalSpawns = 3,
 			shipSpawns = {"endor_smuggler_fighter"}

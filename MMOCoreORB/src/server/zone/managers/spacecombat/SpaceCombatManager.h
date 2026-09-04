@@ -107,8 +107,6 @@ private:
 
 	float applyActiveComponentDamage(ShipObject* attackerShip, ShipObject* defenderShip, const SpaceCollisionResult& result, float damage, int slot, ShipDeltaVector* deltaVector, Vector<BasePacket*>& messages) const;
 
-	int getActiveComponentToDamage(ShipObject* target) const;
-
 	int updateProjectile(ShipObject* Ship, ShipProjectile* projectile, SpaceCollisionResult& result, Vector<ManagedReference<SceneObject*>>& targetVectorCopy, const uint64& miliTime);
 
 	int updateMissile(ShipObject* Ship, ShipProjectile* projectile, SpaceCollisionResult& result, Vector<ManagedReference<SceneObject*>>& targetVectorCopy, const uint64& miliTime);

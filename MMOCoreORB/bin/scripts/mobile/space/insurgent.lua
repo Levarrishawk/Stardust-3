@@ -24,6 +24,7 @@ insurgent = Creature:new {
 	pvpBitmask = NONE,
 	creatureBitmask = PACK, 
 	optionsBitmask = AIENABLED + JTLINTERESTING,
+	conversationTemplate = "hakassha_sireen_convo",
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/space_imperial_tier4_corellia_nin_gursawe.iff"},

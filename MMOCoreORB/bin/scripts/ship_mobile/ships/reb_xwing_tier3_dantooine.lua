@@ -1,5 +1,5 @@
 reb_xwing_tier3_dantooine = ShipAgent:new {
-	template = "xwing_tier3",
+	template = "z95_tier3",
 	pilotTemplate = "medium_fighter_tier3",
 	shipType = "fighter",
 

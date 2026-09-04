@@ -12,8 +12,8 @@ function jPaiBrekConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("nothing_i_can")
 	end
 
-	-- Player is a Rebel pilot
-	if (SpaceHelpers:isRebelPilot(pPlayer) and faction == FACTIONREBEL and playerFactionStatus > ONLEAVE) then
+	-- Pilot retirement is independent of the player's current ground GCW status.
+	if (SpaceHelpers:isRebelPilot(pPlayer)) then
 		CreatureObject(pNpc):doAnimation("greet")
 
 		return convoTemplate:getScreen("hello_rebel_pilot")

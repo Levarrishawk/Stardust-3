@@ -8123,3 +8123,11 @@ object_tangible_ship_components_weapon_capacitor_shared_weapon_capacitor_test = 
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_weapon_capacitor_shared_weapon_capacitor_test, "object/tangible/ship/components/weapon_capacitor/shared_weapon_capacitor_test.iff")
+
+object_tangible_ship_components_weapon_capacitor_shared_cap_prototype_capacitor_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/weapon_capacitor/shared_cap_prototype_capacitor_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_weapon_capacitor_shared_cap_prototype_capacitor_dev, "object/tangible/ship/components/weapon_capacitor/shared_cap_prototype_capacitor_dev.iff")

@@ -7769,3 +7769,11 @@ object_tangible_ship_components_engine_shared_xwing_engine_s02_test = SharedTang
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_engine_shared_xwing_engine_s02_test, "object/tangible/ship/components/engine/shared_xwing_engine_s02_test.iff")
+
+object_tangible_ship_components_engine_shared_eng_prototype_engine_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/engine/shared_eng_prototype_engine_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_engine_shared_eng_prototype_engine_dev, "object/tangible/ship/components/engine/shared_eng_prototype_engine_dev.iff")

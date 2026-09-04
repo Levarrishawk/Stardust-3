@@ -404,12 +404,9 @@ void ObjectManager::loadLastUsedObjectID() {
 
 	if (!ServerCore::truncateDatabases() && storedID != 0) {
 		nextObjectID = storedID + 1;
-
-		info() << "done loading stored id as last used object id 0x" << hex << uppercase << nextObjectID;
-		return;
 	}
 
-	info("loading bruteforce last used id..");
+	info("checking databases for highest used object id..");
 
 	uint64 maxObjectID = 0;
 	uint64 objectID;

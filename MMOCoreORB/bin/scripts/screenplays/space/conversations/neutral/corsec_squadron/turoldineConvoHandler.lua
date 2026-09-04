@@ -80,6 +80,18 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local duty4Complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_DUTY_4.name)
 
 	local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 4)
+	local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 4)
+	local requiredTier4Skills = 0
+
+	if (questFourComplete) then
+		requiredTier4Skills = 4
+	elseif (questThreeComplete) then
+		requiredTier4Skills = 3
+	elseif (questTwoComplete) then
+		requiredTier4Skills = 2
+	elseif (questOneComplete) then
+		requiredTier4Skills = 1
+	end
 
 	--[[
 			Quests
@@ -92,7 +104,8 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("on_mission")
 
 	-- Check if players have all the tier4 skill boxes and finished the last mission, then send them to next trainer.
-	elseif (questFourComplete and completedTier4) then
+	elseif (questFourComplete and completedTier4 and
+			getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 		-- Players has all the skill boxes, they should be a tier 3. Increment if not proper
 		if (ghost:getPilotTier() <= 4) then
 			-- Increment pilot to Tier 5!
@@ -101,6 +114,12 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		-- Player has not earned the master box yet
 		if (not SpaceHelpers:hasMasterSkill(pPlayer, "neutral")) then
+			if (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke") == "1") then
+				return convoTemplate:getScreen("should_help_alliance")
+			elseif (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToDeclann") == "1") then
+				return convoTemplate:getScreen("decide_assist_empire")
+			end
+
 			return convoTemplate:getScreen("master_mission")
 		else
 			return convoTemplate:getScreen("here_for_work2")
@@ -115,9 +134,14 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("second_mission_success")
 	elseif (questOneComplete and getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("first_mission_success")
-	-- Pilot is able to train
-	elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-		return convoTemplate:getScreen("ready_train_pilot")
+	-- Each completed mission requires one Tier 4 skill before the campaign can
+	-- advance. Offer training when XP permits, otherwise keep the pilot on duty.
+	elseif (tier4SkillCount < requiredTier4Skills) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+			return convoTemplate:getScreen("ready_train_pilot")
+		end
+
+		return convoTemplate:getScreen("here_for_work2")
 
 	-- Has not spoken to Turoldine yet
 	elseif (getQuestStatus(playerID .. "CorsecSquadronScreenplay:StartedTuroldine") ~= "1") then
@@ -149,7 +173,7 @@ function turoldineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				return convoTemplate:getScreen("second_mission")
 			end
 		-- Player is ready for first mission, so either was not given it after training first box or failed
-		elseif (not questOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 4)) then
+		elseif (not questOneComplete) then
 			if (getQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 				return convoTemplate:getScreen("failed_first_mission")
 			else
@@ -199,7 +223,7 @@ function turoldineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, s
 			responseString = "final_"
 		elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2A.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2A.name) or
 					SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2B.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2B.name)) then
-			responseString = "mission4_"
+			responseString = "final_"
 		elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.name)) then
 			responseString = "mission3_"
 		elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, CorsecSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)) then
@@ -296,39 +320,39 @@ function turoldineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, s
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
+		assassinate_corellia_privateer_tier4_4a:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier4_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_third_mission" or screenID == "accept_third_mission2" or screenID == "failed_third_mission") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
 		--	Give third mission to player
+		space_battle_corellia_privateer_tier4_3a:resetQuest(pPlayer)
 		space_battle_corellia_privateer_tier4_3a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_second_mission" or screenID == "failed_second_mission") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
 		--	Give second mission to player
+		assassinate_corellia_privateer_tier4_2a:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier4_2a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_first_mission" or screenID == "failed_first_mission") then
 		setQuestStatus(playerID .. CorsecSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
 		--	Give first mission to player
+		patrol_corellia_privateer_tier4_1a:resetQuest(pPlayer)
 		patrol_corellia_privateer_tier4_1a:startQuest(pPlayer, pNpc)
 
 	-- Master mission choice: player decided to help the Alliance (hunt the Imperial corvette)
 	elseif (screenID == "should_help_alliance") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
-				not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name)) then
-			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
+		if (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToDeclann") ~= "1") then
+			setQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke", 1)
+			SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 		end
 
 	-- Master mission choice: player decided to help the Empire (hunt the Rebel corvette)
 	elseif (screenID == "decide_assist_empire") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_IMPERIAL.name) and
-				not SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.type, CorsecSquadronScreenplay.MASTER_QUEST_STRING_REBEL.name)) then
-			destroy_master_imperial_1:startQuest(pPlayer, pNpc)
+		if (getQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToBurke") ~= "1") then
+			setQuestStatus(playerID .. "CorsecSquadronScreenplay:reportToDeclann", 1)
+			SpaceHelpers:addImperialMasterTrainerWaypoint(pPlayer)
 		end
 	end
 

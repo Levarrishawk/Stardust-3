@@ -14,8 +14,9 @@ tier_3_1_a_spy = ShipAgent:new {
 
 	aggressive = 0,
 
-	spaceFaction = "imperial",
-	alliedFactions = {"rsf"},
+	spaceFaction = "blacksun",
+  alliedFactions = {"pirate, blacksun"},
+  enemyFactions = {"imperial", "rebel", "civilian", "merchant", "rsf", "corsec", "hutt", "valarian"},
 	imperialFactionReward = -51,
 	rebelFactionReward = 26,
 

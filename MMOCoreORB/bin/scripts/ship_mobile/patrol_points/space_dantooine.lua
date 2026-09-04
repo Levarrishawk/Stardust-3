@@ -1,4 +1,9 @@
 space_dantooine = SpacePatrolPointTable:new {
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_1", x = -471, z = -1739, y = 1798},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_2", x = 294, z = 509, y = 3594},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_3", x = 1562, z = 97, y = 5577},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_4", x = 2910, z = -386, y = 7314},
+	{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_5", x = -6362, z = -477, y = 3393},
 	{patrolPointName = "tier3_privateer_rancor_path_03", x = -2188, z = -21, y = 564},
 	{patrolPointName = "corellia_privateer_assassinate_42a_1", x = -6621, z = -6310, y = -1147},
 	{patrolPointName = "corellia_imperial_tier4_recoveryduty1_5", x = -1914, z = -7056, y = 1779},
@@ -124,7 +129,7 @@ space_dantooine = SpacePatrolPointTable:new {
 	{patrolPointName = "bh_path_bravo_05", x = 4681, z = -250, y = 1515},
 	{patrolPointName = "naboo_privateer_tier3_leg_1_patrol_3", x = 4816, z = 81, y = 1973},
 	{patrolPointName = "tatooine_privateer_tier4_leg_4_assassinate_three_3", x = 6047, z = 884, y = 1422},
-	{patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 7512, z = -5651, y = 1803},
+	{patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 5200, z = -4800, y = 1800},
 	{patrolPointName = "tatooine_privateer_tier4_recovery_duty_escort_3", x = 5562, z = -2901, y = -1410},
 	{patrolPointName = "corellia_imperial_tier4_recovery1_4", x = 6538, z = -1692, y = -3169},
 	{patrolPointName = "tatooine_privateer_tier4_recovery_duty_egress_1", x = 7453, z = -2650, y = -2621},

@@ -195,6 +195,7 @@ includeFile("space/conversations/rebel/crimson_phoenix_squadron/daLaSocunaConvoH
 includeFile("space/squadrons/HavocSquadronScreenplay.lua")
 
 includeFile("space/conversations/rebel/havoc_squadron/kreezoConvoHandler.lua")
+includeFile("space/conversations/rebel/willhamBurkeConvoHandler.lua")
 includeFile("space/conversations/rebel/havoc_squadron/viopaConvoHandler.lua")
 includeFile("space/conversations/rebel/havoc_squadron/vrakConvoHandler.lua")
 includeFile("space/conversations/rebel/havoc_squadron/aqzowConvoHandler.lua")
@@ -211,9 +212,11 @@ includeFile("space/conversations/rebel/vortex_squadron/v3fxConvoHandler.lua")
 
 -- Imperial
 includeFile("space/conversations/imperial/imperialBrokerConvoHandler.lua")
+includeFile("space/conversations/imperial/nialDeclannConvoHandler.lua")
 
 -- Black Epsilon Squadron
 includeFile("space/squadrons/BlackEpsilonSquadronScreenplay.lua")
+includeFile("space/squadrons/BlackEpsilonSquadronMissionScreenplay.lua")
 
 includeFile("space/conversations/imperial/black_epsilon_squadron/hakasshaSireenConvoHandler.lua")
 
@@ -221,9 +224,12 @@ includeFile("space/conversations/imperial/black_epsilon_squadron/hakasshaSireenC
 includeFile("space/squadrons/InquisitionSquadronScreenplay.lua")
 
 includeFile("space/conversations/imperial/inquisition_squadron/barnSinkkoConvoHandler.lua")
+includeFile("space/conversations/imperial/inquisition_squadron/barlowInquisitionConvoHandler.lua")
 
 -- Storm Squadron
 includeFile("space/squadrons/StormSquadronScreenplay.lua")
+includeFile("space/squadrons/StormSquadronTier3Screenplay.lua")
+includeFile("space/squadrons/StormSquadronTier4Screenplay.lua")
 
 includeFile("space/conversations/imperial/storm_squadron/akalColzetConvoHandler.lua")
 

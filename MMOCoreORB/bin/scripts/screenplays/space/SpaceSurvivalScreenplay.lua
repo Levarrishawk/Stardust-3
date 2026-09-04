@@ -24,6 +24,7 @@ SpaceSurvivalScreenplay = SpaceQuestLogic:new {
 
 	survivalTime = 600, -- In Seconds, 0 runs the quest on survivalWaves instead
 	survivalWaves = 0, -- Number of waves that must be survived, 0 runs the quest on survivalTime
+	survivalUpdateInterval = 0, -- In Seconds, 0 disables periodic remaining-time messages
 
 	delayToFirstAttack = 5, -- In Seconds
 	attackDelay = 100, -- In Seconds, time between waves
@@ -127,7 +128,7 @@ function SpaceSurvivalScreenplay:failQuest(pPlayer, notifyClient)
 		return
 	end
 
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName) and (notifyClient ~= "false" or not SpaceHelpers:isSpaceQuestComplete(pPlayer, self.questType, self.questName))) then
 		return
 	end
 
@@ -198,6 +199,7 @@ function SpaceSurvivalScreenplay:cleanUpQuestData(playerID)
 	-- Delete the wave tracking
 	deleteData(playerID .. ":" .. self.className .. ":waveCount:")
 	deleteData(playerID .. ":" .. self.className .. ":survivalRunning:")
+	deleteData(playerID .. ":" .. self.className .. ":survivalRunID:")
 
 	-- Delete the defence point active area
 	local areaID = readData(playerID .. ":" .. self.className .. ":survivalArea:")
@@ -346,6 +348,9 @@ function SpaceSurvivalScreenplay:startSurvival(pPlayer)
 	writeData(playerID .. ":" .. self.className .. ":survivalRunning:", 1)
 	writeData(playerID .. ":" .. self.className .. ":waveCount:", 0)
 
+	local survivalRunID = getRandomNumber(1, 2147483646)
+	writeData(playerID .. ":" .. self.className .. ":survivalRunID:", survivalRunID)
+
 	if (self.DEBUG_SPACE_SURVIVAL) then
 		print(self.className .. ":startSurvival -- Survival Time: " .. self.survivalTime .. " Total Waves: " .. totalWaves .. " Wave Delay: " .. self:getWaveDelay())
 	end
@@ -355,6 +360,66 @@ function SpaceSurvivalScreenplay:startSurvival(pPlayer)
 	-- Timed survival, holding out for the full duration completes the quest
 	if (self.survivalTime > 0) then
 		createEvent(self.survivalTime * 1000, self.className, "endSurvival", pPlayer, "")
+
+		if (self.survivalUpdateInterval > 0) then
+			CreatureObject(pPlayer):sendSystemMessage("Hold position: " .. self:getSurvivalTimeText(self.survivalTime) .. " remaining.")
+
+			local remainingTime = self.survivalTime - self.survivalUpdateInterval
+
+			if (remainingTime > 0) then
+				createEvent(self.survivalUpdateInterval * 1000, self.className, "sendSurvivalUpdate", pPlayer, survivalRunID .. ":" .. remainingTime)
+			end
+		end
+	end
+end
+
+function SpaceSurvivalScreenplay:getSurvivalTimeText(remainingTime)
+	if (remainingTime >= 60 and remainingTime % 60 == 0) then
+		local minutes = remainingTime / 60
+		local unit = " minutes"
+
+		if (minutes == 1) then
+			unit = " minute"
+		end
+
+		return minutes .. unit
+	end
+
+	local unit = " seconds"
+
+	if (remainingTime == 1) then
+		unit = " second"
+	end
+
+	return remainingTime .. unit
+end
+
+function SpaceSurvivalScreenplay:sendSurvivalUpdate(pPlayer, eventData)
+	if (pPlayer == nil or eventData == nil) then
+		return
+	end
+
+	local runID, remainingTime = string.match(eventData, "^(%d+):(%d+)$")
+
+	if (runID == nil or remainingTime == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)
+			or readData(playerID .. ":" .. self.className .. ":survivalRunning:") ~= 1
+			or readData(playerID .. ":" .. self.className .. ":survivalRunID:") ~= tonumber(runID)) then
+		return
+	end
+
+	remainingTime = tonumber(remainingTime)
+	CreatureObject(pPlayer):sendSystemMessage("Hold position: " .. self:getSurvivalTimeText(remainingTime) .. " remaining.")
+
+	remainingTime = remainingTime - self.survivalUpdateInterval
+
+	if (remainingTime > 0) then
+		createEvent(self.survivalUpdateInterval * 1000, self.className, "sendSurvivalUpdate", pPlayer, runID .. ":" .. remainingTime)
 	end
 end
 
@@ -641,42 +706,49 @@ function SpaceSurvivalScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		return 1
 	end
 
+	-- Hyperspace can notify before the creature's final zone state is settled.
+	-- Defer the check and read the actual current zone after transfer.
+	createEvent(5000, self.className, "checkEnteredZone", pPlayer, "")
+
+	return 0
+end
+
+function SpaceSurvivalScreenplay:checkEnteredZone(pPlayer)
+	if (pPlayer == nil or not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
-		return 0
+		return
 	end
 
-	local pRootParent = SceneObject(pPlayer):getRootParent()
-
-	if (pRootParent ~= nil and SceneObject(pRootParent):getObjectName() == "player_sorosuub_space_yacht") then
-		return 0
+	if (SpaceHelpers:isInYacht(pPlayer)) then
+		return
 	end
 
-	local playerID = SceneObject(pPlayer):getObjectID()
+	local zoneNameHash = getHashCode(SceneObject(pPlayer):getZoneName())
 	local spaceQuestHash = getHashCode(self.questZone)
 
 	if (self.DEBUG_SPACE_SURVIVAL) then
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
 	end
 
-	-- Player is in the correct zone
-	if (zoneNameHash == spaceQuestHash and not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
-		-- Complete the quest task 0
-		SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
+	-- Player is in the correct zone. Always resume setup because a chained quest may
+	-- retain its completed location task without having created its defence waypoint.
+	if (zoneNameHash == spaceQuestHash) then
+		if (not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
+			-- Complete the quest task 0
+			SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
 
-		-- Activate quest task 1
-		SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+			-- Activate quest task 1
+			SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+		end
 
 		-- Send the player to the defence point
 		createEvent(4000, self.className, "setupSurvival", pPlayer, "")
-
-		return 0
 	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
-
-		return 1
 	end
-
-	return 0
 end

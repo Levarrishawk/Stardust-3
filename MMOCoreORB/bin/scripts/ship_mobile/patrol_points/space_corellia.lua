@@ -464,6 +464,43 @@ space_corellia = SpacePatrolPointTable:new {
 	{patrolPointName = "corellia_privateer_tier3_rescue_escort_3", x = 4000, z = 600, y = 100},
 	-- RSF Tier 3 Mission 2d: Space Battle (defend RSF ships in Corellia)
 	{patrolPointName = "corellia_privateer_tier3_space_battle_1", x = 4500, z = -1000, y = 400},
+	-- Stardust-3: squadron-isolated patrol point registrations.
+	{patrolPointName = "black_epsilon_corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:197
+	{patrolPointName = "black_epsilon_imperial_patrol_1", x = 590, z = -3500, y = -6000},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:86
+	{patrolPointName = "black_epsilon_imperial_patrol_2", x = -2500, z = 4000, y = 3500},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:87
+	{patrolPointName = "black_epsilon_imperial_patrol_3", x = -3800, z = 2500, y = 5000},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:88
+	{patrolPointName = "black_epsilon_military_escort_2", x = 2915, z = 3828, y = 2887},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:196
+	{patrolPointName = "black_epsilon_naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:194
+	{patrolPointName = "black_epsilon_rebel_escort_1", x = 7188, z = 1899, y = -2831},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:150, BlackEpsilonSquadronScreenplay.lua:250
+	{patrolPointName = "black_epsilon_rebel_escort_2", x = 6446, z = 2694, y = -5694},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:151
+	{patrolPointName = "black_epsilon_rebel_escort_3", x = 4453, z = 3127, y = -7150},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:152
+	{patrolPointName = "black_epsilon_rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:153, BlackEpsilonSquadronScreenplay.lua:251
+	{patrolPointName = "black_epsilon_rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:252, BlackEpsilonSquadronScreenplay.lua:38
+	{patrolPointName = "black_epsilon_rebel_patrol_2", x = 6031, z = -4540, y = -1962},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:39
+	{patrolPointName = "black_epsilon_rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:253, BlackEpsilonSquadronScreenplay.lua:40
+	{patrolPointName = "black_epsilon_rebel_security_patrol_1", x = 5024, z = -3710, y = -1723},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:123
+	{patrolPointName = "black_epsilon_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:124, BlackEpsilonSquadronScreenplay.lua:193
+	{patrolPointName = "black_epsilon_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:125
+	{patrolPointName = "black_epsilon_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:126
+	{patrolPointName = "black_epsilon_trade_escort_4", x = 895, z = 210, y = 695},	-- squadron-isolated: BlackEpsilonSquadronScreenplay.lua:195
+	{patrolPointName = "havoc_corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- squadron-isolated: HavocSquadronScreenplay.lua:193
+	{patrolPointName = "havoc_imperial_patrol_1", x = 590, z = -3500, y = -6000},	-- squadron-isolated: HavocSquadronScreenplay.lua:82
+	{patrolPointName = "havoc_imperial_patrol_2", x = -2500, z = 4000, y = 3500},	-- squadron-isolated: HavocSquadronScreenplay.lua:83
+	{patrolPointName = "havoc_imperial_patrol_3", x = -3800, z = 2500, y = 5000},	-- squadron-isolated: HavocSquadronScreenplay.lua:84
+	{patrolPointName = "havoc_military_escort_2", x = 2915, z = 3828, y = 2887},	-- squadron-isolated: HavocSquadronScreenplay.lua:192
+	{patrolPointName = "havoc_naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},	-- squadron-isolated: HavocSquadronScreenplay.lua:190
+	{patrolPointName = "havoc_rebel_escort_1", x = 7188, z = 1899, y = -2831},	-- squadron-isolated: HavocSquadronScreenplay.lua:146, HavocSquadronScreenplay.lua:246
+	{patrolPointName = "havoc_rebel_escort_2", x = 6446, z = 2694, y = -5694},	-- squadron-isolated: HavocSquadronScreenplay.lua:147
+	{patrolPointName = "havoc_rebel_escort_3", x = 4453, z = 3127, y = -7150},	-- squadron-isolated: HavocSquadronScreenplay.lua:148
+	{patrolPointName = "havoc_rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- squadron-isolated: HavocSquadronScreenplay.lua:149, HavocSquadronScreenplay.lua:247
+	{patrolPointName = "havoc_rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- squadron-isolated: HavocSquadronScreenplay.lua:248, HavocSquadronScreenplay.lua:34
+	{patrolPointName = "havoc_rebel_patrol_2", x = 6031, z = -4540, y = -1962},	-- squadron-isolated: HavocSquadronScreenplay.lua:35
+	{patrolPointName = "havoc_rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- squadron-isolated: HavocSquadronScreenplay.lua:249, HavocSquadronScreenplay.lua:36
+	{patrolPointName = "havoc_rebel_security_patrol_1", x = 5024, z = -3710, y = -1723},	-- squadron-isolated: HavocSquadronScreenplay.lua:119
+	{patrolPointName = "havoc_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},	-- squadron-isolated: HavocSquadronScreenplay.lua:120, HavocSquadronScreenplay.lua:189
+	{patrolPointName = "havoc_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741},	-- squadron-isolated: HavocSquadronScreenplay.lua:121
+	{patrolPointName = "havoc_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222},	-- squadron-isolated: HavocSquadronScreenplay.lua:122
+	{patrolPointName = "havoc_trade_escort_4", x = 895, z = 210, y = 695},	-- squadron-isolated: HavocSquadronScreenplay.lua:191
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_corellia, "space_corellia")

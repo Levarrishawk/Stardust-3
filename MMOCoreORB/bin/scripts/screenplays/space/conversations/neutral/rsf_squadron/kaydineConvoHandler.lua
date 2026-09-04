@@ -68,6 +68,8 @@ function kaydineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local recoveryDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.type, RsfSquadronScreenplay.TIER2_QUEST_STRING_DUTY_4.name)
 
 	local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)
+	local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 2)
+	local requiredTier2Skills = questFourComplete and 4 or questThreeComplete and 3 or questTwoComplete and 2 or questOneComplete and 1 or 0
 
 	--[[
 			Quests
@@ -80,11 +82,12 @@ function kaydineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("on_mission")
 
 	-- Check if players have all the tier2 skill boxes and finished the last mission, then send them to next trainer.
-	elseif (questFourComplete and completedTier2) then
+	elseif (questFourComplete and completedTier2 and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
 		-- Player has all the skill boxes, they should be tier 3. Increment if not proper
 		if (ghost:getPilotTier() <= 2) then
 			ghost:incrementPilotTier()
 		end
+		SpaceHelpers:addDuliosWaypoint(pPlayer)
 
 		return convoTemplate:getScreen("completed_kaydine")
 	-- Reward Checks
@@ -96,9 +99,11 @@ function kaydineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("complete_second_mission")
 	elseif (questOneComplete and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("complete_first_mission")
-	-- Pilot is able to train
-	elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-		return convoTemplate:getScreen("ready_train_pilot")
+	elseif (tier2SkillCount < requiredTier2Skills) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+			return convoTemplate:getScreen("ready_train_pilot")
+		end
+		return convoTemplate:getScreen("here_for_work")
 	elseif (not questFourComplete) then
 		-- Player is able to start fourth mission
 		if (questThreeComplete and not questFourStarted) then
@@ -123,7 +128,7 @@ function kaydineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				return convoTemplate:getScreen("second_mission")
 			end
 		-- Player is ready for first mission
-		elseif (not questOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "neutral", 2)) then
+		elseif (not questOneComplete) then
 			if (getQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
 				return convoTemplate:getScreen("failed_first_mission")
 			else
@@ -214,6 +219,7 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 
 		if (ghost:getPilotTier() <= 2 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
 			ghost:incrementPilotTier()
+			SpaceHelpers:addDuliosWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -245,15 +251,19 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 	-- Give Missions
 	elseif (screenID == "accept_assassinate" or screenID == "nonsense" or screenID == "let_me_know" or screenID == "report_back_success" or screenID == "key_to_success" or screenID == "just_malfunctioned") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
+		assassinate_naboo_privateer_tier2_4a:resetQuest(pPlayer)
 		assassinate_naboo_privateer_tier2_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_inspect" or screenID == "on_your_way" or screenID == "take_it_serious" or screenID == "bad_liar") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
+		inspect_naboo_privateer_15:resetQuest(pPlayer)
 		inspect_naboo_privateer_15:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_escort" or screenID == "back_to_escort" or screenID == "now_is_good" or screenID == "be_smarter") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
+		escort_naboo_privateer_14:resetQuest(pPlayer)
 		escort_naboo_privateer_14:startQuest(pPlayer, pNpc)
 	elseif ((screenID == "start_first_mission") or (screenID == "try_first_mission") or (screenID == "cant_wait_first")) then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
+		destroy_naboo_privateer_13a:resetQuest(pPlayer)
 		destroy_naboo_privateer_13a:startQuest(pPlayer, pNpc)
 	end
 

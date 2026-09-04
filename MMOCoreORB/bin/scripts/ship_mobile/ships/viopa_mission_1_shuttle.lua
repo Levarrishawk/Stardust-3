@@ -14,8 +14,12 @@ viopa_mission_1_shuttle = ShipAgent:new {
 
 	aggressive = 0,
 
-	spaceFaction = "imperial",
-	alliedFactions = {"rsf"},
+	-- This is an Imperial shuttle captured and operated by pirates.  Keeping the
+	-- ship in the Imperial space faction prevents Imperial pilots from attacking
+	-- it during the disable-and-inspect mission.
+	spaceFaction = "pirate",
+	alliedFactions = {"pirate"},
+	enemyFactions = {"imperial", "rebel", "civilian", "merchant", "rsf", "corsec", "hutt", "valarian"},
 	imperialFactionReward = -25,
 	rebelFactionReward = 13,
 	questLoot = "viopa_rebel_1",

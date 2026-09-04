@@ -1766,8 +1766,6 @@ void ShipAiAgentImplementation::swapSpaceFactionAssociations() {
 		enemyFactions.add(tempAllies.get(i));
 
 		// info(true) << "Adding new enemy faction: " << tempAllies.get(i) << " enemyFactions Size: " << enemyFactions.size();
-
-		enemyFactions.removeElementAt(i);
 	}
 }
 

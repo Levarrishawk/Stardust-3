@@ -41,6 +41,12 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("no_jtl")
 	end
 
+	local npcTemplate = SceneObject(pNpc):getTemplateObjectPath()
+	local isSocuna = npcTemplate == "object/mobile/space_rebel_tier1_tatooine_socuna.iff"
+	local isEker = npcTemplate == "object/mobile/space_rebel_tier2_eker.iff"
+	local isArnecio = npcTemplate == "object/mobile/space_rebel_tier3_arnecio.iff"
+	local isUfwol = npcTemplate == "object/mobile/space_rebel_tier4_ufwol.iff"
+
 	-- Check if player is a rebel pilot
 	local isRebelPilot = SpaceHelpers:isRebelPilot(pPlayer)
 
@@ -50,6 +56,16 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player is Neutral Pilot
 	elseif (SpaceHelpers:isNeutralPilot(pPlayer)) then
 		return convoTemplate:getScreen("neutral_pilot")
+	end
+
+	if (SpaceHelpers:isCrimsonPhoenixSquadron(pPlayer)) then
+		local pilotTier = ghost:getPilotTier()
+		local correctTrainer = (pilotTier <= 1 and isSocuna) or (pilotTier == 2 and isEker) or
+			(pilotTier == 3 and isArnecio) or (pilotTier == 4 and isUfwol)
+
+		if (not correctTrainer) then
+			return convoTemplate:getScreen("go_to_next")
+		end
 	end
 
 	-- Check for a starter ship
@@ -127,6 +143,8 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local masterComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER_2.name)
 
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 4)
+		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 4)
+		local requiredTier4Skills = t4QuestFourComplete and 4 or t4QuestThreeComplete and 3 or t4QuestTwoComplete and 2 or t4QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 4 mission from Da'la Socuna
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
@@ -136,10 +154,11 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier4_on_mission")
 
 		-- Player finished the final tier 4 mission and has all the tier 4 skill boxes
-		elseif (t4QuestFourComplete and completedTier4) then
+		elseif (t4QuestFourComplete and completedTier4 and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") == "1") then
 			if (ghost:getPilotTier() <= 4) then
 				-- Increment pilot to Tier 5!
 				ghost:incrementPilotTier()
+				SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 			end
 
 			-- Player has not earned the master box yet
@@ -159,9 +178,11 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t4QuestOneComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier4_first_mission_success")
 
-		-- Pilot is able to train
-		elseif (not completedTier4 and SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
-			return convoTemplate:getScreen("ready_train_tier4")
+		elseif (tier4SkillCount < requiredTier4Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+				return convoTemplate:getScreen("ready_train_tier4")
+			end
+			return convoTemplate:getScreen("tier4_duty_repeat")
 
 		-- Has not received the tier 4 briefing from Da'la Socuna yet
 		elseif (getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4") ~= "1") then
@@ -193,7 +214,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier4_second_mission")
 				end
 			-- Player is ready for first mission, so either was not given it after training first box or failed
-			elseif (not t4QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 4)) then
+			elseif (not t4QuestOneComplete) then
 				if (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("failed_tier4_first_mission")
 				else
@@ -245,6 +266,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		if (t3QuestFourComplete and completedTier3) then
 			if (ghost:getPilotTier() <= 3) then
 				ghost:incrementPilotTier()
+				SpaceHelpers:addUfwolWaypoint(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_completed")
@@ -350,6 +372,8 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t2EscortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
 
 		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 2)
+		local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 2)
+		local requiredTier2Skills = t2QuestFourComplete and 4 or t2QuestThreeComplete and 3 or t2QuestTwoComplete and 2 or t2QuestOneComplete and 1 or 0
 
 		-- Player has an active tier 2 mission
 		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or (t2QuestFourStarted and not t2QuestFourComplete) or
@@ -358,10 +382,11 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier2_has_mission")
 
 		-- Check if players have all the tier2 skill boxes and finished the last mission, ready for Tier 3
-		elseif (t2QuestFourComplete and completedTier2) then
+		elseif (t2QuestFourComplete and completedTier2 and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
 			-- Player has all the skill boxes, they should be tier 3. Increment if not proper
 			if (ghost:getPilotTier() <= 2) then
 				ghost:incrementPilotTier()
+				SpaceHelpers:addArnecioWaypoint(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier2_completed")
@@ -392,9 +417,11 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 			return convoTemplate:getScreen("tier2_mission1_rewarded")
 
-		-- Pilot is able to train
-		elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-			return convoTemplate:getScreen("tier2_training_menu")
+		elseif (tier2SkillCount < requiredTier2Skills) then
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+				return convoTemplate:getScreen("tier2_training_menu")
+			end
+			return convoTemplate:getScreen("tier2_duty_missions")
 
 		elseif (not t2QuestFourComplete) then
 			-- Player is able to start fourth mission
@@ -419,7 +446,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 					return convoTemplate:getScreen("tier2_mission2_brief")
 				end
 			-- Player is ready for first mission
-			elseif (not t2QuestOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 2)) then
+			elseif (not t2QuestOneComplete) then
 				if (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
 					return convoTemplate:getScreen("tier2_failed_mission1")
 				else
@@ -655,14 +682,19 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		-- Track that quest was attempted
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_1.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_1, destroy_surpriseattack_tatooine_rebel_1}, {{type="patrol", name="tatooine_rebel_1"}, {type="destroy_surpriseattack", name="tatooine_rebel_1"}})
 		patrol_tatooine_rebel_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest1") then
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_1, destroy_surpriseattack_tatooine_rebel_1}, {{type="patrol", name="tatooine_rebel_1"}, {type="destroy_surpriseattack", name="tatooine_rebel_1"}})
 		patrol_tatooine_rebel_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest2") then
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_rebel_2}, {{type="destroy", name="tatooine_rebel_2"}})
 		destroy_tatooine_rebel_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest3") then
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_3, escort_tatooine_rebel_3}, {{type="patrol", name="tatooine_rebel_3"}, {type="escort", name="tatooine_rebel_3"}})
 		patrol_tatooine_rebel_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest4") then
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_4}, {{type="assassinate", name="tatooine_rebel_4"}})
 		assassinate_tatooine_rebel_4:startQuest(pPlayer, pNpc)
 	-- Quest 1 completion screens - give reward
 	elseif (screenID == "i_was_attacked" or screenID == "rebel_ambush" or screenID == "patrol_complete") then
@@ -681,10 +713,12 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	elseif (screenID == "quest2_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":attempted", 1)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_rebel_2}, {{type="destroy", name="tatooine_rebel_2"}})
 		destroy_tatooine_rebel_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":attempted", 1)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_3, escort_tatooine_rebel_3}, {{type="patrol", name="tatooine_rebel_3"}, {type="escort", name="tatooine_rebel_3"}})
 		patrol_tatooine_rebel_3:startQuest(pPlayer, pNpc)
 	-- Quest 3 Rewarded - give reward
 	elseif (screenID == "quest3_rewarded") then
@@ -704,6 +738,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	elseif (screenID == "quest4_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_4.name .. ":attempted", 1)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_4}, {{type="assassinate", name="tatooine_rebel_4"}})
 		assassinate_tatooine_rebel_4:startQuest(pPlayer, pNpc)
 	-- Finished: completed all Tier 1 skills, reassigned to Under Inquisitor Fa'Zoll (next trainer)
 	elseif (screenID == "directions_to_next" or screenID == "report_to_fazoll") then
@@ -751,6 +786,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 2) and ghost:getPilotTier() == 2) then
 			-- Increment pilot to Tier 3!
 			ghost:incrementPilotTier()
+			SpaceHelpers:addArnecioWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -773,21 +809,25 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_tatooine_rebel_tier2_1}, {{type="inspect", name="tatooine_rebel_tier2_1"}})
 		inspect_tatooine_rebel_tier2_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission2" or screenID == "tier2_failed_mission2") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_tatooine_rebel_tier2_2}, {{type="escort", name="tatooine_rebel_tier2_2"}})
 		escort_tatooine_rebel_tier2_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission3" or screenID == "tier2_failed_mission3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_rebel_tier2_3}, {{type="recovery", name="tatooine_rebel_tier2_3"}})
 		recovery_tatooine_rebel_tier2_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission4" or screenID == "tier2_failed_mission4") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_tier2_4}, {{type="assassinate", name="tatooine_rebel_tier2_4"}})
 		assassinate_tatooine_rebel_tier2_4:startQuest(pPlayer, pNpc)
 
 	-- Tier 3 Training - options added on excellent work screens, missions-only (no XP requirement)
@@ -820,6 +860,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		if (ghost:getPilotTier() <= 3 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 3)) then
 			-- Increment pilot to Tier 4!
 			ghost:incrementPilotTier()
+			SpaceHelpers:addUfwolWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -829,21 +870,25 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_rebel_tier3_1, patrol_tatooine_rebel_tier3_1_A, destroy_surpriseattack_tatooine_rebel_tier3_1_b, assassinate_tatooine_rebel_tier3_1_c, space_battle_tatooine_rebel_tier3_1_d}, {{type="recovery", name="tatooine_rebel_tier3_1"}, {type="patrol", name="tatooine_rebel_tier3_1_A"}, {type="destroy_surpriseattack", name="tatooine_rebel_tier3_1_b"}, {type="assassinate", name="tatooine_rebel_tier3_1_c"}, {type="space_battle", name="tatooine_rebel_tier3_1_d"}})
 		recovery_tatooine_rebel_tier3_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission2" or screenID == "tier3_failed_mission2") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_tatooine_rebel_tier3_2, delivery_tatooine_rebel_tier3_2_a, survival_tatooine_rebel_tier3_2_b, escort_tatooine_rebel_tier3_2_c}, {{type="inspect", name="tatooine_rebel_tier3_2"}, {type="delivery", name="tatooine_rebel_tier3_2_a"}, {type="survival", name="tatooine_rebel_tier3_2_b"}, {type="escort", name="tatooine_rebel_tier3_2_c"}})
 		inspect_tatooine_rebel_tier3_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission3" or screenID == "tier3_failed_mission3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {delivery_tatooine_rebel_tier3_3, assassinate_tatooine_rebel_tier3_3_a, space_battle_tatooine_rebel_tier3_3_b, escort_tatooine_rebel_tier3_3_c}, {{type="delivery", name="tatooine_rebel_tier3_3"}, {type="assassinate", name="tatooine_rebel_tier3_3_a"}, {type="space_battle", name="tatooine_rebel_tier3_3_b"}, {type="escort", name="tatooine_rebel_tier3_3_c"}})
 		delivery_tatooine_rebel_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission4" or screenID == "tier3_failed_mission4") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_tier3_4, patrol_tatooine_rebel_tier3_4_a, destroy_surpriseattack_tatooine_rebel_tier3_4_b, space_battle_tatooine_rebel_tier3_4_c, survival_tatooine_rebel_tier3_4_d}, {{type="assassinate", name="tatooine_rebel_tier3_4"}, {type="patrol", name="tatooine_rebel_tier3_4_a"}, {type="destroy_surpriseattack", name="tatooine_rebel_tier3_4_b"}, {type="space_battle", name="tatooine_rebel_tier3_4_c"}, {type="survival", name="tatooine_rebel_tier3_4_d"}})
 		assassinate_tatooine_rebel_tier3_4:startQuest(pPlayer, pNpc)
 
 	-- Tier 4 Training
@@ -888,6 +933,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		if (ghost:getPilotTier() <= 4 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 4)) then
 			-- If player has all of the Tier 4 skills, increment their pilot tier
 			ghost:incrementPilotTier()
+			SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 		end
 
 		-- Either the player is ready to train again or they have all of the missions finished, so send them back to the main screen
@@ -929,29 +975,32 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_rebel_tier4_4, assassinate_tatooine_rebel_tier4_4_a, rescue_tatooine_rebel_tier4_4_b, space_battle_tatooine_rebel_tier4_4_c}, {{type="recovery", name="tatooine_rebel_tier4_4"}, {type="assassinate", name="tatooine_rebel_tier4_4_a"}, {type="rescue", name="tatooine_rebel_tier4_4_b"}, {type="space_battle", name="tatooine_rebel_tier4_4_c"}})
 		recovery_tatooine_rebel_tier4_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {space_battle_tatooine_rebel_tier4_3, space_battle_tatooine_rebel_tier4_3_a, survival_tatooine_rebel_tier4_3_b}, {{type="space_battle", name="tatooine_rebel_tier4_3"}, {type="space_battle", name="tatooine_rebel_tier4_3_a"}, {type="survival", name="tatooine_rebel_tier4_3_b"}})
 		space_battle_tatooine_rebel_tier4_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_tier4_2, delivery_no_pickup_tatooine_rebel_tier4_2_a, rescue_tatooine_rebel_tier4_2_b}, {{type="assassinate", name="tatooine_rebel_tier4_2"}, {type="delivery_no_pickup", name="tatooine_rebel_tier4_2_a"}, {type="rescue", name="tatooine_rebel_tier4_2_b"}})
 		assassinate_tatooine_rebel_tier4_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {survival_tatooine_rebel_tier4_1, space_battle_tatooine_rebel_tier4_1_a, space_battle_tatooine_rebel_tier4_1_b}, {{type="survival", name="tatooine_rebel_tier4_1"}, {type="space_battle", name="tatooine_rebel_tier4_1_a"}, {type="space_battle", name="tatooine_rebel_tier4_1_b"}})
 		survival_tatooine_rebel_tier4_1:startQuest(pPlayer, pNpc)
 
 	-- Master mission hand-off
 	elseif (screenID == "accept_master_mission") then
-		if (not SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name) and
-				not SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_MASTER.name)) then
-			destroy_master_rebel_1:startQuest(pPlayer, pNpc)
-		end
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:reportToBurke", 1)
+		SpaceHelpers:addWillhamBurkeWaypoint(pPlayer)
 	end
 
 	return pClonedScreen

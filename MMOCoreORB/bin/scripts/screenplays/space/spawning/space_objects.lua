@@ -62,7 +62,6 @@ SpaceObjects = ScreenPlay:new {
 		{"space_dantooine", "object/static/space/asteroid/asteroid_mammoth_01.iff", 6117, 5454, -2761},
 		{"space_dantooine", "object/static/space/beacon/hyperspace_route_beacon_01.iff", 1627, 6657, -2259},
 		{"space_dantooine", "object/static/space/beacon/hyperspace_route_beacon_01.iff", 1089, 6132, -3261},
-		{"space_dantooine", "object/static/space/spacestation/destroyed_rebel_spacestation_01.iff", -3518, 3307, -980},
 
 		-- Dathomir Space
 		{"space_dathomir", "object/static/space/beacon/hyperspace_generator_01.iff", 1259, -6682, 7209},
@@ -186,7 +185,6 @@ SpaceObjects = ScreenPlay:new {
 		{"space_lok", "object/static/space/beacon/hyperspace_route_beacon_01.iff", 5273, -5878, -5543},
 		{"space_lok", "object/static/space/spacestation/rsf_spacestation.iff", 5994, -6027, -6474},
 		{"space_lok", "object/static/space/spacestation/pirate_outpost_01.iff", -6194, 6429, 6176},
-		{"space_lok", "object/static/space/spacestation/rebel_outpost_01.iff", 6342, 6116, 6635},
 		{"space_lok", "object/static/space/spacestation/corsec_outpost_01.iff", 1964, 4030, 4168},
 		{"space_lok", "object/static/space/beacon/hyperspace_generator_01.iff", -6120, -1391, -6720},
 		{"space_lok", "object/static/space/spacestation/imperial_spacestation_01.iff", 5986, -4617, -201},
@@ -229,7 +227,6 @@ SpaceObjects = ScreenPlay:new {
 		{"space_naboo", "object/static/space/spacestation/tradefed_destroyed_hulk.iff", 2501, -5926, -5497},
 		{"space_naboo", "object/static/space/debris/cargo_destroyed_large_a.iff", 4789, 6473, 4433},
 		{"space_naboo", "object/static/space/asteroid/planetoid_iron_01.iff", 5965, 5895, 5188},
-		{"space_naboo", "object/static/space/spacestation/destroyed_rebel_spacestation_01.iff", -5522, 5966, 5683},
 
 		-- Tatooine Space
 		{"space_tatooine", "object/static/space/beacon/hyperspace_generator_01.iff", -2917, -7017, -6864},
@@ -263,7 +260,6 @@ SpaceObjects = ScreenPlay:new {
 		{"space_tatooine", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -820, -90, 2862},
 		{"space_tatooine", "object/static/space/spacestation/destroyed_neutral_spacestation_01.iff", -2887, 6709, 1248},
 		{"space_tatooine", "object/static/space/spacestation/pirate_outpost_asteroid.iff", 1296, 5965, -5489},
-		{"space_tatooine", "object/static/space/spacestation/destroyed_rebel_spacestation_01.iff", -1507, 1904, -3392},
 
 		-- Yavin4 Space
 		{"space_yavin4", "object/static/space/beacon/hyperspace_route_beacon_01.iff", 3490, -1, 3627},
@@ -298,8 +294,6 @@ SpaceObjects = ScreenPlay:new {
 		{"space_yavin4", "object/static/space/beacon/hyperspace_generator_01.iff", 6144, 1666, -23},
 		{"space_yavin4", "object/static/space/beacon/hyperspace_route_beacon_01.iff", 1662, -2277, -2079},
 		{"space_yavin4", "object/static/space/asteroid/planetoid_iron_01.iff", 796, -2265, 1962},
-		{"space_yavin4", "object/static/space/spacestation/destroyed_rebel_spacestation_01.iff", -191, 5111, 4942},
-		{"space_yavin4", "object/static/space/spacestation/destroyed_rebel_spacestation_01.iff", -6341, -2498, 2},
 	},
 }
 

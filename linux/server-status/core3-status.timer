@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh the public Core3 server status
+
+[Timer]
+OnBootSec=15s
+OnUnitActiveSec=15s
+AccuracySec=1s
+Unit=core3-status.service
+
+[Install]
+WantedBy=timers.target

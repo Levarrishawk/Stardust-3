@@ -8,6 +8,7 @@
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/ship/ShipObject.h"
 #include "server/zone/ZoneClientSession.h"
+#include "templates/params/ObserverEventType.h"
 
 
 //#define DEBUG_HYPERSPACE
@@ -146,6 +147,11 @@ public:
 
 				try {
 					Locker memberLock(shipMember, shipObject);
+
+					// Passengers move with the ship and do not execute their own
+					// switchZone call, so explicitly notify their zone observers after
+					// the ship has entered the destination system.
+					shipMember->notifyObservers(ObserverEventType::ZONESWITCHED, nullptr, zoneName.hashCode());
 
 					shipMember->sendSceneResetToOwner();
 				} catch (...) {

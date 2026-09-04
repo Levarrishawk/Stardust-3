@@ -1,5 +1,5 @@
 dantooine_miner_boss_tier4 = ShipAgent:new {
-	template = "xwing_tier4",
+	template = "z95_tier4",
 	pilotTemplate = "medium_fighter_tier5",
 	shipType = "bomber",
 

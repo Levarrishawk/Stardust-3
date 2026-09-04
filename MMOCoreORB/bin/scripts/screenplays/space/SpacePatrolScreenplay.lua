@@ -53,6 +53,13 @@ function SpacePatrolScreenplay:startQuest(pPlayer, pNpc)
 		return
 	end
 
+	-- A patrol can complete before starting a split side quest. If that side quest is
+	-- dropped, retrying the mission must remove the completed patrol journal state or
+	-- enteredZone will treat task 0 as already complete and never create waypoint 1.
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		SpaceHelpers:clearSpaceQuest(pPlayer, self.questType, self.questName, false)
+	end
+
 	-- Activate the Journal Quest
 	SpaceHelpers:activateSpaceQuest(pPlayer, pNpc, self.questType, self.questName, true)
 
@@ -133,7 +140,7 @@ function SpacePatrolScreenplay:failQuest(pPlayer, notifyClient)
 		return
 	end
 
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName) and (notifyClient ~= "false" or not SpaceHelpers:isSpaceQuestComplete(pPlayer, self.questType, self.questName))) then
 		return
 	end
 
@@ -359,6 +366,11 @@ function SpacePatrolScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
 	-- Check to see if its the final patrol point
 	if (pointNumber == #self.patrolPoints) then
 		deleteData(playerID .. ":" .. self.className)
+
+		-- Finish the journal quest and process any completion-based side quest.
+		-- Previously this branch returned without calling completeQuest, leaving
+		-- patrols permanently active after their final waypoint.
+		self:completeQuest(pPilot, "true")
 		return 0
 	-- Arrived at first waypoint, send them the initial progress message
 	elseif (playerPointCount == 0) then

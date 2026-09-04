@@ -3,12 +3,12 @@ local SpaceHelpers = require("utils.space_helpers")
 
 --[[
 
-	Inquisition Squadron Missions (Imperial - Naboo)
+	Smuggler Alliance Squadron Missions (Neutral - Tatooine)
 
 ]]
 
 --[[
-	Tier 1 -- Lt. Barn Sinkko Main Missions (Naboo)
+	Tier 1 -- Nym Contact Dravis Main Missions (Tatooine)
 ]]
 
 -- Mission 1: Patrol with surprise attack
@@ -31,9 +31,9 @@ patrol_tatooine_privateer_1 = SpacePatrolScreenplay:new {
 	sideQuestDelay = 20,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_patrol_1", x = 6439, z = -5021, y = -2217, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_patrol_2", x = 6031, z = -4540, y = -1962, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_patrol_3", x = 4891, z = -3215, y = -1345, patrolNumber = 3, radius = 150},
+		{patrolPointName = "smuggler_rebel_patrol_1", x = 6439, z = -5021, y = -2217, patrolNumber = 1, radius = 150},
+		{patrolPointName = "smuggler_rebel_patrol_2", x = 6031, z = -4540, y = -1962, patrolNumber = 2, radius = 150},
+		{patrolPointName = "smuggler_rebel_patrol_3", x = 4891, z = -3215, y = -1345, patrolNumber = 3, radius = 150},
 	},
 }
 
@@ -56,7 +56,7 @@ destroy_surpriseattack_tatooine_privateer_1 = SpaceSurpriseAttackScreenplay:new 
 
 	surpriseAttackShips = {
 		zone = "space_tatooine",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier1"}},
+		spawns = {{count = 3, shipName = "blacksun_aggressor_tier1"}},
 	},
 }
 
@@ -79,13 +79,13 @@ destroy_tatooine_privateer_2 = SpaceDestroyScreenplay:new {
 	killsRequired = 4,
 
 	shipLocations = {
-		{patrolPointName = "imperial_patrol_1", x = 590, z = -3500, y = -6000},
-		{patrolPointName = "imperial_patrol_2", x = -2500, z = 4000, y = 3500},
-		{patrolPointName = "imperial_patrol_3", x = -3800, z = 2500, y = 5000},
+		{patrolPointName = "smuggler_imperial_patrol_1", x = 590, z = -3500, y = -6000},
+		{patrolPointName = "smuggler_imperial_patrol_2", x = -2500, z = 4000, y = 3500},
+		{patrolPointName = "smuggler_imperial_patrol_3", x = -3800, z = 2500, y = 5000},
 	},
 
 	shipTypes = {
-		"imp_tie_fighter_tier1", "imp_tie_fighter_tier2", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4",
+		"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1", "blacksun_aggressor_tier1", "blacksun_vehement_tier1",
 	},
 }
 
@@ -116,10 +116,10 @@ patrol_tatooine_privateer_3 = SpacePatrolScreenplay:new {
 	sideQuestDelay = 20,
 
 	patrolPoints = {
-		{patrolPointName = "rebel_security_patrol_1", x = 5024, z = -3710, y = -1723, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_security_patrol_2", x = 3933, z = -3285, y = -3098, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_security_patrol_3", x = 3574, z = -2819, y = -4741, patrolNumber = 3, radius = 150},
-		{patrolPointName = "rebel_security_patrol_4", x = 4496, z = -1657, y = -6222, patrolNumber = 4, radius = 150},
+		{patrolPointName = "smuggler_rebel_security_patrol_1", x = 5024, z = -3710, y = -1723, patrolNumber = 1, radius = 150},
+		{patrolPointName = "smuggler_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098, patrolNumber = 2, radius = 150},
+		{patrolPointName = "smuggler_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741, patrolNumber = 3, radius = 150},
+		{patrolPointName = "smuggler_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222, patrolNumber = 4, radius = 150},
 	},
 }
 
@@ -140,21 +140,21 @@ escort_tatooine_privateer_3 = SpaceEscortScreenplay:new {
 	parentQuestType = "patrol",
 	parentQuestName = "tatooine_privateer_3",
 
-	escortShips = {"reb_freightermedium_tier1"},
+	escortShips = {"imp_freightermedium_tier1"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
+		{"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1"},
+		{"blacksun_aggressor_tier1", "blacksun_fighter_s01_tier1"},
+		{"blacksun_vehement_tier1", "blacksun_fighter_s02_tier1", "blacksun_aggressor_tier1"},
 	}
 }
 
@@ -181,16 +181,16 @@ assassinate_tatooine_privateer_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_tie_fighter_veteran_tier2",
-		escorts = {"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
+		target = "blacksun_ace_s04_tier2",
+		escorts = {"blacksun_aggressor_tier1", "blacksun_vehement_tier1"},
 	},
 
 	targetPatrols = {
-		{patrolPointName = "rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},
-		{patrolPointName = "naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},
-		{patrolPointName = "trade_escort_4", x = 895, z = 210, y = 695},
-		{patrolPointName = "military_escort_2", x = 2915, z = 3828, y = 2887},
-		{patrolPointName = "corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},
+		{patrolPointName = "smuggler_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},
+		{patrolPointName = "smuggler_naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},
+		{patrolPointName = "smuggler_trade_escort_4", x = 895, z = 210, y = 695},
+		{patrolPointName = "smuggler_military_escort_2", x = 2915, z = 3828, y = 2887},
+		{patrolPointName = "smuggler_corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},
 	},
 }
 
@@ -217,9 +217,10 @@ destroy_duty_tatooine_privateer_6 = SpaceDutyDestroyScreenplay:new {
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "imp_tie_fighter_tier2",
+	bossShip = "blacksun_ace_s04_tier2",
 	shipTypes = {
-		{"imp_tie_fighter_tier1"},
+		{"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1"},
+		{"blacksun_aggressor_tier1", "blacksun_vehement_tier1"},
 	},
 }
 
@@ -240,21 +241,21 @@ escort_duty_tatooine_privateer_7 = SpaceDutyEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"reb_transport_tier1", "reb_freightermedium_tier1", "reb_freighterlight_tier1", "reb_freighterheavy_tier1"},
+	escortShips = {"imp_transport_tier1", "imp_freightermedium_tier1", "imp_freighterlight_tier1", "imp_freighterheavy_tier1"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_patrol_1", zoneName = "space_tatooine", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_patrol_3", zoneName = "space_tatooine", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_rebel_patrol_1", zoneName = "space_tatooine", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_rebel_patrol_3", zoneName = "space_tatooine", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 100,
 
 	attackShips = {
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
+		{"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1"},
+		{"blacksun_aggressor_tier1", "blacksun_fighter_s01_tier1"},
+		{"blacksun_vehement_tier1", "blacksun_fighter_s02_tier1"},
 	},
 
 	creditKillBonus = 100,
@@ -266,148 +267,16 @@ registerScreenPlay("escort_duty_tatooine_privateer_7", true)
 	Tier 2 -- tatooine_privateer_tier2 Main Missions
 ]]
 
--- Mission 1: Inspect with surprise attack side quest
-inspect_tatooine_privateer_tier2_1 = SpaceInspectScreenplay:new {
-	className = "inspect_tatooine_privateer_tier2_1",
+-- Mission 1: Destroy the Corsair Behemoth in Lok
+assassinate_tatooine_privateer_tier2_1a = SpaceAssassinateScreenplay:new {
+	className = "assassinate_tatooine_privateer_tier2_1a",
 
-	questName = "tatooine_privateer_tier2_1",
-	questType = "inspect",
-
-	questZone = "space_lok",
-
-	creditReward = 5000,
-
-	sideQuest = true,
-	sideQuestType = "destroy_surpriseattack",
-	sideQuestName = "tatooine_privateer_tier2_1",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	inspectTargets = {"viopa_mission_1_shuttle"},
-	inspectCargo = "imperial_data",
-
-	targetLocation = {x = 1992, z = 800, y = 2716},
-}
-
-registerScreenPlay("inspect_tatooine_privateer_tier2_1", true)
-
-destroy_surpriseattack_tatooine_privateer_tier2_1 = SpaceSurpriseAttackScreenplay:new {
-	className = "destroy_surpriseattack_tatooine_privateer_tier2_1",
-
-	questName = "tatooine_privateer_tier2_1",
-	questType = "destroy_surpriseattack",
-
-	questZone = "space_lok",
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	parentQuest = "inspect_tatooine_privateer_tier2_1",
-	parentQuestType = "inspect",
-	parentQuestName = "tatooine_privateer_tier2_1",
-
-	surpriseAttackShips = {
-		zone = "space_lok",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier2"}},
-	},
-}
-
-registerScreenPlay("destroy_surpriseattack_tatooine_privateer_tier2_1", true)
-
--- Mission 2: Escort (in Dantooine)
-escort_tatooine_privateer_tier2_2 = SpaceEscortScreenplay:new {
-	className = "escort_tatooine_privateer_tier2_2",
-
-	questName = "tatooine_privateer_tier2_2",
-	questType = "escort",
-
-	questZone = "space_dantooine",
-
-	creditReward = 5000,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	escortShips = {"viopa_mission_2_smuggler"},
-
-	escortPoints = {
-		{patrolPointName = "tatooine_privateer_tier2_2_1", zoneName = "space_dantooine", x = 1000, z = -900, y = -2100, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_2_2", zoneName = "space_dantooine", x = -28, z = -908, y = -2207, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_2_3", zoneName = "space_dantooine", x = -1158, z = -952, y = -2363, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_2_4", zoneName = "space_dantooine", x = -2566, z = -1057, y = -2599, escortNumber = 4, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_2_5", zoneName = "space_dantooine", x = -2436, z = -1574, y = -3167, escortNumber = 5, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_2_6", zoneName = "space_dantooine", x = -2129, z = -1970, y = -3738, escortNumber = 6, radius = 250},
-	},
-
-	attackDelay = 70,
-
-	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-	}
-}
-
-registerScreenPlay("escort_tatooine_privateer_tier2_2", true)
-
--- Mission 3: Recovery
-recovery_tatooine_privateer_tier2_3 = SpaceRecoveryScreenplay:new {
-	className = "recovery_tatooine_privateer_tier2_3",
-
-	questName = "tatooine_privateer_tier2_3",
-	questType = "recovery",
-
-	questZone = "space_lok",
-
-	creditReward = 5000,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	arrivalDelay = 15,
-	recoveryDelay = 30,
-
-	recoverShip = "viopa_mission_3_shuttle",
-	recoveryConversationMobile = "object/mobile/shared_dressed_rebel_commando_rodian_male_01.iff",
-
-	escortShips = {"imp_tie_fighter_tier2"},
-
-	preRecoveryPoints = {
-		{patrolPointName = "tatooine_privateer_tier2_3_target_1", zoneName = "space_lok", x = -5500, z = 3900, y = 3600, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_target_2", zoneName = "space_lok", x = -4775, z = 3294, y = 3140, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_target_3", zoneName = "space_lok", x = -3923, z = 2964, y = 2395, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_target_4", zoneName = "space_lok", x = -3191, z = 2904, y = 1706, escortNumber = 4, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_target_5", zoneName = "space_lok", x = -2496, z = 2865, y = 751, escortNumber = 5, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_target_6", zoneName = "space_lok", x = -1540, z = 2528, y = -1100, escortNumber = 6, radius = 250},
-	},
-
-	recoveryPoints = {
-		{patrolPointName = "tatooine_privateer_tier2_3_recover_1", zoneName = "space_lok", x = -3381, z = 2517, y = 877, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_recover_2", zoneName = "space_lok", x = -3512, z = 1885, y = -192, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_recover_3", zoneName = "space_lok", x = -3723, z = 1223, y = -989, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_3_recover_4", zoneName = "space_lok", x = -4257, z = -227, y = -2707, escortNumber = 4, radius = 250},
-	},
-
-	attackDelay = 80,
-
-	attackShips = {
-		{"imp_tie_interceptor_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-	},
-}
-
-registerScreenPlay("recovery_tatooine_privateer_tier2_3", true)
-
--- Mission 4: Assassinate
-assassinate_tatooine_privateer_tier2_4 = SpaceAssassinateScreenplay:new {
-	className = "assassinate_tatooine_privateer_tier2_4",
-
+	questName = "tatooine_privateer_tier2_1a",
 	questType = "assassinate",
-	questName = "tatooine_privateer_tier2_4",
 
 	questZone = "space_lok",
 
-	creditReward = 0,
-	itemReward = {},
+	creditReward = 5000,
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -416,8 +285,8 @@ assassinate_tatooine_privateer_tier2_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "viopa_mission_4_freighter",
-		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier3"},
+		target = "corsair_behemoth_tier3",
+		escorts = {"corsair_raider_tier2", "corsair_raider_tier2"},
 	},
 
 	targetPatrols = {
@@ -425,21 +294,118 @@ assassinate_tatooine_privateer_tier2_4 = SpaceAssassinateScreenplay:new {
 		{patrolPointName = "tatooine_privateer_tier2_four_2", x = 1662, z = 2407, y = 2790},
 		{patrolPointName = "tatooine_privateer_tier2_four_3", x = 533, z = 2411, y = 3116},
 		{patrolPointName = "tatooine_privateer_tier2_four_4", x = -1109, z = 2414, y = 3581},
-		{patrolPointName = "tatooine_privateer_tier2_four_5", x = -2303, z = 2415, y = 4011},
-		{patrolPointName = "tatooine_privateer_tier2_four_6", x = -3674, z = 2416, y = 4444},
 	},
 }
 
-registerScreenPlay("assassinate_tatooine_privateer_tier2_4", true)
+registerScreenPlay("assassinate_tatooine_privateer_tier2_1a", true)
+
+-- Mission 2: Destroy the Imperial patrol in Dantooine
+assassinate_tatooine_privateer_tier2_2a = SpaceAssassinateScreenplay:new {
+	className = "assassinate_tatooine_privateer_tier2_2a",
+
+	questName = "tatooine_privateer_tier2_2a",
+	questType = "assassinate",
+
+	questZone = "space_dantooine",
+
+	creditReward = 5000,
+
+	sideQuest = false,
+	sideQuestType = "",
+
+	arrivalDelay = 10,
+	failTimer = 20,
+
+	assassinateSpawns = {
+		target = "imp_tie_interceptor_tier3",
+		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+	},
+
+	targetPatrols = {
+		{patrolPointName = "tatooine_privateer_tier2_2_1", x = 1000, z = -900, y = -2100},
+		{patrolPointName = "tatooine_privateer_tier2_2_2", x = -28, z = -908, y = -2207},
+		{patrolPointName = "tatooine_privateer_tier2_2_3", x = -1158, z = -952, y = -2363},
+		{patrolPointName = "tatooine_privateer_tier2_2_4", x = -2566, z = -1057, y = -2599},
+	}
+}
+
+registerScreenPlay("assassinate_tatooine_privateer_tier2_2a", true)
+
+-- Mission 3: Destroy the Black Sun Ace in Yavin
+assassinate_tatooine_privateer_tier2_3a = SpaceAssassinateScreenplay:new {
+	className = "assassinate_tatooine_privateer_tier2_3a",
+
+	questName = "tatooine_privateer_tier2_3a",
+	questType = "assassinate",
+
+	questZone = "space_yavin4",
+
+	creditReward = 5000,
+
+	sideQuest = false,
+	sideQuestType = "",
+
+	arrivalDelay = 10,
+	failTimer = 20,
+
+	assassinateSpawns = {
+		target = "blacksun_ace_s04_tier3",
+		escorts = {"blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier2"},
+	},
+
+	targetPatrols = {
+		{patrolPointName = "tier3_privateer_target_path_01", x = 3658, z = -1769, y = -657},
+		{patrolPointName = "smuggler_imperial_scout_flight_path_1", x = 3593, z = -1050, y = -3060},
+		{patrolPointName = "smuggler_imperial_scout_flight_path_2", x = 3255, z = -758, y = -2450},
+		{patrolPointName = "smuggler_rebel_tier_three_patrol_3", x = 3680, z = -853, y = -2726},
+	},
+}
+
+registerScreenPlay("assassinate_tatooine_privateer_tier2_3a", true)
+
+-- Mission 4: Escort the Valarian freighter through Tatooine
+escort_tatooine_privateer_tier2_4a = SpaceEscortScreenplay:new {
+	className = "escort_tatooine_privateer_tier2_4a",
+
+	questType = "escort",
+	questName = "tatooine_privateer_tier2_4a",
+
+	questZone = "space_tatooine",
+
+	creditReward = 5000,
+	itemReward = {},
+
+	sideQuest = false,
+	sideQuestType = "",
+
+	escortShips = {"valarian_freighterlight_mining_tier3"},
+
+	escortPoints = {
+		{patrolPointName = "smuggler_rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
+	},
+
+	attackDelay = 80,
+
+	attackShips = {
+		{"hutt_fighter_s01_tier2", "hutt_fighter_s02_tier2"},
+		{"hutt_fighter_s01_tier2", "hutt_pirate_s01_tier2"},
+		{"hutt_fighter_s02_tier2", "hutt_pirate_s02_tier2", "hutt_fighter_s01_tier2"},
+	},
+}
+
+registerScreenPlay("escort_tatooine_privateer_tier2_4a", true)
 
 -- Tier 2 Duty Missions
 destroy_duty_tatooine_privateer_tier2_destroyduty = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_tatooine_privateer_tier2_destroyduty",
 
-	questName = "tatooine_privateer_tier2_destroyduty",
+	questName = "tatooine_privateer_tier2_1",
 	questType = "destroy_duty",
 
-	questZone = "space_lok",
+	questZone = "space_yavin4",
 
 	creditReward = 200,
 
@@ -453,11 +419,11 @@ destroy_duty_tatooine_privateer_tier2_destroyduty = SpaceDutyDestroyScreenplay:n
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "imp_tie_interceptor_tier3",
+	bossShip = "blacksun_aggressor_tier3",
 	shipTypes = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_aggressor_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier2", "blacksun_aggressor_tier2"},
+		{"blacksun_aggressor_tier2", "blacksun_aggressor_tier2", "blacksun_fighter_s01_tier2"},
 	},
 }
 
@@ -466,10 +432,10 @@ registerScreenPlay("destroy_duty_tatooine_privateer_tier2_destroyduty", true)
 recovery_duty_tatooine_privateer_tier2_recoveryduty = SpaceDutyRecoveryScreenplay:new {
 	className = "recovery_duty_tatooine_privateer_tier2_recoveryduty",
 
-	questName = "tatooine_privateer_tier2_recoveryduty",
+	questName = "tatooine_privateer_tier2_1",
 	questType = "recovery_duty",
 
-	questZone = "space_lok",
+	questZone = "space_dantooine",
 
 	creditReward = 2500,
 	creditKillBonus = 200,
@@ -480,30 +446,30 @@ recovery_duty_tatooine_privateer_tier2_recoveryduty = SpaceDutyRecoveryScreenpla
 	arrivalDelay = 15,
 	recoveryDelay = 30,
 
-	recoverShips = {"corsair_manowar_tier2", "corsair_behemoth_tier2"},
+	recoverShips = {"freighterlight_tier2", "freightermedium_tier2"},
 	recoveryConversationMobile = "object/mobile/shared_dressed_nym_patrol_elite_nikto_m.iff",
 
-	escortShips = {"corsair_sloop_tier2"},
+	escortShips = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
 
 	preRecoveryPoints = {
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_1", zoneName = "space_lok", x = -5007, z = -5499, y = -3499, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_2", zoneName = "space_lok", x = -6466, z = -6879, y = -4229, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_3", zoneName = "space_lok", x = -6974, z = -7081, y = -1544, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_4", zoneName = "space_lok", x = -7169, z = -6943, y = 1241, escortNumber = 4, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_1", zoneName = "space_dantooine", x = 1000, z = -900, y = -2100, escortNumber = 1, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_2", zoneName = "space_dantooine", x = -28, z = -908, y = -2207, escortNumber = 2, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_3", zoneName = "space_dantooine", x = -1158, z = -952, y = -2363, escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_4", zoneName = "space_dantooine", x = -2566, z = -1057, y = -2599, escortNumber = 4, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_5", zoneName = "space_lok", x = -5700, z = -5955, y = -2034, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_6", zoneName = "space_lok", x = -5033, z = -4822, y = -3028, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_7", zoneName = "space_lok", x = -4768, z = -3941, y = -3678, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier2_recovery_duty_8", zoneName = "space_lok", x = -4757, z = -3078, y = -3964, escortNumber = 4, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_3", zoneName = "space_dantooine", x = -1158, z = -952, y = -2363, escortNumber = 1, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_4", zoneName = "space_dantooine", x = -2566, z = -1057, y = -2599, escortNumber = 2, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_5", zoneName = "space_dantooine", x = -2436, z = -1574, y = -3167, escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier2_2_6", zoneName = "space_dantooine", x = -2129, z = -1970, y = -3738, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 100,
 
 	attackShips = {
-		{"corsair_raider_tier2", "corsair_sloop_tier2"},
-		{"corsair_sloop_tier2", "corsair_sloop_tier2"},
+		{"imp_tie_fighter_tier2"},
+		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
 	},
 }
 
@@ -512,7 +478,7 @@ registerScreenPlay("recovery_duty_tatooine_privateer_tier2_recoveryduty", true)
 escort_duty_tatooine_privateer_tier2_escortduty = SpaceDutyEscortScreenplay:new {
 	className = "escort_duty_tatooine_privateer_tier2_escortduty",
 
-	questName = "tatooine_privateer_tier2_escortduty",
+	questName = "tatooine_privateer_tier2_1",
 	questType = "escort_duty",
 
 	questZone = "space_lok",
@@ -524,21 +490,21 @@ escort_duty_tatooine_privateer_tier2_escortduty = SpaceDutyEscortScreenplay:new 
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"nym_smuggle_vessel", "reb_smuggler_ykl37r_tier2", "reb_smuggler_yt1300_tier2"},
+	escortShips = {"freighterlight_tier2", "freightermedium_tier2", "freighterheavy_tier2"},
 
 	escortPoints = {
-		{patrolPointName = "vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
-		{patrolPointName = "lok_imp_pirate_9", zoneName = "space_lok", x = 1492, z = 662, y = -2814, escortNumber = 2, radius = 250},
-		{patrolPointName = "vortex_mission_1_1", zoneName = "space_lok", x = 2241, z = -1210, y = -2943, escortNumber = 3, radius = 250},
-		{patrolPointName = "vortex_mission_1_5", zoneName = "space_lok", x = -2464, z = -1051, y = -2900, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_lok_imp_pirate_9", zoneName = "space_lok", x = 1492, z = 662, y = -2814, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_vortex_mission_1_1", zoneName = "space_lok", x = 2241, z = -1210, y = -2943, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_vortex_mission_1_5", zoneName = "space_lok", x = -2464, z = -1051, y = -2900, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_bomber_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"corsair_manowar_tier2", "corsair_sloop_tier2", "corsair_raider_tier2"},
+		{"corsair_manowar_tier2", "corsair_manowar_tier2", "corsair_raider_tier2"},
+		{"corsair_sloop_tier2", "corsair_manowar_tier2", "corsair_raider_tier2"},
 	},
 
 	creditKillBonus = 200,
@@ -550,7 +516,7 @@ registerScreenPlay("escort_duty_tatooine_privateer_tier2_escortduty", true)
 	Tier 3 -- tatooine_privateer_tier3 Main Missions (missions-only tier)
 ]]
 
--- Mission 1: Recovery (Space Yavin4 - Imperial spy trying to escape with Rebel fleet hangar info)
+-- Mission 1: Recovery (Space Yavin4 - recover an Imperial agent carrying pirate fleet intelligence)
 recovery_tatooine_privateer_tier3_1 = SpaceRecoveryScreenplay:new {
 	className = "recovery_tatooine_privateer_tier3_1",
 
@@ -575,34 +541,34 @@ recovery_tatooine_privateer_tier3_1 = SpaceRecoveryScreenplay:new {
 	escortShips = {},
 
 	preRecoveryPoints = {
-		{patrolPointName = "spy_flight_path_2", zoneName = "space_yavin4", x = 4793, z = -5425, y = 4509, escortNumber = 1, radius = 250},
-		{patrolPointName = "spy_flight_path_3", zoneName = "space_yavin4", x = 4358, z = -4600, y = 4097, escortNumber = 2, radius = 250},
-		{patrolPointName = "spy_flight_path_4", zoneName = "space_yavin4", x = 4040, z = -3996, y = 3796, escortNumber = 3, radius = 250},
-		{patrolPointName = "spy_flight_path_5", zoneName = "space_yavin4", x = 3589, z = -3140, y = 3370, escortNumber = 4, radius = 250},
-		{patrolPointName = "spy_flight_path_6", zoneName = "space_yavin4", x = 3280, z = -2554, y = 3078, escortNumber = 5, radius = 250},
-		{patrolPointName = "spy_flight_path_7", zoneName = "space_yavin4", x = 2073, z = -2087, y = 2117, escortNumber = 6, radius = 250},
-		{patrolPointName = "spy_flight_path_1", zoneName = "space_yavin4", x = 5199, z = -6199, y = 4893, escortNumber = 7, radius = 250},
+		{patrolPointName = "smuggler_spy_flight_path_2", zoneName = "space_yavin4", x = 4793, z = -5425, y = 4509, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_spy_flight_path_3", zoneName = "space_yavin4", x = 4358, z = -4600, y = 4097, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_spy_flight_path_4", zoneName = "space_yavin4", x = 4040, z = -3996, y = 3796, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_spy_flight_path_5", zoneName = "space_yavin4", x = 3589, z = -3140, y = 3370, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_spy_flight_path_6", zoneName = "space_yavin4", x = 3280, z = -2554, y = 3078, escortNumber = 5, radius = 250},
+		{patrolPointName = "smuggler_spy_flight_path_7", zoneName = "space_yavin4", x = 2073, z = -2087, y = 2117, escortNumber = 6, radius = 250},
+		{patrolPointName = "smuggler_spy_flight_path_1", zoneName = "space_yavin4", x = 5199, z = -6199, y = 4893, escortNumber = 7, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "spy_recovery_path_1", zoneName = "space_yavin4", x = 3463, z = -2741, y = 2867, escortNumber = 1, radius = 250},
-		{patrolPointName = "spy_recovery_path_2", zoneName = "space_yavin4", x = 3367, z = -2354, y = 2296, escortNumber = 2, radius = 250},
-		{patrolPointName = "spy_recovery_path_3", zoneName = "space_yavin4", x = 3282, z = -2008, y = 1786, escortNumber = 3, radius = 250},
-		{patrolPointName = "spy_recovery_path_4", zoneName = "space_yavin4", x = 3143, z = -1446, y = 956, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_spy_recovery_path_1", zoneName = "space_yavin4", x = 3463, z = -2741, y = 2867, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_spy_recovery_path_2", zoneName = "space_yavin4", x = 3367, z = -2354, y = 2296, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_spy_recovery_path_3", zoneName = "space_yavin4", x = 3282, z = -2008, y = 1786, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_spy_recovery_path_4", zoneName = "space_yavin4", x = 3143, z = -1446, y = 956, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 70,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s01_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s02_tier2"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier2", "blacksun_bomber_s02_tier2"},
 	},
 }
 
 registerScreenPlay("recovery_tatooine_privateer_tier3_1", true)
 
--- Mission 1 Side Quest A: Patrol (Space Yavin4 - Clear Imperial ships from Rebel escape route)
+-- Mission 1 Side Quest A: Patrol (Space Yavin4 - clear a pirate pursuit route)
 patrol_tatooine_privateer_tier3_1_A = SpacePatrolScreenplay:new {
 	className = "patrol_tatooine_privateer_tier3_1_A",
 
@@ -626,16 +592,16 @@ patrol_tatooine_privateer_tier3_1_A = SpacePatrolScreenplay:new {
 	parentQuestName = "tatooine_privateer_tier3_1",
 
 	patrolPoints = {
-		{patrolPointName = "rebel_tier_three_patrol_1", x = 2793, z = -276, y = -1231, patrolNumber = 1, radius = 150},
-		{patrolPointName = "rebel_tier_three_patrol_2", x = 3215, z = -695, y = -1854, patrolNumber = 2, radius = 150},
-		{patrolPointName = "rebel_tier_three_patrol_3", x = 3680, z = -853, y = -2726, patrolNumber = 3, radius = 150},
-		{patrolPointName = "rebel_tier_three_patrol_4", x = 3975, z = -1404, y = -3805, patrolNumber = 4, radius = 150},
+		{patrolPointName = "smuggler_rebel_tier_three_patrol_1", x = 2793, z = -276, y = -1231, patrolNumber = 1, radius = 150},
+		{patrolPointName = "smuggler_rebel_tier_three_patrol_2", x = 3215, z = -695, y = -1854, patrolNumber = 2, radius = 150},
+		{patrolPointName = "smuggler_rebel_tier_three_patrol_3", x = 3680, z = -853, y = -2726, patrolNumber = 3, radius = 150},
+		{patrolPointName = "smuggler_rebel_tier_three_patrol_4", x = 3975, z = -1404, y = -3805, patrolNumber = 4, radius = 150},
 	},
 }
 
 registerScreenPlay("patrol_tatooine_privateer_tier3_1_A", true)
 
--- Mission 1 Side Quest B: Destroy Surprise Attack (Space Yavin4 - Destroy Imperial patrol on escape path)
+-- Mission 1 Side Quest B: Destroy Surprise Attack (Space Yavin4 - destroy a Black Sun ambush)
 destroy_surpriseattack_tatooine_privateer_tier3_1_b = SpaceSurpriseAttackScreenplay:new {
 	className = "destroy_surpriseattack_tatooine_privateer_tier3_1_b",
 
@@ -657,13 +623,13 @@ destroy_surpriseattack_tatooine_privateer_tier3_1_b = SpaceSurpriseAttackScreenp
 
 	surpriseAttackShips = {
 		zone = "space_yavin4",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier3"}},
+		spawns = {{count = 3, shipName = "blacksun_fighter_s01_tier3"}},
 	},
 }
 
 registerScreenPlay("destroy_surpriseattack_tatooine_privateer_tier3_1_b", true)
 
--- Mission 1 Side Quest C: Assassinate (Space Yavin4 - Stop Imperial scout patrol from escaping)
+-- Mission 1 Side Quest C: Assassinate (Space Yavin4 - stop a Black Sun scout from escaping)
 assassinate_tatooine_privateer_tier3_1_c = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier3_1_c",
 
@@ -690,21 +656,21 @@ assassinate_tatooine_privateer_tier3_1_c = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_tie_interceptor_tier2",
-		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		target = "blacksun_marauder_tier3",
+		escorts = {"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2"},
 	},
 
 	targetPatrols = {
-		{patrolPointName = "imperial_scout_flight_path_1", zoneName = "space_yavin4", x = 3593, z = -1050, y = -3060},
-		{patrolPointName = "imperial_scout_flight_path_2", zoneName = "space_yavin4", x = 3255, z = -758, y = -2450},
-		{patrolPointName = "imperial_scout_flight_path_3", zoneName = "space_yavin4", x = 2804, z = -215, y = -1382},
-		{patrolPointName = "imperial_scout_flight_path_4", zoneName = "space_yavin4", x = 2290, z = 302, y = -266},
+		{patrolPointName = "smuggler_imperial_scout_flight_path_1", zoneName = "space_yavin4", x = 3593, z = -1050, y = -3060},
+		{patrolPointName = "smuggler_imperial_scout_flight_path_2", zoneName = "space_yavin4", x = 3255, z = -758, y = -2450},
+		{patrolPointName = "smuggler_imperial_scout_flight_path_3", zoneName = "space_yavin4", x = 2804, z = -215, y = -1382},
+		{patrolPointName = "smuggler_imperial_scout_flight_path_4", zoneName = "space_yavin4", x = 2290, z = 302, y = -266},
 	},
 }
 
 registerScreenPlay("assassinate_tatooine_privateer_tier3_1_c", true)
 
--- Mission 1 Side Quest D: Space Battle (Space Yavin4 - Assist X-Wing squad against Imperial patrol)
+-- Mission 1 Side Quest D: Space Battle (Space Yavin4 - assist an Imperial patrol against Black Sun)
 space_battle_tatooine_privateer_tier3_1_d = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_privateer_tier3_1_d",
 
@@ -731,24 +697,24 @@ space_battle_tatooine_privateer_tier3_1_d = SpaceBattleScreenplay:new {
 	enemyArrivalDist = 0,
 
 	alliedShips = {
-		{"reb_xwing_tier3"},
-		{"reb_xwing_tier3"},
-		{"reb_xwing_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_interceptor_tier3"},
 	},
 
 	enemyShips = {
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
+		{"blacksun_fighter_s01_tier3"},
+		{"blacksun_fighter_s01_tier3"},
+		{"blacksun_fighter_s02_tier3"},
+		{"blacksun_bomber_s01_tier3"},
+		{"blacksun_bomber_s02_tier3"},
+		{"blacksun_marauder_tier3"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_privateer_tier3_1_d", true)
 
--- Mission 2: Inspect (Space Endor - Rebel fleet forced out of hyperspace, need intel from Hutt smugglers)
+-- Mission 2: Inspect (Space Endor - locate a Hutt smuggler carrying pirate fleet intelligence)
 inspect_tatooine_privateer_tier3_2 = SpaceInspectScreenplay:new {
 	className = "inspect_tatooine_privateer_tier3_2",
 
@@ -772,7 +738,7 @@ inspect_tatooine_privateer_tier3_2 = SpaceInspectScreenplay:new {
 
 registerScreenPlay("inspect_tatooine_privateer_tier3_2", true)
 
--- Mission 2 Side Quest A: Delivery (Space Lok - Deliver data to Alliance fleet)
+-- Mission 2 Side Quest A: Delivery (Space Lok - deliver the intelligence to the Imperial Navy)
 delivery_tatooine_privateer_tier3_2_a = SpaceDeliveryScreenplay:new {
 	className = "delivery_tatooine_privateer_tier3_2_a",
 
@@ -794,8 +760,8 @@ delivery_tatooine_privateer_tier3_2_a = SpaceDeliveryScreenplay:new {
 	parentQuestType = "inspect",
 	parentQuestName = "tatooine_privateer_tier3_2",
 
-	pickupShip = "reb_xwing_tier2",
-	deliveryShip = "reb_awing_tier3",
+	pickupShip = "imp_tie_fighter_tier2",
+	deliveryShip = "imp_transport_tier3",
 
 	pickupPoint = {x = -3000, z = -2000, y = -2600}, -- space_lok:rebel_tier3_2_a_meeting
 	deliveryPoint = {x = 1000, z = -2000, y = -3452}, -- space_lok:rebel_tier3_2_a_delivery
@@ -803,15 +769,15 @@ delivery_tatooine_privateer_tier3_2_a = SpaceDeliveryScreenplay:new {
 	attackDelay = 70,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s01_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier2", "blacksun_bomber_s02_tier2"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier2", "blacksun_marauder_tier2"},
 	},
 }
 
 registerScreenPlay("delivery_tatooine_privateer_tier3_2_a", true)
 
--- Mission 2 Side Quest B: Survival (Space Endor - Defend fleet from Imperial fighter wings)
+-- Mission 2 Side Quest B: Survival (Space Endor - hold against a Black Sun counterattack)
 survival_tatooine_privateer_tier3_2_b = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_privateer_tier3_2_b",
 
@@ -840,17 +806,17 @@ survival_tatooine_privateer_tier3_2_b = SpaceSurvivalScreenplay:new {
 	attackDelay = 100,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s01_tier2", "blacksun_bomber_s02_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s01_tier2", "blacksun_marauder_tier2"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_bomber_s01_tier3"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_marauder_tier3"},
+		{"blacksun_vehement_tier3", "blacksun_marauder_tier3"},
 	},
 }
 
 registerScreenPlay("survival_tatooine_privateer_tier3_2_b", true)
 
--- Mission 2 Side Quest C: Escort (Space Endor - Escort straggling freighter to new fleet position)
+-- Mission 2 Side Quest C: Escort (Space Endor - escort an Imperial intelligence freighter)
 escort_tatooine_privateer_tier3_2_c = SpaceEscortScreenplay:new {
 	className = "escort_tatooine_privateer_tier3_2_c",
 
@@ -868,26 +834,26 @@ escort_tatooine_privateer_tier3_2_c = SpaceEscortScreenplay:new {
 	parentQuestType = "survival",
 	parentQuestName = "tatooine_privateer_tier3_2_b",
 
-	escortShips = {"reb_freighterlight_tier3"},
+	escortShips = {"imp_freighterlight_tier3"},
 
 	escortPoints = {
-		{patrolPointName = "rebel_tier3_2_c_escort_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
-		{patrolPointName = "rebel_tier3_2_c_escort_2", zoneName = "space_endor", x = -549, z = 3180, y = 3238, escortNumber = 2, radius = 250},
-		{patrolPointName = "rebel_tier3_2_c_escort_3", zoneName = "space_endor", x = -1251, z = 1477, y = 3143, escortNumber = 3, radius = 250},
-		{patrolPointName = "rebel_tier3_2_c_escort_4", zoneName = "space_endor", x = -1996, z = -330, y = 3042, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_rebel_tier3_2_c_escort_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_rebel_tier3_2_c_escort_2", zoneName = "space_endor", x = -549, z = 3180, y = 3238, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_rebel_tier3_2_c_escort_3", zoneName = "space_endor", x = -1251, z = 1477, y = 3143, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_rebel_tier3_2_c_escort_4", zoneName = "space_endor", x = -1996, z = -330, y = 3042, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_bomber_s01_tier3", "blacksun_marauder_tier3"},
 	},
 }
 
 registerScreenPlay("escort_tatooine_privateer_tier3_2_c", true)
 
--- Mission 3: Delivery (Space Endor - Meet Nym smuggler with intel data from Lok Alliance Navy)
+-- Mission 3: Delivery (Space Endor - transfer pirate intelligence from a Nym informant)
 delivery_tatooine_privateer_tier3_3 = SpaceDeliveryScreenplay:new {
 	className = "delivery_tatooine_privateer_tier3_3",
 
@@ -904,7 +870,7 @@ delivery_tatooine_privateer_tier3_3 = SpaceDeliveryScreenplay:new {
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	pickupShip = "nym_smuggler",
-	deliveryShip = "reb_gunboat_tier3",
+	deliveryShip = "imp_transport_tier3",
 
 	pickupPoint = "space_endor:tatooine_privateer_tier_3_3_pickup",
 	deliveryPoint = "space_endor:tatooine_privateer_tier_3_3_deliver",
@@ -912,15 +878,15 @@ delivery_tatooine_privateer_tier3_3 = SpaceDeliveryScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_bomber_s01_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_marauder_tier3", "blacksun_vehement_tier3"},
 	},
 }
 
 registerScreenPlay("delivery_tatooine_privateer_tier3_3", true)
 
--- Mission 3 Side Quest A: Assassinate (Space Endor - Destroy Imperial advanced recon ship)
+-- Mission 3 Side Quest A: Assassinate (Space Endor - destroy a Black Sun command ship)
 assassinate_tatooine_privateer_tier3_3_a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier3_3_a",
 
@@ -947,8 +913,8 @@ assassinate_tatooine_privateer_tier3_3_a = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "lambdashuttle_advanced_recon",
-		escorts = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		target = "blacksun_gunship_tier3",
+		escorts = {"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_marauder_tier3"},
 	},
 
 	targetPatrols = {
@@ -963,7 +929,7 @@ assassinate_tatooine_privateer_tier3_3_a = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier3_3_a", true)
 
--- Mission 3 Side Quest B: Space Battle (Space Endor - Assist Green squadron against TIE wing)
+-- Mission 3 Side Quest B: Space Battle (Space Endor - assist an Imperial squadron against Black Sun)
 space_battle_tatooine_privateer_tier3_3_b = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_privateer_tier3_3_b",
 
@@ -994,24 +960,24 @@ space_battle_tatooine_privateer_tier3_3_b = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -200,
 
 	alliedShips = {
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_bomber_tier3"},
+		{"imp_tie_interceptor_tier3"},
 	},
 
 	enemyShips = {
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
+		{"blacksun_fighter_s01_tier3"},
+		{"blacksun_fighter_s01_tier3"},
+		{"blacksun_fighter_s02_tier3"},
+		{"blacksun_bomber_s01_tier3"},
+		{"blacksun_marauder_tier3"},
+		{"blacksun_vehement_tier3"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_privateer_tier3_3_b", true)
 
--- Mission 3 Side Quest C: Escort (Space Endor - Escort Rebel smuggler transporting fleet repair materials)
+-- Mission 3 Side Quest C: Escort (Space Endor - escort an Imperial logistics vessel)
 escort_tatooine_privateer_tier3_3_c = SpaceEscortScreenplay:new {
 	className = "escort_tatooine_privateer_tier3_3_c",
 
@@ -1029,7 +995,7 @@ escort_tatooine_privateer_tier3_3_c = SpaceEscortScreenplay:new {
 	parentQuestType = "space_battle",
 	parentQuestName = "tatooine_privateer_tier3_3_b",
 
-	escortShips = {"rebel_smuggler_tier3"},
+	escortShips = {"imp_freightermedium_tier3"},
 
 	escortPoints = {
 		{patrolPointName = "tatooine_privateer_tier3_3_c_escort_1", zoneName = "space_endor", x = -5250, z = -850, y = 2000, escortNumber = 1, radius = 250},
@@ -1041,14 +1007,14 @@ escort_tatooine_privateer_tier3_3_c = SpaceEscortScreenplay:new {
 	attackDelay = 55,
 
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_bomber_s01_tier3", "blacksun_marauder_tier3"},
 	},
 }
 
 registerScreenPlay("escort_tatooine_privateer_tier3_3_c", true)
 
--- Mission 4: Assassinate (Space Dathomir - Stop Imperial fighter officer from reaching Dathomir fleet)
+-- Mission 4: Assassinate (Space Dathomir - stop a Black Sun commander reaching pirate reinforcements)
 assassinate_tatooine_privateer_tier3_4 = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier3_4",
 
@@ -1069,8 +1035,8 @@ assassinate_tatooine_privateer_tier3_4 = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "tieadvanced_quest_officer_rebel_t3",
-		escorts = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		target = "blacksun_vehement_tier3",
+		escorts = {"blacksun_fighter_s02_tier3", "blacksun_marauder_tier3"},
 	},
 
 	targetPatrols = {
@@ -1083,7 +1049,7 @@ assassinate_tatooine_privateer_tier3_4 = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier3_4", true)
 
--- Mission 4 Side Quest A: Patrol (Space Endor - Search for missing Magenta squadron)
+-- Mission 4 Side Quest A: Patrol (Space Endor - search for a missing Imperial patrol)
 patrol_tatooine_privateer_tier3_4_a = SpacePatrolScreenplay:new {
 	className = "patrol_tatooine_privateer_tier3_4_a",
 
@@ -1116,7 +1082,7 @@ patrol_tatooine_privateer_tier3_4_a = SpacePatrolScreenplay:new {
 
 registerScreenPlay("patrol_tatooine_privateer_tier3_4_a", true)
 
--- Mission 4 Side Quest B: Destroy Surprise Attack (Space Endor - Imperial Elite Ambush squad)
+-- Mission 4 Side Quest B: Destroy Surprise Attack (Space Endor - Black Sun elite ambush)
 destroy_surpriseattack_tatooine_privateer_tier3_4_b = SpaceSurpriseAttackScreenplay:new {
 	className = "destroy_surpriseattack_tatooine_privateer_tier3_4_b",
 
@@ -1138,13 +1104,13 @@ destroy_surpriseattack_tatooine_privateer_tier3_4_b = SpaceSurpriseAttackScreenp
 
 	surpriseAttackShips = {
 		zone = "space_endor",
-		spawns = {{count = 6, shipName = "imp_tie_interceptor_tier3"}},
+		spawns = {{count = 6, shipName = "blacksun_fighter_s02_tier3"}},
 	},
 }
 
 registerScreenPlay("destroy_surpriseattack_tatooine_privateer_tier3_4_b", true)
 
--- Mission 4 Side Quest C: Space Battle (Space Endor - Assist Blue Squadron attacking TIE bomber wing)
+-- Mission 4 Side Quest C: Space Battle (Space Endor - assist Imperial bombers against Black Sun)
 space_battle_tatooine_privateer_tier3_4_c = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_privateer_tier3_4_c",
 
@@ -1175,25 +1141,25 @@ space_battle_tatooine_privateer_tier3_4_c = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -50,
 
 	alliedShips = {
-		{"reb_bwing_tier3"},
-		{"reb_bwing_tier3"},
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
+		{"imp_tie_bomber_tier3"},
+		{"imp_tie_bomber_tier3"},
+		{"imp_tie_fighter_tier3"},
+		{"imp_tie_interceptor_tier3"},
 	},
 
 	enemyShips = {
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
+		{"blacksun_bomber_s01_tier3"},
+		{"blacksun_bomber_s02_tier3"},
+		{"blacksun_fighter_s01_tier3"},
+		{"blacksun_fighter_s02_tier3"},
+		{"blacksun_marauder_tier3"},
+		{"blacksun_vehement_tier3"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_privateer_tier3_4_c", true)
 
--- Mission 4 Side Quest D: Survival (Space Endor - Guard fleet flank during hyperspace evacuation)
+-- Mission 4 Side Quest D: Survival (Space Endor - guard the Imperial formation during withdrawal)
 survival_tatooine_privateer_tier3_4_d = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_privateer_tier3_4_d",
 
@@ -1218,9 +1184,9 @@ survival_tatooine_privateer_tier3_4_d = SpaceSurvivalScreenplay:new {
 	attackDelay = 60,
 
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_bomber_s01_tier3"},
+		{"blacksun_fighter_s02_tier3", "blacksun_marauder_tier3", "blacksun_bomber_s02_tier3"},
+		{"blacksun_vehement_tier3", "blacksun_marauder_tier3", "blacksun_fighter_s01_tier3"},
 	},
 }
 
@@ -1244,10 +1210,7 @@ survival_tatooine_privateer_tier4_1 = SpaceSurvivalScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "tatooine_privateer_tier4_1_a",
-	sideQuestType2 = "space_battle",
-	sideQuestName2 = "tatooine_privateer_tier4_1_b",
-
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	survivalTime = 300,
 	survivalPoint = "space_dathomir:tatooine_privateer_tier4_1_survival_point",
@@ -1276,8 +1239,10 @@ space_battle_tatooine_privateer_tier4_1_a = SpaceBattleScreenplay:new {
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "space_battle",
+	sideQuestName = "tatooine_privateer_tier4_1_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "survival_tatooine_privateer_tier4_1",
 	parentQuestType = "survival",
@@ -1295,8 +1260,8 @@ space_battle_tatooine_privateer_tier4_1_a = SpaceBattleScreenplay:new {
 		{"nym_enforcer_tier4"},
 		{"nym_enforcer_tier4"},
 		{"nym_enforcer_tier4"},
-		{"reb_xwing_tier4"},
-		{"reb_xwing_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_interceptor_tier4"},
 	},
 
 	enemyShips = {
@@ -1328,9 +1293,9 @@ space_battle_tatooine_privateer_tier4_1_b = SpaceBattleScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "survival_tatooine_privateer_tier4_1",
-	parentQuestType = "survival",
-	parentQuestName = "tatooine_privateer_tier4_1",
+	parentQuest = "space_battle_tatooine_privateer_tier4_1_a",
+	parentQuestType = "space_battle",
+	parentQuestName = "tatooine_privateer_tier4_1_a",
 
 	battlePoint = "space_dathomir:corellia_rebe_tier4_1_b_battle_point",
 	allyArrivalDelay = 30,
@@ -1361,7 +1326,7 @@ space_battle_tatooine_privateer_tier4_1_b = SpaceBattleScreenplay:new {
 
 registerScreenPlay("space_battle_tatooine_privateer_tier4_1_b", true)
 
--- Mission 2: Assassinate (Space Dathomir - Terminate Imperial Inquisitor before he reaches the fleet)
+-- Mission 2: Assassinate (Space Dathomir - terminate a Black Sun Vigo before reinforcements arrive)
 assassinate_tatooine_privateer_tier4_2 = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier4_2",
 
@@ -1376,17 +1341,14 @@ assassinate_tatooine_privateer_tier4_2 = SpaceAssassinateScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "delivery_no_pickup",
 	sideQuestName = "tatooine_privateer_tier4_2_a",
-	sideQuestType2 = "rescue",
-	sideQuestName2 = "tatooine_privateer_tier4_2_b",
-
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	arrivalDelay = 5,
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "tieadvanced_inquisitor_tier4",
-		escorts = {"tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard", "tieinterceptor_inquisitor_guard"},
+		target = "blacksun_vehement_tier4",
+		escorts = {"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_gunship_tier4"},
 	},
 
 	targetPatrols = {
@@ -1401,7 +1363,7 @@ assassinate_tatooine_privateer_tier4_2 = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier4_2", true)
 
--- Mission 2 Side Quest A: Delivery No Pickup (Space Dathomir - Deliver Inquisitor wreck data)
+-- Mission 2 Side Quest A: Delivery No Pickup (Space Dathomir - deliver captured Black Sun records)
 delivery_no_pickup_tatooine_privateer_tier4_2_a = SpaceDeliveryNoPickupScreenplay:new {
 	className = "delivery_no_pickup_tatooine_privateer_tier4_2_a",
 
@@ -1412,31 +1374,33 @@ delivery_no_pickup_tatooine_privateer_tier4_2_a = SpaceDeliveryNoPickupScreenpla
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "rescue",
+	sideQuestName = "tatooine_privateer_tier4_2_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "assassinate_tatooine_privateer_tier4_2",
 	parentQuestType = "assassinate",
 	parentQuestName = "tatooine_privateer_tier4_2",
 
-	deliveryShip = "rebel_smuggler_tier3",
+	deliveryShip = "imp_transport_tier3",
 	deliveryPoint = "space_dathomir:tatooine_privateer_tier4_2_a_delivery",
 
 	attackDelay = 45,
 
 	attackShips = {
-		{"imp_tie_interceptor_tier4", "imp_tie_advanced_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4"},
+		{"blacksun_fighter_s02_tier4", "blacksun_fighter_s03_tier4", "blacksun_bomber_s02_tier4"},
+		{"blacksun_marauder_tier4", "blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_marauder_tier4"},
+		{"blacksun_vehement_tier3", "blacksun_marauder_tier3", "blacksun_fighter_s03_tier4"},
+		{"blacksun_vehement_tier4", "blacksun_marauder_tier4", "blacksun_gunship_tier4"},
 	},
 }
 
 registerScreenPlay("delivery_no_pickup_tatooine_privateer_tier4_2_a", true)
 
--- Mission 2 Side Quest B: Rescue (Space Dathomir - Rescue Rebel diplomat ambushed by Imperials)
+-- Mission 2 Side Quest B: Rescue (Space Dathomir - rescue an Imperial envoy ambushed by Black Sun)
 rescue_tatooine_privateer_tier4_2_b = SpaceRescueScreenplay:new {
 	className = "rescue_tatooine_privateer_tier4_2_b",
 
@@ -1450,11 +1414,11 @@ rescue_tatooine_privateer_tier4_2_b = SpaceRescueScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "assassinate_tatooine_privateer_tier4_2",
-	parentQuestType = "assassinate",
-	parentQuestName = "tatooine_privateer_tier4_2",
+	parentQuest = "delivery_no_pickup_tatooine_privateer_tier4_2_a",
+	parentQuestType = "delivery_no_pickup",
+	parentQuestName = "tatooine_privateer_tier4_2_a",
 
-	rescueShip = "reb_diplomat_tier4",
+	rescueShip = "imp_lambda_shuttle_tier4",
 	rescueArrivalDelay = 3,
 
 	escortPoints = {
@@ -1467,18 +1431,18 @@ rescue_tatooine_privateer_tier4_2_b = SpaceRescueScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_bomber_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4"},
+		{"blacksun_fighter_s02_tier4", "blacksun_fighter_s03_tier4", "blacksun_marauder_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4"},
+		{"blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_marauder_tier3"},
+		{"blacksun_vehement_tier3", "blacksun_marauder_tier3", "blacksun_fighter_s03_tier4"},
+		{"blacksun_vehement_tier4", "blacksun_marauder_tier4", "blacksun_gunship_tier4"},
 	},
 }
 
 registerScreenPlay("rescue_tatooine_privateer_tier4_2_b", true)
 
--- Mission 3: Space Battle (Space Dathomir - Guerilla strike on Imperial space station)
+-- Mission 3: Space Battle (Space Dathomir - repel the first coordinated Hidden Daggers strike)
 space_battle_tatooine_privateer_tier4_3 = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_privateer_tier4_3",
 
@@ -1492,10 +1456,7 @@ space_battle_tatooine_privateer_tier4_3 = SpaceBattleScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "tatooine_privateer_tier4_3_a",
-	sideQuestType2 = "survival",
-	sideQuestName2 = "tatooine_privateer_tier4_3_b",
-
-	-- sideQuestSplitType = "both",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	battlePoint = "space_dathomir:tatooine_privateer_tier4_3_battle_point",
 	allyArrivalDelay = 60,
@@ -1506,30 +1467,30 @@ space_battle_tatooine_privateer_tier4_3 = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -200,
 
 	alliedShips = {
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_enforcer_tier5"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_interceptor_tier4"},
+		{"imp_tie_bomber_tier4"},
+		{"imp_imperial_gunboat_tier4"},
 	},
 
 	enemyShips = {
-		{"imp_imperial_gunboat_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_cutthroat_tier4"},
+		{"evil_raider_tyrant_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_cutthroat_tier4"},
+		{"evil_raider_tyrant_tier4"},
+		{"hidden_daggers_executioner_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_tyrant_tier4"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_privateer_tier4_3", true)
 
--- Mission 3 Side Quest A: Space Battle (Space Dathomir - Help ambushed B-Wing squadrons)
+-- Mission 3 Side Quest A: Space Battle (Space Dathomir - reinforce an ambushed Imperial squadron)
 space_battle_tatooine_privateer_tier4_3_a = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_privateer_tier4_3_a",
 
@@ -1540,8 +1501,10 @@ space_battle_tatooine_privateer_tier4_3_a = SpaceBattleScreenplay:new {
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "survival",
+	sideQuestName = "tatooine_privateer_tier4_3_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "space_battle_tatooine_privateer_tier4_3",
 	parentQuestType = "space_battle",
@@ -1556,24 +1519,24 @@ space_battle_tatooine_privateer_tier4_3_a = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -150,
 
 	alliedShips = {
-		{"reb_bwing_tier4"},
-		{"reb_bwing_tier4"},
-		{"reb_bwing_tier4"},
+		{"imp_tie_bomber_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_interceptor_tier4"},
 	},
 
 	enemyShips = {
-		{"imp_tie_aggressor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
+		{"hidden_daggers_executioner_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_cutthroat_tier4"},
+		{"evil_raider_cutthroat_tier4"},
+		{"evil_raider_tyrant_tier4"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_privateer_tier4_3_a", true)
 
--- Mission 3 Side Quest B: Survival (Space Dathomir - Defend Rebel bombers retreat after failed station attack)
+-- Mission 3 Side Quest B: Survival (Space Dathomir - hold the line against Hidden Daggers reinforcements)
 survival_tatooine_privateer_tier4_3_b = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_privateer_tier4_3_b",
 
@@ -1587,9 +1550,9 @@ survival_tatooine_privateer_tier4_3_b = SpaceSurvivalScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "space_battle_tatooine_privateer_tier4_3",
+	parentQuest = "space_battle_tatooine_privateer_tier4_3_a",
 	parentQuestType = "space_battle",
-	parentQuestName = "tatooine_privateer_tier4_3",
+	parentQuestName = "tatooine_privateer_tier4_3_a",
 
 	survivalTime = 480,
 	survivalPoint = "space_dathomir:tatooine_privateer_tier4_3_b_survival",
@@ -1598,17 +1561,17 @@ survival_tatooine_privateer_tier4_3_b = SpaceSurvivalScreenplay:new {
 	attackDelay = 45,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_advanced_tier4", "imp_tie_aggressor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4", "hidden_daggers_executioner_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_tyrant_tier4", "hidden_daggers_executioner_tier4", "evil_raider_cutthroat_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4"},
+		{"hidden_daggers_executioner_tier4", "evil_raider_tyrant_tier4", "evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4"},
 	},
 }
 
 registerScreenPlay("survival_tatooine_privateer_tier4_3_b", true)
 
--- Mission 4: Recovery (Space Dantooine - Kidnap Imperial technician building space station)
+-- Mission 4: Recovery (Space Dantooine - capture a Hidden Daggers courier carrying fleet intelligence)
 recovery_tatooine_privateer_tier4_4 = SpaceRecoveryScreenplay:new {
 	className = "recovery_tatooine_privateer_tier4_4",
 
@@ -1632,10 +1595,10 @@ recovery_tatooine_privateer_tier4_4 = SpaceRecoveryScreenplay:new {
 	arrivalDelay = 10,
 	recoveryDelay = 30,
 
-	recoverShip = "imp_lambda_shuttle_tier4",
-	recoveryConversationMobile = "object/mobile/dressed_rebel_commando_moncal_male_01.iff",
+	recoverShip = "hidden_daggers_gunship_tier4",
+	recoveryConversationMobile = "object/mobile/dressed_nym_brawler_tran_m.iff",
 
-	escortShips = {"imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
+	escortShips = {"evil_raider_fighter_tier4", "evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4", "hidden_daggers_executioner_tier4"},
 
 	preRecoveryPoints = {
 		{patrolPointName = "tatooine_privateer_tier4_4_recovery_1", zoneName = "space_dantooine", x = -4000, z = 3100, y = 2700, escortNumber = 1, radius = 250},
@@ -1654,15 +1617,15 @@ recovery_tatooine_privateer_tier4_4 = SpaceRecoveryScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_advanced_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_oppressor_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4"},
+		{"hidden_daggers_executioner_tier4", "evil_raider_tyrant_tier4", "evil_raider_cutthroat_tier4"},
 	},
 }
 
 registerScreenPlay("recovery_tatooine_privateer_tier4_4", true)
 
--- Mission 4 Side Quest A: Assassinate (Space Endor - Destroy Imperial freighters carrying station materials)
+-- Mission 4 Side Quest A: Assassinate (Space Endor - destroy Hidden Daggers freighters carrying war materiel)
 assassinate_tatooine_privateer_tier4_4_a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier4_4_a",
 
@@ -1689,8 +1652,8 @@ assassinate_tatooine_privateer_tier4_4_a = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_freighterheavy_tier4",
-		escorts = {"imp_tie_aggressor_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4", "imp_tie_aggressor_tier4", "freighterlight_tatooine_privateer_mission", "freightermedium_tatooine_privateer_mission"},
+		target = "blacksun_freighterheavy_tier4",
+		escorts = {"evil_raider_fighter_tier4", "evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4", "hidden_daggers_executioner_tier4", "evil_raider_fighter_tier4", "blacksun_freighterlight_tier3", "blacksun_freightermedium_tier3"},
 	},
 
 	targetPatrols = {
@@ -1705,7 +1668,7 @@ assassinate_tatooine_privateer_tier4_4_a = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier4_4_a", true)
 
--- Mission 4 Side Quest B: Rescue (Space Endor - Escort SpyNet operative to safety for freighter route intel)
+-- Mission 4 Side Quest B: Rescue (Space Endor - escort an Imperial intelligence operative to safety)
 rescue_tatooine_privateer_tier4_4_b = SpaceRescueScreenplay:new {
 	className = "rescue_tatooine_privateer_tier4_4_b",
 
@@ -1727,7 +1690,7 @@ rescue_tatooine_privateer_tier4_4_b = SpaceRescueScreenplay:new {
 	parentQuestType = "recovery",
 	parentQuestName = "tatooine_privateer_tier4_4",
 
-	rescueShip = "spynet_spy_tier4",
+	rescueShip = "imp_lambda_shuttle_tier4",
 	rescueArrivalDelay = 5,
 
 	escortPoints = {
@@ -1742,18 +1705,18 @@ rescue_tatooine_privateer_tier4_4_b = SpaceRescueScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_advanced_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_fighter_tier4", "evil_raider_cutthroat_tier4"},
+		{"hidden_daggers_executioner_tier4", "evil_raider_tyrant_tier4", "evil_raider_cutthroat_tier4"},
+		{"evil_raider_fighter_tier4", "evil_raider_fighter_tier4", "evil_raider_fighter_tier4"},
+		{"evil_raider_cutthroat_tier4", "evil_raider_cutthroat_tier4", "evil_raider_tyrant_tier4"},
+		{"hidden_daggers_executioner_tier4", "evil_raider_tyrant_tier4", "evil_raider_fighter_tier4"},
 	},
 }
 
 registerScreenPlay("rescue_tatooine_privateer_tier4_4_b", true)
 
--- Mission 4 Side Quest C: Space Battle (Space Endor - Imperial retaliation for freighter attack)
+-- Mission 4 Side Quest C: Space Battle (Space Endor - break the Hidden Daggers counterattack)
 space_battle_tatooine_privateer_tier4_4_c = SpaceBattleScreenplay:new {
 	className = "space_battle_tatooine_privateer_tier4_4_c",
 
@@ -1780,36 +1743,36 @@ space_battle_tatooine_privateer_tier4_4_c = SpaceBattleScreenplay:new {
 	enemyArrivalDist = -200,
 
 	alliedShips = {
-		{"reb_xwing_tier4"},
-		{"reb_xwing_tier4"},
-		{"reb_bwing_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_fighter_tier4"},
+		{"imp_tie_bomber_tier4"},
+		{"imp_tie_interceptor_tier4"},
+		{"imp_tie_advanced_tier4"},
 	},
 
 	enemyShips = {
-		{"imp_decimator_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_oppressor_tier4"},
-		{"imp_tie_advanced_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_fighter_tier4"},
+		{"evil_raider_cutthroat_tier4"},
+		{"evil_raider_cutthroat_tier4"},
+		{"evil_raider_tyrant_tier4"},
+		{"evil_raider_tyrant_tier4"},
+		{"hidden_daggers_executioner_tier4"},
+		{"hidden_daggers_executioner_tier4"},
+		{"hidden_daggers_gunship_tier4"},
 	},
 }
 
 registerScreenPlay("space_battle_tatooine_privateer_tier4_4_c", true)
 
--- Master Mission (two-stage Kessel encounter): destroy_master_rebel_1 (Kessel: destroy
--- 30 Imperial fighters) and destroy_master_rebel_2 (Kessel: destroy the Imperial
--- Corellian Corvette / Star Ravager command vessel) are defined in
+-- Master Mission (two-stage Kessel encounter): temporary Imperial service culminates
+-- in destroy_master_imperial_1 (disrupt the emerging Rebel fighter screen) and
+-- destroy_master_imperial_2 (destroy its Corellian Corvette command vessel), defined in
 -- screenplays/space/squadrons/KesselMasterEncounterScreenplay.lua (loaded first).
 
 -- Tier 4 Duty Missions
 
--- Escort Duty (Space Dathomir - Escort Nym freighters carrying loot from Imperial outpost raid)
+-- Escort Duty (Space Dathomir - escort Imperial supply freighters through pirate territory)
 escort_duty_tatooine_privateer_tier4_1 = SpaceDutyEscortScreenplay:new {
 	className = "escort_duty_tatooine_privateer_tier4_1",
 
@@ -1826,7 +1789,7 @@ escort_duty_tatooine_privateer_tier4_1 = SpaceDutyEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"nym_freighterheavy_tier4", "nym_freighterlight_tier4", "nym_freightermedium_tier4"},
+	escortShips = {"imp_freighterheavy_tier4", "imp_freighterlight_tier4", "imp_freightermedium_tier4"},
 
 	escortPoints = {
 		{patrolPointName = "tatooine_privateer_tier4_1_escort_duty_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
@@ -1838,16 +1801,16 @@ escort_duty_tatooine_privateer_tier4_1 = SpaceDutyEscortScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_bomber_tier4", "imp_tie_advanced_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4", "blacksun_marauder_tier4"},
+		{"blacksun_fighter_s02_tier4", "blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4"},
+		{"blacksun_fighter_s03_tier4", "blacksun_bomber_s03_tier4", "blacksun_vehement_tier4", "blacksun_gunship_tier4"},
 	},
 }
 
 registerScreenPlay("escort_duty_tatooine_privateer_tier4_1", true)
 
--- Rescue Duty (Space Dantooine - Rescue disabled Rebel ships left after Imperial attack)
+-- Rescue Duty (Space Dantooine - rescue disabled Imperial ships after pirate attacks)
 rescue_duty_tatooine_privateer_tier4_1 = SpaceDutyRescueScreenplay:new {
 	className = "rescue_duty_tatooine_privateer_tier4_1",
 
@@ -1862,7 +1825,7 @@ rescue_duty_tatooine_privateer_tier4_1 = SpaceDutyRescueScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	targetShips = {"reb_xwing_tier4", "reb_transport_tier4", "reb_ywing_tier4", "reb_ykl37r_tier4", "reb_freightermedium_tier4", "reb_freighterheavy_tier4", "reb_freighterlight_tier4"},
+	targetShips = {"imp_tie_fighter_tier4", "imp_lambda_shuttle_tier4", "imp_tie_bomber_tier4", "imp_transport_tier4", "imp_freightermedium_tier4", "imp_freighterheavy_tier4", "imp_freighterlight_tier4"},
 
 	targetArrivalDelay = 3,
 
@@ -1877,9 +1840,9 @@ rescue_duty_tatooine_privateer_tier4_1 = SpaceDutyRescueScreenplay:new {
 	attackDelay = 60,
 
 	attackShips = {
-		{"imp_lambda_shuttle_tier4", "imp_lambda_shuttle_tier4", "imp_lambda_shuttle_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_advanced_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_advanced_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4"},
+		{"blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
+		{"blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_vehement_tier4"},
 	},
 }
 
@@ -1907,7 +1870,7 @@ recovery_duty_tatooine_privateer_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	recoveryFaction = "nym",
 	recoveryConversationMobile = "object/mobile/dressed_nym_brawler_tran_m.iff",
 
-	escortShips = {"imp_tie_interceptor_tier4"},
+	escortShips = {"blacksun_fighter_s02_tier4"},
 
 	preRecoveryPoints = {
 		{patrolPointName = "tatooine_privateer_tier4_1_recovery_duty_1", zoneName = "space_endor", escortNumber = 1, radius = 250},
@@ -1926,15 +1889,15 @@ recovery_duty_tatooine_privateer_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	attackDelay = 45,
 
 	attackShips = {
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_bomber_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"},
-		{"imp_tie_fighter_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_advanced_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4", "blacksun_marauder_tier4"},
+		{"blacksun_fighter_s02_tier4", "blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
+		{"blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
 	},
 }
 
 registerScreenPlay("recovery_duty_tatooine_privateer_tier4_1", true)
 
--- Destroy Duty (Space Dantooine - Nym/Rebel alliance putting the squeeze on the Black Sun)
+-- Destroy Duty (Space Dantooine - suppress Black Sun raiding forces)
 destroy_duty_tatooine_privateer_tier4_1 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_tatooine_privateer_tier4_1",
 
@@ -1987,13 +1950,13 @@ SmugglerSquadronScreenplay = ScreenPlay:new {
 	QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "tatooine_privateer_7"},
 
 	-- Tier 2
-	TIER2_QUEST_STRING_1 = {type = "inspect", name = "tatooine_privateer_tier2_1"},
-	TIER2_QUEST_STRING_2 = {type = "escort", name = "tatooine_privateer_tier2_2"},
-	TIER2_QUEST_STRING_3 = {type = "recovery", name = "tatooine_privateer_tier2_3"},
-	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_privateer_tier2_4"},
-	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_privateer_tier2_destroyduty"},
-	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "tatooine_privateer_tier2_recoveryduty"},
-	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "tatooine_privateer_tier2_escortduty"},
+	TIER2_QUEST_STRING_1 = {type = "assassinate", name = "tatooine_privateer_tier2_1a"},
+	TIER2_QUEST_STRING_2 = {type = "assassinate", name = "tatooine_privateer_tier2_2a"},
+	TIER2_QUEST_STRING_3 = {type = "assassinate", name = "tatooine_privateer_tier2_3a"},
+	TIER2_QUEST_STRING_4 = {type = "escort", name = "tatooine_privateer_tier2_4a"},
+	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_privateer_tier2_1"},
+	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "tatooine_privateer_tier2_1"},
+	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "tatooine_privateer_tier2_1"},
 
 	-- Tier 3
 	TIER3_QUEST_STRING_1 = {type = "recovery", name = "tatooine_privateer_tier3_1"},
@@ -2029,8 +1992,8 @@ SmugglerSquadronScreenplay = ScreenPlay:new {
 	TIER4_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "tatooine_privateer_tier4_4_a"},
 	TIER4_QUEST_STRING_4_SIDE2 = {type = "rescue", name = "tatooine_privateer_tier4_4_b"},
 	TIER4_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "tatooine_privateer_tier4_4_c"},
-	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "master_rebel_1"},
-	TIER4_QUEST_STRING_MASTER_2 = {type = "destroy", name = "master_rebel_2"},
+	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "master_imperial_1"},
+	TIER4_QUEST_STRING_MASTER_2 = {type = "destroy", name = "master_imperial_2"},
 	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "tatooine_privateer_tier4_1"},
 	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "tatooine_privateer_tier4_1"},
 	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "tatooine_privateer_tier4_1"},
@@ -2088,19 +2051,19 @@ function SmugglerSquadronScreenplay:resetTier2Quests(pPlayer)
 	end
 
 	-- Mission 1
-	inspect_tatooine_privateer_tier2_1:resetQuest(pPlayer)
+	assassinate_tatooine_privateer_tier2_1a:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1.type, self.TIER2_QUEST_STRING_1.name, false)
 
 	-- Mission 2
-	escort_tatooine_privateer_tier2_2:resetQuest(pPlayer)
+	assassinate_tatooine_privateer_tier2_2a:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_2.type, self.TIER2_QUEST_STRING_2.name, false)
 
 	-- Mission 3
-	recovery_tatooine_privateer_tier2_3:resetQuest(pPlayer)
+	assassinate_tatooine_privateer_tier2_3a:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_3.type, self.TIER2_QUEST_STRING_3.name, false)
 
 	-- Mission 4
-	assassinate_tatooine_privateer_tier2_4:resetQuest(pPlayer)
+	escort_tatooine_privateer_tier2_4a:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_4.type, self.TIER2_QUEST_STRING_4.name, false)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
@@ -2218,8 +2181,8 @@ function SmugglerSquadronScreenplay:resetTier4Quests(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_4_SIDE3.type, self.TIER4_QUEST_STRING_4_SIDE3.name, false)
 
 	-- Master (two-stage Kessel corvette encounter)
-	destroy_master_rebel_1:resetQuest(pPlayer)
-	destroy_master_rebel_2:resetQuest(pPlayer)
+	destroy_master_imperial_1:resetQuest(pPlayer)
+	destroy_master_imperial_2:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_MASTER.type, self.TIER4_QUEST_STRING_MASTER.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER4_QUEST_STRING_MASTER_2.type, self.TIER4_QUEST_STRING_MASTER_2.name, false)
 

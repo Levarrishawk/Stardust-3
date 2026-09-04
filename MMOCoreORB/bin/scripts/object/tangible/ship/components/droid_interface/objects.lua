@@ -6766,3 +6766,12 @@ object_tangible_ship_components_droid_interface_shared_droid_interface_test = Sh
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_ship_components_droid_interface_shared_droid_interface_test, "object/tangible/ship/components/droid_interface/shared_droid_interface_test.iff")
+
+object_tangible_ship_components_droid_interface_shared_ddi_tiefighter_basic_dev = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/ship/components/droid_interface/shared_ddi_tiefighter_basic_dev.iff"
+  --Data below here is deprecated and loaded from the tres, keeping for easy lookups
+
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_ship_components_droid_interface_shared_ddi_tiefighter_basic_dev, "object/tangible/ship/components/droid_interface/shared_ddi_tiefighter_basic_dev.iff")
+

@@ -149,42 +149,21 @@ void SpaceCombatManager::applyDamage(ShipObject* ship, const ShipProjectile* pro
 
 	Vector<BasePacket*> messages;
 
-	if (targetShip->isComponentFunctional(Components::BRIDGE) && targetShip->isSlotTargetable(Components::BRIDGE)) {
-		for(int i = 0; i < result.size(); ++i) {
-			int collisionSlot = result.getSlot(i);
+	// The client sends Components::SIZE when no subsystem is selected. Damage
+	// always passes through the impacted shield facing and armor first. Once
+	// those defenses are exhausted, explicitly targeted fire is confined to the
+	// selected subsystem; untargeted fire alone can damage the chassis.
+	damage = applyShieldDamage(targetShip, result, damage, shieldEffect, deltaVector, messages);
 
-			if (targetShip->isComponentTargetable(collisionSlot)) {
-				damage = applyComponentDamage(ship, targetShip, result, damage, collisionSlot, deltaVector, messages);
+	if (damage > 0.f) {
+		damage = applyArmorDamage(targetShip, result, damage, armorEffect, deltaVector, messages);
+	}
 
-				if (damage <= 0.f) {
-					break;
-				}
-			}
-		}
-	} else {
-		for (int hitType = 0; hitType < ShipHitType::SIZE; ++hitType) {
-			switch (hitType) {
-				case ShipHitType::HITSHIELD: {
-					damage = applyShieldDamage(targetShip, result, damage, shieldEffect, deltaVector, messages);
-					break;
-				}
-				case ShipHitType::HITARMOR: {
-					damage = applyArmorDamage(targetShip, result, damage, armorEffect, deltaVector, messages);
-					break;
-				}
-				case ShipHitType::HITCOMPONENT: {
-					damage = applyActiveComponentDamage(ship, targetShip, result, damage, targetSlot, deltaVector, messages);
-					break;
-				}
-				case ShipHitType::HITCHASSIS: {
-					damage = applyChassisDamage(targetShip, result, damage, deltaVector, messages);
-					break;
-				}
-			}
-
-			if (damage <= 0.f) {
-				break;
-			}
+	if (damage > 0.f) {
+		if (targetSlot < Components::SIZE) {
+			damage = applyActiveComponentDamage(ship, targetShip, result, damage, targetSlot, deltaVector, messages);
+		} else {
+			damage = applyChassisDamage(targetShip, result, damage, deltaVector, messages);
 		}
 	}
 
@@ -505,6 +484,8 @@ float SpaceCombatManager::applyComponentDamage(ShipObject* attackerShip, ShipObj
 	if (defenderShip->getCurrentHitpointsMap()->get(slot) <= 0.f) {
 		defenderShip->setComponentDemolished(slot, false, deltaVector);
 
+		// The bridge is the intentional subsystem-based destruction path for
+		// capital ships. Other destroyed subsystems do not spill into chassis.
 		if (slot == Components::BRIDGE) {
 			applyChassisDamage(defenderShip, result, defenderShip->getChassisCurrentHealth(), deltaVector, messages);
 		}
@@ -516,44 +497,18 @@ float SpaceCombatManager::applyComponentDamage(ShipObject* attackerShip, ShipObj
 float SpaceCombatManager::applyActiveComponentDamage(ShipObject* attackerShip, ShipObject* defenderShip, const SpaceCollisionResult& result, float damage, int targetSlot, ShipDeltaVector* deltaVector, Vector<BasePacket*>& messages) const {
 	bool defenderDisabled = defenderShip->isShipDisabled();
 
-	int activeSlot = getActiveComponentToDamage(defenderShip);
-
-	if (activeSlot != Components::CHASSIS && defenderShip->getCurrentHitpointsMap()->get(activeSlot) > 0.f) {
-		damage = applyComponentDamage(attackerShip, defenderShip, result, damage, activeSlot, deltaVector, messages);
+	if (targetSlot >= 0 && targetSlot < Components::SIZE && defenderShip->isComponentTargetable(targetSlot) && defenderShip->getCurrentHitpointsMap()->get(targetSlot) > 0.f) {
+		applyComponentDamage(attackerShip, defenderShip, result, damage, targetSlot, deltaVector, messages);
 	}
 
 	if (!defenderDisabled && defenderShip->isShipDisabled()) {
 		triggerDisabledObserver(attackerShip, defenderShip);
 	}
 
-	return damage;
-}
-
-int SpaceCombatManager::getActiveComponentToDamage(ShipObject* target) const {
-	const auto componentMap = target->getShipComponentMap();
-
-	if (componentMap == nullptr) {
-		return Components::CHASSIS;
-	}
-
-	Vector<int> installedSlots;
-
-	for (int i = 0; i < componentMap->size(); ++i) {
-		auto slot = componentMap->getKeyAt(i);
-		auto compCRC = componentMap->getValueAt(i);
-
-		if (compCRC == 0) {
-			continue;
-		}
-
-		installedSlots.add(slot);
-	}
-
-	if (installedSlots.size() == 0) {
-		return Components::CHASSIS;
-	}
-
-	return installedSlots.get(System::random(installedSlots.size() - 1));
+	// Never redirect or spill targeted subsystem damage into another component
+	// or the chassis. This allows a pilot to disable a target without destroying
+	// it accidentally once the selected subsystem reaches zero condition.
+	return 0.f;
 }
 
 int SpaceCombatManager::updateProjectile(ShipObject* ship, ShipProjectile* projectile, SpaceCollisionResult& result, Vector<ManagedReference<SceneObject*>>& targetVectorCopy, const uint64& miliTime) {

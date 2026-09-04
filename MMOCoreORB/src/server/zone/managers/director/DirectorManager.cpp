@@ -2814,6 +2814,16 @@ int DirectorManager::spawnShipAgent(lua_State* L) {
 	Vector3 spawnPosition = Vector3::ZERO;
 	String shipName, zoneName;
 	ShipObject* targetShip = nullptr;
+	int shipNameIndex = numberOfArguments == 6 ? -6 : -5;
+	int zoneNameIndex = numberOfArguments == 6 ? -5 : -4;
+
+	if (!lua_isstring(L, shipNameIndex) || !lua_isstring(L, zoneNameIndex)) {
+		String err = "invalid ship or zone name passed to DirectorManager::spawnShipAgent";
+		printTraceError(L, err);
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		lua_pushnil(L);
+		return 1;
+	}
 
 	if (numberOfArguments == 6) {
 		targetShip = (ShipObject*) lua_touserdata(L, -1);

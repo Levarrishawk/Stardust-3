@@ -1,5 +1,5 @@
 hiddendaggers_slayer = ShipAgent:new {
-	template = "xwing_tier1",
+	template = "z95_tier1",
 	pilotTemplate = "medium_fighter_tier1",
 	shipType = "fighter",
 

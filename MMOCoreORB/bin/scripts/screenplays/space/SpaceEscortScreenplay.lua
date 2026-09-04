@@ -28,9 +28,12 @@ SpaceEscortScreenplay = SpaceQuestLogic:new {
 
 	spawnAttackWaves = true,
 	checkPlayerDistance = true,
+	orderedEscortRoute = false,
 
 	attackDelay = 0, -- In Seconds
 	attackShips = {},
+
+	completionSystemMessage = "",
 
 	tauntData = {
 		goodbyeCount = 5,
@@ -102,6 +105,7 @@ function SpaceEscortScreenplay:completeQuest(pPlayer, notifyClient)
 	end
 
 	local notifyBool = true
+	local questWasActive = SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)
 
 	if (notifyClient == "false") then
 		notifyBool = false
@@ -109,6 +113,11 @@ function SpaceEscortScreenplay:completeQuest(pPlayer, notifyClient)
 
 	-- Complete the Journal Quest
 	SpaceHelpers:completeSpaceQuest(pPlayer, self.questType, self.questName, notifyBool)
+	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+
+	if (questWasActive and self.completionSystemMessage ~= "") then
+		CreatureObject(pPlayer):sendSystemMessage(self.completionSystemMessage)
+	end
 
 	-- Remove the zone entry observer
 	dropObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer)
@@ -132,7 +141,7 @@ function SpaceEscortScreenplay:failQuest(pPlayer, notifyClient)
 		return
 	end
 
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName) and (notifyClient ~= "false" or not SpaceHelpers:isSpaceQuestComplete(pPlayer, self.questType, self.questName))) then
 		return
 	end
 
@@ -211,6 +220,9 @@ function SpaceEscortScreenplay:cleanUpQuestData(playerID)
 
 	-- Kill Count Tracking
 	deleteData(playerID .. ":" .. self.className .. ":" .. ":EscortKillCount:")
+
+	deleteData(playerID .. ":" .. self.className .. ":escortRouteIndex:")
+	deleteStringVectorSharedMemory(playerID .. ":" .. self.className .. ":escortRoute:")
 end
 
 function SpaceEscortScreenplay:setupEscort(pPlayer)
@@ -230,7 +242,12 @@ function SpaceEscortScreenplay:setupEscort(pPlayer)
 	-- Quest Progress update
 	SpaceHelpers:sendQuestProgess(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title")
 
-	local randomStart = getRandomNumber(1, #self.escortPoints)
+	local randomStart = 1
+
+	if (not self.orderedEscortRoute) then
+		randomStart = getRandomNumber(1, #self.escortPoints)
+	end
+
 	writeData(playerID .. self.className .. ":startPoint:", randomStart)
 
 	if (self.DEBUG_SPACE_ESCORT) then
@@ -409,45 +426,121 @@ function SpaceEscortScreenplay:assignEscortPoints(pShipAgent)
 	local startingPointName = readStringData(agentID .. ":" .. self.className .. ":startingPoint:")
 	deleteStringData(agentID .. ":" .. self.className .. ":startingPoint:")
 
-	-- Add escort points randomly
+	-- Build the route from the remaining escort points. Most legacy escort missions
+	-- randomize them; missions with a defined travel path can opt into sequential
+	-- order beginning with the point after the rendezvous.
 	local totalPoints = 0
-	local escortWaypoints = {}
 	local randomPoints = {}
 
-	for i = 1, #self.escortPoints do
-		table.insert(escortWaypoints, self.escortPoints[i])
-	end
+	if (self.orderedEscortRoute) then
+		local startingPointIndex = 0
 
-	if (self.DEBUG_SPACE_ESCORT) then
-		print(self.className .. ":assignEscortPoints -- Total Available escort Points: " .. #escortWaypoints)
-	end
-
-	while (#escortWaypoints > 0) do
-		local randomPoint = getRandomNumber(1, #escortWaypoints)
-		local pointName = escortWaypoints[randomPoint].patrolPointName
-
-		if (pointName ~= startingPointName) then
-			table.insert(randomPoints, pointName)
-
-			totalPoints = totalPoints + 1
-
-			if (self.DEBUG_SPACE_ESCORT) then
-				print(self.className .. ":assignEscortPoints -- Assining Point: " .. pointName)
+		for i = 1, #self.escortPoints do
+			if (self.escortPoints[i].patrolPointName == startingPointName) then
+				startingPointIndex = i
+				break
 			end
 		end
 
-		-- Drop the point from the table
-		table.remove(escortWaypoints, randomPoint)
+		if (startingPointIndex > 0) then
+			for offset = 1, #self.escortPoints - 1 do
+				local pointIndex = ((startingPointIndex + offset - 1) % #self.escortPoints) + 1
+				table.insert(randomPoints, self.escortPoints[pointIndex].patrolPointName)
+				totalPoints = totalPoints + 1
+			end
+		end
+	else
+		local escortWaypoints = {}
+
+		for i = 1, #self.escortPoints do
+			table.insert(escortWaypoints, self.escortPoints[i])
+		end
+
+		if (self.DEBUG_SPACE_ESCORT) then
+			print(self.className .. ":assignEscortPoints -- Total Available escort Points: " .. #escortWaypoints)
+		end
+
+		while (#escortWaypoints > 0) do
+			local randomPoint = getRandomNumber(1, #escortWaypoints)
+			local pointName = escortWaypoints[randomPoint].patrolPointName
+
+			if (pointName ~= startingPointName) then
+				table.insert(randomPoints, pointName)
+				totalPoints = totalPoints + 1
+			end
+
+			-- Drop the point from the table
+			table.remove(escortWaypoints, randomPoint)
+		end
 	end
 
 	-- Add the named escort points to the agent
 	ShipAiAgent(pShipAgent):assignFixedPatrolPointsTable(randomPoints)
+
+	local playerID = readData(agentID .. ":" .. self.className .. ":escorterID:")
+	writeStringVectorSharedMemory(playerID .. ":" .. self.className .. ":escortRoute:", randomPoints)
+	writeData(playerID .. ":" .. self.className .. ":escortRouteIndex:", 1)
+	self:updateEscortWaypoint(pShipAgent)
 
 	if (self.DEBUG_SPACE_ESCORT) then
 		print(self.className .. ":assignEscortPoints -- Total Points Assigned: " .. totalPoints)
 	end
 
 	writeData(agentID .. ":" .. self.className .. ":escortShipProgress:", totalPoints)
+end
+
+function SpaceEscortScreenplay:updateEscortWaypoint(pShipAgent)
+	if (pShipAgent == nil) then
+		return
+	end
+
+	local agentID = SceneObject(pShipAgent):getObjectID()
+	local playerID = readData(agentID .. ":" .. self.className .. ":escorterID:")
+	local pPlayer = getSceneObject(playerID)
+
+	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	local route = readStringVectorSharedMemory(playerID .. ":" .. self.className .. ":escortRoute:")
+	local routeIndex = readData(playerID .. ":" .. self.className .. ":escortRouteIndex:")
+
+	if (routeIndex < 1 or routeIndex > #route) then
+		SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+		return
+	end
+
+	local pointName = route[routeIndex]
+	local escortPoint = nil
+
+	for i = 1, #self.escortPoints do
+		if (self.escortPoints[i].patrolPointName == pointName) then
+			escortPoint = self.escortPoints[i]
+			break
+		end
+	end
+
+	if (escortPoint == nil) then
+		Logger:log(self.className .. ":updateEscortWaypoint -- Unable to resolve route point " .. pointName .. ".", LT_ERROR)
+		return
+	end
+
+	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+
+	local waypointID = PlayerObject(pGhost):addWaypoint(escortPoint.zoneName, "Escort Destination", "Escort Destination", escortPoint.x, escortPoint.z, escortPoint.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
+	local pWaypoint = getSceneObject(waypointID)
+
+	if (pWaypoint ~= nil) then
+		WaypointObject(pWaypoint):setQuestDetails("@spacequest/" .. self.questType .. "/" .. self.questName .. ":title_d")
+	end
+
+	setQuestStatus(playerID .. ":" .. self.className .. ":waypointID", waypointID)
 end
 
 function SpaceEscortScreenplay:checkEscort(pShipAgent)
@@ -742,44 +835,51 @@ function SpaceEscortScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		return 1
 	end
 
+	-- Hyperspace can notify before the creature's final zone state is settled.
+	-- Defer the check and read the actual current zone after transfer.
+	createEvent(5000, self.className, "checkEnteredZone", pPlayer, "")
+
+	return 0
+end
+
+function SpaceEscortScreenplay:checkEnteredZone(pPlayer)
+	if (pPlayer == nil or not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
-		return 0
+		return
 	end
 
-	local pRootParent = SceneObject(pPlayer):getRootParent()
-
-	if (pRootParent ~= nil and SceneObject(pRootParent):getObjectName() == "player_sorosuub_space_yacht") then
-		return 0
+	if (SpaceHelpers:isInYacht(pPlayer)) then
+		return
 	end
 
-	local playerID = SceneObject(pPlayer):getObjectID()
+	local zoneNameHash = getHashCode(SceneObject(pPlayer):getZoneName())
 	local spaceQuestHash = getHashCode(self.questZone)
 
 	if (self.DEBUG_SPACE_ESCORT) then
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
 	end
 
-	-- Player is in the correct zone
-	if (zoneNameHash == spaceQuestHash and not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
-		-- Complete the quest task 0
-		SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
+	-- Player is in the correct zone. Always resume setup because a chained quest may
+	-- retain its completed location task without having created its rendezvous waypoint.
+	if (zoneNameHash == spaceQuestHash) then
+		if (not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
+			-- Complete the quest task 0
+			SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
 
-		-- Activate quest task 1
-		SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+			-- Activate quest task 1
+			SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+		end
 
 		-- Setup the escort for the player
 		createEvent(4000, self.className, "setupEscort", pPlayer, "")
-
-		return 0
 	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
-
-		return 1
 	end
-
-	return 0
 end
 
 function SpaceEscortScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
@@ -901,6 +1001,10 @@ function SpaceEscortScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
 
 		-- Write the escort ships progress
 		writeData(shipAgentID .. ":" .. self.className .. ":escortShipProgress:", shipProgress)
+
+		local routeIndex = readData(playerID .. ":" .. self.className .. ":escortRouteIndex:")
+		writeData(playerID .. ":" .. self.className .. ":escortRouteIndex:", routeIndex + 1)
+		self:updateEscortWaypoint(pShip)
 
 		return 0
 	end

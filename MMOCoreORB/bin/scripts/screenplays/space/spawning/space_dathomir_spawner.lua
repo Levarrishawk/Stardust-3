@@ -57,9 +57,6 @@ SpaceDathomirSpawner = SpaceSpawnerScreenPlay:new {
 		{spawnName = "imperial_generator_lookout_4", spawnType = SHIP_SPAWN_SINGLE, x = 6234, z = -1952, y = -7218, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 70, maxPatrol = 340, totalSpawns = 6,
 			shipSpawns = {"imp_tie_bomber_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4"}
 		},
-		{spawnName = "naboo_imperial_tier4_inspect1_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 7606, z = 4673, y = -1681, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 50, maxPatrol = 140, totalSpawns = 1,
-			shipSpawns = {"crystal_smuggler_yt1300_tier4"}
-		},
 		{spawnName = "imperial_secret_station_guard_2", spawnType = SHIP_SPAWN_SQUADRON, x = 6338, z = 6281, y = -6527, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 100, minPatrol = 100, maxPatrol = 300, totalSpawns = 1,
 			shipSpawns = {"squad_tie_mix_ace"}
 		},
@@ -79,11 +76,11 @@ SpaceDathomirSpawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "tatooine_rebel_tier3_2_suspect_1", spawnType = SHIP_SPAWN_SINGLE, x = 5585, z = 4809, y = -2403, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 30, maxRespawn = 120, minSpawnDistance = 1, maxSpawnDistance = 100, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"tatooine_rebel_tier3_2_suspect_1_00", "tatooine_rebel_tier3_2_suspect_1_01", "tatooine_rebel_tier3_2_suspect_1_02", "tatooine_rebel_tier3_2_suspect_1_03"},
-			shipSpawns = {"tatooine_tier3_2_inspect_awing", "tatooine_tier3_2_inspect_bwing", "tatooine_tier3_2_inspect_xwing", "tatooine_tier3_2_inspect_ywing", "reb_awing_tier4", "reb_bwing_tier4"}
+			shipSpawns = {"tatooine_tier3_2_inspect_awing", "tatooine_tier3_2_inspect_ywing", "tatooine_tier3_2_inspect_xwing", "tatooine_tier3_2_inspect_ywing", "reb_awing_tier4", "reb_ywing_tier4"}
 		},
 		{spawnName = "tatooine_rebel_tier3_2_suspect_2", spawnType = SHIP_SPAWN_SINGLE, x = 4719, z = 5053, y = -3111, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 30, maxRespawn = 120, minSpawnDistance = 1, maxSpawnDistance = 100, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"tatooine_rebel_tier3_2_suspect_2_00", "tatooine_rebel_tier3_2_suspect_2_01", "tatooine_rebel_tier3_2_suspect_2_02", "tatooine_rebel_tier3_2_suspect_2_03", "tatooine_rebel_tier3_2_suspect_2_04", "tatooine_rebel_tier3_2_suspect_2_05"},
-			shipSpawns = {"reb_awing_tier4", "reb_bwing_tier4", "tatooine_tier3_2_inspect_awing", "tatooine_tier3_2_inspect_bwing", "tatooine_tier3_2_inspect_xwing", "tatooine_tier3_2_inspect_ywing", "tatooine_tier3_2_inspect_ywing"}
+			shipSpawns = {"reb_awing_tier4", "reb_ywing_tier4", "tatooine_tier3_2_inspect_awing", "tatooine_tier3_2_inspect_ywing", "tatooine_tier3_2_inspect_xwing", "tatooine_tier3_2_inspect_ywing", "tatooine_tier3_2_inspect_ywing"}
 		},
 		{spawnName = "naboo_imperial_tier3_inspect3escort_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 2021, z = 4211, y = -3441, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 300, totalSpawns = 5,
 			shipSpawns = {"xwing_ace"}
@@ -158,14 +155,14 @@ SpaceDathomirSpawner = SpaceSpawnerScreenPlay:new {
 			shipSpawns = {"freighterheavy", "freighterlight_mining", "freighterheavy_tier3_story", "freighterheavy_tier3_story"}
 		},
 		{spawnName = "rebel_defenders_2", spawnType = SHIP_SPAWN_SINGLE, x = 5131, z = 242, y = -512, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 5, maxSpawnDistance = 10, minPatrol = 90, maxPatrol = 380, totalSpawns = 6,
-			shipSpawns = {"reb_bwing_tier4", "reb_awing_tier4"}
+			shipSpawns = {"reb_ywing_tier4", "reb_awing_tier4"}
 		},
 		{spawnName = "rebel_patrol_1", spawnType = SHIP_SPAWN_SINGLE, x = 7077, z = -1467, y = 1776, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 300, maxRespawn = 420, minSpawnDistance = 5, maxSpawnDistance = 10, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_patrol_1_00", "rebel_patrol_1_01", "rebel_patrol_1_02", "rebel_patrol_1_03", "rebel_patrol_1_04", "rebel_patrol_1_05", "rebel_patrol_1_06", "rebel_patrol_1_07", "rebel_patrol_1_08", "rebel_patrol_1_09"},
-			shipSpawns = {"reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_bwing_tier4", "reb_bwing_tier4", "reb_bwing_tier4", "reb_bwing_tier4", "reb_xwing_tier4", "reb_ykl37r_tier4", "reb_ywing_tier4"}
+			shipSpawns = {"reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_ywing_tier4", "reb_xwing_tier4", "reb_ykl37r_tier4", "reb_ywing_tier4"}
 		},
 		{spawnName = "rebel_defenders_1", spawnType = SHIP_SPAWN_SINGLE, x = 7438, z = -450, y = 1370, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 5, maxSpawnDistance = 10, minPatrol = 90, maxPatrol = 380, totalSpawns = 6,
-			shipSpawns = {"reb_bwing_tier4", "reb_awing_tier4"}
+			shipSpawns = {"reb_ywing_tier4", "reb_awing_tier4"}
 		},
 		{spawnName = "nebula_assassin_guardians_2", spawnType = SHIP_SPAWN_SINGLE, x = -1969, z = 2659, y = -7044, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 300, maxRespawn = 420, minSpawnDistance = 5, maxSpawnDistance = 10, minPatrol = 90, maxPatrol = 300, totalSpawns = 3,
 			shipSpawns = {"nebula_assassin_bomber_tier4", "nebula_assassin_saboteur_tier5"}

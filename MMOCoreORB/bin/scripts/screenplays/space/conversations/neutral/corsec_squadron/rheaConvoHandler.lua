@@ -38,6 +38,24 @@ function rheaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_3.type, CorsecSquadronScreenplay.QUEST_STRING_3.name) and SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_3_SIDE.type, CorsecSquadronScreenplay.QUEST_STRING_3_SIDE.name)
 	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_4.type, CorsecSquadronScreenplay.QUEST_STRING_4.name)
 
+	-- Some valid recruitment responses previously reached the first assignment
+	-- without granting the neutral novice skill or recording CorSec membership.
+	-- Repair only characters whose CorSec mission history proves enrollment.
+	local hasCorsecMissionProgress = questOneStarted or questOneComplete or questTwoStarted or questTwoComplete or questThreeStarted or questThreeComplete or questFourStarted or questFourComplete
+
+	if (hasCorsecMissionProgress and not isNeutralPilot) then
+		SpaceHelpers:grantNovicePilot(pPlayer, "neutralPilot")
+		SpaceHelpers:setSquadronType(pPlayer, CORSEC_SQUADRON)
+
+		local pPlayerGhost = CreatureObject(pPlayer):getPlayerObject()
+
+		if (pPlayerGhost ~= nil and LuaPlayerObject(pPlayerGhost):getPilotTier() < 1) then
+			LuaPlayerObject(pPlayerGhost):incrementPilotTier()
+		end
+
+		isNeutralPilot = true
+	end
+
 	local destroyDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_1.type, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_1.name)
 	local escortDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_2.type, CorsecSquadronScreenplay.QUEST_STRING_DUTY_4_2.name)
 
@@ -230,6 +248,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 1) and ghost:getPilotTier() == 1) then
 			-- Increment pilot to Tier 2!
 			ghost:incrementPilotTier()
+			SpaceHelpers:addCorsecRikkhWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -280,7 +299,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 	elseif (screenID == "positive_reject") then
 		CreatureObject(pPlayer):doAnimation("nod_head_multiple")
 		CreatureObject(pNpc):doAnimation("shrug_shoulders")
-	elseif (screenID == "maybe_great") then
+	elseif (screenID == "maybe_great" or screenID == "i_guess_so") then
 		CreatureObject(pPlayer):doAnimation("rub_chin_thoughtful")
 		CreatureObject(pNpc):doAnimation("nod_head_once")
 
@@ -337,6 +356,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 
 	-- Missions
 	elseif (screenID == "yes_im_ready") then
+		patrol_corellia_privateer_1:resetQuest(pPlayer)
 		patrol_corellia_privateer_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "i_was_attacked") then
 		CreatureObject(pPlayer):doAnimation("pound_fist_palm")
@@ -345,6 +365,7 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		CreatureObject(pPlayer):doAnimation("nod_head_multiple")
 		CreatureObject(pNpc):doAnimation("rub_chin_thoughtful")
 	elseif (screenID == "train_me2") then
+		destroy_corellia_privateer_2:resetQuest(pPlayer)
 		destroy_corellia_privateer_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "whats_next") then
 		CreatureObject(pPlayer):doAnimation("shrug_hands")
@@ -355,11 +376,13 @@ function rheaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		CreatureObject(pNpc):doAnimation("shake_head_no")
 		CreatureObject(pPlayer):doAnimation("belly_laugh")
 
+		patrol_corellia_privateer_3:resetQuest(pPlayer)
 		patrol_corellia_privateer_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me4") then
 		CreatureObject(pNpc):doAnimation("nod_head_once")
 		CreatureObject(pPlayer):doAnimation("belly_laugh")
 
+		assassinate_corellia_privateer_tier1_4a:resetQuest(pPlayer)
 		assassinate_corellia_privateer_tier1_4a:startQuest(pPlayer, pNpc)
 	end
 

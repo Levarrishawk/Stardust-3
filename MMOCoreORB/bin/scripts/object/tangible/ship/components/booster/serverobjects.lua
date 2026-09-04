@@ -182,3 +182,5 @@ includeFile("tangible/ship/components/booster/bst_surronian_nomad_x8.lua")
 includeFile("tangible/ship/components/booster/bst_tiefighter_basic.lua")
 includeFile("tangible/ship/components/booster/bst_z95_basic.lua")
 includeFile("tangible/ship/components/booster/xwing_booster_test.lua")
+includeFile("tangible/ship/components/booster/bst_sap_imperial_1_dev.lua")
+

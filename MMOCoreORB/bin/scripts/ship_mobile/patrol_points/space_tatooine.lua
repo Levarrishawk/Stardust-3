@@ -494,6 +494,47 @@ space_tatooine = SpacePatrolPointTable:new {
 	{patrolPointName = "trando_reinforcement_1", x = 7100, z = 850, y = 6300},	-- src: screenplays/space/squadrons/KashyyykSlaverScreenplay.lua:assassinate_ep3_slaver_trando_reinforcement_intercept:targetPatrols
 	{patrolPointName = "trando_reinforcement_2", x = 6200, z = 700, y = 5400},	-- src: screenplays/space/squadrons/KashyyykSlaverScreenplay.lua:assassinate_ep3_slaver_trando_reinforcement_intercept:targetPatrols
 	{patrolPointName = "trando_reinforcement_3", x = 5300, z = 500, y = 4600},	-- src: screenplays/space/squadrons/KashyyykSlaverScreenplay.lua:assassinate_ep3_slaver_trando_reinforcement_intercept:targetPatrols
+	-- Stardust-3: squadron-isolated patrol point registrations.
+	{patrolPointName = "crimson_phoenix_corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:193
+	{patrolPointName = "crimson_phoenix_imperial_patrol_1", x = 590, z = -3500, y = -6000},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:82
+	{patrolPointName = "crimson_phoenix_imperial_patrol_2", x = -2500, z = 4000, y = 3500},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:83
+	{patrolPointName = "crimson_phoenix_imperial_patrol_3", x = -3800, z = 2500, y = 5000},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:84
+	{patrolPointName = "crimson_phoenix_military_escort_2", x = 2915, z = 3828, y = 2887},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:192
+	{patrolPointName = "crimson_phoenix_naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:190
+	{patrolPointName = "crimson_phoenix_rebel_escort_1", x = 7188, z = 1899, y = -2831},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:146, CrimsonPhoenixSquadronScreenplay.lua:246
+	{patrolPointName = "crimson_phoenix_rebel_escort_2", x = 6446, z = 2694, y = -5694},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:147
+	{patrolPointName = "crimson_phoenix_rebel_escort_3", x = 4453, z = 3127, y = -7150},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:148
+	{patrolPointName = "crimson_phoenix_rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:149, CrimsonPhoenixSquadronScreenplay.lua:247
+	{patrolPointName = "crimson_phoenix_rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:248, CrimsonPhoenixSquadronScreenplay.lua:34
+	{patrolPointName = "crimson_phoenix_rebel_patrol_2", x = 6031, z = -4540, y = -1962},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:35
+	{patrolPointName = "crimson_phoenix_rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:249, CrimsonPhoenixSquadronScreenplay.lua:36
+	{patrolPointName = "crimson_phoenix_rebel_security_patrol_1", x = 5024, z = -3710, y = -1723},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:119
+	{patrolPointName = "crimson_phoenix_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:120, CrimsonPhoenixSquadronScreenplay.lua:189
+	{patrolPointName = "crimson_phoenix_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:121
+	{patrolPointName = "crimson_phoenix_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:122
+	{patrolPointName = "crimson_phoenix_trade_escort_4", x = 895, z = 210, y = 695},	-- squadron-isolated: CrimsonPhoenixSquadronScreenplay.lua:191
+	{patrolPointName = "smuggler_corellia_imperial_tier3_leg_1_recovery_recover_1", x = 752, z = -2678, y = -1479},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:193
+	{patrolPointName = "smuggler_imperial_patrol_1", x = 590, z = -3500, y = -6000},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:82
+	{patrolPointName = "smuggler_imperial_patrol_2", x = -2500, z = 4000, y = 3500},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:83
+	{patrolPointName = "smuggler_imperial_patrol_3", x = -3800, z = 2500, y = 5000},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:84
+	{patrolPointName = "smuggler_military_escort_2", x = 2915, z = 3828, y = 2887},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:192
+	{patrolPointName = "smuggler_naboo_privateer_tier3_leg_2_rescue_egress_4", x = 1156, z = -7106, y = -2482},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:190
+	{patrolPointName = "smuggler_rebel_escort_1", x = 7188, z = 1899, y = -2831},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:146, SmugglerSquadronScreenplay.lua:247, SmugglerSquadronScreenplay.lua:384
+	{patrolPointName = "smuggler_rebel_escort_2", x = 6446, z = 2694, y = -5694},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:147, SmugglerSquadronScreenplay.lua:385
+	{patrolPointName = "smuggler_rebel_escort_3", x = 4453, z = 3127, y = -7150},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:148, SmugglerSquadronScreenplay.lua:386
+	{patrolPointName = "smuggler_rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:149, SmugglerSquadronScreenplay.lua:248, SmugglerSquadronScreenplay.lua:387
+	{patrolPointName = "smuggler_rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:249, SmugglerSquadronScreenplay.lua:34
+	{patrolPointName = "smuggler_rebel_patrol_2", x = 6031, z = -4540, y = -1962},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:35
+	{patrolPointName = "smuggler_rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:250, SmugglerSquadronScreenplay.lua:36
+	{patrolPointName = "smuggler_rebel_security_patrol_1", x = 5024, z = -3710, y = -1723},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:119
+	{patrolPointName = "smuggler_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:120, SmugglerSquadronScreenplay.lua:189
+	{patrolPointName = "smuggler_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:121
+	{patrolPointName = "smuggler_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:122
+	{patrolPointName = "smuggler_trade_escort_4", x = 895, z = 210, y = 695},	-- squadron-isolated: SmugglerSquadronScreenplay.lua:191
+	{patrolPointName = "storm_rebel_escort_1", x = 7188, z = 1899, y = -2831},	-- squadron-isolated: StormSquadronScreenplay.lua:245
+	{patrolPointName = "storm_rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- squadron-isolated: StormSquadronScreenplay.lua:246
+	{patrolPointName = "storm_rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- squadron-isolated: StormSquadronScreenplay.lua:247
+	{patrolPointName = "storm_rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- squadron-isolated: StormSquadronScreenplay.lua:248
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_tatooine, "space_tatooine")

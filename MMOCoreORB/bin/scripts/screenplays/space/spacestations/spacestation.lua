@@ -26,6 +26,7 @@ SpaceStationScreenPlay = ScreenPlay:new {
 		kaadara = {"naboo", 5280, -192, 6688},
 		keren = {"naboo", 1370, 13, 2750},
 		moenia = {"naboo", 4730, 4.2, -4678},
+		emperors_retreat = {"naboo", 2442.8, 292, -3916.8},
 		narmle = {"rori", -5372, 80, -2191},
 		restuss = {"rori", 5341, 80, 5735},
 		dearic = {"talus", 265, 6, -2950},

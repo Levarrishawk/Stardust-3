@@ -829,14 +829,14 @@ v3_fx_convo_tier3_mission1_brief = ConvoScreen:new {
 	leftDialog = "@conversation/naboo_rebel_tier3:s_189c01a2",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_rebel_tier3:s_49776d50", "tier3_accept_mission1"},
+		{"@conversation/naboo_rebel_tier3:s_d55f2579", "tier3_accept_mission1"},
 	}
 }
 v3_fx_convo:addScreen(v3_fx_convo_tier3_mission1_brief)
 
 v3_fx_convo_tier3_accept_mission1 = ConvoScreen:new {
 	id = "tier3_accept_mission1",
-	leftDialog = "@conversation/naboo_rebel_tier3:s_d55f2579",
+	leftDialog = "@conversation/naboo_rebel_tier3:s_49776d50",
 	stopConversation = "true",
 	options = {}
 }
@@ -1000,7 +1000,7 @@ v3_fx_convo:addScreen(v3_fx_convo_tier3_train_droid)
 -- All tier 3 skills earned, tier incremented
 v3_fx_convo_tier3_completed = ConvoScreen:new {
 	id = "tier3_completed",
-	leftDialog = "@conversation/naboo_rebel_tier3:s_cbc2d68c",
+	leftDialog = "Your work with me is complete. Report to Brother Extok Evin in Dearic on Talus for your next assignment. I have uploaded his location to your datapad.",
 	stopConversation = "true",
 	options = {}
 }

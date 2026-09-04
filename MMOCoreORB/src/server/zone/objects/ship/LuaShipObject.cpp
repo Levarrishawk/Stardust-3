@@ -5,6 +5,7 @@
 #include "server/zone/objects/intangible/ShipControlDevice.h"
 #include "server/zone/objects/intangible/tasks/StoreShipTask.h"
 #include "server/zone/objects/ship/events/DestroyShipTask.h"
+#include "server/zone/objects/ship/events/HyperspaceToLocationTask.h"
 
 const char LuaShipObject::className[] = "LuaShipObject";
 
@@ -28,6 +29,7 @@ Luna<LuaShipObject>::RegType LuaShipObject::Register[] = {
 	{ "isLowerTurretFunctional", &LuaShipObject::isLowerTurretFunctional },
 	{ "getShipName", &LuaShipObject::getShipName },
 	{ "setHyperspacing", &LuaShipObject::setHyperspacing },
+	{ "startHyperspace", &LuaShipObject::startHyperspace },
 	{ "getShipFactionString", &LuaShipObject::getShipFactionString },
 	{ "setShipFactionString", &LuaShipObject::setShipFactionString },
 	{ "getShipFactionHash", &LuaShipObject::getShipFactionHash },
@@ -350,6 +352,48 @@ int LuaShipObject::setHyperspacing(lua_State* L) {
 	realObject->setHyperspacing(val);
 
 	return 0;
+}
+
+int LuaShipObject::startHyperspace(lua_State* L) {
+	int numberOfArguments = lua_gettop(L) - 1;
+
+	if (numberOfArguments != 5) {
+		realObject->error() << "Improper number of arguments in LuaShipObject::startHyperspace.";
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	float y = lua_tonumber(L, -1);
+	float z = lua_tonumber(L, -2);
+	float x = lua_tonumber(L, -3);
+	String zoneName = lua_tostring(L, -4);
+	CreatureObject* player = (CreatureObject*)lua_touserdata(L, -5);
+
+	if (player == nullptr || zoneName.isEmpty() || realObject->isHyperspacing() || !realObject->isShipLaunched()) {
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	Locker lock(realObject);
+
+	if (realObject->getPilot() != player) {
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	realObject->setHyperspacing(true);
+
+	auto task = new HyperspaceToLocationTask(player, realObject, zoneName, Vector3(x, y, z));
+
+	if (task != nullptr) {
+		task->schedule(0);
+		lua_pushboolean(L, true);
+		return 1;
+	}
+
+	realObject->setHyperspacing(false);
+	lua_pushboolean(L, false);
+	return 1;
 }
 
 int LuaShipObject::getShipFactionString(lua_State* L) {

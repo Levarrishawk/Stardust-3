@@ -16,7 +16,7 @@ droid_fighter = ShipAgent:new {
 
 	spaceFaction = "pirate",
 	alliedFactions = {"pirate"},
-	enemyFactions = {"rsf"},
+	enemyFactions = {"imperial", "rebel", "civilian", "merchant", "hutt", "rsf"},
 	appearance = "generic_pirate",
 
 	pvpBitmask = ATTACKABLE,

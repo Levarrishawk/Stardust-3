@@ -79,6 +79,8 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.type, HavocSquadronScreenplay.TIER2_QUEST_STRING_DUTY_3.name)
 
 	local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 2)
+	local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 2)
+	local requiredTier2Skills = questFourComplete and 4 or questThreeComplete and 3 or questTwoComplete and 2 or questOneComplete and 1 or 0
 
 	-- viopaSmuggler flag states:
 	-- 0/nil = Not sent to Vrak yet
@@ -105,12 +107,13 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("has_mission")
 
 	-- Check if players have all the tier2 skill boxes and finished the last mission, then send them to next trainer
-	elseif (questFourComplete and completedTier2) then
+	elseif (questFourComplete and completedTier2 and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
 		-- Player has all the skill boxes, they should be tier 3. Increment if not proper
 		if (ghost:getPilotTier() <= 2) then
 			ghost:incrementPilotTier()
 		end
 
+		SpaceHelpers:addAqzowWaypoint(pPlayer)
 		return convoTemplate:getScreen("completed_viopa")
 
 	-- Reward Checks
@@ -127,9 +130,11 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	elseif (questOneComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 		return convoTemplate:getScreen("excellent_work")
 
-	-- Pilot is able to train
-	elseif (not completedTier2 and SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
-		return convoTemplate:getScreen("more_training")
+	elseif (tier2SkillCount < requiredTier2Skills) then
+		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 2)) then
+			return convoTemplate:getScreen("more_training")
+		end
+		return convoTemplate:getScreen("duty_missions")
 
 	elseif (not questFourComplete) then
 		-- Player has completed and been rewarded for mission 3
@@ -173,7 +178,7 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				end
 			end
 		-- Player is ready for first mission
-		elseif (not questOneComplete and SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 2)) then
+		elseif (not questOneComplete) then
 			if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted") == "1") then
 				return convoTemplate:getScreen("failed_mission1")
 			else
@@ -357,26 +362,30 @@ function viopaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 	-- Give Missions (Mission 1 - first time accept)
 	elseif (screenID == "accept_mission1_easy" or screenID == "accept_mission1_consider") then
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_viopa_rebel_1}, {{type="inspect", name="viopa_rebel_1"}})
 		inspect_viopa_rebel_1:startQuest(pPlayer, pNpc)
 
 	-- Mission 1 - retry accept
 	elseif (screenID == "retry_mission1_accept" or screenID == "retry_mission1_convinced") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_viopa_rebel_1}, {{type="inspect", name="viopa_rebel_1"}})
 		inspect_viopa_rebel_1:startQuest(pPlayer, pNpc)
 
 	elseif (screenID == "accept_mission3") then
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_viopa_rebel_3}, {{type="recovery", name="viopa_rebel_3"}})
 		recovery_viopa_rebel_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_mission4_best" or screenID == "accept_mission4_luck") then
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
-
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_viopa_rebel_4}, {{type="assassinate", name="viopa_rebel_4"}})
 		assassinate_viopa_rebel_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_mission2_eager" or screenID == "retry_mission2_reluctant") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_viopa_rebel_2}, {{type="escort", name="viopa_rebel_2"}})
 		escort_viopa_rebel_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_mission3") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_viopa_rebel_3}, {{type="recovery", name="viopa_rebel_3"}})
 		recovery_viopa_rebel_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_mission4") then
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_viopa_rebel_4}, {{type="assassinate", name="viopa_rebel_4"}})
 		assassinate_viopa_rebel_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "goodbye") then
 		CreatureObject(pNpc):doAnimation("goodbye")
@@ -396,6 +405,7 @@ function viopaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 	elseif (screenID == "mission2_granted_sweetie" or screenID == "mission2_granted_goodluck") then
 		-- Player accepted Mission 2 (escort hacker to Dantooine)
 		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_viopa_rebel_2}, {{type="escort", name="viopa_rebel_2"}})
 		escort_viopa_rebel_2:startQuest(pPlayer, pNpc)
 
 	elseif (screenID == "accept_confront_vrak" or screenID == "accept_confront_vrak_flayed") then

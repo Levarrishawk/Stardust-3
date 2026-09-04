@@ -135,6 +135,7 @@ includeFile("conversations/space/rebel/crimson_phoenix_squadron/da_la_socuna_con
 
 -- Havoc Squadron (Arkon)
 includeFile("conversations/space/rebel/havoc_squadron/kreezo_convo.lua")
+includeFile("conversations/space/rebel/willham_burke_convo.lua")
 includeFile("conversations/space/rebel/havoc_squadron/viopa_convo.lua")
 includeFile("conversations/space/rebel/havoc_squadron/vrak_convo.lua")
 includeFile("conversations/space/rebel/havoc_squadron/aqzow_convo.lua")
@@ -148,11 +149,14 @@ includeFile("conversations/space/rebel/vortex_squadron/v3_fx_convo.lua")
 
 -- Imperial Pilot
 
+includeFile("conversations/space/imperial/nial_declann_convo.lua")
+
 -- Black Epsilon Squadron
 includeFile("conversations/space/imperial/black_epsilon_squadron/hakassha_sireen_convo.lua")
 
 -- Imperial Inquisition Squadron
 includeFile("conversations/space/imperial/inquisition_squadron/barn_sinkko_convo.lua")
+includeFile("conversations/space/imperial/inquisition_squadron/barlow_inquisition_convo.lua")
 
 -- Storm Squadron
 includeFile("conversations/space/imperial/storm_squadron/akal_colzet_convo.lua")

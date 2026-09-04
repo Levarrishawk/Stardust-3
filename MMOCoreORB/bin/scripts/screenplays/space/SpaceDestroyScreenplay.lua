@@ -57,6 +57,13 @@ function SpaceDestroyScreenplay:startQuest(pPlayer, pNpc)
 	if (not hasObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer)) then
 		createObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer, 1)
 	end
+
+	-- Initialize immediately when the quest is accepted in its destination zone.
+	local playerZoneHash = getHashCode(SceneObject(pPlayer):getZoneName())
+
+	if (playerZoneHash == getHashCode(self.questZone) and not SpaceHelpers:isInYacht(pPlayer)) then
+		self:enteredZone(pPlayer, nil, playerZoneHash)
+	end
 end
 
 function SpaceDestroyScreenplay:completeQuest(pPlayer, notifyClient)
@@ -81,6 +88,9 @@ function SpaceDestroyScreenplay:completeQuest(pPlayer, notifyClient)
 	-- Remove the zone entry observer
 	dropObserver(ZONESWITCHED, self.className, "enteredZone", pPlayer)
 
+	-- Remove the ship destruction observer
+	dropObserver(DESTROYEDSHIP, self.className, "notifyDestroyedShip", pPlayer)
+
 	if (self.sideQuest and (self.sideQuestSplitType == self.SIDE_QUEST_SPLIT_TYPES.COMPLETION or self.sideQuestSplitType == self.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL)) then
 		local alertMessage = "@spacequest/" .. self.questType .. "/" .. self.questName .. ":split_quest_alert"
 
@@ -98,7 +108,7 @@ function SpaceDestroyScreenplay:failQuest(pPlayer, notifyClient)
 		return
 	end
 
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName) and (notifyClient ~= "false" or not SpaceHelpers:isSpaceQuestComplete(pPlayer, self.questType, self.questName))) then
 		return
 	end
 
@@ -197,13 +207,23 @@ function SpaceDestroyScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 	local spaceQuestHash = getHashCode(self.questZone)
+	local entryTaskComplete = SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)
+	local destroyTaskComplete = SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 1)
 
 	if (self.DEBUG_SPACE_DESTROY) then
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
 	end
 
-	-- Player is in the correct zone
-	if (zoneNameHash == spaceQuestHash and not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
+	-- Reattach the runtime destruction observer after a server restart or relog.
+	-- Quest task state persists, but screenplay observers do not.
+	if (zoneNameHash == spaceQuestHash and entryTaskComplete and not destroyTaskComplete) then
+		if (not hasObserver(DESTROYEDSHIP, self.className, "notifyDestroyedShip", pPlayer)) then
+			createObserver(DESTROYEDSHIP, self.className, "notifyDestroyedShip", pPlayer, true)
+		end
+	end
+
+	-- Player is in the correct zone for the first time
+	if (zoneNameHash == spaceQuestHash and not entryTaskComplete) then
 		-- Complete the quest task 0
 		SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
 
@@ -250,7 +270,7 @@ function SpaceDestroyScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 
 		-- Player effect for player
 		CreatureObject(pPlayer):playEffect("clienteffect/ui_quest_waypoint_target.cef", "")
-	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0) and SpaceHelpers:isSpaceQuestTaskActive(pPlayer, self.questType, self.questName, 1)) then
+	elseif (zoneNameHash ~= spaceQuestHash and entryTaskComplete and SpaceHelpers:isSpaceQuestTaskActive(pPlayer, self.questType, self.questName, 1)) then
 		-- Fail the quest for the player
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
 	end
@@ -324,7 +344,7 @@ function SpaceDestroyScreenplay:notifyDestroyedShip(pPlayer, pShipAgent)
 	end
 
 	-- Kill counter sent to player
-	SpaceHelpers:sendQuestUpdate(pPlayer, self.killsRequired - killCount .. " targets remaining to be destroyed.") --  "destroy_remainder_update"
+	SpaceHelpers:sendQuestUpdate(pPlayer, "Mission Target Killed: " .. (self.killsRequired - killCount) .. " Remaining")
 
 	writeData(playerID .. ":" .. self.className .. ":killCount", killCount)
 

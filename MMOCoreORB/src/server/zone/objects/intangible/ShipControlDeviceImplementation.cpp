@@ -42,6 +42,11 @@ ShipObject* ShipControlDeviceImplementation::launchShip(CreatureObject* player, 
 
 	Locker sLock(ship, _this.getReferenceUnsafeStaticCast());
 
+	// A ship stored while its hyperspace route was still calculating may retain
+	// the transient flag from an older server version. Never carry that state into
+	// a new launch.
+	ship->setHyperspacing(false);
+
 	ship->initializePosition(position.getX(), position.getZ(), position.getY());
 	ship->setDirection(1,0,0,0);
 	ship->setMovementCounter(0);

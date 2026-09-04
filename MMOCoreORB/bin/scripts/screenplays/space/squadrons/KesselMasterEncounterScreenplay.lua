@@ -57,16 +57,15 @@ KESSEL_TARGET_ZONE = "space_light1"
 KESSEL_REBEL_CORVETTE_SPAWN = { x = -7260, z = 4873, y = 6341 }   -- Rebel Corellian Corvette
 KESSEL_IMPERIAL_CORVETTE_SPAWN = { x = -6231, z = -259, y = -6059 } -- Imperial Star Ravager
 
--- Authentic Kessel corvette spawn timing (Biophilia Pre-CU Scrapbook v5.1):
+-- Authentic Kessel corvette dwell timing (Biophilia Pre-CU Scrapbook v5.1):
 --   MonsofoLexius "Corvette Master Mission Spawn Information" (data/20070127185616)
 --   Zina "Corvette Master Level Mission" FAQ v3.0b           (data/20070127191311)
--- The corvette stays in-system ~45 min then hyperspaces out; full per-faction cycle ~2h;
--- the two faction corvettes spawn ~1h apart; disabled gunboat escorts self-destruct ~1-2 min.
+-- The mission-owned corvette stays in-system ~45 min and disabled gunboat escorts
+-- self-destruct after ~1-2 min. Live's alternating global spawn schedule is not
+-- applied here because each mission creates a private target for its player.
 KESSEL_CORVETTE_DWELL_MS      = 2700 * 1000  -- ~45 min in-system, then hyperspace out (Zina)
-KESSEL_CORVETTE_RESPAWN_MS    = 4500 * 1000  -- ~1h15m after exit until next spawn      (Zina)
-KESSEL_CORVETTE_CYCLE_MS      = 7200 * 1000  -- ~2h full per-faction spawn cycle         (both guides)
-KESSEL_CORVETTE_ALTERNATE_MS  = 3600 * 1000  -- two vettes spawn ~1h apart               (both guides)
 KESSEL_ESCORT_SELFDESTRUCT_MS =   90 * 1000  -- disabled gunboat self-destructs ~1-2 min (MonsofoLexius)
+KESSEL_CORVETTE_TRIGGER_RANGE = 1500          -- spawn as the pilot approaches the rendezvous
 
 --[[
 	KesselCorvetteEncounter -- Stage 2 base.
@@ -101,16 +100,13 @@ KesselCorvetteEncounter = SpaceDestroyScreenplay:new {
 	escortAgents = {}, -- 2 tier-5 gunboats
 	spawnAnchor = { x = 0, z = 0, y = 0 },
 
-	-- Alternating-hour spawn window (the two faction corvettes spawn ~1h apart):
-	-- 0 = even KESSEL_CORVETTE_ALTERNATE_MS window, 1 = odd window (set per subclass).
-	spawnWindowParity = 0,
-
 	DEBUG_KESSEL_ENCOUNTER = false,
 }
 
 registerScreenPlay("KesselCorvetteEncounter", false)
 
--- Override zone entry: run the base destroy bookkeeping, then spawn the encounter.
+-- Override zone entry: run the base destroy bookkeeping, then guide the player to
+-- the documented exit point and watch for their approach.
 function KesselCorvetteEncounter:enteredZone(pPlayer, nill, zoneNameHash)
 	if (pPlayer == nil) then
 		return 0
@@ -125,28 +121,19 @@ function KesselCorvetteEncounter:enteredZone(pPlayer, nill, zoneNameHash)
 
 	local spaceQuestHash = getHashCode(self.questZone)
 
-	-- Only attempt a spawn when the player enters the quest (Kessel) zone; the Live
-	-- schedule gate decides whether the corvette can actually appear right now.
+	-- Begin the rendezvous check only in Kessel. The target is deliberately not
+	-- spawned on zone entry; it appears as the player approaches the waypoint.
 	if (zoneNameHash == spaceQuestHash) then
-		self:trySpawnCorvette(pPlayer)
+		self:ensureRendezvousWaypoint(pPlayer)
+		self:scheduleRendezvousCheck(pPlayer)
 	end
 
 	return 0
 end
 
---[[
-	Live spawn schedule gate (scrapbook: MonsofoLexius + Zina):
-	  * KESSEL_CORVETTE_ALTERNATE_MS : the two faction corvettes spawn ~1h apart --
-	    each corvette only spawns during its own alternating-hour wall-clock window
-	    (spawnWindowParity).
-	  * KESSEL_CORVETTE_RESPAWN_MS   : minimum gap after a hyperspace exit before
-	    this corvette can spawn again.
-	  * KESSEL_CORVETTE_CYCLE_MS     : full per-faction cycle -- minimum gap between
-	    successive spawns of this corvette.
-	  * The corvette will NOT spawn while its previous gunboat escorts still sit at
-	    its exit point (disable them -- they self-destruct -- or destroy them).
-	If blocked, ONE re-check event is scheduled for when the earliest gate could clear.
-]]
+-- Spawn immediately for the mission owner. The only blocker is a surviving escort
+-- group from an earlier attempt at the same exit point; one re-check is scheduled
+-- for the escort self-destruct cadence.
 function KesselCorvetteEncounter:trySpawnCorvette(pPlayer)
 	if (pPlayer == nil) then
 		return
@@ -174,33 +161,11 @@ function KesselCorvetteEncounter:trySpawnCorvette(pPlayer)
 		return
 	end
 
-	local now = getTimestampMilli()
 	local delay = 0
 
 	if (self:escortsAtExitPoint(playerID)) then
 		-- Escorts still hold the exit point; re-check on the self-destruct cadence.
 		delay = KESSEL_ESCORT_SELFDESTRUCT_MS
-	else
-		-- Alternating-hour faction window.
-		local windowIndex = math.floor(now / KESSEL_CORVETTE_ALTERNATE_MS) % 2
-
-		if (windowIndex ~= self.spawnWindowParity) then
-			delay = KESSEL_CORVETTE_ALTERNATE_MS - (now % KESSEL_CORVETTE_ALTERNATE_MS)
-		end
-
-		-- Minimum gap since the last hyperspace exit.
-		local lastExit = readData(playerID .. ":" .. self.className .. ":lastExitMs")
-
-		if (lastExit ~= nil and lastExit > 0 and (now - lastExit) < KESSEL_CORVETTE_RESPAWN_MS) then
-			delay = math.max(delay, KESSEL_CORVETTE_RESPAWN_MS - (now - lastExit))
-		end
-
-		-- Full per-faction cycle since the last spawn.
-		local lastSpawn = readData(playerID .. ":" .. self.className .. ":lastSpawnMs")
-
-		if (lastSpawn ~= nil and lastSpawn > 0 and (now - lastSpawn) < KESSEL_CORVETTE_CYCLE_MS) then
-			delay = math.max(delay, KESSEL_CORVETTE_CYCLE_MS - (now - lastSpawn))
-		end
 	end
 
 	if (delay == 0) then
@@ -208,7 +173,6 @@ function KesselCorvetteEncounter:trySpawnCorvette(pPlayer)
 
 		if (self:spawnCorvetteEncounter(pPlayer)) then
 			writeData(playerID .. ":" .. self.className .. ":corvetteUp", 1)
-			writeData(playerID .. ":" .. self.className .. ":lastSpawnMs", now)
 		end
 
 		return
@@ -228,8 +192,13 @@ function KesselCorvetteEncounter:spawnCheckEvent(pPlayer)
 		return
 	end
 
-	deleteData(SceneObject(pPlayer):getObjectID() .. ":" .. self.className .. ":pendingSpawnCheck")
+	local playerID = SceneObject(pPlayer):getObjectID()
+	deleteData(playerID .. ":" .. self.className .. ":pendingSpawnCheck")
 	self:trySpawnCorvette(pPlayer)
+
+	if (readData(playerID .. ":" .. self.className .. ":corvetteUp") ~= 1) then
+		self:scheduleRendezvousCheck(pPlayer)
+	end
 end
 
 -- True while any previous escort gunboat still exists at the corvette's exit point.
@@ -307,6 +276,7 @@ function KesselCorvetteEncounter:spawnCorvetteEncounter(pPlayer)
 	CreatureObject(pPlayer):addSpaceMissionObject(corvetteID, true)
 
 	writeData(playerID .. ":" .. self.className .. ":corvetteID", corvetteID)
+	SpaceHelpers:clearQuestWaypoints(pPlayer, self.className)
 
 	-- Scope flag read by ShipManager::notifyDestruction (C++): only THIS spawned
 	-- corvette counts for master credit, not convoy/station-squad corvettes that
@@ -383,12 +353,11 @@ function KesselCorvetteEncounter:hyperspaceOutCorvette(pPlayer)
 		end
 
 		deleteData(corvetteID .. ":kesselMasterCorvette")
+		deleteData(corvetteID .. ":QuestOwner")
 		deleteData(playerID .. ":" .. self.className .. ":corvetteID")
 	end
 
 	deleteData(playerID .. ":" .. self.className .. ":corvetteUp")
-	writeData(playerID .. ":" .. self.className .. ":lastExitMs", getTimestampMilli())
-
 	SpaceHelpers:sendQuestUpdate(pPlayer, "The enemy corvette has jumped to hyperspace before you could destroy it. Its escorts remain at the exit point; the corvette will not return while they hold it.")
 end
 
@@ -404,6 +373,7 @@ function KesselCorvetteEncounter:clearEncounterState(pPlayer)
 
 	if (corvetteID ~= nil and corvetteID ~= 0) then
 		deleteData(corvetteID .. ":kesselMasterCorvette")
+		deleteData(corvetteID .. ":QuestOwner")
 	end
 
 	deleteData(playerID .. ":" .. self.className .. ":corvetteID")
@@ -426,8 +396,8 @@ function KesselCorvetteEncounter:clearEncounterState(pPlayer)
 	deleteData(playerID .. ":" .. self.className .. ":escortCount")
 	deleteData(playerID .. ":" .. self.className .. ":corvetteUp")
 	deleteData(playerID .. ":" .. self.className .. ":pendingSpawnCheck")
-	deleteData(playerID .. ":" .. self.className .. ":lastSpawnMs")
-	deleteData(playerID .. ":" .. self.className .. ":lastExitMs")
+	deleteData(playerID .. ":" .. self.className .. ":rendezvousCheckPending")
+	deleteData(playerID .. ":" .. self.className .. ":rendezvousAlertSent")
 end
 
 function KesselCorvetteEncounter:resetQuest(pPlayer)
@@ -535,10 +505,14 @@ function KesselCorvetteEncounter:grantPilotMastery(pPlayer)
 end
 
 function KesselCorvetteEncounter:completeQuest(pPlayer, notifyClient)
-	self:grantAcePilotReward(pPlayer)
-	self:grantPilotMastery(pPlayer)
 	self:clearEncounterState(pPlayer)
 	SpaceDestroyScreenplay.completeQuest(self, pPlayer, notifyClient)
+
+	if (self.questName == "master_rebel_2") then
+		CreatureObject(pPlayer):sendSystemMessage("Return to Admiral Willham Burke on Corellia to report your victory.")
+	else
+		CreatureObject(pPlayer):sendSystemMessage("Return to Grand Admiral Nial Declann on Naboo to report your victory.")
+	end
 end
 
 function KesselCorvetteEncounter:failQuest(pPlayer, notifyClient)
@@ -563,11 +537,6 @@ destroy_master_imperial_1 = SpaceDestroyScreenplay:new {
 
 	creditReward = 10000,
 
-	sideQuest = true,
-	sideQuestType = "destroy",
-	sideQuestName = "master_imperial_2",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
 	killsRequired = 30,
 
 	shipLocations = {},
@@ -582,6 +551,106 @@ destroy_master_imperial_1 = SpaceDestroyScreenplay:new {
 	},
 }
 
+function destroy_master_imperial_1:completeQuest(pPlayer, notifyClient)
+	SpaceDestroyScreenplay.completeQuest(self, pPlayer, notifyClient)
+
+	if (pPlayer ~= nil) then
+		CreatureObject(pPlayer):sendSystemMessage("Return to Grand Admiral Nial Declann on Naboo for further orders.")
+	end
+end
+
+function KesselCorvetteEncounter:ensureRendezvousWaypoint(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local waypointKey = playerID .. ":" .. self.className .. ":waypointVector"
+	local waypointTable = readStringVectorSharedMemory(waypointKey)
+
+	if (#waypointTable > 0) then
+		return
+	end
+
+	local point = self.spawnAnchor
+	local waypointID = PlayerObject(pGhost):addWaypoint(self.questZone, "Corvette Rendezvous", "Corvette Rendezvous",
+		point.x, point.z, point.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
+
+	if (waypointID > 0) then
+		writeStringVectorSharedMemory(waypointKey, { tostring(waypointID) })
+		SpaceHelpers:sendQuestUpdate(pPlayer, "Proceed to the supplied rendezvous coordinates and locate the enemy corvette.")
+	end
+end
+
+function KesselCorvetteEncounter:scheduleRendezvousCheck(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local pendingKey = playerID .. ":" .. self.className .. ":rendezvousCheckPending"
+
+	if (readData(pendingKey) == 1) then
+		return
+	end
+
+	writeData(pendingKey, 1)
+	createEvent(1000, self.className, "checkRendezvousDistance", pPlayer, "")
+end
+
+function KesselCorvetteEncounter:checkRendezvousDistance(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local pendingKey = playerID .. ":" .. self.className .. ":rendezvousCheckPending"
+	deleteData(pendingKey)
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)
+			or SceneObject(pPlayer):getZoneName() ~= self.questZone
+			or readData(playerID .. ":" .. self.className .. ":corvetteUp") == 1) then
+		return
+	end
+
+	local pPilotShip = SceneObject(pPlayer):getRootParent()
+
+	if (pPilotShip == nil or not SceneObject(pPilotShip):isShipObject()) then
+		return
+	end
+
+	local point = self.spawnAnchor
+	local dx = SceneObject(pPilotShip):getWorldPositionX() - point.x
+	local dz = SceneObject(pPilotShip):getWorldPositionZ() - point.z
+	local dy = SceneObject(pPilotShip):getWorldPositionY() - point.y
+	local distance = math.sqrt((dx * dx) + (dz * dz) + (dy * dy))
+
+	if (distance <= KESSEL_CORVETTE_TRIGGER_RANGE) then
+		local alertKey = playerID .. ":" .. self.className .. ":rendezvousAlertSent"
+
+		if (readData(alertKey) ~= 1) then
+			CreatureObject(pPlayer):sendSystemMessage("ALERT: Comscan has detected a large battlegroup exiting hyperspace in your vicinity!")
+			CreatureObject(pPlayer):playMusicMessage("sound/mus_rebel_enteredsystem.snd")
+			writeData(alertKey, 1)
+		end
+
+		self:trySpawnCorvette(pPlayer)
+
+		if (readData(playerID .. ":" .. self.className .. ":corvetteUp") ~= 1
+				and readData(playerID .. ":" .. self.className .. ":pendingSpawnCheck") ~= 1) then
+			self:scheduleRendezvousCheck(pPlayer)
+		end
+	else
+		self:scheduleRendezvousCheck(pPlayer)
+	end
+end
+
 registerScreenPlay("destroy_master_imperial_1", true)
 
 -- Rebel / Freelancer-rebel pilots: weaken the Imperial battlegroup -- 30 TIEs/gunboats.
@@ -595,10 +664,10 @@ destroy_master_rebel_1 = SpaceDestroyScreenplay:new {
 
 	creditReward = 10000,
 
-	sideQuest = true,
-	sideQuestType = "destroy",
-	sideQuestName = "master_rebel_2",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	-- Burke debriefs the pilot after the fighter sweep and grants the
+	-- corvette assignment in a separate conversation.
+	sideQuest = false,
+	sideQuestType = "",
 
 	killsRequired = 30,
 
@@ -635,12 +704,10 @@ destroy_master_imperial_2 = KesselCorvetteEncounter:new {
 	-- Imperial pilots earn the Imperial "ace pilot" wearable (Zina FAQ §VI).
 	aceRewardFaction = "empire",
 
-	-- Rebel corvette takes the even alternating-hour window.
-	spawnWindowParity = 0,
-
 	corvetteAgent = "reb_corellian_corvette_tier4",
 	escortAgents = { "reb_gunboat_tier5", "reb_gunboat_tier5" },
 	spawnAnchor = KESSEL_REBEL_CORVETTE_SPAWN,
+	shipLocations = { KESSEL_REBEL_CORVETTE_SPAWN },
 
 	shipTypes = { "reb_corellian_corvette_tier4" },
 }
@@ -661,12 +728,10 @@ destroy_master_rebel_2 = KesselCorvetteEncounter:new {
 	-- Rebel pilots earn the Rebel "ace pilot" wearable (Zina FAQ §VI).
 	aceRewardFaction = "rebel",
 
-	-- Imperial Star Ravager takes the odd window (the two vettes spawn ~1h apart).
-	spawnWindowParity = 1,
-
 	corvetteAgent = "imp_corellian_corvette_tier4",
 	escortAgents = { "imp_imperial_gunboat_tier5", "imp_imperial_gunboat_tier5" },
 	spawnAnchor = KESSEL_IMPERIAL_CORVETTE_SPAWN,
+	shipLocations = { KESSEL_IMPERIAL_CORVETTE_SPAWN },
 
 	shipTypes = { "imp_corellian_corvette_tier4" },
 }

@@ -198,6 +198,10 @@ public:
 		player->sendMessage(message);
 		player->sendMessage(optionsList);
 
+		if (npc->isShipAiAgent()) {
+			player->playMusicMessage("sound/sys_comm_generic.snd");
+		}
+
 		CreatureObject* creo = npc->asCreatureObject();
 
 		if (!animation.isEmpty() && creo != nullptr) {

@@ -18,6 +18,8 @@ SpaceDeliveryScreenplay = SpaceQuestLogic:new {
 
 	attackDelay = 0, -- In Seconds
 	attackShips = {},
+	waitForAttackShips = false,
+	postDeliveryAttackDelay = 1,
 
 	--[[
 		Journal task layout, taken from the delivery_no_pickup string files:
@@ -148,7 +150,7 @@ function SpaceDeliveryScreenplay:failQuest(pPlayer, notifyClient)
 		return
 	end
 
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName) and (notifyClient ~= "false" or not SpaceHelpers:isSpaceQuestComplete(pPlayer, self.questType, self.questName))) then
 		return
 	end
 
@@ -543,6 +545,13 @@ function SpaceDeliveryScreenplay:finishLeg(pPlayer, legName)
 		return
 	end
 
+	-- Some deliveries culminate in an interception after the cargo transfer.
+	-- Keep the journal active until those mission targets have been destroyed.
+	if (self.waitForAttackShips and #self.attackShips > 0) then
+		createEvent(self.postDeliveryAttackDelay * 1000, self.className, "spawnAttackWave", pPlayer, "")
+		return
+	end
+
 	createEvent(1000, self.className, "completeQuest", pPlayer, "true")
 end
 
@@ -625,6 +634,11 @@ function SpaceDeliveryScreenplay:spawnAttackWave(pPlayer)
 	end
 
 	if (#shipIDs == 0) then
+		if (self.waitForAttackShips) then
+			CreatureObject(pPlayer):sendSystemMessage("Mission failed because the intercepting ships could not be spawned.")
+			createEvent(1000, self.className, "failQuest", pPlayer, "true")
+		end
+
 		return
 	end
 
@@ -723,43 +737,50 @@ function SpaceDeliveryScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 		return 1
 	end
 
+	-- Hyperspace can notify before the creature's final zone state is settled.
+	-- Defer the check and read the actual current zone after transfer.
+	createEvent(5000, self.className, "checkEnteredZone", pPlayer, "")
+
+	return 0
+end
+
+function SpaceDeliveryScreenplay:checkEnteredZone(pPlayer)
+	if (pPlayer == nil or not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 
 	if (pGhost == nil) then
-		return 0
+		return
 	end
 
-	local pRootParent = SceneObject(pPlayer):getRootParent()
-
-	if (pRootParent ~= nil and SceneObject(pRootParent):getObjectName() == "player_sorosuub_space_yacht") then
-		return 0
+	if (SpaceHelpers:isInYacht(pPlayer)) then
+		return
 	end
 
-	local playerID = SceneObject(pPlayer):getObjectID()
+	local zoneNameHash = getHashCode(SceneObject(pPlayer):getZoneName())
 	local spaceQuestHash = getHashCode(self.questZone)
 
 	if (self.DEBUG_SPACE_DELIVERY) then
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
 	end
 
-	-- Player is in the correct zone
-	if (zoneNameHash == spaceQuestHash and not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
-		-- Complete the quest task 0
-		SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
+	-- Player is in the correct zone. Always resume the first leg here because a chained
+	-- quest may retain its completed location task without having created its waypoint.
+	if (zoneNameHash == spaceQuestHash) then
+		if (not SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
+			-- Complete the quest task 0
+			SpaceHelpers:completeSpaceQuestTask(pPlayer, self.questType, self.questName, 0, false)
 
-		-- Activate quest task 1
-		SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+			-- Activate quest task 1
+			SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
+		end
 
 		createEvent(4000, self.className, "startFirstLeg", pPlayer, "")
-
-		return 0
 	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
-
-		return 1
 	end
-
-	return 0
 end
 
 function SpaceDeliveryScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
@@ -834,6 +855,10 @@ function SpaceDeliveryScreenplay:notifyAttackShipDestroyed(pShipAgent, pKillerSh
 		return 1
 	end
 
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return 1
+	end
+
 	local agentID = SceneObject(pShipAgent):getObjectID()
 
 	-- Remove agent as mission object
@@ -858,6 +883,10 @@ function SpaceDeliveryScreenplay:notifyAttackShipDestroyed(pShipAgent, pKillerSh
 
 	CreatureObject(pPlayer):playEffect("clienteffect/ui_quest_destroyed_all.cef", "")
 	CreatureObject(pPlayer):sendSystemMessage("@spacequest/" .. self.questType .. "/" .. self.questName .. ":attack_stopped")
+
+	if (self.waitForAttackShips) then
+		createEvent(1000, self.className, "completeQuest", pPlayer, "true")
+	end
 
 	return 1
 end

@@ -1052,60 +1052,16 @@ int ShipManager::notifyDestruction(ShipObject* destructorShip, ShipAiAgent* dest
 			&& DirectorManager::instance()->readSharedMemory(String::valueOf(destructedShip->getObjectID()) + ":kesselMasterCorvette") == 1;
 
 		if (isKesselMasterCorvette) {
-			// Kessel master-encounter corvettes: master credit goes to EVERY player who
-			// damaged a subsystem, is in the corvette's zone (Kessel), and is in range
-			// when it dies -- not just the highest-damage group. Capital ships take
-			// damage exclusively through targetable component hits (SpaceCombatManager),
-			// so any threat-map damage against the corvette IS subsystem damage.
-			// Holding the master mission is enforced by the screenplay's DESTROYEDSHIP
-			// observer, which only exists for quest holders.
-			auto destructedZone = destructedShip->getZone();
+			// This is a private, mission-owned encounter. Notify its recorded owner
+			// directly so bridge destruction, subsystem destruction, and outright
+			// chassis destruction all satisfy the same mission completion condition.
+			uint64 questOwnerID = DirectorManager::instance()->readSharedMemory(String::valueOf(destructedShip->getObjectID()) + ":QuestOwner");
+			auto questOwner = cast<CreatureObject*>(zoneServer->getObject(questOwnerID).get());
 
-			for (int i = 0; i < copyThreatMap.size(); ++i) {
-				ThreatMapEntry* entry = &copyThreatMap.elementAt(i).getValue();
-				TangibleObject* attacker = copyThreatMap.elementAt(i).getKey();
+			if (questOwner != nullptr && questOwner->isPlayerCreature()) {
+				Locker locker(questOwner, destructedShip);
 
-				if (entry == nullptr || attacker == nullptr || !attacker->isPlayerShip()) {
-					continue;
-				}
-
-				// Damaged-a-subsystem requirement.
-				if (entry->getTotalDamage() == 0) {
-					continue;
-				}
-
-				auto attackerShip = attacker->asShipObject();
-
-				if (attackerShip == nullptr) {
-					continue;
-				}
-
-				// Cross-lock the attacker ship before reading its zone/position/roster.
-				Locker attackerLocker(attackerShip, destructedShip);
-
-				// Must be in the corvette's zone and in range at its death.
-				if (attackerShip->getZone() != destructedZone) {
-					continue;
-				}
-
-				if (!destructedShip->isInRange3dZoneless(attackerShip, ZoneServer::SPACECLOSEOBJECTRANGE)) {
-					continue;
-				}
-
-				auto playersOnBoard = attackerShip->getPlayersOnBoard();
-
-				for (int j = 0; j < playersOnBoard.size(); ++j) {
-					auto shipMemberID = playersOnBoard.get(j);
-					auto shipMember = cast<CreatureObject*>(zoneServer->getObject(shipMemberID).get());
-
-					if (shipMember == nullptr || !shipMember->isPlayerCreature()) {
-						continue;
-					}
-
-					Locker locker(shipMember, destructedShip);
-
-					shipMember->notifyObservers(ObserverEventType::DESTROYEDSHIP, destructedShip);
-				}
+				questOwner->notifyObservers(ObserverEventType::DESTROYEDSHIP, destructedShip);
 			}
 		} else {
 			ManagedReference<ShipObject*> playerShip = copyThreatMap.getHighestDamageGroupShip();
@@ -1409,7 +1365,32 @@ void ShipManager::reDeedShip(CreatureObject* player, ShipControlDevice* shipDevi
 	}
 
 	String chassisName = ship->getShipChassisName().replaceAll("player_", "");
-	String deedPath = "object/tangible/ship/crafted/chassis/" + chassisName + "_deed.iff";
+	bool isPrototypeTieFighter = chassisName == "prototype_tiefighter";
+	bool isPrototypeZ95 = chassisName == "prototype_z95";
+	bool isPrototypeHuttLight = chassisName == "prototype_hutt_light";
+	bool isPrototypeStarterShip = isPrototypeTieFighter || isPrototypeZ95 || isPrototypeHuttLight;
+	String deedChassisName = chassisName;
+
+	if (isPrototypeTieFighter) {
+		deedChassisName = "tiefighter";
+	} else if (isPrototypeZ95) {
+		deedChassisName = "z95";
+	} else if (isPrototypeHuttLight) {
+		deedChassisName = "hutt_light_s01";
+	}
+
+	String deedPath = "object/tangible/ship/crafted/chassis/" + deedChassisName + "_deed.iff";
+	String prototypeShipTemplate;
+
+	if (isPrototypeStarterShip) {
+		auto shipTemplate = ship->getObjectTemplate();
+
+		if (shipTemplate == nullptr) {
+			return;
+		}
+
+		prototypeShipTemplate = shipTemplate->getFullTemplateString();
+	}
 
 	// Create the deed and transfer
 	auto object = zoneServer->createObject(deedPath.hashCode(), 2);
@@ -1463,6 +1444,11 @@ void ShipManager::reDeedShip(CreatureObject* player, ShipControlDevice* shipDevi
 	*/
 
 	shipDeed->setControlDeviceTemplate(deviceStringName);
+
+	if (isPrototypeStarterShip) {
+		shipDeed->setGeneratedObjectTemplate(prototypeShipTemplate);
+	}
+
 	shipDeed->setCertificationRequired(certificationRequired);
 	shipDeed->setParkingLocation(parkingLocation);
 

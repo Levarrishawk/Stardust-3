@@ -159,6 +159,7 @@ escort_corellia_privateer_3 = SpaceEscortScreenplay:new {
 	-- Screenplay Specific Variables
 
 	escortShips = {"freighterheavy_tier1"},
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "privateer_security_escort_1", zoneName = "space_corellia", x = -5034, z = -5439, y = -4558, escortNumber = 1, radius = 250},
@@ -351,7 +352,7 @@ escort_corellia_privateer_14 = SpaceEscortScreenplay:new {
 	attackDelay = 180, -- In Seconds
 
 	attackShips = {
-		{"reb_xwing_tier2", "reb_xwing_tier2", "reb_ywing_tier3", "reb_xwing_tier3", "reb_z95_tier2", "reb_z95_tier2"},
+		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s01_tier3", "blacksun_fighter_s01_tier3", "blacksun_fighter_s03_tier2", "blacksun_bomber_s02_tier2"},
 	}
 }
 
@@ -743,7 +744,7 @@ survival_corellia_privateer_tier3_2_a = SpaceSurvivalScreenplay:new {
 	questName = "corellia_privateer_tier3_2_a",
 	questType = "survival",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 0,
 
@@ -758,6 +759,20 @@ survival_corellia_privateer_tier3_2_a = SpaceSurvivalScreenplay:new {
 	sideQuestDelay = 4, -- Time in seconds to wait to trigger side quest
 
 	-- Screenplay Specific Variables
+
+	survivalTime = 600,
+	survivalUpdateInterval = 60,
+
+	survivalPoint = {x = 32, z = -5934, y = 4132}, -- space_dathomir:corellia_privateer_tier3_survival
+	survivalAreaRadius = 500,
+
+	delayToFirstAttack = 5,
+	attackDelay = 30,
+
+	attackShips = {
+		{"scavenger_hunter_tier3", "scavenger_hunter_tier3"},
+		{"scavenger_fanatic_tier3", "scavenger_fanatic_tier3", "scavenger_missileboat_tier3"},
+	},
 }
 
 registerScreenPlay("survival_corellia_privateer_tier3_2_a", true)
@@ -1177,13 +1192,15 @@ escort_corellia_privateer_tier4_2b = SpaceEscortScreenplay:new {
 	-- Screenplay Specific Variables
 
 	escortShips = {"freighterlight_tier3"},
+	escortSpeed = 70,
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "corellia_privateer_tier4_leg_2_escort_1", zoneName = "space_dathomir", x = 2611, z = -387, y = 3617, escortNumber = 1, radius = 250},
 		{patrolPointName = "corellia_privateer_tier4_leg_2_escort_2", zoneName = "space_dathomir", x = 683, z = 1485, y = 3209, escortNumber = 2, radius = 250},
 		{patrolPointName = "corellia_privateer_tier4_leg_2_escort_3", zoneName = "space_dathomir", x = -1642, z = 3578, y = 2633, escortNumber = 3, radius = 250},
 		{patrolPointName = "corellia_privateer_tier4_leg_2_escort_4", zoneName = "space_dathomir", x = -2146, z = 5611, y = 2738, escortNumber = 4, radius = 250},
-		{patrolPointName = "corellia_privateer_tier4_leg_2_escort_5", zoneName = "space_dathomir", x = -2682, z = 7408, y = 2855, escortNumber = 4, radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_leg_2_escort_5", zoneName = "space_dathomir", x = -2682, z = 7408, y = 2855, escortNumber = 5, radius = 250},
 	},
 
 	attackDelay = 85, -- In Seconds
@@ -1299,7 +1316,7 @@ space_battle_corellia_privateer_tier4_3c_win = SpaceBattleScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 7512, z = -5651, y = 1803},
+	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 5200, z = -4800, y = 1800},
 
 	supportShipsDelay = 30,
 	enemyShipsDelay = 90,
@@ -1333,14 +1350,14 @@ space_battle_corellia_privateer_tier4_3c_lose = SpaceBattleScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 7512, z = -5651, y = 1803},
+	battleLocation = {patrolPointName = "corellia_privateer_tier4_leg_3_space_battle_two", x = 5200, z = -4800, y = 1800},
 
 	supportShipsDelay = 60,
 	enemyShipsDelay = 90,
 
 	supportShips = {"corsec_gunship_tier4", "corsec_interdiction_craft_tier4", "corsec_lancer_tier4", "corsec_fighter_tier4"},
 
-	enemyShips = {"blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4S", "blacksun_bomber_s02_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4",
+	enemyShips = {"blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_bomber_s02_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4",
 		"blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4"
 	},
 }
