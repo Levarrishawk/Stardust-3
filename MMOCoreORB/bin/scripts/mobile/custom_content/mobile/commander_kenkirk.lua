@@ -27,7 +27,7 @@
        -- mobType: SD3 schema field, OURS
        lootGroups sd_sub_3 at lootChance 10000000 -- SOE intLootRolls 1 @ 100%. ]]
 commander_kenkirk = Creature:new {
-	customName = "commander_kenkirk",
+	customName = "Commander Kenkirk",	-- OURS, NOT SOURCED: the English form of SOE's own template name object/mobile/commander_kenkirk.iff; no name string ships in any TRE (0 hits in _STF_EN_ALL.tsv), and the SD-2 import showed the raw key in-game (fix-3)
 	socialGroup = "heroic_sd",
 	faction = "",
 	mobType = MOB_NPC,

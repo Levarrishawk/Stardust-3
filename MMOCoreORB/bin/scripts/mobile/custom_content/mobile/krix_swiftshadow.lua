@@ -37,7 +37,7 @@
        -- mobType: SD3 schema field, OURS
        lootGroups sd_sub_1 at lootChance 10000000 -- SOE intLootRolls 1 @ 100%. ]]
 krix_swiftshadow = Creature:new {
-	customName = "krix_swiftshadow",
+	customName = "Krix Swiftshadow",	-- OURS, NOT SOURCED: the English form of SOE's own template name object/mobile/krix_swiftshadow.iff; no name string ships in any TRE (0 hits in _STF_EN_ALL.tsv), and the SD-2 import showed the raw key in-game (fix-3)
 	socialGroup = "heroic_sd",
 	faction = "",
 	mobType = MOB_NPC,
