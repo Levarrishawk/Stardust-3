@@ -84,8 +84,10 @@ object/tangible/collection/shared_rare_melee_caller_storms.iff (and its server
 pair) -- but it is a non-functional display tangible
 (SharedTangibleObjectTemplate, gameObjectType = 8211, no damage, no attackSpeed,
 no xpType, no cert). Swapping the working sword granted below for that display
-piece is an open decision for Aaron, not taken here. The live functional weapon
-is not granted; the reward stays a substitution matched by description.
+piece would pay the quest out in an ornament the player cannot swing, and that is
+not a choice anyone needs to make -- a reward that cannot be used is a defect.
+The name-exact object is therefore refused on purpose and the reward stays a
+substitution matched by description.
 
 What the name says: a one-handed sword ("sword_1h"), from Trials of Obi-Wan
 ("tow"), and task 11 describes it as "a strange sword, wrapped up in cloth".
@@ -106,8 +108,9 @@ closed when the path is not in scripts/managers/crafting/schematics.lua and woul
 silently grant nothing (the defect this arc's hidden_treasure.lua reward already
 had to be corrected for).
 
-To restore a live functional weapon later, only rewardWeapon below changes --
-Aaron's open call on the collection display tangible above is the other path.
+If the name-exact sword_1h_tow_obsidian is ever rebuilt as a real weapon template
+instead of the collection display tangible it currently is, only rewardWeapon
+below changes. Nothing else in this file reads the reward path.
 
 WHAT IS NOT MODELLED
 

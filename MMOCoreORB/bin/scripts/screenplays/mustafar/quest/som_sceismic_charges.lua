@@ -84,10 +84,20 @@ Two things are readable from the structure even though every field is blank, and
 they are recorded because they are structure, not guesswork:
 
   * SIX Retrieve Item tasks -- ids 1, 2, 3, 4, 5 and 7 -- all siblings under
-    task 0, each Count 1. And a Wait for Tasks with exactly SIX Task<n> slots
-    waiting on them. Six charges, one per location, then a gate that opens when
-    all six are done. That matches the [list] prose's "Travel around to the
-    different locations and set off the explosives".
+    task 0, each Count 1, then a gate that opens when all six are done. That
+    matches the [list] prose's "Travel around to the different locations and set
+    off the explosives".
+
+    (An earlier draft of this header offered a second reason: that the Wait for
+    Tasks carries "exactly SIX Task<n> slots". That is not evidence and the
+    claim is withdrawn. TASK_QUEST_NAME_1..6 / TASK_TASK_NAME_1..6 /
+    TASK_DISPLAY_STRING_1..6 is a fixed six-slot schema emitted for ANY quest
+    containing a wait_for_tasks task -- checked against three unrelated quests,
+    axkva_min_intro.tab, borvo_acklay_biceps.tab and borvo_acklay_boots_gloves.tab,
+    all six columns on every one. Here all six are empty; this gate waits on
+    nothing. The count of six stands on the retrieve tasks above and on task 0's
+    TASKS_ON_COMPLETE=[1,2,3,5,6,7,8] in the live server table, which is a real
+    field with real contents.)
   * One Encounter hanging off the THIRD charge only, Count 1, 5 to 50 m. One
     location was going to bite back.
 
@@ -121,35 +131,88 @@ nobody repeats it:
     serverobjects.lua include.
 
 So the six locations the [list] says the miners "have already set up" were never
-set up in any data this port can read. This file therefore follows
-hk_history.lua's precedent exactly: it places nothing, invents no coordinate, no
-creature, no item and no credit figure, and instead carries the two strings that
-DID ship plus the seams that a placement pass would call. hk_history.lua made
-the same call for the same reason -- ten playbacks with no shipped trigger --
-and its header says so in its own OPEN QUESTION section.
+set up in any data this port can read. This file places nothing, invents no
+coordinate, no creature, no item and no credit figure, and instead carries the
+two strings that DID ship plus the seams a placement pass would call.
 
-WHAT AARON HAS TO RULE BEFORE THIS CAN BE PLAYED
+THIS QUEST WAS NEVER PLAYABLE ON LIVE EITHER -- THE FIVE GAPS ARE CLOSED
 
-These are open decisions, not omissions, and they are listed again in the report
-that accompanies this port:
+An earlier version of this header listed five items under "WHAT AARON HAS TO
+RULE BEFORE THIS CAN BE PLAYED". That framing was wrong. They were never
+Aaron's to rule -- they were an unfinished search. The search has now been run
+against the live server source (SWG-Source/dsrc), against a fourth Mustafar
+snapshot nobody had dumped, and against the public record. Four of the five have
+hard answers and the fifth is a proven negative. Nothing here is waiting on a
+decision.
 
-  1. WHERE the six charge stations stand. Six positions on Mustafar. Nothing
-     shipped them. Once they exist, either spawnSceneObject them from a region
-     file or attach to them here with registerStation() below.
-  2. WHAT the player does at one. The Retrieve Item tasks carry no
-     retrieveMenuText, so even the radial's wording is unshipped. The label in
-     this file is this file's, and it is the only invented string in it.
-  3. WHAT attacks at the third one. Encounter Count 1, 5 to 50 m -- the numbers
-     shipped, the Creature Type did not. ambush.template below is deliberately
-     left as the empty string and spawnAmbush refuses to run rather than
-     substituting a creature nobody chose. Fill it and it works.
-  4. WHAT the reward is. Bank Credits 0, Experience Amount 0, and no loot fields
-     at all. As shipped, finishing this quest pays literally nothing. That is
-     the data, not an oversight in the port.
-  5. WHO gives it. No conversation table in _som/string/en/conversation/ mentions
-     it, no NPC is named in the file, and the [list] names nobody. grantQuest and
-     turnIn are exposed for whoever it turns out to be -- the same shape
-     bounty_hunts.lua uses for its giver-less hunts.
+  1. WHERE the six charge stations stand -- NOWHERE, on four independent
+     authorities. (a) The live compiled task table
+     datatables/questtask/quest/som_sceismic_charges.tab carries
+     PLANET_NAME=tatooine, LOCATION_X/Y/Z=0.0 on every row -- a separate source
+     from the client .qst, and it agrees. (b) The twelve live server buildout
+     tables for this planet (mustafar_main_ne/nw/se/sw, mustafar_volcano,
+     obiwan_crystal_cave, sher_kar_cave, uplink_cave, old_republic_facility,
+     decrepit_droid_factory, working_droid_factory, mustafar_droid_army) DO place
+     quest tangibles -- tulrus_egg x10, must_chem_locker x5,
+     must_ventilation_station x4, som_mining_marker_01..05, som_vault_lever --
+     and seismic_charge_stations is in none of them. (c) A grep for
+     "seismic_charge_stations" over the whole live server source returns exactly
+     one file: the template object/tangible/quest/seismic_charge_stations.tpf
+     itself. Nothing places it, spawns it or names it. (d) The fourth snapshot,
+     "snapshot/mustafar se.ws" in mtg_planets.tre (68,074 bytes, 127 templates,
+     711 nodes), was extracted and dumped -- no shared_seismic_charge_stations.
+     It carries the som_mining_marker_01..05 quest markers, so it is exactly the
+     kind of file that would have held them.
+  2. WHAT the player does at one -- ON LIVE, NOTHING. The station's .tpf attaches
+     the script quest.task.ground.retrieve_item_on_item, whose OnObjectMenuRequest
+     only adds the quest verb when groundquests.playerNeedsToRetrieveThisItem
+     returns true. That function (groundquests.java:1292) requires the task's
+     SERVER_TEMPLATE field to equal the item's template. SERVER_TEMPLATE is empty
+     on every retrieve row of this quest, so it can never match, the quest verb is
+     never added, and the only radial the live station ever had is the script's
+     base menu_info_types.ITEM_USE -- plain "Use". The station does have a shipped
+     NAME: @som/som_item:seismic_charge_station, "Seismic Charge Station".
+     stationMenuText below is still this file's own wording. It is the one
+     invented string here, it replaces a live default of "Use", and it stays
+     because "Use" is worse, not because anyone must choose.
+  3. WHAT attacks at the third one -- UNSHIPPED, confirmed twice. The live table's
+     encounter row carries CREATURE_TYPE=[] with COUNT=[1], MIN_DISTANCE=[5],
+     MAX_DISTANCE=[50]: the same blank as the client .qst, from an independent
+     source. The "third station" reading is now confirmed rather than inferred --
+     in the live table the encounter is task id 4 and it is activated by
+     TASKS_ON_COMPLETE=[4] on the third retrieve item, id 3. stationWithAmbush = 3
+     is right. ambush.template stays the empty string and spawnAmbush refuses to
+     run rather than substituting a creature nobody chose.
+  4. WHAT the reward is -- ZERO, and that is the live value. The live reward row
+     reads EXPERIENCE_TYPE=[] EXPERIENCE_AMOUNT=[0] FACTION_NAME=[Rebel]
+     FACTION_AMOUNT=[0] BANK_CREDITS=[0] ITEM=[] WEAPON=[] ARMOR=[]. The live
+     questlist row carries no level, tier, type, XP or credit block at all.
+     rewardCredits = 0 below is not a placeholder; it is the shipped figure.
+  5. WHO gives it -- NOBODY, and the method is proven rather than assumed. No
+     .java in the live server source mentions som_sceismic_charges: no grantQuest,
+     no isQuestActive, no hasCompletedQuest. The same grep finds both siblings'
+     givers immediately, so it is known-good --
+     script/conversation/miner_madness_chief_drono.java:33 grants som_poison_miners
+     and script/conversation/striking_miners_urst.java:33 grants som_striking_miners.
+     This quest exists as a CRC (quest_crc_string_table.tab:1343, 0x7dd11d67), a
+     compiled table of empty tasks, three strings and one unplaced prop. Nothing
+     in the shipped game could hand it out. (One false lead, recorded so it is not
+     chased again: unaccepted_quests.tab:389 lists it -- but that table has 1,386
+     rows including 74 of the 76 som_ quests, and nothing in this server reads it.)
+
+The public record agrees. The journal string "The miners often use seismic
+charges to help find locations for good resources" returns zero hits anywhere.
+All 43 quests in the SWG wiki's Mustafar category were enumerated and there is no
+"Seismic Charges" entry; the S section runs Salvage or Die, Sher Kar, Sickness of
+the Storm Lord, Skin the Blistmoks, Skull of the Jundak, Supplies for the Miners,
+Symbiosis, Symbols of Chu-Gon Dar. No guide, wiki or forum ever transcribed it,
+because nobody could ever play it.
+
+So this file is complete as content: it is a faithful port of a quest SOE shipped
+unfinished. grantQuest, registerStation, spawnAmbush and turnIn below are a
+working quest waiting on six coordinates that were never authored. If those
+coordinates are ever invented, they are new design, not restoration, and they
+belong in a placement pass that says so.
 
 NO JOURNAL
 
@@ -197,8 +260,10 @@ somSceismicChargesScreenPlay = ScreenPlay:new {
 	stationTemplate = "object/tangible/quest/seismic_charge_stations.iff",
 
 	-- task 6, Encounter. Count / Min Distance / Max Distance are quoted exactly;
-	-- Creature Type shipped EMPTY and is left empty on purpose -- see open
-	-- decision 3. spawnAmbush refuses to run until Aaron fills it in.
+	-- Creature Type shipped EMPTY and is left empty on purpose -- see finding 3
+	-- in the header: the live table's encounter row carries CREATURE_TYPE=[] too,
+	-- so nothing was ever specified here by anyone. spawnAmbush refuses to run
+	-- rather than substitute a creature the shipped data never named.
 	ambush = {
 		template = "",
 		count = 1,
@@ -211,8 +276,9 @@ somSceismicChargesScreenPlay = ScreenPlay:new {
 	rewardCredits = 0,
 	rewardItem = "",
 
-	-- Not shipped -- the Retrieve Item tasks carry no retrieveMenuText. This is
-	-- the only invented string in this file; see open decision 2.
+	-- Not shipped -- the Retrieve Item tasks carry no retrieveMenuText, and on
+	-- live the quest verb never appeared at all (header, finding 2). This is the
+	-- one invented string in this file. It stands in for a live default of "Use".
 	stationMenuText = "Set off the seismic charge",
 
 	-- Filled by registerStation(): object id -> station number, 1 to
@@ -282,9 +348,11 @@ end
 
 --[[ Entry points for a giver
 
-Nobody is named as the giver anywhere in the shipped data; see open decision 5.
-These two are what a giver's conversation handler calls once Aaron says who it
-is.
+Nobody is named as the giver anywhere in the shipped data, and no .java in the
+live server source grants this quest either -- header, finding 5. There is no
+giver to find. These two are what a giver's conversation handler would call if
+one is ever written, in the same shape bounty_hunts.lua uses for its giver-less
+hunts.
 --]]
 
 -- Task 0 firing. It carries no musicOnActivate, so nothing is played -- unlike
@@ -323,9 +391,10 @@ end
 --[[ The six charges
 
 registerStation binds a placed object to a station number, 1 to stationCount.
-Nothing calls it yet -- see open decision 1 -- but it is the seam a region file
-or a later placement pass uses, and it is the same shape hk_history.lua:266-284
-uses for its own unplaced terminals.
+Nothing calls it, and nothing ever will from shipped data -- four independent
+authorities place no station anywhere (header, finding 1). It is the seam a
+region file or a later placement pass uses if six coordinates are ever authored,
+and it is the same shape hk_history.lua uses for registerTrigger.
 --]]
 
 function somSceismicChargesScreenPlay:registerStation(pObject, station)
@@ -480,8 +549,9 @@ end
 --[[ Radial label
 
 Exposed rather than hard-wired because the wording is invented, not quoted --
-see open decision 2. Whatever places the stations calls this for the label so
-that correcting the wording is a one-line change here.
+the live station's only radial was a plain "Use" (header, finding 2). Whatever
+places the stations calls this for the label, so correcting the wording stays a
+one-line change here.
 --]]
 
 function somSceismicChargesScreenPlay:getStationMenuText(pPlayer, station)

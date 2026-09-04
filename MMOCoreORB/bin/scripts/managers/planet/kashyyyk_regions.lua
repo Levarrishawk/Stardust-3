@@ -67,14 +67,16 @@
 --   on every row so the naming can be checked against what is actually there.
 --
 -- WHAT IS DELIBERATELY ABSENT
---   * No SPAWNAREA rows and no world_spawner row. mobile/spawn/ contains no
---     Kashyyyk spawn group of any kind, so naming one would be an invention and
---     would fail at load. Spawn groups are an open decision for the repo owner;
---     once they exist, spawn rows belong in a separate pass.
+--   * No SPAWNAREA rows and no world_spawner row. This is blocked, not undecided:
+--     mobile/spawn/ contains no Kashyyyk spawn group of any kind, so every name
+--     this file could write would dangle and fail at load. Spawn rows become
+--     possible the day a Kashyyyk spawn group exists, and belong in the pass that
+--     writes it.
 --   * No rows for kashyyyk_rryatt_trail, kashyyyk_north_dungeons,
---     kashyyyk_south_dungeons or kashyyyk_pob_dungeons*. Those snapshots live
---     only in mtg_patch_023.tre, which config.lua does not load, and dungeon
---     ownership is an open decision.
+--     kashyyyk_south_dungeons or kashyyyk_pob_dungeons*. Also blocked, not
+--     undecided: those snapshots ship only in mtg_patch_023.tre, and config.lua
+--     does not load it, so the server cannot see the geometry those rows would
+--     describe. Loading that TRE is a separate change with its own consequences.
 --   * Only ONE localized region name exists for this planet. kashyyyk_region_names.stf
 --     ships exactly one key (kachirho). Any other @kashyyyk_region_names:* string
 --     would dangle, so every other row below uses a plain unlocalized name, the

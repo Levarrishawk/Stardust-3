@@ -235,10 +235,10 @@ omitted historian.lua and maneater.lua. Both are named now.
   social group as the surface ones. If they did not, these kills should not count
   and the substitution is what makes them. Nobody can settle that from what ships.
 
-  ALREADY GUARDED. jedi_dog's Cobak is an orf_xandank matched by objectID rather
-  than by template, precisely so an ordinary orf_xandank cannot be mistaken for him
-  (jedi_dog.lua:459). The ORF's own xandank is one more ordinary one and the guard
-  already covers it.
+  ALREADY GUARDED, twice over. jedi_dog's Cobak is matched by objectID rather than
+  by template (jedi_dog.lua:470-477), and he is no longer an orf_xandank at all --
+  he spawns as som_xandank_cobak, his own template. The ORF's own xandank is one
+  more ordinary one and neither guard can confuse it for him.
 
   SPAWN-ONLY, so no counter to disturb. Three more screenplays name a substituted
   template but never call getCreatureTemplateName, so they cannot mis-credit

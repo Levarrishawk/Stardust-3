@@ -196,9 +196,10 @@ object/tangible/collection/shared_rare_pistol_mustafarian_modified_disruptor.iff
 (and its server pair) -- but it is a non-functional display tangible
 (SharedTangibleObjectTemplate, gameObjectType = 8211, no damage, no attackSpeed,
 no xpType, no cert). Swapping the working pistol granted below for that display
-piece is an open decision for Aaron, not taken here. The live functional weapon
-is not granted; the reward stays a substitution matched by description: a pistol,
-from Trials of Obi-Wan.
+piece would pay the quest out in an ornament the player cannot fire, and that is
+not a choice anyone needs to make -- a reward that cannot be used is a defect.
+The name-exact object is therefore refused on purpose and the reward stays a
+substitution matched by description: a pistol, from Trials of Obi-Wan.
 
 The obvious Mustafar-flavoured match is object/weapon/ranged/pistol/
 som_disruptor_pistol.iff or som_ion_relic_pistol.iff. When this arc was written
@@ -215,24 +216,46 @@ and the stats in the SoM ranged weapon pass (som_disruptor_pistol 257-513,
 som_ion_relic_pistol 264-527, attackSpeed 3, maxRange 35, taken from the live
 weapon_stats.tab rows weapon_tow_pistol_04_03 and
 weapon_tow_pistol_ion_relic_05_01). So the original grounds for the refusal are
-gone. Whether this reward should now be swapped to a SoM pistol is an open
-decision for Aaron, and is deliberately not taken here -- the same standing as the
-display-tangible swap noted above.
+gone, and the reward is now som_disruptor_pistol.
 
-What is handed over instead is object/weapon/ranged/pistol/pistol_dl44.iff, a
-registered base template with real numbers (object/weapon/ranged/pistol/
-pistol_dl44.lua: minDamage 20, maxDamage 90, attackSpeed 3.4, xpType
-combat_rangedspecialize_pistol, cert_pistol_dl44). It is the same pistol
-historian.lua:246-256 hands out in this arc when a shipped reward said only
-"a pistol", so the two agree.
+That used to read "an open decision for Aaron". It was not a decision -- it was a
+measurement nobody had taken. Taken now, against the live table
+datatables/item/master_item/weapon_stats.tab:
+
+	weapon_tow_pistol_02_01   244-488   tier 12   actual_dps 915   <- what this
+	                                                                  quest pays
+	som_disruptor_pistol      257-513   (weapon_tow_pistol_04_03, actual_dps 963)
+	pistol_dl44                20-90
+
+The whole TOW pistol family is one tier and one narrow band -- rows 90-99 run
+235-470 to 264-527, every one tier_granted 12, target_dps 938. som_disruptor_pistol
+lands 5% above the row this quest actually pays. pistol_dl44 lands an order of
+magnitude below it, so the old reward was not a conservative substitute; it was
+the wrong tier of weapon entirely, and a level-capped reward quest paid out
+starter gear.
+
+It is also what the arc already does elsewhere: symbiosis.lua grants
+som_sword_obsidian for its own TOW melee reward rather than a generic blade. The
+two now agree.
+
+The pistol handed over is therefore object/weapon/ranged/pistol/som_disruptor_pistol.iff
+(object/custom_content/weapon/ranged/som_disruptor_pistol.lua: minDamage 257,
+maxDamage 513, attackSpeed 3, maxRange 35, xpType combat_rangedspecialize_pistol,
+cert_pistol_cdef), registered with addTemplate at the end of that file and included
+from custom_content/weapon/ranged/serverobjects.lua:155.
+
+historian.lua:246-256 still hands out pistol_dl44, and that stays right: its
+shipped reward says only "a pistol" with no live stats row behind it. This one
+names a specific TOW pistol and has a row, so it is matched to the row.
 
 It goes over with giveItem() into the player's inventory, which creates the object
 for real. This is deliberately NOT addRewardedSchematic, which fails closed when
 the path is not in scripts/managers/crafting/schematics.lua and would silently
 grant nothing -- the defect hidden_treasure.lua's reward had to be corrected for.
 
-To restore a live functional weapon later, only rewardItem below changes --
-Aaron's open call on the collection display tangible above is the other path.
+If a closer match than som_disruptor_pistol is ever built -- a template cut to
+weapon_tow_pistol_02_01's own 244-488 rather than 04_03's 257-513 -- only
+rewardItem below changes. Nothing else in this file reads the reward path.
 
 REPEATS
 
@@ -327,8 +350,9 @@ somPoisonMinersScreenPlay = ScreenPlay:new {
 
 	-- task 8: Bank Credits 0, Experience Amount 0.
 	rewardCredits = 0,
-	-- Substituted for the .qst's weapon_tow_pistol_02_01; see THE REWARD.
-	rewardItem = "object/weapon/ranged/pistol/pistol_dl44.iff",
+	-- Matched to the .qst's weapon_tow_pistol_02_01 (244-488, tier 12) by the
+	-- weapon_stats.tab row som_disruptor_pistol comes from; see THE REWARD.
+	rewardItem = "object/weapon/ranged/pistol/som_disruptor_pistol.iff",
 
 	campAreaID = 0,
 	beaconAreaID = 0,

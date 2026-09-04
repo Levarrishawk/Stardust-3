@@ -19,8 +19,8 @@
 	EVERY string, coordinate, radius, count, item template and signal name in this
 	file is quoted from those seven .qst files. Where a value is quoted, the comment
 	says which task it came from. Where a value is NOT in the shipped data it is
-	labelled INFERRED or SUBSTITUTED and it is also listed as an open decision in the
-	hand-back report -- it is not dressed up as shipped data.
+	labelled INFERRED or SUBSTITUTED at the point it is used, with the reason it
+	could not be sourced -- it is not dressed up as shipped data.
 
 	Coordinate mapping: the .qst writes LocationX / LocationY / LocationZ where
 	LocationY is the HEIGHT. Core3 takes (x, z, y). So x = LocationX,
@@ -2088,8 +2088,13 @@ function storyArcChaptersScreenPlay:useFactoryTerminal(pPlayer, objectID)
 		return
 	end
 
-	-- task 10 Reward, verbatim template, CountItem 1.
-	self:grantItem(pPlayer, self.datapadTemplate, "You have received a droid factory history datapad.")
+	-- task 10 Reward, verbatim template, CountItem 1. The confirmation line is the
+	-- shipped one: @som/som_quest:df_terminal_datapad, "You downloaded the factory
+	-- recordings to a datapad." It was an invented paraphrase until the df_terminal_*
+	-- keys were found -- the same table the keypad half of this file already reads
+	-- at :2115 and :2136-2145. grantItem ends in sendSystemMessage (:1408), which
+	-- resolves @refs.
+	self:grantItem(pPlayer, self.datapadTemplate, "@som/som_quest:df_terminal_datapad")
 
 	local history = _G["somHkHistoryScreenPlay"]
 
@@ -2513,8 +2518,13 @@ function storyArcChaptersScreenPlay:getRadialText(pPlayer, role)
 		return nil
 	end
 
+	-- The shipped radial label, @som/som_quest:df_terminal_use "Access Factory
+	-- Memory Banks". "Break into the terminal" was invented before the df_terminal_*
+	-- keys were found. The live terminal drew three rows -- df_terminal_use,
+	-- df_terminal_use_override and df_terminal_slice -- and this port collapses the
+	-- override and slice steps into the one gate at :2078-2090, so only _use is hung.
 	if (role == "factoryTerminal" and stage == self.STAGE_FACTORY_TERMINAL) then
-		return "Break into the terminal"
+		return "@som/som_quest:df_terminal_use"
 	end
 
 	if (role == "factoryKeypad" and stage == self.STAGE_ENTER_FACTORY) then

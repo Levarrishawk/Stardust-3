@@ -59,7 +59,9 @@
 	70, registered at som/serverobjects.lua:175), renamed with
 	setCustomObjectName("Foehorn").  That is the heaviest-flavoured shipped tulrus
 	variant and task 4 calls the target "A huge and furious tulrus", but the pick
-	is MINE, not a finding -- see OPEN DECISIONS in the report.
+	is MINE, not a finding, and this comment is where it is recorded rather than
+	deferred: som_tulrus_foehorn exists nowhere but its own .qst, so no further
+	reading can settle what it looked like.
 
 	SOCIAL GROUP IS NOT USABLE -- TEMPLATES ENUMERATED INSTEAD
 	----------------------------------------------------------

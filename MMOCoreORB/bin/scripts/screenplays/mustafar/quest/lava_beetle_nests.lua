@@ -109,7 +109,9 @@
 	That is the only shipped soldier-caste kubaza beetle in the tree, and the
 	.qst's own prose calls the targets "kubaza soldier beetles" in task 15-18's
 	journalEntryDescription and "kubaza beetles" in task 6's.  The substitution
-	is my pick, not a finding -- see OPEN DECISIONS in the report.  Nothing here
+	is my pick, not a finding, and this comment is where it is recorded rather
+	than deferred: the two .qst names exist nowhere but the .qst files, so no
+	further reading can settle which creature they meant.  Nothing here
 	distinguishes the two .qst names from each other, because nothing shipped
 	says how they differed.
 

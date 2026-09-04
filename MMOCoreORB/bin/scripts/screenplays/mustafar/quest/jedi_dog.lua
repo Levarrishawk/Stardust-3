@@ -94,36 +94,50 @@
 	over all of C:\swg-extract\_som returns hits only inside this .qst itself.
 	There is no mobile/custom_content/som template for it, so it cannot be spawned.
 
-	It is substituted with mobile/custom_content/som/orf_xandank (level 70,
-	registered at som/serverobjects.lua:101), renamed with
-	setCustomObjectName("Cobak").
+	So it is BUILT, at mobile/custom_content/som/som_xandank_cobak.lua
+	(registered at som/serverobjects.lua:239), and spawned under that name,
+	renamed with setCustomObjectName("Cobak").
 
-	orf_xandank rather than the plain "xandank" for one concrete reason, not
-	flavour: trophy_hunts.lua:432-436 counts som_xandank_trophey's pack kills off
-	a template set of { xandank, xandank_onyx_plated, xandank_patriarch }, with a
-	deliberate fallback (trophy_hunts.lua:1174) that credits ANY creature of
-	those templates when the recorded spawn ids do not match.  Building Cobak out
-	of one of those three would make killing him tick that quest's pack counter
-	even when he is not one of its recorded spawns.  orf_xandank is outside
-	trophy_hunts' set, so it avoids exactly that.
+	Every stat in it is orf_xandank.lua verbatim and it reuses orf_xandank's
+	shipped appearance, so nothing about the creature the player fights changed.
+	Reusing another template's .iff is the tree's ordinary convention, not a
+	special case built for this: 3385 of 6223 creature templates in mobile/ do
+	it (bageraset_bruiser -> bageraset_hue.iff is a nearby example), so this
+	needed no new client asset.
 
-	It does NOT avoid every counter, and saying so would be false.  Four xandank
-	templates are registered (som/serverobjects.lua:101 orf_xandank, :190 xandank,
-	:180 xandank_onyx_plated, :181 xandank_patriarch) and TWO other screenplays
-	count all four together:
+	The registered NAME is the whole point, because the name is what quests count
+	kills by -- ScreenPlayObserver reads AiAgent:getCreatureTemplateName()
+	(bounty_hunts.lua:490).  Three sets list xandank templates:
 
-	    bounty_hunts.lua:275     killTemplates = { xandank, xandank_onyx_plated,
-	    map_exploration.lua:186                    xandank_patriarch, orf_xandank }
+	    bounty_hunts.lua:281      { xandank, xandank_onyx_plated,
+	    map_exploration.lua:193     xandank_patriarch, orf_xandank }
+	    trophy_hunts.lua:432-436  { xandank, xandank_onyx_plated,
+	                                xandank_patriarch }
 
-	So killing Cobak credits those two quests' xandank legs no matter which of
-	the four he is built from -- there is no xandank variant that dodges them.
-	Whether a scripted unique should be excluded from those two sets (the way
-	reunite_shard's som_kenobi_reunite_tulrus is excluded from the tulrus sets)
-	is a real call and it is NOT made here: touching another screenplay's kill
-	set would change quests nobody asked me to change.  OPEN.
+	som_xandank_cobak is in none of them, so killing Cobak now ticks no culling
+	quest at all.  That matches live, where som_xandank_cobak was its own
+	CreatureType and could not have counted either, and it matches how this arc
+	already handles a scripted unique: som_kenobi_reunite_tulrus is a dedicated
+	template sitting outside the tulrus sets for the same reason.
 
-	Which shipped xandank variant Cobak "should" be is still MINE, not a finding
-	-- see OPEN DECISIONS in the report.
+	This replaces an earlier workaround that spawned him as orf_xandank to dodge
+	trophy_hunts' set specifically.  That dodged one set of three and left the
+	other two counting him; it is gone.  trophy_hunts.lua:1174's fallback --
+	which credits ANY creature of its templates when the recorded spawn ids do
+	not match -- also no longer reaches him, since he is not one of its templates.
+
+	No other screenplay's kill set was edited to achieve this, which matters:
+	changing bounty_hunts' or map_exploration's killTemplates would alter quests
+	this file has no business altering.  Cobak steps out of those sets by being
+	his own template, which is the tree's own mechanism, so those two files are
+	untouched and still count the four ordinary xandank variants exactly as
+	before (som/serverobjects.lua:101 orf_xandank, :190 xandank, :180
+	xandank_onyx_plated, :181 xandank_patriarch).
+
+	What Cobak LOOKS like is still my pick and not a finding -- the .qst gives no
+	appearance, so orf_xandank's was carried over unchanged as the one already in
+	use.  It is recorded here rather than deferred: nothing shipped says which
+	xandank he resembled, so no amount of further reading would settle it.
 
 	Berken's Flow, where task 5 says to look: the chest sits 411.99 m outside the
 	nearest Berken's Flow spawn ring, which is berkens_4 (centre -616 / 4433,
@@ -271,7 +285,7 @@ jediDogScreenPlay = ScreenPlay:new {
 	collarItemName = "The tag on the collar reads: Cobak - 78452",
 	collarsRequired = 1,
 	collarDropPercent = 100,
-	cobakTemplate = "orf_xandank",
+	cobakTemplate = "som_xandank_cobak",
 	cobakName = "Cobak",
 	-- Respawning, not one-shot: he is a permanent world guard shared by every
 	-- player and the quest is repeatable.  Respawn re-inserts the SAME object,
@@ -458,8 +472,9 @@ end
 --
 -- One persistent observer per player.  The 5th argument to createObserver is
 -- the persistence flag; without it the credit stops after a relog.  Cobak is
--- matched by objectID rather than by template so that an ordinary orf_xandank
--- somewhere else on the planet cannot hand over the collar.
+-- matched by objectID rather than by template.  He now has his own template
+-- (som_xandank_cobak), so a template match would be sound, but objectID is
+-- kept: it is the stricter test and it survives the template being reused.
 -- ====================================================================
 
 function jediDogScreenPlay:attachKillObserver(pPlayer)

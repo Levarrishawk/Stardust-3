@@ -22,25 +22,55 @@ Ten one-task quests in the client TREs:
 
 Every one is a single task of type "Comm Player" carrying a literal
 `Comm Message Text` and an `NPC Appearance Server Template`. The prose in the
-`entries` table below is quoted verbatim from those files -- including their
-typos, which are shipped and are left alone:
+`entries` table below is quoted from those files -- including their typos, which
+are shipped and are left alone:
 
 	one    the quest title says Entry #64951, the message body says #64591
 	       (transposed digits). Both files agree; both are reproduced.
-	three  "a through study", "we already striped the ship", "thought patten",
-	       "so sort of control override"
+	three  "we already striped the ship", "so sort of control override"
 	five   opens "Entry: #64955:" with an extra colon, and spells the Viceroy
 	       "Gunnary"
 	six    "Sideous", "Vadar"
-	nine   "Initate"
+
+Four more typos were on this list until the string source changed -- three's "a
+through study" and "thought patten", nine's "Flaw located" and "Initate". They
+are artefacts of the quest/ground copy only. The copy that now renders spells
+all four correctly. See the next section.
 
 Cross-checked against the shipped string tables
 string/en/quest/ground/som_hk_history_<n>.stf. All four carried fields
 (task00_comm_message_text, journal_entry_title, journal_entry_description,
 category) are byte-identical to the .qst on all ten entries -- 40 of 40
-comparisons, no disagreement. The literal is used here rather than an "@stf"
-reference so the text renders regardless of which client TREs a given install
-carries; the key each string lives under is recorded per entry as `stf`.
+comparisons, no disagreement.
+
+THERE IS A SECOND SHIPPED COPY, AND IT IS THE ONE USED
+
+That 40-of-40 comparison covered two sources. It missed a third:
+string/en/som/som_quest.stf carries the same ten bodies again under
+hk_history_message_01 .. _10. It ships in mtg_patch_019.tre, which
+conf/config.lua:176 loads.
+
+This file used to hardcode the English bodies as literals, and said it did so
+"so the text renders regardless of which client TREs a given install carries."
+That reason does not survive checking. The datapad is the only object that
+reaches all ten, and HkHistoryDatapadMenuComponent.lua already resolves six
+@som/som_quest keys -- :20 the radial, :41-42 the window, :47 the per-entry row
+label hk_history_datapad_01..10, :71 and :78 the error. An install missing
+som_quest.stf shows raw keys for the radial and for every row in the list, so
+the feature is broken before a body is ever rendered. A literal body could not
+have rescued it. `message` is therefore the shipped key, matching the sibling
+file and the tree's own convention for SUI prompts (corvetteSui.lua:6,
+warrenComponents.lua:43). The English is kept inline as a trailing comment, the
+way corvetteSui.lua keeps its own.
+
+The som_quest copy also differs from the quest/ground copy in four places, and
+in all four it is the correct spelling -- "a thorough study" (not "through"),
+"thought patterns" (not "patten"), "Flaws located" (not "Flaw"), "Initiate"
+(not "Initate"). Rendering now follows som_quest, so those four typos are gone.
+The typos that appear in BOTH copies are genuinely shipped and still render:
+entry one's transposed #64591, entry five's "Entry: #64955:" and "Gunnary",
+entry six's "Sideous" and "Vadar". The key each string lives under in
+string/en/quest/ground/ is still recorded per entry as `stf`.
 
 The `.qst` files carry nothing else this port can act on. Planet is "tatooine"
 and the location is 0,0,0 on all ten, which is the editor default for a task that
@@ -135,7 +165,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/neimoidian.iff",
 			stf = "@quest/ground/som_hk_history_one:task00_comm_message_text",
-			message = "Entry #64591: Today we located a crashed vessel of that appears to be Old Republic in origin. All the ships systems seem to be off line but functional which have our engineers baffled as to the cause of the crash. The only occupant that we were able to find of the ship was a droid of unknown design. Surprisingly, after all this time, the droid seems to be in excellent condition and our engineers are confident that they will be able to reactivate it. Maybe it will have some clues about the origin of the vessel.",
+			message = "@som/som_quest:hk_history_message_01", -- Entry #64591: Today we located a crashed vessel of that appears to be Old Republic in origin. All the ships systems seem to be off line but functional which have our engineers baffled as to the cause of the crash. The only occupant that we were able to find of the ship was a droid of unknown design. Surprisingly, after all this time, the droid seems to be in excellent condition and our engineers are confident that they will be able to reactivate it. Maybe it will have some clues about the origin of the vessel.",
 		},
 		{
 			number = 2,
@@ -144,7 +174,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/neimoidian.iff",
 			stf = "@quest/ground/som_hk_history_two:task00_comm_message_text",
-			message = "Entry #64952: What a disaster. Our engineers managed to turn the droid back on and it went on a rampage. It went through several of our engineers, three super battle droids, and even a droideka with incredible ease. Fortunately one of our smarter engineers installed a restraining bolt on it before we turned it back on and we were able to stop it. Viceroy Gunray has been informed of our discovery.",
+			message = "@som/som_quest:hk_history_message_02", -- Entry #64952: What a disaster. Our engineers managed to turn the droid back on and it went on a rampage. It went through several of our engineers, three super battle droids, and even a droideka with incredible ease. Fortunately one of our smarter engineers installed a restraining bolt on it before we turned it back on and we were able to stop it. Viceroy Gunray has been informed of our discovery.",
 		},
 		{
 			number = 3,
@@ -153,7 +183,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/neimoidian.iff",
 			stf = "@quest/ground/som_hk_history_three:task00_comm_message_text",
-			message = "Entry #64953: As per Viceroy Gunray's orders, we have made a through study of this droid. It is like nothing we have ever seen before, amazing technology for something so old. Due to its incomprehensible thought matrix we were unable to perform a memory wipe. But one of our engineers came up with a solution, we were able to transfer the memory and thought patterns of the droid into a functioning sub-system of the crashed cruiser. Since we already striped the ship of everything of value, we should be safe from that homicidal droid there. On a side note our engineers said that in order to make the transfer they had to remove a sub-routine in the droid's thought patten...so sort of control override.",
+			message = "@som/som_quest:hk_history_message_03", -- Entry #64953: As per Viceroy Gunray's orders, we have made a thorough study of this droid. It is like nothing we have ever seen before, amazing technology for something so old. Due to its incomprehensible thought matrix we were unable to perform a memory wipe. But one of our engineers came up with a solution; we were able to transfer the memory and thought patterns of the droid into a functioning sub-system of the crashed cruiser. Since we already striped the ship of everything of value, we should be safe from that homicidal droid there. On a side note our engineers said that in order to make the transfer they had to remove a sub-routine in the droid's thought pattern...so sort of control override.",
 		},
 		{
 			number = 4,
@@ -162,7 +192,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/neimoidian.iff",
 			stf = "@quest/ground/som_hk_history_four:task00_comm_message_text",
-			message = "Entry #64954: Without the knowledge of the local Mustafarians we finished construction of our new factory. Based off of the design of the droid found in the crashed ship, we were able to make a new combat droid of incredible power. The factory is fully stocked and ready to be activated. With these new droids we will be unstoppable. Viceroy Gunray announced that he will be arriving tomorrow. He will have the honor of activating our new factory.",
+			message = "@som/som_quest:hk_history_message_04", -- Entry #64954: Without the knowledge of the local Mustafarians we finished construction of our new factory. Based off of the design of the droid found in the crashed ship, we were able to make a new combat droid of incredible power. The factory is fully stocked and ready to be activated. With these new droids we will be unstoppable. Viceroy Gunray announced that he will be arriving tomorrow. He will have the honor of activating our new factory.",
 		},
 		{
 			number = 5,
@@ -171,7 +201,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/neimoidian.iff",
 			stf = "@quest/ground/som_hk_history_five:task00_comm_message_text",
-			message = "Entry: #64955: Viceroy Gunnary arrived today but informed us that the factory will have to remain offline for a while longer. He is awaiting word from Sideous before he can take the next step. The factory remains at the ready and if early estimates of its production capabilities are any indication, we will have a massive army of these new droids shortly after it is turned on. On a side note, the droids AI seems to have melded with the ship and taken over its operational systems. Our engineers have never seen the like before. We have sealed up the ship and disconnected the uplink we set up on the ship for reasons of safety. Once we have a chance we will destroy the ship and that homicidal AI with it.",
+			message = "@som/som_quest:hk_history_message_05", -- Entry: #64955: Viceroy Gunnary arrived today but informed us that the factory will have to remain offline for a while longer. He is awaiting word from Sideous before he can take the next step. The factory remains at the ready and if early estimates of its production capabilities are any indication, we will have a massive army of these new droids shortly after it is turned on. On a side note, the droids AI seems to have melded with the ship and taken over its operational systems. Our engineers have never seen the like before. We have sealed up the ship and disconnected the uplink we set up on the ship for reasons of safety. Once we have a chance we will destroy the ship and that homicidal AI with it.",
 		},
 		{
 			number = 6,
@@ -180,7 +210,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/neimoidian.iff",
 			stf = "@quest/ground/som_hk_history_six:task00_comm_message_text",
-			message = "Entry #64956: This will be my last entry. Viceroy Gunray is dead and most of the federation along with him. Sideous' new apprentice killed everyone. I was only able to escape by chance. I have shut down most of the factory's systems and am preparing to go into hiding. I cannot take the risk that Vadar will come looking for me here.",
+			message = "@som/som_quest:hk_history_message_06", -- Entry #64956: This will be my last entry. Viceroy Gunray is dead and most of the federation along with him. Sideous' new apprentice killed everyone. I was only able to escape by chance. I have shut down most of the factory's systems and am preparing to go into hiding. I cannot take the risk that Vadar will come looking for me here.",
 		},
 		{
 			number = 7,
@@ -189,7 +219,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/hk47.iff",
 			stf = "@quest/ground/som_hk_history_seven:task00_comm_message_text",
-			message = "Entry #64957: Access port number AG4. Begin factory start up sequence. Prepare automated systems override. Droid cycle process full click. Alter door passcode...37323.",
+			message = "@som/som_quest:hk_history_message_07", -- Entry #64957: Access port number AG4. Begin factory start up sequence. Prepare automated systems override. Droid cycle process full click. Alter door passcode...37323.",
 		},
 		{
 			number = 8,
@@ -198,7 +228,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/hk47.iff",
 			stf = "@quest/ground/som_hk_history_eight:task00_comm_message_text",
-			message = "Entry #64958: Interesting. Factory has an automated recorder installed in its main frame. Meatbags, seem to take comfort in keeping logs of their activities. I am amused by this behavior.",
+			message = "@som/som_quest:hk_history_message_08", -- Entry #64958: Interesting. The factory has an automated recorder installed into its main frame. Meatbags, seem to take comfort in keeping logs of their activities. I am amused by this behavior.",
 		},
 		{
 			number = 9,
@@ -207,7 +237,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/hk47.iff",
 			stf = "@quest/ground/som_hk_history_nine:task00_comm_message_text",
-			message = "Entry #64959: Flaw located in model HK-57 and model HK-67. Initate creation sequence for model HK-77, full capacity. Prepare and install humanoid elimination orders.",
+			message = "@som/som_quest:hk_history_message_09", -- Entry #64959: Flaws located in model HK-57 and model HK-67. Initiate creation sequence for model HK-77, full capacity. Prepare and install humanoid elimination orders.",
 		},
 		{
 			number = 10,
@@ -216,7 +246,7 @@ somHkHistoryScreenPlay = ScreenPlay:new {
 			radialText = "Start Playback",
 			appearance = "object/mobile/som/hk47.iff",
 			stf = "@quest/ground/som_hk_history_ten:task00_comm_message_text",
-			message = "Entry #64960: Target initiated. Mensix Mining Facility. Limited defensive capabilities. Minimum force required to accomplish primary objective. Primary objective...elimination of meatbags.",
+			message = "@som/som_quest:hk_history_message_10", -- Entry #64960: Target initiated. Mensix Mining Facility. Limited defensive capabilities. Minimum force required to accomplish primary objective. Primary objective...elimination of meatbags.",
 		},
 	},
 
@@ -231,10 +261,25 @@ registerScreenPlay("somHkHistoryScreenPlay", true)
 function somHkHistoryScreenPlay:start()
 	self.entryByObjectID = {}
 
-	-- Nothing is placed. The shipped .qst files do not say what triggers a
-	-- playback (see OPEN QUESTION in the header), and this port does not invent
-	-- console positions. Once the placements are known this is where they get
-	-- attached, via self:registerTrigger(pObject, number).
+	-- This screenplay places nothing, and that is correct rather than pending.
+	-- There was never a set of ten consoles to place. The trigger shipped as two
+	-- objects, both already wired by story_arc_chapters.lua:
+	--
+	--   the exterior factory terminal, snapshot/mustafar.ws node 12112268
+	--   (529.13, 66.15, 1968.60), plays entry 7 only -- story_arc_chapters.lua
+	--   :928-938 claims its radial, :2069 useFactoryTerminal, :2093-2097 calls
+	--   playEntry. Entry 7 is the arc's key: :2131-2140 refuses the door passcode
+	--   37323 unless hasPlayedEntry(pPlayer, 7).
+	--
+	--   the droid factory history datapad, granted by that same terminal, plays
+	--   all ten -- HkHistoryDatapadMenuComponent.lua:20 radial, :39-51 the list,
+	--   :82 calls playEntry. It is bound declaratively in
+	--   object/custom_content/tangible/item/som/droid_factory_history_datapad.lua:2.
+	--
+	-- The ten .qst files carry Planet tatooine / 0,0,0 / createWaypoint 0, so
+	-- there is no location to derive and none was withheld. registerTrigger and
+	-- terminalUsed below keep no caller on purpose: they are the seam for a third
+	-- placed object, and no third object ships.
 end
 
 --[[ Lookup ]]
