@@ -59,3 +59,6 @@ SWGEmu.exe.planetmap.bin
 /object
 /effect
 /.codex-tmp
+
+# Mustafar port working notes -- kept on disk, out of the repo.
+/scratch/
