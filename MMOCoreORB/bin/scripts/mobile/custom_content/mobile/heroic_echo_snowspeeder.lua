@@ -47,7 +47,11 @@ heroic_echo_snowspeeder = Creature:new {
 	optionsBitmask = AIENABLED,
 	diet = NONE,
 
-	templates = {"object/mobile/snowspeeder.iff"},
+	-- EB-d fix-1 (2026-09-04): SOE's appearance object/mobile/snowspeeder.iff carries client gameObjectType 0x10002 (a vehicle type);
+	-- Core3's ObjectManager refuses to create a creature from it ("unknown gameObjectType 65538", final boot probe).
+	-- The registered creature-typed snowspeeder model is the TCG familiar; scaled up. OURS, NOT SOURCED (appearance substitution).
+	templates = {"object/mobile/tcg_familiar_snow_speeder.iff"},
+	scale = 4.0,
 	lootGroups = {},
 
 	conversationTemplate = "",
