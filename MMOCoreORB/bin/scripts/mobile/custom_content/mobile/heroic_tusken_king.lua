@@ -59,7 +59,10 @@ heroic_tusken_king = Creature:new {
 	lootGroups = { { groups = { {group = "tusken_heroic_drops", chance = 10000000} }, lootChance = 10000000 } },
 
 	conversationTemplate = "",
-	primaryWeapon = "object/weapon/melee/baton/baton_gaderiffi_elite.iff",
+	-- SOE primary_weapon baton_gaderiffi_elite.iff is registered only by object/custom_content/weapon/melee/baton_gaderiffi_elite.lua,
+	-- a directory the include chain never reaches (board X-3) -- the boot probe logged "unknown CRC 0xd72bbc82" on this spawn.
+	-- Until X-3 is ruled, the King carries the registered tusken_melee group (stock gaderiffi). OURS, NOT SOURCED. (H(ta) fix-1)
+	primaryWeapon = "tusken_melee",
 	secondaryWeapon = "tusken_ranged",
 	primaryAttacks = merge(brawlermaster, fencermaster),
 	secondaryAttacks = merge(marksmanmaster, riflemanmaster)
