@@ -1,5 +1,5 @@
 -- Tusken Army (Mos Espa) entry radial. Copied from Lev's axkvaMinEntryMenuComponent.lua
--- (the template, Aaron 2026-09-04): radial ids (20, 3) = axkvaMinEntryMenuComponent.lua:7,
+-- (the template, ruling 2026-09-04): radial ids (20, 3) = axkvaMinEntryMenuComponent.lua:7,
 -- the 6 m range check = :16. Mount guard DROPPED (D10): SOE instance_datatable.tab
 -- vehicle_allowed = 1 and the town is 656 m wide. Grouped-only kept.
 local ObjectManager = require("managers.object.object_manager")
