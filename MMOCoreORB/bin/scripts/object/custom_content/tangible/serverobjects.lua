@@ -63,4 +63,8 @@ includeFile("custom_content/tangible/smuggler/serverobjects.lua")
 includeFile("custom_content/tangible/tcg/serverobjects.lua")
 includeFile("custom_content/tangible/veteran_reward/serverobjects.lua")
 
-
+-- Meatlump themepark tangibles (event / hideout / reward / the puzzle sets). This directory carried its own
+-- serverobjects.lua and exact addTemplate strings but was never included from here, so the corellia and naboo
+-- snapshots logged 20 "could not create snapshot object ... object/tangible/meatlump/event/..." errors every
+-- boot. One include; deploy probe 2026-09-04 03:49: 20 -> 0, no other snapshot error remains. (MT part 1)
+includeFile("custom_content/tangible/meatlump/serverobjects.lua")
