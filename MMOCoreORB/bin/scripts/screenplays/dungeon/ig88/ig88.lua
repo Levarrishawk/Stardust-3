@@ -44,7 +44,7 @@
 -- not referenced anywhere in this tree and was not verified to ship; spec 1.5
 -- says drop it rather than substitute a different effect.
 --
--- Barks: silent this round (D3). Markers only, no English bark text.
+-- Barks: Lev-style spatialChat, one line per SOE shout beat (H(ig-b)).
 
 local ObjectManager = require("managers.object.object_manager")
 
@@ -396,7 +396,6 @@ function ig88:spawnPhaseZero()
   if (pMouse ~= nil) then
     TangibleObject(pMouse):setOptionBit(INVULNERABLE)
     -- Blink dropped: appearance/pt_ig88_mouse_droid_blink.prt was not verified to ship.
-    -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_defeat
     writeData("ig88:starterMouseID", SceneObject(pMouse):getObjectID())
   end
 
@@ -439,9 +438,9 @@ function ig88:notifyStarterMouseArea(pActiveArea, pMovingObject)
     local cellID = self:getR1CellID()
     -- SOURCED (SOE, heroic_ig88.tab:9) pathPoint mouse_destination (0,0,-22)
     AiAgent(pMouse):setNextPosition(0, 0, -22, cellID)
+    spatialChat(pMouse, "Intruders! Raise the alarm!")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_defeat)
   end
 
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_defeat
   createEvent(5 * 1000, "ig88", "startEncounter", pMovingObject, "")
   return 0
 end
@@ -475,9 +474,7 @@ function ig88:startEncounter(pPlayer)
   self:deleteAlarms()
 
   -- Timing ladder off message_start_encounter. delayAction seconds * 1000.
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key start_ig88_taunt
   createEvent(10 * 1000, "ig88", "ig88Waypoint1", pPlayer, "")
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_regret
   createEvent(11 * 1000, "ig88", "barkRegret", pPlayer, "")
 
   -- Bomb-droid ladder SOURCED (SOE, heroic_ig88.tab:22,30-59). t+61 and t+70 appear twice -- SOE duplicates, transcribed both.
@@ -541,15 +538,39 @@ function ig88:deleteAlarms()
 end
 
 function ig88:barkRegret(pPlayer)
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_regret
+  local pBoss = getSceneObject(readData("ig88:bossID"))
+  if (pBoss == nil) then
+    return
+  end
+  spatialChat(pBoss, "You should not have come here.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_regret)
+  createEvent(4 * 1000, "ig88", "barkRegretLater", pPlayer, "")
+end
+
+function ig88:barkRegretLater(pPlayer)
+  if (readData("ig88:encounterState") ~= 1) then
+    return
+  end
+  local pBoss = getSceneObject(readData("ig88:bossID"))
+  if (pBoss == nil) then
+    return
+  end
+  spatialChat(pBoss, "Did you think I would not be ready for you?")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_regret)
 end
 
 function ig88:barkBombDroids(pPlayer)
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_bomb_droids
+  local pBoss = getSceneObject(readData("ig88:bossID"))
+  if (pBoss == nil) then
+    return
+  end
+  spatialChat(pBoss, "Bomb droids, destroy them.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_bomb_droids)
 end
 
 function ig88:barkBombIntermission(pPlayer)
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_bomb_intermission
+  local pBoss = getSceneObject(readData("ig88:bossID"))
+  if (pBoss == nil) then
+    return
+  end
+  spatialChat(pBoss, "Is that all? I am just getting started.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_bomb_intermission)
 end
 
 function ig88:ig88Waypoint1(pPlayer)
@@ -558,6 +579,7 @@ function ig88:ig88Waypoint1(pPlayer)
   if (pBoss == nil) then
     return
   end
+  spatialChat(pBoss, "So. You found me. That was a mistake.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java start_ig88_taunt)
   local cellID = self:getR1CellID()
   AiAgent(pBoss):setNextPosition(0, 0, -14, cellID)
 end
@@ -631,7 +653,10 @@ function ig88:spawnDroidekas(pPlayer)
   if (readData("ig88:encounterState") ~= 1) then
     return
   end
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_droidekas
+  local pBoss = getSceneObject(readData("ig88:bossID"))
+  if (pBoss ~= nil) then
+    spatialChat(pBoss, "Droidekas, wipe them out.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_droidekas)
+  end
   local spots = {
     {20, 0, -22}, {-20, 0, 43}, {-20, 0, -22}, {20, 0, 43}
   }
@@ -679,7 +704,10 @@ function ig88:spawnSuperDroidsAndMice(pPlayer)
   if (readData("ig88:encounterState") ~= 1) then
     return
   end
-  -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_super_droids
+  local pBoss = getSceneObject(readData("ig88:bossID"))
+  if (pBoss ~= nil) then
+    spatialChat(pBoss, "Super battle droids, kill them all.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_super_droids)
+  end
   writeData("ig88:superDroidsAlive", 2)
 
   local pSuper1 = self:spawnMobileInR1("heroic_ig88_super_battle_droid", 20, 0, -22, 0)
@@ -815,7 +843,10 @@ function ig88:superDroidKilled(pSuper, pPlayer)
   if (left == 0 and readData("ig88:encounterState") == 1) then
     -- waitForComplete on the two super droids -> delete both mice, shoutAssassination, charge +1 s.
     self:destroyPatrolMice()
-    -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_assassination
+    local pBoss = getSceneObject(readData("ig88:bossID"))
+    if (pBoss ~= nil) then
+      spatialChat(pBoss, "Enough. I will finish this myself.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_assassination)
+    end
     createEvent(1000, "ig88", "ig88Charge", pPlayer, "")
   end
   return 0
@@ -938,10 +969,45 @@ function ig88:ig88Killed(pBoss, pPlayer)
   writeData("ig88:encounterState", 2)
   if (pPlayer ~= nil) then
     CreatureObject(pPlayer):sendSystemMessage("You and your group have defeated IG-88!  You will be removed from the instance in 120 seconds.")
-    -- REWARD: awaiting Aaron's ruling (spec PART 7.1); SOE awards tokenIndex 2 here
+    -- OURS, NOT SOURCED (Lev's awardBadgeToAll shape; the item is SOE's tokenIndex 2)
+    createEvent(1000, "ig88", "awardTokenToAll", pPlayer, "")
     createEvent(120000, "ig88", "handleVictory", pPlayer, "")
   end
   return 0
+end
+
+function ig88:awardToken(pPlayer)
+  if (pPlayer == nil) then
+    return
+  end
+  -- Guard key is per player PER RUN (run = ig88StartTime), so a repeat victory grants again the way
+  -- SOE's script does on every kill; a per-player-only key would have meant one token per server
+  -- uptime. Stale keys from old runs are harmless volatile writeData. (orchestrator fix-2, H(ig-b))
+  local oid = SceneObject(pPlayer):getObjectID() .. ":" .. tostring(readData("ig88StartTime"))
+  if (readData("ig88:token:" .. oid) == 1) then
+    return
+  end
+  local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
+  if (pInventory ~= nil) then
+    giveItem(pInventory, "object/tangible/loot/misc/ig88_token.iff", -1, true)
+    writeData("ig88:token:" .. oid, 1)
+  end
+end
+
+function ig88:awardTokenToAll(pPlayer)
+  -- OURS, NOT SOURCED (Lev's awardBadgeToAll shape; the item is SOE's tokenIndex 2)
+  createEvent(1000, "ig88", "awardToken", pPlayer, "")
+
+  if (CreatureObject(pPlayer):isGrouped()) then
+    local groupSize = CreatureObject(pPlayer):getGroupSize()
+
+    for i = 0, groupSize - 1, 1 do
+      local pMember = CreatureObject(pPlayer):getGroupMember(i)
+      if pMember ~= nil and pMember ~= pPlayer and CreatureObject(pPlayer):isInRangeWithObject(pMember, 300) and not SceneObject(pMember):isAiAgent() then
+        self:awardToken(pMember, pPlayer)
+      end
+    end
+  end
 end
 
 -- SOURCED (SOE, ig88_controller.java:61-87). Polls every 5 s while anyone is alive in r1;
@@ -957,7 +1023,10 @@ function ig88:failureCheck(pPlayer)
   if (now - readData("ig88:lastFailureTime") > 1) then
     writeData("ig88:lastFailureTime", now)
     writeData("ig88:failureCount", readData("ig88:failureCount") + 1)
-    -- BARK: awaiting Aaron's ruling (spec 1.7); SOE key ig88_failed
+    local pBoss = getSceneObject(readData("ig88:bossID"))
+    if (pBoss ~= nil) then
+      spatialChat(pBoss, "You have failed. As expected.")  -- OURS, NOT SOURCED (Lev-style bark; beat from ig88.java ig88_failed)
+    end
     createEvent(5 * 1000, "ig88", "restartSpawn", pPlayer, "")
   end
 end
