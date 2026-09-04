@@ -448,6 +448,8 @@ includeFile("groups/ship/components/ship_component_trade_fed_tier2.lua")
 includeFile("groups/ship/components/ship_component_trade_fed_tier3.lua")
 includeFile("groups/ship/components/ship_component_trade_fed_tier4.lua")
 includeFile("groups/ship/components/ship_component_trade_fed_tier5.lua")
+-- Tusken Army heroic
+includeFile("groups/dungeon/tusken/tusken_heroic_drops.lua")
 includeFile("groups/ship/components/ship_component_valarian_tier1.lua")
 includeFile("groups/ship/components/ship_component_valarian_tier2.lua")
 includeFile("groups/ship/components/ship_component_valarian_tier3.lua")

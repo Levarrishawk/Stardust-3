@@ -548,6 +548,10 @@ includeFile("tasks/misc/theater_manager.lua")
 includeFile("tasks/misc/conversations/crafting_contractor_conv_handler.lua")
 includeFile("tasks/misc/conversations/kidnappedNobleConvoHandler.lua")
 includeFile("tasks/misc/conversations/philosopher_conv_handler.lua")
+-- Tusken Army heroic
+includeFile("events/tuskenArmyEntryMenuComponent.lua")
+includeFile("dungeon/tusken/tuskenArmy.lua")
+includeFile("dungeon/tusken/tuskenArmyEntryWay.lua")
 includeFile("tasks/misc/conversations/herald_tatooine2_conv_handler.lua")
 
 -- Caves
