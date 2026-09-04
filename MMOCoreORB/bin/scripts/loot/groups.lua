@@ -747,3 +747,6 @@ includeFile("groups/wearables/wearables_common.lua")
 includeFile("groups/wearables/wearables_rare.lua")
 includeFile("groups/wearables/wearables_scarce.lua")
 includeFile("groups/wearables/wearables_uncommon.lua")
+
+-- IG-88
+includeFile("groups/dungeon/ig88/ig88_heroic_drops.lua")
