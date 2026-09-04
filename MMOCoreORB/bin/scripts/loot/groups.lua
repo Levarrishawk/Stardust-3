@@ -747,3 +747,11 @@ includeFile("groups/wearables/wearables_common.lua")
 includeFile("groups/wearables/wearables_rare.lua")
 includeFile("groups/wearables/wearables_scarce.lua")
 includeFile("groups/wearables/wearables_uncommon.lua")
+
+-- Exar Kun
+includeFile("groups/crystal_kuns_blood.lua")
+includeFile("groups/buff_droid.lua")
+includeFile("groups/weapon/dungeon/massassi_sith_weapons.lua")
+includeFile("groups/dungeon/exar_kun/nge_jedi_cloaks.lua")
+includeFile("groups/dungeon/exar_kun/jedi_house_deeds.lua")
+includeFile("groups/dungeon/exar_kun/exar_kun_furniture.lua")

@@ -105,5 +105,6 @@ includeFile("tangible/terminal/terminal_travel.lua")
 includeFile("tangible/terminal/terminal_travel_tutorial.lua")
 includeFile("tangible/terminal/terminal_water_pressure.lua")
 includeFile("tangible/terminal/test.lua")
+includeFile("tangible/terminal/terminal_exar_kun_entrance.lua")
 
 includeFile("tangible/terminal/terminal_axkva_min_entrance.lua")

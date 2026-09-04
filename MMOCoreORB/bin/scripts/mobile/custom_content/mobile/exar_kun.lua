@@ -4,15 +4,15 @@ exar_kun = Creature:new {
 	socialGroup = "kun",
 	mobType = MOB_NPC,
 	faction = "kun",
-	level = 400,
+	level = 200,
 	chanceHit = 4.75,
 	damageMin = 1770,
 	damageMax = 2600,
 	baseXp = 12424,
-	baseHAM = 1200000,
-	baseHAMmax = 1200000,
+	baseHAM = 610000,
+	baseHAMmax = 610000,
 	armor = 2,
-	resists = {75,75,75,75,75,75,75,75,75},
+	resists = {55,55,15,25,15,25,15,25,15},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -44,17 +44,7 @@ exar_kun = Creature:new {
       groups = {
         {group = "crystal_kuns_blood", chance = 2000000},
         {group = "nge_jedi_cloaks", chance = 2000000},
-        {group = "unstable_sabers_gen3", chance = 2000000},
-        {group = "clothing_attachments", chance = 2000000},
-        {group = "armor_attachments", chance = 2000000},
-      },
-      lootChance = 10000000,
-    },
-    {
-      groups = {
-        {group = "crystal_kuns_blood", chance = 2000000},
-        {group = "nge_jedi_cloaks", chance = 2000000},
-        {group = "unstable_sabers_gen4", chance = 2000000},
+        {group = "massassi_sith_weapons", chance = 2000000},
         {group = "clothing_attachments", chance = 2000000},
         {group = "armor_attachments", chance = 2000000},
       },
@@ -74,17 +64,17 @@ exar_kun = Creature:new {
       groups = {
         {group = "crystal_kuns_blood", chance = 2000000},
         {group = "nge_jedi_cloaks", chance = 2000000},
-        {group = "unstable_crystal_pack", chance = 2000000},
+        {group = "massassi_sith_weapons", chance = 2000000},
         {group = "clothing_attachments", chance = 2000000},
         {group = "armor_attachments", chance = 2000000},
       },
       lootChance = 10000000,
-    }, 
+    },
     {
       groups = {
-        {group = "holocron_dark", chance = 2000000},
-        {group = "power_crystals", chance = 2000000},
-        {group = "unstable_crystal_pack", chance = 2000000},
+        {group = "crystal_kuns_blood", chance = 2000000},
+        {group = "nge_jedi_cloaks", chance = 2000000},
+        {group = "massassi_sith_weapons", chance = 2000000},
         {group = "clothing_attachments", chance = 2000000},
         {group = "armor_attachments", chance = 2000000},
       },
@@ -102,7 +92,7 @@ exar_kun = Creature:new {
     }, 
     {
       groups = {
-        {group = "unstable_sabers_gen3", chance = 2000000},
+        {group = "holocron_dark", chance = 2000000},
         {group = "power_crystals", chance = 2000000},
         {group = "massassi_sith_weapons", chance = 2000000},
         {group = "clothing_attachments", chance = 2000000},
@@ -112,14 +102,30 @@ exar_kun = Creature:new {
     }, 
     {
       groups = {
-        {group = "unstable_sabers_gen4", chance = 2000000},
+        {group = "holocron_dark", chance = 2000000},
         {group = "power_crystals", chance = 2000000},
         {group = "massassi_sith_weapons", chance = 2000000},
         {group = "clothing_attachments", chance = 2000000},
         {group = "armor_attachments", chance = 2000000},
       },
       lootChance = 10000000,
-    },    
+    }, 
+    {
+      groups = {
+        {group = "holocron_dark", chance = 2000000},
+        {group = "power_crystals", chance = 2000000},
+        {group = "massassi_sith_weapons", chance = 2000000},
+        {group = "clothing_attachments", chance = 2000000},
+        {group = "armor_attachments", chance = 2000000},
+      },
+      lootChance = 10000000,
+    },  
+    {
+      groups = {
+        {group = "buff_droid", chance = 10000000},        
+      },
+      lootChance = 500000,
+    },
     {
       groups = {
         {group = "nge_jedi_cloaks", chance = 5000000},        
