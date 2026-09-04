@@ -148,6 +148,8 @@ includeFile("groups/npc/corellia/cor_swoop_tier_1.lua")
 includeFile("groups/npc/corellia/corsec_tier_1.lua")
 includeFile("groups/npc/corellia/drall_tier_1.lua")
 includeFile("groups/npc/corellia/flail_tier_1.lua")
+-- IG-88
+includeFile("groups/dungeon/ig88/ig88_heroic_drops.lua")
 includeFile("groups/npc/corellia/followers_of_lord_nyax_tier_1.lua")
 includeFile("groups/npc/corellia/followers_of_lord_nyax_tier_4.lua")
 includeFile("groups/npc/corellia/hidden_daggers_tier_1.lua")
@@ -747,6 +749,3 @@ includeFile("groups/wearables/wearables_common.lua")
 includeFile("groups/wearables/wearables_rare.lua")
 includeFile("groups/wearables/wearables_scarce.lua")
 includeFile("groups/wearables/wearables_uncommon.lua")
-
--- IG-88
-includeFile("groups/dungeon/ig88/ig88_heroic_drops.lua")
