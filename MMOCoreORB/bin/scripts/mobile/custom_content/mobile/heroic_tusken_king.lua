@@ -23,7 +23,7 @@
 -- on SD3 (0 files tree-wide). Not faked. Attacks follow stock tusken_king.lua with the
 -- elite gaffi as primary (melee) so primaryAttacks are brawler/fencer, ranged on secondary.
 --
--- D6: loot deferred to H(ta-b). lootGroups empty; the token is the reward.
+-- D6 (H(ta-a)): loot was deferred; H(ta-b) wired lootGroups to tusken_heroic_drops (SOURCED, SOE heroic.tab column tusken). The token is granted by the screenplay.
 -- Never weapons/attacks -- CreatureTemplate::readObject() does not read them.
 heroic_tusken_king = Creature:new {
 	customName = "a Tusken king",
@@ -55,7 +55,8 @@ heroic_tusken_king = Creature:new {
 	scale = 1.3,
 
 	templates = {"object/mobile/tusken_king.iff"},
-	lootGroups = {},
+	-- SOURCED (SOE heroic.tab column tusken); H(ta-b)
+	lootGroups = { { groups = { {group = "tusken_heroic_drops", chance = 10000000} }, lootChance = 10000000 } },
 
 	conversationTemplate = "",
 	primaryWeapon = "object/weapon/melee/baton/baton_gaderiffi_elite.iff",

@@ -747,3 +747,6 @@ includeFile("groups/wearables/wearables_common.lua")
 includeFile("groups/wearables/wearables_rare.lua")
 includeFile("groups/wearables/wearables_scarce.lua")
 includeFile("groups/wearables/wearables_uncommon.lua")
+
+-- Tusken Army heroic
+includeFile("groups/dungeon/tusken/tusken_heroic_drops.lua")
