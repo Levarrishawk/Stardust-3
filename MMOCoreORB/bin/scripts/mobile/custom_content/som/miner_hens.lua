@@ -2,13 +2,14 @@ miner_hens = Creature:new {
 	customName = "Miner Renlo Hens",
 	socialGroup = "townsperson",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	mobType = MOB_NPC,
+	level = 45,
+	chanceHit = 0.44,
+	damageMin = 345,
+	damageMax = 400,
+	baseXp = 4461,
+	baseHAM = 9300,
+	baseHAMmax = 11300,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -27,9 +28,11 @@ miner_hens = Creature:new {
 
 	templates = {"object/mobile/som/miner_hens.iff"},
 	lootGroups = {},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	conversationTemplate = "xandank_trophy",
+	primaryAttacks = { },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(miner_hens, "miner_hens")

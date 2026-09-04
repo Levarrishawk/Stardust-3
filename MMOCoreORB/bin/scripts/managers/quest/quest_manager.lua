@@ -351,6 +351,66 @@ QuestManager.quests.FS_CRAFTING4_QUEST_FINISH 		= 185
 QuestManager.quests.FS_CRAFT_PUZZLE_QUEST_04 		= 186
 QuestManager.quests.FS_CS_QUEST_DONE_NOTIFYONLY 	= 187
 
+-- Secrets of Mustafar: The Mining Field Markers (Surveyor Keslev -- no middle name; the
+-- "Jo" this used to carry came from the wiki, not from the shipped journals).
+-- Per area: _MARKERS is the "go check this area" quest, _MARKERS_nn is one marker, and the
+-- bare area quest is the .qst's Reward task -- it completes the moment that area's last
+-- marker is activated and pays 5000cr / 290xp on the spot. There is no hand-in; the earlier
+-- "turned in to Keslev" note here described a screen live never had.
+QuestManager.quests.SOM_BERKENS_FLOW_MARKERS		= 188
+QuestManager.quests.SOM_BERKENS_FLOW_MARKERS_01		= 189
+QuestManager.quests.SOM_BERKENS_FLOW_MARKERS_02		= 190
+QuestManager.quests.SOM_BERKENS_FLOW_MARKERS_03		= 191
+QuestManager.quests.SOM_BERKENS_FLOW_MARKERS_04		= 192
+QuestManager.quests.SOM_BERKENS_FLOW_MARKERS_05		= 193
+QuestManager.quests.SOM_BERKENS_FLOW			= 194
+QuestManager.quests.SOM_MINING_FIELD_MARKERS		= 195
+QuestManager.quests.SOM_MINING_FIELD_MARKERS_01		= 196
+QuestManager.quests.SOM_MINING_FIELD_MARKERS_02		= 197
+QuestManager.quests.SOM_MINING_FIELD_MARKERS_03		= 198
+QuestManager.quests.SOM_MINING_FIELD_MARKERS_04		= 199
+QuestManager.quests.SOM_MINING_FIELD_MARKERS_05		= 200
+QuestManager.quests.SOM_MINING_FIELD			= 201
+QuestManager.quests.SOM_CRYSTAL_FLATS_MARKERS		= 202
+QuestManager.quests.SOM_CRYSTAL_FLATS_MARKERS_01	= 203
+QuestManager.quests.SOM_CRYSTAL_FLATS_MARKERS_02	= 204
+QuestManager.quests.SOM_CRYSTAL_FLATS_MARKERS_03	= 205
+QuestManager.quests.SOM_CRYSTAL_FLATS_MARKERS_04	= 206
+QuestManager.quests.SOM_CRYSTAL_FLATS_MARKERS_05	= 207
+QuestManager.quests.SOM_CRYSTAL_FLATS			= 208
+QuestManager.quests.SOM_SMOKING_FOREST_MARKERS		= 209
+QuestManager.quests.SOM_SMOKING_FOREST_MARKERS_01	= 210
+QuestManager.quests.SOM_SMOKING_FOREST_MARKERS_02	= 211
+QuestManager.quests.SOM_SMOKING_FOREST_MARKERS_03	= 212
+QuestManager.quests.SOM_SMOKING_FOREST_MARKERS_04	= 213
+QuestManager.quests.SOM_SMOKING_FOREST_MARKERS_05	= 214
+QuestManager.quests.SOM_SMOKING_FOREST			= 215
+QuestManager.quests.SOM_CENTRAL_VOLCANO_MARKERS		= 216
+QuestManager.quests.SOM_CENTRAL_VOLCANO_MARKERS_01	= 217
+QuestManager.quests.SOM_CENTRAL_VOLCANO_MARKERS_02	= 218
+QuestManager.quests.SOM_CENTRAL_VOLCANO_MARKERS_03	= 219
+QuestManager.quests.SOM_CENTRAL_VOLCANO			= 220
+QuestManager.quests.SOM_BURNING_PLAINS_MARKERS		= 221
+QuestManager.quests.SOM_BURNING_PLAINS_MARKERS_01	= 222
+QuestManager.quests.SOM_BURNING_PLAINS_MARKERS_02	= 223
+QuestManager.quests.SOM_BURNING_PLAINS_MARKERS_03	= 224
+QuestManager.quests.SOM_BURNING_PLAINS_MARKERS_04	= 225
+QuestManager.quests.SOM_BURNING_PLAINS_MARKERS_05	= 226
+QuestManager.quests.SOM_BURNING_PLAINS			= 227
+QuestManager.quests.SOM_NESTING_GROUNDS_MARKERS		= 228
+QuestManager.quests.SOM_NESTING_GROUNDS_MARKERS_01	= 229
+QuestManager.quests.SOM_NESTING_GROUNDS_MARKERS_02	= 230
+QuestManager.quests.SOM_NESTING_GROUNDS_MARKERS_03	= 231
+QuestManager.quests.SOM_NESTING_GROUNDS			= 232
+
+-- The Exploration of Mustafar quest (the damaged map) has no row in
+-- datatables/player/quests.iff, so it gets no ids here. Rows 233 onward in the
+-- shipped table are build_speeder / bibs_offer / col_tat_vistas, and an id in
+-- this list is an index into that table -- naming rows the table does not hold
+-- would have set unrelated quests' journal bits. That quest tracks its progress
+-- in persistent screenplay data instead; see
+-- screenplays/mustafar/quest/map_exploration.lua.
+
 -- Test quests and space quests not added.
 QuestManager.questCRC = {}
 

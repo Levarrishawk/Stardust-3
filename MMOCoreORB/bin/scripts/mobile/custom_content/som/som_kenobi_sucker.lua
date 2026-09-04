@@ -1,15 +1,24 @@
+-- The "sucker" of som_kenobi_cursed_shard_2, branch B -- the mark you talk into
+-- taking the cursed shard off your hands. (An earlier comment here called this a
+-- symbiosis encounter; that was wrong. Its string table is
+-- string/en/conversation/som_kenobi_cursed_shard_sucker.stf, which is the .qst's
+-- gaveAwayShard branch and has nothing to do with symbiosis.)
+-- Art is appearance/whiphid_m_02.sat; the conversation is a crude hungry brute
+-- ("I really hungry!", "before I have you for food").
+-- No proper name in any som STF -- named by species + demeanour.
 som_kenobi_sucker = Creature:new {
-	customName = "som_kenobi_sucker",
-	socialGroup = "townsperson",
+	customName = "a Hungry Whiphid",
+	socialGroup = "thug",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	mobType = MOB_NPC,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -20,21 +29,30 @@ som_kenobi_sucker = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
-	creatureBitmask = PACK + STALKER,
-	optionsBitmask = AIENABLED,
+	pvpBitmask = ATTACKABLE + ENEMY,
+	creatureBitmask = STALKER,
+	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/som_kenobi_sucker.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "thug_tier_1", chance = 10000000}
+			}
 		}
 	},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+
+	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
+	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary
+	primaryWeapon = "general_unarmed",
+	secondaryWeapon = "none",
+	conversationTemplate = "som_kenobi_cursed_shard_sucker",
+
+	-- primaryAttacks and secondaryAttacks should be separate skill groups specific to the weapon type listed in primaryWeapon and secondaryWeapon
+	-- Use merge() to merge groups in creatureskills.lua together. If a weapon is set to "none", set the attacks variable to empty brackets
+	primaryAttacks = merge(brawlermaster,swordsmanmaster),
+	secondaryAttacks = brawlermaster
 }
 
 CreatureTemplates:addCreatureTemplate(som_kenobi_sucker, "som_kenobi_sucker")

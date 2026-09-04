@@ -127,14 +127,14 @@ object_weapon_ranged_pistol_som_disruptor_pistol_generic = object_weapon_ranged_
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
 	-- combat_meleespecialize_twohandlightsaber, combat_meleespecialize_polearmlightsaber, combat_meleespecialize_onehandlightsaber
-	xpType = "combat_rangedspecialize_carbine",
+	xpType = "combat_rangedspecialize_pistol",
 
 	-- See http://www.ocdsoft.com/files/certifications.xls
-	certificationsRequired = { "cert_carbine_cdef" },
+	certificationsRequired = { "cert_pistol_cdef" },
 	-- See http://www.ocdsoft.com/files/accuracy.xls
-	creatureAccuracyModifiers = { "carbine_accuracy" },
+	creatureAccuracyModifiers = { "pistol_accuracy" },
 
-	creatureAimModifiers = { "carbine_aim", "aim" },
+	creatureAimModifiers = { "pistol_aim", "aim" },
 
 	-- See http://www.ocdsoft.com/files/defense.xls
 	defenderDefenseModifiers = { "ranged_defense" },
@@ -143,33 +143,33 @@ object_weapon_ranged_pistol_som_disruptor_pistol_generic = object_weapon_ranged_
 	defenderSecondaryDefenseModifiers = { "counterattack" },
 
 	-- See http://www.ocdsoft.com/files/speed.xls
-	speedModifiers = { "carbine_speed" },
+	speedModifiers = { "pistol_speed" },
 
 	-- Leave blank for now
 	damageModifiers = { },
 
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 0,
-	actionAttackCost = 0,
-	mindAttackCost = 0,
+	healthAttackCost = 23,
+	actionAttackCost = 47,
+	mindAttackCost = 23,
 	forceCost = 0,
 
 	pointBlankRange = 0,
-	pointBlankAccuracy = 100,
+	pointBlankAccuracy = 0,
 
-	idealRange = 50,
-	idealAccuracy = 100,
+	idealRange = 10,
+	idealAccuracy = -32,
 
-	maxRange = 200,
-	maxRangeAccuracy = 100,
+	maxRange = 35,
+	maxRangeAccuracy = 0,
 
-	minDamage = 99999999998,
-	maxDamage = 99999999999,
+	minDamage = 257,
+	maxDamage = 513,
 
-	attackSpeed = 1,
+	attackSpeed = 3,
 
-	woundsRatio = 80,
+	woundsRatio = 25,
 
 	numberExperimentalProperties = {1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2},
 	experimentalProperties = {"XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ", "XX", "XX", "XX", "CD", "OQ", "CD", "OQ", "CD", "OQ", "CD", "OQ"},

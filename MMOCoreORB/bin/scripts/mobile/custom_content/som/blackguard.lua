@@ -1,14 +1,15 @@
 blackguard = Creature:new {
 	customName = "a blackguard minion",
-	socialGroup = "townsperson",
+	socialGroup = "wilder",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -28,13 +29,16 @@ blackguard = Creature:new {
 	templates = {"object/mobile/som/blackguard.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "wilder_tier_1", chance = 10000000}
+			}
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmanmaster,pistoleermaster),
+	secondaryAttacks = pistoleermaster
 }
 
 CreatureTemplates:addCreatureTemplate(blackguard, "blackguard")

@@ -3,6 +3,7 @@ ep3_clone_relics_claw_bodyguard_02 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.33,
 	damageMin = 180,

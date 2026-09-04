@@ -2,14 +2,15 @@ asn_121 = Creature:new {
 	customName = "ASN-121",
 	socialGroup = "townsperson",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	mobType = MOB_DROID,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -23,18 +24,22 @@ asn_121 = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = NONE,
 
 	templates = {"object/mobile/som/asn_121.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "technician_tier_1", chance = 7000000},
+				{group = "junk", chance = 3000000}
+			}
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "ranged_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmanmaster,bountyhuntermaster),
+	secondaryAttacks = bountyhuntermaster
 }
 
 CreatureTemplates:addCreatureTemplate(asn_121, "asn_121")

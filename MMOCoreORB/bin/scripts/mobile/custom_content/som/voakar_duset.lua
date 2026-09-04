@@ -1,15 +1,16 @@
 voakar_duset = Creature:new {
-	customName = "voakar_duset",
-	socialGroup = "townsperson",
+	customName = "Voakar Duset",
+	socialGroup = "thug",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	mobType = MOB_NPC,
+	level = 100,
+	chanceHit = 1,
+	damageMin = 645,
+	damageMax = 1000,
+	baseXp = 9429,
+	baseHAM = 24000,
+	baseHAMmax = 30000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -28,13 +29,19 @@ voakar_duset = Creature:new {
 	templates = {"object/mobile/som/voakar_duset.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "thug_tier_1", chance = 6000000},
+				{group = "armor_attachments", chance = 2000000},
+				{group = "clothing_attachments", chance = 2000000}
+			},
+			lootChance = 7000000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_heavy",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmanmaster,bountyhuntermaster),
+	secondaryAttacks = bountyhuntermaster
 }
 
 CreatureTemplates:addCreatureTemplate(voakar_duset, "voakar_duset")

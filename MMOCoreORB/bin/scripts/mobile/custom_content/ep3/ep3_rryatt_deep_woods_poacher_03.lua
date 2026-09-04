@@ -3,6 +3,7 @@ ep3_rryatt_deep_woods_poacher_03 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.33,
 	damageMin = 180,

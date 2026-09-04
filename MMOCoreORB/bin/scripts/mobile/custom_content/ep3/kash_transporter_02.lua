@@ -3,6 +3,7 @@ kash_transporter_02 = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "wookiee",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 45,
 	chanceHit = 0.45,
 	damageMin = 750,

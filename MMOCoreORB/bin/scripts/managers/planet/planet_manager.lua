@@ -732,6 +732,78 @@ mustafar = {
   },
 }
 
+-- ===========================================================================
+-- KASHYYYK -- PROVENANCE
+-- ===========================================================================
+-- Zone "kashyyyk" loads snapshot/kashyyyk.ws: PlanetManagerImplementation.cpp:633
+-- opens "snapshot/" + zone->getZoneName() + ".ws". That is the MERGED whole-surface
+-- map shipped in mtg_patch_022.tre, NOT kashyyyk_main.ws. Every figure below was
+-- measured against that merged file, the same governing-file reasoning already
+-- recorded in kashyyyk_regions.lua.
+--
+-- AXIS MAPPING (matches kashyyyk_regions.lua)
+--   The .ws DATA chunk stores (x, y, z) with y as HEIGHT. A travel point row is
+--   read by PlanetTravelPoint.h:79-83 as arrivalVector.set(field "x", field "z",
+--   field "y"), and Vector3.h:379 declares set(float x, float z, float y). So the
+--   lua "z" slot is HEIGHT and the lua "y" slot is the ground-plane second axis:
+--     lua-x = ws-x    lua-z = ws-height    lua-y = ws-z
+--   The height is not cosmetic here -- BoardShuttleCommand.h:339 sets the arriving
+--   player's Z straight from getArrivalPositionZ().
+--
+-- KEYS WRITTEN, AND WHERE THEY ARE READ
+--   weatherEnabled      PlanetManagerImplementation.cpp:164 (int)
+--   gcwEnabled          PlanetManagerImplementation.cpp:173 (int)
+--   planetTravelPoints  PlanetManagerImplementation.cpp:182 -> PlanetTravelPointList.h:118
+--   badgeAreas          PlanetManagerImplementation.cpp:200
+--   planetObjects       PlanetManagerImplementation.cpp:196
+--   No navAreas table. Every other entry in this file carries one, but nothing in
+--   MMOCoreORB/src reads planet_manager's navAreas -- the only navAreas symbol in
+--   the C++ is a local built from regionMap in PlanetManagerImplementation.cpp:361.
+--   Nav areas come from the *_regions.lua rows, not from here.
+--   No jtlLaunchPoint. space_kashyyyk does exist (space_manager.lua:160), but the
+--   launch coordinate inside it is not settled by any shipped file, and
+--   PlanetManagerImplementation.cpp:251-254 returns cleanly when the key is absent.
+kashyyyk = {
+	-- WeatherManagerImplementation.cpp:60 looks the zone name up as a global table in
+	-- scripts/managers/weather_manager.lua. That file has no kashyyyk table (its zone
+	-- tables run corellia..chandrila, lines 105-296), so weatherEnabled = 1 would take
+	-- the WeatherManagerImplementation.cpp:31-33 "ERROR in Lua config" fallback.
+	weatherEnabled = 0,
+	-- GCW is a faction-warfare choice, not something the snapshot settles. Nothing
+	-- kashyyyk-specific is needed to turn it on: gcw_manager.lua is read as globals
+	-- only (GCWManagerImplementation.cpp:101-139), no per-zone table.
+	gcwEnabled = 0,
+
+	planetTravelPoints = {
+		-- The only shuttle/starport structure anywhere on the merged surface.
+		-- snapshot/kashyyyk.ws (448 templates / 4679 nodes) contains exactly one:
+		--   object/building/kashyyyk/shared_mun_kash_shuttlepost_s01.iff
+		--   ws x=398.22  height=41.08  z=-2399.41  cell=0  parent=0
+		-- It is the kashyyyk_hunting sub-zone's shuttlepost (same node at hunting-local
+		-- z=600.59, i.e. the proved dz -3000 merge offset), and it sits inside the
+		-- shipped-measured hunting_grounds_outpost circle in kashyyyk_regions.lua:161.
+		-- The name follows that region row; no localized Kashyyyk string exists for it
+		-- (kashyyyk_region_names.stf ships only the kachirho key), and travel point
+		-- names are raw ASCII, not STF keys (PlanetTravelPointList.h:65).
+		-- mun_kachirho_starport is present in kashyyyk_main.ws but ABSENT from the
+		-- merged kashyyyk.ws, so there is no Kachirho travel structure to point at.
+		-- Flags follow the shipped outpost-only planets, which are the exact structural
+		-- match -- one or more shuttle-class points, no starport, so the shuttle-class
+		-- point carries interplanetary travel: endor (lines 206-207), dantooine
+		-- (108-110), dathomir (145-146), lok (245), yavin4 (568-570) all use
+		-- interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3.
+		{name = "Hunting Grounds Outpost", x = 398.22, z = 41.08, y = -2399.41, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+	},
+
+	-- Empty by intent. Badge areas are authored content, not snapshot data: the badge
+	-- id in column 6 indexes the shipped badge list, and no Kashyyyk badge assignment
+	-- is settled here. Rows can be added later without touching anything above.
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
 
 tutorial = {
 	weatherEnabled = 0,

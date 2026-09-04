@@ -1,24 +1,25 @@
 lava_flea = Creature:new {
 	customName = "a Lava Flea",
-	socialGroup = "",
+	socialGroup = "lava_flea",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
+	mobType = MOB_HERBIVORE,
+	level = 50,
+	chanceHit = 0.47,
+	damageMin = 370,
+	damageMax = 450,
+	baseXp = 4825,
+	baseHAM = 9700,
+	baseHAMmax = 11900,
+	armor = 1,
+	resists = {130,130,-1,160,160,160,-1,-1,-1},
+	meatType = "meat_insect",
+	meatAmount = 80,
+	hideType = "hide_scaley",
+	hideAmount = 60,
 	boneType = "",
 	boneAmount = 0,
 	milk = 0,
-	tamingChance = 0,
+	tamingChance = 0.25,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
@@ -26,15 +27,13 @@ lava_flea = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/lava_flea.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	weapons = {"pirate_weapons_light"},
+	controlDeviceTemplate = "object/intangible/pet/som/lava_flea.iff",
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"creatureareaattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(lava_flea, "lava_flea")

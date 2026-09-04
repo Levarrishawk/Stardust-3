@@ -1,22 +1,23 @@
 orf_whisper_bird = Creature:new {
 	customName = "Whisper Bird",
-	socialGroup = "townsperson",
+	socialGroup = "orf_fauna",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	mobType = MOB_HERBIVORE,
+	level = 50,
+	chanceHit = 0.47,
+	damageMin = 370,
+	damageMax = 450,
+	baseXp = 4825,
+	baseHAM = 9700,
+	baseHAMmax = 11900,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	meatType = "meat_avian",
+	meatAmount = 100,
+	hideType = "hide_leathery",
+	hideAmount = 60,
+	boneType = "bone_avian",
+	boneAmount = 50,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
@@ -26,15 +27,12 @@ orf_whisper_bird = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/orf_whisper_bird.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	weapons = {"pirate_weapons_light"},
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"creatureareaattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(orf_whisper_bird, "orf_whisper_bird")

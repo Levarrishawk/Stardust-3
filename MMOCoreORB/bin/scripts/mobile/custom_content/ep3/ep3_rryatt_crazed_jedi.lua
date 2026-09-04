@@ -2,6 +2,7 @@ ep3_rryatt_crazed_jedi = Creature:new {
 	customName = "Crazed Jedi",
 	socialGroup = "nightsister",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 120,
 	chanceHit = 4.50,
 	damageMin = 1250,

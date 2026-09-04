@@ -3,6 +3,7 @@ ep3_healthy_wookiee = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "wookiee",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 10, --45,
 	chanceHit = 0.45,
 	damageMin = 750,

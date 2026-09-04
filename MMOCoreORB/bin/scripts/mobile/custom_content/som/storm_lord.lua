@@ -1,16 +1,23 @@
+-- Storm Lord open-world boss.
+-- Loot: live table mustafar/storm_lord_drop (loot group storm_lord_drop).
+-- creatures.tab intLootRolls = 3, so three identical lootGroups blocks.
+-- master_loot.tab chance 10000/10000 so lootChance = 10000000 on each.
+-- Previous dark_jedi_tier_5 / force_tier_4 / holocron / crystal / attachment
+-- groups were filler, not a tuned choice.
 storm_lord = Creature:new {
 	customName = "Storm Lord",
-	socialGroup = "townsperson",
+	socialGroup = "storm_lord",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
+	mobType = MOB_NPC,
+	level = 140,
+	chanceHit = 7,
+	damageMin = 845,
+	damageMax = 1400,
+	baseXp = 13273,
+	baseHAM = 68000,
+	baseHAMmax = 83000,
+	armor = 2,
+	resists = {90,90,90,90,90,90,90,90,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -26,10 +33,31 @@ storm_lord = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/storm_lord.iff"},
-	lootGroups = {},
-	weapons = {"pirate_weapons_light"},
+	lootGroups = {
+		{
+			groups = {
+				{group = "storm_lord_drop", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "storm_lord_drop", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "storm_lord_drop", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
+	primaryWeapon = "melee_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(brawlermaster,swordsmanmaster,forcepowermaster),
+	secondaryAttacks = forcepowermaster
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord, "storm_lord")

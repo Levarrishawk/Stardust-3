@@ -1,11 +1,23 @@
 --New Content Mob Template Files
 
---To Fix
---includeFile("som/miner_pilot.lua")	--ToDo Fix tre error
---includeFile("som/neimoidian.lua")	--ToDo Fix tre error
---includeFile("som/som_crazed_mustafarian_hermit.lua")	--ToDo Fix tre error
---includeFile("som/som_trinity_assassin_ithorian_male.lua")	--ToDo Fix tre error
---includeFile("som/voakar_duset.lua")	--ToDo Fix tre error (Neimoidian race needs adding)
+--[[ These four were commented out as "ToDo Fix tre error".  There is no tre
+     error.  Every one of them used the bare som/ prefix while every live line in
+     this file uses custom_content/som/, so the include simply did not resolve --
+     that is the error the author hit.  The client assets do ship
+     (object/mobile/som/shared_neimoidian.iff is in mtg_patch_010_object_01.tre,
+     loaded at conf/config.lua:168, with the full appearance chain), and the
+     object templates are registered by
+     object/custom_content/mobile/som/serverobjects.lua.
+
+     miner_pilot and som_crazed_mustafarian_hermit are already included further
+     down this file with the correct path, so those two lines are dead
+     duplicates and are dropped rather than repaired.  neimoidian and
+     voakar_duset were registered nowhere, which is why the arc cross-reference
+     reported them as the only two unregistered creatures in the tree.
+     neimoidian is the NPC appearance for six of the ten HK history quests.
+     Both spawn clean on a boot probe. ]]
+includeFile("custom_content/som/neimoidian.lua")
+includeFile("custom_content/som/voakar_duset.lua")
 
 
 --Mustafar (som)
@@ -19,6 +31,8 @@ includeFile("custom_content/som/blistmok.lua")
 includeFile("custom_content/som/blistmok_shrieker.lua")
 includeFile("custom_content/som/blistmok_trampler.lua")
 includeFile("custom_content/som/trained_blistmok.lua")
+includeFile("custom_content/som/chief_armstrong.lua")
+includeFile("custom_content/som/chief_glost.lua")
 includeFile("custom_content/som/cinderclaw.lua")
 includeFile("custom_content/som/col_narl.lua")
 includeFile("custom_content/som/coyn_captain.lua")
@@ -31,9 +45,11 @@ includeFile("custom_content/som/cww8a_battle_droid.lua")
 includeFile("custom_content/som/cww8a_eradicator.lua")
 includeFile("custom_content/som/deathsting.lua")
 includeFile("custom_content/som/diskret_stahn.lua")
+includeFile("custom_content/som/engineer_cobar.lua")
 includeFile("custom_content/som/djedi_hum_m_01.lua")
 includeFile("custom_content/som/djedi_twk_f_01.lua")
 includeFile("custom_content/som/doc_lu.lua")
+includeFile("custom_content/som/foreman_donko.lua")
 includeFile("custom_content/som/foreman_nurfa.lua")
 includeFile("custom_content/som/hk47.lua")
 includeFile("custom_content/som/hk77.lua")
@@ -51,6 +67,12 @@ includeFile("custom_content/som/miner_hens.lua")
 includeFile("custom_content/som/miner_on_strike.lua")
 includeFile("custom_content/som/miner_foreman_on_strike.lua")
 includeFile("custom_content/som/miner_pilot.lua")
+-- Invisible AiAgent carrier for the crashed cruiser's shipped conversation; live
+-- hangs that conversation on a tangible and Core3 cannot. See the file's header.
+includeFile("custom_content/som/must_cruiser_ai.lua")
+-- The same carrier deviation, one building later: the Old Republic Facility's
+-- Terminal Delta Five is a tangible on live too.
+includeFile("custom_content/som/must_facility_ai.lua")
 includeFile("custom_content/som/must_foreman_chivos.lua")
 includeFile("custom_content/som/must_junk.lua")
 includeFile("custom_content/som/must_milo_mensix.lua")
@@ -89,9 +111,31 @@ includeFile("custom_content/som/ruins_weequay.lua")
 includeFile("custom_content/som/sansii.lua")
 includeFile("custom_content/som/scorching_terror.lua")
 includeFile("custom_content/som/sher_kar.lua")
+includeFile("custom_content/som/skar.lua")
 includeFile("custom_content/som/som_alien_parasite.lua")
 includeFile("custom_content/som/som_ancient_guardian_droideka.lua")
 includeFile("custom_content/som/som_ancient_guardian_ig.lua")
+includeFile("custom_content/som/som_ancient_jundak.lua")
+includeFile("custom_content/som/som_battlefield_ak_1a.lua")
+includeFile("custom_content/som/som_battlefield_ak_3.lua")
+includeFile("custom_content/som/som_battlefield_commander.lua")
+includeFile("custom_content/som/som_battlefield_droid_soldier.lua")
+includeFile("custom_content/som/som_battlefield_droid_squad_leader.lua")
+includeFile("custom_content/som/som_battlefield_elite_guard.lua")
+includeFile("custom_content/som/som_battlefield_foreman_koseyet.lua")
+includeFile("custom_content/som/som_battlefield_gk_5.lua")
+includeFile("custom_content/som/som_battlefield_miner.lua")
+includeFile("custom_content/som/som_battlefield_mining_droid.lua")
+includeFile("custom_content/som/som_battlefield_mining_leader.lua")
+-- The commented-out line in the "To Fix" block at the top of this file blamed a
+-- tre error; it was a path error -- it read "som/..." instead of
+-- "custom_content/som/...", the same wrongness miner_pilot.lua had.
+-- shared_som_crazed_mustafarian_hermit.iff ships in mtg_patch_010_object_01.tre,
+-- the same TRE as shared_obi_wan_ghost.iff, and its object template is already
+-- registered from object/custom_content/mobile/som/serverobjects.lua:80.
+-- Without this line the creature template is never registered and
+-- som_kenobi_main_quest_1 has no hermit to find.
+includeFile("custom_content/som/som_crazed_mustafarian_hermit.lua")
 includeFile("custom_content/som/som_dark_jedi_boss.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_1.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_2.lua")
@@ -101,10 +145,22 @@ includeFile("custom_content/som/som_dark_jedi_minion_5.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_6.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_7.lua")
 includeFile("custom_content/som/som_dark_jedi_minion_8.lua")
+includeFile("custom_content/som/som_decrepit_battle_droid.lua")
+includeFile("custom_content/som/som_decrepit_blastromech.lua")
+includeFile("custom_content/som/som_decrepit_colonel_or5.lua")
+includeFile("custom_content/som/som_decrepit_cww8_combat_droid.lua")
+includeFile("custom_content/som/som_decrepit_guardian.lua")
+includeFile("custom_content/som/som_decrepit_patrol_bot.lua")
+includeFile("custom_content/som/som_decrepit_super_battle_droid.lua")
 includeFile("custom_content/som/som_kenobi_blistmok.lua")
+includeFile("custom_content/som/som_kenobi_dying_miner.lua")
 includeFile("custom_content/som/som_kenobi_epo_qetora.lua")
 includeFile("custom_content/som/som_kenobi_historian_dark_jedi.lua")
 includeFile("custom_content/som/som_kenobi_menth_paul.lua")
+includeFile("custom_content/som/som_kenobi_moral_corrupt_guard.lua")
+includeFile("custom_content/som/som_kenobi_moral_exec.lua")
+includeFile("custom_content/som/som_kenobi_moral_strike_leader.lua")
+includeFile("custom_content/som/som_kenobi_obi_wan.lua")
 includeFile("custom_content/som/som_kenobi_reunite_dark_jedi.lua")
 includeFile("custom_content/som/som_kenobi_reunite_dark_trooper.lua")
 includeFile("custom_content/som/som_kenobi_reunite_inquisitorium_hunter.lua")
@@ -114,15 +170,73 @@ includeFile("custom_content/som/som_kenobi_sucker.lua")
 includeFile("custom_content/som/som_kenobi_treasure_hunter_corpse_01.lua")
 includeFile("custom_content/som/som_kenobi_treasure_hunter_corpse_02.lua")
 includeFile("custom_content/som/som_kenobi_treasure_hunter_corpse_03.lua")
+includeFile("custom_content/som/som_link_lava_beetle_defender.lua")
+includeFile("custom_content/som/som_link_lava_beetle_drone.lua")
+includeFile("custom_content/som/som_link_lava_beetle_foreman.lua")
+includeFile("custom_content/som/som_link_lava_beetle_soldier.lua")
+includeFile("custom_content/som/som_link_lava_beetle_worker.lua")
+includeFile("custom_content/som/som_link_relay_droid.lua")
 includeFile("custom_content/som/som_mustafarian_computer_technician.lua")
 includeFile("custom_content/som/som_mustafarian_ikt.lua")
 includeFile("custom_content/som/som_mustafarian_phantom_bandit.lua")
+includeFile("custom_content/som/som_orf_ancient_guard_droid.lua")
+includeFile("custom_content/som/som_orf_ancient_patrol_drone.lua")
+includeFile("custom_content/som/som_orf_ancient_security_drone.lua")
+includeFile("custom_content/som/som_orf_ancient_sentinel_droid.lua")
+includeFile("custom_content/som/som_orf_ancient_tulrus.lua")
+includeFile("custom_content/som/som_orf_ancient_xandank.lua")
+includeFile("custom_content/som/som_orf_beetle_hatchling.lua")
+includeFile("custom_content/som/som_orf_beetle_soldier.lua")
+includeFile("custom_content/som/som_orf_beetle_worker.lua")
+includeFile("custom_content/som/som_orf_flea_hatchling.lua")
+includeFile("custom_content/som/som_orf_flea_juvenile.lua")
+includeFile("custom_content/som/som_orf_flea_starving.lua")
 includeFile("custom_content/som/som_pann_protocol_droid.lua")
 includeFile("custom_content/som/som_pwwoz_pwwa.lua")
 includeFile("custom_content/som/som_pwwoz_thug_1.lua")
 includeFile("custom_content/som/som_pwwoz_thug_2.lua")
+includeFile("custom_content/som/som_sherkar_consort.lua")
+includeFile("custom_content/som/som_sherkar_karling.lua")
+includeFile("custom_content/som/som_sherkar_praetorian.lua")
+includeFile("custom_content/som/som_sherkar_symbiot.lua")
+
+-- The next line, som_trinity_assassin_ithorian_male, used to be commented out. That
+-- comment blamed a tre error; it was a path error. It read
+-- "som/..." instead of "custom_content/som/...", the same wrongness miner_pilot.lua had.
+-- shared_som_trinity_assassin_ithorian_male.iff ships in mtg_patch_010_object_01.tre, the
+-- same TRE as its two siblings below, and its object template is already registered from
+-- object/custom_content/mobile/som/serverobjects.lua:110. collectors_business needs it.
+includeFile("custom_content/som/som_trinity_assassin_ithorian_male.lua")
 includeFile("custom_content/som/som_trinity_assassin_nightsister_female.lua")
 includeFile("custom_content/som/som_trinity_assassin_zabrak_female.lua")
+includeFile("custom_content/som/som_volcano_autopilot.lua")
+includeFile("custom_content/som/som_volcano_final_hk47.lua")
+includeFile("custom_content/som/som_volcano_final_lava_beetle.lua")
+includeFile("custom_content/som/som_volcano_final_risen_sustainer.lua")
+includeFile("custom_content/som/som_volcano_final_septipod.lua")
+includeFile("custom_content/som/som_volcano_final_squadleader.lua")
+includeFile("custom_content/som/som_volcano_final_squadmember.lua")
+includeFile("custom_content/som/som_volcano_final_walker.lua")
+includeFile("custom_content/som/som_volcano_five_boss_septipod.lua")
+includeFile("custom_content/som/som_volcano_five_midguard.lua")
+includeFile("custom_content/som/som_volcano_five_septipod.lua")
+includeFile("custom_content/som/som_volcano_four_cym_prototype.lua")
+includeFile("custom_content/som/som_volcano_four_lava_beetle.lua")
+includeFile("custom_content/som/som_volcano_one_sustainer.lua")
+includeFile("custom_content/som/som_volcano_one_taskmaster.lua")
+includeFile("custom_content/som/som_volcano_three_forward_commander.lua")
+includeFile("custom_content/som/som_volcano_three_hk77.lua")
+includeFile("custom_content/som/som_volcano_three_risen_commander.lua")
+includeFile("custom_content/som/som_volcano_two_ak_prime.lua")
+includeFile("custom_content/som/som_volcano_two_hk77.lua")
+includeFile("custom_content/som/som_working_devistator.lua")
+includeFile("custom_content/som/som_working_doom_bringer.lua")
+includeFile("custom_content/som/som_working_hand_of_doom.lua")
+includeFile("custom_content/som/som_working_hk_58_aurek.lua")
+includeFile("custom_content/som/som_working_hk_58_besh.lua")
+includeFile("custom_content/som/som_working_master_droid_engineer.lua")
+includeFile("custom_content/som/som_working_super_repair_droid.lua")
+includeFile("custom_content/som/som_xandank_cobak.lua")
 includeFile("custom_content/som/storm_lord.lua")
 includeFile("custom_content/som/storm_lord_guard.lua")
 includeFile("custom_content/som/storm_lord_minion.lua")
@@ -142,6 +256,7 @@ includeFile("custom_content/som/tremor_foot.lua")
 includeFile("custom_content/som/tulrus.lua")
 includeFile("custom_content/som/tulrus_magma_drenched.lua")
 includeFile("custom_content/som/union_sentry_droid.lua")
+includeFile("custom_content/som/urup_falco.lua")
 includeFile("custom_content/som/vansk_blackguard.lua")
 includeFile("custom_content/som/volcano_cyborg_lt.lua")
 includeFile("custom_content/som/xandank.lua")
@@ -153,6 +268,6 @@ includeFile("custom_content/som/xandank_patriarch.lua")
 --Root Folder
 includeFile("custom_content/som/mustafarian_miner_01.lua")
 includeFile("custom_content/som/mustafarian_miner_02.lua")
-includeFile("custom_content/som/surveyor_jo.lua")
+includeFile("custom_content/som/som_surveyor_keslev.lua")
 includeFile("custom_content/som/boss_uruli.lua")
 

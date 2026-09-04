@@ -2,6 +2,7 @@ ep3_wke_dead_guard = Creature:new {
 	customName = "a Dead Guard",
 	socialGroup = "wookiee",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 45,
 	chanceHit = 0.45,
 	damageMin = 750,

@@ -3,6 +3,7 @@ ep3_blackscale_scaleguard = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 105,
 	chanceHit = 1.05,
 	damageMin = 1150,

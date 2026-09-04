@@ -3,6 +3,7 @@ ep3_clone_relics_cww8 = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_ANDROID,
 	level = 80,
 	chanceHit = 0.8,
 	damageMin = 800,

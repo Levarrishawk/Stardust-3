@@ -1,20 +1,21 @@
 lava_flea_smoldering = Creature:new {
 	customName = "Smoldering Lava Flea",
-	socialGroup = "townsperson",
+	socialGroup = "lava_flea",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
+	mobType = MOB_HERBIVORE,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
+	resists = {130,130,-1,160,160,160,-1,-1,-1},
+	meatType = "meat_insect",
+	meatAmount = 200,
+	hideType = "hide_scaley",
+	hideAmount = 150,
 	boneType = "",
 	boneAmount = 0,
 	milk = 0,
@@ -28,13 +29,19 @@ lava_flea_smoldering = Creature:new {
 	templates = {"object/mobile/som/lava_flea_smoldering.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "resource_creature", chance = 6000000},
+				{group = "junk", chance = 2000000},
+				{group = "armor_attachments", chance = 2000000}
+			},
+			lootChance = 4000000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(lava_flea_smoldering, "lava_flea_smoldering")

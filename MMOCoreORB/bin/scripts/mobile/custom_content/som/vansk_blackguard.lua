@@ -1,15 +1,22 @@
+-- Vansk of the Blackguard.
+-- Loot: live table mustafar/blackguard_vansk_drop (loot group blackguard_vansk_drop).
+-- creatures.tab intLootRolls = 2, so two identical lootGroups blocks.
+-- master_loot.tab chance 10000/10000 so lootChance = 10000000 on each.
+-- Previous wilder_tier_1 / armor_attachments / clothing_attachments were filler,
+-- not a tuned choice.
 vansk_blackguard = Creature:new {
 	customName = "Vansk of the Blackguard",
-	socialGroup = "townsperson",
+	socialGroup = "wilder",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	mobType = MOB_NPC,
+	level = 100,
+	chanceHit = 1,
+	damageMin = 645,
+	damageMax = 1000,
+	baseXp = 9429,
+	baseHAM = 24000,
+	baseHAMmax = 30000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -28,13 +35,23 @@ vansk_blackguard = Creature:new {
 	templates = {"object/mobile/som/vansk_blackguard.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "blackguard_vansk_drop", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "blackguard_vansk_drop", chance = 10000000}
+			},
+			lootChance = 10000000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_heavy",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmanmaster,carbineermaster),
+	secondaryAttacks = carbineermaster
 }
 
 CreatureTemplates:addCreatureTemplate(vansk_blackguard, "vansk_blackguard")

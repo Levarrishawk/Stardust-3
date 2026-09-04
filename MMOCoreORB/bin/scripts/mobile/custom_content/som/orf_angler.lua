@@ -1,40 +1,38 @@
 orf_angler = Creature:new {
-	customName = "orf_angler",
-	socialGroup = "townsperson",
+	customName = "an Angler",
+	socialGroup = "orf_fauna",
 	faction = "",
+	mobType = MOB_CARNIVORE,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	meatType = "meat_carnivore",
+	meatAmount = 250,
+	hideType = "hide_leathery",
+	hideAmount = 180,
+	boneType = "bone_mammal",
+	boneAmount = 120,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/orf_angler.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	weapons = {"pirate_weapons_light"},
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(orf_angler, "orf_angler")

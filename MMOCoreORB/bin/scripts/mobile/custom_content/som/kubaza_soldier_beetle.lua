@@ -1,20 +1,21 @@
 kubaza_soldier_beetle = Creature:new {
 	customName = "a Kubaza Soldier Beetle",
-	socialGroup = "townsperson",
+	socialGroup = "kubaza",
 	faction = "",
+	mobType = MOB_CARNIVORE,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
+	meatType = "meat_insect",
+	meatAmount = 200,
+	hideType = "hide_scaley",
+	hideAmount = 150,
 	boneType = "",
 	boneAmount = 0,
 	milk = 0,
@@ -23,18 +24,15 @@ kubaza_soldier_beetle = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/kubaza_beetle.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	weapons = {"pirate_weapons_light"},
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(kubaza_soldier_beetle, "kubaza_soldier_beetle")

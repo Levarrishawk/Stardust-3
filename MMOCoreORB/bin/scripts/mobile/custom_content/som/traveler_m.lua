@@ -2,13 +2,14 @@ traveler_m = Creature:new {
 	customName = "an Unhappy Tourist",
 	socialGroup = "townsperson",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	mobType = MOB_NPC,
+	level = 45,
+	chanceHit = 0.44,
+	damageMin = 345,
+	damageMax = 400,
+	baseXp = 4461,
+	baseHAM = 9300,
+	baseHAMmax = 11300,
 	armor = 0,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
@@ -26,15 +27,12 @@ traveler_m = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/traveler_m.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	weapons = {"pirate_weapons_light"},
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(traveler_m, "traveler_m")

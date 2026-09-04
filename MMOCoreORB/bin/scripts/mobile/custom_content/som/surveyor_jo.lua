@@ -1,36 +1,11 @@
-surveyor_jo = Creature:new {
-	customName = "Surveyor Jo Keslev",
-	socialGroup = "townsperson",
-	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
-	milk = 0,
-	tamingChance = 0,
-	ferocity = 0,
-	scale = 1.2,
-	pvpBitmask = NONE,
-	creatureBitmask = PACK + STALKER,
-	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
-	diet = HERBIVORE,
-
-	templates = {"object/mobile/som/miner_hens.iff"},
-	lootGroups = {},
-	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "jo_kelsev",
-	attacks = merge(marksmannovice,brawlernovice)
-}
-
-CreatureTemplates:addCreatureTemplate(surveyor_jo, "surveyor_jo")
+-- MOVED -- this creature template is now som_surveyor_keslev.lua in this same folder.
+--
+-- The NPC is Surveyor Keslev.  All seven shipped quest journals say so, and the live
+-- facility spawn table names the mobile som_surveyor_keslev.  Both the middle name and
+-- the misspelt surname came from the wiki.  His conversationTemplate moved with him,
+-- from "jo_kelsev" to "som_exploration_marker" -- which is the live conversation id and
+-- the name every other tree in mobile/conversations/mustafar/ already follows.
+--
+-- The file is kept rather than removed because this repo does not delete files.  It is
+-- no longer in serverobjects.lua and defines nothing, so it loads as a no-op.  Nothing
+-- should reference surveyor_jo; if a grep finds one, it is stale.

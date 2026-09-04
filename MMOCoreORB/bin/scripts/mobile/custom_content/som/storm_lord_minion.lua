@@ -1,16 +1,17 @@
 storm_lord_minion = Creature:new {
 	customName = "a storm lord minion",
-	socialGroup = "",
+	socialGroup = "storm_lord",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
 	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -28,13 +29,16 @@ storm_lord_minion = Creature:new {
 	templates = {"object/mobile/som/storm_lord_minion.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "wilder_tier_1", chance = 10000000}
+			}
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_light",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(marksmanmaster,pistoleermaster),
+	secondaryAttacks = pistoleermaster
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord_minion, "storm_lord_minion")

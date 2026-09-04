@@ -1,40 +1,38 @@
 trained_blistmok = Creature:new {
 	customName = "a trained blistmok",
-	socialGroup = "",
+	socialGroup = "blistmok",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	mobType = MOB_CARNIVORE,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
+	meatType = "meat_carnivore",
+	meatAmount = 250,
+	hideType = "hide_leathery",
+	hideAmount = 180,
+	boneType = "bone_mammal",
+	boneAmount = 120,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/blistmok.iff"},
-	lootGroups = {
-		{
-			groups = {},
-			lootChance = 2100000
-		}
-	},
-	weapons = {"pirate_weapons_light"},
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(trained_blistmok, "trained_blistmok")

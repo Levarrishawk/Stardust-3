@@ -2,6 +2,7 @@ ep3_clone_relics_durge = Creature:new {
 	customName = "Durge",
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 300,
 	chanceHit = 30.0,
 	damageMin = 3500,

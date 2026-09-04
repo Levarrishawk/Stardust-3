@@ -1,24 +1,25 @@
 tulrus = Creature:new {
 	customName = "a Tulrus",
-	socialGroup = "townsperson",
+	socialGroup = "tulrus",
 	faction = "",
+	mobType = MOB_HERBIVORE,
 	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	chanceHit = 0.65,
+	damageMin = 430,
+	damageMax = 570,
+	baseXp = 6747,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
+	meatType = "meat_herbivore",
+	meatAmount = 300,
+	hideType = "hide_leathery",
+	hideAmount = 200,
+	boneType = "bone_mammal",
+	boneAmount = 150,
 	milk = 0,
-	tamingChance = 0,
+	tamingChance = 0.25,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE + ENEMY,
 	creatureBitmask = PACK + STALKER,
@@ -26,15 +27,27 @@ tulrus = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/tulrus.iff"},
+	controlDeviceTemplate = "object/intangible/pet/som/tulrus.iff",
+	-- Live rolls once at 100% and then picks one of two pools evenly, so this
+	-- creature drops something on every kill. The trophy is one of four in its
+	-- own pool, so it is still 12.5% per kill -- the same rate the previous
+	-- encoding produced. The old lootChance = 1250000 was that 12.5% collapsed
+	-- onto the roll itself, which delivered the trophy at the right rate but
+	-- dropped nothing the other 87.5% of the time.
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "som_tulrus_trophy", chance = 5000000},
+				{group = "som_mustafar_creature", chance = 5000000}
+			},
+			lootChance = 10000000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"stunattack",""}, {"intimidationattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(tulrus, "tulrus")

@@ -3,6 +3,7 @@ ep3_jessokk_scarhand = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.33,
 	damageMin = 180,

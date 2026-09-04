@@ -1,16 +1,22 @@
+-- Sher Kar open-world / lair boss.
+-- Loot: live table mustafar/sher_kar_loot (loot group sher_kar_loot). creatures.tab
+-- intLootRolls = 2, so two identical lootGroups blocks. master_loot.tab chance
+-- 10000/10000 so lootChance = 10000000 on each. Previous dark_jedi_tier_5 /
+-- force_tier_4 / crystal / attachment groups were filler, not a tuned choice.
 sher_kar = Creature:new {
 	customName = "Sher Kar",
-	socialGroup = "townsperson",
+	socialGroup = "sher_kar",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
+	mobType = MOB_CARNIVORE,
+	level = 200,
+	chanceHit = 16,
+	damageMin = 1145,
+	damageMax = 2000,
+	baseXp = 19008,
+	baseHAM = 160000,
+	baseHAMmax = 195000,
+	armor = 3,
+	resists = {165,145,35,35,35,35,35,35,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -23,18 +29,28 @@ sher_kar = Creature:new {
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER + KILLER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/sher_kar.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "sher_kar_loot", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+		{
+			groups = {
+				{group = "sher_kar_loot", chance = 10000000}
+			},
+			lootChance = 10000000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"creatureareaattack",""}, {"creatureareaknockdown",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(sher_kar, "sher_kar")

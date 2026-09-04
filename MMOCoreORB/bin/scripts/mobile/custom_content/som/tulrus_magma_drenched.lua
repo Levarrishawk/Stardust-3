@@ -1,22 +1,23 @@
 tulrus_magma_drenched = Creature:new {
-	customName = "tulrus_magma_drenched",
-	socialGroup = "townsperson",
+	customName = "a Magma-Drenched Tulrus",
+	socialGroup = "tulrus",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	mobType = MOB_HERBIVORE,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
+	resists = {130,130,-1,160,160,160,-1,-1,-1},
+	meatType = "meat_herbivore",
+	meatAmount = 600,
+	hideType = "hide_bristley",
+	hideAmount = 450,
+	boneType = "bone_mammal",
+	boneAmount = 400,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
@@ -28,13 +29,19 @@ tulrus_magma_drenched = Creature:new {
 	templates = {"object/mobile/som/tulrus_magma_drenched.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "resource_creature", chance = 6000000},
+				{group = "junk", chance = 2000000},
+				{group = "armor_attachments", chance = 2000000}
+			},
+			lootChance = 4000000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"knockdownattack",""}, {"dizzyattack",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(tulrus_magma_drenched, "tulrus_magma_drenched")

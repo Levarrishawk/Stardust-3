@@ -3,6 +3,7 @@ ep3_canopy_reaper_01 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 130,
 	chanceHit = 1.33,
 	damageMin = 1800,

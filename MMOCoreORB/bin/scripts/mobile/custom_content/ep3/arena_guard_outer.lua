@@ -3,6 +3,7 @@ arena_guard_outer = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.33,
 	damageMin = 180,

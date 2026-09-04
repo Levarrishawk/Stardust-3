@@ -1,15 +1,16 @@
 treasure_hunter_protector = Creature:new {
 	customName = "a treasure hunter protector",
-	socialGroup = "townsperson",
+	socialGroup = "mercenary",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	mobType = MOB_NPC,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -28,13 +29,16 @@ treasure_hunter_protector = Creature:new {
 	templates = {"object/mobile/som/treasure_hunter_protector.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "mercenary_tier_1", chance = 10000000}
+			}
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "pirate_weapons_heavy",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(brawlermaster,swordsmanmaster),
+	secondaryAttacks = brawlermaster
 }
 
 CreatureTemplates:addCreatureTemplate(treasure_hunter_protector, "treasure_hunter_protector")

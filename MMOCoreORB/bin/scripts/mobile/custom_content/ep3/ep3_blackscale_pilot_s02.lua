@@ -3,6 +3,7 @@ ep3_blackscale_pilot_s02 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 60,
 	chanceHit = 0.60,
 	damageMin = 400,

@@ -26,7 +26,7 @@ object_draft_schematic_weapon_heavy_lava_cannon = object_draft_schematic_weapon_
    contribution = {100, 100, 100, 100, 100, 100, 100},
 
 
-   targetTemplate = "object/weapon/ranged/rifle/rifle_som_lava_cannon.iff",
+   targetTemplate = "object/weapon/ranged/heavy/som_lava_cannon_generic.iff",
 
    additionalTemplates = {
              }

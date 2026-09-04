@@ -1,16 +1,17 @@
 storm_lord_touched = Creature:new {
-	customName = "storm_lord_touched",
-	socialGroup = "townsperson",
+	customName = "a storm-touched acolyte",
+	socialGroup = "storm_lord",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
+	mobType = MOB_NPC,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -20,7 +21,7 @@ storm_lord_touched = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
+	pvpBitmask = ATTACKABLE + AGGRESSIVE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
@@ -28,13 +29,16 @@ storm_lord_touched = Creature:new {
 	templates = {"object/mobile/som/storm_lord_touched.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "wilder_tier_1", chance = 10000000}
+			}
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "melee_weapons",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = merge(brawlermaster,swordsmanmaster,forcewielder),
+	secondaryAttacks = forcewielder
 }
 
 CreatureTemplates:addCreatureTemplate(storm_lord_touched, "storm_lord_touched")

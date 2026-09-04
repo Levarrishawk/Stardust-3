@@ -1,40 +1,47 @@
 xandank_patriarch = Creature:new {
-	customName = "xandank_patriarch",
-	socialGroup = "townsperson",
+	customName = "a Xandank Patriarch",
+	socialGroup = "xandank",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
-	resists = {0,0,0,0,0,0,0,-1,-1},
-	meatType = "",
-	meatAmount = 0,
-	hideType = "",
-	hideAmount = 0,
-	boneType = "",
-	boneAmount = 0,
+	mobType = MOB_CARNIVORE,
+	level = 100,
+	chanceHit = 1,
+	damageMin = 645,
+	damageMax = 1000,
+	baseXp = 9429,
+	baseHAM = 24000,
+	baseHAMmax = 30000,
+	armor = 1,
+	resists = {5,5,5,30,-1,30,-1,-1,-1},
+	meatType = "meat_carnivore",
+	meatAmount = 500,
+	hideType = "hide_leathery",
+	hideAmount = 400,
+	boneType = "bone_mammal",
+	boneAmount = 375,
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
+	diet = CARNIVORE,
 
 	templates = {"object/mobile/som/xandank_patriarch.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "resource_creature", chance = 5000000},
+				{group = "armor_attachments", chance = 2500000},
+				{group = "clothing_attachments", chance = 2500000}
+			},
+			lootChance = 7000000
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+	primaryAttacks = { {"creatureareaattack",""}, {"creatureareaknockdown",""} },
+	secondaryAttacks = { }
 }
 
 CreatureTemplates:addCreatureTemplate(xandank_patriarch, "xandank_patriarch")

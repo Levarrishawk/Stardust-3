@@ -1,15 +1,18 @@
+-- One of the scavengers that skulk around the Mustafar ruins; historian.lua spawns
+-- these for som_kenobi_historian_2's "killScavengers" task.
 ruins_leader = Creature:new {
-	customName = "ruins_leader",
-	socialGroup = "townsperson",
+	customName = "a scavenger leader",
+	socialGroup = "thug",
 	faction = "",
-	level = 70,
-	chanceHit = 0.27,
-	damageMin = 550,
-	damageMax = 800,
-	baseXp = 235,
-	baseHAM = 16000,
-	baseHAMmax = 19000,
-	armor = 0,
+	mobType = MOB_NPC,
+	level = 85,
+	chanceHit = 0.75,
+	damageMin = 555,
+	damageMax = 820,
+	baseXp = 8130,
+	baseHAM = 12000,
+	baseHAMmax = 15000,
+	armor = 1,
 	resists = {0,0,0,0,0,0,0,-1,-1},
 	meatType = "",
 	meatAmount = 0,
@@ -28,13 +31,21 @@ ruins_leader = Creature:new {
 	templates = {"object/mobile/som/ruins_leader.iff"},
 	lootGroups = {
 		{
-			groups = {},
-			lootChance = 2100000
+			groups = {
+				{group = "thug_tier_1", chance = 10000000}
+			}
 		}
 	},
-	weapons = {"pirate_weapons_light"},
+	-- weapons/attacks are dead fields. CreatureTemplate.cpp reads defaultWeapon (:138),
+	-- primaryWeapon/secondaryWeapon (:191/192) and primaryAttacks (:195); nothing reads
+	-- weapons or attacks, so this mobile used to spawn unarmed. Pairing follows
+	-- corellia/corellia_times_investigator.lua, which uses the same weapon group.
+	primaryWeapon = "pirate_weapons_heavy",
+	secondaryWeapon = "none",
 	conversationTemplate = "",
-	attacks = merge(marksmannovice,brawlernovice)
+
+	primaryAttacks = merge(marksmanmaster,carbineermaster),
+	secondaryAttacks = carbineermaster
 }
 
 CreatureTemplates:addCreatureTemplate(ruins_leader, "ruins_leader")

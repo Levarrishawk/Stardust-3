@@ -27,7 +27,7 @@ object_draft_schematic_weapon_appearance_weapon_appearance_heavy_republic_flamer
    contribution = {100, 100, 100, 100, 100, 100, 100, 100},
 
 
-   targetTemplate = "object/weapon/ranged/heavy/heavy_rocket_launcher.iff",
+   targetTemplate = "object/weapon/ranged/heavy/som_republic_flamer_generic.iff",
 
    additionalTemplates = {
              }

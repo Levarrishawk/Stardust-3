@@ -3,6 +3,7 @@ ep3_etyyy_chiss_poacher_smuggler_03 = Creature:new {
 	randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "townsperson",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 45,
 	chanceHit = 0.45,
 	damageMin = 300,

@@ -3,6 +3,7 @@ ep3_broodmaster_hsskas = Creature:new {
 	--randomNameType = NAME_GENERIC_TAG,
 	socialGroup = "trandoshan",
 	faction = "",
+	mobType = MOB_NPC,
 	level = 115,
 	chanceHit = 1.25,
 	damageMin = 1380,
