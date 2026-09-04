@@ -3344,3 +3344,10 @@ object_tangible_terminal_shared_test = SharedTangibleObjectTemplate:new {
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_terminal_shared_test, "object/tangible/terminal/shared_test.iff")
+
+object_tangible_terminal_shared_terminal_axkva_min_entrance = SharedTangibleObjectTemplate:new {
+  clientTemplateFileName = "object/tangible/terminal/shared_terminal_axkva_min_entrance.iff"
+  
+}
+
+ObjectTemplates:addClientTemplate(object_tangible_terminal_shared_terminal_axkva_min_entrance, "object/tangible/terminal/shared_terminal_axkva_min_entrance.iff")

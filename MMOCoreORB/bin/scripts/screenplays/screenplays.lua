@@ -163,6 +163,11 @@ includeFile("dungeon/corellian_corvette/ticket_takers/ds_297.lua")
 includeFile("dungeon/corellian_corvette/ticket_takers/klaatu.lua")
 includeFile("dungeon/corellian_corvette/ticket_takers/lt_lance.lua")
 
+-- Axkva Min
+includeFile("dungeon/axkva_min/axkvaMin.lua")
+includeFile("dungeon/axkva_min/axkvaMinEntryWay.lua")
+includeFile("events/axkvaMinEntryMenuComponent.lua")
+
 
 -- Village
 
