@@ -35,52 +35,23 @@
 --   object/draft_schematic/weapon/appearance/weapon_appearance_heavy_carbonite_rifle.iff
 --     wrapper template (generic_limited_use / _flashy) mangled or absent on SD3; a bare draft
 --     schematic is not a lootable item -- waits on the addTemplate-path fix (board X-1).
---
--- Core3 loot groups resolve itemTemplate against addLootItemTemplate, not
--- against ObjectTemplates. This one fenced file therefore registers a loot
--- item for each resolving iff (key = path) so the group can name the templates
--- D2 asked for without extra loot/items.lua files.
-
-local function ig88RegisterLootItem(path)
-	addLootItemTemplate(path, {
-		minimumLevel = 0,
-		maximumLevel = -1,
-		customObjectName = "",
-		directObjectTemplate = path,
-		craftingValues = {},
-		customizationStringNames = {},
-		customizationValues = {}
-	})
-end
-
-ig88RegisterLootItem("object/tangible/item/ig_droid_head.iff")
-ig88RegisterLootItem("object/tangible/wearables/ring/ring_s01.iff")
-ig88RegisterLootItem("object/tangible/wearables/ring/ring_s02.iff")
-ig88RegisterLootItem("object/tangible/wearables/ring/ring_s03.iff")
-ig88RegisterLootItem("object/tangible/wearables/ring/ring_s04.iff")
-ig88RegisterLootItem("object/tangible/component/weapon/new_weapon/enhancement_melee_slot_one_s09.iff")
-ig88RegisterLootItem("object/tangible/component/weapon/new_weapon/enhancement_melee_slot_two_s09.iff")
-ig88RegisterLootItem("object/tangible/component/weapon/new_weapon/enhancement_ranged_slot_one_s09.iff")
-ig88RegisterLootItem("object/tangible/component/weapon/new_weapon/enhancement_ranged_slot_two_s09.iff")
-ig88RegisterLootItem("object/tangible/component/weapon/new_weapon/enhancement_melee_slot_one_s18.iff")
-ig88RegisterLootItem("object/tangible/component/weapon/new_weapon/enhancement_ranged_slot_one_s18.iff")
 
 ig88_heroic_drops = {
 	description = "",
 	minimumLevel = 0,
 	maximumLevel = -1,
 	lootItems = {
-		{itemTemplate = "object/tangible/item/ig_droid_head.iff", weight = 1250000},
-		{itemTemplate = "object/tangible/wearables/ring/ring_s01.iff", weight = 1250000},
-		{itemTemplate = "object/tangible/wearables/ring/ring_s02.iff", weight = 1250000},
-		{itemTemplate = "object/tangible/wearables/ring/ring_s03.iff", weight = 1250000},
-		{itemTemplate = "object/tangible/wearables/ring/ring_s04.iff", weight = 1250000},
-		{itemTemplate = "object/tangible/component/weapon/new_weapon/enhancement_melee_slot_one_s09.iff", weight = 625000},
-		{itemTemplate = "object/tangible/component/weapon/new_weapon/enhancement_melee_slot_two_s09.iff", weight = 625000},
-		{itemTemplate = "object/tangible/component/weapon/new_weapon/enhancement_ranged_slot_one_s09.iff", weight = 625000},
-		{itemTemplate = "object/tangible/component/weapon/new_weapon/enhancement_ranged_slot_two_s09.iff", weight = 625000},
-		{itemTemplate = "object/tangible/component/weapon/new_weapon/enhancement_melee_slot_one_s18.iff", weight = 625000},
-		{itemTemplate = "object/tangible/component/weapon/new_weapon/enhancement_ranged_slot_one_s18.iff", weight = 625000},
+		{itemTemplate = "item_heroic_ig_88_head_01_01", weight = 1250000},
+		{itemTemplate = "item_heroic_random_ring_01_01", weight = 1250000},
+		{itemTemplate = "item_heroic_random_ring_01_02", weight = 1250000},
+		{itemTemplate = "item_heroic_random_ring_01_03", weight = 1250000},
+		{itemTemplate = "item_heroic_random_ring_01_04", weight = 1250000},
+		{itemTemplate = "wp_comp_heroic_enhancement_melee_slot_one_s09", weight = 625000},
+		{itemTemplate = "wp_comp_heroic_enhancement_melee_slot_two_s09", weight = 625000},
+		{itemTemplate = "wp_comp_heroic_enhancement_ranged_slot_one_s09", weight = 625000},
+		{itemTemplate = "wp_comp_heroic_enhancement_ranged_slot_two_s09", weight = 625000},
+		{itemTemplate = "wp_comp_heroic_enhancement_melee_slot_one_s18", weight = 625000},
+		{itemTemplate = "wp_comp_heroic_enhancement_ranged_slot_one_s18", weight = 625000},
 	}
 }
 
