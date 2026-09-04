@@ -298,6 +298,11 @@ includeFile("groups/npc/talus/liberation_party_tier_1.lua")
 includeFile("groups/npc/talus/lost_aqualish_tier_1.lua")
 includeFile("groups/npc/talus/poacher_tier_1.lua")
 includeFile("groups/npc/talus/sif_tier_1.lua")
+-- Star Destroyer heroic
+includeFile("groups/dungeon/star_destroyer/sd_boss.lua")
+includeFile("groups/dungeon/star_destroyer/sd_sub_1.lua")
+includeFile("groups/dungeon/star_destroyer/sd_sub_2.lua")
+includeFile("groups/dungeon/star_destroyer/sd_sub_3.lua")
 includeFile("groups/npc/talus/sif_tier_2.lua")
 includeFile("groups/npc/talus/sleemo_gang_tier_1.lua")
 
