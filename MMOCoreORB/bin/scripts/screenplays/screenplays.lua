@@ -759,6 +759,8 @@ includeFile("collections/collections_ui.lua")
 includeFile("collections/collector_npc.lua")
 includeFile("collections/collector_spawns.lua")
 includeFile("collections/collection_objects.lua")
+includeFile("collections/collection_vistas.lua")
+includeFile("collections/collection_listening_posts.lua")
 
 -- Mustafar
 -- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.
