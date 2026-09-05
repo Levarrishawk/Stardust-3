@@ -31,7 +31,7 @@ ep3_pug_jumper = Creature:new {
 
 	templates = {"object/mobile/ep3_pug_jumper.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_pug_jumper lootList kashyyyk_pug_jumper intLootRolls=1 creatures.tab line 1484 (ep3_pug_jumper).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

@@ -29,7 +29,7 @@ ep3_roroo = Creature:new {
 
 	templates = {"object/mobile/ep3_roroo.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_roroo lootList kashyyyk_roroo intLootRolls=1 creatures.tab line 1503 (ep3_roroo).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

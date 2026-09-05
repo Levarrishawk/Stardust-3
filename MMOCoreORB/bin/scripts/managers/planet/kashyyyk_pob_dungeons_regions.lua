@@ -35,7 +35,7 @@
 --                                      mapWidth 16384  (research E9)
 --
 -- BUILDOUT -> WORLD CONVERSION {#kash-offset}
---   UNMEASURED — measured in the spawn round.
+--   UNMEASURED — measured in the spawn pass.
 --   Trap 6: no linear map. The buildout has one thm_kash_myyydril_caverns at
 --   (400.2584, 4.32584, 400.512) and one dungeon_avatar_platform at
 --   (450.2555, 41.521, 500.4547). The 023 snapshot has 10 myyydril copies and
@@ -45,7 +45,7 @@
 --   Trap 5: myyydril_caverns.tab (80 rows) and avatar_platform.tab (54 rows)
 --   are 11-column (no objid/container). px is column 3, not column 5.
 --
--- NO SPAWN ROWS YET. A later round adds them from the transcribed buildouts.
+-- NO SPAWN ROWS YET. A later pass adds them from the transcribed buildouts.
 --
 -- ZONE SHAPE
 --   terrain/kashyyyk_pob_dungeons.trn reports mapWidth 16384, i.e. the zone

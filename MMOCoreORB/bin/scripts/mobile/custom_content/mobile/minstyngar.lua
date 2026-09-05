@@ -29,7 +29,7 @@ minstyngar = Creature:new {
 	scale = 1,
 	templates = {"object/mobile/minstyngar.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_minstyngar lootList kashyyyk_minstyngar intLootRolls=1 creatures.tab line 1272 (ep3_cr_minstyngar).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

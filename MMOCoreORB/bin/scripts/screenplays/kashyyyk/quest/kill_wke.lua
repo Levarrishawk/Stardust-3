@@ -10,7 +10,7 @@
 		task 1  Wait for Signal    gurnstReward  -- conversation turn-in
 		task 2  Reward             Bank Credits 15000
 
-	Kill templates are the repo names the K-12 lair headers map onto
+	Kill templates are the repo names the the lair headers map onto
 	ep3_npc_wookiee_freedom_fighters (no look-alikes):
 		ep3_wke_freedom_fighter_01..05
 		ep3_wke_forest_stalker_01..03  (same kash_kachirho_wke_fighters lair)

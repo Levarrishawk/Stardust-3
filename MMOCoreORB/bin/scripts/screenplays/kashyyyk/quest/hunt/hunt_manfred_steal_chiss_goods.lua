@@ -12,7 +12,7 @@
 		task 3  d3  Wait for Signal  manfred_deliverToKerssoc  signal manfred_deliverToKerssoc
 		task 4  d4  Wait for Signal  manfred_backToManfred  signal manfred_backToManfred
 
-	OPEN: Retrieve Item spawned; world origin was not in the giver scout. OPEN placement near the giver.
+	OPEN: Retrieve Item spawned; world origin was not in the transcription. OPEN placement near the giver.
 
 	Giver already stands via kashyyyk_static_npcs.lua. Not spawned here.
 
@@ -206,7 +206,7 @@ function huntManfredStealChissGoodsScreenPlay:start()
 end
 
 function huntManfredStealChissGoodsScreenPlay:spawnRetrieves()
-	-- OPEN placement: giver scout has no world origin for this iff. Ring around Manfred.
+	-- OPEN placement: giver transcription has no world origin for this iff. Ring around Manfred.
 	local cx, cz, cy = 115.31, 33.4733, -2554.67
 	for i = 1, self.retrieveCount do
 		local ang = (i / self.retrieveCount) * 6.28318

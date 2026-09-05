@@ -31,7 +31,7 @@ ep3_fern_bicker = Creature:new {
 
 	templates = {"object/mobile/ep3_fern_bicker.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_fern_bicker lootList kashyyyk_fern_bicker intLootRolls=1 creatures.tab line 1336 (ep3_fern_bicker).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

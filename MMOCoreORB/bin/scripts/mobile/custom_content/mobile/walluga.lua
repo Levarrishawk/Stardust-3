@@ -29,7 +29,7 @@ walluga = Creature:new {
 
 	templates = {"object/mobile/walluga.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_walluga lootList kashyyyk_walluga intLootRolls=1 creatures.tab line 1276 (ep3_cr_walluga).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

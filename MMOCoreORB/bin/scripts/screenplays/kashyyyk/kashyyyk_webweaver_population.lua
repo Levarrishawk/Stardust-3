@@ -43,7 +43,7 @@ The surface travel screenplay measured a hunting snapshot node already
 at merged world (398.22, 41.08, -2399.41). snapshot/kashyyyk.ws stores
 translated coordinates. This populator finds the building by node id
 (getSceneObject(6292864)), so the cells resolve either way; start()
-prints the building's world position so the orchestrator can confirm.
+prints the building's world position so the maintainer can confirm.
 
 THE AXIS MAPPING  --  copied from the POB dungeon populator
 

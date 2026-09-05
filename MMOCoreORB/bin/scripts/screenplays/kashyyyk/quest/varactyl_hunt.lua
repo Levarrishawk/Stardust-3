@@ -12,7 +12,7 @@
 		task 1  Wait for Signal             varactylReward  -- conversation turn-in
 		task 2  Reward                      Bank Credits 8000
 
-	Kill templates from the K-12 lair headers (no look-alikes, not Jagged Fang):
+	Kill templates from the the lair headers (no look-alikes, not Jagged Fang):
 		ep3_kachirho_varactyl            -> varactyl_deathspine
 		ep3_kachirho_varactyl_preystalker -> varactyl_preystalker
 		varactyl_stalker                 (repo kachirho varactyl, not the matriarch)

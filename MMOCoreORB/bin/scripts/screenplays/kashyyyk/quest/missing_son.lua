@@ -14,7 +14,7 @@
 		                                   Item object/weapon/melee/polearm/lance_kashyyk.iff
 
 	OPEN: ep3_kachirho_lobarorr ships pvpBitmask NONE, so the kill cannot land until a
-	later round makes him attackable. Observer still matches that template. Lobarorr is
+	a later ruling makes him attackable. Observer still matches that template. Lobarorr is
 	not spawned here (no buildout row in the giver dump).
 
 	"Spear of Chatook" has no object template; tracked as a loot flag (glyph_hunt shape).

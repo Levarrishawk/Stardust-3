@@ -7,7 +7,7 @@
 
 	THE TASK TREE
 		task 0  Destroy Multiple   Count 1, Target Server Template ep3_kachirho_varactyl_jaggedfang
-		                           -> repo varactyl_jagged_fang (K-12 lair header)
+		                           -> repo varactyl_jagged_fang (the lair headers)
 		task 1  Retrieve Item      object/tangible/quest/kachirho_varactyl_egg.iff
 		task 2  Reward             Item object/tangible/loot/quest/ep3/varactyl_egg.iff  -- OPEN, no repo template
 

@@ -41,24 +41,24 @@
 --   (no objid/container). px is column 3, not column 5.
 --   Contents: Hracca Glade + Bocctyyy monster islands.
 --
--- WHAT NOW EXISTS (K-9, ruling 2026-09-04)
+-- WHAT NOW EXISTS (, ruling 2026-09-04)
 --   * SPAWNAREA rows from SOE datatables/buildout/kashyyyk_south_dungeons/
 --     hracca.tab (29) and bocctyyy.tab (26) area_spawner.iff (55 sourced).
 --     Name is south_sp_<tab>_<buildout_row> because both tabs start at row 3.
 --     wx/wz are already dungeon-snapshot world coords for island copy #0
---     (buildout - 3968 on x, + 2944 on z, proved). This round places copy #0
+--     (buildout - 3968 on x, + 2944 on z, proved). This pass places copy #0
 --     ONLY; the island repeats at +1152 m in x per copy -- copies are a later
 --     decision.
 --     Spawn limit is SOE intSpawnCount (floored to 1). Radius is
 --     max(SOE fltRadius, 32): a Core3 spawn area needs room for a lair.
---     A type table a surface round already built is reused by name; no second
+--     A type table a surface pass already built is reused by name; no second
 --     file. Fully-OPEN type tables (etyyy_mouf: no repo mouf template) stay as
 --     comments so the server does not dangle a spawn-group name; coords stay
 --     sourced.
 --   * 89 object/tangible/spawning/ rows (88 kashyyyk/* monster-island spawners
 --     driven by SOE's theme_park.dungeon.space_dungeon_controller java + 2
 --     control objects, and 1 ep3 quest NPC) are NOT in this file -- OPEN for
---     the behaviours round.
+--     the behaviours pass.
 --
 -- ZONE SHAPE
 --   terrain/kashyyyk_south_dungeons.trn reports mapWidth 16384, i.e. the zone
@@ -92,7 +92,7 @@ kashyyyk_south_dungeons_regions = {
 	{"southedge_kashyyyk_south_dungeons_nobuild", -8000, -8000, {RECTANGLE, 8000, -7640}, NOBUILDZONEAREA},
 	{"eastedge_kashyyyk_south_dungeons_nobuild", 7640, -7640, {RECTANGLE, 8000, 7640}, NOBUILDZONEAREA},
 
-	-- SPAWNAREA -- Hracca Glade + Bocctyyy (kashyyyk_south_dungeons), K-9
+	-- SPAWNAREA -- Hracca Glade + Bocctyyy (kashyyyk_south_dungeons), 
 	-- Sourced area_spawner.iff: 55 (hracca.tab 29, bocctyyy.tab 26). Island copy #0 only.
 	-- Live rows: 52. Still-fully-OPEN type tables: 3 row(s) commented (etyyy_mouf).
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.

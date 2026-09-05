@@ -31,7 +31,7 @@ urnsoris = Creature:new {
 
 	templates = {"object/mobile/urnsoris.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/myyydril_eviserator lootList myyydril_eviserator intLootRolls=1 creatures.tab line 1581 (ep3_urnsoris_eviscerater).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

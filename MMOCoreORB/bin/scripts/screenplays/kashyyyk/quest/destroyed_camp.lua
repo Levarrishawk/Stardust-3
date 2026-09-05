@@ -19,15 +19,15 @@
 			the only shipped line that states the code 25854. codeReceived
 			advances the stage; s_413 then fires codeEntered for the award.
 
-	Radio is kashyyyk_main row 1792 at wx=116.17, wz=813.43. K-12 static NPCs did not
+	Radio is kashyyyk_main row 1792 at wx=116.17, wz=813.43. static NPCs did not
 	place this mobile (it is not a celebrity row); spawned here. Conversation table is
 	conversation/destroyed_camp_radio (java c_stringFile), not in the 370-row dump.
 
 	Kill templates (repo, no look-alikes): ep3_canopy_bandit_01..04 and
-	ep3_canopy_reaper_01 (K-12 lair header). ep3_kachirho_canopy_cutthroat is OPEN
+	ep3_canopy_reaper_01 (the lair headers). ep3_kachirho_canopy_cutthroat is OPEN
 	(no repo template). The live lair currently only stands the reaper.
 
-	Bag world origin was not in the scout; spawned at the radio camp. OPEN placement.
+	Bag world origin was not in the transcription; spawned at the radio camp. OPEN placement.
 
 	Giver conversation is attached to ep3_kachirho_qst_radio.
 
@@ -90,7 +90,7 @@ function kachirhoDestroyedCampScreenPlay:spawnProps()
 		SceneObject(pDrum):setObjectMenuComponent("KashDestroyedCampMenuComponent")
 	end
 
-	-- Bag: iff exists. Canopy-camp origin was not in the scout. OPEN placement, radio camp.
+	-- Bag: iff exists. Canopy-camp origin was not in the transcription. OPEN placement, radio camp.
 	local pBag = spawnSceneObject("kashyyyk", self.bagTemplate, self.radioX - 2, z, self.radioY, 0, 0)
 
 	if (pBag ~= nil) then

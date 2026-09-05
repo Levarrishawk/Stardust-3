@@ -12,7 +12,7 @@
 
 	Kill templates:
 		ep3_rryatt_crazed_jedi -> ep3_rryatt_crazed_jedi
-		cited: kashyyyk_rryatt_crazed_jedi.lua line 10 (c6-match)
+		cited: kashyyyk_rryatt_crazed_jedi.lua line 10 (iff-match)
 
 	Giver ep3_rryatt_krepauk is placed by the Rryatt NPC screenplay.
 

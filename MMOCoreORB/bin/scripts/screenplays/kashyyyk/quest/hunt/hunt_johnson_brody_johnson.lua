@@ -12,7 +12,7 @@
 		task 3  d3  Wait for Signal  johnson_talkToMada  signal johnson_talkToMada
 		task 5  d4  Wait for Signal  johnson_returnToSmith  signal johnson_returnToSmith
 
-	OPEN: Retrieve Item spawned; world origin was not in the giver scout. OPEN placement near the giver.
+	OPEN: Retrieve Item spawned; world origin was not in the transcription. OPEN placement near the giver.
 
 	Giver already stands via kashyyyk_static_npcs.lua. Not spawned here.
 
@@ -206,7 +206,7 @@ function huntJohnsonBrodyJohnsonScreenPlay:start()
 end
 
 function huntJohnsonBrodyJohnsonScreenPlay:spawnRetrieves()
-	-- OPEN placement: giver scout has no world origin for this iff. Ring near Johnson Smith.
+	-- OPEN placement: giver transcription has no world origin for this iff. Ring near Johnson Smith.
 	local cx, cz, cy = -392.8, 80.5588, -2132.74
 	for i = 1, self.retrieveCount do
 		local ang = (i / self.retrieveCount) * 6.28318

@@ -31,7 +31,7 @@ ep3_wke_commando_01 = Creature:new {
 
 	templates = {"object/mobile/ep3/ep3_wke_commando_01.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/wke_resistance_commando lootList wke_resistance_commando intLootRolls=1 creatures.tab line 1475 (ep3_npc_wookiee_commando).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

@@ -58,7 +58,7 @@ def main():
     ap.add_argument('--tre', action='append', default=[])
     ap.add_argument('--pattern', required=True)
     ap.add_argument('--out', required=True)
-    ap.add_argument('--tre-reader', default=r'C:\swg-extract\tre_read.py')
+    ap.add_argument('--tre-reader', required=True, help='path to a local tre_read.py; the TRE archives never enter the repo')
     a = ap.parse_args()
     pat = re.compile(a.pattern)
     qdir = os.path.join(a.shared, 'datatables', 'questlist', 'quest')

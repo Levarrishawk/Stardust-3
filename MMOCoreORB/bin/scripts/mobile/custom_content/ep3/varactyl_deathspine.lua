@@ -29,7 +29,7 @@ varactyl_deathspine = Creature:new {
 
 	templates = {"object/mobile/varactyl.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_varactyl lootList kashyyyk_varactyl intLootRolls=1 creatures.tab line 1409 (ep3_kachirho_varactyl_deathspine).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

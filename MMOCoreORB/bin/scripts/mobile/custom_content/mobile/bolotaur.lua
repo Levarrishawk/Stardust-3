@@ -30,7 +30,7 @@ bolotaur = Creature:new {
 	diet = HERBIVORE,
 	templates = {"object/mobile/bolotaur.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_bolotaur lootList kashyyyk_bolotaur intLootRolls=1 creatures.tab line 1269 (ep3_cr_bolotaur).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

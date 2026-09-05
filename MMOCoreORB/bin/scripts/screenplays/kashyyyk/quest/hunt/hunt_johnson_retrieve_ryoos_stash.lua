@@ -11,7 +11,7 @@
 		task 2  d2  Retrieve Item  johnson_findRyoosStash  object/tangible/quest/etyyy_ryoos_salt.iff
 		task 3  d3  Wait for Signal  johnson_ryoosSalt  signal johnson_ryoosSalt
 
-	OPEN: Retrieve Item spawned; world origin was not in the giver scout. OPEN placement near the giver.
+	OPEN: Retrieve Item spawned; world origin was not in the transcription. OPEN placement near the giver.
 
 	Giver already stands via kashyyyk_static_npcs.lua. Not spawned here.
 
@@ -204,7 +204,7 @@ function huntJohnsonRetrieveRyoosStashScreenPlay:start()
 end
 
 function huntJohnsonRetrieveRyoosStashScreenPlay:spawnRetrieves()
-	-- OPEN placement: giver scout has no world origin for this iff. Ring near Ryoo Finn.
+	-- OPEN placement: giver transcription has no world origin for this iff. Ring near Ryoo Finn.
 	local cx, cz, cy = -614.96, 8.7683, -2148.77
 	for i = 1, self.retrieveCount do
 		local ang = (i / self.retrieveCount) * 6.28318

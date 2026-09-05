@@ -36,8 +36,8 @@
 --   Trap 4: five levels are stacked by height in one zone, not separated in
 --   x/z. Each tab has its own offset. The 023 snapshot carries SIX copies of
 --   every level layout (two x-columns at approx -3908 and approx +444, three
---   z-bands). Levels 4 and 5 (K-11b) sit in the column x approx -3908 at
---   dz +2115. This round (K-11a) places levels 1-2 in that SAME instance copy
+--   z-bands). Levels 4 and 5 sit in the column x approx -3908 at
+--   dz +2115. This pass places levels 1-2 in that SAME instance copy
 --   (dz +3365). Which of the six copies should be live is the maintainer's
 --   decision (same question as the POB copies).
 --   Level 1-2 (kashyyyk_rryatt_trail_lvl_1_and_2.tab, 13-column):
@@ -49,7 +49,7 @@
 --     does not match the snapshot under any constant offset. Its building
 --     rows (poi_kash_rryatt_lvl2_* at heights ~87-102) find no node at a
 --     consistent (dx, dz, dy); the level-3 layout in 023 must differ from
---     the leaked tab's frame. Nothing built this round.
+--     the leaked tab's frame. Nothing built this file.
 --   Level 4 (kashyyyk_rryatt_trail_lvl_4.tab, 13-column):
 --     world_x = buildout_x - 3908    world_z = buildout_z + 2115
 --     evidence (three building rows matched to snapshot nodes):
@@ -67,7 +67,7 @@
 --   (557 rows) is 11-column (no objid/container). px is column 5 only on the 13.
 --   Sources: 4 buildout tabs, 1968 rows; 28 rryatt_* type tables.
 --
--- WHAT NOW EXISTS (K-11b + K-11a, ruling 2026-09-04)
+-- WHAT NOW EXISTS (+ , ruling 2026-09-04)
 --   * SPAWNAREA rows from SOE datatables/buildout/kashyyyk_rryatt_trail/
 --     kashyyyk_rryatt_trail_lvl_4.tab (58) and kashyyyk_rryatt_trail_lvl_5.tab
 --     (40) area_spawner.iff (98 sourced). Name is rryatt_sp_<lvl>_<buildout_row>
@@ -75,13 +75,13 @@
 --     dungeon-snapshot world coords using the per-level offsets above.
 --     Spawn limit is SOE intSpawnCount (floored to 1). Radius is
 --     max(SOE fltRadius, 32): a Core3 spawn area needs room for a lair.
---     A type table a surface round already built is reused by name; no second
---     file. New rryatt_* type tables get a lair + group this round.
---     kash_blackscale_enforcer was built by the north-dungeons round (K-8b);
+--     A type table a surface pass already built is reused by name; no second
+--     file. New rryatt_* type tables get a lair + group this file.
+--     kash_blackscale_enforcer was built by the north-dungeons pass;
 --     its four level-4 rows are live. Coords stay sourced.
 --   * 3 trail-guide quest NPCs + 1 rryatt_trail_rroot_spawner control object
---     are NOT in this file -- OPEN for the behaviours round.
---   * Levels 1-2 area_spawners (K-11a, ruling 2026-09-04): sourced from
+--     are NOT in this file -- OPEN for the behaviours pass.
+--   * Levels 1-2 area_spawners (, ruling 2026-09-04): sourced from
 --     kashyyyk_rryatt_trail_lvl_1_and_2.tab area_spawner.iff. Name is
 --     rryatt_sp_12_<buildout_row>. World coords use (x - 3908, z + 3365)
 --     so they sit in the same instance copy as levels 4-5. A type table
@@ -92,7 +92,7 @@
 --     constant offset; build nothing).
 --   * patrol_spawner.iff rows and patrol_point_setup waypoints are OPEN
 --     (not Core3 SPAWNAREA rows). Quest NPCs / control objects stay OPEN
---     for the behaviours round.
+--     for the behaviours pass.
 --
 -- ZONE SHAPE
 --   terrain/kashyyyk_rryatt_trail.trn reports mapWidth 16384, i.e. the zone
@@ -145,9 +145,9 @@ kashyyyk_rryatt_trail_regions = {
 	{"southedge_kashyyyk_rryatt_trail_nobuild", -8000, -8000, {RECTANGLE, 8000, -7640}, NOBUILDZONEAREA},
 	{"eastedge_kashyyyk_rryatt_trail_nobuild", 7640, -7640, {RECTANGLE, 8000, 7640}, NOBUILDZONEAREA},
 
-	-- SPAWNAREA -- Rryatt Trail levels 4 and 5 (kashyyyk_rryatt_trail), K-11b
+	-- SPAWNAREA -- Rryatt Trail levels 4 and 5 (kashyyyk_rryatt_trail), 
 	-- Sourced area_spawner.iff: 98 (lvl_4.tab 58, lvl_5.tab 40).
-	-- Live rows: 98 (the four kash_blackscale_enforcer rows went live with the north round's lair).
+	-- Live rows: 98 (the four kash_blackscale_enforcer rows went live with the north pass's lair).
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.
 	{"rryatt_sp_4_4", -3503.62, 3076.43, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_webweaver_darkstalker"}, 2},
 	{"rryatt_sp_4_5", -3415.62, 3089.43, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_webweaver_darkstalker"}, 2},
@@ -247,7 +247,7 @@ kashyyyk_rryatt_trail_regions = {
 	{"rryatt_sp_5_41", -1363.82, 2582.97, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_gotal_hunter"}, 2},
 	{"rryatt_sp_5_42", -1421.50, 2564.32, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_gotal_hunter"}, 2},
 	{"rryatt_sp_5_43", -1509.78, 2580.91, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_gotal_hunter"}, 2},
-	-- SPAWNAREA -- Rryatt Trail levels 1 and 2 (kashyyyk_rryatt_trail), K-11a
+	-- SPAWNAREA -- Rryatt Trail levels 1 and 2 (kashyyyk_rryatt_trail), 
 	-- Sourced area_spawner.iff from kashyyyk_rryatt_trail_lvl_1_and_2.tab.
 	-- Live rows: 34. Commented OPEN: 12 (mouf type tables; no repo mouf template).
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.

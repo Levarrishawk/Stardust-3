@@ -12,7 +12,7 @@
 
 	Kill templates:
 		ep3_rryatt_feral_wookiee -> ep3_rryatt_feral_wookiee_01..04
-		cited: kashyyyk_rryatt_feral_wookiee.lua line 10 (c6-rotate numbered set)
+		cited: kashyyyk_rryatt_feral_wookiee.lua line 10 (set-rotate numbered set)
 
 	Giver ep3_rryatt_krepauk is placed by the Rryatt NPC screenplay.
 

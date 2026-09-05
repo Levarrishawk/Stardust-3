@@ -33,7 +33,7 @@ general_grievous = Creature:new {
 
 	templates = {"object/mobile/ep3/general_grievous.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/myyydril_grievous lootList myyydril_grievous intLootRolls=1 creatures.tab line 1378 (ep3_general_grievous).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

@@ -22,7 +22,7 @@ _dsrc/sku.0/sys.server/compiled/game/datatables/spawning/dungeon/
 Every room name, position and heading below is QUOTED from those rows. Nothing
 here is read off a .ilf and nothing here is placed by eye. The object rows
 (quest crystals, terminals, doors, lockboxes) are dungeon logic and furniture,
-not this round -- the same cut MustafarDungeonPopulation originally made,
+not this file -- the same cut MustafarDungeonPopulation originally made,
 before its 2026-08-31 props pass.
 
 THE AXIS MAPPING  --  the one thing to get right
@@ -49,7 +49,7 @@ farm or one copy per dungeon is still open.
 
 copies, below, is the single table that decides. Only copy #0 of each dungeon
 is listed. Switch the rest on by adding their snapshot node IDs (commented
-next to the table, from scout-k10-pob.clean.json).
+next to the table, from the transcribed spawn rows).
 
     myyydril copy #0   node 12900001   world (1000, 4.32584, 0)
     avatar   copy #0   node 12900721   world (1000, 41.521, 1000)
@@ -76,17 +76,17 @@ third argument. This file does the same. Live's myyydril/avatar tables mix
 blank, 300, 360, 480, 600, 800, 1200 and 1800; applying 600 to every row is
 the Mustafar substitution of application, not of value (header lines 78-90).
 
-THEME_PARK BEHAVIOUR IS NOT THIS ROUND
+THEME_PARK BEHAVIOUR IS SEPARATE
 
 Rows whose script is theme_park.* (myyydril generic_death, avatar generic_death
 and the platform terminal/prisoner/lockbox scripts) still spawn as creatures.
-The behaviour itself is a later round. conversation.* is the same cut.
+The behaviour itself is separate. conversation.* is the same cut.
 
 THE TEMPLATES ARE THIS TREE'S OWN
 
-Mapped from C6 iff-matches (scratch/round-k9/scout-c6.clean.json matches) and
+Mapped from creature-table iff-matches (the creature table) and
 from Creature:new registrations in mobile/custom_content/ep3/ and
-mobile/custom_content/mobile/. C6 scanned only ep3/; the mobile/ dir holds the
+mobile/custom_content/mobile/. the first pass scanned only ep3/; the mobile/ dir holds the
 urnsoris, uwari and dressed_myyydril bodies. Numbered set members rotate in
 table order. Creatures with no repo template are OPEN: listed in place as
 comments under their SOE name, never substituted. battle_droid.iff on

@@ -32,7 +32,7 @@ kashyyyk_bull_bantha = Creature:new {
 
 	templates = {"object/mobile/kashyyyk_bantha.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_bantha lootList kashyyyk_bantha intLootRolls=1 creatures.tab line 1393 (ep3_kachirho_bantha_bull).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

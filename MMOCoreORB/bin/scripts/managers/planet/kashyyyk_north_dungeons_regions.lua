@@ -40,7 +40,7 @@
 --   (no objid/container). px is column 3, not column 5.
 --   Contents: Trandoshan slave camp + the Arena.
 --
--- WHAT NOW EXISTS (K-8b, ruling 2026-09-04)
+-- WHAT NOW EXISTS (, ruling 2026-09-04)
 --   * SPAWNAREA rows from SOE datatables/buildout/kashyyyk_north_dungeons/
 --     slaver.tab and arena.tab. transcribe_spawners.py processed both
 --     tabs; all 108 spawners are slaver.tab (91 area_spawner.iff, 17
@@ -50,14 +50,14 @@
 --     - 3840 on x, + 2816 on z, proved).
 --     Spawn limit is SOE intSpawnCount (floored to 1). Radius is
 --     max(SOE fltRadius, 32): a Core3 spawn area needs room for a lair.
---     A type table a surface round already built is reused by name; no
---     second file. kash_blackscale_kamurith is built (K-8b.1): SOE's
+--     A type table a surface pass already built is reused by name; no
+--     second file. kash_blackscale_kamurith is built: SOE's
 --     voritor_lizard_hue.iff is the appearance the base-game kamurith
 --     templates declare, an iff match. The named boss table
 --     kash_blackscale_kamurith_ysskir (1 row) stays a comment so the server
 --     does not dangle a spawn-group name; coords stay sourced.
 --     Empty-strSpawns area spawners stay as comments.
---     patrol_spawner.iff rows stay as comments (the north patrol round
+--     patrol_spawner.iff rows stay as comments (the north patrol pass
 --     comes after the surface patrol shape is proven).
 --   * 130 object/tangible/spawning/ and ground_spawning/ rows (128
 --     patrol_point_setup waypoints, 1 space_dungeon_controller control
@@ -96,9 +96,9 @@ kashyyyk_north_dungeons_regions = {
 	{"southedge_kashyyyk_north_dungeons_nobuild", -8000, -8000, {RECTANGLE, 8000, -7640}, NOBUILDZONEAREA},
 	{"eastedge_kashyyyk_north_dungeons_nobuild", 7640, -7640, {RECTANGLE, 8000, 7640}, NOBUILDZONEAREA},
 
-	-- SPAWNAREA -- Trandoshan slave camp + the Arena (kashyyyk_north_dungeons), K-8b
+	-- SPAWNAREA -- Trandoshan slave camp + the Arena (kashyyyk_north_dungeons), 
 	-- Sourced spawners: 108 (slaver.tab 91 area_spawner.iff + 17 patrol_spawner.iff; arena.tab 0).
-	-- Live rows: 69 (K-8b 58 + K-8b.1 the 11 kamurith rows). Commented: 21 empty
+	-- Live rows: 69 (58 + the 11 kamurith rows). Commented: 21 empty
 	-- strSpawns, 1 named-boss table (kamurith_ysskir), 17 patrol_spawner.iff.
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.
 	-- OPEN (empty strSpawns; no type table): {"north_sp_slaver_3", -3528.72, 3304.84, {CIRCLE, 32}, SPAWNAREA, {""}, 1}, -- strSpawns= soe_radius=0.0 soe_count=1
@@ -191,22 +191,22 @@ kashyyyk_north_dungeons_regions = {
 	{"north_sp_slaver_90", -3404.71, 3669.55, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 1},
 	{"north_sp_slaver_91", -3404.47, 3660.38, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 1},
 	{"north_sp_slaver_92", -3506.64, 3718.91, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_trooper"}, 4},
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_93", -3153.28, 2937.77, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 1}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=1.0 soe_count=1
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_403", -3195.21, 3041.63, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=3.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_413", -3212.50, 3086.77, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=2.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_423", -3296.49, 3092.40, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 1}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=2.0 soe_count=1
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_425", -3322.39, 3082.14, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 3}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=3.0 soe_count=3
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_439", -3468.48, 3188.83, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=3.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_443", -3480.90, 3378.95, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 1}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=3.0 soe_count=1
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_455", -3354.87, 3367.12, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=1.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_461", -3334.10, 3468.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_476", -3292.91, 3447.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=2.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_480", -3093.11, 3570.29, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_485", -3173.80, 3683.25, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_491", -3200.28, 3632.02, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 3}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=3
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_502", -3499.98, 3544.39, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 5}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=5
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_507", -3477.28, 3676.01, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_trooper"}, 4}, -- strSpawns=kashyyyk/kash_blackscale_trooper soe_radius=3.0 soe_count=4
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_514", -3585.92, 3629.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_trooper"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_trooper soe_radius=1.0 soe_count=2
-	-- OPEN (patrol_spawner.iff; north patrol round comes after the surface patrol shape is proven): {"north_sp_slaver_529", -3585.61, 3651.02, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_trooper"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_trooper soe_radius=1.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_93", -3153.28, 2937.77, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 1}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=1.0 soe_count=1
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_403", -3195.21, 3041.63, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=3.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_413", -3212.50, 3086.77, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=2.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_423", -3296.49, 3092.40, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 1}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=2.0 soe_count=1
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_425", -3322.39, 3082.14, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 3}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=3.0 soe_count=3
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_439", -3468.48, 3188.83, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=3.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_443", -3480.90, 3378.95, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_enforcer"}, 1}, -- strSpawns=kashyyyk/kash_blackscale_enforcer soe_radius=3.0 soe_count=1
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_455", -3354.87, 3367.12, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=1.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_461", -3334.10, 3468.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_476", -3292.91, 3447.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_guard"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_guard soe_radius=2.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_480", -3093.11, 3570.29, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_485", -3173.80, 3683.25, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_491", -3200.28, 3632.02, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 3}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=3
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_502", -3499.98, 3544.39, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_assault"}, 5}, -- strSpawns=kashyyyk/kash_blackscale_assault soe_radius=2.0 soe_count=5
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_507", -3477.28, 3676.01, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_trooper"}, 4}, -- strSpawns=kashyyyk/kash_blackscale_trooper soe_radius=3.0 soe_count=4
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_514", -3585.92, 3629.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_trooper"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_trooper soe_radius=1.0 soe_count=2
+	-- OPEN (patrol_spawner.iff; the north patrols follow once the surface patrol shape is proven): {"north_sp_slaver_529", -3585.61, 3651.02, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_blackscale_trooper"}, 2}, -- strSpawns=kashyyyk/kash_blackscale_trooper soe_radius=1.0 soe_count=2
 	{"north_sp_slaver_544", -3270.96, 2831.60, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_clone_droid"}, 1},
 }

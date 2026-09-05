@@ -19,7 +19,7 @@
 -- next to it. Rows whose NAME or RADIUS is not itself shipped are marked
 -- INFERRED so nothing here reads as quoted data when it is not.
 --
--- WHICH SHIPPED FILES GOVERN (ruling 2026-09-04, K-1, TRE order option (a))
+-- WHICH SHIPPED FILES GOVERN (ruling 2026-09-04, , TRE order option (a))
 --   The DEPLOY's bin/conf/config.lua TreFiles (conf/ is never synced from this
 --   repo; the Mustafar precedent) lists mtg_patch_022.tre ABOVE mtg_patch_023.tre
 --   and mtg_planets.tre below both, and "kashyyyk" is in its ZonesEnabled. First
@@ -92,11 +92,11 @@
 --   snapshot/kashyyyk.ws by template name, leaving 1934 structure-like top-level
 --   nodes of 4642. Those were clustered, then each region below was measured as
 --   a bounding box over the shipped node positions: the centre printed here is
---   the bbox centre and the radius is the enclosing radius rounded UP to a round
+--   the bbox centre and the radius is the enclosing radius rounded UP to a pass
 --   number. Node count, measured radius and the dominant templates are recorded
 --   on every row so the naming can be checked against what is actually there.
 --
--- WHAT NOW EXISTS (K-3 + K-3.1 + K-4 + K-5, ruling 2026-09-04)
+-- WHAT NOW EXISTS (+ + + , ruling 2026-09-04)
 --   * SPAWNAREA rows from SOE datatables/buildout/kashyyyk_main/kashyyyk_main.tab
 --     area_spawner.iff (240 sourced). Name is kach_sp_<buildout_row> so each row
 --     traces to a sourced buildout line. wx/wz are already merged-snapshot world
@@ -104,22 +104,22 @@
 --     intSpawnCount (floored to 1). Radius is max(SOE fltRadius, 32): a Core3 spawn
 --     area needs room for a lair, and the NGE area-spawner radii are typically 1-20 m.
 --     Live rows are area_spawners whose type table has at least one mapped creature
---     (C6 iff-match under ep3/ OR K-3.1 mapping: custom_content/mobile stubs and
---     numbered set members). The C6 scout was too narrow (ruling 2026-09-04).
+--     (the creature table iff-match under ep3/ OR mapping: custom_content/mobile stubs and
+--     numbered set members). The the creature table transcription was too narrow (ruling 2026-09-04).
 --     Fully-OPEN type tables stay as comments so the server does not dangle a
 --     spawn-group name; coords stay sourced.
 --   * 27 kashyyyk_main patrol_spawner.iff rows are NOT in this file. They need
---     patrol paths from the 126 patrol_waypoint rows -- OPEN for K-3b.
+--     patrol paths from the 126 patrol_waypoint rows -- OPEN for .
 --   * SPAWNAREA rows from SOE datatables/buildout/kashyyyk_hunting/kashyyyk_hunting.tab
 --     area_spawner.iff (258 sourced). Name is hunt_sp_<buildout_row>. wx/wz are
 --     already merged-snapshot world coords (buildout - 2048 on x, - 5048 on z,
 --     proved). Spawn limit is SOE intSpawnCount (floored to 1). Radius is
 --     max(SOE fltRadius, 32): a Core3 spawn area needs room for a lair.
 --     Region names stay hunting_grounds_* (Etyyy is in no shipped Kashyyyk string
---     table); spawn-group names keep SOE's etyyy_* stems. A type table K-3 already
+--     table); spawn-group names keep SOE's etyyy_* stems. A type table already
 --     built is reused by name; no second file.
 --   * 14 kashyyyk_hunting patrol_spawner.iff rows are NOT in this file. They need
---     patrol paths from the 84 patrol_waypoint rows -- OPEN for K-3b.
+--     patrol paths from the 84 patrol_waypoint rows -- OPEN for .
 --   * SPAWNAREA rows from SOE datatables/buildout/kashyyyk_dead_forest/kashyyyk_dead_forest.tab
 --     area_spawner.iff (87 sourced; 84 with a type table). Name is dead_sp_<buildout_row>.
 --     wx/wz are already merged-snapshot world coords (buildout - 3548 on x, - 548 on z,
@@ -131,7 +131,7 @@
 --     rebel_first_lieutenant, which have no type table anywhere in SOE's data --
 --     listed OPEN, no SPAWNAREA row.
 --   * 4 kashyyyk_dead_forest patrol_spawner.iff rows are NOT in this file. They need
---     patrol paths -- OPEN for K-3b.
+--     patrol paths -- OPEN for .
 --   * No world_spawner row. Kashyyyk used placed area-spawners, not a planet-wide
 --     spawn list (no spawn_lists/kashyyyk in the leak).
 --
@@ -139,7 +139,7 @@
 --   * No rows for kashyyyk_rryatt_trail, kashyyyk_north_dungeons,
 --     kashyyyk_south_dungeons or kashyyyk_pob_dungeons*. Their snapshots ship
 --     only in mtg_patch_023.tre, which the deploy now loads (below 022); their
---     rows belong to the dungeon components (K-8+), each with its own zone.
+--     rows belong to the dungeon components (+), each with its own zone.
 --   * Only ONE localized region name exists for this planet. kashyyyk_region_names.stf
 --     ships exactly one key (kachirho). Any other @kashyyyk_region_names:* string
 --     would dangle, so every other row below uses a plain unlocalized name, the
@@ -351,11 +351,11 @@ kashyyyk_regions = {
 	-- thm_all_humanoid_bone_skull/_forearm/_thigh
 	{"dead_forest_webweaver_den", -1277, 1814, {CIRCLE, 20}, NOSPAWNAREA + NOBUILDZONEAREA},
 
-	-- SPAWNAREA -- Kachirho surface (kashyyyk_main), K-3 + K-3.1
+	-- SPAWNAREA -- Kachirho surface (kashyyyk_main), + 
 	-- Sourced area_spawner.iff in kashyyyk_main.tab: 240.
 	-- Live rows: 239. Still-fully-OPEN type tables: 1 row(s) commented.
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.
-	-- 27 patrol_spawner.iff rows are OPEN for K-3b.
+	-- 27 patrol_spawner.iff rows are OPEN for .
 	{"kach_sp_12", -498.75, -113.12, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_clone_droid"}, 1},
 	{"kach_sp_16", 218.16, -124.27, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_kachirho_guard_wookiee"}, 1},
 	{"kach_sp_17", 204.55, -137.72, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_kachirho_guard_wookiee"}, 1},
@@ -596,15 +596,15 @@ kashyyyk_regions = {
 	{"kach_sp_1663", 567.31, -643.60, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_lesser"}, 1},
 	{"kach_sp_1664", 587.35, -637.75, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_lesser"}, 1},
 	-- OPEN area_spawner.iff rows (not live; would dangle). Count = 1.
-	-- Full sourced row is in the comment so a later round can uncomment when a repo template exists.
+	-- Full sourced row is in the comment so a later pass can uncomment when a repo template exists.
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for ep3_npc_ceremonial_captain): {"kach_sp_56", -54.40, 839.33, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_kash_kachirho_wke_ceremonial_captain"}, 1}, -- strSpawns type table fully unmatched
 
 
-	-- SPAWNAREA -- Hunting grounds (kashyyyk_hunting), K-4
+	-- SPAWNAREA -- Hunting grounds (kashyyyk_hunting), 
 	-- Sourced area_spawner.iff in kashyyyk_hunting.tab: 258.
 	-- Live rows: 225. Still-fully-OPEN type tables: 33 row(s) commented.
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.
-	-- 14 patrol_spawner.iff rows are OPEN for K-3b.
+	-- 14 patrol_spawner.iff rows are OPEN for .
 	{"hunt_sp_3", -1212.96, -3127.24, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_laen_pieweto"}, 1},
 	{"hunt_sp_4", -1204.15, -3133.07, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_chiss_poacher_hunter"}, 3},
 	{"hunt_sp_5", -1216.12, -3113.90, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_chiss_poacher_hunter"}, 3},
@@ -831,7 +831,7 @@ kashyyyk_regions = {
 	{"hunt_sp_343", 69.39, -3186.45, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_sordaan"}, 1},
 	{"hunt_sp_377", 221.45, -2432.26, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_clone_droid"}, 1},
 	-- OPEN area_spawner.iff rows (not live; would dangle). Count = 33.
-	-- Full sourced row is in the comment so a later round can uncomment when a repo template exists.
+	-- Full sourced row is in the comment so a later pass can uncomment when a repo template exists.
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for type): {"hunt_sp_39", -1169.58, -2260.92, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_mouf_quest_brightclaw"}, 1}, -- strSpawns=kashyyyk/etyyy_mouf_quest_brightclaw soe_radius=3.0 soe_count=1
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for type): {"hunt_sp_40", -1156.81, -2444.45, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_mouf_vicious"}, 3}, -- strSpawns=kashyyyk/etyyy_mouf_vicious soe_radius=6.0 soe_count=3
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for type): {"hunt_sp_41", -1216.02, -2405.11, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_mouf_vicious"}, 3}, -- strSpawns=kashyyyk/etyyy_mouf_vicious soe_radius=8.0 soe_count=3
@@ -867,13 +867,13 @@ kashyyyk_regions = {
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for type): {"hunt_sp_376", -265.95, -2311.13, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_mouf_vibrant"}, 2}, -- strSpawns=kashyyyk/etyyy_mouf_vibrant soe_radius=3.0 soe_count=2
 
 
-	-- SPAWNAREA -- Dead forest (kashyyyk_dead_forest), K-5
+	-- SPAWNAREA -- Dead forest (kashyyyk_dead_forest), 
 	-- Sourced area_spawner.iff in kashyyyk_dead_forest.tab: 87.
 	-- With a type table: 84. Three rebel_* strSpawns have no type table
 	-- anywhere in SOE's data (buildout 5-7): listed OPEN, no SPAWNAREA row.
 	-- Live rows: 58. Still-fully-OPEN type tables: 26 row(s) commented.
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.
-	-- 4 patrol_spawner.iff rows are OPEN for K-3b.
+	-- 4 patrol_spawner.iff rows are OPEN for .
 	{"dead_sp_8", -1288.92, 1778.03, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_webweaver_gravespinner"}, 4},
 	{"dead_sp_9", -1307.45, 1747.94, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_webweaver_tombsinger"}, 4},
 	{"dead_sp_10", -1339.12, 1735.02, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_webweaver_bloodseeker"}, 4},
@@ -933,7 +933,7 @@ kashyyyk_regions = {
 	{"dead_sp_146", -1163.91, 1351.24, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_sayormi_warrior"}, 1},
 	{"dead_sp_147", -1148.94, 1302.69, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_sayormi"}, 3},
 	-- OPEN area_spawner.iff rows (not live; would dangle). Count = 26.
-	-- Full sourced row is in the comment so a later round can uncomment when a repo template exists.
+	-- Full sourced row is in the comment so a later pass can uncomment when a repo template exists.
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for type): {"dead_sp_12", -1361.41, 1491.62, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_great_mouf"}, 4}, -- strSpawns=kashyyyk/forest_great_mouf soe_radius=10.0 soe_count=4
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for type): {"dead_sp_13", -1307.40, 1440.41, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_great_mouf"}, 4}, -- strSpawns=kashyyyk/forest_great_mouf soe_radius=15.0 soe_count=4
 	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo file for type): {"dead_sp_14", -1301.84, 1364.14, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_forest_mouf"}, 4}, -- strSpawns=kashyyyk/forest_mouf soe_radius=15.0 soe_count=4

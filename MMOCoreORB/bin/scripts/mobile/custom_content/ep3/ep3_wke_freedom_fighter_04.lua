@@ -31,7 +31,7 @@ ep3_wke_freedom_fighter_04 = Creature:new {
 
 	templates = {"object/mobile/ep3/ep3_wke_freedom_fighter_04.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/wke_resistance lootList wke_resistance intLootRolls=1 creatures.tab line 1477 (ep3_npc_wookiee_freedom_fighters).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

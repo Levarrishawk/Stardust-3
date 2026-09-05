@@ -31,7 +31,7 @@ dressed_ep3_forest_outcast_assassin_01 = Creature:new {
 
 	templates = {"object/mobile/dressed_ep3_forest_outcast_assassin_01.iff"},
 	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/forest_outcast lootList forest_outcast intLootRolls=1 creatures.tab line 1354 (ep3_forest_outcast_assassin).
-	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
 	lootGroups = {
 		{
 			groups = {

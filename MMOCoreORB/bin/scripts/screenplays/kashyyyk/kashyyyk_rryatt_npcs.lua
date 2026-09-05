@@ -1,6 +1,6 @@
 -- Kashyyyk Rryatt Trail static NPCs (ruling 2026-09-04: "ensure kashyyyk is fully done").
 -- Celebrity spawners from the lvl 1-2 / lvl 4 / lvl 5 buildout tabs. Copy #0 only
--- (six copies of every level layout are the maintainer's ruling, same cut K-8 / K-10
+-- (six copies of every level layout are the maintainer's ruling, same cut / 
 -- used). World coords are x, z, y = wx, py, wz already offset to copy #0:
 --   lvl 1-2  dx -3908  dz +3365
 --   lvl 4    dx -3908  dz +2115
