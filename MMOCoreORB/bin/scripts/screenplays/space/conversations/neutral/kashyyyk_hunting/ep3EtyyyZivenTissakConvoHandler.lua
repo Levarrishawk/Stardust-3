@@ -20,10 +20,10 @@
 	same coordinate. Neither screenplay references the other, so a player can run either side first --
 	which is correct, they are rival employers, not a single ladder.
 
-	REACHABILITY, STATED PLAINLY. ep3_etyyy_ziven_tissak is not spawned anywhere in this repo, there
-	are no Kashyyyk ground spawn areas, and config.lua ZonesEnabled has no Kashyyyk ground zone (only
-	SpaceZonesEnabled has "space_kashyyyk"). This handler is correct and inert until all three of those
-	are addressed.
+	Ground screens and java OnStartNpcConversation order folded in. ruling 2026-09-04.
+	NO JOURNAL: do not call the journal engine.
+
+	alreadyHasSpaceMission is space_quest.hasQuest (any datapad mission), not the hunting-arc list.
 ]]
 
 Ep3EtyyyZivenTissakConvoHandler = conv_handler:new {}
@@ -78,6 +78,33 @@ function Ep3EtyyyZivenTissakConvoHandler:canFly(pPlayer)
 	return isJtlEnabled() and SpaceHelpers:isPilot(pPlayer) and SpaceHelpers:hasCertifiedShip(pPlayer, true)
 end
 
+function Ep3EtyyyZivenTissakConvoHandler:alreadyHasSpaceMission(pPlayer)
+	return EtyyyHuntState:hasAnySpaceQuest(pPlayer)
+end
+
+function Ep3EtyyyZivenTissakConvoHandler:canSpeakWookiee(pPlayer)
+	return CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend")
+end
+
+function Ep3EtyyyZivenTissakConvoHandler:spaceFailedOrTaken(pPlayer, takenKey, quest)
+	if (SpaceHelpers:isSpaceQuestActive(pPlayer, quest.type, quest.name) or SpaceHelpers:isSpaceQuestComplete(pPlayer, quest.type, quest.name)) then
+		return false
+	end
+	return self:getFlag(pPlayer, takenKey) == 1 or EtyyyHuntState:spaceFailed(pPlayer, quest.type, quest.name)
+end
+
+function Ep3EtyyyZivenTissakConvoHandler:hasCompletedZivenHunts(pPlayer)
+	return huntZivenCollectWebweaverEyesScreenPlay:hasCompletedQuest(pPlayer)
+end
+
+function Ep3EtyyyZivenTissakConvoHandler:killedSilkthrower(pPlayer)
+	return huntLootSilkthrowerKilledScreenPlay:isQuestActive(pPlayer)
+end
+
+function Ep3EtyyyZivenTissakConvoHandler:killedSilkthrowerPlusAll(pPlayer)
+	return huntLootBrightclawKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootPaleclawKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootStonelegKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootSpiketopKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootGreyclimberKilledScreenPlay:hasCompletedQuest(pPlayer)
+end
+
 function Ep3EtyyyZivenTissakConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (pPlayer == nil or pNpc == nil or pConvTemplate == nil) then
 		return
@@ -85,46 +112,51 @@ function Ep3EtyyyZivenTissakConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTe
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	-- Walked backwards, deepest leg first, so a later leg always wins over an earlier one.
+	-- ep3_etyyy_ziven_tissak.java OnStartNpcConversation:1365-2029
 	if (SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_ZIVEN_FREIGHTER_2.type, EP3_ZIVEN_FREIGHTER_2.name)) then
-		return convoTemplate:getScreen("ep3_ziven_complete")
+		return convoTemplate:getScreen("s_882")
+	elseif (self:spaceFailedOrTaken(pPlayer, EP3_ZIVEN_FREIGHTER_2_TAKEN_KEY, EP3_ZIVEN_FREIGHTER_2)) then
+		return convoTemplate:getScreen("s_883")
+	elseif (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_ZIVEN_FREIGHTER_2.type, EP3_ZIVEN_FREIGHTER_2.name)) then
+		return convoTemplate:getScreen("s_763")
+	elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_ZIVEN_FREIGHTER_1.type, EP3_ZIVEN_FREIGHTER_1.name)) then
+		return convoTemplate:getScreen("s_764")
+	elseif (self:spaceFailedOrTaken(pPlayer, EP3_ZIVEN_FREIGHTER_1_TAKEN_KEY, EP3_ZIVEN_FREIGHTER_1)) then
+		return convoTemplate:getScreen("s_875")
+	elseif (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_ZIVEN_FREIGHTER_1.type, EP3_ZIVEN_FREIGHTER_1.name)) then
+		return convoTemplate:getScreen("s_765")
+	elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_ZIVEN_FORDAN.type, EP3_ZIVEN_FORDAN.name)) then
+		return convoTemplate:getScreen("s_576")
+	elseif (self:spaceFailedOrTaken(pPlayer, EP3_ZIVEN_FORDAN_TAKEN_KEY, EP3_ZIVEN_FORDAN)) then
+		return convoTemplate:getScreen("s_575")
+	elseif (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_ZIVEN_FORDAN.type, EP3_ZIVEN_FORDAN.name)) then
+		return convoTemplate:getScreen("s_748")
+	elseif (self:killedSilkthrowerPlusAll(pPlayer) and self:killedSilkthrower(pPlayer)) then
+		return convoTemplate:getScreen("s_1763")
+	elseif (self:killedSilkthrower(pPlayer)) then
+		return convoTemplate:getScreen("s_1769")
+	elseif (huntZivenCollectWebweaverEyesScreenPlay:hasCompletedQuest(pPlayer) and SpaceHelpers:isSpaceQuestComplete(pPlayer, "recovery", "ep3_hunting_banol_capture_fordan")) then
+		return convoTemplate:getScreen("s_366")
+	elseif (self:hasCompletedZivenHunts(pPlayer)) then
+		return convoTemplate:getScreen("s_1699")
+	elseif (huntZivenCollectWebweaverEyesScreenPlay:isTaskActive(pPlayer, "ziven_webweaverEyes")) then
+		return convoTemplate:getScreen("s_1703")
+	elseif (huntZivenCollectWebweaverEyesScreenPlay:isTaskActive(pPlayer, "ziven_collectWebweaverEyes")) then
+		return convoTemplate:getScreen("s_1715")
+	elseif (huntZivenCollectWebweaverFangsScreenPlay:isTaskActive(pPlayer, "ziven_webweaverFangs") or huntZivenCollectWebweaverFangsScreenPlay:hasCompletedQuest(pPlayer)) then
+		EtyyyHuntState:raise(pPlayer, "ziven_webweaverFangs")
+		return convoTemplate:getScreen("s_1719")
+	elseif (huntZivenCollectWebweaverFangsScreenPlay:isTaskActive(pPlayer, "ziven_collectWebweaverFangs")) then
+		return convoTemplate:getScreen("s_1731")
+	elseif (huntZivenCollectWebweaverFangsScreenPlay:isTaskActive(pPlayer, "ziven_talkToZiven")) then
+		if (pNpc ~= nil) then
+			CreatureObject(pNpc):doAnimation("greet")
+		end
+		return convoTemplate:getScreen("s_1735")
+	elseif (huntKerssocEnterEtyyyScreenPlay:isTaskActive(pPlayer, "etyyy_talkToZiven")) then
+		return convoTemplate:getScreen("s_1747")
 	end
-
-	if (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_ZIVEN_FREIGHTER_2.type, EP3_ZIVEN_FREIGHTER_2.name)) then
-		return convoTemplate:getScreen("ep3_ziven_freighter2_in_flight")
-	end
-
-	if (self:getFlag(pPlayer, EP3_ZIVEN_FREIGHTER_2_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_ziven_freighter2_failed")
-	end
-
-	if (SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_ZIVEN_FREIGHTER_1.type, EP3_ZIVEN_FREIGHTER_1.name)) then
-		return convoTemplate:getScreen("ep3_ziven_freighter2_offer")
-	end
-
-	if (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_ZIVEN_FREIGHTER_1.type, EP3_ZIVEN_FREIGHTER_1.name)) then
-		return convoTemplate:getScreen("ep3_ziven_freighter1_in_flight")
-	end
-
-	if (self:getFlag(pPlayer, EP3_ZIVEN_FREIGHTER_1_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_ziven_freighter1_failed")
-	end
-
-	if (SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_ZIVEN_FORDAN.type, EP3_ZIVEN_FORDAN.name)) then
-		return convoTemplate:getScreen("ep3_ziven_freighter1_offer")
-	end
-
-	if (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_ZIVEN_FORDAN.type, EP3_ZIVEN_FORDAN.name)) then
-		return convoTemplate:getScreen("ep3_ziven_fordan_in_flight")
-	end
-
-	-- Took the rescue once and no longer holds it. See the FLAGGED INTERPRETATION block above
-	-- ep3_ziven_fordan_failed in the convo file.
-	if (self:getFlag(pPlayer, EP3_ZIVEN_FORDAN_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_ziven_fordan_failed")
-	end
-
-	return convoTemplate:getScreen("ep3_ziven_fordan_offer")
+	return convoTemplate:getScreen("s_1759")
 end
 
 function Ep3EtyyyZivenTissakConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
@@ -140,8 +172,54 @@ function Ep3EtyyyZivenTissakConvoHandler:runScreenHandlers(pConvTemplate, pPlaye
 
 	pClonedConvo:setDialogTextTU(CreatureObject(pPlayer):getFirstName())
 
+	if (screenID == "s_1763") then
+		EtyyyHuntState:raise(pPlayer, "lootQuest_defeatedSilkthrower")
+		huntLootCompletedAllScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_1769") then
+		EtyyyHuntState:raise(pPlayer, "lootQuest_defeatedSilkthrower")
+	elseif (screenID == "s_769") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_768")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "assassinate", "ep3_hunting_ziven_vs_sordaans_freighter_02", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, assassinate_ep3_hunting_ziven_vs_sordaans_freighter_02, "assassinate", "ep3_hunting_ziven_vs_sordaans_freighter_02")
+		self:setFlag(pPlayer, EP3_ZIVEN_FREIGHTER_2_TAKEN_KEY, 1)
+	elseif (screenID == "s_761") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_760")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "assassinate", "ep3_hunting_ziven_vs_sordaans_freighter_01", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, assassinate_ep3_hunting_ziven_vs_sordaans_freighter_01, "assassinate", "ep3_hunting_ziven_vs_sordaans_freighter_01")
+		self:setFlag(pPlayer, EP3_ZIVEN_FREIGHTER_1_TAKEN_KEY, 1)
+	elseif (screenID == "s_580") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_747")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "rescue", "ep3_hunting_ziven_fordans_ship", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, rescue_ep3_hunting_ziven_fordans_ship, "rescue", "ep3_hunting_ziven_fordans_ship")
+		self:setFlag(pPlayer, EP3_ZIVEN_FORDAN_TAKEN_KEY, 1)
+	elseif (screenID == "s_573") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_745")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "rescue", "ep3_hunting_ziven_fordans_ship", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, rescue_ep3_hunting_ziven_fordans_ship, "rescue", "ep3_hunting_ziven_fordans_ship")
+		self:setFlag(pPlayer, EP3_ZIVEN_FORDAN_TAKEN_KEY, 1)
+	elseif (screenID == "s_1707") then
+		EtyyyHuntState:raise(pPlayer, "ziven_webweaverEyes")
+		EtyyyHuntState:raise(pPlayer, "sordaan_zivenSendsYou")
+		huntSordaanSeekSordaanScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_1723") then
+		huntZivenCollectWebweaverEyesScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_1739") then
+		EtyyyHuntState:raise(pPlayer, "ziven_talkToZiven")
+	elseif (screenID == "s_1751") then
+		EtyyyHuntState:raise(pPlayer, "etyyy_talkToZiven")
+		if (huntTuwezzKillDiseasedUllersScreenPlay:canGrantQuest(pPlayer)) then
+			huntTuwezzKillDiseasedUllersScreenPlay:grantQuest(pPlayer)
+		end
 	-- THE RESCUE GRANT / RE-GRANT.
-	if (screenID == "ep3_ziven_fordan_accept" or screenID == "ep3_ziven_fordan_retry") then
+	elseif (screenID == "ep3_ziven_fordan_accept" or screenID == "ep3_ziven_fordan_retry") then
 		if (not self:canFly(pPlayer)) then
 			return LuaConversationTemplate(pConvTemplate):getScreen("ep3_ziven_no_space")
 		end

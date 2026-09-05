@@ -14,10 +14,8 @@
 	out Tripp's latest shipment... Any interest in another little project?" is the Fordan pitch and it
 	only exists after the shipment job.
 
-	REACHABILITY, STATED PLAINLY. ep3_etyyy_banol_starkiller is not spawned anywhere in this repo,
-	there are no Kashyyyk ground spawn areas, and config.lua ZonesEnabled has no Kashyyyk ground zone
-	(only SpaceZonesEnabled has "space_kashyyyk"). This handler is correct and inert until all three of
-	those are addressed.
+	Ground screens and java OnStartNpcConversation order folded in. ruling 2026-09-04.
+	NO JOURNAL: do not call the journal engine.
 ]]
 
 Ep3EtyyyBanolStarkillerConvoHandler = conv_handler:new {}
@@ -86,6 +84,10 @@ function Ep3EtyyyBanolStarkillerConvoHandler:canFly(pPlayer)
 	return isJtlEnabled() and SpaceHelpers:isPilot(pPlayer) and SpaceHelpers:hasCertifiedShip(pPlayer, true)
 end
 
+function Ep3EtyyyBanolStarkillerConvoHandler:alreadyHasSpaceQuest(pPlayer)
+	return EtyyyHuntState:hasAnySpaceQuest(pPlayer)
+end
+
 function Ep3EtyyyBanolStarkillerConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (pPlayer == nil or pNpc == nil or pConvTemplate == nil) then
 		return
@@ -93,50 +95,24 @@ function Ep3EtyyyBanolStarkillerConvoHandler:getInitialScreen(pPlayer, pNpc, pCo
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	local shipmentActive = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name)
-	local shipmentDone = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name)
-	local fordanActive = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_BANOL_FORDAN.type, EP3_BANOL_FORDAN.name)
-	local fordanDone = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BANOL_FORDAN.type, EP3_BANOL_FORDAN.name)
-
-	-- Holding one of his jobs right now. s_752 is literally true here.
-	if (shipmentActive or fordanActive) then
-		return convoTemplate:getScreen("ep3_banol_busy")
-	end
-
-	-- Fordan captured. s_516 is his standing screen from then on, and it is itself a repeatable
-	-- shipment offer, so nothing below needs to run.
-	if (fordanDone) then
-		return convoTemplate:getScreen("ep3_banol_fordan_praise")
-	end
-
-	-- Took the Fordan job and no longer holds it. s_506 says outright that Fordan is gone for good, so
-	-- the recovery quest is never re-offered; only the shipment job remains.
-	if (self:getFlag(pPlayer, EP3_BANOL_FORDAN_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_banol_fordan_failed")
-	end
-
-	if (shipmentDone) then
-		-- Fordan already put to him once and turned down (or the pitch was walked away from): back to
-		-- the standing shipment offer. Accepting there clears the latch, so the next completed
-		-- shipment brings the Fordan pitch round again.
-		if (self:getFlag(pPlayer, EP3_BANOL_FORDAN_PITCHED_KEY) == 1) then
-			return convoTemplate:getScreen("ep3_banol_reoffer")
+	-- ep3_etyyy_banol_starkiller.java OnStartNpcConversation:512-758
+	if (EtyyyHuntState:spaceFailed(pPlayer, "assassinate", "ep3_hunting_banol_destroy_tripps_goods") or (self:getFlag(pPlayer, EP3_BANOL_SHIPMENT_TAKEN_KEY) == 1 and not SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name) and not SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BANOL_SHIPMENT.type, EP3_BANOL_SHIPMENT.name))) then
+		return convoTemplate:getScreen("s_486")
+	elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, "assassinate", "ep3_hunting_banol_destroy_tripps_goods") and (SpaceHelpers:isSpaceQuestComplete(pPlayer, "recovery", "ep3_hunting_banol_capture_fordan") or EtyyyHuntState:spaceFailed(pPlayer, "recovery", "ep3_hunting_banol_capture_fordan"))) then
+		return convoTemplate:getScreen("s_496")
+	elseif (EtyyyHuntState:spaceFailed(pPlayer, "recovery", "ep3_hunting_banol_capture_fordan") or (self:getFlag(pPlayer, EP3_BANOL_FORDAN_TAKEN_KEY) == 1 and not SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_BANOL_FORDAN.type, EP3_BANOL_FORDAN.name) and not SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BANOL_FORDAN.type, EP3_BANOL_FORDAN.name))) then
+		return convoTemplate:getScreen("s_506")
+	elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, "recovery", "ep3_hunting_banol_capture_fordan")) then
+		return convoTemplate:getScreen("s_516")
+	elseif (SpaceHelpers:isSpaceQuestComplete(pPlayer, "assassinate", "ep3_hunting_banol_destroy_tripps_goods")) then
+		return convoTemplate:getScreen("s_526")
+	elseif (EtyyyHuntState:canDoBanol(pPlayer)) then
+		if (pNpc ~= nil) then
+			CreatureObject(pNpc):doAnimation("greet")
 		end
-
-		return convoTemplate:getScreen("ep3_banol_fordan_intro")
+		return convoTemplate:getScreen("s_556")
 	end
-
-	-- Took the shipment job once and no longer holds it. See the FLAGGED INTERPRETATION block above
-	-- ep3_banol_failed in the convo file.
-	if (self:getFlag(pPlayer, EP3_BANOL_SHIPMENT_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_banol_failed")
-	end
-
-	if (BANOL_REQUIRE_SORDAAN_REFERRAL and self:getFlag(pPlayer, EP3_BANOL_SORDAAN_KEY) ~= 1) then
-		return convoTemplate:getScreen("ep3_banol_brushoff")
-	end
-
-	return convoTemplate:getScreen("ep3_banol_greeting")
+	return convoTemplate:getScreen("s_570")
 end
 
 function Ep3EtyyyBanolStarkillerConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
@@ -152,8 +128,23 @@ function Ep3EtyyyBanolStarkillerConvoHandler:runScreenHandlers(pConvTemplate, pP
 
 	pClonedConvo:setDialogTextTU(CreatureObject(pPlayer):getFirstName())
 
+	if (screenID == "s_520" or screenID == "s_546" or screenID == "s_564") then
+		if (self:alreadyHasSpaceQuest(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_752")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "assassinate", "ep3_hunting_banol_destroy_tripps_goods", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, assassinate_ep3_hunting_banol_destroy_tripps_goods, "assassinate", "ep3_hunting_banol_destroy_tripps_goods")
+		self:setFlag(pPlayer, EP3_BANOL_SHIPMENT_TAKEN_KEY, 1)
+	elseif (screenID == "s_534") then
+		if (self:alreadyHasSpaceQuest(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_752")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "assassinate", "ep3_hunting_banol_destroy_tripps_goods", false)
+		SpaceHelpers:clearSpaceQuest(pPlayer, "recovery", "ep3_hunting_banol_capture_fordan", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, recovery_ep3_hunting_banol_capture_fordan, "recovery", "ep3_hunting_banol_capture_fordan")
+		self:setFlag(pPlayer, EP3_BANOL_FORDAN_TAKEN_KEY, 1)
 	-- THE SHIPMENT GRANT. Four shipped accept points all land on the same quest.
-	if (screenID == "ep3_banol_accept" or screenID == "ep3_banol_retry"
+	elseif (screenID == "ep3_banol_accept" or screenID == "ep3_banol_retry"
 		or screenID == "ep3_banol_reoffer_accept" or screenID == "ep3_banol_fordan_failed_accept"
 		or screenID == "ep3_banol_praise_accept" or screenID == "ep3_banol_else_accept") then
 

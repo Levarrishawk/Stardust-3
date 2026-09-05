@@ -16,10 +16,8 @@
 	mobile/conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_tripp_rar_convo.lua for the full
 	list of keys left out and why.
 
-	REACHABILITY, STATED PLAINLY. ep3_etyyy_tripp_rar is not spawned anywhere in this repo, there are
-	no Kashyyyk ground spawn areas, and config.lua ZonesEnabled has no Kashyyyk ground zone (only
-	SpaceZonesEnabled has "space_kashyyyk"). This handler is correct and inert until all three of
-	those are addressed.
+	Ground screens and java OnStartNpcConversation order folded in. ruling 2026-09-04.
+	NO JOURNAL: do not call the journal engine.
 ]]
 
 Ep3EtyyyTrippRarConvoHandler = conv_handler:new {}
@@ -71,6 +69,26 @@ function Ep3EtyyyTrippRarConvoHandler:canFly(pPlayer)
 	return isJtlEnabled() and SpaceHelpers:isPilot(pPlayer) and SpaceHelpers:hasCertifiedShip(pPlayer, true)
 end
 
+function Ep3EtyyyTrippRarConvoHandler:alreadyHasSpaceMission(pPlayer)
+	return EtyyyHuntState:hasAnySpaceQuest(pPlayer)
+end
+
+function Ep3EtyyyTrippRarConvoHandler:killedBrightclaw(pPlayer)
+	return huntLootBrightclawKilledScreenPlay:isQuestActive(pPlayer)
+end
+
+function Ep3EtyyyTrippRarConvoHandler:killedPaleclaw(pPlayer)
+	return huntLootPaleclawKilledScreenPlay:isQuestActive(pPlayer)
+end
+
+function Ep3EtyyyTrippRarConvoHandler:killedBrightclawPlusAll(pPlayer)
+	return huntLootPaleclawKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootSilkthrowerKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootStonelegKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootSpiketopKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootGreyclimberKilledScreenPlay:hasCompletedQuest(pPlayer)
+end
+
+function Ep3EtyyyTrippRarConvoHandler:killedPaleclawPlusAll(pPlayer)
+	return huntLootBrightclawKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootSilkthrowerKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootStonelegKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootSpiketopKilledScreenPlay:hasCompletedQuest(pPlayer) and huntLootGreyclimberKilledScreenPlay:hasCompletedQuest(pPlayer)
+end
+
 function Ep3EtyyyTrippRarConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (pPlayer == nil or pNpc == nil or pConvTemplate == nil) then
 		return
@@ -78,30 +96,41 @@ function Ep3EtyyyTrippRarConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTempl
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	local active = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_TRIPP_SHIPMENT.type, EP3_TRIPP_SHIPMENT.name)
-	local complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_TRIPP_SHIPMENT.type, EP3_TRIPP_SHIPMENT.name)
-
-	if (complete) then
-		-- s_378 is the end of her shipped space arc; after it she has nothing else wired to say, so
-		-- she stays on her own "at least you defeated them" line rather than repeating the payoff.
-		if (self:getFlag(pPlayer, EP3_TRIPP_THANKED_KEY) == 1) then
-			return convoTemplate:getScreen("ep3_tripp_mercenaries")
+	-- ep3_etyyy_tripp_rar.java OnStartNpcConversation:1188-1750
+	if (SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_TRIPP_SHIPMENT.type, EP3_TRIPP_SHIPMENT.name)) then
+		return convoTemplate:getScreen("s_370")
+	elseif ((self:getFlag(pPlayer, EP3_TRIPP_TAKEN_KEY) == 1 or EtyyyHuntState:spaceFailed(pPlayer, EP3_TRIPP_SHIPMENT.type, EP3_TRIPP_SHIPMENT.name)) and not SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_TRIPP_SHIPMENT.type, EP3_TRIPP_SHIPMENT.name)) then
+		return convoTemplate:getScreen("s_156")
+	elseif (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_TRIPP_SHIPMENT.type, EP3_TRIPP_SHIPMENT.name)) then
+		return convoTemplate:getScreen("s_749")
+	elseif (self:killedBrightclawPlusAll(pPlayer) and self:killedBrightclaw(pPlayer)) then
+		return convoTemplate:getScreen("s_470")
+	elseif (self:killedBrightclaw(pPlayer)) then
+		return convoTemplate:getScreen("s_476")
+	elseif (self:killedPaleclawPlusAll(pPlayer) and self:killedPaleclaw(pPlayer)) then
+		return convoTemplate:getScreen("s_480")
+	elseif (self:killedPaleclaw(pPlayer)) then
+		return convoTemplate:getScreen("s_482")
+	elseif (huntTrippCollectMoufIncisorsScreenPlay:hasCompletedQuest(pPlayer) and SpaceHelpers:isSpaceQuestComplete(pPlayer, "assassinate", "ep3_hunting_banol_destroy_tripps_goods")) then
+		return convoTemplate:getScreen("s_384")
+	elseif (huntTrippCollectMoufIncisorsScreenPlay:hasCompletedQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_398")
+	elseif (huntTrippCollectMoufIncisorsScreenPlay:isTaskActive(pPlayer, "tripp_moufIncisors")) then
+		return convoTemplate:getScreen("s_404")
+	elseif (huntTrippCollectMoufIncisorsScreenPlay:isTaskActive(pPlayer, "tripp_collectingMoufIncisors")) then
+		return convoTemplate:getScreen("s_418")
+	elseif (huntTrippCollectMoufPeltsScreenPlay:isTaskActive(pPlayer, "tripp_moufPelts") or huntTrippCollectMoufPeltsScreenPlay:hasCompletedQuest(pPlayer)) then
+		EtyyyHuntState:raise(pPlayer, "tripp_moufPelts")
+		return convoTemplate:getScreen("s_424")
+	elseif (huntTrippCollectMoufPeltsScreenPlay:isTaskActive(pPlayer, "tripp_collectingMoufPelts")) then
+		return convoTemplate:getScreen("s_438")
+	elseif (huntTrippCollectMoufPeltsScreenPlay:isTaskActive(pPlayer, "tripp_talkToTripp")) then
+		if (pNpc ~= nil) then
+			CreatureObject(pNpc):doAnimation("greet")
 		end
-
-		return convoTemplate:getScreen("ep3_tripp_complete")
+		return convoTemplate:getScreen("s_444")
 	end
-
-	if (active) then
-		return convoTemplate:getScreen("ep3_tripp_in_flight")
-	end
-
-	-- Took it once and no longer holds it. See the FLAGGED INTERPRETATION block above
-	-- ep3_tripp_failed in mobile/conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_tripp_rar_convo.lua.
-	if (self:getFlag(pPlayer, EP3_TRIPP_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_tripp_failed")
-	end
-
-	return convoTemplate:getScreen("ep3_tripp_offer")
+	return convoTemplate:getScreen("s_466")
 end
 
 function Ep3EtyyyTrippRarConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
@@ -117,8 +146,33 @@ function Ep3EtyyyTrippRarConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, 
 
 	pClonedConvo:setDialogTextTU(CreatureObject(pPlayer):getFirstName())
 
+	if (screenID == "s_470") then
+		EtyyyHuntState:raise(pPlayer, "lootQuest_defeatedBrightclaw")
+		huntLootCompletedAllScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_476") then
+		EtyyyHuntState:raise(pPlayer, "lootQuest_defeatedBrightclaw")
+	elseif (screenID == "s_480") then
+		EtyyyHuntState:raise(pPlayer, "lootQuest_defeatedPaleclaw")
+		huntLootCompletedAllScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_482") then
+		EtyyyHuntState:raise(pPlayer, "lootQuest_defeatedPaleclaw")
+	elseif (screenID == "s_388") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_750")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "escort", "ep3_hunting_tripp_protect_shipment", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, escort_ep3_hunting_tripp_protect_shipment, "escort", "ep3_hunting_tripp_protect_shipment")
+		self:setFlag(pPlayer, EP3_TRIPP_TAKEN_KEY, 1)
+	elseif (screenID == "s_408") then
+		EtyyyHuntState:raise(pPlayer, "tripp_moufIncisors")
+		EtyyyHuntState:raise(pPlayer, "sordaan_trippSendsYou")
+		huntSordaanSeekSordaanScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_428") then
+		huntTrippCollectMoufIncisorsScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_452") then
+		EtyyyHuntState:raise(pPlayer, "tripp_talkToTripp")
 	-- THE GRANT. s_386 "Um, sure, I suppose I could do that." lands on ep3_tripp_accept.
-	if (screenID == "ep3_tripp_accept") then
+	elseif (screenID == "ep3_tripp_accept") then
 		if (not self:canFly(pPlayer)) then
 			return LuaConversationTemplate(pConvTemplate):getScreen("ep3_tripp_no_space")
 		end

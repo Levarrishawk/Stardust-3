@@ -326,4 +326,277 @@ ep3_chrilooc_farewell = ConvoScreen:new {
 }
 ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_chrilooc_farewell);
 
+
+-- Ground screens folded in (ruling 2026-09-04). Screen ids are the shipped
+-- java keys. Existing space screens above are untouched.
+ep3_etyyy_chrilooc_convo_s_374 = ConvoScreen:new {
+	id = "s_374",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_374", -- That's right. Please help Johnson. He's not only helping those poor Arconans, but he is also oversee...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_376", "s_378"},
+		{"@conversation/ep3_etyyy_chrilooc:s_380", "s_382"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_374)
+
+ep3_etyyy_chrilooc_convo_s_378 = ConvoScreen:new {
+	id = "s_378",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_378", -- Excellent. On your way then.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_378)
+
+ep3_etyyy_chrilooc_convo_s_382 = ConvoScreen:new {
+	id = "s_382",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_382", -- As you wish.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_382)
+
+ep3_etyyy_chrilooc_convo_s_388 = ConvoScreen:new {
+	id = "s_388",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_388", -- Good luck.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_388)
+
+ep3_etyyy_chrilooc_convo_s_394 = ConvoScreen:new {
+	id = "s_394",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_394", -- I've heard that you're already working with Kerssoc, a Rodian hunter near here. That's good. Continu...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_394)
+
+ep3_etyyy_chrilooc_convo_s_396 = ConvoScreen:new {
+	id = "s_396",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_396", -- Etyyy is under the control of some Rodian hunters. They are very, very selective about who they let ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_396)
+
+ep3_etyyy_chrilooc_convo_s_408 = ConvoScreen:new {
+	id = "s_408",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_408", -- Excellent. You're being able to travel to and from Etyyy will allow you to be of further service to ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_372", "s_374"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_408)
+
+ep3_etyyy_chrilooc_convo_s_412 = ConvoScreen:new {
+	id = "s_412",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_412", -- Giving up? I'm actually surprised. And disappointed. You could have been of use to me in Etyyy. Ah w...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_412)
+
+ep3_etyyy_chrilooc_convo_s_400 = ConvoScreen:new {
+	id = "s_400",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_400", -- Follow the path east out of Kachirho, and you'll find them. Oh, and don't let Kerssoc know you've be...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_400)
+
+ep3_etyyy_chrilooc_convo_s_404 = ConvoScreen:new {
+	id = "s_404",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_404", -- As you wish. I'll be here.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_404)
+
+ep3_etyyy_chrilooc_convo_s_418 = ConvoScreen:new {
+	id = "s_418",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_418", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_418)
+
+ep3_etyyy_chrilooc_convo_s_420 = ConvoScreen:new {
+	id = "s_420",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_420", -- Very good. You can launch into space from the starport here in town. Return to me after the medical ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_420)
+
+ep3_etyyy_chrilooc_convo_s_424 = ConvoScreen:new {
+	id = "s_424",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_424", -- Guess you weren't serious about finding Brody Johnson. So be it.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_424)
+
+ep3_etyyy_chrilooc_convo_s_430 = ConvoScreen:new {
+	id = "s_430",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_430", -- Return when you are done.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_430)
+
+ep3_etyyy_chrilooc_convo_s_436 = ConvoScreen:new {
+	id = "s_436",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_436", -- Yes, I'm... wait, come to think of it, you may be of use to me. I do remember Brody Johnson and woul...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_436)
+
+ep3_etyyy_chrilooc_convo_s_458 = ConvoScreen:new {
+	id = "s_458",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_458", -- Right. Good bye.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_458)
+
+ep3_etyyy_chrilooc_convo_s_440 = ConvoScreen:new {
+	id = "s_440",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_440", -- I and my associates are in need of medical supplies. Times are especially tough at the moment, and o...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_440)
+
+ep3_etyyy_chrilooc_convo_s_454 = ConvoScreen:new {
+	id = "s_454",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_454", -- As you wish. Farewell.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_454)
+
+ep3_etyyy_chrilooc_convo_s_444 = ConvoScreen:new {
+	id = "s_444",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_444", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_444)
+
+ep3_etyyy_chrilooc_convo_s_446 = ConvoScreen:new {
+	id = "s_446",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_446", -- Very good. You can launch into space from the starport here in town. Return to me after the medical ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_446)
+
+ep3_etyyy_chrilooc_convo_s_450 = ConvoScreen:new {
+	id = "s_450",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_450", -- Guess you weren't serious about finding Brody Johnson. So be it.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_450)
+
+ep3_etyyy_chrilooc_convo_s_364 = ConvoScreen:new {
+	id = "s_364",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_364", -- Sacwo wwoorwocsc oacanan wwwohwor rwo sacwo craccwo. Wwwohwor. Rhas sacwor oaraww rwooaooccwo ooharc...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_364)
+
+ep3_etyyy_chrilooc_convo_s_366 = ConvoScreen:new {
+	id = "s_366",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_366", -- So you discovered the truth, eh? Makes no real difference to me. I never understood why Brody would ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_366)
+
+ep3_etyyy_chrilooc_convo_s_368 = ConvoScreen:new {
+	id = "s_368",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_368", -- You've spoken to Johnson Smith? Good. I'm sure he can help you locate Brody. And please help him wit...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_368)
+
+ep3_etyyy_chrilooc_convo_s_370 = ConvoScreen:new {
+	id = "s_370",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_370", -- Good, now that you can come and go from Etyyy, you can be of further service to me. And I can be of ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_372", "s_374"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_370)
+
+ep3_etyyy_chrilooc_convo_s_384 = ConvoScreen:new {
+	id = "s_384",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_384", -- You need to gain access to the hunting grounds, Etyyy. Do whatever Kerssoc asks, and he should let y...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_386", "s_388"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_384)
+
+ep3_etyyy_chrilooc_convo_s_390 = ConvoScreen:new {
+	id = "s_390",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_390", -- I appreciate your help in obtaining those medical supplies. In return I'll tell you what I know. I h...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_392", "s_396"},
+		{"@conversation/ep3_etyyy_chrilooc:s_406", "s_408"},
+		{"@conversation/ep3_etyyy_chrilooc:s_410", "s_412"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_390)
+
+ep3_etyyy_chrilooc_convo_s_414 = ConvoScreen:new {
+	id = "s_414",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_414", -- Look, we really need medical supplies. I'm going to have to insist that you help us with those. Mayb...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_416", "s_420"},
+		{"@conversation/ep3_etyyy_chrilooc:s_422", "s_424"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_414)
+
+ep3_etyyy_chrilooc_convo_s_426 = ConvoScreen:new {
+	id = "s_426",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_426", -- Launch into Kashyyyk space and intercept those medical supplies.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_428", "s_430"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_426)
+
+ep3_etyyy_chrilooc_convo_s_432 = ConvoScreen:new {
+	id = "s_432",
+	animation = "greet",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_432", -- What do you want? I have no patience or time for... ah, I see. You're looking for Brody Johnson. I'm...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_chrilooc:s_434", "s_436"},
+		{"@conversation/ep3_etyyy_chrilooc:s_456", "s_458"},
+	}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_432)
+
+ep3_etyyy_chrilooc_convo_s_460 = ConvoScreen:new {
+	id = "s_460",
+	leftDialog = "@conversation/ep3_etyyy_chrilooc:s_460", -- The forests will never be the same. Never. But they can become ours again.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_chrilooc_convotemplate:addScreen(ep3_etyyy_chrilooc_convo_s_460)
+
 addConversationTemplate("ep3_etyyy_chrilooc_convotemplate", ep3_etyyy_chrilooc_convotemplate);

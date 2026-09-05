@@ -221,4 +221,167 @@ ep3_kara_done = ConvoScreen:new {
 }
 ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_kara_done);
 
+
+-- Ground screens folded in (ruling 2026-09-04). Screen ids are the shipped
+-- java keys. Existing space screens above are untouched.
+ConvoScreen:new {
+	id = "s_40",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_40", -- Before we talk about this, you need to complete your current space tasks.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_40)
+
+ep3_etyyy_kara_corlon_convo_s_42 = ConvoScreen:new {
+	id = "s_42",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_42", -- Thanks for completing those. I really appreciate your help. Those [*spats out something in a languag...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_42)
+
+ep3_etyyy_kara_corlon_convo_s_44 = ConvoScreen:new {
+	id = "s_44",
+	animation = "check_wrist_device",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_44", -- Is there a problem with the last delivery? This one is in... [*she checks her datapad*]... the Datho...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_44)
+
+ep3_etyyy_kara_corlon_convo_s_54 = ConvoScreen:new {
+	id = "s_54",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_54", -- Was there a mix up with the second delivery? I need you to go to the Tatooine system. I've arranged ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_54)
+
+ep3_etyyy_kara_corlon_convo_s_64 = ConvoScreen:new {
+	id = "s_64",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_64", -- I really need those goods to be delivered to Dantooine. My contacts there are getting edgy. Go  fini...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_64)
+
+ep3_etyyy_kara_corlon_convo_s_76 = ConvoScreen:new {
+	id = "s_76",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_76", -- Thank you.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_76)
+
+ep3_etyyy_kara_corlon_convo_s_48 = ConvoScreen:new {
+	id = "s_48",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_48", -- Good. To the Dathomir system then. Return here to me when you've completed the delivery.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_48)
+
+ep3_etyyy_kara_corlon_convo_s_52 = ConvoScreen:new {
+	id = "s_52",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_52", -- I see. Let me know when you can do this one. I'll be here. You've shown you can be trusted, so I'd h...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_52)
+
+ep3_etyyy_kara_corlon_convo_s_58 = ConvoScreen:new {
+	id = "s_58",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_58", -- There will be one more delivery after this one. But more on that later. For now head to the Tatooine...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_58)
+
+ep3_etyyy_kara_corlon_convo_s_62 = ConvoScreen:new {
+	id = "s_62",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_62", -- Okay. That first delivery bought my some daylight. But please don't dally too long. I need this next...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_62)
+
+ep3_etyyy_kara_corlon_convo_s_68 = ConvoScreen:new {
+	id = "s_68",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_68", -- Please hurry and make the delivery. I need to recoup some some profits from this venture soon, or La...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_68)
+
+ep3_etyyy_kara_corlon_convo_s_72 = ConvoScreen:new {
+	id = "s_72",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_72", -- [*sigh*] Fine. But please hurry back. Or maybe I should just look elsewhere for help with this.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_72)
+
+ep3_etyyy_kara_corlon_convo_s_82 = ConvoScreen:new {
+	id = "s_82",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_82", -- Did he? Hmmm, I guess if Johnson trusts you then maybe I can as well. I actually could use some help...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_82)
+
+ep3_etyyy_kara_corlon_convo_s_96 = ConvoScreen:new {
+	id = "s_96",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_96", -- Apparently. It veils their vision with an addictive hallucination of colors. Or something like that....
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_96)
+
+ep3_etyyy_kara_corlon_convo_s_86 = ConvoScreen:new {
+	id = "s_86",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_86", -- Great. First I need... wait, you already have something to do in space. You'll need to complete that...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_86)
+
+ep3_etyyy_kara_corlon_convo_s_88 = ConvoScreen:new {
+	id = "s_88",
+	animation = "check_wrist_device",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_88", -- I'll have the cargo loaded onto your ship. [*fiddles with her datapad*] Your first stop will be in t...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_88)
+
+ep3_etyyy_kara_corlon_convo_s_92 = ConvoScreen:new {
+	id = "s_92",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_92", -- Right. Don't tarry for too long. I'm already having second thoughts about trusting you.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_92)
+
+ep3_etyyy_kara_corlon_convo_s_36 = ConvoScreen:new {
+	id = "s_36",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_36", -- Look, I appreciate the help you have given me, and I appreciate any future assistance that you might...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kara_corlon:s_38", "s_64"},
+		{"@conversation/ep3_etyyy_kara_corlon:s_74", "s_76"},
+	}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_36)
+
+ep3_etyyy_kara_corlon_convo_s_78 = ConvoScreen:new {
+	id = "s_78",
+	leftDialog = "@conversation/ep3_etyyy_kara_corlon:s_78", -- Why are you snooping around here? Go away. These poor Arconans are trying to find relief from their ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kara_corlon:s_80", "s_82"},
+		{"@conversation/ep3_etyyy_kara_corlon:s_94", "s_96"},
+	}
+}
+ep3_etyyy_kara_corlon_convotemplate:addScreen(ep3_etyyy_kara_corlon_convo_s_78)
+
 addConversationTemplate("ep3_etyyy_kara_corlon_convotemplate", ep3_etyyy_kara_corlon_convotemplate);
