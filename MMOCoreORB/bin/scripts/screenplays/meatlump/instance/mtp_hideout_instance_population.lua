@@ -3,7 +3,7 @@
 -- Rows from spawning/heroic/mtp_hideout_instance.tab.
 -- trigger = column triggerId. Sequencer objects stay OPEN (no template).
 -- Axis: repo x <- loc_x, repo z <- loc_y (height), repo y <- loc_z, heading <- yaw.
--- Templates: hub / M-1 / appearance match. OPEN when none.
+-- Templates: the hub, the hideout part, or an appearance match. OPEN when none.
 
 MtpHideoutInstancePopulation = {
 	rows = {

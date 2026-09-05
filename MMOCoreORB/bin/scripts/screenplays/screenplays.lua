@@ -756,6 +756,7 @@ includeFile("meatlump/instance/serverobjects.lua")
 includeFile("meatlump/vendor/mtp_vendor.lua")
 includeFile("meatlump/king/meatlump_king.lua")
 includeFile("meatlump/quest/web/serverobjects.lua")
+includeFile("meatlump/minigames/serverobjects.lua")
 
 -- Mustafar
 -- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.
