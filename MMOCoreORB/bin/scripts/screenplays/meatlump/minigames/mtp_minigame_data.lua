@@ -314,6 +314,29 @@ function MtpMinigameData.applyCipher(text, cipher)
 	return table.concat(out)
 end
 
+-- The cipher glyph for one plaintext character (the same mapping applyCipher
+-- uses; ciphers 2 and 3 hold multi-byte glyphs, so callers must never index
+-- a ciphered string by byte).
+function MtpMinigameData.cipherGlyph(ch, cipher)
+	local pos = string.find(MtpMinigameData.CIPHER_PLAIN, ch, 1, true)
+
+	if (pos == nil) then
+		return ch
+	end
+
+	local i = 0
+
+	for _, code in utf8.codes(cipher) do
+		i = i + 1
+
+		if (i == pos) then
+			return utf8.char(code)
+		end
+	end
+
+	return ch
+end
+
 -- disarm_bomb_puzzle.java:370-506: sequential cuts, wrong cut explodes
 function MtpMinigameData.evaluateBombCut(cutArray, buttonNumber, wire)
 	if (cutArray == nil or wire == nil or wire == "") then

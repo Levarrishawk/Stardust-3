@@ -1,19 +1,27 @@
 --[[
-	Meatlump puzzle containers and the two drawable calibration pages.
+	Meatlump puzzle containers: two calibration pages and four TEXT puzzles.
 
-	ruling 2026-09-05: "ensuring meatlump ... done"
+	ruling 2026-09-05: "finish up meatlumps ... in full"
 
 	NO JOURNAL.
 
-	OPEN: CollectionManager.modifyCollectionSlotValue is paid on a game3/game4
-	win. The collections branch merges later; print when the global is absent.
+	OPEN: CollectionManager.modifyCollectionSlotValue is paid on a win.
+	The collections branch merges later; print when the global is absent.
 	canCollectCollectible uses CollectionManager.hasCompletedCollectionSlotPrereq /
 	hasCompletedCollection / hasCompletedCollectionSlot the same way; print and
 	skip those three when the global is absent (OURS).
 
-	OPEN: /Script.sliceTerminal, /Script.questionnaire, /Script.disarmBomb
-	do not ship. Placeholder radial uses @meatlump/meatlump:you_have_debuff
-	(no "not available" key in the 64 shipped keys).
+	OURS: /Script.sliceTerminal, /Script.questionnaire, /Script.disarmBomb
+	do not ship. SOE's own scripts drive them as TEXT pages:
+	code_break_minigame.java:113-150, slicing_minigame.java:130-141,
+	target_map_puzzle.java:448-466 build a coloured prompt string
+	(sui.colorWhite/Red/Green/Blue, sui.newLine) into details.lblPrompt
+	and read the player's typed answer back; disarm_bomb_puzzle.java:165-174
+	sets the prompt and the caption and offers the cut choices. Core3's
+	generic boxes carry exactly that: SuiInputBox (prompt + a typed answer)
+	for code break, slicing and target map, and SuiListBox (prompt + choices)
+	for the bomb's steps. OURS presentation on SOURCED logic -- the colours
+	become plain text, everything else is the java's.
 
 	OURS: puzzle downer and buff are DirectorSharedMemory timers. This fork has
 	no CreatureObject hasBuff/addBuff and the six *_puzzle_downer / *_puzzle_buff
@@ -41,7 +49,7 @@ MtpMinigameObjects = ScreenPlay:new {
 		slicing_minigame = "safe",
 		code_break_minigame = "locked_container",
 		target_map_puzzle = "target_map",
-		-- bomb_defuse: no placed container in the shipped tables; buff.tab:1712 / :1718
+		disarm_bomb_puzzle = "bomb_defuse", -- no placed container; buff.tab:1712 / :1718
 	},
 	playerButtons = {
 		"top.triangles.player.right.1",
@@ -65,6 +73,7 @@ MtpMinigameObjects = ScreenPlay:new {
 		destroy_weapon_cache = "@meatlump/meatlump:weapon_calibration_use",
 		slicing_minigame = "@meatlump/meatlump:meatlump_safe_open",
 		target_map_puzzle = "@meatlump/meatlump:meatlump_decipher_map",
+		disarm_bomb_puzzle = "@meatlump/meatlump:meatlump_defuse_bomb",
 	},
 	deviceTemplate = {
 		code_break_minigame = "object/tangible/meatlump/event/slicing_device_meatlump_container.iff",
@@ -72,6 +81,19 @@ MtpMinigameObjects = ScreenPlay:new {
 		destroy_weapon_cache = "object/tangible/meatlump/event/slicing_device_meatlump_weapon.iff",
 		slicing_minigame = "object/tangible/meatlump/event/slicing_device_meatlump_safe.iff",
 		target_map_puzzle = "object/tangible/meatlump/event/slicing_device_meatlump_map.iff",
+		disarm_bomb_puzzle = "object/tangible/meatlump/event/slicing_device_meatlump_bomb.iff",
+	},
+	cutLabel = {
+		cut_red = "Cut Red",
+		cut_black = "Cut Black",
+		cut_brown = "Cut Brown",
+		cut_yellow = "Cut Yellow",
+		cut_white = "Cut White",
+		cut_green = "Cut Green",
+		cut_red_black = "Cut Red Black",
+		cut_yellow_green = "Cut Yellow Green",
+		cut_yellow_brown = "Cut Yellow Brown",
+		cut_black_white = "Cut Black White",
 	},
 	containers = {
 	{
@@ -1306,6 +1328,844 @@ function MtpMinigameObjects:weaponCallback(pPlayer, pSui, eventIndex, ...)
 	suiPageData:sendUpdateTo(pPlayer)
 end
 
+function MtpMinigameObjects.stripColor(text)
+	if (text == nil) then
+		return ""
+	end
+
+	return (string.gsub(text, "\\#%x%x%x%x%x%x", ""))
+end
+
+function MtpMinigameObjects.closePid(pPlayer, pidKey)
+	if (pPlayer == nil or pidKey == nil) then
+		return
+	end
+
+	local pageId = readData(SceneObject(pPlayer):getObjectID() .. pidKey)
+
+	if (pageId == nil or pageId == 0) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):removeSuiBox(pageId)
+	end
+end
+
+function MtpMinigameObjects.splitGuessList(list)
+	local out = {}
+
+	if (list == nil or list == "") then
+		return out
+	end
+
+	for part in string.gmatch(list, "[^,]+") do
+		local trimmed = string.match(part, "^%s*(.-)%s*$")
+
+		if (trimmed ~= nil and trimmed ~= "") then
+			out[#out + 1] = trimmed
+		end
+	end
+
+	return out
+end
+
+function MtpMinigameObjects.replaceChar(text, from, to)
+	if (text == nil or from == nil or to == nil or from == to) then
+		return text
+	end
+
+	local out = {}
+
+	for i = 1, string.len(text) do
+		local ch = string.sub(text, i, i)
+
+		if (ch == from) then
+			out[#out + 1] = to
+		else
+			out[#out + 1] = ch
+		end
+	end
+
+	return table.concat(out)
+end
+
+-- slicing_minigame.java:475-508; returns scrambled (reversedPassword is built and discarded)
+function MtpMinigameObjects.scramblePassword(password)
+	if (password == nil or password == "") then
+		return password
+	end
+
+	local scrambled = ""
+
+	for i = 1, string.len(password) do
+		local ch = string.sub(password, i, i)
+
+		if (getRandomNumber(0, 1) == 1) then
+			scrambled = scrambled .. ch
+		else
+			scrambled = ch .. scrambled
+		end
+	end
+
+	if (string.len(scrambled) ~= string.len(password)) then
+		return password
+	end
+
+	return scrambled
+end
+
+function MtpMinigameObjects.shuffleCopy(list)
+	local out = {}
+
+	for i = 1, #list do
+		out[i] = list[i]
+	end
+
+	for i = 1, #out do
+		local j = getRandomNumber(1, #out)
+		out[i], out[j] = out[j], out[i]
+	end
+
+	return out
+end
+
+function MtpMinigameObjects.shufflePaired(listA, listB)
+	local a = {}
+	local b = {}
+
+	for i = 1, #listA do
+		a[i] = listA[i]
+		b[i] = listB[i]
+	end
+
+	for i = 1, #a do
+		local j = getRandomNumber(1, #a)
+		a[i], a[j] = a[j], a[i]
+		b[i], b[j] = b[j], b[i]
+	end
+
+	return a, b
+end
+
+function MtpMinigameObjects.cleanupCode(pPlayer)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local n = readData(playerID .. ":mtpCode:n") or 0
+
+	deleteData(playerID .. ":mtpCode:n")
+	deleteData(playerID .. ":mtpCode:pos")
+	deleteData(playerID .. ":mtpCode:oid")
+	deleteData(playerID .. ":mtpCode:Pid")
+
+	for i = 1, n do
+		deleteData(playerID .. ":mtpCode:secret" .. i)
+		deleteData(playerID .. ":mtpCode:guesses" .. i)
+		deleteStringData(playerID .. ":mtpCode:stars" .. i)
+		deleteStringData(playerID .. ":mtpCode:hint" .. i)
+	end
+end
+
+function MtpMinigameObjects.cleanupSafe(pPlayer)
+	local playerID = SceneObject(pPlayer):getObjectID()
+
+	deleteData(playerID .. ":mtpSafe:oid")
+	deleteData(playerID .. ":mtpSafe:row")
+	deleteData(playerID .. ":mtpSafe:need")
+	deleteData(playerID .. ":mtpSafe:have")
+	deleteData(playerID .. ":mtpSafe:thresh")
+	deleteData(playerID .. ":mtpSafe:wrong")
+	deleteData(playerID .. ":mtpSafe:Pid")
+	deleteStringData(playerID .. ":mtpSafe:password")
+	deleteStringData(playerID .. ":mtpSafe:scrambled")
+	deleteStringData(playerID .. ":mtpSafe:guesses")
+end
+
+function MtpMinigameObjects.cleanupMap(pPlayer)
+	local playerID = SceneObject(pPlayer):getObjectID()
+
+	deleteData(playerID .. ":mtpMap:oid")
+	deleteData(playerID .. ":mtpMap:Pid")
+	deleteStringData(playerID .. ":mtpMap:solve")
+	deleteStringData(playerID .. ":mtpMap:prefix")
+	deleteStringData(playerID .. ":mtpMap:target")
+	deleteStringData(playerID .. ":mtpMap:trail")
+	deleteStringData(playerID .. ":mtpMap:planet")
+	deleteStringData(playerID .. ":mtpMap:prefixScr")
+	deleteStringData(playerID .. ":mtpMap:targetScr")
+	deleteStringData(playerID .. ":mtpMap:trailScr")
+	deleteStringData(playerID .. ":mtpMap:planetScr")
+end
+
+function MtpMinigameObjects.cleanupBomb(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local oid = readData(playerID .. ":mtpBomb:oid")
+	local n = readData(playerID .. ":mtpBomb:n") or 0
+
+	if (oid ~= nil and oid ~= 0) then
+		deleteData(oid .. ":mtpBomb:defuser")
+	end
+
+	deleteData(playerID .. ":mtpBomb:oid")
+	deleteData(playerID .. ":mtpBomb:Pid")
+	deleteData(playerID .. ":mtpBomb:n")
+	deleteData(playerID .. ":mtpBomb:button")
+	deleteData(playerID .. ":mtpBomb:timer")
+	deleteData(playerID .. ":mtpBomb:max")
+	deleteData(playerID .. ":mtpBomb:running")
+	writeData(playerID .. ":mtpBomb:gen", (readData(playerID .. ":mtpBomb:gen") or 0) + 1)
+	deleteData(playerID .. ":mtpBomb:buff")
+
+	for i = 1, n do
+		deleteStringData(playerID .. ":mtpBomb:wire" .. i)
+		deleteStringData(playerID .. ":mtpBomb:color" .. i)
+		deleteStringData(playerID .. ":mtpBomb:cut" .. i)
+	end
+end
+
+-- code_break_minigame.java:80-169 createSui; :243-317 getRandomNumberCombinations
+function MtpMinigameObjects:openCodeBreak(pPlayer, pObj)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local oid = SceneObject(pObj):getObjectID()
+	local n = readData(playerID .. ":mtpCode:n") or 0
+
+	if (n > 0 and readData(playerID .. ":mtpCode:oid") ~= oid) then
+		self.cleanupCode(pPlayer)
+		n = 0
+	end
+
+	if (n <= 0) then
+		n = getRandomNumber(4, 6)
+
+		if (self.hasPuzzleBuff(pPlayer, "locked_container")) then
+			n = MtpMinigameData.BUFF_COMBO_AMOUNT
+		end
+
+		writeData(playerID .. ":mtpCode:n", n)
+		writeData(playerID .. ":mtpCode:pos", 1)
+		writeData(playerID .. ":mtpCode:oid", oid)
+
+		for i = 1, n do
+			local secret = getRandomNumber(0, MtpMinigameData.MAX_INT_COMBO[i])
+			writeData(playerID .. ":mtpCode:secret" .. i, secret)
+			writeData(playerID .. ":mtpCode:guesses" .. i, 0)
+			writeStringData(playerID .. ":mtpCode:stars" .. i, string.rep("*", string.len(tostring(secret))))
+			writeStringData(playerID .. ":mtpCode:hint" .. i, "")
+		end
+	end
+
+	local pos = readData(playerID .. ":mtpCode:pos") or 1
+	local prompt = getStringId("@meatlump/meatlump:slicing_minigame_text") .. "\n\n"
+
+	for i = 1, n do
+		prompt = prompt .. "Number combination " .. i .. ": "
+
+		if (pos <= i) then
+			prompt = prompt .. readStringData(playerID .. ":mtpCode:stars" .. i)
+			local hint = readStringData(playerID .. ":mtpCode:hint" .. i)
+
+			if (hint ~= nil and hint ~= "") then
+				prompt = prompt .. "\n" .. hint
+			end
+
+			prompt = prompt .. "\n\n"
+		else
+			prompt = prompt .. tostring(readData(playerID .. ":mtpCode:secret" .. i)) .. "\n\n"
+		end
+	end
+
+	local sui = SuiInputBox.new("MtpMinigameObjects", "codeBreakCallback")
+	sui.setTargetNetworkId(oid)
+	sui.setForceCloseDistance(self.FORCE_CLOSE)
+	sui.setTitle("LOCK BREAKER")
+	sui.setPrompt(prompt)
+
+	local pageId = sui.sendTo(pPlayer)
+	writeData(playerID .. ":mtpCode:Pid", pageId)
+end
+
+function MtpMinigameObjects:codeBreakCallback(pPlayer, pSui, eventIndex, args)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local pageId = readData(playerID .. ":mtpCode:Pid")
+
+	if (pageId == 0) then
+		return
+	end
+
+	if (eventIndex == 1) then
+		self.applyDowner(pPlayer, "locked_container")
+		CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_canceled_early")
+		self.cleanupCode(pPlayer)
+		return
+	end
+
+	local oid = readData(playerID .. ":mtpCode:oid")
+	local pObj = getSceneObject(oid)
+
+	if (pObj == nil) then
+		self.cleanupCode(pPlayer)
+		return
+	end
+
+	local pos = readData(playerID .. ":mtpCode:pos") or 1
+	local n = readData(playerID .. ":mtpCode:n") or 0
+	local secret = readData(playerID .. ":mtpCode:secret" .. pos)
+	local result = MtpMinigameData.evaluateCodeBreakGuess(secret, args)
+
+	if (result == "correct") then
+		writeData(playerID .. ":mtpCode:pos", pos + 1)
+
+		if (pos >= n) then
+			local counts = {}
+
+			for i = 1, n do
+				counts[i] = readData(playerID .. ":mtpCode:guesses" .. i) or 0
+			end
+
+			MtpMinigameData.evaluateCodeBreakThresholds(counts, n)
+			self.paySlot(pPlayer, readStringData(oid .. ":mtpSlot"))
+			self.cleanupCode(pPlayer)
+			return
+		end
+
+		self:openCodeBreak(pPlayer, pObj)
+		return
+	end
+
+	if (result == "too_high" or result == "too_low") then
+		local nGuess = tonumber(args)
+		local guesses = (readData(playerID .. ":mtpCode:guesses" .. pos) or 0) + 1
+		writeData(playerID .. ":mtpCode:guesses" .. pos, guesses)
+
+		if (result == "too_high") then
+			writeStringData(playerID .. ":mtpCode:hint" .. pos, " (" .. nGuess .. " too high)")
+		else
+			writeStringData(playerID .. ":mtpCode:hint" .. pos, " (" .. nGuess .. " too low)")
+		end
+	end
+
+	self:openCodeBreak(pPlayer, pObj)
+end
+
+-- slicing_minigame.java:88-166 createSafeSui; :333-396 getRandomPassword
+function MtpMinigameObjects:openSlicing(pPlayer, pObj)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local oid = SceneObject(pObj):getObjectID()
+	local password = readStringData(playerID .. ":mtpSafe:password")
+
+	if (password ~= nil and password ~= "" and readData(playerID .. ":mtpSafe:oid") ~= oid) then
+		self.cleanupSafe(pPlayer)
+		password = ""
+	end
+
+	if (password == nil or password == "") then
+		local idx = getRandomNumber(1, #MtpMinigameData.passwords)
+		local row = MtpMinigameData.passwords[idx]
+		local need = row.pointsNeeded
+		local thresh = row.threshold
+		local scrambled = row.password
+		local iteration = 0
+
+		while (scrambled == row.password and iteration < 2) do
+			scrambled = self.scramblePassword(row.password)
+			iteration = iteration + 1
+		end
+
+		if (self.hasPuzzleBuff(pPlayer, "safe")) then
+			if (need > 1) then
+				need = need - MtpMinigameData.BUFF_POINTS_NEEDED_DECREASE
+			end
+
+			thresh = thresh + MtpMinigameData.BUFF_THRESHOLD_INCREASE
+		end
+
+		writeData(playerID .. ":mtpSafe:oid", oid)
+		writeData(playerID .. ":mtpSafe:row", idx)
+		writeData(playerID .. ":mtpSafe:need", need)
+		writeData(playerID .. ":mtpSafe:have", 0)
+		writeData(playerID .. ":mtpSafe:thresh", thresh)
+		writeData(playerID .. ":mtpSafe:wrong", 0)
+		writeStringData(playerID .. ":mtpSafe:password", row.password)
+		writeStringData(playerID .. ":mtpSafe:scrambled", scrambled)
+		writeStringData(playerID .. ":mtpSafe:guesses", "")
+		password = row.password
+	end
+
+	local scrambled = readStringData(playerID .. ":mtpSafe:scrambled")
+	local need = readData(playerID .. ":mtpSafe:need") or 0
+	local have = readData(playerID .. ":mtpSafe:have") or 0
+	local thresh = readData(playerID .. ":mtpSafe:thresh") or 0
+	local wrong = readData(playerID .. ":mtpSafe:wrong") or 0
+	local guessList = readStringData(playerID .. ":mtpSafe:guesses")
+	local prompt = getStringId("@meatlump/meatlump:safe_minigame_text") .. "\n\n"
+	prompt = prompt .. "Scrambled Password: " .. scrambled .. "\n"
+	prompt = prompt .. "Total Fail Attempts: " .. wrong .. "\n"
+	prompt = prompt .. "Maximum Fail Attempts Allowed: " .. (thresh + 1) .. "\n"
+	prompt = prompt .. "Points Needed: " .. need .. "\n"
+	prompt = prompt .. "Current Points: " .. have .. "\n\n"
+
+	if (guessList ~= nil and guessList ~= "") then
+		prompt = prompt .. guessList .. "\n"
+	end
+
+	local sui = SuiInputBox.new("MtpMinigameObjects", "slicingCallback")
+	sui.setTargetNetworkId(oid)
+	sui.setForceCloseDistance(self.FORCE_CLOSE)
+	sui.setTitle("OLD SAFE")
+	sui.setPrompt(prompt)
+
+	local pageId = sui.sendTo(pPlayer)
+	writeData(playerID .. ":mtpSafe:Pid", pageId)
+end
+
+function MtpMinigameObjects.slicingFail(pPlayer)
+	MtpMinigameObjects.applyDowner(pPlayer, "safe")
+	CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_failed")
+	MtpMinigameObjects.cleanupSafe(pPlayer)
+end
+
+function MtpMinigameObjects.slicingIncrementWrong(pPlayer, thresh)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local current = readData(playerID .. ":mtpSafe:wrong") or 0
+
+	if (current >= thresh) then
+		return false
+	end
+
+	writeData(playerID .. ":mtpSafe:wrong", current + 1)
+	return true
+end
+
+function MtpMinigameObjects:slicingCallback(pPlayer, pSui, eventIndex, args)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local pageId = readData(playerID .. ":mtpSafe:Pid")
+
+	if (pageId == 0) then
+		return
+	end
+
+	if (eventIndex == 1) then
+		self.applyDowner(pPlayer, "safe")
+		CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_canceled_early")
+		self.cleanupSafe(pPlayer)
+		return
+	end
+
+	local oid = readData(playerID .. ":mtpSafe:oid")
+	local pObj = getSceneObject(oid)
+
+	if (pObj == nil) then
+		self.cleanupSafe(pPlayer)
+		return
+	end
+
+	local idx = readData(playerID .. ":mtpSafe:row")
+	local row = MtpMinigameData.passwords[idx]
+
+	if (row == nil) then
+		self.cleanupSafe(pPlayer)
+		return
+	end
+
+	local guess = args or ""
+	-- slicing_minigame.java:191 isNameReserved(playerGuess, RESERVED_RULES_TO_IGNORE).
+	-- The array is an ignore list (number/syntax/fictionally_reserved/reserved),
+	-- not a reject list. Remaining engine rules (profane, developer, racial,
+	-- empty, in use) have no Lua NameManager binding on this tree, so the
+	-- reserved gate is not applied; the guess goes to evaluateSlicingGuess.
+	local work = {
+		password = readStringData(playerID .. ":mtpSafe:password"),
+		anagrams = row.anagrams,
+		pointsNeeded = readData(playerID .. ":mtpSafe:need") or row.pointsNeeded,
+		threshold = readData(playerID .. ":mtpSafe:thresh") or row.threshold,
+	}
+	local result = MtpMinigameData.evaluateSlicingGuess(work, guess, self.splitGuessList(readStringData(playerID .. ":mtpSafe:guesses")), readData(playerID .. ":mtpSafe:have") or 0, readData(playerID .. ":mtpSafe:wrong") or 0)
+
+	if (result == "win") then
+		self.paySlot(pPlayer, readStringData(oid .. ":mtpSlot"))
+		self.cleanupSafe(pPlayer)
+		return
+	end
+
+	if (result == "anagram") then
+		local list = readStringData(playerID .. ":mtpSafe:guesses")
+
+		if (list == nil or list == "") then
+			writeStringData(playerID .. ":mtpSafe:guesses", guess)
+		else
+			writeStringData(playerID .. ":mtpSafe:guesses", list .. ", " .. guess)
+		end
+
+		writeData(playerID .. ":mtpSafe:have", (readData(playerID .. ":mtpSafe:have") or 0) + MtpMinigameData.DEFAULT_ANAGRAM_POINT)
+		self:openSlicing(pPlayer, pObj)
+		return
+	end
+
+	if (result == "already") then
+		CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:safe_guessed_previous")
+	end
+
+	if (not self.slicingIncrementWrong(pPlayer, work.threshold)) then
+		self.slicingFail(pPlayer)
+		return
+	end
+
+	self:openSlicing(pPlayer, pObj)
+end
+
+-- target_map_puzzle.java:411-489 createMapText; :625-780 getRandomText
+function MtpMinigameObjects:openMap(pPlayer, pObj)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local oid = SceneObject(pObj):getObjectID()
+	local solve = readStringData(playerID .. ":mtpMap:solve")
+
+	if (solve ~= nil and solve ~= "" and readData(playerID .. ":mtpMap:oid") ~= oid) then
+		self.cleanupMap(pPlayer)
+		solve = ""
+	end
+
+	if (solve == nil or solve == "") then
+		local row = MtpMinigameData.mapText[getRandomNumber(1, #MtpMinigameData.mapText)]
+		local hasBuff = self.hasPuzzleBuff(pPlayer, "target_map")
+		local cipher = MtpMinigameData.CIPHER_1
+
+		if (hasBuff) then
+			cipher = MtpMinigameData.CIPHER_3
+		elseif (getRandomNumber(1, 2) == 2) then
+			cipher = MtpMinigameData.CIPHER_2
+		end
+
+		local newTarget = MtpMinigameData.applyCipher(row.target, cipher)
+		local newPrefix = row.prefix
+		local newTrail = row.trail
+		local newPlanet = row.planet
+
+		for s = 1, string.len(row.target) do
+			local src = string.sub(row.target, s, s)
+			-- the glyph for this character, not a byte of the ciphered string
+			-- (ciphers 2 and 3 are multi-byte) -- target_map_puzzle.java:625-780
+			local dst = MtpMinigameData.cipherGlyph(src, cipher)
+			newPrefix = self.replaceChar(newPrefix, src, dst)
+			newTrail = self.replaceChar(newTrail, src, dst)
+			newPlanet = self.replaceChar(newPlanet, src, dst)
+		end
+
+		solve = "target"
+
+		if (hasBuff) then
+			if (getRandomNumber(2, 3) == 2) then
+				solve = "location"
+			else
+				solve = "planet"
+			end
+		end
+
+		writeData(playerID .. ":mtpMap:oid", oid)
+		writeStringData(playerID .. ":mtpMap:solve", solve)
+		writeStringData(playerID .. ":mtpMap:prefix", row.prefix)
+		writeStringData(playerID .. ":mtpMap:target", row.target)
+		writeStringData(playerID .. ":mtpMap:trail", row.trail)
+		writeStringData(playerID .. ":mtpMap:planet", row.planet)
+		writeStringData(playerID .. ":mtpMap:prefixScr", newPrefix)
+		writeStringData(playerID .. ":mtpMap:targetScr", newTarget)
+		writeStringData(playerID .. ":mtpMap:trailScr", newTrail)
+		writeStringData(playerID .. ":mtpMap:planetScr", newPlanet)
+	end
+
+	local markTarget = ""
+	local markLoc = ""
+	local markPlanet = ""
+
+	if (solve == "target") then
+		markTarget = "RED "
+	elseif (solve == "location") then
+		markLoc = "RED "
+	else
+		markPlanet = "RED "
+	end
+
+	local prompt = getStringId("@meatlump/meatlump:decipher_map_text") .. "\n\n"
+	prompt = prompt .. readStringData(playerID .. ":mtpMap:prefixScr") .. "\n\n"
+	prompt = prompt .. "Target: " .. markTarget .. readStringData(playerID .. ":mtpMap:targetScr") .. "\n\n"
+	prompt = prompt .. "Target Location: " .. markLoc .. readStringData(playerID .. ":mtpMap:trailScr") .. "\n\n"
+	prompt = prompt .. "Target Planet: " .. markPlanet .. readStringData(playerID .. ":mtpMap:planetScr") .. "\n\n"
+	prompt = prompt .. "Solve the RED text."
+
+	local sui = SuiInputBox.new("MtpMinigameObjects", "mapCallback")
+	sui.setTargetNetworkId(oid)
+	sui.setForceCloseDistance(self.FORCE_CLOSE)
+	sui.setTitle("Target Map")
+	sui.setPrompt(prompt)
+
+	local pageId = sui.sendTo(pPlayer)
+	writeData(playerID .. ":mtpMap:Pid", pageId)
+end
+
+function MtpMinigameObjects:mapCallback(pPlayer, pSui, eventIndex, args)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local pageId = readData(playerID .. ":mtpMap:Pid")
+
+	if (pageId == 0) then
+		return
+	end
+
+	if (eventIndex == 1) then
+		self.applyDowner(pPlayer, "target_map")
+		CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_canceled_early")
+		self.cleanupMap(pPlayer)
+		return
+	end
+
+	local oid = readData(playerID .. ":mtpMap:oid")
+	local solve = readStringData(playerID .. ":mtpMap:solve")
+	local phrase = ""
+
+	if (solve == "target") then
+		phrase = readStringData(playerID .. ":mtpMap:target")
+	elseif (solve == "location") then
+		phrase = readStringData(playerID .. ":mtpMap:trail")
+	else
+		phrase = readStringData(playerID .. ":mtpMap:planet")
+	end
+
+	if (MtpMinigameData.evaluateMapGuess(phrase, args or "") == "win") then
+		self.paySlot(pPlayer, readStringData(oid .. ":mtpSlot"))
+		self.cleanupMap(pPlayer)
+		return
+	end
+
+	self.applyDowner(pPlayer, "target_map")
+	self.cleanupMap(pPlayer)
+end
+
+-- disarm_bomb_puzzle.java:134-214 createBombUI; :216-283 initializePlayer; :285-335 getBombData
+function MtpMinigameObjects.bombTimerNow(pPlayer)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	return readData(playerID .. ":mtpBomb:timer") or 0
+end
+
+function MtpMinigameObjects:openBomb(pPlayer, pObj)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local oid = SceneObject(pObj):getObjectID()
+	local n = readData(playerID .. ":mtpBomb:n") or 0
+
+	if (n > 0 and readData(playerID .. ":mtpBomb:oid") ~= oid) then
+		self.cleanupBomb(pPlayer)
+		n = 0
+	end
+
+	if (n <= 0) then
+		local wires = self.shuffleCopy(MtpMinigameData.WIRE_LIST)
+		local colors, cuts = self.shufflePaired(MtpMinigameData.COLOR_LIST, MtpMinigameData.CUT_LIST)
+		n = #wires
+		local timer = MtpMinigameData.DEFAULT_BOMB_TIMER
+		local hasBuff = self.hasPuzzleBuff(pPlayer, "bomb_defuse")
+
+		if (hasBuff) then
+			timer = timer + MtpMinigameData.BUFF_TIMER_INCREASE
+		end
+
+		writeData(playerID .. ":mtpBomb:oid", oid)
+		writeData(playerID .. ":mtpBomb:n", n)
+		writeData(playerID .. ":mtpBomb:button", 1)
+		writeData(playerID .. ":mtpBomb:timer", timer)
+		writeData(playerID .. ":mtpBomb:max", timer)
+		writeData(playerID .. ":mtpBomb:running", 0)
+		writeData(playerID .. ":mtpBomb:buff", hasBuff and 1 or 0)
+		writeData(oid .. ":mtpBomb:defuser", playerID)
+
+		local gen = (readData(playerID .. ":mtpBomb:gen") or 0) + 1
+		writeData(playerID .. ":mtpBomb:gen", gen)
+
+		for i = 1, n do
+			writeStringData(playerID .. ":mtpBomb:wire" .. i, wires[i])
+			writeStringData(playerID .. ":mtpBomb:color" .. i, colors[i])
+			writeStringData(playerID .. ":mtpBomb:cut" .. i, cuts[i])
+		end
+
+		createEvent(MtpMinigameData.DEFUSE_TIME_OUT_SECONDS * 1000, "MtpMinigameObjects", "bombIdleTimeout", pPlayer, tostring(gen))
+	end
+
+	local timer = self.bombTimerNow(pPlayer)
+	local prompt = "Timer: " .. timer .. "\n\n"
+	prompt = prompt .. getStringId("@meatlump/meatlump:bomb_intro_text") .. "\n\n"
+
+	for i = 1, n do
+		prompt = prompt .. i .. ". " .. self.stripColor(readStringData(playerID .. ":mtpBomb:wire" .. i)) .. " is " .. self.stripColor(readStringData(playerID .. ":mtpBomb:color" .. i)) .. "\n"
+	end
+
+	local sui = SuiListBox.new("MtpMinigameObjects", "bombCallback")
+	sui.setTargetNetworkId(oid)
+	sui.setForceCloseDistance(self.FORCE_CLOSE)
+	sui.setTitle("Disarm Bomb")
+	sui.setPrompt(prompt)
+
+	local button = readData(playerID .. ":mtpBomb:button") or 1
+	local hasBuff = (readData(playerID .. ":mtpBomb:buff") or 0) == 1
+	local used = {}
+
+	if (hasBuff) then
+		for i = 1, button - 1 do
+			used[readStringData(playerID .. ":mtpBomb:cut" .. i)] = true
+		end
+	end
+
+	for i = 1, #MtpMinigameData.CUT_LIST do
+		local cut = MtpMinigameData.CUT_LIST[i]
+
+		if (not used[cut]) then
+			sui.add(self.cutLabel[cut], cut)
+		end
+	end
+
+	local pageId = sui.sendTo(pPlayer)
+	writeData(playerID .. ":mtpBomb:Pid", pageId)
+end
+
+function MtpMinigameObjects.bombExplode(pPlayer)
+	MtpMinigameObjects.closePid(pPlayer, ":mtpBomb:Pid")
+	MtpMinigameObjects.applyDowner(pPlayer, "bomb_defuse")
+	CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_failed")
+	MtpMinigameObjects.cleanupBomb(pPlayer)
+end
+
+function MtpMinigameObjects:bombIdleTimeout(pPlayer, pGen)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local gen = tonumber(pGen) or 0
+
+	if ((readData(playerID .. ":mtpBomb:gen") or 0) ~= gen) then
+		return
+	end
+
+	if ((readData(playerID .. ":mtpBomb:running") or 0) == 1) then
+		return
+	end
+
+	self.closePid(pPlayer, ":mtpBomb:Pid")
+	CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:took_too_long")
+	self.cleanupBomb(pPlayer)
+end
+
+function MtpMinigameObjects:bombTick(pPlayer, pGen)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local gen = tonumber(pGen) or 0
+
+	if ((readData(playerID .. ":mtpBomb:gen") or 0) ~= gen) then
+		return
+	end
+
+	local timer = (readData(playerID .. ":mtpBomb:timer") or 0) - 1
+	writeData(playerID .. ":mtpBomb:timer", timer)
+
+	if (timer < 0) then
+		self.bombExplode(pPlayer)
+		return
+	end
+
+	createEvent(1000, "MtpMinigameObjects", "bombTick", pPlayer, tostring(gen))
+end
+
+function MtpMinigameObjects:bombCallback(pPlayer, pSui, eventIndex, args)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local pageId = readData(playerID .. ":mtpBomb:Pid")
+
+	if (pageId == 0) then
+		return
+	end
+
+	local timer = readData(playerID .. ":mtpBomb:timer") or 0
+	local maxTimer = readData(playerID .. ":mtpBomb:max") or 0
+	local started = (readData(playerID .. ":mtpBomb:running") or 0) == 1 or (timer < maxTimer)
+
+	if (eventIndex == 1 or args == nil or tonumber(args) < 0) then
+		if (started) then
+			self.bombExplode(pPlayer)
+		else
+			self.applyDowner(pPlayer, "bomb_defuse")
+			CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_canceled_early")
+			self.cleanupBomb(pPlayer)
+		end
+
+		return
+	end
+
+	local oid = readData(playerID .. ":mtpBomb:oid")
+	local pObj = getSceneObject(oid)
+
+	if (pObj == nil) then
+		self.cleanupBomb(pPlayer)
+		return
+	end
+
+	local pPageData = LuaSuiBoxPage(pSui):getSuiPageData()
+
+	if (pPageData == nil) then
+		self.bombExplode(pPlayer)
+		return
+	end
+
+	local wire = LuaSuiPageData(pPageData):getStoredData(tostring(args))
+	local n = readData(playerID .. ":mtpBomb:n") or 0
+	local button = readData(playerID .. ":mtpBomb:button") or 1
+	local cutArray = {}
+
+	for i = 1, n do
+		cutArray[i] = readStringData(playerID .. ":mtpBomb:cut" .. i)
+	end
+
+	local result = MtpMinigameData.evaluateBombCut(cutArray, button, wire)
+
+	if (result == "explode" or result == "cancel") then
+		self.bombExplode(pPlayer)
+		return
+	end
+
+	if (result == "win") then
+		self.paySlot(pPlayer, readStringData(oid .. ":mtpSlot"))
+		self.cleanupBomb(pPlayer)
+		return
+	end
+
+	writeData(playerID .. ":mtpBomb:timer", timer - MtpMinigameData.BUTTON_PENALTY)
+	writeData(playerID .. ":mtpBomb:button", button + 1)
+
+	if ((readData(playerID .. ":mtpBomb:running") or 0) ~= 1) then
+		writeData(playerID .. ":mtpBomb:running", 1)
+		createEvent(1000, "MtpMinigameObjects", "bombTick", pPlayer, tostring(readData(playerID .. ":mtpBomb:gen") or 0))
+	end
+
+	self:openBomb(pPlayer, pObj)
+end
+
 MtpMinigameMenuComponent = {}
 
 function MtpMinigameMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResponse, pPlayer)
@@ -1330,8 +2190,9 @@ function MtpMinigameMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, 
 
 	local kind = readStringData(SceneObject(pSceneObject):getObjectID() .. ":mtpKind")
 	local puzzleKind = MtpMinigameObjects.puzzleKind[kind]
+	local oid = SceneObject(pSceneObject):getObjectID()
 
-	if (kind == "destroy_food_supplies" or kind == "destroy_weapon_cache") then
+	if (kind == "destroy_food_supplies" or kind == "destroy_weapon_cache" or kind == "code_break_minigame" or kind == "slicing_minigame" or kind == "target_map_puzzle" or kind == "disarm_bomb_puzzle") then
 		if (not MtpMinigameObjects.canCollectCollectible(pPlayer, pSceneObject)) then
 			return 0
 		end
@@ -1341,6 +2202,15 @@ function MtpMinigameMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, 
 			return 0
 		end
 
+		if (kind == "disarm_bomb_puzzle") then
+			local defuser = readData(oid .. ":mtpBomb:defuser") or 0
+
+			if (defuser ~= 0) then
+				CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:currently_being_defused")
+				return 0
+			end
+		end
+
 		if (not MtpMinigameObjects.consumeDevice(pPlayer, kind)) then
 			CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_need_device")
 			return 0
@@ -1348,19 +2218,20 @@ function MtpMinigameMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, 
 
 		if (kind == "destroy_food_supplies") then
 			MtpMinigameObjects:openFood(pPlayer, pSceneObject)
-		else
+		elseif (kind == "destroy_weapon_cache") then
 			MtpMinigameObjects:openWeapon(pPlayer, pSceneObject)
+		elseif (kind == "code_break_minigame") then
+			MtpMinigameObjects:openCodeBreak(pPlayer, pSceneObject)
+		elseif (kind == "slicing_minigame") then
+			MtpMinigameObjects:openSlicing(pPlayer, pSceneObject)
+		elseif (kind == "target_map_puzzle") then
+			MtpMinigameObjects:openMap(pPlayer, pSceneObject)
+		else
+			MtpMinigameObjects:openBomb(pPlayer, pSceneObject)
 		end
 
 		return 0
 	end
 
-	if (not CreatureObject(pPlayer):isInRangeWithObject(pSceneObject, MtpMinigameObjects.MAX_RANGE)) then
-		return 0
-	end
-
-	-- OPEN: meatlump.stf has no "not available" key among the 64. Closest shipped
-	-- line is you_have_debuff (TSV 106091).
-	CreatureObject(pPlayer):sendSystemMessage("@meatlump/meatlump:you_have_debuff")
 	return 0
 end
