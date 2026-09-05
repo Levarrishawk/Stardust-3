@@ -775,6 +775,7 @@ includeFile("kashyyyk/quest/conversation/ep3_kachirho_qst_radio_conv_handler.lua
 includeFile("kashyyyk/quest/conversation/ep3_pirus_gue_conv_handler.lua")
 includeFile("kashyyyk/quest/conversation/ep3_trando_kressik_conv_handler.lua")
 includeFile("kashyyyk/quest/conversation/ep3_wke_lolo_conv_handler.lua")
+includeFile("kashyyyk/quest/myyydril/serverobjects.lua")
 includeFile("kashyyyk/quest/trando/serverobjects.lua")
 includeFile("kashyyyk/quest/avatar/serverobjects.lua")
 includeFile("kashyyyk/quest/rryatt/serverobjects.lua")
