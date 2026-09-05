@@ -49,6 +49,15 @@ CollectorSpawns = ScreenPlay:new {
 		-- order loads stardust_03's snapshot/dathomir.ws first, and that snapshot has no Aurilia hut at all (no
 		-- aurilia template among its 387), so this row cannot spawn until the maintainer rules on the Aurilia village.
 		-- The row stays for that day; open = true keeps it out of the boot spawn.
+		-- WHAT SHE NEEDS (ruling 2026-09-05, "notate dathomir collector's absence and placement needed"): the Aurilia
+		-- village rows of dathomir_7_2.tab -- the pyramid hut :237 at world 5355.09 / 78.5 / -4138.22, her sign :234
+		-- (aurilia_collector_sign, world 5348.17 / 78.5 / -4139.92), the two sheres :231 / :235, the bank terminal :236,
+		-- the hut's furniture :239-242 -- exist only in mtg_patch_023's snapshot. Two ways to give her a home, either one
+		-- the maintainer's call: (a) load a dathomir snapshot that carries the village (the merged-snapshot shape used
+		-- for Kashyyyk), then this row spawns as written with buildingId 15092 / cell 1; or (b) spawn the hut from Lua at
+		-- the world position above (spawnSceneObject with the building template creates its cells) and adopt cell 1 --
+		-- OURS placement on SOURCED coordinates. She activates seven collections (col_rock_bubbling among them); until
+		-- she stands, those cannot be started.
 		{
 			collector = "nexus_collector",
 			zone = "dathomir",
