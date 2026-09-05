@@ -43,6 +43,7 @@ includeFile("meatlump/quest/web/conversation/mtp_hideout_weapon_supply_tech_conv
 includeFile("meatlump/quest/web/conversation/mtp_hideout_weapon_supply_smuggler_conv_handler.lua")
 includeFile("meatlump/quest/web/conversation/mtp_hideout_safe_tech_conv_handler.lua")
 includeFile("meatlump/quest/web/conversation/mtp_hideout_recon_conv_handler.lua")
+includeFile("meatlump/quest/web/conversation/mtp_hideout_col_eavesdrop_conv_handler.lua")
 includeFile("meatlump/quest/web/conversation/mtp_ragtag_ames_missd_conv_handler.lua")
 includeFile("meatlump/quest/web/conversation/mtp_corellia_times_contact_conv_handler.lua")
 includeFile("meatlump/quest/web/conversation/mtp_corsec_intelligence_officer_conv_handler.lua")

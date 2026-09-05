@@ -9,6 +9,7 @@ includeFile("conversations/meatlump/web/mtp_hideout_weapon_supply_tech_convo.lua
 includeFile("conversations/meatlump/web/mtp_hideout_weapon_supply_smuggler_convo.lua")
 includeFile("conversations/meatlump/web/mtp_hideout_safe_tech_convo.lua")
 includeFile("conversations/meatlump/web/mtp_hideout_recon_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_col_eavesdrop_convo.lua")
 includeFile("conversations/meatlump/web/mtp_ragtag_ames_missd_convo.lua")
 includeFile("conversations/meatlump/web/mtp_corellia_times_contact_convo.lua")
 includeFile("conversations/meatlump/web/mtp_corsec_intelligence_officer_convo.lua")
