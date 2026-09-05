@@ -32,18 +32,6 @@ EP3_BOSHAZ_REFUSED_KEY = ":ep3_boshaz:refused"     -- heard the Zssik pitch and 
 EP3_BOSHAZ_CHAWROO_KEY = ":ep3_boshaz:chawroo"     -- 0 not accepted, 1 accepted, 2 settled
 EP3_BOSHAZ_DONE_KEY = ":ep3_boshaz:dakar"          -- paid off and sent on to Dakar
 
---[[
-	FLAGGED INTERPRETATION -- GROUND LEG PROGRESSION. The Zssik pitch ends in a GROUND task: rescue
-	Chawroo from the Blackscale patrol northwest of here (s_157) and get him to set up the meeting.
-	There is no Kashyyyk ground screenplay, no Kashyyyk ground spawn areas and no Chawroo mobile in
-	this repo, so that leg cannot be checked. With that true, the leg advances one step per hail:
-	accept -> "you had better hurry" -> settled. The dialogue is client fact; this progression is not.
-
-	Set this to false once a real Chawroo ground quest exists, then replace the single
-	getFlag() == 1 branch below with the real completion test. Nothing else in this file changes.
-]]
-BOSHAZ_GROUND_LEG_AUTO = true
-
 function Ep3BoshazConvoHandler:getFlag(pPlayer, flagKey)
 	if (pPlayer == nil) then
 		return 0
@@ -92,32 +80,34 @@ function Ep3BoshazConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	-- Paid off and handed on to Dakar already.
-	if (self:getFlag(pPlayer, EP3_BOSHAZ_DONE_KEY) == 1) then
+	-- java OnStartNpcConversation order (ep3_trandoshan_boshaz_zssik_01.java:1470-1658).
+	-- Existing space screen ids wrap the same keys; zssik_02 state is the screenplay.
+
+	-- hasCompletedGroundQuest
+	if (trandoBoshazZssik02ScreenPlay ~= nil and trandoBoshazZssik02ScreenPlay:getStage(pPlayer) == 0 and trandoBoshazZssik02ScreenPlay:getRuns(pPlayer) > 0) then
 		return convoTemplate:getScreen("ep3_boshaz_dakar")
+	end
+
+	-- isOnTask01 (talkToBoshaz)
+	if (trandoBoshazZssik02ScreenPlay ~= nil and trandoBoshazZssik02ScreenPlay:isTurnIn(pPlayer)) then
+		return convoTemplate:getScreen("ep3_boshaz_ground_done")
+	end
+
+	-- isOnGroundQuest
+	if (trandoBoshazZssik02ScreenPlay ~= nil and trandoBoshazZssik02ScreenPlay:getStage(pPlayer) > 0) then
+		return convoTemplate:getScreen("ep3_boshaz_ground_active")
 	end
 
 	local active = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_BOSHAZ_ESCORT.type, EP3_BOSHAZ_ESCORT.name)
 	local complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_BOSHAZ_ESCORT.type, EP3_BOSHAZ_ESCORT.name)
 
-	-- Escort survived -- the reveal, the Zssik pitch, then the Chawroo ground leg.
+	-- hasCompletedSpaceMission / hasReceivedReward
+	if (complete and self:getFlag(pPlayer, EP3_BOSHAZ_DONE_KEY) == 1) then
+		return convoTemplate:getScreen("ep3_boshaz_return")
+	end
+
+	-- hasWonSpaceMission
 	if (complete) then
-		local chawroo = self:getFlag(pPlayer, EP3_BOSHAZ_CHAWROO_KEY)
-
-		if (chawroo == 2) then
-			return convoTemplate:getScreen("ep3_boshaz_ground_done")
-		end
-
-		if (chawroo == 1) then
-			if (BOSHAZ_GROUND_LEG_AUTO) then
-				self:setFlag(pPlayer, EP3_BOSHAZ_CHAWROO_KEY, 2)
-			end
-
-			return convoTemplate:getScreen("ep3_boshaz_ground_active")
-		end
-
-		-- Heard the pitch and walked away. s_617 is the client's own "have you changed your mind
-		-- about working for the Zssik" re-entry.
 		if (self:getFlag(pPlayer, EP3_BOSHAZ_REFUSED_KEY) == 1) then
 			return convoTemplate:getScreen("ep3_boshaz_return")
 		end
@@ -125,18 +115,16 @@ function Ep3BoshazConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("ep3_boshaz_setup")
 	end
 
+	-- hasFailedSpaceMission
+	if (self:getFlag(pPlayer, EP3_BOSHAZ_TAKEN_KEY) == 1 and not active) then
+		return convoTemplate:getScreen("ep3_boshaz_escort_failed")
+	end
+
+	-- isOnSpaceMission
 	if (active) then
 		return convoTemplate:getScreen("ep3_boshaz_busy")
 	end
 
-	-- Took it once and no longer holds it. See the FLAGGED INTERPRETATION block above
-	-- ep3_boshaz_escort_failed in mobile/conversations/space/neutral/kashyyyk_slaver/ep3_boshaz_convo.lua.
-	if (self:getFlag(pPlayer, EP3_BOSHAZ_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_boshaz_escort_failed")
-	end
-
-	-- s_725 is a brush-off, not a pilot gate, so a non-pilot still gets the greeting; the gate fires
-	-- at the point of the offer (see runScreenHandlers below).
 	return convoTemplate:getScreen("ep3_boshaz_greeting")
 end
 
@@ -183,21 +171,30 @@ function Ep3BoshazConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, s
 		self:setFlag(pPlayer, EP3_BOSHAZ_REFUSED_KEY, 1)
 
 	-- Chawroo ground leg accepted. s_155 "Alright, where can I find Chawroo?" lands on ep3_boshaz_where.
-	elseif (screenID == "ep3_boshaz_where") then
+	elseif (screenID == "ep3_boshaz_where" or screenID == "s_157") then
 		self:setFlag(pPlayer, EP3_BOSHAZ_REFUSED_KEY, 0)
 		self:setFlag(pPlayer, EP3_BOSHAZ_CHAWROO_KEY, 1)
 
-	--[[
-		THE PAYOFF. s_607 "They have been dealt with if that is what you mean." lands here.
+		if (trandoBoshazZssik02ScreenPlay ~= nil) then
+			trandoBoshazZssik02ScreenPlay:grantQuest(pPlayer)
+		end
 
-		FLAGGED INTERPRETATION -- NO SECOND PAYOUT. s_609 says "here is payment for the completion of
-		your first task for us", but no amount is attested anywhere in the .stf or the screenplay, and
-		escort_ep3_trando_boshaz_zssik_01 already pays creditReward = 2500 on its own completion. This
-		screen is therefore text-only and latches him onto Dakar. If a figure is ever decided, this is
-		the one place to add it.
-	]]
-	elseif (screenID == "ep3_boshaz_payoff") then
+	elseif (screenID == "ep3_boshaz_hurry" or screenID == "s_615") then
+		if (trandoBoshazZssik02ScreenPlay ~= nil) then
+			trandoBoshazZssik02ScreenPlay:clearQuest(pPlayer)
+			trandoBoshazZssik02ScreenPlay:grantQuest(pPlayer)
+		end
+
+	elseif (screenID == "ep3_boshaz_payoff" or screenID == "s_609") then
 		self:setFlag(pPlayer, EP3_BOSHAZ_DONE_KEY, 1)
+
+		if (trandoBoshazZssik02ScreenPlay ~= nil) then
+			trandoBoshazZssik02ScreenPlay:signalRewardBoshaz(pPlayer)
+		end
+
+		if (trandoBoshazTransferScreenPlay ~= nil) then
+			trandoBoshazTransferScreenPlay:grantQuest(pPlayer)
+		end
 	end
 
 	return pScreenClone
