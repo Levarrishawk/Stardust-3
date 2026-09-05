@@ -27,6 +27,10 @@ require("sui.custom.SuiProcessorPuzzle")
 require("sui.custom.SuiRadiationSensor")
 require("sui.custom.SuiReceiverPuzzle")
 
+-- Collections data + manager. managers/ Lua is otherwise require'd on demand
+-- (managers/quest/quest_manager.lua); load at DirectorManager boot so CollectionData is present.
+require("managers.collections.collection_manager")
+
 includeFile("helperfuncs.lua")
 includeFile("playerTriggers.lua")
 
