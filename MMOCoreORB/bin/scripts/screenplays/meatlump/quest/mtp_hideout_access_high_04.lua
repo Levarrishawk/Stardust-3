@@ -9,7 +9,7 @@
 
 	NO JOURNAL: this branch has no managers/quest/journal.lua.
 
-	TASK_NAME and SIGNAL_NAME reuse the base names. TIER_LEVEL = 82 is OURS-pending. item_meatlump_lump_01_01 x9 is OPEN (token currency not in the fork). Credits are the questlist NGE amounts (REWARD_CREDITS on task rows is 0). Rebalance pending.
+	TASK_NAME and SIGNAL_NAME reuse the base names. TIER_LEVEL = 82 is OURS-pending. Lumps are SOURCED QUEST_REWARD_LOOT_COUNT of eow_meatlump_lump (OURS appearance; master_item.tab:5620 dungeon iff absent from the client). Credits are SOURCED questlist QUEST_REWARD_BANK_CREDITS (Kashyyyk shipped-amount precedent).
 ]]
 
 mtpHideoutAccessHigh04ScreenPlay = ScreenPlay:new {
@@ -17,8 +17,9 @@ mtpHideoutAccessHigh04ScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpHideoutAccessHigh04ScreenPlay",
 	questName = "mtp_hideout_access_high_04",
 	repeatable = false,
-	rewardCredits = 8963, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 9, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 8963, -- SOURCED questlist/quest/mtp_hideout_access_high_04.tab QUEST_REWARD_BANK_CREDITS=8963 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	rewardXp = 0, -- SOURCED questlist/quest/mtp_hideout_access_high_04.tab QUEST_REWARD_BANK_CREDITS=8963 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	lumpCount = 9, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	TIER_LEVEL = 82, -- OURS-pending (Pre-CU has no CL 82/90)
 	tasks = {
 		{

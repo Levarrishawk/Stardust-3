@@ -9,7 +9,7 @@ corellia_coronet_vani_korr_conv_handler = conv_handler:new {}
 function corellia_coronet_vani_korr_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	-- Access-chain order from OnStartNpcConversation. Act 1 is OPEN on this branch.
+	-- Access-chain order from OnStartNpcConversation. corellia_coronet_meatlump_act1 is absent from this branch.
 	if (MtpQuestEngine.isTaskActive(MtpQuestEngine.byName("mtp_hideout_access_07"), pPlayer, "mtp_hideout_access_07_04") or MtpQuestEngine.isQuestComplete(pPlayer, "mtp_hideout_access_07") or MtpQuestEngine.isTaskActive(MtpQuestEngine.byName("mtp_hideout_access_high_07"), pPlayer, "mtp_hideout_access_07_04") or MtpQuestEngine.isQuestComplete(pPlayer, "mtp_hideout_access_high_07")) then
 		if (MtpQuestEngine.isQuestComplete(pPlayer, "mtp_hideout_access_07") or MtpQuestEngine.isQuestComplete(pPlayer, "mtp_hideout_access_high_07")) then
 			return convoTemplate:getScreen("s_191")
@@ -43,7 +43,7 @@ function corellia_coronet_vani_korr_conv_handler:getInitialScreen(pPlayer, pNpc,
 	elseif (MtpQuestEngine.isQuestActive(pPlayer, "mtp_hideout_access_01") or MtpQuestEngine.isQuestActive(pPlayer, "mtp_hideout_access_high_01")) then
 		return convoTemplate:getScreen("s_141")
 	elseif (MtpQuestEngine.playerLevel(pPlayer) >= 55) then
-		-- OPEN: shipped gate is act1_end AND level >= 55. Act 1 is not on this branch.
+		-- Shipped gate is act1_end AND level >= 55. corellia_coronet_meatlump_act1 is absent from this branch; level 55 stands in.
 		return convoTemplate:getScreen("s_135")
 	end
 

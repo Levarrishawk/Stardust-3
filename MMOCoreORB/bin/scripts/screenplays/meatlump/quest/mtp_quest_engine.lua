@@ -15,6 +15,15 @@ MtpQuestEngine = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "MtpQuestEngine",
 	TIER_LEVEL = 82, -- OURS-pending (Pre-CU has no CL 82/90)
+	-- OURS appearance: object/custom_content/tangible/loot/creature_loot/collections/eow_meatlump_lump.lua
+	-- (client shared_eow_meatlump_lump.iff). SOURCED count is questlist QUEST_REWARD_LOOT_COUNT.
+	-- Shipped static item_meatlump_lump_01_01 (master_item.tab:5620) uses
+	-- object/tangible/loot/dungeon/meatlump/meatlump_lump.iff, which is absent from the client.
+	LUMP_TEMPLATE = "object/tangible/loot/creature/loot/collections/eow_meatlump_lump.iff",
+	-- Core3 has no quest_combat / quest_general. Unknown types cap at 2000 once
+	-- (PlayerObjectImplementation.cpp:740-753). combat_general is the Mustafar
+	-- substitution (mustafar_quest_xp.lua).
+	XP_TYPE = "combat_general",
 }
 
 MtpQuestEngine.quests = {}
@@ -349,10 +358,92 @@ function MtpQuestEngine.completeQuest(sp, pPlayer)
 		CreatureObject(pPlayer):addBankCredits(sp.rewardCredits, true)
 	end
 
-	-- lumpCount is OPEN: item_meatlump_lump_01_01 is not in the fork.
+	if ((sp.rewardXp or 0) > 0) then
+		CreatureObject(pPlayer):awardExperience(MtpQuestEngine.XP_TYPE, sp.rewardXp, true)
+	end
+
+	MtpQuestEngine.grantLumps(pPlayer, sp.lumpCount or 0)
 
 	MtpQuestEngine.write(sp, pPlayer, "runs", tostring(MtpQuestEngine.getRuns(sp, pPlayer) + 1))
 	MtpQuestEngine.clearQuest(sp, pPlayer)
+end
+
+function MtpQuestEngine.grantLumps(pPlayer, count)
+	if (pPlayer == nil or count == nil or count <= 0) then
+		return
+	end
+
+	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	if (pInventory == nil) then
+		return
+	end
+
+	for i = 1, count do
+		giveItem(pInventory, MtpQuestEngine.LUMP_TEMPLATE, -1)
+	end
+end
+
+function MtpQuestEngine.walkTemplateCount(pContainer, template)
+	if (pContainer == nil) then
+		return 0
+	end
+
+	local n = 0
+	local size = SceneObject(pContainer):getContainerObjectsSize()
+
+	if (size == nil) then
+		return 0
+	end
+
+	for i = 0, size - 1 do
+		local pObj = SceneObject(pContainer):getContainerObject(i)
+
+		if (pObj ~= nil) then
+			if (SceneObject(pObj):getTemplateObjectPath() == template) then
+				n = n + 1
+			end
+
+			n = n + MtpQuestEngine.walkTemplateCount(pObj, template)
+		end
+	end
+
+	return n
+end
+
+function MtpQuestEngine.countTemplate(pPlayer, template)
+	if (pPlayer == nil or template == nil or template == "") then
+		return 0
+	end
+
+	local pInv = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	return MtpQuestEngine.walkTemplateCount(pInv, template)
+end
+
+function MtpQuestEngine.removeTemplate(pPlayer, template, count)
+	if (pPlayer == nil or template == nil or template == "" or count == nil or count <= 0) then
+		return false
+	end
+
+	local pInv = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	if (pInv == nil) then
+		return false
+	end
+
+	for i = 1, count do
+		local pObj = getContainerObjectByTemplate(pInv, template, true)
+
+		if (pObj == nil) then
+			return false
+		end
+
+		SceneObject(pObj):destroyObjectFromWorld()
+		SceneObject(pObj):destroyObjectFromDatabase()
+	end
+
+	return true
 end
 
 function MtpQuestEngine.activateTask(sp, pPlayer, id)

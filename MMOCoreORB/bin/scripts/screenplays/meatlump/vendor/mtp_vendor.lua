@@ -3,9 +3,10 @@
 
 	ruling 2026-09-04
 
-	SOURCED: item/vendor/mtp_meatlump_vendor.tab (18 rows). resourceAmount is lump cost.
-	OPEN: item_meatlump_lump_01_01 is not in the fork. priceFn is pluggable;
-	the default always refuses with @set_bonus:vendor_cant_purchase and lists the cost.
+	SOURCED: item/vendor/mtp_meatlump_vendor.tab (18 rows). resourceAmount is lump cost
+	(stock[].lumps below). Price hook counts OURS eow_meatlump_lump items
+	(object/custom_content/tangible/loot/creature_loot/collections/eow_meatlump_lump.lua;
+	master_item.tab:5620 dungeon iff absent from the client) and removes that many.
 ]]
 
 MtpVendor = ScreenPlay:new {
@@ -13,7 +14,7 @@ MtpVendor = ScreenPlay:new {
 	screenplayName = "MtpVendor",
 	REFUSE_KEY = "@set_bonus:vendor_cant_purchase",
 	NOT_READY = "@set_bonus:vendor_not_ready",
-	TOKEN = "item_meatlump_lump_01_01",
+	TOKEN = "item_meatlump_lump_01_01", -- SOURCED shipped name; inventory items are eow_meatlump_lump
 	stock = {
 		{ item = "item_meatlump_camp_light_schematic_02_01", lumps = 55 },
 		{ item = "item_meatlump_camp_light_schematic_02_02", lumps = 55 },
@@ -41,10 +42,32 @@ registerScreenPlay("MtpVendor", true)
 function MtpVendor:start()
 end
 
--- Pluggable price hook. Return true to allow the sale.
--- Default: lumps are not in the fork, so every buy refuses.
+function MtpVendor.resolveStockTemplate(name)
+	if (name == nil or name == "") then
+		return nil
+	end
+
+	if (CollectionStaticItems == nil or CollectionStaticItems[name] == nil) then
+		print("[meatlump] CollectionStaticItems absent; vendor stock " .. tostring(name) .. " not given")
+		return nil
+	end
+
+	local entry = CollectionStaticItems[name]
+
+	if (entry.inFork == false) then
+		print("[meatlump] vendor stock absent from the client: " .. name)
+		return nil
+	end
+
+	return entry.template
+end
+
+-- Pluggable price hook. Return true when the player holds enough eow lumps.
 function MtpVendor.priceFn(pPlayer, entry)
-	return false, entry.lumps, MtpVendor.TOKEN
+	local need = entry.lumps
+	local have = MtpQuestEngine.countTemplate(pPlayer, MtpQuestEngine.LUMP_TEMPLATE)
+
+	return have >= need, need, MtpVendor.TOKEN
 end
 
 function MtpVendor.canAfford(pPlayer, entry)
@@ -84,12 +107,24 @@ function MtpVendor:onPicked(pPlayer, pSui, eventIndex, args)
 	end
 
 	local ok, need, token = MtpVendor.canAfford(pPlayer, entry)
+	local stockTemplate = MtpVendor.resolveStockTemplate(entry.item)
 
-	if (ok) then
-		-- Future: deduct token and giveItem the schematic. Not reachable today.
+	if (not ok or stockTemplate == nil) then
+		CreatureObject(pPlayer):sendSystemMessage(self.REFUSE_KEY)
+		CreatureObject(pPlayer):sendSystemMessage("Need " .. tostring(need) .. "x " .. tostring(token) .. " for " .. entry.item)
 		return
 	end
 
-	CreatureObject(pPlayer):sendSystemMessage(self.REFUSE_KEY)
-	CreatureObject(pPlayer):sendSystemMessage("Need " .. tostring(need) .. "x " .. tostring(token) .. " for " .. entry.item)
+	if (not MtpQuestEngine.removeTemplate(pPlayer, MtpQuestEngine.LUMP_TEMPLATE, need)) then
+		CreatureObject(pPlayer):sendSystemMessage(self.REFUSE_KEY)
+		return
+	end
+
+	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	if (pInventory == nil) then
+		return
+	end
+
+	giveItem(pInventory, stockTemplate, -1)
 end

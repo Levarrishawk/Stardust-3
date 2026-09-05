@@ -5,7 +5,7 @@
 
 	SOURCED: questlist/questtask mtp_corsec_intelligence_officer_safe.
 
-	Credits are the questlist NGE amounts (REWARD_CREDITS on task rows is 0). Rebalance pending. Safe minigame / collection slots are OPEN until the collections branch merges. Task types: nothing, wait_for_signal, wait_for_tasks.
+	Credits are SOURCED questlist QUEST_REWARD_BANK_CREDITS (Kashyyyk shipped-amount precedent). Safe minigame is the minigames screenplay; collection slots pay through CollectionManager when present. Task types: nothing, wait_for_signal, wait_for_tasks.
 ]]
 
 mtpCorsecIntelligenceOfficerSafeScreenPlay = ScreenPlay:new {
@@ -13,8 +13,9 @@ mtpCorsecIntelligenceOfficerSafeScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpCorsecIntelligenceOfficerSafeScreenPlay",
 	questName = "mtp_corsec_intelligence_officer_safe",
 	repeatable = false,
-	rewardCredits = 0, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 0, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 0, -- SOURCED questlist/quest/mtp_corsec_intelligence_officer_safe.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	rewardXp = 0, -- SOURCED questlist/quest/mtp_corsec_intelligence_officer_safe.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	lumpCount = 0, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	tasks = {
 		{
 			id = 0,

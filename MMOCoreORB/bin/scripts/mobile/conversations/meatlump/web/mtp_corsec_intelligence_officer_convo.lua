@@ -80,7 +80,7 @@ mtp_corsec_intelligence_officer_convo:addScreen(mtp_corsec_intelligence_officer_
 
 mtp_corsec_intelligence_officer_convo_s_17 = ConvoScreen:new {
 	id = "s_17",
-	leftDialog = "@conversation/mtp_corsec_intelligence_officer:s_17", -- OURS: signal met / grant safe OPEN
+	leftDialog = "@conversation/mtp_corsec_intelligence_officer:s_17", -- OURS: signal met / grant safe
 	stopConversation = true,
 	options = {}
 }

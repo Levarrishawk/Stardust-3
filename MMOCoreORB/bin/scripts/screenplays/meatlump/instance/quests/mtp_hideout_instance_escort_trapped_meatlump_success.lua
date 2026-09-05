@@ -17,8 +17,9 @@ mtpHideoutInstanceEscortTrappedMeatlumpSuccessScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpHideoutInstanceEscortTrappedMeatlumpSuccessScreenPlay",
 	questName = "mtp_hideout_instance_escort_trapped_meatlump_success",
 	repeatable = false,
-	rewardCredits = 0, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 7, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 0, -- SOURCED questlist/quest/mtp_hideout_instance_escort_trapped_meatlump_success.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	rewardXp = 0, -- SOURCED questlist/quest/mtp_hideout_instance_escort_trapped_meatlump_success.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	lumpCount = 7, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	tasks = {
 		{
 			id = 0,

@@ -7,7 +7,7 @@
 	QUEST_REWARD_LOOT_NAME=item_mtp_king_corellia_times_story QUEST_REWARD_LOOT_COUNT=1.
 	SOURCED: questtask 0 wait_for_signal mtp_king_story; questtask 1 complete_quest.
 	OURS: the fork-side analogue object/tangible/meatlump/hideout/mtp_king_story.iff granted on complete.
-	OPEN: item_meatlump_lump_01_01 is not in the fork.
+	Lumps: SOURCED QUEST_REWARD_LOOT_COUNT of eow_meatlump_lump (OURS appearance; master_item.tab:5620 dungeon iff absent from the client).
 ]]
 
 mtpMeatlumpKingStoryScreenPlay = ScreenPlay:new {
@@ -15,8 +15,9 @@ mtpMeatlumpKingStoryScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpMeatlumpKingStoryScreenPlay",
 	questName = "mtp_meatlump_king_story",
 	repeatable = false,
-	rewardCredits = 49918, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 0, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 49918, -- SOURCED questlist/quest/mtp_meatlump_king_story.tab QUEST_REWARD_BANK_CREDITS=49918 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	rewardXp = 0, -- SOURCED questlist/quest/mtp_meatlump_king_story.tab QUEST_REWARD_BANK_CREDITS=49918 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	lumpCount = 0, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	tasks = {
 		{
 			id = 0,

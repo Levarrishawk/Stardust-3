@@ -22,7 +22,7 @@ function mtp_corsec_intelligence_officer_conv_handler:runScreenHandlers(pConvTem
 	-- OURS: the conversation never grants intro/safe or fires corSecIntelligenceOfficerMet,
 	-- so both quests are unreachable. Grant intro on the greeting if it is not already
 	-- active or complete. At s_17 fire the intro signal and grant the safe quest once.
-	-- OPEN: safe minigame / collection slots until the collections branch merges.
+	-- Safe minigame is mtp_minigame_objects.lua; collection slots pay through CollectionManager when present.
 	if (screenID == "s_3") then
 		if (not MtpQuestEngine.isQuestActiveOrComplete(pPlayer, "mtp_corsec_intelligence_officer_intro")) then
 			MtpWebTasks.grant(pPlayer, "mtp_corsec_intelligence_officer_intro")

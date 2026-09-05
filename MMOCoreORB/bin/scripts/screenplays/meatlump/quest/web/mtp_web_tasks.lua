@@ -43,7 +43,7 @@ function MtpWebTasks.attach(pPlayer, name)
 		guard = guard + 1
 		local progressed = false
 
-		-- OPEN: quest_shuttle_comlink / shuttle event are not Lua items.
+		-- quest_shuttle_comlink / shuttle event are absent from this engine (not Lua items).
 		if (name == "mtp_hideout_retrieve_delivery") then
 			if (MtpQuestEngine.isTaskActive(sp, pPlayer, "useComlink")) then
 				MtpQuestEngine.sendSignal(sp, pPlayer, "shuttleTooHotCommSignal")

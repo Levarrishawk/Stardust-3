@@ -9,7 +9,7 @@
 
 	NO JOURNAL: this branch has no managers/quest/journal.lua.
 
-	t7 retrieve_item _07_02a is activated by t0 but t1 watches only _02b/_02c. Dangling as shipped. TASK_NAME and SIGNAL_NAME reuse the base names. TIER_LEVEL = 82 is OURS-pending. item_meatlump_lump_01_01 x11 is OPEN (token currency not in the fork). Credits are the questlist NGE amounts (REWARD_CREDITS on task rows is 0). Rebalance pending.
+	t7 retrieve_item _07_02a is activated by t0 but t1 watches only _02b/_02c. Dangling as shipped. TASK_NAME and SIGNAL_NAME reuse the base names. TIER_LEVEL = 82 is OURS-pending. Lumps are SOURCED QUEST_REWARD_LOOT_COUNT of eow_meatlump_lump (OURS appearance; master_item.tab:5620 dungeon iff absent from the client). Credits are SOURCED questlist QUEST_REWARD_BANK_CREDITS (Kashyyyk shipped-amount precedent).
 ]]
 
 mtpHideoutAccessHigh07ScreenPlay = ScreenPlay:new {
@@ -17,8 +17,9 @@ mtpHideoutAccessHigh07ScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpHideoutAccessHigh07ScreenPlay",
 	questName = "mtp_hideout_access_high_07",
 	repeatable = false,
-	rewardCredits = 8986, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 11, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 8986, -- SOURCED questlist/quest/mtp_hideout_access_high_07.tab QUEST_REWARD_BANK_CREDITS=8986 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	rewardXp = 0, -- SOURCED questlist/quest/mtp_hideout_access_high_07.tab QUEST_REWARD_BANK_CREDITS=8986 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	lumpCount = 11, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	TIER_LEVEL = 82, -- OURS-pending (Pre-CU has no CL 82/90)
 	tasks = {
 		{

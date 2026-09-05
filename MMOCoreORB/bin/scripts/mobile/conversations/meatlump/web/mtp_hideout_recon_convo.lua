@@ -10,7 +10,7 @@ mtp_hideout_recon_convo = ConvoTemplate:new {
 
 mtp_hideout_recon_convo_s_8 = ConvoScreen:new {
 	id = "s_8",
-	leftDialog = "@conversation/mtp_hideout_recon:s_8", -- recon offer; collection slot OPEN
+	leftDialog = "@conversation/mtp_hideout_recon:s_8", -- recon offer; meatlump_camera_starter_slot (col_meatlump_photo_01)
 	stopConversation = false,
 	options = {
 		{"@conversation/mtp_hideout_recon:s_6", "s_10"},
@@ -41,7 +41,7 @@ mtp_hideout_recon_convo:addScreen(mtp_hideout_recon_convo_s_16)
 
 mtp_hideout_recon_convo_s_20 = ConvoScreen:new {
 	id = "s_20",
-	leftDialog = "@conversation/mtp_hideout_recon:s_20", -- accept; collection OPEN
+	leftDialog = "@conversation/mtp_hideout_recon:s_20", -- accept; meatlump_camera_starter_slot
 	stopConversation = true,
 	options = {}
 }

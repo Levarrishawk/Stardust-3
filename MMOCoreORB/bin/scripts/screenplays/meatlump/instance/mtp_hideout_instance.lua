@@ -3,14 +3,14 @@
 -- Hub stays shared. This file is the per-player dungeon SOE ran in dungeon1.
 -- No journal module: this branch has no managers/quest/journal.lua.
 --
--- OPEN (not ported):
---   trigger/sequencer consumption beyond spawn-at-claim filter
---     (delayAction:spawn_entryb_object:2, delayAction:mtp_escort_entryb_object:2,
---     triggerId spawn_entryb_object, triggerId mtp_escort_trapped_meatlump_p2)
---   combat scaling / the 65 minimum
---   weak-security 150 HP
---   login validation
---   the rescue-endpoint trigger
+-- Ported here: entryb_controller at claim (delayAction:spawn_entryb_object /
+-- mtp_escort_entryb_object wired to shared_mtp_hideout_instance_entryb_controller.iff),
+-- escort p2 rows on startEscort, weak-security 150 HAM (ThemeParkLogic:normalizeNpc shape).
+-- Named absent:
+--   content_tools sequencer delayAction scripts -- Core3 has no sequencer
+--   NGE combat scaling / the 65 minimum -- absent from this fork
+--   mtp_hideout_instance_exit -- absent from the client; cell-1 ladder_exit stand-in stays
+--   NGE instance login occupant check -- absent from this engine; session timer still ejects
 
 MtpHideoutInstance = ScreenPlay:new {
 	numberOfActs = 1,
@@ -322,6 +322,24 @@ function MtpHideoutInstance:spawnRow(pBuilding, row)
 		CreatureObject(pMob):clearOptionBit(INVULNERABLE)
 		CreatureObject(pMob):setPvpStatusBitmask(ATTACKABLE)
 	end
+
+	-- SOURCED spawning/heroic/mtp_hideout_instance.tab script mtp_instance_weak_security.
+	-- ThemeParkLogic:normalizeNpc HAM loop (themeParkLogic.lua:930-947), ham=150. NGE combat scaling is absent from this fork.
+	if (row.script ~= nil and string.find(row.script, "mtp_instance_weak_security", 1, true) ~= nil) then
+		local ham = 150
+
+		for i = 0, 8 do
+			if (i % 3 == 0) then
+				CreatureObject(pMob):setHAM(i, ham)
+				CreatureObject(pMob):setBaseHAM(i, ham)
+				CreatureObject(pMob):setMaxHAM(i, ham)
+			else
+				CreatureObject(pMob):setHAM(i, ham / 100)
+				CreatureObject(pMob):setBaseHAM(i, ham / 100)
+				CreatureObject(pMob):setMaxHAM(i, ham / 100)
+			end
+		end
+	end
 end
 
 function MtpHideoutInstance:spawnProp(pBuilding, prop)
@@ -355,7 +373,8 @@ function MtpHideoutInstance:spawnProp(pBuilding, prop)
 end
 
 function MtpHideoutInstance:spawnExitAnalogue(pBuilding)
-	-- OPEN: mtp_hideout_instance_exit.iff is unregistered. Cell-1 stand-in from the buildout row.
+	-- mtp_hideout_instance_exit.iff is absent from the client (no shared client file).
+	-- Cell-1 ladder_exit stand-in from the buildout row stays.
 	local pCell = BuildingObject(pBuilding):getCell(1)
 
 	if (pCell == nil) then
@@ -898,6 +917,19 @@ function MtpHideoutInstance:startEscort(pPlayer, pNpc)
 	writeData(npcID .. ":mtpEscortOwner", playerID)
 	writeData(playerID .. ":mtpEscortNpc", npcID)
 	createEvent(5000, "MtpHideoutInstance", "escortTick", pNpc, tostring(playerID))
+
+	-- SOURCED triggerId mtp_escort_trapped_meatlump_p2: spawn extra rows without despawning the escort NPC.
+	local pBuilding = self:getBuilding()
+
+	if (pBuilding ~= nil) then
+		local rows = MtpHideoutInstancePopulation.rows
+
+		for i = 1, #rows do
+			if (rows[i].trigger == "mtp_escort_trapped_meatlump_p2") then
+				self:spawnRow(pBuilding, rows[i])
+			end
+		end
+	end
 end
 
 function MtpHideoutInstance:stopEscort(pNpc)

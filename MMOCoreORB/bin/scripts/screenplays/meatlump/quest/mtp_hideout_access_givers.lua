@@ -7,8 +7,7 @@
 	the .qst; the journal row comes from the integration branch later.
 
 	None of these givers stand in the hideout spawn map. Spawned at sourced
-	task waypoints (Kashyyyk radio shape). old_meatlump has no waypoint: OPEN
-	placement next to Kaiya.
+	task waypoints (Kashyyyk radio shape). old_meatlump has no sourced waypoint; placed next to Kaiya.
 ]]
 
 mtpHideoutAccessGiversScreenPlay = ScreenPlay:new {
@@ -16,11 +15,11 @@ mtpHideoutAccessGiversScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpHideoutAccessGiversScreenPlay",
 	givers = {
 		{ template = "dressed_corellia_vani_korr", planet = "corellia", x = -107, y = 28, z = -4465, heading = 0 },
-		{ template = "dressed_meatlump_male_03", planet = "corellia", x = -597, y = 24, z = -3927, heading = 0 }, -- crate_maker stand-in; appearance OPEN vs dressed_corran_horn
-		{ template = "dressed_meatlump_male_04", planet = "corellia", x = -6152, y = 29, z = -2004, heading = 0 }, -- droid_farmer stand-in; appearance OPEN vs dressed_quest_farmer
+		{ template = "dressed_meatlump_male_03", planet = "corellia", x = -597, y = 24, z = -3927, heading = 0 }, -- crate_maker stand-in; dressed_corran_horn is absent from the client
+		{ template = "dressed_meatlump_male_04", planet = "corellia", x = -6152, y = 29, z = -2004, heading = 0 }, -- droid_farmer stand-in; dressed_quest_farmer is absent from the client
 		{ template = "dressed_npe_dartas", planet = "talus", x = 843, y = 6, z = -3178, heading = 0 }, -- bike_racer
 		{ template = "dressed_meatlump_lieutenant_02", planet = "corellia", x = -277, y = 28, z = -4144, heading = 0 }, -- kaiya_merel
-		{ template = "dressed_meatlump_male_02", planet = "corellia", x = -280, y = 28, z = -4140, heading = 0 }, -- old_meatlump; OPEN placement
+		{ template = "dressed_meatlump_male_02", planet = "corellia", x = -280, y = 28, z = -4140, heading = 0 }, -- old_meatlump; no sourced waypoint, placed next to Kaiya
 	},
 }
 

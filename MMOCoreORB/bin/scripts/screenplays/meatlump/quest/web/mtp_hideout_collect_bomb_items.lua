@@ -5,7 +5,7 @@
 
 	SOURCED: questlist/questtask mtp_hideout_collect_bomb_items.
 
-	Credits are the questlist NGE amounts (REWARD_CREDITS on task rows is 0). Rebalance pending. item_meatlump_lump_01_01 x5 is OPEN (token currency not in the fork). Task types: nothing, retrieve_item, wait_for_signal, wait_for_tasks.
+	Credits are SOURCED questlist QUEST_REWARD_BANK_CREDITS (Kashyyyk shipped-amount precedent). Lumps are SOURCED QUEST_REWARD_LOOT_COUNT of eow_meatlump_lump (OURS appearance; master_item.tab:5620 dungeon iff absent from the client). Task types: nothing, retrieve_item, wait_for_signal, wait_for_tasks.
 ]]
 
 mtpHideoutCollectBombItemsScreenPlay = ScreenPlay:new {
@@ -13,8 +13,9 @@ mtpHideoutCollectBombItemsScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpHideoutCollectBombItemsScreenPlay",
 	questName = "mtp_hideout_collect_bomb_items",
 	repeatable = false,
-	rewardCredits = 0, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 5, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 0, -- SOURCED questlist/quest/mtp_hideout_collect_bomb_items.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	rewardXp = 0, -- SOURCED questlist/quest/mtp_hideout_collect_bomb_items.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=0
+	lumpCount = 5, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	tasks = {
 		{
 			id = 0,
@@ -41,7 +42,7 @@ mtpHideoutCollectBombItemsScreenPlay = ScreenPlay:new {
 			x = -516.0,
 			y = 28.0,
 			z = -4448.0,
-			spawnInherited = true, -- OPEN: hideout-cell retrieve; engine spawn is world-only
+			spawnInherited = true, -- Core3 spawnRetrieve is world-only (parent 0); hideout-cell retrieve is absent from this engine
 			-- onComplete wired to wait_for_tasks so the engine does not complete the quest on the first child
 		},
 		{
@@ -60,7 +61,7 @@ mtpHideoutCollectBombItemsScreenPlay = ScreenPlay:new {
 			x = -516.0,
 			y = 28.0,
 			z = -4448.0,
-			spawnInherited = true, -- OPEN: hideout-cell retrieve; engine spawn is world-only
+			spawnInherited = true, -- Core3 spawnRetrieve is world-only (parent 0); hideout-cell retrieve is absent from this engine
 			-- onComplete wired to wait_for_tasks so the engine does not complete the quest on the first child
 		},
 		{
@@ -79,7 +80,7 @@ mtpHideoutCollectBombItemsScreenPlay = ScreenPlay:new {
 			x = -516.0,
 			y = 28.0,
 			z = -4448.0,
-			spawnInherited = true, -- OPEN: hideout-cell retrieve; engine spawn is world-only
+			spawnInherited = true, -- Core3 spawnRetrieve is world-only (parent 0); hideout-cell retrieve is absent from this engine
 			-- onComplete wired to wait_for_tasks so the engine does not complete the quest on the first child
 		},
 		{

@@ -5,7 +5,7 @@
 
 	SOURCED: questlist/questtask mtp_find_infiltrator_5.
 
-	Credits are the questlist NGE amounts (REWARD_CREDITS on task rows is 0). Rebalance pending. item_meatlump_lump_01_01 x5 is OPEN (token currency not in the fork). Task types: nothing, wait_for_signal, wait_for_tasks.
+	Credits are SOURCED questlist QUEST_REWARD_BANK_CREDITS (Kashyyyk shipped-amount precedent). Lumps are SOURCED QUEST_REWARD_LOOT_COUNT of eow_meatlump_lump (OURS appearance; master_item.tab:5620 dungeon iff absent from the client). Task types: nothing, wait_for_signal, wait_for_tasks.
 ]]
 
 mtpFindInfiltrator5ScreenPlay = ScreenPlay:new {
@@ -13,8 +13,9 @@ mtpFindInfiltrator5ScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpFindInfiltrator5ScreenPlay",
 	questName = "mtp_find_infiltrator_5",
 	repeatable = false,
-	rewardCredits = 0, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 5, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 0, -- SOURCED questlist/quest/mtp_find_infiltrator_5.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=2500
+	rewardXp = 2500, -- SOURCED questlist/quest/mtp_find_infiltrator_5.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=2500
+	lumpCount = 5, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	tasks = {
 		{
 			id = 0,

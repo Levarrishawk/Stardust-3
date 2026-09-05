@@ -5,8 +5,7 @@
 
 	NO JOURNAL.
 
-	OPEN: CollectionManager.modifyCollectionSlotValue is paid on a win.
-	The collections branch merges later; print when the global is absent.
+	CollectionManager.modifyCollectionSlotValue is paid on a win (paySlot, guarded).
 	canCollectCollectible uses CollectionManager.hasCompletedCollectionSlotPrereq /
 	hasCompletedCollection / hasCompletedCollectionSlot the same way; print and
 	skip those three when the global is absent (OURS).
@@ -28,9 +27,11 @@
 	templates do not exist. downerUntil / applyDowner write
 	playerOid .. ":mtpDowner:" .. kind = os.time() + 45 (buff.tab:1707-1712,
 	<kind>_puzzle_downer DURATION 45). The -50 constitution/agility/stamina on
-	those rows is NGE stat balance -> OPEN (not applied). hasPuzzleBuff reads
-	playerOid .. ":mtpBuff:" .. kind (buff.tab:1713-1718 DURATION 120, +10 tries
-	at destroy_food_supplies.java:110). Nothing grants it yet -> OPEN.
+	those rows has no Pre-CU equivalent; the lockout carries the mechanic.
+	hasPuzzleBuff reads playerOid .. ":mtpBuff:" .. kind (buff.tab:1713-1718
+	DURATION 120, +10 tries at destroy_food_supplies.java:110). Grep of the six
+	puzzle java files: applyBuff is only used for *_puzzle_downer; the shipped
+	scripts never apply *_puzzle_buff (hasBuff is a reader only).
 ]]
 
 MtpMinigameObjects = ScreenPlay:new {
@@ -42,7 +43,7 @@ MtpMinigameObjects = ScreenPlay:new {
 	MAX_RANGE = 5, -- collection.MAX_RANGE_TO_COLLECT
 	FORCE_CLOSE = 10, -- java setSUIMaxRangeToObject 10.0f
 	DOWNER_SECONDS = 45, -- buff.tab:1707-1712 DURATION
-	BUFF_SECONDS = 120, -- buff.tab:1713-1718 DURATION; nothing grants yet
+	BUFF_SECONDS = 120, -- buff.tab:1713-1718 DURATION; shipped scripts never apply *_puzzle_buff
 	puzzleKind = {
 		destroy_food_supplies = "food_supplies",
 		destroy_weapon_cache = "weapons_cache",
@@ -382,9 +383,10 @@ MtpMinigameObjects = ScreenPlay:new {
 		template = "object/tangible/meatlump/event/meatlump_food_palette_01_02.iff",
 		kind = "destroy_food_supplies",
 		slot = "col_meatlump_food_sabotage_01:meatlump_food_crate_01_02",
-		x = -5242.90658, z = 6.7, y = 3656.78058,
+		-- naboo_2_6.tab line 229; cellNode 601455727 parent ply_nboo_house_s_s02_fp1
+		cellNode = 601455727,
+		x = 5.88742, z = 0.7, y = -6.01942,
 		qw = 1, qx = 0, qy = 0, qz = 0,
-		nabooHouse = true, -- OPEN: SOE cell of ply_nboo_house_s_s02_fp1; no snapshot oid
 	},
 	{
 		planet = "naboo",
@@ -392,9 +394,10 @@ MtpMinigameObjects = ScreenPlay:new {
 		template = "object/tangible/meatlump/event/meatlump_weapon_palette_01_04.iff",
 		kind = "destroy_weapon_cache",
 		slot = "col_meatlump_weapon_sabotage_01:meatlump_weapon_crate_01_04",
-		x = -5244.92812, z = 6.7, y = 3660.04813,
-		qw = 1, qx = 0, qy = 0, qz = 0,
-		nabooHouse = true, -- OPEN: SOE cell of ply_nboo_house_s_s02_fp1; no snapshot oid
+		-- naboo_2_6.tab line 232; cellNode 601455727 parent ply_nboo_house_s_s02_fp1
+		cellNode = 601455727,
+		x = 3.86588, z = 0.7, y = -2.75187,
+		qw = 0.993956, qx = 0, qy = 0.109778, qz = 0,
 	},
 	{
 		planet = "naboo",
@@ -402,9 +405,10 @@ MtpMinigameObjects = ScreenPlay:new {
 		template = "object/tangible/meatlump/event/meatlump_map_01_07.iff",
 		kind = "target_map_puzzle",
 		slot = "col_meatlump_map_01:meatlump_map_01_07",
-		x = -5250.48569, z = 6.750249, y = 3661.39631,
-		qw = 1, qx = 0, qy = 0, qz = 0,
-		nabooHouse = true, -- OPEN: SOE cell of ply_nboo_house_s_s02_fp1; no snapshot oid
+		-- naboo_2_6.tab line 238; cellNode 601455732 parent ply_nboo_house_s_s02_fp1
+		cellNode = 601455732,
+		x = -1.69169, z = 0.750249, y = -1.40369,
+		qw = -0.703845, qx = 0, qy = 0, qz = 0.710353,
 	},
 	{
 		planet = "naboo",
@@ -412,9 +416,10 @@ MtpMinigameObjects = ScreenPlay:new {
 		template = "object/tangible/meatlump/event/meatlump_container_01_06.iff",
 		kind = "code_break_minigame",
 		slot = "col_meatlump_container_01:meatlump_container_01_06",
-		x = -5255.85045, z = 6.7, y = 3664.80777,
+		-- naboo_2_6.tab line 239; cellNode 601455732 parent ply_nboo_house_s_s02_fp1
+		cellNode = 601455732,
+		x = -7.05645, z = 0.7, y = 2.00777,
 		qw = 1, qx = 0, qy = 0, qz = 0,
-		nabooHouse = true, -- OPEN: SOE cell of ply_nboo_house_s_s02_fp1; no snapshot oid
 	},
 	{
 		planet = "naboo",
@@ -422,9 +427,10 @@ MtpMinigameObjects = ScreenPlay:new {
 		template = "object/tangible/meatlump/event/meatlump_safe_01_09.iff",
 		kind = "slicing_minigame",
 		slot = "col_meatlump_safe_01:meatlump_safe_01_09",
-		x = -5254.89261, z = 6.7, y = 3666.66794,
+		-- naboo_2_6.tab line 241; cellNode 601455732 parent ply_nboo_house_s_s02_fp1
+		cellNode = 601455732,
+		x = -6.09861, z = 0.7, y = 3.86794,
 		qw = 1, qx = 0, qy = 0, qz = 0,
-		nabooHouse = true, -- OPEN: SOE cell of ply_nboo_house_s_s02_fp1; no snapshot oid
 	},
 	{
 		planet = "naboo",
@@ -695,7 +701,25 @@ function MtpMinigameObjects:spawnIfMissing(row)
 	local cellID = 0
 	local pCell = nil
 
-	if (row.building == "main" and row.cellName ~= nil) then
+	if (row.cellNode ~= nil) then
+		pCell = getSceneObject(row.cellNode)
+
+		if (pCell == nil or not SceneObject(pCell):isCellObject()) then
+			print("[meatlump] naboo house cell not a cell: " .. tostring(row.cellNode))
+			return false
+		end
+
+		cellID = SceneObject(pCell):getObjectID()
+
+		for n = 0, SceneObject(pCell):getContainerObjectsSize() - 1 do
+			local pObj = SceneObject(pCell):getContainerObject(n)
+
+			if (pObj ~= nil and SceneObject(pObj):getTemplateObjectPath() == row.template) then
+				self:wire(pObj, row)
+				return true
+			end
+		end
+	elseif (row.building == "main" and row.cellName ~= nil) then
 		pCell = self:hideoutCell(row.cellName)
 
 		if (pCell == nil) then
@@ -776,7 +800,7 @@ function MtpMinigameObjects.splitSlot(slot)
 	return string.sub(slot, 1, colon - 1), string.sub(slot, colon + 1)
 end
 
--- OPEN: collections branch merges later. Java pays collection.slotName on a win.
+-- Java pays collection.slotName on a win (guarded CollectionManager).
 function MtpMinigameObjects.paySlot(pPlayer, slot)
 	if (pPlayer == nil or slot == nil) then
 		return
@@ -903,8 +927,8 @@ function MtpMinigameObjects.consumeDevice(pPlayer, kind)
 	return true
 end
 
--- OURS: DirectorSharedMemory stand-in for <kind>_puzzle_buff. OPEN: nothing grants
--- playerOid .. ":mtpBuff:" .. kind = os.time() + BUFF_SECONDS yet.
+-- OURS: DirectorSharedMemory stand-in for <kind>_puzzle_buff. The shipped scripts
+-- never apply it (grep of the six puzzle java files: applyBuff is only *_puzzle_downer).
 function MtpMinigameObjects.hasPuzzleBuff(pPlayer, kind)
 	if (pPlayer == nil or kind == nil) then
 		return false

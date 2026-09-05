@@ -4,15 +4,20 @@
 	ruling 2026-09-04
 
 	SOURCED: theme_park/meatlump/meatlump_king.tab (26 offering/reaction rows).
+	SOURCED: hideout/meatlump_king.java case GIVE (line 102).
 	SOURCED: questlist mtp_meatlump_king_story QUEST_REWARD_BANK_CREDITS=49918
 	QUEST_REWARD_LOOT_NAME=item_mtp_king_corellia_times_story.
-	OPEN: give-reaction collection items and lump tokens.
+	Give-reaction: template match. Lumps are eow_meatlump_lump (master_item.tab:5620
+	dungeon iff absent from the client). Unfinished lump is
+	object/tangible/meatlump/hideout/meatlump_lump_unfinished.iff. Doll/newspaper
+	names go through CollectionStaticItems when present.
 ]]
 
 MeatlumpKing = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "MeatlumpKing",
 	FLAVOR = { "s_25", "s_26", "s_27", "s_28", "s_29", "s_30", "s_31", "s_33", "s_35", "s_37", "s_39", "s_44" },
+	UNFINISHED_TEMPLATE = "object/tangible/meatlump/hideout/meatlump_lump_unfinished.iff",
 	offerings = {
 		{ offering = "bow", reaction = "bow", chat = "", give = "" },
 		{ offering = "item_meatlump_lump_01_01", reaction = "celebrate", chat = "mtp_king_lump", give = "meatlump_hench_doll_arm_r_02_01:meatlump_newspaper_02_09" },
@@ -53,6 +58,73 @@ function MeatlumpKing.flavorScreen()
 	return MeatlumpKing.FLAVOR[n]
 end
 
+function MeatlumpKing.offeringTemplate(name)
+	if (name == "item_meatlump_lump_01_01") then
+		return MtpQuestEngine.LUMP_TEMPLATE
+	end
+
+	if (name == "item_meatlump_lump_unfinished_01_01") then
+		return MeatlumpKing.UNFINISHED_TEMPLATE
+	end
+
+	return nil
+end
+
+function MeatlumpKing.resolveGiveTemplate(name)
+	if (name == "item_meatlump_lump_01_01") then
+		return MtpQuestEngine.LUMP_TEMPLATE
+	end
+
+	if (CollectionStaticItems ~= nil and CollectionStaticItems[name] ~= nil) then
+		local entry = CollectionStaticItems[name]
+
+		if (entry.inFork == false) then
+			print("[meatlump] king give item absent from the client: " .. name)
+			return nil
+		end
+
+		if (entry.template ~= nil) then
+			return entry.template
+		end
+	end
+
+	-- Bridge addTemplate paths in this tree (creature/loot, not creature_loot).
+	if (name == "meatlump_hench_doll_arm_r_02_01") then
+		return "object/tangible/loot/creature/loot/collections/meatlump_hench_doll_arm.iff"
+	end
+
+	if (name == "meatlump_newspaper_02_09") then
+		return "object/tangible/loot/creature/loot/collections/meatlump_newspaper_09.iff"
+	end
+
+	print("[meatlump] CollectionStaticItems absent; give " .. tostring(name) .. " not granted")
+	return nil
+end
+
+function MeatlumpKing.splitGive(give)
+	local names = {}
+
+	if (give == nil or give == "") then
+		return names
+	end
+
+	local rest = give
+
+	while (rest ~= "") do
+		local colon = string.find(rest, ":", 1, true)
+
+		if (colon == nil) then
+			names[#names + 1] = rest
+			break
+		end
+
+		names[#names + 1] = string.sub(rest, 1, colon - 1)
+		rest = string.sub(rest, colon + 1)
+	end
+
+	return names
+end
+
 function MeatlumpKing.openOfferings(pPlayer, pNpc)
 	if (pPlayer == nil or pNpc == nil) then
 		return
@@ -86,6 +158,19 @@ function MeatlumpKing:onOffering(pPlayer, pSui, eventIndex, args)
 		return
 	end
 
+	local needTemplate = self.offeringTemplate(o.offering)
+
+	if (needTemplate ~= nil) then
+		if (MtpQuestEngine.countTemplate(pPlayer, needTemplate) < 1) then
+			CreatureObject(pPlayer):sendSystemMessage("@set_bonus:vendor_cant_purchase")
+			return
+		end
+
+		if (not MtpQuestEngine.removeTemplate(pPlayer, needTemplate, 1)) then
+			return
+		end
+	end
+
 	local npcOid = readData(SceneObject(pPlayer):getObjectID() .. ":mtpKingNpc")
 	local pNpc = getSceneObject(npcOid)
 
@@ -97,10 +182,23 @@ function MeatlumpKing:onOffering(pPlayer, pSui, eventIndex, args)
 		spatialChat(pNpc, "@theme_park/meatlump/meatlump_king:" .. o.chat)
 	end
 
-	if (o.give ~= nil and o.give ~= "") then
-		-- OPEN: give-reaction items (doll parts, newspapers, lumps) are collection
-		-- loot the collections branch owns. Token lumps are not in the fork.
-		CreatureObject(pPlayer):sendSystemMessage("@set_bonus:vendor_cant_purchase")
-		CreatureObject(pPlayer):sendSystemMessage("Need " .. o.offering .. " to receive " .. o.give)
+	if (o.give == nil or o.give == "") then
+		return
+	end
+
+	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	if (pInventory == nil) then
+		return
+	end
+
+	local names = self.splitGive(o.give)
+
+	for i = 1, #names do
+		local template = self.resolveGiveTemplate(names[i])
+
+		if (template ~= nil) then
+			giveItem(pInventory, template, -1)
+		end
 	end
 end

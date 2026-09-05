@@ -56,7 +56,7 @@ mtp_hideout_weapon_supply_tech_convo:addScreen(mtp_hideout_weapon_supply_tech_co
 
 mtp_hideout_weapon_supply_tech_convo_s_49 = ConvoScreen:new {
 	id = "s_49",
-	leftDialog = "@conversation/mtp_hideout_weapon_supply_tech:s_49", -- delivery active: bad comlink OPEN
+	leftDialog = "@conversation/mtp_hideout_weapon_supply_tech:s_49", -- delivery active; quest_shuttle_comlink is absent from this engine
 	stopConversation = true,
 	options = {}
 }
@@ -74,7 +74,7 @@ mtp_hideout_weapon_supply_tech_convo:addScreen(mtp_hideout_weapon_supply_tech_co
 
 mtp_hideout_weapon_supply_tech_convo_s_17 = ConvoScreen:new {
 	id = "s_17",
-	leftDialog = "@conversation/mtp_hideout_weapon_supply_tech:s_17", -- grant delivery (comlink OPEN)
+	leftDialog = "@conversation/mtp_hideout_weapon_supply_tech:s_17", -- grant delivery; meatlump_weapon_activation_01 (col_meatlump_weapon_sabotage_01)
 	stopConversation = true,
 	options = {}
 }

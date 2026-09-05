@@ -33,6 +33,12 @@ function mtp_hideout_weapon_supply_tech_conv_handler:runScreenHandlers(pConvTemp
 		MtpWebTasks.grant(pPlayer, "mtp_camp_quest_naboo")
 	elseif (screenID == "s_17") then
 		MtpWebTasks.grant(pPlayer, "mtp_hideout_retrieve_delivery")
+
+		if (CollectionManager == nil or CollectionManager.modifyCollectionSlotValue == nil) then
+			print("[meatlump] CollectionManager absent; slot meatlump_weapon_activation_01 not paid")
+		else
+			CollectionManager.modifyCollectionSlotValue(pPlayer, "meatlump_weapon_activation_01", 1)
+		end
 	end
 
 	return pClonedScreen

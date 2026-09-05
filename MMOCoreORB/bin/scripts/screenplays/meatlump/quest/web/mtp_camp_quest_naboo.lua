@@ -5,7 +5,7 @@
 
 	SOURCED: questlist/questtask mtp_camp_quest_naboo.
 
-	Credits are the questlist NGE amounts (REWARD_CREDITS on task rows is 0). Rebalance pending. go_to_location is implemented in MtpWebTasks (active area); not in MtpQuestEngine. Task types: go_to_location, nothing, wait_for_tasks.
+	Credits are SOURCED questlist QUEST_REWARD_BANK_CREDITS (Kashyyyk shipped-amount precedent). go_to_location is implemented in MtpWebTasks (active area); not in MtpQuestEngine. Task types: go_to_location, nothing, wait_for_tasks.
 ]]
 
 mtpCampQuestNabooScreenPlay = ScreenPlay:new {
@@ -13,8 +13,9 @@ mtpCampQuestNabooScreenPlay = ScreenPlay:new {
 	screenplayName = "mtpCampQuestNabooScreenPlay",
 	questName = "mtp_camp_quest_naboo",
 	repeatable = false,
-	rewardCredits = 0, -- OPEN: shipped NGE amount; the rebalance is a maintainer ruling
-	lumpCount = 0, -- OPEN: item_meatlump_lump_01_01 is not in the fork
+	rewardCredits = 0, -- SOURCED questlist/quest/mtp_camp_quest_naboo.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=1000
+	rewardXp = 1000, -- SOURCED questlist/quest/mtp_camp_quest_naboo.tab QUEST_REWARD_BANK_CREDITS=0 QUEST_REWARD_EXPERIENCE_AMOUNT=1000
+	lumpCount = 0, -- SOURCED QUEST_REWARD_LOOT_COUNT; OURS eow_meatlump_lump (master_item.tab:5620 dungeon iff absent from the client)
 	tasks = {
 		{
 			id = 0,

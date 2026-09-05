@@ -1,9 +1,14 @@
 -- mtp hideout instance population
 -- ruling 2026-09-04
 -- Rows from spawning/heroic/mtp_hideout_instance.tab.
--- trigger = column triggerId. Sequencer objects stay OPEN (no template).
+-- trigger = column triggerId.
 -- Axis: repo x <- loc_x, repo z <- loc_y (height), repo y <- loc_z, heading <- yaw.
--- Templates: the hub, the hideout part, or an appearance match. OPEN when none.
+-- Hideout folder registrations (objects.lua / serverobjects.lua): hotdog_grill_01/02,
+-- lump_unfinished, entryb_controller, instance_supplies, ladder_enter/exit, rock_chair,
+-- king_story. No sequencer object template. delayAction sequencer scripts are absent
+-- from Core3 (no content_tools sequencer). delayAction:spawn_entryb_object:2 and
+-- delayAction:mtp_escort_entryb_object:2 spawn the registered entryb_controller
+-- (client shared_mtp_hideout_instance_entryb_controller.iff ships) -- see props.
 
 MtpHideoutInstancePopulation = {
 	rows = {
@@ -41,7 +46,7 @@ MtpHideoutInstancePopulation = {
 		{ soe = "mtp_instance_power_droid", mapped = "eg6_power_droid", social = "mtp_droid_target", cell = "computer", x = -7.4, z = -16.0, y = 119.3, heading = 127.0, respawn = 0, trigger = "mtp_kill_all_droids", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_r5", mapped = "r5", social = "mtp_droid_target", cell = "computer", x = 19.9, z = -16.0, y = 121.3, heading = 74.0, respawn = 0, trigger = "mtp_kill_all_droids", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_mouse_droid", mapped = "mouse_droid", social = "mtp_droid_target", cell = "computer", x = 1.3, z = -16.0, y = 105.0, heading = 100.0, respawn = 0, trigger = "mtp_kill_all_droids", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
-		-- OPEN: delayAction:spawn_entryb_object:2 in  (no repo template)
+		-- delayAction:spawn_entryb_object:2 -> entryb_controller in props (mtp_kill_all_droids)
 		{ soe = "mtp_instance_r5", mapped = "r5", social = "mtp_droid_target", cell = "entryb", x = 2.5, z = -12.0, y = 50.1, heading = 169.0, respawn = 0, trigger = "mtp_kill_specific_droids", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_blastromech", mapped = "som_decrepit_blastromech", social = "mtp_droid_target", cell = "guardroom", x = 20.1, z = -16.0, y = 74.5, heading = -142.0, respawn = 0, trigger = "mtp_kill_specific_droids", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_power_droid", mapped = "eg6_power_droid", social = "mtp_droid_target", cell = "guardroom", x = 15.0, z = -16.0, y = 78.7, heading = 114.0, respawn = 0, trigger = "mtp_kill_specific_droids", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
@@ -98,7 +103,7 @@ MtpHideoutInstancePopulation = {
 		{ soe = "mtp_instance_security_droid_01", mapped = "warren_agro_droid", social = "mtp_security_droid", cell = "computer", x = 2.9, z = -16.0, y = 112.3, heading = 164.0, respawn = 0, trigger = "mtp_kill_specific_droids", script = "theme_park.meatlump.hideout.mtp_instance_weak_security" },
 		{ soe = "mtp_instance_security_droid_01", mapped = "warren_agro_droid", social = "mtp_security_droid", cell = "computer", x = 17.8, z = -16.0, y = 123.9, heading = -158.0, respawn = 0, trigger = "mtp_kill_specific_droids", script = "theme_park.meatlump.hideout.mtp_instance_weak_security" },
 		{ soe = "mtp_instance_security_droid_02", mapped = "warren_agro_droid", social = "mtp_security_droid", cell = "computer", x = 2.4, z = -16.0, y = 99.0, heading = 12.0, respawn = 0, trigger = "mtp_kill_specific_droids", script = "theme_park.meatlump.hideout.mtp_instance_weak_security" },
-		-- OPEN: delayAction:spawn_entryb_object:2 in  (no repo template)
+		-- delayAction:spawn_entryb_object:2 -> entryb_controller in props (mtp_kill_specific_droids)
 		{ soe = "mtp_instance_aggro_security_droid_01", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "entryb", x = 2.5, z = -12.0, y = 50.1, heading = 169.0, respawn = 0, trigger = "mtp_recover_supplies", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_aggro_security_droid_02", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "guardroom", x = 20.1, z = -16.0, y = 74.5, heading = -142.0, respawn = 0, trigger = "mtp_recover_supplies", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_aggro_security_droid_02", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "guardroom", x = 15.0, z = -16.0, y = 78.7, heading = 114.0, respawn = 0, trigger = "mtp_recover_supplies", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
@@ -133,7 +138,7 @@ MtpHideoutInstancePopulation = {
 		{ soe = "mtp_instance_ragtag_cudgel", mapped = "meatlump_clod", social = "", cell = "computer", x = -7.4, z = -16.0, y = 119.3, heading = 127.0, respawn = 0, trigger = "mtp_recover_supplies", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_aggro_security_droid_01", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "computer", x = 19.9, z = -16.0, y = 121.3, heading = 74.0, respawn = 0, trigger = "mtp_recover_supplies", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_aggro_security_droid_02", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "computer", x = 1.3, z = -16.0, y = 105.0, heading = 100.0, respawn = 0, trigger = "mtp_recover_supplies", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
-		-- OPEN: delayAction:spawn_entryb_object:2 in  (no repo template)
+		-- delayAction:spawn_entryb_object:2 -> entryb_controller in props (mtp_recover_supplies)
 		{ soe = "mtp_instance_aggro_security_droid_01", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "entryb", x = 2.0, z = -12.0, y = 48.6, heading = 158.0, respawn = 0, trigger = "mtp_escort_trapped_meatlump", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_aggro_security_droid_02", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "guardroom1", x = -15.4, z = -12.0, y = 91.1, heading = 63.0, respawn = 0, trigger = "mtp_escort_trapped_meatlump", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_aggro_security_droid_01", mapped = "warren_agro_droid", social = "mtp_droid_target", cell = "mess", x = -33.5, z = -12.0, y = 94.8, heading = -4.0, respawn = 0, trigger = "mtp_escort_trapped_meatlump", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
@@ -163,10 +168,16 @@ MtpHideoutInstancePopulation = {
 		{ soe = "mtp_instance_ragtag_blackjack", mapped = "meatlump_clod", social = "", cell = "planning", x = -25.9, z = -12.0, y = 154.0, heading = -48.0, respawn = 0, trigger = "mtp_escort_trapped_meatlump_p2", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_ragtag_cudgel", mapped = "meatlump_clod", social = "", cell = "planning", x = -31.9, z = -12.0, y = 155.3, heading = -142.0, respawn = 0, trigger = "mtp_escort_trapped_meatlump_p2", script = "theme_park.meatlump.hideout.mtp_instance_loiter" },
 		{ soe = "mtp_instance_lost_meatlump", mapped = "dressed_meatlump_hideout_male_01", social = "", cell = "computer", x = 24.1, z = -16.0, y = 121.4, heading = -86.0, respawn = 0, trigger = "mtp_escort_trapped_meatlump", script = "conversation.mtp_trapped_meatlump_target" },
-		-- OPEN: delayAction:mtp_escort_entryb_object:2 in  (no repo template)
+		-- delayAction:mtp_escort_entryb_object:2 -> entryb_controller in props (mtp_escort_trapped_meatlump)
 	},
 	props = {
-		{ iff = "object/tangible/meatlump/hideout/mtp_hideout_instance_entryb_controller.iff", cell = "entryb", x = 3.7, z = -12.0, y = 36.6, yaw = 0.0, trigger = "spawn_entryb_object" },
+		-- delayAction:spawn_entryb_object:2 / mtp_escort_entryb_object:2. Pose from
+		-- spawning/heroic/mtp_hideout_instance.tab entryb_controller (cell entryb, 3.7 / -12 / 36.6).
+		-- Wired to claim enterSignals so spawnProp runs (trigger spawn_entryb_object never matched).
+		{ iff = "object/tangible/meatlump/hideout/mtp_hideout_instance_entryb_controller.iff", cell = "entryb", x = 3.7, z = -12.0, y = 36.6, yaw = 0.0, trigger = "mtp_kill_all_droids" },
+		{ iff = "object/tangible/meatlump/hideout/mtp_hideout_instance_entryb_controller.iff", cell = "entryb", x = 3.7, z = -12.0, y = 36.6, yaw = 0.0, trigger = "mtp_kill_specific_droids" },
+		{ iff = "object/tangible/meatlump/hideout/mtp_hideout_instance_entryb_controller.iff", cell = "entryb", x = 3.7, z = -12.0, y = 36.6, yaw = 0.0, trigger = "mtp_recover_supplies" },
+		{ iff = "object/tangible/meatlump/hideout/mtp_hideout_instance_entryb_controller.iff", cell = "entryb", x = 3.7, z = -12.0, y = 36.6, yaw = 0.0, trigger = "mtp_escort_trapped_meatlump" },
 		{ iff = "object/static/structure/military/bunker_crate_style_01.iff", cell = "hall1b", x = 17.5, z = -16.0, y = 98.0, yaw = 0.0, trigger = "mtp_kill_all_droids" },
 		{ iff = "object/static/structure/military/bunker_crate_style_01.iff", cell = "hall1b", x = 12.2, z = -16.0, y = 93.0, yaw = 0.0, trigger = "mtp_kill_specific_droids" },
 		{ iff = "object/static/structure/military/bunker_crate_style_01.iff", cell = "hall1b", x = 12.2, z = -16.0, y = 93.0, yaw = 0.0, trigger = "mtp_recover_supplies" },

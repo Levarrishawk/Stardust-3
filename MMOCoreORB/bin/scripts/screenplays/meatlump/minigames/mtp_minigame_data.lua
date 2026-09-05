@@ -3,10 +3,11 @@
 
 	ruling 2026-09-05: "ensuring meatlump ... done"
 
-	OPEN: /Script.sliceTerminal, /Script.questionnaire, /Script.disarmBomb
+	OURS: /Script.sliceTerminal, /Script.questionnaire, /Script.disarmBomb
 	do not ship. Task logic and tables live here so a later page has
 	nothing missing. evaluate* functions take the player's answer and
-	return the java outcome. No SUI page is opened from this file.
+	return the java outcome. The four TEXT puzzles are Core3 boxes in
+	mtp_minigame_objects.lua (OURS presentation on SOURCED logic).
 
 	Sources: datatables/theme_park/meatlump_threshold.tab,
 	meatlump_safe_passwords.tab, meatlump_target_map_text.tab,
