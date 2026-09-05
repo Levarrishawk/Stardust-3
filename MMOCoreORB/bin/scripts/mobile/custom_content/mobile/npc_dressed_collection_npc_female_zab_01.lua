@@ -24,13 +24,14 @@ npc_dressed_collection_npc_female_zab_01 = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/npc_dressed_collection_npc_female_zab_01.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "collectorNpcConvoTemplate",
+	objectMenuComponent = "CollectorNpcMenuComponent",
 	attacks = {
 	}
 }

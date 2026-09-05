@@ -754,6 +754,11 @@ includeFile("cities/chandrila_nayli_outpost.lua")
 includeFile("cities/hutta_bilbousa_city.lua")
 includeFile("poi/naboo_memorial.lua")
 
+-- Collections
+includeFile("collections/collections_ui.lua")
+includeFile("collections/collector_npc.lua")
+includeFile("collections/collector_spawns.lua")
+
 -- Mustafar
 -- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.
 includeFile("mustafar/mustafar_quest_xp.lua")
