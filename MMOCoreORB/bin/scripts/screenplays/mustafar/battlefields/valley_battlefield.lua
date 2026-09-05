@@ -145,7 +145,7 @@ ValleyBattlefield = ScreenPlay:new {
 	-- live exit_one 541,155,-160,mustafar -> a REAL Mustafar world coordinate,
 	-- 10.8 m from Chapter Three 01's scout post. This used to depend on a 60 m
 	-- exemption inside mustafar_boundaries:notifySpawnAreaSe. That exemption was a
-	-- one-way door out of the map and round G(d) deleted it; the exit point is free
+	-- one-way door out of the map and the boundary fix deleted it; the exit point is free
 	-- ground now because Se0/Se1/Se2 were moved instead. Nearest wall is Se1 at
 	-- (825,-300) r256, 60.6 m away.
 	exitX = 541,
@@ -167,7 +167,7 @@ ValleyBattlefield = ScreenPlay:new {
 	rezMax = 3,            -- forward_commander.java:704
 	-- UPPERCASE, and it has to be. DirectorManager.cpp:863-869 registers every
 	-- badge as a Lua global under badge->getKey().toUpperCase(), so a lowercase
-	-- key makes the _G[] guard a permanent no-op. Corrected in round G(b1);
+	-- key makes the _G[] guard a permanent no-op. Corrected with the badge pass;
 	-- volcano_battlefield.lua:256 had the same defect. This server's
 	-- badge_map.iff carries no bdg_must_* row, so the guard is currently a
 	-- no-op by data rather than by defect.
@@ -313,7 +313,9 @@ ValleyBattlefield.stage1Props = {
 	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/demo_pack.iff", locx = -3, locz = 2, yaw = 0, isDemoPack = true },
 	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/demo_pack.iff", locx = -4, locz = 0, yaw = 0, isDemoPack = true },
 	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/power_generator.iff", locx = 26, locz = -22, yaw = 25, isGenerator = true },
-	{ template = "object/tangible/collection/rare_heavy_oppressor_flame_thrower.iff", locx = 10, locz = -35, yaw = 0 },
+	-- SOURCED valley_event_data.tab stage 1 locx 10 locz -35 yaw 0.
+	-- Slot rare_heavy_oppressor_flame_thrower.tpf:9 collection.slotName.
+	{ template = "object/tangible/collection/rare_heavy_oppressor_flame_thrower.iff", locx = 10, locz = -35, yaw = 0, slot = "col_rare_heavy_01:oppressor_flame_thrower_01" },
 	-- lower camp
 	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/must_bandit_fence_16m.iff", locx = 17.7881, locz = -2.17578, yaw = 129.671 },
 	{ template = "object/tangible/dungeon/mustafar/valley_battlefield/must_bandit_fence_8m.iff", locx = 26.9551, locz = 4.29785, yaw = 0 },
@@ -839,6 +841,10 @@ function ValleyBattlefield:runStage1(session)
 				SceneObject(pObj):setObjectMenuComponent("SomDemoPackMenuComponent")
 			else
 				table.insert(track.props, oid)
+
+				if (row.slot ~= nil) then
+					CollectionObjects:bindObject(pObj, row.slot)
+				end
 
 				if (row.isDemoPack) then
 					printLuaError("ValleyBattlefield: DemolitionPack is not loaded; demo pack radial not attached")
