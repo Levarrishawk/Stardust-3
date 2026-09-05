@@ -38,15 +38,27 @@
 	Rewards (collection.java:95 grantCollectionReward; player_collection.java:27):
 	  rewardsFor(collectionName)
 	  grantCollectionReward(pPlayer, collectionName, canReset)
-	Implemented kinds: item (iff path only), xpModifier, quest_signal (hook), reward_text (shipped prose),
-	slot_name (via modifyCollectionSlotValue).
-	OPEN: command, skill_mod, crafting_template, grantRandomItem, grantWeightedRandom, quest,
-	item static_item names (no iff path — NGE createStaticItem).
+	  updateCraftingSlot(pPlayer, template) — collection.java:272 (not a grant kind)
+	Implemented kinds: item (iff path and CollectionStaticItems bridge), xpModifier
+	(OURS scale * xp.java:2023 repeatCollectionXpModifier), quest_signal (hook),
+	reward_text (shipped prose),
+	slot_name (modifyCollectionSlotValue; badge_book slots go through grantBadgeSlot),
+	command (PlayerObject:addAbility when the name is in the command/ability table),
+	grantRandomItem / grantWeightedRandom (java roll; names resolve through the bridge),
+	quest (OPEN — questGrant hook for the journal branch),
+	skill_mod (OPEN — CreatureObject:addSkillMod is not a Lua binding),
+	crafting_template (updateCraftingSlot reverse-index; not a schematic grant).
+	OPEN: item static_item names whose template is not in the fork,
+	lootSchematic use (NGE limited-use schematic — no Core3 twin; item is granted when inFork),
+	command names not in the command table, quest, skill_mod apply,
+	crafting_template schematic grant, stackAmount increment (no Lua setUseCount).
 ]]
 
 require("managers.collections.collection_data")
+require("managers.collections.collection_static_items")
 
 CollectionManager = CollectionManager or {}
+require("managers.collections.collection_badges")
 
 CollectionManager.SCREENPLAY = "Collections"
 CollectionManager.BADGE_BOOK = "badge_book"
@@ -58,29 +70,41 @@ CollectionManager.NO_MESSAGE = "noMessage"
 CollectionManager.NO_SCRIPT_NOTIFY = "noScriptNotifyOnModify"
 
 -- XP amount rule (OURS). SOE xp.java:1933 grantCollectionXP is xpModifier * (XP in the current
--- NGE combat-level band) and grantXpByTemplate uses quest_combat / quest_crafting / quest_social,
--- none of which this tree has. mustafar_quest_xp.lua already ruled combat_general as the
--- substitution for unknown NGE XP types (PlayerObjectImplementation.cpp falls through to a
--- 2000 cap on an unknown type). Amount: math.floor(xpModifier * 1000) combat_general, or
--- space_combat_general when isSpaceXp is set (PlayerManagerImplementation.cpp already awards
--- that type). xpModifier in rewards.tab is 0 / 0.1 / 0.2 / 0.25 / 0.3, so the grant is 0 / 100
--- / 200 / 250 / 300 — the same scale as kidnappedNobleConvoHandler.lua:21 (250 combat_general).
+-- NGE combat-level band) * xp.java:2023 repeatCollectionXpModifier, and grantXpByTemplate uses
+-- quest_combat / quest_crafting / quest_social, none of which this tree has. mustafar_quest_xp.lua
+-- already ruled combat_general as the substitution for unknown NGE XP types
+-- (PlayerObjectImplementation.cpp falls through to a 2000 cap on an unknown type). Amount:
+-- math.floor(xpModifier * 1000 * repeat) combat_general, or space_combat_general when isSpaceXp
+-- is set (PlayerManagerImplementation.cpp already awards that type). xpModifier in rewards.tab
+-- is 0 / 0.1 / 0.2 / 0.25 / 0.3, so the first grant is 0 / 100 / 200 / 250 / 300 — the same
+-- scale as kidnappedNobleConvoHandler.lua:21 (250 combat_general). The NGE level band does not
+-- exist Pre-CU, so XP_MODIFIER_SCALE stays. Repeat: max(0.1, 1 - repeat/10) where repeat =
+-- slot value of <collectionName>_tracker minus 1 (xp.java:1945, 2023-2032), applied when
+-- repeat > 0.
 CollectionManager.XP_MODIFIER_SCALE = 1000
 CollectionManager.XP_TYPE = "combat_general"
 CollectionManager.SPACE_XP_TYPE = "space_combat_general"
 
 CollectionManager.OPEN_REWARD_KINDS = {
-	"command",
-	"skill_mod",
-	"crafting_template",
-	"grantRandomItem",
-	"grantWeightedRandom",
-	"quest",
-	"item static_item names (no iff path)",
+	"skill_mod apply (no CreatureObject:addSkillMod Lua binding)",
+	"command: creature_milking_buff, lair_egg_buff, flangedjessoon",
+	"quest (questGrant hook only — no journal on this branch)",
+	"item static_item names whose template is not in the fork",
+	"lootSchematic use (NGE limited-use schematic — no Core3 twin)",
+	"crafting_template schematic grant (java uses updateCraftingSlot, not grantSchematic)",
+	"stackAmount increment (no Lua setUseCount binding)",
 }
+
+-- collection.java:38 MAXLOOP for grantWeightedRandom
+CollectionManager.WEIGHTED_RANDOM_MAXLOOP = 7
+-- rewards.tab skill_mod_amount column default i[1]
+CollectionManager.SKILL_MOD_AMOUNT_DEFAULT = 1
+-- Hook name the journal branch consumes (parallel to quest_signal)
+CollectionManager.QUEST_GRANT_HOOK = "questGrant"
 
 CollectionManager.listeners = CollectionManager.listeners or {}
 CollectionManager.questSignalListeners = CollectionManager.questSignalListeners or {}
+CollectionManager.questGrantListeners = CollectionManager.questGrantListeners or {}
 
 function CollectionManager.addListener(fn)
 	if fn == nil then
@@ -96,6 +120,14 @@ function CollectionManager.addQuestSignalListener(fn)
 	end
 
 	CollectionManager.questSignalListeners[#CollectionManager.questSignalListeners + 1] = fn
+end
+
+function CollectionManager.addQuestGrantListener(fn)
+	if fn == nil then
+		return
+	end
+
+	CollectionManager.questGrantListeners[#CollectionManager.questGrantListeners + 1] = fn
 end
 
 local function slotIndex(slotName)
@@ -665,8 +697,12 @@ function CollectionManager.handleCollectionSlotModified(pPlayer, bookName, pageN
 		return
 	end
 
-	-- player_collection.java:29 — badge_book has its own message path
+	-- player_collection.java:29 — badge_book has its own message path.
+	-- NGE: the native slot IS the badge. OURS: award the Core3 badge on complete.
 	if bookName == CollectionManager.BADGE_BOOK then
+		if completed then
+			CollectionManager.grantBadgeSlot(pPlayer, slotName)
+		end
 		return
 	end
 
@@ -806,6 +842,14 @@ local function itemIsIff(item)
 	return false
 end
 
+local function playerGhost(pPlayer)
+	if pPlayer == nil then
+		return nil
+	end
+
+	return CreatureObject(pPlayer):getPlayerObject()
+end
+
 local function giveIffItem(pPlayer, template, stackAmount)
 	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
 	if pInventory == nil then
@@ -816,12 +860,155 @@ local function giveIffItem(pPlayer, template, stackAmount)
 		template = template .. ".iff"
 	end
 
+	-- DirectorManager.cpp:2431 giveItem (register :479)
 	local pItem = giveItem(pInventory, template, -1)
 	if pItem ~= nil and stackAmount ~= nil and stackAmount > 1 then
-		TangibleObject(pItem):setUseCount(stackAmount)
+		-- java collection.java:193-196 / 227-229 setCount if AUTO_STACK_SCRIPT.
+		-- Core3 TangibleObjectImplementation.cpp setUseCount has no Lua binding;
+		-- pcall so a missing method cannot abort the rest of the grant.
+		pcall(function()
+			TangibleObject(pItem):setUseCount(stackAmount)
+		end)
+	end
+
+	if pItem ~= nil then
+		-- collection.java:1351 / 1375 SID_REWARD_ITEM
+		local itemMessage = LuaStringIdChatParameter("@collection:reward_item")
+		itemMessage:setTT(SceneObject(pItem):getDisplayedName())
+		CreatureObject(pPlayer):sendSystemMessage(itemMessage:_getObject())
 	end
 
 	return pItem
+end
+
+-- collection.java:1321-1322: last ':' segment of item_stats objvars is the slot.
+local function staticItemSlotName(info)
+	if info == nil or info.slot == nil or info.slot == "" then
+		return nil
+	end
+
+	return string.match(info.slot, "([^:]+)$")
+end
+
+-- collection.java:179-235. Iff paths go through giveItem. Static-item names
+-- resolve through CollectionStaticItems (static_item.java:16-19). Grant with
+-- DirectorManager.cpp:2431 giveItem when inFork. lootSchematic use is OPEN
+-- (NGE limited-use schematic has no Core3 twin); the item is still granted.
+local function grantRewardItem(pPlayer, itemName, stackAmount)
+	if itemName == nil or itemName == "" then
+		return nil
+	end
+
+	if itemIsIff(itemName) then
+		return giveIffItem(pPlayer, itemName, stackAmount)
+	end
+
+	local info = CollectionStaticItems[itemName]
+	if info == nil then
+		print("CollectionManager: OPEN static item unknown: " .. itemName)
+		return nil
+	end
+
+	if info.inFork ~= true then
+		print("CollectionManager: OPEN static item not in fork: " .. itemName)
+		return nil
+	end
+
+	local pItem = giveIffItem(pPlayer, info.template, stackAmount)
+	if pItem ~= nil and info.slot ~= nil and info.slot ~= "" then
+		-- screenplays/collections: writeStringData(oid .. ":collection.slot", slot)
+		local oid = SceneObject(pItem):getObjectID()
+		writeStringData(oid .. ":collection.slot", info.slot)
+	end
+
+	return pItem
+end
+
+-- collection.java:1303 getRandomItem — rand(0, length-1)
+local function pickRandomItem(items)
+	if items == nil or #items == 0 then
+		return nil
+	end
+
+	local index = getRandomNumber(1, #items)
+	return items[index]
+end
+
+-- collection.java:1313-1339 getWeightedRandomItem. Re-roll only while the
+-- picked item's item_stats slot is already completed (MAXLOOP tries). The last
+-- pick is kept when every try is complete (java leaves randomChoice there).
+local function pickWeightedRandomItem(pPlayer, items)
+	if items == nil or #items == 0 then
+		return nil
+	end
+
+	local choice = items[1]
+	for _ = 1, CollectionManager.WEIGHTED_RANDOM_MAXLOOP do
+		choice = pickRandomItem(items)
+		local info = CollectionStaticItems[choice]
+		local slotName = staticItemSlotName(info)
+		if slotName == nil or not CollectionManager.hasCompletedCollectionSlot(pPlayer, slotName) then
+			break
+		end
+	end
+
+	return choice
+end
+
+-- xp.java:2023-2032 repeatCollectionXpModifier
+local function repeatCollectionXpModifier(repeatSlotValue)
+	local repeatMultiplier = 1.0 - (repeatSlotValue / 10.0)
+	if repeatMultiplier < 0.1 then
+		repeatMultiplier = 0.1
+	end
+
+	return repeatMultiplier
+end
+
+-- collection.java:236-242 grantCommand. Core3: PlayerObject:addAbility.
+local function grantRewardCommand(pPlayer, commandName)
+	local pGhost = playerGhost(pPlayer)
+	if pGhost == nil or commandName == nil or commandName == "" then
+		return false
+	end
+
+	local ghost = PlayerObject(pGhost)
+	if not ghost:hasAbility(commandName) then
+		ghost:addAbility(commandName)
+	end
+
+	return ghost:hasAbility(commandName)
+end
+
+-- collection.java:244-259. Permanence: applySkillStatisticModifier (not a buff).
+-- Lua has CreatureObject:getSkillMod only; addSkillMod is not bound.
+-- Amount: rewards.tab skill_mod_amount default i[1] when the cell is empty.
+-- Cap: skip when current >= skillModMax unless skillModMax == -1.
+local function grantRewardSkillMod(pPlayer, skillMod, amount, skillModMax)
+	if pPlayer == nil or skillMod == nil or skillMod == "" then
+		return false
+	end
+
+	amount = tonumber(amount) or CollectionManager.SKILL_MOD_AMOUNT_DEFAULT
+	skillModMax = tonumber(skillModMax) or 10
+	local current = CreatureObject(pPlayer):getSkillMod(skillMod)
+	if current >= skillModMax and skillModMax ~= -1 then
+		return true
+	end
+
+	return false
+end
+
+-- collection.java:169-177 groundquests.grantQuestNoAcceptUI. No journal grant
+-- on this branch: raise CollectionManager.QUEST_GRANT_HOOK for the journal branch.
+local function raiseQuestGrant(pPlayer, questName)
+	if questName == nil or questName == "" then
+		return
+	end
+
+	for i = 1, #CollectionManager.questGrantListeners do
+		CollectionManager.questGrantListeners[i](pPlayer, questName)
+	end
 end
 
 function CollectionManager.grantCollectionReward(pPlayer, collectionName, canReset)
@@ -838,7 +1025,9 @@ function CollectionManager.grantCollectionReward(pPlayer, collectionName, canRes
 	-- collection.java:105 dataTableSearchColumnForString — first matching row
 	local row = rows[1]
 
-	-- collection.java:126-139 slot_name (comma list)
+	-- collection.java:126-139 slot_name (comma list). badge_book slots: java
+	-- badge.grantBadge; OURS modifyCollectionSlotValue which completes the slot
+	-- and grantBadgeSlot awards the Core3 badge (handleCollectionSlotModified).
 	if row.slotName ~= nil and row.slotName ~= "" then
 		local slots = splitComma(row.slotName)
 		for i = 1, #slots do
@@ -846,10 +1035,17 @@ function CollectionManager.grantCollectionReward(pPlayer, collectionName, canRes
 		end
 	end
 
-	-- collection.java:142-167 xpModifier. Amount rule: CollectionManager.XP_MODIFIER_SCALE.
+	-- collection.java:142-167 xpModifier. Amount rule: CollectionManager.XP_MODIFIER_SCALE
+	-- (OURS; the NGE level-band width does not exist Pre-CU). Repeat:
+	-- xp.java:1945-1952 / 2023-2032 repeatCollectionXpModifier.
+	-- isSpaceXp -> space_combat_general (collection.java:144-166).
 	local xpModifier = tonumber(row.xpModifier) or 0
 	if xpModifier > 0 then
 		local xpAmount = math.floor(xpModifier * CollectionManager.XP_MODIFIER_SCALE)
+		local repeatSlotValue = CollectionManager.getCollectionSlotValue(pPlayer, collectionName .. "_tracker") - 1
+		if repeatSlotValue > 0 then
+			xpAmount = math.floor(xpModifier * CollectionManager.XP_MODIFIER_SCALE * repeatCollectionXpModifier(repeatSlotValue))
+		end
 		if xpAmount > 0 then
 			local xpType = CollectionManager.XP_TYPE
 			if row.isSpaceXp == 1 then
@@ -862,25 +1058,48 @@ function CollectionManager.grantCollectionReward(pPlayer, collectionName, canRes
 		end
 	end
 
-	-- collection.java:179-235 item. Iff paths only; static_item names are OPEN.
+	-- collection.java:169-177 quest — OPEN, questGrant hook
+	if row.quest ~= nil and row.quest ~= "" then
+		local quests = splitComma(row.quest)
+		for i = 1, #quests do
+			raiseQuestGrant(pPlayer, quests[i])
+		end
+	end
+
+	-- collection.java:179-235 item, including grantRandomItem / grantWeightedRandom
 	if row.item ~= nil and row.item ~= "" then
-		if row.grantRandomItem == 1 or row.grantWeightedRandom == 1 then
-			-- OPEN: grantRandomItem / grantWeightedRandom — collection.java:185-210
+		local items = splitComma(row.item)
+		local stackAmount = row.stackAmount or 1
+		if row.grantRandomItem == 1 then
+			-- collection.java:185-196
+			grantRewardItem(pPlayer, pickRandomItem(items), stackAmount)
+		elseif row.grantWeightedRandom == 1 then
+			-- collection.java:198-209
+			grantRewardItem(pPlayer, pickWeightedRandomItem(pPlayer, items), stackAmount)
 		else
-			local items = splitComma(row.item)
-			local stackAmount = row.stackAmount or 1
 			for i = 1, #items do
-				if itemIsIff(items[i]) then
-					giveIffItem(pPlayer, items[i], stackAmount)
-				end
+				grantRewardItem(pPlayer, items[i], stackAmount)
 			end
 		end
 	end
 
-	-- OPEN: command — collection.java:236-242
-	-- OPEN: skill_mod — collection.java:244-259
-	-- OPEN: quest — collection.java:169-177 groundquests.grantQuestNoAcceptUI
-	-- OPEN: crafting_template — collection.java:272 updateCraftingSlot
+	-- collection.java:236-242 command
+	if row.command ~= nil and row.command ~= "" then
+		local commands = splitComma(row.command)
+		for i = 1, #commands do
+			grantRewardCommand(pPlayer, commands[i])
+		end
+	end
+
+	-- collection.java:244-259 skill_mod. OPEN to apply (no addSkillMod binding).
+	if row.skillMod ~= nil and row.skillMod ~= "" then
+		local skillMods = splitComma(row.skillMod)
+		local amount = row.skillModAmount or CollectionManager.SKILL_MOD_AMOUNT_DEFAULT
+		local skillModMax = row.skillModMax
+		for i = 1, #skillMods do
+			grantRewardSkillMod(pPlayer, skillMods[i], amount, skillModMax)
+		end
+	end
 
 	-- collection.java:261-264 quest_signal
 	if row.questSignal ~= nil and row.questSignal ~= "" then
@@ -900,6 +1119,100 @@ function CollectionManager.grantCollectionReward(pPlayer, collectionName, canRes
 	end
 
 	return true
+end
+
+-- Completing a badge_book slot whose name matches a Core3 badge key awards
+-- that badge. OURS: player_collection.java has no equivalent (NGE slot == badge).
+function CollectionManager.grantBadgeSlot(pPlayer, slotName)
+	if pPlayer == nil or slotName == nil or slotName == "" then
+		return false
+	end
+
+	local badgeId = CollectionBadges.badgeIdForSlot(slotName)
+	if badgeId == nil then
+		return false
+	end
+
+	local pGhost = playerGhost(pPlayer)
+	if pGhost == nil then
+		return false
+	end
+
+	local ghost = PlayerObject(pGhost)
+	if not ghost:hasBadge(badgeId) then
+		ghost:awardBadge(badgeId)
+	end
+
+	return true
+end
+
+-- collection.java:272 updateCraftingSlot. crafting_template + category are a
+-- reverse index (rewards.tab comments: "nothing to do with the rest of the
+-- table"). First matching craftingTemplate row, then increment every incomplete
+-- slot in that category.
+function CollectionManager.updateCraftingSlot(pPlayer, template)
+	if pPlayer == nil or template == nil or template == "" then
+		return false
+	end
+
+	local row = nil
+	for i = 1, #CollectionData.rewards do
+		if CollectionData.rewards[i].craftingTemplate == template then
+			row = CollectionData.rewards[i]
+			break
+		end
+	end
+
+	if row == nil or row.category == nil or row.category == "" then
+		return false
+	end
+
+	local slotNames = CollectionManager.getAllCollectionSlotsInCategory(row.category)
+	if #slotNames == 0 then
+		return false
+	end
+
+	for i = 1, #slotNames do
+		local slotName = slotNames[i]
+		if not CollectionManager.hasCompletedCollectionSlot(pPlayer, slotName) then
+			CollectionManager.modifyCollectionSlotValue(pPlayer, slotName, 1)
+			if not CollectionManager.hasCompletedCollectionSlot(pPlayer, slotName) then
+				local info = CollectionManager.getCollectionSlotInfo(slotName)
+				local collectionName = nil
+				if info ~= nil then
+					collectionName = info[3]
+				end
+				sendCollectionProse(pPlayer, "@collection:player_slot_increment", slotName, collectionName)
+			end
+		end
+	end
+
+	return true
+end
+
+-- Login sync: badges already earned -> matching badge_book slots.
+-- player_collection.java has no login sync (NGE badges are the slots).
+function CollectionManager.syncBadgesOnLogin(pPlayer)
+	if pPlayer == nil then
+		return
+	end
+
+	local pGhost = playerGhost(pPlayer)
+	if pGhost == nil then
+		return
+	end
+
+	local ghost = PlayerObject(pGhost)
+	local slotNames = CollectionManager.getAllCollectionSlotsInBook(CollectionManager.BADGE_BOOK)
+	for i = 1, #slotNames do
+		local slotName = slotNames[i]
+		if not CollectionManager.hasCompletedCollectionSlot(pPlayer, slotName) then
+			local badgeId = CollectionBadges.badgeIdForSlot(slotName)
+			if badgeId ~= nil and ghost:hasBadge(badgeId) then
+				CollectionManager.modifyCollectionSlotValue(pPlayer, slotName, 1)
+			end
+		end
+	end
 end
 
 return CollectionManager
