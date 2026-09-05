@@ -148,6 +148,7 @@ function CollectorSpawns:spawnIfMissing(entry)
 
 	writeData(key, SceneObject(pNpc):getObjectID())
 	self:bindCollector(pNpc, entry.collector)
+	print("CollectorSpawns: " .. entry.collector .. " placed on " .. entry.zone .. " (" .. entry.template .. ")")
 end
 
 function CollectorSpawns:bindCollector(pNpc, collector)

@@ -384,22 +384,7 @@ function CollectorNpcMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer,
 	return 0
 end
 
-collectorNpcConvoTemplate = ConvoTemplate:new {
-	initialScreen = "start",
-	templateType = "Lua",
-	luaClassHandler = "collectorNpcConvoHandler",
-	screens = {}
-}
-
-collectorNpcConvoStart = ConvoScreen:new {
-	id = "start",
-	leftDialog = "@collection:col_npc_prompt",
-	stopConversation = "true",
-	options = {}
-}
-collectorNpcConvoTemplate:addScreen(collectorNpcConvoStart)
-
-addConversationTemplate("collectorNpcConvoTemplate", collectorNpcConvoTemplate)
+-- The conversation template lives in mobile/conversations/collections/collector_npc_convo.lua (the conversation Lua state).
 
 collectorNpcConvoHandler = conv_handler:new {}
 
