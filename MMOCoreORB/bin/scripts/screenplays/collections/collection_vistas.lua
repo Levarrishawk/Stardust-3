@@ -232,9 +232,9 @@ function CollectionVistas:notifyEnteredVista(pArea, pCreature)
 	return 0
 end
 
--- OPEN: 30 Nym theme-park consume_click rows in nym_*_objects.tab. Those
--- NGE dungeons are not on this fork (terminal_nym_cave.iff exists; the
--- rooms do not). Nothing spawned.
+-- Absent from this server (no Nym caves): 30 Nym theme-park consume_click
+-- rows in nym_*_objects.tab. Those NGE dungeons are not on this fork
+-- (terminal_nym_cave.iff exists; the rooms do not). Nothing spawned.
 --
 -- nym_droid_cave_objects.tab
 --   :3  nyms_surveillance_device:icon_nyms_surveillance_device_10

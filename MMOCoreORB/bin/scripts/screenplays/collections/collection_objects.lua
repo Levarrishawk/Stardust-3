@@ -18,6 +18,14 @@
 -- sui.smartCountdownTimerSUI has no Lua twin) plus a 500 ms watcher that
 -- cancels on incap/dead, HAM drop, combat, or >0.1 m move. finishClick is
 -- the expiry recheck.
+-- 43 indoor rows whose buildings the snapshots lack: 40 are NGE stations
+-- (nova_orion_station, npe_shared_station) and the Blackwing facility plus
+-- other NGE buildings -- absent content, not spawned. 3 heroic_star_destroyer
+-- rows spawn guarded on the heroic-sd screenplay global starDestroyer
+-- (screenplays/dungeon/star_destroyer/starDestroyer.lua; building id
+-- starDestroyer:buildingId; getCell(i) for i = 1 .. getTotalCellNumber at
+-- :711). Same guard shape as CollectionListeningPosts on
+-- MeatlumpHideoutScreenPlay.
 
 includeFile("collections/objects/corellia.lua")
 includeFile("collections/objects/dantooine.lua")
@@ -112,9 +120,35 @@ function CollectionObjects:existingInCell(pCell, template)
 	return nil
 end
 
+function CollectionObjects:starDestroyerCell(entry)
+	-- heroic-sd screenplays/dungeon/star_destroyer/starDestroyer.lua
+	-- spawnTheShip writes starDestroyer:buildingId; getCell(i) 1-based (:711).
+	-- Guarded like CollectionListeningPosts:hideoutCell on MeatlumpHideoutScreenPlay.
+	if (starDestroyer == nil) then
+		print("CollectionObjects: starDestroyer screenplay absent; " .. entry.row .. " on " .. entry.zone .. " not spawned")
+		return nil
+	end
+
+	local pBuilding = getSceneObject(readData("starDestroyer:buildingId"))
+
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		print("CollectionObjects: starDestroyer:buildingId unresolved; " .. entry.row .. " on " .. entry.zone .. " not spawned")
+		return nil
+	end
+
+	local pCell = BuildingObject(pBuilding):getCell(entry.cell)
+
+	if (pCell == nil or not SceneObject(pCell):isCellObject()) then
+		print("CollectionObjects: " .. entry.row .. " on " .. entry.zone .. " star destroyer cell " .. tostring(entry.cell) .. " did not resolve; not spawned")
+		return nil
+	end
+
+	return pCell
+end
+
 function CollectionObjects:spawnIfMissing(entry)
-	if (entry.open) then
-		print("CollectionObjects: " .. entry.row .. " on " .. entry.zone .. " is OPEN (" .. entry.openNote .. "); not spawned")
+	if (entry.absent) then
+		print("CollectionObjects: " .. entry.row .. " on " .. entry.zone .. " absent (" .. tostring(entry.absentNote) .. "); not spawned")
 		return false
 	end
 
@@ -136,7 +170,23 @@ function CollectionObjects:spawnIfMissing(entry)
 
 	local cellId = 0
 
-	if (entry.cell ~= nil and entry.cell ~= 0) then
+	if (entry.starDestroyer == true) then
+		local pSdCell = self:starDestroyerCell(entry)
+
+		if (pSdCell == nil) then
+			return false
+		end
+
+		cellId = SceneObject(pSdCell):getObjectID()
+
+		local pAdoptedSd = self:existingInCell(pSdCell, entry.template)
+
+		if (pAdoptedSd ~= nil) then
+			writeData(key, SceneObject(pAdoptedSd):getObjectID())
+			self:bindObject(pAdoptedSd, entry.slot)
+			return true
+		end
+	elseif (entry.cell ~= nil and entry.cell ~= 0) then
 		local pCell = getSceneObject(entry.cell)
 
 		-- LuaSceneObject.cpp:692 isCellObject. Hold if the snapshot node is

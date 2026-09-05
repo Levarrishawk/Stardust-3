@@ -31,8 +31,8 @@ CollectionObjectSpawns.talus = {
 		qw = 0.955337, qx = 0, qy = -0.29552, qz = 0,
 		cell = 9,
 		slot = "col_gcw_insurgency:col_gcw_insurgency_talus",
-		open = true,
-		openNote = "building-not-in-snapshot",
+		absent = true,
+		absentNote = "absent from this server (NGE building the snapshots lack)",
 	},
 	{
 		row = "talus_2_4_ws:1",

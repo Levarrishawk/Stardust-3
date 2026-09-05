@@ -18,11 +18,10 @@
 -- Indoor spawn: MeatlumpHideoutScreenPlay.MAIN_ID + getNamedCell, guarded
 -- like that branch's CollectionManager nil check. Cell-local transform
 -- from the tab; spawnSceneObject parent is the cell oid.
--- OPEN: col_listening_device_02_01 (master_item.tab:5572, template
+-- col_listening_device_02_01 (master_item.tab:5572, template
 -- object/tangible/collection/meatlump_listening_device.iff, no slot) is
--- added on the bridge separately. grantRewardItem does not call
--- setObjectMenuComponent (scope fence: no manager edits). Enter matches
--- the fork template in inventory (java :30 static-item name).
+-- added on the bridge. Enter matches the fork template in inventory
+-- (java :30 static-item name).
 
 CollectionListeningPosts = ScreenPlay:new {
 	numberOfActs = 1,
@@ -133,24 +132,19 @@ function CollectionListeningPosts:hideoutCell(cellName)
 end
 
 function CollectionListeningPosts:spawnIfMissing(entry)
-	if (entry.open) then
-		print("CollectionListeningPosts: " .. entry.row .. " on " .. entry.zone .. " is OPEN (" .. entry.openNote .. "); not spawned")
-		return false
-	end
-
 	if (not isZoneEnabled(entry.zone)) then
 		return false
 	end
 
 	if (MeatlumpHideoutScreenPlay == nil) then
-		print("CollectionListeningPosts: MeatlumpHideoutScreenPlay absent; " .. entry.row .. " on " .. entry.zone .. " is OPEN; not spawned")
+		print("CollectionListeningPosts: MeatlumpHideoutScreenPlay absent; " .. entry.row .. " on " .. entry.zone .. " not spawned")
 		return false
 	end
 
 	local pCell = self:hideoutCell(entry.cellName)
 
 	if (pCell == nil) then
-		print("CollectionListeningPosts: " .. entry.row .. " on " .. entry.zone .. " is OPEN (cell " .. entry.cellName .. " did not resolve); not spawned")
+		print("CollectionListeningPosts: " .. entry.row .. " on " .. entry.zone .. " cell " .. entry.cellName .. " did not resolve; not spawned")
 		return false
 	end
 

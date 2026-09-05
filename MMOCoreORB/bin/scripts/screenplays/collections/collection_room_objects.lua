@@ -15,9 +15,9 @@
 -- geoLab.lua:318 cell 1627798. This file uses that building node plus
 -- getNamedCell("caveroom2") rather than editing geoLab.lua.
 -- Valley flame thrower is ValleyBattlefield.stage1Props / runStage1, not here.
--- Squill cave table respawn_time 900: OPEN note only -- consume_click does not
--- destroy the world object (collection_objects.lua:456-458 finishClick), so
--- respawn is moot.
+-- Squill cave table respawn_time 900: moot: the click does not consume
+-- (consume_click does not destroy the world object; finishClick), so
+-- respawn is resolved.
 
 CollectionRoomObjects = ScreenPlay:new {
 	numberOfActs = 1,
@@ -187,7 +187,8 @@ CollectionRoomObjects = ScreenPlay:new {
 		},
 		-- SOURCED quest/hero_of_tatooine/squill_cave.tab r27. Node 7125559 at
 		-- 38.65, -113.43 (1 shared_tatooine_squill_cave.iff). Table respawn_time
-		-- 900 is OPEN/moot: finishClick does not consume the world object.
+		-- 900 is moot: the click does not consume (finishClick does not
+		-- consume the world object).
 		{
 			row = "squill_cave:r27",
 			zone = "tatooine",
@@ -239,14 +240,14 @@ function CollectionRoomObjects:namedCell(entry)
 	local pBuilding = getSceneObject(entry.buildingNode)
 
 	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
-		print("CollectionRoomObjects: " .. entry.row .. " on " .. entry.zone .. " is OPEN (building " .. tostring(entry.buildingNode) .. " did not resolve); not spawned")
+		print("CollectionRoomObjects: " .. entry.row .. " on " .. entry.zone .. " building " .. tostring(entry.buildingNode) .. " did not resolve; not spawned")
 		return nil
 	end
 
 	local pCell = BuildingObject(pBuilding):getNamedCell(entry.room)
 
 	if (pCell == nil) then
-		print("CollectionRoomObjects: " .. entry.row .. " on " .. entry.zone .. " is OPEN (room " .. entry.room .. " did not resolve); not spawned")
+		print("CollectionRoomObjects: " .. entry.row .. " on " .. entry.zone .. " room " .. entry.room .. " did not resolve; not spawned")
 		return nil
 	end
 
@@ -254,8 +255,8 @@ function CollectionRoomObjects:namedCell(entry)
 end
 
 function CollectionRoomObjects:spawnIfMissing(entry)
-	if (entry.open) then
-		print("CollectionRoomObjects: " .. entry.row .. " on " .. entry.zone .. " is OPEN (" .. entry.openNote .. "); not spawned")
+	if (entry.absent) then
+		print("CollectionRoomObjects: " .. entry.row .. " on " .. entry.zone .. " absent (" .. tostring(entry.absentNote) .. "); not spawned")
 		return false
 	end
 
@@ -264,7 +265,7 @@ function CollectionRoomObjects:spawnIfMissing(entry)
 	end
 
 	if (entry.respawnNote ~= nil) then
-		print("CollectionRoomObjects: " .. entry.row .. " OPEN note (" .. entry.respawnNote .. ")")
+		print("CollectionRoomObjects: " .. entry.row .. " note (" .. entry.respawnNote .. ")")
 	end
 
 	local key = self:storedKey(entry)

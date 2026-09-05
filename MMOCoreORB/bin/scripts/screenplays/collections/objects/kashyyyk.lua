@@ -13,8 +13,8 @@ CollectionObjectSpawns.kashyyyk = {
 		qw = 0.741831, qx = 0, qy = 0, qz = -0.670587,
 		cell = 8,
 		slot = "col_rare_melee_04:sayormi_heartstriker_01",
-		open = true,
-		openNote = "building-not-in-snapshot",
+		absent = true,
+		absentNote = "absent from this server (NGE building the snapshots lack)",
 	},
 	{
 		row = "kashyyyk_dead_forest:2",

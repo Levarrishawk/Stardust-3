@@ -45,13 +45,16 @@
 	slot_name (modifyCollectionSlotValue; badge_book slots go through grantBadgeSlot),
 	command (PlayerObject:addAbility when the name is in the command/ability table),
 	grantRandomItem / grantWeightedRandom (java roll; names resolve through the bridge),
-	quest (OPEN — questGrant hook for the journal branch),
-	skill_mod (OPEN — CreatureObject:addSkillMod is not a Lua binding),
+	quest (raised on questGrant for the journal branch's listener),
+	skill_mod (OPEN — CreatureObject:addSkillMod is not bound in Lua -- the ONE item that needs C++),
 	crafting_template (updateCraftingSlot reverse-index; not a schematic grant).
-	OPEN: item static_item names whose template is not in the fork,
-	lootSchematic use (NGE limited-use schematic — no Core3 twin; item is granted when inFork),
-	command names not in the command table, quest, skill_mod apply,
-	crafting_template schematic grant, stackAmount increment (no Lua setUseCount).
+	item static_item names whose template is not in the fork: template absent from this server (102),
+	lootSchematic: 93 items; loot_schematic.java -- .schematic grants a schematic via
+	PlayerObject:addRewardedSchematic (LuaPlayerObject.cpp:291); .beast / .ability / .skill
+	are NGE beast-master / expertise. 8 rows are beast-master holocrons (absent system,
+	item still granted). 85 rows carry loot_schematic.schematic. Command names not in
+	the command table stay unggranted. stackAmount (81 rows): OURS giveItem in a loop
+	so the player holds the shipped count (no setUseCount binding).
 ]]
 
 require("managers.collections.collection_data")
@@ -86,13 +89,142 @@ CollectionManager.XP_TYPE = "combat_general"
 CollectionManager.SPACE_XP_TYPE = "space_combat_general"
 
 CollectionManager.OPEN_REWARD_KINDS = {
-	"skill_mod apply (no CreatureObject:addSkillMod Lua binding)",
-	"command: creature_milking_buff, lair_egg_buff, flangedjessoon",
-	"quest (questGrant hook only — no journal on this branch)",
-	"item static_item names whose template is not in the fork",
-	"lootSchematic use (NGE limited-use schematic — no Core3 twin)",
-	"crafting_template schematic grant (java uses updateCraftingSlot, not grantSchematic)",
-	"stackAmount increment (no Lua setUseCount binding)",
+	"skill_mod apply: CreatureObject:addSkillMod is not bound in Lua -- the ONE item that needs C++",
+}
+
+-- loot_schematic.java: VAR_SCHEMATIC grants a schematic; VAR_BEAST / VAR_ABILITY /
+-- VAR_SKILL are NGE beast-master / expertise (TYPE_BEAST_ABILITY = 5). 8 beast
+-- holocrons: absent system, item still granted. 85 rows carry .schematic.
+-- Use: PlayerObject:addRewardedSchematic (LuaPlayerObject.cpp:291) type
+-- SchematicList::LOOT = 1 (LootSchematicMenuComponent.cpp:82).
+CollectionManager.LOOT_SCHEMATICS = {
+	["col_feather_pillow_reward_02_01"]={schematic="object/draft_schematic/furniture/furniture_throwpillow_hue_s01.iff",uses=2},
+	["col_fish_tank_reward_schematic_02_01"]={schematic="object/draft_schematic/furniture/furniture_collection_fish_tank.iff",uses=2},
+	["col_fried_icecream_fryer_schematic"]={schematic="object/draft_schematic/item/collection_ice_cream_fryer.iff",uses=1},
+	["col_glass_shelving_reward_02_01"]={schematic="object/draft_schematic/furniture/furniture_collection_glass_shelves_01.iff",uses=2},
+	["col_ig_88_schematic_02_01"]={schematic="object/draft_schematic/item/collection_posed_ig_88.iff",uses=1},
+	["col_jeweled_necklace_schematic_02_01"]={schematic="object/draft_schematic/clothing/clothing_collection_jeweled_necklace.iff",uses=1},
+	["col_reward_dejarik_table_schematic_02_01"]={schematic="object/draft_schematic/furniture/furniture_collection_dejarik_table.iff",uses=1},
+	["col_stormtrooper_schematic_02_01"]={schematic="object/draft_schematic/item/collection_posed_stormtrooper.iff",uses=1},
+	["item_collection_dancing_droid_module_schematic_01_01"]={schematic="object/draft_schematic/droid/component/droid_dance_module.iff",uses=1},
+	["item_collection_hanging_light_schematic_01_01"]={schematic="object/draft_schematic/furniture/furniture_collection_hanging_light_01.iff",uses=2},
+	["item_collection_hanging_light_schematic_01_02"]={schematic="object/draft_schematic/furniture/furniture_collection_hanging_light_02.iff",uses=1},
+	["item_collection_reward_booster_01_mk1_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk1.iff",uses=1},
+	["item_collection_reward_booster_01_mk2_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk2.iff",uses=1},
+	["item_collection_reward_booster_01_mk3_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk3.iff",uses=1},
+	["item_collection_reward_booster_01_mk4_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk4.iff",uses=1},
+	["item_collection_reward_booster_01_mk5_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk5.iff",uses=1},
+	["item_collection_reward_capacitor_01_mk1_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk1.iff",uses=1},
+	["item_collection_reward_capacitor_01_mk2_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk2.iff",uses=1},
+	["item_collection_reward_capacitor_01_mk3_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk3.iff",uses=1},
+	["item_collection_reward_capacitor_01_mk4_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk4.iff",uses=1},
+	["item_collection_reward_capacitor_01_mk5_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk5.iff",uses=1},
+	["item_collection_reward_engine_01_mk1_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk1.iff",uses=1},
+	["item_collection_reward_engine_01_mk2_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk2.iff",uses=1},
+	["item_collection_reward_engine_01_mk3_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk3.iff",uses=1},
+	["item_collection_reward_engine_01_mk4_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk4.iff",uses=1},
+	["item_collection_reward_engine_01_mk5_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk5.iff",uses=1},
+	["item_collection_reward_potted_flower_schematic_01_01"]={schematic="object/draft_schematic/furniture/furniture_flowers_collection_potted_s01.iff",uses=1},
+	["item_collection_reward_potted_plant_schematic_01_01"]={schematic="object/draft_schematic/furniture/furniture_plants_collection_potted_large_s01.iff",uses=1},
+	["item_collection_reward_reactor_01_mk1_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk1.iff",uses=1},
+	["item_collection_reward_reactor_01_mk2_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk2.iff",uses=1},
+	["item_collection_reward_reactor_01_mk3_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk3.iff",uses=1},
+	["item_collection_reward_reactor_01_mk4_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk4.iff",uses=1},
+	["item_collection_reward_reactor_01_mk5_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_01_mk5.iff",uses=1},
+	["item_crafting_collection_gunship_cargo_hold"]={schematic="object/draft_schematic/space/cargo_hold/crg_pob_gunship_huge.iff",uses=3},
+	["item_crafting_collection_gunship_imperial_schematic"]={schematic="object/draft_schematic/space/chassis/player_gunship_imperial.iff",uses=3},
+	["item_crafting_collection_gunship_neutral_schematic"]={schematic="object/draft_schematic/space/chassis/player_gunship_neutral.iff",uses=3},
+	["item_crafting_collection_gunship_rebel_schematic"]={schematic="object/draft_schematic/space/chassis/player_gunship_rebel.iff",uses=3},
+	["item_crafting_collection_pob_furniture_chair_schematic"]={schematic="object/draft_schematic/furniture/furniture_collection_pob_chair.iff",uses=3},
+	["item_crafting_collection_pob_furniture_couch_schematic"]={schematic="object/draft_schematic/furniture/furniture_collection_pob_couch.iff",uses=3},
+	["item_crafting_collection_reward_booster_01_mk1_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk1.iff",uses=3},
+	["item_crafting_collection_reward_booster_01_mk2_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk2.iff",uses=3},
+	["item_crafting_collection_reward_booster_01_mk3_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk3.iff",uses=3},
+	["item_crafting_collection_reward_booster_01_mk4_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk4.iff",uses=3},
+	["item_crafting_collection_reward_booster_01_mk5_schematic"]={schematic="object/draft_schematic/space/booster/collection_reward_booster_01_mk5.iff",uses=3},
+	["item_crafting_collection_reward_capacitor_01_mk1_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk1.iff",uses=3},
+	["item_crafting_collection_reward_capacitor_01_mk2_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk2.iff",uses=3},
+	["item_crafting_collection_reward_capacitor_01_mk3_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk3.iff",uses=3},
+	["item_crafting_collection_reward_capacitor_01_mk4_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk4.iff",uses=3},
+	["item_crafting_collection_reward_capacitor_01_mk5_schematic"]={schematic="object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk5.iff",uses=3},
+	["item_crafting_collection_reward_engine_01_mk1_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk1.iff",uses=3},
+	["item_crafting_collection_reward_engine_01_mk2_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk2.iff",uses=3},
+	["item_crafting_collection_reward_engine_01_mk3_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk3.iff",uses=3},
+	["item_crafting_collection_reward_engine_01_mk4_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk4.iff",uses=3},
+	["item_crafting_collection_reward_engine_01_mk5_schematic"]={schematic="object/draft_schematic/space/engine/collection_reward_engine_01_mk5.iff",uses=3},
+	["item_crafting_collection_reward_reactor_01_mk1_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk1.iff",uses=3},
+	["item_crafting_collection_reward_reactor_01_mk2_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk2.iff",uses=3},
+	["item_crafting_collection_reward_reactor_01_mk3_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk3.iff",uses=3},
+	["item_crafting_collection_reward_reactor_01_mk4_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_02_mk4.iff",uses=3},
+	["item_crafting_collection_reward_reactor_01_mk5_schematic"]={schematic="object/draft_schematic/space/reactor/collection_reward_reactor_01_mk5.iff",uses=3},
+	["item_dwartii_statue_braata_schematic_01"]={schematic="object/draft_schematic/item/collection_dwartii_statue_braata.iff",uses=1},
+	["item_dwartii_statue_faya_schematic_01"]={schematic="object/draft_schematic/item/collection_dwartii_statue_faya.iff",uses=1},
+	["item_dwartii_statue_sistros_schematic_01"]={schematic="object/draft_schematic/item/collection_dwartii_statue_sistros.iff",uses=1},
+	["item_dwartii_statue_yanjon_schematic_01"]={schematic="object/draft_schematic/item/collection_dwartii_statue_yanjon.iff",uses=1},
+	["item_framed_beetle_specimen_schematic_01"]={schematic="object/draft_schematic/furniture/furniture_framed_beetle_specimen_collection_reward.iff",uses=1},
+	["item_gunship_cargo_hold_01"]={schematic="object/draft_schematic/space/cargo_hold/crg_pob_gunship_huge.iff",uses=1},
+	["item_gunship_imperial_schematic"]={schematic="object/draft_schematic/space/chassis/player_gunship_imperial.iff",uses=1},
+	["item_gunship_neutral_schematic"]={schematic="object/draft_schematic/space/chassis/player_gunship_neutral.iff",uses=1},
+	["item_gunship_rebel_schematic"]={schematic="object/draft_schematic/space/chassis/player_gunship_rebel.iff",uses=1},
+	["item_limited_use_combat_fan_l_02_01"]={schematic="object/draft_schematic/dance_prop/prop_combat_fan_l.iff",uses=1},
+	["item_limited_use_schematic_backdrop_generator_01_01"]={schematic="object/draft_schematic/furniture/furniture_stage_backdrop.iff",uses=1},
+	["item_limited_use_schematic_bounty_dc15_04_01"]={schematic="object/draft_schematic/weapon/appearance/weapon_appearance_rifle_dc15_bounty.iff",uses=1},
+	["item_limited_use_schematic_bounty_ee3_04_01"]={schematic="object/draft_schematic/weapon/appearance/weapon_appearance_carbine_ee3_bounty.iff",uses=1},
+	["item_limited_use_schematic_green_gem_01_01"]={schematic="object/draft_schematic/furniture/furniture_light_gem_green.iff",uses=1},
+	["item_limited_use_schematic_jessoon"]={schematic="object/draft_schematic/instrument/instrument_flanged_jessoon.iff",uses=1},
+	["item_limited_use_schematic_purple_gem_01_01"]={schematic="object/draft_schematic/furniture/furniture_light_gem_purple.iff",uses=1},
+	["item_limited_use_schematic_pyro_machine_01_01"]={schematic="object/draft_schematic/furniture/furniture_stage_pyro.iff",uses=1},
+	["item_limited_use_schematic_red_gem_01_01"]={schematic="object/draft_schematic/furniture/furniture_light_gem_red.iff",uses=1},
+	["item_limited_use_schematic_smoke_machine_01_01"]={schematic="object/draft_schematic/furniture/furniture_stage_smoke.iff",uses=1},
+	["item_limited_use_schematic_stage_controller_01_01"]={schematic="object/draft_schematic/furniture/furniture_stage_controller.iff",uses=1},
+	["item_pob_furniture_chair_schematic_01"]={schematic="object/draft_schematic/furniture/furniture_collection_pob_chair.iff",uses=1},
+	["item_pob_furniture_couch_schematic_01"]={schematic="object/draft_schematic/furniture/furniture_collection_pob_couch.iff",uses=1},
+	["item_schematic_fifth_gen_saber_03_01"]={schematic="object/draft_schematic/weapon/lightsaber_one_handed_gen5.iff",uses=1},
+	["item_schematic_fifth_gen_saber_03_02"]={schematic="object/draft_schematic/weapon/lightsaber_two_handed_gen5.iff",uses=1},
+	["item_schematic_fifth_gen_saber_03_03"]={schematic="object/draft_schematic/weapon/lightsaber_polearm_gen5.iff",uses=1},
+	["item_schematic_pistol_dd6_01_01"]={schematic="object/draft_schematic/weapon/appearance/weapon_appearance_pistol_dd6.iff",uses=1},
+}
+
+
+-- The 25 drafts whose crafted object has no client file. Use must not
+-- claim a grant (addRewardedSchematic is not called).
+CollectionManager.LOOT_SCHEMATIC_CLIENT_ABSENT = {
+	["object/draft_schematic/instrument/instrument_flanged_jessoon.iff"]=true,
+	["object/draft_schematic/space/booster/collection_reward_booster_01_mk1.iff"]=true,
+	["object/draft_schematic/space/booster/collection_reward_booster_01_mk2.iff"]=true,
+	["object/draft_schematic/space/booster/collection_reward_booster_01_mk3.iff"]=true,
+	["object/draft_schematic/space/booster/collection_reward_booster_01_mk4.iff"]=true,
+	["object/draft_schematic/space/booster/collection_reward_booster_01_mk5.iff"]=true,
+	["object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk1.iff"]=true,
+	["object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk2.iff"]=true,
+	["object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk3.iff"]=true,
+	["object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk4.iff"]=true,
+	["object/draft_schematic/space/capacitor/collection_reward_capacitor_01_mk5.iff"]=true,
+	["object/draft_schematic/space/cargo_hold/crg_pob_gunship_huge.iff"]=true,
+	["object/draft_schematic/space/chassis/player_gunship_imperial.iff"]=true,
+	["object/draft_schematic/space/chassis/player_gunship_neutral.iff"]=true,
+	["object/draft_schematic/space/chassis/player_gunship_rebel.iff"]=true,
+	["object/draft_schematic/space/engine/collection_reward_engine_01_mk1.iff"]=true,
+	["object/draft_schematic/space/engine/collection_reward_engine_01_mk2.iff"]=true,
+	["object/draft_schematic/space/engine/collection_reward_engine_01_mk3.iff"]=true,
+	["object/draft_schematic/space/engine/collection_reward_engine_01_mk4.iff"]=true,
+	["object/draft_schematic/space/engine/collection_reward_engine_01_mk5.iff"]=true,
+	["object/draft_schematic/space/reactor/collection_reward_reactor_01_mk5.iff"]=true,
+	["object/draft_schematic/space/reactor/collection_reward_reactor_02_mk1.iff"]=true,
+	["object/draft_schematic/space/reactor/collection_reward_reactor_02_mk2.iff"]=true,
+	["object/draft_schematic/space/reactor/collection_reward_reactor_02_mk3.iff"]=true,
+	["object/draft_schematic/space/reactor/collection_reward_reactor_02_mk4.iff"]=true,
+}
+
+CollectionManager.LOOT_SCHEMATIC_BEAST = {
+	["item_beast_holocron_04_01"]=true,
+	["item_beast_holocron_04_02"]=true,
+	["item_beast_holocron_04_03"]=true,
+	["item_beast_holocron_04_04"]=true,
+	["item_beast_holocron_04_05"]=true,
+	["item_beast_holocron_04_08"]=true,
+	["item_beast_holocron_04_09"]=true,
+	["item_beast_holocron_04_10"]=true,
 }
 
 -- collection.java:38 MAXLOOP for grantWeightedRandom
@@ -850,7 +982,7 @@ local function playerGhost(pPlayer)
 	return CreatureObject(pPlayer):getPlayerObject()
 end
 
-local function giveIffItem(pPlayer, template, stackAmount)
+local function giveIffItem(pPlayer, template)
 	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
 	if pInventory == nil then
 		return nil
@@ -861,24 +993,7 @@ local function giveIffItem(pPlayer, template, stackAmount)
 	end
 
 	-- DirectorManager.cpp:2431 giveItem (register :479)
-	local pItem = giveItem(pInventory, template, -1)
-	if pItem ~= nil and stackAmount ~= nil and stackAmount > 1 then
-		-- java collection.java:193-196 / 227-229 setCount if AUTO_STACK_SCRIPT.
-		-- Core3 TangibleObjectImplementation.cpp setUseCount has no Lua binding;
-		-- pcall so a missing method cannot abort the rest of the grant.
-		pcall(function()
-			TangibleObject(pItem):setUseCount(stackAmount)
-		end)
-	end
-
-	if pItem ~= nil then
-		-- collection.java:1351 / 1375 SID_REWARD_ITEM
-		local itemMessage = LuaStringIdChatParameter("@collection:reward_item")
-		itemMessage:setTT(SceneObject(pItem):getDisplayedName())
-		CreatureObject(pPlayer):sendSystemMessage(itemMessage:_getObject())
-	end
-
-	return pItem
+	return giveItem(pInventory, template, -1)
 end
 
 -- collection.java:1321-1322: last ':' segment of item_stats objvars is the slot.
@@ -892,29 +1007,53 @@ end
 
 -- collection.java:179-235. Iff paths go through giveItem. Static-item names
 -- resolve through CollectionStaticItems (static_item.java:16-19). Grant with
--- DirectorManager.cpp:2431 giveItem when inFork. lootSchematic use is OPEN
--- (NGE limited-use schematic has no Core3 twin); the item is still granted.
-local function grantRewardItem(pPlayer, itemName, stackAmount)
-	if itemName == nil or itemName == "" then
-		return nil
+-- DirectorManager.cpp:2431 giveItem when inFork. loot_schematic.beast items
+-- are beast-master holocrons (absent system); the item is still granted.
+-- loot_schematic.schematic: attach Use -> PlayerObject:addRewardedSchematic.
+local function bindLootSchematic(pItem, itemName)
+	if pItem == nil or itemName == nil then
+		return
 	end
 
-	if itemIsIff(itemName) then
-		return giveIffItem(pPlayer, itemName, stackAmount)
+	if CollectionManager.LOOT_SCHEMATIC_BEAST[itemName] == true then
+		return
 	end
 
+	local rec = CollectionManager.LOOT_SCHEMATICS[itemName]
+	if rec == nil or rec.schematic == nil or rec.schematic == "" then
+		return
+	end
+
+	local oid = SceneObject(pItem):getObjectID()
+	writeStringData(oid .. ":collection.lootSchematic", rec.schematic)
+	writeData(oid .. ":collection.lootSchematicUses", rec.uses or 1)
+	SceneObject(pItem):setObjectMenuComponent("CollectionLootSchematicMenuComponent")
+end
+
+local function sendRewardItemMessage(pPlayer, pItem)
+	if pPlayer == nil or pItem == nil then
+		return
+	end
+
+	-- collection.java:1351 / 1375 SID_REWARD_ITEM
+	local itemMessage = LuaStringIdChatParameter("@collection:reward_item")
+	itemMessage:setTT(SceneObject(pItem):getDisplayedName())
+	CreatureObject(pPlayer):sendSystemMessage(itemMessage:_getObject())
+end
+
+local function grantOneStaticItem(pPlayer, itemName)
 	local info = CollectionStaticItems[itemName]
 	if info == nil then
-		print("CollectionManager: OPEN static item unknown: " .. itemName)
+		print("CollectionManager: template absent from this server (unknown): " .. itemName)
 		return nil
 	end
 
 	if info.inFork ~= true then
-		print("CollectionManager: OPEN static item not in fork: " .. itemName)
+		print("CollectionManager: template absent from this server: " .. itemName)
 		return nil
 	end
 
-	local pItem = giveIffItem(pPlayer, info.template, stackAmount)
+	local pItem = giveIffItem(pPlayer, info.template)
 	if pItem ~= nil then
 		if CollectionLoot ~= nil and info.consumeLoot == true then
 			CollectionLoot.attachLootItemComponent(pItem)
@@ -928,8 +1067,39 @@ local function grantRewardItem(pPlayer, itemName, stackAmount)
 			local oid = SceneObject(pItem):getObjectID()
 			writeStringData(oid .. ":collection.slot", info.slot)
 		end
+		if info.lootSchematic == true then
+			bindLootSchematic(pItem, itemName)
+		end
 	end
 
+	return pItem
+end
+
+local function grantRewardItem(pPlayer, itemName, stackAmount)
+	if itemName == nil or itemName == "" then
+		return nil
+	end
+
+	-- OURS: no setUseCount Lua binding. grant the item N times so the player
+	-- holds the shipped stackAmount (collection.java:193-196 setCount).
+	local count = tonumber(stackAmount) or 1
+	if count < 1 then
+		count = 1
+	end
+
+	local pItem = nil
+	for _ = 1, count do
+		if itemIsIff(itemName) then
+			pItem = giveIffItem(pPlayer, itemName)
+		else
+			pItem = grantOneStaticItem(pPlayer, itemName)
+			if pItem == nil then
+				return nil
+			end
+		end
+	end
+
+	sendRewardItemMessage(pPlayer, pItem)
 	return pItem
 end
 
@@ -991,6 +1161,7 @@ end
 
 -- collection.java:244-259. Permanence: applySkillStatisticModifier (not a buff).
 -- Lua has CreatureObject:getSkillMod only; addSkillMod is not bound.
+-- OPEN: CreatureObject:addSkillMod is not bound in Lua -- the ONE item that needs C++
 -- Amount: rewards.tab skill_mod_amount default i[1] when the cell is empty.
 -- Cap: skip when current >= skillModMax unless skillModMax == -1.
 local function grantRewardSkillMod(pPlayer, skillMod, amount, skillModMax)
@@ -1008,8 +1179,8 @@ local function grantRewardSkillMod(pPlayer, skillMod, amount, skillModMax)
 	return false
 end
 
--- collection.java:169-177 groundquests.grantQuestNoAcceptUI. No journal grant
--- on this branch: raise CollectionManager.QUEST_GRANT_HOOK for the journal branch.
+-- collection.java:169-177 groundquests.grantQuestNoAcceptUI. Raised on
+-- questGrant for the journal branch's listener.
 local function raiseQuestGrant(pPlayer, questName)
 	if questName == nil or questName == "" then
 		return
@@ -1067,7 +1238,7 @@ function CollectionManager.grantCollectionReward(pPlayer, collectionName, canRes
 		end
 	end
 
-	-- collection.java:169-177 quest — OPEN, questGrant hook
+	-- collection.java:169-177 quest — raised on questGrant for the journal branch's listener
 	if row.quest ~= nil and row.quest ~= "" then
 		local quests = splitComma(row.quest)
 		for i = 1, #quests do
@@ -1100,7 +1271,7 @@ function CollectionManager.grantCollectionReward(pPlayer, collectionName, canRes
 		end
 	end
 
-	-- collection.java:244-259 skill_mod. OPEN to apply (no addSkillMod binding).
+	-- collection.java:244-259 skill_mod. OPEN: CreatureObject:addSkillMod is not bound in Lua -- the ONE item that needs C++
 	if row.skillMod ~= nil and row.skillMod ~= "" then
 		local skillMods = splitComma(row.skillMod)
 		local amount = row.skillModAmount or CollectionManager.SKILL_MOD_AMOUNT_DEFAULT
@@ -1222,6 +1393,69 @@ function CollectionManager.syncBadgesOnLogin(pPlayer)
 			end
 		end
 	end
+end
+
+-- loot_schematic.java:86-117 ITEM_USE; :165-198 TYPE_SCHEMATIC grantSchematic.
+-- Core3: PlayerObject:addRewardedSchematic (LuaPlayerObject.cpp:291) type 1 =
+-- SchematicList::LOOT (LootSchematicMenuComponent.cpp:82). Radial 20 ITEM_USE.
+CollectionLootSchematicMenuComponent = { }
+
+function CollectionLootSchematicMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResponse, pPlayer)
+	if pSceneObject == nil or pPlayer == nil then
+		return
+	end
+
+	if SceneObject(pSceneObject):isASubChildOf(pPlayer) == false then
+		return
+	end
+
+	local menuResponse = LuaObjectMenuResponse(pMenuResponse)
+	menuResponse:addRadialMenuItem(20, 3, "@loot_schematic:use_schematic")
+end
+
+function CollectionLootSchematicMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, selectedID)
+	if pPlayer == nil or pSceneObject == nil or selectedID ~= 20 then
+		return 0
+	end
+
+	if SceneObject(pSceneObject):isASubChildOf(pPlayer) == false then
+		CreatureObject(pPlayer):sendSystemMessage("@loot_schematic:must_be_holding")
+		return 0
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if pGhost == nil then
+		return 0
+	end
+
+	local oid = SceneObject(pSceneObject):getObjectID()
+	local schematic = readStringData(oid .. ":collection.lootSchematic")
+	if schematic == nil or schematic == "" then
+		print("CollectionManager: schematic absent")
+		return 0
+	end
+
+	if CollectionManager.LOOT_SCHEMATIC_CLIENT_ABSENT[schematic] == true then
+		print("CollectionManager: schematic's crafted object absent from this client")
+		return 0
+	end
+
+	local uses = readData(oid .. ":collection.lootSchematicUses")
+	if uses == nil or uses == 0 then
+		uses = 1
+	end
+
+	-- LuaPlayerObject.cpp:297-302: false when SchematicMap has no draft of that path.
+	local learned = PlayerObject(pGhost):addRewardedSchematic(schematic, 1, uses, true)
+	if learned ~= true then
+		print("CollectionManager: schematic absent: " .. schematic)
+		return 0
+	end
+
+	CreatureObject(pPlayer):sendSystemMessage("@loot_schematic:schematic_learned")
+	SceneObject(pSceneObject):destroyObjectFromWorld()
+	SceneObject(pSceneObject):destroyObjectFromDatabase()
+	return 0
 end
 
 return CollectionManager

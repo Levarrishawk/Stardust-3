@@ -211,8 +211,8 @@ CollectionObjectSpawns.dantooine = {
 		qw = 0.841901, qx = 0, qy = 0, qz = 0.539632,
 		cell = 6,
 		slot = "col_rebel_marine_armor:rebel_marine_gloves",
-		open = true,
-		openNote = "building-not-in-snapshot",
+		absent = true,
+		absentNote = "absent from this server (NGE building the snapshots lack)",
 	},
 	{
 		row = "dantooine_6_3:1",

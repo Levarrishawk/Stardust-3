@@ -211,8 +211,8 @@ CollectionObjectSpawns.naboo = {
 		qw = 0.841901, qx = 0, qy = 0.539632, qz = 0,
 		cell = 2,
 		slot = "col_datapad_01:datapad_08",
-		open = true,
-		openNote = "building-not-in-snapshot",
+		absent = true,
+		absentNote = "absent from this server (NGE building the snapshots lack)",
 	},
 	{
 		row = "naboo_7_4:1",

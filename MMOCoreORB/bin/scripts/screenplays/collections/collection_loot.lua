@@ -270,7 +270,7 @@ CollectionLoot = ScreenPlay:new {
 --   yavin_smuggler_member creatures.tab:5751 roll=4 columns=col_story_count_dooku_set_1,col_story_count_dooku_set_2,col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
 --   yavin_smuggler_muscle creatures.tab:5752 roll=4 columns=col_story_count_dooku_set_1,col_story_count_dooku_set_2,col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
 
--- OPEN: static items in used columns that are not consume-grantable
+-- Static items in used columns that are not consume-grantable
 -- (empty slot / consumeLoot=false). 29 items.
 --   col_trophy_bane_back_spider_02_01
 --   col_ig_88_wooden_dowel_02_01
@@ -306,8 +306,8 @@ CollectionLoot = ScreenPlay:new {
 --   object/tangible/collection/reward/col_reward_feather_duster.iff name=A Feather Duster slot=(empty) col_reward_feather_duster_02_01,col_reward_feather_duster_02_02,col_reward_feather_duster_02_03,col_reward_feather_duster_02_04,col_reward_feather_duster_02_05
 --   object/tangible/loot/generic_usable/generic_storage_increase.iff name=A Crate for Increased Building Storage slot=(empty) item_storage_increase_05_03,item_storage_increase_05_04
 
--- OPEN (resolved by choice, not by guess): duplicate display names on a
--- shared template that map to different slots. slotOf returns those slots
+-- Duplicate display names on a shared template that map to different
+-- slots (resolved by choice, not by guess). slotOf returns those slots
 -- joined with `|` (consume_loot.java:216 multi-slot form). onUse offers
 -- still-open collections via collection_list_title / collection_list_prompt;
 -- one still-open entry fills without asking (onUse #avail == 1 ->
@@ -423,7 +423,7 @@ function CollectionLoot:printAmbiguousTemplates()
 			parts[#parts + 1] = rec.rows[j].name .. "=" .. (rec.rows[j].slot or "")
 		end
 
-		print("CollectionLoot: OPEN ambiguous name " .. rec.displayName .. " on " .. rec.template .. " (" .. table.concat(parts, ", ") .. ")")
+		print("CollectionLoot: ambiguous name " .. rec.displayName .. " on " .. rec.template .. " (" .. table.concat(parts, ", ") .. ")")
 	end
 end
 
