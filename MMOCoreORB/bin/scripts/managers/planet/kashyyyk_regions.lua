@@ -19,9 +19,16 @@
 -- next to it. Rows whose NAME or RADIUS is not itself shipped are marked
 -- INFERRED so nothing here reads as quoted data when it is not.
 --
--- WHICH SHIPPED FILES GOVERN
---   bin/conf/config.lua TreFiles puts mtg_patch_022.tre above mtg_planets.tre
---   and does NOT list mtg_patch_023.tre at all, so the governing bytes are:
+--   WHICH SHIPPED FILES GOVERN
+--     Two config.lua files disagree, and this comment used to state only one of them.
+--       repo bin/conf/config.lua:152-157 (byte-identical to upstream 405162693a since
+--         37410f3570) puts mtg_patch_022.tre above mtg_planets.tre and does NOT list
+--         mtg_patch_023.tre at all.
+--       the live dev box, /home/ciiv/workspace/Stardust-3/MMOCoreORB/bin/conf/config.lua:166-174,
+--         DOES list mtg_patch_023.tre, at :172, ABOVE mtg_patch_022.tre at :173.
+--         That box is not a git checkout, so nothing here reaches it.
+--     Which order is correct is not settled in this comment. Everything below was derived
+--     against the REPO list, so the governing bytes for these rows are:
 --     terrain/kashyyyk.trn                 mtg_patch_022.tre  mapWidth 16384
 --     snapshot/kashyyyk.ws                 mtg_patch_022.tre  448 templates,
 --                                          4642 top-level nodes
@@ -73,10 +80,14 @@
 --     possible the day a Kashyyyk spawn group exists, and belong in the pass that
 --     writes it.
 --   * No rows for kashyyyk_rryatt_trail, kashyyyk_north_dungeons,
---     kashyyyk_south_dungeons or kashyyyk_pob_dungeons*. Also blocked, not
---     undecided: those snapshots ship only in mtg_patch_023.tre, and config.lua
---     does not load it, so the server cannot see the geometry those rows would
---     describe. Loading that TRE is a separate change with its own consequences.
+--     kashyyyk_south_dungeons or kashyyyk_pob_dungeons*. Blocked against the REPO
+--     config, not undecided: those snapshots ship only in mtg_patch_023.tre, which
+--     bin/conf/config.lua:152-157 does not load, so a server booting the repo config
+--     cannot see the geometry those rows would describe. NOTE: the live dev box's own
+--     config.lua:172 DOES load mtg_patch_023.tre, above 022 -- so on that box the
+--     geometry is visible and these rows are writable. Which TRE order is right, and
+--     whether the repo config should follow, is a separate decision with its own
+--     consequences and is not made here.
 --   * Only ONE localized region name exists for this planet. kashyyyk_region_names.stf
 --     ships exactly one key (kachirho). Any other @kashyyyk_region_names:* string
 --     would dangle, so every other row below uses a plain unlocalized name, the
