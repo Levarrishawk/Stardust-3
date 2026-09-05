@@ -2,13 +2,9 @@ MeatlumpLadderDownMenuComponent = {}
 
 -- SOE mtp_hideout_entrance_ladder.java:30 gated on completed
 -- mtp_hideout_access_07 or mtp_hideout_access_high_07 or god. Part 1 ships
--- the hideout open (orchestrator D1).
-MeatlumpLadderDownMenuComponent.GATE_ENABLED = false
--- When GATE_ENABLED flips to true, the check is:
---   Journal.done(pPlayer, "mtp_hideout_access_07") or Journal.done(pPlayer, "mtp_hideout_access_high_07")
---   or PlayerObject(pGhost):isPrivileged()
---   via require("managers.quest.journal")
--- TODO: do not add that require now (the module lives on branch journal-1-module).
+-- the hideout gated on _07 / _high_07 screenplay state.
+MeatlumpLadderDownMenuComponent.GATE_ENABLED = true
+-- Gate uses MtpQuestEngine screenplay state (no Journal.* on this branch).
 
 function MeatlumpLadderDownMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResponse, pPlayer)
 	if (pSceneObject == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
@@ -29,15 +25,17 @@ function MeatlumpLadderDownMenuComponent:handleObjectMenuSelect(pSceneObject, pP
 		return 0
 	end
 
-	-- GATE_ENABLED is false this round; the live-faithful body is the TODO above.
+	-- GATE_ENABLED: screenplay state of _07 / _high_07 (no Journal.* on this branch).
 	if (MeatlumpLadderDownMenuComponent.GATE_ENABLED) then
-		-- TODO: require("managers.quest.journal") -- module is on another branch.
-		-- Intended check:
-		--   local pGhost = CreatureObject(pPlayer):getPlayerObject()
-		--   if (not (Journal.done(pPlayer, "mtp_hideout_access_07") or Journal.done(pPlayer, "mtp_hideout_access_high_07") or (pGhost ~= nil and PlayerObject(pGhost):isPrivileged()))) then
-		--     CreatureObject(pPlayer):sendSystemMessage("You are unable to descend.") -- OURS, NOT SOURCED (SOE key elevator_text:mtp_unable_to_descend does not ship)
-		--     return 0
-		--   end
+		local pGhost = CreatureObject(pPlayer):getPlayerObject()
+		local done = MtpQuestEngine.isQuestComplete(pPlayer, "mtp_hideout_access_07") or MtpQuestEngine.isQuestComplete(pPlayer, "mtp_hideout_access_high_07")
+		local priv = pGhost ~= nil and PlayerObject(pGhost):isPrivileged()
+
+		if (not (done or priv)) then
+			-- OURS, NOT SOURCED (SOE key elevator_text:mtp_unable_to_descend does not ship)
+			CreatureObject(pPlayer):sendSystemMessage("You are unable to descend.")
+			return 0
+		end
 	end
 
 	local pMain = getSceneObject(MeatlumpHideoutScreenPlay.MAIN_ID)

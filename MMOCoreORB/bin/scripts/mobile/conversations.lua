@@ -306,6 +306,9 @@ includeFile("conversations/racetracks/nashalconversation.lua")
 -- Space
 includeFile("conversations/space/space_conversations.lua")
 
+-- Meatlump
+includeFile("conversations/meatlump/serverobjects.lua")
+
 -- Mustafar
 includeFile("conversations/mustafar/som_exploration_marker.lua")
 includeFile("conversations/mustafar/som_pei_yi.lua")

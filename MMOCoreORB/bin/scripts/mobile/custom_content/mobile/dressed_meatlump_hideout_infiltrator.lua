@@ -24,13 +24,13 @@ dressed_meatlump_hideout_infiltrator = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE + INVULNERABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_meatlump_hideout_infiltrator.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "mtp_hideout_infiltrator_convo",
 	attacks = {
 	}
 }

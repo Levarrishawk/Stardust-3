@@ -24,13 +24,13 @@ dressed_corellia_ragtag_ames_missd = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE + INVULNERABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_corellia_ragtag_ames_missd.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "mtp_ragtag_ames_missd_convo",
 	attacks = {
 	}
 }

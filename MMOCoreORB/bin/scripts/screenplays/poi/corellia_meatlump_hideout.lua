@@ -53,6 +53,7 @@ function MeatlumpHideoutScreenPlay:start()
 		self.propsSpawned = 0
 		self:spawnLadders()
 		self:spawnProps()
+		self:attachInstanceDoor()
 		self:spawnMobiles()
 		print("[meatlump] hideout props: present=" .. self.propsPresent .. " spawned=" .. self.propsSpawned)
 	end
@@ -140,10 +141,30 @@ function MeatlumpHideoutScreenPlay:spawnProps()
 	self:spawnIfMissing("object/tangible/meatlump/event/meatlump_weapon_palette_01_12.iff", 66.197, -36.000, 159.255, "main", "masterroom", 1, 0, 0, 0) -- ws masterroom
 	self:spawnIfMissing("object/tangible/meatlump/event/meatlump_food_palette_01_12.iff", 78.587, -36.000, 159.922, "main", "masterroom", 1, 0, 0, 0) -- ws masterroom
 
-	-- D5: instance enter as a prop, no menu component. Not in corellia.ws.
-	-- corellia_4_2.tab L248 template object/tangible/meatlump/hideout/mtp_hideout_instance_enter.iff is unregistered in this fork.
-	-- Spawned the registered analogue mtp_hideout_instance_entryb_controller.iff at the tab coordinates.
+	-- Instance door. corellia_4_2.tab L248 mtp_hideout_instance_enter.iff is unregistered; analogue is the entryb controller.
 	self:spawnIfMissing("object/tangible/meatlump/hideout/mtp_hideout_instance_entryb_controller.iff", 48.7528, -59.5329, 162.362, "main", "deathroom", 0.707132, 0, 0, -0.707081)
+end
+
+function MeatlumpHideoutScreenPlay:attachInstanceDoor()
+	local cellID = self:cellId(self.MAIN_ID, "deathroom")
+
+	if (cellID == nil) then
+		return
+	end
+
+	local pCell = getSceneObject(cellID)
+
+	if (pCell == nil) then
+		return
+	end
+
+	for i = 0, SceneObject(pCell):getContainerObjectsSize() - 1, 1 do
+		local pObj = SceneObject(pCell):getContainerObject(i)
+
+		if (pObj ~= nil and SceneObject(pObj):getTemplateObjectPath() == "object/tangible/meatlump/hideout/mtp_hideout_instance_entryb_controller.iff") then
+			SceneObject(pObj):setObjectMenuComponent("MtpHideoutInstanceMenuComponent")
+		end
+	end
 end
 
 function MeatlumpHideoutScreenPlay:spawnMobiles()

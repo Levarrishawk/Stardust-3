@@ -750,6 +750,13 @@ includeFile("cities/chandrila_nayli_outpost.lua")
 includeFile("cities/hutta_bilbousa_city.lua")
 includeFile("poi/naboo_memorial.lua")
 
+-- Meatlump
+includeFile("meatlump/quest/serverobjects.lua")
+includeFile("meatlump/instance/serverobjects.lua")
+includeFile("meatlump/vendor/mtp_vendor.lua")
+includeFile("meatlump/king/meatlump_king.lua")
+includeFile("meatlump/quest/web/serverobjects.lua")
+
 -- Mustafar
 -- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.
 includeFile("mustafar/mustafar_quest_xp.lua")

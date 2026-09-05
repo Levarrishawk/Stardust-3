@@ -1,0 +1,15 @@
+-- Meatlump web conversations. ruling 2026-09-04
+
+includeFile("conversations/meatlump/mtp_meatlump_king_convo.lua")
+includeFile("conversations/meatlump/web/mtp_vendor_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_map_tech_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_bomb_tech_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_food_supply_tech_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_weapon_supply_tech_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_weapon_supply_smuggler_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_safe_tech_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_recon_convo.lua")
+includeFile("conversations/meatlump/web/mtp_ragtag_ames_missd_convo.lua")
+includeFile("conversations/meatlump/web/mtp_corellia_times_contact_convo.lua")
+includeFile("conversations/meatlump/web/mtp_corsec_intelligence_officer_convo.lua")
+includeFile("conversations/meatlump/web/mtp_hideout_infiltrator_convo.lua")
