@@ -388,6 +388,8 @@
 	  conversations.lua, any creature template, or any other agent's screenplay.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 storyArcChaptersScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "storyArcChaptersScreenPlay",
@@ -889,6 +891,53 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	miloID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §story_arc_chapters / taskText :1418-1465.
+-- Screenplay data stays truth.
+storyArcChaptersScreenPlay.journalMap = {
+	[1] = { quest = "som_story_arc_chapter_one_01", complete = {0}, activate = {1} }, -- 1→one_01 t1 Travel to the Wreckage
+	[2] = { quest = "som_story_arc_chapter_one_01", complete = {1}, activate = {2} }, -- 2→one_01 t2 Locate a Working Terminal
+	[3] = { -- 3→one_02 t0 Salvage Circuit Boards
+		{ quest = "som_story_arc_chapter_one_01", complete = {2}, finish = true },
+		{ quest = "som_story_arc_chapter_one_02", activate = {0} },
+	},
+	[4] = { quest = "som_story_arc_chapter_one_02", complete = {0}, activate = {1} }, -- 4→one_02 t1 Search Salvage Bandits
+	[5] = { quest = "som_story_arc_chapter_one_02", complete = {1}, activate = {2} }, -- 5→one_02 t2 Fix Terminal
+	[6] = { quest = "som_story_arc_chapter_one_02", complete = {2}, activate = {6} }, -- 6→one_02 t6 Activate Computer
+	[7] = { -- 7→one_03 t1 Create an Uplink
+		{ quest = "som_story_arc_chapter_one_02", complete = {6}, finish = true },
+		{ quest = "som_story_arc_chapter_one_03", complete = {0}, activate = {1} },
+	},
+	[8] = { quest = "som_story_arc_chapter_one_03", complete = {1}, activate = {6} }, -- 8→one_03 t6 Return to the Ship's Computer
+	[9] = { quest = "som_story_arc_chapter_one_03", complete = {6}, activate = {2} }, -- 9→one_03 t2 Travel to the Old Republic Facility
+	[10] = { quest = "som_story_arc_chapter_one_03", complete = {2}, activate = {3} }, -- 10→one_03 t3 Turn Facility Power On
+	[11] = { quest = "som_story_arc_chapter_one_03", complete = {3}, activate = {5} }, -- 11→one_03 t5 Find Terminal Delta-Five
+	[12] = { -- 12→two_01 t0 Investigate the Droid Factory
+		{ quest = "som_story_arc_chapter_one_03", complete = {5}, finish = true },
+		{ quest = "som_story_arc_chapter_two_01", activate = {0} },
+	},
+	[13] = { quest = "som_story_arc_chapter_two_01", complete = {0}, activate = {1} }, -- 13→two_01 t1 Repair the Factory
+	[14] = { quest = "som_story_arc_chapter_two_01", complete = {1}, activate = {5} }, -- 14→two_01 t5 Return to the Ship's Computer
+	[15] = { quest = "som_story_arc_chapter_two_01", complete = {5}, activate = {4} }, -- 15→two_01 t4 Return to Milo
+	[16] = { -- 16→three_01 t6 Defeat the Droid Army
+		{ quest = "som_story_arc_chapter_two_01", complete = {4}, finish = true },
+		{ quest = "som_story_arc_chapter_three_01", complete = {0}, activate = {6} },
+	},
+	[17] = { quest = "som_story_arc_chapter_three_01", complete = {6} }, -- 17→three_01 t17 Scout (t17 OOR, no bit)
+	[18] = { quest = "som_story_arc_chapter_three_01", activate = {9} }, -- 18→three_01 t9 Search for Answers
+	[19] = { quest = "som_story_arc_chapter_three_01", complete = {9}, activate = {11} }, -- 19→three_01 t11 Enter Droid Factory
+	[20] = { quest = "som_story_arc_chapter_three_01", complete = {11} }, -- 20→three_01 t16 Shut Down Factory (t16 OOR)
+	[21] = { quest = "som_story_arc_chapter_three_01", activate = {14} }, -- 21→three_01 t14 Return to Milo
+	[22] = { -- 22→three_03 t0 Talk to a Pilot
+		{ quest = "som_story_arc_chapter_three_01", complete = {14}, finish = true },
+		{ quest = "som_story_arc_chapter_three_03", activate = {0} },
+	},
+	[23] = { quest = "som_story_arc_chapter_three_03", complete = {0}, activate = {3} }, -- 23→three_03 t3 Defeat HK-47
+	[24] = { quest = "som_story_arc_chapter_three_03", complete = {3}, activate = {5} }, -- 24→three_03 t5 Return to Milo
+	[25] = { quest = "som_story_arc_chapter_three_03", complete = {5}, activate = {6} }, -- 25→three_03 t6 Check Your Messages
+	[26] = { quest = "som_story_arc_chapter_three_03", complete = {6, 4}, activate = {4}, finish = true }, -- 26→three_03 t4 Reward
+}
+
 registerScreenPlay("storyArcChaptersScreenPlay", true)
 
 function storyArcChaptersScreenPlay:start()
@@ -1276,6 +1325,7 @@ end
 
 function storyArcChaptersScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function storyArcChaptersScreenPlay:getCount(pPlayer, key)

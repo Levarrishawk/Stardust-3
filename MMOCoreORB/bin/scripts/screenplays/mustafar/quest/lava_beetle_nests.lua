@@ -232,6 +232,8 @@
 	    reproduced as shipped.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 lavaBeetleNestsScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "lavaBeetleNestsScreenPlay",
@@ -369,6 +371,16 @@ lavaBeetleNestsScreenPlay = ScreenPlay:new {
 	campAreaID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §lava_beetle_nests. Screenplay data stays truth.
+lavaBeetleNestsScreenPlay.journalMap = {
+	[1] = { quest = "som_lava_beetle_nest_destroy", complete = {0}, activate = {5} }, -- 1→t5 Go to Location
+	[2] = { quest = "som_lava_beetle_nest_destroy", complete = {5}, activate = {10, 11, 12, 13, 14, 15} }, -- 2→t10 over t11-t18 (t16-t18 OOR)
+	[3] = { quest = "som_lava_beetle_nest_destroy", complete = {10, 11, 12, 13, 14, 15}, activate = {6} }, -- 3→t6 Encounter Count 8
+	[4] = { quest = "som_lava_beetle_nest_destroy", complete = {6}, activate = {9} }, -- 4→t9 Wait for Signal
+	[5] = { quest = "som_lava_beetle_nest_destroy", complete = {9}, finish = true }, -- 5→t19 Immediately Complete (t19 OOR)
+}
+
 registerScreenPlay("lavaBeetleNestsScreenPlay", true)
 
 -- ====================================================================
@@ -436,6 +448,7 @@ end
 
 function lavaBeetleNestsScreenPlay:setStage(pPlayer, stage)
 	self:setNumber(pPlayer, "stage", stage)
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 -- Which of the two variants is live.  Both drive the same four world nests, so

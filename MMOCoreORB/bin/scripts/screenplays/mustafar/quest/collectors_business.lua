@@ -120,6 +120,8 @@ Task 18 is a Wait for Signal on "talkedDroid" -- the turn-in conversation. That 
 the conversation handler, not a task.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 collectorsBusinessScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -187,6 +189,15 @@ collectorsBusinessScreenPlay = ScreenPlay:new {
 	STAGE_DONE = 4,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §collectors_business. Screenplay data stays truth.
+collectorsBusinessScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_collectors_business_1", complete = {0}, activate = {1} }, -- 1→t1 find the broken droid
+	[2] = { quest = "som_kenobi_collectors_business_1", complete = {1}, activate = {4} }, -- 2→t4 search rubble
+	[3] = { quest = "som_kenobi_collectors_business_1", complete = {4} }, -- 3→t18 return to Q4P3 (t18 OOR, no bit)
+	[4] = { quest = "som_kenobi_collectors_business_1", finish = true }, -- 4→t19/t20 Reward+Complete (both OOR)
+}
+
 registerScreenPlay("collectorsBusinessScreenPlay", true)
 
 function collectorsBusinessScreenPlay:start()
@@ -245,6 +256,7 @@ end
 
 function collectorsBusinessScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 -- Which radial, if any, this player should be offered on a given object.

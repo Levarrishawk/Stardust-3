@@ -174,6 +174,8 @@ _2's Wait for Signal "gaveAwayShard" is the Whiphid conversation, not a task; se
 cursed_shard_sucker_conv_handler.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 cursedShardScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -252,6 +254,18 @@ cursedShardScreenPlay = ScreenPlay:new {
 	approachAreaID = 0,
 	bridgeAreaID = 0,
 	npcIDByTemplate = {},
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §cursed_shard. Screenplay data stays truth.
+cursedShardScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_cursed_shard_1", complete = {0}, activate = {10} }, -- 1→_1 t10 "What to do?"
+	[2] = { quest = "som_kenobi_cursed_shard_1", complete = {10}, activate = {11} }, -- 2→_1 t11 brood Timer
+	[3] = { -- 3→_1 t12 complete + _2 granted; both branches live
+		{ quest = "som_kenobi_cursed_shard_1", complete = {11, 12}, finish = true },
+		{ quest = "som_kenobi_cursed_shard_2", complete = {0}, activate = {1, 2, 4, 11} }, -- _2 t1/t4/t11 or t2
+	},
+	[4] = { quest = "som_kenobi_cursed_shard_2", finish = true }, -- 4→_2 t7/t8 or t9/t10; both branches share STAGE_DONE
 }
 
 registerScreenPlay("cursedShardScreenPlay", true)
@@ -375,6 +389,7 @@ end
 
 function cursedShardScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function cursedShardScreenPlay:hasFlag(pPlayer, key)

@@ -297,6 +297,8 @@ WHAT IS NOT MODELLED
     recomputed from quest_experience (see mustafar_quest_xp.lua).
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 somPoisonMinersScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -356,6 +358,17 @@ somPoisonMinersScreenPlay = ScreenPlay:new {
 
 	campAreaID = 0,
 	beaconAreaID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §som_poison_miners. Screenplay data stays truth.
+somPoisonMinersScreenPlay.journalMap = {
+	[1] = { quest = "som_poison_miners", complete = {0}, activate = {2} }, -- 1→t2 Go to Location
+	[2] = { quest = "som_poison_miners", complete = {2}, activate = {11} }, -- 2→t11 Wait for Signal
+	[3] = { quest = "som_poison_miners", complete = {11}, activate = {12} }, -- 3→t12 Wait for Signal
+	[4] = { quest = "som_poison_miners", complete = {12}, activate = {9} }, -- 4→t9 Go to Location
+	[5] = { quest = "som_poison_miners", complete = {9}, activate = {10} }, -- 5→t10 Encounter
+	[6] = { quest = "som_poison_miners", complete = {10, 7}, activate = {7, 8}, finish = true }, -- 6→t7 live; t8 Reward on closeOut→0
 }
 
 registerScreenPlay("somPoisonMinersScreenPlay", true)
@@ -431,6 +444,7 @@ end
 
 function somPoisonMinersScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function somPoisonMinersScreenPlay:getKills(pPlayer)

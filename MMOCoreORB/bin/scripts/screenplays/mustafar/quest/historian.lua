@@ -286,6 +286,8 @@ Task 7 on both quest-one files is a Wait for Signal on "successDone", and _2's t
 waits on "piecesRetrieved". Those are the turn-in conversation, not tasks.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 historianScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -407,6 +409,17 @@ historianScreenPlay = ScreenPlay:new {
 	questGiverID = 0,
 	terminalIDs = {},
 	campMobileIDs = {},
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §historian. Screenplay data stays truth.
+historianScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_historian_1", activate = {0} }, -- 1→_1 t0 live (q1step has the finer ladder)
+	[2] = { quest = "som_kenobi_historian_1", complete = {5}, activate = {7} }, -- 2→_1 t7 Wait for Signal
+	[3] = { quest = "som_kenobi_historian_1", complete = {7, 8}, finish = true }, -- 3→_1 t8 Reward / t12 Complete
+	[4] = { quest = "som_kenobi_historian_2", complete = {0}, activate = {1, 2, 3, 4, 6} }, -- 4→_2 t1-t4 under t6
+	[5] = { quest = "som_kenobi_historian_2", complete = {6}, activate = {7} }, -- 5→_2 t7 Wait for Signal
+	[6] = { quest = "som_kenobi_historian_2", complete = {7, 8}, finish = true }, -- 6→_2 t8 Reward
 }
 
 registerScreenPlay("historianScreenPlay", true)
@@ -613,6 +626,7 @@ end
 
 function historianScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function historianScreenPlay:rawQ1Step(pPlayer)

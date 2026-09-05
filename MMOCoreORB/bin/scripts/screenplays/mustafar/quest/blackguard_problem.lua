@@ -220,6 +220,8 @@ showSystemMessages is true on all six tasks that have journal text and 0 only on
 task 0 and task 7, neither of which has any, so the flag is honoured as written.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 somBlackguardProblemScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -339,6 +341,18 @@ somBlackguardProblemScreenPlay = ScreenPlay:new {
 	questGiverID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §blackguard_problem. Screenplay data stays truth.
+somBlackguardProblemScreenPlay.journalMap = {
+	[1] = { quest = "som_blackguard_problem", complete = {0}, activate = {1} }, -- 1→t1 kill 10 Blackguard
+	[2] = { quest = "som_blackguard_problem", complete = {1}, activate = {2} }, -- 2→t2 wait minion_defeated
+	[3] = { quest = "som_blackguard_problem", complete = {2}, activate = {3} }, -- 3→t3 kill Vansk
+	[4] = { quest = "som_blackguard_problem", complete = {3}, activate = {4} }, -- 4→t4 wait vansk_defeated
+	[5] = { quest = "som_blackguard_problem", complete = {4}, activate = {5} }, -- 5→t5 kill San'sii
+	[6] = { quest = "som_blackguard_problem", complete = {5}, activate = {6} }, -- 6→t6 wait sansii_defeated
+	[7] = { quest = "som_blackguard_problem", complete = {6}, activate = {7}, finish = true }, -- 7→t7 Reward (then reset 0)
+}
+
 registerScreenPlay("somBlackguardProblemScreenPlay", true)
 
 -- start() exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
@@ -385,6 +399,7 @@ end
 
 function somBlackguardProblemScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function somBlackguardProblemScreenPlay:getRuns(pPlayer)

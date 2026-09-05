@@ -217,6 +217,8 @@ the stored Experience Amount 0 is real, but live still paid because the server
 recomputed from quest_experience (see mustafar_quest_xp.lua).
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 reuniteShardScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -310,6 +312,24 @@ reuniteShardScreenPlay = ScreenPlay:new {
 	-- Filled in at start(); active areas only exist at runtime.
 	legByAreaID = {},
 	vibrationAreaID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §reunite_shard. Screenplay data stays truth.
+reuniteShardScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_reunite_shard_1", complete = {0}, activate = {1} }, -- 1→_1 t1 Go to Location
+	[2] = { quest = "som_kenobi_reunite_shard_1", complete = {1}, activate = {3} }, -- 2→_1 t3 Retrieve
+	[3] = { -- 3→_1 t4 complete + _2 t13-t16 all live (t16 OOR)
+		{ quest = "som_kenobi_reunite_shard_1", complete = {3, 4}, finish = true },
+		{ quest = "som_kenobi_reunite_shard_2", activate = {13, 14, 15} },
+	},
+	[4] = { -- 4→_2 t12 grants _3; _3 t2 live
+		{ quest = "som_kenobi_reunite_shard_2", finish = true },
+		{ quest = "som_kenobi_reunite_shard_3", activate = {2} },
+	},
+	[5] = { quest = "som_kenobi_reunite_shard_3", complete = {2}, activate = {3} }, -- 5→_3 t3 Timer
+	[6] = { quest = "som_kenobi_reunite_shard_3", complete = {3}, activate = {4} }, -- 6→_3 t4 Retrieve
+	[7] = { quest = "som_kenobi_reunite_shard_3", complete = {4, 5, 6}, finish = true }, -- 7→_3 t6 Reward
 }
 
 registerScreenPlay("reuniteShardScreenPlay", true)
@@ -476,6 +496,7 @@ end
 
 function reuniteShardScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function reuniteShardScreenPlay:hasFlag(pPlayer, key)

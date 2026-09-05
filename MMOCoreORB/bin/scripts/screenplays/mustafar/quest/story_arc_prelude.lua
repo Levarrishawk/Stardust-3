@@ -264,6 +264,8 @@ placeholder string and nothing is granted from it; isObiwanCheckComplete is publ
 so that whatever ends up being the beach quest can read the gate.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 storyArcPreludeScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -377,6 +379,22 @@ storyArcPreludeScreenPlay = ScreenPlay:new {
 	crashAreaID = 0,
 	arrivalAreaID = 0,
 	chivosID = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §story_arc_prelude. Screenplay data stays truth.
+storyArcPreludeScreenPlay.journalMap = {
+	[1] = { quest = "som_story_arc_prelude_01", complete = {0}, activate = {4} }, -- 1→_01 t4 Go to Location
+	[2] = { -- 2→_01 t2/t3 grant _02; _02 t1 live
+		{ quest = "som_story_arc_prelude_01", complete = {4, 2, 3}, finish = true },
+		{ quest = "som_story_arc_prelude_02", activate = {1} },
+	},
+	[3] = { quest = "som_story_arc_prelude_02", complete = {1}, activate = {5} }, -- 3→_02 t5 Wait for Signal
+	[4] = { quest = "som_story_arc_prelude_02", complete = {5, 6}, finish = true }, -- 4→_02 t6 Reward; _03 on offer
+	[5] = { quest = "som_story_arc_prelude_03", complete = {0}, activate = {1} }, -- 5→_03 t1 music; t15 Go to Location OOR
+	[6] = { quest = "som_story_arc_prelude_03", complete = {1}, activate = {13, 12, 6} }, -- 6→_03 t13/t12/t6 live
+	[7] = { quest = "som_story_arc_prelude_03", complete = {13, 12, 6}, activate = {7} }, -- 7→_03 t7 Wait for Signal
+	[8] = { quest = "som_story_arc_prelude_03", complete = {7, 14}, finish = true }, -- 8→_03 t14 Reward
 }
 
 registerScreenPlay("storyArcPreludeScreenPlay", true)
@@ -507,6 +525,7 @@ end
 
 function storyArcPreludeScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function storyArcPreludeScreenPlay:hasFlag(pPlayer, key)

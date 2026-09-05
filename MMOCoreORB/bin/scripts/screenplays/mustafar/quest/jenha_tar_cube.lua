@@ -201,6 +201,8 @@ flag costs nothing here and is honoured by having no reward chatter beyond the
 hand-over lines.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 somJenhaTarCubeScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -296,6 +298,15 @@ somJenhaTarCubeScreenPlay = ScreenPlay:new {
 	questGiverID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §jenha_tar_cube. Screenplay data stays truth.
+somJenhaTarCubeScreenPlay.journalMap = {
+	[1] = { quest = "som_jenha_tar_cube", activate = {0} }, -- 1→t0 Find the Ruins (stage = task+1)
+	[2] = { quest = "som_jenha_tar_cube", complete = {0}, activate = {1} }, -- 2→t1 Retrieve Item ×3
+	[3] = { quest = "som_jenha_tar_cube", complete = {1}, activate = {2} }, -- 3→t2 Wait for Signal somCubeSuccess
+	[4] = { quest = "som_jenha_tar_cube", complete = {2, 3, 4, 5, 6}, finish = true }, -- 4→t3-t6 four Reward tasks
+}
+
 registerScreenPlay("somJenhaTarCubeScreenPlay", true)
 
 function somJenhaTarCubeScreenPlay:start()
@@ -383,6 +394,7 @@ end
 
 function somJenhaTarCubeScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function somJenhaTarCubeScreenPlay:getRuns(pPlayer)

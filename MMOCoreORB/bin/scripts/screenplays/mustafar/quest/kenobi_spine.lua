@@ -274,6 +274,8 @@ WHAT IS NOT MODELLED, AND WHY
   two pay out here -- no credits are invented for the four that pay nothing.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 kenobiSpineScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -787,6 +789,27 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	exitStoneCopies = 0,
 	obiwanLairCopies = 0,
 	lairObserverCopies = 0,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §kenobi_spine. Screenplay data stays truth.
+kenobiSpineScreenPlay.journalMap = {
+	[1] = { quest = "som_obi_wan_signal_1", activate = {0} }, -- 1→signal_1 t0 Wait for Signal dyingMiner
+	[2] = { -- 2→signal_1 t1 Reward + signal_2 t0 returnToObiWan
+		{ quest = "som_obi_wan_signal_1", complete = {0, 1}, finish = true },
+		{ quest = "som_obi_wan_signal_2", activate = {0} },
+	},
+	[3] = { quest = "som_obi_wan_signal_2", complete = {0, 1}, finish = true }, -- 3→signal_2 t1 Reward
+	[4] = { quest = "som_kenobi_main_quest_1", activate = {0} }, -- 4→main_quest_1 t0 (hermit sub-state not in stage)
+	[5] = { -- 5→main_quest_1 t17 grants _spared (t17 OOR)
+		{ quest = "som_kenobi_main_quest_1", finish = true },
+		{ quest = "som_kenobi_main_quest_spared", activate = {0} },
+	},
+	[6] = { -- 6→main_quest_1 t21/t22 grants _killed (both OOR)
+		{ quest = "som_kenobi_main_quest_1", finish = true },
+		{ quest = "som_kenobi_main_quest_killed", activate = {0} },
+	},
+	-- 7-11 unmapped: CRC is spared vs killed / _3_visible vs _3_b_visible, from the spared flag not stage.
 }
 
 registerScreenPlay("kenobiSpineScreenPlay", true)
@@ -1946,6 +1969,7 @@ end
 
 function kenobiSpineScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function kenobiSpineScreenPlay:getHermitStage(pPlayer)

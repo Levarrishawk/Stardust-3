@@ -163,6 +163,8 @@ Amount 0 is real; live still paid, because the server recomputed from
 quest_experience (see mustafar_quest_xp.lua).
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 moralChoiceScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -268,6 +270,18 @@ moralChoiceScreenPlay = ScreenPlay:new {
 	terminalCellID = 0,
 	terminalCellBy = "none",
 	generatorAttached = false,
+}
+
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §moral_choice. Screenplay data stays truth.
+moralChoiceScreenPlay.journalMap = {
+	[1] = { quest = "som_kenobi_moral_choice_1", complete = {1}, activate = {0} }, -- 1→t0 Tear out cables (root t1 hidden)
+	[2] = { quest = "som_kenobi_moral_choice_1", complete = {0}, activate = {4, 3} }, -- 2→t4 Encounter + t3 Steal core
+	[3] = { quest = "som_kenobi_moral_choice_1", complete = {4, 3}, activate = {5, 7} }, -- 3→t5 Encounter + t7 givenCore
+	[4] = { quest = "som_kenobi_moral_choice_1", activate = {10, 11} }, -- 4→t10 hidden + t11 Upload data
+	[5] = { quest = "som_kenobi_moral_choice_1", complete = {10, 11}, activate = {15, 12} }, -- 5→t16 OOR; t15 Encounter + t12 talkedLeader2
+	[6] = { quest = "som_kenobi_moral_choice_1", complete = {5, 7, 8, 9}, finish = true }, -- 6→t8/t9 corp complete
+	[7] = { quest = "som_kenobi_moral_choice_1", complete = {12, 13, 14}, finish = true }, -- 7→t13/t14 miners complete
 }
 
 registerScreenPlay("moralChoiceScreenPlay", true)
@@ -404,6 +418,7 @@ end
 
 function moralChoiceScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function moralChoiceScreenPlay:isPresent(pPlayer)

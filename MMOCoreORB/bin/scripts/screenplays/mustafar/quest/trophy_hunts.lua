@@ -331,6 +331,8 @@
 	    and no XP are granted, because that is what the .qst says.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 trophyHuntsScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "trophyHuntsScreenPlay",
@@ -619,6 +621,36 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 	},
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §trophy_hunts. Screenplay data stays truth.
+trophyHuntsScreenPlay.journalMapRug = {
+	[1] = { quest = "som_blistmok_rug", complete = {0}, activate = {3, 1, 2} }, -- 1→t3 Wait for Tasks over t1/t2
+	[2] = { quest = "som_blistmok_rug", complete = {3, 1, 2}, activate = {4} }, -- 2→t4 Destroy+Loot Ura Jen
+	[3] = { quest = "som_blistmok_rug", complete = {4}, activate = {7}, finish = true }, -- 3→t7 Reward
+}
+trophyHuntsScreenPlay.journalMapSkull = {
+	[1] = { quest = "som_jundak_skull", complete = {0}, activate = {1} }, -- 1→t1 Destroy+Loot Ancient Jundak
+	[2] = { quest = "som_jundak_skull", complete = {1}, activate = {5} }, -- 2→t5 Wait for Signal _one
+	[3] = { quest = "som_jundak_skull", complete = {5}, activate = {6} }, -- 3→t6 Wait for Signal _two
+	[4] = { quest = "som_jundak_skull", complete = {6} }, -- 4→between t6 and Reward
+	[5] = { quest = "som_jundak_skull", activate = {7}, finish = true }, -- 5→t7 Reward
+}
+trophyHuntsScreenPlay.journalMapPack = {
+	[1] = { quest = "som_xandank_trophey", complete = {15} }, -- 1→t16 Go to Location (t16 OOR); t15 music
+	[2] = { quest = "som_xandank_trophey" }, -- 2→t18 OOR
+	[3] = { quest = "som_xandank_trophey" }, -- 3→t17 OOR
+	[4] = { quest = "som_xandank_trophey" }, -- 4→t19 OOR
+	[5] = { quest = "som_xandank_trophey" }, -- 5→t20 OOR
+	[6] = { quest = "som_xandank_trophey" }, -- 6→t22/t23/t27 OOR
+	[7] = { quest = "som_xandank_trophey" }, -- 7→t25 OOR
+	[8] = { quest = "som_xandank_trophey", finish = true }, -- 8→t26 Reward OOR
+}
+trophyHuntsScreenPlay.journalMaps = {
+	rug = trophyHuntsScreenPlay.journalMapRug,
+	skull = trophyHuntsScreenPlay.journalMapSkull,
+	pack = trophyHuntsScreenPlay.journalMapPack,
+}
+
 registerScreenPlay("trophyHuntsScreenPlay", true)
 
 -- ====================================================================
@@ -830,6 +862,7 @@ end
 
 function trophyHuntsScreenPlay:setStage(pPlayer, quest, stage)
 	self:setNumber(pPlayer, quest, "stage", stage)
+	JournalMirror.applyStage(pPlayer, self.journalMaps[quest.dataPrefix], stage)   -- J-3 journal mirror
 end
 
 function trophyHuntsScreenPlay:isActive(pPlayer, quest)

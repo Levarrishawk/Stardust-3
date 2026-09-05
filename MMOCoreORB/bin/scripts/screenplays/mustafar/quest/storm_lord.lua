@@ -285,6 +285,8 @@ Reward, says true and has no journal text of its own; its completion message is
 the one this file sends.
 --]]
 
+local JournalMirror = require("managers.quest.journal_mirror")
+
 somStormLordScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -445,6 +447,20 @@ somStormLordScreenPlay = ScreenPlay:new {
 	brotherID = 0,
 }
 
+-- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
+-- this header and scratch/mustafar-stage-task-map.md §storm_lord. Screenplay data stays truth.
+somStormLordScreenPlay.journalMap = {
+	[1] = { quest = "som_storm_lord", complete = {0}, activate = {1} }, -- 1→t1 kill 15 minions
+	[2] = { quest = "som_storm_lord", complete = {1}, activate = {2} }, -- 2→t2 wait minions_defeated
+	[3] = { quest = "som_storm_lord", complete = {2}, activate = {3} }, -- 3→t3 kill 10 zealots
+	[4] = { quest = "som_storm_lord", complete = {3}, activate = {4} }, -- 4→t4 wait zealots_defeated
+	[5] = { quest = "som_storm_lord", complete = {4}, activate = {5} }, -- 5→t5 defeat the Prophet
+	[6] = { quest = "som_storm_lord", complete = {5}, activate = {6} }, -- 6→t6 wait prophet_defeated
+	[7] = { quest = "som_storm_lord", complete = {6}, activate = {7} }, -- 7→t7 defeat the Storm Lord
+	[8] = { quest = "som_storm_lord", complete = {7}, activate = {8} }, -- 8→t8 wait storm_lord_defeated
+	[9] = { quest = "som_storm_lord", complete = {8}, activate = {9}, finish = true }, -- 9→t9 Reward (then reset 0)
+}
+
 registerScreenPlay("somStormLordScreenPlay", true)
 
 -- start() exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
@@ -502,6 +518,7 @@ end
 
 function somStormLordScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	JournalMirror.applyStage(pPlayer, self.journalMap, stage)   -- J-3 journal mirror
 end
 
 function somStormLordScreenPlay:getRuns(pPlayer)
