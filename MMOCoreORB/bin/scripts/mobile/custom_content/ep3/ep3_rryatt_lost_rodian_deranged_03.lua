@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1522 (ep3_rryatt_lost_rodian_hunter_deranged, where=rryatt_trail, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_rryatt_lost_rodian_deranged_03 = Creature:new {
 	customName = "Deranged Rodian",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "lost_rodian_hunter",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 85,

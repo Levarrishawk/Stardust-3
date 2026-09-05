@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1514 (ep3_rryatt_deep_woods_poacher, where=rryatt_trail, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_rryatt_deep_woods_poacher_01 = Creature:new {
 	customName = "Deep Woods Poacher",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "deep_woods_poacher",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

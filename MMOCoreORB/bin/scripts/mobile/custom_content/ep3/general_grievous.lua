@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1378 (ep3_general_grievous, where=myyydril, BOSS).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 general_grievous = Creature:new {
 	--objectName = "@mob/creature_names:ep3_general_grievous",
 	customName = "General Grievous",
-	socialGroup = "droids",
+	socialGroup = "myyydril_grievous",
 	pvpFaction = "",
 	faction = "",
 	mobType = MOB_ANDROID,
@@ -30,7 +32,16 @@ general_grievous = Creature:new {
 	scale = 1.5,
 
 	templates = {"object/mobile/ep3/general_grievous.iff"},
-	lootGroups = {},
+	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/myyydril_grievous lootList myyydril_grievous intLootRolls=1 creatures.tab line 1378 (ep3_general_grievous).
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	lootGroups = {
+		{
+			groups = {
+				{group = "myyydril_grievous", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
 	weapons = {"dark_jedi_weapons_gen4"},
 	conversationTemplate = "",
 	attacks = merge(lightsabermaster)

@@ -1,9 +1,11 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1347 (ep3_forest_kerritamba_assassin, where=dead_forest, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 dressed_ep3_forest_wke_assassin = Creature:new {
 	customName = "human_base_male",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "forest_kerritamba",
+	faction = "forest_kerritamba",
 	level = 4,
 	chanceHit = 0.24,
 	damageMin = 40,
@@ -28,7 +30,16 @@ dressed_ep3_forest_wke_assassin = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_ep3_forest_wke_assassin.iff"},
-	lootGroups = {},
+	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/forest_kerritamba lootList forest_kerritamba intLootRolls=1 creatures.tab line 1347 (ep3_forest_kerritamba_assassin).
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	lootGroups = {
+		{
+			groups = {
+				{group = "forest_kerritamba", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

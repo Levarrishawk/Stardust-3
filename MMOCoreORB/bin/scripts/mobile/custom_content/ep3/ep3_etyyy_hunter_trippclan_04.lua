@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1471 (ep3_npc_rodian_trippclan, where=etyyy, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_etyyy_hunter_trippclan_04 = Creature:new {
 	customName = "Trippclan Hunter",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "etyyy_rodian_tripp",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

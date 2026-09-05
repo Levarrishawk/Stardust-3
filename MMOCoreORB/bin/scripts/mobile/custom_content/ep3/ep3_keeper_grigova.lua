@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1571 (ep3_slaver_keeper_grigova, where=slave_camp, BOSS).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_keeper_grigova = Creature:new {
 	customName = "Keeper Grigova",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "blackscale",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

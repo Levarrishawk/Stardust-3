@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 534 (clone_relics_ikvizi, where=kashyyyk, NORMAL); 1263 (ep3_clone_relics_geonosian_ikvizi, where=kashyyyk, NORMAL; primary).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_clone_relics_geonosian_ikvizi = Creature:new {
 	customName = "Ikvizi",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

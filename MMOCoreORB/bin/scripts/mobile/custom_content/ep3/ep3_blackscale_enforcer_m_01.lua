@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1245 (ep3_avatar_blackscale_scalelord, where=avatar, ELITE); 1287 (ep3_etyyy_blackscale_enforcer, where=etyyy, ELITE; primary); 1560 (ep3_slaver_blackscale_enforcer, where=slave_camp, ELITE); 1561 (ep3_slaver_blackscale_enforcer_rryatt, where=slave_camp, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_blackscale_enforcer_m_01 = Creature:new {
 	customName = "Blackscale Enforcer",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "trandoshan",
+	socialGroup = "blackscale",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 85,

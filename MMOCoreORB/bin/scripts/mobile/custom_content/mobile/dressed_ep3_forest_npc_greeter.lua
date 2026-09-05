@@ -1,8 +1,10 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1353 (ep3_forest_npc_greeter, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 dressed_ep3_forest_npc_greeter = Creature:new {
 	customName = "dressed_ep3_forest_npc_greeter",
 	--objectName = "",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	level = 100,
 	chanceHit = 1,

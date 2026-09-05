@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1569 (ep3_slaver_broodmaster_hsskas, where=slave_camp, BOSS).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_broodmaster_hsskas = Creature:new {
 	customName = "Broodmaster Hsskas",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "trandoshan",
+	socialGroup = "blackscale",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 115,

@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1464 (ep3_npc_arcona_addict, where=etyyy, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_etyyy_arcona_02 = Creature:new {
 	customName = "Arcona",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "etyyy_arcona",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1485 (ep3_qst_anguished_wookiee, where=kachirho, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_anguished_wookiee_01 = Creature:new {
 	customName = "Anguished Wookiee",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "wookiee",
+	socialGroup = "mad_wookiee",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 45,

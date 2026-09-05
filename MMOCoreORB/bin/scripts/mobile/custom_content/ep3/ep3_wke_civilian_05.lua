@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1250 (ep3_avatar_wke_captive, where=avatar, ELITE); 1416 (ep3_kachirho_wke_healthy, where=kachirho, NORMAL); 1492 (ep3_qst_wookiee_captive, where=kashyyyk, NORMAL); 1493 (ep3_qst_wookiee_civilians, where=kashyyyk, NORMAL; primary); 1494 (ep3_qst_wookiee_escaped, where=kashyyyk, NORMAL); 1496 (ep3_qst_wookiee_tagged, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_wke_civilian_05 = Creature:new {
 	customName = "Wookiee Civilian",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

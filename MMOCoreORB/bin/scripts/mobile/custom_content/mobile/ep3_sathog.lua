@@ -1,9 +1,11 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1555 (ep3_sathog, where=kachirho, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_sathog = Creature:new {
 	customName = "ep3_sathog",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "sathog",
+	faction = "",
 	level = 4,
 	chanceHit = 0.24,
 	damageMin = 40,
@@ -28,7 +30,16 @@ ep3_sathog = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3_sathog.iff"},
-	lootGroups = {},
+	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_sathog lootList kashyyyk_sathog intLootRolls=1 creatures.tab line 1555 (ep3_sathog).
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this round.
+	lootGroups = {
+		{
+			groups = {
+				{group = "kashyyyk_sathog", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

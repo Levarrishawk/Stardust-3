@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1290 (ep3_etyyy_chiss_poacher_defender, where=etyyy, NORMAL; primary); 1403 (ep3_kachirho_chiss_guard, where=kachirho, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_etyyy_chiss_poacher_defender_04 = Creature:new {
 	customName = "Chiss Poacher Defender",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "chiss_poacher_etyyy",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 45,

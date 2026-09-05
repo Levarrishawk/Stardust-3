@@ -1,8 +1,10 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1248 (ep3_avatar_jawa, where=avatar, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_avatar_jawa = Creature:new {
 	customName = "Jawa",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
-	faction = "",
+	socialGroup = "avatar_blackscale",
+	faction = "jawa",
 	mobType = MOB_NPC,
 	level = 30,
 	chanceHit = 0.33,

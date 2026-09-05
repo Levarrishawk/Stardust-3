@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 549 (clone_relics_trandoshan_researcher, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_clone_relics_trandoshan_researcher_05 = Creature:new {
 	customName = "Trandoshan Researcher",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "hsskor",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,
