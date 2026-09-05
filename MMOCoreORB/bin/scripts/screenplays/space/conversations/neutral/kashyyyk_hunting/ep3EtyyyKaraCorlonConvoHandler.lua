@@ -70,12 +70,32 @@ function Ep3EtyyyKaraCorlonConvoHandler:canFly(pPlayer)
 	return isJtlEnabled() and SpaceHelpers:isPilot(pPlayer) and SpaceHelpers:hasCertifiedShip(pPlayer, true)
 end
 
+function Ep3EtyyyKaraCorlonConvoHandler:talkToKara(pPlayer)
+	return huntJohnsonHelpKaraScreenPlay:isTaskActive(pPlayer, "johnson_talkToKara")
+end
+
+function Ep3EtyyyKaraCorlonConvoHandler:karaKnowsYou(pPlayer)
+	return huntJohnsonHelpKaraScreenPlay:hasCompletedTask(pPlayer, "johnson_talkToKara")
+end
+
+function Ep3EtyyyKaraCorlonConvoHandler:workingOnDeliveries(pPlayer)
+	return huntJohnsonHelpKaraScreenPlay:isTaskActive(pPlayer, "johnson_karaDeliveries")
+end
+
+function Ep3EtyyyKaraCorlonConvoHandler:alreadyHasSpaceQuest(pPlayer)
+	return EtyyyHuntState:hasAnySpaceQuest(pPlayer)
+end
+
 function Ep3EtyyyKaraCorlonConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (pPlayer == nil or pNpc == nil or pConvTemplate == nil) then
 		return
 	end
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
+
+	if (self:talkToKara(pPlayer)) then
+		return convoTemplate:getScreen("ep3_kara_greeting")
+	end
 
 	local a1 = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_KARA_1.type, EP3_KARA_1.name)
 	local c1 = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_KARA_1.type, EP3_KARA_1.name)
@@ -139,6 +159,9 @@ function Ep3EtyyyKaraCorlonConvoHandler:runScreenHandlers(pConvTemplate, pPlayer
 			return LuaConversationTemplate(pConvTemplate):getScreen("ep3_kara_busy_first")
 		end
 
+		if (self:talkToKara(pPlayer)) then
+			EtyyyHuntState:raise(pPlayer, "johnson_talkToKara")
+		end
 		self:grant(pPlayer, pNpc, delivery_no_pickup_ep3_hunting_kara_poacher_delivery_01, EP3_KARA_1)
 
 	-- Re-offer of leg 02. s_56 "I'm on my way." lands on ep3_kara_leg2_go.
@@ -150,8 +173,11 @@ function Ep3EtyyyKaraCorlonConvoHandler:runScreenHandlers(pConvTemplate, pPlayer
 		self:grant(pPlayer, pNpc, delivery_no_pickup_ep3_hunting_kara_poacher_delivery_03, EP3_KARA_3)
 
 	-- s_76 "Thank you." -- after this she moves to s_36, her "we can't be seen talking" screen.
+	elseif (screenID == "ep3_kara_complete") then
+		EtyyyHuntState:raise(pPlayer, "johnson_karaDeliveries")
 	elseif (screenID == "ep3_kara_farewell") then
 		self:setFlag(pPlayer, EP3_KARA_FAREWELL_KEY, 1)
+		EtyyyHuntState:raise(pPlayer, "johnson_karaDeliveries")
 	end
 
 	return pScreenClone

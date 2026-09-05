@@ -302,4 +302,408 @@ ep3_ziven_no_space = ConvoScreen:new {
 }
 ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_ziven_no_space);
 
+
+-- Ground screens folded in (ruling 2026-09-04). Screen ids are the shipped
+-- java keys. Existing space screens above are untouched.
+ep3_etyyy_ziven_tissak_convo_s_1763 = ConvoScreen:new {
+	id = "s_1763",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1763", -- Is that... it is! Silkthrower's fang. Not many hunters could have defeated that webweaver. I've also...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1763)
+
+ep3_etyyy_ziven_tissak_convo_s_1769 = ConvoScreen:new {
+	id = "s_1769",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1769", -- Is that... it is! Silkthrower's fang. Not many hunters could have defeated that webweaver, yet you h...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1769)
+
+ep3_etyyy_ziven_tissak_convo_s_768 = ConvoScreen:new {
+	id = "s_768",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_768", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_768)
+
+ep3_etyyy_ziven_tissak_convo_s_769 = ConvoScreen:new {
+	id = "s_769",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_769", -- Vey good. Destroy the second freighter and any ships that are escorting it.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_769)
+
+ep3_etyyy_ziven_tissak_convo_s_888 = ConvoScreen:new {
+	id = "s_888",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_888", -- Okay, but return if you change your mind.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_888)
+
+ep3_etyyy_ziven_tissak_convo_s_774 = ConvoScreen:new {
+	id = "s_774",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_774", -- Okay, but return if you change your mind.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_774)
+
+ep3_etyyy_ziven_tissak_convo_s_760 = ConvoScreen:new {
+	id = "s_760",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_760", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_760)
+
+ep3_etyyy_ziven_tissak_convo_s_761 = ConvoScreen:new {
+	id = "s_761",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_761", -- Excellent. Launch into space and destroy the first freighter as well as any ships escorting it. Once...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_761)
+
+ep3_etyyy_ziven_tissak_convo_s_881 = ConvoScreen:new {
+	id = "s_881",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_881", -- Okay, but return if you change your mind.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_881)
+
+ep3_etyyy_ziven_tissak_convo_s_762 = ConvoScreen:new {
+	id = "s_762",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_762", -- Okay, but return if you change your mind.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_762)
+
+ep3_etyyy_ziven_tissak_convo_s_747 = ConvoScreen:new {
+	id = "s_747",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_747", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_747)
+
+ep3_etyyy_ziven_tissak_convo_s_580 = ConvoScreen:new {
+	id = "s_580",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_580", -- Thank you. Launch into space when you're ready.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_580)
+
+ep3_etyyy_ziven_tissak_convo_s_584 = ConvoScreen:new {
+	id = "s_584",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_584", -- I understand. Not everyone has the stomach for this kind of thing.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_584)
+
+ep3_etyyy_ziven_tissak_convo_s_745 = ConvoScreen:new {
+	id = "s_745",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_745", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_745)
+
+ep3_etyyy_ziven_tissak_convo_s_573 = ConvoScreen:new {
+	id = "s_573",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_573", -- Very good. I don't know what to expect up there, but try to salvage Fordan's ship if at all possible...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_573)
+
+ep3_etyyy_ziven_tissak_convo_s_574 = ConvoScreen:new {
+	id = "s_574",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_574", -- I understand. Not everyone has the stomach for this kind of thing.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_574)
+
+ep3_etyyy_ziven_tissak_convo_s_1707 = ConvoScreen:new {
+	id = "s_1707",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1707", -- Send him my regards as well, if you would.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1707)
+
+ep3_etyyy_ziven_tissak_convo_s_1711 = ConvoScreen:new {
+	id = "s_1711",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1711", -- Very well. Return to me when you are ready.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1711)
+
+ep3_etyyy_ziven_tissak_convo_s_1723 = ConvoScreen:new {
+	id = "s_1723",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1723", -- You will again be hunting webweavers, but you'll be targeting webweaver warriors. From them, I ask t...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1723)
+
+ep3_etyyy_ziven_tissak_convo_s_1727 = ConvoScreen:new {
+	id = "s_1727",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1727", -- Very well. Return when you are ready to hunt.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1727)
+
+ep3_etyyy_ziven_tissak_convo_s_1739 = ConvoScreen:new {
+	id = "s_1739",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1739", -- Your prey will be the feared webweaver spiders. Most of these creatures never leave the deepest murk...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1739)
+
+ep3_etyyy_ziven_tissak_convo_s_1743 = ConvoScreen:new {
+	id = "s_1743",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1743", -- Very well. Return when you are ready to hunt.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1743)
+
+ep3_etyyy_ziven_tissak_convo_s_1751 = ConvoScreen:new {
+	id = "s_1751",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1751", -- Tuwezz is down at the Hracca Glade gate camp. I'll upload a waypoint to your datapad to make finding...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1751)
+
+ep3_etyyy_ziven_tissak_convo_s_1755 = ConvoScreen:new {
+	id = "s_1755",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1755", -- Very well. Return when you are ready to hunt.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1755)
+
+ep3_etyyy_ziven_tissak_convo_s_1767 = ConvoScreen:new {
+	id = "s_1767",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1767", -- It's time he was forced to recognize hunting excellence in someone other than himself. Though based ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1767)
+
+ep3_etyyy_ziven_tissak_convo_s_882 = ConvoScreen:new {
+	id = "s_882",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_882", -- Very well done! That should send a message to Sordaan to leave me and my clan in peace. And if not, ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_263", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_882)
+
+ep3_etyyy_ziven_tissak_convo_s_883 = ConvoScreen:new {
+	id = "s_883",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_883", -- The second freighter got away. Not to worry, it's only a minor setback. We'll pick another freighter...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_884", "s_769"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_886", "s_888"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_261", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_883)
+
+ep3_etyyy_ziven_tissak_convo_s_763 = ConvoScreen:new {
+	id = "s_763",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_763", -- Destroy Sordaan's second freighter and it's escort. Sordaan hates nothing more than spending money, ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_259", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_763)
+
+ep3_etyyy_ziven_tissak_convo_s_764 = ConvoScreen:new {
+	id = "s_764",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_764", -- You did well on the first freighter, but that's not enough. Go take out a second of Sordaan's freigh...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_766", "s_769"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_772", "s_774"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_257", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_764)
+
+ep3_etyyy_ziven_tissak_convo_s_875 = ConvoScreen:new {
+	id = "s_875",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_875", -- The first freighter escaped, but that's not a problem. There are plenty more of them. We'll simply s...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_876", "s_761"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_879", "s_881"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_255", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_875)
+
+ep3_etyyy_ziven_tissak_convo_s_765 = ConvoScreen:new {
+	id = "s_765",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_765", -- Destroy Sordaan's first freighter. Make sure none of his ships survive.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_253", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_765)
+
+ep3_etyyy_ziven_tissak_convo_s_576 = ConvoScreen:new {
+	id = "s_576",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_576", -- I appreciate you recovering that ship. My technicians were able to learn some things and I now know ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_758", "s_761"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_759", "s_762"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_251", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_576)
+
+ep3_etyyy_ziven_tissak_convo_s_575 = ConvoScreen:new {
+	id = "s_575",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_575", -- I heard about the attacks, and you're inability to recover Fordan's ship. We've reacquired the locat...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_578", "s_580"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_582", "s_584"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_249", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_575)
+
+ep3_etyyy_ziven_tissak_convo_s_748 = ConvoScreen:new {
+	id = "s_748",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_748", -- Launch into space and head to the location we upload to you for Fordan's ship.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_247", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_748)
+
+ep3_etyyy_ziven_tissak_convo_s_366 = ConvoScreen:new {
+	id = "s_366",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_366", -- I just received some disturbing news. A friend of mine, Fordan Szholz, was on his way to Kashyyyk bu...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_571", "s_573"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_572", "s_574"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_245", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_366)
+
+ep3_etyyy_ziven_tissak_convo_s_1699 = ConvoScreen:new {
+	id = "s_1699",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1699", -- Good hunting to you.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1701", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1699)
+
+ep3_etyyy_ziven_tissak_convo_s_1703 = ConvoScreen:new {
+	id = "s_1703",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1703", -- Again you amaze me. These are 2 of the most perfect webweaver eyes I've yet seen. Good hunting indee...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1705", "s_1707"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1709", "s_1711"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1713", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1703)
+
+ep3_etyyy_ziven_tissak_convo_s_1715 = ConvoScreen:new {
+	id = "s_1715",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1715", -- You'll find webweaver warriors in the southeast corner of Etyyy. They are usually further in along t...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1717", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1715)
+
+ep3_etyyy_ziven_tissak_convo_s_1719 = ConvoScreen:new {
+	id = "s_1719",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1719", -- The things I've heard about your hunting skills have been proven to be accurate. But are you ready f...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1721", "s_1723"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1725", "s_1727"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1729", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1719)
+
+ep3_etyyy_ziven_tissak_convo_s_1731 = ConvoScreen:new {
+	id = "s_1731",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1731", -- Gather 38 webweaver fangs. You'll find webweavers down toward the southeast corner of the hunting gr...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1733", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1731)
+
+ep3_etyyy_ziven_tissak_convo_s_1735 = ConvoScreen:new {
+	id = "s_1735",
+	animation = "greet",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1735", -- You've come back to me quite the accomplished hunter. And I hope to continue your growth. Are you re...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1737", "s_1739"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1741", "s_1743"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1745", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1735)
+
+ep3_etyyy_ziven_tissak_convo_s_1747 = ConvoScreen:new {
+	id = "s_1747",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1747", -- Welcome to Etyyy! Hopefully you will fare better than the last hunters that Kerssoc was foolish enou...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1749", "s_1751"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1753", "s_1755"},
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1757", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1747)
+
+ep3_etyyy_ziven_tissak_convo_s_1759 = ConvoScreen:new {
+	id = "s_1759",
+	leftDialog = "@conversation/ep3_etyyy_ziven_tissak:s_1759", -- Greetings, young hunter. May your weapon never miss its mark.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_ziven_tissak:s_1761", "s_1769"},
+	}
+}
+ep3_etyyy_ziven_tissak_convotemplate:addScreen(ep3_etyyy_ziven_tissak_convo_s_1759)
+
 addConversationTemplate("ep3_etyyy_ziven_tissak_convotemplate", ep3_etyyy_ziven_tissak_convotemplate);

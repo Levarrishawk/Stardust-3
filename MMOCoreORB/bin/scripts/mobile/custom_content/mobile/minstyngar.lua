@@ -1,6 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1272 (ep3_cr_minstyngar, where=kashyyyk, NORMAL; primary); 1525 (ep3_rryatt_minstyngar_breeder, where=rryatt_trail, NORMAL); 1526 (ep3_rryatt_minstyngar_elite_bloodspiller, where=rryatt_trail, ELITE); 1527 (ep3_rryatt_minstyngar_elite_bonecrusher, where=rryatt_trail, ELITE); 1528 (ep3_rryatt_minstyngar_elite_deathcaller, where=rryatt_trail, ELITE); 1529 (ep3_rryatt_minstyngar_lvl3_boss, where=rryatt_trail, BOSS); 1530 (ep3_rryatt_minstyngar_preyfinder, where=rryatt_trail, NORMAL); 1531 (ep3_rryatt_minstyngar_thrasher, where=rryatt_trail, NORMAL); 1537 (ep3_rryatt_qst_minstyngar, where=rryatt_trail, NORMAL); 1572 (ep3_slaver_selindrolich, where=slave_camp, BOSS).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 minstyngar = Creature:new {
 	customName = "Minstyngar",
-	socialGroup = "townsperson",
+	socialGroup = "minstyngar",
+	faction = "",
 	level = 400,
 	chanceHit = 500,
 	damageMin = 1800,
@@ -25,7 +28,16 @@ minstyngar = Creature:new {
 	diet = CARNIVORE,
 	scale = 1,
 	templates = {"object/mobile/minstyngar.iff"},
-	lootGroups = {},
+	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_minstyngar lootList kashyyyk_minstyngar intLootRolls=1 creatures.tab line 1272 (ep3_cr_minstyngar).
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
+	lootGroups = {
+		{
+			groups = {
+				{group = "kashyyyk_minstyngar", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

@@ -1,6 +1,8 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1513 (ep3_rryatt_crazed_jedi, where=rryatt_trail, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_rryatt_crazed_jedi = Creature:new {
 	customName = "Crazed Jedi",
-	socialGroup = "nightsister",
+	socialGroup = "rryatt_crazed_jedi",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 120,

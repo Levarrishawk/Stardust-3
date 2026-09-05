@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1502 (ep3_rodian_corpse, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_kach_dead_rodian_01 = Creature:new {
 	customName = "Dead Rodian",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

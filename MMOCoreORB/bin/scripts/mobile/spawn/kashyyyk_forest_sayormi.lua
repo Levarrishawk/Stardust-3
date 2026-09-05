@@ -1,0 +1,22 @@
+-- SOURCED -- spawn group for type table datatables/spawning/ground_spawning/types/kashyyyk/forest_sayormi.tab
+-- Lair kashyyyk_forest_sayormi (same stem). Mustafar precedent for the numeric fields:
+--   spawnLimit = -1, numberToSpawn = 0, weighting = 15, size = 25
+--   (bin/scripts/mobile/spawn/mustafar_blistmoks.lua).
+-- minDifficulty/maxDifficulty = min/max `level` of the repo templates
+-- in this lair (OURS, as the templates stand; the level curve is an open ruling).
+kashyyyk_forest_sayormi = {
+
+	lairSpawns = {
+    {
+      lairTemplateName = "kashyyyk_forest_sayormi",
+      spawnLimit = -1,
+      minDifficulty = 4,
+      maxDifficulty = 4,
+      numberToSpawn = 0,
+      weighting = 15,
+      size = 25
+    },    				
+	}
+}
+
+addSpawnGroup("kashyyyk_forest_sayormi", kashyyyk_forest_sayormi);

@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1480 (ep3_orooroo_betrayer, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_orooroo_betrayer = Creature:new {
 	customName = "Orooroo the Betrayer",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,
@@ -24,14 +26,14 @@ ep3_orooroo_betrayer = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_orooroo_betrayer.iff"},
 	scale = 1.2,
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_orooroo_betrayer_convo",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }

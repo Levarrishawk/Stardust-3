@@ -1,8 +1,10 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1251 (ep3_avatar_wke_commando, where=avatar, ELITE); 1475 (ep3_npc_wookiee_commando, where=kachirho, NORMAL; primary).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_wke_commando_02 = Creature:new {
 	customName = "Wookiee Commando",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "wookiee",
-	faction = "",
+	socialGroup = "kashyyyk_resistance",
+	faction = "kashyyyk_resistance",
 	mobType = MOB_NPC,
 	level = 105,
 	chanceHit = 1.05,
@@ -28,7 +30,16 @@ ep3_wke_commando_02 = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_wke_commando_02.iff"},
-	lootGroups = {},
+	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/wke_resistance_commando lootList wke_resistance_commando intLootRolls=1 creatures.tab line 1475 (ep3_npc_wookiee_commando).
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
+	lootGroups = {
+		{
+			groups = {
+				{group = "wke_resistance_commando", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
 	weapons = {"pirate_weapons_heavy"},
 	conversationTemplate = "",
 	attacks = merge(brawlermaster,marksmanmaster,commandomaster,bountyhuntermaster)

@@ -1,6 +1,8 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1559 (ep3_slaver_blackscale_captain_beshk, where=slave_camp, BOSS).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_blackscale_captain_beshk = Creature:new {
 	customName = "Captain Beshk",
-	socialGroup = "trandoshan",
+	socialGroup = "blackscale",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 115,

@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1295 (ep3_etyyy_ehartt_brihnt, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_etyyy_ehartt_brihnt = Creature:new {
 	customName = "Ehartt Brihnt",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,
@@ -24,13 +26,13 @@ ep3_etyyy_ehartt_brihnt = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_etyyy_ehartt_brihnt.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_etyyy_ehartt_brihnt_convo",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }

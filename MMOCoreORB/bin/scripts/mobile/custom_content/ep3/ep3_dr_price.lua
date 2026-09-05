@@ -1,6 +1,8 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1281 (ep3_dr_price, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_dr_price = Creature:new {
 	customName = "Dr Price",
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

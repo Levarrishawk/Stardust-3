@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1422 (ep3_mining_captain_koh, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_mining_captain_koh = Creature:new {
 	customName = "Captain Koh",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

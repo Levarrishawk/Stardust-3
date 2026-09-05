@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1507 (ep3_rryatt_abandoned_droideka, where=rryatt_trail, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_rryatt_abandoned_droideka_01 = Creature:new {
 	customName = "Abandoned Battle Droideka",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "droids",
+	socialGroup = "rryatt_abandoned_droid",
 	faction = "",
 	mobType = MOB_DROID,
 	level = 134,

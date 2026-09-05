@@ -259,4 +259,121 @@ ep3_gursan_alt_debrief = ConvoScreen:new {
 }
 ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_alt_debrief);
 
+-- Compound / Hsskas screens from conversation.ep3_gursan_bryes (java screen ids). Existing space
+-- screens above are untouched; these keys were unused in this template.
+
+ep3_gursan_s_816 = ConvoScreen:new {
+	id = "s_816",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_816",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_818", "s_820"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_816)
+
+ep3_gursan_s_820 = ConvoScreen:new {
+	id = "s_820",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_820",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_822", "s_824"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_820)
+
+ep3_gursan_s_824 = ConvoScreen:new {
+	id = "s_824",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_824",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_826", "s_828"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_824)
+
+ep3_gursan_s_828 = ConvoScreen:new {
+	id = "s_828",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_828",
+	stopConversation = "true",
+	options = {}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_828)
+
+ep3_gursan_s_830 = ConvoScreen:new {
+	id = "s_830",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_830",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_832", "s_834"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_830)
+
+ep3_gursan_s_834 = ConvoScreen:new {
+	id = "s_834",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_834",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_836", "s_838"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_834)
+
+ep3_gursan_s_838 = ConvoScreen:new {
+	id = "s_838",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_838",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_840", "s_842"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_838)
+
+ep3_gursan_s_842 = ConvoScreen:new {
+	id = "s_842",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_842",
+	stopConversation = "true",
+	options = {}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_842)
+
+ep3_gursan_s_844 = ConvoScreen:new {
+	id = "s_844",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_844",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_846", "s_848"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_844)
+
+ep3_gursan_s_848 = ConvoScreen:new {
+	id = "s_848",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_848",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_850", "ep3_gursan_alt_done"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_848)
+
+ep3_gursan_s_856 = ConvoScreen:new {
+	id = "s_856",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_856",
+	stopConversation = "true",
+	options = {}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_856)
+
+ep3_gursan_s_852 = ConvoScreen:new {
+	id = "s_852",
+	leftDialog = "@conversation/ep3_gursan_bryes:s_852",
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_gursan_bryes:s_854", "s_856"},
+	}
+}
+ep3_gursan_bryes_convotemplate:addScreen(ep3_gursan_s_852)
+
 addConversationTemplate("ep3_gursan_bryes_convotemplate", ep3_gursan_bryes_convotemplate);

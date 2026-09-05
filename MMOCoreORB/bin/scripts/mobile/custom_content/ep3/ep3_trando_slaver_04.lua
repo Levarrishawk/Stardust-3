@@ -1,8 +1,10 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1473 (ep3_npc_trandoshan_slavers, where=kachirho, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_trando_slaver_04 = Creature:new {
 	customName = "Trandoshan Slaver",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "trandoshan",
-	faction = "",
+	socialGroup = "hsskor",
+	faction = "hsskor",
 	mobType = MOB_NPC,
 	level = 100,
 	chanceHit = 1.00,

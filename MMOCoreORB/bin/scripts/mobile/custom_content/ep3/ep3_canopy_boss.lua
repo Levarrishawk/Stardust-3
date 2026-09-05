@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1399 (ep3_kachirho_canopy_boss, where=kachirho, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_canopy_boss = Creature:new {
 	customName = "Canopy Boss",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "canopy_bandit",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 130,

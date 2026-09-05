@@ -1,9 +1,11 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1375 (ep3_forest_wirartu, where=arena, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 dressed_arena_champion = Creature:new {
 	customName = "human_base_male",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "forest_kerritamba",
+	faction = "forest_kerritamba",
 	level = 4,
 	chanceHit = 0.24,
 	damageMin = 40,
@@ -24,13 +26,13 @@ dressed_arena_champion = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_arena_champion.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_forest_wirartu_arena_convo",
 	attacks = {
 	}
 }

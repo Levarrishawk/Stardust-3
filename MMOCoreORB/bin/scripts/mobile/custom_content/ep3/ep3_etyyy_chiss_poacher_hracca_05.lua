@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1381 (ep3_hracca_chiss_poacher_hunter, where=hracca, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_etyyy_chiss_poacher_hracca_05 = Creature:new {
 	customName = "Chiss Poacher Hracca",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "chiss_poacher_etyyy",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 45,

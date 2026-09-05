@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1239 (ep3_arena_uller_hellstalker, where=arena, ELITE); 1274 (ep3_cr_uller, where=kashyyyk, NORMAL); 1319 (ep3_etyyy_uller, where=etyyy, NORMAL); 1320 (ep3_etyyy_uller_diseased, where=etyyy, NORMAL); 1321 (ep3_etyyy_uller_elder, where=etyyy, NORMAL); 1322 (ep3_etyyy_uller_spiketop, where=etyyy, ELITE); 1323 (ep3_etyyy_uller_warhoof, where=etyyy, ELITE); 1388 (ep3_hracca_noxious_uller, where=hracca, NORMAL); 1405 (ep3_kachirho_uller, where=kachirho, NORMAL); 1406 (ep3_kachirho_uller_packleader, where=kachirho, NORMAL); 1407 (ep3_kachirho_uller_stoneclaw, where=kachirho, ELITE; primary).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 uller_stoneclaw = Creature:new {
 	customName = "an Uller Stoneclaw",
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "uller_kachiro",
+	faction = "",
 	level = 60,
 	chanceHit = 0.24,
 	damageMin = 375,
@@ -26,7 +28,16 @@ uller_stoneclaw = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/uller.iff"},
-	lootGroups = {},
+	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/kashyyyk_uller lootList kashyyyk_uller intLootRolls=1 creatures.tab line 1274 (ep3_cr_uller).
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
+	lootGroups = {
+		{
+			groups = {
+				{group = "kashyyyk_uller", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

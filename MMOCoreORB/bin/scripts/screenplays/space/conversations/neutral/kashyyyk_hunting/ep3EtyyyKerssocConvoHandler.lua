@@ -19,6 +19,9 @@
 	Kashyyyk ground spawn areas, and config.lua ZonesEnabled has no Kashyyyk ground zone (only
 	SpaceZonesEnabled has "space_kashyyyk"). This handler is correct and inert until all three of
 	those are addressed; nothing here depends on them, so it costs nothing to land now.
+
+	Ground screens and java OnStartNpcConversation order folded in. ruling 2026-09-04.
+	NO JOURNAL: do not call the journal engine.
 ]]
 
 Ep3EtyyyKerssocConvoHandler = conv_handler:new {}
@@ -89,6 +92,54 @@ function Ep3EtyyyKerssocConvoHandler:canFly(pPlayer)
 	return isJtlEnabled() and SpaceHelpers:isPilot(pPlayer) and SpaceHelpers:hasCertifiedShip(pPlayer, true)
 end
 
+function Ep3EtyyyKerssocConvoHandler:hasManfredsDelivery(pPlayer)
+	return pPlayer ~= nil and huntManfredStealChissGoodsScreenPlay:isTaskActive(pPlayer, "manfred_deliverToKerssoc")
+end
+
+function Ep3EtyyyKerssocConvoHandler:hasCompletedAllQuests(pPlayer)
+	return pPlayer ~= nil and (huntKerssocEnterEtyyyScreenPlay:isQuestActive(pPlayer) or huntKerssocEnterEtyyyScreenPlay:hasCompletedQuest(pPlayer))
+end
+
+function Ep3EtyyyKerssocConvoHandler:finishedAttackingChissCamp(pPlayer)
+	return pPlayer ~= nil and (huntKerssocKillChissPoachersScreenPlay:isTaskActive(pPlayer, "kerssoc_attackChissPoachers") or huntKerssocKillChissPoachersScreenPlay:hasCompletedQuest(pPlayer))
+end
+
+function Ep3EtyyyKerssocConvoHandler:attackingChissCamp(pPlayer)
+	return pPlayer ~= nil and huntKerssocKillChissPoachersScreenPlay:isTaskActive(pPlayer, "kerssoc_killingChissPoachers")
+end
+
+function Ep3EtyyyKerssocConvoHandler:hasCompletedDestroyWeaponsQuest(pPlayer)
+	return pPlayer ~= nil and SpaceHelpers:isSpaceQuestComplete(pPlayer, "assassinate", "ep3_hunting_kerssoc_destroy_chiss_weapons")
+end
+
+function Ep3EtyyyKerssocConvoHandler:hasCompletedEscortQuest(pPlayer)
+	return pPlayer ~= nil and SpaceHelpers:isSpaceQuestComplete(pPlayer, "escort", "ep3_hunting_kerssoc_supplies")
+end
+
+function Ep3EtyyyKerssocConvoHandler:hasCompletedDeliverQuest(pPlayer)
+	return pPlayer ~= nil and SpaceHelpers:isSpaceQuestComplete(pPlayer, "delivery_no_pickup", "ep3_hunting_kerssoc_smuggle_goods")
+end
+
+function Ep3EtyyyKerssocConvoHandler:isOnDeliverQuest(pPlayer)
+	return pPlayer ~= nil and SpaceHelpers:isSpaceQuestActive(pPlayer, "delivery_no_pickup", "ep3_hunting_kerssoc_smuggle_goods")
+end
+
+function Ep3EtyyyKerssocConvoHandler:finishedHuntingBantha(pPlayer)
+	return pPlayer ~= nil and (huntKerssocBanthaPeltsScreenPlay:isTaskActive(pPlayer, "kerssoc_kashyyykBanthaPelts") or huntKerssocBanthaPeltsScreenPlay:hasCompletedQuest(pPlayer))
+end
+
+function Ep3EtyyyKerssocConvoHandler:isHuntingBantha(pPlayer)
+	return pPlayer ~= nil and huntKerssocBanthaPeltsScreenPlay:isTaskActive(pPlayer, "kerssoc_huntingBantha")
+end
+
+function Ep3EtyyyKerssocConvoHandler:fromChrilooc(pPlayer)
+	return pPlayer ~= nil and huntChriloocSeekRodiansScreenPlay:isTaskActive(pPlayer, "chrilooc_talkToKerssoc")
+end
+
+function Ep3EtyyyKerssocConvoHandler:alreadyHasSpaceMission(pPlayer)
+	return EtyyyHuntState:hasAnySpaceQuest(pPlayer)
+end
+
 function Ep3EtyyyKerssocConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (pPlayer == nil or pNpc == nil or pConvTemplate == nil) then
 		return
@@ -96,87 +147,38 @@ function Ep3EtyyyKerssocConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTempla
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	local smuggleActive = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_KERSSOC_SMUGGLE.type, EP3_KERSSOC_SMUGGLE.name)
-	local smuggleComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_KERSSOC_SMUGGLE.type, EP3_KERSSOC_SMUGGLE.name)
-	local suppliesActive = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_KERSSOC_SUPPLIES.type, EP3_KERSSOC_SUPPLIES.name)
-	local suppliesComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_KERSSOC_SUPPLIES.type, EP3_KERSSOC_SUPPLIES.name)
-	local weaponsActive = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_KERSSOC_WEAPONS.type, EP3_KERSSOC_WEAPONS.name)
-	local weaponsComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_KERSSOC_WEAPONS.type, EP3_KERSSOC_WEAPONS.name)
-
-	local pelts = self:getFlag(pPlayer, EP3_KERSSOC_PELTS_KEY)
-	local camp = self:getFlag(pPlayer, EP3_KERSSOC_CAMP_KEY)
-
-	-- Chain finished and the gate is open.
-	if (self:getFlag(pPlayer, EP3_KERSSOC_ACCESS_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_hunting_grounds")
-	end
-
-	-- Space chain done; the last ground leg, then the payoff.
-	if (weaponsComplete) then
-		if (camp == 0) then
-			return convoTemplate:getScreen("ep3_etyyy_kerssoc_camp")
+	-- java OnStartNpcConversation order (ep3_etyyy_kerssoc.java:700-1026)
+	if (self:hasManfredsDelivery(pPlayer)) then
+		EtyyyHuntState:raise(pPlayer, "manfred_deliverToKerssoc")
+		return convoTemplate:getScreen("s_1056")
+	elseif (self:hasCompletedAllQuests(pPlayer)) then
+		return convoTemplate:getScreen("s_1058")
+	elseif (self:finishedAttackingChissCamp(pPlayer)) then
+		EtyyyHuntState:raise(pPlayer, "kerssoc_attackChissPoachers")
+		return convoTemplate:getScreen("s_1060")
+	elseif (self:attackingChissCamp(pPlayer)) then
+		return convoTemplate:getScreen("s_1070")
+	elseif (self:hasCompletedDestroyWeaponsQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_1072")
+	elseif (self:hasCompletedEscortQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_1082")
+	elseif (self:hasCompletedDeliverQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_1092")
+	elseif (self:isOnDeliverQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_1102")
+	elseif (self:finishedHuntingBantha(pPlayer)) then
+		EtyyyHuntState:raise(pPlayer, "kerssoc_kashyyykBanthaPelts")
+		return convoTemplate:getScreen("s_1104")
+	elseif (self:isHuntingBantha(pPlayer)) then
+		return convoTemplate:getScreen("s_1118")
+	elseif (self:fromChrilooc(pPlayer)) then
+		if (pNpc ~= nil) then
+			CreatureObject(pNpc):doAnimation("greet")
 		end
-
-		if (camp == 1) then
-			if (KERSSOC_GROUND_LEGS_AUTO) then
-				self:setFlag(pPlayer, EP3_KERSSOC_CAMP_KEY, 2)
-			end
-
-			return convoTemplate:getScreen("ep3_etyyy_kerssoc_camp_active")
-		end
-
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_access")
+		EtyyyHuntState:raise(pPlayer, "chrilooc_talkToKerssoc")
+		return convoTemplate:getScreen("s_1124")
 	end
-
-	-- Third leg in flight.
-	if (weaponsActive) then
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_busy_weapons")
-	end
-
-	-- Second leg done but the third never landed or was lost. s_1082 is the retry.
-	if (suppliesComplete) then
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_weapons_retry")
-	end
-
-	-- Second leg in flight.
-	if (suppliesActive) then
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_busy_escort")
-	end
-
-	-- Head done but the escort never landed or was lost. s_1092 is the retry.
-	if (smuggleComplete) then
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_escort_retry")
-	end
-
-	-- Head in flight.
-	if (smuggleActive) then
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_smuggle_active")
-	end
-
-	-- Pelts handed over; this is the screen that leads to the space quest.
-	if (pelts == 2) then
-		if (not self:canFly(pPlayer)) then
-			return convoTemplate:getScreen("ep3_etyyy_kerssoc_pelts_turnin_nopilot")
-		end
-
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_pelts_turnin")
-	end
-
-	-- Pelt leg running.
-	if (pelts == 1) then
-		if (KERSSOC_GROUND_LEGS_AUTO) then
-			self:setFlag(pPlayer, EP3_KERSSOC_PELTS_KEY, 2)
-		end
-
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_pelts_waiting")
-	end
-
-	-- Turned him down before.
-	if (self:getFlag(pPlayer, EP3_KERSSOC_REFUSED_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_etyyy_kerssoc_no_hunter")
-	end
-
-	return convoTemplate:getScreen("ep3_etyyy_kerssoc_greeting")
+	return convoTemplate:getScreen("s_1146")
 end
 
 function Ep3EtyyyKerssocConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
@@ -192,32 +194,42 @@ function Ep3EtyyyKerssocConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 
 	pClonedConvo:setDialogTextTU(CreatureObject(pPlayer):getFirstName())
 
-	-- Ground leg accepted. s_1134 "I'll do it." lands here from both intro arcs.
-	if (screenID == "ep3_etyyy_kerssoc_pelts_accept") then
-		self:setFlag(pPlayer, EP3_KERSSOC_REFUSED_KEY, 0)
-		self:setFlag(pPlayer, EP3_KERSSOC_PELTS_KEY, 1)
-
-	-- Both shipped refusals.
-	elseif (screenID == "ep3_etyyy_kerssoc_pelts_decline" or screenID == "ep3_etyyy_kerssoc_pelts_not_worth") then
-		self:setFlag(pPlayer, EP3_KERSSOC_REFUSED_KEY, 1)
-
-	-- THE GRANT. s_1110 "Okay, I'll deliver them." lands here.
-	elseif (screenID == "ep3_etyyy_kerssoc_smuggle_accept") then
-		self:grant(pPlayer, pNpc, delivery_no_pickup_ep3_hunting_kerssoc_smuggle_goods, EP3_KERSSOC_SMUGGLE)
-
-	-- Retry of the escort leg. s_1094 "Yes I am." lands here.
-	elseif (screenID == "ep3_etyyy_kerssoc_escort_retry_yes") then
-		self:grant(pPlayer, pNpc, escort_ep3_hunting_kerssoc_supplies, EP3_KERSSOC_SUPPLIES)
-
-	-- Retry of the weapons leg. s_1084 "I am. This time I'll succeed." lands here.
+	if (screenID == "s_1064") then
+		EtyyyHuntState:raise(pPlayer, "chrilooc_gainEtyyyEntry")
+		huntKerssocEnterEtyyyScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_1076") then
+		huntKerssocKillChissPoachersScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_1086") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_1303")
+		end
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, assassinate_ep3_hunting_kerssoc_destroy_chiss_weapons, "assassinate", "ep3_hunting_kerssoc_destroy_chiss_weapons")
 	elseif (screenID == "ep3_etyyy_kerssoc_weapons_retry_yes") then
 		self:grant(pPlayer, pNpc, assassinate_ep3_hunting_kerssoc_destroy_chiss_weapons, EP3_KERSSOC_WEAPONS)
-
-	-- Second ground leg accepted.
+	elseif (screenID == "s_1096") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_1302")
+		end
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, escort_ep3_hunting_kerssoc_supplies, "escort", "ep3_hunting_kerssoc_supplies")
+	elseif (screenID == "ep3_etyyy_kerssoc_escort_retry_yes") then
+		self:grant(pPlayer, pNpc, escort_ep3_hunting_kerssoc_supplies, EP3_KERSSOC_SUPPLIES)
+	elseif (screenID == "s_1112") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_1301")
+		end
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, delivery_no_pickup_ep3_hunting_kerssoc_smuggle_goods, "delivery_no_pickup", "ep3_hunting_kerssoc_smuggle_goods")
+	elseif (screenID == "ep3_etyyy_kerssoc_smuggle_accept") then
+		self:grant(pPlayer, pNpc, delivery_no_pickup_ep3_hunting_kerssoc_smuggle_goods, EP3_KERSSOC_SMUGGLE)
+	elseif (screenID == "s_1136") then
+		huntKerssocBanthaPeltsScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "ep3_etyyy_kerssoc_pelts_accept") then
+		self:setFlag(pPlayer, EP3_KERSSOC_REFUSED_KEY, 0)
+		self:setFlag(pPlayer, EP3_KERSSOC_PELTS_KEY, 1)
+		huntKerssocBanthaPeltsScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "ep3_etyyy_kerssoc_pelts_decline" or screenID == "ep3_etyyy_kerssoc_pelts_not_worth") then
+		self:setFlag(pPlayer, EP3_KERSSOC_REFUSED_KEY, 1)
 	elseif (screenID == "ep3_etyyy_kerssoc_camp_accept") then
 		self:setFlag(pPlayer, EP3_KERSSOC_CAMP_KEY, 1)
-
-	-- The gate opens.
 	elseif (screenID == "ep3_etyyy_kerssoc_access_yes") then
 		self:setFlag(pPlayer, EP3_KERSSOC_ACCESS_KEY, 1)
 	end

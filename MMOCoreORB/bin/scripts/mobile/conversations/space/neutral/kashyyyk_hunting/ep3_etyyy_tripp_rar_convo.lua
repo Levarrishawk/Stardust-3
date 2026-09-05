@@ -163,4 +163,292 @@ ep3_tripp_give_up = ConvoScreen:new {
 }
 ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_tripp_give_up);
 
+
+-- Ground screens folded in (ruling 2026-09-04). Screen ids are the shipped
+-- java keys. Existing space screens above are untouched.
+ep3_etyyy_tripp_rar_convo_s_374 = ConvoScreen:new {
+	id = "s_374",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_374", -- My pilot told me how well you performed in helping them get my shipment of goods out of the system. ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_374)
+
+ep3_etyyy_tripp_rar_convo_s_470 = ConvoScreen:new {
+	id = "s_470",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_470", -- Very impressive. Brightclaw was not a typical mouf, and defeating him would take much skill and cour...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_470)
+
+ep3_etyyy_tripp_rar_convo_s_476 = ConvoScreen:new {
+	id = "s_476",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_476", -- Very impressive. Brightclaw was not a typical mouf, and defeating him would take much skill and cour...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_476)
+
+ep3_etyyy_tripp_rar_convo_s_480 = ConvoScreen:new {
+	id = "s_480",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_480", -- Very impressive. Paleclaw was a ferocious mouf. I'm certain that defeating him was not an easy hunt....
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_480)
+
+ep3_etyyy_tripp_rar_convo_s_482 = ConvoScreen:new {
+	id = "s_482",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_482", -- Very impressive. Paleclaw was a ferocious mouf. I'm certain that defeating him was not an easy hunt....
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_482)
+
+ep3_etyyy_tripp_rar_convo_s_378 = ConvoScreen:new {
+	id = "s_378",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_378", -- Ah, I see. That's too bad. Well, at least you defeated them. That's the important thing.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_378)
+
+ep3_etyyy_tripp_rar_convo_s_750 = ConvoScreen:new {
+	id = "s_750",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_750", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_750)
+
+ep3_etyyy_tripp_rar_convo_s_388 = ConvoScreen:new {
+	id = "s_388",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_388", -- Ah, good. When you're ready launch into space here in the Kashyyyk system. We'll relay more informat...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_388)
+
+ep3_etyyy_tripp_rar_convo_s_235 = ConvoScreen:new {
+	id = "s_235",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_235", -- I suppose I'll think of something.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_235)
+
+ep3_etyyy_tripp_rar_convo_s_392 = ConvoScreen:new {
+	id = "s_392",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_392", -- I understand, but thanks anyway.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_392)
+
+ep3_etyyy_tripp_rar_convo_s_408 = ConvoScreen:new {
+	id = "s_408",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_408", -- Don't let him bully you. Sordaan has a vast fortune which lets him buy most things he might desire, ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_408)
+
+ep3_etyyy_tripp_rar_convo_s_412 = ConvoScreen:new {
+	id = "s_412",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_412", -- Okay. Farewell for now then. Return when you're ready.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_412)
+
+ep3_etyyy_tripp_rar_convo_s_428 = ConvoScreen:new {
+	id = "s_428",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_428", -- You probably noticed some vicious moufs in the same general area as the vibrant moufs. Many vicious ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_428)
+
+ep3_etyyy_tripp_rar_convo_s_432 = ConvoScreen:new {
+	id = "s_432",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_432", -- Okay. Farewell for now then.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_432)
+
+ep3_etyyy_tripp_rar_convo_s_448 = ConvoScreen:new {
+	id = "s_448",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_448", -- Excellent. I'll have you hunting moufs, as I said. You're after pristine mouf pelts. Specifically fr...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_448)
+
+ep3_etyyy_tripp_rar_convo_s_460 = ConvoScreen:new {
+	id = "s_460",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_460", -- Okay. Farewell for now then.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_460)
+
+ep3_etyyy_tripp_rar_convo_s_452 = ConvoScreen:new {
+	id = "s_452",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_452", -- You'll find vibrant moufs in the northwest corner of the region. They're past the Arcona compound, a...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_452)
+
+ep3_etyyy_tripp_rar_convo_s_456 = ConvoScreen:new {
+	id = "s_456",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_456", -- Okay. Farewell for now then.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_456)
+
+ep3_etyyy_tripp_rar_convo_s_474 = ConvoScreen:new {
+	id = "s_474",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_474", -- Good. Even he would be impressed by this.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_474)
+
+ep3_etyyy_tripp_rar_convo_s_370 = ConvoScreen:new {
+	id = "s_370",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_370", -- Welcome, I trust all goes well for you?
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_372", "s_374"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_380", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_382", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_370)
+
+ep3_etyyy_tripp_rar_convo_s_156 = ConvoScreen:new {
+	id = "s_156",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_156", -- It's worse than I feared. Even with your help, my shipment of goods wasn't safe. I don't know what t...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_230", "s_388"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_233", "s_235"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_241", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_243", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_156)
+
+ep3_etyyy_tripp_rar_convo_s_749 = ConvoScreen:new {
+	id = "s_749",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_749", -- We'll relay coordinates to you for where you should meet the shipment once you're in space.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_237", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_239", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_749)
+
+ep3_etyyy_tripp_rar_convo_s_384 = ConvoScreen:new {
+	id = "s_384",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_384", -- Greetings again. Actually I'm glad you came by and spoke with me. I have a problem I thought you mig...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_386", "s_388"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_390", "s_392"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_394", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_396", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_384)
+
+ep3_etyyy_tripp_rar_convo_s_398 = ConvoScreen:new {
+	id = "s_398",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_398", -- Hello. How goes your hunting?
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_400", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_402", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_398)
+
+ep3_etyyy_tripp_rar_convo_s_404 = ConvoScreen:new {
+	id = "s_404",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_404", -- You're becoming quite the hunter. These incisors are exactly as flawless as I'd hoped they would be....
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_406", "s_408"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_410", "s_412"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_414", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_416", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_404)
+
+ep3_etyyy_tripp_rar_convo_s_418 = ConvoScreen:new {
+	id = "s_418",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_418", -- Please collect 18 flawless mouf incisors. You'll find vicious moufs in the northwest corner of Etyyy...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_420", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_422", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_418)
+
+ep3_etyyy_tripp_rar_convo_s_424 = ConvoScreen:new {
+	id = "s_424",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_424", -- These are wonderful mouf pelts. Good job! Ready for your next hunting goal?
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_426", "s_428"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_430", "s_432"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_434", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_436", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_424)
+
+ep3_etyyy_tripp_rar_convo_s_438 = ConvoScreen:new {
+	id = "s_438",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_438", -- You'll find vibrant moufs in the northwest corner of the hunting grounds. Return to me when you have...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_440", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_442", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_438)
+
+ep3_etyyy_tripp_rar_convo_s_444 = ConvoScreen:new {
+	id = "s_444",
+	animation = "greet",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_444", -- So you're the hunter I've been hearing so much about. Ready to get back to the hunt? I'll have you h...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_446", "s_448"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_458", "s_460"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_462", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_464", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_444)
+
+ep3_etyyy_tripp_rar_convo_s_466 = ConvoScreen:new {
+	id = "s_466",
+	leftDialog = "@conversation/ep3_etyyy_tripp_rar:s_466", -- I apologize if I seem rude, but I'm busy looking into why my shipments of mouf pelts and mouf inciso...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_tripp_rar:s_468", "s_476"},
+		{"@conversation/ep3_etyyy_tripp_rar:s_478", "s_482"},
+	}
+}
+ep3_etyyy_tripp_rar_convotemplate:addScreen(ep3_etyyy_tripp_rar_convo_s_466)
+
 addConversationTemplate("ep3_etyyy_tripp_rar_convotemplate", ep3_etyyy_tripp_rar_convotemplate);

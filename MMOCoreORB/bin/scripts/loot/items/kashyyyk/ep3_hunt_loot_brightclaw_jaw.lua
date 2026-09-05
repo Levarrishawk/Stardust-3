@@ -1,0 +1,13 @@
+-- Transcribes datatables/loot/loot_items/kashyyyk/etyyy_brightclaw.tab (SOE strItemType).
+-- Object template is in-tree. ruling 2026-09-04: ensure kashyyyk is done in full.
+ep3_hunt_loot_brightclaw_jaw = {
+	minimumLevel = 0,
+	maximumLevel = -1,
+	customObjectName = "",
+	directObjectTemplate = "object/tangible/quest/quest_start/ep3_hunt_loot_brightclaw_jaw.iff",
+	craftingValues = {},
+	customizationStringNames = {},
+	customizationValues = {}
+}
+
+addLootItemTemplate("ep3_hunt_loot_brightclaw_jaw", ep3_hunt_loot_brightclaw_jaw)

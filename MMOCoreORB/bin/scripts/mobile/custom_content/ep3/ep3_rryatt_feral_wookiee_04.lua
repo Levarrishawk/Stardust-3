@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1515 (ep3_rryatt_feral_wookiee, where=rryatt_trail, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_rryatt_feral_wookiee_04 = Creature:new {
 	customName = "Feral Wookiee",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "wookiee",
+	socialGroup = "feral_wookiee_rryatt",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 105,

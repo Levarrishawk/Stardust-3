@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1489 (ep3_qst_myssith, where=dead_forest, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_myssith = Creature:new {
 	customName = "Myssith",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "hsskor",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

@@ -1,0 +1,22 @@
+-- SOURCED -- spawn group for type table datatables/spawning/ground_spawning/types/kashyyyk/etyyy_chiss_poacher_defender.tab
+-- Lair kashyyyk_etyyy_chiss_poacher_defender (same stem). Mustafar precedent for the numeric fields:
+--   spawnLimit = -1, numberToSpawn = 0, weighting = 15, size = 25
+--   (bin/scripts/mobile/spawn/mustafar_blistmoks.lua).
+-- minDifficulty/maxDifficulty = min/max `level` of the repo templates
+-- in this lair (OURS, as the templates stand; the level curve is an open ruling).
+kashyyyk_etyyy_chiss_poacher_defender = {
+
+	lairSpawns = {
+    {
+      lairTemplateName = "kashyyyk_etyyy_chiss_poacher_defender",
+      spawnLimit = -1,
+      minDifficulty = 45,
+      maxDifficulty = 45,
+      numberToSpawn = 0,
+      weighting = 15,
+      size = 25
+    },    				
+	}
+}
+
+addSpawnGroup("kashyyyk_etyyy_chiss_poacher_defender", kashyyyk_etyyy_chiss_poacher_defender);

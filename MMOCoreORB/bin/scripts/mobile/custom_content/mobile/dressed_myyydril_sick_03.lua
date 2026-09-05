@@ -1,9 +1,11 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1449 (ep3_myyydril_lost, where=myyydril, ELITE); 1458 (ep3_myyydril_sick, where=myyydril, NORMAL; primary).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 dressed_myyydril_sick_03 = Creature:new {
 	customName = "human_base_male",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "myyydril",
+	faction = "",
 	level = 4,
 	chanceHit = 0.24,
 	damageMin = 40,

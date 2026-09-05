@@ -117,6 +117,20 @@ function Ep3GursanBryesConvoHandler:isComplete(pPlayer, quest)
 	return SpaceHelpers:isSpaceQuestComplete(pPlayer, quest.type, quest.name)
 end
 
+function Ep3GursanBryesConvoHandler:entryActive(pPlayer)
+	return slaverGursanEntryQuestScreenPlay ~= nil and slaverGursanEntryQuestScreenPlay:getStage(pPlayer) > 0
+end
+
+function Ep3GursanBryesConvoHandler:entryCanGrant(pPlayer)
+	return slaverGursanEntryQuestScreenPlay ~= nil and slaverGursanEntryQuestScreenPlay:canGrantQuest(pPlayer)
+end
+
+function Ep3GursanBryesConvoHandler:entryFinished(pPlayer)
+	return slaverGursanEntryQuestScreenPlay ~= nil
+		and slaverGursanEntryQuestScreenPlay:getStage(pPlayer) == 0
+		and slaverGursanEntryQuestScreenPlay:getRuns(pPlayer) > 0
+end
+
 function Ep3GursanBryesConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (pPlayer == nil or pNpc == nil or pConvTemplate == nil) then
 		return
@@ -124,51 +138,61 @@ function Ep3GursanBryesConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplat
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	-- Deepest leg first. Within each leg, active is tested before complete, so the repeatable variant
-	-- reads correctly the moment it is taken again.
+	-- java OnStartNpcConversation order (ep3_gursan_bryes.java:972-1283). Space screens that
+	-- already wrap a java key are returned by their existing ids; compound-only keys use the
+	-- java screen ids added to this template.
 
-	-- Leg 3 -- the repeatable variant.
-	if (self:isActive(pPlayer, EP3_GURSAN_ALT)) then
-		return convoTemplate:getScreen("ep3_gursan_cyssc_active")
-	end
-
-	if (self:isComplete(pPlayer, EP3_GURSAN_ALT)) then
-		if (self:getFlag(pPlayer, EP3_GURSAN_ALT_DEBRIEFED_KEY)) then
-			return convoTemplate:getScreen("ep3_gursan_alt_reoffer")
-		end
-
+	-- haveWonRepeatCyssc
+	if (self:isComplete(pPlayer, EP3_GURSAN_ALT_SIDE) or (self:isComplete(pPlayer, EP3_GURSAN_ALT) and not self:getFlag(pPlayer, EP3_GURSAN_ALT_DEBRIEFED_KEY))) then
 		return convoTemplate:getScreen("ep3_gursan_alt_done")
 	end
 
-	-- Leg 2 -- the Cyssc ambush.
-	if (self:isActive(pPlayer, EP3_GURSAN_CYSSC)) then
-		return convoTemplate:getScreen("ep3_gursan_cyssc_active")
+	-- cysscTimerActive (debrief latch stands in for the daily objVar)
+	if (self:isComplete(pPlayer, EP3_GURSAN_ALT) and self:getFlag(pPlayer, EP3_GURSAN_ALT_DEBRIEFED_KEY)) then
+		return convoTemplate:getScreen("ep3_gursan_alt_reoffer")
 	end
 
-	if (self:isComplete(pPlayer, EP3_GURSAN_CYSSC)) then
-		if (self:getFlag(pPlayer, EP3_GURSAN_CYSSC_DEBRIEFED_KEY)) then
-			return convoTemplate:getScreen("ep3_gursan_alt_offer")
-		end
+	-- canRepeatCyssc (java also requires the alt quests are not currently held)
+	if (self:isComplete(pPlayer, EP3_GURSAN_CYSSC) and self:getFlag(pPlayer, EP3_GURSAN_CYSSC_DEBRIEFED_KEY)
+		and not self:isActive(pPlayer, EP3_GURSAN_ALT) and not self:isActive(pPlayer, EP3_GURSAN_ALT_SIDE)) then
+		return convoTemplate:getScreen("ep3_gursan_alt_offer")
+	end
 
+	-- hasDefeatedCysscSpace
+	if (self:isComplete(pPlayer, EP3_GURSAN_CYSSC) and not self:isActive(pPlayer, EP3_GURSAN_ALT) and not self:isActive(pPlayer, EP3_GURSAN_ALT_SIDE)) then
 		return convoTemplate:getScreen("ep3_gursan_cyssc_done")
 	end
 
-	-- Leg 1 -- the Tatooine intercept. He ships no "get on with it" line for this leg, only the
-	-- brush-off, so a player already holding it gets that.
+	-- hasCysscSpaceSeries
+	if (self:isActive(pPlayer, EP3_GURSAN_ALT) or self:isActive(pPlayer, EP3_GURSAN_CYSSC) or self:isActive(pPlayer, EP3_GURSAN_ALT_SIDE)) then
+		return convoTemplate:getScreen("ep3_gursan_cyssc_active")
+	end
+
 	if (self:isActive(pPlayer, EP3_GURSAN_INTERCEPT)) then
 		return convoTemplate:getScreen("ep3_gursan_brushoff")
 	end
 
-	if (self:isComplete(pPlayer, EP3_GURSAN_INTERCEPT)) then
+	-- canCompleteSignalQuest
+	if (self:isComplete(pPlayer, EP3_GURSAN_INTERCEPT) and self:entryFinished(pPlayer)) then
 		return convoTemplate:getScreen("ep3_gursan_cyssc_offer")
 	end
 
-	-- Not yet handed over by Kymayrr.
-	if (not self:isComplete(pPlayer, EP3_GURSAN_RHOSK_GATE)) then
-		return convoTemplate:getScreen("ep3_gursan_brushoff")
+	-- isSignalQuestActive
+	if (self:isComplete(pPlayer, EP3_GURSAN_INTERCEPT) and (self:entryCanGrant(pPlayer) or self:entryActive(pPlayer))) then
+		return convoTemplate:getScreen("s_816")
 	end
 
-	return convoTemplate:getScreen("ep3_gursan_intercept_offer")
+	-- hasWonHsskasSpaceQuest
+	if (SpaceHelpers:isSpaceQuestComplete(pPlayer, "space_battle", "ep3_slaver_hsskas_space_battle")) then
+		return convoTemplate:getScreen("s_852")
+	end
+
+	-- hasRescuedRroot
+	if (self:isComplete(pPlayer, EP3_GURSAN_RHOSK_GATE)) then
+		return convoTemplate:getScreen("ep3_gursan_intercept_offer")
+	end
+
+	return convoTemplate:getScreen("ep3_gursan_brushoff")
 end
 
 function Ep3GursanBryesConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
@@ -330,6 +354,12 @@ function Ep3GursanBryesConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pN
 		self:setFlag(pPlayer, EP3_GURSAN_CYSSC_DEBRIEFED_KEY)
 	elseif (screenID == "ep3_gursan_alt_debrief") then
 		self:setFlag(pPlayer, EP3_GURSAN_ALT_DEBRIEFED_KEY)
+	elseif (screenID == "s_828") then
+		if (slaverGursanEntryQuestScreenPlay ~= nil) then
+			slaverGursanEntryQuestScreenPlay:grantQuest(pPlayer)
+		end
+	elseif (screenID == "s_856") then
+		-- OPEN: grantQuest ep3_gursan_slay_hsskas is outside this arc
 	end
 
 	return pScreenClone

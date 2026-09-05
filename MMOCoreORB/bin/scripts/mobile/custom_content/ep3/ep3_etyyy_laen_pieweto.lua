@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1292 (ep3_etyyy_chiss_poacher_laen_pieweto, where=etyyy, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_etyyy_laen_pieweto = Creature:new {
 	customName = "Laen Pieweto, Chiss Poacher Leader",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "chiss_poacher_etyyy",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 47,

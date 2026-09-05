@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 545 (clone_relics_ovarra, where=kashyyyk, NORMAL); 1264 (ep3_clone_relics_ovarra, where=kashyyyk, NORMAL; primary).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_clone_relics_ovarra = Creature:new {
 	customName = "Ovarra",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "townsperson",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,

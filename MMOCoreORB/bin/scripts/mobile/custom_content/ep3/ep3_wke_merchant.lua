@@ -1,8 +1,10 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1590 (ep3_wke_merchant_01, where=kashyyyk, NORMAL; primary); 1591 (ep3_wke_merchant_03, where=kashyyyk, NORMAL); 1592 (ep3_wke_merchant_04, where=kashyyyk, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_wke_merchant = Creature:new {
 	customName = "a Wookiee Trading Co. Employee",
 	planetMapCategory = "junkshop",
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "kashyyyk",
+	faction = "",
 	mobType = MOB_NPC,
 	level = 100,
 	chanceHit = 1,

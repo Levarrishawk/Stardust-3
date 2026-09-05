@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab lines 1247 (ep3_avatar_harwakokok_mighty, where=avatar, BOSS); 1380 (ep3_harwakokok_mighty, where=kashyyyk, NORMAL; primary).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_harwakokok_mighty = Creature:new {
 	customName = "Harwakokok The Mighty",
 	--randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "wookiee",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 250,
@@ -24,14 +26,14 @@ ep3_harwakokok_mighty = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_harwakokok_mighty.iff"},
 	scale = 1.3,
 	lootGroups = {},
 	weapons = {"chewbacca_weapons"},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_harwakokok_mighty_convo",
 	attacks = merge(brawlermaster,marksmanmaster)
 }
 

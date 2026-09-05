@@ -431,4 +431,341 @@ ep3_etyyy_kerssoc_busy_other = ConvoScreen:new {
 }
 ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_busy_other);
 
+
+-- Ground screens folded in (ruling 2026-09-04). Screen ids are the shipped
+-- java keys. Existing space screens above are untouched.
+ep3_etyyy_kerssoc_convo_s_1064 = ConvoScreen:new {
+	id = "s_1064",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1064", -- Good. The gate is just to the west. You can enter there. Once you're inside, go to the main Rodian h...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1064)
+
+ep3_etyyy_kerssoc_convo_s_1068 = ConvoScreen:new {
+	id = "s_1068",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1068", -- Very well. Return to me when you're ready to enter Etyyy.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1068)
+
+ep3_etyyy_kerssoc_convo_s_1076 = ConvoScreen:new {
+	id = "s_1076",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1076", -- Good. Off you go then.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1076)
+
+ep3_etyyy_kerssoc_convo_s_1080 = ConvoScreen:new {
+	id = "s_1080",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1080", -- Fine. But don't wait too long.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1080)
+
+ep3_etyyy_kerssoc_convo_s_1303 = ConvoScreen:new {
+	id = "s_1303",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1303", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1303)
+
+ep3_etyyy_kerssoc_convo_s_1086 = ConvoScreen:new {
+	id = "s_1086",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1086", -- Yeah. Let's hope so.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1086)
+
+ep3_etyyy_kerssoc_convo_s_1090 = ConvoScreen:new {
+	id = "s_1090",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1090", -- Really. Don't hurry or anything.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1090)
+
+ep3_etyyy_kerssoc_convo_s_1302 = ConvoScreen:new {
+	id = "s_1302",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1302", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1302)
+
+ep3_etyyy_kerssoc_convo_s_1096 = ConvoScreen:new {
+	id = "s_1096",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1096", -- Good. Go to it. Make sure nothing happens to those supplies.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1096)
+
+ep3_etyyy_kerssoc_convo_s_1100 = ConvoScreen:new {
+	id = "s_1100",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1100", -- Hmm. I see.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1100)
+
+ep3_etyyy_kerssoc_convo_s_1108 = ConvoScreen:new {
+	id = "s_1108",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1108", -- No. Not yet. We've only just started. Next I need you to deliver these flawless Kashyyyk bantha pelt...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1110", "s_1112"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1114", "s_1116"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1108)
+
+ep3_etyyy_kerssoc_convo_s_1301 = ConvoScreen:new {
+	id = "s_1301",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1301", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1301)
+
+ep3_etyyy_kerssoc_convo_s_1112 = ConvoScreen:new {
+	id = "s_1112",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1112", -- Good. Away you go then. Fly to the Corellia system. Once there, you'll receive word on where to meet...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1112)
+
+ep3_etyyy_kerssoc_convo_s_1116 = ConvoScreen:new {
+	id = "s_1116",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1116", -- Okay. Come back when you're ready.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1116)
+
+ep3_etyyy_kerssoc_convo_s_1122 = ConvoScreen:new {
+	id = "s_1122",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1122", -- Good.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1122)
+
+ep3_etyyy_kerssoc_convo_s_1128 = ConvoScreen:new {
+	id = "s_1128",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1128", -- Eager? That's a good sign. First I want to see what kind of hunter you are. And to be honest, I want...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1130", "s_1132"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1128)
+
+ep3_etyyy_kerssoc_convo_s_1144 = ConvoScreen:new {
+	id = "s_1144",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1144", -- Fine. Go away.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1144)
+
+ep3_etyyy_kerssoc_convo_s_1132 = ConvoScreen:new {
+	id = "s_1132",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1132", -- Yes, I do. You could get away with it. Probably. I'm mostly sure you could. At the very least, Sorda...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1134", "s_1136"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1138", "s_1140"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1132)
+
+ep3_etyyy_kerssoc_convo_s_1136 = ConvoScreen:new {
+	id = "s_1136",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1136", -- Good. Go to it. 17 flawless Kashyyyk bantha pelts. I'll be waiting.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1136)
+
+ep3_etyyy_kerssoc_convo_s_1140 = ConvoScreen:new {
+	id = "s_1140",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1140", -- If you can't stomach something simple like this, you have no hope of ever entering Etyyy.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1140)
+
+ep3_etyyy_kerssoc_convo_s_1150 = ConvoScreen:new {
+	id = "s_1150",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1150", -- Indeed I am. Not yet to the level of those in the actual hunting grounds, but I will be soon. Oh, so...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1152", "s_1154"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1150)
+
+ep3_etyyy_kerssoc_convo_s_1166 = ConvoScreen:new {
+	id = "s_1166",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1166", -- Good.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1166)
+
+ep3_etyyy_kerssoc_convo_s_1154 = ConvoScreen:new {
+	id = "s_1154",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1154", -- That's right. The hunting grounds to the south. The Wookiees call that area Etyyy. Which I guess is ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1156", "s_1158"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1160", "s_1162"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1154)
+
+ep3_etyyy_kerssoc_convo_s_1158 = ConvoScreen:new {
+	id = "s_1158",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1158", -- Whoa. Not so fast. You have to get my permission before you'll be able to enter Etyyy.  First I want...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1130", "s_1132"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1158)
+
+ep3_etyyy_kerssoc_convo_s_1162 = ConvoScreen:new {
+	id = "s_1162",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1162", -- Didn't think you looked like the hunting type anyway. Not really sure why I bothered to offer.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1162)
+
+ep3_etyyy_kerssoc_convo_s_1056 = ConvoScreen:new {
+	id = "s_1056",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1056", -- Right. I was expecting you with these poached goods. Return to Manfred and let him know I'll ship th...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1056)
+
+ep3_etyyy_kerssoc_convo_s_1058 = ConvoScreen:new {
+	id = "s_1058",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1058", -- I trust you're doing well in the hunting grounds.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1058)
+
+ep3_etyyy_kerssoc_convo_s_1060 = ConvoScreen:new {
+	id = "s_1060",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1060", -- Well done with your attack on the Chiss camp. You've done far better than I ever expected. I suppose...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1062", "s_1064"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1066", "s_1068"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1060)
+
+ep3_etyyy_kerssoc_convo_s_1070 = ConvoScreen:new {
+	id = "s_1070",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1070", -- Go on. Get to it. Those Chiss poachers aren't going to kill themselves.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1070)
+
+ep3_etyyy_kerssoc_convo_s_1072 = ConvoScreen:new {
+	id = "s_1072",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1072", -- Good work destroying that shipment of Chiss weapons. Though it has kind of riled up the Chiss poache...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1074", "s_1076"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1078", "s_1080"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1072)
+
+ep3_etyyy_kerssoc_convo_s_1082 = ConvoScreen:new {
+	id = "s_1082",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1082", -- What happened to destroying the ship full of Chiss poacher weapons? Couldn't handle it? Or did you s...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1084", "s_1086"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1088", "s_1090"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1082)
+
+ep3_etyyy_kerssoc_convo_s_1092 = ConvoScreen:new {
+	id = "s_1092",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1092", -- You were supposed to escort a shipment of supplies. What happened? Ah, whatever. I'll give you anoth...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1094", "s_1096"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1098", "s_1100"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1092)
+
+ep3_etyyy_kerssoc_convo_s_1102 = ConvoScreen:new {
+	id = "s_1102",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1102", -- Go deliver those pelts. Times a-wasting.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1102)
+
+ep3_etyyy_kerssoc_convo_s_1104 = ConvoScreen:new {
+	id = "s_1104",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1104", -- Well, look at these flawless Kashyyyk bantha pelts. Well done. I'd say I'm impressed, but it's not l...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1106", "s_1108"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1104)
+
+ep3_etyyy_kerssoc_convo_s_1118 = ConvoScreen:new {
+	id = "s_1118",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1118", -- Go get those flawless Kashyyyk bantha pelts. I'm waiting.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1120", "s_1122"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1118)
+
+ep3_etyyy_kerssoc_convo_s_1124 = ConvoScreen:new {
+	id = "s_1124",
+	animation = "greet",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1124", -- You want to enter the hunting grounds? You think Etyyy is open to just anyone? Ha. Not even close. I...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1126", "s_1128"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1142", "s_1144"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1124)
+
+ep3_etyyy_kerssoc_convo_s_1146 = ConvoScreen:new {
+	id = "s_1146",
+	leftDialog = "@conversation/ep3_etyyy_kerssoc:s_1146", -- Bah, you're no hunter. Leave now.
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_kerssoc:s_1148", "s_1150"},
+		{"@conversation/ep3_etyyy_kerssoc:s_1164", "s_1166"},
+	}
+}
+ep3_etyyy_kerssoc_convotemplate:addScreen(ep3_etyyy_kerssoc_convo_s_1146)
+
 addConversationTemplate("ep3_etyyy_kerssoc_convotemplate", ep3_etyyy_kerssoc_convotemplate);

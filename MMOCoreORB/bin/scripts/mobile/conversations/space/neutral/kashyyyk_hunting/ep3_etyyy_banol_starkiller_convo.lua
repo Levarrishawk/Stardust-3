@@ -347,4 +347,234 @@ ep3_banol_else_no = ConvoScreen:new {
 }
 ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_banol_else_no);
 
+
+-- Ground screens folded in (ruling 2026-09-04). Screen ids are the shipped
+-- java keys. Existing space screens above are untouched.
+ep3_etyyy_banol_starkiller_convo_s_752 = ConvoScreen:new {
+	id = "s_752",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_752", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_752)
+
+ep3_etyyy_banol_starkiller_convo_s_520 = ConvoScreen:new {
+	id = "s_520",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_520", -- Good. You know the drill.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_520)
+
+ep3_etyyy_banol_starkiller_convo_s_494 = ConvoScreen:new {
+	id = "s_494",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_494", -- Yeah, alright. If you change you're mind, let me know.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_494)
+
+ep3_etyyy_banol_starkiller_convo_s_504 = ConvoScreen:new {
+	id = "s_504",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_504", -- Yeah, alright. If you change you're mind, let me know.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_504)
+
+ep3_etyyy_banol_starkiller_convo_s_514 = ConvoScreen:new {
+	id = "s_514",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_514", -- Yeah, alright. If you change you're mind, let me know.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_514)
+
+ep3_etyyy_banol_starkiller_convo_s_524 = ConvoScreen:new {
+	id = "s_524",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_524", -- Yeah, alright. If you change you're mind, let me know.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_524)
+
+ep3_etyyy_banol_starkiller_convo_s_530 = ConvoScreen:new {
+	id = "s_530",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_530", -- That punk, Ziven, is expecting the arrival of a friend of his named Fordan Szholz. This Szholz is re...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_530)
+
+ep3_etyyy_banol_starkiller_convo_s_542 = ConvoScreen:new {
+	id = "s_542",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_542", -- Yeah, I guess. Tripp has another shipment scheduled. Interested in hitting that again?
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_542)
+
+ep3_etyyy_banol_starkiller_convo_s_554 = ConvoScreen:new {
+	id = "s_554",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_554", -- Yeah, alright. You did good, so I let it slide. But if you change you're mind, let me know.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_554)
+
+ep3_etyyy_banol_starkiller_convo_s_753 = ConvoScreen:new {
+	id = "s_753",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_753", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_753)
+
+ep3_etyyy_banol_starkiller_convo_s_534 = ConvoScreen:new {
+	id = "s_534",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_534", -- Good. Launch into Kashyyyk space and await further word on Fordan's arrival.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_534)
+
+ep3_etyyy_banol_starkiller_convo_s_538 = ConvoScreen:new {
+	id = "s_538",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_538", -- Yeah, okay. Whatever.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_538)
+
+ep3_etyyy_banol_starkiller_convo_s_754 = ConvoScreen:new {
+	id = "s_754",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_754", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_754)
+
+ep3_etyyy_banol_starkiller_convo_s_546 = ConvoScreen:new {
+	id = "s_546",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_546", -- Good. You know the drill. Return to me when it's done.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_546)
+
+ep3_etyyy_banol_starkiller_convo_s_550 = ConvoScreen:new {
+	id = "s_550",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_550", -- Yeah, alright. If you change you're mind, let me know.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_550)
+
+ep3_etyyy_banol_starkiller_convo_s_560 = ConvoScreen:new {
+	id = "s_560",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_560", -- There's this other hunter in the camp. You might have seen her, Tripp Rar. Sordaan doesn't like her ...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_560)
+
+ep3_etyyy_banol_starkiller_convo_s_755 = ConvoScreen:new {
+	id = "s_755",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_755", -- It looks like you already have a mission in space. Come back once you've completed that one.
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_755)
+
+ep3_etyyy_banol_starkiller_convo_s_564 = ConvoScreen:new {
+	id = "s_564",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_564", -- Good, good. Intercept them in Kashyyyk space. Oh, and return to me when it's done. I look forward to...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_564)
+
+ep3_etyyy_banol_starkiller_convo_s_568 = ConvoScreen:new {
+	id = "s_568",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_568", -- Don't have the stomach for this kind of thing? Fine. But if you change your mind, I'm not going anyw...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_568)
+
+ep3_etyyy_banol_starkiller_convo_s_486 = ConvoScreen:new {
+	id = "s_486",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_486", -- What happened? How hard is it to stop a shipment of goods from leaving the system? Tripp has another...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_banol_starkiller:s_488", "s_520"},
+		{"@conversation/ep3_etyyy_banol_starkiller:s_492", "s_494"},
+	}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_486)
+
+ep3_etyyy_banol_starkiller_convo_s_496 = ConvoScreen:new {
+	id = "s_496",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_496", -- Looking for something to do? Tripp has another shipment scheduled. Would you like to go destroy it?
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_banol_starkiller:s_498", "s_520"},
+		{"@conversation/ep3_etyyy_banol_starkiller:s_502", "s_504"},
+	}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_496)
+
+ep3_etyyy_banol_starkiller_convo_s_506 = ConvoScreen:new {
+	id = "s_506",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_506", -- You let Fordan slip away? I can't believe it. Reports say he's left the system. If he returns, he'll...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_banol_starkiller:s_508", "s_520"},
+		{"@conversation/ep3_etyyy_banol_starkiller:s_512", "s_514"},
+	}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_506)
+
+ep3_etyyy_banol_starkiller_convo_s_516 = ConvoScreen:new {
+	id = "s_516",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_516", -- That business with Fordan went pretty well. I'm impressed by your abilities, and I don't impress eas...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_banol_starkiller:s_518", "s_520"},
+		{"@conversation/ep3_etyyy_banol_starkiller:s_522", "s_524"},
+	}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_516)
+
+ep3_etyyy_banol_starkiller_convo_s_526 = ConvoScreen:new {
+	id = "s_526",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_526", -- You did pretty good taking out Tripp's latest shipment. I'm happy with the results. Any interest in ...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_banol_starkiller:s_528", "s_530"},
+		{"@conversation/ep3_etyyy_banol_starkiller:s_540", "s_542"},
+		{"@conversation/ep3_etyyy_banol_starkiller:s_552", "s_554"},
+	}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_526)
+
+ep3_etyyy_banol_starkiller_convo_s_556 = ConvoScreen:new {
+	id = "s_556",
+	animation = "greet",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_556", -- What? Oh yeah, right. Sordaan wanted me to throw some work your way. Lost one of his bets, eh? No, d...
+	stopConversation = "false",
+	options = {
+		{"@conversation/ep3_etyyy_banol_starkiller:s_558", "s_560"},
+	}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_556)
+
+ep3_etyyy_banol_starkiller_convo_s_570 = ConvoScreen:new {
+	id = "s_570",
+	leftDialog = "@conversation/ep3_etyyy_banol_starkiller:s_570", -- What? What are you looking at? Huh? Do I look like I'm here for your entertainment? Well, I'm not. S...
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_banol_starkiller_convotemplate:addScreen(ep3_etyyy_banol_starkiller_convo_s_570)
+
 addConversationTemplate("ep3_etyyy_banol_starkiller_convotemplate", ep3_etyyy_banol_starkiller_convotemplate);

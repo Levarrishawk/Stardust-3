@@ -760,9 +760,10 @@ mustafar = {
 --   MMOCoreORB/src reads planet_manager's navAreas -- the only navAreas symbol in
 --   the C++ is a local built from regionMap in PlanetManagerImplementation.cpp:361.
 --   Nav areas come from the *_regions.lua rows, not from here.
---   No jtlLaunchPoint. space_kashyyyk does exist (space_manager.lua:160), but the
---   launch coordinate inside it is not settled by any shipped file, and
---   PlanetManagerImplementation.cpp:251-254 returns cleanly when the key is absent.
+--   jtlLaunchPoint      PlanetManagerImplementation.cpp:251-265 (loadJTLData)
+--     Settled by datatables/space_zones/launch_locations.tab:35: Kachirho Starport
+--     -> space_kashyyyk -5000, 100, -5000, station_kashyyyk. Lua slot order is
+--     {"<space_zone>", x, z, y}, same as corellia (this file line 76).
 kashyyyk = {
 	-- WeatherManagerImplementation.cpp:60 looks the zone name up as a global table in
 	-- scripts/managers/weather_manager.lua. That file has no kashyyyk table (its zone
@@ -795,9 +796,89 @@ kashyyyk = {
 		{name = "Hunting Grounds Outpost", x = 398.22, z = 41.08, y = -2399.41, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
 	},
 
+	-- datatables/space_zones/launch_locations.tab:35 (Kachirho Starport).
+	jtlLaunchPoint = {"space_kashyyyk", -5000, 100, -5000},
+
 	-- Empty by intent. Badge areas are authored content, not snapshot data: the badge
 	-- id in column 6 indexes the shipped badge list, and no Kashyyyk badge assignment
 	-- is settled here. Rows can be added later without touching anything above.
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
+-- ===========================================================================
+-- KASHYYYK DUNGEON ZONES -- PROVENANCE
+-- ===========================================================================
+-- Four zones, each with its own snapshot (trap 1: Kashyyyk is seven zones, not
+-- one). PlanetManagerImplementation.cpp:633 opens "snapshot/" + zoneName + ".ws".
+-- ruling 2026-09-04, TRE order option (a): mtg_patch_022.tre above
+-- mtg_patch_023.tre; 023 must stay loaded because north_dungeons, south_dungeons
+-- and rryatt_trail ship only there. pob_dungeons also ships a smaller cut in 022.
+-- These are dungeon zones reached from the surface; there is no shuttle, so
+-- planetTravelPoints is empty. PlanetManagerImplementation.cpp:182-184 and
+-- PlanetTravelPointList.h:118-136 do not require at least one travel point: an
+-- empty table is a valid table of size 0 and the loop adds nothing.
+-- weatherEnabled 0: weather_manager.lua has no table for these zone names, the
+-- same reason as the surface kashyyyk block.
+-- gcwEnabled 0: GCW is a faction-warfare choice, not something the snapshot
+-- settles; same as the surface.
+-- badgeAreas / planetObjects empty by intent.
+kashyyyk_rryatt_trail = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
+kashyyyk_north_dungeons = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
+kashyyyk_south_dungeons = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
+kashyyyk_pob_dungeons = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
 	badgeAreas = {
 	},
 

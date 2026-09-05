@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1568 (ep3_slaver_blackscale_wookiee_berserker, where=slave_camp, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_blackscale_wookiee_berserker_01 = Creature:new {
 	customName = "Wookiee Berserker",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "wookiee",
+	socialGroup = "blackscale",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 105,

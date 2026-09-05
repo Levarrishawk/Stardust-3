@@ -27,6 +27,8 @@
 	conversation are correct and inert until a spawn exists.
 ]]
 
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 526 (clone_relics_darth_vader, where=kashyyyk, BOSS).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_clone_relics_darth_vader = Creature:new {
 	objectName = "@mob/creature_names:darth_vader",
 	socialGroup = "imperial",

@@ -1,8 +1,10 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1476 (ep3_npc_wookiee_forest_stalker, where=kachirho, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_wke_forest_stalker_03 = Creature:new {
 	customName = "Forest Stalker",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "wookiee",
-	faction = "",
+	socialGroup = "kashyyyk_resistance",
+	faction = "kashyyyk_resistance",
 	mobType = MOB_NPC,
 	level = 105,
 	chanceHit = 1.05,
@@ -28,7 +30,16 @@ ep3_wke_forest_stalker_03 = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_wke_forest_stalker_03.iff"},
-	lootGroups = {},
+	-- SOURCED (ruling 2026-09-04): lootTable kashyyyk/wke_resistance lootList wke_resistance intLootRolls=1 creatures.tab line 1476 (ep3_npc_wookiee_forest_stalker).
+	-- OURS: chance=10000000 lootChance=10000000 (Mustafar roll numbers; single group occupies the full 10M). collectionLoot/chronicle not this file.
+	lootGroups = {
+		{
+			groups = {
+				{group = "wke_resistance", chance = 10000000}
+			},
+			lootChance = 10000000
+		}
+	},
 	weapons = {"chewbacca_weapons"},
 	conversationTemplate = "",
 	attacks = merge(brawlermaster,marksmanmaster)

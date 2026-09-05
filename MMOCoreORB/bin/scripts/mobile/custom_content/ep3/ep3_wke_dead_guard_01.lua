@@ -1,7 +1,9 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1467 (ep3_npc_dead_guard, where=kachirho, NORMAL).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 ep3_wke_dead_guard_01 = Creature:new {
 	customName = "Dead Guard",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "wookiee",
+	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 45,

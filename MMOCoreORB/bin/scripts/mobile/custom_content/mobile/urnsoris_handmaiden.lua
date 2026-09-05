@@ -1,9 +1,11 @@
+-- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1582 (ep3_urnsoris_handmaiden, where=myyydril, ELITE).
+-- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 urnsoris_handmaiden = Creature:new {
 	customName = "urnsoris_handmaiden",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "myyydril_urn",
+	faction = "",
 	level = 4,
 	chanceHit = 0.24,
 	damageMin = 40,

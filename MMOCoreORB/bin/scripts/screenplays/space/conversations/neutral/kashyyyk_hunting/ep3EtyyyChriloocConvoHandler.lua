@@ -86,6 +86,50 @@ function Ep3EtyyyChriloocConvoHandler:canFly(pPlayer)
 	return isJtlEnabled() and SpaceHelpers:isPilot(pPlayer) and SpaceHelpers:hasCertifiedShip(pPlayer, true)
 end
 
+function Ep3EtyyyChriloocConvoHandler:cannotSpeakWookiee(pPlayer)
+	return pPlayer ~= nil and (not CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend"))
+end
+
+function Ep3EtyyyChriloocConvoHandler:foundBrodyJohnson(pPlayer)
+	return huntJohnsonBrodyJohnsonScreenPlay:hasCompletedQuest(pPlayer)
+end
+
+function Ep3EtyyyChriloocConvoHandler:hasCompletedSmithQuest(pPlayer)
+	return pPlayer ~= nil and huntChriloocSeekJohnsonScreenPlay:hasCompletedQuest(pPlayer)
+end
+
+function Ep3EtyyyChriloocConvoHandler:hasCompletedKerssocQuest(pPlayer)
+	return pPlayer ~= nil and (huntChriloocSeekRodiansScreenPlay:isTaskActive(pPlayer, "chrilooc_talkToChrilooc") or huntChriloocSeekRodians02ScreenPlay:isTaskActive(pPlayer, "chrilooc_talkToChrilooc_02"))
+end
+
+function Ep3EtyyyChriloocConvoHandler:isSpeakingWithKerssoc(pPlayer)
+	return pPlayer ~= nil and (huntChriloocSeekRodiansScreenPlay:isTaskActive(pPlayer, "chrilooc_gainEtyyyEntry") or huntChriloocSeekRodians02ScreenPlay:isTaskActive(pPlayer, "chrilooc_gainEtyyyEntry_02"))
+end
+
+function Ep3EtyyyChriloocConvoHandler:hasCompletedMedicalQuest(pPlayer)
+	return pPlayer ~= nil and SpaceHelpers:isSpaceQuestComplete(pPlayer, "recovery", "ep3_hunting_chrilooc_medical_supplies")
+end
+
+function Ep3EtyyyChriloocConvoHandler:failedGettingMedSupplies(pPlayer)
+	return pPlayer ~= nil and EtyyyHuntState:spaceFailed(pPlayer, "recovery", "ep3_hunting_chrilooc_medical_supplies")
+end
+
+function Ep3EtyyyChriloocConvoHandler:isGettingMedicalSupplies(pPlayer)
+	return pPlayer ~= nil and SpaceHelpers:isSpaceQuestActive(pPlayer, "recovery", "ep3_hunting_chrilooc_medical_supplies")
+end
+
+function Ep3EtyyyChriloocConvoHandler:fromWrelaac(pPlayer)
+	return pPlayer ~= nil and huntWrelaacToChriloocScreenPlay:isQuestActive(pPlayer)
+end
+
+function Ep3EtyyyChriloocConvoHandler:hasEtyyyAccess(pPlayer)
+	return pPlayer ~= nil and (huntKerssocEnterEtyyyScreenPlay:isQuestActive(pPlayer) or huntKerssocEnterEtyyyScreenPlay:hasCompletedQuest(pPlayer))
+end
+
+function Ep3EtyyyChriloocConvoHandler:alreadyHasSpaceMission(pPlayer)
+	return EtyyyHuntState:hasAnySpaceQuest(pPlayer)
+end
+
 -- Is the player already working with Kerssoc? Any of Kerssoc's three space quests touched at all.
 function Ep3EtyyyChriloocConvoHandler:withKerssoc(pPlayer)
 	local names = {
@@ -111,45 +155,31 @@ function Ep3EtyyyChriloocConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTempl
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	local active = SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_CHRILOOC_SUPPLIES.type, EP3_CHRILOOC_SUPPLIES.name)
-	local complete = SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_CHRILOOC_SUPPLIES.type, EP3_CHRILOOC_SUPPLIES.name)
-
-	if (complete) then
-		local johnson = self:getFlag(pPlayer, EP3_CHRILOOC_JOHNSON_KEY)
-
-		-- Both of these are unreachable until a Johnson Smith chain exists. See the block above.
-		if (johnson == 2) then
-			return convoTemplate:getScreen("ep3_chrilooc_truth")
+	-- java OnStartNpcConversation order (ep3_etyyy_chrilooc.java:593-836)
+	if (self:cannotSpeakWookiee(pPlayer)) then
+		EtyyyHuntState:emoteWookieeConfusion(pPlayer, pNpc)
+		return convoTemplate:getScreen("s_364")
+	elseif (self:foundBrodyJohnson(pPlayer)) then
+		return convoTemplate:getScreen("s_366")
+	elseif (self:hasCompletedSmithQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_368")
+	elseif (self:hasCompletedKerssocQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_370")
+	elseif (self:isSpeakingWithKerssoc(pPlayer)) then
+		return convoTemplate:getScreen("s_384")
+	elseif (self:hasCompletedMedicalQuest(pPlayer)) then
+		return convoTemplate:getScreen("s_390")
+	elseif (self:failedGettingMedSupplies(pPlayer)) then
+		return convoTemplate:getScreen("s_414")
+	elseif (self:isGettingMedicalSupplies(pPlayer)) then
+		return convoTemplate:getScreen("s_426")
+	elseif (self:fromWrelaac(pPlayer)) then
+		if (pNpc ~= nil) then
+			CreatureObject(pNpc):doAnimation("greet")
 		end
-
-		if (johnson == 1) then
-			return convoTemplate:getScreen("ep3_chrilooc_johnson_done")
-		end
-
-		-- First time he pays out in information.
-		if (self:getFlag(pPlayer, EP3_CHRILOOC_TOLD_KEY) ~= 1) then
-			return convoTemplate:getScreen("ep3_chrilooc_complete")
-		end
-
-		-- Told already: Etyyy access decides which of his own follow-ups he opens on.
-		if (self:getFlag(pPlayer, EP3_CHRILOOC_ETYYY_ACCESS_KEY) == 1) then
-			return convoTemplate:getScreen("ep3_chrilooc_etyyy_return")
-		end
-
-		return convoTemplate:getScreen("ep3_chrilooc_no_access")
+		return convoTemplate:getScreen("s_432")
 	end
-
-	if (active) then
-		return convoTemplate:getScreen("ep3_chrilooc_busy")
-	end
-
-	-- Took it once and no longer holds it. See the FLAGGED INTERPRETATION block above
-	-- ep3_chrilooc_failed in mobile/conversations/space/neutral/kashyyyk_hunting/ep3_etyyy_chrilooc_convo.lua.
-	if (self:getFlag(pPlayer, EP3_CHRILOOC_TAKEN_KEY) == 1) then
-		return convoTemplate:getScreen("ep3_chrilooc_failed")
-	end
-
-	return convoTemplate:getScreen("ep3_chrilooc_greeting")
+	return convoTemplate:getScreen("s_460")
 end
 
 function Ep3EtyyyChriloocConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
@@ -165,8 +195,32 @@ function Ep3EtyyyChriloocConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, 
 
 	pClonedConvo:setDialogTextTU(CreatureObject(pPlayer):getFirstName())
 
-	-- THE GRANT. s_442 "Very well. I'll do it." lands on ep3_chrilooc_accept.
-	if (screenID == "ep3_chrilooc_accept") then
+	if (screenID == "s_378") then
+		EtyyyHuntState:raise(pPlayer, "chrilooc_talkToChrilooc")
+		huntChriloocSeekJohnsonScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_394") then
+		huntChriloocSeekRodians02ScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_400") then
+		huntChriloocSeekRodiansScreenPlay:grantQuest(pPlayer)
+	elseif (screenID == "s_420") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_418")
+		end
+		if (huntWrelaacToChriloocScreenPlay:isQuestActive(pPlayer)) then
+			EtyyyHuntState:raise(pPlayer, "wrelaac_talkToChrilooc")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "recovery", "ep3_hunting_chrilooc_medical_supplies", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, recovery_ep3_hunting_chrilooc_medical_supplies, "recovery", "ep3_hunting_chrilooc_medical_supplies")
+	elseif (screenID == "s_446") then
+		if (self:alreadyHasSpaceMission(pPlayer)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_444")
+		end
+		if (huntWrelaacToChriloocScreenPlay:isQuestActive(pPlayer)) then
+			EtyyyHuntState:raise(pPlayer, "wrelaac_talkToChrilooc")
+		end
+		SpaceHelpers:clearSpaceQuest(pPlayer, "recovery", "ep3_hunting_chrilooc_medical_supplies", false)
+		EtyyyHuntState:grantSpace(pPlayer, pNpc, recovery_ep3_hunting_chrilooc_medical_supplies, "recovery", "ep3_hunting_chrilooc_medical_supplies")
+	elseif (screenID == "ep3_chrilooc_accept") then
 		if (not self:canFly(pPlayer)) then
 			return LuaConversationTemplate(pConvTemplate):getScreen("ep3_chrilooc_no_space")
 		end
