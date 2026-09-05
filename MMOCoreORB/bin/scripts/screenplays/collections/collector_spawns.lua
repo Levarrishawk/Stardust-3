@@ -81,14 +81,15 @@ CollectorSpawns = ScreenPlay:new {
 
 	-- SOURCED dathomir_7_2.tab world rows (areas_dathomir.tab dathomir_7_2 x1 4096 z1 -6144).
 	villageWorld = {
-		-- :231 aurilia_shere
-		{row = "dathomir_7_2:231", template = "object/building/content/aurilia/aurilia_shere.iff",
+		-- :231 aurilia_shere -- the shipped row's server template aurilia_shere.tpf points at
+		-- shared_aurilia_sphere.iff; this tree registers that client file as aurilia_sphere.
+		{row = "dathomir_7_2:231", template = "object/building/content/aurilia/aurilia_sphere.iff",
 			x = 5278, z = 83.91, y = -4177, qw = 1, qx = 0, qy = 0, qz = 0},
 		-- :234 aurilia_collector_sign
 		{row = "dathomir_7_2:234", template = "object/building/content/aurilia/aurilia_collector_sign.iff",
 			x = 5348.17, z = 78.5, y = -4139.92, qw = 0.707123, qx = 0, qy = -0.70709, qz = 0},
 		-- :235 aurilia_shere
-		{row = "dathomir_7_2:235", template = "object/building/content/aurilia/aurilia_shere.iff",
+		{row = "dathomir_7_2:235", template = "object/building/content/aurilia/aurilia_sphere.iff",
 			x = 5278, z = 83.91, y = -4134, qw = 1, qx = 0, qy = 0, qz = 0},
 		-- :236 terminal_bank
 		{row = "dathomir_7_2:236", template = "object/tangible/terminal/terminal_bank.iff",
