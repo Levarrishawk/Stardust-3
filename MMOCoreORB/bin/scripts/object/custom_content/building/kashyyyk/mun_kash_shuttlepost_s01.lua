@@ -39,6 +39,16 @@
 --this exception also makes it possible to release a modified version 
 
 object_building_kashyyyk_mun_kash_shuttlepost_s01 = object_building_kashyyyk_shared_mun_kash_shuttlepost_s01:new {
-
+	planetMapCategory = "shuttleport",
+	-- childObjects table shape copied from object/building/corellia/shuttleport_corellia.lua:46-50
+	-- (the three outdoor templates, headings, cellid = -1, containmentType = -1). That
+	-- precedent is a different building (circular Corellian shuttleport). This mesh is
+	-- mun_kash_shuttlepost_s01, so the relative x/z/y below are OURS: ground level (z = 0)
+	-- on the pad at the post origin, which is the Hunting Grounds Outpost travel point.
+	childObjects = {
+		{templateFile = "object/tangible/terminal/terminal_travel.iff", x = -8, z = 0, y = -6, ox = 0, oy = -0.707107, oz = 0, ow = 0.707107, cellid = -1, containmentType = -1},
+		{templateFile = "object/tangible/travel/ticket_collector/ticket_collector.iff", x = -8, z = 0, y = 6, ox = 0, oy = -0.707107, oz = 0, ow = 0.707107, cellid = -1, containmentType = -1},
+		{templateFile = "object/creature/npc/theme_park/player_shuttle.iff", x = 0, z = 0, y = 0, ox = 0, oy = 1, oz = 0, ow = 0, cellid = -1, containmentType = -1}
+	}
 }
 ObjectTemplates:addTemplate(object_building_kashyyyk_mun_kash_shuttlepost_s01, "object/building/kashyyyk/mun_kash_shuttlepost_s01.iff")

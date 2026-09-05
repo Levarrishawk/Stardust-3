@@ -760,9 +760,10 @@ mustafar = {
 --   MMOCoreORB/src reads planet_manager's navAreas -- the only navAreas symbol in
 --   the C++ is a local built from regionMap in PlanetManagerImplementation.cpp:361.
 --   Nav areas come from the *_regions.lua rows, not from here.
---   No jtlLaunchPoint. space_kashyyyk does exist (space_manager.lua:160), but the
---   launch coordinate inside it is not settled by any shipped file, and
---   PlanetManagerImplementation.cpp:251-254 returns cleanly when the key is absent.
+--   jtlLaunchPoint      PlanetManagerImplementation.cpp:251-265 (loadJTLData)
+--     Settled by datatables/space_zones/launch_locations.tab:35: Kachirho Starport
+--     -> space_kashyyyk -5000, 100, -5000, station_kashyyyk. Lua slot order is
+--     {"<space_zone>", x, z, y}, same as corellia (this file line 76).
 kashyyyk = {
 	-- WeatherManagerImplementation.cpp:60 looks the zone name up as a global table in
 	-- scripts/managers/weather_manager.lua. That file has no kashyyyk table (its zone
@@ -794,6 +795,9 @@ kashyyyk = {
 		-- interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3.
 		{name = "Hunting Grounds Outpost", x = 398.22, z = 41.08, y = -2399.41, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
 	},
+
+	-- datatables/space_zones/launch_locations.tab:35 (Kachirho Starport).
+	jtlLaunchPoint = {"space_kashyyyk", -5000, 100, -5000},
 
 	-- Empty by intent. Badge areas are authored content, not snapshot data: the badge
 	-- id in column 6 indexes the shipped badge list, and no Kashyyyk badge assignment

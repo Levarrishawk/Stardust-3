@@ -24,13 +24,13 @@ ep3_ortha_ledox = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_ortha_ledox.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_ortha_ledox_convo",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }

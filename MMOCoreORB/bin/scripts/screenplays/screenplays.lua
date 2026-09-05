@@ -750,6 +750,32 @@ includeFile("cities/chandrila_nayli_outpost.lua")
 includeFile("cities/hutta_bilbousa_city.lua")
 includeFile("poi/naboo_memorial.lua")
 
+-- Kashyyyk
+includeFile("kashyyyk/kashyyyk_patrol_paths.lua")
+includeFile("kashyyyk/kashyyyk_patrols.lua")
+includeFile("kashyyyk/kashyyyk_static_npcs.lua")
+includeFile("kashyyyk/kashyyyk_travel.lua")
+-- Quest XP first so every Kachirho screenplay below can call KashyyykQuestXp.
+-- Shape is mustafar_quest_xp.lua (OURS). Journal.* is not called; the client
+-- ships quest/ep3_kachirho_*.qst and the journal row comes later.
+includeFile("kashyyyk/quest/kashyyyk_quest_xp.lua")
+includeFile("kashyyyk/quest/kill_wke.lua")
+includeFile("kashyyyk/quest/varactyl_hunt.lua")
+includeFile("kashyyyk/quest/survey_data.lua")
+includeFile("kashyyyk/quest/varactyl_egg.lua")
+includeFile("kashyyyk/quest/missing_son.lua")
+includeFile("kashyyyk/quest/takook_comm.lua")
+includeFile("kashyyyk/quest/destroyed_camp.lua")
+includeFile("kashyyyk/quest/trando_rifle_crafting.lua")
+includeFile("kashyyyk/quest/conversation/ep3_col_gurnst_conv_handler.lua")
+includeFile("kashyyyk/quest/conversation/ep3_dr_farnsworth_conv_handler.lua")
+includeFile("kashyyyk/quest/conversation/ep3_kachirho_chatook_conv_handler.lua")
+includeFile("kashyyyk/quest/conversation/ep3_ortha_ledox_conv_handler.lua")
+includeFile("kashyyyk/quest/conversation/ep3_kachirho_qst_radio_conv_handler.lua")
+includeFile("kashyyyk/quest/conversation/ep3_pirus_gue_conv_handler.lua")
+includeFile("kashyyyk/quest/conversation/ep3_trando_kressik_conv_handler.lua")
+includeFile("kashyyyk/quest/conversation/ep3_wke_lolo_conv_handler.lua")
+
 -- Mustafar
 -- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.
 includeFile("mustafar/mustafar_quest_xp.lua")
