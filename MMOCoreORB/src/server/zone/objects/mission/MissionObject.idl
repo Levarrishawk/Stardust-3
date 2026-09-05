@@ -348,6 +348,9 @@ class MissionObject extends IntangibleObject {
 	public native unsigned int getQuestCRC();
 
 	@read
+	public native unsigned int getGroundQuestCRC();
+
+	@read
 	public native string getTypeAsString();
 
 	@read

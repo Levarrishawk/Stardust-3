@@ -27,6 +27,9 @@ local function appendOps(ops, entry)
 			table.insert(ops, { kind = "task", key = key, n = entry.activate[i], state = "active" })
 		end
 	end
+	if (entry.count ~= nil and type(entry.count) == "table") then
+		table.insert(ops, { kind = "count", key = key, n = entry.count[1], current = entry.count[2], max = entry.count[3] })
+	end
 	if (entry.finish) then
 		table.insert(ops, { kind = "finish", key = key })
 	end
@@ -70,6 +73,12 @@ function JournalMirror.applyStage(pPlayer, map, stage)
 			else
 				table.insert(writes, op)
 			end
+		elseif (op.kind == "count") then
+			if (type(op.n) ~= "number" or op.n < 0 or op.n > 15 or op.n ~= math.floor(op.n)) then
+				print("[journal_mirror] count task out of range: " .. tostring(op.n))
+			else
+				table.insert(writes, op)
+			end
 		else
 			table.insert(writes, op)
 		end
@@ -87,6 +96,8 @@ function JournalMirror.applyStage(pPlayer, map, stage)
 			Journal.begin(pPlayer, op.key, notify)
 		elseif (op.kind == "task") then
 			Journal.task(pPlayer, op.key, op.n, op.state, notify)
+		elseif (op.kind == "count") then
+			Journal.count(pPlayer, op.key, op.n, op.current, op.max)
 		else
 			Journal.complete(pPlayer, op.key, notify)
 		end

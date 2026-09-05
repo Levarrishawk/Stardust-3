@@ -848,6 +848,10 @@ class PlayerObject extends IntangibleObject {
 
 	public native boolean isJournalQuestTaskComplete(unsigned int questCrc, int taskNum);
 
+	public native void setQuestCounter(unsigned int questCrc, int n);
+
+	public native int getQuestCounter(unsigned int questCrc);
+
 	/**
 	 * Sends a badges response message
 	 * @pre { }
@@ -904,6 +908,11 @@ class PlayerObject extends IntangibleObject {
 
 	@local
 	public native void clearPlayerQuestData(unsigned int questCrc, boolean notifyClient = true);
+
+	/**
+	 * Sends the whole quest journal map (delta 8 view 6) -- the client treats that view as a packed map.
+	 */
+	public native void sendPlayerQuestsDataMap();
 	/**
 	 * Gets the faction point list.
 	 */

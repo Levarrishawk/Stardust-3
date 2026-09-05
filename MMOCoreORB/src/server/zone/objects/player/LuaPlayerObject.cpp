@@ -19,6 +19,10 @@
 #include "server/zone/objects/player/sui/listbox/SuiListBox.h"
 #include "server/zone/objects/player/sui/callbacks/EnclaveCouncilRankSuiCallback.h"
 #include "server/zone/managers/stringid/StringIdManager.h"
+#include "server/zone/objects/creature/CreatureObject.h"
+#include "server/zone/objects/player/PlayerObject.h"
+#include "server/zone/packets/object/QuestTaskCounterMessage.h"
+#include "server/zone/packets/object/QuestTaskTimerMessage.h"
 
 const char LuaPlayerObject::className[] = "LuaPlayerObject";
 
@@ -64,6 +68,10 @@ Luna<LuaPlayerObject>::RegType LuaPlayerObject::Register[] = {
 		{ "isJournalQuestComplete", &LuaPlayerObject::isJournalQuestComplete },
 		{ "isJournalQuestTaskActive", &LuaPlayerObject::isJournalQuestTaskActive },
 		{ "isJournalQuestTaskComplete", &LuaPlayerObject::isJournalQuestTaskComplete },
+		{ "sendQuestTaskCounter", &LuaPlayerObject::sendQuestTaskCounter },
+		{ "sendQuestTaskTimer", &LuaPlayerObject::sendQuestTaskTimer },
+		{ "setQuestCounter", &LuaPlayerObject::setQuestCounter },
+		{ "getQuestCounter", &LuaPlayerObject::getQuestCounter },
 		{ "setActiveQuestsBit", &LuaPlayerObject::setActiveQuestsBit },
 		{ "clearActiveQuestsBit", &LuaPlayerObject::clearActiveQuestsBit },
 		{ "hasActiveQuestBitSet", &LuaPlayerObject::hasActiveQuestBitSet },
@@ -562,6 +570,58 @@ int LuaPlayerObject::isJournalQuestTaskComplete(lua_State* L) {
 	int task = lua_tointeger(L, -1);
 
 	lua_pushboolean(L, realObject->isJournalQuestTaskComplete(questCrc, task));
+
+	return 1;
+}
+
+int LuaPlayerObject::sendQuestTaskCounter(lua_State* L) {
+	String questName = lua_tostring(L, -5);
+	int taskId = lua_tointeger(L, -4);
+	String stfKey = lua_tostring(L, -3);
+	int current = lua_tointeger(L, -2);
+	int max = lua_tointeger(L, -1);
+
+	ManagedReference<CreatureObject*> player = realObject->getParentRecursively(SceneObjectType::PLAYERCREATURE).castTo<CreatureObject*>();
+
+	if (player == nullptr)
+		return 0;
+
+	player->sendMessage(new QuestTaskCounterMessage(player, questName, taskId, stfKey, current, max));
+
+	return 0;
+}
+
+int LuaPlayerObject::sendQuestTaskTimer(lua_State* L) {
+	String questName = lua_tostring(L, -4);
+	int taskId = lua_tointeger(L, -3);
+	String stfKey = lua_tostring(L, -2);
+	int seconds = lua_tointeger(L, -1);
+
+	ManagedReference<CreatureObject*> player = realObject->getParentRecursively(SceneObjectType::PLAYERCREATURE).castTo<CreatureObject*>();
+
+	if (player == nullptr)
+		return 0;
+
+	player->sendMessage(new QuestTaskTimerMessage(player, questName, taskId, stfKey, seconds));
+
+	return 0;
+}
+
+int LuaPlayerObject::setQuestCounter(lua_State* L) {
+	unsigned int questCrc = lua_tointeger(L, -2);
+	int n = lua_tointeger(L, -1);
+
+	Locker locker(realObject);
+
+	realObject->setQuestCounter(questCrc, n);
+
+	return 0;
+}
+
+int LuaPlayerObject::getQuestCounter(lua_State* L) {
+	unsigned int questCrc = lua_tointeger(L, -1);
+
+	lua_pushinteger(L, realObject->getQuestCounter(questCrc));
 
 	return 1;
 }

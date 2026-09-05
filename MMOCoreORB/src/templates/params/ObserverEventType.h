@@ -114,6 +114,10 @@ public:
 		SHIPDESTROYED,				// ManagedObject arg1 = destructing ship long arg2 = current squadron size, Uses: tracking specific ship destruction
 		INSPECTEDSHIP,				// ManagedObject arg1 = shipAgent that was inspected by player long arg2 = cargo string hashCode
 		HERD,						// ManagedObject arg1 = AiAgent, long arg2 = 0
+		MISSIONACTIVATED,			// MissionObjective arg1 = mission object, int arg2 = 0
+		MISSIONCOMPLETED,			// MissionObjective arg1 = mission object, int arg2 = 0
+		MISSIONABORTED,				// MissionObjective arg1 = mission object, int arg2 = 0
+		MISSIONFAILED,				// MissionObjective arg1 = mission object, int arg2 = 0
 	};
 };
 

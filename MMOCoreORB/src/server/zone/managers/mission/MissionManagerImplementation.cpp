@@ -305,6 +305,8 @@ void MissionManagerImplementation::createDestroyMissionObjectives(MissionObject*
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
 
+	mission->setQuestType("mission");
+	mission->setQuestName("destroy");
 	mission->setMissionObjective(objective);
 	objective->activate();
 }
@@ -316,6 +318,8 @@ void MissionManagerImplementation::createDeliverMissionObjectives(MissionObject*
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
 
+	mission->setQuestType("mission");
+	mission->setQuestName("deliver");
 	mission->setMissionObjective(objective);
 	objective->activate();
 }
@@ -365,6 +369,8 @@ void MissionManagerImplementation::createCraftingMissionObjectives(MissionObject
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
 
+	mission->setQuestType("mission");
+	mission->setQuestName("crafting");
 	mission->setMissionObjective(objective);
 	objective->activate();
 }
@@ -382,6 +388,8 @@ void MissionManagerImplementation::createSurveyMissionObjectives(MissionObject* 
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
 
+	mission->setQuestType("mission");
+	mission->setQuestName("survey");
 	mission->setMissionObjective(objective);
 	objective->activate();
 }
@@ -392,6 +400,13 @@ void MissionManagerImplementation::createEntertainerMissionObjectives(MissionObj
 	Locker locker(objective);
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
+
+	mission->setQuestType("mission");
+
+	if (mission->getTypeCRC() == MissionTypes::DANCER)
+		mission->setQuestName("dancer");
+	else
+		mission->setQuestName("musician");
 
 	mission->setMissionObjective(objective);
 	objective->activate();
@@ -404,6 +419,8 @@ void MissionManagerImplementation::createHuntingMissionObjectives(MissionObject*
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
 
+	mission->setQuestType("mission");
+	mission->setQuestName("hunting");
 	mission->setMissionObjective(objective);
 	objective->activate();
 }
@@ -415,6 +432,8 @@ void MissionManagerImplementation::createReconMissionObjectives(MissionObject* m
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
 
+	mission->setQuestType("mission");
+	mission->setQuestName("recon");
 	mission->setMissionObjective(objective);
 	objective->activate();
 }
@@ -426,6 +445,8 @@ void MissionManagerImplementation::createBountyMissionObjectives(MissionObject* 
 
 	ObjectManager::instance()->persistObject(objective, 1, "missionobjectives");
 
+	mission->setQuestType("mission");
+	mission->setQuestName("bounty");
 	mission->setMissionObjective(objective);
 	objective->activate();
 }
@@ -514,8 +535,12 @@ void MissionManagerImplementation::handleMissionFail(MissionObject* mission, Cre
 	ManagedReference<PlayerObject*> ghost = player->getPlayerObject();
 
 	if (ghost != nullptr) {
-		// Space Missions
-		uint32 questCRC = mission->getQuestCRC();
+		uint32 questCRC = 0;
+
+		if (mission->getQuestType() == "mission")
+			questCRC = mission->getGroundQuestCRC();
+		else
+			questCRC = mission->getQuestCRC();
 
 		if (questCRC > 0) {
 			ghost->clearJournalQuest(questCRC, false);
@@ -548,13 +573,18 @@ void MissionManagerImplementation::handleMissionAbort(MissionObject* mission, Cr
 			return;
 		}
 
-		// Space Missions
-		uint32 questCRC = mission->getQuestCRC();
+		// Ground terminal missions use mission/<type>; space keeps spacequest/<type>/<name>.
+		uint32 questCRC = 0;
+
+		if (questType == "mission")
+			questCRC = mission->getGroundQuestCRC();
+		else
+			questCRC = mission->getQuestCRC();
 
 		if (questCRC > 0) {
 			ghost->clearJournalQuest(questCRC, false);
 
-			if (questMessage) {
+			if (questMessage && questType != "mission") {
 				String questString = "@spacequest/" + questType + "/" + questName + ":title";
 
 				StringIdChatParameter spaceAbort("space/quest", "quest_aborted");
@@ -569,8 +599,8 @@ void MissionManagerImplementation::handleMissionAbort(MissionObject* mission, Cr
 
 	mission->abort();
 
-	// JTL Mission Abort to clear lua quest data
-	if (!questType.isEmpty()) {
+	// JTL Mission Abort to clear lua quest data (space only; ground uses questType "mission")
+	if (!questType.isEmpty() && questType != "mission") {
 		Lua* lua = DirectorManager::instance()->getLuaInstance();
 
 		if (lua != nullptr) {

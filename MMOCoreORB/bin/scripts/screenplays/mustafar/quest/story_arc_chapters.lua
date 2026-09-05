@@ -580,7 +580,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- The two arc tasks both target the operational factory. Nothing in the tree
 	-- states a rule for reaching the decrepit one -- in live the keypad code
 	-- decided, and that puzzle only covers the arc -- so the rule above is ours,
-	-- ruled by Aaron 2026-08-31 as part of completing Mustafar rather than left as
+	-- ruled by ruling 2026-08-31 as part of completing Mustafar rather than left as
 	-- an open question. It is the same class of deviation as using arc stage in
 	-- place of the code, and it is what makes the decrepit interior reachable
 	-- instead of furnished-and-sealed.

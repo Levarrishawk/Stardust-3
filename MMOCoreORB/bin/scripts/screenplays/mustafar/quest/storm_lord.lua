@@ -156,7 +156,7 @@ positions inside that footprint, the headings, and the respawn interval. None of
 those are recorded anywhere -- not in the shipped data, not in the live spawn
 tables, not in any live-era account. Ten bodies on a 120 s respawn is a judgment
 call made to match the shape of the minion leg beside it, and it is marked as
-ours in the comment on the spawn block itself. Aaron can retune any of the four
+ours in the comment on the spawn block itself. the maintainer can retune any of the four
 numbers without touching anything else.
 
 THE PROPHET  --  where he stands
@@ -183,7 +183,7 @@ WHY THIS FILE DOES NOT DO THE SPAWNING
 Both placements went into storm_lord_region.lua rather than here, because that
 file already owns every placement in this valley -- the minions, the guards and
 the Storm Lord himself. An earlier revision of this header said that file was
-another agent's and must not be touched. Aaron has ruled otherwise: there is no
+another agent's and must not be touched. the maintainer has ruled otherwise: there is no
 other owner for Mustafar content. That constraint is retired and is recorded
 here only so the change of course is legible.
 
@@ -218,7 +218,7 @@ shared_*.iff finds no object template carrying that objectName, so granting the
 live item would mean authoring an object. It is left unresolved rather than
 replaced with a guess. This is the same class of unresolvable reward already
 recorded in hidden_treasure.lua and bounty_hunts.lua, and it means that until
-Aaron rules on the item, completing this quest pays nothing but the completion
+the maintainer rules on the item, completing this quest pays nothing but the completion
 message. That is stated plainly rather than hidden behind a stand-in reward.
 
 The Reward task's CountItem 1 / CountWeapon 1 / CountArmor 1 and its

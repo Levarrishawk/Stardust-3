@@ -21,6 +21,7 @@
 #include "server/zone/objects/mission/events/FailMissionAfterCertainTimeTask.h"
 #include "events/CompleteMissionObjectiveTask.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
+#include "templates/params/ObserverEventType.h"
 
 void MissionObjectiveImplementation::destroyObjectFromDatabase() {
 	for (int i = 0; i < observers.size(); ++i) {
@@ -67,6 +68,11 @@ void MissionObjectiveImplementation::activate() {
 
 		failTask = new FailMissionAfterCertainTimeTask(mission.get());
 		failTask->schedule(timeRemaining);
+
+		ManagedReference<CreatureObject*> player = getPlayerOwner();
+
+		if (player != nullptr)
+			player->notifyObservers(ObserverEventType::MISSIONACTIVATED, getMissionObject().get(), 0);
 	}
 }
 
@@ -90,6 +96,8 @@ void MissionObjectiveImplementation::complete() {
 	}
 
 	clearFailTask();
+
+	player->notifyObservers(ObserverEventType::MISSIONCOMPLETED, getMissionObject().get(), 0);
 }
 
 void MissionObjectiveImplementation::addObserver(MissionObserver* observer, bool makePersistent) {
@@ -105,6 +113,11 @@ void MissionObjectiveImplementation::addObserver(MissionObserver* observer, bool
 
 void MissionObjectiveImplementation::abort() {
 	clearFailTask();
+
+	ManagedReference<CreatureObject*> player = getPlayerOwner();
+
+	if (player != nullptr)
+		player->notifyObservers(ObserverEventType::MISSIONABORTED, getMissionObject().get(), 0);
 }
 
 void MissionObjectiveImplementation::clearFailTask() {
@@ -174,6 +187,12 @@ void MissionObjectiveImplementation::removeMissionFromPlayer() {
 
 void MissionObjectiveImplementation::fail() {
 	abort();
+
+	ManagedReference<CreatureObject*> player = getPlayerOwner();
+
+	if (player != nullptr)
+		player->notifyObservers(ObserverEventType::MISSIONFAILED, getMissionObject().get(), 0);
+
 	removeMissionFromPlayer();
 }
 

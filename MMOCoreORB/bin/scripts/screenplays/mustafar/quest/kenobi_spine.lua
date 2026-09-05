@@ -244,7 +244,7 @@ WHAT IS NOT MODELLED, AND WHY
   datatables/spawning/dungeon/ and concluded from two empty directories that
   nothing shipped. The table was in the building's own server template all
   along. That is a research gap, not a design question, and the sentence
-  calling the placement Aaron's decision is withdrawn.
+  calling the placement the maintainer's decision is withdrawn.
 
   The 141-node .ilf has TWO statue galleries, and they still describe the room:
 
