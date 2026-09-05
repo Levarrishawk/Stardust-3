@@ -12,7 +12,7 @@
 --   scout_trooper -> scout_trooper  size=4  exact-name (exact registered name (SOE creatureName equals repo addCreatureTemplate name; lua faction/imperial/scout_trooper.lua; C6 creatures.tab line n/a))
 kashyyyk_rryatt_scout_troopers = Lair:new {
 	mobiles = {{"scout_trooper",4},{"scout_trooper",4},{"scout_trooper",4}},
-	spawnLimit = 2,
+	spawnLimit = 4,
 	buildingsVeryEasy = {},
   buildingsEasy = {},
   buildingsMedium = {},

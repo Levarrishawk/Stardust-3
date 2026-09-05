@@ -775,6 +775,15 @@ includeFile("kashyyyk/quest/conversation/ep3_kachirho_qst_radio_conv_handler.lua
 includeFile("kashyyyk/quest/conversation/ep3_pirus_gue_conv_handler.lua")
 includeFile("kashyyyk/quest/conversation/ep3_trando_kressik_conv_handler.lua")
 includeFile("kashyyyk/quest/conversation/ep3_wke_lolo_conv_handler.lua")
+includeFile("kashyyyk/kashyyyk_pob_population.lua")
+includeFile("kashyyyk/hracca_monster_island.lua")
+includeFile("kashyyyk/bocctyyy_the_bet.lua")
+includeFile("kashyyyk/trando_slave_camp.lua")
+includeFile("kashyyyk/myyydril_grievous.lua")
+includeFile("kashyyyk/myyydril_compactor.lua")
+includeFile("kashyyyk/avatar_platform.lua")
+includeFile("kashyyyk/kashyyyk_arena.lua")
+includeFile("kashyyyk/kashyyyk_rryatt_npcs.lua")
 
 -- Mustafar
 -- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.

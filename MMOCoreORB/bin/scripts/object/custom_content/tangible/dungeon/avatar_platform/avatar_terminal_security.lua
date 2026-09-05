@@ -1,0 +1,5 @@
+object_tangible_dungeon_avatar_platform_avatar_terminal_security = object_tangible_dungeon_avatar_platform_shared_avatar_terminal_security:new {
+
+}
+
+ObjectTemplates:addTemplate(object_tangible_dungeon_avatar_platform_avatar_terminal_security, "object/tangible/dungeon/avatar_platform/avatar_terminal_security.iff")

@@ -809,6 +809,83 @@ kashyyyk = {
 	}
 }
 
+-- ===========================================================================
+-- KASHYYYK DUNGEON ZONES -- PROVENANCE
+-- ===========================================================================
+-- Four zones, each with its own snapshot (trap 1: Kashyyyk is seven zones, not
+-- one). PlanetManagerImplementation.cpp:633 opens "snapshot/" + zoneName + ".ws".
+-- ruling 2026-09-04, TRE order option (a): mtg_patch_022.tre above
+-- mtg_patch_023.tre; 023 must stay loaded because north_dungeons, south_dungeons
+-- and rryatt_trail ship only there. pob_dungeons also ships a smaller cut in 022.
+-- These are dungeon zones reached from the surface; there is no shuttle, so
+-- planetTravelPoints is empty. PlanetManagerImplementation.cpp:182-184 and
+-- PlanetTravelPointList.h:118-136 do not require at least one travel point: an
+-- empty table is a valid table of size 0 and the loop adds nothing.
+-- weatherEnabled 0: weather_manager.lua has no table for these zone names, the
+-- same reason as the surface kashyyyk block.
+-- gcwEnabled 0: GCW is a faction-warfare choice, not something the snapshot
+-- settles; same as the surface.
+-- badgeAreas / planetObjects empty by intent.
+kashyyyk_rryatt_trail = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
+kashyyyk_north_dungeons = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
+kashyyyk_south_dungeons = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
+kashyyyk_pob_dungeons = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+
+	-- Dungeon zone reached from the surface; no shuttle.
+	planetTravelPoints = {
+	},
+
+	badgeAreas = {
+	},
+
+	planetObjects = {
+	}
+}
+
 tutorial = {
 	weatherEnabled = 0,
 	gcwEnabled = 0,

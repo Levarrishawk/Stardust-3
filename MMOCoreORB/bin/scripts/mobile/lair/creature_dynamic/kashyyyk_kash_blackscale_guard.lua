@@ -13,7 +13,7 @@
 --   ep3_slaver_blackscale_guard -> ep3_blackscale_guard_m_03  size=1  c6-rotate (C6 creatures.tab line 1562; rotate numbered variants ep3_blackscale_guard_m_01.._04)
 kashyyyk_kash_blackscale_guard = Lair:new {
 	mobiles = {{"ep3_blackscale_guard_m_01",1},{"ep3_blackscale_guard_m_02",1},{"ep3_blackscale_guard_m_03",1}},
-	spawnLimit = 4,
+	spawnLimit = 6,
 	buildingsVeryEasy = {},
   buildingsEasy = {},
   buildingsMedium = {},
