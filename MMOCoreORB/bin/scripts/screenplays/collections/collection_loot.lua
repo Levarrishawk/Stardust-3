@@ -18,10 +18,14 @@
 -- OURS: after that stored record, slot resolution matches
 -- SceneObject:getCustomObjectName() (LuaSceneObject.cpp:74) to
 -- CollectionStaticItems.displayName among rows sharing the template; if the
--- name is unique or every duplicate maps to the same slot, use it; else the
--- unique-template reverse map. Loot customObjectName and grant
--- setCustomObjectName (LuaSceneObject.cpp:39) are SOURCED master_item.tab
--- string_name.
+-- name is unique or every duplicate maps to the same slot, use it; if
+-- duplicates map to different slots, return those slots joined with `|`
+-- (consume_loot.java:216 multi-slot form). onUse then offers still-open
+-- collections via collection_list_title / collection_list_prompt, or fills
+-- the one remaining entry without asking (onUse #avail == 1 ->
+-- confirmConsume). Else the unique-template reverse map. Loot
+-- customObjectName and grant setCustomObjectName (LuaSceneObject.cpp:39)
+-- are SOURCED master_item.tab string_name.
 -- lootChance scale: LootGroupCollectionEntry.h:39 + LootManagerImplementation.cpp:711
 -- System::random(10000000). SharedTangibleObjectTemplate.lua:114 objectMenuComponent;
 -- SharedObjectTemplate.cpp:169 parses it.
@@ -285,7 +289,12 @@ CollectionLoot = ScreenPlay:new {
 --   object/tangible/collection/reward/col_reward_feather_duster.iff name=A Feather Duster slot=(empty) col_reward_feather_duster_02_01,col_reward_feather_duster_02_02,col_reward_feather_duster_02_03,col_reward_feather_duster_02_04,col_reward_feather_duster_02_05
 --   object/tangible/loot/generic_usable/generic_storage_increase.iff name=A Crate for Increased Building Storage slot=(empty) item_storage_increase_05_03,item_storage_increase_05_04
 
--- OPEN: duplicate display names on a shared template that map to different slots.
+-- OPEN (resolved by choice, not by guess): duplicate display names on a
+-- shared template that map to different slots. slotOf returns those slots
+-- joined with `|` (consume_loot.java:216 multi-slot form). onUse offers
+-- still-open collections via collection_list_title / collection_list_prompt;
+-- one still-open entry fills without asking (onUse #avail == 1 ->
+-- confirmConsume).
 --   object/tangible/loot/creature_loot/collections/jedi_holocron_01.iff name=Strange Jedi Holocron 1/5 item_collection_jedi_holocron_01_01=inv_holocron_collection_01:jedi_holocron_01_01,item_collection_jedi_holocron_02_01=inv_holocron_collection_02:jedi_holocron_02_01
 --   object/tangible/loot/creature_loot/collections/jedi_holocron_01.iff name=Strange Jedi Holocron 2/5 item_collection_jedi_holocron_01_02=inv_holocron_collection_01:jedi_holocron_01_02,item_collection_jedi_holocron_02_02=inv_holocron_collection_02:jedi_holocron_02_02
 --   object/tangible/loot/creature_loot/collections/jedi_holocron_01.iff name=Strange Jedi Holocron 3/5 item_collection_jedi_holocron_01_03=inv_holocron_collection_01:jedi_holocron_01_03,item_collection_jedi_holocron_02_03=inv_holocron_collection_02:jedi_holocron_02_03
@@ -1790,21 +1799,25 @@ function CollectionLoot:slotOf(pItem)
 		end
 
 		if (#matches > 1) then
-			local slot = matches[1].slot or ""
-			local same = true
+			-- OURS: shared name, different slots -> consume_loot.java:216 `a|b|c`.
+			local joined = {}
+			local seen = {}
 
-			for i = 2, #matches do
-				if ((matches[i].slot or "") ~= slot) then
-					same = false
-					break
+			for i = 1, #matches do
+				local s = matches[i].slot or ""
+
+				if (s ~= "" and seen[s] == nil) then
+					seen[s] = true
+					joined[#joined + 1] = s
 				end
 			end
 
-			if (same and slot ~= "") then
-				return slot
+			if (#joined == 0) then
+				return nil
 			end
 
-			return nil
+			table.sort(joined)
+			return table.concat(joined, "|")
 		end
 	end
 
