@@ -1,15 +1,7 @@
--- Kashyyyk Hunting Grounds Outpost travel children (ruling 2026-09-04:
--- "ensure kashyyyk is fully done, including any space work").
--- The shuttleport at snapshot node 6295268 already exists in a warm
--- clientobjects DB, so BuildingObject::createChildObjects is never walked
--- again (same ZoneServerImplementation early-return the Meatlump hideout
--- hit). Those children are outdoor (cellid -1), so a cell container walk
--- does not apply. Lua has no getObjectsInRange / getCloseObjects /
--- PlanetTravelPoint::getShuttle binding; SceneObject:getChildObject throws
--- ArrayIndexOutOfBoundsException on an empty childObjects vector (the warm
--- DB case). Detection is therefore getSceneObject on OIDs stored with
--- writeData (DirectorSharedMemory, process lifetime) plus a 20 m
--- getDistanceTo check against the post.
+-- Repair missing travel children on existing shuttleposts and adopt children
+-- created from the building template on fresh databases. Cached OIDs are
+-- process-local; persistent template children are rediscovered after restart.
+-- Requires the bounds-checked SceneObject:getChildObject binding.
 
 KashyyykTravelScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
@@ -70,19 +62,31 @@ function KashyyykTravelScreenPlay:childPresent(pBuilding, entry, index)
 	local oid = readData("KashyyykTravel:oid:" .. index)
 	local pObj = getSceneObject(oid)
 
-	if (pObj == nil) then
+	if (self:matchesChild(pBuilding, pObj, entry)) then
+		return true
+	end
+
+	local childIndex = 0
+	local pChild = SceneObject(pBuilding):getChildObject(childIndex)
+	while (pChild ~= nil) do
+		if (self:matchesChild(pBuilding, pChild, entry)) then
+			writeData("KashyyykTravel:oid:" .. index, SceneObject(pChild):getObjectID())
+			return true
+		end
+		childIndex = childIndex + 1
+		pChild = SceneObject(pBuilding):getChildObject(childIndex)
+	end
+
+	return false
+end
+
+function KashyyykTravelScreenPlay:matchesChild(pBuilding, pObj, entry)
+	if (pObj == nil or SceneObject(pObj):getZoneName() ~= self.planet) then
 		return false
 	end
 
-	if (SceneObject(pObj):getTemplateObjectPath() ~= entry.templateFile) then
-		return false
-	end
-
-	if (SceneObject(pBuilding):getDistanceTo(pObj) > 20) then
-		return false
-	end
-
-	return true
+	return SceneObject(pObj):getTemplateObjectPath() == entry.templateFile
+		and SceneObject(pBuilding):getDistanceTo(pObj) <= 20
 end
 
 function KashyyykTravelScreenPlay:spawnIfMissing(pBuilding, entry, index)

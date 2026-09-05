@@ -6,6 +6,7 @@ includeFile("custom_content/mobile/serverobjects.lua")
 includeFile("custom_content/npe/serverobjects.lua")
 includeFile("custom_content/som/serverobjects.lua")
 includeFile("custom_content/event/serverobjects.lua")
+includeFile("custom_content/kashyyyk_hunt_targets.lua")
 
 
 --Root Folder

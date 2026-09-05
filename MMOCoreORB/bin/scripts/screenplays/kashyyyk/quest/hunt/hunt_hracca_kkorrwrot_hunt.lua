@@ -10,7 +10,7 @@
 		task 1  d1  Destroy Multiple  hracca_huntKkorrwrot  Target ep3_hracca_kkorrwrot  Count 1
 		task 2  d2  Wait for Signal  hracca_kkorrwrotKilled  signal hracca_kkorrwrotKilled
 
-	OPEN: pvpBitmask NONE on kkorrwrot; observer still matches
+	Uses the attackable Hracca encounter variant.
 
 	Giver already stands via kashyyyk_static_npcs.lua. Not spawned here.
 
@@ -38,7 +38,7 @@ huntHraccaKkorrwrotHuntScreenPlay = ScreenPlay:new {
 	timerSeconds = 0,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "kkorrwrot" },
+	killTemplates = { "kashyyyk_hracca_kkorrwrot" },
 	taskStages = { hracca_huntKkorrwrot = 1,
 		hracca_kkorrwrotKilled = 2 },
 }

@@ -9,7 +9,7 @@
 -- Creature rows (SOE creatureName -> repo template):
 --   ep3_etyyy_bantha_kashyyyk_greyclimber -> kashyyyk_bull_bantha  size=5  iff-match (creatures.tab line 1284; lua kashyyyk_bull_bantha.lua [picked 1 of 2 the creature table lua matches])
 kashyyyk_etyyy_kash_bantha_quest_greyclimber = Lair:new {
-	mobiles = {{"kashyyyk_bull_bantha",5}},
+	mobiles = {{"kashyyyk_hunt_greyclimber",5}},
 	spawnLimit = 1,
 	buildingsVeryEasy = {},
   buildingsEasy = {},

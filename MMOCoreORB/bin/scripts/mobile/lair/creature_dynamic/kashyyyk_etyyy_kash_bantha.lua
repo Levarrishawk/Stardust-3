@@ -11,7 +11,7 @@
 --   ep3_etyyy_bantha_kashyyyk -> kashyyyk_bull_bantha  size=5  iff-match (creatures.tab line 1283; lua kashyyyk_bull_bantha.lua [picked 1 of 2 the creature table lua matches])
 --   ep3_etyyy_bantha_kashyyyk -> kashyyyk_bull_bantha  size=5  iff-match (creatures.tab line 1283; lua kashyyyk_bull_bantha.lua [picked 1 of 2 the creature table lua matches])
 kashyyyk_etyyy_kash_bantha = Lair:new {
-	mobiles = {{"kashyyyk_bull_bantha",5},{"kashyyyk_bull_bantha",5},{"kashyyyk_bull_bantha",5}},
+	mobiles = {{"kashyyyk_hunt_bantha",5},{"kashyyyk_hunt_bantha",5},{"kashyyyk_hunt_bantha",5}},
 	spawnLimit = 6,
 	buildingsVeryEasy = {},
   buildingsEasy = {},

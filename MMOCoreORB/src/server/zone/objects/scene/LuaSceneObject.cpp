@@ -982,6 +982,11 @@ int LuaSceneObject::cancelPendingTask(lua_State* L) {
 int LuaSceneObject::getChildObject(lua_State* L) {
 	int index = lua_tonumber(L, -1);
 
+	if (index < 0 || index >= realObject->getChildObjects()->size()) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	SceneObject* obj = realObject->getChildObjects()->get(index);
 
 	if (obj == nullptr) {

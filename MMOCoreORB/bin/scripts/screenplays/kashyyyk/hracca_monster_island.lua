@@ -25,10 +25,9 @@ OPEN
 
 	Outdoor isolation / concurrency / the space-dungeon session model. Copy #0
 	is a shared surface. Kill count is island-wide (writeData), not per party.
-	No instance recycle: poachers are one boot cycle (live reset on dungeon
-	cleanup). Chiss fog particles and the fog-end PRT are not placed. The
-	mapped kkorrwrot template is a level-4 townsperson placeholder
-	(pvpBitmask NONE) -- the level curve is an open ruling; this file does not substitute.
+	The shared encounter resets five minutes after boss completion.
+	Chiss fog particles and the fog-end PRT are not placed. The boss inherits
+	the existing level-4 stats; the level curve remains an open ruling.
 
 COORDINATE TRANSFORM
 
@@ -183,7 +182,8 @@ HraccaMonsterIsland = ScreenPlay:new {
 		"ep3_etyyy_chiss_poacher_hracca_08",
 	},
 
-	bossTemplate = "kkorrwrot",
+	bossTemplate = "kashyyyk_hracca_kkorrwrot",
+	resetDelay = 5 * 60 * 1000,
 
 	-- theme_park/kashyyyk/hracca.stf -- hracca_controller.java:85-110
 	countdownKeys = {
@@ -399,8 +399,29 @@ function HraccaMonsterIsland:notifyBossKilled(pVictim, pKiller)
 	end
 
 	self:raiseHuntSignal(pVictim)
+	self:scheduleReset()
 
 	return 1
+end
+
+function HraccaMonsterIsland:scheduleReset()
+	if (readData("HraccaMonsterIsland:resetPending") == 1) then
+		return
+	end
+
+	writeData("HraccaMonsterIsland:resetPending", 1)
+	createEvent(self.resetDelay, "HraccaMonsterIsland", "resetEncounter", nil, "")
+end
+
+function HraccaMonsterIsland:resetEncounter()
+	if (readData("HraccaMonsterIsland:resetPending") ~= 1) then
+		return
+	end
+
+	deleteData("HraccaMonsterIsland:resetPending")
+	if (isZoneEnabled(self.zoneName)) then
+		self:spawnPoachers()
+	end
 end
 
 function HraccaMonsterIsland:raiseHuntSignal(pFrom)

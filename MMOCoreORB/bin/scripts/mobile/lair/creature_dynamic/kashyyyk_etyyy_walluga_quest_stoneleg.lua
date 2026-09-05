@@ -9,7 +9,7 @@
 -- Creature rows (SOE creatureName -> repo template):
 --   ep3_etyyy_walluga_stoneleg -> walluga  size=10  iff-matched (repo templates iff equals SOE template column walluga.iff; creatures.tab line 1327; level-4 placeholder today, the level curve is an open ruling)
 kashyyyk_etyyy_walluga_quest_stoneleg = Lair:new {
-	mobiles = {{"walluga",10}},
+	mobiles = {{"kashyyyk_hunt_stoneleg",10}},
 	spawnLimit = 1,
 	buildingsVeryEasy = {},
   buildingsEasy = {},

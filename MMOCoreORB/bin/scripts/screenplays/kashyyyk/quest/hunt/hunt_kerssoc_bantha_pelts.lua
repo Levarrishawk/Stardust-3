@@ -10,7 +10,7 @@
 		task 2  d1  Destroy Multiple and Loot  kerssoc_huntingBantha  CreatureType ep3_etyyy_bantha_kashyyyk  Social bantha_kashyyyk  Loot "Kashyyyk bantha pelt" x17 50%
 		task 3  d2  Wait for Signal  kerssoc_kashyyykBanthaPelts  signal kerssoc_kashyyykBanthaPelts
 
-	OPEN: pvpBitmask NONE on kashyyyk_bull_bantha; observer still matches
+	Uses an attackable hunting variant; decorative banthas remain unchanged.
 	OPEN: LootItemName "Kashyyyk bantha pelt" has no object template; tracked as a per-player loot flag (chunk shape).
 
 	Giver already stands via kashyyyk_static_npcs.lua. Not spawned here.
@@ -39,7 +39,7 @@ huntKerssocBanthaPeltsScreenPlay = ScreenPlay:new {
 	timerSeconds = 0,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "kashyyyk_bull_bantha" },
+	killTemplates = { "kashyyyk_hunt_bantha", "kashyyyk_hunt_greyclimber" },
 	taskStages = { kerssoc_huntingBantha = 1,
 		kerssoc_kashyyykBanthaPelts = 2 },
 }

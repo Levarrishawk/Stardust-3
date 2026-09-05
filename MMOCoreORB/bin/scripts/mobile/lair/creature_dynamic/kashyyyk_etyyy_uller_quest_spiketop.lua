@@ -9,7 +9,7 @@
 -- Creature rows (SOE creatureName -> repo template):
 --   ep3_etyyy_uller_spiketop -> uller_stoneclaw  size=4  iff-match (creatures.tab line 1322; lua uller_stoneclaw.lua)
 kashyyyk_etyyy_uller_quest_spiketop = Lair:new {
-	mobiles = {{"uller_stoneclaw",4}},
+	mobiles = {{"kashyyyk_hunt_spiketop",4}},
 	spawnLimit = 1,
 	buildingsVeryEasy = {},
   buildingsEasy = {},

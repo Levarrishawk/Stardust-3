@@ -9,7 +9,7 @@
 -- Creature rows (SOE creatureName -> repo template):
 --   ep3_etyyy_webweaver_silkthrower -> webweaver  size=5  iff-matched (repo templates iff equals SOE template column webweaver.iff; creatures.tab line 1330; level-4 placeholder today, the level curve is an open ruling)
 kashyyyk_etyyy_webweaver_quest_silkthrower = Lair:new {
-	mobiles = {{"webweaver",5}},
+	mobiles = {{"kashyyyk_hunt_silkthrower",5}},
 	spawnLimit = 1,
 	buildingsVeryEasy = {},
   buildingsEasy = {},
