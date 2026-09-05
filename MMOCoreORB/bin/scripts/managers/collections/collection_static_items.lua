@@ -1,7 +1,7 @@
 -- SOURCED -- SOE master_item.tab + item_stats.tab, transcribed by tools/collections/build_static_items.py
 -- static_item.java:16-19 (MASTER_ITEM_TABLE / ITEM_STAT_BALANCE_TABLE).
 -- The source transcription is never committed. Do not hand-edit.
--- Counts: 861 items, 636 with slot, 860 displayName, 759 inFork, 630 consumeLoot, 93 lootSchematic, 661 autostack, 207 reward.
+-- Counts: 862 items, 637 with slot, 861 displayName, 760 inFork, 630 consumeLoot, 93 lootSchematic, 661 autostack, 207 reward.
 CollectionStaticItems = {
 	["chapter_8_space_mobile_02_01"]={template="object/tangible/collection/reward/space_mobile_publish_gift.iff",slot="",displayName="A Space Mobile",consumeLoot=false,lootSchematic=false,autostack=false,inFork=true,unique=false},
 	["col_aurebesh_tile_aurek_02_01"]={template="object/tangible/loot/creature_loot/collections/aurebesh_tile_aurek.iff",slot="col_aurebesh_tiles:aurek",displayName="Aurek",consumeLoot=true,lootSchematic=false,autostack=true,inFork=true,unique=false},
@@ -197,6 +197,7 @@ CollectionStaticItems = {
 	["col_kima_bone_02_01"]={template="object/tangible/loot/creature_loot/collections/kima_bone.iff",slot="col_bone:kima_bone_01",displayName="A Chipped Kima Bone",consumeLoot=true,lootSchematic=false,autostack=true,inFork=true,unique=false},
 	["col_kwi_bone_02_01"]={template="object/tangible/loot/creature_loot/collections/kwi_bone.iff",slot="col_bone:kwi_bone_01",displayName="A Split Kwi Leg Bone",consumeLoot=true,lootSchematic=false,autostack=true,inFork=true,unique=false},
 	["col_lightsaber_1h_01_03"]={template="object/tangible/loot/creature_loot/collections/col_lightsaber_1h_01.iff",slot="col_lightsaber_1h_01:col_lightsaber_1h_01_03",displayName="A Jedi Relic",consumeLoot=true,lootSchematic=false,autostack=true,inFork=true,unique=false},
+	["col_listening_device_02_01"]={template="object/tangible/collection/meatlump_listening_device.iff",slot="col_listening_device:listening_location_",displayName="a Meatlump listening device",consumeLoot=false,lootSchematic=false,autostack=false,inFork=true,unique=false},
 	["col_luxum_crystal_02_01"]={template="object/tangible/loot/creature_loot/collections/luxum_crystal.iff",slot="col_shattered_shards_02:col_luxum_shards_01_reward",displayName="A Reconstructed Luxum Crystal",consumeLoot=true,lootSchematic=false,autostack=true,inFork=true,unique=false},
 	["col_luxum_shard_02_01"]={template="object/tangible/loot/creature_loot/collections/unknown_shattered_shard_fragment.iff",slot="col_luxum_shards_01:col_luxum_shard_piece_01",displayName="A Luxum Crystal Shard 1/5",consumeLoot=true,lootSchematic=false,autostack=true,inFork=true,unique=false},
 	["col_luxum_shard_02_02"]={template="object/tangible/loot/creature_loot/collections/unknown_shattered_shard_fragment.iff",slot="col_luxum_shards_01:col_luxum_shard_piece_02",displayName="A Luxum Crystal Shard 2/5",consumeLoot=true,lootSchematic=false,autostack=true,inFork=true,unique=false},
