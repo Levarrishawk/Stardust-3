@@ -1,10 +1,17 @@
 -- Collection world objects (ruling 2026-09-05: "all the collections, the gui,
--- the items across the galaxy, everything").
+-- the items across the galaxy, everything" / 2026-09-05: "finish up collection 100%").
 -- SOURCED spawnSceneObject + spawnIfMissing (collector_spawns.lua). Slot binding
 -- is per-object writeStringData <oid>:collection.slot (collector_spawns.lua:159
 -- writeStringData for <oid>:collection.columnName; slot is a string so this is
--- writeStringData, not writeData). Quaternion is identity (OURS): the transcribed
--- rows carry px/py/pz only.
+-- writeStringData, not writeData). Quaternion is the buildout row.
+-- Indoor cell is the snapshot cell node id: getSceneObject(cell) returns the
+-- cell (serpent_shard.lua:33-35 node id IS the object id;
+-- deathWatchBunker.lua:148 / :1940 dungeon cells). spawnSceneObject parent is
+-- that cell oid with the cell-local transform. Before spawn, SceneObject:isCellObject
+-- (LuaSceneObject.cpp:692); if it is not, print and hold (OURS). An existing
+-- child of that cell with the same template is adopted instead of a second
+-- spawn (collection_listening_posts.lua:249 getContainerObject loop;
+-- heroOfTatooine.lua:676 cell contents).
 -- Click: CollectionObjectMenuComponent ITEM_USE @collection:consume_item
 -- (consume_click.java:52; collector_npc.lua:371 radial 20; tutorial.lua:259
 -- setObjectMenuComponent after spawn). Countdown is createEvent 5 s (OURS:
@@ -83,6 +90,28 @@ function CollectionObjects:storedKey(entry)
 	return self.screenplayName .. ":" .. entry.zone .. ":" .. entry.row
 end
 
+function CollectionObjects:existingInCell(pCell, template)
+	-- collection_listening_posts.lua:249-254 (Meatlump device match);
+	-- heroOfTatooine.lua:676-678 (cell getContainerObject).
+	if (pCell == nil or template == nil or template == "") then
+		return nil
+	end
+
+	for i = 0, SceneObject(pCell):getContainerObjectsSize() - 1, 1 do
+		local pItem = SceneObject(pCell):getContainerObject(i)
+
+		if (pItem ~= nil and SceneObject(pItem):getTemplateObjectPath() == template) then
+			local stored = readStringData(SceneObject(pItem):getObjectID() .. ":collection.slot")
+
+			if (stored == nil or stored == "") then
+				return pItem
+			end
+		end
+	end
+
+	return nil
+end
+
 function CollectionObjects:spawnIfMissing(entry)
 	if (entry.open) then
 		print("CollectionObjects: " .. entry.row .. " on " .. entry.zone .. " is OPEN (" .. entry.openNote .. "); not spawned")
@@ -105,7 +134,52 @@ function CollectionObjects:spawnIfMissing(entry)
 		end
 	end
 
-	local pObject = spawnSceneObject(entry.zone, entry.template, entry.x, entry.z, entry.y, 0, 1, 0, 0, 0)
+	local cellId = 0
+
+	if (entry.cell ~= nil and entry.cell ~= 0) then
+		local pCell = getSceneObject(entry.cell)
+
+		-- LuaSceneObject.cpp:692 isCellObject. Hold if the snapshot node is
+		-- missing or not a cell; spawnSceneObject would otherwise drop the
+		-- object on the zone at cell-local coords (DirectorManager.cpp:3118).
+		if (pCell == nil or not SceneObject(pCell):isCellObject()) then
+			print("CollectionObjects: " .. entry.row .. " on " .. entry.zone .. " cell " .. tostring(entry.cell) .. " is not a cell; not spawned")
+			return false
+		end
+
+		cellId = entry.cell
+
+		local pAdopted = self:existingInCell(pCell, entry.template)
+
+		if (pAdopted ~= nil) then
+			writeData(key, SceneObject(pAdopted):getObjectID())
+			self:bindObject(pAdopted, entry.slot)
+			return true
+		end
+	end
+
+	local qw = entry.qw
+	local qx = entry.qx
+	local qy = entry.qy
+	local qz = entry.qz
+
+	if (qw == nil) then
+		qw = 1
+	end
+
+	if (qx == nil) then
+		qx = 0
+	end
+
+	if (qy == nil) then
+		qy = 0
+	end
+
+	if (qz == nil) then
+		qz = 0
+	end
+
+	local pObject = spawnSceneObject(entry.zone, entry.template, entry.x, entry.z, entry.y, cellId, qw, qx, qy, qz)
 
 	if (pObject == nil) then
 		return false
