@@ -24,13 +24,13 @@ dressed_shoartu_mystic_03 = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_shoartu_mystic_03.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_forest_perusta_convo",
 	attacks = {
 	}
 }

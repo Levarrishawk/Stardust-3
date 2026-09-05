@@ -26,13 +26,13 @@ dressed_ep3_forest_outcast_male_01 = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_ep3_forest_outcast_male_01.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_forest_rhiek_convo",
 	attacks = {
 	}
 }

@@ -26,13 +26,13 @@ dressed_ep3_forest_kerritamba_dealer = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/dressed_ep3_forest_kerritamba_dealer.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_forest_kerritamba_dealer_convo",
 	attacks = {
 	}
 }

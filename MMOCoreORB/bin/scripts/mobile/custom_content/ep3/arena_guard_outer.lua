@@ -26,13 +26,13 @@ arena_guard_outer = Creature:new {
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/arena_guard_outer.iff"},
 	lootGroups = {},
 	weapons = {"pirate_weapons_light"},
-	conversationTemplate = "",
+	conversationTemplate = "ep3_forest_arena_guard_convo",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }
