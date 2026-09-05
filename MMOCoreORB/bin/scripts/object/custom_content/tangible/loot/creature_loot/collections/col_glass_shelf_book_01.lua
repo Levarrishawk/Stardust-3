@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_col_glass_shelf_book_01 = object_tangible_loot_creature_loot_collections_shared_col_glass_shelf_book_01:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

@@ -1,4 +1,5 @@
 object_tangible_loot_npc_loot_datapad_flashy_generic = object_tangible_loot_npc_loot_shared_datapad_flashy_generic:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

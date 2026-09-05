@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_unknown_shattered_shard_fragment = object_tangible_loot_creature_loot_collections_shared_unknown_shattered_shard_fragment:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

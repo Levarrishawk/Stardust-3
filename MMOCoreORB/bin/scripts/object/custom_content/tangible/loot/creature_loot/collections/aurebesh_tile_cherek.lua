@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_aurebesh_tile_cherek = object_tangible_loot_creature_loot_collections_shared_aurebesh_tile_cherek:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_kai_tok_feather = object_tangible_loot_creature_loot_collections_shared_kai_tok_feather:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

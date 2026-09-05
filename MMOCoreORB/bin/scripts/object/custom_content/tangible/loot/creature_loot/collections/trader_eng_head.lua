@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_trader_eng_head = object_tangible_loot_creature_loot_collections_shared_trader_eng_head:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

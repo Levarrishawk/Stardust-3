@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_gulginaw_feather = object_tangible_loot_creature_loot_collections_shared_gulginaw_feather:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

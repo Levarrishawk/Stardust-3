@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_dejarik_keypad_02 = object_tangible_loot_creature_loot_collections_shared_dejarik_keypad_02:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

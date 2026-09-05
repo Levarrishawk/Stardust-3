@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_rancor_eye = object_tangible_loot_creature_loot_collections_shared_rancor_eye:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

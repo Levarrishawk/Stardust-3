@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_sith_holocron_01 = object_tangible_loot_creature_loot_collections_shared_sith_holocron_01:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

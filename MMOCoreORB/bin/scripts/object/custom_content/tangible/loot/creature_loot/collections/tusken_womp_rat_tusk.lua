@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_tusken_womp_rat_tusk = object_tangible_loot_creature_loot_collections_shared_tusken_womp_rat_tusk:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

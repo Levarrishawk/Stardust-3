@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_dejarik_kintan = object_tangible_loot_creature_loot_collections_shared_dejarik_kintan:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

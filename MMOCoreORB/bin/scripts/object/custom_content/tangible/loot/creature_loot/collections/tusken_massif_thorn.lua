@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_tusken_massif_thorn = object_tangible_loot_creature_loot_collections_shared_tusken_massif_thorn:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

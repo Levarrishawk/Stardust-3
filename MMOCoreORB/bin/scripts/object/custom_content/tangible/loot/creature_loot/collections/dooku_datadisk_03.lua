@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_dooku_datadisk_03 = object_tangible_loot_creature_loot_collections_shared_dooku_datadisk_03:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

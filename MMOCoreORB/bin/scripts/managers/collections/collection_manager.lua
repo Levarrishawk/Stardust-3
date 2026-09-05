@@ -915,10 +915,19 @@ local function grantRewardItem(pPlayer, itemName, stackAmount)
 	end
 
 	local pItem = giveIffItem(pPlayer, info.template, stackAmount)
-	if pItem ~= nil and info.slot ~= nil and info.slot ~= "" then
-		-- screenplays/collections: writeStringData(oid .. ":collection.slot", slot)
-		local oid = SceneObject(pItem):getObjectID()
-		writeStringData(oid .. ":collection.slot", info.slot)
+	if pItem ~= nil then
+		if CollectionLoot ~= nil and info.consumeLoot == true then
+			CollectionLoot.attachLootItemComponent(pItem)
+		end
+		if info.displayName ~= nil and info.displayName ~= "" then
+			-- OURS: Core3 has no master_item string_name; setCustomObjectName (LuaSceneObject.cpp:39)
+			SceneObject(pItem):setCustomObjectName(info.displayName)
+		end
+		if info.slot ~= nil and info.slot ~= "" then
+			-- OURS: Core3 has no per-object item_stats; writeStringData(oid .. ":collection.slot", slot)
+			local oid = SceneObject(pItem):getObjectID()
+			writeStringData(oid .. ":collection.slot", info.slot)
+		end
 	end
 
 	return pItem

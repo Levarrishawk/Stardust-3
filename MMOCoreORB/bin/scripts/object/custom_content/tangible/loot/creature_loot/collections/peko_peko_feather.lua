@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_peko_peko_feather = object_tangible_loot_creature_loot_collections_shared_peko_peko_feather:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

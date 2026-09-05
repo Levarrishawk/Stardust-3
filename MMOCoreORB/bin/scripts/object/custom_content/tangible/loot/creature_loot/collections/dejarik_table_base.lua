@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_dejarik_table_base = object_tangible_loot_creature_loot_collections_shared_dejarik_table_base:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

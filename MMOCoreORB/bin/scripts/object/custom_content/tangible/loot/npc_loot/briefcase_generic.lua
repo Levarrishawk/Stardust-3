@@ -1,4 +1,5 @@
 object_tangible_loot_npc_loot_briefcase_generic = object_tangible_loot_npc_loot_shared_briefcase_generic:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_trader_mun_left_arm = object_tangible_loot_creature_loot_collections_shared_trader_mun_left_arm:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

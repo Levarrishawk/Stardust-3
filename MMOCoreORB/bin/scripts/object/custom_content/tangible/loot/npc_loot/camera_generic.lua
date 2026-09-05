@@ -1,4 +1,5 @@
 object_tangible_loot_npc_loot_camera_generic = object_tangible_loot_npc_loot_shared_camera_generic:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

@@ -1,0 +1,45 @@
+-- SOURCED -- collection_loot.tab column col_aurebesh_tiles; cell-count weights (loot.java:1572-1575 rand among cells, duplicates included).
+col_aurebesh_tiles = {
+	description = "",
+	minimumLevel = 0,
+	maximumLevel = 0,
+	lootItems = {
+		{itemTemplate = "col_aurebesh_tile_aurek_02_01", weight = 412372},
+		{itemTemplate = "col_aurebesh_tile_besh_02_01", weight = 206186},
+		{itemTemplate = "col_aurebesh_tile_cherek_02_01", weight = 618557},
+		{itemTemplate = "col_aurebesh_tile_cresh_02_01", weight = 103093},
+		{itemTemplate = "col_aurebesh_tile_dorn_02_01", weight = 412372},
+		{itemTemplate = "col_aurebesh_tile_enth_02_01", weight = 103093},
+		{itemTemplate = "col_aurebesh_tile_esk_02_01", weight = 309279},
+		{itemTemplate = "col_aurebesh_tile_forn_02_01", weight = 515464},
+		{itemTemplate = "col_aurebesh_tile_grek_02_01", weight = 103093},
+		{itemTemplate = "col_aurebesh_tile_herf_02_01", weight = 927836},
+		{itemTemplate = "col_aurebesh_tile_isk_02_01", weight = 206186},
+		{itemTemplate = "col_aurebesh_tile_jenth_02_01", weight = 103093},
+		{itemTemplate = "col_aurebesh_tile_kerenth_02_01", weight = 103093},
+		{itemTemplate = "col_aurebesh_tile_krill_02_01", weight = 206186},
+		{itemTemplate = "col_aurebesh_tile_leth_02_01", weight = 206186},
+		{itemTemplate = "col_aurebesh_tile_mern_02_01", weight = 103093},
+		{itemTemplate = "col_aurebesh_tile_nen_02_01", weight = 721650},
+		{itemTemplate = "col_aurebesh_tile_nern_02_01", weight = 206186},
+		{itemTemplate = "col_aurebesh_tile_onith_02_01", weight = 103093},
+		{itemTemplate = "col_aurebesh_tile_orenth_02_01", weight = 206186},
+		{itemTemplate = "col_aurebesh_tile_osk_02_01", weight = 103092},
+		{itemTemplate = "col_aurebesh_tile_peth_02_01", weight = 103092},
+		{itemTemplate = "col_aurebesh_tile_qek_02_01", weight = 206185},
+		{itemTemplate = "col_aurebesh_tile_resh_02_01", weight = 206185},
+		{itemTemplate = "col_aurebesh_tile_senth_02_01", weight = 103092},
+		{itemTemplate = "col_aurebesh_tile_shen_02_01", weight = 103092},
+		{itemTemplate = "col_aurebesh_tile_thesh_02_01", weight = 206185},
+		{itemTemplate = "col_aurebesh_tile_trill_02_01", weight = 206185},
+		{itemTemplate = "col_aurebesh_tile_usk_02_01", weight = 309278},
+		{itemTemplate = "col_aurebesh_tile_vev_02_01", weight = 206185},
+		{itemTemplate = "col_aurebesh_tile_wesk_02_01", weight = 309278},
+		{itemTemplate = "col_aurebesh_tile_xesh_02_01", weight = 309278},
+		{itemTemplate = "col_aurebesh_tile_yirt_02_01", weight = 412371},
+		{itemTemplate = "col_aurebesh_tile_zerek_02_01", weight = 1134020},
+		{itemTemplate = "col_fried_icecream_fryer_broken_activation", weight = 206185}
+	}
+}
+
+addLootGroupTemplate("col_aurebesh_tiles", col_aurebesh_tiles)

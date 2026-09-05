@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_publish_gift_datapad_component_02 = object_tangible_loot_creature_loot_collections_shared_publish_gift_datapad_component_02:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

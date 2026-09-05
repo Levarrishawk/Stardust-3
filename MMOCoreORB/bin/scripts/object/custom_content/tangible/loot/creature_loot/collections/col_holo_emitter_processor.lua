@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_col_holo_emitter_processor = object_tangible_loot_creature_loot_collections_shared_col_holo_emitter_processor:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

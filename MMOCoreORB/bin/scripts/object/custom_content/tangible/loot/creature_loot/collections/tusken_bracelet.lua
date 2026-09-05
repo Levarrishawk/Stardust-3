@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_tusken_bracelet = object_tangible_loot_creature_loot_collections_shared_tusken_bracelet:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

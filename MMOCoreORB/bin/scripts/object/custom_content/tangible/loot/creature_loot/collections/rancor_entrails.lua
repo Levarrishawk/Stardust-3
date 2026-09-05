@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_rancor_entrails = object_tangible_loot_creature_loot_collections_shared_rancor_entrails:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

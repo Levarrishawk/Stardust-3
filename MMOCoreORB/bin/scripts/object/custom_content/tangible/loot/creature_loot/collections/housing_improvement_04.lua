@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_housing_improvement_04 = object_tangible_loot_creature_loot_collections_shared_housing_improvement_04:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_aurebesh_tile_herf = object_tangible_loot_creature_loot_collections_shared_aurebesh_tile_herf:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 

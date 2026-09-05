@@ -3,9 +3,10 @@
 
 Usage:  build_static_items.py <json> [--scripts <path to bin/scripts>]
 
-Reads a name -> {template, slot, scripts, unique, in_fork, ...} JSON transcription of
-master_item.tab + item_stats.tab (static_item.java:16-19). Writes CollectionStaticItems,
-sorted by name, deterministic. The JSON itself is never committed.
+Reads a name -> {template, slot, display_name, scripts, unique, in_fork, ...} JSON
+transcription of master_item.tab + item_stats.tab (static_item.java:16-19). Writes
+CollectionStaticItems, sorted by name, deterministic. displayName is master_item.tab
+string_name. The JSON itself is never committed.
 """
 from __future__ import print_function
 
@@ -65,6 +66,7 @@ def emit_row(name, rec):
     parts = [
         "template=" + lua_str(rec.get("template") or ""),
         "slot=" + lua_str(slot),
+        "displayName=" + lua_str(rec.get("display_name") or ""),
         "consumeLoot=" + lua_bool(CONSUME_LOOT in scripts),
         "lootSchematic=" + lua_bool(LOOT_SCHEMATIC in scripts),
         "autostack=" + lua_bool(AUTOSTACK in scripts),
@@ -102,6 +104,7 @@ def main():
     n_schematic = 0
     n_autostack = 0
     n_reward = 0
+    n_display = 0
     for name in names:
         rec = data[name]
         if not isinstance(rec, dict):
@@ -111,6 +114,8 @@ def main():
             n_slot += 1
         if rec.get("in_fork") is True:
             n_fork += 1
+        if rec.get("display_name"):
+            n_display += 1
         if CONSUME_LOOT in scripts:
             n_consume += 1
         if LOOT_SCHEMATIC in scripts:
@@ -128,8 +133,8 @@ def main():
     out.append("-- SOURCED -- SOE master_item.tab + item_stats.tab, transcribed by tools/collections/build_static_items.py")
     out.append("-- static_item.java:16-19 (MASTER_ITEM_TABLE / ITEM_STAT_BALANCE_TABLE).")
     out.append("-- The source transcription is never committed. Do not hand-edit.")
-    out.append("-- Counts: %d items, %d with slot, %d inFork, %d consumeLoot, %d lootSchematic, %d autostack, %d reward." % (
-        len(names), n_slot, n_fork, n_consume, n_schematic, n_autostack, n_reward,
+    out.append("-- Counts: %d items, %d with slot, %d displayName, %d inFork, %d consumeLoot, %d lootSchematic, %d autostack, %d reward." % (
+        len(names), n_slot, n_display, n_fork, n_consume, n_schematic, n_autostack, n_reward,
     ))
     out.append("CollectionStaticItems = {")
     for name in names:
@@ -141,7 +146,7 @@ def main():
     with open(dest, "w", encoding="utf-8", newline="\n") as handle:
         handle.write("\n".join(out))
 
-    print("items", len(names), "slot", n_slot, "inFork", n_fork, file=sys.stderr)
+    print("items", len(names), "slot", n_slot, "displayName", n_display, "inFork", n_fork, file=sys.stderr)
     print("consumeLoot", n_consume, "lootSchematic", n_schematic, "autostack", n_autostack, "reward", n_reward, file=sys.stderr)
     print("->", dest, file=sys.stderr)
 

@@ -1,4 +1,5 @@
 object_tangible_loot_creature_loot_collections_dejarik_ngok = object_tangible_loot_creature_loot_collections_shared_dejarik_ngok:new {
+	objectMenuComponent = "CollectionLootItemMenuComponent",
 
 }
 
