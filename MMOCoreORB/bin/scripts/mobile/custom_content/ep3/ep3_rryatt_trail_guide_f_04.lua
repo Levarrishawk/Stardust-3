@@ -1,9 +1,10 @@
--- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1542 (ep3_rryatt_trail_guide_m_01, where=kashyyyk, NORMAL).
--- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
-ep3_rryatt_trail_guide_m_01 = Creature:new {
+-- OURS: exact SOE name for the placement rows; the guild_f file is this fork's earlier spelling
+-- ruling 2026-09-04: "ensure kashyyyk is fully done"
+
+ep3_rryatt_trail_guide_f_04 = Creature:new {
 	customName = "Rryatt Trail Guide",
 	randomNameType = NAME_GENERIC_TAG,
-	socialGroup = "kashyyyk",
+	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,
 	level = 30,
@@ -29,7 +30,7 @@ ep3_rryatt_trail_guide_m_01 = Creature:new {
 	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
-	templates = {"object/mobile/ep3/ep3_rryatt_trail_guide_m_01.iff"},
+	templates = {"object/mobile/ep3/ep3_rryatt_trail_guild_f_04.iff"},
 	lootGroups = {},
 	weapons = {},
 	conversationTemplate = "rryatt_trail_guide_convo",
@@ -37,4 +38,4 @@ ep3_rryatt_trail_guide_m_01 = Creature:new {
 	attacks = merge(brawlermaster,marksmanmaster)
 }
 
-CreatureTemplates:addCreatureTemplate(ep3_rryatt_trail_guide_m_01, "ep3_rryatt_trail_guide_m_01")
+CreatureTemplates:addCreatureTemplate(ep3_rryatt_trail_guide_f_04, "ep3_rryatt_trail_guide_f_04")

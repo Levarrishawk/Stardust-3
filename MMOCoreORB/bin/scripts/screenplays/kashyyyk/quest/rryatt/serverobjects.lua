@@ -1,0 +1,20 @@
+-- Kashyyyk Rryatt Trail quests. ruling 2026-09-04: "ensure kashyyyk is fully done"
+-- NO JOURNAL: this branch has no managers/quest/journal.lua.
+
+includeFile("kashyyyk/quest/rryatt/rryatt_quest_xp.lua")
+includeFile("kashyyyk/quest/rryatt/cheyerooto_5_rrwii_root.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_krepauk_kill_walluga_smashers.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_krepauk_defeat_exjedi.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_krepauk_cleanse_feral_wookiees.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_krepauk_kill_elite_minstyngar.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_krepauk_defeat_katarn.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_tressk_kill_lost_rodian_hunters.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_tressk_kill_deep_woods_poachers.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_tressk_kill_gotal_hunters.lua")
+includeFile("kashyyyk/quest/rryatt/rryatt_trail_mastery.lua")
+includeFile("kashyyyk/quest/rryatt/conversation/ep3_cheyerooto_conv_handler.lua")
+includeFile("kashyyyk/quest/rryatt/conversation/ep3_rryatt_krepauk_conv_handler.lua")
+includeFile("kashyyyk/quest/rryatt/conversation/ep3_rryatt_tressk_conv_handler.lua")
+includeFile("kashyyyk/quest/rryatt/conversation/ep3_rryatt_vritol_conv_handler.lua")
+includeFile("kashyyyk/quest/rryatt/conversation/ep3_achonnko_conv_handler.lua")
+includeFile("kashyyyk/quest/rryatt/conversation/rryatt_trail_guide_conv_handler.lua")
