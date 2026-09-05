@@ -28,7 +28,7 @@ mtp_hideout_col_eavesdrop_npc_01 = Creature:new {
 	optionsBitmask = AIENABLED + CONVERSABLE + INVULNERABLE, -- creatures.tab:6108 invulnerable=1
 	diet = HERBIVORE, -- OURS
 
-	templates = {"object/mobile/dressed_meatlump_hideout_male_04.iff"}, -- C6: creatures.tab:6108 template=meatlump_thug (species group, not an iff)
+	templates = {"object/mobile/dressed_meatlump_hideout_male_04.iff"}, -- SOURCED creatures.tab:6108 template=meatlump_thug (species group, not an iff)
 	lootGroups = {},
 	weapons = {}, -- OURS
 	conversationTemplate = "mtp_hideout_col_eavesdrop_convo",
