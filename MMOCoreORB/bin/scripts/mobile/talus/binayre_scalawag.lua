@@ -36,7 +36,31 @@ binayre_scalawag = Creature:new {
 			groups = {
 				{group = "binayre_tier_1", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "housing_improvement_01", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_aurebesh_tiles", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_contraband_set_02", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_01", chance = 10000000}
+			},
+			lootChance = 100000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

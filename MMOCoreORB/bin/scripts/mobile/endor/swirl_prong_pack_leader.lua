@@ -30,7 +30,14 @@ swirl_prong_pack_leader = Creature:new {
 	templates = {"object/mobile/swirl_prong_hue.iff"},
 	hues = { 16, 17, 18, 19, 20, 21, 22, 23 },
 	scale = 1.25,
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "housing_improvement_01", chance = 10000000}
+			},
+			lootChance = 400000
+		},
+	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary

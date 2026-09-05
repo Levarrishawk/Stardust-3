@@ -43,7 +43,43 @@ som_kenobi_historian_dark_jedi = Creature:new {
 				{group = "holocron_dark", chance = 1000000}
 			},
 			lootChance = 5000000
-		}
+		},
+		{
+			groups = {
+				{group = "housing_improvement_03", chance = 10000000}
+			},
+			lootChance = 66666
+		},
+		{
+			groups = {
+				{group = "housing_improvement_04", chance = 10000000}
+			},
+			lootChance = 66666
+		},
+		{
+			groups = {
+				{group = "housing_improvement_05", chance = 10000000}
+			},
+			lootChance = 66666
+		},
+		{
+			groups = {
+				{group = "col_sith_holocron", chance = 10000000}
+			},
+			lootChance = 66666
+		},
+		{
+			groups = {
+				{group = "col_aurebesh_tiles", chance = 10000000}
+			},
+			lootChance = 66666
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_02", chance = 10000000}
+			},
+			lootChance = 66666
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

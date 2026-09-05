@@ -29,7 +29,26 @@ swirl_prong_impaler = Creature:new {
 	templates = {"object/mobile/swirl_prong_hue.iff"},
 	hues = { 8, 9, 10, 11, 12, 13, 14, 15 },
 	scale = 1.15,
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "housing_improvement_04", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+		{
+			groups = {
+				{group = "housing_improvement_05", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+		{
+			groups = {
+				{group = "col_story_count_dooku_set_2", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary

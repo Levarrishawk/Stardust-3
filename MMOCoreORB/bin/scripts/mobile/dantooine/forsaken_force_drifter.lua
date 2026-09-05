@@ -34,7 +34,25 @@ forsaken_force_drifter = Creature:new {
 			groups = {
 				{group = "force_tier_3", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "housing_improvement_05", chance = 10000000}
+			},
+			lootChance = 133333
+		},
+		{
+			groups = {
+				{group = "col_jedi_holocron", chance = 10000000}
+			},
+			lootChance = 133333
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_03", chance = 10000000}
+			},
+			lootChance = 133333
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

@@ -38,7 +38,73 @@ ancient_bull_rancor = Creature:new {
 				{group = "wearables_all", chance = 1500000}
 			},
 			lootChance = 2960000
-		}
+		},
+		{
+			groups = {
+				{group = "col_rancor_parts", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "housing_improvement_01", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "housing_improvement_02", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "housing_improvement_03", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "housing_improvement_04", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "housing_improvement_05", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "col_dejarik_holomonster", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "col_dejarik_table", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "col_dejarik_table", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "col_story_count_dooku_set_2", chance = 10000000}
+			},
+			lootChance = 54545
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_02", chance = 10000000}
+			},
+			lootChance = 54545
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

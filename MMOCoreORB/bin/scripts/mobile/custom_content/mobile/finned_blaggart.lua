@@ -28,7 +28,14 @@ finned_blaggart = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/finned_blaggart.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_finned_blaggart", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

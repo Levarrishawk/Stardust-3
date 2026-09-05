@@ -28,7 +28,14 @@ naboo_legacy_quest_droideka = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/naboo_legacy_quest_droideka.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_holo_emitter_01", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

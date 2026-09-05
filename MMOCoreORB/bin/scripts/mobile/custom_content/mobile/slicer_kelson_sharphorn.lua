@@ -28,7 +28,32 @@ slicer_kelson_sharphorn = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/slicer_kelson_sharphorn.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_contraband_set_03", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_contraband_set_04", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_03", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_04", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

@@ -28,7 +28,14 @@ endor_ig88_security_battlemech_beta = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/endor_ig88_security_battlemech_beta.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_holo_emitter_01", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

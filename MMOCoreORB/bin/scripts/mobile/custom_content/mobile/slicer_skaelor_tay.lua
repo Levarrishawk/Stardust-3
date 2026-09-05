@@ -28,7 +28,32 @@ slicer_skaelor_tay = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/slicer_skaelor_tay.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_contraband_set_01", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_contraband_set_02", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_01", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_02", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

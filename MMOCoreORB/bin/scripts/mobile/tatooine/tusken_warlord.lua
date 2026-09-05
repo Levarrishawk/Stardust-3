@@ -32,7 +32,31 @@ tusken_warlord = Creature:new {
 			groups = {
 				{group = "tusken_raider_tier_2", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "col_tusken_valuables", chance = 10000000}
+			},
+			lootChance = 150000
+		},
+		{
+			groups = {
+				{group = "col_aurebesh_tiles", chance = 10000000}
+			},
+			lootChance = 150000
+		},
+		{
+			groups = {
+				{group = "col_kill_tusken_activation_loot", chance = 10000000}
+			},
+			lootChance = 150000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_01", chance = 10000000}
+			},
+			lootChance = 150000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

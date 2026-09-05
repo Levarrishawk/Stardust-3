@@ -41,7 +41,13 @@ naboo_pirate_armsman = Creature:new {
 			groups = {
 				{group = "naboo_pirate_tier_1", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "col_contraband_set_01", chance = 10000000}
+			},
+			lootChance = 400000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

@@ -34,7 +34,37 @@ nightsister_ranger = Creature:new {
 			groups = {
 				{group = "nightsister_tier_3", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "col_nightsister_valuables", chance = 10000000}
+			},
+			lootChance = 80000
+		},
+		{
+			groups = {
+				{group = "col_sith_holocron", chance = 10000000}
+			},
+			lootChance = 80000
+		},
+		{
+			groups = {
+				{group = "col_dejarik_holomonster", chance = 10000000}
+			},
+			lootChance = 80000
+		},
+		{
+			groups = {
+				{group = "col_dejarik_table", chance = 10000000}
+			},
+			lootChance = 80000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_02", chance = 10000000}
+			},
+			lootChance = 80000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

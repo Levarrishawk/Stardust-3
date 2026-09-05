@@ -27,7 +27,14 @@ probot = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/probot.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_holo_emitter_01", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+	},
 	conversationTemplate = "",
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

@@ -38,7 +38,25 @@ enraged_bull_rancor = Creature:new {
 				{group = "wearables_all", chance = 1500000}
 			},
 			lootChance = 2780000
-		}
+		},
+		{
+			groups = {
+				{group = "col_rancor_parts", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+		{
+			groups = {
+				{group = "col_eng_trader", chance = 10000000}
+			},
+			lootChance = 200000
+		},
+		{
+			groups = {
+				{group = "col_mun_trader", chance = 10000000}
+			},
+			lootChance = 200000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

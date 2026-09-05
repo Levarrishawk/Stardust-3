@@ -28,7 +28,14 @@ scorpion_kliknik = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/scorpion_kliknik.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_scorpion_kliknik", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

@@ -38,7 +38,37 @@ singing_mountain_clan_rancor = Creature:new {
 				{group = "wearables_all", chance = 1500000}
 			},
 			lootChance = 2100000
-		}
+		},
+		{
+			groups = {
+				{group = "col_rancor_parts", chance = 10000000}
+			},
+			lootChance = 120000
+		},
+		{
+			groups = {
+				{group = "housing_improvement_05", chance = 10000000}
+			},
+			lootChance = 120000
+		},
+		{
+			groups = {
+				{group = "col_dejarik_holomonster", chance = 10000000}
+			},
+			lootChance = 120000
+		},
+		{
+			groups = {
+				{group = "col_dejarik_table", chance = 10000000}
+			},
+			lootChance = 120000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_02", chance = 10000000}
+			},
+			lootChance = 120000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

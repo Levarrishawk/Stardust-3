@@ -29,7 +29,20 @@ injured_kwi = Creature:new {
 	templates = {"object/mobile/kwi_hue.iff"},
 	hues = { 0, 1, 2, 3, 4, 5, 6, 7 },
 	scale = 0.9,
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "housing_improvement_03", chance = 10000000}
+			},
+			lootChance = 250000
+		},
+		{
+			groups = {
+				{group = "col_glass_shelving_01", chance = 10000000}
+			},
+			lootChance = 250000
+		},
+	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
 	-- Unarmed should be put on secondary unless the mobile doesn't use weapons, in which case "unarmed" should be put primary and "none" as secondary

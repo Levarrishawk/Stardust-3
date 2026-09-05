@@ -37,7 +37,19 @@ ragtag_thug = Creature:new {
 			groups = {
 				{group = "ragtag_tier_1", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "col_contraband_set_01", chance = 10000000}
+			},
+			lootChance = 300000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_01", chance = 10000000}
+			},
+			lootChance = 300000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

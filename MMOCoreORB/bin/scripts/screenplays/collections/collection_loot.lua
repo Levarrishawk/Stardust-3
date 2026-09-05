@@ -3,7 +3,23 @@
 -- SOURCED drop: loot.java:1545 addCollectionLoot -- on a kill, rand(1,100) <=
 -- creatures.tab collectionRoll; pick ONE column at random from collectionLoot;
 -- pick ONE item at random from that column of collection_loot.tab; create the
--- static item in the corpse inventory. Chances are NGE tuning -> OPEN.
+-- static item in the corpse inventory.
+-- SOURCED creatures.tab collectionRoll (ruling 2026-09-05: shipped rolls
+-- as SOURCED; heroic loot rounds took SOE chances as SOURCED; no Pre-CU
+-- value conflicts). Six rows:
+--   ancient_bull_rancor creatures.tab:38 roll=6 columns=11
+--   bane_back_spider creatures.tab:138 roll=100 columns=1
+--   binayre_chief creatures.tab:205 roll=6 columns=3
+--   endor_ig88_security_battlemech_alpha creatures.tab:1216 roll=2 columns=1
+--   mand_bunker_foreman creatures.tab:2789 roll=7 columns=7
+--   naboo_pirate creatures.tab:3599 roll=4 columns=1
+-- OURS attach: one lootGroups entry per collectionLoot column on the
+-- creature template (CreatureTemplate.cpp:187 copies at registration;
+-- Lua cannot amend a registered CreatureTemplate). lootChance =
+-- collectionRoll * 100000 / nColumns so the per-kill total equals the
+-- shipped roll (LootManagerImplementation.cpp:706-715; 1% = 100000).
+-- Inner chance = 10000000. Core3 rolls each entry independently; the
+-- split makes at most one column expected per kill.
 -- Which creature drops which collection is content and is listed below.
 -- SOURCED use: consume_loot.java:23 OnObjectMenuRequest ITEM_USE
 -- @collection:consume_item; :32 OnObjectMenuSelect: need_to_activate_collection,
@@ -12,7 +28,8 @@
 -- collection_list_prompt / collection_list_title.
 -- OURS (Core3 translation): CollectionLootItemMenuComponent implements Use
 -- (ITEM_USE 20; SharedTangibleObjectTemplate.lua:114 / SharedObjectTemplate.cpp:169).
--- OURS: CollectionLoot.ENABLED = false until collectionRoll chances are ruled.
+-- OURS: CollectionLoot.ENABLED = true; chances are the SOURCED collectionRoll
+-- split across columns as above. Templates under mobile/ hold the lootGroups.
 -- OURS: grant path records the slot as writeStringData(oid .. ":collection.slot")
 -- (Core3 has no per-object item_stats).
 -- OURS: after that stored record, slot resolution matches
@@ -33,7 +50,7 @@
 CollectionLoot = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "CollectionLoot",
-	ENABLED = false, -- OURS: collectionRoll chances held until ruled (NGE tuning OPEN)
+	ENABLED = true, -- SOURCED creatures.tab collectionRoll (see header)
 	creatures = {
 		{name="ancient_bull_rancor", roll=6, columns={"col_rancor_parts", "housing_improvement_01", "housing_improvement_02", "housing_improvement_03", "housing_improvement_04", "housing_improvement_05", "col_dejarik_holomonster", "col_dejarik_table", "col_dejarik_table", "col_story_count_dooku_set_2", "col_shattered_shard_02"}},
 		{name="bane_back_spider", roll=100, columns={"col_bane_back_spider"}},
@@ -105,153 +122,153 @@ CollectionLoot = ScreenPlay:new {
 	},
 }
 
--- OPEN: NGE-only / no mobile template of this name in the fork (146 rows).
---   bestine_tusken_raid_leader roll=4 columns=col_tusken_valuables,col_aurebesh_tiles,col_shattered_shard_01
---   bestine_tusken_raid_sub_leader roll=4 columns=col_tusken_valuables,col_shattered_shard_01
---   borvos_rancor roll=3 columns=col_rancor_parts,col_dejarik_holomonster,col_dejarik_table
---   corellia_braggans_fist_thug roll=4 columns=col_contraband_set_02,col_shattered_shard_01
---   endor_ig88_security_battle_droid_blue roll=2 columns=col_holo_emitter_01
---   endor_ig88_security_battle_droid_purple roll=2 columns=col_holo_emitter_01
---   endor_ig88_security_battle_droid_red roll=2 columns=col_holo_emitter_01
---   feeder_tusken_guard roll=4 columns=col_tusken_valuables,housing_improvement_01,housing_improvement_02,col_shattered_shard_02
---   garyn_lieutenant roll=6 columns=housing_improvement_03,col_aurebesh_tiles,col_shattered_shard_04,col_glass_shelving_01
---   garyn_vigo roll=6 columns=housing_improvement_03,col_aurebesh_tiles,col_shattered_shard_03,col_shattered_shard_04,col_glass_shelving_01
---   heroic_axkva_axkva_min roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
---   heroic_axkva_kimaru roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
---   heroic_axkva_lelli_hi roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
---   heroic_axkva_nandina roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
---   heroic_axkva_suin_chalo roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
---   heroic_echo_imp_assassin roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_echo_probe_droid roll=6 columns=col_holo_emitter_01
---   heroic_echo_snowtrooper roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_echo_snowtrooper_interior roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_echo_stormcommando roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_echo_wampa_boss roll=10 columns=echo_base_wampa_boss
---   heroic_exar_caretaker roll=25 columns=heroic_exar_caretaker
---   heroic_exar_gackle_bat roll=5 columns=heroic_exar_gackle_bat
---   heroic_exar_gackle_bat_boss roll=5 columns=heroic_exar_gackle_bat
---   heroic_exar_hate_fist roll=25 columns=heroic_exar_hate_fist
---   heroic_exar_kun roll=25 columns=heroic_exar_kun
---   heroic_exar_minder roll=25 columns=heroic_exar_minder
---   heroic_exar_open_hand roll=25 columns=heroic_exar_open_hand
---   heroic_ig88_droideka roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   heroic_ig88_ig88_rocket roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   heroic_ig88_normal_droideka roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   heroic_ig88_super_battle_droid roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   heroic_sd_captain_sait roll=15 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_sd_commander_kenkirk roll=15 columns=col_shattered_shard_02,col_shattered_shard_04,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_sd_krix_swiftshadow roll=10 columns=col_shattered_shard_02,col_shattered_shard_04,col_glass_shelving_01,col_glass_shelving_02
---   heroic_sd_stormtrooper roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_sd_stormtrooper_grenadier roll=7 columns=col_shattered_shard_02,col_shattered_shard_04,col_glass_shelving_01,col_glass_shelving_02
---   heroic_sd_stormtrooper_squad_leader roll=7 columns=col_shattered_shard_02,col_shattered_shard_04,col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01
---   heroic_sd_watch_captain_prat roll=15 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
---   heroic_tusken_blood_hunter roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02
---   heroic_tusken_king roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,heroic_tusken_junk
---   heroic_tusken_raid_leader roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02,heroic_tusken_junk
---   heroic_tusken_war_master roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02,heroic_tusken_junk
---   heroic_tusken_warlord roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02,heroic_tusken_junk
---   legacy_lin34_droid roll=2 columns=col_holo_emitter_01
---   legacy_r3_droid roll=2 columns=col_holo_emitter_01
---   legacy_ra_droid roll=2 columns=col_holo_emitter_01
---   mand_bunker_crazed_scientist roll=1 columns=col_contraband_set_04
---   mand_bunker_dthwatch_gold roll=6 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_contraband_set_04
---   mand_bunker_medical_droid roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_contraband_set_04,col_holo_emitter_01
---   mand_bunker_workshop_droid roll=6 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_holo_emitter_01
---   meatlump_outpost_guard_donk roll=4 columns=col_shattered_shard_02,col_shattered_shard_03,col_contraband_set_04,col_contraband_set_01
---   meatlump_outpost_guard_dunder roll=4 columns=col_shattered_shard_01,col_shattered_shard_04,col_contraband_set_02,col_contraband_set_03
---   mtp_delivery_ambush_ragtag_blackjack roll=4 columns=col_contraband_set_01,col_contraband_set_02
---   mtp_hideout_quest_ragtag_anita_bath roll=7 columns=col_contraband_set_03,col_contraband_set_04
---   mtp_hideout_quest_ragtag_box_orox roll=7 columns=col_contraband_set_03,col_contraband_set_04
---   mtp_instance_aggro_security_droid_01 roll=2 columns=col_holo_emitter_01
---   mtp_instance_aggro_security_droid_02 roll=2 columns=col_holo_emitter_01
---   mtp_instance_blastromech roll=2 columns=col_holo_emitter_01
---   mtp_instance_mouse_droid roll=2 columns=col_holo_emitter_01
---   mtp_instance_power_droid roll=2 columns=col_holo_emitter_01
---   mtp_instance_r5 roll=2 columns=col_holo_emitter_01
---   mtp_quest_stephax_dain_high roll=4 columns=col_shattered_shard_02,col_shattered_shard_03,col_contraband_set_04,col_contraband_set_01
---   mtp_quest_stephax_meatlump_high roll=4 columns=col_shattered_shard_01,col_shattered_shard_04,col_contraband_set_03,col_contraband_set_02
---   mtp_recruiter_corsec_agent roll=7 columns=housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   mtp_recruiter_corsec_detective roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   mtp_recruiter_corsec_investigator roll=7 columns=housing_improvement_01,col_aurebesh_tiles,col_shattered_shard_01
---   naboo_beachcomber_smuggler roll=4 columns=col_contraband_set_01
---   naboo_pirate_butcher roll=4 columns=col_contraband_set_01
---   naboo_pirate_mugger roll=4 columns=col_contraband_set_01
---   naboo_pirate_raider roll=4 columns=col_contraband_set_01
---   naboo_pirate_savage roll=4 columns=col_contraband_set_01
---   naboo_pirate_swashbuckler roll=4 columns=col_contraband_set_01
---   naboo_stonewall_labs_battle_droid_blue roll=2 columns=col_holo_emitter_01
---   naboo_stonewall_labs_battle_droid_green roll=2 columns=col_holo_emitter_01
---   naboo_stonewall_labs_battle_droid_yellow roll=2 columns=col_holo_emitter_01
---   naboo_ultragungan_blastromech roll=2 columns=col_holo_emitter_01
---   naboo_ultragungan_flawed_battle_droid roll=2 columns=col_holo_emitter_01
---   nightsister_sentinal roll=4 columns=col_nightsister_valuables,col_sith_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   nym_goodie_dispenser roll=6 columns=col_shattered_shard_02
---   peko_peko_albatross_high roll=7 columns=col_feather_peko_peko
---   rebel_detainment_blastromech roll=2 columns=col_holo_emitter_01
---   rebel_detainment_cww89_battle_droid roll=2 columns=col_holo_emitter_01
---   rebel_detainment_cww89a_battle_droid roll=2 columns=col_holo_emitter_01
---   rebel_detainment_cww89a_battle_droid_normal roll=2 columns=col_holo_emitter_01
---   rebel_detainment_d270_droid roll=2 columns=col_holo_emitter_01
---   scavenger_punk roll=100 columns=inv_publish_datapad_component_02
---   scavenger_thief roll=100 columns=inv_publish_datapad_component_03
---   scavenger_thug roll=100 columns=inv_publish_datapad_component_01
---   scavenger_thug_elite roll=100 columns=inv_publish_datapad_component_01,inv_publish_datapad_component_02,inv_publish_datapad_component_03
---   smuggler_patrol_jabba_1 roll=4 columns=housing_improvement_05,col_aurebesh_tiles,col_shattered_shard_03
---   som_crystal_flats_salvage_bandit_enforcer roll=4 columns=col_contraband_set_03,col_shattered_shard_03
---   som_crystal_flats_salvage_bandit_king roll=6 columns=col_contraband_set_03,col_shattered_shard_03
---   som_crystal_flats_salvage_bandit_thug roll=4 columns=col_contraband_set_03,col_shattered_shard_03
---   som_crystal_flats_treasure_hunter_merc roll=4 columns=col_contraband_set_03,col_shattered_shard_03
---   som_crystal_flats_treasure_hunter_thug roll=4 columns=col_contraband_set_03,col_shattered_shard_03
---   som_kenobi_ancient_guardian_droideka roll=4 columns=col_holo_emitter_01
---   som_kenobi_ancient_guardian_ig roll=4 columns=col_holo_emitter_01
---   som_kenobi_dark_jedi_minion_1 roll=4 columns=housing_improvement_05,col_shattered_shard_03
---   som_kenobi_dark_jedi_minion_2 roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
---   som_kenobi_dark_jedi_minion_3 roll=4 columns=housing_improvement_05,col_shattered_shard_03
---   som_kenobi_dark_jedi_minion_4 roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
---   som_kenobi_dark_jedi_minion_5 roll=4 columns=housing_improvement_05,col_shattered_shard_03
---   som_kenobi_dark_jedi_minion_mix roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
---   som_kenobi_finale_minion_melee roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
---   som_kenobi_finale_minion_mix roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
---   som_kenobi_pwwoz_pwwa roll=4 columns=col_sith_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   som_kenobi_pwwoz_thug_1 roll=4 columns=col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03
---   som_kenobi_pwwoz_thug_2 roll=4 columns=col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03
---   som_kenobi_trinity_assassin_ithorian_male roll=4 columns=housing_improvement_05,col_sith_holocron,col_aurebesh_tiles,col_shattered_shard_03
---   som_kenobi_trinity_assassin_nightsister_female roll=4 columns=housing_improvement_05,col_sith_holocron,col_aurebesh_tiles,col_shattered_shard_03
---   som_kenobi_trinity_assassin_zabrak_female roll=4 columns=housing_improvement_05,col_aurebesh_tiles,col_shattered_shard_03
---   spider_nightsister_crawler roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   spider_nightsister_elder roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   spider_nightsister_initiate roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   spider_nightsister_protector roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   spider_nightsister_sentinel roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   spider_nightsister_sentry roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   spider_nightsister_spell_weaver roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   spider_nightsister_stalker roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   spider_nightsister_web_dancer roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
---   talus_nashal_binary_lifter roll=2 columns=col_holo_emitter_01
---   talus_nashal_power_droid roll=2 columns=col_holo_emitter_01
---   tatooine_wayfar_spy roll=50 columns=col_new_player_wayfar_spy
---   township_nightsister_aranei roll=6 columns=col_rancor_parts,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
---   treasure_guard_droid roll=3 columns=col_holo_emitter_01
---   treasure_guard_jedi_boss roll=6 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_jedi_holocron,col_contraband_set_04,col_shattered_shard_02
---   treasure_guard_jedi_elder roll=4 columns=housing_improvement_05,col_jedi_holocron,col_aurebesh_tiles,col_shattered_shard_03
---   tusken_fort_tusken_treasure_guardian roll=6 columns=col_tusken_valuables,housing_improvement_01,housing_improvement_02,col_shattered_shard_01
---   tusken_raider_18 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
---   tusken_raider_19 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
---   tusken_raider_20 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
---   tusken_raider_21 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
---   tusken_raider_ambusher roll=7 columns=col_tusken_valuables,col_shattered_shard_02
---   tusken_raider_marauder roll=7 columns=col_tusken_valuables,col_shattered_shard_02
---   tusken_raider_scout_newbie roll=3 columns=col_tusken_valuables
---   tusken_raider_soldier roll=3 columns=col_tusken_valuables
---   tusken_raider_warrior roll=3 columns=col_tusken_valuables
---   tusken_raider_wildman roll=3 columns=col_tusken_valuables
---   tusken_raider_worshiper roll=6 columns=col_tusken_valuables,col_dejarik_holomonster,col_dejarik_table
---   tusken_raider_zealot roll=3 columns=col_tusken_valuables
---   u13_garyn_shiv roll=6 columns=housing_improvement_03,col_aurebesh_tiles,col_shattered_shard_04,col_glass_shelving_01
---   yavin_smuggler_bully_elite roll=4 columns=col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
---   yavin_smuggler_henchmen_elite roll=4 columns=col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
---   yavin_smuggler_member roll=4 columns=col_story_count_dooku_set_1,col_story_count_dooku_set_2,col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
---   yavin_smuggler_muscle roll=4 columns=col_story_count_dooku_set_1,col_story_count_dooku_set_2,col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
+-- Absent from this server (146 rows; no mobile template of this name).
+--   bestine_tusken_raid_leader creatures.tab:197 roll=4 columns=col_tusken_valuables,col_aurebesh_tiles,col_shattered_shard_01
+--   bestine_tusken_raid_sub_leader creatures.tab:198 roll=4 columns=col_tusken_valuables,col_shattered_shard_01
+--   borvos_rancor creatures.tab:389 roll=3 columns=col_rancor_parts,col_dejarik_holomonster,col_dejarik_table
+--   corellia_braggans_fist_thug creatures.tab:648 roll=4 columns=col_contraband_set_02,col_shattered_shard_01
+--   endor_ig88_security_battle_droid_blue creatures.tab:1213 roll=2 columns=col_holo_emitter_01
+--   endor_ig88_security_battle_droid_purple creatures.tab:1214 roll=2 columns=col_holo_emitter_01
+--   endor_ig88_security_battle_droid_red creatures.tab:1215 roll=2 columns=col_holo_emitter_01
+--   feeder_tusken_guard creatures.tab:1774 roll=4 columns=col_tusken_valuables,housing_improvement_01,housing_improvement_02,col_shattered_shard_02
+--   garyn_lieutenant creatures.tab:1899 roll=6 columns=housing_improvement_03,col_aurebesh_tiles,col_shattered_shard_04,col_glass_shelving_01
+--   garyn_vigo creatures.tab:1906 roll=6 columns=housing_improvement_03,col_aurebesh_tiles,col_shattered_shard_03,col_shattered_shard_04,col_glass_shelving_01
+--   heroic_axkva_axkva_min creatures.tab:2154 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
+--   heroic_axkva_kimaru creatures.tab:2157 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
+--   heroic_axkva_lelli_hi creatures.tab:2158 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
+--   heroic_axkva_nandina creatures.tab:2159 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
+--   heroic_axkva_suin_chalo creatures.tab:2160 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table
+--   heroic_echo_imp_assassin creatures.tab:6157 roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_echo_probe_droid creatures.tab:6176 roll=6 columns=col_holo_emitter_01
+--   heroic_echo_snowtrooper creatures.tab:6154 roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_echo_snowtrooper_interior creatures.tab:6155 roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_echo_stormcommando creatures.tab:6156 roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_echo_wampa_boss creatures.tab:6207 roll=10 columns=echo_base_wampa_boss
+--   heroic_exar_caretaker creatures.tab:5897 roll=25 columns=heroic_exar_caretaker
+--   heroic_exar_gackle_bat creatures.tab:5906 roll=5 columns=heroic_exar_gackle_bat
+--   heroic_exar_gackle_bat_boss creatures.tab:5907 roll=5 columns=heroic_exar_gackle_bat
+--   heroic_exar_hate_fist creatures.tab:5895 roll=25 columns=heroic_exar_hate_fist
+--   heroic_exar_kun creatures.tab:5887 roll=25 columns=heroic_exar_kun
+--   heroic_exar_minder creatures.tab:5902 roll=25 columns=heroic_exar_minder
+--   heroic_exar_open_hand creatures.tab:5896 roll=25 columns=heroic_exar_open_hand
+--   heroic_ig88_droideka creatures.tab:2167 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   heroic_ig88_ig88_rocket creatures.tab:2168 roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   heroic_ig88_normal_droideka creatures.tab:2170 roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   heroic_ig88_super_battle_droid creatures.tab:2171 roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   heroic_sd_captain_sait creatures.tab:5813 roll=15 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_sd_commander_kenkirk creatures.tab:5814 roll=15 columns=col_shattered_shard_02,col_shattered_shard_04,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_sd_krix_swiftshadow creatures.tab:5834 roll=10 columns=col_shattered_shard_02,col_shattered_shard_04,col_glass_shelving_01,col_glass_shelving_02
+--   heroic_sd_stormtrooper creatures.tab:5817 roll=12 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_sd_stormtrooper_grenadier creatures.tab:5835 roll=7 columns=col_shattered_shard_02,col_shattered_shard_04,col_glass_shelving_01,col_glass_shelving_02
+--   heroic_sd_stormtrooper_squad_leader creatures.tab:5836 roll=7 columns=col_shattered_shard_02,col_shattered_shard_04,col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01
+--   heroic_sd_watch_captain_prat creatures.tab:5816 roll=15 columns=col_shattered_shard_01,col_shattered_shard_03,col_glass_shelving_01,col_glass_shelving_02,heroic_sd_junk
+--   heroic_tusken_blood_hunter creatures.tab:2175 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02
+--   heroic_tusken_king creatures.tab:2182 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,heroic_tusken_junk
+--   heroic_tusken_raid_leader creatures.tab:2194 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02,heroic_tusken_junk
+--   heroic_tusken_war_master creatures.tab:2198 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02,heroic_tusken_junk
+--   heroic_tusken_warlord creatures.tab:2199 roll=7 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_story_count_dooku_set_3,col_aurebesh_tiles,col_tusken_valuables,col_shattered_shard_02,heroic_tusken_junk
+--   legacy_lin34_droid creatures.tab:2639 roll=2 columns=col_holo_emitter_01
+--   legacy_r3_droid creatures.tab:2648 roll=2 columns=col_holo_emitter_01
+--   legacy_ra_droid creatures.tab:2649 roll=2 columns=col_holo_emitter_01
+--   mand_bunker_crazed_scientist creatures.tab:2784 roll=1 columns=col_contraband_set_04
+--   mand_bunker_dthwatch_gold creatures.tab:2785 roll=6 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_contraband_set_04
+--   mand_bunker_medical_droid creatures.tab:2790 roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_contraband_set_04,col_holo_emitter_01
+--   mand_bunker_workshop_droid creatures.tab:2794 roll=6 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_holo_emitter_01
+--   meatlump_outpost_guard_donk creatures.tab:6034 roll=4 columns=col_shattered_shard_02,col_shattered_shard_03,col_contraband_set_04,col_contraband_set_01
+--   meatlump_outpost_guard_dunder creatures.tab:6035 roll=4 columns=col_shattered_shard_01,col_shattered_shard_04,col_contraband_set_02,col_contraband_set_03
+--   mtp_delivery_ambush_ragtag_blackjack creatures.tab:6118 roll=4 columns=col_contraband_set_01,col_contraband_set_02
+--   mtp_hideout_quest_ragtag_anita_bath creatures.tab:6113 roll=7 columns=col_contraband_set_03,col_contraband_set_04
+--   mtp_hideout_quest_ragtag_box_orox creatures.tab:6112 roll=7 columns=col_contraband_set_03,col_contraband_set_04
+--   mtp_instance_aggro_security_droid_01 creatures.tab:6096 roll=2 columns=col_holo_emitter_01
+--   mtp_instance_aggro_security_droid_02 creatures.tab:6097 roll=2 columns=col_holo_emitter_01
+--   mtp_instance_blastromech creatures.tab:6092 roll=2 columns=col_holo_emitter_01
+--   mtp_instance_mouse_droid creatures.tab:6091 roll=2 columns=col_holo_emitter_01
+--   mtp_instance_power_droid creatures.tab:6090 roll=2 columns=col_holo_emitter_01
+--   mtp_instance_r5 creatures.tab:6093 roll=2 columns=col_holo_emitter_01
+--   mtp_quest_stephax_dain_high creatures.tab:6031 roll=4 columns=col_shattered_shard_02,col_shattered_shard_03,col_contraband_set_04,col_contraband_set_01
+--   mtp_quest_stephax_meatlump_high creatures.tab:6029 roll=4 columns=col_shattered_shard_01,col_shattered_shard_04,col_contraband_set_03,col_contraband_set_02
+--   mtp_recruiter_corsec_agent creatures.tab:6140 roll=7 columns=housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   mtp_recruiter_corsec_detective creatures.tab:6120 roll=7 columns=housing_improvement_01,housing_improvement_02,housing_improvement_03,housing_improvement_04,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   mtp_recruiter_corsec_investigator creatures.tab:6121 roll=7 columns=housing_improvement_01,col_aurebesh_tiles,col_shattered_shard_01
+--   naboo_beachcomber_smuggler creatures.tab:3510 roll=4 columns=col_contraband_set_01
+--   naboo_pirate_butcher creatures.tab:3601 roll=4 columns=col_contraband_set_01
+--   naboo_pirate_mugger creatures.tab:3605 roll=4 columns=col_contraband_set_01
+--   naboo_pirate_raider creatures.tab:3606 roll=4 columns=col_contraband_set_01
+--   naboo_pirate_savage creatures.tab:3607 roll=4 columns=col_contraband_set_01
+--   naboo_pirate_swashbuckler creatures.tab:3608 roll=4 columns=col_contraband_set_01
+--   naboo_stonewall_labs_battle_droid_blue creatures.tab:3633 roll=2 columns=col_holo_emitter_01
+--   naboo_stonewall_labs_battle_droid_green creatures.tab:3634 roll=2 columns=col_holo_emitter_01
+--   naboo_stonewall_labs_battle_droid_yellow creatures.tab:3635 roll=2 columns=col_holo_emitter_01
+--   naboo_ultragungan_blastromech creatures.tab:3658 roll=2 columns=col_holo_emitter_01
+--   naboo_ultragungan_flawed_battle_droid creatures.tab:3660 roll=2 columns=col_holo_emitter_01
+--   nightsister_sentinal creatures.tab:3716 roll=4 columns=col_nightsister_valuables,col_sith_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   nym_goodie_dispenser creatures.tab:3854 roll=6 columns=col_shattered_shard_02
+--   peko_peko_albatross_high creatures.tab:3927 roll=7 columns=col_feather_peko_peko
+--   rebel_detainment_blastromech creatures.tab:6312 roll=2 columns=col_holo_emitter_01
+--   rebel_detainment_cww89_battle_droid creatures.tab:6317 roll=2 columns=col_holo_emitter_01
+--   rebel_detainment_cww89a_battle_droid creatures.tab:6320 roll=2 columns=col_holo_emitter_01
+--   rebel_detainment_cww89a_battle_droid_normal creatures.tab:6324 roll=2 columns=col_holo_emitter_01
+--   rebel_detainment_d270_droid creatures.tab:6318 roll=2 columns=col_holo_emitter_01
+--   scavenger_punk creatures.tab:5795 roll=100 columns=inv_publish_datapad_component_02
+--   scavenger_thief creatures.tab:5796 roll=100 columns=inv_publish_datapad_component_03
+--   scavenger_thug creatures.tab:4323 roll=100 columns=inv_publish_datapad_component_01
+--   scavenger_thug_elite creatures.tab:4324 roll=100 columns=inv_publish_datapad_component_01,inv_publish_datapad_component_02,inv_publish_datapad_component_03
+--   smuggler_patrol_jabba_1 creatures.tab:4570 roll=4 columns=housing_improvement_05,col_aurebesh_tiles,col_shattered_shard_03
+--   som_crystal_flats_salvage_bandit_enforcer creatures.tab:4676 roll=4 columns=col_contraband_set_03,col_shattered_shard_03
+--   som_crystal_flats_salvage_bandit_king creatures.tab:4677 roll=6 columns=col_contraband_set_03,col_shattered_shard_03
+--   som_crystal_flats_salvage_bandit_thug creatures.tab:4678 roll=4 columns=col_contraband_set_03,col_shattered_shard_03
+--   som_crystal_flats_treasure_hunter_merc creatures.tab:4680 roll=4 columns=col_contraband_set_03,col_shattered_shard_03
+--   som_crystal_flats_treasure_hunter_thug creatures.tab:4681 roll=4 columns=col_contraband_set_03,col_shattered_shard_03
+--   som_kenobi_ancient_guardian_droideka creatures.tab:4709 roll=4 columns=col_holo_emitter_01
+--   som_kenobi_ancient_guardian_ig creatures.tab:4710 roll=4 columns=col_holo_emitter_01
+--   som_kenobi_dark_jedi_minion_1 creatures.tab:4716 roll=4 columns=housing_improvement_05,col_shattered_shard_03
+--   som_kenobi_dark_jedi_minion_2 creatures.tab:4717 roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
+--   som_kenobi_dark_jedi_minion_3 creatures.tab:4718 roll=4 columns=housing_improvement_05,col_shattered_shard_03
+--   som_kenobi_dark_jedi_minion_4 creatures.tab:4719 roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
+--   som_kenobi_dark_jedi_minion_5 creatures.tab:4720 roll=4 columns=housing_improvement_05,col_shattered_shard_03
+--   som_kenobi_dark_jedi_minion_mix creatures.tab:4721 roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
+--   som_kenobi_finale_minion_melee creatures.tab:4724 roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
+--   som_kenobi_finale_minion_mix creatures.tab:4725 roll=4 columns=housing_improvement_05,col_sith_holocron,col_shattered_shard_03
+--   som_kenobi_pwwoz_pwwa creatures.tab:4731 roll=4 columns=col_sith_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   som_kenobi_pwwoz_thug_1 creatures.tab:4732 roll=4 columns=col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03
+--   som_kenobi_pwwoz_thug_2 creatures.tab:4733 roll=4 columns=col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03
+--   som_kenobi_trinity_assassin_ithorian_male creatures.tab:4744 roll=4 columns=housing_improvement_05,col_sith_holocron,col_aurebesh_tiles,col_shattered_shard_03
+--   som_kenobi_trinity_assassin_nightsister_female creatures.tab:4745 roll=4 columns=housing_improvement_05,col_sith_holocron,col_aurebesh_tiles,col_shattered_shard_03
+--   som_kenobi_trinity_assassin_zabrak_female creatures.tab:4746 roll=4 columns=housing_improvement_05,col_aurebesh_tiles,col_shattered_shard_03
+--   spider_nightsister_crawler creatures.tab:4920 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   spider_nightsister_elder creatures.tab:4921 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   spider_nightsister_initiate creatures.tab:4922 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   spider_nightsister_protector creatures.tab:4923 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   spider_nightsister_sentinel creatures.tab:4924 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   spider_nightsister_sentry creatures.tab:4925 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   spider_nightsister_spell_weaver creatures.tab:4926 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   spider_nightsister_stalker creatures.tab:4927 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   spider_nightsister_web_dancer creatures.tab:4928 roll=4 columns=col_jedi_holocron,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_03
+--   talus_nashal_binary_lifter creatures.tab:5163 roll=2 columns=col_holo_emitter_01
+--   talus_nashal_power_droid creatures.tab:5172 roll=2 columns=col_holo_emitter_01
+--   tatooine_wayfar_spy creatures.tab:5294 roll=50 columns=col_new_player_wayfar_spy
+--   township_nightsister_aranei creatures.tab:5789 roll=6 columns=col_rancor_parts,housing_improvement_05,col_dejarik_holomonster,col_dejarik_table,col_shattered_shard_02
+--   treasure_guard_droid creatures.tab:5399 roll=3 columns=col_holo_emitter_01
+--   treasure_guard_jedi_boss creatures.tab:5401 roll=6 columns=housing_improvement_03,housing_improvement_04,housing_improvement_05,col_jedi_holocron,col_contraband_set_04,col_shattered_shard_02
+--   treasure_guard_jedi_elder creatures.tab:5402 roll=4 columns=housing_improvement_05,col_jedi_holocron,col_aurebesh_tiles,col_shattered_shard_03
+--   tusken_fort_tusken_treasure_guardian creatures.tab:5427 roll=6 columns=col_tusken_valuables,housing_improvement_01,housing_improvement_02,col_shattered_shard_01
+--   tusken_raider_18 creatures.tab:5435 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
+--   tusken_raider_19 creatures.tab:5436 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
+--   tusken_raider_20 creatures.tab:5437 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
+--   tusken_raider_21 creatures.tab:5438 roll=3 columns=col_tusken_valuables,col_kill_tusken_activation_loot
+--   tusken_raider_ambusher creatures.tab:5439 roll=7 columns=col_tusken_valuables,col_shattered_shard_02
+--   tusken_raider_marauder creatures.tab:5440 roll=7 columns=col_tusken_valuables,col_shattered_shard_02
+--   tusken_raider_scout_newbie creatures.tab:5441 roll=3 columns=col_tusken_valuables
+--   tusken_raider_soldier creatures.tab:5442 roll=3 columns=col_tusken_valuables
+--   tusken_raider_warrior creatures.tab:5443 roll=3 columns=col_tusken_valuables
+--   tusken_raider_wildman creatures.tab:5444 roll=3 columns=col_tusken_valuables
+--   tusken_raider_worshiper creatures.tab:5445 roll=6 columns=col_tusken_valuables,col_dejarik_holomonster,col_dejarik_table
+--   tusken_raider_zealot creatures.tab:5446 roll=3 columns=col_tusken_valuables
+--   u13_garyn_shiv creatures.tab:6389 roll=6 columns=housing_improvement_03,col_aurebesh_tiles,col_shattered_shard_04,col_glass_shelving_01
+--   yavin_smuggler_bully_elite creatures.tab:5747 roll=4 columns=col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
+--   yavin_smuggler_henchmen_elite creatures.tab:5748 roll=4 columns=col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
+--   yavin_smuggler_member creatures.tab:5751 roll=4 columns=col_story_count_dooku_set_1,col_story_count_dooku_set_2,col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
+--   yavin_smuggler_muscle creatures.tab:5752 roll=4 columns=col_story_count_dooku_set_1,col_story_count_dooku_set_2,col_aurebesh_tiles,col_contraband_set_03,col_shattered_shard_03,col_glass_shelving_02
 
 -- OPEN: static items in used columns that are not consume-grantable
 -- (empty slot / consumeLoot=false). 29 items.
@@ -306,1347 +323,7 @@ CollectionLoot = ScreenPlay:new {
 --   object/tangible/loot/creature_loot/collections/sith_holocron_01.iff name=Strange Sith Holocron 4/5 item_collection_sith_holocron_01_04=inv_holocron_collection_01:sith_holocron_01_04,item_collection_sith_holocron_02_04=inv_holocron_collection_02:sith_holocron_02_04
 --   object/tangible/loot/creature_loot/collections/sith_holocron_01.iff name=Strange Sith Holocron 5/5 item_collection_sith_holocron_01_05=inv_holocron_collection_01:sith_holocron_01_05,item_collection_sith_holocron_02_05=inv_holocron_collection_02:sith_holocron_02_05
 
---[[ OPEN: hand-merge into each creature's lootGroups when CollectionLoot.ENABLED
-     is ruled. Lua cannot amend a registered CreatureTemplate: creatures.lua
-     CreatureTemplates:addCreatureTemplate calls C++ addTemplate, and
-     CreatureTemplate.cpp:187 lootgroups.readObject copies the table at
-     registration. getCreatureTemplate looks up CreatureTemplates[crc], which
-     addCreatureTemplate never populates. lootChance is OPEN (NGE collectionRoll).
-     Engine: LootGroupCollectionEntry.h:39 reads lootChance;
-     LootManagerImplementation.cpp:711 rolls System::random(10000000), so 1% is
-     100000 (collectionRoll * 100000), not per-mille. Inner chance is the group's
-     share of that entry (LootGroupEntry.h:30). One entry per column as specified;
-     SOE instead picks ONE column after the roll (loot.java:1569-1571).
-
-ancient_bull_rancor:
-	{
-		groups = {
-			{group = "col_rancor_parts", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_03", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_2", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-bane_back_spider:
-	{
-		groups = {
-			{group = "col_bane_back_spider", chance = 10000000}
-		},
-		lootChance = 10000000
-	},
-
-binayre_chief:
-	{
-		groups = {
-			{group = "housing_improvement_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-binayre_hooligan:
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-binayre_scalawag:
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-binayre_swindler:
-	{
-		groups = {
-			{group = "housing_improvement_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-black_sun_smuggler:
-	{
-		groups = {
-			{group = "housing_improvement_03", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_glass_shelving_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-dark_adept:
-	{
-		groups = {
-			{group = "col_sith_holocron", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-endor_ig88_security_battlemech_alpha:
-	{
-		groups = {
-			{group = "col_holo_emitter_01", chance = 10000000}
-		},
-		lootChance = 200000
-	},
-
-endor_ig88_security_battlemech_beta:
-	{
-		groups = {
-			{group = "col_holo_emitter_01", chance = 10000000}
-		},
-		lootChance = 200000
-	},
-
-endor_ig88_security_battlemech_omega:
-	{
-		groups = {
-			{group = "col_holo_emitter_01", chance = 10000000}
-		},
-		lootChance = 200000
-	},
-
-enraged_bull_rancor:
-	{
-		groups = {
-			{group = "col_rancor_parts", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_eng_trader", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_mun_trader", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-feeble_kima:
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-finned_blaggart:
-	{
-		groups = {
-			{group = "col_finned_blaggart", chance = 10000000}
-		},
-		lootChance = 10000000
-	},
-
-flit:
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-force_trained_archaist:
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 300000
-	},
-	{
-		groups = {
-			{group = "col_jedi_holocron", chance = 10000000}
-		},
-		lootChance = 300000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 300000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_03", chance = 10000000}
-		},
-		lootChance = 300000
-	},
-
-forsaken_force_drifter:
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_jedi_holocron", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_03", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-giant_peko_peko:
-	{
-		groups = {
-			{group = "col_feather_peko_peko", chance = 10000000}
-		},
-		lootChance = 300000
-	},
-
-gulginaw:
-	{
-		groups = {
-			{group = "col_feather_gulginaw", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-injured_kwi:
-	{
-		groups = {
-			{group = "housing_improvement_03", chance = 10000000}
-		},
-		lootChance = 500000
-	},
-	{
-		groups = {
-			{group = "col_glass_shelving_01", chance = 10000000}
-		},
-		lootChance = 500000
-	},
-
-kai_tok_bloodreaver:
-	{
-		groups = {
-			{group = "col_feather_kai_tok", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_1", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_glass_shelving_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-kai_tok_prowler:
-	{
-		groups = {
-			{group = "col_feather_kai_tok", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_1", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_glass_shelving_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-kai_tok_scavenger:
-	{
-		groups = {
-			{group = "col_feather_kai_tok", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_1", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_glass_shelving_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-kai_tok_slayer:
-	{
-		groups = {
-			{group = "col_feather_kai_tok", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_1", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_glass_shelving_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-mand_bunker_foreman:
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 700000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_02", chance = 10000000}
-		},
-		lootChance = 700000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_03", chance = 10000000}
-		},
-		lootChance = 700000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 700000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 700000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_3", chance = 10000000}
-		},
-		lootChance = 700000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_04", chance = 10000000}
-		},
-		lootChance = 700000
-	},
-
-mand_bunker_technician:
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_03", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_3", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-murra_blanca:
-	{
-		groups = {
-			{group = "col_murra_blanca", chance = 10000000}
-		},
-		lootChance = 10000000
-	},
-
-mutant_acklay:
-	{
-		groups = {
-			{group = "col_mutant_acklay", chance = 10000000}
-		},
-		lootChance = 10000000
-	},
-
-naboo_legacy_quest_droideka:
-	{
-		groups = {
-			{group = "col_holo_emitter_01", chance = 10000000}
-		},
-		lootChance = 200000
-	},
-
-naboo_legacy_quest_mouse_droid:
-	{
-		groups = {
-			{group = "col_holo_emitter_01", chance = 10000000}
-		},
-		lootChance = 200000
-	},
-
-naboo_pirate:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-naboo_pirate_armsman:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-naboo_pirate_crewman:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-naboo_pirate_cutthroat:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-naboo_pirate_lieutenant:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-narglatch_hunter:
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-nightsister_bull_rancor:
-	{
-		groups = {
-			{group = "col_rancor_parts", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-nightsister_enraged_bull_rancor:
-	{
-		groups = {
-			{group = "col_rancor_parts", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-nightsister_enraged_rancor:
-	{
-		groups = {
-			{group = "col_rancor_parts", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-nightsister_initiate:
-	{
-		groups = {
-			{group = "col_nightsister_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_sith_holocron", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-nightsister_outcast:
-	{
-		groups = {
-			{group = "col_nightsister_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_sith_holocron", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-nightsister_rancor:
-	{
-		groups = {
-			{group = "col_rancor_parts", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-nightsister_ranger:
-	{
-		groups = {
-			{group = "col_nightsister_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_sith_holocron", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-nightsister_sentry:
-	{
-		groups = {
-			{group = "col_nightsister_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_sith_holocron", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-painted_spat:
-	{
-		groups = {
-			{group = "col_painted_spat", chance = 10000000}
-		},
-		lootChance = 10000000
-	},
-
-peko_peko:
-	{
-		groups = {
-			{group = "col_feather_peko_peko", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-peko_peko_albatross:
-	{
-		groups = {
-			{group = "col_feather_peko_peko", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-probot:
-	{
-		groups = {
-			{group = "col_holo_emitter_01", chance = 10000000}
-		},
-		lootChance = 200000
-	},
-
-ragtag_kook:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-ragtag_mercenary:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-ragtag_thug:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-scorpion_kliknik:
-	{
-		groups = {
-			{group = "col_scorpion_kliknik", chance = 10000000}
-		},
-		lootChance = 10000000
-	},
-
-singing_mountain_clan_rancor:
-	{
-		groups = {
-			{group = "col_rancor_parts", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_holomonster", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_dejarik_table", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-slicer_boyd_chillings:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_04", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_04", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-slicer_kelson_sharphorn:
-	{
-		groups = {
-			{group = "col_contraband_set_03", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_04", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_03", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_04", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-slicer_skaelor_tay:
-	{
-		groups = {
-			{group = "col_contraband_set_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_contraband_set_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-som_kenobi_historian_dark_jedi:
-	{
-		groups = {
-			{group = "housing_improvement_03", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_sith_holocron", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-spiketail_blurrg:
-	{
-		groups = {
-			{group = "col_spiketail_blurrg", chance = 10000000}
-		},
-		lootChance = 10000000
-	},
-
-swirl_prong_impaler:
-	{
-		groups = {
-			{group = "housing_improvement_04", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_05", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_story_count_dooku_set_2", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-swirl_prong_pack_leader:
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-tusken_avenger:
-	{
-		groups = {
-			{group = "col_tusken_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "housing_improvement_02", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_kill_tusken_activation_loot", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-tusken_berserker:
-	{
-		groups = {
-			{group = "col_tusken_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_kill_tusken_activation_loot", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-tusken_brute:
-	{
-		groups = {
-			{group = "col_tusken_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-tusken_captain:
-	{
-		groups = {
-			{group = "col_tusken_valuables", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_kill_tusken_activation_loot", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-tusken_chief:
-	{
-		groups = {
-			{group = "col_tusken_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_kill_tusken_activation_loot", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-tusken_guard:
-	{
-		groups = {
-			{group = "col_tusken_valuables", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 400000
-	},
-
-tusken_warlord:
-	{
-		groups = {
-			{group = "col_tusken_valuables", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_aurebesh_tiles", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_kill_tusken_activation_loot", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-	{
-		groups = {
-			{group = "col_shattered_shard_01", chance = 10000000}
-		},
-		lootChance = 600000
-	},
-
-]]
+-- Collection lootGroups are on the 67 in-fork creature templates under mobile/.
 
 registerScreenPlay("CollectionLoot", true)
 
@@ -1690,12 +367,6 @@ CollectionLoot.templateMap = buildTemplateMap()
 
 function CollectionLoot:start()
 	self:printAmbiguousTemplates()
-
-	if (not self.ENABLED) then
-		return
-	end
-
-	print("CollectionLoot: ENABLED is true but Lua cannot amend registered creature lootGroups. creatures.lua CreatureTemplates:addCreatureTemplate calls C++ addTemplate; CreatureTemplate.cpp:187 copies lootGroups at registration; getCreatureTemplate looks up CreatureTemplates[crc] which is never populated. OPEN: merge the lootGroups snippets in this file by hand.")
 end
 
 function CollectionLoot:printAmbiguousTemplates()

@@ -35,7 +35,13 @@ peko_peko_albatross = Creature:new {
 				{group = "peko_albatross", chance = 10000000}
 			},
 			lootChance = 4100000
-		}
+		},
+		{
+			groups = {
+				{group = "col_feather_peko_peko", chance = 10000000}
+			},
+			lootChance = 600000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

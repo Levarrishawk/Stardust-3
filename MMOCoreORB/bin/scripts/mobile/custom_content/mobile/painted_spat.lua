@@ -28,7 +28,14 @@ painted_spat = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/painted_spat.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_painted_spat", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

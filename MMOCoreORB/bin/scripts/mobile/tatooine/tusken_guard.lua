@@ -32,7 +32,25 @@ tusken_guard = Creature:new {
 			groups = {
 				{group = "tusken_raider_tier_1", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "col_tusken_valuables", chance = 10000000}
+			},
+			lootChance = 133333
+		},
+		{
+			groups = {
+				{group = "col_aurebesh_tiles", chance = 10000000}
+			},
+			lootChance = 133333
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_01", chance = 10000000}
+			},
+			lootChance = 133333
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

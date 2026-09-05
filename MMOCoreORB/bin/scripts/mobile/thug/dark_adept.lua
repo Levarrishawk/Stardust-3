@@ -34,7 +34,31 @@ dark_adept = Creature:new {
 			groups = {
 				{group = "dark_jedi_tier_4", chance = 10000000}
 			}
-		}
+		},
+		{
+			groups = {
+				{group = "col_sith_holocron", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_dejarik_holomonster", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_dejarik_table", chance = 10000000}
+			},
+			lootChance = 100000
+		},
+		{
+			groups = {
+				{group = "col_shattered_shard_02", chance = 10000000}
+			},
+			lootChance = 100000
+		},
 	},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

@@ -28,7 +28,14 @@ murra_blanca = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/murra_blanca.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_murra_blanca", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {

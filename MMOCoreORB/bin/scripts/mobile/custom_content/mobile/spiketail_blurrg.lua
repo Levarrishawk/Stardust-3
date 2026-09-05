@@ -28,7 +28,14 @@ spiketail_blurrg = Creature:new {
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/spiketail_blurrg.iff"},
-	lootGroups = {},
+	lootGroups = {
+		{
+			groups = {
+				{group = "col_spiketail_blurrg", chance = 10000000}
+			},
+			lootChance = 10000000
+		},
+	},
 	weapons = {},
 	conversationTemplate = "",
 	attacks = {
