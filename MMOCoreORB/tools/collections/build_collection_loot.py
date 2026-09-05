@@ -5,9 +5,11 @@ Usage:  build_collection_loot.py <json> [--scripts <path to bin/scripts>]
 
 Reads a transcription of creatures.tab collectionRoll/collectionLoot plus
 datatables/loot/loot_items/collectible/collection_loot.tab (loot.java:1545
-addCollectionLoot). Writes loot/items/collections/<column>.lua,
-loot/groups/collections/<column>.lua, screenplays/collections/collection_loot.lua,
-include lines, a guarded CollectionLoot.attachLootItemComponent plus
+addCollectionLoot). Writes loot/items/collections/<item>.lua (one file per
+loot item, named after the item; LootGroupMap.cpp:98 warns when the
+addLootItemTemplate key differs from the file basename), loot/groups/collections/<column>.lua,
+screenplays/collections/collection_loot.lua, include lines (items.lua is one
+sorted line per item), a guarded CollectionLoot.attachLootItemComponent plus
 setCustomObjectName(displayName) on the grant path, and objectMenuComponent on
 unique-template object luas. Group weights follow loot.java:1572-1575 (cell
 count, duplicates included) and sum to 10000000. The JSON itself is never
@@ -852,6 +854,45 @@ def emit_screenplay(in_fork, out_fork, open_items, ambiguous, resolved_same_slot
     return "\n".join(header)
 
 
+def prune_lua_dir(directory, keep_basenames):
+    """Delete generated .lua files whose basename is not in keep_basenames."""
+    removed = []
+    if not os.path.isdir(directory):
+        return removed
+    for fn in os.listdir(directory):
+        if not fn.endswith(".lua"):
+            continue
+        if fn[:-4] in keep_basenames:
+            continue
+        os.remove(os.path.join(directory, fn))
+        removed.append(fn)
+    return removed
+
+
+def replace_collection_includes(path, rel_includes, include_prefix, header="-- Collections"):
+    """Replace the Collections include block (header + includeFile(prefix...)) with rel_includes."""
+    text = read_text(path)
+    nl = detect_nl(text)
+    kept = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped == header:
+            continue
+        if stripped.startswith('includeFile("' + include_prefix):
+            continue
+        kept.append(line)
+    while kept and kept[-1] == "":
+        kept.pop()
+    block_lines = [header]
+    for inc in rel_includes:
+        block_lines.append('includeFile("' + inc + '")')
+    new_text = nl.join(kept) + nl + nl + nl.join(block_lines) + nl
+    if new_text == text:
+        return False
+    write_text(path, new_text, newline="")
+    return True
+
+
 def ensure_includes(path, rel_includes, header="-- Collections"):
     text = read_text(path)
     nl = detect_nl(text)
@@ -970,7 +1011,6 @@ def main():
         os.makedirs(groups_dir)
 
     emitted_items = set()
-    item_includes = []
     group_includes = []
     rows_per_column = OrderedDict()
 
@@ -987,22 +1027,8 @@ def main():
             "weights": [],
         }
 
-        item_chunks = []
-        if open_in_col:
-            item_chunks.append("-- OPEN: not grantable in CollectionStaticItems: " + ", ".join(open_in_col))
-            item_chunks.append("")
         for name in grant_in_col:
-            if name in emitted_items:
-                continue
             emitted_items.add(name)
-            item_chunks.append(emit_loot_item(
-                name,
-                normalize_iff(static[name]["template"]),
-                static[name].get("display_name") or "",
-            ))
-        if item_chunks:
-            write_text(os.path.join(items_dir, column + ".lua"), "\n".join(item_chunks).rstrip() + "\n")
-            item_includes.append("items/collections/" + column + ".lua")
 
         if grant_in_col:
             weights = cell_count_weights(grant_in_col, cells)
@@ -1010,6 +1036,16 @@ def main():
             rows_per_column[column]["weights"] = list(zip(grant_in_col, weights))
             write_text(os.path.join(groups_dir, column + ".lua"), emit_loot_group(column, grant_in_col, weights))
             group_includes.append("groups/collections/" + column + ".lua")
+
+    item_includes = []
+    for name in sorted(emitted_items):
+        write_text(os.path.join(items_dir, name + ".lua"), emit_loot_item(
+            name,
+            normalize_iff(static[name]["template"]),
+            static[name].get("display_name") or "",
+        ))
+        item_includes.append("items/collections/" + name + ".lua")
+    pruned_items = prune_lua_dir(items_dir, emitted_items)
 
     # Reverse-map uniqueness across the whole bridge (consume-use, not just loot columns).
     by_template = OrderedDict()
@@ -1048,7 +1084,11 @@ def main():
         else:
             skipped_object.append((rel, name, result))
 
-    ensure_includes(os.path.join(scripts, "loot", "items.lua"), item_includes)
+    replace_collection_includes(
+        os.path.join(scripts, "loot", "items.lua"),
+        item_includes,
+        "items/collections/",
+    )
     ensure_includes(os.path.join(scripts, "loot", "groups.lua"), group_includes)
     ensure_includes(
         os.path.join(scripts, "screenplays", "screenplays.lua"),
@@ -1060,7 +1100,7 @@ def main():
     write_text(os.path.join(scripts, "screenplays", "collections", "collection_loot.lua"), screenplay)
 
     print("creatures", len(creatures), "in_fork", len(in_fork), "open", len(out_fork))
-    print("columns", len(used_columns), "distinct_items", len(all_items), "loot_items", len(emitted_items), "open_items", len(open_items), "skipped", len(skipped))
+    print("columns", len(used_columns), "distinct_items", len(all_items), "loot_items", len(emitted_items), "item_files", len(item_includes), "pruned", len(pruned_items), "open_items", len(open_items), "skipped", len(skipped))
     print("unique_slotted_templates", len(unique_slotted), "object_menu_edits", len(patched), "ambiguous_names", len(ambiguous), "resolved_same_slot", len(resolved_same_slot))
     for column, stats in rows_per_column.items():
         extra = ""
