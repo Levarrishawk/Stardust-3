@@ -24,13 +24,13 @@ meatlump_m_01_nonvendor_vendor = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED + CONVERSABLE + INVULNERABLE,
+	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/meatlump_m_01_nonvendor_vendor.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "mtp_vendor_convo",
+	conversationTemplate = "",
 	attacks = {
 	}
 }

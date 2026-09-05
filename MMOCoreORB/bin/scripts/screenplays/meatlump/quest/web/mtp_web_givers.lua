@@ -20,7 +20,7 @@ MtpWebGivers = ScreenPlay:new {
 		{ template = "dressed_meatlump_hideout_safe_tech", convo = "mtp_hideout_safe_tech_convo", building = "main", cell = "masterroom" },
 		{ template = "dressed_meatlump_hideout_male_05", convo = "mtp_hideout_recon_convo", building = "main", cell = "greathall" },
 		{ template = "meatlump_king_static", convo = "mtp_meatlump_king_convo", building = "main", cell = "arena" },
-		{ template = "meatlump_m_01_nonvendor_vendor", convo = "mtp_vendor_convo", building = "main", cell = "greathall" },
+		{ template = "mtp_meatlump_vendor", convo = "mtp_vendor_convo", building = "main", cell = "greathall" },
 	},
 	maps = {
 		{ quest = "mtp_map_quest_corellia_01", building = "entrance", cell = "bunker", x = 7.662 },
