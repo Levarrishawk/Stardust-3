@@ -26,3 +26,13 @@ registerScreenPlay("SpaceDutyPatrolScreenplay", false)
 		Space Duty Patrol Quest Functions
 
 --]]
+
+function SpaceDutyPatrolScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
+	local dutyExitResult = self:endDutyOnZoneExit(pPlayer, zoneNameHash)
+
+	if (dutyExitResult ~= nil) then
+		return dutyExitResult
+	end
+
+	return SpacePatrolScreenplay.enteredZone(self, pPlayer, nill, zoneNameHash)
+end

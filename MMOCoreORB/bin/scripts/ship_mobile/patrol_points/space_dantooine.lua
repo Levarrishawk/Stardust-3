@@ -1386,6 +1386,19 @@ space_dantooine = SpacePatrolPointTable:new {
 	-- Admiral Kilnstrider's Storm Squadron Tier 4 captured transport route.
 	{patrolPointName = "storm_t4_4_b_capture", x = 1600, z = 1800, y = -4700},
 	{patrolPointName = "storm_t4_4_b_escape", x = 4200, z = 1100, y = -2200},
+
+	-- Black Epsilon Squadron mission and duty routes.
+	{patrolPointName = "black_epsilon_t4_1_patrol_1", x = -5000, z = 1400, y = 3900},
+	{patrolPointName = "black_epsilon_t4_1_patrol_2", x = -2200, z = 700, y = 1200},
+	{patrolPointName = "black_epsilon_t4_1_patrol_3", x = 800, z = 0, y = -1500},
+	{patrolPointName = "black_epsilon_t4_2_capture", x = -4800, z = -500, y = 4200},
+	{patrolPointName = "black_epsilon_t4_2_escape", x = -1700, z = 0, y = 1200},
+	{patrolPointName = "black_epsilon_t4_duty_escort_1", x = -5000, z = 900, y = -3700},
+	{patrolPointName = "black_epsilon_t4_duty_escort_2", x = -900, z = 100, y = -300},
+	{patrolPointName = "black_epsilon_t4_duty_escort_3", x = 3900, z = -700, y = 3300},
+	{patrolPointName = "black_epsilon_t4_duty_recovery_capture", x = -4200, z = 600, y = 3300},
+	{patrolPointName = "black_epsilon_t4_duty_recovery_escape", x = -900, z = 100, y = 300},
+	{patrolPointName = "black_epsilon_t4_duty_rescue_escape", x = 1200, z = 0, y = -700},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_dantooine, "space_dantooine")

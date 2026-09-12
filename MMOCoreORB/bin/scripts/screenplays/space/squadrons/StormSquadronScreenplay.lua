@@ -1751,14 +1751,14 @@ registerScreenPlay("space_battle_tatooine_imperial_tier4_4_c", true)
 
 -- Tier 4 Duty Missions
 
--- Escort Duty (Space Dathomir - escort Imperial supply freighters through pirate territory)
+-- Escort Duty (Space Endor - escort Imperial supply freighters through pirate territory)
 escort_duty_tatooine_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	className = "escort_duty_tatooine_imperial_tier4_1",
 
 	questName = "tatooine_imperial_tier4_escortduty_1",
 	questType = "escort_duty",
 
-	questZone = "space_dathomir",
+	questZone = "space_endor",
 
 	creditReward = 5000,
 	creditKillBonus = 300,
@@ -1771,10 +1771,10 @@ escort_duty_tatooine_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	escortShips = {"imp_freighterheavy_tier4", "imp_freighterlight_tier4", "imp_freightermedium_tier4"},
 
 	escortPoints = {
-		{patrolPointName = "tatooine_imperial_tier4_1_escort_duty_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_escort_duty_2", zoneName = "space_dathomir", escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_escort_duty_3", zoneName = "space_dathomir", escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_escort_duty_4", zoneName = "space_dathomir", escortNumber = 4, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_escortduty_1", zoneName = "space_endor", escortNumber = 1, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_escortduty_2", zoneName = "space_endor", escortNumber = 2, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_escortduty_3", zoneName = "space_endor", escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_escortduty_4", zoneName = "space_endor", escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 50,
@@ -1789,14 +1789,14 @@ escort_duty_tatooine_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 
 registerScreenPlay("escort_duty_tatooine_imperial_tier4_1", true)
 
--- Rescue Duty (Space Dantooine - rescue disabled Imperial ships after pirate attacks)
+-- Rescue Duty (Space Endor - rescue disabled Imperial ships after pirate attacks)
 rescue_duty_tatooine_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	className = "rescue_duty_tatooine_imperial_tier4_1",
 
 	questName = "tatooine_imperial_tier4_rescueduty_1",
 	questType = "rescue_duty",
 
-	questZone = "space_dantooine",
+	questZone = "space_endor",
 
 	creditReward = 5000,
 	creditKillBonus = 300,
@@ -1809,11 +1809,9 @@ rescue_duty_tatooine_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	targetArrivalDelay = 3,
 
 	recoveryPoints = {
-		{patrolPointName = "tatooine_imperial_tier4_1_rescue_duty_1", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_rescue_duty_2", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_rescue_duty_3", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_rescue_duty_4", zoneName = "space_dantooine", radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_rescue_duty_5", zoneName = "space_dantooine", radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_rescueduty_1", zoneName = "space_endor", radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_rescueduty_2", zoneName = "space_endor", radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_rescueduty_3", zoneName = "space_endor", radius = 250},
 	},
 
 	attackDelay = 60,
@@ -1852,17 +1850,17 @@ recovery_duty_tatooine_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	escortShips = {"borvo_defender_tier4"},
 
 	preRecoveryPoints = {
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_1", zoneName = "space_endor", escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_2", zoneName = "space_endor", escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_3", zoneName = "space_endor", escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_4", zoneName = "space_endor", escortNumber = 4, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_1", zoneName = "space_endor", escortNumber = 1, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_2", zoneName = "space_endor", escortNumber = 2, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_3", zoneName = "space_endor", escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_4", zoneName = "space_endor", escortNumber = 4, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_5", zoneName = "space_endor", escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_6", zoneName = "space_endor", escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_7", zoneName = "space_endor", escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_imperial_tier4_1_recovery_duty_8", zoneName = "space_endor", escortNumber = 4, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_5", zoneName = "space_endor", escortNumber = 1, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_6", zoneName = "space_endor", escortNumber = 2, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_7", zoneName = "space_endor", escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_imperial_tier4_recoveryduty_8", zoneName = "space_endor", escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 45,
@@ -1876,14 +1874,14 @@ recovery_duty_tatooine_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 
 registerScreenPlay("recovery_duty_tatooine_imperial_tier4_1", true)
 
--- Destroy Duty (Space Dantooine - suppress Borvo syndicate raiding forces)
+-- Destroy Duty (Space Endor - suppress Borvo syndicate raiding forces)
 destroy_duty_tatooine_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_tatooine_imperial_tier4_1",
 
 	questName = "tatooine_imperial_tier4_destroyduty_1",
 	questType = "destroy_duty",
 
-	questZone = "space_dantooine",
+	questZone = "space_endor",
 
 	creditReward = 300,
 
@@ -1908,6 +1906,14 @@ destroy_duty_tatooine_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 }
 
 registerScreenPlay("destroy_duty_tatooine_imperial_tier4_1", true)
+
+-- Mission abort callbacks are resolved from the client quest path as
+-- <questType>_<questName>. Expose those names while retaining the descriptive
+-- screenplay globals used by the trainer conversation handler.
+escort_duty_tatooine_imperial_tier4_escortduty_1 = escort_duty_tatooine_imperial_tier4_1
+rescue_duty_tatooine_imperial_tier4_rescueduty_1 = rescue_duty_tatooine_imperial_tier4_1
+recovery_duty_tatooine_imperial_tier4_recoveryduty_1 = recovery_duty_tatooine_imperial_tier4_1
+destroy_duty_tatooine_imperial_tier4_destroyduty_1 = destroy_duty_tatooine_imperial_tier4_1
 
 --[[
 

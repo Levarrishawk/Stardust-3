@@ -15,6 +15,8 @@ velocity_smuggler_tier4 = ShipAgent:new {
 	aggressive = 1,
 
 	spaceFaction = "civilian",
+	alliedFactions = {"civilian", "merchant"},
+	enemyFactions = {"imperial", "pirate"},
 
 	color1 = 5,
 	color2 = 42,

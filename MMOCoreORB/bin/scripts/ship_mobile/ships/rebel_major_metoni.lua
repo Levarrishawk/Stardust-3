@@ -1,5 +1,5 @@
 rebel_major_metoni = ShipAgent:new {
-	template = "bwing_tier2",
+	template = "arc170_tier2",
 	pilotTemplate = "bomber_tier3",
 	shipType = "fighter",
 

@@ -752,6 +752,12 @@ space_lok = SpacePatrolPointTable:new {
 	{patrolPointName = "vortex_vortex_mission_1_1", x = 2241, z = -1210, y = -2943},	-- squadron-isolated: VortexSquadronScreenplay.lua:532
 	{patrolPointName = "vortex_vortex_mission_1_4", x = -1009, z = -1075, y = -2900},	-- squadron-isolated: VortexSquadronScreenplay.lua:530
 	{patrolPointName = "vortex_vortex_mission_1_5", x = -2464, z = -1051, y = -2900},	-- squadron-isolated: VortexSquadronScreenplay.lua:533
+
+	-- Black Epsilon Squadron mission and duty routes.
+	{patrolPointName = "black_epsilon_t3_4_capture", x = -5300, z = 800, y = -3300},
+	{patrolPointName = "black_epsilon_t3_4_escape", x = -2300, z = 300, y = -600},
+	{patrolPointName = "black_epsilon_t3_4_patrol_craft", x = 1000, z = 1200, y = -4900},
+	{patrolPointName = "black_epsilon_t3_4_queen", x = 5200, z = -900, y = 3800},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_lok, "space_lok")

@@ -628,6 +628,19 @@ space_dathomir = SpacePatrolPointTable:new {
 
 	-- Inquisition 3_4_c Price of Liberty assassination location.
 	{patrolPointName = "naboo_imperial_tier3_4_c_price_of_liberty", x = 2005, z = 4299, y = -3566},
+
+	-- Black Epsilon Squadron mission and duty routes.
+	{patrolPointName = "black_epsilon_t4_3_escort_1", x = -5100, z = 1800, y = -3900},
+	{patrolPointName = "black_epsilon_t4_3_escort_2", x = -1700, z = 900, y = -900},
+	{patrolPointName = "black_epsilon_t4_3_escort_3", x = 2600, z = -300, y = 2600},
+	{patrolPointName = "black_epsilon_t4_3_a_escape", x = 1800, z = -500, y = 1400},
+	{patrolPointName = "black_epsilon_t4_3_b_patrol_1", x = 900, z = 1500, y = -4500},
+	{patrolPointName = "black_epsilon_t4_3_b_patrol_2", x = -1900, z = 700, y = -1800},
+	{patrolPointName = "black_epsilon_t4_3_b_patrol_3", x = -4600, z = -100, y = 1000},
+	{patrolPointName = "black_epsilon_t4_4_neja", x = -5000, z = 1500, y = -4000},
+	{patrolPointName = "black_epsilon_t4_4_a_capture", x = -1800, z = 800, y = -900},
+	{patrolPointName = "black_epsilon_t4_4_a_escape", x = 1300, z = 100, y = 1700},
+	{patrolPointName = "black_epsilon_t4_4_onli", x = 5400, z = -1000, y = 4100},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_dathomir, "space_dathomir")

@@ -847,11 +847,6 @@ space_endor = SpacePatrolPointTable:new {
 	{patrolPointName = "storm_t4_2_c_route_1", x = 3000, z = 250, y = 1800},
 	{patrolPointName = "storm_t4_2_c_route_2", x = 4100, z = -150, y = 200},
 	{patrolPointName = "storm_t4_2_c_route_3", x = 5200, z = -600, y = -1600},
-	{patrolPointName = "storm_t4_3_escort_1", x = -5200, z = 3400, y = -4000},
-	{patrolPointName = "storm_t4_3_escort_2", x = -2600, z = 2500, y = -2100},
-	{patrolPointName = "storm_t4_3_escort_3", x = 300, z = 1500, y = -300},
-	{patrolPointName = "storm_t4_3_escort_4", x = 3200, z = 700, y = 1800},
-	{patrolPointName = "storm_t4_3_a_escape", x = 2700, z = -1200, y = -2300},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_endor, "space_endor")

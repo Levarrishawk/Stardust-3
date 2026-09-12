@@ -23,7 +23,7 @@ insurgent = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = PACK, 
-	optionsBitmask = AIENABLED + JTLINTERESTING,
+	optionsBitmask = AIENABLED + JTLINTERESTING + CONVERSABLE,
 	conversationTemplate = "hakassha_sireen_convo",
 	diet = HERBIVORE,
 

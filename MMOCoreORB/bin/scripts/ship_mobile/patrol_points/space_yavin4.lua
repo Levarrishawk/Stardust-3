@@ -795,6 +795,20 @@ space_yavin4 = SpacePatrolPointTable:new {
 	{patrolPointName = "vortex_spy_recovery_path_2", x = 3367, z = -2354, y = 2296},	-- squadron-isolated: VortexSquadronScreenplay.lua:589
 	{patrolPointName = "vortex_spy_recovery_path_3", x = 3282, z = -2008, y = 1786},	-- squadron-isolated: VortexSquadronScreenplay.lua:590
 	{patrolPointName = "vortex_spy_recovery_path_4", x = 3143, z = -1446, y = 956},	-- squadron-isolated: VortexSquadronScreenplay.lua:591
+
+	-- Black Epsilon Squadron mission and duty routes.
+	{patrolPointName = "black_epsilon_t3_1_patrol_1", x = -5200, z = 1200, y = 4200},
+	{patrolPointName = "black_epsilon_t3_1_patrol_2", x = -2100, z = 600, y = 1700},
+	{patrolPointName = "black_epsilon_t3_1_patrol_3", x = 900, z = -100, y = -700},
+	{patrolPointName = "black_epsilon_t3_1_c_capture", x = 5100, z = 1200, y = 2100},
+	{patrolPointName = "black_epsilon_t3_1_c_escape", x = 2800, z = 500, y = 200},
+	{patrolPointName = "black_epsilon_t3_2_capture", x = -4400, z = -700, y = 3300},
+	{patrolPointName = "black_epsilon_t3_2_escape", x = -1800, z = -200, y = 900},
+	{patrolPointName = "black_epsilon_t3_2_b_1", x = -3200, z = -1000, y = 2500},
+	{patrolPointName = "black_epsilon_t3_2_b_2", x = -900, z = 100, y = 300},
+	{patrolPointName = "black_epsilon_t3_2_b_3", x = 2800, z = -600, y = -2200},
+	{patrolPointName = "black_epsilon_t3_3_escape", x = -1800, z = 200, y = -900},
+	{patrolPointName = "black_epsilon_t3_3_emissary", x = 3800, z = 1400, y = 4600},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_yavin4, "space_yavin4")

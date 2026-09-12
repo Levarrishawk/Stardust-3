@@ -123,6 +123,27 @@ function SpaceQuestLogic:failQuest(pPlayer, notifyClient)
 
 end
 
+-- Duty assignments only remain valid while the player stays in the system where
+-- the duty began. Return nil when the normal zone-entry handler should continue.
+function SpaceQuestLogic:endDutyOnZoneExit(pPlayer, zoneNameHash)
+	if (pPlayer == nil) then
+		return 0
+	end
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return 1
+	end
+
+	local dutyStarted = SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)
+
+	if (dutyStarted and zoneNameHash ~= getHashCode(self.questZone)) then
+		self:failQuest(pPlayer, "true")
+		return 1
+	end
+
+	return nil
+end
+
 function SpaceQuestLogic:triggerCompletionSplitQuest(pPlayer)
 	local alertMessage = "@spacequest/" .. self.questType .. "/" .. self.questName .. ":split_quest_alert"
 

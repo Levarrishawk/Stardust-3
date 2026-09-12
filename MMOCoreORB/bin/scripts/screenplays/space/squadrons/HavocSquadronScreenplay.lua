@@ -141,6 +141,7 @@ escort_corellia_rebel_3 = SpaceEscortScreenplay:new {
 	parentQuestName = "corellia_rebel_3",
 
 	escortShips = {"reb_freightermedium_tier1"},
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "havoc_rebel_escort_1", zoneName = "space_corellia", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},

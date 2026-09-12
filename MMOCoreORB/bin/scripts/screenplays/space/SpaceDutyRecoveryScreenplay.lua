@@ -43,6 +43,16 @@ registerScreenPlay("SpaceDutyRecoveryScreenplay", false)
 
 --]]
 
+function SpaceDutyRecoveryScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
+	local dutyExitResult = self:endDutyOnZoneExit(pPlayer, zoneNameHash)
+
+	if (dutyExitResult ~= nil) then
+		return dutyExitResult
+	end
+
+	return SpaceRecoveryScreenplay.enteredZone(self, pPlayer, nill, zoneNameHash)
+end
+
 -- Every recovery duty mission declares a creditReward, but nothing ever paid it:
 -- SpaceRecoveryScreenplay:completeQuest has no reward call, and unlike the non-duty
 -- recovery quests -- which are paid by their squadron conversation handler calling
@@ -60,4 +70,12 @@ function SpaceDutyRecoveryScreenplay:completeQuest(pPlayer, notifyClient)
 	self:rewardPlayer(pPlayer)
 
 	SpaceRecoveryScreenplay.completeQuest(self, pPlayer, notifyClient)
+
+	local pPlayerShip = SceneObject(pPlayer):getRootParent()
+
+	if (SceneObject(pPlayer):getZoneName() == self.questZone and pPlayerShip ~= nil and SceneObject(pPlayerShip):isShipObject() and not SpaceHelpers:isInYacht(pPlayer)) then
+		self:startQuest(pPlayer, "")
+	else
+		SpaceHelpers:failSpaceQuest(pPlayer, self.questType, self.questName, false)
+	end
 end

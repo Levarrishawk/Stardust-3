@@ -501,6 +501,34 @@ space_corellia = SpacePatrolPointTable:new {
 	{patrolPointName = "havoc_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741},	-- squadron-isolated: HavocSquadronScreenplay.lua:121
 	{patrolPointName = "havoc_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222},	-- squadron-isolated: HavocSquadronScreenplay.lua:122
 	{patrolPointName = "havoc_trade_escort_4", x = 895, z = 210, y = 695},	-- squadron-isolated: HavocSquadronScreenplay.lua:191
+
+	-- Black Epsilon Squadron mission and duty routes.
+	{patrolPointName = "black_epsilon_t1_1_patrol_1", x = -5200, z = -900, y = 3900},
+	{patrolPointName = "black_epsilon_t1_1_patrol_2", x = -3100, z = -300, y = 2100},
+	{patrolPointName = "black_epsilon_t1_1_patrol_3", x = -900, z = 500, y = 300},
+	{patrolPointName = "black_epsilon_t1_3_escort_1", x = -5000, z = 900, y = -3100},
+	{patrolPointName = "black_epsilon_t1_3_escort_2", x = -1800, z = 300, y = -900},
+	{patrolPointName = "black_epsilon_t1_3_escort_3", x = 2100, z = -400, y = 1700},
+	{patrolPointName = "black_epsilon_t1_4_prototype_1", x = -4700, z = 1600, y = 4700},
+	{patrolPointName = "black_epsilon_t1_4_prototype_2", x = -1600, z = 900, y = 2200},
+	{patrolPointName = "black_epsilon_t1_4_prototype_3", x = 2100, z = 200, y = -800},
+	{patrolPointName = "black_epsilon_t2_torton_capture", x = -5500, z = 600, y = 3900},
+	{patrolPointName = "black_epsilon_t2_torton_escape", x = -2800, z = 200, y = 1300},
+	{patrolPointName = "black_epsilon_t2_diplomat", x = 3900, z = -1100, y = -4200},
+	{patrolPointName = "black_epsilon_t2_bomber_leader", x = -800, z = 1800, y = -5200},
+	{patrolPointName = "black_epsilon_t2_patrol_1", x = 5100, z = 1000, y = 3900},
+	{patrolPointName = "black_epsilon_t2_patrol_2", x = 2400, z = 300, y = 1300},
+	{patrolPointName = "black_epsilon_t2_patrol_3", x = -300, z = -500, y = -1200},
+	{patrolPointName = "black_epsilon_t2_drone", x = 900, z = 1200, y = 5100},
+	{patrolPointName = "black_epsilon_t1_duty_escort_1", x = -5200, z = 500, y = -3500},
+	{patrolPointName = "black_epsilon_t1_duty_escort_2", x = -900, z = 100, y = -400},
+	{patrolPointName = "black_epsilon_t1_duty_escort_3", x = 3700, z = -500, y = 2900},
+	{patrolPointName = "corellia_imperial_9_route_1", x = -4800, z = 800, y = 3800},
+	{patrolPointName = "corellia_imperial_9_route_2", x = -1000, z = 100, y = 500},
+	{patrolPointName = "corellia_imperial_9_route_3", x = 3500, z = -700, y = -3100},
+	{patrolPointName = "corellia_imperial_11_route_1", x = -4800, z = 800, y = 3800},
+	{patrolPointName = "corellia_imperial_11_route_2", x = -1000, z = 100, y = 500},
+	{patrolPointName = "corellia_imperial_11_route_3", x = 3500, z = -700, y = -3100},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_corellia, "space_corellia")

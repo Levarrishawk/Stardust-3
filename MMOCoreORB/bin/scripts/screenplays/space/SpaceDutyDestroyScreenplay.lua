@@ -597,12 +597,10 @@ end
 --]]
 
 function SpaceDutyDestroyScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
-	if (pPlayer == nil) then
-		return 0
-	end
+	local dutyExitResult = self:endDutyOnZoneExit(pPlayer, zoneNameHash)
 
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
-		return 1
+	if (dutyExitResult ~= nil) then
+		return dutyExitResult
 	end
 
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
@@ -637,8 +635,6 @@ function SpaceDutyDestroyScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 
 		-- Find a target location
 		createEvent(2000, self.className, "getTargetLocation", pPlayer, "true")
-	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
-		createEvent(2000, self.className, "failQuest", pPlayer, "true")
 	end
 
 	return 0

@@ -42,6 +42,7 @@ SpaceRescueScreenplay = SpaceQuestLogic:new {
 	escortAttackShips = {
 		-- {{count = 1, shipName = "aynat_vaporizer_tier3"}},
 	},
+	escortAttackAlliedFactions = {},
 
 	tauntData = {
 		panicCount = 5,
@@ -755,6 +756,13 @@ function SpaceRescueScreenplay:spawnEscortAttackers(pPlayer)
 
 				if (pAttacker ~= nil) then
 					ShipAiAgent(pAttacker):setMissionOwner(pPlayer)
+
+					for factionIndex = 1, #self.escortAttackAlliedFactions do
+						local factionHash = getHashCode(self.escortAttackAlliedFactions[factionIndex])
+						ShipAiAgent(pAttacker):addSpaceFactionAlly(factionHash)
+						ShipAiAgent(pAttacker):removeSpaceFactionEnemy(factionHash)
+					end
+
 					ShipAiAgent(pAttacker):setMinimumGuardPatrol(100)
 					ShipAiAgent(pAttacker):setMaximumGuardPatrol(500)
 					ShipAiAgent(pAttacker):setGuardPatrol()

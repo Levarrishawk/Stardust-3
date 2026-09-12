@@ -1442,7 +1442,7 @@ registerScreenPlay("space_battle_naboo_imperial_tier4_4_d", true)
 escort_duty_naboo_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	className = "escort_duty_naboo_imperial_tier4_1",
 
-	questName = "naboo_imperial_tier4_1",
+	questName = "naboo_imperial_tier4_2",
 	questType = "escort_duty",
 
 	questZone = "space_dathomir",
@@ -1458,32 +1458,32 @@ escort_duty_naboo_imperial_tier4_1 = SpaceDutyEscortScreenplay:new {
 	escortShips = {"imp_freighterheavy_tier4", "imp_freighterlight_tier4", "imp_freightermedium_tier4"},
 
 	escortPoints = {
-		{patrolPointName = "naboo_imperial_tier4_escort1_1", zoneName = "space_dathomir", x = 3787, z = -6425, y = 49, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_escort1_2", zoneName = "space_dathomir", x = 3065, z = -5248, y = 1760, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_escort1_3", zoneName = "space_dathomir", x = 2200, z = -4231, y = 2864, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_escort1_4", zoneName = "space_dathomir", x = 1502, z = -3172, y = 4240, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escortduty1_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escortduty1_2", zoneName = "space_dathomir", escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escortduty1_3", zoneName = "space_dathomir", escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_escortduty1_4", zoneName = "space_dathomir", escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 50,
 
 	attackShips = {
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4", "blacksun_marauder_tier4"},
-		{"blacksun_fighter_s02_tier4", "blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
-		{"blacksun_fighter_s01_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4"},
-		{"blacksun_fighter_s03_tier4", "blacksun_bomber_s03_tier4", "blacksun_vehement_tier4", "blacksun_gunship_tier4"},
+		{"coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4", "coynite_merc_neutron_tier4"},
+		{"coynite_merc_pulsar_tier4", "coynite_merc_neutron_tier4", "coynite_merc_quasar_tier4"},
+		{"coynite_merc_neutron_tier4", "coynite_merc_quasar_tier4", "coynite_merc_quasar_tier4"},
+		{"coynite_merc_quasar_tier4", "coynite_merc_quasar_tier4", "coynite_merc_captain_tier4"},
 	},
 }
 
 registerScreenPlay("escort_duty_naboo_imperial_tier4_1", true)
 
--- Rescue Duty (Space Dantooine - rescue disabled Imperial ships after pirate attacks)
+-- Rescue Duty (Space Dathomir - rescue disabled Imperial ships after Rebel attacks)
 rescue_duty_naboo_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	className = "rescue_duty_naboo_imperial_tier4_1",
 
-	questName = "naboo_imperial_tier4_1",
+	questName = "naboo_imperial_tier4_4",
 	questType = "rescue_duty",
 
-	questZone = "space_dantooine",
+	questZone = "space_dathomir",
 
 	creditReward = 5000,
 	creditKillBonus = 300,
@@ -1496,32 +1496,31 @@ rescue_duty_naboo_imperial_tier4_1 = SpaceDutyRescueScreenplay:new {
 	targetArrivalDelay = 3,
 
 	recoveryPoints = {
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_1", zoneName = "space_dantooine", x = -471, z = -1739, y = 1798, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_2", zoneName = "space_dantooine", x = 294, z = 509, y = 3594, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_3", zoneName = "space_dantooine", x = 1562, z = 97, y = 5577, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_4", zoneName = "space_dantooine", x = 2910, z = -386, y = 7314, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_rescue_duty_5", zoneName = "space_dantooine", x = -6362, z = -477, y = 3393, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_rescueduty1_1", zoneName = "space_dathomir", radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_rescueduty1_2", zoneName = "space_dathomir", radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_rescueduty1_3", zoneName = "space_dathomir", radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_rescueduty1_4", zoneName = "space_dathomir", radius = 250},
 	},
 
 	attackDelay = 60,
 
 	attackShips = {
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4"},
-		{"blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
-		{"blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_vehement_tier4"},
+		{"reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"},
+		{"reb_xwing_tier4", "reb_ywing_tier4", "reb_awing_tier4"},
+		{"reb_xwing_tier4", "reb_ywing_tier4", "reb_bwing_tier4"},
 	},
 }
 
 registerScreenPlay("rescue_duty_naboo_imperial_tier4_1", true)
 
--- Recovery Duty (Space Endor - Nym pirates infiltrate Imperial troop transports)
+-- Recovery Duty (Space Dathomir - capture rogue Imperial vessels)
 recovery_duty_naboo_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	className = "recovery_duty_naboo_imperial_tier4_1",
 
-	questName = "naboo_imperial_tier4_1",
+	questName = "naboo_imperial_tier4_3",
 	questType = "recovery_duty",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
 	creditReward = 5000,
 	creditKillBonus = 300,
@@ -1529,48 +1528,46 @@ recovery_duty_naboo_imperial_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	recoverShip = "lambdashuttle_troop_transport_ace",
+	recoverShip = "rogue_imperial_shuttle_tier4",
 	targetArrivalDelay = 10,
 	recoveryDelay = 30,
 
-	recoveryFaction = "nym",
-	recoveryConversationMobile = "object/mobile/dressed_nym_brawler_tran_m.iff",
+	recoveryFaction = "imperial",
+	recoveryConversationMobile = "object/mobile/dressed_imperial_officer_m.iff",
 
-	escortShips = {"blacksun_fighter_s02_tier4"},
+	escortShips = {"rogue_imperial_tiebomber_tier4"},
 
 	preRecoveryPoints = {
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_1", zoneName = "space_endor", x = -778, z = 1426, y = -905, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_2", zoneName = "space_endor", x = -1454, z = 3074, y = -1580, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_3", zoneName = "space_endor", x = -2232, z = 4616, y = -2283, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_4", zoneName = "space_endor", x = -2849, z = 6172, y = -2900, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recoveryduty1_1", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recoveryduty1_2", zoneName = "space_dathomir", escortNumber = 2, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_5", zoneName = "space_endor", x = 70, z = 3633, y = -2133, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_6", zoneName = "space_endor", x = 2045, z = 4717, y = -3428, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_7", zoneName = "space_endor", x = 3980, z = 5779, y = -4704, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_imperial_tier4_1_recovery_duty_8", zoneName = "space_endor", x = 6111, z = 7006, y = -6049, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recoveryduty1_4", zoneName = "space_dathomir", escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recoveryduty1_5", zoneName = "space_dathomir", escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recoveryduty1_6", zoneName = "space_dathomir", escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_imperial_tier4_recoveryduty1_7", zoneName = "space_dathomir", escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 45,
 
 	attackShips = {
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_bomber_s01_tier4", "blacksun_marauder_tier4"},
-		{"blacksun_fighter_s02_tier4", "blacksun_fighter_s03_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
-		{"blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4"},
+		{"reb_xwing_tier4", "reb_ywing_tier4", "reb_z95_tier4"},
+		{"reb_xwing_tier4", "reb_ywing_tier4", "reb_awing_tier4"},
+		{"reb_xwing_tier4", "reb_ywing_tier4", "reb_bwing_tier4"},
 	},
 }
 
 registerScreenPlay("recovery_duty_naboo_imperial_tier4_1", true)
 
--- Destroy Duty (Space Dantooine - suppress Black Sun raiding forces)
+-- Destroy Duty (Space Dathomir - suppress Coynite forces)
 destroy_duty_naboo_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_naboo_imperial_tier4_1",
 
 	questName = "naboo_imperial_tier4_1",
 	questType = "destroy_duty",
 
-	questZone = "space_dantooine",
+	questZone = "space_dathomir",
 
 	creditReward = 300,
 
@@ -1584,13 +1581,13 @@ destroy_duty_naboo_imperial_tier4_1 = SpaceDutyDestroyScreenplay:new {
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "blacksun_marauder_tier4",
+	bossShip = "coynite_merc_captain_tier4",
 	shipTypes = {
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4"},
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4"},
-		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4"},
-		{"blacksun_fighter_s01_tier4"},
-		{"blacksun_vehement_tier4"},
+		{"coynite_merc_pulsar_tier4", "coynite_merc_pulsar_tier4"},
+		{"coynite_merc_pulsar_tier4", "coynite_merc_neutron_tier4"},
+		{"coynite_merc_neutron_tier4", "coynite_merc_neutron_tier4"},
+		{"coynite_merc_quasar_tier4"},
+		{"coynite_merc_captain_tier4"},
 	},
 }
 
@@ -1664,9 +1661,9 @@ InquisitionSquadronScreenplay = ScreenPlay:new {
 	TIER4_QUEST_STRING_4_SIDE4 = {type = "space_battle", name = "naboo_imperial_tier4_4_d"},
 	TIER4_QUEST_STRING_MASTER = {type = "destroy", name = "master_imperial_1"},
 	TIER4_QUEST_STRING_MASTER_2 = {type = "destroy", name = "master_imperial_2"},
-	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "naboo_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "naboo_imperial_tier4_1"},
-	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "naboo_imperial_tier4_1"},
+	TIER4_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "naboo_imperial_tier4_2"},
+	TIER4_QUEST_STRING_DUTY_2 = {type = "rescue_duty", name = "naboo_imperial_tier4_4"},
+	TIER4_QUEST_STRING_DUTY_3 = {type = "recovery_duty", name = "naboo_imperial_tier4_3"},
 	TIER4_QUEST_STRING_DUTY_4 = {type = "destroy_duty", name = "naboo_imperial_tier4_1"},
 }
 

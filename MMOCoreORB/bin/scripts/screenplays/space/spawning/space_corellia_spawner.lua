@@ -6,6 +6,17 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 	spaceZone = "space_corellia",
 
 	shipSpawns = {
+		-- Keep Havoc Squadron's introductory TIE hunt populated so new pilots can
+		-- find qualifying targets immediately at each mission waypoint.
+		{spawnName = "havoc_rebel_2_tie_patrol_1", spawnType = SHIP_SPAWN_SINGLE, x = 590, z = -3500, y = -6000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 25, maxSpawnDistance = 75, minPatrol = 75, maxPatrol = 150, totalSpawns = 3,
+			shipSpawns = {"imp_tie_fighter_tier1"}
+		},
+		{spawnName = "havoc_rebel_2_tie_patrol_2", spawnType = SHIP_SPAWN_SINGLE, x = -2500, z = 4000, y = 3500, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 25, maxSpawnDistance = 75, minPatrol = 75, maxPatrol = 150, totalSpawns = 3,
+			shipSpawns = {"imp_tie_fighter_tier1"}
+		},
+		{spawnName = "havoc_rebel_2_tie_patrol_3", spawnType = SHIP_SPAWN_SINGLE, x = -3800, z = 2500, y = 5000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 30, maxRespawn = 60, minSpawnDistance = 25, maxSpawnDistance = 75, minPatrol = 75, maxPatrol = 150, totalSpawns = 3,
+			shipSpawns = {"imp_tie_fighter_tier1"}
+		},
 		{spawnName = "binyare_fighter_eight_spawner", spawnType = SHIP_SPAWN_SINGLE, x = 6562, z = -6987, y = 6527, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, totalSpawns = 3,
 			patrolsToAssign = 5, fixedPatrolPoints = {"binyare_fighter_eight_spawner_00", "binyare_fighter_eight_spawner_01", "binyare_fighter_eight_spawner_02", "binyare_fighter_eight_spawner_03", "binyare_fighter_eight_spawner_04", "binyare_fighter_eight_spawner_05", "binyare_fighter_eight_spawner_06", "binyare_fighter_eight_spawner_07", "binyare_fighter_eight_spawner_08", "binyare_fighter_eight_spawner_09", "binyare_fighter_eight_spawner_10", "binyare_fighter_eight_spawner_11", "binyare_fighter_eight_spawner_12", "binyare_fighter_eight_spawner_13", "binyare_fighter_eight_spawner_14"},
 			shipSpawns = {"binyare_raider_average", "binyare_raider_average", "binyare_raider_average", "binyare_raider_average"}

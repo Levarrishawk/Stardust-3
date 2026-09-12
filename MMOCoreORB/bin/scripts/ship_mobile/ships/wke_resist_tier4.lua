@@ -1,5 +1,5 @@
 wke_resist_tier4 = ShipAgent:new {
-	template = "bwing_tier4",
+	template = "arc170_tier4",
 	pilotTemplate = "bomber_tier4",
 	shipType = "fighter",
 

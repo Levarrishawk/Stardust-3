@@ -187,9 +187,9 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		end
 	end
 
-	-- Player has been introduced but hasn't started quest 1 yet - show duty missions
+	-- Player has completed Viopa's introductory duty briefing and is ready for mission 1
 	if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":introduced") == "1") then
-		return convoTemplate:getScreen("duty_missions")
+		return convoTemplate:getScreen("start_mission1")
 	end
 
 	-- New pilot to Viopa

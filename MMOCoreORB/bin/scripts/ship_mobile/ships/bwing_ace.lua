@@ -1,5 +1,5 @@
 bwing_ace = ShipAgent:new {
-	template = "bwing_tier1",
+	template = "arc170_tier1",
 	pilotTemplate = "bomber_tier1",
 	shipType = "bomber",
 

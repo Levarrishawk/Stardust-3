@@ -16,6 +16,16 @@ registerScreenPlay("SpaceDutyRescueScreenplay", false)
 
 --]]
 
+function SpaceDutyRescueScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
+	local dutyExitResult = self:endDutyOnZoneExit(pPlayer, zoneNameHash)
+
+	if (dutyExitResult ~= nil) then
+		return dutyExitResult
+	end
+
+	return SpaceRescueScreenplay.enteredZone(self, pPlayer, nill, zoneNameHash)
+end
+
 -- Same gap as SpaceDutyRecoveryScreenplay: rescue duty missions declare a
 -- creditReward that nothing ever paid, because SpaceRescueScreenplay:completeQuest
 -- has no reward call and duty missions have no turn-in conversation to pay from.
@@ -29,4 +39,12 @@ function SpaceDutyRescueScreenplay:completeQuest(pPlayer, notifyClient)
 	self:rewardPlayer(pPlayer)
 
 	SpaceRescueScreenplay.completeQuest(self, pPlayer, notifyClient)
+
+	local pPlayerShip = SceneObject(pPlayer):getRootParent()
+
+	if (SceneObject(pPlayer):getZoneName() == self.questZone and pPlayerShip ~= nil and SceneObject(pPlayerShip):isShipObject() and not SpaceHelpers:isInYacht(pPlayer)) then
+		self:startQuest(pPlayer, "")
+	else
+		SpaceHelpers:failSpaceQuest(pPlayer, self.questType, self.questName, false)
+	end
 end

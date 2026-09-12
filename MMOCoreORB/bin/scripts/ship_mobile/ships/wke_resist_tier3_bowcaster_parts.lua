@@ -48,7 +48,7 @@
 ]]
 
 wke_resist_tier3_bowcaster_parts = ShipAgent:new {
-	template = "bwing_tier3",
+	template = "arc170_tier3",
 	pilotTemplate = "bomber_tier3",
 	shipType = "fighter",
 

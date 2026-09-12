@@ -73,6 +73,9 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local destroyDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.QUEST_STRING_DUTY_1.type, HavocSquadronScreenplay.QUEST_STRING_DUTY_1.name)
 	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.QUEST_STRING_DUTY_2.type, HavocSquadronScreenplay.QUEST_STRING_DUTY_2.name)
 
+	local tier1SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 1)
+	local requiredTier1Skills = questFourComplete and 4 or questThreeComplete and 3 or questTwoComplete and 2 or questOneComplete and 1 or 0
+
 	-- Player is a Rebel Pilot but a different squadron
 	if (isRebelPilot and not SpaceHelpers:isHavocSquadron(pPlayer)) then
 		return convoTemplate:getScreen("non_havoc_pilot")
@@ -225,23 +228,12 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player has already finished and been sent to Viopa
 	elseif (getQuestStatus(playerID .. "HavocSquadronScreenplay:kreezo_finished") == "1") then
 		return convoTemplate:getScreen("go_to_viopa")
-	-- Check if players have all the tier1 skill boxes, send them to next trainer.
-	elseif (SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 1)) then
+	-- Send players onward only after all four missions and all four tier 1 skills are complete.
+	elseif (questFourComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_4.name .. ":reward") == "1" and SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 1)) then
 		return convoTemplate:getScreen("completed_kreezo")
 	-- Player is not a member of the Rebel Faction
 	elseif (faction ~= FACTIONREBEL) then
 		return convoTemplate:getScreen("recruitment_not_rebel")
-	-- Player is a Havoc pilot and has at least one of the Tier1 skill boxes
-	elseif (SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 1)) then
-		-- Check if the player can be trained in the remaining Tier1 Skills
-		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
-			return convoTemplate:getScreen("more_training")
-		-- Offer Duty missions
-		else
-			CreatureObject(pPlayer):doAnimation("salute1")
-
-			return convoTemplate:getScreen("duty_missions")
-		end
 	-- Player has completed quest 4 and needs reward
 	elseif (questFourComplete) then
 		if (getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_4.name .. ":reward") ~= "1") then
@@ -253,24 +245,19 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 			-- Grant Faction Standing
 			ghost:increaseFactionStanding("rebel", 75)
+			return convoTemplate:getScreen("missions_complete")
 		end
 
-		return convoTemplate:getScreen("missions_complete")
-	-- Player has attempted quest 4 but failed/aborted
-	elseif (getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_4.name .. ":attempted") == "1" and not questFourComplete) then
-		return convoTemplate:getScreen("failed_quest4")
-	-- Player has finished 3, has received the reward and needs to start quest 4
-	elseif (questThreeComplete and not questFourStarted and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_3.name .. ":reward") == "1") then
-		return convoTemplate:getScreen("grant_quest4")
+		if (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
+			return convoTemplate:getScreen("more_training")
+		end
+
+		CreatureObject(pPlayer):doAnimation("salute1")
+
+		return convoTemplate:getScreen("duty_missions")
 	-- Player has completed quest 3 and needs reward (reward given in runScreenHandlers when they respond)
 	elseif (questThreeComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_3.name .. ":reward") ~= "1") then
 		return convoTemplate:getScreen("excellent_work3")
-	-- Player has attempted quest 3 but failed/aborted
-	elseif (getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_3.name .. ":attempted") == "1" and not questThreeComplete) then
-		return convoTemplate:getScreen("failed_quest3")
-	-- Player has finished 2, has received the reward and needs to start quest 3
-	elseif (questTwoComplete and not questThreeStarted and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_2.name .. ":reward") == "1") then
-		return convoTemplate:getScreen("excellent_work2")
 	-- Player has completed quest 2 and needs reward
 	elseif (questTwoComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_2.name .. ":reward") ~= "1") then
 		-- Give player the reward and update that they received it
@@ -283,15 +270,30 @@ function kreezoConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		ghost:increaseFactionStanding("rebel", 50)
 
 		return convoTemplate:getScreen("excellent_work2")
+	-- Player has finished quest 1 and needs to report to Kreezo
+	elseif (questOneComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_1.name .. ":reward") ~= "1") then
+		return convoTemplate:getScreen("excellent_work")
+	-- Offer each skill earned through the completed story missions whenever the player has enough XP
+	elseif (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
+		return convoTemplate:getScreen("more_training")
+	-- Player has attempted quest 4 but failed/aborted
+	elseif (getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_4.name .. ":attempted") == "1" and not questFourComplete) then
+		return convoTemplate:getScreen("failed_quest4")
+	-- Player has finished 3, has received the reward and needs to start quest 4
+	elseif (questThreeComplete and not questFourStarted and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_3.name .. ":reward") == "1") then
+		return convoTemplate:getScreen("grant_quest4")
+	-- Player has attempted quest 3 but failed/aborted
+	elseif (getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_3.name .. ":attempted") == "1" and not questThreeComplete) then
+		return convoTemplate:getScreen("failed_quest3")
+	-- Player has finished 2, has received the reward and needs to start quest 3
+	elseif (questTwoComplete and not questThreeStarted and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_2.name .. ":reward") == "1") then
+		return convoTemplate:getScreen("excellent_work2")
 	-- Player has attempted quest 2 but failed/aborted
 	elseif (getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_2.name .. ":attempted") == "1" and not questTwoComplete) then
 		return convoTemplate:getScreen("failed_quest2")
 	-- Player has finished quest 1, received reward, needs to start quest 2
 	elseif (questOneComplete and not questTwoStarted and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_1.name .. ":reward") == "1") then
 		return convoTemplate:getScreen("grant_quest2")
-	-- Player has finished quest 1 and needs to report to Kreezo
-	elseif (questOneComplete and getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_1.name .. ":reward") ~= "1") then
-		return convoTemplate:getScreen("excellent_work")
 	-- Player has attempted quest 1 but failed/aborted
 	elseif (getQuestStatus(playerID .. HavocSquadronScreenplay.QUEST_STRING_1.name .. ":attempted") == "1" and not questOneComplete) then
 		return convoTemplate:getScreen("failed_quest1")
@@ -329,35 +331,30 @@ function kreezoConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		return pClonedScreen
 	end
 
-	-- Handle first free training after completing all 4 missions (player chooses which skill)
-	if (screenID == "missions_complete") then
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01")) then
-			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_26970ef", "train_player_fighters_free") -- I am interested in basic starfighter training.
-		end
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01")) then
-			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_3fa70900", "train_player_component_free") -- I am interested in basic starship component use.
-		end
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01")) then
-			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_8c272224", "train_player_basics_free") -- I am interested in starfighter survival tactics.
-		end
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01")) then
-			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_9480f430", "train_player_droid_free") -- I am interested in droid interface basics.
-		end
-	-- Handle additional training (requires XP)
-	elseif (screenID == "more_training") then
+	-- Handle training after mission rewards (requires XP)
+	if (screenID == "missions_complete" or screenID == "more_training") then
 		local skillManager = LuaSkillManager()
+		local hasTrainingOption = false
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_01")) then
 			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_26970ef", "train_player_fighters") -- I am interested in basic starfighter training.
+			hasTrainingOption = true
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_01")) then
 			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_3fa70900", "train_player_component") -- I am interested in basic starship component use.
+			hasTrainingOption = true
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_01")) then
 			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_8c272224", "train_player_basics") -- I am interested in starfighter survival tactics.
+			hasTrainingOption = true
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_01")) then
 			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_9480f430", "train_player_droid") -- I am interested in droid interface basics.
+			hasTrainingOption = true
+		end
+
+		if (screenID == "missions_complete" and not hasTrainingOption) then
+			clonedConversation:addOption("@conversation/corellia_rebel_trainer_1:s_b4be0022", "request_duty") -- Things'd be better if I had a mission.
 		end
 	-- Handle Skill box granting
 	elseif (string.find(screenID, "train_player_")) then

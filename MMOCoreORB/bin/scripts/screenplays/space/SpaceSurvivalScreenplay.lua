@@ -22,6 +22,7 @@ SpaceSurvivalScreenplay = SpaceQuestLogic:new {
 	survivalPoint = "",
 	survivalAreaRadius = 400,
 	survivalMaxDistance = 0, -- 0 disables defending-distance checks
+	retainWaypointDuringSurvival = false,
 
 	survivalTime = 600, -- In Seconds, 0 runs the quest on survivalWaves instead
 	survivalWaves = 0, -- Number of waves that must be survived, 0 runs the quest on survivalTime
@@ -690,7 +691,9 @@ function SpaceSurvivalScreenplay:notifyEnteredQuestArea(pActiveArea, pShip)
 		print(self.className .. ":notifyEnteredQuestArea -- Player Ship: " .. SceneObject(pShip):getDisplayedName())
 	end
 
-	SpaceHelpers:clearQuestWaypoint(pPilot, self.className)
+	if (not self.retainWaypointDuringSurvival) then
+		SpaceHelpers:clearQuestWaypoint(pPilot, self.className)
+	end
 
 	createEvent(1000, self.className, "startSurvival", pPilot, "")
 

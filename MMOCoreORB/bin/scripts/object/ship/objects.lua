@@ -41,6 +41,42 @@
 --which carries forward this exception.
 
 
+object_ship_shared_arc170 = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_arc170.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_ship_shared_arc170, "object/ship/shared_arc170.iff")
+
+object_ship_shared_arc170_tier1 = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_arc170_tier1.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_ship_shared_arc170_tier1, "object/ship/shared_arc170_tier1.iff")
+
+object_ship_shared_arc170_tier2 = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_arc170_tier2.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_ship_shared_arc170_tier2, "object/ship/shared_arc170_tier2.iff")
+
+object_ship_shared_arc170_tier3 = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_arc170_tier3.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_ship_shared_arc170_tier3, "object/ship/shared_arc170_tier3.iff")
+
+object_ship_shared_arc170_tier4 = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_arc170_tier4.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_ship_shared_arc170_tier4, "object/ship/shared_arc170_tier4.iff")
+
+object_ship_shared_arc170_tier5 = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_arc170_tier5.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_ship_shared_arc170_tier5, "object/ship/shared_arc170_tier5.iff")
+
 object_ship_shared_assaultship = SharedShipObjectTemplate:new {
 	clientTemplateFileName = "object/ship/shared_assaultship.iff"
 	--Data below here is deprecated and loaded from the tres, keeping for easy lookups

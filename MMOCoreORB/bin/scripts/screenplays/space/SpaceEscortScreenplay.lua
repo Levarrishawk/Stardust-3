@@ -498,15 +498,15 @@ function SpaceEscortScreenplay:updateEscortWaypoint(pShipAgent)
 		return
 	end
 
-	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
-		return
-	end
-
 	local agentID = SceneObject(pShipAgent):getObjectID()
 	local playerID = readData(agentID .. ":" .. self.className .. ":escorterID:")
 	local pPlayer = getSceneObject(playerID)
 
 	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+		return
+	end
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
 		return
 	end
 

@@ -1,6 +1,12 @@
 -- {chassisTypeName, chassisDataName, chassisTemplatePath},
 
 chassisData = {
+	{"arc170", "player_arc170", "object/ship/arc170.iff"},
+	{"arc170_tier1", "player_arc170", "object/ship/arc170_tier1.iff"},
+	{"arc170_tier2", "player_arc170", "object/ship/arc170_tier2.iff"},
+	{"arc170_tier3", "player_arc170", "object/ship/arc170_tier3.iff"},
+	{"arc170_tier4", "player_arc170", "object/ship/arc170_tier4.iff"},
+	{"arc170_tier5", "player_arc170", "object/ship/arc170_tier5.iff"},
 	{"assaultship", "assaultship", "object/ship/assaultship.iff"},
 	{"awing", "awing", "object/ship/awing.iff"},
 	{"awing_tier1", "awing_tier1", "object/ship/awing_tier1.iff"},

@@ -213,10 +213,10 @@ hakassha_sireen_convo_retry_quest1 = ConvoScreen:new {
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_retry_quest1)
 
---[[ Tier 1 -- Mission 2: Destroy the B-Wing prototype (handler starts destroy_corellia_imperial_2 on "quest2_accepted") ]]
+--[[ Tier 1 -- Mission 2: Destroy the Rebel cadets (handler starts destroy_corellia_imperial_2 on "quest2_accepted") ]]
 hakassha_sireen_convo_grant_quest2 = ConvoScreen:new {
 	id = "grant_quest2",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_fbd7d1ba", -- I think you'll like this mission, hon. You get to test your mettle against some new Rebel technology. Real cutting edge stuff, too.
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_11c38900", -- I have discovered that the Rebels are training X-Wing cadets in Corellian space. Destroying the cadets will cripple that effort.
 	stopConversation = "false",
 	options = {
 		{"@conversation/corellia_imperial_trainer_1:s_96682689", "quest2_accepted"}, -- Tell me about the job.
@@ -226,21 +226,18 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_grant_quest2)
 
 hakassha_sireen_convo_quest2_accepted = ConvoScreen:new {
 	id = "quest2_accepted",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_540bd789", -- Apparently the Rebels are testing a new prototype starfighter called the B-Wing. It's a heavy assault fighter, loaded with weapons and layered in armor. B-Wing prototypes have been spotted in the Corellian system. We want you to find one and destroy it.
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_a074ac18", -- The trainees should not be a match for you, but their instructors might. Hunt them down in the Corellian system.
 	stopConversation = "true",
 	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_quest2_accepted)
 
--- Quest 2 rewarded; leads into Mission 3 (the escort). The handler starts quest 3 on "train_me3".
+-- Quest 2 rewarded. The next conversation offers training or duty before Mission 3.
 hakassha_sireen_convo_excellent_work2 = ConvoScreen:new {
 	id = "excellent_work2",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_83dc5be7", -- Here is your pay for the B-Wing mission. I've also gotten a hold of a TIE pilot helmet. It looks pretty menacing, should make you feel more the part for these operations.
-	stopConversation = "false",
-	options = {
-		{"@conversation/corellia_imperial_trainer_1:s_7a80cd06", "train_me3"}, -- I'm ready for the next step in the operation.
-		{"@conversation/corellia_imperial_trainer_1:s_192ddc14", "train_me3"}, -- Are you going to train me?
-	}
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_1345d43f", -- Excellent work. Here is your payment for a successful operation.
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_excellent_work2)
 
@@ -255,7 +252,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_train_me3)
 
 hakassha_sireen_convo_failed_quest2 = ConvoScreen:new {
 	id = "failed_quest2",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_3ac44381", -- Failure at this point is only going to encourage the Rebels to invest further in experimental ship designs. You need to get back up there and bag a B-Wing. Show the Rebels that technology isn't going to be their salvation.
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_da237511", -- I take my job seriously, babe. Get back out there and do it right this time.
 	stopConversation = "false",
 	options = {
 		{"@conversation/corellia_imperial_trainer_1:s_1adbadc4", "retry_quest2"}, -- I'm ready.
@@ -266,7 +263,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_quest2)
 -- Quest 2 retry acknowledged (handler restarts destroy_corellia_imperial_2)
 hakassha_sireen_convo_retry_quest2 = ConvoScreen:new {
 	id = "retry_quest2",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_5dd3c672", -- Report back to me when you've taken out the prototype ship. Good luck, hon.
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_a074ac18", -- Hunt down the trainees and their instructors in the Corellian system.
 	stopConversation = "true",
 	options = {}
 }
@@ -311,10 +308,10 @@ hakassha_sireen_convo_retry_quest3 = ConvoScreen:new {
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_retry_quest3)
 
---[[ Tier 1 -- Mission 4: Destroy the Rebel X-Wing trainees (handler starts assassinate_corellia_imperial_4 on "quest4_accepted") ]]
+--[[ Tier 1 -- Mission 4: Destroy the ARC-170 prototype (handler starts assassinate_corellia_imperial_4 on "quest4_accepted") ]]
 hakassha_sireen_convo_grant_quest4 = ConvoScreen:new {
 	id = "grant_quest4",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_6942389e", -- And you've earned it!  I'll make a deal with you, %NU.  Do just one more assignment for me, and I'll train you to be a better starfighter pilot.  Are you up for a challenge?
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_fbd7d1ba", -- Test your mettle against some heavily modified Insurgent technology.
 	stopConversation = "false",
 	options = {
 		{"@conversation/corellia_imperial_trainer_1:s_86c66182", "quest4_accepted"}, -- What's the next step?
@@ -324,7 +321,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_grant_quest4)
 
 hakassha_sireen_convo_quest4_accepted = ConvoScreen:new {
 	id = "quest4_accepted",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_11c38900", -- I have discovered that the Rebels are training X-Wing cadets in Corellian space. The Rebels are quickly working to recruit new pilots to their cause. Destroying the cadets will cripple that effort. Corellian citizens will think twice about signing up if the Rebels can't even protect their young and inexperienced.
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_540bd789", -- The Insurgents are testing a heavily armed and armored ARC-170 prototype in the Corellian system. Find it and destroy it.
 	stopConversation = "true",
 	options = {}
 }
@@ -332,7 +329,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_quest4_accepted)
 
 hakassha_sireen_convo_failed_quest4 = ConvoScreen:new {
 	id = "failed_quest4",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_da237511", -- I take my job seriously, babe. Get back out there and do it right this time.
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_3ac44381", -- Failure will encourage more investment in experimental ships. Get back up there and bag the ARC-170.
 	stopConversation = "false",
 	options = {
 		{"@conversation/corellia_imperial_trainer_1:s_1adbadc4", "retry_quest4"}, -- I'm ready.
@@ -343,7 +340,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_quest4)
 -- Quest 4 retry acknowledged (handler restarts assassinate_corellia_imperial_4)
 hakassha_sireen_convo_retry_quest4 = ConvoScreen:new {
 	id = "retry_quest4",
-	leftDialog = "@conversation/corellia_imperial_trainer_1:s_a074ac18", -- The trainees shouldn't be a match for you, but their instructors might. You are going to have to hunt them down in the Corellian system. Intelligence has not yet been able to locate their training grounds but there are reports of a Rebel station somewhere in the system. Might be a good start. Be on guard and don't worry if one escapes and reports you. The Empire is fully justified in destroying terrorist training grounds found within its jurisdiction.
+	leftDialog = "@conversation/corellia_imperial_trainer_1:s_5dd3c672", -- Report back when you have destroyed the prototype ship.
 	stopConversation = "true",
 	options = {}
 }
@@ -542,7 +539,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_go_to_next)
 -- Tier 2 - Active Mission
 hakassha_sireen_convo_tier2_on_mission = ConvoScreen:new {
 	id = "tier2_on_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_a59c7bd7",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_ae8492d2",
 	stopConversation = "true",
 	options = {}
 }
@@ -551,10 +548,10 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_on_mission)
 -- Tier 2 - Initial Briefing
 hakassha_sireen_convo_tier2_initial_briefing = ConvoScreen:new {
 	id = "tier2_initial_briefing",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_41786376",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_74f9775d",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_fa3398f3", "tier2_first_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_9edd30bf", "tier2_first_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_initial_briefing)
@@ -562,28 +559,28 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_initial_briefing)
 -- Tier 2 - Mission 1
 hakassha_sireen_convo_tier2_first_mission = ConvoScreen:new {
 	id = "tier2_first_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_199bd27f",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_2ee19e18",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_f1be3213", "tier2_first_mission_details"},
-		{"@conversation/naboo_imperial_trainer_2:s_91223b5c", "accept_tier2_first_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_e7f16de3", "tier2_first_mission_details"},
+		{"@conversation/corellia_imperial_trainer_2:s_8bf01045", "accept_tier2_first_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_first_mission)
 
 hakassha_sireen_convo_tier2_first_mission_details = ConvoScreen:new {
 	id = "tier2_first_mission_details",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_d2fa677d",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_683cbf70",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_91223b5c", "accept_tier2_first_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_8bf01045", "accept_tier2_first_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_first_mission_details)
 
 hakassha_sireen_convo_accept_tier2_first_mission = ConvoScreen:new {
 	id = "accept_tier2_first_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_aceff31e",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_52841755",
 	stopConversation = "true",
 	options = {}
 }
@@ -591,7 +588,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_first_mission
 
 hakassha_sireen_convo_failed_tier2_first_mission = ConvoScreen:new {
 	id = "failed_tier2_first_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_825fac62",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_5bfd4371", -- Capture that Hidden Dagger freighter.
 	stopConversation = "true",
 	options = {}
 }
@@ -599,28 +596,26 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier2_first_mission
 
 hakassha_sireen_convo_tier2_first_mission_success = ConvoScreen:new {
 	id = "tier2_first_mission_success",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_ad754",
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_daf7bb7d", "tier2_second_mission"},
-	}
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_392fc531",
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_first_mission_success)
 
 -- Tier 2 - Mission 2
 hakassha_sireen_convo_tier2_second_mission = ConvoScreen:new {
 	id = "tier2_second_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_b8791e16",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_9a117462", -- I have an assignment for you and it cannot wait.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_e6765c30", "accept_tier2_second_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_6d3be6aa", "accept_tier2_second_mission"}, -- What is the task?
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_second_mission)
 
 hakassha_sireen_convo_accept_tier2_second_mission = ConvoScreen:new {
 	id = "accept_tier2_second_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_dfdec194",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_8db61bfa", -- Eliminate the Rebel diplomat Darmin Lerspri before he reaches Corellia.
 	stopConversation = "true",
 	options = {}
 }
@@ -628,7 +623,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_second_missio
 
 hakassha_sireen_convo_failed_tier2_second_mission = ConvoScreen:new {
 	id = "failed_tier2_second_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_825fac62",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_bae9fe80", -- You failed to dispose of Darmin. Get back up there.
 	stopConversation = "true",
 	options = {}
 }
@@ -636,39 +631,37 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier2_second_missio
 
 hakassha_sireen_convo_tier2_second_mission_success = ConvoScreen:new {
 	id = "tier2_second_mission_success",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_de870f1",
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_3c9b80ee", "tier2_third_mission"},
-	}
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_e67a0734", -- Darmin will no longer be a thorn in the Empire's side.
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_second_mission_success)
 
 -- Tier 2 - Mission 3
 hakassha_sireen_convo_tier2_third_mission = ConvoScreen:new {
 	id = "tier2_third_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_26408ea",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_98840984", -- A Rebel bomber squadron has been sighted in the system.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_6e39f51b", "tier2_third_mission_details"},
-		{"@conversation/naboo_imperial_trainer_2:s_51fe08f5", "accept_tier2_third_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_d6dfa36e", "tier2_third_mission_details"}, -- Shouldn't the Navy handle a direct assault?
+		{"@conversation/corellia_imperial_trainer_2:s_1ff4247a", "accept_tier2_third_mission"}, -- I will not fail.
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_third_mission)
 
 hakassha_sireen_convo_tier2_third_mission_details = ConvoScreen:new {
 	id = "tier2_third_mission_details",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_b257ddf8",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_2517a327", -- Black Epsilon can do with one craft what takes the Navy ten.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_51fe08f5", "accept_tier2_third_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_1ff4247a", "accept_tier2_third_mission"}, -- I will not fail.
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_third_mission_details)
 
 hakassha_sireen_convo_accept_tier2_third_mission = ConvoScreen:new {
 	id = "accept_tier2_third_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_1d63bf5d",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_b5a3714a", -- Do not let the bombers reach their objective.
 	stopConversation = "true",
 	options = {}
 }
@@ -676,7 +669,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_third_mission
 
 hakassha_sireen_convo_failed_tier2_third_mission = ConvoScreen:new {
 	id = "failed_tier2_third_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_825fac62",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_fe284208", -- Get back up there and finish the Rebels.
 	stopConversation = "true",
 	options = {}
 }
@@ -684,39 +677,37 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier2_third_mission
 
 hakassha_sireen_convo_tier2_third_mission_success = ConvoScreen:new {
 	id = "tier2_third_mission_success",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_2ccef947",
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_96db4fc7", "tier2_fourth_mission"},
-	}
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_b69b5bf4", -- The bomber squadron has been destroyed.
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_third_mission_success)
 
 -- Tier 2 - Mission 4
 hakassha_sireen_convo_tier2_fourth_mission = ConvoScreen:new {
 	id = "tier2_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_196d2fe6",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_9a117462", -- I have an assignment for you and it cannot wait.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_20b3aa70", "tier2_fourth_mission_details"},
-		{"@conversation/naboo_imperial_trainer_2:s_1f033c46", "accept_tier2_fourth_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_6d3be6aa", "tier2_fourth_mission_details"},
+		{"@conversation/corellia_imperial_trainer_2:s_8bf01045", "accept_tier2_fourth_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_fourth_mission)
 
 hakassha_sireen_convo_tier2_fourth_mission_details = ConvoScreen:new {
 	id = "tier2_fourth_mission_details",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_e17af774",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_1946850", -- A scanning vessel detected possible Rebel craft in a nebula.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_1f033c46", "accept_tier2_fourth_mission"},
+		{"@conversation/corellia_imperial_trainer_2:s_8bf01045", "accept_tier2_fourth_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_fourth_mission_details)
 
 hakassha_sireen_convo_accept_tier2_fourth_mission = ConvoScreen:new {
 	id = "accept_tier2_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_d1fa21c",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_f4fd144d", -- They will not resist attacking; show them what it means to cross Black Epsilon.
 	stopConversation = "true",
 	options = {}
 }
@@ -724,7 +715,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_fourth_missio
 
 hakassha_sireen_convo_failed_tier2_fourth_mission = ConvoScreen:new {
 	id = "failed_tier2_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_306da215",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_4cc1cf3b", -- The operation must proceed as planned.
 	stopConversation = "true",
 	options = {}
 }
@@ -732,16 +723,96 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier2_fourth_missio
 
 hakassha_sireen_convo_tier2_fourth_mission_success = ConvoScreen:new {
 	id = "tier2_fourth_mission_success",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_78c7dc33",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_9d96ae32", -- You handled the Rebel attack with skill and ruthlessness.
 	stopConversation = "true",
 	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_fourth_mission_success)
 
+-- Tier 2 - Mission 5: recover the personnel dossier
+hakassha_sireen_convo_tier2_fifth_mission = ConvoScreen:new {
+	id = "tier2_fifth_mission",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_9a117462", -- I have an assignment for you and it cannot wait.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_trainer_2:s_6d3be6aa", "accept_tier2_fifth_mission"}, -- What is the task?
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_fifth_mission)
+
+hakassha_sireen_convo_accept_tier2_fifth_mission = ConvoScreen:new {
+	id = "accept_tier2_fifth_mission",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_79813bfb", -- Intercept the freighter and recover the personnel dossier.
+	stopConversation = "true",
+	options = {}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_fifth_mission)
+
+hakassha_sireen_convo_failed_tier2_fifth_mission = ConvoScreen:new {
+	id = "failed_tier2_fifth_mission",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_63e01bb7", -- Get back into space and complete your mission.
+	stopConversation = "true",
+	options = {}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier2_fifth_mission)
+
+hakassha_sireen_convo_tier2_fifth_mission_success = ConvoScreen:new {
+	id = "tier2_fifth_mission_success",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_9f952cc3", -- The dossier will be useful to the Inquisition. Here is your payment.
+	stopConversation = "true",
+	options = {}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_fifth_mission_success)
+
+-- Tier 2 - Mission 6: eliminate the X-Wing drone and jam the Rebel response
+hakassha_sireen_convo_tier2_sixth_mission = ConvoScreen:new {
+	id = "tier2_sixth_mission",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_d9391d4a", -- Your tour is nearly finished; I have one final task.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_trainer_2:s_9d2c9b0a", "tier2_sixth_mission_details"}, -- More enemy fighter squads?
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_sixth_mission)
+
+hakassha_sireen_convo_tier2_sixth_mission_details = ConvoScreen:new {
+	id = "tier2_sixth_mission_details",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_e978ca6b", -- The Rebels are setting a trap specifically for you.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_trainer_2:s_7ca4fcb8", "accept_tier2_sixth_mission"}, -- What sort of surprise?
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_sixth_mission_details)
+
+hakassha_sireen_convo_accept_tier2_sixth_mission = ConvoScreen:new {
+	id = "accept_tier2_sixth_mission",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_25edc644", -- Destroy the unmanned fighter near the outer asteroid belts.
+	stopConversation = "true",
+	options = {}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_sixth_mission)
+
+hakassha_sireen_convo_failed_tier2_sixth_mission = ConvoScreen:new {
+	id = "failed_tier2_sixth_mission",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_4cc1cf3b", -- The attack and communications disruption must proceed.
+	stopConversation = "true",
+	options = {}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier2_sixth_mission)
+
+hakassha_sireen_convo_tier2_sixth_mission_success = ConvoScreen:new {
+	id = "tier2_sixth_mission_success",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_25457635", -- Good, that is all.
+	stopConversation = "true",
+	options = {}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_sixth_mission_success)
+
 -- Tier 2 - Training
 hakassha_sireen_convo_ready_train_tier2 = ConvoScreen:new {
 	id = "ready_train_tier2",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_9ac35c60",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_584a90f8",
 	stopConversation = "false",
 	options = {
 		-- Options added dynamically via handler
@@ -751,7 +822,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_ready_train_tier2)
 
 hakassha_sireen_convo_tier2_train_fighters = ConvoScreen:new {
 	id = "tier2_train_fighters",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_c4880407",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_3f764ef1",
 	stopConversation = "true",
 	options = {}
 }
@@ -759,7 +830,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_train_fighters)
 
 hakassha_sireen_convo_tier2_train_component = ConvoScreen:new {
 	id = "tier2_train_component",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_241a34a1",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_cc4d7ea",
 	stopConversation = "true",
 	options = {}
 }
@@ -767,7 +838,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_train_component)
 
 hakassha_sireen_convo_tier2_train_basics = ConvoScreen:new {
 	id = "tier2_train_basics",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_486da900",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_2517a327",
 	stopConversation = "true",
 	options = {}
 }
@@ -775,7 +846,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_train_basics)
 
 hakassha_sireen_convo_tier2_train_droid = ConvoScreen:new {
 	id = "tier2_train_droid",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_31804e15",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_c914798f",
 	stopConversation = "true",
 	options = {}
 }
@@ -784,7 +855,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_train_droid)
 -- Tier 2 - Completed
 hakassha_sireen_convo_tier2_completed = ConvoScreen:new {
 	id = "tier2_completed",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_49be19d2",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_be3a7e31",
 	stopConversation = "true",
 	options = {}
 }
@@ -793,65 +864,65 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_completed)
 -- Tier 2 - Duty missions
 hakassha_sireen_convo_tier2_duty_repeat = ConvoScreen:new {
 	id = "tier2_duty_repeat",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_be89481",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_ee11d13c",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_f0a7a4ef", "accept_tier2_duty1"},
-		{"@conversation/naboo_imperial_trainer_2:s_e84f3a62", "accept_tier2_duty2"},
-		{"@conversation/naboo_imperial_trainer_2:s_e6765c30", "accept_tier2_duty3"},
+		{"@spacequest/destroy_duty/corellia_imperial_8:title", "accept_tier2_duty1"},
+		{"@spacequest/escort_duty/corellia_imperial_9:title", "accept_tier2_duty2"},
+		{"@spacequest/destroy_duty/corellia_imperial_10:title", "accept_tier2_duty3"},
 		{"@spacequest/escort_duty/corellia_imperial_11:title", "accept_tier2_duty4"},
-		{"@conversation/naboo_imperial_trainer_2:s_b2a924ab", "tier2_duty_brief1"},
+		{"@conversation/corellia_imperial_trainer_2:s_116d8b3b", "tier2_duty_brief1"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_duty_repeat)
 
 hakassha_sireen_convo_tier2_duty_brief1 = ConvoScreen:new {
 	id = "tier2_duty_brief1",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_6a6fe80",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_60a52374",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_8efde2ae", "tier2_duty_brief2"},
+		{"@conversation/corellia_imperial_trainer_2:s_2c4789b", "tier2_duty_brief2"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_duty_brief1)
 
 hakassha_sireen_convo_tier2_duty_brief2 = ConvoScreen:new {
 	id = "tier2_duty_brief2",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_9962665d",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_dc33e486",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_8efde2ae", "tier2_duty_brief3"},
+		{"@conversation/corellia_imperial_trainer_2:s_2c4789b", "tier2_duty_brief3"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_duty_brief2)
 
 hakassha_sireen_convo_tier2_duty_brief3 = ConvoScreen:new {
 	id = "tier2_duty_brief3",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_b2634e3d",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_e8db34a5",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_8efde2ae", "tier2_duty_menu"},
+		{"@conversation/corellia_imperial_trainer_2:s_2c4789b", "tier2_duty_menu"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_duty_brief3)
 
 hakassha_sireen_convo_tier2_duty_menu = ConvoScreen:new {
 	id = "tier2_duty_menu",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_5b4ccb84",
+	leftDialog = "@conversation/corellia_imperial_trainer_2:s_60a52374",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_trainer_2:s_f0a7a4ef", "accept_tier2_duty1"},
-		{"@conversation/naboo_imperial_trainer_2:s_e84f3a62", "accept_tier2_duty2"},
-		{"@conversation/naboo_imperial_trainer_2:s_e6765c30", "accept_tier2_duty3"},
+		{"@spacequest/destroy_duty/corellia_imperial_8:title", "accept_tier2_duty1"},
+		{"@spacequest/escort_duty/corellia_imperial_9:title", "accept_tier2_duty2"},
+		{"@spacequest/destroy_duty/corellia_imperial_10:title", "accept_tier2_duty3"},
 		{"@spacequest/escort_duty/corellia_imperial_11:title", "accept_tier2_duty4"},
-		{"@conversation/naboo_imperial_trainer_2:s_b2a924ab", "tier2_duty_brief1"},
+		{"@conversation/corellia_imperial_trainer_2:s_116d8b3b", "tier2_duty_brief1"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier2_duty_menu)
 
 hakassha_sireen_convo_accept_tier2_duty1 = ConvoScreen:new {
 	id = "accept_tier2_duty1",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_aceff31e",
+	leftDialog = "@spacequest/destroy_duty/corellia_imperial_8:title",
 	stopConversation = "true",
 	options = {}
 }
@@ -859,7 +930,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_duty1)
 
 hakassha_sireen_convo_accept_tier2_duty2 = ConvoScreen:new {
 	id = "accept_tier2_duty2",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_205f33ca",
+	leftDialog = "@spacequest/escort_duty/corellia_imperial_9:title",
 	stopConversation = "true",
 	options = {}
 }
@@ -867,7 +938,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_duty2)
 
 hakassha_sireen_convo_accept_tier2_duty3 = ConvoScreen:new {
 	id = "accept_tier2_duty3",
-	leftDialog = "@conversation/naboo_imperial_trainer_2:s_4682fc3c",
+	leftDialog = "@spacequest/destroy_duty/corellia_imperial_10:title",
 	stopConversation = "true",
 	options = {}
 }
@@ -890,7 +961,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier2_duty4)
 -- Tier 3 - Active Mission
 hakassha_sireen_convo_tier3_on_mission = ConvoScreen:new {
 	id = "tier3_on_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_c9911c0f",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_2e69b8ed",
 	stopConversation = "true",
 	options = {}
 }
@@ -899,28 +970,77 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_on_mission)
 -- Tier 3 - Mission 1
 hakassha_sireen_convo_tier3_first_mission = ConvoScreen:new {
 	id = "tier3_first_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_51edad38",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_1c0f4063",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_d70dba34", "tier3_first_mission_details"},
-		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_first_mission"},
+		{"@conversation/corellia_imperial_tier3:s_fd236a42", "tier3_first_mission_details"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission)
 
 hakassha_sireen_convo_tier3_first_mission_details = ConvoScreen:new {
 	id = "tier3_first_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_d2a2c5a9",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_b622a494",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_first_mission"},
+		{"@conversation/corellia_imperial_tier3:s_d547e29b", "tier3_first_mission_briefing"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_details)
 
+hakassha_sireen_convo_tier3_first_mission_briefing = ConvoScreen:new {
+	id = "tier3_first_mission_briefing",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_ecfe85ae",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_7af5dab4", "tier3_first_mission_security"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_briefing)
+
+hakassha_sireen_convo_tier3_first_mission_security = ConvoScreen:new {
+	id = "tier3_first_mission_security",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_7bef2106",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_1969477d", "tier3_first_mission_threat"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_security)
+
+hakassha_sireen_convo_tier3_first_mission_threat = ConvoScreen:new {
+	id = "tier3_first_mission_threat",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_53126084",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_f2993921", "tier3_first_mission_nym"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_threat)
+
+hakassha_sireen_convo_tier3_first_mission_nym = ConvoScreen:new {
+	id = "tier3_first_mission_nym",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_586a7d64",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_12c769cf", "tier3_first_mission_orders"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_nym)
+
+hakassha_sireen_convo_tier3_first_mission_orders = ConvoScreen:new {
+	id = "tier3_first_mission_orders",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_daab08d3",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_b6b25f13", "accept_tier3_first_mission"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_orders)
+
 hakassha_sireen_convo_accept_tier3_first_mission = ConvoScreen:new {
 	id = "accept_tier3_first_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_f64e0998",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_e3bbe83c",
 	stopConversation = "true",
 	options = {}
 }
@@ -928,7 +1048,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier3_first_mission
 
 hakassha_sireen_convo_failed_tier3_first_mission = ConvoScreen:new {
 	id = "failed_tier3_first_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_5a9c71e2",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_1f1da1b8",
 	stopConversation = "true",
 	options = {}
 }
@@ -936,39 +1056,89 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier3_first_mission
 
 hakassha_sireen_convo_tier3_first_mission_success = ConvoScreen:new {
 	id = "tier3_first_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_4b5066f2",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_14060a1c",
 	stopConversation = "false",
 	options = {
-		-- Training options added dynamically via handler
+		{"@conversation/corellia_imperial_tier3:s_b200234c", "tier3_first_mission_success_report"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_success)
 
+hakassha_sireen_convo_tier3_first_mission_success_report = ConvoScreen:new {
+	id = "tier3_first_mission_success_report",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_b695af6b",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_2c7b60e", "tier3_first_mission_success_alliance"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_success_report)
+
+hakassha_sireen_convo_tier3_first_mission_success_alliance = ConvoScreen:new {
+	id = "tier3_first_mission_success_alliance",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_2b261439",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_72418db3", "tier3_first_mission_success_losses"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_success_alliance)
+
+hakassha_sireen_convo_tier3_first_mission_success_losses = ConvoScreen:new {
+	id = "tier3_first_mission_success_losses",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_a1b009ed",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_8c751827", "tier3_first_mission_success_strategy"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_success_losses)
+
+hakassha_sireen_convo_tier3_first_mission_success_strategy = ConvoScreen:new {
+	id = "tier3_first_mission_success_strategy",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_a4f70dc9",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_b6b25f13", "tier3_first_mission_training"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_success_strategy)
+
+hakassha_sireen_convo_tier3_first_mission_training = ConvoScreen:new {
+	id = "tier3_first_mission_training",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_8dcf50f",
+	stopConversation = "false",
+	options = {
+		-- Training option added dynamically via handler
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_first_mission_training)
+
 -- Tier 3 - Mission 2
 hakassha_sireen_convo_tier3_second_mission = ConvoScreen:new {
 	id = "tier3_second_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_47424e40",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_fdda16c7",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_d70dba34", "tier3_second_mission_details"},
-		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_second_mission"},
+		{"@conversation/corellia_imperial_tier3:s_7c05dd60", "tier3_second_mission_details"},
+		{"@conversation/corellia_imperial_tier3:s_5eb7a1e3", "accept_tier3_second_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_second_mission)
 
 hakassha_sireen_convo_tier3_second_mission_details = ConvoScreen:new {
 	id = "tier3_second_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_b49d8273",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_22f895e3",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_second_mission"},
+		{"@conversation/corellia_imperial_tier3:s_5eb7a1e3", "accept_tier3_second_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_second_mission_details)
 
 hakassha_sireen_convo_accept_tier3_second_mission = ConvoScreen:new {
 	id = "accept_tier3_second_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_6ffd0979",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_1e26f934",
 	stopConversation = "true",
 	options = {}
 }
@@ -976,7 +1146,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier3_second_missio
 
 hakassha_sireen_convo_failed_tier3_second_mission = ConvoScreen:new {
 	id = "failed_tier3_second_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_53d34239",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_d32315a8",
 	stopConversation = "true",
 	options = {}
 }
@@ -984,7 +1154,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier3_second_missio
 
 hakassha_sireen_convo_tier3_second_mission_success = ConvoScreen:new {
 	id = "tier3_second_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_89772a9c",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_6cef5164",
 	stopConversation = "false",
 	options = {
 		-- Training options added dynamically via handler
@@ -995,28 +1165,28 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_second_mission_succe
 -- Tier 3 - Mission 3
 hakassha_sireen_convo_tier3_third_mission = ConvoScreen:new {
 	id = "tier3_third_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_5400c2b8",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_424f249d",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_d70dba34", "tier3_third_mission_details"},
-		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_third_mission"},
+		{"@conversation/corellia_imperial_tier3:s_d0f9703", "tier3_third_mission_details"},
+		{"@conversation/corellia_imperial_tier3:s_5eb7a1e3", "accept_tier3_third_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_third_mission)
 
 hakassha_sireen_convo_tier3_third_mission_details = ConvoScreen:new {
 	id = "tier3_third_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_28876e4d",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_85e02cc1",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_f8e71988", "accept_tier3_third_mission"},
+		{"@conversation/corellia_imperial_tier3:s_5eb7a1e3", "accept_tier3_third_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_third_mission_details)
 
 hakassha_sireen_convo_accept_tier3_third_mission = ConvoScreen:new {
 	id = "accept_tier3_third_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_b8302127",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_66ebf9d3",
 	stopConversation = "true",
 	options = {}
 }
@@ -1024,7 +1194,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier3_third_mission
 
 hakassha_sireen_convo_failed_tier3_third_mission = ConvoScreen:new {
 	id = "failed_tier3_third_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_a425b892",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_cf274903",
 	stopConversation = "true",
 	options = {}
 }
@@ -1032,7 +1202,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier3_third_mission
 
 hakassha_sireen_convo_tier3_third_mission_success = ConvoScreen:new {
 	id = "tier3_third_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_596a67f0",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_799d2952",
 	stopConversation = "false",
 	options = {
 		-- Training options added dynamically via handler
@@ -1043,28 +1213,28 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_third_mission_succes
 -- Tier 3 - Mission 4
 hakassha_sireen_convo_tier3_fourth_mission = ConvoScreen:new {
 	id = "tier3_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_ee64b80a",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_27e5eff7",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_c142d50f", "tier3_fourth_mission_details"},
-		{"@conversation/naboo_imperial_tier3:s_180340a", "accept_tier3_fourth_mission"},
+		{"@conversation/corellia_imperial_tier3:s_c9015929", "tier3_fourth_mission_details"},
+		{"@conversation/corellia_imperial_tier3:s_5eb7a1e3", "accept_tier3_fourth_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_fourth_mission)
 
 hakassha_sireen_convo_tier3_fourth_mission_details = ConvoScreen:new {
 	id = "tier3_fourth_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_3bd0f63e",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_36900273",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier3:s_180340a", "accept_tier3_fourth_mission"},
+		{"@conversation/corellia_imperial_tier3:s_5eb7a1e3", "accept_tier3_fourth_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_fourth_mission_details)
 
 hakassha_sireen_convo_accept_tier3_fourth_mission = ConvoScreen:new {
 	id = "accept_tier3_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_6905c6b2",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_271e95b3",
 	stopConversation = "true",
 	options = {}
 }
@@ -1072,7 +1242,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier3_fourth_missio
 
 hakassha_sireen_convo_failed_tier3_fourth_mission = ConvoScreen:new {
 	id = "failed_tier3_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_1530dc31",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_73c4833",
 	stopConversation = "true",
 	options = {}
 }
@@ -1080,7 +1250,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier3_fourth_missio
 
 hakassha_sireen_convo_tier3_fourth_mission_success = ConvoScreen:new {
 	id = "tier3_fourth_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_5df75ba2",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_dd4ea40c",
 	stopConversation = "false",
 	options = {
 		-- Training options added dynamically via handler
@@ -1091,7 +1261,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_fourth_mission_succe
 -- Tier 3 - Training
 hakassha_sireen_convo_tier3_train_fighters = ConvoScreen:new {
 	id = "tier3_train_fighters",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_84ce496b",
 	stopConversation = "true",
 	options = {}
 }
@@ -1099,7 +1269,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_train_fighters)
 
 hakassha_sireen_convo_tier3_train_component = ConvoScreen:new {
 	id = "tier3_train_component",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_7fe8c9bb",
 	stopConversation = "true",
 	options = {}
 }
@@ -1107,7 +1277,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_train_component)
 
 hakassha_sireen_convo_tier3_train_procedures = ConvoScreen:new {
 	id = "tier3_train_procedures",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_726bfa38",
 	stopConversation = "true",
 	options = {}
 }
@@ -1115,7 +1285,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_train_procedures)
 
 hakassha_sireen_convo_tier3_train_droid = ConvoScreen:new {
 	id = "tier3_train_droid",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_4c42a50e",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_f00894a4",
 	stopConversation = "true",
 	options = {}
 }
@@ -1124,11 +1294,41 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_train_droid)
 -- Tier 3 - Completed
 hakassha_sireen_convo_tier3_completed = ConvoScreen:new {
 	id = "tier3_completed",
-	leftDialog = "@conversation/naboo_imperial_tier3:s_f50e2248",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_91cf92a7", -- From now on, you'll be reporting to someone named Insurgent.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_900f01d1", "tier3_transfer_orders"}, -- What?
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_completed)
+
+hakassha_sireen_convo_tier3_transfer_orders = ConvoScreen:new {
+	id = "tier3_transfer_orders",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_c18b617e", -- The transfer order was signed by the Emperor.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_1474f13c", "tier3_transfer_command"}, -- What did the order say?
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_transfer_orders)
+
+hakassha_sireen_convo_tier3_transfer_command = ConvoScreen:new {
+	id = "tier3_transfer_command",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_6d0b02b", -- Insurgent ordered Haymir to transfer the pilot immediately.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier3:s_9b5a6b23", "tier3_transfer_destination"}, -- He asked for me by name?
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_transfer_command)
+
+hakassha_sireen_convo_tier3_transfer_destination = ConvoScreen:new {
+	id = "tier3_transfer_destination",
+	leftDialog = "@conversation/corellia_imperial_tier3:s_c65e1fa7", -- Meet Insurgent at the Imperial Outpost on Dantooine.
 	stopConversation = "true",
 	options = {}
 }
-hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_completed)
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_transfer_destination)
 
 --[[
 
@@ -1139,7 +1339,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier3_completed)
 -- Tier 4 - Active Mission
 hakassha_sireen_convo_tier4_on_mission = ConvoScreen:new {
 	id = "tier4_on_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_fcbb92d0",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_b94e3a35",
 	stopConversation = "true",
 	options = {}
 }
@@ -1148,39 +1348,67 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_on_mission)
 -- Tier 4 - Initial Briefing
 hakassha_sireen_convo_tier4_initial_briefing = ConvoScreen:new {
 	id = "tier4_initial_briefing",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_59da8c80",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_735e94f9",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_c82e9a2f", "tier4_first_mission"},
+		{"@conversation/corellia_imperial_tier4:s_c06cf370", "tier4_intro_zeal"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_initial_briefing)
 
+hakassha_sireen_convo_tier4_intro_zeal = ConvoScreen:new {
+	id = "tier4_intro_zeal",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_fd2777e5",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier4:s_ca776e30", "tier4_intro_identity"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_intro_zeal)
+
+hakassha_sireen_convo_tier4_intro_identity = ConvoScreen:new {
+	id = "tier4_intro_identity",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_d1579156",
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_imperial_tier4:s_4e718340", "tier4_intro_complete"},
+	}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_intro_identity)
+
+hakassha_sireen_convo_tier4_intro_complete = ConvoScreen:new {
+	id = "tier4_intro_complete",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_beec51b5",
+	stopConversation = "true",
+	options = {}
+}
+hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_intro_complete)
+
 -- Tier 4 - Mission 1
 hakassha_sireen_convo_tier4_first_mission = ConvoScreen:new {
 	id = "tier4_first_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_47b7d709",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_b52941c3",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_488aa777", "tier4_first_mission_details"},
-		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_first_mission"},
+		{"@conversation/corellia_imperial_tier4:s_3bdff7cb", "tier4_first_mission_details"},
+		{"@conversation/corellia_imperial_tier4:s_7017e938", "accept_tier4_first_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_first_mission)
 
 hakassha_sireen_convo_tier4_first_mission_details = ConvoScreen:new {
 	id = "tier4_first_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_e89ef227",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_74052171",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_first_mission"},
+		{"@conversation/corellia_imperial_tier4:s_7017e938", "accept_tier4_first_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_first_mission_details)
 
 hakassha_sireen_convo_accept_tier4_first_mission = ConvoScreen:new {
 	id = "accept_tier4_first_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_6387b3e9",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_bde3268d",
 	stopConversation = "true",
 	options = {}
 }
@@ -1188,7 +1416,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier4_first_mission
 
 hakassha_sireen_convo_failed_tier4_first_mission = ConvoScreen:new {
 	id = "failed_tier4_first_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_edc55445",
 	stopConversation = "true",
 	options = {}
 }
@@ -1196,39 +1424,37 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier4_first_mission
 
 hakassha_sireen_convo_tier4_first_mission_success = ConvoScreen:new {
 	id = "tier4_first_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_725be20b",
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_imperial_tier4:s_bdebb4cc", "tier4_second_mission"},
-	}
+	leftDialog = "@conversation/corellia_imperial_tier4:s_e705e25f",
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_first_mission_success)
 
 -- Tier 4 - Mission 2
 hakassha_sireen_convo_tier4_second_mission = ConvoScreen:new {
 	id = "tier4_second_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_1e39a0ae",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_5f1f6bbe",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_8a38a5ed", "tier4_second_mission_details"},
-		{"@conversation/naboo_imperial_tier4:s_6d741d67", "accept_tier4_second_mission"},
+		{"@conversation/corellia_imperial_tier4:s_5a23ab6f", "tier4_second_mission_details"},
+		{"@conversation/corellia_imperial_tier4:s_7ef4aae8", "accept_tier4_second_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_second_mission)
 
 hakassha_sireen_convo_tier4_second_mission_details = ConvoScreen:new {
 	id = "tier4_second_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_4ee43f47",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_707841db",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_6d741d67", "accept_tier4_second_mission"},
+		{"@conversation/corellia_imperial_tier4:s_7ef4aae8", "accept_tier4_second_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_second_mission_details)
 
 hakassha_sireen_convo_accept_tier4_second_mission = ConvoScreen:new {
 	id = "accept_tier4_second_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_9a9518f8",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_da6d3376",
 	stopConversation = "true",
 	options = {}
 }
@@ -1236,7 +1462,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier4_second_missio
 
 hakassha_sireen_convo_failed_tier4_second_mission = ConvoScreen:new {
 	id = "failed_tier4_second_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_edc55445",
 	stopConversation = "true",
 	options = {}
 }
@@ -1244,39 +1470,37 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier4_second_missio
 
 hakassha_sireen_convo_tier4_second_mission_success = ConvoScreen:new {
 	id = "tier4_second_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_417ab2a4",
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_imperial_tier4:s_834bed59", "tier4_third_mission"},
-	}
+	leftDialog = "@conversation/corellia_imperial_tier4:s_f8880079",
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_second_mission_success)
 
 -- Tier 4 - Mission 3
 hakassha_sireen_convo_tier4_third_mission = ConvoScreen:new {
 	id = "tier4_third_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_dafddb17",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_4faccfdf",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_362a48e0", "tier4_third_mission_details"},
-		{"@conversation/naboo_imperial_tier4:s_c17d2691", "accept_tier4_third_mission"},
+		{"@conversation/corellia_imperial_tier4:s_5babb29c", "tier4_third_mission_details"},
+		{"@conversation/corellia_imperial_tier4:s_b9c73c6d", "accept_tier4_third_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_third_mission)
 
 hakassha_sireen_convo_tier4_third_mission_details = ConvoScreen:new {
 	id = "tier4_third_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_4bcaf756",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_9f2ab4a0",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_c17d2691", "accept_tier4_third_mission"},
+		{"@conversation/corellia_imperial_tier4:s_b9c73c6d", "accept_tier4_third_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_third_mission_details)
 
 hakassha_sireen_convo_accept_tier4_third_mission = ConvoScreen:new {
 	id = "accept_tier4_third_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_db35e23",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_622b4f74",
 	stopConversation = "true",
 	options = {}
 }
@@ -1284,7 +1508,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier4_third_mission
 
 hakassha_sireen_convo_failed_tier4_third_mission = ConvoScreen:new {
 	id = "failed_tier4_third_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_edc55445",
 	stopConversation = "true",
 	options = {}
 }
@@ -1292,39 +1516,37 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier4_third_mission
 
 hakassha_sireen_convo_tier4_third_mission_success = ConvoScreen:new {
 	id = "tier4_third_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_aa21cdc1",
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_imperial_tier4:s_938d7337", "tier4_fourth_mission"},
-	}
+	leftDialog = "@conversation/corellia_imperial_tier4:s_3f2bae5b",
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_third_mission_success)
 
 -- Tier 4 - Mission 4
 hakassha_sireen_convo_tier4_fourth_mission = ConvoScreen:new {
 	id = "tier4_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_1899241d",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_690701a5",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_e07a0513", "tier4_fourth_mission_details"},
-		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_fourth_mission"},
+		{"@conversation/corellia_imperial_tier4:s_fc7e0cf7", "tier4_fourth_mission_details"},
+		{"@conversation/corellia_imperial_tier4:s_7017e938", "accept_tier4_fourth_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_fourth_mission)
 
 hakassha_sireen_convo_tier4_fourth_mission_details = ConvoScreen:new {
 	id = "tier4_fourth_mission_details",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_c25d28ef",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_1b4ddba3",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_e69b471b", "accept_tier4_fourth_mission"},
+		{"@conversation/corellia_imperial_tier4:s_7017e938", "accept_tier4_fourth_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_fourth_mission_details)
 
 hakassha_sireen_convo_accept_tier4_fourth_mission = ConvoScreen:new {
 	id = "accept_tier4_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_320b2029",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_9a8ac7e9",
 	stopConversation = "true",
 	options = {}
 }
@@ -1332,7 +1554,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier4_fourth_missio
 
 hakassha_sireen_convo_failed_tier4_fourth_mission = ConvoScreen:new {
 	id = "failed_tier4_fourth_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_91d10a84",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_edc55445",
 	stopConversation = "true",
 	options = {}
 }
@@ -1340,76 +1562,70 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_failed_tier4_fourth_missio
 
 hakassha_sireen_convo_tier4_fourth_mission_success = ConvoScreen:new {
 	id = "tier4_fourth_mission_success",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_6fb4f06a",
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_imperial_tier4:s_7177c3f2", "master_who_declann"},
-		{"@conversation/naboo_imperial_tier4:s_58edcac7", "master_where_report"},
-		{"@conversation/naboo_imperial_tier4:s_fae9dc1b", "master_what_want"},
-		{"@conversation/naboo_imperial_tier4:s_a3aef707", "master_becoming_imperial"},
-		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
-	}
+	leftDialog = "@conversation/corellia_imperial_tier4:s_d4500734",
+	stopConversation = "true",
+	options = {}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_fourth_mission_success)
 
 -- Master mission
 hakassha_sireen_convo_master_mission = ConvoScreen:new {
 	id = "master_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_6fb4f06a",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_d4500734",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_7177c3f2", "master_who_declann"},
-		{"@conversation/naboo_imperial_tier4:s_58edcac7", "master_where_report"},
-		{"@conversation/naboo_imperial_tier4:s_fae9dc1b", "master_what_want"},
-		{"@conversation/naboo_imperial_tier4:s_a3aef707", "master_becoming_imperial"},
-		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+		{"@conversation/corellia_imperial_tier4:s_817cf33", "master_who_declann"},
+		{"@conversation/corellia_imperial_tier4:s_6d9530c5", "master_where_report"},
+		{"@conversation/corellia_imperial_tier4:s_11c1ca52", "master_what_want"},
+		{"@conversation/corellia_imperial_tier4:s_9ec3be5d", "master_becoming_imperial"},
+		{"@conversation/corellia_imperial_tier4:s_ea248fbf", "accept_master_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_master_mission)
 
 hakassha_sireen_convo_master_who_declann = ConvoScreen:new {
 	id = "master_who_declann",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_55905a28",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_d2794755",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+		{"@conversation/corellia_imperial_tier4:s_ea248fbf", "accept_master_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_master_who_declann)
 
 hakassha_sireen_convo_master_where_report = ConvoScreen:new {
 	id = "master_where_report",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_a0d28eb",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_c610ccb7",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+		{"@conversation/corellia_imperial_tier4:s_ea248fbf", "accept_master_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_master_where_report)
 
 hakassha_sireen_convo_master_what_want = ConvoScreen:new {
 	id = "master_what_want",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_cd04b926",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_69231042",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+		{"@conversation/corellia_imperial_tier4:s_ea248fbf", "accept_master_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_master_what_want)
 
 hakassha_sireen_convo_master_becoming_imperial = ConvoScreen:new {
 	id = "master_becoming_imperial",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_c33416a7",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_fde2347a",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_17fa0de9", "accept_master_mission"},
+		{"@conversation/corellia_imperial_tier4:s_ea248fbf", "accept_master_mission"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_master_becoming_imperial)
 
 hakassha_sireen_convo_accept_master_mission = ConvoScreen:new {
 	id = "accept_master_mission",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_c28f20f3",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_d7e41231",
 	stopConversation = "true",
 	options = {}
 }
@@ -1418,10 +1634,10 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_master_mission)
 -- Tier 4 - Completed
 hakassha_sireen_convo_tier4_completed = ConvoScreen:new {
 	id = "tier4_completed",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_145d7cc3",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_a74ee1d8",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_4854758d", "tier4_duty_repeat"},
+		{"@conversation/corellia_imperial_tier4:s_4854758d", "tier4_duty_repeat"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_completed)
@@ -1429,7 +1645,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_completed)
 -- Tier 4 - Training
 hakassha_sireen_convo_ready_train_tier4 = ConvoScreen:new {
 	id = "ready_train_tier4",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_5dce257f",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_2afc3f27",
 	stopConversation = "false",
 	options = {
 		-- Options added dynamically via handler
@@ -1439,7 +1655,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_ready_train_tier4)
 
 hakassha_sireen_convo_tier4_train_fighters = ConvoScreen:new {
 	id = "tier4_train_fighters",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_1c6fdb34",
 	stopConversation = "true",
 	options = {}
 }
@@ -1447,7 +1663,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_train_fighters)
 
 hakassha_sireen_convo_tier4_train_component = ConvoScreen:new {
 	id = "tier4_train_component",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_1c6fdb34",
 	stopConversation = "true",
 	options = {}
 }
@@ -1455,7 +1671,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_train_component)
 
 hakassha_sireen_convo_tier4_train_basics = ConvoScreen:new {
 	id = "tier4_train_basics",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_1c6fdb34",
 	stopConversation = "true",
 	options = {}
 }
@@ -1463,7 +1679,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_train_basics)
 
 hakassha_sireen_convo_tier4_train_droid = ConvoScreen:new {
 	id = "tier4_train_droid",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_490da0e3",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_1c6fdb34",
 	stopConversation = "true",
 	options = {}
 }
@@ -1472,65 +1688,65 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_train_droid)
 -- Tier 4 - Duty missions
 hakassha_sireen_convo_tier4_duty_repeat = ConvoScreen:new {
 	id = "tier4_duty_repeat",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_ace49d41",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_81995254",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_82095b20", "accept_tier4_duty1"},
-		{"@conversation/naboo_imperial_tier4:s_be7e95c", "accept_tier4_duty2"},
-		{"@conversation/naboo_imperial_tier4:s_60a8bfcb", "accept_tier4_duty3"},
-		{"@conversation/naboo_imperial_tier4:s_851406fb", "accept_tier4_duty4"},
-		{"@conversation/naboo_imperial_tier4:s_49805f81", "tier4_duty_brief1"},
+		{"@spacequest/destroy_duty/corellia_imperial_tier4_1:title", "accept_tier4_duty1"},
+		{"@spacequest/escort_duty/corellia_imperial_tier4_2:title", "accept_tier4_duty2"},
+		{"@spacequest/recovery_duty/corellia_imperial_tier4_3:title", "accept_tier4_duty3"},
+		{"@spacequest/rescue_duty/corellia_imperial_tier4_4:title", "accept_tier4_duty4"},
+		{"@conversation/corellia_imperial_tier4:s_c82e9a2f", "tier4_duty_brief1"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_duty_repeat)
 
 hakassha_sireen_convo_tier4_duty_brief1 = ConvoScreen:new {
 	id = "tier4_duty_brief1",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_85c9e37e",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_b3155267",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_61657d0f", "tier4_duty_brief2"},
+		{"@conversation/corellia_imperial_tier4:s_362a48e0", "tier4_duty_brief2"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_duty_brief1)
 
 hakassha_sireen_convo_tier4_duty_brief2 = ConvoScreen:new {
 	id = "tier4_duty_brief2",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_52708145",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_5e4d41df",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_61657d0f", "tier4_duty_brief3"},
+		{"@conversation/corellia_imperial_tier4:s_362a48e0", "tier4_duty_brief3"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_duty_brief2)
 
 hakassha_sireen_convo_tier4_duty_brief3 = ConvoScreen:new {
 	id = "tier4_duty_brief3",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_f76cec26",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_34120baf",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_61657d0f", "tier4_duty_menu"},
+		{"@conversation/corellia_imperial_tier4:s_362a48e0", "tier4_duty_menu"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_duty_brief3)
 
 hakassha_sireen_convo_tier4_duty_menu = ConvoScreen:new {
 	id = "tier4_duty_menu",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_ee9d18a3",
+	leftDialog = "@conversation/corellia_imperial_tier4:s_beb66be",
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_imperial_tier4:s_82095b20", "accept_tier4_duty1"},
-		{"@conversation/naboo_imperial_tier4:s_be7e95c", "accept_tier4_duty2"},
-		{"@conversation/naboo_imperial_tier4:s_60a8bfcb", "accept_tier4_duty3"},
-		{"@conversation/naboo_imperial_tier4:s_851406fb", "accept_tier4_duty4"},
-		{"@conversation/naboo_imperial_tier4:s_49805f81", "tier4_duty_brief1"},
+		{"@spacequest/destroy_duty/corellia_imperial_tier4_1:title", "accept_tier4_duty1"},
+		{"@spacequest/escort_duty/corellia_imperial_tier4_2:title", "accept_tier4_duty2"},
+		{"@spacequest/recovery_duty/corellia_imperial_tier4_3:title", "accept_tier4_duty3"},
+		{"@spacequest/rescue_duty/corellia_imperial_tier4_4:title", "accept_tier4_duty4"},
+		{"@conversation/corellia_imperial_tier4:s_c82e9a2f", "tier4_duty_brief1"},
 	}
 }
 hakassha_sireen_convo:addScreen(hakassha_sireen_convo_tier4_duty_menu)
 
 hakassha_sireen_convo_accept_tier4_duty1 = ConvoScreen:new {
 	id = "accept_tier4_duty1",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	leftDialog = "@spacequest/destroy_duty/corellia_imperial_tier4_1:title",
 	stopConversation = "true",
 	options = {}
 }
@@ -1538,7 +1754,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier4_duty1)
 
 hakassha_sireen_convo_accept_tier4_duty2 = ConvoScreen:new {
 	id = "accept_tier4_duty2",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	leftDialog = "@spacequest/escort_duty/corellia_imperial_tier4_2:title",
 	stopConversation = "true",
 	options = {}
 }
@@ -1546,7 +1762,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier4_duty2)
 
 hakassha_sireen_convo_accept_tier4_duty3 = ConvoScreen:new {
 	id = "accept_tier4_duty3",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	leftDialog = "@spacequest/recovery_duty/corellia_imperial_tier4_3:title",
 	stopConversation = "true",
 	options = {}
 }
@@ -1554,7 +1770,7 @@ hakassha_sireen_convo:addScreen(hakassha_sireen_convo_accept_tier4_duty3)
 
 hakassha_sireen_convo_accept_tier4_duty4 = ConvoScreen:new {
 	id = "accept_tier4_duty4",
-	leftDialog = "@conversation/naboo_imperial_tier4:s_ee5488a5",
+	leftDialog = "@spacequest/rescue_duty/corellia_imperial_tier4_4:title",
 	stopConversation = "true",
 	options = {}
 }

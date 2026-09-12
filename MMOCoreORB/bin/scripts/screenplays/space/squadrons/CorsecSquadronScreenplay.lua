@@ -1556,7 +1556,7 @@ rescue_duty_corellia_privateer_tier4_1 = SpaceDutyRescueScreenplay:new {
 	questName = "corellia_privateer_tier4_1",
 	questType = "rescue_duty",
 
-	questZone = "space_lok",
+	questZone = "space_dantooine",
 
 	creditReward = 0,
 
@@ -1568,6 +1568,23 @@ rescue_duty_corellia_privateer_tier4_1 = SpaceDutyRescueScreenplay:new {
 	sideQuestType = "",
 
 	-- Screenplay Specific Variables
+	targetShips = {"freighterheavy_tier4", "freighterlight_tier4", "freightermedium_tier4"},
+	targetArrivalDelay = 3,
+
+	recoveryPoints = {
+		{patrolPointName = "corellia_privateer_tier4_rescue_duty_1", zoneName = "space_dantooine", radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_rescue_duty_2", zoneName = "space_dantooine", radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_rescue_duty_3", zoneName = "space_dantooine", radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_rescue_duty_4", zoneName = "space_dantooine", radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_rescue_duty_5", zoneName = "space_dantooine", radius = 250},
+	},
+
+	attackDelay = 60,
+	attackShips = {
+		{"hutt_fighter_s01_tier4", "hutt_fighter_s02_tier4", "hutt_bomber_s01_tier4"},
+		{"hutt_fighter_s02_tier4", "hutt_pirate_s01_tier4", "hutt_bomber_s02_tier4"},
+		{"hutt_assassin_s01_tier4", "hutt_pirate_s02_tier4", "hutt_despot_tier4"},
+	},
 
 }
 
@@ -1601,13 +1618,13 @@ recovery_duty_corellia_privateer_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 		{patrolPointName = "corellia_privateer_tier4_recovery_duty_escort_2", x = -1096, z = 2908, y = -340, escortNumber = 2, radius = 250},
 		{patrolPointName = "corellia_privateer_tier4_recovery_duty_escort_3", x = -1863, z = 2415, y = -2912, escortNumber = 3, radius = 250},
 		{patrolPointName = "corellia_privateer_tier4_recovery_duty_escort_4", x = -3093, z = 1706, y = -6585, escortNumber = 4, radius = 250},
-		{patrolPointName = "corellia_privateer_tier4_leg_1_patrol_one_4", x = 293, z = 4511, y = -4776, escortNumber = 5, radius = 250},
 	},
 
 	recoveryPoints = {
 		{patrolPointName = "corellia_privateer_tier4_recovery_duty_egress_1", x = -2157, z = -731, y = -5594, escortNumber = 1, radius = 250},
-		{patrolPointName = "corellia_privateer_tier4_recovery_duty_egress_3", x = -491, z = -6021, y = -3466, escortNumber = 2, radius = 250},
-		{patrolPointName = "corellia_privateer_tier4_recovery_duty_egress_4", x = 57, z = -7525, y = -2756, escortNumber = 3, radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_recovery_duty_egress_2", x = -1204, z = -3635, y = -4388, escortNumber = 2, radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_recovery_duty_egress_3", x = -491, z = -6021, y = -3466, escortNumber = 3, radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_recovery_duty_egress_4", x = 57, z = -7525, y = -2756, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 90, -- In Seconds
@@ -1649,7 +1666,7 @@ escort_duty_corellia_privateer_tier4_1 = SpaceDutyEscortScreenplay:new {
 		{patrolPointName = "corellia_privateer_tier4_escort_duty_2", zoneName = "space_dathomir", x = 2089, z = 4103, y = -4060, escortNumber = 2, radius = 250},
 		{patrolPointName = "corellia_privateer_tier4_escort_duty_3", zoneName = "space_dathomir", x = 1396, z = 5751, y = -3946, escortNumber = 3, radius = 250},
 		{patrolPointName = "corellia_privateer_tier4_escort_duty_4", zoneName = "space_dathomir", x = 817, z = 7127, y = -3851, escortNumber = 4, radius = 250},
-		{patrolPointName = "corellia_privateer_tier4_escort_duty_5", zoneName = "space_dathomir", x = 23729, z = 7391, y = -1995, escortNumber = 5, radius = 250},
+		{patrolPointName = "corellia_privateer_tier4_escort_duty_5", zoneName = "space_dathomir", x = 2372, z = 7391, y = -1995, escortNumber = 5, radius = 250},
 	},
 
 	attackDelay = 90, -- In Seconds

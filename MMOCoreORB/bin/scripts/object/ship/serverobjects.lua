@@ -47,6 +47,12 @@ includeFile("ship/base/serverobjects.lua")
 includeFile("ship/player/serverobjects.lua")
 
 -- Server Objects
+includeFile("ship/arc170.lua")
+includeFile("ship/arc170_tier1.lua")
+includeFile("ship/arc170_tier2.lua")
+includeFile("ship/arc170_tier3.lua")
+includeFile("ship/arc170_tier4.lua")
+includeFile("ship/arc170_tier5.lua")
 includeFile("ship/assaultship.lua")
 includeFile("ship/awing.lua")
 includeFile("ship/awing_tier1.lua")

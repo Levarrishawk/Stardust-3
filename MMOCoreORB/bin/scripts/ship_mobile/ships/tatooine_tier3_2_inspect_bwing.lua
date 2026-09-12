@@ -1,5 +1,5 @@
 tatooine_tier3_2_inspect_bwing = ShipAgent:new {
-	template = "bwing_tier2",
+	template = "arc170_tier2",
 	pilotTemplate = "bomber_tier2",
 	shipType = "fighter",
 
