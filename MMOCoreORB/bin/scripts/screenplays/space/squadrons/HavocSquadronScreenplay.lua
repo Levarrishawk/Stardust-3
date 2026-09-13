@@ -835,11 +835,12 @@ survival_corellia_rebel_tier3_2_b = SpaceSurvivalScreenplay:new {
 	parentQuestType = "delivery",
 	parentQuestName = "corellia_rebel_tier3_2_a",
 
-	survivalTime = 600,
+	survivalTime = 300,
+	survivalUpdateInterval = 30,
 	survivalPoint = "space_endor:rebel_tier3_2_b_defend_point",
 	delayToFirstAttack = 5,
 
-	attackDelay = 100,
+	attackDelay = 90,
 
 	attackShips = {
 		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2"},
