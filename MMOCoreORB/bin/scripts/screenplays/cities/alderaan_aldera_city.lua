@@ -5,6 +5,8 @@ AlderaCityScreenPlay = ScreenPlay:new {
 
 registerScreenPlay("AlderaCityScreenPlay", true)
 
+AlderaCityPatrolRoutes = {}
+
 function AlderaCityScreenPlay:start()
 	if (isZoneEnabled("alderaan")) then
 		self:spawnMobiles()
@@ -26,7 +28,7 @@ end
 function AlderaCityScreenPlay:spawnPatrols(routes)
 	local pedestrians = {"commoner", "commoner", "businessman", "artisan", "commoner", "noble"}
 
-	self.patrolRoutes = routes
+	AlderaCityPatrolRoutes = routes
 
 	for routeIndex = 1, #routes, 1 do
 		local route = routes[routeIndex]
@@ -62,7 +64,8 @@ function AlderaCityScreenPlay:walkPatrol(pMobile)
 	end
 
 	local objectID = SceneObject(pMobile):getObjectID()
-	local route = self.patrolRoutes[readData(objectID .. ":AlderaCity:route")]
+	local routeIndex = readData(objectID .. ":AlderaCity:route")
+	local route = AlderaCityPatrolRoutes[routeIndex]
 	local pointIndex = readData(objectID .. ":AlderaCity:point") + 1
 
 	if (route == nil) then
