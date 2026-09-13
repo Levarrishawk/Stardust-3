@@ -767,6 +767,7 @@ inspect_corellia_rebel_tier3_2 = SpaceInspectScreenplay:new {
 
 	inspectTargets = {"huttsmuggler"},
 	inspectCargo = "sector_recon_data",
+	spawnInspectTarget = true,
 
 	targetLocation = {x = 4249, z = 2899, y = 3799},
 }
