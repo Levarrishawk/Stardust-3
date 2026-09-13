@@ -7,7 +7,7 @@ aqzow_liaison_convo = ConvoTemplate:new {
 
 aqzow_liaison_greeting = ConvoScreen:new {
 	id = "greeting",
-	customDialogText = "Lieutenant Colonel Aqzow has transferred to the Hidden Rebel Base on Yavin 4. I can upload his new coordinates to your datapad.",
+	customDialogText = "Lady Viopa has vetted you for clearance, and guess what... You've been cleared, otherwise I'd have met you with a blaster in your face.   You're looking for Colonel Aqzow right?   I can upload his coordinates to your datapad.  Hope you don't mind trudging through the heat and mud in this Jungle to get to him.   You'll understand when you get there why we take such precautions.",
 	stopConversation = "false",
 	options = {
 		{"Upload Aqzow's coordinates.", "give_waypoint"},
@@ -18,7 +18,7 @@ aqzow_liaison_convo:addScreen(aqzow_liaison_greeting)
 
 aqzow_liaison_give_waypoint = ConvoScreen:new {
 	id = "give_waypoint",
-	customDialogText = "Aqzow is at the Hidden Rebel Base, near -3078, -2998. The waypoint is now in your datapad.",
+	customDialogText = "Aqzow is near -3078, -2998. The waypoint is now in your datapad.",
 	stopConversation = "true",
 	options = {}
 }
