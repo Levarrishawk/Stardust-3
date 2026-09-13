@@ -41,8 +41,7 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 			local pointIndex = ((i - 1) % #route) + 1
 			local point = route[pointIndex]
 			local nextPoint = route[(pointIndex % #route) + 1]
-			local routePass = math.floor((i - 1) / #route)
-			local routeProgress = routePass * 0.16
+			local routeProgress = getRandomNumber(0, 80) / 100
 			local spawnX = point[1] + ((nextPoint[1] - point[1]) * routeProgress)
 			local spawnY = point[2] + ((nextPoint[2] - point[2]) * routeProgress)
 			local template = pedestrians[((i + routeIndex - 2) % #pedestrians) + 1]
@@ -235,10 +234,6 @@ function AlderaCityScreenPlay:spawnMobiles()
 		{
 			{1068, -1312, 62}, {1085, -1296, 48}, {1100, -1280, 43},
 			{1085, -1296, -132}
-		},
-		{
-			{1048, -1490, 109}, {1070, -1478, 112}, {1092, -1465, 116},
-			{1070, -1478, -68}
 		}
 	}
 
