@@ -873,6 +873,7 @@ escort_corellia_rebel_tier3_2_c = SpaceEscortScreenplay:new {
 	parentQuestName = "corellia_rebel_tier3_2_b",
 
 	escortShips = {"reb_freighterlight_tier3"},
+	escortSpeed = 45,
 
 	escortPoints = {
 		{patrolPointName = "havoc_rebel_tier3_2_c_escort_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
