@@ -59,7 +59,7 @@ gins_darone_missions =
 npcMapGinsDarone =
 	{
 		{
-			spawnData = { npcTemplate = "gins_darone", x = -22.0, z = 32.0, y = 58.0, direction = 111, cellID = 3465358, position = STAND },
+			spawnData = { npcTemplate = "gins_darone", x = 4008, z = 37, y = -6205, direction = 90, cellID = 0, position = STAND },
 			worldPosition = { x = -3094, y = -2985 },
 			npcNumber = 1,
 			stfFile = "@static_npc/yavin/yavin_massassi_gins_darone",

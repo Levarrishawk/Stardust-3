@@ -689,6 +689,7 @@ includeFile("poi/tatooine_krayt_graveyard.lua")
 includeFile("poi/tatooine_sandcrawler_ne.lua")
 includeFile("poi/tatooine_village_ruins.lua")
 includeFile("poi/yavin4_blueleaf_temple.lua")
+includeFile("poi/yavin4_great_massassi_rebel_base.lua")
 includeFile("poi/yavin4_imperial_base.lua")
 includeFile("poi/yavin4_woolamander_temple.lua")
 
