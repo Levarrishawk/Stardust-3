@@ -32,7 +32,8 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 			local routeProgress = getRandomNumber(0, 100) / 100
 			local spawnX = point[1] + ((nextPoint[1] - point[1]) * routeProgress)
 			local spawnY = point[2] + ((nextPoint[2] - point[2]) * routeProgress)
-			local template = pedestrians[((i + routeIndex - 2) % #pedestrians) + 1]
+			local templates = route.templates or pedestrians
+			local template = templates[((i + routeIndex - 2) % #templates) + 1]
 			local pMobile = spawnMobile("alderaan", template, 60, spawnX, 28, spawnY, point[3], 0)
 
 			if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
@@ -119,7 +120,16 @@ function AlderaCityScreenPlay:spawnMobiles()
 		{population = 3, points = {{1362, -1544, 0}, {1362, -1534, 0}}},
 		{population = 4, points = {{1242, -1515, 0}, {1340, -1515, 0}, {1340, -1502, 0}, {1242, -1502, 0}}},
 		{population = 4, points = {{1255, -1495, 0}, {1255, -1405, 0}}},
-		{population = 6, points = {{1218, -1730, 0}, {1357, -1730, 0}, {1357, -1554, 0}, {1218, -1554, 0}}},
+		{
+			population = 24,
+			templates = {
+				"stormtrooper", "stormtrooper", "imperial_trooper", "imperial_private",
+				"imperial_noncom", "imperial_staff_sergeant", "imperial_medic",
+				"imperial_pilot", "imperial_officer", "imperial_first_lieutenant",
+				"alderaan_security_force"
+			},
+			points = {{1218, -1730, 0}, {1357, -1730, 0}, {1357, -1554, 0}, {1218, -1554, 0}}
+		},
 		{population = 4, points = {{1082, -1737, 0}, {1205, -1737, 0}, {1205, -1702, 0}, {1082, -1702, 0}}},
 		{population = 3, points = {{1130, -1693, 0}, {1171, -1693, 0}, {1171, -1661, 0}, {1130, -1661, 0}}},
 		{population = 3, points = {{1045, -1711, 0}, {1097, -1711, 0}, {1097, -1659, 0}, {1045, -1659, 0}}},
