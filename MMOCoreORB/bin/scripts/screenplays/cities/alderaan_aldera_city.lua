@@ -26,18 +26,27 @@ function AlderaCityScreenPlay:spawnCityMobile(template, x, z, y, direction, mood
 end
 
 function AlderaCityScreenPlay:spawnPatrols(routes)
-	local pedestrians = {"commoner", "commoner", "businessman", "artisan", "commoner", "noble"}
+	local pedestrians = {
+		"commoner", "commoner", "businessman", "artisan", "commoner", "noble",
+		"commoner", "alderaan_security_force", "commoner", "stormtrooper",
+		"businessman", "alderaan_security_force"
+	}
 
 	AlderaCityPatrolRoutes = routes
 
 	for routeIndex = 1, #routes, 1 do
 		local route = routes[routeIndex]
 
-		for i = 1, 18, 1 do
+		for i = 1, #route * 5, 1 do
 			local pointIndex = ((i - 1) % #route) + 1
 			local point = route[pointIndex]
+			local nextPoint = route[(pointIndex % #route) + 1]
+			local routePass = math.floor((i - 1) / #route)
+			local routeProgress = routePass * 0.16
+			local spawnX = point[1] + ((nextPoint[1] - point[1]) * routeProgress)
+			local spawnY = point[2] + ((nextPoint[2] - point[2]) * routeProgress)
 			local template = pedestrians[((i + routeIndex - 2) % #pedestrians) + 1]
-			local pMobile = spawnMobile("alderaan", template, 60, point[1], 28, point[2], point[3], 0)
+			local pMobile = spawnMobile("alderaan", template, 60, spawnX, 28, spawnY, point[3], 0)
 
 			if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
 				local objectID = SceneObject(pMobile):getObjectID()
@@ -293,7 +302,11 @@ function AlderaCityScreenPlay:spawnMobiles()
 		{"stormtrooper", 930, 28, -1448, 90, "neutral"}
 	}
 
-	local areas = {starport, civicSquare, market, leisure, westTransit, eastTransit, residential, publicServices, checkpoints}
+	-- The surrounding filler structures exist only in the client snapshot. Core3 cannot
+	-- collision-test their footprints, so do not use the inferred district coordinates
+	-- above as spawn points. Until the client snapshot is decoded into verified lanes,
+	-- every active city spawn is anchored to one of the explicit pedestrian routes.
+	local areas = {}
 
 	for i = 1, #areas, 1 do
 		local area = areas[i]
