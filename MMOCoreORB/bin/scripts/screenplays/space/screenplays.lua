@@ -199,6 +199,7 @@ includeFile("space/conversations/rebel/willhamBurkeConvoHandler.lua")
 includeFile("space/conversations/rebel/havoc_squadron/viopaConvoHandler.lua")
 includeFile("space/conversations/rebel/havoc_squadron/vrakConvoHandler.lua")
 includeFile("space/conversations/rebel/havoc_squadron/aqzowConvoHandler.lua")
+includeFile("space/conversations/rebel/havoc_squadron/aqzowLiaisonConvoHandler.lua")
 --includeFile("space/conversations/rebel/havoc_squadron/arkonConvoHandler.lua")
 
 -- Vortex Squadron

@@ -39,6 +39,7 @@ SpaceStationScreenPlay = ScreenPlay:new {
 		yavin4_mining = {"yavin4", -267, 35, 4896},
 		labor = {"yavin4", -6921, 73, -5726},
 		yavin4_imperial = {"yavin4", 4054, 37, -6216},
+		yavin4_hidden_rebel_base = {"yavin4", -3143, 70, -3045},
 		kachirho = {"kashyyyk", -670, 18, -137},
 	},
 }

@@ -28,6 +28,7 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
 		-- Cell 3: hangar and maintenance floor
 		{"rebel_pilot", 300, 28.0, 2.0, 20.0, 120, 3465355, "npc_conversation"},
 		{"rebel_pilot", 300, 31.0, 2.0, 18.0, -60, 3465355, "npc_conversation"},
+		{"aqzow", 60, -35.9, 2.0, 43.1, 90, 3465355, ""},
 		{"commoner_technician", 300, 20.0, 2.0, 28.0, 180, 3465355, "npc_use_terminal_high"},
 		{"commoner_technician", 300, -22.0, 2.0, 19.0, 35, 3465355, "npc_use_terminal_low"},
 		{"rebel_trooper", 300, 39.0, 2.0, 72.0, -90, 3465355, ""},
@@ -113,6 +114,7 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
     {"object/static/structure/general/ywing.iff", -33.3, 3.0, 90.8, 3465355, 90},
     {"object/static/vehicle/player_shuttle.iff", 20.0, 2.2, 14.6, 3465355, 0},
     {"object/static/vehicle/static_yt_1300.iff", 0.0, 2.0, 66.5, 3465355, 0},
+    {"object/tangible/terminal/terminal_space.iff", -40.2, 2.0, 36.4, 3465355, 90},
 
 		-- Tactical war room
 		{"object/tangible/furniture/all/frn_all_desk_map_table.iff", -25.0, 32.0, 58.0, 3465358, 0},

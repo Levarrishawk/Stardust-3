@@ -1,4 +1,5 @@
 local Logger = require("utils.logger")
+local SpaceHelpers = require("utils.space_helpers")
 require("utils.helpers")
 
 SpacestationYavin4ConvoHandler = conv_handler:new {}
@@ -48,12 +49,20 @@ function SpacestationYavin4ConvoHandler:runScreenHandlers(pConvTemplate, pPlayer
 	end
 
 	-- Handle Landing
-	if (screenID == "spacestation_yavin4_land_mining_land") then
+	local playerID = CreatureObject(pPlayer):getObjectID()
+	local hasHiddenBaseClearance = getQuestStatus(playerID .. "SpaceLandingPermission:havoc_yavin_rebel_base") == "1" or
+		getQuestStatus(playerID .. HavocSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted") == "1"
+
+	if (screenID == "spacestation_yavin4_land" and SpaceHelpers:isHavocSquadron(pPlayer) and hasHiddenBaseClearance) then
+		pClonedConvo:addOption("Hidden Rebel Base.", "spacestation_yavin4_land_hidden_rebel_base_main")
+	elseif (screenID == "spacestation_yavin4_land_mining_land") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "yavin4_mining")
 	elseif (screenID == "spacestation_yavin4_land_labor_land") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "labor")
 	elseif (screenID == "spacestation_yavin4_land_imperial_land") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "yavin4_imperial")
+	elseif (screenID == "spacestation_yavin4_land_hidden_rebel_base_land") then
+		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "yavin4_hidden_rebel_base")
 	end
 
 	-- Handle Repair Options

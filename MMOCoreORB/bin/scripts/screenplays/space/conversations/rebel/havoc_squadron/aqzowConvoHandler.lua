@@ -51,6 +51,11 @@ function aqzowConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("no_jtl")
 	end
 
+	if (getQuestStatus(playerID .. "SpaceLandingPermission:havoc_yavin_rebel_base") ~= "1") then
+		setQuestStatus(playerID .. "SpaceLandingPermission:havoc_yavin_rebel_base", 1)
+		CreatureObject(pPlayer):sendSystemMessage("Lieutenant Colonel Aqzow has granted you clearance to land at the Hidden Rebel Base on Yavin 4.")
+	end
+
 	-- Testing resetAqzowQuests
 	--HavocSquadronScreenplay:resetAqzowQuests(pPlayer)
 

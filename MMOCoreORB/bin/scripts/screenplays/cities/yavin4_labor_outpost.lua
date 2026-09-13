@@ -16,7 +16,7 @@ Yavin4LaborOutpostScreenPlay = CityScreenPlay:new {
 
 	mobiles = {
 		{"eker", 60, -3.9, 0.6, 1.2, -144, 3035372, ""},
-		{"aqzow", 60, 1.9, 0.6, 1.7, 40, 3035376, ""}
+		{"aqzow_liaison", 60, 1.9, 0.6, 1.7, 40, 3035376, ""}
 	}
 }
 

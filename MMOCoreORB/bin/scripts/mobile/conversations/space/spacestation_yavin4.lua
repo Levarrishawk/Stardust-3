@@ -116,6 +116,38 @@ spacestation_yavin4_land_imperial_land = ConvoScreen:new {
 
 spacestation_yavin4_convotemplate:addScreen(spacestation_yavin4_land_imperial_land);
 
+-- Hidden Rebel Base Landing Main
+
+spacestation_yavin4_land_hidden_rebel_base_main = ConvoScreen:new {
+	id = "spacestation_yavin4_land_hidden_rebel_base_main",
+	customDialogText = "Your Havoc Squadron clearance is confirmed. Do you want to land at the Hidden Rebel Base?",
+	stopConversation = "false",
+	options = {
+		{"Land at the Hidden Rebel Base.", "spacestation_yavin4_land_hidden_rebel_base_land"},
+		{"Cancel request to land.", "spacestation_yavin4_land_all_abort"},
+	}
+}
+
+spacestation_yavin4_convotemplate:addScreen(spacestation_yavin4_land_hidden_rebel_base_main);
+
+spacestation_yavin4_land_hidden_rebel_base_land = ConvoScreen:new {
+	id = "spacestation_yavin4_land_hidden_rebel_base_land",
+	customDialogText = "Clearance confirmed. Beginning landing approach to the Hidden Rebel Base.",
+	stopConversation = "true",
+	options = {}
+}
+
+spacestation_yavin4_convotemplate:addScreen(spacestation_yavin4_land_hidden_rebel_base_land);
+
+spacestation_yavin4_land_all_abort = ConvoScreen:new {
+	id = "spacestation_yavin4_land_all_abort",
+	customDialogText = "Landing request cancelled.",
+	stopConversation = "true",
+	options = {}
+}
+
+spacestation_yavin4_convotemplate:addScreen(spacestation_yavin4_land_all_abort);
+
 -- Repair Main
 spacestation_yavin4_repair = ConvoScreen:new {
 	id = "spacestation_yavin4_repair",
