@@ -91,18 +91,13 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
 		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -24.0, 55.0, -25.0, 3465362, 0},
 		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 24.0, 55.0, -25.0, 3465362, 0},
 
-		-- Strong rear backlight inspired by the Alliance award ceremony. These
-		-- sit on the raised rear platform, between the temple's stone uprights.
-		{"object/static/particle/particle_newbie_spotlight.iff", -8.0, 58.0, -51.5, 3465362, 0},
-		{"object/static/particle/particle_newbie_spotlight.iff", -4.0, 58.0, -51.5, 3465362, 0},
-		{"object/static/particle/particle_newbie_spotlight.iff", 0.0, 58.0, -51.5, 3465362, 0},
-		{"object/static/particle/particle_newbie_spotlight.iff", 4.0, 58.0, -51.5, 3465362, 0},
-		{"object/static/particle/particle_newbie_spotlight.iff", 8.0, 58.0, -51.5, 3465362, 0},
-		{"object/static/particle/pt_light_constant_blue.iff", -8.0, 68.0, -50.5, 3465362, 0},
-		{"object/static/particle/pt_light_constant_blue.iff", -4.0, 68.0, -50.5, 3465362, 0},
-		{"object/static/particle/pt_light_constant_blue.iff", 0.0, 68.0, -50.5, 3465362, 0},
-		{"object/static/particle/pt_light_constant_blue.iff", 4.0, 68.0, -50.5, 3465362, 0},
-		{"object/static/particle/pt_light_constant_blue.iff", 8.0, 68.0, -50.5, 3465362, 0},
+		-- Strong rear backlight inspired by the Alliance award ceremony. The
+		-- artefacts sit behind the stone uprights on the raised rear platform.
+		{"object/tangible/item/lytus_family_artefact.iff", -8.0, 58.0, -52.5, 3465362, 0},
+		{"object/tangible/item/lytus_family_artefact.iff", -4.0, 58.0, -52.5, 3465362, 0},
+		{"object/tangible/item/lytus_family_artefact.iff", 0.0, 58.0, -52.5, 3465362, 0},
+		{"object/tangible/item/lytus_family_artefact.iff", 4.0, 58.0, -52.5, 3465362, 0},
+		{"object/tangible/item/lytus_family_artefact.iff", 8.0, 58.0, -52.5, 3465362, 0},
 
 		-- Hangar work areas and stores
 		{"object/tangible/furniture/all/frn_all_data_terminal_free_s1.iff", 20.0, 2.0, 30.0, 3465355, 180},
