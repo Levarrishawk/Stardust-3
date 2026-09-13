@@ -105,6 +105,7 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
 		{"object/tangible/container/drum/large_plain_crate_s01.iff", -37.0, 2.0, 12.0, 3465355, 15},
 		{"object/tangible/container/drum/large_plain_crate_s02.iff", -34.5, 2.0, 12.5, 3465355, -10},
 		{"object/tangible/container/drum/large_plain_crate_s03.iff", -36.0, 2.0, 15.0, 3465355, 30},
+		{"object/static/structure/general/ywing.iff", 33.3, 2.0, 15.0, 3465355, -90},
 
 		-- Tactical war room
 		{"object/tangible/furniture/all/frn_all_desk_map_table.iff", -25.0, 32.0, 58.0, 3465358, 0},
