@@ -5,6 +5,7 @@ includeFile("conversations.lua")
 includeFile("dressgroup/serverobjects.lua") 
 
 -- Creatures
+includeFile("alderaan/serverobjects.lua")
 includeFile("corellia/serverobjects.lua")
 includeFile("dantooine/serverobjects.lua")
 includeFile("dathomir/serverobjects.lua")
