@@ -43,10 +43,13 @@ function vrakConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 
 	local playerID = CreatureObject(pPlayer):getObjectID()
 
-	-- First meeting complete: Player finished talking to Vrak
-	-- Set viopaSmuggler = 2 so Viopa knows they met
+	-- First meeting complete: Vrak sends the player to meet the hacker in Dantooine.
 	if (screenID == "thank_you_vrak" or screenID == "calm_down_goodbye") then
 		setQuestStatus(playerID .. "HavocSquadron:viopaSmuggler", 2)
+		setQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
+
+		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_viopa_rebel_2}, {{type="escort", name="viopa_rebel_2"}})
+		escort_viopa_rebel_2:startQuest(pPlayer, pNpc)
 
 	-- Confrontation complete: Player got the info about Kud'ar Mub'at
 	-- Set viopaSmuggler = 4 so Viopa knows they confronted Vrak
