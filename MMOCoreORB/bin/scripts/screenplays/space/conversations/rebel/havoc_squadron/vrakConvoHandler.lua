@@ -57,9 +57,8 @@ function vrakConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, select
 		HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_viopa_rebel_2}, {{type="escort", name="viopa_rebel_2"}})
 		escort_viopa_rebel_2:startQuest(pPlayer, pNpc)
 
-	-- Confrontation complete: Player got the info about Kud'ar Mub'at
-	-- Set viopaSmuggler = 4 so Viopa knows they confronted Vrak
-	elseif (screenID == "betrayal_explanation") then
+	-- Confrontation complete: only the final responses unlock Viopa's fourth mission.
+	elseif (screenID == "nym_will_take_care" or screenID == "nym_ensures_change") then
 		setQuestStatus(playerID .. "HavocSquadron:viopaSmuggler", 4)
 	end
 

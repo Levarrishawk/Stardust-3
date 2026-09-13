@@ -140,7 +140,7 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		-- Player has completed and been rewarded for mission 3
 		if (questThreeComplete and not questFourStarted) then
 			-- Player needs to be sent to confront Vrak
-			if (viopaSmuggler == 2) then
+			if (viopaSmuggler < 3) then
 				return convoTemplate:getScreen("send_confront_vrak")
 			-- Player has been sent to confront Vrak but hasn't spoken with him yet
 			elseif (viopaSmuggler == 3) then
@@ -148,14 +148,6 @@ function viopaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			-- Player has confronted Vrak (viopaSmuggler == 4), ready for Mission 4
 			elseif (viopaSmuggler == 4) then
 				return convoTemplate:getScreen("vrak_confronted")
-
-			-- Player is able to start fourth mission
-			else
-				if (getQuestStatus(playerID .. HavocSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted") == "1") then
-					return convoTemplate:getScreen("failed_mission4")
-				else
-					return convoTemplate:getScreen("mission4_brief")
-				end
 			end
 		-- Player is able to start third mission
 		elseif (questTwoComplete) then
