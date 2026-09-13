@@ -837,7 +837,8 @@ survival_corellia_rebel_tier3_2_b = SpaceSurvivalScreenplay:new {
 
 	survivalTime = 300,
 	survivalUpdateInterval = 30,
-	survivalPoint = "space_endor:rebel_tier3_2_b_defend_point",
+	survivalPoint = {x = -153, z = 1800, y = 3265},
+	retainWaypointDuringSurvival = true,
 	delayToFirstAttack = 5,
 
 	attackDelay = 90,

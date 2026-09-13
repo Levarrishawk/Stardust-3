@@ -71,7 +71,7 @@ space_endor = SpacePatrolPointTable:new {
 	{patrolPointName = "tier3_privateer_assassinate_path_01", x = 3516, z = -69, y = 2111},
 	{patrolPointName = "tatooine_imperial_tier4_recovery2_2", x = 3570, z = 2552, y = 1242},
 	{patrolPointName = "navpoint_hyperspace_durillium_sea", x = 5737, z = 2276, y = 3735},
-	{patrolPointName = "rebel_tier3_2_b_defend_point", x = -153, z = 3803, y = 3265},
+	{patrolPointName = "rebel_tier3_2_b_defend_point", x = -153, z = 1800, y = 3265},
 	{patrolPointName = "rebel_tier3_2_c_escort_1", x = -239, z = 3935, y = 3280},
 	{patrolPointName = "rebel_tier3_2_c_escort_2", x = -549, z = 3180, y = 3238},
 	{patrolPointName = "corellia_rebel_tier4_4_c_battle_point", x = 318, z = 4729, y = 4803},
