@@ -1173,8 +1173,8 @@ space_battle_corellia_rebel_tier3_4_c = SpaceBattleScreenplay:new {
 	parentQuestName = "corellia_rebel_tier3_4_b",
 
 	battlePoint = "space_endor:corellia_rebel_tier3_4_c_battlepoint",
-	allyArrivalDelay = 60,
-	enemyArrivalDelay = 80,
+	allyArrivalDelay = 20,
+	enemyArrivalDelay = 30,
 	allyOriginDist = 800,
 	enemyOriginDist = -800,
 	allyArrivalDist = 100,
@@ -1218,7 +1218,9 @@ survival_corellia_rebel_tier3_4_d = SpaceSurvivalScreenplay:new {
 	parentQuestName = "corellia_rebel_tier3_4_c",
 
 	survivalTime = 300,
-	survivalPoint = "space_endor:corellia_rebel_tier3_4_c_survival",
+	survivalUpdateInterval = 30,
+	survivalPoint = {x = -1600, z = -600, y = 2600},
+	retainWaypointDuringSurvival = true,
 	delayToFirstAttack = 5,
 
 	attackDelay = 60,

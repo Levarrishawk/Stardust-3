@@ -7,7 +7,7 @@ SpaceEndorSpawner = SpaceSpawnerScreenPlay:new {
 	
 	primarySpawns = {
   --  {spawnName = "hvy_rebel_station", shipName = "spacestation_freedom", x = -6000, z = 0, y = 0, minRespawn = 7200, maxRespawn = 10800},
-    {spawnName = "imperial_star_destroyer", shipName = "star_destroyer", x = -7004, z = -1312, y = 7148, minRespawn = 7200, maxRespawn = 10800},
+    {spawnName = "imperial_star_destroyer", shipName = "star_destroyer", x = -7004, z = -1312, y = 7148, minRespawn = 300, maxRespawn = 10800},
   },
 
 	shipSpawns = {
