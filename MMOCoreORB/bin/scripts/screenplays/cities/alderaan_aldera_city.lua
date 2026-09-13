@@ -50,6 +50,66 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 	end
 end
 
+function AlderaCityScreenPlay:spawnCantinaMobiles()
+	local cantinaCellID = 610000068
+	local cantinaMobiles = {
+		-- Staff work from inside the U-shaped bar.
+		{"bartender", -8.0, -0.9, -2.2, 0, "npc_use_terminal_high"},
+		{"bartender", 5.8, -0.9, 2.8, 180, "conversation"},
+
+		-- Customers line the public side of the bar.
+		{"patron", -8.2, -0.9, -3.8, 0, "npc_standing_drinking"},
+		{"commoner", -4.7, -0.9, -3.8, 0, "npc_standing_drinking"},
+		{"gambler", -1.2, -0.9, -3.8, 0, "npc_standing_drinking"},
+		{"businessman", 2.3, -0.9, -3.8, 0, "npc_standing_drinking"},
+		{"mercenary", 5.5, -0.9, -3.8, 0, "npc_standing_drinking"},
+		{"noble", -7.0, -0.9, 4.5, 180, "npc_standing_drinking"},
+		{"artisan", -2.5, -0.9, 4.5, 180, "conversation"},
+		{"info_broker", 1.0, -0.9, 4.5, 180, "conversation"},
+		{"devaronian_male", 9.5, -0.9, 0.2, -90, "npc_standing_drinking"},
+
+		-- Four patrons around the southern table, facing into the group.
+		{"chiss_female", 2.2, -0.9, -8.8, -90, "npc_sitting_chair"},
+		{"sullustan_male", 5.0, -0.9, -8.8, 90, "npc_sitting_table"},
+		{"commoner_old", 3.6, -0.9, -7.4, 180, "npc_sitting_chair"},
+		{"patron", 3.6, -0.9, -10.2, 0, "npc_sitting_table"},
+
+		-- Four patrons around the northern table.
+		{"ithorian_male", 1.4, -0.9, 10.0, -90, "npc_sitting_chair"},
+		{"businessman", 4.2, -0.9, 10.0, 90, "npc_sitting_table"},
+		{"commoner", 2.8, -0.9, 8.6, 180, "npc_sitting_chair"},
+		{"noble", 2.8, -0.9, 11.4, 0, "npc_sitting_table"},
+
+		-- A quieter table toward the western wall.
+		{"artisan", -13.7, -0.9, 8.5, -90, "npc_sitting_chair"},
+		{"commoner", -10.9, -0.9, 8.5, 90, "npc_sitting_table"},
+		{"info_broker", -12.3, -0.9, 7.1, 180, "npc_sitting_chair"},
+		{"patron", -12.3, -0.9, 9.9, 0, "npc_sitting_table"},
+
+		-- Small standing conversations and activity near the stage side.
+		{"bounty_hunter", 12.7, -0.9, -8.0, 45, "conversation"},
+		{"mercenary", 14.0, -0.9, -6.7, -135, "conversation"},
+		{"commoner", 13.8, -0.9, 7.0, 135, "conversation"},
+		{"commoner_old", 12.5, -0.9, 8.3, -45, "conversation"},
+		{"entertainer", 20.0, -0.9, -2.4, -90, "happy"},
+		{"entertainer", 20.0, -0.9, 1.0, -90, "entertained"},
+		{"patron", 16.5, -0.9, -0.8, 90, "entertained"}
+	}
+
+	for i = 1, #cantinaMobiles, 1 do
+		local mobile = cantinaMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], 60, mobile[2], mobile[3], mobile[4], mobile[5], cantinaCellID)
+
+		if (pMobile ~= nil) then
+			CreatureObject(pMobile):setMoodString(mobile[6])
+
+			if (SceneObject(pMobile):isAiAgent()) then
+				AiAgent(pMobile):addObjectFlag(AI_STATIC)
+			end
+		end
+	end
+end
+
 function AlderaCityScreenPlay:walkPatrol(pMobile)
 	if (pMobile == nil or not SceneObject(pMobile):isAiAgent() or SceneObject(pMobile):getZoneName() == "" or CreatureObject(pMobile):isDead()) then
 		return
@@ -157,4 +217,5 @@ function AlderaCityScreenPlay:spawnMobiles()
 	}
 
 	self:spawnPatrols(pedestrianRoutes)
+	self:spawnCantinaMobiles()
 end
