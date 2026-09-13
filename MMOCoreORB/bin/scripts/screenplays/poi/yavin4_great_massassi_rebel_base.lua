@@ -30,8 +30,8 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
 		{"rebel_pilot", 300, 31.0, 2.0, 18.0, -60, 3465355, "npc_conversation"},
 		{"commoner_technician", 300, 20.0, 2.0, 28.0, 180, 3465355, "npc_use_terminal_high"},
 		{"commoner_technician", 300, -22.0, 2.0, 19.0, 35, 3465355, "npc_use_terminal_low"},
-		{"rebel_trooper", 300, 43.5, 2.0, 72.0, -90, 3465355, ""},
-		{"rebel_trooper", 300, -43.5, 2.0, 72.0, 90, 3465355, ""},
+		{"rebel_trooper", 300, 39.0, 2.0, 72.0, -90, 3465355, ""},
+		{"rebel_trooper", 300, -39.0, 2.0, 72.0, 90, 3465355, ""},
 		{"rebel_commando", 300, 0.0, 2.0, 52.0, 180, 3465355, ""},
 		{"rebel_medic", 300, -31.0, 2.0, 91.0, 135, 3465355, "npc_survey"},
 

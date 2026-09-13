@@ -17634,49 +17634,14 @@ ObjectTemplates:addClientTemplate(object_static_structure_general_shared_web_07,
 
 object_static_structure_general_shared_xwing = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/static/structure/general/shared_xwing.iff"
-	--Data below here is deprecated and loaded from the tres, keeping for easy lookups
---[[
-	appearanceFilename = "appearance/poi_all_xwing.apt",
-	arrangementDescriptorFilename = "",
 
-	clearFloraRadius = 0,
-	clientDataFile = "",
-	clientGameObjectType = 5,
-	collisionActionBlockFlags = 255,
-	collisionActionFlags = 1,
-	collisionActionPassFlags = 0,
-	collisionMaterialBlockFlags = 1,
-	collisionMaterialFlags = 1,
-	collisionMaterialPassFlags = 0,
-	containerType = 0,
-	containerVolumeLimit = 0,
-
-	detailedDescription = "@string_table:pristine wall",
-
-	gameObjectType = 5,
-
-	locationReservationRadius = 0,
-	lookAtText = "@string_table:pristine wall",
-
-	noBuildRadius = 0,
-
-	objectName = "@obj_n:unknown_object",
-	onlyVisibleInTools = 0,
-
-	portalLayoutFilename = "",
-
-	scale = 1,
-	scaleThresholdBeforeExtentTest = 0.5,
-	sendToClient = 1,
-	slotDescriptorFilename = "",
-	snapToTerrain = 1,
-	surfaceType = 1,
-
-	totalCellNumber = 0,
-
-	clientObjectCRC = 3802756237,
-	derivedFromTemplates = {"object/object/base/shared_base_object.iff", "object/static/base/shared_static_base.iff", "object/static/structure/base/shared_static_structure_base.iff"}
-]]
 }
 
 ObjectTemplates:addClientTemplate(object_static_structure_general_shared_xwing, "object/static/structure/general/shared_xwing.iff")
+
+object_static_structure_general_shared_ywing = SharedStaticObjectTemplate:new {
+  clientTemplateFileName = "object/static/structure/general/shared_ywing.iff"
+
+}
+
+ObjectTemplates:addClientTemplate(object_static_structure_general_shared_ywing, "object/static/structure/general/shared_ywing.iff")
