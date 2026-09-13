@@ -5,6 +5,10 @@ SpaceCorelliaSpawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_corellia",
 
+	primarySpawns = {
+		{spawnName = "corellia_station_star_destroyer", shipName = "star_destroyer", x = 4020, z = -5374, y = -2600, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		-- Keep Havoc Squadron's introductory TIE hunt populated so new pilots can
 		-- find qualifying targets immediately at each mission waypoint.

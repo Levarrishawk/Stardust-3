@@ -5,6 +5,10 @@ SpaceDantooineSpawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_dantooine",
 
+	primarySpawns = {
+		{spawnName = "dantooine_station_star_destroyer", shipName = "star_destroyer", x = -1141, z = -742, y = -5902, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		{spawnName = "corellia_imperial_tier4_inspect2", spawnType = SHIP_SPAWN_SINGLE, x = -3934, z = -6968, y = 2011, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 50, maxPatrol = 120, totalSpawns = 1,
 			shipSpawns = {"velocity_merc_group_leader_tier5"}

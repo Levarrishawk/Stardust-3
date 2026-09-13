@@ -5,6 +5,10 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_naboo",
 
+	primarySpawns = {
+		{spawnName = "naboo_station_star_destroyer", shipName = "star_destroyer", x = 9, z = 905, y = -6461, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		{spawnName = "inquisition_mission_2_droids_1", spawnType = SHIP_SPAWN_SINGLE, x = 590, z = -3500, y = -6000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 16, maxSpawnDistance = 48, minPatrol = 40, maxPatrol = 160, totalSpawns = 4,
 			shipSpawns = {"rogue_droid_fighter_tier1_naboo"}

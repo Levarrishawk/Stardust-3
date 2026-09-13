@@ -5,6 +5,10 @@ SpaceKashyyykSpawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_kashyyyk",
 
+	primarySpawns = {
+		{spawnName = "kashyyyk_station_star_destroyer", shipName = "star_destroyer", x = -2500, z = 250, y = -5000, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		-- Ghrag Mercenaries. The zone's primary antagonist, so they get the widest
 		-- coverage and the boss/ace tiers. The Tyyyn Nebula is their home ground.

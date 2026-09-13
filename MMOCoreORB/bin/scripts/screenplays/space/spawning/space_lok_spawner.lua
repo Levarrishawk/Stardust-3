@@ -5,6 +5,10 @@ SpaceLokSpawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_lok",
 
+	primarySpawns = {
+		{spawnName = "lok_station_star_destroyer", shipName = "star_destroyer", x = -3735, z = -5342, y = 114, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		{spawnName = "nym_gunboat_to_imp", spawnType = SHIP_SPAWN_SINGLE, x = 6427, z = -6877, y = -5763, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"nym_gunboat_to_imp_00", "nym_gunboat_to_imp_01", "nym_gunboat_to_imp_02", "nym_gunboat_to_imp_03", "nym_gunboat_to_imp_04", "nym_gunboat_to_imp_05", "nym_gunboat_to_imp_06", "nym_gunboat_to_imp_07", "nym_gunboat_to_imp_08", "nym_gunboat_to_imp_09", "nym_gunboat_to_imp_10", "nym_gunboat_to_imp_11", "nym_gunboat_to_imp_12", "nym_gunboat_to_imp_13", "nym_gunboat_to_imp_14", "nym_gunboat_to_imp_15", "nym_gunboat_to_imp_16"},

@@ -5,6 +5,10 @@ SpaceLight1Spawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_light1",
 
+	primarySpawns = {
+		{spawnName = "kessel_star_destroyer", shipName = "star_destroyer", x = 750, z = 0, y = 0, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		{spawnName = "rebel_tier5Patrol_12", spawnType = SHIP_SPAWN_SINGLE, x = -3199, z = -6013, y = 5343, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"rebel_tier5Patrol_12_00", "rebel_tier5Patrol_12_01", "rebel_tier5Patrol_12_02", "rebel_tier5Patrol_12_03", "rebel_tier5Patrol_12_04", "rebel_tier5Patrol_12_05", "rebel_tier5Patrol_12_06", "rebel_tier5Patrol_12_07"},

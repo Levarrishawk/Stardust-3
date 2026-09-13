@@ -5,6 +5,10 @@ SpaceTatooineSpawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_tatooine",
 
+	primarySpawns = {
+		{spawnName = "tatooine_station_star_destroyer", shipName = "star_destroyer", x = -188, z = -5873, y = 1865, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		{spawnName = "hutt_guards_base_4", spawnType = SHIP_SPAWN_SINGLE, x = 1428, z = 7355, y = -5554, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 50, maxPatrol = 120, totalSpawns = 3,
 			shipSpawns = {"hutt_bomber_s01_tier1", "hutt_bomber_s01_tier1", "hutt_bomber_s01_tier1_tatooine", "hutt_fighter_s01_tier1", "hutt_fighter_s01_tier1", "hutt_fighter_s01_tier1", "hutt_fighter_s01_tier1", "hutt_fighter_s01_tier1_tatooine"}

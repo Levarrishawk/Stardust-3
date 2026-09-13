@@ -5,6 +5,10 @@ SpaceYavin4Spawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_yavin4",
 
+	primarySpawns = {
+		{spawnName = "yavin4_station_star_destroyer", shipName = "star_destroyer", x = -3070, z = -5168, y = -5235, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		{spawnName = "imperial_tie_hyper1_patrol4", spawnType = SHIP_SPAWN_SINGLE, x = 3686, z = 1552, y = 3339, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 50, minPatrol = 100, maxPatrol = 400, totalSpawns = 6,
 			shipSpawns = {"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3", "imp_tie_advanced_tier3", "imp_tie_aggressor_tier3", "imp_tie_oppressor_tier3"}

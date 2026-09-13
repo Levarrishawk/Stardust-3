@@ -5,6 +5,11 @@ SpaceDathomirSpawner = SpaceSpawnerScreenPlay:new {
 
 	spaceZone = "space_dathomir",
 
+	primarySpawns = {
+		{spawnName = "dathomir_imperial_star_destroyer", shipName = "star_destroyer", x = 5825, z = 1658, y = 2612, minRespawn = 7200, maxRespawn = 10800},
+		{spawnName = "dathomir_station_star_destroyer", shipName = "star_destroyer", x = -3900, z = 2340, y = -3500, minRespawn = 7200, maxRespawn = 10800},
+	},
+
 	shipSpawns = {
 		{spawnName = "imperial_generator_lookout_1", spawnType = SHIP_SPAWN_SINGLE, x = 1365, z = -6750, y = 7020, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 20, maxSpawnDistance = 40, minPatrol = 70, maxPatrol = 340, totalSpawns = 6,
 			shipSpawns = {"imp_tie_aggressor_tier4", "imp_tie_bomber_tier4", "imp_tie_fighter_tier4", "imp_tie_advanced_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4"}

@@ -1252,10 +1252,10 @@ survival_corellia_rebel_tier4_1 = SpaceSurvivalScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "corellia_rebel_tier4_1_a",
-	sideQuestType2 = "space_battle",
-	sideQuestName2 = "corellia_rebel_tier4_1_b",
-
-	-- sideQuestSplitType = "both",
+	sideFailQuestType = "space_battle",
+	sideFailQuestName = "corellia_rebel_tier4_1_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL,
+	failureSplitOnObjectiveOnly = true,
 
 	survivalTime = 300,
 	survivalPoint = "space_dathomir:corellia_rebel_tier4_1_survival_point",
@@ -1384,10 +1384,10 @@ assassinate_corellia_rebel_tier4_2 = SpaceAssassinateScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "delivery_no_pickup",
 	sideQuestName = "corellia_rebel_tier4_2_a",
-	sideQuestType2 = "rescue",
-	sideQuestName2 = "corellia_rebel_tier4_2_b",
-
-	-- sideQuestSplitType = "both",
+	sideFailQuestType = "rescue",
+	sideFailQuestName = "corellia_rebel_tier4_2_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL,
+	failureSplitOnObjectiveOnly = true,
 
 	arrivalDelay = 5,
 	failTimer = 20,
@@ -1500,10 +1500,10 @@ space_battle_corellia_rebel_tier4_3 = SpaceBattleScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "corellia_rebel_tier4_3_a",
-	sideQuestType2 = "survival",
-	sideQuestName2 = "corellia_rebel_tier4_3_b",
-
-	-- sideQuestSplitType = "both",
+	sideFailQuestType = "survival",
+	sideFailQuestName = "corellia_rebel_tier4_3_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL,
+	failureSplitOnObjectiveOnly = true,
 
 	battlePoint = "space_dathomir:corellia_rebel_tier4_3_battle_point",
 	allyArrivalDelay = 60,
@@ -2063,6 +2063,46 @@ function HavocSquadronScreenplay:prepareMissionChainAttempt(pPlayer, missionScre
 	for i = 1, #missionQuests do
 		SpaceHelpers:clearSpaceQuest(pPlayer, missionQuests[i].type, missionQuests[i].name, false)
 	end
+end
+
+function HavocSquadronScreenplay:recoverStaleArkonMissionChains(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+
+	local function recoverChain(headQuest, successQuest, failureQuest, missionScreenplays, missionQuests)
+		if (getQuestStatus(playerID .. headQuest.name .. ":attempted") ~= "1" or
+			SpaceHelpers:isSpaceQuestComplete(pPlayer, successQuest.type, successQuest.name) or
+			SpaceHelpers:isSpaceQuestComplete(pPlayer, failureQuest.type, failureQuest.name)) then
+			return
+		end
+
+		local chainProgressed = false
+		local chainActive = false
+
+		for i = 1, #missionQuests do
+			local quest = missionQuests[i]
+
+			chainProgressed = chainProgressed or SpaceHelpers:isSpaceQuestComplete(pPlayer, quest.type, quest.name)
+			chainActive = chainActive or SpaceHelpers:isSpaceQuestActive(pPlayer, quest.type, quest.name)
+		end
+
+		if (chainProgressed and not chainActive) then
+			self:prepareMissionChainAttempt(pPlayer, missionScreenplays, missionQuests)
+		end
+	end
+
+	recoverChain(self.TIER4_QUEST_STRING_1, self.TIER4_QUEST_STRING_1_SIDE1, self.TIER4_QUEST_STRING_1_SIDE2,
+		{survival_corellia_rebel_tier4_1, space_battle_corellia_rebel_tier4_1_a, space_battle_corellia_rebel_tier4_1_b},
+		{self.TIER4_QUEST_STRING_1, self.TIER4_QUEST_STRING_1_SIDE1, self.TIER4_QUEST_STRING_1_SIDE2})
+	recoverChain(self.TIER4_QUEST_STRING_2, self.TIER4_QUEST_STRING_2_SIDE1, self.TIER4_QUEST_STRING_2_SIDE2,
+		{assassinate_corellia_rebel_tier4_2, delivery_no_pickup_corellia_rebel_tier4_2_a, rescue_corellia_rebel_tier4_2_b},
+		{self.TIER4_QUEST_STRING_2, self.TIER4_QUEST_STRING_2_SIDE1, self.TIER4_QUEST_STRING_2_SIDE2})
+	recoverChain(self.TIER4_QUEST_STRING_3, self.TIER4_QUEST_STRING_3_SIDE1, self.TIER4_QUEST_STRING_3_SIDE2,
+		{space_battle_corellia_rebel_tier4_3, space_battle_corellia_rebel_tier4_3_a, survival_corellia_rebel_tier4_3_b},
+		{self.TIER4_QUEST_STRING_3, self.TIER4_QUEST_STRING_3_SIDE1, self.TIER4_QUEST_STRING_3_SIDE2})
 end
 
 -- Reset functions for quest clearing
