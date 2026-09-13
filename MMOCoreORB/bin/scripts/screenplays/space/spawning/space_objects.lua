@@ -113,7 +113,7 @@ SpaceObjects = ScreenPlay:new {
 		{"space_endor", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -5260, -1622, 7002},
 		{"space_endor", "object/static/space/ship/cargo_freighter.iff", -5310, -1610, 7005},
 		{"space_endor", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -7424, -277, 4733},
-		{"space_endor", "object/static/space/ship/nebulon_frigate.iff", -7004, -1312, 7148},
+	--	{"space_endor", "object/static/space/ship/nebulon_frigate.iff", -7004, -1312, 7148},
 		{"space_endor", "object/static/space/beacon/hyperspace_generator_01.iff", -3555, 2636, 4780},
 		{"space_endor", "object/static/space/ship/cargo_freighter.iff", -4952, -1528, 6305},
 		{"space_endor", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -4920, -1528, 6324},

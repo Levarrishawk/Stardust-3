@@ -4,6 +4,11 @@ SpaceEndorSpawner = SpaceSpawnerScreenPlay:new {
 	screenplayName = "SpaceEndorSpawner",
 
 	spaceZone = "space_endor",
+	
+	primarySpawns = {
+  --  {spawnName = "hvy_rebel_station", shipName = "spacestation_freedom", x = -6000, z = 0, y = 0, minRespawn = 7200, maxRespawn = 10800},
+    {spawnName = "imperial_star_destroyer", shipName = "star_destroyer", x = -7004, z = -1312, y = 7148, minRespawn = 7200, maxRespawn = 10800},
+  },
 
 	shipSpawns = {
 		{spawnName = "freighter_mission_dudes_1", spawnType = SHIP_SPAWN_SINGLE, x = 3569, z = -482, y = -2421, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, minPatrol = 90, maxPatrol = 380, totalSpawns = 3,
