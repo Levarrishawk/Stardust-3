@@ -17,21 +17,78 @@ function AlderaCityScreenPlay:spawnCityMobile(template, x, z, y, direction, mood
 	if (pMobile ~= nil and mood ~= nil) then
 		self:setMoodString(pMobile, mood)
 	end
+
+	if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+		AiAgent(pMobile):addObjectFlag(AI_STATIC)
+	end
 end
 
-function AlderaCityScreenPlay:spawnPedestrianFlow(points)
+function AlderaCityScreenPlay:spawnPatrols(routes)
 	local pedestrians = {"commoner", "commoner", "businessman", "artisan", "commoner", "noble"}
 
-	for i = 1, #points, 1 do
-		local point = points[i]
-		local firstTemplate = pedestrians[((i - 1) % #pedestrians) + 1]
-		local secondTemplate = pedestrians[(i % #pedestrians) + 1]
-		local thirdTemplate = pedestrians[((i + 2) % #pedestrians) + 1]
+	self.patrolRoutes = routes
 
-		self:spawnCityMobile(firstTemplate, point[1] - 3, 28, point[2] - 2, point[3], "neutral")
-		self:spawnCityMobile(secondTemplate, point[1] + 2, 28, point[2] + 1, point[3] + 170, "neutral")
-		self:spawnCityMobile(thirdTemplate, point[1] + 5, 28, point[2] - 4, point[3] - 20, "neutral")
+	for routeIndex = 1, #routes, 1 do
+		local route = routes[routeIndex]
+
+		for i = 1, 18, 1 do
+			local pointIndex = ((i - 1) % #route) + 1
+			local point = route[pointIndex]
+			local template = pedestrians[((i + routeIndex - 2) % #pedestrians) + 1]
+			local pMobile = spawnMobile("alderaan", template, 60, point[1], 28, point[2], point[3], 0)
+
+			if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+				local objectID = SceneObject(pMobile):getObjectID()
+
+				writeData(objectID .. ":AlderaCity:route", routeIndex)
+				writeData(objectID .. ":AlderaCity:point", pointIndex)
+				AiAgent(pMobile):setAITemplate()
+				AiAgent(pMobile):setMovementState(AI_PATROLLING)
+				createObserver(DESTINATIONREACHED, "AlderaCityScreenPlay", "patrolDestinationReached", pMobile)
+				createEvent(getRandomNumber(3, 12) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
+			end
+		end
 	end
+end
+
+function AlderaCityScreenPlay:walkPatrol(pMobile)
+	if (pMobile == nil or not SceneObject(pMobile):isAiAgent() or SceneObject(pMobile):getZoneName() == "" or CreatureObject(pMobile):isDead()) then
+		return
+	end
+
+	if (CreatureObject(pMobile):isInCombat()) then
+		createEvent(10 * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
+		return
+	end
+
+	local objectID = SceneObject(pMobile):getObjectID()
+	local route = self.patrolRoutes[readData(objectID .. ":AlderaCity:route")]
+	local pointIndex = readData(objectID .. ":AlderaCity:point") + 1
+
+	if (route == nil) then
+		return
+	end
+
+	if (pointIndex > #route) then
+		pointIndex = 1
+	end
+
+	local point = route[pointIndex]
+
+	writeData(objectID .. ":AlderaCity:point", pointIndex)
+	AiAgent(pMobile):setMovementState(AI_PATROLLING)
+	AiAgent(pMobile):stopWaiting()
+	AiAgent(pMobile):setWait(0)
+	AiAgent(pMobile):setNextPosition(point[1], 28, point[2], 0)
+	AiAgent(pMobile):executeBehavior()
+end
+
+function AlderaCityScreenPlay:patrolDestinationReached(pMobile)
+	if (pMobile ~= nil and SceneObject(pMobile):getZoneName() ~= "" and not CreatureObject(pMobile):isDead()) then
+		createEvent(getRandomNumber(4, 15) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
+	end
+
+	return 0
 end
 
 function AlderaCityScreenPlay:spawnMobiles()
@@ -145,19 +202,36 @@ function AlderaCityScreenPlay:spawnMobiles()
 	}
 
 	-- Dense pedestrian traffic along the city's principal boulevards and promenades.
-	local pedestrianFlow = {
-		{1128, -1200, 176}, {1134, -1220, 174}, {1138, -1240, 178},
-		{1142, -1260, 180}, {1145, -1280, 176}, {1148, -1300, 181},
-		{1150, -1320, 178}, {1151, -1458, 2}, {1155, -1480, -3},
-		{1160, -1502, 4}, {1164, -1524, 1}, {1168, -1546, -5},
-		{1055, -1408, 84}, {1032, -1414, 88}, {1009, -1420, 91},
-		{986, -1427, 87}, {963, -1434, 92}, {940, -1440, 89},
-		{917, -1446, 94}, {894, -1450, 88}, {871, -1453, 91},
-		{1214, -1435, -71}, {1235, -1448, -68}, {1256, -1461, -65},
-		{1277, -1474, -69}, {1298, -1487, -66}, {1320, -1500, -71},
-		{1068, -1312, 62}, {1085, -1296, 48}, {1100, -1280, 43},
-		{1200, -1320, -48}, {1218, -1335, -55}, {1238, -1350, -57},
-		{1048, -1490, 109}, {1070, -1478, 112}, {1092, -1465, 116}
+	local pedestrianRoutes = {
+		{
+			{1128, -1200, 176}, {1134, -1220, 174}, {1138, -1240, 178},
+			{1142, -1260, 180}, {1145, -1280, 176}, {1148, -1300, 181}
+		},
+		{
+			{1150, -1320, 178}, {1151, -1458, 2}, {1155, -1480, -3},
+			{1160, -1502, 4}, {1164, -1524, 1}, {1168, -1546, -5}
+		},
+		{
+			{1055, -1408, 84}, {1032, -1414, 88}, {1009, -1420, 91},
+			{986, -1427, 87}, {963, -1434, 92}, {940, -1440, 89},
+			{917, -1446, 94}, {894, -1450, 88}, {871, -1453, 91}
+		},
+		{
+			{1214, -1435, -71}, {1235, -1448, -68}, {1256, -1461, -65},
+			{1277, -1474, -69}, {1298, -1487, -66}, {1320, -1500, -71}
+		},
+		{
+			{1068, -1312, 62}, {1085, -1296, 48}, {1100, -1280, 43},
+			{1085, -1296, -132}
+		},
+		{
+			{1200, -1320, -48}, {1218, -1335, -55}, {1238, -1350, -57},
+			{1218, -1335, 125}
+		},
+		{
+			{1048, -1490, 109}, {1070, -1478, 112}, {1092, -1465, 116},
+			{1070, -1478, -68}
+		}
 	}
 
 	-- Residential gardens and neighborhood plazas: families, workers, and local services.
@@ -227,5 +301,5 @@ function AlderaCityScreenPlay:spawnMobiles()
 		end
 	end
 
-	self:spawnPedestrianFlow(pedestrianFlow)
+	self:spawnPatrols(pedestrianRoutes)
 end
