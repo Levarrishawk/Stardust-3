@@ -22,6 +22,9 @@ SpaceSpawnerScreenPlay = ScreenPlay:new {
 	shipSpawns = {
 	},
 
+	primarySpawns = {
+	},
+
 	squadronsShips = {
 		squad_bestine_pirates = {SHIP_SQUADRON_FORM_WALL, {"bestine_pirate", "bestine_pirate"}},
 		squad_bh_target_escort_1 = {SHIP_SQUADRON_FORM_WEDGE, {"bh_target_guard", "bh_target_guard", "bh_target_guard"}},
@@ -313,6 +316,56 @@ function SpaceSpawnerScreenPlay:start()
 	end
 
 	createEvent(randomDelay * 1000, self.screenplayName, "populateSpawns", nil, "")
+
+	if (#self.primarySpawns > 0) then
+		createEvent(randomDelay * 500, self.screenplayName, "spawnPrimaryTargets", nil, "")
+	end
+end
+
+function SpaceSpawnerScreenPlay:spawnPrimaryTargets()
+	for i = 1, #self.primarySpawns, 1 do
+		self:spawnPrimaryTarget(nil, tostring(i))
+	end
+end
+
+function SpaceSpawnerScreenPlay:spawnPrimaryTarget(pNil, indexString)
+	local tableNum = tonumber(indexString)
+	local spawnTable = self.primarySpawns[tableNum]
+
+	if (spawnTable == nil) then
+		return
+	end
+
+	local pShipAgent = spawnShipAgent(spawnTable.shipName, self.spaceZone, spawnTable.x, spawnTable.z, spawnTable.y)
+
+	if (pShipAgent == nil) then
+		Logger:log(self.screenplayName .. " -- ERROR: Failed to spawn primary Ship Agent: " .. spawnTable.shipName .. " Spawner Name: " .. spawnTable.spawnName, LT_ERROR)
+		return
+	end
+
+	ShipAiAgent(pShipAgent):setDespawnOnNoPlayerInRange(false)
+	createObserver(SHIPDESTROYED, self.screenplayName, "primaryTargetDestroyed", pShipAgent)
+
+	local agentID = SceneObject(pShipAgent):getObjectID()
+	writeData(agentID .. ":PrimaryIndex:", tableNum)
+end
+
+function SpaceSpawnerScreenPlay:primaryTargetDestroyed(pShipAgent, pKillerShip)
+	if (pShipAgent == nil or not SceneObject(pShipAgent):isShipAiAgent()) then
+		return 1
+	end
+
+	local agentID = SceneObject(pShipAgent):getObjectID()
+	local tableNum = readData(agentID .. ":PrimaryIndex:")
+	deleteData(agentID .. ":PrimaryIndex:")
+
+	local spawnTable = self.primarySpawns[tableNum]
+
+	if (spawnTable ~= nil) then
+		createEvent(getRandomNumber(spawnTable.minRespawn, spawnTable.maxRespawn) * 1000, self.screenplayName, "spawnPrimaryTarget", nil, tostring(tableNum))
+	end
+
+	return 1
 end
 
 function SpaceSpawnerScreenPlay:populateSpawns()
