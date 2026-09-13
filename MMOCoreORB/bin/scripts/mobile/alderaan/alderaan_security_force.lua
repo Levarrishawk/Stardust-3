@@ -1,6 +1,6 @@
 alderaan_security_force = Creature:new {
-	objectName = "@mob/creature_names:rebel_trooper",
-	customName = "an Alderaan Security Force trooper",
+	--objectName = "@mob/creature_names:rebel_trooper",
+	customName = "an Alderaan Security Force Officer",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
 	mobType = MOB_NPC,
@@ -30,14 +30,13 @@ alderaan_security_force = Creature:new {
 	diet = HERBIVORE,
 
 	-- The local force retained Alderaanian field uniforms while serving the Empire.
-	templates = {
-		"object/mobile/dressed_rebel_trooper_bith_m_01.iff",
-		"object/mobile/dressed_rebel_trooper_human_female_01.iff",
-		"object/mobile/dressed_rebel_trooper_human_male_01.iff",
-		"object/mobile/dressed_rebel_trooper_sullustan_male_01.iff",
-		"object/mobile/dressed_rebel_trooper_twk_female_01.iff",
-		"object/mobile/dressed_rebel_trooper_twk_male_01.iff"
-	},
+	templates = {"object/mobile/dressed_rebel_crewman_human_female_01.iff",
+    "object/mobile/dressed_rebel_crewman_human_female_02.iff",
+    "object/mobile/dressed_rebel_crewman_human_male_01.iff",
+    "object/mobile/dressed_rebel_crewman_human_male_02.iff",
+    "object/mobile/dressed_rebel_crewman_human_male_03.iff",
+    "object/mobile/dressed_rebel_crewman_human_male_04.iff"
+  },
 	lootGroups = {
 		{
 			groups = {
