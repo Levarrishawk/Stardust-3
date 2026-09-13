@@ -1,3 +1,5 @@
+local SpaceHelpers = require("utils.space_helpers")
+
 vrakConvoHandler = conv_handler:new {}
 
 function vrakConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
@@ -17,8 +19,12 @@ function vrakConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		viopaSmuggler = tonumber(viopaSmuggler) or 0
 	end
 
+	local missionTwoActive = SpaceHelpers:isSpaceQuestActive(pPlayer, HavocSquadronScreenplay.TIER2_QUEST_STRING_2.type, HavocSquadronScreenplay.TIER2_QUEST_STRING_2.name)
+	local missionTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, HavocSquadronScreenplay.TIER2_QUEST_STRING_2.type, HavocSquadronScreenplay.TIER2_QUEST_STRING_2.name)
+
 	-- First meeting: Player has been sent by Viopa to meet Vrak (viopaSmuggler == 1)
-	if (viopaSmuggler == 1) then
+	-- State 2 recovery lets characters who spoke to Vrak before mission assignment was added repeat the conversation.
+	if (viopaSmuggler == 1 or (viopaSmuggler == 2 and not missionTwoActive and not missionTwoComplete)) then
 		return convoTemplate:getScreen("are_you_the_pilot")
 
 	-- Confrontation: Player returns to confront Vrak about betrayal (viopaSmuggler == 3)
