@@ -1410,10 +1410,8 @@ kreezo_convo:addScreen(kreezo_convo_failed_tier4_first_mission)
 kreezo_convo_tier4_first_mission_success = ConvoScreen:new {
 	id = "tier4_first_mission_success",
 	leftDialog = "@conversation/corellia_rebel_tier4:s_1047bc70", -- Nice work out there. Ready for round two?
-	stopConversation = "false",
-	options = {
-		{"@conversation/corellia_rebel_tier4:s_c82e9a2f", "tier4_second_mission"}, -- Yes, please.
-	}
+	stopConversation = "true",
+	options = {}
 }
 kreezo_convo:addScreen(kreezo_convo_tier4_first_mission_success)
 
@@ -1458,10 +1456,8 @@ kreezo_convo:addScreen(kreezo_convo_failed_tier4_second_mission)
 kreezo_convo_tier4_second_mission_success = ConvoScreen:new {
 	id = "tier4_second_mission_success",
 	leftDialog = "@conversation/corellia_rebel_tier4:s_7afc40b8", -- The Alliance is feeling more confident, now that you've terminated that Inquisitor.
-	stopConversation = "false",
-	options = {
-		{"@conversation/corellia_rebel_tier4:s_99d3b4fd", "tier4_third_mission"}, -- What have you got for me?
-	}
+	stopConversation = "true",
+	options = {}
 }
 kreezo_convo:addScreen(kreezo_convo_tier4_second_mission_success)
 
@@ -1506,10 +1502,8 @@ kreezo_convo:addScreen(kreezo_convo_failed_tier4_third_mission)
 kreezo_convo_tier4_third_mission_success = ConvoScreen:new {
 	id = "tier4_third_mission_success",
 	leftDialog = "@conversation/corellia_rebel_tier4:s_81e25d24", -- You showed them! Let's see the Empire try to build a station in THIS system!
-	stopConversation = "false",
-	options = {
-		{"@conversation/corellia_rebel_tier4:s_8fc8c755", "tier4_fourth_mission"}, -- Do you have a mission for me?
-	}
+	stopConversation = "true",
+	options = {}
 }
 kreezo_convo:addScreen(kreezo_convo_tier4_third_mission_success)
 
@@ -1543,13 +1537,9 @@ kreezo_convo:addScreen(kreezo_convo_failed_tier4_fourth_mission)
 -- Tier 4 - Mission 4 Complete / Master hand-off (Admiral Willham Burke - Kessel)
 kreezo_convo_tier4_fourth_mission_success = ConvoScreen:new {
 	id = "tier4_fourth_mission_success",
-	leftDialog = "@conversation/corellia_rebel_tier4:s_b6b4b241", -- Attention! Alliance Headquarters has approved your transfer. You are now serving under the command of Admiral Willham Burke.
-	stopConversation = "false",
-	options = {
-		{"@conversation/corellia_rebel_tier4:s_bbe3529b", "master_who"}, -- Who is Admiral Burke?
-		{"@conversation/corellia_rebel_tier4:s_bcc6b959", "master_where"}, -- Where do I need to report?
-		{"@conversation/corellia_rebel_tier4:s_e42b260e", "accept_master_mission"}, -- I'm on my way.
-	}
+	leftDialog = "@conversation/corellia_rebel_tier4:s_8907c99", -- What you need are SKILLS! And you've come to the right place.
+	stopConversation = "true",
+	options = {}
 }
 kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission_success)
 
