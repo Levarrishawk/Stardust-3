@@ -55,19 +55,55 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
 		{"rebel_trooper", 300, 5.5, 57.0, 67.5, -90, 3465361, ""},
 		{"rebel_trooper", 300, -5.5, 57.0, 67.5, 90, 3465361, ""},
 
-		-- Cell 10: briefing hall and command post
-		{"rebel_high_general", 300, 0.0, 55.0, 7.0, 180, 3465362, "npc_survey"},
-		{"rebel_general", 300, -5.0, 55.0, 1.0, 25, 3465362, "npc_conversation"},
-		{"rebel_colonel", 300, 5.0, 55.0, 1.0, -25, 3465362, "npc_conversation"},
-		{"rebel_pilot", 300, -17.0, 55.0, -24.0, 90, 3465362, "npc_attention"},
-		{"rebel_pilot", 300, 17.0, 55.0, -24.0, -90, 3465362, "npc_attention"},
-		{"rebel_medic", 300, -20.0, 55.0, -39.0, 45, 3465362, "npc_survey"},
-		{"rebel_trooper", 300, -8.0, 55.0, 50.0, 180, 3465362, ""},
-		{"rebel_trooper", 300, 8.0, 55.0, 50.0, 180, 3465362, ""},
+		-- Cell 10: ceremony and assembly hall. The center remains open for
+		-- formations, awards, mission briefings, and combat drills.
+		{"rebel_trooper", 300, -8.0, 55.0, 50.0, 180, 3465362, "npc_attention"},
+		{"rebel_trooper", 300, 8.0, 55.0, 50.0, 180, 3465362, "npc_attention"},
+		{"rebel_army_captain", 300, 0.0, 55.0, 8.0, 180, 3465362, "npc_attention"},
+		{"rebel_trooper", 300, -8.0, 55.0, -8.0, 0, 3465362, "npc_attention"},
+		{"rebel_trooper", 300, 8.0, 55.0, -8.0, 180, 3465362, "npc_attention"},
+		{"rebel_commando", 300, -14.0, 55.0, -35.0, 45, 3465362, "npc_combat"},
+		{"rebel_commando", 300, 14.0, 55.0, -35.0, -45, 3465362, "npc_combat"},
 	},
 
 	-- {template, x, z, y, cell, direction}
 	objects = {
+		-- Portable Rebel illumination through the otherwise dark temple
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -65.0, 2.0, 88.0, 3465353, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -68.0, 2.0, 88.0, 3465353, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -55.0, 2.0, 73.5, 3465354, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -83.5, 2.0, 66.0, 3465354, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -43.5, 2.0, 100.0, 3465355, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 43.5, 2.0, 100.0, 3465355, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -43.5, 2.0, 45.0, 3465355, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 43.5, 2.0, 45.0, 3465355, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -77.5, 12.0, 43.0, 3465356, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -38.5, 32.0, 74.5, 3465357, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -18.0, 32.0, 30.0, 3465357, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -33.0, 32.0, 63.5, 3465358, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -18.0, 32.0, 63.5, 3465358, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 13.5, 57.0, 67.0, 3465360, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -5.5, 57.0, 65.0, 3465361, 0},
+
+		-- Ceremony-hall perimeter; preserve the processional aisle and drill floor
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -17.0, 55.0, 8.0, 3465362, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 17.0, 55.0, 8.0, 3465362, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -24.0, 55.0, -25.0, 3465362, 0},
+		{"object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 24.0, 55.0, -25.0, 3465362, 0},
+
+		-- Strong rear backlight inspired by the Alliance award ceremony. These
+		-- sit on the raised rear platform, between the temple's stone uprights.
+		{"object/static/particle/particle_newbie_spotlight.iff", -8.0, 58.0, -51.5, 3465362, 0},
+		{"object/static/particle/particle_newbie_spotlight.iff", -4.0, 58.0, -51.5, 3465362, 0},
+		{"object/static/particle/particle_newbie_spotlight.iff", 0.0, 58.0, -51.5, 3465362, 0},
+		{"object/static/particle/particle_newbie_spotlight.iff", 4.0, 58.0, -51.5, 3465362, 0},
+		{"object/static/particle/particle_newbie_spotlight.iff", 8.0, 58.0, -51.5, 3465362, 0},
+		{"object/static/particle/pt_light_constant_blue.iff", -8.0, 68.0, -50.5, 3465362, 0},
+		{"object/static/particle/pt_light_constant_blue.iff", -4.0, 68.0, -50.5, 3465362, 0},
+		{"object/static/particle/pt_light_constant_blue.iff", 0.0, 68.0, -50.5, 3465362, 0},
+		{"object/static/particle/pt_light_constant_blue.iff", 4.0, 68.0, -50.5, 3465362, 0},
+		{"object/static/particle/pt_light_constant_blue.iff", 8.0, 68.0, -50.5, 3465362, 0},
+
 		-- Hangar work areas and stores
 		{"object/tangible/furniture/all/frn_all_data_terminal_free_s1.iff", 20.0, 2.0, 30.0, 3465355, 180},
 		{"object/tangible/furniture/all/frn_all_data_terminal_free_s2.iff", -22.0, 2.0, 17.0, 3465355, 0},
@@ -81,11 +117,6 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
 		{"object/tangible/furniture/technical/chair_s01.iff", -20.0, 32.0, 56.5, 3465358, -90},
 		{"object/tangible/furniture/technical/chair_s01.iff", -30.0, 32.0, 56.5, 3465358, 90},
 
-		-- Upper briefing hall
-		{"object/tangible/furniture/all/frn_all_desk_map_table.iff", 0.0, 55.0, 4.0, 3465362, 0},
-		{"object/tangible/furniture/all/frn_all_command_console.iff", 0.0, 55.0, -39.0, 3465362, 180},
-		{"object/tangible/furniture/all/frn_all_data_terminal_free_s1.iff", -22.0, 55.0, -15.0, 3465362, 90},
-		{"object/tangible/furniture/all/frn_all_data_terminal_free_s2.iff", 22.0, 55.0, -15.0, 3465362, -90},
 	}
 }
 
