@@ -1252,13 +1252,12 @@ survival_corellia_rebel_tier4_1 = SpaceSurvivalScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "corellia_rebel_tier4_1_a",
-	sideFailQuestType = "space_battle",
-	sideFailQuestName = "corellia_rebel_tier4_1_b",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL,
-	failureSplitOnObjectiveOnly = true,
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	survivalTime = 300,
+	survivalUpdateInterval = 30,
 	survivalPoint = "space_dathomir:corellia_rebel_tier4_1_survival_point",
+	retainWaypointDuringSurvival = true,
 	delayToFirstAttack = 5,
 
 	attackDelay = 60,
@@ -1284,8 +1283,10 @@ space_battle_corellia_rebel_tier4_1_a = SpaceBattleScreenplay:new {
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "space_battle",
+	sideQuestName = "corellia_rebel_tier4_1_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "survival_corellia_rebel_tier4_1",
 	parentQuestType = "survival",
@@ -1336,9 +1337,9 @@ space_battle_corellia_rebel_tier4_1_b = SpaceBattleScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "survival_corellia_rebel_tier4_1",
-	parentQuestType = "survival",
-	parentQuestName = "corellia_rebel_tier4_1",
+	parentQuest = "space_battle_corellia_rebel_tier4_1_a",
+	parentQuestType = "space_battle",
+	parentQuestName = "corellia_rebel_tier4_1_a",
 
 	battlePoint = "space_dathomir:corellia_rebe_tier4_1_b_battle_point",
 	allyArrivalDelay = 30,
@@ -1384,10 +1385,7 @@ assassinate_corellia_rebel_tier4_2 = SpaceAssassinateScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "delivery_no_pickup",
 	sideQuestName = "corellia_rebel_tier4_2_a",
-	sideFailQuestType = "rescue",
-	sideFailQuestName = "corellia_rebel_tier4_2_b",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL,
-	failureSplitOnObjectiveOnly = true,
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	arrivalDelay = 5,
 	failTimer = 20,
@@ -1420,8 +1418,10 @@ delivery_no_pickup_corellia_rebel_tier4_2_a = SpaceDeliveryNoPickupScreenplay:ne
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "rescue",
+	sideQuestName = "corellia_rebel_tier4_2_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "assassinate_corellia_rebel_tier4_2",
 	parentQuestType = "assassinate",
@@ -1458,9 +1458,9 @@ rescue_corellia_rebel_tier4_2_b = SpaceRescueScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "assassinate_corellia_rebel_tier4_2",
-	parentQuestType = "assassinate",
-	parentQuestName = "corellia_rebel_tier4_2",
+	parentQuest = "delivery_no_pickup_corellia_rebel_tier4_2_a",
+	parentQuestType = "delivery_no_pickup",
+	parentQuestName = "corellia_rebel_tier4_2_a",
 
 	rescueShip = "reb_diplomat_tier4",
 	rescueArrivalDelay = 3,
@@ -1500,10 +1500,7 @@ space_battle_corellia_rebel_tier4_3 = SpaceBattleScreenplay:new {
 	sideQuest = true,
 	sideQuestType = "space_battle",
 	sideQuestName = "corellia_rebel_tier4_3_a",
-	sideFailQuestType = "survival",
-	sideFailQuestName = "corellia_rebel_tier4_3_b",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL,
-	failureSplitOnObjectiveOnly = true,
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	battlePoint = "space_dathomir:corellia_rebel_tier4_3_battle_point",
 	allyArrivalDelay = 60,
@@ -1548,8 +1545,10 @@ space_battle_corellia_rebel_tier4_3_a = SpaceBattleScreenplay:new {
 
 	creditReward = 0,
 
-	sideQuest = false,
-	sideQuestType = "",
+	sideQuest = true,
+	sideQuestType = "survival",
+	sideQuestName = "corellia_rebel_tier4_3_b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	parentQuest = "space_battle_corellia_rebel_tier4_3",
 	parentQuestType = "space_battle",
@@ -1595,9 +1594,9 @@ survival_corellia_rebel_tier4_3_b = SpaceSurvivalScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "space_battle_corellia_rebel_tier4_3",
+	parentQuest = "space_battle_corellia_rebel_tier4_3_a",
 	parentQuestType = "space_battle",
-	parentQuestName = "corellia_rebel_tier4_3",
+	parentQuestName = "corellia_rebel_tier4_3_a",
 
 	survivalTime = 480,
 	survivalPoint = "space_dathomir:corellia_rebel_tier4_3_b_survival",
@@ -2072,10 +2071,9 @@ function HavocSquadronScreenplay:recoverStaleArkonMissionChains(pPlayer)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 
-	local function recoverChain(headQuest, successQuest, failureQuest, missionScreenplays, missionQuests)
+	local function recoverChain(headQuest, finalQuest, missionScreenplays, missionQuests)
 		if (getQuestStatus(playerID .. headQuest.name .. ":attempted") ~= "1" or
-			SpaceHelpers:isSpaceQuestComplete(pPlayer, successQuest.type, successQuest.name) or
-			SpaceHelpers:isSpaceQuestComplete(pPlayer, failureQuest.type, failureQuest.name)) then
+			SpaceHelpers:isSpaceQuestComplete(pPlayer, finalQuest.type, finalQuest.name)) then
 			return
 		end
 
@@ -2094,13 +2092,13 @@ function HavocSquadronScreenplay:recoverStaleArkonMissionChains(pPlayer)
 		end
 	end
 
-	recoverChain(self.TIER4_QUEST_STRING_1, self.TIER4_QUEST_STRING_1_SIDE1, self.TIER4_QUEST_STRING_1_SIDE2,
+	recoverChain(self.TIER4_QUEST_STRING_1, self.TIER4_QUEST_STRING_1_SIDE2,
 		{survival_corellia_rebel_tier4_1, space_battle_corellia_rebel_tier4_1_a, space_battle_corellia_rebel_tier4_1_b},
 		{self.TIER4_QUEST_STRING_1, self.TIER4_QUEST_STRING_1_SIDE1, self.TIER4_QUEST_STRING_1_SIDE2})
-	recoverChain(self.TIER4_QUEST_STRING_2, self.TIER4_QUEST_STRING_2_SIDE1, self.TIER4_QUEST_STRING_2_SIDE2,
+	recoverChain(self.TIER4_QUEST_STRING_2, self.TIER4_QUEST_STRING_2_SIDE2,
 		{assassinate_corellia_rebel_tier4_2, delivery_no_pickup_corellia_rebel_tier4_2_a, rescue_corellia_rebel_tier4_2_b},
 		{self.TIER4_QUEST_STRING_2, self.TIER4_QUEST_STRING_2_SIDE1, self.TIER4_QUEST_STRING_2_SIDE2})
-	recoverChain(self.TIER4_QUEST_STRING_3, self.TIER4_QUEST_STRING_3_SIDE1, self.TIER4_QUEST_STRING_3_SIDE2,
+	recoverChain(self.TIER4_QUEST_STRING_3, self.TIER4_QUEST_STRING_3_SIDE2,
 		{space_battle_corellia_rebel_tier4_3, space_battle_corellia_rebel_tier4_3_a, survival_corellia_rebel_tier4_3_b},
 		{self.TIER4_QUEST_STRING_3, self.TIER4_QUEST_STRING_3_SIDE1, self.TIER4_QUEST_STRING_3_SIDE2})
 end
