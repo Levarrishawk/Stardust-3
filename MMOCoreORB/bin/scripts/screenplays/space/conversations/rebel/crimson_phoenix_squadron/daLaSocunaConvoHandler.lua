@@ -62,7 +62,14 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local pilotTier = ghost:getPilotTier()
 		local pendingSocunaHandoff = isSocuna and pilotTier == 2 and
 			getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:socuna_finished") ~= "1"
-		local correctTrainer = (pilotTier <= 1 and isSocuna) or pendingSocunaHandoff or (pilotTier == 2 and isEker) or
+
+		-- Tier 1 training advances the stored pilot tier immediately. Keep Da'la in
+		-- her sendoff flow without allowing her to enter Major Eker's tier 2 branch.
+		if (pendingSocunaHandoff) then
+			return convoTemplate:getScreen("completed_sinkko")
+		end
+
+		local correctTrainer = (pilotTier <= 1 and isSocuna) or (pilotTier == 2 and isEker) or
 			(pilotTier == 3 and isArnecio) or (pilotTier == 4 and isUfwol)
 
 		if (not correctTrainer) then
