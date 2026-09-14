@@ -141,6 +141,7 @@ includeFile("conversations/space/rebel/havoc_squadron/viopa_convo.lua")
 includeFile("conversations/space/rebel/havoc_squadron/vrak_convo.lua")
 includeFile("conversations/space/rebel/havoc_squadron/aqzow_convo.lua")
 includeFile("conversations/space/rebel/havoc_squadron/aqzow_liaison_convo.lua")
+includeFile("conversations/space/rebel/crimson_phoenix_squadron/eker_liaison_convo.lua")
 
 -- Vortex Squadron
 includeFile("conversations/space/rebel/vortex_squadron/v3_fx_convo.lua")

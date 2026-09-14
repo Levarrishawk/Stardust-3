@@ -77,6 +77,13 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		end
 	end
 
+	-- Meeting Major Eker establishes clearance for the Hidden Rebel Base landing
+	-- point. The permission persists independently of any individual mission.
+	if (isEker and getQuestStatus(playerID .. "SpaceLandingPermission:crimson_phoenix_yavin_rebel_base") ~= "1") then
+		setQuestStatus(playerID .. "SpaceLandingPermission:crimson_phoenix_yavin_rebel_base", 1)
+		CreatureObject(pPlayer):sendSystemMessage("Major Eker has granted you clearance to land at the Hidden Rebel Base on Yavin 4.")
+	end
+
 	-- Check for a starter ship
 	local hasShip = SpaceHelpers:hasCertifiedShip(pPlayer, true)
 

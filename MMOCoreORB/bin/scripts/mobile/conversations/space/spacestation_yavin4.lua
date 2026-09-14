@@ -120,7 +120,7 @@ spacestation_yavin4_convotemplate:addScreen(spacestation_yavin4_land_imperial_la
 
 spacestation_yavin4_land_hidden_rebel_base_main = ConvoScreen:new {
 	id = "spacestation_yavin4_land_hidden_rebel_base_main",
-	customDialogText = "Your Havoc Squadron clearance is confirmed. Do you want to land at the Hidden Rebel Base?",
+	customDialogText = "Your Rebel command clearance is confirmed. Do you want to land at the Hidden Rebel Base?",
 	stopConversation = "false",
 	options = {
 		{"Land at the Hidden Rebel Base.", "spacestation_yavin4_land_hidden_rebel_base_land"},

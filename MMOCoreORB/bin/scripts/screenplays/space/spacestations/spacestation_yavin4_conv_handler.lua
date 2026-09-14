@@ -50,10 +50,14 @@ function SpacestationYavin4ConvoHandler:runScreenHandlers(pConvTemplate, pPlayer
 
 	-- Handle Landing
 	local playerID = CreatureObject(pPlayer):getObjectID()
-	local hasHiddenBaseClearance = getQuestStatus(playerID .. "SpaceLandingPermission:havoc_yavin_rebel_base") == "1" or
+	local hasHavocHiddenBaseClearance = getQuestStatus(playerID .. "SpaceLandingPermission:havoc_yavin_rebel_base") == "1" or
 		getQuestStatus(playerID .. HavocSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted") == "1"
+	local hasCrimsonPhoenixHiddenBaseClearance =
+		getQuestStatus(playerID .. "SpaceLandingPermission:crimson_phoenix_yavin_rebel_base") == "1"
 
-	if (screenID == "spacestation_yavin4_land" and SpaceHelpers:isHavocSquadron(pPlayer) and hasHiddenBaseClearance) then
+	if (screenID == "spacestation_yavin4_land" and
+		((SpaceHelpers:isHavocSquadron(pPlayer) and hasHavocHiddenBaseClearance) or
+		(SpaceHelpers:isCrimsonPhoenixSquadron(pPlayer) and hasCrimsonPhoenixHiddenBaseClearance))) then
 		pClonedConvo:addOption("Hidden Rebel Base.", "spacestation_yavin4_land_hidden_rebel_base_main")
 	elseif (screenID == "spacestation_yavin4_land_mining_land") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "yavin4_mining")

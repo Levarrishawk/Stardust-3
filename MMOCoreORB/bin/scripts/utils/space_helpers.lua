@@ -1060,7 +1060,7 @@ function SpaceHelpers:addCrimsonPhoenixNextWaypoint(pPlayer)
 	if (pPlayer == nil) then return end
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 	if (pGhost ~= nil) then
-		PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:eker", "@npc_spawner_n:eker", -6966, 0, -5658, WAYPOINT_BLUE, true, true, 0)
+		PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:eker", "@npc_spawner_n:eker", -3078, 0, -2998, WAYPOINT_BLUE, true, true, 0)
 	end
 end
 
