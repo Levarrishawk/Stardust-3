@@ -186,7 +186,7 @@ function SpaceRecoveryScreenplay:failQuest(pPlayer, notifyClient)
 		createEvent(200, self.sideQuestType .. "_" .. self.sideQuestName, "failQuest", pPlayer, "false")
 	end
 
-	if (self.sideQuest and (self.sideQuestSplitType == self.SIDE_QUEST_SPLIT_TYPES.FAILURE or self.sideQuestSplitType == self.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL)) then
+	if (self.sideQuest and (not self.failureSplitOnObjectiveOnly or notifyClient == "objective") and (self.sideQuestSplitType == self.SIDE_QUEST_SPLIT_TYPES.FAILURE or self.sideQuestSplitType == self.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL)) then
 		self:triggerFailureSplitQuest(pPlayer)
 	end
 end
@@ -965,7 +965,7 @@ function SpaceRecoveryScreenplay:notifyRecoveryShipDestroyed(pShipAgent, pKiller
 	writeData(SceneObject(pPlayer):getObjectID() .. self.className .. ":failedType:", 1)
 
 	-- Schedule Fail event
-	createEvent(2000, self.className, "failQuest", pPlayer, "")
+	createEvent(2000, self.className, "failQuest", pPlayer, self.failureSplitOnObjectiveOnly and "objective" or "true")
 
 	return 1
 end
