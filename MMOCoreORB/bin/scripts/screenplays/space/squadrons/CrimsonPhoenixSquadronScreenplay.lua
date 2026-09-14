@@ -266,6 +266,52 @@ registerScreenPlay("escort_duty_tatooine_rebel_7", true)
 	Tier 2 -- Major Eker
 ]]
 
+-- These retired records remain registered so observers saved on characters before
+-- the Eker mission correction can resolve once, remove the obsolete journal entry,
+-- and detach cleanly. They can be removed after all legacy characters have cycled.
+local function retiredEkerQuest(prototype, className, questType, questName)
+	local quest = prototype:new {
+		className = className,
+		questType = questType,
+		questName = questName,
+	}
+
+	function quest:enteredZone(pPlayer, nill, zoneNameHash)
+		if (pPlayer ~= nil) then
+			SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+			SpaceHelpers:clearSpaceQuest(pPlayer, self.questType, self.questName, false)
+		end
+
+		return 1
+	end
+
+	return quest
+end
+
+inspect_tatooine_rebel_tier2_1 = retiredEkerQuest(SpaceInspectScreenplay, "inspect_tatooine_rebel_tier2_1", "inspect", "tatooine_rebel_tier2_1")
+registerScreenPlay("inspect_tatooine_rebel_tier2_1", true)
+
+destroy_surpriseattack_tatooine_rebel_tier2_1 = retiredEkerQuest(SpaceSurpriseAttackScreenplay, "destroy_surpriseattack_tatooine_rebel_tier2_1", "destroy_surpriseattack", "tatooine_rebel_tier2_1")
+registerScreenPlay("destroy_surpriseattack_tatooine_rebel_tier2_1", true)
+
+escort_tatooine_rebel_tier2_2 = retiredEkerQuest(SpaceEscortScreenplay, "escort_tatooine_rebel_tier2_2", "escort", "tatooine_rebel_tier2_2")
+registerScreenPlay("escort_tatooine_rebel_tier2_2", true)
+
+recovery_tatooine_rebel_tier2_3 = retiredEkerQuest(SpaceRecoveryScreenplay, "recovery_tatooine_rebel_tier2_3", "recovery", "tatooine_rebel_tier2_3")
+registerScreenPlay("recovery_tatooine_rebel_tier2_3", true)
+
+assassinate_tatooine_rebel_tier2_4 = retiredEkerQuest(SpaceAssassinateScreenplay, "assassinate_tatooine_rebel_tier2_4", "assassinate", "tatooine_rebel_tier2_4")
+registerScreenPlay("assassinate_tatooine_rebel_tier2_4", true)
+
+destroy_duty_tatooine_rebel_tier2_destroyduty = retiredEkerQuest(SpaceDutyDestroyScreenplay, "destroy_duty_tatooine_rebel_tier2_destroyduty", "destroy_duty", "tatooine_rebel_tier2_destroyduty")
+registerScreenPlay("destroy_duty_tatooine_rebel_tier2_destroyduty", true)
+
+recovery_duty_tatooine_rebel_tier2_recoveryduty = retiredEkerQuest(SpaceDutyRecoveryScreenplay, "recovery_duty_tatooine_rebel_tier2_recoveryduty", "recovery_duty", "tatooine_rebel_tier2_recoveryduty")
+registerScreenPlay("recovery_duty_tatooine_rebel_tier2_recoveryduty", true)
+
+escort_duty_tatooine_rebel_tier2_escortduty = retiredEkerQuest(SpaceDutyEscortScreenplay, "escort_duty_tatooine_rebel_tier2_escortduty", "escort_duty", "tatooine_rebel_tier2_escortduty")
+registerScreenPlay("escort_duty_tatooine_rebel_tier2_escortduty", true)
+
 escort_yavin_rebel_13 = SpaceEscortScreenplay:new {
  className="escort_yavin_rebel_13", questName="yavin_rebel_13", questType="escort", questZone="space_yavin4", creditReward=5000, itemReward={{species={-1},item="object/tangible/ship/components/shield_generator/shd_mission_reward_rebel_incom_k77.iff"}}, sideQuest=false, sideQuestType="", orderedEscortRoute=true, escortShips={"yavin_mission_1_freighter"},
  escortPoints={{patrolPointName="eker_vip_1",zoneName="space_yavin4",x=-3100,z=-1800,y=600,escortNumber=1,radius=250},{patrolPointName="eker_vip_2",zoneName="space_yavin4",x=-2596,z=126,y=3005,escortNumber=2,radius=250},{patrolPointName="eker_vip_3",zoneName="space_yavin4",x=-990,z=331,y=3100,escortNumber=3,radius=250},{patrolPointName="eker_vip_4",zoneName="space_yavin4",x=323,z=348,y=3303,escortNumber=4,radius=250}}, attackDelay=70,

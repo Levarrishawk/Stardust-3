@@ -758,6 +758,12 @@ space_lok = SpacePatrolPointTable:new {
 	{patrolPointName = "black_epsilon_t3_4_escape", x = -2300, z = 300, y = -600},
 	{patrolPointName = "black_epsilon_t3_4_patrol_craft", x = 1000, z = 1200, y = -4900},
 	{patrolPointName = "black_epsilon_t3_4_queen", x = 5200, z = -900, y = 3800},
+
+	-- Major Eker's final escort route.
+	{patrolPointName = "eker_nym_1", x = -1009, z = -1075, y = -2900},
+	{patrolPointName = "eker_nym_2", x = 1492, z = 662, y = -2814},
+	{patrolPointName = "eker_nym_3", x = 2241, z = -1210, y = -2943},
+	{patrolPointName = "eker_nym_4", x = -2464, z = -1051, y = -2900},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_lok, "space_lok")

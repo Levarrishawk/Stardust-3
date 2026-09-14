@@ -809,6 +809,24 @@ space_yavin4 = SpacePatrolPointTable:new {
 	{patrolPointName = "black_epsilon_t3_2_b_3", x = 2800, z = -600, y = -2200},
 	{patrolPointName = "black_epsilon_t3_3_escape", x = -1800, z = 200, y = -900},
 	{patrolPointName = "black_epsilon_t3_3_emissary", x = 3800, z = 1400, y = 4600},
+
+	-- Major Eker mission and duty routes.
+	{patrolPointName = "eker_vip_1", x = -3100, z = -1800, y = 600},
+	{patrolPointName = "eker_vip_2", x = -2596, z = 126, y = 3005},
+	{patrolPointName = "eker_vip_3", x = -990, z = 331, y = 3100},
+	{patrolPointName = "eker_vip_4", x = 323, z = 348, y = 3303},
+	{patrolPointName = "eker_recovery_duty_1", x = -5007, z = -5499, y = -3499},
+	{patrolPointName = "eker_recovery_duty_2", x = -6466, z = -6879, y = -4229},
+	{patrolPointName = "eker_recovery_duty_3", x = -6974, z = -7081, y = -1544},
+	{patrolPointName = "eker_recovery_duty_4", x = -7169, z = -6943, y = 1241},
+	{patrolPointName = "eker_recovery_duty_5", x = -5700, z = -5955, y = -2034},
+	{patrolPointName = "eker_recovery_duty_6", x = -5033, z = -4822, y = -3028},
+	{patrolPointName = "eker_recovery_duty_7", x = -4768, z = -3941, y = -3678},
+	{patrolPointName = "eker_recovery_duty_8", x = -4757, z = -3078, y = -3964},
+	{patrolPointName = "eker_refugee_duty_1", x = -1009, z = -1075, y = -2900},
+	{patrolPointName = "eker_refugee_duty_2", x = 1492, z = 662, y = -2814},
+	{patrolPointName = "eker_refugee_duty_3", x = 2241, z = -1210, y = -2943},
+	{patrolPointName = "eker_refugee_duty_4", x = -2464, z = -1051, y = -2900},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_yavin4, "space_yavin4")
