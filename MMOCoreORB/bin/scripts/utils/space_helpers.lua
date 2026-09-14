@@ -1076,7 +1076,7 @@ function SpaceHelpers:addUfwolWaypoint(pPlayer)
 	if (pPlayer == nil) then return end
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 	if (pGhost ~= nil) then
-		PlayerObject(pGhost):addWaypoint("dathomir", "@npc_spawner_n:ufwol", "@npc_spawner_n:ufwol", -115, 0, -1580, WAYPOINT_BLUE, true, true, 0)
+		PlayerObject(pGhost):addWaypoint("yavin4", "@npc_spawner_n:ufwol", "@npc_spawner_n:ufwol", -3086, 0, -2988, WAYPOINT_BLUE, true, true, 0)
 	end
 end
 

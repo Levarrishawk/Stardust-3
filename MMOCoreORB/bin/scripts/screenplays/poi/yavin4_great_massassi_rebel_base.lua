@@ -49,6 +49,7 @@ Yavin4GreatMassassiRebelBaseScreenPlay = ScreenPlay:new {
 		{"rebel_colonel", 300, -25.0, 32.0, 64.0, 180, 3465358, "npc_survey"},
 		{"rebel_first_lieutenant", 300, -20.0, 32.0, 58.0, -90, 3465358, "npc_use_terminal_high"},
 		{"rebel_specforce_captain", 300, -30.0, 32.0, 58.0, 90, 3465358, "npc_use_terminal_high"},
+		{"ufwol", 60, -25.2, 32.0, 49.9, -5, 3465358, "neutral"},
 		{"rebel_commando", 300, -32.5, 32.0, 49.5, 45, 3465358, ""},
 
 		-- Cells 7-9: upper access and ceremony-hall antechamber
