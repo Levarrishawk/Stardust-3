@@ -373,12 +373,12 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (ghost:getPilotTier() == 2) then
 		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name)
 		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.name)
-		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name)
+		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name) or SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name) or SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3_SIDE.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3_SIDE.name)
 		local t2QuestFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name)
 
 		local t2QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name)
 		local t2QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.name)
-		local t2QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name)
+		local t2QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3_SIDE.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3_SIDE.name)
 		local t2QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name)
 
 		local t2DestroyDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.type, CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_DUTY_1.name)
@@ -413,25 +413,29 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		elseif (t2QuestFourComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward", 1)
 
-			assassinate_tatooine_rebel_tier2_4:rewardPlayer(pPlayer)
+			escort_yavin_rebel_16:rewardPlayer(pPlayer)
+			ghost:increaseFactionStanding("rebel", 75)
 
 			return convoTemplate:getScreen("tier2_mission4_rewarded")
 		elseif (t2QuestThreeComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)
 
-			recovery_tatooine_rebel_tier2_3:rewardPlayer(pPlayer)
+			inspect_yavin_rebel_15:rewardPlayer(pPlayer)
+			ghost:increaseFactionStanding("rebel", 75)
 
 			return convoTemplate:getScreen("tier2_mission3_rewarded")
 		elseif (t2QuestTwoComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward", 1)
 
-			escort_tatooine_rebel_tier2_2:rewardPlayer(pPlayer)
+			inspect_yavin_rebel_14:rewardPlayer(pPlayer)
+			ghost:increaseFactionStanding("rebel", 75)
 
 			return convoTemplate:getScreen("tier2_mission2_rewarded")
 		elseif (t2QuestOneComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward") ~= "1") then
 			setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward", 1)
 
-			inspect_tatooine_rebel_tier2_1:rewardPlayer(pPlayer)
+			escort_yavin_rebel_13:rewardPlayer(pPlayer)
+			ghost:increaseFactionStanding("rebel", 75)
 
 			return convoTemplate:getScreen("tier2_mission1_rewarded")
 
@@ -823,37 +827,37 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 
 	-- Tier 2 Duty Missions
 	elseif (screenID == "tier2_destroy_duty") then
-		destroy_duty_tatooine_rebel_tier2_destroyduty:startQuest(pPlayer, pNpc)
+		destroy_duty_yavin_rebel_9:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_recovery_duty") then
-		recovery_duty_tatooine_rebel_tier2_recoveryduty:startQuest(pPlayer, pNpc)
+		recovery_duty_yavin_rebel_12:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_escort_duty") then
-		escort_duty_tatooine_rebel_tier2_escortduty:startQuest(pPlayer, pNpc)
+		escort_duty_yavin_rebel_10:startQuest(pPlayer, pNpc)
 
 	-- Give Tier 2 Missions
 	elseif (screenID == "tier2_accept_mission1" or screenID == "tier2_failed_mission1") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_tatooine_rebel_tier2_1}, {{type="inspect", name="tatooine_rebel_tier2_1"}})
-		inspect_tatooine_rebel_tier2_1:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_yavin_rebel_13}, {{type="escort", name="yavin_rebel_13"}})
+		escort_yavin_rebel_13:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission2" or screenID == "tier2_failed_mission2") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_tatooine_rebel_tier2_2}, {{type="escort", name="tatooine_rebel_tier2_2"}})
-		escort_tatooine_rebel_tier2_2:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_yavin_rebel_14}, {{type="inspect", name="yavin_rebel_14"}})
+		inspect_yavin_rebel_14:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission3" or screenID == "tier2_failed_mission3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_rebel_tier2_3}, {{type="recovery", name="tatooine_rebel_tier2_3"}})
-		recovery_tatooine_rebel_tier2_3:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_yavin_rebel_15, destroy_surpriseattack_yavin_rebel_15}, {{type="inspect", name="yavin_rebel_15"}, {type="destroy_surpriseattack", name="yavin_rebel_15"}})
+		inspect_yavin_rebel_15:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_mission4" or screenID == "tier2_failed_mission4") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_tier2_4}, {{type="assassinate", name="tatooine_rebel_tier2_4"}})
-		assassinate_tatooine_rebel_tier2_4:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {escort_yavin_rebel_16}, {{type="escort", name="yavin_rebel_16"}})
+		escort_yavin_rebel_16:startQuest(pPlayer, pNpc)
 
 	-- Tier 3 Training - options added on excellent work screens, missions-only (no XP requirement)
 	elseif (string.find(screenID, "tier3_excellent_work")) then

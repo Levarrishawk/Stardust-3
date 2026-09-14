@@ -263,183 +263,35 @@ escort_duty_tatooine_rebel_7 = SpaceDutyEscortScreenplay:new {
 registerScreenPlay("escort_duty_tatooine_rebel_7", true)
 
 --[[
-	Tier 2 -- tatooine_rebel_tier2 Main Missions
+	Tier 2 -- Major Eker
 ]]
 
--- Mission 1: Inspect with surprise attack side quest
-inspect_tatooine_rebel_tier2_1 = SpaceInspectScreenplay:new {
-	className = "inspect_tatooine_rebel_tier2_1",
-
-	questName = "tatooine_rebel_tier2_1",
-	questType = "inspect",
-
-	questZone = "space_lok",
-
-	creditReward = 5000,
-
-	sideQuest = true,
-	sideQuestType = "destroy_surpriseattack",
-	sideQuestName = "tatooine_rebel_tier2_1",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	inspectTargets = {"viopa_mission_1_shuttle"},
-	inspectCargo = "imperial_data",
-
-	targetLocation = {x = 1992, z = 800, y = 2716},
+escort_yavin_rebel_13 = SpaceEscortScreenplay:new {
+ className="escort_yavin_rebel_13", questName="yavin_rebel_13", questType="escort", questZone="space_yavin4", creditReward=5000, itemReward={{species={-1},item="object/tangible/ship/components/shield_generator/shd_mission_reward_rebel_incom_k77.iff"}}, sideQuest=false, sideQuestType="", orderedEscortRoute=true, escortShips={"yavin_mission_1_freighter"},
+ escortPoints={{patrolPointName="eker_vip_1",zoneName="space_yavin4",x=-3100,z=-1800,y=600,escortNumber=1,radius=250},{patrolPointName="eker_vip_2",zoneName="space_yavin4",x=-2596,z=126,y=3005,escortNumber=2,radius=250},{patrolPointName="eker_vip_3",zoneName="space_yavin4",x=-990,z=331,y=3100,escortNumber=3,radius=250},{patrolPointName="eker_vip_4",zoneName="space_yavin4",x=323,z=348,y=3303,escortNumber=4,radius=250}}, attackDelay=70,
+ attackShips={{"imp_tie_fighter_tier2","imp_tie_fighter_tier2","imp_tie_fighter_tier2"},{"imp_tie_fighter_tier2","imp_tie_fighter_tier2","imp_tie_fighter_tier2"},{"imp_tie_fighter_tier2","imp_tie_fighter_tier2","imp_tie_fighter_tier2"}}
 }
+registerScreenPlay("escort_yavin_rebel_13",true)
 
-registerScreenPlay("inspect_tatooine_rebel_tier2_1", true)
+inspect_yavin_rebel_14 = SpaceInspectScreenplay:new {className="inspect_yavin_rebel_14",questName="yavin_rebel_14",questType="inspect",questZone="space_yavin4",creditReward=5000,itemReward={{species={-1},item="object/tangible/ship/components/droid_interface/ddi_mission_reward_rebel_moncal_d22.iff"}},sideQuest=false,sideQuestType="",inspectTargets={"yavin_mission_2_shuttle"},inspectCargo="yavin_mission_2",spawnInspectTarget=true,targetLocation={x=2437,z=-873,y=2907}}
+registerScreenPlay("inspect_yavin_rebel_14",true)
 
-destroy_surpriseattack_tatooine_rebel_tier2_1 = SpaceSurpriseAttackScreenplay:new {
-	className = "destroy_surpriseattack_tatooine_rebel_tier2_1",
+inspect_yavin_rebel_15 = SpaceInspectScreenplay:new {className="inspect_yavin_rebel_15",questName="yavin_rebel_15",questType="inspect",questZone="space_lok",creditReward=5000,itemReward={{species={-1},item="object/tangible/ship/components/booster/bst_mission_reward_rebel_novaldex_hypernova.iff"}},sideQuest=true,sideQuestType="destroy_surpriseattack",sideQuestName="yavin_rebel_15",sideQuestSplitType=SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,sideQuestDelay=2,inspectTargets={"yavin_mission_3_shuttle"},inspectCargo="yavin_mission_3",spawnInspectTarget=true,targetLocation={x=-5500,z=3900,y=3600}}
+registerScreenPlay("inspect_yavin_rebel_15",true)
+destroy_surpriseattack_yavin_rebel_15 = SpaceSurpriseAttackScreenplay:new {className="destroy_surpriseattack_yavin_rebel_15",questName="yavin_rebel_15",questType="destroy_surpriseattack",questZone="space_lok",sideQuest=false,sideQuestType="",parentQuest="inspect_yavin_rebel_15",parentQuestType="inspect",parentQuestName="yavin_rebel_15",surpriseAttackShips={zone="space_lok",spawns={{count=3,shipName="imp_tie_interceptor_tier2"}}}}
+registerScreenPlay("destroy_surpriseattack_yavin_rebel_15",true)
 
-	questName = "tatooine_rebel_tier2_1",
-	questType = "destroy_surpriseattack",
+escort_yavin_rebel_16 = SpaceEscortScreenplay:new {className="escort_yavin_rebel_16",questName="yavin_rebel_16",questType="escort",questZone="space_lok",creditReward=5000,itemReward={{species={-1},item="object/tangible/ship/components/weapon/wpn_mission_reward_rebel_taim_ion_driver.iff"}},sideQuest=false,sideQuestType="",orderedEscortRoute=true,escortShips={"nym_smuggle_vessel"},escortPoints={{patrolPointName="eker_nym_1",zoneName="space_lok",x=-1009,z=-1075,y=-2900,escortNumber=1,radius=250},{patrolPointName="eker_nym_2",zoneName="space_lok",x=1492,z=662,y=-2814,escortNumber=2,radius=250},{patrolPointName="eker_nym_3",zoneName="space_lok",x=2241,z=-1210,y=-2943,escortNumber=3,radius=250},{patrolPointName="eker_nym_4",zoneName="space_lok",x=-2464,z=-1051,y=-2900,escortNumber=4,radius=250}},attackDelay=70,attackShips={{"imp_tie_interceptor_tier2","imp_tie_interceptor_tier2","imp_tie_interceptor_tier2"},{"imp_tie_interceptor_tier2","imp_tie_interceptor_tier2","imp_tie_interceptor_tier2"},{"imp_tie_interceptor_tier2","imp_tie_interceptor_tier2","imp_tie_interceptor_tier2"}}}
+registerScreenPlay("escort_yavin_rebel_16",true)
 
-	questZone = "space_lok",
+-- Eker duty missions
+destroy_duty_yavin_rebel_9 = SpaceDutyDestroyScreenplay:new {
+	className = "destroy_duty_yavin_rebel_9",
 
-	sideQuest = false,
-	sideQuestType = "",
-
-	parentQuest = "inspect_tatooine_rebel_tier2_1",
-	parentQuestType = "inspect",
-	parentQuestName = "tatooine_rebel_tier2_1",
-
-	surpriseAttackShips = {
-		zone = "space_lok",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier2"}},
-	},
-}
-
-registerScreenPlay("destroy_surpriseattack_tatooine_rebel_tier2_1", true)
-
--- Mission 2: Escort (in Dantooine)
-escort_tatooine_rebel_tier2_2 = SpaceEscortScreenplay:new {
-	className = "escort_tatooine_rebel_tier2_2",
-
-	questName = "tatooine_rebel_tier2_2",
-	questType = "escort",
-
-	questZone = "space_dantooine",
-
-	creditReward = 5000,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	escortShips = {"viopa_mission_2_smuggler"},
-
-	escortPoints = {
-		{patrolPointName = "tatooine_rebel_tier2_2_1", zoneName = "space_dantooine", x = 1000, z = -900, y = -2100, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_2_2", zoneName = "space_dantooine", x = -28, z = -908, y = -2207, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_2_3", zoneName = "space_dantooine", x = -1158, z = -952, y = -2363, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_2_4", zoneName = "space_dantooine", x = -2566, z = -1057, y = -2599, escortNumber = 4, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_2_5", zoneName = "space_dantooine", x = -2436, z = -1574, y = -3167, escortNumber = 5, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_2_6", zoneName = "space_dantooine", x = -2129, z = -1970, y = -3738, escortNumber = 6, radius = 250},
-	},
-
-	attackDelay = 70,
-
-	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-	}
-}
-
-registerScreenPlay("escort_tatooine_rebel_tier2_2", true)
-
--- Mission 3: Recovery
-recovery_tatooine_rebel_tier2_3 = SpaceRecoveryScreenplay:new {
-	className = "recovery_tatooine_rebel_tier2_3",
-
-	questName = "tatooine_rebel_tier2_3",
-	questType = "recovery",
-
-	questZone = "space_lok",
-
-	creditReward = 5000,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	arrivalDelay = 15,
-	recoveryDelay = 30,
-
-	recoverShip = "viopa_mission_3_shuttle",
-	recoveryConversationMobile = "object/mobile/shared_dressed_rebel_commando_rodian_male_01.iff",
-
-	escortShips = {"imp_tie_fighter_tier2"},
-
-	preRecoveryPoints = {
-		{patrolPointName = "tatooine_rebel_tier2_3_target_1", zoneName = "space_lok", x = -5500, z = 3900, y = 3600, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_target_2", zoneName = "space_lok", x = -4775, z = 3294, y = 3140, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_target_3", zoneName = "space_lok", x = -3923, z = 2964, y = 2395, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_target_4", zoneName = "space_lok", x = -3191, z = 2904, y = 1706, escortNumber = 4, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_target_5", zoneName = "space_lok", x = -2496, z = 2865, y = 751, escortNumber = 5, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_target_6", zoneName = "space_lok", x = -1540, z = 2528, y = -1100, escortNumber = 6, radius = 250},
-	},
-
-	recoveryPoints = {
-		{patrolPointName = "tatooine_rebel_tier2_3_recover_1", zoneName = "space_lok", x = -3381, z = 2517, y = 877, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_recover_2", zoneName = "space_lok", x = -3512, z = 1885, y = -192, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_recover_3", zoneName = "space_lok", x = -3723, z = 1223, y = -989, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_3_recover_4", zoneName = "space_lok", x = -4257, z = -227, y = -2707, escortNumber = 4, radius = 250},
-	},
-
-	attackDelay = 80,
-
-	attackShips = {
-		{"imp_tie_interceptor_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-	},
-}
-
-registerScreenPlay("recovery_tatooine_rebel_tier2_3", true)
-
--- Mission 4: Assassinate
-assassinate_tatooine_rebel_tier2_4 = SpaceAssassinateScreenplay:new {
-	className = "assassinate_tatooine_rebel_tier2_4",
-
-	questType = "assassinate",
-	questName = "tatooine_rebel_tier2_4",
-
-	questZone = "space_lok",
-
-	creditReward = 0,
-	itemReward = {},
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	arrivalDelay = 10,
-	failTimer = 20,
-
-	assassinateSpawns = {
-		target = "viopa_mission_4_freighter",
-		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier3"},
-	},
-
-	targetPatrols = {
-		{patrolPointName = "tatooine_rebel_tier2_four_1", x = 2800, z = 2400, y = 2800},
-		{patrolPointName = "tatooine_rebel_tier2_four_2", x = 1662, z = 2407, y = 2790},
-		{patrolPointName = "tatooine_rebel_tier2_four_3", x = 533, z = 2411, y = 3116},
-		{patrolPointName = "tatooine_rebel_tier2_four_4", x = -1109, z = 2414, y = 3581},
-		{patrolPointName = "tatooine_rebel_tier2_four_5", x = -2303, z = 2415, y = 4011},
-		{patrolPointName = "tatooine_rebel_tier2_four_6", x = -3674, z = 2416, y = 4444},
-	},
-}
-
-registerScreenPlay("assassinate_tatooine_rebel_tier2_4", true)
-
--- Tier 2 Duty Missions
-destroy_duty_tatooine_rebel_tier2_destroyduty = SpaceDutyDestroyScreenplay:new {
-	className = "destroy_duty_tatooine_rebel_tier2_destroyduty",
-
-	questName = "tatooine_rebel_tier2_destroyduty",
+	questName = "yavin_rebel_9",
 	questType = "destroy_duty",
 
-	questZone = "space_lok",
+	questZone = "space_yavin4",
 
 	creditReward = 200,
 
@@ -453,23 +305,23 @@ destroy_duty_tatooine_rebel_tier2_destroyduty = SpaceDutyDestroyScreenplay:new {
 	minDistance = 12500,
 	maxDistance = 17500,
 
-	bossShip = "imp_tie_interceptor_tier3",
+	bossShip = "hutt_fighter_s02_tier3",
 	shipTypes = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		{"hutt_fighter_s01_tier2", "hutt_fighter_s01_tier2", "hutt_fighter_s02_tier2"},
+		{"hutt_fighter_s02_tier2", "hutt_fighter_s01_tier2", "hutt_bomber_s01_tier2"},
+		{"hutt_fighter_s01_tier2", "hutt_fighter_s02_tier2", "hutt_fighter_s02_tier2"},
 	},
 }
 
-registerScreenPlay("destroy_duty_tatooine_rebel_tier2_destroyduty", true)
+registerScreenPlay("destroy_duty_yavin_rebel_9", true)
 
-recovery_duty_tatooine_rebel_tier2_recoveryduty = SpaceDutyRecoveryScreenplay:new {
-	className = "recovery_duty_tatooine_rebel_tier2_recoveryduty",
+recovery_duty_yavin_rebel_12 = SpaceDutyRecoveryScreenplay:new {
+	className = "recovery_duty_yavin_rebel_12",
 
-	questName = "tatooine_rebel_tier2_recoveryduty",
+	questName = "yavin_rebel_12",
 	questType = "recovery_duty",
 
-	questZone = "space_lok",
+	questZone = "space_yavin4",
 
 	creditReward = 2500,
 	creditKillBonus = 200,
@@ -480,42 +332,42 @@ recovery_duty_tatooine_rebel_tier2_recoveryduty = SpaceDutyRecoveryScreenplay:ne
 	arrivalDelay = 15,
 	recoveryDelay = 30,
 
-	recoverShips = {"corsair_manowar_tier2", "corsair_behemoth_tier2"},
-	recoveryConversationMobile = "object/mobile/shared_dressed_nym_patrol_elite_nikto_m.iff",
+	recoverShips = {"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
+	recoveryConversationMobile = "object/mobile/shared_dressed_rebel_commando_human_male_01.iff",
 
-	escortShips = {"corsair_sloop_tier2"},
+	escortShips = {"imp_tie_fighter_tier2"},
 
 	preRecoveryPoints = {
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_1", zoneName = "space_lok", x = -5007, z = -5499, y = -3499, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_2", zoneName = "space_lok", x = -6466, z = -6879, y = -4229, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_3", zoneName = "space_lok", x = -6974, z = -7081, y = -1544, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_4", zoneName = "space_lok", x = -7169, z = -6943, y = 1241, escortNumber = 4, radius = 250},
+		{patrolPointName = "eker_recovery_duty_1", zoneName = "space_yavin4", x = -5007, z = -5499, y = -3499, escortNumber = 1, radius = 250},
+		{patrolPointName = "eker_recovery_duty_2", zoneName = "space_yavin4", x = -6466, z = -6879, y = -4229, escortNumber = 2, radius = 250},
+		{patrolPointName = "eker_recovery_duty_3", zoneName = "space_yavin4", x = -6974, z = -7081, y = -1544, escortNumber = 3, radius = 250},
+		{patrolPointName = "eker_recovery_duty_4", zoneName = "space_yavin4", x = -7169, z = -6943, y = 1241, escortNumber = 4, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_5", zoneName = "space_lok", x = -5700, z = -5955, y = -2034, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_6", zoneName = "space_lok", x = -5033, z = -4822, y = -3028, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_7", zoneName = "space_lok", x = -4768, z = -3941, y = -3678, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier2_recovery_duty_8", zoneName = "space_lok", x = -4757, z = -3078, y = -3964, escortNumber = 4, radius = 250},
+		{patrolPointName = "eker_recovery_duty_5", zoneName = "space_yavin4", x = -5700, z = -5955, y = -2034, escortNumber = 1, radius = 250},
+		{patrolPointName = "eker_recovery_duty_6", zoneName = "space_yavin4", x = -5033, z = -4822, y = -3028, escortNumber = 2, radius = 250},
+		{patrolPointName = "eker_recovery_duty_7", zoneName = "space_yavin4", x = -4768, z = -3941, y = -3678, escortNumber = 3, radius = 250},
+		{patrolPointName = "eker_recovery_duty_8", zoneName = "space_yavin4", x = -4757, z = -3078, y = -3964, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 100,
 
 	attackShips = {
-		{"corsair_raider_tier2", "corsair_sloop_tier2"},
-		{"corsair_sloop_tier2", "corsair_sloop_tier2"},
+		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
+		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
 	},
 }
 
-registerScreenPlay("recovery_duty_tatooine_rebel_tier2_recoveryduty", true)
+registerScreenPlay("recovery_duty_yavin_rebel_12", true)
 
-escort_duty_tatooine_rebel_tier2_escortduty = SpaceDutyEscortScreenplay:new {
-	className = "escort_duty_tatooine_rebel_tier2_escortduty",
+escort_duty_yavin_rebel_10 = SpaceDutyEscortScreenplay:new {
+	className = "escort_duty_yavin_rebel_10",
 
-	questName = "tatooine_rebel_tier2_escortduty",
+	questName = "yavin_rebel_10",
 	questType = "escort_duty",
 
-	questZone = "space_lok",
+	questZone = "space_yavin4",
 
 	creditReward = 2500,
 
@@ -524,13 +376,13 @@ escort_duty_tatooine_rebel_tier2_escortduty = SpaceDutyEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	escortShips = {"nym_smuggle_vessel", "reb_smuggler_ykl37r_tier2", "reb_smuggler_yt1300_tier2"},
+	escortShips = {"reb_freighterlight_tier2", "reb_freightermedium_tier2", "reb_freighterheavy_tier2"},
 
 	escortPoints = {
-		{patrolPointName = "crimson_phoenix_vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
-		{patrolPointName = "crimson_phoenix_lok_imp_pirate_9", zoneName = "space_lok", x = 1492, z = 662, y = -2814, escortNumber = 2, radius = 250},
-		{patrolPointName = "crimson_phoenix_vortex_mission_1_1", zoneName = "space_lok", x = 2241, z = -1210, y = -2943, escortNumber = 3, radius = 250},
-		{patrolPointName = "crimson_phoenix_vortex_mission_1_5", zoneName = "space_lok", x = -2464, z = -1051, y = -2900, escortNumber = 4, radius = 250},
+		{patrolPointName = "eker_refugee_duty_1", zoneName = "space_yavin4", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
+		{patrolPointName = "eker_refugee_duty_2", zoneName = "space_yavin4", x = 1492, z = 662, y = -2814, escortNumber = 2, radius = 250},
+		{patrolPointName = "eker_refugee_duty_3", zoneName = "space_yavin4", x = 2241, z = -1210, y = -2943, escortNumber = 3, radius = 250},
+		{patrolPointName = "eker_refugee_duty_4", zoneName = "space_yavin4", x = -2464, z = -1051, y = -2900, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
@@ -544,7 +396,7 @@ escort_duty_tatooine_rebel_tier2_escortduty = SpaceDutyEscortScreenplay:new {
 	creditKillBonus = 200,
 }
 
-registerScreenPlay("escort_duty_tatooine_rebel_tier2_escortduty", true)
+registerScreenPlay("escort_duty_yavin_rebel_10", true)
 
 --[[
 	Tier 3 -- tatooine_rebel_tier3 Main Missions (missions-only tier)
@@ -1987,13 +1839,14 @@ CrimsonPhoenixSquadronScreenplay = ScreenPlay:new {
 	QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "tatooine_rebel_7"},
 
 	-- Tier 2
-	TIER2_QUEST_STRING_1 = {type = "inspect", name = "tatooine_rebel_tier2_1"},
-	TIER2_QUEST_STRING_2 = {type = "escort", name = "tatooine_rebel_tier2_2"},
-	TIER2_QUEST_STRING_3 = {type = "recovery", name = "tatooine_rebel_tier2_3"},
-	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_rebel_tier2_4"},
-	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_rebel_tier2_destroyduty"},
-	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "tatooine_rebel_tier2_recoveryduty"},
-	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "tatooine_rebel_tier2_escortduty"},
+	TIER2_QUEST_STRING_1 = {type = "escort", name = "yavin_rebel_13"},
+	TIER2_QUEST_STRING_2 = {type = "inspect", name = "yavin_rebel_14"},
+	TIER2_QUEST_STRING_3 = {type = "inspect", name = "yavin_rebel_15"},
+	TIER2_QUEST_STRING_3_SIDE = {type = "destroy_surpriseattack", name = "yavin_rebel_15"},
+	TIER2_QUEST_STRING_4 = {type = "escort", name = "yavin_rebel_16"},
+	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "yavin_rebel_9"},
+	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "yavin_rebel_12"},
+	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "yavin_rebel_10"},
 
 	-- Tier 3
 	TIER3_QUEST_STRING_1 = {type = "recovery", name = "tatooine_rebel_tier3_1"},
@@ -2100,19 +1953,21 @@ function CrimsonPhoenixSquadronScreenplay:resetTier2Quests(pPlayer)
 	end
 
 	-- Mission 1
-	inspect_tatooine_rebel_tier2_1:resetQuest(pPlayer)
+	escort_yavin_rebel_13:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1.type, self.TIER2_QUEST_STRING_1.name, false)
 
 	-- Mission 2
-	escort_tatooine_rebel_tier2_2:resetQuest(pPlayer)
+	inspect_yavin_rebel_14:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_2.type, self.TIER2_QUEST_STRING_2.name, false)
 
 	-- Mission 3
-	recovery_tatooine_rebel_tier2_3:resetQuest(pPlayer)
+	inspect_yavin_rebel_15:resetQuest(pPlayer)
+	destroy_surpriseattack_yavin_rebel_15:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_3.type, self.TIER2_QUEST_STRING_3.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_3_SIDE.type, self.TIER2_QUEST_STRING_3_SIDE.name, false)
 
 	-- Mission 4
-	assassinate_tatooine_rebel_tier2_4:resetQuest(pPlayer)
+	escort_yavin_rebel_16:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_4.type, self.TIER2_QUEST_STRING_4.name, false)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
