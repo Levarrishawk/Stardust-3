@@ -327,8 +327,40 @@ registerScreenPlay("inspect_yavin_rebel_15",true)
 destroy_surpriseattack_yavin_rebel_15 = SpaceSurpriseAttackScreenplay:new {className="destroy_surpriseattack_yavin_rebel_15",questName="yavin_rebel_15",questType="destroy_surpriseattack",questZone="space_lok",sideQuest=false,sideQuestType="",parentQuest="inspect_yavin_rebel_15",parentQuestType="inspect",parentQuestName="yavin_rebel_15",surpriseAttackShips={zone="space_lok",spawns={{count=3,shipName="imp_tie_interceptor_tier2"}}}}
 registerScreenPlay("destroy_surpriseattack_yavin_rebel_15",true)
 
-escort_yavin_rebel_16 = SpaceEscortScreenplay:new {className="escort_yavin_rebel_16",questName="yavin_rebel_16",questType="escort",questZone="space_lok",creditReward=5000,itemReward={{species={-1},item="object/tangible/ship/components/weapon/wpn_mission_reward_rebel_taim_ion_driver.iff"}},sideQuest=false,sideQuestType="",orderedEscortRoute=true,escortShips={"nym_smuggle_vessel"},escortPoints={{patrolPointName="eker_nym_1",zoneName="space_lok",x=-1009,z=-1075,y=-2900,escortNumber=1,radius=250},{patrolPointName="eker_nym_2",zoneName="space_lok",x=1492,z=662,y=-2814,escortNumber=2,radius=250},{patrolPointName="eker_nym_3",zoneName="space_lok",x=2241,z=-1210,y=-2943,escortNumber=3,radius=250},{patrolPointName="eker_nym_4",zoneName="space_lok",x=-2464,z=-1051,y=-2900,escortNumber=4,radius=250}},attackDelay=70,attackShips={{"imp_tie_interceptor_tier2","imp_tie_interceptor_tier2","imp_tie_interceptor_tier2"},{"imp_tie_interceptor_tier2","imp_tie_interceptor_tier2","imp_tie_interceptor_tier2"},{"imp_tie_interceptor_tier2","imp_tie_interceptor_tier2","imp_tie_interceptor_tier2"}}}
-registerScreenPlay("escort_yavin_rebel_16",true)
+escort_yavin_rebel_16 = SpaceEscortScreenplay:new {
+	className = "escort_yavin_rebel_16",
+	questName = "yavin_rebel_16",
+	questType = "escort",
+	questZone = "space_lok",
+
+	creditReward = 5000,
+	itemReward = {
+		{species = {-1}, item = "object/tangible/ship/components/weapon/wpn_mission_reward_rebel_taim_ion_driver.iff"},
+	},
+
+	sideQuest = false,
+	sideQuestType = "",
+
+	escortShips = {"nym_smuggle_vessel"},
+	escortSpeed = 20,
+	orderedEscortRoute = true,
+
+	escortPoints = {
+		{patrolPointName = "eker_nym_1", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
+		{patrolPointName = "eker_nym_2", zoneName = "space_lok", x = 1492, z = 662, y = -2814, escortNumber = 2, radius = 250},
+		{patrolPointName = "eker_nym_3", zoneName = "space_lok", x = 2241, z = -1210, y = -2943, escortNumber = 3, radius = 250},
+		{patrolPointName = "eker_nym_4", zoneName = "space_lok", x = -2464, z = -1051, y = -2900, escortNumber = 4, radius = 250},
+	},
+
+	attackDelay = 70,
+	attackShips = {
+		{"imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
+		{"imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
+		{"imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
+	},
+}
+
+registerScreenPlay("escort_yavin_rebel_16", true)
 
 -- Eker duty missions
 destroy_duty_yavin_rebel_9 = SpaceDutyDestroyScreenplay:new {
