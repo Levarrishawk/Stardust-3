@@ -750,20 +750,50 @@ da_la_socuna_convo_tier2_failed_mission2 = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission2)
 
--- Tier 2 mission 3 (recovery)
+-- Tier 2 mission 3 (recover the Imperial database)
 da_la_socuna_convo_tier2_mission3_brief = ConvoScreen:new {
 	id = "tier2_mission3_brief",
-	leftDialog = "@conversation/yavin_rebel_trainer_2:s_d931ff32",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_154b642e",
 	stopConversation = "false",
 	options = {
-		{"@conversation/yavin_rebel_trainer_2:s_b2e340f6", "tier2_accept_mission3"},
+		{"@conversation/yavin_rebel_trainer_2:s_2dec7766", "tier2_mission3_database"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_brief)
 
+da_la_socuna_convo_tier2_mission3_database = ConvoScreen:new {
+	id = "tier2_mission3_database",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_5018d177",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_d5609495", "tier2_mission3_recovery_team"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_database)
+
+da_la_socuna_convo_tier2_mission3_recovery_team = ConvoScreen:new {
+	id = "tier2_mission3_recovery_team",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_5c4ab8c9",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_851cc47", "tier2_mission3_lok_route"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_recovery_team)
+
+da_la_socuna_convo_tier2_mission3_lok_route = ConvoScreen:new {
+	id = "tier2_mission3_lok_route",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_b0753766",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_a99ad4e8", "tier2_accept_mission3"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_lok_route)
+
 da_la_socuna_convo_tier2_accept_mission3 = ConvoScreen:new {
 	id = "tier2_accept_mission3",
-	leftDialog = "@conversation/yavin_rebel_trainer_2:s_c928423d",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_a7558b8",
 	stopConversation = "true",
 	options = {}
 }
@@ -785,16 +815,66 @@ da_la_socuna_convo_tier2_failed_mission3 = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission3)
 
--- Tier 2 mission 4 (assassinate)
+-- Tier 2 mission 4 (escort Nym's smuggler)
 da_la_socuna_convo_tier2_mission4_brief = ConvoScreen:new {
 	id = "tier2_mission4_brief",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_fddb83ca",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_b2e340f6", "tier2_mission4_good_news"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_brief)
+
+da_la_socuna_convo_tier2_mission4_good_news = ConvoScreen:new {
+	id = "tier2_mission4_good_news",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_d931ff32",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_3f00169", "tier2_mission4_nym_has_it"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_good_news)
+
+da_la_socuna_convo_tier2_mission4_nym_has_it = ConvoScreen:new {
+	id = "tier2_mission4_nym_has_it",
 	leftDialog = "@conversation/yavin_rebel_trainer_2:s_18ac5f05",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_3d419bc4", "tier2_mission4_nym_reasons"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_nym_has_it)
+
+da_la_socuna_convo_tier2_mission4_nym_reasons = ConvoScreen:new {
+	id = "tier2_mission4_nym_reasons",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_b6cf63f0",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_b2e9d505", "tier2_mission4_nym_fee"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_nym_reasons)
+
+da_la_socuna_convo_tier2_mission4_nym_fee = ConvoScreen:new {
+	id = "tier2_mission4_nym_fee",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_2857391a",
+	stopConversation = "false",
+	options = {
+		{"@conversation/yavin_rebel_trainer_2:s_39acc227", "tier2_mission4_orders"},
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_nym_fee)
+
+da_la_socuna_convo_tier2_mission4_orders = ConvoScreen:new {
+	id = "tier2_mission4_orders",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_1c128099",
 	stopConversation = "false",
 	options = {
 		{"@conversation/yavin_rebel_trainer_2:s_cd0a60d4", "tier2_accept_mission4"},
 	}
 }
-da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_brief)
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_orders)
 
 da_la_socuna_convo_tier2_accept_mission4 = ConvoScreen:new {
 	id = "tier2_accept_mission4",
