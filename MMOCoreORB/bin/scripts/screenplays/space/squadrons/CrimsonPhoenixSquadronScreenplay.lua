@@ -140,6 +140,7 @@ escort_tatooine_rebel_2 = SpaceEscortScreenplay:new {
 	parentQuestName = "tatooine_rebel_2",
 
 	escortShips = {"reb_freightermedium_tier1"},
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "crimson_phoenix_rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
