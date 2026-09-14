@@ -480,515 +480,123 @@ registerScreenPlay("escort_duty_yavin_rebel_10", true)
 	Tier 3 -- tatooine_rebel_tier3 Main Missions (missions-only tier)
 ]]
 
--- Mission 1: Recovery (Space Yavin4 - Imperial spy trying to escape with Rebel fleet hangar info)
+-- Mission 1: Capture the Imperial security officer in Dathomir.
 recovery_tatooine_rebel_tier3_1 = SpaceRecoveryScreenplay:new {
 	className = "recovery_tatooine_rebel_tier3_1",
 
 	questName = "tatooine_rebel_tier3_1",
 	questType = "recovery",
 
-	questZone = "space_yavin4",
+	questZone = "space_dathomir",
 
-	creditReward = 0,
+	creditReward = 25000,
+	itemReward = {{species = {-1}, item = "object/tangible/ship/components/armor/arm_mission_reward_rebel_corellian_triplate.iff"}},
 
 	sideQuest = true,
-	sideQuestType = "patrol",
-	sideQuestName = "tatooine_rebel_tier3_1_A",
+	sideQuestType = "delivery",
+	sideQuestName = "tatooine_rebel_tier3_1_a",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	arrivalDelay = 20,
 	recoveryDelay = 30,
 
-	recoverShip = "tier_3_1_a_spy",
+	recoverShip = "lambdashuttle_rebel_tier3_1_officer",
 	recoveryConversationMobile = "object/mobile/ig_assassin_droid.iff",
 
-	escortShips = {},
+	escortShips = {"imp_tie_fighter_tier3"},
 
 	preRecoveryPoints = {
-		{patrolPointName = "crimson_phoenix_spy_flight_path_2", zoneName = "space_yavin4", x = 4793, z = -5425, y = 4509, escortNumber = 1, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_flight_path_3", zoneName = "space_yavin4", x = 4358, z = -4600, y = 4097, escortNumber = 2, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_flight_path_4", zoneName = "space_yavin4", x = 4040, z = -3996, y = 3796, escortNumber = 3, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_flight_path_5", zoneName = "space_yavin4", x = 3589, z = -3140, y = 3370, escortNumber = 4, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_flight_path_6", zoneName = "space_yavin4", x = 3280, z = -2554, y = 3078, escortNumber = 5, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_flight_path_7", zoneName = "space_yavin4", x = 2073, z = -2087, y = 2117, escortNumber = 6, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_flight_path_1", zoneName = "space_yavin4", x = 5199, z = -6199, y = 4893, escortNumber = 7, radius = 250},
+		{patrolPointName = "phoenix_t3_1_capture_1", zoneName = "space_dathomir", x = -5200, z = 3400, y = 4400, escortNumber = 1, radius = 250},
+		{patrolPointName = "phoenix_t3_1_capture_2", zoneName = "space_dathomir", x = -4600, z = 3000, y = 3700, escortNumber = 2, radius = 250},
+		{patrolPointName = "phoenix_t3_1_capture_3", zoneName = "space_dathomir", x = -3900, z = 2700, y = 3000, escortNumber = 3, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "crimson_phoenix_spy_recovery_path_1", zoneName = "space_yavin4", x = 3463, z = -2741, y = 2867, escortNumber = 1, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_recovery_path_2", zoneName = "space_yavin4", x = 3367, z = -2354, y = 2296, escortNumber = 2, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_recovery_path_3", zoneName = "space_yavin4", x = 3282, z = -2008, y = 1786, escortNumber = 3, radius = 250},
-		{patrolPointName = "crimson_phoenix_spy_recovery_path_4", zoneName = "space_yavin4", x = 3143, z = -1446, y = 956, escortNumber = 4, radius = 250},
+		{patrolPointName = "phoenix_t3_1_escape_1", zoneName = "space_dathomir", x = -3200, z = 2400, y = 2300, escortNumber = 1, radius = 250},
+		{patrolPointName = "phoenix_t3_1_escape_2", zoneName = "space_dathomir", x = -2400, z = 2000, y = 1500, escortNumber = 2, radius = 250},
+		{patrolPointName = "phoenix_t3_1_escape_3", zoneName = "space_dathomir", x = -1500, z = 1600, y = 600, escortNumber = 3, radius = 250},
 	},
 
 	attackDelay = 70,
 
 	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
+		{"imp_tie_fighter_tier3"},
 	},
 }
 
 registerScreenPlay("recovery_tatooine_rebel_tier3_1", true)
 
--- Mission 1 Side Quest A: Patrol (Space Yavin4 - Clear Imperial ships from Rebel escape route)
-patrol_tatooine_rebel_tier3_1_A = SpacePatrolScreenplay:new {
-	className = "patrol_tatooine_rebel_tier3_1_A",
-
-	questName = "tatooine_rebel_tier3_1_A",
-	questType = "patrol",
-
-	questZone = "space_yavin4",
-
-	creditReward = 0,
-
-	sideQuest = true,
-	sideQuestType = "destroy_surpriseattack",
-	sideQuestName = "tatooine_rebel_tier3_1_b",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.PATROL_POINT,
-
-	sideQuestPatrolStart = 3,
-	sideQuestDelay = 5,
-
-	parentQuest = "recovery_tatooine_rebel_tier3_1",
-	parentQuestType = "recovery",
-	parentQuestName = "tatooine_rebel_tier3_1",
-
-	patrolPoints = {
-		{patrolPointName = "crimson_phoenix_rebel_tier_three_patrol_1", x = 2793, z = -276, y = -1231, patrolNumber = 1, radius = 150},
-		{patrolPointName = "crimson_phoenix_rebel_tier_three_patrol_2", x = 3215, z = -695, y = -1854, patrolNumber = 2, radius = 150},
-		{patrolPointName = "crimson_phoenix_rebel_tier_three_patrol_3", x = 3680, z = -853, y = -2726, patrolNumber = 3, radius = 150},
-		{patrolPointName = "crimson_phoenix_rebel_tier_three_patrol_4", x = 3975, z = -1404, y = -3805, patrolNumber = 4, radius = 150},
-	},
-}
-
-registerScreenPlay("patrol_tatooine_rebel_tier3_1_A", true)
-
--- Mission 1 Side Quest B: Destroy Surprise Attack (Space Yavin4 - Destroy Imperial patrol on escape path)
-destroy_surpriseattack_tatooine_rebel_tier3_1_b = SpaceSurpriseAttackScreenplay:new {
-	className = "destroy_surpriseattack_tatooine_rebel_tier3_1_b",
-
-	questName = "tatooine_rebel_tier3_1_b",
-	questType = "destroy_surpriseattack",
-
-	questZone = "space_yavin4",
-
-	sideQuest = true,
-	sideQuestType = "assassinate",
-	sideQuestName = "tatooine_rebel_tier3_1_c",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 0,
-
-	parentQuest = "patrol_tatooine_rebel_tier3_1_A",
-	parentQuestType = "patrol",
-	parentQuestName = "tatooine_rebel_tier3_1_A",
-
-	surpriseAttackShips = {
-		zone = "space_yavin4",
-		spawns = {{count = 3, shipName = "imp_tie_fighter_tier3"}},
-	},
-}
-
-registerScreenPlay("destroy_surpriseattack_tatooine_rebel_tier3_1_b", true)
-
--- Mission 1 Side Quest C: Assassinate (Space Yavin4 - Stop Imperial scout patrol from escaping)
-assassinate_tatooine_rebel_tier3_1_c = SpaceAssassinateScreenplay:new {
-	className = "assassinate_tatooine_rebel_tier3_1_c",
-
-	questType = "assassinate",
-	questName = "tatooine_rebel_tier3_1_c",
-
-	questZone = "space_yavin4",
-
-	creditReward = 0,
-	itemReward = {},
-
-	sideQuest = true,
-	sideQuestType = "space_battle",
-	sideQuestName = "tatooine_rebel_tier3_1_d",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 0,
-
-	parentQuest = "destroy_surpriseattack_tatooine_rebel_tier3_1_b",
-	parentQuestType = "destroy_surpriseattack",
-	parentQuestName = "tatooine_rebel_tier3_1_b",
-
-	arrivalDelay = 2,
-	failTimer = 20,
-
-	assassinateSpawns = {
-		target = "imp_tie_interceptor_tier2",
-		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-	},
-
-	targetPatrols = {
-		{patrolPointName = "crimson_phoenix_imperial_scout_flight_path_1", zoneName = "space_yavin4", x = 3593, z = -1050, y = -3060},
-		{patrolPointName = "crimson_phoenix_imperial_scout_flight_path_2", zoneName = "space_yavin4", x = 3255, z = -758, y = -2450},
-		{patrolPointName = "crimson_phoenix_imperial_scout_flight_path_3", zoneName = "space_yavin4", x = 2804, z = -215, y = -1382},
-		{patrolPointName = "crimson_phoenix_imperial_scout_flight_path_4", zoneName = "space_yavin4", x = 2290, z = 302, y = -266},
-	},
-}
-
-registerScreenPlay("assassinate_tatooine_rebel_tier3_1_c", true)
-
--- Mission 1 Side Quest D: Space Battle (Space Yavin4 - Assist X-Wing squad against Imperial patrol)
-space_battle_tatooine_rebel_tier3_1_d = SpaceBattleScreenplay:new {
-	className = "space_battle_tatooine_rebel_tier3_1_d",
-
-	questName = "tatooine_rebel_tier3_1_d",
-	questType = "space_battle",
-
-	questZone = "space_yavin4",
-
-	creditReward = 0,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	parentQuest = "assassinate_tatooine_rebel_tier3_1_c",
-	parentQuestType = "assassinate",
-	parentQuestName = "tatooine_rebel_tier3_1_c",
-
-	battlePoint = "space_yavin4:rebel_tier3_1_d_space_battle",
-	allyArrivalDelay = 20,
-	enemyArrivalDelay = 35,
-	allyOriginDist = -600,
-	enemyOriginDist = 800,
-	allyArrivalDist = -100,
-	enemyArrivalDist = 0,
-
-	alliedShips = {
-		{"reb_xwing_tier3"},
-		{"reb_xwing_tier3"},
-		{"reb_xwing_tier3"},
-	},
-
-	enemyShips = {
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-	},
-}
-
-registerScreenPlay("space_battle_tatooine_rebel_tier3_1_d", true)
-
--- Mission 2: Inspect (Space Endor - Rebel fleet forced out of hyperspace, need intel from Hutt smugglers)
+-- Mission 2: Find the Imperial bomb aboard a suspicious Rebel ship.
 inspect_tatooine_rebel_tier3_2 = SpaceInspectScreenplay:new {
 	className = "inspect_tatooine_rebel_tier3_2",
 
 	questName = "tatooine_rebel_tier3_2",
 	questType = "inspect",
 
-	questZone = "space_endor",
+	questZone = "space_dathomir",
 
-	creditReward = 0,
+	creditReward = 25000,
+	itemReward = {{species = {-1}, item = "object/tangible/ship/components/weapon_capacitor/cap_mission_reward_rebel_qualdex_battery_array.iff"}},
 
 	sideQuest = true,
-	sideQuestType = "delivery",
+	sideQuestType = "destroy_surpriseattack",
 	sideQuestName = "tatooine_rebel_tier3_2_a",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
-	inspectTargets = {"huttsmuggler"},
-	inspectCargo = "sector_recon_data",
+	inspectTargets = {"tatooine_tier3_2_inspect_ywing", "tatooine_tier3_2_inspect_bwing", "tatooine_tier3_2_inspect_xwing", "tatooine_tier3_2_inspect_awing"},
+	inspectCargo = "tatooine_rebel_tier3_2",
 
-	targetLocation = {x = 4249, z = 2899, y = 3799},
+	targetLocation = {x = -4100, z = 900, y = 2300},
+	spawnInspectTarget = true,
 }
 
 registerScreenPlay("inspect_tatooine_rebel_tier3_2", true)
 
--- Mission 2 Side Quest A: Delivery (Space Lok - Deliver data to Alliance fleet)
-delivery_tatooine_rebel_tier3_2_a = SpaceDeliveryScreenplay:new {
-	className = "delivery_tatooine_rebel_tier3_2_a",
-
-	questName = "tatooine_rebel_tier3_2_a",
-	questType = "delivery",
-
-	questZone = "space_lok",
-
-	creditReward = 0,
-
-	sideQuest = true,
-	sideQuestType = "survival",
-	sideQuestName = "tatooine_rebel_tier3_2_b",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 3,
-
-	parentQuest = "inspect_tatooine_rebel_tier3_2",
-	parentQuestType = "inspect",
-	parentQuestName = "tatooine_rebel_tier3_2",
-
-	pickupShip = "reb_xwing_tier2",
-	deliveryShip = "reb_awing_tier3",
-
-	pickupPoint = {x = -3000, z = -2000, y = -2600}, -- space_lok:rebel_tier3_2_a_meeting
-	deliveryPoint = {x = 1000, z = -2000, y = -3452}, -- space_lok:rebel_tier3_2_a_delivery
-
-	attackDelay = 70,
-
-	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-	},
-}
-
-registerScreenPlay("delivery_tatooine_rebel_tier3_2_a", true)
-
--- Mission 2 Side Quest B: Survival (Space Endor - Defend fleet from Imperial fighter wings)
-survival_tatooine_rebel_tier3_2_b = SpaceSurvivalScreenplay:new {
-	className = "survival_tatooine_rebel_tier3_2_b",
-
-	questName = "tatooine_rebel_tier3_2_b",
-	questType = "survival",
-
-	questZone = "space_endor",
-
-	creditReward = 0,
-
-	sideQuest = true,
-	sideQuestType = "escort",
-	sideQuestName = "tatooine_rebel_tier3_2_c",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 0,
-
-	parentQuest = "delivery_tatooine_rebel_tier3_2_a",
-	parentQuestType = "delivery",
-	parentQuestName = "tatooine_rebel_tier3_2_a",
-
-	survivalTime = 600,
-	survivalPoint = "space_endor:rebel_tier3_2_b_defend_point",
-	delayToFirstAttack = 5,
-
-	attackDelay = 100,
-
-	attackShips = {
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_bomber_tier2", "imp_tie_bomber_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
-	},
-}
-
-registerScreenPlay("survival_tatooine_rebel_tier3_2_b", true)
-
--- Mission 2 Side Quest C: Escort (Space Endor - Escort straggling freighter to new fleet position)
-escort_tatooine_rebel_tier3_2_c = SpaceEscortScreenplay:new {
-	className = "escort_tatooine_rebel_tier3_2_c",
-
-	questName = "tatooine_rebel_tier3_2_c",
-	questType = "escort",
-
-	questZone = "space_endor",
-
-	creditReward = 0,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	parentQuest = "survival_tatooine_rebel_tier3_2_b",
-	parentQuestType = "survival",
-	parentQuestName = "tatooine_rebel_tier3_2_b",
-
-	escortShips = {"reb_freighterlight_tier3"},
-
-	escortPoints = {
-		{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
-		{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_2", zoneName = "space_endor", x = -549, z = 3180, y = 3238, escortNumber = 2, radius = 250},
-		{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_3", zoneName = "space_endor", x = -1251, z = 1477, y = 3143, escortNumber = 3, radius = 250},
-		{patrolPointName = "crimson_phoenix_rebel_tier3_2_c_escort_4", zoneName = "space_endor", x = -1996, z = -330, y = 3042, escortNumber = 4, radius = 250},
-	},
-
-	attackDelay = 80,
-
-	attackShips = {
-		{"imp_tie_interceptor_tier2", "imp_tie_interceptor_tier2"},
-		{"imp_tie_fighter_tier2", "imp_tie_interceptor_tier2"},
-	},
-}
-
-registerScreenPlay("escort_tatooine_rebel_tier3_2_c", true)
-
--- Mission 3: Delivery (Space Endor - Meet Nym smuggler with intel data from Lok Alliance Navy)
+-- Mission 3: Collect Nym's prison data in Lok and deliver it in Dathomir.
 delivery_tatooine_rebel_tier3_3 = SpaceDeliveryScreenplay:new {
 	className = "delivery_tatooine_rebel_tier3_3",
 
 	questName = "tatooine_rebel_tier3_3",
 	questType = "delivery",
 
-	questZone = "space_endor",
+	questZone = "space_lok",
+	pickupZone = "space_lok",
+	deliveryZone = "space_dathomir",
 
-	creditReward = 0,
+	creditReward = 25000,
+	itemReward = {{species = {-1}, item = "object/tangible/ship/components/engine/eng_mission_reward_rebel_incom_military.iff"}},
 
 	sideQuest = true,
-	sideQuestType = "assassinate",
+	sideQuestType = "space_battle",
 	sideQuestName = "tatooine_rebel_tier3_3_a",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
 	pickupShip = "nym_smuggler",
-	deliveryShip = "reb_gunboat_tier3",
+	deliveryShip = "tatooine_rebel_3_3_b_smuggler_yt1300_tier3",
 
-	pickupPoint = "space_endor:tatooine_rebel_tier_3_3_pickup",
-	deliveryPoint = "space_endor:tatooine_rebel_tier_3_3_deliver",
+	pickupPoint = {x = -4200, z = 800, y = -2300},
+	deliveryPoint = {x = -3600, z = -600, y = 1700},
 
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		{"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
 	},
 }
 
 registerScreenPlay("delivery_tatooine_rebel_tier3_3", true)
 
--- Mission 3 Side Quest A: Assassinate (Space Endor - Destroy Imperial advanced recon ship)
-assassinate_tatooine_rebel_tier3_3_a = SpaceAssassinateScreenplay:new {
-	className = "assassinate_tatooine_rebel_tier3_3_a",
-
-	questType = "assassinate",
-	questName = "tatooine_rebel_tier3_3_a",
-
-	questZone = "space_endor",
-
-	creditReward = 0,
-	itemReward = {},
-
-	sideQuest = true,
-	sideQuestType = "space_battle",
-	sideQuestName = "tatooine_rebel_tier3_3_b",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 0,
-
-	parentQuest = "delivery_tatooine_rebel_tier3_3",
-	parentQuestType = "delivery",
-	parentQuestName = "tatooine_rebel_tier3_3",
-
-	arrivalDelay = 20,
-	failTimer = 20,
-
-	assassinateSpawns = {
-		target = "lambdashuttle_advanced_recon",
-		escorts = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
-	},
-
-	targetPatrols = {
-		{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_1", zoneName = "space_endor", x = 2940, z = -4680, y = 1200},
-		{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_2", zoneName = "space_endor", x = 2922, z = -3692, y = 1654},
-		{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_3", zoneName = "space_endor", x = 2900, z = -2445, y = 2228},
-		{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_4", zoneName = "space_endor", x = 2892, z = -1093, y = 2859},
-		{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_5", zoneName = "space_endor", x = 2892, z = 55, y = 3394},
-		{patrolPointName = "tatooine_rebel_tier3_3_a_spyship_6", zoneName = "space_endor", x = 2892, z = 1122, y = 3890},
-	},
-}
-
-registerScreenPlay("assassinate_tatooine_rebel_tier3_3_a", true)
-
--- Mission 3 Side Quest B: Space Battle (Space Endor - Assist Green squadron against TIE wing)
-space_battle_tatooine_rebel_tier3_3_b = SpaceBattleScreenplay:new {
-	className = "space_battle_tatooine_rebel_tier3_3_b",
-
-	questName = "tatooine_rebel_tier3_3_b",
-	questType = "space_battle",
-
-	questZone = "space_endor",
-
-	creditReward = 0,
-
-	sideQuest = true,
-	sideQuestType = "escort",
-	sideQuestName = "tatooine_rebel_tier3_3_c",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 0,
-
-	parentQuest = "assassinate_tatooine_rebel_tier3_3_a",
-	parentQuestType = "assassinate",
-	parentQuestName = "tatooine_rebel_tier3_3_a",
-
-	battlePoint = "space_endor:tatooine_rebel_tier3_3_b_battlepoint",
-	allyArrivalDelay = 60,
-	enemyArrivalDelay = 85,
-	allyOriginDist = 500,
-	enemyOriginDist = -750,
-	allyArrivalDist = 50,
-	enemyArrivalDist = -200,
-
-	alliedShips = {
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
-	},
-
-	enemyShips = {
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-		{"imp_tie_interceptor_tier3"},
-	},
-}
-
-registerScreenPlay("space_battle_tatooine_rebel_tier3_3_b", true)
-
--- Mission 3 Side Quest C: Escort (Space Endor - Escort Rebel smuggler transporting fleet repair materials)
-escort_tatooine_rebel_tier3_3_c = SpaceEscortScreenplay:new {
-	className = "escort_tatooine_rebel_tier3_3_c",
-
-	questName = "tatooine_rebel_tier3_3_c",
-	questType = "escort",
-
-	questZone = "space_endor",
-
-	creditReward = 0,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	parentQuest = "space_battle_tatooine_rebel_tier3_3_b",
-	parentQuestType = "space_battle",
-	parentQuestName = "tatooine_rebel_tier3_3_b",
-
-	escortShips = {"rebel_smuggler_tier3"},
-
-	escortPoints = {
-		{patrolPointName = "tatooine_rebel_tier3_3_c_escort_1", zoneName = "space_endor", x = -5250, z = -850, y = 2000, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier3_3_c_escort_2", zoneName = "space_endor", x = -4323, z = -525, y = 2310, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier3_3_c_escort_3", zoneName = "space_endor", x = -3632, z = -680, y = 1552, escortNumber = 3, radius = 250},
-		{patrolPointName = "tatooine_rebel_tier3_3_c_escort_4", zoneName = "space_endor", x = -2813, z = -400, y = 1793, escortNumber = 4, radius = 250},
-	},
-
-	attackDelay = 55,
-
-	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
-	},
-}
-
-registerScreenPlay("escort_tatooine_rebel_tier3_3_c", true)
-
--- Mission 4: Assassinate (Space Dathomir - Stop Imperial fighter officer from reaching Dathomir fleet)
+-- Mission 4: Stop the decorated Imperial pilot in Endor.
 assassinate_tatooine_rebel_tier3_4 = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_rebel_tier3_4",
 
 	questType = "assassinate",
 	questName = "tatooine_rebel_tier3_4",
 
-	questZone = "space_dathomir",
+	questZone = "space_endor",
 
-	creditReward = 0,
-	itemReward = {},
+	creditReward = 25000,
+	itemReward = {{species = {-1}, item = "object/tangible/ship/components/reactor/rct_mission_reward_rebel_slayn_hypervortex.iff"}},
 
 	sideQuest = true,
 	sideQuestType = "patrol",
@@ -1000,14 +608,13 @@ assassinate_tatooine_rebel_tier3_4 = SpaceAssassinateScreenplay:new {
 
 	assassinateSpawns = {
 		target = "tieadvanced_quest_officer_rebel_t3",
-		escorts = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		escorts = {"imp_tie_interceptor_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
 	},
 
 	targetPatrols = {
-		{patrolPointName = "tatooine_rebel_tier3_4_assassin_1", zoneName = "space_dathomir"},
-		{patrolPointName = "tatooine_rebel_tier3_4_assassin_2", zoneName = "space_dathomir"},
-		{patrolPointName = "tatooine_rebel_tier3_4_assassin_3", zoneName = "space_dathomir"},
-		{patrolPointName = "tatooine_rebel_tier3_4_assassin_4", zoneName = "space_dathomir"},
+		{patrolPointName = "phoenix_t3_4_hero_1", zoneName = "space_endor", x = 2900, z = -4600, y = 1200},
+		{patrolPointName = "phoenix_t3_4_hero_2", zoneName = "space_endor", x = 2900, z = -3000, y = 1900},
+		{patrolPointName = "phoenix_t3_4_hero_3", zoneName = "space_endor", x = 2900, z = -1400, y = 2700},
 	},
 }
 
@@ -1056,7 +663,7 @@ destroy_surpriseattack_tatooine_rebel_tier3_4_b = SpaceSurpriseAttackScreenplay:
 	questZone = "space_endor",
 
 	sideQuest = true,
-	sideQuestType = "space_battle",
+	sideQuestType = "delivery_no_pickup",
 	sideQuestName = "tatooine_rebel_tier3_4_c",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
@@ -1074,87 +681,130 @@ destroy_surpriseattack_tatooine_rebel_tier3_4_b = SpaceSurpriseAttackScreenplay:
 
 registerScreenPlay("destroy_surpriseattack_tatooine_rebel_tier3_4_b", true)
 
--- Mission 4 Side Quest C: Space Battle (Space Endor - Assist Blue Squadron attacking TIE bomber wing)
-space_battle_tatooine_rebel_tier3_4_c = SpaceBattleScreenplay:new {
-	className = "space_battle_tatooine_rebel_tier3_4_c",
-
-	questName = "tatooine_rebel_tier3_4_c",
-	questType = "space_battle",
-
-	questZone = "space_endor",
-
-	creditReward = 0,
-
-	sideQuest = true,
-	sideQuestType = "survival",
-	sideQuestName = "tatooine_rebel_tier3_4_d",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-
-	sideQuestDelay = 0,
-
-	parentQuest = "destroy_surpriseattack_tatooine_rebel_tier3_4_b",
-	parentQuestType = "destroy_surpriseattack",
-	parentQuestName = "tatooine_rebel_tier3_4_b",
-
-	battlePoint = "space_endor:tatooine_rebel_tier3_4_c_battlepoint",
-	allyArrivalDelay = 60,
-	enemyArrivalDelay = 80,
-	allyOriginDist = 800,
-	enemyOriginDist = -800,
-	allyArrivalDist = 100,
-	enemyArrivalDist = -50,
-
-	alliedShips = {
-		{"reb_bwing_tier3"},
-		{"reb_bwing_tier3"},
-		{"reb_ywing_tier3"},
-		{"reb_ywing_tier3"},
-	},
-
-	enemyShips = {
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-		{"imp_tie_fighter_tier3"},
-	},
+-- Canonical Arnecio Ulvaw'op Tier 3 mission legs. These quest identities match
+-- the client STF files. resetTier3Quests also clears the former placeholder
+-- type/name pairs so characters can recover from stale datapad entries.
+delivery_tatooine_rebel_tier3_1_a = SpaceDeliveryScreenplay:new {
+	className = "delivery_tatooine_rebel_tier3_1_a", questName = "tatooine_rebel_tier3_1_a", questType = "delivery", questZone = "space_dathomir",
+	creditReward = 0, sideQuest = true, sideQuestType = "survival", sideQuestName = "tatooine_rebel_tier3_1_b", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	parentQuest = "recovery_tatooine_rebel_tier3_1", parentQuestType = "recovery", parentQuestName = "tatooine_rebel_tier3_1",
+	pickupShip = "lambdashuttle_rebel_tier3_1_a_spies", deliveryShip = "reb_gunboat_tier3",
+	pickupPoint = {x = -4700, z = 3000, y = 3800}, deliveryPoint = {x = -2200, z = 2400, y = 900},
+	attackDelay = 25, attackShips = {{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"}},
 }
+registerScreenPlay("delivery_tatooine_rebel_tier3_1_a", true)
 
-registerScreenPlay("space_battle_tatooine_rebel_tier3_4_c", true)
-
--- Mission 4 Side Quest D: Survival (Space Endor - Guard fleet flank during hyperspace evacuation)
-survival_tatooine_rebel_tier3_4_d = SpaceSurvivalScreenplay:new {
-	className = "survival_tatooine_rebel_tier3_4_d",
-
-	questName = "tatooine_rebel_tier3_4_d",
-	questType = "survival",
-
-	questZone = "space_endor",
-
-	creditReward = 0,
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	parentQuest = "space_battle_tatooine_rebel_tier3_4_c",
-	parentQuestType = "space_battle",
-	parentQuestName = "tatooine_rebel_tier3_4_c",
-
-	survivalTime = 300,
-	survivalPoint = "space_endor:tatooine_rebel_tier3_4_c_survival",
-	delayToFirstAttack = 5,
-
-	attackDelay = 60,
-
+survival_tatooine_rebel_tier3_1_b = SpaceSurvivalScreenplay:new {
+	className = "survival_tatooine_rebel_tier3_1_b", questName = "tatooine_rebel_tier3_1_b", questType = "survival", questZone = "space_dathomir",
+	creditReward = 0, sideQuest = true, sideQuestType = "escort", sideQuestName = "tatooine_rebel_tier3_1_c", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	parentQuest = "delivery_tatooine_rebel_tier3_1_a", parentQuestType = "delivery", parentQuestName = "tatooine_rebel_tier3_1_a",
+	survivalTime = 180, survivalPoint = "space_dathomir:tatooine_rebel_tier3_1_b_defend", delayToFirstAttack = 5, attackDelay = 35,
 	attackShips = {
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
-		{"imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_bomber_tier3"},
+		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
+		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
+		{"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"},
+		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_advanced_tier3"},
 	},
 }
+registerScreenPlay("survival_tatooine_rebel_tier3_1_b", true)
 
-registerScreenPlay("survival_tatooine_rebel_tier3_4_d", true)
+escort_tatooine_rebel_tier3_1_c = SpaceEscortScreenplay:new {
+	className = "escort_tatooine_rebel_tier3_1_c", questName = "tatooine_rebel_tier3_1_c", questType = "escort", questZone = "space_dathomir",
+	creditReward = 0, sideQuest = false, sideQuestType = "", parentQuest = "survival_tatooine_rebel_tier3_1_b", parentQuestType = "survival", parentQuestName = "tatooine_rebel_tier3_1_b",
+	escortShips = {"lambdashuttle_rebel_tier3_1_a_spies"}, orderedEscortRoute = true,
+	escortPoints = {
+		{patrolPointName = "phoenix_t3_1_c_1", zoneName = "space_dathomir", x = -1700, z = 2100, y = 500, escortNumber = 1, radius = 250},
+		{patrolPointName = "phoenix_t3_1_c_2", zoneName = "space_dathomir", x = -700, z = 1700, y = -500, escortNumber = 2, radius = 250},
+		{patrolPointName = "phoenix_t3_1_c_3", zoneName = "space_dathomir", x = 500, z = 1300, y = -1500, escortNumber = 3, radius = 250},
+	},
+	attackDelay = 35, attackShips = {{"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_advanced_tier3"}},
+}
+registerScreenPlay("escort_tatooine_rebel_tier3_1_c", true)
+
+destroy_surpriseattack_tatooine_rebel_tier3_2_a = SpaceSurpriseAttackScreenplay:new {
+	className = "destroy_surpriseattack_tatooine_rebel_tier3_2_a", questName = "tatooine_rebel_tier3_2_a", questType = "destroy_surpriseattack", questZone = "space_dathomir",
+	sideQuest = true, sideQuestType = "assassinate", sideQuestName = "tatooine_rebel_tier3_2_b", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	parentQuest = "inspect_tatooine_rebel_tier3_2", parentQuestType = "inspect", parentQuestName = "tatooine_rebel_tier3_2",
+	surpriseAttackShips = {zone = "space_dathomir", spawns = {{count = 3, shipName = "imp_tie_interceptor_tier3"}}},
+}
+registerScreenPlay("destroy_surpriseattack_tatooine_rebel_tier3_2_a", true)
+
+assassinate_tatooine_rebel_tier3_2_b = SpaceAssassinateScreenplay:new {
+	className = "assassinate_tatooine_rebel_tier3_2_b", questName = "tatooine_rebel_tier3_2_b", questType = "assassinate", questZone = "space_dantooine",
+	creditReward = 0, sideQuest = true, sideQuestType = "space_battle", sideQuestName = "tatooine_rebel_tier3_2_c", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	parentQuest = "destroy_surpriseattack_tatooine_rebel_tier3_2_a", parentQuestType = "destroy_surpriseattack", parentQuestName = "tatooine_rebel_tier3_2_a",
+	arrivalDelay = 5, failTimer = 20, assassinateSpawns = {target = "tatooine_tier3_2_b_inquisitor", escorts = {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"}},
+	targetPatrols = {
+		{patrolPointName = "phoenix_t3_2_b_1", zoneName = "space_dantooine", x = -3600, z = 1600, y = 2700},
+		{patrolPointName = "phoenix_t3_2_b_2", zoneName = "space_dantooine", x = -2600, z = 1300, y = 1700},
+		{patrolPointName = "phoenix_t3_2_b_3", zoneName = "space_dantooine", x = -1500, z = 900, y = 600},
+	},
+}
+registerScreenPlay("assassinate_tatooine_rebel_tier3_2_b", true)
+
+space_battle_tatooine_rebel_tier3_2_c = SpaceBattleScreenplay:new {
+	className = "space_battle_tatooine_rebel_tier3_2_c", questName = "tatooine_rebel_tier3_2_c", questType = "space_battle", questZone = "space_dantooine",
+	creditReward = 0, sideQuest = false, sideQuestType = "", parentQuest = "assassinate_tatooine_rebel_tier3_2_b", parentQuestType = "assassinate", parentQuestName = "tatooine_rebel_tier3_2_b",
+	battlePoint = "space_dantooine:tatooine_rebel_tier3_2_c_battle", allyArrivalDelay = 10, enemyArrivalDelay = 20, allyOriginDist = -500, enemyOriginDist = 700, allyArrivalDist = -100, enemyArrivalDist = 0,
+	alliedShips = {{"reb_bwing_tier3"}, {"reb_bwing_tier3"}, {"reb_bwing_tier3"}},
+	enemyShips = {{"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_interceptor_tier3"}, {"imp_tie_interceptor_tier3"}},
+}
+registerScreenPlay("space_battle_tatooine_rebel_tier3_2_c", true)
+
+space_battle_tatooine_rebel_tier3_3_a = SpaceBattleScreenplay:new {
+	className = "space_battle_tatooine_rebel_tier3_3_a", questName = "tatooine_rebel_tier3_3_a", questType = "space_battle", questZone = "space_dathomir",
+	creditReward = 0, sideQuest = true, sideQuestType = "escort", sideQuestName = "tatooine_rebel_tier3_3_b", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	parentQuest = "delivery_tatooine_rebel_tier3_3", parentQuestType = "delivery", parentQuestName = "tatooine_rebel_tier3_3",
+	battlePoint = "space_dathomir:tatooine_rebel_tier3_3_a_battle", allyArrivalDelay = 10, enemyArrivalDelay = 20, allyOriginDist = -500, enemyOriginDist = 700, allyArrivalDist = -100, enemyArrivalDist = 0,
+	alliedShips = {{"reb_xwing_tier3"}, {"reb_xwing_tier3"}, {"reb_xwing_tier3"}},
+	enemyShips = {{"imp_lambda_shuttle_tier3"}, {"imp_lambda_shuttle_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}},
+}
+registerScreenPlay("space_battle_tatooine_rebel_tier3_3_a", true)
+
+escort_tatooine_rebel_tier3_3_b = SpaceEscortScreenplay:new {
+	className = "escort_tatooine_rebel_tier3_3_b", questName = "tatooine_rebel_tier3_3_b", questType = "escort", questZone = "space_dathomir",
+	creditReward = 0, sideQuest = true, sideQuestType = "survival", sideQuestName = "tatooine_rebel_tier3_3_c", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	parentQuest = "space_battle_tatooine_rebel_tier3_3_a", parentQuestType = "space_battle", parentQuestName = "tatooine_rebel_tier3_3_a",
+	escortShips = {"tatooine_rebel_3_3_b_smuggler_yt1300_tier3"}, orderedEscortRoute = true,
+	escortPoints = {
+		{patrolPointName = "phoenix_t3_3_b_1", zoneName = "space_dathomir", x = -4300, z = -900, y = 2200, escortNumber = 1, radius = 250},
+		{patrolPointName = "phoenix_t3_3_b_2", zoneName = "space_dathomir", x = -3200, z = -500, y = 1300, escortNumber = 2, radius = 250},
+		{patrolPointName = "phoenix_t3_3_b_3", zoneName = "space_dathomir", x = -2000, z = -100, y = 300, escortNumber = 3, radius = 250},
+	},
+	attackDelay = 35, attackShips = {{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"}, {"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3"}},
+}
+registerScreenPlay("escort_tatooine_rebel_tier3_3_b", true)
+
+survival_tatooine_rebel_tier3_3_c = SpaceSurvivalScreenplay:new {
+	className = "survival_tatooine_rebel_tier3_3_c", questName = "tatooine_rebel_tier3_3_c", questType = "survival", questZone = "space_dathomir",
+	creditReward = 0, sideQuest = false, sideQuestType = "", parentQuest = "escort_tatooine_rebel_tier3_3_b", parentQuestType = "escort", parentQuestName = "tatooine_rebel_tier3_3_b",
+	survivalTime = 180, survivalPoint = "space_dathomir:tatooine_rebel_tier3_3_c_hold", delayToFirstAttack = 5, attackDelay = 35,
+	attackShips = {
+		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
+		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},
+		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_bomber_tier3"},
+		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
+	},
+}
+registerScreenPlay("survival_tatooine_rebel_tier3_3_c", true)
+
+delivery_no_pickup_tatooine_rebel_tier3_4_c = SpaceDeliveryNoPickupScreenplay:new {
+	className = "delivery_no_pickup_tatooine_rebel_tier3_4_c", questName = "tatooine_rebel_tier3_4_c", questType = "delivery_no_pickup", questZone = "space_endor",
+	creditReward = 0, sideQuest = true, sideQuestType = "space_battle", sideQuestName = "tatooine_rebel_tier3_4_d", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	parentQuest = "destroy_surpriseattack_tatooine_rebel_tier3_4_b", parentQuestType = "destroy_surpriseattack", parentQuestName = "tatooine_rebel_tier3_4_b",
+	deliveryShip = "rebel_smuggler_tier3", deliveryPoint = {x = -1200, z = -500, y = 2500}, attackDelay = 30,
+	attackShips = {{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"}},
+}
+registerScreenPlay("delivery_no_pickup_tatooine_rebel_tier3_4_c", true)
+
+space_battle_tatooine_rebel_tier3_4_d = SpaceBattleScreenplay:new {
+	className = "space_battle_tatooine_rebel_tier3_4_d", questName = "tatooine_rebel_tier3_4_d", questType = "space_battle", questZone = "space_endor",
+	creditReward = 0, sideQuest = false, sideQuestType = "", parentQuest = "delivery_no_pickup_tatooine_rebel_tier3_4_c", parentQuestType = "delivery_no_pickup", parentQuestName = "tatooine_rebel_tier3_4_c",
+	battlePoint = "space_endor:tatooine_rebel_tier3_4_d_battle", allyArrivalDelay = 10, enemyArrivalDelay = 20, allyOriginDist = -500, enemyOriginDist = 700, allyArrivalDist = -100, enemyArrivalDist = 0,
+	alliedShips = {{"reb_xwing_tier3"}, {"reb_xwing_tier3"}, {"reb_xwing_tier3"}, {"reb_xwing_tier3"}, {"reb_xwing_tier3"}},
+	enemyShips = {{"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_fighter_tier3"}, {"imp_tie_aggressor_tier3"}},
+}
+registerScreenPlay("space_battle_tatooine_rebel_tier3_4_d", true)
 
 --[[
 	Tier 4 -- tatooine_rebel_tier4 Main Missions
@@ -1928,23 +1578,22 @@ CrimsonPhoenixSquadronScreenplay = ScreenPlay:new {
 
 	-- Tier 3
 	TIER3_QUEST_STRING_1 = {type = "recovery", name = "tatooine_rebel_tier3_1"},
-	TIER3_QUEST_STRING_1_SIDE1 = {type = "patrol", name = "tatooine_rebel_tier3_1_A"},
-	TIER3_QUEST_STRING_1_SIDE2 = {type = "destroy_surpriseattack", name = "tatooine_rebel_tier3_1_b"},
-	TIER3_QUEST_STRING_1_SIDE3 = {type = "assassinate", name = "tatooine_rebel_tier3_1_c"},
-	TIER3_QUEST_STRING_1_SIDE4 = {type = "space_battle", name = "tatooine_rebel_tier3_1_d"},
+	TIER3_QUEST_STRING_1_SIDE1 = {type = "delivery", name = "tatooine_rebel_tier3_1_a"},
+	TIER3_QUEST_STRING_1_SIDE2 = {type = "survival", name = "tatooine_rebel_tier3_1_b"},
+	TIER3_QUEST_STRING_1_SIDE3 = {type = "escort", name = "tatooine_rebel_tier3_1_c"},
 	TIER3_QUEST_STRING_2 = {type = "inspect", name = "tatooine_rebel_tier3_2"},
-	TIER3_QUEST_STRING_2_SIDE1 = {type = "delivery", name = "tatooine_rebel_tier3_2_a"},
-	TIER3_QUEST_STRING_2_SIDE2 = {type = "survival", name = "tatooine_rebel_tier3_2_b"},
-	TIER3_QUEST_STRING_2_SIDE3 = {type = "escort", name = "tatooine_rebel_tier3_2_c"},
+	TIER3_QUEST_STRING_2_SIDE1 = {type = "destroy_surpriseattack", name = "tatooine_rebel_tier3_2_a"},
+	TIER3_QUEST_STRING_2_SIDE2 = {type = "assassinate", name = "tatooine_rebel_tier3_2_b"},
+	TIER3_QUEST_STRING_2_SIDE3 = {type = "space_battle", name = "tatooine_rebel_tier3_2_c"},
 	TIER3_QUEST_STRING_3 = {type = "delivery", name = "tatooine_rebel_tier3_3"},
-	TIER3_QUEST_STRING_3_SIDE1 = {type = "assassinate", name = "tatooine_rebel_tier3_3_a"},
-	TIER3_QUEST_STRING_3_SIDE2 = {type = "space_battle", name = "tatooine_rebel_tier3_3_b"},
-	TIER3_QUEST_STRING_3_SIDE3 = {type = "escort", name = "tatooine_rebel_tier3_3_c"},
+	TIER3_QUEST_STRING_3_SIDE1 = {type = "space_battle", name = "tatooine_rebel_tier3_3_a"},
+	TIER3_QUEST_STRING_3_SIDE2 = {type = "escort", name = "tatooine_rebel_tier3_3_b"},
+	TIER3_QUEST_STRING_3_SIDE3 = {type = "survival", name = "tatooine_rebel_tier3_3_c"},
 	TIER3_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_rebel_tier3_4"},
 	TIER3_QUEST_STRING_4_SIDE1 = {type = "patrol", name = "tatooine_rebel_tier3_4_a"},
 	TIER3_QUEST_STRING_4_SIDE2 = {type = "destroy_surpriseattack", name = "tatooine_rebel_tier3_4_b"},
-	TIER3_QUEST_STRING_4_SIDE3 = {type = "space_battle", name = "tatooine_rebel_tier3_4_c"},
-	TIER3_QUEST_STRING_4_SIDE4 = {type = "survival", name = "tatooine_rebel_tier3_4_d"},
+	TIER3_QUEST_STRING_4_SIDE3 = {type = "delivery_no_pickup", name = "tatooine_rebel_tier3_4_c"},
+	TIER3_QUEST_STRING_4_SIDE4 = {type = "space_battle", name = "tatooine_rebel_tier3_4_d"},
 
 	-- Tier 4
 	TIER4_QUEST_STRING_1 = {type = "survival", name = "tatooine_rebel_tier4_1"},
@@ -2069,21 +1718,19 @@ function CrimsonPhoenixSquadronScreenplay:resetTier3Quests(pPlayer)
 
 	-- Mission 1
 	recovery_tatooine_rebel_tier3_1:resetQuest(pPlayer)
-	patrol_tatooine_rebel_tier3_1_A:resetQuest(pPlayer)
-	destroy_surpriseattack_tatooine_rebel_tier3_1_b:resetQuest(pPlayer)
-	assassinate_tatooine_rebel_tier3_1_c:resetQuest(pPlayer)
-	space_battle_tatooine_rebel_tier3_1_d:resetQuest(pPlayer)
+	delivery_tatooine_rebel_tier3_1_a:resetQuest(pPlayer)
+	survival_tatooine_rebel_tier3_1_b:resetQuest(pPlayer)
+	escort_tatooine_rebel_tier3_1_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1.type, self.TIER3_QUEST_STRING_1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE1.type, self.TIER3_QUEST_STRING_1_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE2.type, self.TIER3_QUEST_STRING_1_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE3.type, self.TIER3_QUEST_STRING_1_SIDE3.name, false)
-	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_1_SIDE4.type, self.TIER3_QUEST_STRING_1_SIDE4.name, false)
 
 	-- Mission 2
 	inspect_tatooine_rebel_tier3_2:resetQuest(pPlayer)
-	delivery_tatooine_rebel_tier3_2_a:resetQuest(pPlayer)
-	survival_tatooine_rebel_tier3_2_b:resetQuest(pPlayer)
-	escort_tatooine_rebel_tier3_2_c:resetQuest(pPlayer)
+	destroy_surpriseattack_tatooine_rebel_tier3_2_a:resetQuest(pPlayer)
+	assassinate_tatooine_rebel_tier3_2_b:resetQuest(pPlayer)
+	space_battle_tatooine_rebel_tier3_2_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_2.type, self.TIER3_QUEST_STRING_2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_2_SIDE1.type, self.TIER3_QUEST_STRING_2_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_2_SIDE2.type, self.TIER3_QUEST_STRING_2_SIDE2.name, false)
@@ -2091,9 +1738,9 @@ function CrimsonPhoenixSquadronScreenplay:resetTier3Quests(pPlayer)
 
 	-- Mission 3
 	delivery_tatooine_rebel_tier3_3:resetQuest(pPlayer)
-	assassinate_tatooine_rebel_tier3_3_a:resetQuest(pPlayer)
-	space_battle_tatooine_rebel_tier3_3_b:resetQuest(pPlayer)
-	escort_tatooine_rebel_tier3_3_c:resetQuest(pPlayer)
+	space_battle_tatooine_rebel_tier3_3_a:resetQuest(pPlayer)
+	escort_tatooine_rebel_tier3_3_b:resetQuest(pPlayer)
+	survival_tatooine_rebel_tier3_3_c:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3.type, self.TIER3_QUEST_STRING_3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE1.type, self.TIER3_QUEST_STRING_3_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE2.type, self.TIER3_QUEST_STRING_3_SIDE2.name, false)
@@ -2103,13 +1750,34 @@ function CrimsonPhoenixSquadronScreenplay:resetTier3Quests(pPlayer)
 	assassinate_tatooine_rebel_tier3_4:resetQuest(pPlayer)
 	patrol_tatooine_rebel_tier3_4_a:resetQuest(pPlayer)
 	destroy_surpriseattack_tatooine_rebel_tier3_4_b:resetQuest(pPlayer)
-	space_battle_tatooine_rebel_tier3_4_c:resetQuest(pPlayer)
-	survival_tatooine_rebel_tier3_4_d:resetQuest(pPlayer)
+	delivery_no_pickup_tatooine_rebel_tier3_4_c:resetQuest(pPlayer)
+	space_battle_tatooine_rebel_tier3_4_d:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4.type, self.TIER3_QUEST_STRING_4.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE1.type, self.TIER3_QUEST_STRING_4_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE2.type, self.TIER3_QUEST_STRING_4_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE3.type, self.TIER3_QUEST_STRING_4_SIDE3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE4.type, self.TIER3_QUEST_STRING_4_SIDE4.name, false)
+
+	-- Clear journal entries created by the former placeholder chains. Their type/name
+	-- pairs do not exist in the client data and cannot be resumed by the corrected flow.
+	local obsoleteTier3Quests = {
+		{type = "patrol", name = "tatooine_rebel_tier3_1_A"},
+		{type = "destroy_surpriseattack", name = "tatooine_rebel_tier3_1_b"},
+		{type = "assassinate", name = "tatooine_rebel_tier3_1_c"},
+		{type = "space_battle", name = "tatooine_rebel_tier3_1_d"},
+		{type = "delivery", name = "tatooine_rebel_tier3_2_a"},
+		{type = "survival", name = "tatooine_rebel_tier3_2_b"},
+		{type = "escort", name = "tatooine_rebel_tier3_2_c"},
+		{type = "assassinate", name = "tatooine_rebel_tier3_3_a"},
+		{type = "space_battle", name = "tatooine_rebel_tier3_3_b"},
+		{type = "escort", name = "tatooine_rebel_tier3_3_c"},
+		{type = "space_battle", name = "tatooine_rebel_tier3_4_c"},
+		{type = "survival", name = "tatooine_rebel_tier3_4_d"},
+	}
+
+	for i = 1, #obsoleteTier3Quests do
+		SpaceHelpers:clearSpaceQuest(pPlayer, obsoleteTier3Quests[i].type, obsoleteTier3Quests[i].name, false)
+	end
 
 	local playerID = SceneObject(pPlayer):getObjectID()
 
@@ -2121,6 +1789,7 @@ function CrimsonPhoenixSquadronScreenplay:resetTier3Quests(pPlayer)
 	removeQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":reward")
 	removeQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward")
 	removeQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward")
+	removeQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:tier3_introduced")
 end
 
 function CrimsonPhoenixSquadronScreenplay:resetTier4Quests(pPlayer)

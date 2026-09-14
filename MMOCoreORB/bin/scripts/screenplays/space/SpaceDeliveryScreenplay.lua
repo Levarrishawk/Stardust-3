@@ -10,9 +10,11 @@ SpaceDeliveryScreenplay = SpaceQuestLogic:new {
 
 	pickupShip = "",
 	pickupPoint = "",
+	pickupZone = "",
 
 	deliveryShip = "",
 	deliveryPoint = "",
+	deliveryZone = "",
 
 	rendezvousRadius = 200,
 
@@ -293,6 +295,16 @@ function SpaceDeliveryScreenplay:getLegShip(legName)
 	return self.deliveryShip
 end
 
+function SpaceDeliveryScreenplay:getLegZone(legName)
+	if (legName == "pickup" and self.pickupZone ~= "") then
+		return self.pickupZone
+	elseif (legName ~= "pickup" and self.deliveryZone ~= "") then
+		return self.deliveryZone
+	end
+
+	return self.questZone
+end
+
 --[[
 	pickupPoint and deliveryPoint are authored in the "<zone>:<point_name>" composite form. Named
 	space patrol points live in ship_mobile/patrol_points and are loaded into the ship agent
@@ -371,6 +383,7 @@ function SpaceDeliveryScreenplay:startLeg(pPlayer, legName)
 	SpaceHelpers:sendQuestUpdate(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":" .. messages.foundLoc)
 
 	local location = self:getLegLocation(legName)
+	local legZone = self:getLegZone(legName)
 
 	-- No readable coordinates, the freighter comes to the player instead
 	if (location == nil) then
@@ -383,7 +396,7 @@ function SpaceDeliveryScreenplay:startLeg(pPlayer, legName)
 	if (pGhost ~= nil) then
 		SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
 
-		local waypointID = PlayerObject(pGhost):addWaypoint(self.questZone, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title", "", location.x, location.z, location.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
+		local waypointID = PlayerObject(pGhost):addWaypoint(legZone, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title", "", location.x, location.z, location.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
 
 		local pWaypoint = getSceneObject(waypointID)
 
@@ -395,7 +408,7 @@ function SpaceDeliveryScreenplay:startLeg(pPlayer, legName)
 		setQuestStatus(playerID .. ":" .. self.className .. ":waypointID", waypointID)
 	end
 
-	local pActiveArea = spawnSpaceActiveArea(self.questZone, "object/space_active_area.iff", location.x, location.z, location.y, self.rendezvousRadius)
+	local pActiveArea = spawnSpaceActiveArea(legZone, "object/space_active_area.iff", location.x, location.z, location.y, self.rendezvousRadius)
 
 	if (pActiveArea == nil) then
 		Logger:log(self.className .. ":startLeg -- Failed to spawn the rendezvous active area.", LT_ERROR)
@@ -422,6 +435,7 @@ function SpaceDeliveryScreenplay:spawnFreighter(pPlayer)
 	local legName = readStringData(playerID .. ":" .. self.className .. ":leg:")
 	local messages = self:getLegMessages(legName)
 	local freighter = self:getLegShip(legName)
+	local legZone = self:getLegZone(legName)
 
 	local pPlayerShip = SceneObject(pPlayer):getRootParent()
 
@@ -431,7 +445,7 @@ function SpaceDeliveryScreenplay:spawnFreighter(pPlayer)
 	end
 
 	local spawnLocation = ShipObject(pPlayerShip):getSpawnPointInFrontOfShip(250, 500)
-	local pShipAgent = spawnShipAgent(freighter, self.questZone, spawnLocation[1], spawnLocation[2], spawnLocation[3], pPlayerShip)
+	local pShipAgent = spawnShipAgent(freighter, legZone, spawnLocation[1], spawnLocation[2], spawnLocation[3], pPlayerShip)
 
 	-- The freighter could not be placed, hand the leg to the player rather than stall the quest
 	if (pShipAgent == nil) then
@@ -545,6 +559,12 @@ function SpaceDeliveryScreenplay:finishLeg(pPlayer, legName)
 	deleteStringData(playerID .. ":" .. self.className .. ":leg:")
 
 	if (legName == "pickup") then
+		if (self:getLegZone("pickup") ~= self:getLegZone("delivery")) then
+			writeStringData(playerID .. ":" .. self.className .. ":leg:", "delivery_waiting")
+			SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+			return
+		end
+
 		createEvent(2000, self.className, "startDeliveryLeg", pPlayer, "")
 		return
 	end
@@ -589,6 +609,8 @@ function SpaceDeliveryScreenplay:spawnAttackWave(pPlayer)
 	end
 
 	local playerID = SceneObject(pPlayer):getObjectID()
+	local legName = readStringData(playerID .. ":" .. self.className .. ":leg:")
+	local legZone = self:getLegZone(legName)
 	local playerFactionHash = SpaceHelpers:getPlayerSpaceFactionHash(pPlayer)
 	local spawnLocation = ShipObject(pPlayerShip):getSpawnPointInFrontOfShip(600, 1200)
 
@@ -602,7 +624,7 @@ function SpaceDeliveryScreenplay:spawnAttackWave(pPlayer)
 	local pSquadronLeader = nil
 
 	for i = 1, #waveShips, 1 do
-		local pShipAgent = spawnShipAgent(waveShips[i], self.questZone, spawnLocation[1] + getRandomNumber(50, 150), spawnLocation[2], spawnLocation[3] + getRandomNumber(50, 150), pPlayerShip)
+		local pShipAgent = spawnShipAgent(waveShips[i], legZone, spawnLocation[1] + getRandomNumber(50, 150), spawnLocation[2], spawnLocation[3] + getRandomNumber(50, 150), pPlayerShip)
 
 		if (pShipAgent == nil) then
 			goto continue
@@ -768,7 +790,17 @@ function SpaceDeliveryScreenplay:checkEnteredZone(pPlayer)
 	end
 
 	local zoneNameHash = getHashCode(SceneObject(pPlayer):getZoneName())
-	local spaceQuestHash = getHashCode(self.questZone)
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local legName = readStringData(playerID .. ":" .. self.className .. ":leg:")
+	local expectedZone = self.questZone
+
+	if (legName == "delivery_waiting" or legName == "delivery") then
+		expectedZone = self:getLegZone("delivery")
+	elseif (legName == "pickup") then
+		expectedZone = self:getLegZone("pickup")
+	end
+
+	local spaceQuestHash = getHashCode(expectedZone)
 
 	if (self.DEBUG_SPACE_DELIVERY) then
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
@@ -785,8 +817,13 @@ function SpaceDeliveryScreenplay:checkEnteredZone(pPlayer)
 			SpaceHelpers:activateSpaceQuestTask(pPlayer, self.questType, self.questName, 1, true)
 		end
 
-		createEvent(4000, self.className, "startFirstLeg", pPlayer, "")
-	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
+		if (legName == "delivery_waiting") then
+			writeStringData(playerID .. ":" .. self.className .. ":leg:", "delivery")
+			createEvent(4000, self.className, "startDeliveryLeg", pPlayer, "")
+		elseif (legName == "") then
+			createEvent(4000, self.className, "startFirstLeg", pPlayer, "")
+		end
+	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0) and legName ~= "delivery_waiting") then
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
 	end
 end

@@ -266,8 +266,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local t3QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name)
 		local t3QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name) or
@@ -282,7 +281,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
-		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
+		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name)
 		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
 		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
 		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
@@ -312,6 +311,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward", 1)
 
 				assassinate_tatooine_rebel_tier3_4:rewardPlayer(pPlayer)
+				ghost:increaseFactionStanding("rebel", 100)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work4")
@@ -320,6 +320,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward", 1)
 
 				delivery_tatooine_rebel_tier3_3:rewardPlayer(pPlayer)
+				ghost:increaseFactionStanding("rebel", 100)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work3")
@@ -328,6 +329,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":reward", 1)
 
 				inspect_tatooine_rebel_tier3_2:rewardPlayer(pPlayer)
+				ghost:increaseFactionStanding("rebel", 100)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work2")
@@ -336,6 +338,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward", 1)
 
 				recovery_tatooine_rebel_tier3_1:rewardPlayer(pPlayer)
+				ghost:increaseFactionStanding("rebel", 100)
 			end
 
 			return convoTemplate:getScreen("tier3_excellent_work1")
@@ -918,25 +921,25 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:tier3_introduced", 1)
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_rebel_tier3_1, patrol_tatooine_rebel_tier3_1_A, destroy_surpriseattack_tatooine_rebel_tier3_1_b, assassinate_tatooine_rebel_tier3_1_c, space_battle_tatooine_rebel_tier3_1_d}, {{type="recovery", name="tatooine_rebel_tier3_1"}, {type="patrol", name="tatooine_rebel_tier3_1_A"}, {type="destroy_surpriseattack", name="tatooine_rebel_tier3_1_b"}, {type="assassinate", name="tatooine_rebel_tier3_1_c"}, {type="space_battle", name="tatooine_rebel_tier3_1_d"}})
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_rebel_tier3_1, delivery_tatooine_rebel_tier3_1_a, survival_tatooine_rebel_tier3_1_b, escort_tatooine_rebel_tier3_1_c}, {CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE1, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE2, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3})
 		recovery_tatooine_rebel_tier3_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission2" or screenID == "tier3_failed_mission2") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_tatooine_rebel_tier3_2, delivery_tatooine_rebel_tier3_2_a, survival_tatooine_rebel_tier3_2_b, escort_tatooine_rebel_tier3_2_c}, {{type="inspect", name="tatooine_rebel_tier3_2"}, {type="delivery", name="tatooine_rebel_tier3_2_a"}, {type="survival", name="tatooine_rebel_tier3_2_b"}, {type="escort", name="tatooine_rebel_tier3_2_c"}})
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {inspect_tatooine_rebel_tier3_2, destroy_surpriseattack_tatooine_rebel_tier3_2_a, assassinate_tatooine_rebel_tier3_2_b, space_battle_tatooine_rebel_tier3_2_c}, {CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3})
 		inspect_tatooine_rebel_tier3_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission3" or screenID == "tier3_failed_mission3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {delivery_tatooine_rebel_tier3_3, assassinate_tatooine_rebel_tier3_3_a, space_battle_tatooine_rebel_tier3_3_b, escort_tatooine_rebel_tier3_3_c}, {{type="delivery", name="tatooine_rebel_tier3_3"}, {type="assassinate", name="tatooine_rebel_tier3_3_a"}, {type="space_battle", name="tatooine_rebel_tier3_3_b"}, {type="escort", name="tatooine_rebel_tier3_3_c"}})
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {delivery_tatooine_rebel_tier3_3, space_battle_tatooine_rebel_tier3_3_a, escort_tatooine_rebel_tier3_3_b, survival_tatooine_rebel_tier3_3_c}, {CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3})
 		delivery_tatooine_rebel_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_mission4" or screenID == "tier3_failed_mission4") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_tier3_4, patrol_tatooine_rebel_tier3_4_a, destroy_surpriseattack_tatooine_rebel_tier3_4_b, space_battle_tatooine_rebel_tier3_4_c, survival_tatooine_rebel_tier3_4_d}, {{type="assassinate", name="tatooine_rebel_tier3_4"}, {type="patrol", name="tatooine_rebel_tier3_4_a"}, {type="destroy_surpriseattack", name="tatooine_rebel_tier3_4_b"}, {type="space_battle", name="tatooine_rebel_tier3_4_c"}, {type="survival", name="tatooine_rebel_tier3_4_d"}})
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_tier3_4, patrol_tatooine_rebel_tier3_4_a, destroy_surpriseattack_tatooine_rebel_tier3_4_b, delivery_no_pickup_tatooine_rebel_tier3_4_c, space_battle_tatooine_rebel_tier3_4_d}, {CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3, CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4})
 		assassinate_tatooine_rebel_tier3_4:startQuest(pPlayer, pNpc)
 
 	-- Tier 4 Training
