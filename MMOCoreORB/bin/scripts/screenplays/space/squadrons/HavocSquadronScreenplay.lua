@@ -1465,6 +1465,7 @@ rescue_corellia_rebel_tier4_2_b = SpaceRescueScreenplay:new {
 	rescueShip = "reb_diplomat_tier4",
 	rescueLocation = {x = 4200, z = 4350, y = -2500},
 	rescueArrivalDelay = 3,
+	escortSpeed = 50,
 
 	escortPoints = {
 		{patrolPointName = "corellia_rebel_tier4_2_b_rescue_1", zoneName = "space_dathomir", x = 3872, z = 4158, y = -2791, escortNumber = 1, radius = 250},
@@ -1600,7 +1601,9 @@ survival_corellia_rebel_tier4_3_b = SpaceSurvivalScreenplay:new {
 	parentQuestName = "corellia_rebel_tier4_3_a",
 
 	survivalTime = 480,
+	survivalUpdateInterval = 30,
 	survivalPoint = "space_dathomir:corellia_rebel_tier4_3_b_survival",
+	retainWaypointDuringSurvival = true,
 	delayToFirstAttack = 5,
 
 	attackDelay = 45,
@@ -1628,14 +1631,14 @@ recovery_corellia_rebel_tier4_4 = SpaceRecoveryScreenplay:new {
 	creditReward = 0,
 
 	sideQuest = true,
-	-- The leg parentQuest chain is strictly serial here: _b's parent is this head,
-	-- _a's parent is _b, and _c's parent is _a. So this head hands off to _b, and
-	-- _b already COMPLETION-splits onto _a. The head previously pointed at _a with
-	-- no split type at all (default NONE), so no leg ever started.
-	sideQuestType = "rescue",
-	sideQuestName = "corellia_rebel_tier4_4_b",
+	sideQuestType = "assassinate",
+	sideQuestName = "corellia_rebel_tier4_4_a",
+	sideFailQuestType = "rescue",
+	sideFailQuestName = "corellia_rebel_tier4_4_b",
 
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	-- A successful capture reveals the Endor freighter route. If the shuttle is
+	-- lost, the SpyNet rescue is the alternate route to recover that information.
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.BIDIRECTIONAL,
 
 	arrivalDelay = 10,
 	recoveryDelay = 30,
@@ -1643,7 +1646,7 @@ recovery_corellia_rebel_tier4_4 = SpaceRecoveryScreenplay:new {
 	recoverShip = "imp_lambda_shuttle_tier4",
 	recoveryConversationMobile = "object/mobile/dressed_rebel_commando_moncal_male_01.iff",
 
-	escortShips = {"imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
+	escortShips = {"imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4"},
 
 	preRecoveryPoints = {
 		{patrolPointName = "corellia_rebel_tier4_4_recovery_1", zoneName = "space_dantooine", x = -4000, z = 3100, y = 2700, escortNumber = 1, radius = 250},
@@ -1662,9 +1665,7 @@ recovery_corellia_rebel_tier4_4 = SpaceRecoveryScreenplay:new {
 	attackDelay = 50,
 
 	attackShips = {
-		{"imp_tie_advanced_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_oppressor_tier4"},
+		{"imp_tie_aggressor_tier4"},
 	},
 }
 
@@ -1698,7 +1699,7 @@ assassinate_corellia_rebel_tier4_4_a = SpaceAssassinateScreenplay:new {
 
 	assassinateSpawns = {
 		target = "imp_freighterheavy_tier4",
-		escorts = {"imp_tie_aggressor_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4", "imp_tie_aggressor_tier4", "freighterlight_corellia_rebel_mission", "freightermedium_corellia_rebel_mission"},
+		escorts = {"imp_tie_aggressor_tier4", "imp_tie_aggressor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_oppressor_tier4", "imp_tie_aggressor_tier4", "imp_freighterheavy_tier4", "imp_freighterheavy_tier4"},
 	},
 
 	targetPatrols = {
@@ -1790,20 +1791,19 @@ space_battle_corellia_rebel_tier4_4_c = SpaceBattleScreenplay:new {
 	alliedShips = {
 		{"reb_xwing_tier4"},
 		{"reb_xwing_tier4"},
-		{"reb_bwing_tier4"},
-		{"nym_fighter_tier4"},
-		{"nym_fighter_tier4"},
+		{"reb_xwing_tier4"},
+		{"reb_xwing_tier4"},
 	},
 
 	enemyShips = {
 		{"imp_decimator_tier4"},
 		{"imp_tie_interceptor_tier4"},
 		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
-		{"imp_tie_interceptor_tier4"},
 		{"imp_tie_oppressor_tier4"},
+		{"imp_tie_oppressor_tier4"},
+		{"imp_tie_aggressor_tier4"},
+		{"imp_tie_aggressor_tier4"},
+		{"imp_tie_advanced_tier4"},
 		{"imp_tie_advanced_tier4"},
 	},
 }

@@ -1507,20 +1507,60 @@ kreezo_convo_tier4_third_mission_success = ConvoScreen:new {
 }
 kreezo_convo:addScreen(kreezo_convo_tier4_third_mission_success)
 
--- Tier 4 - Mission 4 (Recovery - disable the Imperial troop transports in the Endor system)
+-- Tier 4 - Mission 4 (Recovery - kidnap the Imperial technician in Dantooine)
 kreezo_convo_tier4_fourth_mission = ConvoScreen:new {
 	id = "tier4_fourth_mission",
-	leftDialog = "@conversation/corellia_rebel_tier4:s_6429f86b", -- Another group of our men infiltrated a number of Imperial troop transports in the Endor system.
+	leftDialog = "@conversation/corellia_rebel_tier4:s_e8f374d9", -- Hey Rebel! I've got a new assignment for you.
 	stopConversation = "false",
 	options = {
-		{"@conversation/corellia_rebel_tier4:s_8450d7db", "accept_tier4_fourth_mission"}, -- Let me take a crack at disabling those troop transports.
+		{"@conversation/corellia_rebel_tier4:s_1551b284", "tier4_fourth_mission_station"}, -- Something good?
 	}
 }
 kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission)
 
+kreezo_convo_tier4_fourth_mission_station = ConvoScreen:new {
+	id = "tier4_fourth_mission_station",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_e93fce3e", -- The Empire is planning to build a space station in the Lok system.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_d1be90a9", "tier4_fourth_mission_plan"}, -- What's the plan?
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission_station)
+
+kreezo_convo_tier4_fourth_mission_plan = ConvoScreen:new {
+	id = "tier4_fourth_mission_plan",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_b607bb2e", -- Destroy the station components while they are en route to Lok.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_8729f60e", "tier4_fourth_mission_route"}, -- Smart.
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission_plan)
+
+kreezo_convo_tier4_fourth_mission_route = ConvoScreen:new {
+	id = "tier4_fourth_mission_route",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_31fd5acf", -- First find out what route the Imperial freighters plan to use.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_900f01d1", "tier4_fourth_mission_kidnap"}, -- What?
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission_route)
+
+kreezo_convo_tier4_fourth_mission_kidnap = ConvoScreen:new {
+	id = "tier4_fourth_mission_kidnap",
+	leftDialog = "@conversation/corellia_rebel_tier4:s_127f2e23", -- Kidnap one of their technical supervisors to learn the plan.
+	stopConversation = "false",
+	options = {
+		{"@conversation/corellia_rebel_tier4:s_410d920c", "accept_tier4_fourth_mission"}, -- Alright, let's do this!
+	}
+}
+kreezo_convo:addScreen(kreezo_convo_tier4_fourth_mission_kidnap)
+
 kreezo_convo_accept_tier4_fourth_mission = ConvoScreen:new {
 	id = "accept_tier4_fourth_mission",
-	leftDialog = "@conversation/corellia_rebel_tier4:s_b0d064ef", -- Endor it is! Leave immediately!
+	leftDialog = "@conversation/corellia_rebel_tier4:s_d8209030", -- Then you're going to Dantooine! Goodbye!
 	stopConversation = "true",
 	options = {}
 }
