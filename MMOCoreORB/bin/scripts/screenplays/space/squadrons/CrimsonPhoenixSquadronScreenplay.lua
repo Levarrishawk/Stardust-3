@@ -698,7 +698,7 @@ survival_tatooine_rebel_tier3_1_b = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_rebel_tier3_1_b", questName = "tatooine_rebel_tier3_1_b", questType = "survival", questZone = "space_dathomir",
 	creditReward = 0, sideQuest = true, sideQuestType = "escort", sideQuestName = "tatooine_rebel_tier3_1_c", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 	parentQuest = "delivery_tatooine_rebel_tier3_1_a", parentQuestType = "delivery", parentQuestName = "tatooine_rebel_tier3_1_a",
-	survivalTime = 180, survivalPoint = "space_dathomir:tatooine_rebel_tier3_1_b_defend", delayToFirstAttack = 5, attackDelay = 35,
+	survivalTime = 180, survivalUpdateInterval = 30, survivalPoint = "space_dathomir:tatooine_rebel_tier3_1_b_defend", delayToFirstAttack = 5, attackDelay = 35,
 	attackShips = {
 		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
 		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
@@ -713,9 +713,10 @@ escort_tatooine_rebel_tier3_1_c = SpaceEscortScreenplay:new {
 	creditReward = 0, sideQuest = false, sideQuestType = "", parentQuest = "survival_tatooine_rebel_tier3_1_b", parentQuestType = "survival", parentQuestName = "tatooine_rebel_tier3_1_b",
 	escortShips = {"lambdashuttle_rebel_tier3_1_a_spies"}, orderedEscortRoute = true,
 	escortPoints = {
-		{patrolPointName = "phoenix_t3_1_c_1", zoneName = "space_dathomir", x = -1700, z = 2100, y = 500, escortNumber = 1, radius = 250},
-		{patrolPointName = "phoenix_t3_1_c_2", zoneName = "space_dathomir", x = -700, z = 1700, y = -500, escortNumber = 2, radius = 250},
-		{patrolPointName = "phoenix_t3_1_c_3", zoneName = "space_dathomir", x = 500, z = 1300, y = -1500, escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_rebel_tier3_1_c_escort_1", zoneName = "space_dathomir", x = -2300, z = 3250, y = 2950, escortNumber = 1, radius = 250},
+		{patrolPointName = "tatooine_rebel_tier3_1_c_escort_2", zoneName = "space_dathomir", x = -1740, z = 2006, y = 1861, escortNumber = 2, radius = 250},
+		{patrolPointName = "tatooine_rebel_tier3_1_c_escort_3", zoneName = "space_dathomir", x = -697, z = 1383, y = 2052, escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_rebel_tier3_1_c_escort_4", zoneName = "space_dathomir", x = -281, z = 843, y = 893, escortNumber = 4, radius = 250},
 	},
 	attackDelay = 35, attackShips = {{"imp_tie_interceptor_tier3", "imp_tie_interceptor_tier3", "imp_tie_advanced_tier3"}},
 }
@@ -778,7 +779,7 @@ registerScreenPlay("escort_tatooine_rebel_tier3_3_b", true)
 survival_tatooine_rebel_tier3_3_c = SpaceSurvivalScreenplay:new {
 	className = "survival_tatooine_rebel_tier3_3_c", questName = "tatooine_rebel_tier3_3_c", questType = "survival", questZone = "space_dathomir",
 	creditReward = 0, sideQuest = false, sideQuestType = "", parentQuest = "escort_tatooine_rebel_tier3_3_b", parentQuestType = "escort", parentQuestName = "tatooine_rebel_tier3_3_b",
-	survivalTime = 180, survivalPoint = "space_dathomir:tatooine_rebel_tier3_3_c_hold", delayToFirstAttack = 5, attackDelay = 35,
+	survivalTime = 180, survivalUpdateInterval = 30, survivalPoint = "space_dathomir:tatooine_rebel_tier3_3_c_hold", delayToFirstAttack = 5, attackDelay = 35,
 	attackShips = {
 		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_fighter_tier3"},
 		{"imp_tie_fighter_tier3", "imp_tie_fighter_tier3", "imp_tie_interceptor_tier3"},

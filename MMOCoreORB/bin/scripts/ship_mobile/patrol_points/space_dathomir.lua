@@ -641,6 +641,19 @@ space_dathomir = SpacePatrolPointTable:new {
 	{patrolPointName = "black_epsilon_t4_4_a_capture", x = -1800, z = 800, y = -900},
 	{patrolPointName = "black_epsilon_t4_4_a_escape", x = 1300, z = 100, y = 1700},
 	{patrolPointName = "black_epsilon_t4_4_onli", x = 5400, z = -1000, y = 4100},
+
+	-- Crimson Phoenix 3_1 Lambda capture and post-recovery escape route.
+	{patrolPointName = "phoenix_t3_1_capture_1", x = -5200, z = 3400, y = 4400},
+	{patrolPointName = "phoenix_t3_1_capture_2", x = -4600, z = 3000, y = 3700},
+	{patrolPointName = "phoenix_t3_1_capture_3", x = -3900, z = 2700, y = 3000},
+	{patrolPointName = "phoenix_t3_1_escape_1", x = -3200, z = 2400, y = 2300},
+	{patrolPointName = "phoenix_t3_1_escape_2", x = -2400, z = 2000, y = 1500},
+	{patrolPointName = "phoenix_t3_1_escape_3", x = -1500, z = 1600, y = 600},
+
+	-- Crimson Phoenix 3_3_b smuggler escort route.
+	{patrolPointName = "phoenix_t3_3_b_1", x = -4300, z = -900, y = 2200},
+	{patrolPointName = "phoenix_t3_3_b_2", x = -3200, z = -500, y = 1300},
+	{patrolPointName = "phoenix_t3_3_b_3", x = -2000, z = -100, y = 300},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_dathomir, "space_dathomir")
