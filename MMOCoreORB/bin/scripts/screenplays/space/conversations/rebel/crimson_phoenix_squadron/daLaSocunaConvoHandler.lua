@@ -774,16 +774,16 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		local skillManager = LuaSkillManager()
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_02")) then
-			clonedConversation:addOption("@conversation/lok_rebel_trainer_2:s_c6c91897", "tier2_train_fighters") -- Multi-Role Craft
+			clonedConversation:addOption("@conversation/yavin_rebel_trainer_2:s_c6c91897", "tier2_train_fighters")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_02")) then
-			clonedConversation:addOption("@conversation/lok_rebel_trainer_2:s_98d991e7", "tier2_train_component") -- Weapons B, Intermediate Alliance Starship Ordnance
+			clonedConversation:addOption("@conversation/yavin_rebel_trainer_2:s_98d991e7", "tier2_train_component")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_02")) then
-			clonedConversation:addOption("@conversation/lok_rebel_trainer_2:s_73ccefde", "tier2_train_basics") -- Intermediate Procedures
+			clonedConversation:addOption("@conversation/yavin_rebel_trainer_2:s_73ccefde", "tier2_train_basics")
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_02")) then
-			clonedConversation:addOption("@conversation/lok_rebel_trainer_2:s_3c4ff185", "tier2_train_droid") -- Astromech Management
+			clonedConversation:addOption("@conversation/yavin_rebel_trainer_2:s_3c4ff185", "tier2_train_droid")
 		end
 
 	-- Handle Tier 2 Skill box granting

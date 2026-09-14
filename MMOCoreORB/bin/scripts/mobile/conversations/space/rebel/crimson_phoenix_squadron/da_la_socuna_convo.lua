@@ -568,17 +568,16 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_go_to_next)
 
 
 --[[
-	Tier 2 screens (Vrak-stage dispatch through Da'la Socuna; authentic Live strings from
-	string/en/conversation/lok_rebel_trainer_2.stf)
+	Major Eker Tier 2 screens using string/en/conversation/yavin_rebel_trainer_2.stf
 ]]
 
 -- New tier 2 pilot introduction
 da_la_socuna_convo_tier2_introduction = ConvoScreen:new {
 	id = "tier2_introduction",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_438969d3", -- greeting
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_928a5ee3",
 	stopConversation = "false",
 	options = {
-		{"@conversation/lok_rebel_trainer_2:s_da77c355", "tier2_intro_accept"},
+		{"@conversation/yavin_rebel_trainer_2:s_6a1c47d9", "tier2_intro_accept"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_introduction)
@@ -586,7 +585,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_introduction)
 -- Introduction accepted (handler sets tier2_introduced)
 da_la_socuna_convo_tier2_intro_accept = ConvoScreen:new {
 	id = "tier2_intro_accept",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_e58d7043",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_97073639",
 	stopConversation = "true",
 	options = {}
 }
@@ -595,12 +594,12 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_intro_accept)
 -- Duty mission menu
 da_la_socuna_convo_tier2_duty_missions = ConvoScreen:new {
 	id = "tier2_duty_missions",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_9d922723",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_e641a3d8",
 	stopConversation = "false",
 	options = {
-		{"@conversation/lok_rebel_trainer_2:s_1dfeca09", "tier2_destroy_duty"},
-		{"@conversation/lok_rebel_trainer_2:s_e02126d9", "tier2_recovery_duty"},
-		{"@conversation/lok_rebel_trainer_2:s_cd3e2b38", "tier2_escort_duty"},
+		{"@conversation/yavin_rebel_trainer_2:s_46fb1c35", "tier2_destroy_duty"},
+		{"@conversation/yavin_rebel_trainer_2:s_73c783f8", "tier2_recovery_duty"},
+		{"@conversation/yavin_rebel_trainer_2:s_80e4843e", "tier2_escort_duty"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_duty_missions)
@@ -608,7 +607,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_duty_missions)
 -- Duty confirms (handler starts the duty quests)
 da_la_socuna_convo_tier2_destroy_duty = ConvoScreen:new {
 	id = "tier2_destroy_duty",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_99210986",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_895e16f4",
 	stopConversation = "true",
 	options = {}
 }
@@ -616,7 +615,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_destroy_duty)
 
 da_la_socuna_convo_tier2_recovery_duty = ConvoScreen:new {
 	id = "tier2_recovery_duty",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_e6569c04",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_895e16f4",
 	stopConversation = "true",
 	options = {}
 }
@@ -624,7 +623,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_recovery_duty)
 
 da_la_socuna_convo_tier2_escort_duty = ConvoScreen:new {
 	id = "tier2_escort_duty",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_37e5c8bc",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_895e16f4",
 	stopConversation = "true",
 	options = {}
 }
@@ -633,7 +632,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_escort_duty)
 -- Player already has an active tier 2 mission
 da_la_socuna_convo_tier2_has_mission = ConvoScreen:new {
 	id = "tier2_has_mission",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_d356f8d",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_f7f3ab80",
 	stopConversation = "true",
 	options = {}
 }
@@ -642,7 +641,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_has_mission)
 -- Tier 2 training menu (options added dynamically by handler)
 da_la_socuna_convo_tier2_training_menu = ConvoScreen:new {
 	id = "tier2_training_menu",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_4ee75073",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_434cf40e",
 	stopConversation = "false",
 	options = {}
 }
@@ -651,7 +650,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_training_menu)
 -- Tier 2 training results (handler grants the skill)
 da_la_socuna_convo_tier2_train_fighters = ConvoScreen:new {
 	id = "tier2_train_fighters",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_895e16f4",
 	stopConversation = "true",
 	options = {}
 }
@@ -659,7 +658,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_fighters)
 
 da_la_socuna_convo_tier2_train_component = ConvoScreen:new {
 	id = "tier2_train_component",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_895e16f4",
 	stopConversation = "true",
 	options = {}
 }
@@ -667,7 +666,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_component)
 
 da_la_socuna_convo_tier2_train_basics = ConvoScreen:new {
 	id = "tier2_train_basics",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_895e16f4",
 	stopConversation = "true",
 	options = {}
 }
@@ -675,7 +674,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_basics)
 
 da_la_socuna_convo_tier2_train_droid = ConvoScreen:new {
 	id = "tier2_train_droid",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_5a954a3f",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_895e16f4",
 	stopConversation = "true",
 	options = {}
 }
@@ -684,17 +683,17 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_train_droid)
 -- Tier 2 mission 1 (inspect)
 da_la_socuna_convo_tier2_mission1_brief = ConvoScreen:new {
 	id = "tier2_mission1_brief",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_c91bccf0",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_f88289a7",
 	stopConversation = "false",
 	options = {
-		{"@conversation/lok_rebel_trainer_2:s_359d1c6c", "tier2_accept_mission1"},
+		{"@conversation/yavin_rebel_trainer_2:s_468ab4d3", "tier2_accept_mission1"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission1_brief)
 
 da_la_socuna_convo_tier2_accept_mission1 = ConvoScreen:new {
 	id = "tier2_accept_mission1",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_5ee66c06",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_d80e99ca",
 	stopConversation = "true",
 	options = {}
 }
@@ -702,7 +701,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission1)
 
 da_la_socuna_convo_tier2_mission1_rewarded = ConvoScreen:new {
 	id = "tier2_mission1_rewarded",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_71350221",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_b685e199",
 	stopConversation = "true",
 	options = {}
 }
@@ -710,7 +709,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission1_rewarded)
 
 da_la_socuna_convo_tier2_failed_mission1 = ConvoScreen:new {
 	id = "tier2_failed_mission1",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_14086bc1",
 	stopConversation = "true",
 	options = {}
 }
@@ -719,17 +718,17 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission1)
 -- Tier 2 mission 2 (escort)
 da_la_socuna_convo_tier2_mission2_brief = ConvoScreen:new {
 	id = "tier2_mission2_brief",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_565951d5",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_a760a737",
 	stopConversation = "false",
 	options = {
-		{"@conversation/lok_rebel_trainer_2:s_80b2d7f9", "tier2_accept_mission2"},
+		{"@conversation/yavin_rebel_trainer_2:s_bc57b086", "tier2_accept_mission2"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission2_brief)
 
 da_la_socuna_convo_tier2_accept_mission2 = ConvoScreen:new {
 	id = "tier2_accept_mission2",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_2af8de7c",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_cec991df",
 	stopConversation = "true",
 	options = {}
 }
@@ -737,7 +736,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission2)
 
 da_la_socuna_convo_tier2_mission2_rewarded = ConvoScreen:new {
 	id = "tier2_mission2_rewarded",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_4af0c602",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_9777c464",
 	stopConversation = "true",
 	options = {}
 }
@@ -745,7 +744,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission2_rewarded)
 
 da_la_socuna_convo_tier2_failed_mission2 = ConvoScreen:new {
 	id = "tier2_failed_mission2",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_f9855bf1",
 	stopConversation = "true",
 	options = {}
 }
@@ -754,17 +753,17 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission2)
 -- Tier 2 mission 3 (recovery)
 da_la_socuna_convo_tier2_mission3_brief = ConvoScreen:new {
 	id = "tier2_mission3_brief",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_3ae0bba3",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_d931ff32",
 	stopConversation = "false",
 	options = {
-		{"@conversation/lok_rebel_trainer_2:s_dce7fb", "tier2_accept_mission3"},
+		{"@conversation/yavin_rebel_trainer_2:s_b2e340f6", "tier2_accept_mission3"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_brief)
 
 da_la_socuna_convo_tier2_accept_mission3 = ConvoScreen:new {
 	id = "tier2_accept_mission3",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_723b4288",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_c928423d",
 	stopConversation = "true",
 	options = {}
 }
@@ -772,7 +771,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission3)
 
 da_la_socuna_convo_tier2_mission3_rewarded = ConvoScreen:new {
 	id = "tier2_mission3_rewarded",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_9417b6d9",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_b685e199",
 	stopConversation = "true",
 	options = {}
 }
@@ -780,7 +779,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission3_rewarded)
 
 da_la_socuna_convo_tier2_failed_mission3 = ConvoScreen:new {
 	id = "tier2_failed_mission3",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_450abd55",
 	stopConversation = "true",
 	options = {}
 }
@@ -789,17 +788,17 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission3)
 -- Tier 2 mission 4 (assassinate)
 da_la_socuna_convo_tier2_mission4_brief = ConvoScreen:new {
 	id = "tier2_mission4_brief",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_75e5035c",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_18ac5f05",
 	stopConversation = "false",
 	options = {
-		{"@conversation/lok_rebel_trainer_2:s_9b2edf50", "tier2_accept_mission4"},
+		{"@conversation/yavin_rebel_trainer_2:s_cd0a60d4", "tier2_accept_mission4"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_brief)
 
 da_la_socuna_convo_tier2_accept_mission4 = ConvoScreen:new {
 	id = "tier2_accept_mission4",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_b24f64b",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_6c872984",
 	stopConversation = "true",
 	options = {}
 }
@@ -807,7 +806,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_accept_mission4)
 
 da_la_socuna_convo_tier2_mission4_rewarded = ConvoScreen:new {
 	id = "tier2_mission4_rewarded",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_5164f707",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_2a29add6",
 	stopConversation = "true",
 	options = {}
 }
@@ -815,7 +814,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_mission4_rewarded)
 
 da_la_socuna_convo_tier2_failed_mission4 = ConvoScreen:new {
 	id = "tier2_failed_mission4",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_1eaa0d45",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_7b57442",
 	stopConversation = "true",
 	options = {}
 }
@@ -824,7 +823,7 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_failed_mission4)
 -- All tier 2 skills earned, tier incremented
 da_la_socuna_convo_tier2_completed = ConvoScreen:new {
 	id = "tier2_completed",
-	leftDialog = "@conversation/lok_rebel_trainer_2:s_5884fe0d",
+	leftDialog = "@conversation/yavin_rebel_trainer_2:s_308630ef",
 	stopConversation = "true",
 	options = {}
 }
