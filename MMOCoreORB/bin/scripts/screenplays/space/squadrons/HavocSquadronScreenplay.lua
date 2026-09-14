@@ -1463,6 +1463,7 @@ rescue_corellia_rebel_tier4_2_b = SpaceRescueScreenplay:new {
 	parentQuestName = "corellia_rebel_tier4_2_a",
 
 	rescueShip = "reb_diplomat_tier4",
+	rescueLocation = {x = 4200, z = 4350, y = -2500},
 	rescueArrivalDelay = 3,
 
 	escortPoints = {
