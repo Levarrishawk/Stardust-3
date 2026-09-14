@@ -60,7 +60,9 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	if (SpaceHelpers:isCrimsonPhoenixSquadron(pPlayer)) then
 		local pilotTier = ghost:getPilotTier()
-		local correctTrainer = (pilotTier <= 1 and isSocuna) or (pilotTier == 2 and isEker) or
+		local pendingSocunaHandoff = isSocuna and pilotTier == 2 and
+			getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:socuna_finished") ~= "1"
+		local correctTrainer = (pilotTier <= 1 and isSocuna) or pendingSocunaHandoff or (pilotTier == 2 and isEker) or
 			(pilotTier == 3 and isArnecio) or (pilotTier == 4 and isUfwol)
 
 		if (not correctTrainer) then
@@ -749,7 +751,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_4.name .. ":attempted", 1)
 		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_4}, {{type="assassinate", name="tatooine_rebel_4"}})
 		assassinate_tatooine_rebel_4:startQuest(pPlayer, pNpc)
-	-- Finished: completed all Tier 1 skills, reassigned to Under Inquisitor Fa'Zoll (next trainer)
+	-- Finished: completed all Tier 1 skills, reassigned to Major Eker (next trainer)
 	elseif (screenID == "directions_to_next" or screenID == "report_to_fazoll") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:socuna_finished", 1)
