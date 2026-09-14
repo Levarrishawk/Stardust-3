@@ -506,36 +506,38 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		CreatureObject(pPlayer):doAnimation("salute1")
 
 		return convoTemplate:getScreen("duty_missions")
-	-- Player has attempted quest 4 but failed/aborted
-	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_4.name .. ":attempted") == "1" and not questFourComplete) then
-		return convoTemplate:getScreen("failed_quest4")
-	-- Player has finished 3, has received the reward and needs to start quest 4
-	elseif (questThreeComplete and not questFourStarted and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":reward") == "1") then
-		return convoTemplate:getScreen("grant_quest4")
 	-- Player has completed quest 3 and needs reward (reward given in runScreenHandlers when they respond)
 	elseif (questThreeComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":reward") ~= "1") then
 		return convoTemplate:getScreen("excellent_work3")
-	-- Player has attempted quest 3 but failed/aborted
-	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":attempted") == "1" and not questThreeComplete) then
-		return convoTemplate:getScreen("failed_quest3")
-	-- Player has finished 2, has received the reward and needs to start quest 3
-	elseif (questTwoComplete and not questThreeStarted and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":reward") == "1") then
-		return convoTemplate:getScreen("excellent_work2")
 	-- Player has completed quest 2 and needs reward
 	elseif (questTwoComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":reward") ~= "1") then
 		-- Give player the reward and update that they received it
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":reward", 1)
 
 		-- Grant Reward
-		destroy_tatooine_rebel_2:rewardPlayer(pPlayer)
+		destroy_tatooine_rebel_3:rewardPlayer(pPlayer)
 
 		-- Grant Faction Standing
 		ghost:increaseFactionStanding("rebel", 50)
 
-		if (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
-			return convoTemplate:getScreen("more_training")
-		end
-
+		return convoTemplate:getScreen("quest2_report")
+	-- Player has finished quest 1 and needs to report to Sinkko
+	elseif (questOneComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_1.name .. ":reward") ~= "1") then
+		return convoTemplate:getScreen("excellent_work")
+	-- Offer each skill earned through the completed story missions whenever the player has enough XP
+	elseif (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
+		return convoTemplate:getScreen("more_training")
+	-- Player has attempted quest 4 but failed/aborted
+	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_4.name .. ":attempted") == "1" and not questFourComplete) then
+		return convoTemplate:getScreen("failed_quest4")
+	-- Player has finished 3, has received the reward and needs to start quest 4
+	elseif (questThreeComplete and not questFourStarted and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":reward") == "1") then
+		return convoTemplate:getScreen("grant_quest4")
+	-- Player has attempted quest 3 but failed/aborted
+	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":attempted") == "1" and not questThreeComplete) then
+		return convoTemplate:getScreen("failed_quest3")
+	-- Player has finished 2, has received the reward and needs to start quest 3
+	elseif (questTwoComplete and not questThreeStarted and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":reward") == "1") then
 		return convoTemplate:getScreen("excellent_work2")
 	-- Player has attempted quest 2 but failed/aborted
 	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":attempted") == "1" and not questTwoComplete) then
@@ -543,12 +545,6 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player has finished quest 1, received reward, needs to start quest 2
 	elseif (questOneComplete and not questTwoStarted and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_1.name .. ":reward") == "1") then
 		return convoTemplate:getScreen("grant_quest2")
-	-- Player has finished quest 1 and needs to report to Sinkko
-	elseif (questOneComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_1.name .. ":reward") ~= "1") then
-		return convoTemplate:getScreen("excellent_work")
-	-- Offer each skill earned through the completed story missions whenever the player has enough XP
-	elseif (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
-		return convoTemplate:getScreen("more_training")
 	-- Player has attempted quest 1 but failed/aborted
 	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_1.name .. ":attempted") == "1" and not questOneComplete) then
 		return convoTemplate:getScreen("failed_quest1")
@@ -586,38 +582,43 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		return pClonedScreen
 	end
 
-	-- Offer training earned through completed missions whenever the player has enough XP.
-	if (screenID == "missions_complete" or screenID == "more_training") then
+	-- Completing Da'la's fourth mission grants one free Tier 1 skill choice.
+	if (screenID == "missions_complete") then
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01")) then
+			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_26970ef", "train_player_fighters_free") -- I am interested in basic starfighter training.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01")) then
+			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_d912490", "train_player_component_free") -- I am interested in basic Alliance component use.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01")) then
+			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_8c272224", "train_player_basics_free") -- I am interested in starfighter survival tactics.
+		end
+		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01")) then
+			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_9480f430", "train_player_droid_free") -- I am interested in droid interface basics.
+		end
+	-- Additional training between missions requires the normal XP cost.
+	elseif (screenID == "more_training") then
 		local skillManager = LuaSkillManager()
-		local hasTrainingOption = false
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01")) then
 			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_01")) then
 				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_26970ef", "train_player_fighters") -- I am interested in basic starfighter training.
-				hasTrainingOption = true
 			end
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01")) then
 			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_01")) then
 				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_d912490", "train_player_component") -- I am interested in basic Alliance component use.
-				hasTrainingOption = true
 			end
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01")) then
 			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_01")) then
 				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_8c272224", "train_player_basics") -- I am interested in starfighter survival tactics.
-				hasTrainingOption = true
 			end
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01")) then
 			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_01")) then
 				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_9480f430", "train_player_droid") -- I am interested in droid interface basics.
-				hasTrainingOption = true
 			end
-		end
-
-		if (screenID == "missions_complete" and not hasTrainingOption) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_1583743c", "duty_missions") -- Do you have any missions I could fly?
 		end
 	-- Handle Skill box granting
 	elseif (string.find(screenID, "train_player_")) then
@@ -696,11 +697,11 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_1, destroy_surpriseattack_tatooine_rebel_1}, {{type="patrol", name="tatooine_rebel_1"}, {type="destroy_surpriseattack", name="tatooine_rebel_1"}})
 		patrol_tatooine_rebel_1:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest2") then
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_rebel_2}, {{type="destroy", name="tatooine_rebel_2"}})
-		destroy_tatooine_rebel_2:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_rebel_3}, {{type="destroy", name="tatooine_rebel_3"}})
+		destroy_tatooine_rebel_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest3") then
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_3, escort_tatooine_rebel_3}, {{type="patrol", name="tatooine_rebel_3"}, {type="escort", name="tatooine_rebel_3"}})
-		patrol_tatooine_rebel_3:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_2, escort_tatooine_rebel_2}, {{type="patrol", name="tatooine_rebel_2"}, {type="escort", name="tatooine_rebel_2"}})
+		patrol_tatooine_rebel_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "retry_quest4") then
 		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {assassinate_tatooine_rebel_4}, {{type="assassinate", name="tatooine_rebel_4"}})
 		assassinate_tatooine_rebel_4:startQuest(pPlayer, pNpc)
@@ -721,13 +722,13 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	elseif (screenID == "quest2_accepted") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":attempted", 1)
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_rebel_2}, {{type="destroy", name="tatooine_rebel_2"}})
-		destroy_tatooine_rebel_2:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {destroy_tatooine_rebel_3}, {{type="destroy", name="tatooine_rebel_3"}})
+		destroy_tatooine_rebel_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "train_me3") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":attempted", 1)
-		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_3, escort_tatooine_rebel_3}, {{type="patrol", name="tatooine_rebel_3"}, {type="escort", name="tatooine_rebel_3"}})
-		patrol_tatooine_rebel_3:startQuest(pPlayer, pNpc)
+		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {patrol_tatooine_rebel_2, escort_tatooine_rebel_2}, {{type="patrol", name="tatooine_rebel_2"}, {type="escort", name="tatooine_rebel_2"}})
+		patrol_tatooine_rebel_2:startQuest(pPlayer, pNpc)
 	-- Quest 3 Rewarded - give reward
 	elseif (screenID == "quest3_rewarded") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
@@ -737,7 +738,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 			setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_3.name .. ":reward", 1)
 
 			-- Grant Reward
-			patrol_tatooine_rebel_3:rewardPlayer(pPlayer)
+			patrol_tatooine_rebel_2:rewardPlayer(pPlayer)
 
 			-- Grant Faction Standing
 			PlayerObject(pGhost):increaseFactionStanding("rebel", 50)

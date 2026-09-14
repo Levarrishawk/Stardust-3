@@ -214,7 +214,7 @@ da_la_socuna_convo_retry_quest1 = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_retry_quest1)
 
---[[ Tier 1 -- Mission 2: Destroy (handler starts destroy_tatooine_rebel_2 on "quest2_accepted") ]]
+--[[ Tier 1 -- Mission 2: Destroy (handler starts destroy_tatooine_rebel_3 on "quest2_accepted") ]]
 da_la_socuna_convo_grant_quest2 = ConvoScreen:new {
 	id = "grant_quest2",
 	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_406f8d3e", -- It will take a bit to decode your ship sensor data. In the meantime, we have another assignment for you... if you are ready.
@@ -233,7 +233,36 @@ da_la_socuna_convo_quest2_accepted = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_quest2_accepted)
 
--- Quest 2 rewarded; leads into Mission 3 (strike the TIE wing on the supply route)
+-- Mission 2 report
+da_la_socuna_convo_quest2_report = ConvoScreen:new {
+	id = "quest2_report",
+	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_1f0828c5", -- Report mission status!
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_trainer_1:s_6a7a0499", "quest2_best"}, -- I got more TIE Fighters than you did on your first mission!
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_quest2_report)
+
+da_la_socuna_convo_quest2_best = ConvoScreen:new {
+	id = "quest2_best",
+	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_1500b5d6", -- Are you saying that my pilots are not the BEST pilots in the entire Alliance?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_rebel_trainer_1:s_2ea6d944", "quest2_report_complete"}, -- Really?
+	}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_quest2_best)
+
+da_la_socuna_convo_quest2_report_complete = ConvoScreen:new {
+	id = "quest2_report_complete",
+	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_4c695dbd", -- No.
+	stopConversation = "true",
+	options = {}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_quest2_report_complete)
+
+-- Quest 2 rewarded; leads into Mission 3 (scout and escort the supply convoy)
 da_la_socuna_convo_excellent_work2 = ConvoScreen:new {
 	id = "excellent_work2",
 	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_bda1eb17", -- Your ship sensor data has been completely decoded. The Alliance supply route is entirely compromised. We need you to scout a new route for our in-system supply convoy. Are you up to it?
@@ -245,10 +274,10 @@ da_la_socuna_convo_excellent_work2 = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_excellent_work2)
 
--- Mission 3 accepted (handler starts patrol_tatooine_rebel_3 on "train_me3")
+-- Mission 3 accepted (handler starts patrol_tatooine_rebel_2 on "train_me3")
 da_la_socuna_convo_train_me3 = ConvoScreen:new {
 	id = "train_me3",
-	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_b0778713", -- The Empire does not yet know that their fleet info has been compromised. Strike the new TIE fighters moving into this area with extreme prejudice, and they will have no choice but to halt their invasion strategy.
+	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_7077f9f7", -- Outstanding!
 	stopConversation = "true",
 	options = {}
 }
@@ -264,7 +293,7 @@ da_la_socuna_convo_failed_quest2 = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_failed_quest2)
 
--- Quest 2 retry acknowledged (handler restarts destroy_tatooine_rebel_2)
+-- Quest 2 retry acknowledged (handler restarts destroy_tatooine_rebel_3)
 da_la_socuna_convo_retry_quest2 = ConvoScreen:new {
 	id = "retry_quest2",
 	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_cc82ca6b", -- Good! Your orders have been renewed. Good luck, pilot!
@@ -303,7 +332,7 @@ da_la_socuna_convo_failed_quest3 = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_failed_quest3)
 
--- Quest 3 retry acknowledged (handler restarts patrol_tatooine_rebel_3)
+-- Quest 3 retry acknowledged (handler restarts patrol_tatooine_rebel_2)
 da_la_socuna_convo_retry_quest3 = ConvoScreen:new {
 	id = "retry_quest3",
 	leftDialog = "@conversation/tatooine_rebel_trainer_1:s_cc82ca6b", -- Good! Your orders have been renewed. Good luck, pilot!

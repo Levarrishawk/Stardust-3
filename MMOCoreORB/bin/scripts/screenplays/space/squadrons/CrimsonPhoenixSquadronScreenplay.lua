@@ -3,12 +3,12 @@ local SpaceHelpers = require("utils.space_helpers")
 
 --[[
 
-	Inquisition Squadron Missions (Imperial - Naboo)
+	Crimson Phoenix Squadron Missions (Rebel - Tatooine)
 
 ]]
 
 --[[
-	Tier 1 -- Lt. Barn Sinkko Main Missions (Naboo)
+	Tier 1 -- Commander Da'la Socuna Main Missions (Tatooine)
 ]]
 
 -- Mission 1: Patrol with surprise attack
@@ -62,11 +62,11 @@ destroy_surpriseattack_tatooine_rebel_1 = SpaceSurpriseAttackScreenplay:new {
 
 registerScreenPlay("destroy_surpriseattack_tatooine_rebel_1", true)
 
--- Mission 2: Destroy
-destroy_tatooine_rebel_2 = SpaceDestroyScreenplay:new {
-	className = "destroy_tatooine_rebel_2",
+-- Mission 2: Hunt down TIE fighters
+destroy_tatooine_rebel_3 = SpaceDestroyScreenplay:new {
+	className = "destroy_tatooine_rebel_3",
 
-	questName = "tatooine_rebel_2",
+	questName = "tatooine_rebel_3",
 	questType = "destroy",
 
 	questZone = "space_tatooine",
@@ -85,17 +85,17 @@ destroy_tatooine_rebel_2 = SpaceDestroyScreenplay:new {
 	},
 
 	shipTypes = {
-		"imp_tie_fighter_tier1", "imp_tie_fighter_tier2", "imp_tie_fighter_tier3", "imp_tie_fighter_tier4",
+		"imp_tie_fighter_tier1",
 	},
 }
 
-registerScreenPlay("destroy_tatooine_rebel_2", true)
+registerScreenPlay("destroy_tatooine_rebel_3", true)
 
--- Mission 3: Patrol with escort side quest
-patrol_tatooine_rebel_3 = SpacePatrolScreenplay:new {
-	className = "patrol_tatooine_rebel_3",
+-- Mission 3: Supply-route patrol with escort side quest
+patrol_tatooine_rebel_2 = SpacePatrolScreenplay:new {
+	className = "patrol_tatooine_rebel_2",
 
-	questName = "tatooine_rebel_3",
+	questName = "tatooine_rebel_2",
 	questType = "patrol",
 
 	questZone = "space_tatooine",
@@ -109,7 +109,7 @@ patrol_tatooine_rebel_3 = SpacePatrolScreenplay:new {
 
 	sideQuest = true,
 	sideQuestType = "escort",
-	sideQuestName = "tatooine_rebel_3",
+	sideQuestName = "tatooine_rebel_2",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.PATROL_POINT,
 
 	sideQuestPatrolStart = 2,
@@ -119,16 +119,15 @@ patrol_tatooine_rebel_3 = SpacePatrolScreenplay:new {
 		{patrolPointName = "crimson_phoenix_rebel_security_patrol_1", x = 5024, z = -3710, y = -1723, patrolNumber = 1, radius = 150},
 		{patrolPointName = "crimson_phoenix_rebel_security_patrol_2", x = 3933, z = -3285, y = -3098, patrolNumber = 2, radius = 150},
 		{patrolPointName = "crimson_phoenix_rebel_security_patrol_3", x = 3574, z = -2819, y = -4741, patrolNumber = 3, radius = 150},
-		{patrolPointName = "crimson_phoenix_rebel_security_patrol_4", x = 4496, z = -1657, y = -6222, patrolNumber = 4, radius = 150},
 	},
 }
 
-registerScreenPlay("patrol_tatooine_rebel_3", true)
+registerScreenPlay("patrol_tatooine_rebel_2", true)
 
-escort_tatooine_rebel_3 = SpaceEscortScreenplay:new {
-	className = "escort_tatooine_rebel_3",
+escort_tatooine_rebel_2 = SpaceEscortScreenplay:new {
+	className = "escort_tatooine_rebel_2",
 
-	questName = "tatooine_rebel_3",
+	questName = "tatooine_rebel_2",
 	questType = "escort",
 
 	questZone = "space_tatooine",
@@ -136,9 +135,9 @@ escort_tatooine_rebel_3 = SpaceEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	parentQuest = "patrol_tatooine_rebel_3",
+	parentQuest = "patrol_tatooine_rebel_2",
 	parentQuestType = "patrol",
-	parentQuestName = "tatooine_rebel_3",
+	parentQuestName = "tatooine_rebel_2",
 
 	escortShips = {"reb_freightermedium_tier1"},
 
@@ -152,13 +151,13 @@ escort_tatooine_rebel_3 = SpaceEscortScreenplay:new {
 	attackDelay = 80,
 
 	attackShips = {
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
-		{"imp_tie_fighter_tier1"},
+		{"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
+		{"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
+		{"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
 	}
 }
 
-registerScreenPlay("escort_tatooine_rebel_3", true)
+registerScreenPlay("escort_tatooine_rebel_2", true)
 
 -- Mission 4: Assassinate
 assassinate_tatooine_rebel_4 = SpaceAssassinateScreenplay:new {
@@ -182,7 +181,7 @@ assassinate_tatooine_rebel_4 = SpaceAssassinateScreenplay:new {
 
 	assassinateSpawns = {
 		target = "imp_tie_fighter_veteran_tier2",
-		escorts = {"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
+		escorts = {"imp_tie_fighter_tier1", "imp_tie_fighter_tier1", "imp_tie_fighter_tier1"},
 	},
 
 	targetPatrols = {
@@ -1976,12 +1975,12 @@ registerScreenPlay("destroy_duty_tatooine_rebel_tier4_1", true)
 CrimsonPhoenixSquadronScreenplay = ScreenPlay:new {
 	screenplayName = "CrimsonPhoenixSquadronScreenplay",
 
-	-- Tier 1 (Lt. Barn Sinkko)
+	-- Tier 1 (Commander Da'la Socuna)
 	QUEST_STRING_1 = {type = "patrol", name = "tatooine_rebel_1"},
 	QUEST_STRING_1_SIDE = {type = "destroy_surpriseattack", name = "tatooine_rebel_1"},
-	QUEST_STRING_2 = {type = "destroy", name = "tatooine_rebel_2"},
-	QUEST_STRING_3 = {type = "patrol", name = "tatooine_rebel_3"},
-	QUEST_STRING_3_SIDE = {type = "escort", name = "tatooine_rebel_3"},
+	QUEST_STRING_2 = {type = "destroy", name = "tatooine_rebel_3"},
+	QUEST_STRING_3 = {type = "patrol", name = "tatooine_rebel_2"},
+	QUEST_STRING_3_SIDE = {type = "escort", name = "tatooine_rebel_2"},
 	QUEST_STRING_4 = {type = "assassinate", name = "tatooine_rebel_4"},
 	QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_rebel_6"},
 	QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "tatooine_rebel_7"},
@@ -2068,12 +2067,12 @@ function CrimsonPhoenixSquadronScreenplay:resetSocunaQuests(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.QUEST_STRING_1_SIDE.type, self.QUEST_STRING_1_SIDE.name, false)
 
 	-- Mission 2
-	destroy_tatooine_rebel_2:resetQuest(pPlayer)
+	destroy_tatooine_rebel_3:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.QUEST_STRING_2.type, self.QUEST_STRING_2.name, false)
 
 	-- Mission 3
-	patrol_tatooine_rebel_3:resetQuest(pPlayer)
-	escort_tatooine_rebel_3:resetQuest(pPlayer)
+	patrol_tatooine_rebel_2:resetQuest(pPlayer)
+	escort_tatooine_rebel_2:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.QUEST_STRING_3.type, self.QUEST_STRING_3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.QUEST_STRING_3_SIDE.type, self.QUEST_STRING_3_SIDE.name, false)
 
