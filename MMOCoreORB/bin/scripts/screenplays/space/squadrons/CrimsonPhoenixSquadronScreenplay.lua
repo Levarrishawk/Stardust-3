@@ -1377,6 +1377,7 @@ function CrimsonPhoenixSquadronScreenplay:resetTier4Quests(pPlayer)
 	local playerID = SceneObject(pPlayer):getObjectID()
 
 	removeQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedTier4")
+	removeQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4")
 
 	removeQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted")
 	removeQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted")

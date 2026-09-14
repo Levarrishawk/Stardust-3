@@ -1231,28 +1231,51 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_on_mission)
 
 da_la_socuna_convo_tier4_initial_briefing = ConvoScreen:new {
 	id = "tier4_initial_briefing",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_1ec8846c",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_37df0fba",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_rebel_tier4:s_5bc07030", "tier4_first_mission"},
+		{"@conversation/tatooine_rebel_tier4:s_5bc07030", "tier4_intro_not_spy"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_initial_briefing)
 
--- Tier 4 mission 1 (survival)
+local function addUfwolTier4Screen(id, dialog, option, nextScreen)
+	local screen = ConvoScreen:new {
+		id = id,
+		leftDialog = "@conversation/tatooine_rebel_tier4:" .. dialog,
+		stopConversation = option == nil and "true" or "false",
+		options = option == nil and {} or {{"@conversation/tatooine_rebel_tier4:" .. option, nextScreen}},
+	}
+
+	da_la_socuna_convo:addScreen(screen)
+end
+
+addUfwolTier4Screen("tier4_intro_not_spy", "s_2db03120", "s_221bd4ce", "tier4_intro_ulvawop")
+addUfwolTier4Screen("tier4_intro_ulvawop", "s_6e4f5881", "s_6c38055e", "tier4_intro_spies")
+addUfwolTier4Screen("tier4_intro_spies", "s_325c76db", "s_856aca7d", "tier4_intro_activity")
+addUfwolTier4Screen("tier4_intro_activity", "s_aa15510b", "s_521e8b09", "tier4_intro_phoenix")
+addUfwolTier4Screen("tier4_intro_phoenix", "s_15235513", "s_d9cced1f", "tier4_intro_attack")
+addUfwolTier4Screen("tier4_intro_attack", "s_5471712d", "s_43fcfbca", "tier4_intro_numbers")
+addUfwolTier4Screen("tier4_intro_numbers", "s_f73581de", "s_8ddbf95b", "tier4_intro_new_ties")
+addUfwolTier4Screen("tier4_intro_new_ties", "s_579532ac", "s_c127c173", "tier4_intro_next_generation")
+addUfwolTier4Screen("tier4_intro_next_generation", "s_b1dd06bd", "s_914a4095", "tier4_intro_warnings")
+addUfwolTier4Screen("tier4_intro_warnings", "s_954ec468", "s_61657d0f", "tier4_intro_challenge")
+addUfwolTier4Screen("tier4_intro_challenge", "s_f689a56f", "s_d55f2579", "tier4_first_mission")
+
+-- Tier 4 mission 1 (attack the Empire's advanced fighters)
 da_la_socuna_convo_tier4_first_mission = ConvoScreen:new {
 	id = "tier4_first_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_ac30ef3",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_d68a9f0a",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_rebel_tier4:s_c1c9b365", "accept_tier4_first_mission"},
+		{"@conversation/tatooine_rebel_tier4:s_49e55ca2", "accept_tier4_first_mission"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_first_mission)
 
 da_la_socuna_convo_accept_tier4_first_mission = ConvoScreen:new {
 	id = "accept_tier4_first_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_79e6aa32",
 	stopConversation = "true",
 	options = {}
 }

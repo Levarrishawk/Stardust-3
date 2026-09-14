@@ -211,10 +211,8 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			end
 			return convoTemplate:getScreen("tier4_duty_repeat")
 
-		-- Has not received the tier 4 briefing from Da'la Socuna yet
+		-- Has not received the tier 4 briefing from General Ufwol yet
 		elseif (getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4") ~= "1") then
-			setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4", 1)
-
 			return convoTemplate:getScreen("tier4_initial_briefing")
 
 		-- Missions are not complete yet
@@ -1047,6 +1045,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		recovery_tatooine_rebel_tier4_2:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4", 1)
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
 		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {space_battle_tatooine_rebel_tier4_1, assassinate_tatooine_rebel_tier4_1_a, patrol_tatooine_rebel_tier4_1_b, destroy_surpriseattack_tatooine_rebel_tier4_1_c}, {CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3})
