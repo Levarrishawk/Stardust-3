@@ -69,6 +69,15 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("completed_sinkko")
 		end
 
+		-- Training the fourth box advances the pilot tier before the next
+		-- conversation. Keep former trainers on their own reassignment text
+		-- instead of falling through to Da'la's generic Major Eker message.
+		if (isEker and pilotTier >= 3) then
+			return convoTemplate:getScreen("tier2_completed")
+		elseif (isArnecio and pilotTier >= 4) then
+			return convoTemplate:getScreen("tier3_completed")
+		end
+
 		local correctTrainer = (pilotTier <= 1 and isSocuna) or (pilotTier == 2 and isEker) or
 			(pilotTier == 3 and isArnecio) or (pilotTier == 4 and isUfwol)
 
@@ -363,6 +372,10 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			end
 		end
 
+		if (getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:tier3_introduced") ~= "1") then
+			return convoTemplate:getScreen("tier3_intro_greeting")
+		end
+
 		return convoTemplate:getScreen("tier3_mission1_brief")
 	end
 
@@ -404,7 +417,6 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			-- Player has all the skill boxes, they should be tier 3. Increment if not proper
 			if (ghost:getPilotTier() <= 2) then
 				ghost:incrementPilotTier()
-				SpaceHelpers:addArnecioWaypoint(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier2_completed")
@@ -815,7 +827,6 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 2) and ghost:getPilotTier() == 2) then
 			-- Increment pilot to Tier 3!
 			ghost:incrementPilotTier()
-			SpaceHelpers:addArnecioWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -824,6 +835,13 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	elseif (screenID == "tier2_intro_accept") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:tier2_introduced", 1)
+	elseif (screenID == "tier2_completed") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+
+		if (getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:eker_finished") ~= "1") then
+			setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:eker_finished", 1)
+			SpaceHelpers:addArnecioWaypoint(pPlayer)
+		end
 
 	-- Tier 2 Duty Missions
 	elseif (screenID == "tier2_destroy_duty") then
@@ -897,6 +915,7 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 	-- Give Tier 3 Missions
 	elseif (screenID == "tier3_accept_mission1" or screenID == "tier3_failed_mission1") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:tier3_introduced", 1)
 		setQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted", 1)
 
 		CrimsonPhoenixSquadronScreenplay:prepareMissionChainAttempt(pPlayer, {recovery_tatooine_rebel_tier3_1, patrol_tatooine_rebel_tier3_1_A, destroy_surpriseattack_tatooine_rebel_tier3_1_b, assassinate_tatooine_rebel_tier3_1_c, space_battle_tatooine_rebel_tier3_1_d}, {{type="recovery", name="tatooine_rebel_tier3_1"}, {type="patrol", name="tatooine_rebel_tier3_1_A"}, {type="destroy_surpriseattack", name="tatooine_rebel_tier3_1_b"}, {type="assassinate", name="tatooine_rebel_tier3_1_c"}, {type="space_battle", name="tatooine_rebel_tier3_1_d"}})

@@ -913,6 +913,111 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier2_completed)
 	Tier 3 screens (authentic Live strings from string/en/conversation/tatooine_rebel_tier3.stf)
 ]]
 
+-- Arnecio Ulvaw'op introduction and first mission briefing.
+da_la_socuna_convo_tier3_intro_greeting = ConvoScreen:new {
+	id = "tier3_intro_greeting",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_6f921f12",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_783af10a", "tier3_intro_dossier"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_greeting)
+
+da_la_socuna_convo_tier3_intro_dossier = ConvoScreen:new {
+	id = "tier3_intro_dossier",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_be9caae0",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_81682525", "tier3_intro_dathomir"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_dossier)
+
+da_la_socuna_convo_tier3_intro_dathomir = ConvoScreen:new {
+	id = "tier3_intro_dathomir",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_645464dc",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_4c695dbd", "tier3_intro_prison"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_dathomir)
+
+da_la_socuna_convo_tier3_intro_prison = ConvoScreen:new {
+	id = "tier3_intro_prison",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_d2f7d204",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_2787404a", "tier3_intro_interest"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_prison)
+
+da_la_socuna_convo_tier3_intro_interest = ConvoScreen:new {
+	id = "tier3_intro_interest",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_8fbd3f85",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_3059f369", "tier3_intro_cautious"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_interest)
+
+da_la_socuna_convo_tier3_intro_cautious = ConvoScreen:new {
+	id = "tier3_intro_cautious",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_b3f5831e",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_82f0aea5", "tier3_intro_personal"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_cautious)
+
+da_la_socuna_convo_tier3_intro_personal = ConvoScreen:new {
+	id = "tier3_intro_personal",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_12e4e81a",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_5bd69df6", "tier3_intro_officer"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_personal)
+
+da_la_socuna_convo_tier3_intro_officer = ConvoScreen:new {
+	id = "tier3_intro_officer",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_86fe6fa2",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_3aa053cf", "tier3_intro_location"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_officer)
+
+da_la_socuna_convo_tier3_intro_location = ConvoScreen:new {
+	id = "tier3_intro_location",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_189648be",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_6a45ad00", "tier3_intro_lambda"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_location)
+
+da_la_socuna_convo_tier3_intro_lambda = ConvoScreen:new {
+	id = "tier3_intro_lambda",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_459dafe4",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_4c695dbd", "tier3_intro_shuttle"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_lambda)
+
+da_la_socuna_convo_tier3_intro_shuttle = ConvoScreen:new {
+	id = "tier3_intro_shuttle",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_374e94fe",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_61657d0f", "tier3_intro_escort"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_shuttle)
+
+da_la_socuna_convo_tier3_intro_escort = ConvoScreen:new {
+	id = "tier3_intro_escort",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_13faa821",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_1bd3a505", "tier3_intro_assault_droid"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_escort)
+
+da_la_socuna_convo_tier3_intro_assault_droid = ConvoScreen:new {
+	id = "tier3_intro_assault_droid",
+	leftDialog = "@conversation/tatooine_rebel_tier3:s_c4bc453f",
+	stopConversation = "false",
+	options = {{"@conversation/tatooine_rebel_tier3:s_25e98647", "tier3_accept_mission1"}}
+}
+da_la_socuna_convo:addScreen(da_la_socuna_convo_tier3_intro_assault_droid)
+
 da_la_socuna_convo_tier3_not_ready = ConvoScreen:new {
 	id = "tier3_not_ready",
 	leftDialog = "@conversation/tatooine_rebel_tier3:s_614f7f1c",
