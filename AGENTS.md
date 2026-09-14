@@ -110,6 +110,8 @@ Do not move a method between `PlayerObject.idl` and `PlayerManager.idl` merely t
 
 ## Client Files and TRE Assets
 
+- Reference for future Blender asset work: [nostyleguy/io_scene_swg_msh](https://github.com/nostyleguy/io_scene_swg_msh). The user identified this as a Blender export tool for formats digestible by the SWG client and plans to use it later.
+
 - Do not modify TRE assets, client data files, client executables, or client-only resources unless explicitly requested.
 - Do not assume matching client modifications exist.
 - Prefer server-side changes that work independently.
