@@ -2323,6 +2323,7 @@ void PlayerManagerImplementation::disseminateSpaceExperience(ShipAiAgent* destru
 	uint32 totalDamage = threatMap->getTotalDamage();
 
 	if (totalDamage == 0) {
+		warning() << "Space XP skipped for " << destructedObject->getDisplayedName() << ": copied threat map has no damage.";
 		threatMap->removeAll();
 		return;
 	}
@@ -2360,6 +2361,7 @@ void PlayerManagerImplementation::disseminateSpaceExperience(ShipAiAgent* destru
 		TangibleObject* attacker = threatMap->elementAt(i).getKey();
 
 		if (entry == nullptr || attacker == nullptr || !attacker->isPlayerShip()) {
+			warning() << "Space XP skipped threat entry for " << destructedObject->getDisplayedName() << ": attacker is not a player ship.";
 			continue;
 		}
 
@@ -2377,6 +2379,7 @@ void PlayerManagerImplementation::disseminateSpaceExperience(ShipAiAgent* destru
 
 		// Range check
 		if (!destructedObject->isInRange3dZoneless(playerShip, ZoneServer::SPACECLOSEOBJECTRANGE)) {
+			warning() << "Space XP skipped for player ship " << playerShip->getObjectID() << ": outside reward range of " << destructedObject->getDisplayedName() << ".";
 			continue;
 		}
 
@@ -2393,6 +2396,7 @@ void PlayerManagerImplementation::disseminateSpaceExperience(ShipAiAgent* destru
 		int totalPlayers = playersOnBoard.size();
 
 		if (totalPlayers == 0) {
+			warning() << "Space XP skipped for player ship " << playerShip->getObjectID() << ": no pilot or onboard players found.";
 			continue;
 		}
 
@@ -2459,7 +2463,14 @@ void PlayerManagerImplementation::disseminateSpaceExperience(ShipAiAgent* destru
 
 				// info(true) << "Awarding XP to: " << shipMember->getDisplayedName() << " Ace Multiplier: " << aceMultiplier << " XP Amount: " << shipExperience;
 
-				awardExperience(shipMember, "space_combat_general", shipExperience, true, 1.f);
+				int awardedExperience = awardExperience(shipMember, "space_combat_general", shipExperience, true, 1.f);
+
+				info(true) << "Space XP result: player=" << shipMember->getDisplayedName()
+					<< " target=" << destructedObject->getDisplayedName()
+					<< " requested=" << (int)shipExperience
+					<< " awarded=" << awardedExperience
+					<< " current=" << ghost->getExperience("space_combat_general")
+					<< " cap=" << ghost->getXpCap("space_combat_general");
 
 				if (aceMultiplier > 0) {
 					awardExperience(shipMember, "space_combat_general", shipExperience, true, aceMultiplier, true, true);
