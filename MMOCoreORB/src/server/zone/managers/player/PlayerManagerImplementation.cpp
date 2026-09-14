@@ -2402,6 +2402,12 @@ void PlayerManagerImplementation::disseminateSpaceExperience(ShipAiAgent* destru
 
 			Locker playLock(shipMember, playerShip);
 
+			// Pilot skills can be granted by screenplay conversation handlers while a
+			// character has an older space-combat XP cap cached. Refresh the limits
+			// before applying kill XP so a newly trained tier-four pilot is not held
+			// at the preceding tier's cap.
+			SkillManager::instance()->updateXpLimits(ghost);
+
 			// Award Faction Points to overt players
 			if (shipMember->getFactionStatus() == FactionStatus::OVERT && (imperialReward != 0 || rebelReward != 0)) {
 				FactionManager* factionManager = FactionManager::instance();
