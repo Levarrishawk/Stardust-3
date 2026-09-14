@@ -69,7 +69,7 @@ void ShipAgentTemplate::readObject(LuaObject* templateData) {
 	pilotTemplate = templateData->getStringField("pilotTemplate").trim();
 	shipType = templateData->getStringField("shipType").trim();
 
-	experience = templateData->getIntField("experience");
+	experience = (int)templateData->getFloatField("experience");
 
 	lootChance = templateData->getFloatField("lootChance");
 	lootRolls = templateData->getIntField("lootRolls");
