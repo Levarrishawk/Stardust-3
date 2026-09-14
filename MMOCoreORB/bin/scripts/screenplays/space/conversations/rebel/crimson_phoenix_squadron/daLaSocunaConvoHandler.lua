@@ -86,6 +86,8 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	local destroyDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.QUEST_STRING_DUTY_1.type, CrimsonPhoenixSquadronScreenplay.QUEST_STRING_DUTY_1.name)
 	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.QUEST_STRING_DUTY_2.type, CrimsonPhoenixSquadronScreenplay.QUEST_STRING_DUTY_2.name)
+	local tier1SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 1)
+	local requiredTier1Skills = questFourComplete and 4 or questThreeComplete and 3 or questTwoComplete and 2 or questOneComplete and 1 or 0
 
 	-- Player is an Imperial Pilot but a different squadron
 	if (isRebelPilot and not SpaceHelpers:isCrimsonPhoenixSquadron(pPlayer)) then
@@ -477,23 +479,12 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player has already finished and been sent to the next trainer
 	elseif (getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:socuna_finished") == "1") then
 		return convoTemplate:getScreen("go_to_next")
-	-- Check if players have all the tier1 skill boxes, send them to next trainer.
-	elseif (SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 1)) then
+	-- Send players onward only after all four missions and all four tier 1 skills are complete.
+	elseif (questFourComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_4.name .. ":reward") == "1" and SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 1)) then
 		return convoTemplate:getScreen("completed_sinkko")
-	-- Player is not a member of the Imperial Faction
+	-- Player is not a member of the Rebel Faction
 	elseif (faction ~= FACTIONREBEL) then
 		return convoTemplate:getScreen("recruitment_not_imperial")
-	-- Player is an Inquisition pilot and has at least one of the Tier1 skill boxes
-	elseif (SpaceHelpers:hasPilotTierSkill(pPlayer, "rebel_navy", 1)) then
-		-- Check if the player can be trained in the remaining Tier1 Skills
-		if (SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
-			return convoTemplate:getScreen("more_training")
-		-- Offer Duty missions
-		else
-			CreatureObject(pPlayer):doAnimation("salute1")
-
-			return convoTemplate:getScreen("duty_missions")
-		end
 	-- Player has completed quest 4 and needs reward
 	elseif (questFourComplete) then
 		if (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_4.name .. ":reward") ~= "1") then
@@ -505,9 +496,16 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 			-- Grant Faction Standing
 			ghost:increaseFactionStanding("rebel", 75)
+			return convoTemplate:getScreen("missions_complete")
 		end
 
-		return convoTemplate:getScreen("missions_complete")
+		if (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
+			return convoTemplate:getScreen("more_training")
+		end
+
+		CreatureObject(pPlayer):doAnimation("salute1")
+
+		return convoTemplate:getScreen("duty_missions")
 	-- Player has attempted quest 4 but failed/aborted
 	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_4.name .. ":attempted") == "1" and not questFourComplete) then
 		return convoTemplate:getScreen("failed_quest4")
@@ -534,6 +532,10 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		-- Grant Faction Standing
 		ghost:increaseFactionStanding("rebel", 50)
 
+		if (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
+			return convoTemplate:getScreen("more_training")
+		end
+
 		return convoTemplate:getScreen("excellent_work2")
 	-- Player has attempted quest 2 but failed/aborted
 	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_2.name .. ":attempted") == "1" and not questTwoComplete) then
@@ -544,6 +546,9 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	-- Player has finished quest 1 and needs to report to Sinkko
 	elseif (questOneComplete and getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_1.name .. ":reward") ~= "1") then
 		return convoTemplate:getScreen("excellent_work")
+	-- Offer each skill earned through the completed story missions whenever the player has enough XP
+	elseif (tier1SkillCount < requiredTier1Skills and SpaceHelpers:hasExperienceForTraining(pPlayer, 1)) then
+		return convoTemplate:getScreen("more_training")
 	-- Player has attempted quest 1 but failed/aborted
 	elseif (getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.QUEST_STRING_1.name .. ":attempted") == "1" and not questOneComplete) then
 		return convoTemplate:getScreen("failed_quest1")
@@ -581,35 +586,38 @@ function daLaSocunaConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 		return pClonedScreen
 	end
 
-	-- Handle first free training after completing all 4 missions (player chooses which skill)
-	if (screenID == "missions_complete") then
+	-- Offer training earned through completed missions whenever the player has enough XP.
+	if (screenID == "missions_complete" or screenID == "more_training") then
+		local skillManager = LuaSkillManager()
+		local hasTrainingOption = false
+
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_26970ef", "train_player_fighters_free") -- I am interested in basic starfighter training.
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_01")) then
+				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_26970ef", "train_player_fighters") -- I am interested in basic starfighter training.
+				hasTrainingOption = true
+			end
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_d912490", "train_player_component_free") -- I am interested in basic Alliance component use.
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_01")) then
+				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_d912490", "train_player_component") -- I am interested in basic Alliance component use.
+				hasTrainingOption = true
+			end
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_8c272224", "train_player_basics_free") -- I am interested in starfighter survival tactics.
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_01")) then
+				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_8c272224", "train_player_basics") -- I am interested in starfighter survival tactics.
+				hasTrainingOption = true
+			end
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_9480f430", "train_player_droid_free") -- I am interested in droid interface basics.
+			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_01")) then
+				clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_9480f430", "train_player_droid") -- I am interested in droid interface basics.
+				hasTrainingOption = true
+			end
 		end
-	-- Handle additional training (requires XP)
-	elseif (screenID == "more_training") then
-		local skillManager = LuaSkillManager()
 
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_starships_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_starships_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_26970ef", "train_player_fighters") -- I am interested in basic starfighter training.
-		end
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_weapons_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_weapons_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_d912490", "train_player_component") -- I am interested in basic Alliance component use.
-		end
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_procedures_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_procedures_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_8c272224", "train_player_basics") -- I am interested in starfighter survival tactics.
-		end
-		if (not CreatureObject(pPlayer):hasSkill("pilot_rebel_navy_droid_01") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_rebel_navy_droid_01")) then
-			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_9480f430", "train_player_droid") -- I am interested in droid interface basics.
+		if (screenID == "missions_complete" and not hasTrainingOption) then
+			clonedConversation:addOption("@conversation/tatooine_rebel_trainer_1:s_1583743c", "duty_missions") -- Do you have any missions I could fly?
 		end
 	-- Handle Skill box granting
 	elseif (string.find(screenID, "train_player_")) then
