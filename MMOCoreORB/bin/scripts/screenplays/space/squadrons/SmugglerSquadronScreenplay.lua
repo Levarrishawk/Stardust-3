@@ -736,7 +736,7 @@ assassinate_tatooine_privateer_tier3_1_c = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier3_1_c", true)
 
--- Mission 1 Side Quest D: The real replacement launches a surprise attack in an X-wing.
+-- Mission 1 Side Quest D: The real replacement launches a surprise attack in a Z-95.
 destroy_surpriseattack_tatooine_privateer_tier3_1_d = SpaceSurpriseAttackScreenplay:new {
 	className = "destroy_surpriseattack_tatooine_privateer_tier3_1_d",
 
@@ -754,7 +754,7 @@ destroy_surpriseattack_tatooine_privateer_tier3_1_d = SpaceSurpriseAttackScreenp
 	parentQuestType = "assassinate",
 	parentQuestName = "tatooine_privateer_tier3_1_c",
 
-	surpriseAttackShips = {zone = "space_yavin4", spawns = {{count = 1, shipName = "valarian_xwing_replacement_tier3"}}},
+	surpriseAttackShips = {zone = "space_yavin4", spawns = {{count = 1, shipName = "valarian_replacement_3_tier3"}}},
 }
 
 registerScreenPlay("destroy_surpriseattack_tatooine_privateer_tier3_1_d", true)
