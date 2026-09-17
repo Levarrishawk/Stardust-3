@@ -1523,25 +1523,28 @@ da_la_socuna_convo_master_mission = ConvoScreen:new {
 	leftDialog = "@conversation/tatooine_rebel_tier4:s_30a32651",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_rebel_tier4:s_719a036e", "master_details"},
-		{"@conversation/tatooine_rebel_tier4:s_e42b260e", "accept_master_mission"},
+		{"@conversation/tatooine_rebel_tier4:s_1d23eb6a", "master_details"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_master_mission)
 
 da_la_socuna_convo_master_details = ConvoScreen:new {
 	id = "master_details",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_3bf1bb23",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_e075ea09",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_rebel_tier4:s_e42b260e", "accept_master_mission"},
+		{"@conversation/tatooine_rebel_tier4:s_bc4f4a10", "master_burke_reputation"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_master_details)
 
+addUfwolTier4Screen("master_burke_reputation", "s_265095d0", "s_614d7ac4", "master_classified_mission")
+addUfwolTier4Screen("master_classified_mission", "s_bed2013a", "s_ef167e72", "master_corellia_orders")
+addUfwolTier4Screen("master_corellia_orders", "s_e7488f0b", "s_e1da7727", "accept_master_mission")
+
 da_la_socuna_convo_accept_master_mission = ConvoScreen:new {
 	id = "accept_master_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_e7488f0b",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_35208536",
 	stopConversation = "true",
 	options = {}
 }
