@@ -40,6 +40,17 @@ SpaceTatooineSpawner = SpaceSpawnerScreenPlay:new {
 		{spawnName = "blacksun_threat_3", spawnType = SHIP_SPAWN_SINGLE, x = 2816, z = 336, y = -1908, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 9, maxSpawnDistance = 20, minPatrol = 50, maxPatrol = 200, totalSpawns = 8,
 			shipSpawns = {"blacksun_aggressor_tier1", "blacksun_bomber_s01_tier1", "blacksun_bomber_s01_tier2", "blacksun_bomber_s01_tier2_tatooine", "blacksun_fighter_s01_tier1", "blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier2_tatooine", "blacksun_marauder_tier1", "blacksun_vehement_tier1"}
 		},
+		-- Keep the three destroy_tatooine_privateer_2 search areas populated with
+		-- appropriate low-tier Black Sun targets for new Smuggler Squadron pilots.
+		{spawnName = "smuggler_privateer_2_blacksun_1", spawnType = SHIP_SPAWN_SINGLE, x = 590, z = -3500, y = -6000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 25, maxSpawnDistance = 100, minPatrol = 75, maxPatrol = 200, totalSpawns = 4,
+			shipSpawns = {"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1", "blacksun_aggressor_tier1", "blacksun_vehement_tier1"}
+		},
+		{spawnName = "smuggler_privateer_2_blacksun_2", spawnType = SHIP_SPAWN_SINGLE, x = -2500, z = 4000, y = 3500, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 25, maxSpawnDistance = 100, minPatrol = 75, maxPatrol = 200, totalSpawns = 4,
+			shipSpawns = {"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1", "blacksun_aggressor_tier1", "blacksun_vehement_tier1"}
+		},
+		{spawnName = "smuggler_privateer_2_blacksun_3", spawnType = SHIP_SPAWN_SINGLE, x = -3800, z = 2500, y = 5000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 25, maxSpawnDistance = 100, minPatrol = 75, maxPatrol = 200, totalSpawns = 4,
+			shipSpawns = {"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1", "blacksun_aggressor_tier1", "blacksun_vehement_tier1"}
+		},
 		{spawnName = "bestine_pirates", spawnType = SHIP_SPAWN_SINGLE, x = 896, z = 1268, y = -2850, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 10, maxSpawnDistance = 30, minPatrol = 50, maxPatrol = 200, totalSpawns = 3,
 			shipSpawns = {"bestine_pirate_tier1"}
 		},
