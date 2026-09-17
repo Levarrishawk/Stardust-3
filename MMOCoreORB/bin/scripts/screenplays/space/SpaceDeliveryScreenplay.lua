@@ -109,6 +109,7 @@ function SpaceDeliveryScreenplay:startQuest(pPlayer, pNpc)
 	-- Player accepted the quest inside the quest zone, start the run
 	if (SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0)) then
 		createEvent(4000, self.className, "startFirstLeg", pPlayer, "")
+		createEvent(6000, self.className, "verifyQuestInitialized", pPlayer, "")
 	end
 end
 
@@ -367,6 +368,54 @@ function SpaceDeliveryScreenplay:startDeliveryLeg(pPlayer)
 	self:startLeg(pPlayer, "delivery")
 end
 
+function SpaceDeliveryScreenplay:addLegWaypoint(pPlayer, legName)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	local location = self:getLegLocation(legName)
+
+	if (pGhost == nil or location == nil) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local legZone = self:getLegZone(legName)
+
+	SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+
+	local waypointID = PlayerObject(pGhost):addWaypoint(legZone, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title", "", location.x, location.z, location.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
+	local pWaypoint = getSceneObject(waypointID)
+
+	if (pWaypoint ~= nil) then
+		WaypointObject(pWaypoint):setQuestDetails("@spacequest/" .. self.questType .. "/" .. self.questName .. ":title_d")
+	end
+
+	setQuestStatus(playerID .. ":" .. self.className .. ":waypointID", waypointID)
+end
+
+function SpaceDeliveryScreenplay:verifyQuestInitialized(pPlayer)
+	if (pPlayer == nil or not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local legName = readStringData(playerID .. ":" .. self.className .. ":leg:")
+
+	if (legName == "") then
+		self:startFirstLeg(pPlayer)
+		return
+	end
+
+	local waypointID = tonumber(getQuestStatus(playerID .. ":" .. self.className .. ":waypointID")) or 0
+	local rendezvousAreaID = readData(playerID .. ":" .. self.className .. ":rendezvousArea:")
+
+	if (rendezvousAreaID ~= 0 and self:getLegLocation(legName) ~= nil and getSceneObject(waypointID) == nil) then
+		self:addLegWaypoint(pPlayer, legName)
+	end
+end
+
 function SpaceDeliveryScreenplay:startLeg(pPlayer, legName)
 	if (pPlayer == nil) then
 		Logger:log(self.className .. ":startLeg -- pPlayer is nil.", LT_ERROR)
@@ -407,22 +456,7 @@ function SpaceDeliveryScreenplay:startLeg(pPlayer, legName)
 		return
 	end
 
-	local pGhost = CreatureObject(pPlayer):getPlayerObject()
-
-	if (pGhost ~= nil) then
-		SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
-
-		local waypointID = PlayerObject(pGhost):addWaypoint(legZone, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title", "", location.x, location.z, location.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
-
-		local pWaypoint = getSceneObject(waypointID)
-
-		if (pWaypoint ~= nil) then
-			WaypointObject(pWaypoint):setQuestDetails("@spacequest/" .. self.questType .. "/" .. self.questName .. ":title_d")
-		end
-
-		-- Store the waypointID on the player
-		setQuestStatus(playerID .. ":" .. self.className .. ":waypointID", waypointID)
-	end
+	self:addLegWaypoint(pPlayer, legName)
 
 	local pActiveArea = spawnSpaceActiveArea(legZone, "object/space_active_area.iff", location.x, location.z, location.y, self.rendezvousRadius)
 
@@ -839,6 +873,8 @@ function SpaceDeliveryScreenplay:checkEnteredZone(pPlayer)
 		elseif (legName == "") then
 			createEvent(4000, self.className, "startFirstLeg", pPlayer, "")
 		end
+
+		createEvent(6000, self.className, "verifyQuestInitialized", pPlayer, "")
 	elseif (zoneNameHash ~= spaceQuestHash and SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, 0) and legName ~= "delivery_waiting") then
 		createEvent(2000, self.className, "failQuest", pPlayer, "true")
 	end
