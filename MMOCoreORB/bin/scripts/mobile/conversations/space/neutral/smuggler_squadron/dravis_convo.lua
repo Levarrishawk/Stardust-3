@@ -1780,38 +1780,57 @@ dravis_convo:addScreen(dravis_tier4_first_mission_success);
 
 dravis_tier4_second_mission = ConvoScreen:new {
 	id = "tier4_second_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_9145ef83", -- Listen. There's a heavy mining freighter passing through Endor space.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_67ec71d0", -- Ready to get back to work?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_25f8ac14", "tier4_second_mission_details"}, -- What's it carrying?
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_second_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_8be640b8", "tier4_second_mission_details"}, -- Sure.
 	}
 }
 dravis_convo:addScreen(dravis_tier4_second_mission);
 
 dravis_tier4_second_mission_details = ConvoScreen:new {
 	id = "tier4_second_mission_details",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_88678c75", -- Supplies, a few passengers, nothing special.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_e2084aee", -- What do you know about the Black Sun?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_8462774c", "tier4_second_mission_go"}, -- So I should inspect the ship.
+		{"@conversation/tatooine_privateer_tier4:s_4d999afa", "tier4_second_mission_alliance"}, -- I know they're trouble.
 	}
 }
 dravis_convo:addScreen(dravis_tier4_second_mission_details);
 
-dravis_tier4_second_mission_go = ConvoScreen:new {
-	id = "tier4_second_mission_go",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_87246f3e", -- You got it. Go check it out. And I don't mean one quick pass, either. Take a GOOD look...
+dravis_tier4_second_mission_alliance = ConvoScreen:new {
+	id = "tier4_second_mission_alliance",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_dd5bf0f8", -- Talon and the Black Sun have an understanding.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_second_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_6598178f", "tier4_second_mission_earners"}, -- Interesting.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_second_mission_alliance);
+
+dravis_tier4_second_mission_earners = ConvoScreen:new {
+	id = "tier4_second_mission_earners",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_636f3f4d", -- They're good earners, and they need our help.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_908cfde5", "tier4_second_mission_go"}, -- What's the situation?
+	}
+}
+dravis_convo:addScreen(dravis_tier4_second_mission_earners);
+
+dravis_tier4_second_mission_go = ConvoScreen:new {
+	id = "tier4_second_mission_go",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_59fffde8", -- The disabled Black Sun ship has no help nearby. We're it.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_4bef9ff9", "accept_tier4_second_mission"}, -- Then I better get to work.
 	}
 }
 dravis_convo:addScreen(dravis_tier4_second_mission_go);
 
 dravis_accept_tier4_second_mission = ConvoScreen:new {
 	id = "accept_tier4_second_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_9281abbb", -- Go get 'em, tiger.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_11bcf0c", -- Get to Dantooine and hurry up.
 	stopConversation = "true",
 	options = {}
 }
@@ -1819,7 +1838,7 @@ dravis_convo:addScreen(dravis_accept_tier4_second_mission);
 
 dravis_failed_tier4_second_mission = ConvoScreen:new {
 	id = "failed_tier4_second_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_d858532", -- Get out there and try again.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_10652869", -- Try not to get killed. Get back out there.
 	stopConversation = "true",
 	options = {}
 }
