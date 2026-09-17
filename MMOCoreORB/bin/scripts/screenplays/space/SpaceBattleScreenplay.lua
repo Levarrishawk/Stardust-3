@@ -58,6 +58,12 @@ function SpaceBattleScreenplay:startQuest(pPlayer, pNpc)
 		pNpc = nil
 	end
 
+	-- Split battle quests can be restarted after a later stage fails. Clear the old
+	-- failed/completed journal state so the location task and waypoint are rebuilt.
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		SpaceHelpers:clearSpaceQuest(pPlayer, self.questType, self.questName, false)
+	end
+
 	-- Activate the Journal Quest
 	SpaceHelpers:activateSpaceQuest(pPlayer, pNpc, self.questType, self.questName, false)
 

@@ -963,7 +963,12 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
-		--	Give fourth mission to player
+		-- Clear every stage before retrying so each chained objective can recreate its
+		-- task state and waypoint after a failure.
+		rescue_tatooine_privateer_tier3_4_d:resetQuest(pPlayer)
+		patrol_tatooine_privateer_tier3_4_c:resetQuest(pPlayer)
+		space_battle_tatooine_privateer_tier3_4_b:resetQuest(pPlayer)
+		space_battle_tatooine_privateer_tier3_4_a:resetQuest(pPlayer)
 		patrol_tatooine_privateer_tier3_4:resetQuest(pPlayer)
 		patrol_tatooine_privateer_tier3_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_third_mission" or screenID == "tier3_i_was_better") then
