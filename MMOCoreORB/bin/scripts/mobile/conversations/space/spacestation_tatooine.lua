@@ -159,6 +159,36 @@ spacestation_tatooine_land_entha_abort = ConvoScreen:new {
 }
 spacestation_tatooine_convotemplate:addScreen(spacestation_tatooine_land_entha_abort);
 
+-- Jabba's Palace Landing Main
+spacestation_tatooine_land_jabbas_palace = ConvoScreen:new {
+	id = "spacestation_tatooine_land_jabbas_palace",
+	leftDialog = "You're cleared to land at Jabba's Palace.",
+	stopConversation = "false",
+	options = {
+		{"Thanks.", "spacestation_tatooine_land_jabbas_palace_complete"},
+		{"Wait, I changed my mind.", "spacestation_tatooine_land_jabbas_palace_abort"},
+	}
+}
+spacestation_tatooine_convotemplate:addScreen(spacestation_tatooine_land_jabbas_palace);
+
+-- Jabba's Palace Landing Complete
+spacestation_tatooine_land_jabbas_palace_complete = ConvoScreen:new {
+	id = "spacestation_tatooine_land_jabbas_palace_complete",
+	leftDialog = "Proceed to the palace landing area. Tatooine Station, out.",
+	stopConversation = "true",
+	options = {}
+}
+spacestation_tatooine_convotemplate:addScreen(spacestation_tatooine_land_jabbas_palace_complete);
+
+-- Jabba's Palace Landing Abort
+spacestation_tatooine_land_jabbas_palace_abort = ConvoScreen:new {
+	id = "spacestation_tatooine_land_jabbas_palace_abort",
+	leftDialog = "Fine. Contact us again when you've made up your mind.",
+	stopConversation = "true",
+	options = {}
+}
+spacestation_tatooine_convotemplate:addScreen(spacestation_tatooine_land_jabbas_palace_abort);
+
 -- Repair Main
 spacestation_tatooine_repair = ConvoScreen:new {
 	id = "spacestation_tatooine_repair",

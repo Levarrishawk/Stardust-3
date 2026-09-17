@@ -73,6 +73,12 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		end
 	end
 
+	if (isBeissa and SpaceHelpers:isSmugglerSquadron(pPlayer) and
+		getQuestStatus(playerID .. "SpaceLandingPermission:smuggler_jabbas_palace") ~= "1") then
+		setQuestStatus(playerID .. "SpaceLandingPermission:smuggler_jabbas_palace", 1)
+		CreatureObject(pPlayer):sendSystemMessage("Beissa has granted you clearance to land at Jabba's Palace from the Tatooine space station.")
+	end
+
 	-- Check for a starter ship
 	local hasShip = SpaceHelpers:hasCertifiedShip(pPlayer, true)
 
@@ -265,9 +271,9 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (isBeissa and ghost:getPilotTier() >= 3) then
 		-- Same questName-vs-className constant defect as tier 4 (see NOTE above); literals below
 		-- carry the registered questNames.
-		local T3_SIDE_1A = { type = "patrol", name = "tatooine_privateer_tier3_1_A" }
-		local T3_SIDE_2A = { type = "delivery", name = "tatooine_privateer_tier3_2_a" }
-		local T3_SIDE_4A = { type = "patrol", name = "tatooine_privateer_tier3_4_a" }
+		local T3_SIDE_1A = { type = "assassinate", name = "tatooine_privateer_tier3_1_a" }
+		local T3_SIDE_2A = { type = "inspect", name = "tatooine_privateer_tier3_2_a" }
+		local T3_SIDE_4A = { type = "space_battle", name = "tatooine_privateer_tier3_4_a" }
 
 		local t3QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, T3_SIDE_1A.type, T3_SIDE_1A.name) or
@@ -276,8 +282,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
 		local t3QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, T3_SIDE_2A.type, T3_SIDE_2A.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name) or
-								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name)
 		local t3QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
@@ -289,7 +294,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 								SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
 		local t3QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE4.name)
-		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
+		local t3QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE2.name)
 		local t3QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
 		local t3QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
@@ -320,7 +325,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward", 1)
 
 				-- Grant Reward
-				assassinate_tatooine_privateer_tier3_4:rewardPlayer(pPlayer)
+				patrol_tatooine_privateer_tier3_4:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_complete_mission4")
@@ -329,7 +334,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward", 1)
 
 				-- Grant Reward
-				delivery_tatooine_privateer_tier3_3:rewardPlayer(pPlayer)
+				delivery_no_pickup_tatooine_privateer_tier3_3:rewardPlayer(pPlayer)
 			end
 
 			return convoTemplate:getScreen("tier3_complete_mission3")
@@ -951,15 +956,15 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
-		assassinate_tatooine_privateer_tier3_4:resetQuest(pPlayer)
-		assassinate_tatooine_privateer_tier3_4:startQuest(pPlayer, pNpc)
+		patrol_tatooine_privateer_tier3_4:resetQuest(pPlayer)
+		patrol_tatooine_privateer_tier3_4:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_third_mission" or screenID == "tier3_i_was_better") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 
 		--	Give third mission to player
-		delivery_tatooine_privateer_tier3_3:resetQuest(pPlayer)
-		delivery_tatooine_privateer_tier3_3:startQuest(pPlayer, pNpc)
+		delivery_no_pickup_tatooine_privateer_tier3_3:resetQuest(pPlayer)
+		delivery_no_pickup_tatooine_privateer_tier3_3:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier3_accept_second_mission" or screenID == "tier3_stories_about_me") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":attempted", 1)

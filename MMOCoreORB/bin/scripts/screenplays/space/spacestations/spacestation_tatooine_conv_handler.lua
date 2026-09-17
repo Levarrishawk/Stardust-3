@@ -47,6 +47,13 @@ function SpacestationTatooineConvoHandler:runScreenHandlers(pConvTemplate, pPlay
 		pClonedConvo:addOption("@conversation/station_tatooine:s_6c8ffad8", "spacestation_tatooine_repair") -- (Request Repairs)
 	end
 
+	local playerID = CreatureObject(pPlayer):getObjectID()
+
+	if (screenID == "spacestation_tatooine_land" and
+		getQuestStatus(playerID .. "SpaceLandingPermission:smuggler_jabbas_palace") == "1") then
+		pClonedConvo:addOption("Jabba's Palace.", "spacestation_tatooine_land_jabbas_palace")
+	end
+
 	-- Handle Landing
 	if (screenID == "spacestation_tatooine_land_bestine_complete") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "bestine")
@@ -56,6 +63,8 @@ function SpacestationTatooineConvoHandler:runScreenHandlers(pConvTemplate, pPlay
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "espa")
 	elseif (screenID == "spacestation_tatooine_land_entha_complete") then
 		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "entha")
+	elseif (screenID == "spacestation_tatooine_land_jabbas_palace_complete") then
+		createEvent(3500, "SpaceStationScreenPlay", "landShip", pPlayer, "jabbas_palace")
 	end
 
 	-- Handle Repair Options

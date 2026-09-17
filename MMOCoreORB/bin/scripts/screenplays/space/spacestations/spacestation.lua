@@ -36,6 +36,7 @@ SpaceStationScreenPlay = ScreenPlay:new {
 		eisley = {"tatooine", 3600, 5, -4785},
 		espa = {"tatooine", -2835, 5, 2105},
 		entha = {"tatooine", 1265, 7, 3065},
+		jabbas_palace = {"tatooine", -6171.6, 90, -6381.5},
 		yavin4_mining = {"yavin4", -267, 35, 4896},
 		labor = {"yavin4", -6921, 73, -5726},
 		yavin4_imperial = {"yavin4", 4054, 37, -6216},
