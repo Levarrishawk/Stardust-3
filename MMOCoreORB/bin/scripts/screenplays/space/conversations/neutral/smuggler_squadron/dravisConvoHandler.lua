@@ -259,7 +259,10 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	local t2QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name)
 
-	if (ghost:getPilotTier() >= 3 and t2QuestFourComplete) then
+	-- Beissa owns Tier 3 once the player's pilot tier has advanced. Do not keep
+	-- her conversation dependent on the Tier 2 quest journal entry, since the
+	-- completed mission can be removed during the Talon Karrde handoff.
+	if (isBeissa and ghost:getPilotTier() >= 3) then
 		-- Same questName-vs-className constant defect as tier 4 (see NOTE above); literals below
 		-- carry the registered questNames.
 		local T3_SIDE_1A = { type = "patrol", name = "tatooine_privateer_tier3_1_A" }

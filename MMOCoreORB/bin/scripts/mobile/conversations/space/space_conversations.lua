@@ -119,6 +119,7 @@ includeFile("conversations/space/neutral/clone_relics/ep3_clone_relics_darth_vad
 
 -- Smuggler Squadron
 includeFile("conversations/space/neutral/smuggler_squadron/dravis_convo.lua")
+includeFile("conversations/space/neutral/smuggler_squadron/beissa_convo.lua")
 includeFile("conversations/space/neutral/smuggler_squadron/talon_karrde_pilot_convo.lua")
 
 -- RSF Squadron
