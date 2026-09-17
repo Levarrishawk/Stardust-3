@@ -382,8 +382,8 @@ assassinate_tatooine_privateer_tier2_2a = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "imp_tie_interceptor_tier3",
-		escorts = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
+		target = "smuggler_imperial_patrol_interceptor_tier3",
+		escorts = {"smuggler_imperial_patrol_fighter_tier2", "smuggler_imperial_patrol_fighter_tier2", "smuggler_imperial_patrol_fighter_tier2"},
 	},
 
 	targetPatrols = {
