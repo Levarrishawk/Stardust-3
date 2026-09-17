@@ -95,7 +95,12 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("recruitment")
 	-- Check to ensure player has a starter ship or one they can use
 	elseif (not hasShip and not questOneStarted) then
-		return convoTemplate:getScreen("no_ship")
+		grantStarterShip(pPlayer, "neutral")
+		hasShip = SpaceHelpers:hasCertifiedShip(pPlayer, true)
+
+		if (not hasShip) then
+			return convoTemplate:getScreen("no_ship")
+		end
 	end
 
 	-- Player destroyed their ship control device
@@ -659,6 +664,13 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		-- Set pilot tier
 		if (ghost:getPilotTier() < 1) then
 			ghost:incrementPilotTier()
+		end
+
+		-- Dravis supplies the starter ship as part of enlistment. Grant it here so
+		-- leaving the conversation before selecting the follow-up response cannot
+		-- leave a newly recruited Smuggler Squadron pilot without a ship.
+		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then
+			grantStarterShip(pPlayer, "neutral")
 		end
 
 		if (not SpaceHelpers:hasCertifiedShip(pPlayer, true)) then
