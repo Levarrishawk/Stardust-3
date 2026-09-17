@@ -1297,20 +1297,30 @@ da_la_socuna_convo_tier4_first_mission_success = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_first_mission_success)
 
--- Tier 4 mission 2 (assassinate)
+-- Tier 4 mission 2 (steal an advanced Imperial fighter)
 da_la_socuna_convo_tier4_second_mission = ConvoScreen:new {
 	id = "tier4_second_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_b659eebb",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_7b03d343",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_rebel_tier4:s_bc57b086", "accept_tier4_second_mission"},
+		{"@conversation/tatooine_rebel_tier4:s_d059f8aa", "tier4_second_empire_resources"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_second_mission)
 
+addUfwolTier4Screen("tier4_second_empire_resources", "s_83b2f3f1", "s_6425e854", "tier4_second_gut_it_out")
+addUfwolTier4Screen("tier4_second_gut_it_out", "s_ea7b0fb2", "s_6425e854", "tier4_second_work_smarter")
+addUfwolTier4Screen("tier4_second_work_smarter", "s_4ca48b38", "s_e816c4f3", "tier4_second_threat")
+addUfwolTier4Screen("tier4_second_threat", "s_4df417ce", "s_18d61e21", "tier4_second_hijack")
+addUfwolTier4Screen("tier4_second_hijack", "s_c946f118", "s_790d22d6", "tier4_second_not_easy")
+addUfwolTier4Screen("tier4_second_not_easy", "s_1cd7da68", "s_a33056f4", "tier4_second_test_ride")
+addUfwolTier4Screen("tier4_second_test_ride", "s_2183d62a", "s_d82b46ba", "tier4_second_assault_droid")
+addUfwolTier4Screen("tier4_second_assault_droid", "s_32b5bee1", "s_8e9d0848", "tier4_second_alliance_technology")
+addUfwolTier4Screen("tier4_second_alliance_technology", "s_92a98982", "s_49e55ca2", "accept_tier4_second_mission")
+
 da_la_socuna_convo_accept_tier4_second_mission = ConvoScreen:new {
 	id = "accept_tier4_second_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_9fcfe841",
 	stopConversation = "true",
 	options = {}
 }
