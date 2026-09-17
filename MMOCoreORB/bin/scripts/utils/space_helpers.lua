@@ -848,8 +848,16 @@ local function addFaZollWaypointImpl(pPlayer)
 	PlayerObject(pGhost):addWaypoint("naboo", "@npc_spawner_n:fa_zoll", "@npc_spawner_n:fa_zoll", 2444.4, 292, -3894.8, WAYPOINT_BLUE, true, true, 0)
 end
 
--- @param pPlayer pointer adds hand-off waypoint after finishing Smuggler Squadron tier 1
+-- @param pPlayer pointer adds the Talon Karrde hand-off waypoint after Smuggler Squadron tier 1
 function SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
+	if (pPlayer == nil) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost ~= nil) then
+		PlayerObject(pGhost):addWaypoint("tatooine", "@npc_spawner_n:talon_karrde", "@npc_spawner_n:talon_karrde", 3417, 0, -4795, WAYPOINT_BLUE, true, true, 0)
+	end
+end
+
+function SpaceHelpers:addShamdonKreeWaypoint(pPlayer)
 	if (pPlayer == nil) then return end
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 	if (pGhost ~= nil) then

@@ -58,10 +58,15 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		return convoTemplate:getScreen("rebel_pilot")
 	end
 
+	local awaitingTalonHandoff = false
+
 	if (SpaceHelpers:isSmugglerSquadron(pPlayer)) then
 		local pilotTier = ghost:getPilotTier()
+		awaitingTalonHandoff = isDravis and pilotTier == 2 and
+			SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 1) and
+			getQuestStatus(playerID .. "SmugglerSquadronScreenplay:dravis_finished") ~= "1"
 		local correctTrainer = (pilotTier <= 1 and isDravis) or (pilotTier == 2 and isShamdon) or
-			(pilotTier == 3 and isBeissa) or (pilotTier == 4 and isNirame)
+			(pilotTier == 3 and isBeissa) or (pilotTier == 4 and isNirame) or awaitingTalonHandoff
 
 		if (pilotTier < 5 and not correctTrainer) then
 			return convoTemplate:getScreen("go_to_next")
@@ -384,7 +389,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			Tier 2 (Kaydine-pattern dispatch; XP-gated training)
 	--]]
 
-	if (ghost:getPilotTier() >= 2) then
+	if (ghost:getPilotTier() >= 2 and not awaitingTalonHandoff) then
 		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name)
 		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name)
@@ -744,8 +749,8 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_4.name .. ":attempted", 1)
 		assassinate_tatooine_privateer_4:resetQuest(pPlayer)
 		assassinate_tatooine_privateer_4:startQuest(pPlayer, pNpc)
-	-- Finished: completed all Tier 1 skills, reassigned to Under Inquisitor Fa'Zoll (next trainer)
-	elseif (screenID == "directions_to_next" or screenID == "report_to_fazoll") then
+	-- Finished: completed all Tier 1 skills, report to Talon Karrde for the transition mission
+	elseif (screenID == "report_to_talon") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:dravis_finished", 1)
 		SpaceHelpers:addSmugglerNextWaypoint(pPlayer)

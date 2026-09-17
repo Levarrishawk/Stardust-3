@@ -500,19 +500,39 @@ dravis_convo_completed_sinkko = ConvoScreen:new {
 	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_be1beb37", -- Listen, something has come up that we need you to take care of. Talon Karrde's got a special assignment for you...
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_trainer_1:s_111621e7", "report_to_fazoll"}, -- Where do I go now?
+		{"@conversation/tatooine_privateer_trainer_1:s_8467c710", "talon_oh_and"}, -- Ok
 	}
 }
 dravis_convo:addScreen(dravis_convo_completed_sinkko)
 
--- Reassignment: grant waypoint to the next trainer (handler sets dravis_finished + waypoint)
-dravis_convo_report_to_fazoll = ConvoScreen:new {
-	id = "report_to_fazoll",
+dravis_convo_talon_oh_and = ConvoScreen:new {
+	id = "talon_oh_and",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_f17c03b4", -- Oh, and %TU...
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_1:s_9fdd7cf3", "talon_hyperdrive"}, -- Yes?
+	}
+}
+dravis_convo:addScreen(dravis_convo_talon_oh_and)
+
+dravis_convo_talon_hyperdrive = ConvoScreen:new {
+	id = "talon_hyperdrive",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_7d5682f4", -- You're going to need a ship with a hyperdrive. Do you have one?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_1:s_370822d1", "report_to_talon"}, -- Yes
+	}
+}
+dravis_convo:addScreen(dravis_convo_talon_hyperdrive)
+
+-- Reassignment: grant a waypoint to Talon Karrde in the same cantina room.
+dravis_convo_report_to_talon = ConvoScreen:new {
+	id = "report_to_talon",
 	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_d3d66c68", -- Excellent! Now talk to Talon Karrde.
 	stopConversation = "true",
 	options = {}
 }
-dravis_convo:addScreen(dravis_convo_report_to_fazoll)
+dravis_convo:addScreen(dravis_convo_report_to_talon)
 
 -- Player already reassigned, returns to Dravis
 dravis_convo_go_to_next = ConvoScreen:new {

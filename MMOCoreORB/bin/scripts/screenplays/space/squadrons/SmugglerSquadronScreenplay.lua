@@ -196,6 +196,65 @@ assassinate_tatooine_privateer_4 = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_4", true)
 
+-- Tier 1 transition: Talon Karrde's rendezvous with Nym's contact
+patrol_tat_priv_quest_trans = SpacePatrolScreenplay:new {
+	className = "patrol_tat_priv_quest_trans",
+
+	questName = "tat_priv_quest_trans",
+	questType = "patrol",
+
+	questZone = "space_lok",
+
+	creditReward = 0,
+
+	sideQuest = true,
+	sideQuestType = "assassinate",
+	sideQuestName = "tat_priv_quest_trans",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	sideQuestDelay = 5,
+
+	patrolPoints = {
+		{patrolPointName = "smuggler_talon_nym_rendezvous", x = 5200, z = 1250, y = -750, patrolNumber = 1, radius = 200},
+	},
+}
+
+registerScreenPlay("patrol_tat_priv_quest_trans", true)
+
+assassinate_tat_priv_quest_trans = SpaceAssassinateScreenplay:new {
+	className = "assassinate_tat_priv_quest_trans",
+
+	questName = "tat_priv_quest_trans",
+	questType = "assassinate",
+
+	questZone = "space_lok",
+
+	creditReward = 0,
+
+	parentQuest = "patrol_tat_priv_quest_trans",
+	parentQuestType = "patrol",
+	parentQuestName = "tat_priv_quest_trans",
+
+	sideQuest = false,
+	sideQuestType = "",
+
+	arrivalDelay = 5,
+	failTimer = 20,
+
+	assassinateSpawns = {
+		target = "corsair_behemoth_tier2",
+		escorts = {"corsair_manowar_tier1", "corsair_manowar_tier1", "corsair_manowar_tier1"},
+	},
+
+	targetPatrols = {
+		{patrolPointName = "smuggler_talon_corsair_1", x = 4750, z = 1100, y = -900},
+		{patrolPointName = "smuggler_talon_corsair_2", x = 4300, z = 900, y = -1250},
+		{patrolPointName = "smuggler_talon_corsair_3", x = 3900, z = 700, y = -900},
+		{patrolPointName = "smuggler_talon_corsair_4", x = 4300, z = 1000, y = -500},
+	},
+}
+
+registerScreenPlay("assassinate_tat_priv_quest_trans", true)
+
 -- Sinkko Duty Missions
 destroy_duty_tatooine_privateer_6 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_tatooine_privateer_6",
@@ -1946,6 +2005,8 @@ SmugglerSquadronScreenplay = ScreenPlay:new {
 	QUEST_STRING_3 = {type = "patrol", name = "tatooine_privateer_3"},
 	QUEST_STRING_3_SIDE = {type = "escort", name = "tatooine_privateer_3"},
 	QUEST_STRING_4 = {type = "assassinate", name = "tatooine_privateer_tier1_4a"},
+	QUEST_STRING_TRANS_PATROL = {type = "patrol", name = "tat_priv_quest_trans"},
+	QUEST_STRING_TRANS_ASSASSINATE = {type = "assassinate", name = "tat_priv_quest_trans"},
 	QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_privateer_6"},
 	QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "tatooine_privateer_7"},
 
@@ -2032,9 +2093,16 @@ function SmugglerSquadronScreenplay:resetDravisQuests(pPlayer)
 	assassinate_tatooine_privateer_4:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.QUEST_STRING_4.type, self.QUEST_STRING_4.name, false)
 
+	-- Talon Karrde transition mission
+	assassinate_tat_priv_quest_trans:resetQuest(pPlayer)
+	patrol_tat_priv_quest_trans:resetQuest(pPlayer)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.QUEST_STRING_TRANS_PATROL.type, self.QUEST_STRING_TRANS_PATROL.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.QUEST_STRING_TRANS_ASSASSINATE.type, self.QUEST_STRING_TRANS_ASSASSINATE.name, false)
+
 	local playerID = SceneObject(pPlayer):getObjectID()
 
 	removeQuestStatus(playerID .. "SmugglerSquadronScreenplay:dravis_finished")
+	removeQuestStatus(playerID .. "SmugglerSquadronScreenplay:talon_finished")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_1.name .. ":attempted")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_2.name .. ":attempted")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_3.name .. ":attempted")
