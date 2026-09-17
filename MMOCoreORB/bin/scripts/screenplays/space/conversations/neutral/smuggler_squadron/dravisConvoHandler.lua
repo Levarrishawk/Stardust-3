@@ -446,6 +446,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (ghost:getPilotTier() <= 2) then
 				ghost:incrementPilotTier()
 			end
+			setQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_finished", 1)
 			SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
 
 			return convoTemplate:getScreen("tier2_completed_kaydine")
@@ -856,6 +857,13 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward", 1)
 		assassinate_tatooine_privateer_tier2_2a:rewardPlayer(pPlayer)
+		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_finished", 1)
+
+		if (ghost:getPilotTier() <= 2 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
+			ghost:incrementPilotTier()
+		end
+
+		SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
 	elseif (screenID == "tier2_turnover_intelligence") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)

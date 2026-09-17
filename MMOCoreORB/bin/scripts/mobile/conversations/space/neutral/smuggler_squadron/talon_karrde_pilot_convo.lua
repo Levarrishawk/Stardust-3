@@ -88,6 +88,52 @@ local alreadyComplete = ConvoScreen:new {
 }
 talon_karrde_pilot_convo:addScreen(alreadyComplete)
 
+local tier2HandoffIntro = ConvoScreen:new {
+	id = "tier2_handoff_intro",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_9a287fb8", -- What? Why? What did you do?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_2:s_9cf1e4c3", "tier2_handoff_jabba"}, -- Say no more.
+	}
+}
+talon_karrde_pilot_convo:addScreen(tier2HandoffIntro)
+
+local tier2HandoffJabba = ConvoScreen:new {
+	id = "tier2_handoff_jabba",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_fa31c92f", -- Jabba has asked for your services. Speak with Beissa in Jabba's Palace.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_2:s_de9b68cd", "tier2_handoff_explanation"}, -- Jabba wants me to work for him after what I did?
+	}
+}
+talon_karrde_pilot_convo:addScreen(tier2HandoffJabba)
+
+local tier2HandoffExplanation = ConvoScreen:new {
+	id = "tier2_handoff_explanation",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_7642f4a4", -- Jabba respects strength, and you showed backbone.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_2:s_805cb6f3", "tier2_handoff_final"}, -- Alright I will report to Jabba.
+	}
+}
+talon_karrde_pilot_convo:addScreen(tier2HandoffExplanation)
+
+local tier2HandoffFinal = ConvoScreen:new {
+	id = "tier2_handoff_final",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_9504aca1", -- Go talk to Beissa in Jabba's Palace.
+	stopConversation = "true",
+	options = {}
+}
+talon_karrde_pilot_convo:addScreen(tier2HandoffFinal)
+
+local tier2HandoffComplete = ConvoScreen:new {
+	id = "tier2_handoff_complete",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_9504aca1",
+	stopConversation = "true",
+	options = {}
+}
+talon_karrde_pilot_convo:addScreen(tier2HandoffComplete)
+
 local notReady = ConvoScreen:new {
 	id = "not_ready",
 	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_ff6979b6",

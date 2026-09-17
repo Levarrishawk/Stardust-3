@@ -2159,6 +2159,8 @@ function SmugglerSquadronScreenplay:resetTier2Quests(pPlayer)
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward")
+	removeQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_finished")
+	removeQuestStatus(playerID .. "SmugglerSquadronScreenplay:talon_tier3_handoff")
 	removeQuestStatus(playerID .. "SmugglerSquadron:tier2Smuggler")
 end
 
