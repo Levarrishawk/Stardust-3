@@ -1772,11 +1772,9 @@ dravis_convo:addScreen(dravis_failed_tier4_first_mission);
 
 dravis_tier4_first_mission_success = ConvoScreen:new {
 	id = "tier4_first_mission_success",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_bdc28bb4", -- You did a nice job protecting that scan vessel. We took a look at the tapes.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_8289ab5b", "tier4_second_mission"}, -- I'm ready for my next mission.
-	}
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_18b41c2f", -- Mission accomplished. You get a little off the top.
+	stopConversation = "true",
+	options = {}
 }
 dravis_convo:addScreen(dravis_tier4_first_mission_success);
 
@@ -1829,11 +1827,9 @@ dravis_convo:addScreen(dravis_failed_tier4_second_mission);
 
 dravis_tier4_second_mission_success = ConvoScreen:new {
 	id = "tier4_second_mission_success",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_41799e3b", -- You did good. I have a new mission for you.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_614d7ac4", "tier4_third_mission"}, -- What is the mission?
-	}
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_1371de7b", -- Happy to see TIE fighter debris. Nice work.
+	stopConversation = "true",
+	options = {}
 }
 dravis_convo:addScreen(dravis_tier4_second_mission_success);
 
@@ -1876,11 +1872,9 @@ dravis_convo:addScreen(dravis_failed_tier4_third_mission);
 
 dravis_tier4_third_mission_success = ConvoScreen:new {
 	id = "tier4_third_mission_success",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_44b1cd3c", -- Mm. We'll see. Let's get you going on a new mission.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_614d7ac4", "tier4_fourth_mission"}, -- What is the mission?
-	}
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_62b0748", -- Everything's coming up roses.
+	stopConversation = "true",
+	options = {}
 }
 dravis_convo:addScreen(dravis_tier4_third_mission_success);
 
@@ -1923,15 +1917,9 @@ dravis_convo:addScreen(dravis_failed_tier4_fourth_mission);
 
 dravis_tier4_fourth_mission_success = ConvoScreen:new {
 	id = "tier4_fourth_mission_success",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_92fa7352", -- I have just been informed that Grand Admiral Nial Declann has ordered that you be transferred to his squadron, effective immediately...
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_9fe8c7e7", "master_what_want"}, -- Does it say what they want from me?
-		{"@conversation/naboo_privateer_tier4:s_7177c3f2", "master_who_declann"}, -- Who is Grand Admiral Nial Declann?
-		{"@conversation/naboo_privateer_tier4:s_50d4081c", "master_where_report"}, -- Where do I report?
-		{"@conversation/naboo_privateer_tier4:s_57f232d6", "master_becoming_imperial"}, -- I am going to become an Imperial?
-		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
-	}
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_35a6c533", -- You've got it!
+	stopConversation = "true",
+	options = {}
 }
 dravis_convo:addScreen(dravis_tier4_fourth_mission_success);
 
@@ -2009,7 +1997,7 @@ dravis_convo:addScreen(dravis_tier4_completed);
 
 dravis_ready_train_tier4 = ConvoScreen:new {
 	id = "ready_train_tier4",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_d91c04b2", -- I'm supposed to give you a skill. Hurry up. Let's get this over with.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_9a63e564", -- Pilots like you receive skills training. Pick your poison.
 	stopConversation = "false",
 	options = {
 		-- Options added dynamically via handler
@@ -2019,7 +2007,7 @@ dravis_convo:addScreen(dravis_ready_train_tier4);
 
 dravis_tier4_train_fighters = ConvoScreen:new {
 	id = "tier4_train_fighters",
-	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_bdae1e2f", -- Vessels! Done!
 	stopConversation = "true",
 	options = {}
 }
@@ -2027,7 +2015,7 @@ dravis_convo:addScreen(dravis_tier4_train_fighters);
 
 dravis_tier4_train_component = ConvoScreen:new {
 	id = "tier4_train_component",
-	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_c40a86d2", -- Components! Done!
 	stopConversation = "true",
 	options = {}
 }
@@ -2035,7 +2023,7 @@ dravis_convo:addScreen(dravis_tier4_train_component);
 
 dravis_tier4_train_basics = ConvoScreen:new {
 	id = "tier4_train_basics",
-	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_e3cee4d9", -- Techniques! Done!
 	stopConversation = "true",
 	options = {}
 }
@@ -2043,7 +2031,7 @@ dravis_convo:addScreen(dravis_tier4_train_basics);
 
 dravis_tier4_train_droid = ConvoScreen:new {
 	id = "tier4_train_droid",
-	leftDialog = "@conversation/naboo_privateer_trainer_1:s_cd72f93", -- Good choice.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_b00344d", -- Droids! Done!
 	stopConversation = "true",
 	options = {}
 }

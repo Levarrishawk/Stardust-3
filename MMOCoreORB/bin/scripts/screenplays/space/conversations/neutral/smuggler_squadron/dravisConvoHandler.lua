@@ -998,16 +998,16 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		local skillManager = LuaSkillManager()
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_starships_04")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_ada4db16", "tier4_train_fighters") -- Teach me about exotic vessels.
+			clonedConversation:addOption("@conversation/tatooine_privateer_tier4:s_842279cd", "tier4_train_fighters") -- How about exotic vessels?
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_weapons_04")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_25506b23", "tier4_train_component") -- Teach me about heavy starship component use.
+			clonedConversation:addOption("@conversation/tatooine_privateer_tier4:s_dbb3b0b0", "tier4_train_component") -- How about heavy starship component use?
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_procedures_04")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_fd7e4ac8", "tier4_train_basics") -- Teach me about expert techniques.
+			clonedConversation:addOption("@conversation/tatooine_privateer_tier4:s_ee28691a", "tier4_train_basics") -- How about expert techniques?
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_04") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_04")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_tier4:s_1813de4d", "tier4_train_droid") -- Teach me about droid intelligence theory.
+			clonedConversation:addOption("@conversation/tatooine_privateer_tier4:s_71d852f5", "tier4_train_droid") -- How about droid intelligence theory?
 		end
 
 	-- Handle Tier 4 Skill box granting
