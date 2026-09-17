@@ -390,6 +390,12 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	--]]
 
 	if (ghost:getPilotTier() >= 2 and not awaitingTalonHandoff) then
+		if (isShamdon and getQuestStatus(playerID .. "SmugglerSquadronScreenplay:talon_finished") ~= "1") then
+			return convoTemplate:getScreen("tier2_shamdon_not_ready")
+		elseif (isShamdon and getQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_started") ~= "1") then
+			return convoTemplate:getScreen("tier2_shamdon_intro")
+		end
+
 		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name)
 		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name)
@@ -585,6 +591,11 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 
 	if (ghost == nil) then
 		return pClonedScreen
+	end
+
+	if (screenID == "tier2_shamdon_payment") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_started", 1)
 	end
 
 	-- Handle first free training after completing all 4 missions (player chooses which skill)

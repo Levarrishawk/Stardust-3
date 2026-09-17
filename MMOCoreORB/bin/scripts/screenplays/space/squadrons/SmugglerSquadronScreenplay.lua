@@ -2103,6 +2103,7 @@ function SmugglerSquadronScreenplay:resetDravisQuests(pPlayer)
 
 	removeQuestStatus(playerID .. "SmugglerSquadronScreenplay:dravis_finished")
 	removeQuestStatus(playerID .. "SmugglerSquadronScreenplay:talon_finished")
+	removeQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_started")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_1.name .. ":attempted")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_2.name .. ":attempted")
 	removeQuestStatus(playerID .. SmugglerSquadronScreenplay.QUEST_STRING_3.name .. ":attempted")

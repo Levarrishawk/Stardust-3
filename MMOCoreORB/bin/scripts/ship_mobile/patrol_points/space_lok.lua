@@ -764,6 +764,12 @@ space_lok = SpacePatrolPointTable:new {
 	{patrolPointName = "eker_nym_2", x = 1492, z = 662, y = -2814},
 	{patrolPointName = "eker_nym_3", x = 2241, z = -1210, y = -2943},
 	{patrolPointName = "eker_nym_4", x = -2464, z = -1051, y = -2900},
+
+	-- Talon Karrde's tier 1 transition mission Corsair patrol route.
+	{patrolPointName = "smuggler_talon_corsair_1", x = 4750, z = 1100, y = -900},
+	{patrolPointName = "smuggler_talon_corsair_2", x = 4300, z = 900, y = -1250},
+	{patrolPointName = "smuggler_talon_corsair_3", x = 3900, z = 700, y = -900},
+	{patrolPointName = "smuggler_talon_corsair_4", x = 4300, z = 1000, y = -500},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_lok, "space_lok")

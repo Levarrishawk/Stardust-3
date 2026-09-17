@@ -571,6 +571,43 @@ dravis_tier2_completed_kaydine = ConvoScreen:new {
 }
 dravis_convo:addScreen(dravis_tier2_completed_kaydine);
 
+-- Shamdon's first conversation after the player delivers Talon Karrde's package.
+dravis_tier2_shamdon_intro = ConvoScreen:new {
+	id = "tier2_shamdon_intro",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_1c8bddbb", -- What is it?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d14c381d", "tier2_shamdon_package"}, -- I brought this from Lok.
+	}
+}
+dravis_convo:addScreen(dravis_tier2_shamdon_intro);
+
+dravis_tier2_shamdon_package = ConvoScreen:new {
+	id = "tier2_shamdon_package",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_2e6c7754", -- Oh you must be Talon Karrde's new man. Thanks for this. Here's the money Talon and I agreed upon.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_1a3dce13", "tier2_shamdon_payment"}, -- This isn't much money.
+	}
+}
+dravis_convo:addScreen(dravis_tier2_shamdon_package);
+
+dravis_tier2_shamdon_payment = ConvoScreen:new {
+	id = "tier2_shamdon_payment",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_69e17dd2", -- I'm sure I'll have more for you if you're up to doing some more jobs...
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_tier2_shamdon_payment);
+
+dravis_tier2_shamdon_not_ready = ConvoScreen:new {
+	id = "tier2_shamdon_not_ready",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_3c3002fc", -- Only Talon's people can be trusted around here.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_tier2_shamdon_not_ready);
+
 dravis_tier2_here_for_work = ConvoScreen:new {
 	id = "tier2_here_for_work",
 	leftDialog = "@conversation/naboo_privateer_trainer_2:s_c5fcc7f5", -- Greetings, Captain %TU! Are you ready to take my place on the duty roster?
