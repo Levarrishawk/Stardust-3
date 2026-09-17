@@ -1631,20 +1631,6 @@ dravis_tier4_on_mission = ConvoScreen:new {
 	leftDialog = "@conversation/naboo_privateer_tier4:s_67b2bdc1", -- Hurry up. It's time to get back to work.
 	stopConversation = "true",
 	options = {}
-
-
-dravis_tier4_on_mission = ConvoScreen:new {
-	id = "tier4_on_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_67b2bdc1", -- Hurry up. It's time to get back to work.
-	stopConversation = "true",
-	options = {}
-
-
-dravis_tier4_on_mission = ConvoScreen:new {
-	id = "tier4_on_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_67b2bdc1", -- Hurry up. It's time to get back to work.
-	stopConversation = "true",
-	options = {}
 }
 dravis_convo:addScreen(dravis_tier4_on_mission);
 
