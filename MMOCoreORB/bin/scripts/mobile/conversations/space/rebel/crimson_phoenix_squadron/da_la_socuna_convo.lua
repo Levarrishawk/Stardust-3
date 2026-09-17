@@ -1315,7 +1315,7 @@ addUfwolTier4Screen("tier4_second_threat", "s_4df417ce", "s_18d61e21", "tier4_se
 addUfwolTier4Screen("tier4_second_hijack", "s_c946f118", "s_790d22d6", "tier4_second_not_easy")
 addUfwolTier4Screen("tier4_second_not_easy", "s_1cd7da68", "s_a33056f4", "tier4_second_test_ride")
 addUfwolTier4Screen("tier4_second_test_ride", "s_2183d62a", "s_d82b46ba", "tier4_second_assault_droid")
-addUfwolTier4Screen("tier4_second_assault_droid", "s_32b5bee1", "s_8e9d0848", "tier4_second_alliance_technology")
+addUfwolTier4Screen("tier4_second_assault_droid", "s_32b7bf59", "s_8e9d0848", "tier4_second_alliance_technology")
 addUfwolTier4Screen("tier4_second_alliance_technology", "s_92a98982", "s_49e55ca2", "accept_tier4_second_mission")
 
 da_la_socuna_convo_accept_tier4_second_mission = ConvoScreen:new {
@@ -1401,7 +1401,7 @@ addUfwolTier4Screen("tier4_fourth_full_member", "s_856e4aab", "s_b3e9c738", "tie
 addUfwolTier4Screen("tier4_fourth_endor_failure", "s_323479fd", "s_1131a10a", "tier4_fourth_endor_intel")
 addUfwolTier4Screen("tier4_fourth_endor_intel", "s_5b998dc7", "s_71a53f8b", "tier4_fourth_activity")
 addUfwolTier4Screen("tier4_fourth_activity", "s_ba8b09ff", "s_fa396956", "tier4_fourth_unknown_project")
-addUfwolTier4Screen("tier4_fourth_unknown_project", "s_a72f79b2", "s_32b7bf59", "tier4_fourth_complex_project")
+addUfwolTier4Screen("tier4_fourth_unknown_project", "s_a72f79b2", "s_32b5bee1", "tier4_fourth_complex_project")
 addUfwolTier4Screen("tier4_fourth_complex_project", "s_4123d99b", "s_fbb318e5", "tier4_fourth_target")
 addUfwolTier4Screen("tier4_fourth_target", "s_b659eebb", "s_fb9f7cd6", "accept_tier4_fourth_mission")
 
