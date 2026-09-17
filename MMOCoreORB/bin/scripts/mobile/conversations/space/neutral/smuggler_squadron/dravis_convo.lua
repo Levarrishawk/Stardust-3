@@ -837,22 +837,22 @@ dravis_convo:addScreen(dravis_tier2_final_train_algorithms);
 
 dravis_tier2_first_mission = ConvoScreen:new {
 	id = "tier2_first_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_130b925b", -- We'll need you to catch up to the Ay'Nat Captain's personal starship... a rather fast vessel! Disable him, and protect the RSF Boarding Team while they arrest him.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d6924ee9", -- Welcome back, %NU. Are you ready to get back to work?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "tier2_start_first_mission"}, -- Yes, Captain. I'm ready.
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_start_first_mission"}, -- Yes.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_1aaeed53", "tier2_not_ready"}, -- No I am not.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_first_mission);
 
 dravis_tier2_failed_first_mission = ConvoScreen:new {
 	id = "tier2_failed_first_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_65042122", -- So, I hear you were not able to destroy all three of the Ay'Nat Legion's outlaw fighters. But don't worry...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_3b48f08", -- That Canyon Corsair leader needs to be taken out! He's responsible for our lost transports in the Lok system. Go defeat him!
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_4a1d2431", "tier2_try_first_mission"}, -- Yes, I'm ready.
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_try_first_mission"}, -- Yes.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"}, -- No, not quite yet.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_failed_first_mission);
@@ -867,7 +867,7 @@ dravis_convo:addScreen(dravis_tier2_start_first_mission);
 
 dravis_tier2_try_first_mission = ConvoScreen:new {
 	id = "tier2_try_first_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_726bdb69", -- Good! Then let's get you back out there right away!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_89555084", -- Excellent. I want you to head to Lok and destroy a Canyon Corsair Behemoth.
 	stopConversation = "true",
 	options = {}
 }
@@ -875,7 +875,7 @@ dravis_convo:addScreen(dravis_tier2_try_first_mission);
 
 dravis_tier2_cant_wait_first = ConvoScreen:new {
 	id = "tier2_cant_wait_first",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_a80d9308", -- Good luck!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_89555084", -- Excellent. I want you to head to Lok and destroy a Canyon Corsair Behemoth.
 	stopConversation = "true",
 	options = {}
 }
@@ -1160,7 +1160,7 @@ dravis_convo:addScreen(dravis_tier2_fourth_mission_success);
 
 dravis_tier2_not_ready = ConvoScreen:new {
 	id = "tier2_not_ready",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_943f6352", -- Alright. Hurry up and come back when you're ready.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_66b1a06f", -- Alright. Come see me when you're ready.
 	stopConversation = "true",
 	options = {}
 }
