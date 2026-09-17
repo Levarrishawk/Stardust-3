@@ -211,8 +211,12 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			end
 			return convoTemplate:getScreen("tier4_duty_repeat")
 
-		-- Has not received the tier 4 briefing from General Ufwol yet
-		elseif (getQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4") ~= "1") then
+		-- The mission attempt is authoritative. Older versions marked the briefing as
+		-- started before the player accepted it, which could strand the conversation
+		-- at the final briefing screen on the next interaction.
+		elseif (not t4QuestOneStarted and not t4QuestOneComplete and
+			getQuestStatus(playerID .. CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted") ~= "1") then
+			removeQuestStatus(playerID .. "CrimsonPhoenixSquadronScreenplay:StartedSocunaTier4")
 			return convoTemplate:getScreen("tier4_initial_briefing")
 
 		-- Missions are not complete yet
