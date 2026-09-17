@@ -908,16 +908,16 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		end
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_03")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_tier3:s_c634ffcd", "tier3_train_warships" .. screenAppend) -- Teach me about special warships.
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_aa766bd6", "tier3_train_warships" .. screenAppend) -- I want to know about special warships.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_03")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_tier3:s_a9aeb386", "tier3_train_components" .. screenAppend) -- Teach me about advanced starship component use.
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_a70b470e", "tier3_train_components" .. screenAppend) -- I want to know about advanced starship components.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_03")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_tier3:s_523a54d5", "tier3_train_techniques" .. screenAppend) -- Teach me about advanced techniques.
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_da0e8cd0", "tier3_train_techniques" .. screenAppend) -- I want to know about advanced techniques.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_03")) then
-			clonedConversation:addOption("@conversation/tatooine_privateer_tier3:s_473d09d8", "tier3_train_programming" .. screenAppend) -- Teach me about system balance programming.
+			clonedConversation:addOption("@conversation/naboo_privateer_tier3:s_c28a300f", "tier3_train_programming" .. screenAppend) -- I want to know about system balance programming.
 		end
 
 	-- Handle Tier 3 Skill box granting
