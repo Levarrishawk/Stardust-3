@@ -415,7 +415,10 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		local completedTier2 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)
 		local tier2SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 2)
-		local requiredTier2Skills = t2QuestFourComplete and 4 or t2QuestThreeComplete and 3 or t2QuestTwoComplete and 2 or t2QuestOneComplete and 1 or 0
+		-- Talon Karrde's transition mission is the first tier 2 mission milestone.
+		-- Shamdon therefore trains the first tier 2 skill before assigning her
+		-- Corsair Behemoth mission, then continues the normal mission/training loop.
+		local requiredTier2Skills = t2QuestThreeComplete and 4 or t2QuestTwoComplete and 3 or t2QuestOneComplete and 2 or 1
 
 		-- Player has an active tier 2 mission from Dravis
 		if ((t2QuestOneStarted and not t2QuestOneComplete) or (t2QuestTwoStarted and not t2QuestTwoComplete) or (t2QuestThreeStarted and not t2QuestThreeComplete) or (t2QuestFourStarted and not t2QuestFourComplete) or
@@ -782,16 +785,16 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		end
 
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_starships_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_starships_02")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_45b71b4d", responseString .. "train_fighters") -- I am interested in advanced fighters.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_shamdon:s_45b71b4d", responseString .. "train_fighters") -- I am interested in advanced fighters.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_weapons_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_weapons_02")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_197f4f94", responseString .. "train_components") -- I am interested in intermediate starship component use.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_shamdon:s_197f4f94", responseString .. "train_components") -- I am interested in intermediate starship component use.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_procedures_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_procedures_02")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_8f5942fa", responseString .. "train_techniques") -- I am interested in starship defense training.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_shamdon:s_8f5942fa", responseString .. "train_techniques") -- I am interested in starship defense training.
 		end
 		if (not CreatureObject(pPlayer):hasSkill("pilot_neutral_droid_02") and skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_02")) then
-			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_eff66f4d", responseString .. "train_algorithms") -- I am interested in reactor engineering algorithms.
+			clonedConversation:addOption("@conversation/tatooine_privateer_trainer_shamdon:s_eff66f4d", responseString .. "train_algorithms") -- I am interested in reactor engineering algorithms.
 		end
 
 	-- Handle Tier 2 Skill box granting

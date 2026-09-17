@@ -657,7 +657,7 @@ dravis_convo:addScreen(dravis_tier2_accept_duty_recovery);
 
 dravis_tier2_ready_train_pilot = ConvoScreen:new {
 	id = "tier2_ready_train_pilot",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8a84109d", -- It must be your lucky day. I actually do have some elective duty missions. Take a look and tell me what you want.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_383435", -- You've done an excellent job for me, %NU. I can see that you are ready for more training. What are you interested in learning?
 	stopConversation = "false",
 	options = {}
 }
@@ -665,33 +665,45 @@ dravis_convo:addScreen(dravis_tier2_ready_train_pilot);
 
 dravis_tier2_initial_train_fighters = ConvoScreen:new {
 	id = "tier2_initial_train_fighters",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4aa3066e", -- Ah yes! Good choice! Learning to fly many different types of ships makes an effective pilot!
-	stopConversation = "true",
-	options = {}
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_2fef6afd", -- Good choice. No doubt that will come in handy soon. Are you ready for your next assignment?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_36a4e374", "tier2_start_first_mission"}, -- Yes, I am.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"}, -- No, not quite yet.
+	}
 }
 dravis_convo:addScreen(dravis_tier2_initial_train_fighters);
 
 dravis_tier2_initial_train_components = ConvoScreen:new {
 	id = "tier2_initial_train_components",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8ad6a62e", -- You bet! New components should make your ship more than a match against a dozen Ay'Nat Ghost Fighters!
-	stopConversation = "true",
-	options = {}
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c", -- Good choice. Your new abilities will come in handy soon. Are you ready for your next assignment?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_36a4e374", "tier2_start_first_mission"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"},
+	}
 }
 dravis_convo:addScreen(dravis_tier2_initial_train_components);
 
 dravis_tier2_initial_train_techniques = ConvoScreen:new {
 	id = "tier2_initial_train_techniques",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_f32117e", -- You bet! New defense procedures should make you more than a match against a dozen Ay'Nat Ghost Fighters!
-	stopConversation = "true",
-	options = {}
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_36a4e374", "tier2_start_first_mission"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"},
+	}
 }
 dravis_convo:addScreen(dravis_tier2_initial_train_techniques);
 
 dravis_tier2_initial_train_algorithms = ConvoScreen:new {
 	id = "tier2_initial_train_algorithms",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_fd75abb", -- You bet! New droid algorithms in there should make you more than a match against a dozen Ay'Nat Ghost Fighters!
-	stopConversation = "true",
-	options = {}
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_36a4e374", "tier2_start_first_mission"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"},
+	}
 }
 dravis_convo:addScreen(dravis_tier2_initial_train_algorithms);
 
@@ -847,7 +859,7 @@ dravis_convo:addScreen(dravis_tier2_failed_first_mission);
 
 dravis_tier2_start_first_mission = ConvoScreen:new {
 	id = "tier2_start_first_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_a80d9308", -- Good luck!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_89555084", -- Excellent. I want you to head to Lok and destroy a Canyon Corsair Behemoth.
 	stopConversation = "true",
 	options = {}
 }
