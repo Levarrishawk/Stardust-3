@@ -165,7 +165,7 @@ assassinate_tatooine_privateer_4 = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_4",
 
 	questType = "assassinate",
-	questName = "tatooine_privateer_4",
+	questName = "tatooine_privateer_tier1_4a",
 
 	questZone = "space_tatooine",
 
@@ -1945,7 +1945,7 @@ SmugglerSquadronScreenplay = ScreenPlay:new {
 	QUEST_STRING_2 = {type = "destroy", name = "tatooine_privateer_2"},
 	QUEST_STRING_3 = {type = "patrol", name = "tatooine_privateer_3"},
 	QUEST_STRING_3_SIDE = {type = "escort", name = "tatooine_privateer_3"},
-	QUEST_STRING_4 = {type = "assassinate", name = "tatooine_privateer_4"},
+	QUEST_STRING_4 = {type = "assassinate", name = "tatooine_privateer_tier1_4a"},
 	QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_privateer_6"},
 	QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "tatooine_privateer_7"},
 
