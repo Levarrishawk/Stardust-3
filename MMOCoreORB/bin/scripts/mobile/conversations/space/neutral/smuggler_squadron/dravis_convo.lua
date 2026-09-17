@@ -1628,7 +1628,7 @@ dravis_convo:addScreen(dravis_tier3_train_programming);
 
 dravis_tier4_on_mission = ConvoScreen:new {
 	id = "tier4_on_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_67b2bdc1", -- Hurry up. It's time to get back to work.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_aeab6bd1", -- Get back to work!
 	stopConversation = "true",
 	options = {}
 }
@@ -1636,38 +1636,127 @@ dravis_convo:addScreen(dravis_tier4_on_mission);
 
 dravis_tier4_initial_briefing = ConvoScreen:new {
 	id = "tier4_initial_briefing",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_cdffba3e", -- Tsk. You're late. That's not a good way to start your tour with me, pilot. Are you ready to begin? I have a briefing prepped for you.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_9a63e564", -- Pilots like you receive skills training. Get ready.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_c82e9a2f", "tier4_first_mission"}, -- Yes, please.
+		{"@conversation/tatooine_privateer_tier4:s_c1ff5062", "tier4_nirame_training"}, -- I'm looking for a mission. Do you have any?
 	}
 }
 dravis_convo:addScreen(dravis_tier4_initial_briefing);
 
-dravis_tier4_first_mission = ConvoScreen:new {
-	id = "tier4_first_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_a82676b8", -- Royal Security Forces are using a deep space scan vessel in Endor space.
+dravis_tier4_nirame_training = ConvoScreen:new {
+	id = "tier4_nirame_training",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_842279cd", -- How about exotic vessels?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_b2e340f6", "tier4_first_mission_details"}, -- What's that?
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_first_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_67e6df55", "tier4_nirame_jabba"}, -- Okay.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_training);
+
+dravis_tier4_nirame_jabba = ConvoScreen:new {
+	id = "tier4_nirame_jabba",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_da0b2b1e", -- Now then. You did good work with Jabba.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_fc27931b", "tier4_nirame_compliment"}, -- Thanks.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_jabba);
+
+dravis_tier4_nirame_compliment = ConvoScreen:new {
+	id = "tier4_nirame_compliment",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_2a9aa104", -- I just gave you a compliment. I never give compliments.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_b3e1da76", "tier4_nirame_jabba_happy"}, -- Aw shucks. Lucky me.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_compliment);
+
+dravis_tier4_nirame_jabba_happy = ConvoScreen:new {
+	id = "tier4_nirame_jabba_happy",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_616c8086", -- If Jabba's happy, we're happy.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_61657d0f", "tier4_nirame_business"}, -- I see.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_jabba_happy);
+
+dravis_tier4_nirame_business = ConvoScreen:new {
+	id = "tier4_nirame_business",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_10c507d9", -- Now that Jabba's content, we can go about our business.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_ad973bd9", "tier4_nirame_get_to_work"}, -- Yeah.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_business);
+
+dravis_tier4_nirame_get_to_work = ConvoScreen:new {
+	id = "tier4_nirame_get_to_work",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_e9125b15", -- What have you done for me lately? Had enough of this place?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_cfd8a48c", "tier4_nirame_galaxy"}, -- Enough for a lifetime!
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_get_to_work);
+
+dravis_tier4_nirame_galaxy = ConvoScreen:new {
+	id = "tier4_nirame_galaxy",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_d48df184", -- There's a whole galaxy of booty out there.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_2bf9b1f7", "tier4_nirame_warning"}, -- Oh yeah.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_galaxy);
+
+dravis_tier4_nirame_warning = ConvoScreen:new {
+	id = "tier4_nirame_warning",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_39d3e7a3", -- It's the big time. Lots of unsavory elements are out there.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_53de9d8f", "tier4_nirame_enemies"}, -- Like what?
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_warning);
+
+dravis_tier4_nirame_enemies = ConvoScreen:new {
+	id = "tier4_nirame_enemies",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_30ea47ea", -- CorSec, RSF, Imperials, and Lady Valarian are gunning for us.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_fc7d0eed", "tier4_first_mission"}, -- I can handle them.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_nirame_enemies);
+
+dravis_tier4_first_mission = ConvoScreen:new {
+	id = "tier4_first_mission",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_c870211d", -- Transfer Nym's spice to a Hutt smuggler.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_741df7ed", "tier4_first_mission_details"}, -- Where?
 	}
 }
 dravis_convo:addScreen(dravis_tier4_first_mission);
 
 dravis_tier4_first_mission_details = ConvoScreen:new {
 	id = "tier4_first_mission_details",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_a224e8fe", -- A deep space scan vessel. It's an RSF ship. We're using it to investigate Endor space.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_e9b39b51", -- Lok. This is strictly a space mission.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_first_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_e79eddec", "accept_tier4_first_mission"}, -- Sounds like fun.
 	}
 }
 dravis_convo:addScreen(dravis_tier4_first_mission_details);
 
 dravis_accept_tier4_first_mission = ConvoScreen:new {
 	id = "accept_tier4_first_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_90422eb5", -- Good luck.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_164c9f60", -- The coordinates are in your ship's database.
 	stopConversation = "true",
 	options = {}
 }

@@ -208,10 +208,8 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			end
 			return convoTemplate:getScreen("tier4_duty_repeat")
 
-		-- Has not received the tier 4 briefing from Dravis yet
+		-- Keep Nirame's opening briefing available until its mission is accepted.
 		elseif (getQuestStatus(playerID .. "SmugglerSquadronScreenplay:StartedTier4") ~= "1") then
-			setQuestStatus(playerID .. "SmugglerSquadronScreenplay:StartedTier4", 1)
-
 			return convoTemplate:getScreen("tier4_initial_briefing")
 
 		-- Missions are not complete yet
@@ -1095,6 +1093,7 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		recovery_tatooine_privateer_tier4_2a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_first_mission" or screenID == "failed_tier4_first_mission") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:StartedTier4", 1)
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER4_QUEST_STRING_1.name .. ":attempted", 1)
 
 		delivery_tatooine_privateer_tier4_1a:resetQuest(pPlayer)
