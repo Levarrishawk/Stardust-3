@@ -479,61 +479,120 @@ beissa_tier3_fourth_mission = ConvoScreen:new {
 	leftDialog = "@conversation/tatooine_privateer_tier3:s_f390de3b",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_tier3:s_e2b3bd3d", "tier3_another_assassin"},
-		{"@conversation/tatooine_privateer_tier3:s_719a036e", "tier3_who"},
+		{"@conversation/tatooine_privateer_tier3:s_e2b3bd3d", "tier3_party_foundation"},
 	}
 }
 beissa_convo:addScreen(beissa_tier3_fourth_mission);
 
-beissa_tier3_another_assassin = ConvoScreen:new {
-	id = "tier3_another_assassin",
+beissa_tier3_party_foundation = ConvoScreen:new {
+	id = "tier3_party_foundation",
 	leftDialog = "@conversation/tatooine_privateer_tier3:s_2795978a",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_tier3:s_58081a79", "tier3_beldini_target"},
+		{"@conversation/tatooine_privateer_tier3:s_6713da6c", "tier3_jabbas_friends"},
 	}
 }
-beissa_convo:addScreen(beissa_tier3_another_assassin);
+beissa_convo:addScreen(beissa_tier3_party_foundation);
 
-beissa_tier3_who = ConvoScreen:new {
-	id = "tier3_who",
+beissa_tier3_jabbas_friends = ConvoScreen:new {
+	id = "tier3_jabbas_friends",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_7f124363",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier3:s_9754c9cf", "tier3_respect_jabba"},
+	}
+}
+beissa_convo:addScreen(beissa_tier3_jabbas_friends);
+
+beissa_tier3_respect_jabba = ConvoScreen:new {
+	id = "tier3_respect_jabba",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_821a5372",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier3:s_58081a79", "tier3_business_booming"},
+	}
+}
+beissa_convo:addScreen(beissa_tier3_respect_jabba);
+
+beissa_tier3_business_booming = ConvoScreen:new {
+	id = "tier3_business_booming",
 	leftDialog = "@conversation/tatooine_privateer_tier3:s_99b1ec0",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_tier3:s_dd19988e", "tier3_shoot_first"},
+		{"@conversation/tatooine_privateer_tier3:s_dd19988e", "tier3_new_clan"},
 	}
 }
-beissa_convo:addScreen(beissa_tier3_who);
+beissa_convo:addScreen(beissa_tier3_business_booming);
 
-beissa_tier3_beldini_target = ConvoScreen:new {
-	id = "tier3_beldini_target",
+beissa_tier3_new_clan = ConvoScreen:new {
+	id = "tier3_new_clan",
 	leftDialog = "@conversation/tatooine_privateer_tier3:s_83c2b64",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_tier3:s_800d8ca1", "tier3_just_tell_where"},
+		{"@conversation/tatooine_privateer_tier3:s_800d8ca1", "tier3_rancor_clan"},
 	}
 }
-beissa_convo:addScreen(beissa_tier3_beldini_target);
+beissa_convo:addScreen(beissa_tier3_new_clan);
 
-beissa_tier3_shoot_first = ConvoScreen:new {
-	id = "tier3_shoot_first",
-	leftDialog = "@conversation/tatooine_privateer_tier3:s_5d667e15",
+beissa_tier3_rancor_clan = ConvoScreen:new {
+	id = "tier3_rancor_clan",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_f0fbdf16",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_tier3:s_bc375f79", "tier3_accept_fourth_mission"},
+		{"@conversation/tatooine_privateer_tier3:s_272a2246", "tier3_rancor_threat"},
 	}
 }
-beissa_convo:addScreen(beissa_tier3_shoot_first);
+beissa_convo:addScreen(beissa_tier3_rancor_clan);
 
-beissa_tier3_just_tell_where = ConvoScreen:new {
-	id = "tier3_just_tell_where",
-	leftDialog = "@conversation/tatooine_privateer_tier3:s_5d667e15",
+beissa_tier3_rancor_threat = ConvoScreen:new {
+	id = "tier3_rancor_threat",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_65ef9330",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_privateer_tier3:s_bc375f79", "tier3_accept_fourth_mission"},
+		{"@conversation/tatooine_privateer_tier3:s_98b1ccd4", "tier3_dathomir_friends"},
 	}
 }
-beissa_convo:addScreen(beissa_tier3_just_tell_where);
+beissa_convo:addScreen(beissa_tier3_rancor_threat);
+
+beissa_tier3_dathomir_friends = ConvoScreen:new {
+	id = "tier3_dathomir_friends",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_b3b84a9f",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier3:s_d33e2776", "tier3_slow_death"},
+	}
+}
+beissa_convo:addScreen(beissa_tier3_dathomir_friends);
+
+beissa_tier3_slow_death = ConvoScreen:new {
+	id = "tier3_slow_death",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_1e9e6433",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier3:s_1e18c922", "tier3_patrol_rancors"},
+	}
+}
+beissa_convo:addScreen(beissa_tier3_slow_death);
+
+beissa_tier3_patrol_rancors = ConvoScreen:new {
+	id = "tier3_patrol_rancors",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_55fa5d7a",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier3:s_bc375f79", "tier3_vigo_warning"},
+	}
+}
+beissa_convo:addScreen(beissa_tier3_patrol_rancors);
+
+beissa_tier3_vigo_warning = ConvoScreen:new {
+	id = "tier3_vigo_warning",
+	leftDialog = "@conversation/tatooine_privateer_tier3:s_a92435e7",
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier3:s_ea9e3ad2", "tier3_accept_fourth_mission"},
+	}
+}
+beissa_convo:addScreen(beissa_tier3_vigo_warning);
 
 beissa_tier3_accept_fourth_mission = ConvoScreen:new {
 	id = "tier3_accept_fourth_mission",
