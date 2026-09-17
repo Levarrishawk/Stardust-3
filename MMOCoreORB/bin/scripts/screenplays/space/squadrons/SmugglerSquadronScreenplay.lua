@@ -336,6 +336,9 @@ assassinate_tatooine_privateer_tier2_1a = SpaceAssassinateScreenplay:new {
 	questZone = "space_lok",
 
 	creditReward = 5000,
+	itemReward = {
+		{species = {-1}, item = "object/tangible/ship/components/booster/bst_mission_reward_neutral_mandal_m_series.iff"},
+	},
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -358,7 +361,7 @@ assassinate_tatooine_privateer_tier2_1a = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier2_1a", true)
 
--- Mission 2: Destroy the Imperial patrol in Dantooine
+-- Client quest tier2_2a: Destroy the Imperial patrol in Dantooine (story mission 4)
 assassinate_tatooine_privateer_tier2_2a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier2_2a",
 
@@ -368,6 +371,9 @@ assassinate_tatooine_privateer_tier2_2a = SpaceAssassinateScreenplay:new {
 	questZone = "space_dantooine",
 
 	creditReward = 5000,
+	itemReward = {
+		{species = {-1}, item = "object/tangible/ship/components/weapon/wpn_mission_reward_neutral_hk_military_blaster.iff"},
+	},
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -390,7 +396,7 @@ assassinate_tatooine_privateer_tier2_2a = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier2_2a", true)
 
--- Mission 3: Destroy the Black Sun Ace in Yavin
+-- Client quest tier2_3a: Destroy the Black Sun Ace in Yavin (story mission 2)
 assassinate_tatooine_privateer_tier2_3a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier2_3a",
 
@@ -400,6 +406,9 @@ assassinate_tatooine_privateer_tier2_3a = SpaceAssassinateScreenplay:new {
 	questZone = "space_yavin4",
 
 	creditReward = 5000,
+	itemReward = {
+		{species = {-1}, item = "object/tangible/ship/components/shield_generator/shd_mission_reward_neutral_koensayr_ds23.iff"},
+	},
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -408,7 +417,9 @@ assassinate_tatooine_privateer_tier2_3a = SpaceAssassinateScreenplay:new {
 	failTimer = 20,
 
 	assassinateSpawns = {
-		target = "blacksun_ace_s04_tier3",
+		-- This mobile uses the tier 3 Kihraxz ship and pilot templates. The
+		-- similarly named tier3 mobile is internally configured as tier 4.
+		target = "blacksun_ace_s04_tier2",
 		escorts = {"blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier2"},
 	},
 
@@ -422,7 +433,7 @@ assassinate_tatooine_privateer_tier2_3a = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tatooine_privateer_tier2_3a", true)
 
--- Mission 4: Escort the Valarian freighter through Tatooine
+-- Client quest tier2_4a: Escort the Valarian freighter through Tatooine (story mission 3)
 escort_tatooine_privateer_tier2_4a = SpaceEscortScreenplay:new {
 	className = "escort_tatooine_privateer_tier2_4a",
 
@@ -432,7 +443,9 @@ escort_tatooine_privateer_tier2_4a = SpaceEscortScreenplay:new {
 	questZone = "space_tatooine",
 
 	creditReward = 5000,
-	itemReward = {},
+	itemReward = {
+		{species = {-1}, item = "object/tangible/ship/components/droid_interface/ddi_mission_reward_neutral_sorosuub_w19.iff"},
+	},
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -2012,9 +2025,9 @@ SmugglerSquadronScreenplay = ScreenPlay:new {
 
 	-- Tier 2
 	TIER2_QUEST_STRING_1 = {type = "assassinate", name = "tatooine_privateer_tier2_1a"},
-	TIER2_QUEST_STRING_2 = {type = "assassinate", name = "tatooine_privateer_tier2_2a"},
-	TIER2_QUEST_STRING_3 = {type = "assassinate", name = "tatooine_privateer_tier2_3a"},
-	TIER2_QUEST_STRING_4 = {type = "escort", name = "tatooine_privateer_tier2_4a"},
+	TIER2_QUEST_STRING_2 = {type = "assassinate", name = "tatooine_privateer_tier2_3a"},
+	TIER2_QUEST_STRING_3 = {type = "escort", name = "tatooine_privateer_tier2_4a"},
+	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "tatooine_privateer_tier2_2a"},
 	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_privateer_tier2_1"},
 	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "tatooine_privateer_tier2_1"},
 	TIER2_QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "tatooine_privateer_tier2_1"},

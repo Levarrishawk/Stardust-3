@@ -557,7 +557,7 @@ dravis_convo:addScreen(dravis_convo_go_to_next)
 
 dravis_tier2_on_mission = ConvoScreen:new {
 	id = "tier2_on_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_e95a95a5", -- I believe you have some business to attend to... in space?
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_98adf66d", -- I can see you're busy. Come talk to me when you've got some time.
 	stopConversation = "true",
 	options = {}
 }
@@ -565,7 +565,7 @@ dravis_convo:addScreen(dravis_tier2_on_mission);
 
 dravis_tier2_completed_kaydine = ConvoScreen:new {
 	id = "tier2_completed_kaydine",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_aae78dca", -- I think it's time for you to take on more responsibilities. Head deeper into the palace, my friend! Look for Commander Dulios.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_52e7e5e", -- You'd better go talk to Talon Karrde.
 	stopConversation = "true",
 	options = {}
 }
@@ -610,30 +610,29 @@ dravis_convo:addScreen(dravis_tier2_shamdon_not_ready);
 
 dravis_tier2_here_for_work = ConvoScreen:new {
 	id = "tier2_here_for_work",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_c5fcc7f5", -- Greetings, Captain %TU! Are you ready to take my place on the duty roster?
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_5d262b71", -- You are here for work now, yes?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_6114e8b7", "tier2_duty_options"}, -- I'm ready for duty
-		{"@conversation/naboo_privateer_trainer_2:s_45d20070", "tier2_ready_train_pilot"}, -- I need training
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_36a4e374", "tier2_duty_options"}, -- Yes, I am.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_here_for_work);
 
 dravis_tier2_duty_options = ConvoScreen:new {
 	id = "tier2_duty_options",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_63053557", -- Good! What duty element do you want to participate in today?
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_5af9448", -- Good. There are a number of things you can do for me.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_c892e540", "tier2_accept_duty_destroy1"}, -- Destroy Ay'Nat Legion pirates in this system.
-		{"@conversation/naboo_privateer_trainer_2:s_9b73da8", "tier2_accept_duty_escort"}, -- Protect the Royal Kylantha cargo.
-		{"@conversation/naboo_privateer_trainer_2:s_30297e22", "tier2_accept_duty_recovery"}, -- Recover ships stolen by the Ay'Nat Legion.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_93ba78e7", "tier2_accept_duty_destroy1"}, -- Kill Black Sun Pirates in Yavin.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_c631f8da", "tier2_accept_duty_escort"}, -- Escort Transports in Lok.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_6ff30da7", "tier2_accept_duty_recovery"}, -- Hijack transports in Dantooine.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_duty_options);
 
 dravis_tier2_accept_duty_destroy1 = ConvoScreen:new {
 	id = "tier2_accept_duty_destroy1",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_bb291959", -- Excellent! Be careful up there! Those Ay'Nat outlaws are deadly enemies!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_9fa5f777", -- Go to the Yavin system and wipe them out!
 	stopConversation = "true",
 	options = {}
 }
@@ -641,7 +640,7 @@ dravis_convo:addScreen(dravis_tier2_accept_duty_destroy1);
 
 dravis_tier2_accept_duty_escort = ConvoScreen:new {
 	id = "tier2_accept_duty_escort",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_2e7b17f3", -- It's very likely you'll fall under attack from Ay'Nat Legion pirates. Be careful...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_5423b2d0", -- Help our shipments get through to Lok without being hijacked by the Canyon Corsairs.
 	stopConversation = "true",
 	options = {}
 }
@@ -649,7 +648,7 @@ dravis_convo:addScreen(dravis_tier2_accept_duty_escort);
 
 dravis_tier2_accept_duty_recovery = ConvoScreen:new {
 	id = "tier2_accept_duty_recovery",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_a0072111", -- Hm. A grim job if there ever was one. I respect your courage. Good luck!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_9eb35e93", -- Cut down legal traffic in Dantooine to increase demand for our services.
 	stopConversation = "true",
 	options = {}
 }
@@ -709,7 +708,7 @@ dravis_convo:addScreen(dravis_tier2_initial_train_algorithms);
 
 dravis_tier2_mission2_train_fighters = ConvoScreen:new {
 	id = "tier2_mission2_train_fighters",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4aa3066e", -- Ah yes! Good choice!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_2fef6afd", -- Ah yes! Good choice!
 	stopConversation = "true",
 	options = {}
 }
@@ -717,7 +716,7 @@ dravis_convo:addScreen(dravis_tier2_mission2_train_fighters);
 
 dravis_tier2_mission2_train_components = ConvoScreen:new {
 	id = "tier2_mission2_train_components",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8ad6a62e", -- You bet! New components...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c", -- You bet! New components...
 	stopConversation = "true",
 	options = {}
 }
@@ -725,7 +724,7 @@ dravis_convo:addScreen(dravis_tier2_mission2_train_components);
 
 dravis_tier2_mission2_train_techniques = ConvoScreen:new {
 	id = "tier2_mission2_train_techniques",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_f32117e", -- You bet! New defense procedures...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c", -- You bet! New defense procedures...
 	stopConversation = "true",
 	options = {}
 }
@@ -733,7 +732,7 @@ dravis_convo:addScreen(dravis_tier2_mission2_train_techniques);
 
 dravis_tier2_mission2_train_algorithms = ConvoScreen:new {
 	id = "tier2_mission2_train_algorithms",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_fd75abb", -- You bet! New droid algorithms...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c", -- You bet! New droid algorithms...
 	stopConversation = "true",
 	options = {}
 }
@@ -741,7 +740,7 @@ dravis_convo:addScreen(dravis_tier2_mission2_train_algorithms);
 
 dravis_tier2_mission3_train_fighters = ConvoScreen:new {
 	id = "tier2_mission3_train_fighters",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4aa3066e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_2fef6afd",
 	stopConversation = "true",
 	options = {}
 }
@@ -749,7 +748,7 @@ dravis_convo:addScreen(dravis_tier2_mission3_train_fighters);
 
 dravis_tier2_mission3_train_components = ConvoScreen:new {
 	id = "tier2_mission3_train_components",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8ad6a62e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -757,7 +756,7 @@ dravis_convo:addScreen(dravis_tier2_mission3_train_components);
 
 dravis_tier2_mission3_train_techniques = ConvoScreen:new {
 	id = "tier2_mission3_train_techniques",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_f32117e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -765,7 +764,7 @@ dravis_convo:addScreen(dravis_tier2_mission3_train_techniques);
 
 dravis_tier2_mission3_train_algorithms = ConvoScreen:new {
 	id = "tier2_mission3_train_algorithms",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_fd75abb",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -773,7 +772,7 @@ dravis_convo:addScreen(dravis_tier2_mission3_train_algorithms);
 
 dravis_tier2_mission4_train_fighters = ConvoScreen:new {
 	id = "tier2_mission4_train_fighters",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4aa3066e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_2fef6afd",
 	stopConversation = "true",
 	options = {}
 }
@@ -781,7 +780,7 @@ dravis_convo:addScreen(dravis_tier2_mission4_train_fighters);
 
 dravis_tier2_mission4_train_components = ConvoScreen:new {
 	id = "tier2_mission4_train_components",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8ad6a62e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -789,7 +788,7 @@ dravis_convo:addScreen(dravis_tier2_mission4_train_components);
 
 dravis_tier2_mission4_train_techniques = ConvoScreen:new {
 	id = "tier2_mission4_train_techniques",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_f32117e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -797,7 +796,7 @@ dravis_convo:addScreen(dravis_tier2_mission4_train_techniques);
 
 dravis_tier2_mission4_train_algorithms = ConvoScreen:new {
 	id = "tier2_mission4_train_algorithms",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_fd75abb",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -805,7 +804,7 @@ dravis_convo:addScreen(dravis_tier2_mission4_train_algorithms);
 
 dravis_tier2_final_train_fighters = ConvoScreen:new {
 	id = "tier2_final_train_fighters",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4aa3066e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_2fef6afd",
 	stopConversation = "true",
 	options = {}
 }
@@ -813,7 +812,7 @@ dravis_convo:addScreen(dravis_tier2_final_train_fighters);
 
 dravis_tier2_final_train_components = ConvoScreen:new {
 	id = "tier2_final_train_components",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8ad6a62e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -821,7 +820,7 @@ dravis_convo:addScreen(dravis_tier2_final_train_components);
 
 dravis_tier2_final_train_techniques = ConvoScreen:new {
 	id = "tier2_final_train_techniques",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_f32117e",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -829,7 +828,7 @@ dravis_convo:addScreen(dravis_tier2_final_train_techniques);
 
 dravis_tier2_final_train_algorithms = ConvoScreen:new {
 	id = "tier2_final_train_algorithms",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_fd75abb",
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_dfd3392c",
 	stopConversation = "true",
 	options = {}
 }
@@ -883,17 +882,17 @@ dravis_convo:addScreen(dravis_tier2_cant_wait_first);
 
 dravis_tier2_complete_first_mission = ConvoScreen:new {
 	id = "tier2_complete_first_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9abb9538", -- Fantastic work! The space station holocomm'd me regarding a massive battle between a lone RSF pilot...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d9b1bd09", -- Nice work with that Corsair leader. Maybe that'll teach those guys to steer clear of our transports. I've got your payment right here.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_aa77ffde", "tier2_according_to_plan"}, -- It was nothing
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_bc000879", "tier2_according_to_plan"}, -- It was nothing.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_complete_first_mission);
 
 dravis_tier2_according_to_plan = ConvoScreen:new {
 	id = "tier2_according_to_plan",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8d90962a", -- Nonsense! You've earned this.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_f1bbe36f", -- Don't get too full of yourself. It's a dangerous world, you know? Ready for another assignment?
 	stopConversation = "true",
 	options = {}
 }
@@ -901,7 +900,7 @@ dravis_convo:addScreen(dravis_tier2_according_to_plan);
 
 dravis_tier2_first_mission_success = ConvoScreen:new {
 	id = "tier2_first_mission_success",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9248b2ba", -- Well you've certainly earned it. I'll talk to you later.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_f1bbe36f", -- Well you've certainly earned it. I'll talk to you later.
 	stopConversation = "true",
 	options = {}
 }
@@ -909,40 +908,40 @@ dravis_convo:addScreen(dravis_tier2_first_mission_success);
 
 dravis_tier2_second_mission = ConvoScreen:new {
 	id = "tier2_second_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ec671b3f", -- Well, the Empire has demanded that the prisoners be turned over for questioning.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d6924ee9", -- Welcome back, %NU. Are you ready to get back to work?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_2d67b7a8", "tier2_accept_escort_details"}, -- Where do I come in?
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_accept_escort"}, -- Yes.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_1aaeed53", "tier2_not_ready"}, -- No I am not.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_second_mission);
 
 dravis_tier2_accept_escort_details = ConvoScreen:new {
 	id = "tier2_accept_escort_details",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_287eca83", -- We needed to get that prisoner ship out of the Naboo system to keep the Empire happy.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d70e2c34", -- Go to Yavin and destroy the Black Sun leader.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "tier2_accept_escort"}, -- Yes, Captain. I'm ready.
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_accept_escort"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"},
 	}
 }
 dravis_convo:addScreen(dravis_tier2_accept_escort_details);
 
 dravis_tier2_failed_second_mission = ConvoScreen:new {
 	id = "tier2_failed_second_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_6da2c92b", -- I realize there were a lot of fighters up there to deal with... but nothing changes the fact that the Ay'Nat Legion must go!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_a24306df", -- Get back to the Yavin system and destroy that ship before it's too late!
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_4a1d2431", "tier2_back_to_escort"}, -- Yes, I'm ready.
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_back_to_escort"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"},
 	}
 }
 dravis_convo:addScreen(dravis_tier2_failed_second_mission);
 
 dravis_tier2_accept_escort = ConvoScreen:new {
 	id = "tier2_accept_escort",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_57ba8a73", -- In that case, let's get you back up there. This time make sure the RSF prison ship makes it out of the system.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d70e2c34", -- Go to Yavin and destroy the Black Sun leader.
 	stopConversation = "true",
 	options = {}
 }
@@ -950,7 +949,7 @@ dravis_convo:addScreen(dravis_tier2_accept_escort);
 
 dravis_tier2_back_to_escort = ConvoScreen:new {
 	id = "tier2_back_to_escort",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_57ba8a73", -- In that case, let's get you back up there. This time make sure the RSF prison ship makes it out of the system.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d70e2c34",
 	stopConversation = "true",
 	options = {}
 }
@@ -958,7 +957,7 @@ dravis_convo:addScreen(dravis_tier2_back_to_escort);
 
 dravis_tier2_now_is_good = ConvoScreen:new {
 	id = "tier2_now_is_good",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_d586f458", -- Excellent! Get back out there and do me proud!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d70e2c34",
 	stopConversation = "true",
 	options = {}
 }
@@ -966,7 +965,7 @@ dravis_convo:addScreen(dravis_tier2_now_is_good);
 
 dravis_tier2_be_smarter = ConvoScreen:new {
 	id = "tier2_be_smarter",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_85263c6d", -- We can't afford to botch this opportunity!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_a24306df",
 	stopConversation = "true",
 	options = {}
 }
@@ -974,17 +973,17 @@ dravis_convo:addScreen(dravis_tier2_be_smarter);
 
 dravis_tier2_complete_second_mission = ConvoScreen:new {
 	id = "tier2_complete_second_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_70287826", -- Now that's showing some excellent leadership potential! You've really earned your pay this time.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_1b1dd9b4", -- What do you think? Did you eliminate that pirate?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_5fa9a5d3", "tier2_duty_calls"}, -- Thanks
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_8179979d", "tier2_duty_calls"}, -- Naturally.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_complete_second_mission);
 
 dravis_tier2_duty_calls = ConvoScreen:new {
 	id = "tier2_duty_calls",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9248b2ba", -- Well you've certainly earned it. I'll talk to you later.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_1f4922ce", -- %NU, you'd make an excellent pirate. Ready for another assignment?
 	stopConversation = "true",
 	options = {}
 }
@@ -992,7 +991,7 @@ dravis_convo:addScreen(dravis_tier2_duty_calls);
 
 dravis_tier2_here_is_pay = ConvoScreen:new {
 	id = "tier2_here_is_pay",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ae21cb72", -- Thanks to you! Great work, %NU. You've really earned these credits.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_1f4922ce",
 	stopConversation = "true",
 	options = {}
 }
@@ -1000,29 +999,29 @@ dravis_convo:addScreen(dravis_tier2_here_is_pay);
 
 dravis_tier2_third_mission = ConvoScreen:new {
 	id = "tier2_third_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_35fb22d6", -- The Royal family has increased security in the wake of recent theft. A number of Her Majesty's personal starships have gone missing.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d6924ee9", -- Welcome back, %NU. Are you ready to get back to work?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_a6c7fa2b", "tier2_accept_inspect"}, -- What are the details?
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_accept_inspect"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_1aaeed53", "tier2_not_ready"},
 	}
 }
 dravis_convo:addScreen(dravis_tier2_third_mission);
 
 dravis_tier2_failed_third_mission = ConvoScreen:new {
 	id = "tier2_failed_third_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_85263c6d", -- We can't afford to botch this opportunity! RSF has a new battery of information... and another chance...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_e4c0ecd", -- We can't afford any more mistakes! Now go escort our transport.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_4a1d2431", "tier2_on_your_way"}, -- Yes, I'm ready.
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_on_your_way"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"},
 	}
 }
 dravis_convo:addScreen(dravis_tier2_failed_third_mission);
 
 dravis_tier2_accept_inspect = ConvoScreen:new {
 	id = "tier2_accept_inspect",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_3cef63a0", -- Fly out to your choice of strike points... look for Ay'Nat Legion fighters.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_a07f4bc4", -- Escort one of our transports out of the Tatooine system and watch out for the Hutts.
 	stopConversation = "true",
 	options = {}
 }
@@ -1030,7 +1029,7 @@ dravis_convo:addScreen(dravis_tier2_accept_inspect);
 
 dravis_tier2_on_your_way = ConvoScreen:new {
 	id = "tier2_on_your_way",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_726bdb69", -- Good! Then let's get you back out there right away!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_a07f4bc4",
 	stopConversation = "true",
 	options = {}
 }
@@ -1038,7 +1037,7 @@ dravis_convo:addScreen(dravis_tier2_on_your_way);
 
 dravis_tier2_take_it_serious = ConvoScreen:new {
 	id = "tier2_take_it_serious",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_bb291959", -- Excellent! Be careful up there! Those Ay'Nat outlaws are deadly enemies!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_a07f4bc4",
 	stopConversation = "true",
 	options = {}
 }
@@ -1046,7 +1045,7 @@ dravis_convo:addScreen(dravis_tier2_take_it_serious);
 
 dravis_tier2_bad_liar = ConvoScreen:new {
 	id = "tier2_bad_liar",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_da8818c5", -- If you say so, %NU. I still say it's an impressive accomplishment.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_a07f4bc4",
 	stopConversation = "true",
 	options = {}
 }
@@ -1054,17 +1053,17 @@ dravis_convo:addScreen(dravis_tier2_bad_liar);
 
 dravis_tier2_complete_third_mission = ConvoScreen:new {
 	id = "tier2_complete_third_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ef08027f", -- That's excellent news for the peaceful citizens of the Naboo system.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_7cb248ee", -- Did it go alright? Any problems?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_5fa9a5d3", "tier2_turnover_intelligence"}, -- Thanks
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_eca7c053", "tier2_turnover_intelligence"}, -- No problem at all.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_complete_third_mission);
 
 dravis_tier2_turnover_intelligence = ConvoScreen:new {
 	id = "tier2_turnover_intelligence",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9248b2ba", -- Well you've certainly earned it. I'll talk to you later.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_2b2c40c1", -- I knew you could handle it. Ready for another assignment?
 	stopConversation = "true",
 	options = {}
 }
@@ -1072,29 +1071,29 @@ dravis_convo:addScreen(dravis_tier2_turnover_intelligence);
 
 dravis_tier2_fourth_mission = ConvoScreen:new {
 	id = "tier2_fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_c4ef0e93", -- We need you to slip in to Ay'Nat-controlled space, and hunt down a trio of Ace outlaws.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_d6924ee9", -- Welcome back, %NU. Are you ready to get back to work?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "tier2_accept_assassinate"}, -- Yes, Captain. I'm ready.
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_accept_assassinate"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_1aaeed53", "tier2_not_ready"},
 	}
 }
 dravis_convo:addScreen(dravis_tier2_fourth_mission);
 
 dravis_tier2_failed_fourth_mission = ConvoScreen:new {
 	id = "tier2_failed_fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_65042122", -- So, I hear you were not able to destroy all three of the Ay'Nat Legion's outlaw fighters. But don't worry...
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_ae1a4b87", -- Destroy that Imperial patrol before our customers take their business elsewhere.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_4a1d2431", "tier2_nonsense"}, -- Yes, I'm ready.
-		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "tier2_not_ready"}, -- Not quite yet, sir.
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_d70dba34", "tier2_nonsense"},
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_f3d46f0b", "tier2_not_ready"},
 	}
 }
 dravis_convo:addScreen(dravis_tier2_failed_fourth_mission);
 
 dravis_tier2_accept_assassinate = ConvoScreen:new {
 	id = "tier2_accept_assassinate",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ff45f1fd", -- Good luck to you, Captain %TU!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_666ebdc8", -- Go to Dantooine and destroy the Imperial patrol blocking our shipments.
 	stopConversation = "true",
 	options = {}
 }
@@ -1102,7 +1101,7 @@ dravis_convo:addScreen(dravis_tier2_accept_assassinate);
 
 dravis_tier2_nonsense = ConvoScreen:new {
 	id = "tier2_nonsense",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_726bdb69", -- Good! Then let's get you back out there right away!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_666ebdc8",
 	stopConversation = "true",
 	options = {}
 }
@@ -1110,7 +1109,7 @@ dravis_convo:addScreen(dravis_tier2_nonsense);
 
 dravis_tier2_let_me_know = ConvoScreen:new {
 	id = "tier2_let_me_know",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_d586f458", -- Excellent! Get back out there and do me proud!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_666ebdc8",
 	stopConversation = "true",
 	options = {}
 }
@@ -1118,7 +1117,7 @@ dravis_convo:addScreen(dravis_tier2_let_me_know);
 
 dravis_tier2_report_back_success = ConvoScreen:new {
 	id = "tier2_report_back_success",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_a80d9308", -- Good luck!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_666ebdc8",
 	stopConversation = "true",
 	options = {}
 }
@@ -1126,7 +1125,7 @@ dravis_convo:addScreen(dravis_tier2_report_back_success);
 
 dravis_tier2_key_to_success = ConvoScreen:new {
 	id = "tier2_key_to_success",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_225b33f", -- Good luck, son!
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_666ebdc8",
 	stopConversation = "true",
 	options = {}
 }
@@ -1134,7 +1133,7 @@ dravis_convo:addScreen(dravis_tier2_key_to_success);
 
 dravis_tier2_just_malfunctioned = ConvoScreen:new {
 	id = "tier2_just_malfunctioned",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_b0ab3e88", -- Oh! You had me going there. Well you've earned that, anyway.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_666ebdc8",
 	stopConversation = "true",
 	options = {}
 }
@@ -1142,17 +1141,17 @@ dravis_convo:addScreen(dravis_tier2_just_malfunctioned);
 
 dravis_tier2_complete_fourth_mission = ConvoScreen:new {
 	id = "tier2_complete_fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_76e6f264", -- Captain %TU! You are doing a fantastic job! I think you've grown enough as a pilot to warrant advancement.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_f520ab35", -- How did it go?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_5fa9a5d3", "tier2_fourth_mission_success"}, -- Thanks
+		{"@conversation/tatooine_privateer_trainer_shamdon:s_43f63a81", "tier2_fourth_mission_success"}, -- I killed the Imperial.
 	}
 }
 dravis_convo:addScreen(dravis_tier2_complete_fourth_mission);
 
 dravis_tier2_fourth_mission_success = ConvoScreen:new {
 	id = "tier2_fourth_mission_success",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_aa83c988", -- Head deeper into the palace, my friend! Look for Commander Dulios.
+	leftDialog = "@conversation/tatooine_privateer_trainer_shamdon:s_52e7e5e", -- You'd better go talk to Talon Karrde.
 	stopConversation = "true",
 	options = {}
 }

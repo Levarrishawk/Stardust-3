@@ -396,6 +396,20 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			return convoTemplate:getScreen("tier2_shamdon_intro")
 		end
 
+		-- Earlier versions incorrectly issued tier2_2a (the final Imperial patrol)
+		-- in the second slot. Clear that stale assignment until the preceding Black
+		-- Sun and escort missions have been completed in their proper order.
+		local oldImperialMission = SpaceHelpers:isSpaceQuestActive(pPlayer, "assassinate", "tatooine_privateer_tier2_2a") or
+			SpaceHelpers:isSpaceQuestComplete(pPlayer, "assassinate", "tatooine_privateer_tier2_2a")
+		local blackSunMissionComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, "assassinate", "tatooine_privateer_tier2_3a")
+
+		if (isShamdon and oldImperialMission and not blackSunMissionComplete) then
+			assassinate_tatooine_privateer_tier2_2a:resetQuest(pPlayer)
+			SpaceHelpers:clearSpaceQuest(pPlayer, "assassinate", "tatooine_privateer_tier2_2a", false)
+			removeQuestStatus(playerID .. "tatooine_privateer_tier2_2a:attempted")
+			removeQuestStatus(playerID .. "tatooine_privateer_tier2_2a:reward")
+		end
+
 		local t2QuestOneStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name)
 		local t2QuestTwoStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name)
 		local t2QuestThreeStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name)
@@ -432,7 +446,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			if (ghost:getPilotTier() <= 2) then
 				ghost:incrementPilotTier()
 			end
-			SpaceHelpers:addBeissaWaypoint(pPlayer)
+			SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
 
 			return convoTemplate:getScreen("tier2_completed_kaydine")
 		-- Reward Checks
@@ -819,9 +833,12 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 			end
 		end
 
-		if (ghost:getPilotTier() <= 2 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
+		if (ghost:getPilotTier() <= 2 and
+				SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2) and
+				SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.type, SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name) and
+				getQuestStatus(CreatureObject(pPlayer):getObjectID() .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
 			ghost:incrementPilotTier()
-			SpaceHelpers:addBeissaWaypoint(pPlayer)
+			SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
@@ -838,15 +855,15 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	elseif (screenID == "tier2_fourth_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward", 1)
-		escort_tatooine_privateer_tier2_4a:rewardPlayer(pPlayer)
+		assassinate_tatooine_privateer_tier2_2a:rewardPlayer(pPlayer)
 	elseif (screenID == "tier2_turnover_intelligence") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)
-		assassinate_tatooine_privateer_tier2_3a:rewardPlayer(pPlayer)
+		escort_tatooine_privateer_tier2_4a:rewardPlayer(pPlayer)
 	elseif (screenID == "tier2_duty_calls" or screenID == "tier2_here_is_pay") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward", 1)
-		assassinate_tatooine_privateer_tier2_2a:rewardPlayer(pPlayer)
+		assassinate_tatooine_privateer_tier2_3a:rewardPlayer(pPlayer)
 	elseif (screenID == "tier2_according_to_plan" or screenID == "tier2_first_mission_success") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward", 1)
@@ -856,18 +873,18 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	elseif (screenID == "tier2_accept_assassinate" or screenID == "tier2_nonsense" or screenID == "tier2_let_me_know" or screenID == "tier2_report_back_success" or screenID == "tier2_key_to_success" or screenID == "tier2_just_malfunctioned") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":attempted", 1)
-		escort_tatooine_privateer_tier2_4a:resetQuest(pPlayer)
-		escort_tatooine_privateer_tier2_4a:startQuest(pPlayer, pNpc)
+		assassinate_tatooine_privateer_tier2_2a:resetQuest(pPlayer)
+		assassinate_tatooine_privateer_tier2_2a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_inspect" or screenID == "tier2_on_your_way" or screenID == "tier2_take_it_serious" or screenID == "tier2_bad_liar") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
-		assassinate_tatooine_privateer_tier2_3a:resetQuest(pPlayer)
-		assassinate_tatooine_privateer_tier2_3a:startQuest(pPlayer, pNpc)
+		escort_tatooine_privateer_tier2_4a:resetQuest(pPlayer)
+		escort_tatooine_privateer_tier2_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_accept_escort" or screenID == "tier2_back_to_escort" or screenID == "tier2_now_is_good" or screenID == "tier2_be_smarter") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
-		assassinate_tatooine_privateer_tier2_2a:resetQuest(pPlayer)
-		assassinate_tatooine_privateer_tier2_2a:startQuest(pPlayer, pNpc)
+		assassinate_tatooine_privateer_tier2_3a:resetQuest(pPlayer)
+		assassinate_tatooine_privateer_tier2_3a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "tier2_start_first_mission" or screenID == "tier2_try_first_mission" or screenID == "tier2_cant_wait_first") then
 		local playerID = CreatureObject(pPlayer):getObjectID()
 		setQuestStatus(playerID .. SmugglerSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
