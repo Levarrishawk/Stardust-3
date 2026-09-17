@@ -824,6 +824,7 @@ registerScreenPlay("space_battle_tatooine_rebel_tier4_1", true)
 assassinate_tatooine_rebel_tier4_1_a = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_rebel_tier4_1_a", questName = "tatooine_rebel_tier4_1_a", questType = "assassinate", questZone = "space_dathomir", creditReward = 0,
 	parentQuest = "space_battle_tatooine_rebel_tier4_1", parentQuestType = "space_battle", parentQuestName = "tatooine_rebel_tier4_1", arrivalDelay = 5, failTimer = 20,
+	sideQuest = true, sideQuestType = "patrol", sideQuestName = "tatooine_rebel_tier4_1_b", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 	assassinateSpawns = {target = "imp_tie_aggressor_tier4", escorts = {"imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_interceptor_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4", "imp_tie_fighter_tier4"}},
 	targetPatrols = {{patrolPointName="tatooine_rebel_tier4_1_a_assassin_1"}, {patrolPointName="tatooine_rebel_tier4_1_a_assassin_2"}, {patrolPointName="tatooine_rebel_tier4_1_a_assassin_3"}, {patrolPointName="tatooine_rebel_tier4_1_a_assassin_4"}, {patrolPointName="tatooine_rebel_tier4_1_a_assassin_5"}},
 }

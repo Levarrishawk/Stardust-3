@@ -150,7 +150,11 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.name) or
 								SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.name)
 
-		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.name) or SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.name)
+		local t4QuestOnePartAComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE1.name)
+		local t4QuestOnePartBStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
+		local t4QuestOnePartBComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE2.name)
+		local t4QuestOnePartCStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.name)
+		local t4QuestOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_1_SIDE3.name)
 		local t4QuestTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE1.name) or SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_2_SIDE2.name)
 		local t4QuestThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE1.name) or SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_3_SIDE2.name)
 		local t4QuestFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE1.name) or SpaceHelpers:isSpaceQuestComplete(pPlayer, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.type, CrimsonPhoenixSquadronScreenplay.TIER4_QUEST_STRING_4_SIDE2.name)
@@ -172,6 +176,17 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		local completedTier4 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "rebel_navy", 4)
 		local tier4SkillCount = SpaceHelpers:getPilotTierSkillCount(pPlayer, "rebel_navy", 4)
 		local requiredTier4Skills = t4QuestFourComplete and 4 or t4QuestThreeComplete and 3 or t4QuestTwoComplete and 2 or t4QuestOneComplete and 1 or 0
+
+		-- Repair characters left at an old terminal state without the next portion
+		-- of the patrol and counterattack chain.
+		if (t4QuestOnePartBComplete and not t4QuestOnePartCStarted and not t4QuestOneComplete) then
+			destroy_surpriseattack_tatooine_rebel_tier4_1_c:startQuest(pPlayer, pNpc)
+			return convoTemplate:getScreen("tier4_on_mission")
+		elseif (t4QuestOnePartAComplete and not t4QuestOnePartBStarted and not t4QuestOnePartBComplete and
+			not t4QuestOnePartCStarted and not t4QuestOneComplete) then
+			patrol_tatooine_rebel_tier4_1_b:startQuest(pPlayer, pNpc)
+			return convoTemplate:getScreen("tier4_on_mission")
+		end
 
 		-- Player has an active tier 4 mission from Da'la Socuna
 		if ((t4QuestOneStarted and not t4QuestOneComplete) or (t4QuestTwoStarted and not t4QuestTwoComplete) or (t4QuestThreeStarted and not t4QuestThreeComplete) or (t4QuestFourStarted and not t4QuestFourComplete) or
