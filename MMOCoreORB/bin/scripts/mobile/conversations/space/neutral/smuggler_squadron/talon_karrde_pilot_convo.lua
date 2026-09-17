@@ -134,6 +134,52 @@ local tier2HandoffComplete = ConvoScreen:new {
 }
 talon_karrde_pilot_convo:addScreen(tier2HandoffComplete)
 
+local tier3HandoffIntro = ConvoScreen:new {
+	id = "tier3_handoff_intro",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_74bf2381", -- Jabba is happy with your performance, and Talon has another opportunity.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_2:s_98893f74", "tier3_handoff_dathomir"}, -- What is my next assignment?
+	}
+}
+talon_karrde_pilot_convo:addScreen(tier3HandoffIntro)
+
+local tier3HandoffDathomir = ConvoScreen:new {
+	id = "tier3_handoff_dathomir",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_9fcfc09a", -- Talon has a contact on Dathomir.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_2:s_800d8ca1", "tier3_handoff_nirame"}, -- Who is it?
+	}
+}
+talon_karrde_pilot_convo:addScreen(tier3HandoffDathomir)
+
+local tier3HandoffNirame = ConvoScreen:new {
+	id = "tier3_handoff_nirame",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_de0bf763", -- Nirame Sakute at Nym's operation.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_trainer_2:s_e8ed6f9a", "tier3_handoff_final"}, -- Okay, I'll go.
+	}
+}
+talon_karrde_pilot_convo:addScreen(tier3HandoffNirame)
+
+local tier3HandoffFinal = ConvoScreen:new {
+	id = "tier3_handoff_final",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_aa257bf2", -- Report to the Trade Outpost on Dathomir.
+	stopConversation = "true",
+	options = {}
+}
+talon_karrde_pilot_convo:addScreen(tier3HandoffFinal)
+
+local tier3HandoffComplete = ConvoScreen:new {
+	id = "tier3_handoff_complete",
+	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_2d0c7400",
+	stopConversation = "true",
+	options = {}
+}
+talon_karrde_pilot_convo:addScreen(tier3HandoffComplete)
+
 local notReady = ConvoScreen:new {
 	id = "not_ready",
 	leftDialog = "@conversation/tatooine_privateer_trainer_2:s_ff6979b6",

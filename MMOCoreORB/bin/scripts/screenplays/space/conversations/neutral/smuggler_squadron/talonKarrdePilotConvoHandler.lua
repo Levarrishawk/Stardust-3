@@ -15,6 +15,22 @@ function talonKarrdePilotConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTempl
 		return convoTemplate:getScreen("not_ready")
 	end
 
+	-- Beissa sends the pilot back to Talon after Tier 3. Recover characters that
+	-- completed her final mission before this explicit handoff state was added.
+	local completedBeissa = getQuestStatus(playerID .. "SmugglerSquadronScreenplay:beissa_finished") == "1" or
+		(SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, SmugglerSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name) and
+		SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3))
+
+	if (completedBeissa) then
+		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:beissa_finished", 1)
+
+		if (getQuestStatus(playerID .. "SmugglerSquadronScreenplay:talon_tier4_handoff") == "1") then
+			return convoTemplate:getScreen("tier3_handoff_complete")
+		end
+
+		return convoTemplate:getScreen("tier3_handoff_intro")
+	end
+
 	-- Recover characters that completed Shamdon's final assignment before the
 	-- explicit Talon-to-Beissa handoff state was introduced.
 	local completedShamdon = getQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_finished") == "1" or
@@ -73,6 +89,10 @@ function talonKarrdePilotConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, 
 		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:shamdon_finished", 1)
 		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:talon_tier3_handoff", 1)
 		SpaceHelpers:addBeissaWaypoint(pPlayer)
+	elseif (screenID == "tier3_handoff_final") then
+		local playerID = CreatureObject(pPlayer):getObjectID()
+		setQuestStatus(playerID .. "SmugglerSquadronScreenplay:talon_tier4_handoff", 1)
+		SpaceHelpers:addNirameSakuteWaypoint(pPlayer)
 	end
 
 	return pClonedScreen

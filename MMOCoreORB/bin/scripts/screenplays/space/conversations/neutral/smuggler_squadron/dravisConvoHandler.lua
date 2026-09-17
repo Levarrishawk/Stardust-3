@@ -315,7 +315,8 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 				-- Increment pilot to Tier 4
 				ghost:incrementPilotTier()
 			end
-			SpaceHelpers:addNirameSakuteWaypoint(pPlayer)
+			setQuestStatus(playerID .. "SmugglerSquadronScreenplay:beissa_finished", 1)
+			SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
 
 			return convoTemplate:getScreen("tier3_completed_dulios")
 		end
@@ -955,7 +956,8 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		if (ghost:getPilotTier() <= 3 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)) then
 			-- If player has all of the Tier 3 skills, increment their pilot tier
 			ghost:incrementPilotTier()
-			SpaceHelpers:addNirameSakuteWaypoint(pPlayer)
+			setQuestStatus(CreatureObject(pPlayer):getObjectID() .. "SmugglerSquadronScreenplay:beissa_finished", 1)
+			SpaceHelpers:addSmugglerNextWaypoint(pPlayer)
 		end
 
 	-- Give Tier 3 Missions
