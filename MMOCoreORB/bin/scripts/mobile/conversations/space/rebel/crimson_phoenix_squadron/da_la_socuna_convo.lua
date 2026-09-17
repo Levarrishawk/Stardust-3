@@ -1345,17 +1345,25 @@ da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_second_mission_success)
 -- Tier 4 mission 3 (space battle)
 da_la_socuna_convo_tier4_third_mission = ConvoScreen:new {
 	id = "tier4_third_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_4b3f09bc",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_49bf2ccb",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_rebel_tier4:s_89951606", "accept_tier4_third_mission"},
+		{"@conversation/tatooine_rebel_tier4:s_c8a0830d", "tier4_third_handling"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_third_mission)
 
+addUfwolTier4Screen("tier4_third_handling", "s_6dea357d", "s_6425e854", "tier4_third_engineers")
+addUfwolTier4Screen("tier4_third_engineers", "s_f3eda860", "s_2c10011d", "tier4_third_party")
+addUfwolTier4Screen("tier4_third_party", "s_9722b330", "s_89e27dc9", "tier4_third_no_stamp")
+addUfwolTier4Screen("tier4_third_no_stamp", "s_7f14ac3a", "s_63e0ab42", "tier4_third_new_tack")
+addUfwolTier4Screen("tier4_third_new_tack", "s_1eed1024", "s_8009422e", "tier4_third_endor_lead")
+addUfwolTier4Screen("tier4_third_endor_lead", "s_c2b3ccaa", "s_bc57b086", "tier4_third_station")
+addUfwolTier4Screen("tier4_third_station", "s_62fa1f75", "s_e42b260e", "accept_tier4_third_mission")
+
 da_la_socuna_convo_accept_tier4_third_mission = ConvoScreen:new {
 	id = "accept_tier4_third_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_fed525e5",
 	stopConversation = "true",
 	options = {}
 }
