@@ -79,7 +79,7 @@ function daLaSocunaConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		end
 
 		local correctTrainer = (pilotTier <= 1 and isSocuna) or (pilotTier == 2 and isEker) or
-			(pilotTier == 3 and isArnecio) or (pilotTier == 4 and isUfwol)
+			(pilotTier == 3 and isArnecio) or (pilotTier >= 4 and isUfwol)
 
 		if (not correctTrainer) then
 			return convoTemplate:getScreen("go_to_next")
