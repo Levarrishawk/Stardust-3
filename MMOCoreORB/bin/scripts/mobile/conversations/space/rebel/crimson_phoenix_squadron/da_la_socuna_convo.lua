@@ -1385,20 +1385,29 @@ da_la_socuna_convo_tier4_third_mission_success = ConvoScreen:new {
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_third_mission_success)
 
--- Tier 4 mission 4 (recovery)
+-- Tier 4 mission 4 (terminate the Imperial ship and recover its debris)
 da_la_socuna_convo_tier4_fourth_mission = ConvoScreen:new {
 	id = "tier4_fourth_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_c946f118",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_d30b6d26",
 	stopConversation = "false",
 	options = {
-		{"@conversation/tatooine_rebel_tier4:s_d0fd857b", "accept_tier4_fourth_mission"},
+		{"@conversation/tatooine_rebel_tier4:s_87f091b9", "tier4_fourth_reputation"},
 	}
 }
 da_la_socuna_convo:addScreen(da_la_socuna_convo_tier4_fourth_mission)
 
+addUfwolTier4Screen("tier4_fourth_reputation", "s_33cdebfd", "s_742d8c68", "tier4_fourth_full_member")
+addUfwolTier4Screen("tier4_fourth_full_member", "s_856e4aab", "s_b3e9c738", "tier4_fourth_endor_failure")
+addUfwolTier4Screen("tier4_fourth_endor_failure", "s_323479fd", "s_1131a10a", "tier4_fourth_endor_intel")
+addUfwolTier4Screen("tier4_fourth_endor_intel", "s_5b998dc7", "s_71a53f8b", "tier4_fourth_activity")
+addUfwolTier4Screen("tier4_fourth_activity", "s_ba8b09ff", "s_fa396956", "tier4_fourth_unknown_project")
+addUfwolTier4Screen("tier4_fourth_unknown_project", "s_a72f79b2", "s_32b7bf59", "tier4_fourth_complex_project")
+addUfwolTier4Screen("tier4_fourth_complex_project", "s_4123d99b", "s_fbb318e5", "tier4_fourth_target")
+addUfwolTier4Screen("tier4_fourth_target", "s_b659eebb", "s_fb9f7cd6", "accept_tier4_fourth_mission")
+
 da_la_socuna_convo_accept_tier4_fourth_mission = ConvoScreen:new {
 	id = "accept_tier4_fourth_mission",
-	leftDialog = "@conversation/tatooine_rebel_tier4:s_a5b93c4d",
+	leftDialog = "@conversation/tatooine_rebel_tier4:s_cc7b5947",
 	stopConversation = "true",
 	options = {}
 }
