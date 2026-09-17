@@ -662,9 +662,9 @@ space_dathomir = SpacePatrolPointTable:new {
 	{patrolPointName = "tatooine_privateer_tier3_3_c_escort_4", x = -2813, z = -400, y = 1793},
 
 	-- Beissa Tier 3 Hutt VIP rescue route.
-	{patrolPointName = "tatooine_privateer_tier3_4_d_escape_1", x = -800, z = 300, y = 1800},
-	{patrolPointName = "tatooine_privateer_tier3_4_d_escape_2", x = 800, z = 0, y = 500},
-	{patrolPointName = "tatooine_privateer_tier3_4_d_escape_3", x = 2600, z = -400, y = -1500},
+	{patrolPointName = "tatooine_privateer_tier3_4_d_escape_1", x = -4300, z = 800, y = 800},
+	{patrolPointName = "tatooine_privateer_tier3_4_d_escape_2", x = -5000, z = 300, y = -500},
+	{patrolPointName = "tatooine_privateer_tier3_4_d_escape_3", x = -5700, z = -200, y = -1800},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_dathomir, "space_dathomir")

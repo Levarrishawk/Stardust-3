@@ -882,11 +882,11 @@ rescue_tatooine_privateer_tier3_4_d = SpaceRescueScreenplay:new {
 	className = "rescue_tatooine_privateer_tier3_4_d", questName = "tatooine_privateer_tier3_4_d", questType = "rescue", questZone = "space_dathomir", creditReward = 0,
 	sideQuest = false, sideQuestType = "",
 	parentQuest = "patrol_tatooine_privateer_tier3_4_c", parentQuestType = "patrol", parentQuestName = "tatooine_privateer_tier3_4_c",
-	arrivalDelay = 5, rescueShip = "imp_lambda_shuttle_tier4", rescueLocation = {x = -1800, z = 600, y = 3100}, repairDelay = 20, escortSpeed = 45,
+	arrivalDelay = 5, rescueShip = "imp_lambda_shuttle_tier4", rescueLocation = {x = -3600, z = 1200, y = 1800}, repairDelay = 20, escortSpeed = 45,
 	escortPoints = {
-		{patrolPointName = "tatooine_privateer_tier3_4_d_escape_1", zoneName = "space_dathomir", x = -800, z = 300, y = 1800, escortNumber = 1, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier3_4_d_escape_2", zoneName = "space_dathomir", x = 800, z = 0, y = 500, escortNumber = 2, radius = 250},
-		{patrolPointName = "tatooine_privateer_tier3_4_d_escape_3", zoneName = "space_dathomir", x = 2600, z = -400, y = -1500, escortNumber = 3, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier3_4_d_escape_1", zoneName = "space_dathomir", x = -4300, z = 800, y = 800, escortNumber = 1, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier3_4_d_escape_2", zoneName = "space_dathomir", x = -5000, z = 300, y = -500, escortNumber = 2, radius = 250},
+		{patrolPointName = "tatooine_privateer_tier3_4_d_escape_3", zoneName = "space_dathomir", x = -5700, z = -200, y = -1800, escortNumber = 3, radius = 250},
 	},
 	escortAttackDelay = 45, escortAttackShips = {{{count = 3, shipName = "rancor_clan_soldier_tier3"}}, {{count = 2, shipName = "rancor_clan_ace_tier3"}}},
 }
