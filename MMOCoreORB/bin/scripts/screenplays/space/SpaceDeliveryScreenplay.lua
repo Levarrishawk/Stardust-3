@@ -22,6 +22,7 @@ SpaceDeliveryScreenplay = SpaceQuestLogic:new {
 	attackShips = {},
 	waitForAttackShips = false,
 	postDeliveryAttackDelay = 1,
+	verifySideQuestStart = false,
 
 	--[[
 		Journal task layout, taken from the delivery_no_pickup string files:
@@ -147,6 +148,21 @@ function SpaceDeliveryScreenplay:completeQuest(pPlayer, notifyClient)
 
 		-- Trigger Sidequest
 		createEvent(self.sideQuestDelay * 1050, self.sideQuestType .. "_" .. self.sideQuestName, "startQuest", pPlayer, "")
+
+		if (self.verifySideQuestStart) then
+			createEvent((self.sideQuestDelay + 2) * 1000, self.className, "verifySideQuestStarted", pPlayer, "")
+		end
+	end
+end
+
+function SpaceDeliveryScreenplay:verifySideQuestStarted(pPlayer)
+	if (pPlayer == nil or not self.sideQuest) then
+		return
+	end
+
+	if (not SpaceHelpers:isSpaceQuestActive(pPlayer, self.sideQuestType, self.sideQuestName) and
+			not SpaceHelpers:isSpaceQuestComplete(pPlayer, self.sideQuestType, self.sideQuestName)) then
+		createEvent(100, self.sideQuestType .. "_" .. self.sideQuestName, "startQuest", pPlayer, "")
 	end
 end
 

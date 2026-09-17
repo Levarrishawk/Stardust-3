@@ -19,6 +19,7 @@ SpaceInspectScreenplay = SpaceQuestLogic:new {
 	-- Screenplay Specific Variables
 
 	inspectTargets = {},
+	inspectEscortShips = {},
 	inspectCargo = "",
 
 	targetLocation = {},
@@ -196,6 +197,16 @@ function SpaceInspectScreenplay:cleanUpQuestData(pPlayer)
 	local playerID = SceneObject(pPlayer):getObjectID()
 	local targetID = readData(playerID .. ":" .. self.className .. ":inspectTargetID")
 	local pTarget = getSceneObject(targetID)
+	local escortIDs = readStringVectorSharedMemory(playerID .. ":" .. self.className .. ":inspectEscortShips:")
+
+	for i = 1, #escortIDs, 1 do
+		local pEscort = getSceneObject(tonumber(escortIDs[i]))
+
+		if (pEscort ~= nil) then
+			CreatureObject(pPlayer):removeSpaceMissionObject(SceneObject(pEscort):getObjectID(), true)
+			SceneObject(pEscort):destroyObjectFromWorld()
+		end
+	end
 
 	if (pTarget ~= nil) then
 		dropObserver(SHIPDESTROYED, self.className, "inspectTargetDestroyed", pTarget)
@@ -214,6 +225,7 @@ function SpaceInspectScreenplay:cleanUpQuestData(pPlayer)
 	deleteData(areaID .. ":" .. self.className .. ":playerID")
 	deleteData(playerID .. ":" .. self.className .. ":inspectTargetID")
 	deleteData(playerID .. ":" .. self.className .. ":arrivalAreaID")
+	deleteStringVectorSharedMemory(playerID .. ":" .. self.className .. ":inspectEscortShips:")
 end
 
 function SpaceInspectScreenplay:setupInspection(pPlayer)
@@ -390,6 +402,28 @@ function SpaceInspectScreenplay:notifyEnteredTargetArea(pActiveArea, pShip)
 	CreatureObject(pPlayer):addSpaceMissionObject(targetID, true)
 	writeData(playerID .. ":" .. self.className .. ":inspectTargetID", targetID)
 	createObserver(SHIPDESTROYED, self.className, "inspectTargetDestroyed", pTarget)
+
+	if (#self.inspectEscortShips > 0) then
+		local escortIDs = {}
+		local escortSpawn = ShipObject(pTarget):getSpawnPointBehindShip(25, 75)
+
+		ShipAiAgent(pTarget):createSquadron()
+
+		for i = 1, #self.inspectEscortShips, 1 do
+			local pEscort = spawnShipAgent(self.inspectEscortShips[i], self.questZone, escortSpawn[1], escortSpawn[2], escortSpawn[3])
+
+			if (pEscort ~= nil) then
+				local escortID = SceneObject(pEscort):getObjectID()
+				ShipAiAgent(pEscort):setMissionOwner(pPlayer)
+				ShipAiAgent(pEscort):setFixedPatrol()
+				ShipAiAgent(pEscort):assignToSquadron(pTarget)
+				CreatureObject(pPlayer):addSpaceMissionObject(escortID, true)
+				table.insert(escortIDs, escortID)
+			end
+		end
+
+		writeStringVectorSharedMemory(playerID .. ":" .. self.className .. ":inspectEscortShips:", escortIDs)
+	end
 
 	SpaceHelpers:sendQuestProgess(pPlayer, "@spacequest/" .. self.questType .. "/" .. self.questName .. ":title")
 

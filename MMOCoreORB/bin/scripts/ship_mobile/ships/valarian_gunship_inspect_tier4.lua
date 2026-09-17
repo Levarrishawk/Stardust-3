@@ -1,13 +1,13 @@
 valarian_gunship_inspect_tier4 = ShipAgent:new {
 	template = "hutt_heavy_s01_tier3",
-	pilotTemplate = "heavy_fighter_tier1",
+	pilotTemplate = "heavy_fighter_tier3",
 	shipType = "fighter",
 
 	experience = 1664,
 
 	lootChance = 0.195,
 	lootRolls = 1,
-	lootTable = "space_valarian_tier1",
+	lootTable = "space_valarian_tier3",
 
 	minCredits = 170,
 	maxCredits = 382,

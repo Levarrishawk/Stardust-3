@@ -843,6 +843,13 @@ space_endor = SpacePatrolPointTable:new {
 	{patrolPointName = "storm_t4_2_c_route_1", x = 3000, z = 250, y = 1800},
 	{patrolPointName = "storm_t4_2_c_route_2", x = 4100, z = -150, y = 200},
 	{patrolPointName = "storm_t4_2_c_route_3", x = 5200, z = -600, y = -1600},
+
+	-- Nirame Sakute tier 4 mission 3 captured mining freighter route.
+	{patrolPointName = "tatooine_privateer_tier4_3c_capture_1", x = 4200, z = -1200, y = 5100},
+	{patrolPointName = "tatooine_privateer_tier4_3c_capture_2", x = 3500, z = -800, y = 3900},
+	{patrolPointName = "tatooine_privateer_tier4_3c_escape_1", x = 2500, z = -500, y = 2500},
+	{patrolPointName = "tatooine_privateer_tier4_3c_escape_2", x = 900, z = -100, y = 800},
+	{patrolPointName = "tatooine_privateer_tier4_3c_escape_3", x = -1200, z = 300, y = -1400},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_endor, "space_endor")

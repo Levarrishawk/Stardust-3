@@ -540,6 +540,7 @@ space_tatooine = SpacePatrolPointTable:new {
 	{patrolPointName = "storm_rebel_escort_4", x = 1085, z = 4064, y = -7316},	-- squadron-isolated: StormSquadronScreenplay.lua:246
 	{patrolPointName = "storm_rebel_patrol_1", x = 6439, z = -5021, y = -2217},	-- squadron-isolated: StormSquadronScreenplay.lua:247
 	{patrolPointName = "storm_rebel_patrol_3", x = 4891, z = -3215, y = -1345},	-- squadron-isolated: StormSquadronScreenplay.lua:248
+	{patrolPointName = "tatooine_privateer_tier4_3b_target", x = -1607, z = 6008, y = -240},
 }
 
 SpacePatrolPoints:addSpacePatrolPoints(space_tatooine, "space_tatooine")
