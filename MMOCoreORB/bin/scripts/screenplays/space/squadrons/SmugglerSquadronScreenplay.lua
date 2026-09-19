@@ -999,12 +999,12 @@ recovery_tatooine_privateer_tier4_2a = SpaceRecoveryScreenplay:new {
 		{patrolPointName="tatooine_privateer_tier4_recovery_one_escort_4",zoneName="space_dantooine",x=5973,z=5760,y=2392,escortNumber=4,radius=250},
 	},
 	recoveryPoints = {
-		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_1",zoneName="space_dantooine",x=5741,z=3896,y=2564,escortNumber=1,radius=250},
-		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_2",zoneName="space_dantooine",x=5402,z=1274,y=2831,escortNumber=2,radius=250},
-		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_3",zoneName="space_dantooine",x=4791,z=-2205,y=3186,escortNumber=3,radius=250},
-		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_4",zoneName="space_dantooine",x=4310,z=-5914,y=3532,escortNumber=4,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_1",zoneName="space_dantooine",x=1000,z=-3500,y=6500,escortNumber=1,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_2",zoneName="space_dantooine",x=0,z=-4000,y=6000,escortNumber=2,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_3",zoneName="space_dantooine",x=-1000,z=-4500,y=5500,escortNumber=3,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_one_egress_4",zoneName="space_dantooine",x=0,z=-4500,y=4500,escortNumber=4,radius=250},
 	},
-	attackDelay = 25, attackShips = {{"imp_tie_interceptor_tier4"}},
+	attackDelay = 45, attackShips = {{"imp_tie_interceptor_tier4"}},
 }
 registerScreenPlay("recovery_tatooine_privateer_tier4_2a", true)
 
@@ -1014,10 +1014,10 @@ recovery_tatooine_privateer_tier4_2b = SpaceRecoveryScreenplay:new {
 	parentQuest = "recovery_tatooine_privateer_tier4_2a", parentQuestType = "recovery", parentQuestName = "tatooine_privateer_tier4_2a",
 	arrivalDelay = 5, recoveryDelay = 20, recoverShip = "imp_lambda_shuttle_tier4", recoveryConversationMobile = "object/mobile/dressed_nym_brawler_tran_m.iff", escortShips = {},
 	preRecoveryPoints = {
-		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_1",zoneName="space_dantooine",x=1277,z=2941,y=-460,escortNumber=1,radius=250},
-		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_2",zoneName="space_dantooine",x=503,z=4568,y=2673,escortNumber=2,radius=250},
-		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_3",zoneName="space_dantooine",x=-92,z=5799,y=5096,escortNumber=3,radius=250},
-		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_4",zoneName="space_dantooine",x=-1677,z=7401,y=7455,escortNumber=4,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_1",zoneName="space_dantooine",x=5000,z=2500,y=-4000,escortNumber=1,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_2",zoneName="space_dantooine",x=4500,z=1500,y=-4000,escortNumber=2,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_3",zoneName="space_dantooine",x=4000,z=500,y=-4000,escortNumber=3,radius=250},
+		{patrolPointName="tatooine_privateer_tier4_recovery_two_escort_4",zoneName="space_dantooine",x=3500,z=-500,y=-4000,escortNumber=4,radius=250},
 	},
 	recoveryPoints = {
 		{patrolPointName="tatooine_privateer_tier4_recovery_two_egress_1",zoneName="space_dantooine",x=-1136,z=5676,y=7396,escortNumber=1,radius=250},
