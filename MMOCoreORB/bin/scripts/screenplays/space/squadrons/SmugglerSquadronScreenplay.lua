@@ -1025,7 +1025,7 @@ recovery_tatooine_privateer_tier4_2b = SpaceRecoveryScreenplay:new {
 		{patrolPointName="tatooine_privateer_tier4_recovery_two_egress_3",zoneName="space_dantooine",x=395,z=-609,y=7228,escortNumber=3,radius=250},
 		{patrolPointName="tatooine_privateer_tier4_recovery_two_egress_4",zoneName="space_dantooine",x=1050,z=-3779,y=7179,escortNumber=4,radius=250},
 	},
-	attackDelay = 25, attackShips = {{"imp_tie_aggressor_tier4"}},
+	attackDelay = 45, attackShips = {{"imp_tie_aggressor_tier4"}},
 }
 registerScreenPlay("recovery_tatooine_privateer_tier4_2b", true)
 
@@ -1076,7 +1076,7 @@ recovery_tatooine_privateer_tier4_3c = SpaceRecoveryScreenplay:new {
 		{patrolPointName="tatooine_privateer_tier4_3c_escape_2",zoneName="space_endor",x=900,z=-100,y=800,escortNumber=2,radius=250},
 		{patrolPointName="tatooine_privateer_tier4_3c_escape_3",zoneName="space_endor",x=-1200,z=300,y=-1400,escortNumber=3,radius=250},
 	},
-	attackDelay = 30, attackShips = {{"valarian_gunship_tier4", "valarian_bomber_tier4"}},
+	attackDelay = 40, attackShips = {{"valarian_gunship_tier4", "valarian_bomber_tier4"}},
 }
 registerScreenPlay("recovery_tatooine_privateer_tier4_3c", true)
 
