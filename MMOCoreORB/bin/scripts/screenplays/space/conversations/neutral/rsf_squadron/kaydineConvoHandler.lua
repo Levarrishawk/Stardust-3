@@ -226,13 +226,13 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 
 	-- Duty Missions
 	elseif (screenID == "accept_duty_destroy1") then
-		destroy_duty_naboo_privateer_9:startQuest(pPlayer, pNpc)
+		destroy_duty_naboo_privateer_11:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_duty_escort") then
-		escort_duty_naboo_privateer_10:startQuest(pPlayer, pNpc)
+		escort_duty_naboo_privateer_9:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_duty_destroy2") then
 		destroy_duty_naboo_privateer_11:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_duty_recovery") then
-		CreatureObject(pPlayer):sendSystemMessage("Recovery Duty Missions are not implemented yet!")
+		recovery_duty_naboo_privateer_10:startQuest(pPlayer, pNpc)
 
 	-- Mission Rewards
 	elseif (screenID == "fourth_mission_success") then
@@ -240,10 +240,10 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 		assassinate_naboo_privateer_tier2_4a:rewardPlayer(pPlayer)
 	elseif (screenID == "turnover_intelligence") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward", 1)
-		inspect_naboo_privateer_15:rewardPlayer(pPlayer)
+		escort_naboo_privateer_15:rewardPlayer(pPlayer)
 	elseif (screenID == "duty_calls" or screenID == "here_is_pay") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward", 1)
-		escort_naboo_privateer_14:rewardPlayer(pPlayer)
+		recovery_naboo_privateer_14:rewardPlayer(pPlayer)
 	elseif (screenID == "according_to_plan" or screenID == "first_mission_success") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":reward", 1)
 		destroy_naboo_privateer_13a:rewardPlayer(pPlayer)
@@ -255,12 +255,12 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 		assassinate_naboo_privateer_tier2_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_inspect" or screenID == "on_your_way" or screenID == "take_it_serious" or screenID == "bad_liar") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":attempted", 1)
-		inspect_naboo_privateer_15:resetQuest(pPlayer)
-		inspect_naboo_privateer_15:startQuest(pPlayer, pNpc)
+		escort_naboo_privateer_15:resetQuest(pPlayer)
+		escort_naboo_privateer_15:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_escort" or screenID == "back_to_escort" or screenID == "now_is_good" or screenID == "be_smarter") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":attempted", 1)
-		escort_naboo_privateer_14:resetQuest(pPlayer)
-		escort_naboo_privateer_14:startQuest(pPlayer, pNpc)
+		recovery_naboo_privateer_14:resetQuest(pPlayer)
+		recovery_naboo_privateer_14:startQuest(pPlayer, pNpc)
 	elseif ((screenID == "start_first_mission") or (screenID == "try_first_mission") or (screenID == "cant_wait_first")) then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_1.name .. ":attempted", 1)
 		destroy_naboo_privateer_13a:resetQuest(pPlayer)

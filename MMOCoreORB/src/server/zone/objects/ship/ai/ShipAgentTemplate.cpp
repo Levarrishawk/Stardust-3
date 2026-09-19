@@ -108,6 +108,10 @@ void ShipAgentTemplate::readObject(LuaObject* templateData) {
 
 	enemies.pop();
 
+	// RSF pilots are Imperial-aligned in space and must be hostile to Rebel ships.
+	if (spaceFaction == "rebel" && !enemyFactions.contains("rsf"))
+		enemyFactions.add("rsf");
+
 	imperialFactionReward = templateData->getIntField("imperialFactionReward");
 	rebelFactionReward = templateData->getIntField("rebelFactionReward");
 

@@ -307,13 +307,13 @@ destroy_naboo_privateer_13a = SpaceDestroyScreenplay:new {
 
 registerScreenPlay("destroy_naboo_privateer_13a", true)
 
--- Mission 2: Escort
+-- Mission 2: Recover the Ay'Nat Captain's yacht
 
-escort_naboo_privateer_14 = SpaceEscortScreenplay:new {
-	className = "escort_naboo_privateer_14",
+recovery_naboo_privateer_14 = SpaceRecoveryScreenplay:new {
+	className = "recovery_naboo_privateer_14",
 
 	questName = "naboo_privateer_14",
-	questType = "escort",
+	questType = "recovery",
 
 	questZone = "space_naboo",
 
@@ -325,32 +325,37 @@ escort_naboo_privateer_14 = SpaceEscortScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	-- Screenplay Specific Variables
-	escortShips = {"freighterheavy_tier3"},
+	arrivalDelay = 10,
+	recoveryDelay = 20,
 
-	escortPoints = {
-		{patrolPointName = "rsf_tier2_escort_1", zoneName = "space_naboo", x = 3500, z = 500, y = -2000, escortNumber = 1, radius = 250},
-		{patrolPointName = "rsf_tier2_escort_2", zoneName = "space_naboo", x = 4200, z = 300, y = -500, escortNumber = 2, radius = 250},
-		{patrolPointName = "rsf_tier2_escort_3", zoneName = "space_naboo", x = 5000, z = 100, y = 1000, escortNumber = 3, radius = 250},
-		{patrolPointName = "rsf_tier2_escort_4", zoneName = "space_naboo", x = 5500, z = -200, y = 2500, escortNumber = 4, radius = 250},
+	recoverShip = "aynat_yacht_tier3",
+	recoveryConversationMobile = "object/mobile/shared_dressed_nym_guard_elite_nikto_m.iff",
+	escortShips = {"aynat_enforcer_tier2"},
+
+	preRecoveryPoints = {
+		{patrolPointName = "rsf_recovery_1", zoneName = "space_naboo", x = 2000, z = 300, y = -2500, escortNumber = 1, radius = 250},
 	},
 
-	attackDelay = 180,
+	recoveryPoints = {
+		{patrolPointName = "rsf_recovery_2", zoneName = "space_naboo", x = 3000, z = 500, y = -1500, escortNumber = 1, radius = 250},
+	},
+
+	attackDelay = 20,
 
 	attackShips = {
-		{"blacksun_fighter_s02_tier2", "blacksun_fighter_s02_tier2", "blacksun_fighter_s03_tier2", "blacksun_bomber_s01_tier2"},
+		{"aynat_enforcer_tier2"},
 	}
 }
 
-registerScreenPlay("escort_naboo_privateer_14", true)
+registerScreenPlay("recovery_naboo_privateer_14", true)
 
--- Mission 3: Inspect
+-- Mission 3: Escort the RSF prison ship
 
-inspect_naboo_privateer_15 = SpaceInspectScreenplay:new {
-	className = "inspect_naboo_privateer_15",
+escort_naboo_privateer_15 = SpaceEscortScreenplay:new {
+	className = "escort_naboo_privateer_15",
 
 	questName = "naboo_privateer_15",
-	questType = "inspect",
+	questType = "escort",
 
 	questZone = "space_naboo",
 
@@ -362,14 +367,23 @@ inspect_naboo_privateer_15 = SpaceInspectScreenplay:new {
 	sideQuest = false,
 	sideQuestType = "",
 
-	-- Screenplay Specific Variables
-	inspectTargets = {"blacksun_gunship_tier2"},
-	inspectCargo = "shipment_orders",
+	escortShips = {"rsf_prison_ship_tier2_naboo"},
 
-	targetLocation = {x = 2500, z = 400, y = -3000},
+	escortPoints = {
+		{patrolPointName = "rsf_tier2_escort_1", zoneName = "space_naboo", x = 3500, z = 500, y = -2000, escortNumber = 1, radius = 250},
+		{patrolPointName = "rsf_tier2_escort_2", zoneName = "space_naboo", x = 4200, z = 300, y = -500, escortNumber = 2, radius = 250},
+		{patrolPointName = "rsf_tier2_escort_3", zoneName = "space_naboo", x = 5000, z = 100, y = 1000, escortNumber = 3, radius = 250},
+		{patrolPointName = "rsf_tier2_escort_4", zoneName = "space_naboo", x = 5500, z = -200, y = 2500, escortNumber = 4, radius = 250},
+	},
+
+	attackDelay = 90,
+
+	attackShips = {
+		{"aynat_outlaw_tier2", "aynat_outlaw_tier2", "aynat_enforcer_tier2", "aynat_enforcer_tier2"},
+	}
 }
 
-registerScreenPlay("inspect_naboo_privateer_15", true)
+registerScreenPlay("escort_naboo_privateer_15", true)
 
 -- Mission 4: Assassinate
 
@@ -408,11 +422,11 @@ registerScreenPlay("assassinate_naboo_privateer_tier2_4a", true)
 
 -- Tier 2 Duty Missions
 
-destroy_duty_naboo_privateer_9 = SpaceDutyDestroyScreenplay:new {
-	className = "destroy_duty_naboo_privateer_9",
+escort_duty_naboo_privateer_9 = SpaceDutyEscortScreenplay:new {
+	className = "escort_duty_naboo_privateer_9",
 
 	questName = "naboo_privateer_9",
-	questType = "destroy_duty",
+	questType = "escort_duty",
 
 	questZone = "space_naboo",
 
@@ -422,27 +436,29 @@ destroy_duty_naboo_privateer_9 = SpaceDutyDestroyScreenplay:new {
 	sideQuestType = "",
 
 	-- Screenplay Specific Variables
-	dutyMissionLevel = 2,
+	escortShips = {"rsf_royal_kylantha_freighter_tier2"},
 
-	shipLocations = {
-		{patrolPointName = "rsf_duty_patrol_1", x = 752, z = 659, y = -2444},
-		{patrolPointName = "rsf_duty_patrol_2", x = 2031, z = 887, y = -1759},
-		{patrolPointName = "rsf_duty_patrol_3", x = 2466, z = 854, y = -505},
+	escortPoints = {
+		{patrolPointName = "rsf_tier2_duty_escort_1", zoneName = "space_naboo", x = 1000, z = 500, y = -3000, escortNumber = 1, radius = 250},
+		{patrolPointName = "rsf_tier2_duty_escort_2", zoneName = "space_naboo", x = 2500, z = 300, y = -1500, escortNumber = 2, radius = 250},
+		{patrolPointName = "rsf_tier2_duty_escort_3", zoneName = "space_naboo", x = 4000, z = 100, y = 500, escortNumber = 3, radius = 250},
 	},
 
-	shipTypes = {
-		"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_fighter_s03_tier2",
-		"blacksun_bomber_s01_tier2", "blacksun_bomber_s02_tier2",
+	attackDelay = 90,
+
+	attackShips = {
+		{"aynat_outlaw_tier2", "aynat_enforcer_tier2"},
+		{"aynat_outlaw_tier2", "aynat_outlaw_tier2", "aynat_enforcer_tier2"},
 	},
 }
 
-registerScreenPlay("destroy_duty_naboo_privateer_9", true)
+registerScreenPlay("escort_duty_naboo_privateer_9", true)
 
-escort_duty_naboo_privateer_10 = SpaceDutyEscortScreenplay:new {
-	className = "escort_duty_naboo_privateer_10",
+recovery_duty_naboo_privateer_10 = SpaceDutyRecoveryScreenplay:new {
+	className = "recovery_duty_naboo_privateer_10",
 
 	questName = "naboo_privateer_10",
-	questType = "escort_duty",
+	questType = "recovery_duty",
 
 	questZone = "space_naboo",
 
@@ -452,23 +468,29 @@ escort_duty_naboo_privateer_10 = SpaceDutyEscortScreenplay:new {
 	sideQuestType = "",
 
 	-- Screenplay Specific Variables
-	dutyMissionLevel = 2,
+	arrivalDelay = 15,
+	recoveryDelay = 24,
 
-	escortShips = {"freighterheavy_tier2", "freighterlight_tier2"},
+	recoverShip = "ndc_duty_transport_tier2",
+	recoveryConversationMobile = "object/mobile/shared_dressed_noble_human_male.iff",
+	escortShips = {"aynat_enforcer_tier2"},
 
-	escortPoints = {
-		{patrolPointName = "rsf_tier2_duty_escort_1", zoneName = "space_naboo", x = 1000, z = 500, y = -3000, escortNumber = 1, radius = 250},
-		{patrolPointName = "rsf_tier2_duty_escort_2", zoneName = "space_naboo", x = 2500, z = 300, y = -1500, escortNumber = 2, radius = 250},
-		{patrolPointName = "rsf_tier2_duty_escort_3", zoneName = "space_naboo", x = 4000, z = 100, y = 500, escortNumber = 3, radius = 250},
+	preRecoveryPoints = {
+		{patrolPointName = "rsf_recovery_1", zoneName = "space_naboo", x = 2000, z = 300, y = -2500, escortNumber = 1, radius = 250},
 	},
 
+	recoveryPoints = {
+		{patrolPointName = "rsf_recovery_2", zoneName = "space_naboo", x = 3000, z = 500, y = -1500, escortNumber = 1, radius = 250},
+	},
+
+	attackDelay = 90,
+
 	attackShips = {
-		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2"},
-		{"blacksun_fighter_s01_tier2", "blacksun_fighter_s02_tier2", "blacksun_fighter_s03_tier2"},
+		{"aynat_outlaw_tier2", "aynat_enforcer_tier2"},
 	}
 }
 
-registerScreenPlay("escort_duty_naboo_privateer_10", true)
+registerScreenPlay("recovery_duty_naboo_privateer_10", true)
 
 destroy_duty_naboo_privateer_11 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_naboo_privateer_11",
@@ -1157,10 +1179,11 @@ escort_naboo_privateer_tier4_1a = SpaceEscortScreenplay:new {
 	escortShips = {"rsf_scanner_tier4"},
 
 	escortPoints = {
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_1", zoneName = "space_endor", x = -239, z = 3935, y = 3280, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_2", zoneName = "space_endor", x = -549, z = 3180, y = 3238, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_3", zoneName = "space_endor", x = -1251, z = 1477, y = 3143, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_4", zoneName = "space_endor", x = -1996, z = -330, y = 3042, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_1", zoneName = "space_endor", x = 4394, z = -1173, y = -2050, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_2", zoneName = "space_endor", x = 5476, z = -2006, y = -1551, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_3", zoneName = "space_endor", x = 7420, z = -3437, y = -800, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_4", zoneName = "space_endor", x = 6917, z = -5196, y = 1246, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_5", zoneName = "space_endor", x = 5612, z = -7066, y = 3607, escortNumber = 5, radius = 250},
 	},
 
 	attackDelay = 85,
@@ -1198,10 +1221,11 @@ escort_naboo_privateer_tier4_1b = SpaceEscortScreenplay:new {
 	escortShips = {"imp_lambda_shuttle_tier4"},
 
 	escortPoints = {
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_1", zoneName = "space_endor", x = 4249, z = 2899, y = 3799, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_2", zoneName = "space_endor", x = 3520, z = 2210, y = 3450, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_3", zoneName = "space_endor", x = 2680, z = 1495, y = 3120, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_4", zoneName = "space_endor", x = 1770, z = 640, y = 2830, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_1", zoneName = "space_endor", x = 5815, z = -6701, y = 2035, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_2", zoneName = "space_endor", x = 4663, z = -5802, y = -1128, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_3", zoneName = "space_endor", x = 3522, z = -4905, y = -4248, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_4", zoneName = "space_endor", x = 2920, z = -4431, y = -5893, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_5", zoneName = "space_endor", x = 2190, z = -3832, y = -7527, escortNumber = 5, radius = 250},
 	},
 
 	attackDelay = 85,
@@ -1524,10 +1548,11 @@ escort_naboo_privateer_tier4_4b = SpaceEscortScreenplay:new {
 	escortShips = {"rsf_scanner_tier4"},
 
 	escortPoints = {
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_1", zoneName = "space_yavin4", x = -2600, z = 1800, y = 2100, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_2", zoneName = "space_yavin4", x = -1850, z = 2450, y = 1600, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_3", zoneName = "space_yavin4", x = -1080, z = 3140, y = 1090, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_4", zoneName = "space_yavin4", x = -290, z = 3860, y = 540, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_1", zoneName = "space_yavin4", x = -4970, z = 4802, y = 873, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_2", zoneName = "space_yavin4", x = -6367, z = 5156, y = 1553, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_3", zoneName = "space_yavin4", x = -7440, z = 5038, y = 1840, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_4", zoneName = "space_yavin4", x = -5975, z = 3099, y = -130, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_5", zoneName = "space_yavin4", x = -4967, z = 651, y = -1573, escortNumber = 5, radius = 250},
 	},
 
 	attackDelay = 85,
@@ -1711,16 +1736,17 @@ recovery_duty_naboo_privateer_tier4_1 = SpaceDutyRecoveryScreenplay:new {
 	escortShips = {"aynat_enforcer_tier4", "aynat_enforcer_tier4"},
 
 	preRecoveryPoints = {
-		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_1", x = -397, z = 4235, y = 2013, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_2", x = -1096, z = 2908, y = -340, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_3", x = -1863, z = 2415, y = -2912, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_4", x = -3093, z = 1706, y = -6585, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_1", zoneName = "space_yavin4", x = -2104, z = 5669, y = -3583, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_2", zoneName = "space_yavin4", x = -3790, z = 4893, y = -4029, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_3", zoneName = "space_yavin4", x = -6721, z = 4609, y = -3299, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_escort_4", zoneName = "space_yavin4", x = -7376, z = 4462, y = -2880, escortNumber = 4, radius = 250},
 	},
 
 	recoveryPoints = {
-		{patrolPointName = "naboo_privateer_tier4_recovery_duty_egress_1", x = -2157, z = -731, y = -5594, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_recovery_duty_egress_2", x = -491, z = -6021, y = -3466, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_recovery_duty_egress_3", x = 57, z = -7525, y = -2756, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_egress_1", zoneName = "space_yavin4", x = -6350, z = 2219, y = -3448, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_egress_2", zoneName = "space_yavin4", x = -4961, z = 210, y = -3562, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_egress_3", zoneName = "space_yavin4", x = -3696, z = -1619, y = -3667, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_recovery_duty_egress_4", zoneName = "space_yavin4", x = -2365, z = -3545, y = -3776, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 90, -- In Seconds
@@ -1780,13 +1806,13 @@ RsfSquadronScreenplay = ScreenPlay:new {
 
 	-- Tier 2 Quest Strings
 	TIER2_QUEST_STRING_1 = {type = "destroy", name = "naboo_privateer_13a"},
-	TIER2_QUEST_STRING_2 = {type = "escort", name = "naboo_privateer_14"},
-	TIER2_QUEST_STRING_3 = {type = "inspect", name = "naboo_privateer_15"},
+	TIER2_QUEST_STRING_2 = {type = "recovery", name = "naboo_privateer_14"},
+	TIER2_QUEST_STRING_3 = {type = "escort", name = "naboo_privateer_15"},
 	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "naboo_privateer_tier2_4a"},
 
 	-- Tier 2 Duty Quest Strings
-	TIER2_QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "naboo_privateer_9"},
-	TIER2_QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "naboo_privateer_10"},
+	TIER2_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "naboo_privateer_9"},
+	TIER2_QUEST_STRING_DUTY_2 = {type = "recovery_duty", name = "naboo_privateer_10"},
 	TIER2_QUEST_STRING_DUTY_3 = {type = "destroy_duty", name = "naboo_privateer_11"},
 	TIER2_QUEST_STRING_DUTY_4 = {type = "recovery_duty", name = "naboo_privateer_12"},
 
@@ -1901,11 +1927,11 @@ function RsfSquadronScreenplay:resetKaydineQuests(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1.type, self.TIER2_QUEST_STRING_1.name, false)
 
 	-- Mission 2
-	escort_naboo_privateer_14:resetQuest(pPlayer)
+	recovery_naboo_privateer_14:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_2.type, self.TIER2_QUEST_STRING_2.name, false)
 
 	-- Mission 3
-	inspect_naboo_privateer_15:resetQuest(pPlayer)
+	escort_naboo_privateer_15:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_3.type, self.TIER2_QUEST_STRING_3.name, false)
 
 	-- Mission 4
@@ -1913,8 +1939,8 @@ function RsfSquadronScreenplay:resetKaydineQuests(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_4.type, self.TIER2_QUEST_STRING_4.name, false)
 
 	-- Duty Missions
-	destroy_duty_naboo_privateer_9:resetQuest(pPlayer)
-	escort_duty_naboo_privateer_10:resetQuest(pPlayer)
+	escort_duty_naboo_privateer_9:resetQuest(pPlayer)
+	recovery_duty_naboo_privateer_10:resetQuest(pPlayer)
 	destroy_duty_naboo_privateer_11:resetQuest(pPlayer)
 	recovery_duty_naboo_privateer_12:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_DUTY_1.type, self.TIER2_QUEST_STRING_DUTY_1.name, false)
