@@ -440,13 +440,15 @@ dravis_convo_train_player_droid_free = ConvoScreen:new {
 }
 dravis_convo:addScreen(dravis_convo_train_player_droid_free)
 
---[[ Duty missions (Tier-1 grind: destroy / escort duty) ]]
+--[[ Duty missions (Tier-1 grind) ]]
 dravis_convo_duty_missions = ConvoScreen:new {
 	id = "duty_missions",
-	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_4d19fcb1", -- What's on your mind? Thinking about performing some duty missions?
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_f04d5e44", -- Well, we do need someone to escort our supply shipments...
 	stopConversation = "false",
 	options = {
 		{"@conversation/tatooine_privateer_trainer_1:s_695b8483", "destroy_duty"}, -- Black Sun pirates.
+		{"@conversation/tatooine_privateer_trainer_1:s_61b6e28a", "recovery_duty"}, -- Healthy competition.
+		{"@conversation/tatooine_privateer_trainer_1:s_87f48e61", "leader_duty"}, -- The Black Sun leader.
 		{"@conversation/tatooine_privateer_trainer_1:s_96294214", "escort_duty"}, -- Escort Duty.
 		{"@conversation/tatooine_privateer_trainer_1:s_6106187c", "what_is_duty"}, -- What is a duty mission?
 	}
@@ -459,6 +461,8 @@ dravis_convo_what_is_duty = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/tatooine_privateer_trainer_1:s_695b8483", "destroy_duty"}, -- Black Sun pirates.
+		{"@conversation/tatooine_privateer_trainer_1:s_61b6e28a", "recovery_duty"}, -- Healthy competition.
+		{"@conversation/tatooine_privateer_trainer_1:s_87f48e61", "leader_duty"}, -- The Black Sun leader.
 		{"@conversation/tatooine_privateer_trainer_1:s_96294214", "escort_duty"}, -- Escort Duty.
 	}
 }
@@ -472,6 +476,22 @@ dravis_convo_destroy_duty = ConvoScreen:new {
 	options = {}
 }
 dravis_convo:addScreen(dravis_convo_destroy_duty)
+
+dravis_convo_recovery_duty = ConvoScreen:new {
+	id = "recovery_duty",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_c8bcb663", -- Go recover some of the Valarians' cargo.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_recovery_duty)
+
+dravis_convo_leader_duty = ConvoScreen:new {
+	id = "leader_duty",
+	leftDialog = "@conversation/tatooine_privateer_trainer_1:s_2a8b0366", -- Cut off the head: kill a Black Sun ace.
+	stopConversation = "true",
+	options = {}
+}
+dravis_convo:addScreen(dravis_convo_leader_duty)
 
 -- Duty accepted (handler starts escort_duty_tatooine_privateer_7)
 dravis_convo_escort_duty = ConvoScreen:new {

@@ -92,11 +92,15 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_3.type, SmugglerSquadronScreenplay.QUEST_STRING_3.name) and SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_3_SIDE.type, SmugglerSquadronScreenplay.QUEST_STRING_3_SIDE.name)
 	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_4.type, SmugglerSquadronScreenplay.QUEST_STRING_4.name)
 
-	local destroyDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.name)
-	local escortDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.name)
+	local recoveryDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.name)
+	local destroyDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.name)
+	local escortDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_3.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_3.name)
+	local leaderDutyStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_4.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_4.name)
 
-	local destroyDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.name)
-	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.name)
+	local recoveryDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_1.name)
+	local destroyDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_2.name)
+	local escortDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_3.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_3.name)
+	local leaderDutyComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_4.type, SmugglerSquadronScreenplay.QUEST_STRING_DUTY_4.name)
 
 	-- Player is a neutral pilot but belongs to a different squadron
 	if (isNeutralPilot and not SpaceHelpers:isSmugglerSquadron(pPlayer)) then
@@ -519,7 +523,7 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	--]]
 
 	-- Player has an active quest from Sinkko
-	if ((questTwoStarted and not questTwoComplete) or (questThreeStarted and not questThreeComplete) or (questFourStarted and not questFourComplete) or (destroyDutyStarted and not destroyDutyComplete) or (escortDutyStarted and not escortDutyComplete)) then
+	if ((questTwoStarted and not questTwoComplete) or (questThreeStarted and not questThreeComplete) or (questFourStarted and not questFourComplete) or (recoveryDutyStarted and not recoveryDutyComplete) or (destroyDutyStarted and not destroyDutyComplete) or (escortDutyStarted and not escortDutyComplete) or (leaderDutyStarted and not leaderDutyComplete)) then
 		return convoTemplate:getScreen("has_mission")
 	-- Player has first quest active, the mission giver will offer assistance
 	elseif (questOneStarted and not questOneComplete) then
@@ -695,6 +699,10 @@ function dravisConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		return pClonedScreen
 	elseif (screenID == "destroy_duty") then
 		destroy_duty_tatooine_privateer_6:startQuest(pPlayer, pNpc)
+	elseif (screenID == "recovery_duty") then
+		recovery_duty_tatooine_privateer_5:startQuest(pPlayer, pNpc)
+	elseif (screenID == "leader_duty") then
+		destroy_duty_tatooine_privateer_8:startQuest(pPlayer, pNpc)
 	elseif (screenID == "escort_duty") then
 		escort_duty_tatooine_privateer_7:startQuest(pPlayer, pNpc)
 	-- Recruitment flow - confirm entry into the Smuggler Squadron

@@ -255,7 +255,49 @@ assassinate_tat_priv_quest_trans = SpaceAssassinateScreenplay:new {
 
 registerScreenPlay("assassinate_tat_priv_quest_trans", true)
 
--- Sinkko Duty Missions
+-- Dravis Duty Missions
+recovery_duty_tatooine_privateer_5 = SpaceDutyRecoveryScreenplay:new {
+	className = "recovery_duty_tatooine_privateer_5",
+
+	questName = "tatooine_privateer_5",
+	questType = "recovery_duty",
+
+	questZone = "space_tatooine",
+
+	creditReward = 1000,
+	creditKillBonus = 100,
+
+	sideQuest = false,
+	sideQuestType = "",
+
+	arrivalDelay = 10,
+	recoveryDelay = 20,
+
+	recoverShip = "valarian_freighterlight_mining_tier1",
+	recoveryConversationMobile = "object/mobile/dressed_nym_brawler_tran_m.iff",
+
+	escortShips = {"valarian_fighter_tier1", "valarian_fighter_tier1"},
+
+	preRecoveryPoints = {
+		{patrolPointName = "smuggler_rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+	},
+
+	recoveryPoints = {
+		{patrolPointName = "smuggler_rebel_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
+	},
+
+	attackDelay = 80,
+
+	attackShips = {
+		{"valarian_fighter_tier1"},
+		{"valarian_fighter_tier1", "valarian_bomber_tier1"},
+	},
+}
+
+registerScreenPlay("recovery_duty_tatooine_privateer_5", true)
+
 destroy_duty_tatooine_privateer_6 = SpaceDutyDestroyScreenplay:new {
 	className = "destroy_duty_tatooine_privateer_6",
 
@@ -304,9 +346,9 @@ escort_duty_tatooine_privateer_7 = SpaceDutyEscortScreenplay:new {
 
 	escortPoints = {
 		{patrolPointName = "smuggler_rebel_escort_1", zoneName = "space_tatooine", x = 7188, z = 1899, y = -2831, escortNumber = 1, radius = 250},
-		{patrolPointName = "smuggler_rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 2, radius = 250},
-		{patrolPointName = "smuggler_rebel_patrol_1", zoneName = "space_tatooine", x = 6439, z = -5021, y = -2217, escortNumber = 3, radius = 250},
-		{patrolPointName = "smuggler_rebel_patrol_3", zoneName = "space_tatooine", x = 4891, z = -3215, y = -1345, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_2", zoneName = "space_tatooine", x = 6446, z = 2694, y = -5694, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_3", zoneName = "space_tatooine", x = 4453, z = 3127, y = -7150, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_rebel_escort_4", zoneName = "space_tatooine", x = 1085, z = 4064, y = -7316, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 100,
@@ -321,6 +363,35 @@ escort_duty_tatooine_privateer_7 = SpaceDutyEscortScreenplay:new {
 }
 
 registerScreenPlay("escort_duty_tatooine_privateer_7", true)
+
+destroy_duty_tatooine_privateer_8 = SpaceDutyDestroyScreenplay:new {
+	className = "destroy_duty_tatooine_privateer_8",
+
+	questName = "tatooine_privateer_8",
+	questType = "destroy_duty",
+
+	questZone = "space_tatooine",
+
+	creditReward = 150,
+
+	sideQuest = false,
+	sideQuestType = "",
+
+	totalLevels = 5,
+	totalRounds = 2,
+	totalWaves = 3,
+
+	minDistance = 12500,
+	maxDistance = 17500,
+
+	bossShip = "blacksun_ace_s04_tier2",
+	shipTypes = {
+		{"blacksun_fighter_s01_tier1", "blacksun_fighter_s02_tier1", "blacksun_bomber_s01_tier1"},
+		{"blacksun_aggressor_tier1", "blacksun_vehement_tier1", "blacksun_bomber_s01_tier1"},
+	},
+}
+
+registerScreenPlay("destroy_duty_tatooine_privateer_8", true)
 
 --[[
 	Tier 2 -- tatooine_privateer_tier2 Main Missions
@@ -518,7 +589,7 @@ recovery_duty_tatooine_privateer_tier2_recoveryduty = SpaceDutyRecoveryScreenpla
 	arrivalDelay = 15,
 	recoveryDelay = 30,
 
-	recoverShips = {"freighterlight_tier2", "freightermedium_tier2"},
+	recoverShip = "freighterlight_tier2",
 	recoveryConversationMobile = "object/mobile/shared_dressed_nym_patrol_elite_nikto_m.iff",
 
 	escortShips = {"imp_tie_fighter_tier2", "imp_tie_fighter_tier2"},
@@ -565,10 +636,10 @@ escort_duty_tatooine_privateer_tier2_escortduty = SpaceDutyEscortScreenplay:new 
 	escortShips = {"freighterlight_tier2", "freightermedium_tier2", "freighterheavy_tier2"},
 
 	escortPoints = {
-		{patrolPointName = "smuggler_vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 1, radius = 250},
-		{patrolPointName = "smuggler_lok_imp_pirate_9", zoneName = "space_lok", x = 1492, z = 662, y = -2814, escortNumber = 2, radius = 250},
-		{patrolPointName = "smuggler_vortex_mission_1_1", zoneName = "space_lok", x = 2241, z = -1210, y = -2943, escortNumber = 3, radius = 250},
-		{patrolPointName = "smuggler_vortex_mission_1_5", zoneName = "space_lok", x = -2464, z = -1051, y = -2900, escortNumber = 4, radius = 250},
+		{patrolPointName = "smuggler_vortex_mission_1_5", zoneName = "space_lok", x = -2464, z = -1051, y = -2900, escortNumber = 1, radius = 250},
+		{patrolPointName = "smuggler_vortex_mission_1_4", zoneName = "space_lok", x = -1009, z = -1075, y = -2900, escortNumber = 2, radius = 250},
+		{patrolPointName = "smuggler_lok_imp_pirate_9", zoneName = "space_lok", x = 1492, z = 662, y = -2814, escortNumber = 3, radius = 250},
+		{patrolPointName = "smuggler_vortex_mission_1_1", zoneName = "space_lok", x = 2241, z = -1210, y = -2943, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 80,
@@ -1218,8 +1289,10 @@ SmugglerSquadronScreenplay = ScreenPlay:new {
 	QUEST_STRING_4 = {type = "assassinate", name = "tatooine_privateer_tier1_4a"},
 	QUEST_STRING_TRANS_PATROL = {type = "patrol", name = "tat_priv_quest_trans"},
 	QUEST_STRING_TRANS_ASSASSINATE = {type = "assassinate", name = "tat_priv_quest_trans"},
-	QUEST_STRING_DUTY_1 = {type = "destroy_duty", name = "tatooine_privateer_6"},
-	QUEST_STRING_DUTY_2 = {type = "escort_duty", name = "tatooine_privateer_7"},
+	QUEST_STRING_DUTY_1 = {type = "recovery_duty", name = "tatooine_privateer_5"},
+	QUEST_STRING_DUTY_2 = {type = "destroy_duty", name = "tatooine_privateer_6"},
+	QUEST_STRING_DUTY_3 = {type = "escort_duty", name = "tatooine_privateer_7"},
+	QUEST_STRING_DUTY_4 = {type = "destroy_duty", name = "tatooine_privateer_8"},
 
 	-- Tier 2
 	TIER2_QUEST_STRING_1 = {type = "assassinate", name = "tatooine_privateer_tier2_1a"},
