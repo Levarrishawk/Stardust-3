@@ -442,6 +442,7 @@ void CommandConfigManager::registerCommands3() {
 	commandFactory.registerCommand<PostureUpAttackCommand>(String("postureUpAttack").toLowerCase());
 	commandFactory.registerCommand<PowerBoostCommand>(String("powerBoost").toLowerCase());
 	commandFactory.registerCommand<ProneCommand>(String("prone").toLowerCase());
+	commandFactory.registerCommand<PvpCommand>(String("pvp").toLowerCase());
 	commandFactory.registerCommand<PurchaseReinforcementCommand>(String("purchaseReinforcement").toLowerCase());
 	commandFactory.registerCommand<PurchaseTicketCommand>(String("purchaseTicket").toLowerCase());
 	commandFactory.registerCommand<QuickHealCommand>(String("quickHeal").toLowerCase());

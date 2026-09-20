@@ -181,8 +181,9 @@ function SpaceHelpers:playSpaceQuestVictoryMusic(pPlayer)
 end
 
 -- Keep ground GCW alignment synchronized with the pilot squadron selected by the
--- player. Factional squadrons enlist covert by default, matching GCW recruiters;
--- neutral squadrons clear faction membership and remain on leave.
+-- player. Factional pilot training grants membership on leave; only a faction
+-- recruiter should promote the player to combatant or special forces status.
+-- Neutral pilot training does not alter the player's existing faction or status.
 function SpaceHelpers:synchronizeSquadronFaction(pPlayer, squadron)
 	if (pPlayer == nil) then
 		return
@@ -190,12 +191,9 @@ function SpaceHelpers:synchronizeSquadronFaction(pPlayer, squadron)
 
 	if (squadron == BLACK_EPSILON_SQUADRON or squadron == STORM_SQUADRON or squadron == INQUISITION_SQUADRON) then
 		CreatureObject(pPlayer):setFaction(FACTIONIMPERIAL)
-		CreatureObject(pPlayer):setFactionStatus(COVERT)
+		CreatureObject(pPlayer):setFactionStatus(ONLEAVE)
 	elseif (squadron == CRIMSON_PHOENIX_SQUADRON or squadron == HAVOC_SQUADRON or squadron == VORTEX_SQUADRON) then
 		CreatureObject(pPlayer):setFaction(FACTIONREBEL)
-		CreatureObject(pPlayer):setFactionStatus(COVERT)
-	elseif (squadron == CORSEC_SQUADRON or squadron == RSF_SQUADRON or squadron == SMUGGLER_SQUADRON) then
-		CreatureObject(pPlayer):setFaction(0)
 		CreatureObject(pPlayer):setFactionStatus(ONLEAVE)
 	end
 end

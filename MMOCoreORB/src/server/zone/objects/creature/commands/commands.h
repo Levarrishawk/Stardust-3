@@ -656,6 +656,7 @@
 #include "ShowCouncilRankCommand.h"
 #include "ShowDanceVisualsCommand.h"
 #include "ShowFactionInformationCommand.h"
+#include "PvpCommand.h"
 #include "ShowMusicianVisualsCommand.h"
 #include "ShowPvPRatingCommand.h"
 #include "ShowSpawnRegionCommand.h"

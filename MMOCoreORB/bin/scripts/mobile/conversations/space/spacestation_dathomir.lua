@@ -366,7 +366,7 @@ repair_full = ConvoScreen:new {
 	stopConversation = "false",
 	options = {
 		{"@conversation/station_dathomir:s_873", "accept_repair_full"}, -- Yes.
-		{"@conversation/station_dathomir:s_877", "deny_repair_full"}, -- I can't afford that.
+		{"@conversation/station_dathomir:s_877", "spacestation_dathomir_repair_deny"}, -- I can't afford that.
 		{"@conversation/station_dathomir:s_887", "spacestation_dathomir_repair_deny"}, -- Never mind.
 	}
 }
