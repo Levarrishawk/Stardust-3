@@ -1874,28 +1874,127 @@ dravis_convo:addScreen(dravis_tier4_second_mission_success);
 
 dravis_tier4_third_mission = ConvoScreen:new {
 	id = "tier4_third_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_b5ee61ed", -- A pair of Imperial freighters have entered Yavin space...
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_67ec71d0", -- Hey, there you are. Ready to get back to work?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_77e48d5b", "tier4_third_mission_details"}, -- What do you mean?
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_third_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_8be640b8", "tier4_third_mission_rumors"}, -- Sure.
 	}
 }
 dravis_convo:addScreen(dravis_tier4_third_mission);
 
-dravis_tier4_third_mission_details = ConvoScreen:new {
-	id = "tier4_third_mission_details",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_7378bc13", -- You know how testy Imperial freighter captains can be...
+dravis_tier4_third_mission_rumors = ConvoScreen:new {
+	id = "tier4_third_mission_rumors",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_50335ae8", -- Did you hear any good rumors in Jabba's Palace?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_third_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_77e48d5b", "tier4_third_mission_jabba_angle"}, -- What do you mean?
 	}
 }
-dravis_convo:addScreen(dravis_tier4_third_mission_details);
+dravis_convo:addScreen(dravis_tier4_third_mission_rumors);
+
+dravis_tier4_third_mission_jabba_angle = ConvoScreen:new {
+	id = "tier4_third_mission_jabba_angle",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_8ee47f8c", -- Is Jabba planning something in Dathomir?
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_73d0a21b", "tier4_third_mission_stories"}, -- What? No!
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_jabba_angle);
+
+dravis_tier4_third_mission_stories = ConvoScreen:new {
+	id = "tier4_third_mission_stories",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_95c7e5cc", -- He is, isn't he? I've heard stories.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_4e27fe11", "tier4_third_mission_skeptical"}, -- I don't know what you're talking about.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_stories);
+
+dravis_tier4_third_mission_skeptical = ConvoScreen:new {
+	id = "tier4_third_mission_skeptical",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_4f268deb", -- Uh huh.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_f14cd6bf", "tier4_third_mission_dathomir"}, -- I didn't have any time for gossip.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_skeptical);
+
+dravis_tier4_third_mission_dathomir = ConvoScreen:new {
+	id = "tier4_third_mission_dathomir",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_f17a86bc", -- I'll just say one word: Dathomir.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_c758f78a", "tier4_third_mission_business"}, -- I can't tell you what I don't know!
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_dathomir);
+
+dravis_tier4_third_mission_business = ConvoScreen:new {
+	id = "tier4_third_mission_business",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_9c834ac9", -- Let's get down to business. We need to help Jabba.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_e56b171a", "tier4_third_mission_ally"}, -- I thought I was done with him.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_business);
+
+dravis_tier4_third_mission_ally = ConvoScreen:new {
+	id = "tier4_third_mission_ally",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_8138df62", -- Jabba's the strongest crime lord in the sector.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_443da380", "tier4_third_mission_valarian"}, -- Lady Valarian could become the strongest.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_ally);
+
+dravis_tier4_third_mission_valarian = ConvoScreen:new {
+	id = "tier4_third_mission_valarian",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_bd9c8748", -- Lady Valarian will never become the top player.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_312a9b56", "tier4_third_mission_assignment"}, -- You never know.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_valarian);
+
+dravis_tier4_third_mission_assignment = ConvoScreen:new {
+	id = "tier4_third_mission_assignment",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_8d8e36c9", -- We're doing our part to keep Jabba on top.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_1c8bddbb", "tier4_third_mission_orders"}, -- What is it?
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_assignment);
+
+dravis_tier4_third_mission_orders = ConvoScreen:new {
+	id = "tier4_third_mission_orders",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_11ed6849", -- Disable a Valarian gunship at Dantooine and inspect it.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_658f174d", "tier4_third_mission_freight_plans"}, -- What am I looking for?
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_orders);
+
+dravis_tier4_third_mission_freight_plans = ConvoScreen:new {
+	id = "tier4_third_mission_freight_plans",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_472841f4", -- Freight plans. I want to know what they're transporting!
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_6c251948", "accept_tier4_third_mission"}, -- You got it.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_third_mission_freight_plans);
 
 dravis_accept_tier4_third_mission = ConvoScreen:new {
 	id = "accept_tier4_third_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_ff66ed8b", -- You don't have to love 'em. You just have to keep 'em happy. Get out there and take care of those captains.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_7f405b16", -- And remember: Jabba forever!
 	stopConversation = "true",
 	options = {}
 }
