@@ -1022,6 +1022,13 @@ space_naboo = SpacePatrolPointTable:new {
 	-- RSF Tier 2 Mission 2: Assassinate
 	{patrolPointName = "rsf_tier2_assassinate_1", x = 1500, z = 600, y = -1500},
 	{patrolPointName = "rsf_tier2_assassinate_2", x = 2000, z = 400, y = -2000},
+	-- RSF Tier 2 Mission 1: chained Ay'Nat Enforcer routes
+	{patrolPointName = "rsf_tier2_enforcer_1a_1", x = -4200, z = 600, y = -2800},
+	{patrolPointName = "rsf_tier2_enforcer_1a_2", x = -3300, z = 300, y = -1900},
+	{patrolPointName = "rsf_tier2_enforcer_1b_1", x = -500, z = -300, y = 3600},
+	{patrolPointName = "rsf_tier2_enforcer_1b_2", x = 500, z = -100, y = 4400},
+	{patrolPointName = "rsf_tier2_enforcer_1c_1", x = 4300, z = 500, y = 2600},
+	{patrolPointName = "rsf_tier2_enforcer_1c_2", x = 5200, z = 200, y = 1600},
 	-- RSF Tier 1 Duty: Patrol
 	{patrolPointName = "rsf_duty_patrol_1", x = 752, z = 659, y = -2444},
 	{patrolPointName = "rsf_duty_patrol_2", x = 2031, z = 887, y = -1759},
