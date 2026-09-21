@@ -1957,6 +1957,7 @@ function RsfSquadronScreenplay:resetKaydineQuests(pPlayer)
 	removeQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_2.name .. ":reward")
 	removeQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_3.name .. ":reward")
 	removeQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward")
+	removeQuestStatus(playerID .. "RsfSquadronScreenplay:KaydineIntroduction")
 end
 
 function RsfSquadronScreenplay:resetDuliosQuests(pPlayer)

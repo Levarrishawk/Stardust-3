@@ -60,6 +60,65 @@ on_mission = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(on_mission);
 
+-- Initial Tier 2 introduction
+kaydine_intro = ConvoScreen:new {
+	id = "kaydine_intro",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_464cfc61", -- Greetings, pilot! You must be Captain %TU. Am I right?
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_9560d48e", "kaydine_intro_security"}, -- Yes. How did you know?
+	}
+}
+kaydine_convo_template:addScreen(kaydine_intro);
+
+kaydine_intro_security = ConvoScreen:new {
+	id = "kaydine_intro_security",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9ea46a82", -- Palace security system. Sees all. Tells all. I'm guessing you're here about the job?
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_370822d1", "kaydine_intro_welcome"}, -- Yes.
+	}
+}
+kaydine_convo_template:addScreen(kaydine_intro_security);
+
+kaydine_intro_welcome = ConvoScreen:new {
+	id = "kaydine_intro_welcome",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_7cc7c206", -- Well then, welcome aboard! I'm Captain Kaydine...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_58362a8d", "kaydine_intro_duties"}, -- Tell me about it.
+	}
+}
+kaydine_convo_template:addScreen(kaydine_intro_welcome);
+
+kaydine_intro_duties = ConvoScreen:new {
+	id = "kaydine_intro_duties",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_2847218", -- Being a war-hero, my life is rather complex...
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_8f2e1055", "kaydine_intro_offer"}, -- So there are missions?
+	}
+}
+kaydine_convo_template:addScreen(kaydine_intro_duties);
+
+kaydine_intro_offer = ConvoScreen:new {
+	id = "kaydine_intro_offer",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_6cd96c01", -- Your job will be to take my place on the duty roster in exchange for training. Sound like a good deal?
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_5e2a2bb1", "kaydine_intro_complete"}, -- Sounds good.
+	}
+}
+kaydine_convo_template:addScreen(kaydine_intro_offer);
+
+kaydine_intro_complete = ConvoScreen:new {
+	id = "kaydine_intro_complete",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_24d86e89", -- I will update your flight status and append the RSF codes to your datapad.
+	stopConversation = "true",
+	options = {}
+}
+kaydine_convo_template:addScreen(kaydine_intro_complete);
+
 -- Completed Kaydine's tier, go to next trainer (Dulios)
 completed_kaydine = ConvoScreen:new {
 	id = "completed_kaydine",
@@ -121,7 +180,7 @@ kaydine_convo_template:addScreen(accept_duty_recovery);
 -- Training screen (options added dynamically)
 ready_train_pilot = ConvoScreen:new {
 	id = "ready_train_pilot",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8a84109d", -- It must be your lucky day. I actually do have some elective duty missions. Take a look and tell me what you want.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_76e6f264", -- I think you've grown enough as a pilot to warrant advanced training. What area interests you most?
 	stopConversation = "false",
 	options = {}
 }
@@ -292,17 +351,28 @@ final_train_algorithms = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(final_train_algorithms);
 
--- First Mission: Disable Ay'Nat Captain
+-- First Mission: Destroy Ay'Nat Ghost Fighters
 first_mission = ConvoScreen:new {
 	id = "first_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_130b925b", -- We'll need you to catch up to the Ay'Nat Captain's personal starship... a rather fast vessel! Disable him, and protect the RSF Boarding Team while they arrest him.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9af8d581", -- Ready to go up against the Ay'Nat Ghost Fighters?
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_370822d1", "first_mission_details"}, -- Yes.
+		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
+	}
+}
+kaydine_convo_template:addScreen(first_mission);
+
+first_mission_details = ConvoScreen:new {
+	id = "first_mission_details",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_168f5655", -- Destroy the squadron of Ay'Nat Ghost Fighters sighted outside RSF-controlled space.
 	stopConversation = "false",
 	options = {
 		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "start_first_mission"}, -- Yes, Captain. I'm ready.
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
-kaydine_convo_template:addScreen(first_mission);
+kaydine_convo_template:addScreen(first_mission_details);
 
 failed_first_mission = ConvoScreen:new {
 	id = "failed_first_mission",
@@ -366,13 +436,13 @@ first_mission_success = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(first_mission_success);
 
--- Second Mission: Escort Prison Ship
+-- Second Mission: Capture the Ay'Nat Captain's yacht
 second_mission = ConvoScreen:new {
 	id = "second_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ec671b3f", -- Well, the Empire has demanded that the prisoners be turned over for questioning.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_35fb22d6", -- A number of Her Majesty's personal freight ships have been hijacked.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_2d67b7a8", "accept_escort_details"}, -- Where do I come in?
+		{"@conversation/naboo_privateer_trainer_2:s_7614c65", "accept_escort_details"}, -- Yes, it does.
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
@@ -380,7 +450,7 @@ kaydine_convo_template:addScreen(second_mission);
 
 accept_escort_details = ConvoScreen:new {
 	id = "accept_escort_details",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_287eca83", -- We needed to get that prisoner ship out of the Naboo system to keep the Empire happy.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_130b925b", -- Catch and disable the Ay'Nat Captain's personal starship, then protect the RSF boarding team.
 	stopConversation = "false",
 	options = {
 		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "accept_escort"}, -- Yes, Captain. I'm ready.
@@ -459,13 +529,13 @@ here_is_pay = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(here_is_pay);
 
--- Third Mission: Recover Stolen Ships
+-- Third Mission: Escort the RSF prison ship
 third_mission = ConvoScreen:new {
 	id = "third_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_35fb22d6", -- The Royal family has increased security in the wake of recent theft. A number of Her Majesty's personal starships have gone missing.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ec671b3f", -- The Empire has demanded that the prisoners be turned over for questioning.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_a6c7fa2b", "accept_inspect"}, -- What are the details?
+		{"@conversation/naboo_privateer_trainer_2:s_2d67b7a8", "accept_inspect"}, -- Where do I come in?
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
@@ -484,7 +554,7 @@ kaydine_convo_template:addScreen(failed_third_mission);
 
 accept_inspect = ConvoScreen:new {
 	id = "accept_inspect",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_3cef63a0", -- Fly out to your choice of strike points... look for Ay'Nat Legion fighters.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_287eca83", -- Get the prisoner ship out of Naboo to keep the Empire happy.
 	stopConversation = "true",
 	options = {}
 }
@@ -536,14 +606,35 @@ kaydine_convo_template:addScreen(turnover_intelligence);
 -- Fourth Mission: Hunt Ace Outlaws
 fourth_mission = ConvoScreen:new {
 	id = "fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_c4ef0e93", -- We need you to slip in to Ay'Nat-controlled space, and hunt down a trio of Ace outlaws.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8b529447", -- Are you ready for your next assignment? There's lots to be done!
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_f6ae3b07", "fourth_mission_situation"}, -- What's the job?
+		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
+	}
+}
+kaydine_convo_template:addScreen(fourth_mission);
+
+fourth_mission_situation = ConvoScreen:new {
+	id = "fourth_mission_situation",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4a743aa7", -- The Ay'Nat Legion is mounting an aggressive campaign, so we need to strike at its leadership.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_e9c57758", "fourth_mission_details"}, -- Elite starfighter assassins?
+	}
+}
+kaydine_convo_template:addScreen(fourth_mission_situation);
+
+fourth_mission_details = ConvoScreen:new {
+	id = "fourth_mission_details",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_c4ef0e93", -- Slip into Ay'Nat-controlled space and hunt down a trio of Ace outlaws.
 	stopConversation = "false",
 	options = {
 		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "accept_assassinate"}, -- Yes, Captain. I'm ready.
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
-kaydine_convo_template:addScreen(fourth_mission);
+kaydine_convo_template:addScreen(fourth_mission_details);
 
 failed_fourth_mission = ConvoScreen:new {
 	id = "failed_fourth_mission",
@@ -617,7 +708,7 @@ kaydine_convo_template:addScreen(complete_fourth_mission);
 
 fourth_mission_success = ConvoScreen:new {
 	id = "fourth_mission_success",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_aa83c988", -- Head deeper into the palace, my friend! Look for Commander Dulios.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9248b2ba", -- Well you've certainly earned it. I'll talk to you later.
 	stopConversation = "true",
 	options = {}
 }

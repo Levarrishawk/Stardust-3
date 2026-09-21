@@ -80,6 +80,8 @@ function kaydineConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		(destroyDuty1Started and not destroyDuty1Complete) or (escortDutyStarted and not escortDutyComplete) or (destroyDuty2Started and not destroyDuty2Complete) or (recoveryDutyStarted and not recoveryDutyComplete)) then
 
 		return convoTemplate:getScreen("on_mission")
+	elseif (not questOneStarted and not questOneComplete and getQuestStatus(playerID .. "RsfSquadronScreenplay:KaydineIntroduction") ~= "1") then
+		return convoTemplate:getScreen("kaydine_intro")
 
 	-- Check if players have all the tier2 skill boxes and finished the last mission, then send them to next trainer.
 	elseif (questFourComplete and completedTier2 and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER2_QUEST_STRING_4.name .. ":reward") == "1") then
@@ -195,6 +197,9 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 			clonedConversation:addOption("@conversation/naboo_privateer_trainer_2:s_eff66f4d", responseString .. "train_algorithms") -- I am interested in reactor engineering algorithms.
 		end
 
+	elseif (screenID == "kaydine_intro_complete") then
+		setQuestStatus(playerID .. "RsfSquadronScreenplay:KaydineIntroduction", 1)
+
 	-- Handle Skill box granting
 	elseif (string.find(screenID, "_train_")) then
 		local skillManager = LuaSkillManager()
@@ -215,11 +220,6 @@ function kaydineConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sel
 			if (skillManager:fulfillsSkillPrerequisitesAndXp(pPlayer, "pilot_neutral_droid_02")) then
 				SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_droid_02", true)
 			end
-		end
-
-		if (ghost:getPilotTier() <= 2 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 2)) then
-			ghost:incrementPilotTier()
-			SpaceHelpers:addDuliosWaypoint(pPlayer)
 		end
 
 		return pClonedScreen
