@@ -50,12 +50,15 @@ function duliosConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name) or
 							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
 	local questFourStarted = SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4.name) or
-							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name)
+							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
 	local questOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name)
-	local questTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE3.name)
-	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE3.name)
-	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name)
+	local questTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.name)
+	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name)
+	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
 
 	local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)
 
@@ -88,7 +91,7 @@ function duliosConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":reward", 1)
 
 			-- Grant Reward
-			assassinate_naboo_privateer_tier3_4a:rewardPlayer(pPlayer)
+			assassinate_naboo_privateer_tier3_4f:rewardPlayer(pPlayer)
 		end
 
 		return convoTemplate:getScreen("complete_mission4")
@@ -97,7 +100,7 @@ function duliosConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":reward", 1)
 
 			-- Grant Reward
-			inspect_naboo_privateer_tier3_3a:rewardPlayer(pPlayer)
+			survival_naboo_privateer_tier3_3c:rewardPlayer(pPlayer)
 		end
 
 		return convoTemplate:getScreen("complete_mission3")
@@ -106,7 +109,7 @@ function duliosConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_2.name .. ":reward", 1)
 
 			-- Grant Reward
-			escort_naboo_privateer_tier3_2a:rewardPlayer(pPlayer)
+			rescue_naboo_privateer_tier3_2e:rewardPlayer(pPlayer)
 		end
 
 		return convoTemplate:getScreen("complete_mission2")
@@ -115,7 +118,7 @@ function duliosConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 			setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":reward", 1)
 
 			-- Grant Reward
-			recovery_naboo_privateer_tier3_1a:rewardPlayer(pPlayer)
+			assassinate_naboo_privateer_tier3_1d:rewardPlayer(pPlayer)
 		end
 
 		return convoTemplate:getScreen("complete_mission1")
@@ -220,8 +223,9 @@ function duliosConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 			SpaceHelpers:grantSpaceSkill(pPlayer, "pilot_neutral_droid_03", false)
 		end
 
-		if (ghost:getPilotTier() <= 3 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)) then
-			-- If player has all of the Tier 3 skills, increment their pilot tier
+		-- The final training screens contain Dulios's handoff dialogue, so complete
+		-- the tier and provide Diness Imler's waypoint during that same response.
+		if (string.find(screenID, "_final") and ghost:getPilotTier() <= 3 and SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)) then
 			ghost:incrementPilotTier()
 			SpaceHelpers:addDinessImlerWaypoint(pPlayer)
 		end
@@ -231,8 +235,8 @@ function duliosConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
 		--	Give fourth mission to player
-		assassinate_naboo_privateer_tier3_4a:resetQuest(pPlayer)
-		assassinate_naboo_privateer_tier3_4a:startQuest(pPlayer, pNpc)
+		destroy_surpriseattack_naboo_privateer_tier3_4_initial:resetQuest(pPlayer)
+		destroy_surpriseattack_naboo_privateer_tier3_4_initial:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_third_mission" or screenID == "i_was_better") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 

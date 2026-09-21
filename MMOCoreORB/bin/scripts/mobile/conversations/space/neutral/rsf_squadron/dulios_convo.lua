@@ -134,62 +134,71 @@ complete_mission1 = ConvoScreen:new {
 }
 dulios_convo_template:addScreen(complete_mission1);
 
--- Mission 2: Inspect Diplomat Ships
+-- Mission 2: Escort the Cadamo Sun
 
 second_mission = ConvoScreen:new {
 	id = "second_mission",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_5075e20b", -- Your new mission targets a criminal of a different type. I'm talking about diplomats.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_4f5f8321", -- Well, you noticed on your last mission that we have run-ins from time to time with pirates.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_66f6527f", "diplomats_know"}, -- Do the diplomats know?
-		{"@conversation/naboo_privateer_tier3:s_9d9af42e", "where_diplomats"}, -- Where are these diplomats?
+		{"@conversation/naboo_privateer_tier3:s_a56734f6", "pirates_are_crafty"}, -- I noticed.
 	}
 }
 dulios_convo_template:addScreen(second_mission);
 
-diplomats_know = ConvoScreen:new {
-	id = "diplomats_know",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_68d4ba6b", -- To be honest, it's probably not them. It's probably smugglers taking advantage of the opportunity, and hiding gear on their ship. Doesn't matter. Same difference.
+pirates_are_crafty = ConvoScreen:new {
+	id = "pirates_are_crafty",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_e1775a2f", -- Pirates are crafty devils. Always scheming. So we've got to be crafty too.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_a41bb8c7", "how_suspicious"}, -- How can you be so suspicious?
+		{"@conversation/naboo_privateer_tier3:s_2b6e8499", "cadamo_sun"}, -- As long as I get to shoot down a couple of pirate ships, I'm happy.
 	}
 }
-dulios_convo_template:addScreen(diplomats_know);
+dulios_convo_template:addScreen(pirates_are_crafty);
 
-how_suspicious = ConvoScreen:new {
-	id = "how_suspicious",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_83905129", -- Unlike you, I DO get paid the big bucks, %NU, and it's on account of my suspicious nature. Smugglers may be packing these ships with contraband.
+cadamo_sun = ConvoScreen:new {
+	id = "cadamo_sun",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_2c397539", -- I've got a freighter that needs a pilot escort. It's an old Corellian YT variant, the Cadamo Sun.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_c089dba4", "just_am"}, -- I just am.
+		{"@conversation/naboo_privateer_tier3:s_3895c4ae", "decoy_freighter"}, -- Okay...so what's onboard this ship?
 	}
 }
-dulios_convo_template:addScreen(how_suspicious);
+dulios_convo_template:addScreen(cadamo_sun);
 
-just_am = ConvoScreen:new {
-	id = "just_am",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_c65cf2da", -- What's not to like?
+decoy_freighter = ConvoScreen:new {
+	id = "decoy_freighter",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_7278c01", -- This is a decoy ship. The real goods are on another transport.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_9d9af42e", "where_diplomats"}, -- Where are these diplomats?
+		{"@conversation/naboo_privateer_tier3:s_7a9f14df", "keep_decoy_secret"}, -- So I'm guarding nothing.
 	}
 }
-dulios_convo_template:addScreen(just_am);
+dulios_convo_template:addScreen(decoy_freighter);
 
-where_diplomats = ConvoScreen:new {
-	id = "where_diplomats",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_76734574", -- En route. Fly out to the waypoint and get ready to inspect each and every one of them.
+keep_decoy_secret = ConvoScreen:new {
+	id = "keep_decoy_secret",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_21bb034b", -- You got it. And we want to keep that a little-known fact, if you get my drift.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_6c251948", "accept_second_mission"}, -- You got it.
+		{"@conversation/naboo_privateer_tier3:s_6540bc41", "aynat_pirates"}, -- Who's gunning for it?
 	}
 }
-dulios_convo_template:addScreen(where_diplomats);
+dulios_convo_template:addScreen(keep_decoy_secret);
+
+aynat_pirates = ConvoScreen:new {
+	id = "aynat_pirates",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_72c4169a", -- Ay'Nat Pirate Faction. They want what they think the ship has.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_tier3:s_d5d8a006", "accept_second_mission"}, -- But what they'll get is me.
+	}
+}
+dulios_convo_template:addScreen(aynat_pirates);
 
 accept_second_mission = ConvoScreen:new {
 	id = "accept_second_mission",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_c4095762", -- Fly your ship out to the waypoint. Inspect the diplomats' ships. Use some pretext if you have to. See what you can find.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_b8955212", -- The freighter is up around Naboo; you're clear to go.
 	stopConversation = "true",
 	options = {}
 }
@@ -215,109 +224,68 @@ dulios_convo_template:addScreen(stories_about_me);
 
 complete_mission2 = ConvoScreen:new {
 	id = "complete_mission2",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_47152ac5", -- Oh yeah. The worst of the worst. That data you intercepted has led us to a real hornet's nest of assassins and terrorists.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_29a181c", -- Those pirates really wanted that cargo, eh?
 	stopConversation = "false",
 	options = {}
 }
 dulios_convo_template:addScreen(complete_mission2);
 
--- Mission 3: Hunt Rodian Assassin
+-- Mission 3: Inspect the diplomatic convoy
 
 third_mission = ConvoScreen:new {
 	id = "third_mission",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_70e76a9a", -- OK, %NU, no more busywork. Time for some good old-fashioned killing. How does that sound?
+	leftDialog = "@conversation/naboo_privateer_tier3:s_5075e20b", -- Your new mission targets a criminal of a different type. I'm talking about diplomats.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_5a889c20", "rodians_feel"}, -- Like a dream come true.
-		{"@conversation/naboo_privateer_tier3:s_5a2317e2", "killing_bad_guys"}, -- Depends. Am I killing bad guys?
+		{"@conversation/naboo_privateer_tier3:s_66f6527f", "diplomats_know"}, -- Do the diplomats know?
+		{"@conversation/naboo_privateer_tier3:s_9d9af42e", "where_diplomats"}, -- Where are these diplomats?
 	}
 }
 dulios_convo_template:addScreen(third_mission);
 
-rodians_feel = ConvoScreen:new {
-	id = "rodians_feel",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_b7137723", -- OK. Then let's get started. How do you feel about Rodians?
+diplomats_know = ConvoScreen:new {
+	id = "diplomats_know",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_68d4ba6b", -- It is probably smugglers hiding gear on the diplomats' ships.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_589399fa", "love_em"}, -- Love 'em.
-		{"@conversation/naboo_privateer_tier3:s_af5ccac", "hate_em"}, -- Hate 'em.
+		{"@conversation/naboo_privateer_tier3:s_a41bb8c7", "how_suspicious"}, -- How can you be so suspicious?
 	}
 }
-dulios_convo_template:addScreen(rodians_feel);
+dulios_convo_template:addScreen(diplomats_know);
 
-killing_bad_guys = ConvoScreen:new {
-	id = "killing_bad_guys",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_ab3f1614", -- Boy, do I. This is a good one. I'd like to do this myself.
+how_suspicious = ConvoScreen:new {
+	id = "how_suspicious",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_83905129", -- Smugglers may be packing these ships with contraband.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_a09da7f1", "rodians_feel"}, -- You like that?
+		{"@conversation/naboo_privateer_tier3:s_c089dba4", "just_am"}, -- I just am.
 	}
 }
-dulios_convo_template:addScreen(killing_bad_guys);
+dulios_convo_template:addScreen(how_suspicious);
 
-love_em = ConvoScreen:new {
-	id = "love_em",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_4bdc789d", -- Hope you're being sarcastic. You're looking for a Rodian assassin.
+just_am = ConvoScreen:new {
+	id = "just_am",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_c65cf2da", -- I love you new guys. So easy to wind up.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_51ca1520", "rodian_killed"}, -- An assassin? Who's he killed?
+		{"@conversation/naboo_privateer_tier3:s_9d9af42e", "where_diplomats"}, -- Where are these diplomats?
 	}
 }
-dulios_convo_template:addScreen(love_em);
+dulios_convo_template:addScreen(just_am);
 
-hate_em = ConvoScreen:new {
-	id = "hate_em",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_bf22a8c8", -- Can't say I blame 'em. Got no use for them myself. But this Rodian's a real pain in the keister. We think he's killed two ambassadors already.
+where_diplomats = ConvoScreen:new {
+	id = "where_diplomats",
+	leftDialog = "@conversation/naboo_privateer_tier3:s_76734574", -- Fly out to the waypoint and inspect each of them.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_24ee6c29", "shooting_politicians"}, -- Someone's always shooting at politicians.
+		{"@conversation/naboo_privateer_tier3:s_6c251948", "accept_third_mission"}, -- You got it.
 	}
 }
-dulios_convo_template:addScreen(hate_em);
-
-rodian_killed = ConvoScreen:new {
-	id = "rodian_killed",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_96924c42", -- A couple of ambassadors, for starters. But that's not why we're interested in him. Word is, his next target is the Queen.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier3:s_b8c1a96f", "more_complicated"}, -- Hm. That makes it a little more complicated.
-	}
-}
-dulios_convo_template:addScreen(rodian_killed);
-
-shooting_politicians = ConvoScreen:new {
-	id = "shooting_politicians",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_919b5558", -- It's not the ambassadors they're worried about. This guy's gunning for the Queen.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier3:s_ebe811bd", "more_complicated"}, -- That makes it a little more complicated.
-	}
-}
-dulios_convo_template:addScreen(shooting_politicians);
-
-more_complicated = ConvoScreen:new {
-	id = "more_complicated",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_d5861157", -- The Royal Family is always a high-profile target, buddy. Believe me. The Queen's got more bounties on her head than you've got toes on your feet.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier3:s_692788e8", "find_charmer"}, -- Where can I find this charmer?
-	}
-}
-dulios_convo_template:addScreen(more_complicated);
-
-find_charmer = ConvoScreen:new {
-	id = "find_charmer",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_f6976b78", -- Sounds like a plan. Go to the Dantooine system. Follow the coordinates on your ship's nav system; should lead you right to him. And you've got the element of surprise - I think.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier3:s_a5fe9928", "accept_third_mission"}, -- I'll take care of it.
-	}
-}
-dulios_convo_template:addScreen(find_charmer);
+dulios_convo_template:addScreen(where_diplomats);
 
 accept_third_mission = ConvoScreen:new {
 	id = "accept_third_mission",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_b679efe", -- See that you do.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_c4095762", -- Inspect the diplomats' ships and see what you can find.
 	stopConversation = "true",
 	options = {}
 }
@@ -325,17 +293,17 @@ dulios_convo_template:addScreen(accept_third_mission);
 
 failed_third_mission = ConvoScreen:new {
 	id = "failed_third_mission",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_cae364a9", -- That Rodian is giving you a run for your money.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_53daee1c", -- You're starting to get a bad reputation.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_18868d04", "i_was_better"}, -- I was better.
+		{"@conversation/naboo_privateer_tier3:s_83b47a80", "i_was_better"}, -- You telling stories about me?
 	}
 }
 dulios_convo_template:addScreen(failed_third_mission);
 
 i_was_better = ConvoScreen:new {
 	id = "i_was_better",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_2852c031", -- Prove it. Finish your job.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_57d34626", -- Get back out there and try fighting back this time.
 	stopConversation = "true",
 	options = {}
 }
@@ -343,44 +311,22 @@ dulios_convo_template:addScreen(i_was_better);
 
 complete_mission3 = ConvoScreen:new {
 	id = "complete_mission3",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_b61d6d4f", -- OK! That's one less Rodian messing up the place. Nice work. Time to get back to your training.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_47152ac5", -- The data you intercepted led us to assassins and terrorists.
 	stopConversation = "false",
 	options = {}
 }
 dulios_convo_template:addScreen(complete_mission3);
-
 -- Mission 4: Hunt Human Assassin Beldini
 
 fourth_mission = ConvoScreen:new {
 	id = "fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_333a7093", -- This is a good one; wish I could do it myself. You're going after a Rodian assassin.
+	leftDialog = "@conversation/naboo_privateer_tier3:s_2b9a70e4", -- The data from your last mission identified a host of assassins and terrorists.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier3:s_e7b0a6c9", "another_assassin"}, -- Another assassin?
-		{"@conversation/naboo_privateer_tier3:s_719a036e", "who"}, -- Who?
+		{"@conversation/naboo_privateer_tier3:s_7339c95e", "beldini_target"}, -- Anybody at the top of the list?
 	}
 }
 dulios_convo_template:addScreen(fourth_mission);
-
-another_assassin = ConvoScreen:new {
-	id = "another_assassin",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_acc52186", -- There's more?
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier3:s_c551ea96", "beldini_target"}, -- Looks that way.
-	}
-}
-dulios_convo_template:addScreen(another_assassin);
-
-who = ConvoScreen:new {
-	id = "who",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_5ed53186", -- A human, name of Beldini. The worst of the bunch. He'd kill ya as soon as look at ya.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier3:s_981c060d", "shoot_first"}, -- Then I guess I better shoot first.
-	}
-}
-dulios_convo_template:addScreen(who);
 
 beldini_target = ConvoScreen:new {
 	id = "beldini_target",
@@ -391,16 +337,6 @@ beldini_target = ConvoScreen:new {
 	}
 }
 dulios_convo_template:addScreen(beldini_target);
-
-shoot_first = ConvoScreen:new {
-	id = "shoot_first",
-	leftDialog = "@conversation/naboo_privateer_tier3:s_46eb0ec8", -- First, go to Dantooine. Just follow the data in your nav system. And keep your eyes open. This guy's a professional.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier3:s_ff7bebda", "accept_fourth_mission"}, -- Don't let me down, ok? You'd hate to see a grown man cry.
-	}
-}
-dulios_convo_template:addScreen(shoot_first);
 
 just_tell_where = ConvoScreen:new {
 	id = "just_tell_where",

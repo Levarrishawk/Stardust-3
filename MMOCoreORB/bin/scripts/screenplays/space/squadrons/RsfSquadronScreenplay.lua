@@ -451,6 +451,7 @@ escort_naboo_privateer_15 = SpaceEscortScreenplay:new {
 	sideQuestType = "",
 
 	escortShips = {"rsf_prison_ship_tier2_naboo"},
+	escortSpeed = 30,
 
 	escortPoints = {
 		{patrolPointName = "rsf_tier2_escort_1", zoneName = "space_naboo", x = 3500, z = 500, y = -2000, escortNumber = 1, radius = 250},
