@@ -2018,28 +2018,97 @@ dravis_convo:addScreen(dravis_tier4_third_mission_success);
 
 dravis_tier4_fourth_mission = ConvoScreen:new {
 	id = "tier4_fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_1cf9a0f6", -- I've saved the best for last. I need a pilot willing to fly sorties against Black Sun pirates...
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_8945d3f4", -- Smugglers like us, we have a code.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_e9ea6fec", "tier4_fourth_mission_details"}, -- Good. Because I want to go after them.
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_fourth_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_877810f1", "tier4_fourth_mission_code"}, -- Enlighten me.
 	}
 }
 dravis_convo:addScreen(dravis_tier4_fourth_mission);
 
-dravis_tier4_fourth_mission_details = ConvoScreen:new {
-	id = "tier4_fourth_mission_details",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_fd271a84", -- You read my mind. But this time, you're not going alone. We need a show of force. You'll be joining a fleet of RSF pilots in a sortie against the Black Sun.
+dravis_tier4_fourth_mission_code = ConvoScreen:new {
+	id = "tier4_fourth_mission_code",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_cad10f7b", -- We try to help people in need.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_d55f2579", "accept_tier4_fourth_mission"}, -- I'm ready to go.
+		{"@conversation/tatooine_privateer_tier4:s_14a79f3e", "tier4_fourth_mission_reciprocity"}, -- That's it?
 	}
 }
-dravis_convo:addScreen(dravis_tier4_fourth_mission_details);
+dravis_convo:addScreen(dravis_tier4_fourth_mission_code);
+
+dravis_tier4_fourth_mission_reciprocity = ConvoScreen:new {
+	id = "tier4_fourth_mission_reciprocity",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_db65cfb3", -- We help people who can help us later on.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_a084de70", "tier4_fourth_mission_valarians"}, -- Now you're talking.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_fourth_mission_reciprocity);
+
+dravis_tier4_fourth_mission_valarians = ConvoScreen:new {
+	id = "tier4_fourth_mission_valarians",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_1bfa482b", -- Good job with those Valarian fighters!
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_5c05ecff", "tier4_fourth_mission_publicity"}, -- I just did what I was told.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_fourth_mission_valarians);
+
+dravis_tier4_fourth_mission_publicity = ConvoScreen:new {
+	id = "tier4_fourth_mission_publicity",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_b16ff72d", -- It's good publicity for the Smugglers Alliance.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_5866c569", "tier4_fourth_mission_goodwill"}, -- I follow you.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_fourth_mission_publicity);
+
+dravis_tier4_fourth_mission_goodwill = ConvoScreen:new {
+	id = "tier4_fourth_mission_goodwill",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_29b1a1b4", -- You're going on a goodwill mission.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_4ca03ddb", "tier4_fourth_mission_imperial_ace"}, -- How so?
+	}
+}
+dravis_convo:addScreen(dravis_tier4_fourth_mission_goodwill);
+
+dravis_tier4_fourth_mission_imperial_ace = ConvoScreen:new {
+	id = "tier4_fourth_mission_imperial_ace",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_70597637", -- Start targeting enemy forces with an Imperial Ace.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_da3439a6", "tier4_fourth_mission_targets"}, -- Where is this guy?
+	}
+}
+dravis_convo:addScreen(dravis_tier4_fourth_mission_imperial_ace);
+
+dravis_tier4_fourth_mission_targets = ConvoScreen:new {
+	id = "tier4_fourth_mission_targets",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_6c6479e8", -- Start in Lok, then target CorSec and RSF forces.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_e61fa67b", "tier4_fourth_mission_freedom"}, -- So you're just a freedom fighter.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_fourth_mission_targets);
+
+dravis_tier4_fourth_mission_freedom = ConvoScreen:new {
+	id = "tier4_fourth_mission_freedom",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_293b395b", -- Everybody should be free to do business with our smugglers.
+	stopConversation = "false",
+	options = {
+		{"@conversation/tatooine_privateer_tier4:s_b8dd8b3d", "accept_tier4_fourth_mission"}, -- Very touching.
+	}
+}
+dravis_convo:addScreen(dravis_tier4_fourth_mission_freedom);
 
 dravis_accept_tier4_fourth_mission = ConvoScreen:new {
 	id = "accept_tier4_fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_9281abbb", -- Go get 'em, tiger.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_5af217dd", -- Thanks. You're clear to leave anytime.
 	stopConversation = "true",
 	options = {}
 }
