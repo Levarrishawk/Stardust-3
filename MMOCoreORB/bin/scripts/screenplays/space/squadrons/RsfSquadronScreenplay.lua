@@ -1428,8 +1428,8 @@ patrol_naboo_privateer_tier4_2c = SpacePatrolScreenplay:new {
 		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_1", x = 3482, z = -3131, y = -7486, patrolNumber = 1, radius = 150},
 		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_2", x = 5371, z = -1785, y = -7223, patrolNumber = 2, radius = 150},
 		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_3", x = 7304, z = -654, y = -7255, patrolNumber = 3, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_4", x = 6834, z = 3140, y = -7143, patrolNumber = 4, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_5", x = 6349, z = 6605, y = -7132, patrolNumber = 5, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_4", x = 5600, z = 2800, y = -5700, patrolNumber = 4, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_5", x = 4300, z = 4800, y = -4500, patrolNumber = 5, radius = 150},
 	},
 }
 
