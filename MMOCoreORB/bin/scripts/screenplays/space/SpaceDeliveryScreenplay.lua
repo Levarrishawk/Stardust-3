@@ -22,6 +22,8 @@ SpaceDeliveryScreenplay = SpaceQuestLogic:new {
 	attackShips = {},
 	waitForAttackShips = false,
 	postDeliveryAttackDelay = 1,
+	orderedAttackWaves = false,
+	attackWaveDelay = 5,
 	verifySideQuestStart = false,
 
 	--[[
@@ -259,6 +261,8 @@ function SpaceDeliveryScreenplay:cleanUpQuestData(playerID)
 	-- Delete the freighter tracking
 	deleteData(playerID .. ":" .. self.className .. ":freighterID:")
 	deleteStringData(playerID .. ":" .. self.className .. ":leg:")
+	deleteData(playerID .. ":" .. self.className .. ":attackWaveCount:")
+	deleteData(playerID .. ":" .. self.className .. ":deliveryFinished:")
 
 	-- Delete the rendezvous area
 	local areaID = readData(playerID .. ":" .. self.className .. ":rendezvousArea:")
@@ -623,6 +627,21 @@ function SpaceDeliveryScreenplay:finishLeg(pPlayer, legName)
 		return
 	end
 
+	if (self.orderedAttackWaves) then
+		writeData(playerID .. ":" .. self.className .. ":deliveryFinished:", 1)
+
+		local activeShips = readStringVectorSharedMemory(playerID .. ":" .. self.className .. ":attackShips:")
+		local waveCount = readData(playerID .. ":" .. self.className .. ":attackWaveCount:")
+
+		if (#activeShips == 0 and waveCount < #self.attackShips) then
+			createEvent(self.postDeliveryAttackDelay * 1000, self.className, "spawnAttackWave", pPlayer, "")
+		elseif (#activeShips == 0) then
+			createEvent(1000, self.className, "completeQuest", pPlayer, "true")
+		end
+
+		return
+	end
+
 	-- Some deliveries culminate in an interception after the cargo transfer.
 	-- Keep the journal active until those mission targets have been destroyed.
 	if (self.waitForAttackShips and #self.attackShips > 0) then
@@ -652,13 +671,26 @@ function SpaceDeliveryScreenplay:spawnAttackWave(pPlayer)
 		return
 	end
 
-	local waveShips = self.attackShips[getRandomNumber(1, #self.attackShips)]
+	local playerID = SceneObject(pPlayer):getObjectID()
+	local waveShips = nil
+
+	if (self.orderedAttackWaves) then
+		local waveCount = readData(playerID .. ":" .. self.className .. ":attackWaveCount:") + 1
+
+		if (waveCount > #self.attackShips) then
+			return
+		end
+
+		writeData(playerID .. ":" .. self.className .. ":attackWaveCount:", waveCount)
+		waveShips = self.attackShips[waveCount]
+	else
+		waveShips = self.attackShips[getRandomNumber(1, #self.attackShips)]
+	end
 
 	if (type(waveShips) ~= "table") then
 		waveShips = {waveShips}
 	end
 
-	local playerID = SceneObject(pPlayer):getObjectID()
 	local legName = readStringData(playerID .. ":" .. self.className .. ":leg:")
 	local legZone = self:getLegZone(legName)
 	local playerFactionHash = SpaceHelpers:getPlayerSpaceFactionHash(pPlayer)
@@ -980,6 +1012,18 @@ function SpaceDeliveryScreenplay:notifyAttackShipDestroyed(pShipAgent, pKillerSh
 
 	CreatureObject(pPlayer):playEffect("clienteffect/ui_quest_destroyed_all.cef", "")
 	CreatureObject(pPlayer):sendSystemMessage("@spacequest/" .. self.questType .. "/" .. self.questName .. ":attack_stopped")
+
+	if (self.orderedAttackWaves) then
+		local waveCount = readData(missionOwnerID .. ":" .. self.className .. ":attackWaveCount:")
+
+		if (waveCount < #self.attackShips) then
+			createEvent(self.attackWaveDelay * 1000, self.className, "spawnAttackWave", pPlayer, "")
+		elseif (readData(missionOwnerID .. ":" .. self.className .. ":deliveryFinished:") == 1) then
+			createEvent(1000, self.className, "completeQuest", pPlayer, "true")
+		end
+
+		return 1
+	end
 
 	if (self.waitForAttackShips) then
 		createEvent(1000, self.className, "completeQuest", pPlayer, "true")
