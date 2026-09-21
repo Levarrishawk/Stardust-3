@@ -14,9 +14,9 @@ slave_trader_trader_tier3_dantooine = ShipAgent:new {
 
 	aggressive = 1,
 
-	spaceFaction = "civilian",
-	alliedFactions = {"hutt", "imperial", "civilian"},
-	enemyFactions = {"rebel", "merchant", "pirate"},
+	spaceFaction = "pirate",
+	alliedFactions = {"pirate"},
+	enemyFactions = {"imperial", "rebel", "civilian", "merchant", "rsf", "corsec", "hutt", "valarian"},
 
 	color1 = 7,
 	color2 = 59,

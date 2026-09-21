@@ -58,11 +58,11 @@ SpaceDantooineSpawner = SpaceSpawnerScreenPlay:new {
 		},
 		{spawnName = "slave_trader_out_2", spawnType = SHIP_SPAWN_SINGLE, x = 2299, z = -1583, y = 6678, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, totalSpawns = 3,
 			patrolsToAssign = 5, fixedPatrolPoints = {"slave_trader_out_2_00", "slave_trader_out_2_01", "slave_trader_out_2_02", "slave_trader_out_2_03", "slave_trader_out_2_04", "slave_trader_out_2_05", "slave_trader_out_2_06", "slave_trader_out_2_07", "slave_trader_out_2_08", "slave_trader_out_2_09", "slave_trader_out_2_10", "slave_trader_out_2_11", "slave_trader_out_2_12"},
-			shipSpawns = {"slave_trader_trader_tier3", "slave_trader_trader_tier3_dantooine", "slave_trader_trader_tier3_dantooine"}
+			shipSpawns = {"slave_trader_trader_tier3_dantooine", "slave_trader_trader_tier3_dantooine", "slave_trader_trader_tier3_dantooine"}
 		},
 		{spawnName = "slave_trader_out_1", spawnType = SHIP_SPAWN_SINGLE, x = 4999, z = -1574, y = 6617, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 40, maxSpawnDistance = 80, totalSpawns = 3,
 			patrolsToAssign = 5, fixedPatrolPoints = {"slave_trader_out_1_00", "slave_trader_out_1_01", "slave_trader_out_1_02", "slave_trader_out_1_03", "slave_trader_out_1_04", "slave_trader_out_1_05", "slave_trader_out_1_06", "slave_trader_out_1_07", "slave_trader_out_1_08"},
-			shipSpawns = {"slave_trader_trader_tier3", "slave_trader_trader_tier3_dantooine", "slave_trader_trader_tier3_dantooine"}
+			shipSpawns = {"slave_trader_trader_tier3_dantooine", "slave_trader_trader_tier3_dantooine", "slave_trader_trader_tier3_dantooine"}
 		},
 		{spawnName = "imperial_inquisition_1", spawnType = SHIP_SPAWN_SINGLE, x = 5110, z = 5511, y = 754, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 180, maxRespawn = 300, minSpawnDistance = 10, maxSpawnDistance = 20, totalSpawns = 6,
 			patrolsToAssign = 5, fixedPatrolPoints = {"imperial_inquisition_1_00", "imperial_inquisition_1_01", "imperial_inquisition_1_02", "imperial_inquisition_1_03", "imperial_inquisition_1_04", "imperial_inquisition_1_05", "imperial_inquisition_1_06", "imperial_inquisition_1_07", "imperial_inquisition_1_08", "imperial_inquisition_1_09", "imperial_inquisition_1_10", "imperial_inquisition_1_11", "imperial_inquisition_1_12", "imperial_inquisition_1_13", "imperial_inquisition_1_14", "imperial_inquisition_1_15", "imperial_inquisition_1_16", "imperial_inquisition_1_17", "imperial_inquisition_1_18", "imperial_inquisition_1_19", "imperial_inquisition_1_20", "imperial_inquisition_1_21", "imperial_inquisition_1_22"},
