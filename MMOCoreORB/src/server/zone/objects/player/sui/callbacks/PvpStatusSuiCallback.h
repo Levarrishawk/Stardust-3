@@ -36,6 +36,11 @@ public:
 			return false;
 		}
 
+		if (player->isPilotingShip() || player->isOnboardPobShip()) {
+			player->sendSystemMessage("You can not change your faction status while in a ship.");
+			return false;
+		}
+
 		PlayerObject* ghost = player->getPlayerObject();
 
 		if (ghost != nullptr && ghost->getActivePetsSize() > 0) {
