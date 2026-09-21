@@ -924,7 +924,7 @@ inspect_naboo_privateer_tier3_3a = SpaceInspectScreenplay:new {
 	parentQuestName = "",
 
 	sideQuest = true,
-	sideQuestType = "delivery",
+	sideQuestType = "delivery_no_pickup",
 	sideQuestName = "naboo_privateer_tier3_3b",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 
@@ -938,11 +938,11 @@ inspect_naboo_privateer_tier3_3a = SpaceInspectScreenplay:new {
 
 registerScreenPlay("inspect_naboo_privateer_tier3_3a", true)
 
-delivery_naboo_privateer_tier3_3b = SpaceDeliveryScreenplay:new {
-	className = "delivery_naboo_privateer_tier3_3b",
+delivery_no_pickup_naboo_privateer_tier3_3b = SpaceDeliveryNoPickupScreenplay:new {
+	className = "delivery_no_pickup_naboo_privateer_tier3_3b",
 
 	questName = "naboo_privateer_tier3_3b",
-	questType = "delivery",
+	questType = "delivery_no_pickup",
 
 	questZone = "space_lok",  -- Wiki: Lok System delivery run
 
@@ -958,10 +958,22 @@ delivery_naboo_privateer_tier3_3b = SpaceDeliveryScreenplay:new {
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 	sideQuestDelay = 4,
 
-	-- Screenplay Specific Variables
+	-- Captain Dekert's RSF Rawl rendezvous in the Lok system.
+	deliveryShip = "rsf_rawl_tier3",
+	deliveryPoint = {x = -5600, z = -400, y = 1400},
+
+	-- The two Black Sun interceptions occur in the order described by the mission.
+	attackDelay = 10,
+	attackWaveDelay = 8,
+	orderedAttackWaves = true,
+	waitForAttackShips = true,
+	attackShips = {
+		{"blacksun_aggressor_tier3", "blacksun_aggressor_tier3"},
+		{"blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3"},
+	},
 }
 
-registerScreenPlay("delivery_naboo_privateer_tier3_3b", true)
+registerScreenPlay("delivery_no_pickup_naboo_privateer_tier3_3b", true)
 
 survival_naboo_privateer_tier3_3c = SpaceSurvivalScreenplay:new {
 	className = "survival_naboo_privateer_tier3_3c",
@@ -976,8 +988,8 @@ survival_naboo_privateer_tier3_3c = SpaceSurvivalScreenplay:new {
 		{species = {-1}, item = "object/tangible/ship/components/weapon_capacitor/cap_mission_reward_neutral_sorosuub_v1.iff"},
 	},
 
-	parentQuest = "delivery_naboo_privateer_tier3_3b",
-	parentQuestType = "delivery",
+	parentQuest = "delivery_no_pickup_naboo_privateer_tier3_3b",
+	parentQuestType = "delivery_no_pickup",
 	parentQuestName = "naboo_privateer_tier3_3b",
 
 	-- Mission 3 ends here - return to Dulios for reward (per wiki)
@@ -985,7 +997,24 @@ survival_naboo_privateer_tier3_3c = SpaceSurvivalScreenplay:new {
 	sideQuestType = "",
 	sideQuestName = "",
 
-	-- Screenplay Specific Variables
+	-- Hold at the intercept point through the seven authored Black Sun waves.
+	survivalPoint = {x = -4200, z = 300, y = 2100},
+	survivalAreaRadius = 400,
+	survivalMaxDistance = 750,
+	retainWaypointDuringSurvival = true,
+	survivalTime = 0,
+	survivalWaves = 7,
+	delayToFirstAttack = 5,
+	waveDelay = 20,
+	attackShips = {
+		{"blacksun_bomber_s01_tier3", "blacksun_bomber_s01_tier3", "blacksun_fighter_s01_tier4"},
+		{"blacksun_bomber_s01_tier3", "blacksun_bomber_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3"},
+		{"blacksun_marauder_tier3", "blacksun_marauder_tier3", "blacksun_marauder_tier3"},
+		{"blacksun_bomber_s01_tier3", "blacksun_bomber_s01_tier3", "blacksun_fighter_s01_tier4"},
+		{"blacksun_bomber_s01_tier3", "blacksun_bomber_s01_tier3", "blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3"},
+	},
 }
 
 registerScreenPlay("survival_naboo_privateer_tier3_3c", true)
@@ -1014,37 +1043,7 @@ destroy_surpriseattack_naboo_privateer_tier3_3e = SpaceSurpriseAttackScreenplay:
 
 registerScreenPlay("destroy_surpriseattack_naboo_privateer_tier3_3e", true)
 
--- Mission 4: Destroy_Surpriseattack (Naboo) -> Assassinate (Dantooine) -> Space_Battle (Lok) -> Survival (Lok) -> Assassinate (Lok)
-
--- Initial surprise attack upon launching from Theed - 5 Black Sun Marauders
-destroy_surpriseattack_naboo_privateer_tier3_4_initial = SpaceSurpriseAttackScreenplay:new {
-	className = "destroy_surpriseattack_naboo_privateer_tier3_4_initial",
-
-	questName = "naboo_privateer_tier3_4_initial",
-	questType = "destroy_surpriseattack",
-
-	questZone = "space_naboo",
-
-	creditReward = 0,
-
-	parentQuest = "",
-	parentQuestType = "",
-	parentQuestName = "",
-
-	sideQuest = true,
-	sideQuestType = "assassinate",
-	sideQuestName = "naboo_privateer_tier3_4a",
-	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
-	sideQuestDelay = 3,
-
-	-- 5 Tier 3 Ixiyen Black Sun Marauder (per wiki)
-	surpriseAttackShips = {
-		zone = "space_naboo",
-		spawns = {{count = 5, shipName = "blacksun_marauder_tier3"}},
-	},
-}
-
-registerScreenPlay("destroy_surpriseattack_naboo_privateer_tier3_4_initial", true)
+-- Mission 4: Assassinate (Dantooine) -> Space Battle (Lok) -> three ambush waves (Lok) -> Assassinate (Lok)
 
 -- Dantooine assassinate - destroy Beldini and escorts
 assassinate_naboo_privateer_tier3_4a = SpaceAssassinateScreenplay:new {
@@ -1058,9 +1057,9 @@ assassinate_naboo_privateer_tier3_4a = SpaceAssassinateScreenplay:new {
 	creditReward = 0,
 	itemReward = {},
 
-	parentQuest = "destroy_surpriseattack_naboo_privateer_tier3_4_initial",
-	parentQuestType = "destroy_surpriseattack",
-	parentQuestName = "naboo_privateer_tier3_4_initial",
+	parentQuest = "",
+	parentQuestType = "",
+	parentQuestName = "",
 
 	sideQuest = true,
 	sideQuestType = "space_battle",
@@ -1071,6 +1070,13 @@ assassinate_naboo_privateer_tier3_4a = SpaceAssassinateScreenplay:new {
 	-- Screenplay Specific Variables
 	arrivalDelay = 12,
 	failTimer = 20,
+
+	-- The mission begins with the five Marauders that attack immediately after launch from Theed.
+	launchAmbushZone = "space_naboo",
+	launchAmbushShips = {
+		"blacksun_marauder_tier3", "blacksun_marauder_tier3", "blacksun_marauder_tier3",
+		"blacksun_marauder_tier3", "blacksun_marauder_tier3",
+	},
 
 	-- Per wiki: 2 Tier 3 Rihkxyrk Black Sun Bomber, 2 Tier 3 Ixiyen Black Sun Vehement, 1 Tier 4 Kihraxz Beldini
 	assassinateSpawns = {
@@ -1105,7 +1111,7 @@ space_battle_naboo_privateer_tier3_4b = SpaceBattleScreenplay:new {
 	parentQuestName = "naboo_privateer_tier3_4a",
 
 	sideQuest = true,
-	sideQuestType = "survival",
+	sideQuestType = "destroy_surpriseattack",
 	sideQuestName = "naboo_privateer_tier3_4c",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 	sideQuestDelay = 3,
@@ -1118,18 +1124,19 @@ space_battle_naboo_privateer_tier3_4b = SpaceBattleScreenplay:new {
 
 	-- Per wiki: 3 Tier 3 KSE Firespray RSF Hunter
 	supportShips = {"rsf_hunter_tier3", "rsf_hunter_tier3", "rsf_hunter_tier3"},
+	protectAlliedShips = true,
 	-- Per wiki: 2 Tier 3 Kihraxz Black Sun Fighter, 1 Tier 3 Ixiyen Black Sun Marauder, 1 Tier 4 Kihraxz Crystal Snake
-	enemyShips = {"blacksun_fighter_s01_tier3", "blacksun_fighter_s01_tier3", "blacksun_marauder_tier3", "blacksun_crystal_snake_tier3"},
+	enemyShips = {"blacksun_fighter_s02_tier3", "blacksun_fighter_s02_tier3", "blacksun_marauder_tier3", "blacksun_crystal_snake_tier3"},
 }
 
 registerScreenPlay("space_battle_naboo_privateer_tier3_4b", true)
 
--- Lok survival - 3 waves of Black Sun attackers
-survival_naboo_privateer_tier3_4c = SpaceSurvivalScreenplay:new {
-	className = "survival_naboo_privateer_tier3_4c",
+-- Lok ambush, first wave: 3 Black Sun Marauders
+destroy_surpriseattack_naboo_privateer_tier3_4c = SpaceSurpriseAttackScreenplay:new {
+	className = "destroy_surpriseattack_naboo_privateer_tier3_4c",
 
 	questName = "naboo_privateer_tier3_4c",
-	questType = "survival",
+	questType = "destroy_surpriseattack",
 
 	questZone = "space_lok",
 
@@ -1140,24 +1147,64 @@ survival_naboo_privateer_tier3_4c = SpaceSurvivalScreenplay:new {
 	parentQuestName = "naboo_privateer_tier3_4b",
 
 	sideQuest = true,
+	sideQuestType = "destroy_surpriseattack",
+	sideQuestName = "naboo_privateer_tier3_4d",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	sideQuestDelay = 3,
+
+	surpriseAttackShips = {
+		zone = "space_lok",
+		spawns = {{count = 3, shipName = "blacksun_marauder_tier3"}},
+	},
+}
+
+registerScreenPlay("destroy_surpriseattack_naboo_privateer_tier3_4c", true)
+
+-- Lok ambush, second wave: 4 Black Sun Vehements
+destroy_surpriseattack_naboo_privateer_tier3_4d = SpaceSurpriseAttackScreenplay:new {
+	className = "destroy_surpriseattack_naboo_privateer_tier3_4d",
+	questName = "naboo_privateer_tier3_4d",
+	questType = "destroy_surpriseattack",
+	questZone = "space_lok",
+	creditReward = 0,
+	parentQuest = "destroy_surpriseattack_naboo_privateer_tier3_4c",
+	parentQuestType = "destroy_surpriseattack",
+	parentQuestName = "naboo_privateer_tier3_4c",
+	sideQuest = true,
+	sideQuestType = "destroy_surpriseattack",
+	sideQuestName = "naboo_privateer_tier3_4e",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	sideQuestDelay = 3,
+	surpriseAttackShips = {
+		zone = "space_lok",
+		spawns = {{count = 4, shipName = "blacksun_vehement_tier3"}},
+	},
+}
+
+registerScreenPlay("destroy_surpriseattack_naboo_privateer_tier3_4d", true)
+
+-- Lok ambush, final wave: Black Sun Devastator assault gunboat
+destroy_surpriseattack_naboo_privateer_tier3_4e = SpaceSurpriseAttackScreenplay:new {
+	className = "destroy_surpriseattack_naboo_privateer_tier3_4e",
+	questName = "naboo_privateer_tier3_4e",
+	questType = "destroy_surpriseattack",
+	questZone = "space_lok",
+	creditReward = 0,
+	parentQuest = "destroy_surpriseattack_naboo_privateer_tier3_4d",
+	parentQuestType = "destroy_surpriseattack",
+	parentQuestName = "naboo_privateer_tier3_4d",
+	sideQuest = true,
 	sideQuestType = "assassinate",
 	sideQuestName = "naboo_privateer_tier3_4f",
 	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
 	sideQuestDelay = 3,
-
-	-- Screenplay Specific Variables
-	survivalWaves = {
-		-- Wave 1: 3 Tier 3 Ixiyen Black Sun Marauder
-		{{count = 3, shipName = "blacksun_marauder_tier3"}},
-		-- Wave 2: 4 Tier 3 Ixiyen Black Sun Vehement
-		{{count = 4, shipName = "blacksun_vehement_tier3"}},
-		-- Wave 3: 1 Tier 2 Assault Gunboat Black Sun Devastator (using gunship)
-		{{count = 1, shipName = "blacksun_gunship_tier2"}},
+	surpriseAttackShips = {
+		zone = "space_lok",
+		spawns = {{count = 1, shipName = "blacksun_gunship_tier2"}},
 	},
-	waveDelay = 15,
 }
 
-registerScreenPlay("survival_naboo_privateer_tier3_4c", true)
+registerScreenPlay("destroy_surpriseattack_naboo_privateer_tier3_4e", true)
 
 -- Lok final assassinate - destroy Black Sun operative (Krayt's Bane)
 assassinate_naboo_privateer_tier3_4f = SpaceAssassinateScreenplay:new {
@@ -1173,9 +1220,9 @@ assassinate_naboo_privateer_tier3_4f = SpaceAssassinateScreenplay:new {
 		{species = {-1}, item = "object/tangible/ship/components/armor/arm_mission_reward_neutral_kse_handcrafted.iff"},
 	},
 
-	parentQuest = "survival_naboo_privateer_tier3_4c",
-	parentQuestType = "survival",
-	parentQuestName = "naboo_privateer_tier3_4c",
+	parentQuest = "destroy_surpriseattack_naboo_privateer_tier3_4e",
+	parentQuestType = "destroy_surpriseattack",
+	parentQuestName = "naboo_privateer_tier3_4e",
 
 	sideQuest = false,
 	sideQuestType = "",
@@ -1878,14 +1925,15 @@ RsfSquadronScreenplay = ScreenPlay:new {
 	TIER3_QUEST_STRING_2_SIDE2 = {type = "space_battle", name = "naboo_privateer_tier3_2d"},
 	TIER3_QUEST_STRING_2_SIDE3 = {type = "destroy_surpriseattack", name = "naboo_privateer_tier3_2c"},
 	TIER3_QUEST_STRING_3 = {type = "inspect", name = "naboo_privateer_tier3_3a"},
-	TIER3_QUEST_STRING_3_SIDE1 = {type = "delivery", name = "naboo_privateer_tier3_3b"},
+	TIER3_QUEST_STRING_3_SIDE1 = {type = "delivery_no_pickup", name = "naboo_privateer_tier3_3b"},
 	TIER3_QUEST_STRING_3_SIDE2 = {type = "survival", name = "naboo_privateer_tier3_3c"},
 	TIER3_QUEST_STRING_3_SIDE3 = {type = "destroy_surpriseattack", name = "naboo_privateer_tier3_3e"},
-	TIER3_QUEST_STRING_4 = {type = "destroy_surpriseattack", name = "naboo_privateer_tier3_4_initial"},
-	TIER3_QUEST_STRING_4_SIDE1 = {type = "assassinate", name = "naboo_privateer_tier3_4a"},
-	TIER3_QUEST_STRING_4_SIDE2 = {type = "space_battle", name = "naboo_privateer_tier3_4b"},
-	TIER3_QUEST_STRING_4_SIDE3 = {type = "survival", name = "naboo_privateer_tier3_4c"},
-	TIER3_QUEST_STRING_4_SIDE4 = {type = "assassinate", name = "naboo_privateer_tier3_4f"},
+	TIER3_QUEST_STRING_4 = {type = "assassinate", name = "naboo_privateer_tier3_4a"},
+	TIER3_QUEST_STRING_4_SIDE1 = {type = "space_battle", name = "naboo_privateer_tier3_4b"},
+	TIER3_QUEST_STRING_4_SIDE2 = {type = "destroy_surpriseattack", name = "naboo_privateer_tier3_4c"},
+	TIER3_QUEST_STRING_4_SIDE3 = {type = "destroy_surpriseattack", name = "naboo_privateer_tier3_4d"},
+	TIER3_QUEST_STRING_4_SIDE4 = {type = "destroy_surpriseattack", name = "naboo_privateer_tier3_4e"},
+	TIER3_QUEST_STRING_4_SIDE5 = {type = "assassinate", name = "naboo_privateer_tier3_4f"},
 
 	-- Tier 4 Quest Strings
 	TIER4_QUEST_STRING_1 = {type = "escort", name = "naboo_privateer_tier4_1a"},
@@ -2055,25 +2103,31 @@ function RsfSquadronScreenplay:resetDuliosQuests(pPlayer)
 
 	-- Mission 3
 	inspect_naboo_privateer_tier3_3a:resetQuest(pPlayer)
-	delivery_naboo_privateer_tier3_3b:resetQuest(pPlayer)
+	delivery_no_pickup_naboo_privateer_tier3_3b:resetQuest(pPlayer)
 	survival_naboo_privateer_tier3_3c:resetQuest(pPlayer)
 	destroy_surpriseattack_naboo_privateer_tier3_3e:resetQuest(pPlayer)
+	-- Clear the former incorrectly typed journal entry for characters that reached this chain before the correction.
+	SpaceHelpers:clearSpaceQuest(pPlayer, "delivery", self.TIER3_QUEST_STRING_3_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3.type, self.TIER3_QUEST_STRING_3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE1.type, self.TIER3_QUEST_STRING_3_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE2.type, self.TIER3_QUEST_STRING_3_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_3_SIDE3.type, self.TIER3_QUEST_STRING_3_SIDE3.name, false)
 
 	-- Mission 4
-	destroy_surpriseattack_naboo_privateer_tier3_4_initial:resetQuest(pPlayer)
 	assassinate_naboo_privateer_tier3_4a:resetQuest(pPlayer)
 	space_battle_naboo_privateer_tier3_4b:resetQuest(pPlayer)
-	survival_naboo_privateer_tier3_4c:resetQuest(pPlayer)
+	destroy_surpriseattack_naboo_privateer_tier3_4c:resetQuest(pPlayer)
+	destroy_surpriseattack_naboo_privateer_tier3_4d:resetQuest(pPlayer)
+	destroy_surpriseattack_naboo_privateer_tier3_4e:resetQuest(pPlayer)
 	assassinate_naboo_privateer_tier3_4f:resetQuest(pPlayer)
+	-- Remove the former placeholder journal entry, which has no matching client string table.
+	SpaceHelpers:clearSpaceQuest(pPlayer, "destroy_surpriseattack", "naboo_privateer_tier3_4_initial", false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4.type, self.TIER3_QUEST_STRING_4.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE1.type, self.TIER3_QUEST_STRING_4_SIDE1.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE2.type, self.TIER3_QUEST_STRING_4_SIDE2.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE3.type, self.TIER3_QUEST_STRING_4_SIDE3.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE4.type, self.TIER3_QUEST_STRING_4_SIDE4.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER3_QUEST_STRING_4_SIDE5.type, self.TIER3_QUEST_STRING_4_SIDE5.name, false)
 
 	-- Clear quest status tracking
 	removeQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_1.name .. ":attempted")

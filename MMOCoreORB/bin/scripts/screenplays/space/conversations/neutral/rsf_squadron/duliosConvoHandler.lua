@@ -53,12 +53,13 @@ function duliosConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE1.name) or
 							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE2.name) or
 							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE3.name) or
-							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name) or
+							SpaceHelpers:isSpaceQuestActive(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE5.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE5.name)
 
 	local questOneComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_1_SIDE3.name)
 	local questTwoComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_2_SIDE1.name)
 	local questThreeComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_3_SIDE2.name)
-	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE4.name)
+	local questFourComplete = SpaceHelpers:isSpaceQuestComplete(pPlayer, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE5.type, RsfSquadronScreenplay.TIER3_QUEST_STRING_4_SIDE5.name)
 
 	local completedTier3 = SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 3)
 
@@ -234,9 +235,13 @@ function duliosConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 	elseif (screenID == "accept_fourth_mission" or screenID == "nothing_cant_handle") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_4.name .. ":attempted", 1)
 
+		-- Remove journal states created by the former placeholder and incorrectly typed 4c stage.
+		SpaceHelpers:clearSpaceQuest(pPlayer, "destroy_surpriseattack", "naboo_privateer_tier3_4_initial", false)
+		SpaceHelpers:clearSpaceQuest(pPlayer, "survival", "naboo_privateer_tier3_4c", false)
+
 		--	Give fourth mission to player
-		destroy_surpriseattack_naboo_privateer_tier3_4_initial:resetQuest(pPlayer)
-		destroy_surpriseattack_naboo_privateer_tier3_4_initial:startQuest(pPlayer, pNpc)
+		assassinate_naboo_privateer_tier3_4a:resetQuest(pPlayer)
+		assassinate_naboo_privateer_tier3_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_third_mission" or screenID == "i_was_better") then
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER3_QUEST_STRING_3.name .. ":attempted", 1)
 

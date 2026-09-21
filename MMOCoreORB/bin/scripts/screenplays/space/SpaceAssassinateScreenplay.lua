@@ -1,6 +1,10 @@
 SpaceAssassinateScreenplay = SpaceQuestLogic:new {
 	className = "SpaceAssassinateScreenplay",
 
+	-- Optional launch-system ambush that can precede the destination assassination.
+	launchAmbushZone = "",
+	launchAmbushShips = {},
+
 	DEBUG_SPACE_ASSASSINATE = false,
 
 	arrivalDelay = 5, -- Seconds
@@ -99,6 +103,8 @@ function SpaceAssassinateScreenplay:completeQuest(pPlayer, notifyClient)
 	cancelEvent(self.className, "failAssassination", pPlayer)
 
 	local playerID = SceneObject(pPlayer):getObjectID()
+	deleteData(playerID .. ":" .. self.className .. ":launchAmbushSpawned:")
+	cancelEvent(self.className, "spawnLaunchAmbush", pPlayer)
 
 	-- Remove the vector, it is no longer needed
 	deleteStringVectorSharedMemory(playerID .. self.className .. ":targetShips:")
@@ -145,6 +151,8 @@ function SpaceAssassinateScreenplay:failQuest(pPlayer, notifyClient)
 	-- Data to Delete
 	deleteData(playerID .. ":" .. self.className .. ":TotalKills:")
 	deleteData(playerID .. ":" .. self.className .. ":EscortKills:")
+	deleteData(playerID .. ":" .. self.className .. ":launchAmbushSpawned:")
+	cancelEvent(self.className, "spawnLaunchAmbush", pPlayer)
 
 	-- Cancel the Fail event
 	cancelEvent(self.className, "failAssassination", pPlayer)
@@ -179,6 +187,8 @@ function SpaceAssassinateScreenplay:resetQuest(pPlayer)
 	local playerID = SceneObject(pPlayer):getObjectID()
 	deleteData(playerID .. ":" .. self.className .. ":TotalKills:")
 	deleteData(playerID .. ":" .. self.className .. ":EscortKills:")
+	deleteData(playerID .. ":" .. self.className .. ":launchAmbushSpawned:")
+	cancelEvent(self.className, "spawnLaunchAmbush", pPlayer)
 
 	-- Set Quest failed
 	SpaceHelpers:failSpaceQuest(pPlayer, self.questType, self.questName, false)
@@ -482,6 +492,11 @@ function SpaceAssassinateScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 	local playerID = SceneObject(pPlayer):getObjectID()
 	local spaceQuestHash = getHashCode(self.questZone)
 
+	if (self.launchAmbushZone ~= "" and zoneNameHash == getHashCode(self.launchAmbushZone) and readData(playerID .. ":" .. self.className .. ":launchAmbushSpawned:") == 0) then
+		writeData(playerID .. ":" .. self.className .. ":launchAmbushSpawned:", 1)
+		createEvent(3000, self.className, "spawnLaunchAmbush", pPlayer, "")
+	end
+
 	if (self.DEBUG_SPACE_ASSASSINATE) then
 		print(self.className .. ":enteredZone called -- QuestType: " .. self.questType .. " Quest Name: " .. self.questName .. " Player Zone Hash: " .. zoneNameHash .. " questZone hash: " .. spaceQuestHash)
 	end
@@ -506,6 +521,46 @@ function SpaceAssassinateScreenplay:enteredZone(pPlayer, nill, zoneNameHash)
 	end
 
 	return 0
+end
+
+function SpaceAssassinateScreenplay:spawnLaunchAmbush(pPlayer)
+	if (pPlayer == nil or not SpaceHelpers:isSpaceQuestActive(pPlayer, self.questType, self.questName)) then
+		return
+	end
+
+	local pPlayerShip = SceneObject(pPlayer):getRootParent()
+
+	if (pPlayerShip == nil or not SceneObject(pPlayerShip):isShipObject() or SceneObject(pPlayer):getZoneName() ~= self.launchAmbushZone) then
+		writeData(SceneObject(pPlayer):getObjectID() .. ":" .. self.className .. ":launchAmbushSpawned:", 0)
+		return
+	end
+
+	local spawnLocation = ShipObject(pPlayerShip):getSpawnPointInFrontOfShip(600, 1200)
+	local playerFactionHash = SpaceHelpers:getPlayerSpaceFactionHash(pPlayer)
+	local pSquadronLeader = nil
+
+	for i = 1, #self.launchAmbushShips, 1 do
+		local pShipAgent = spawnShipAgent(self.launchAmbushShips[i], self.launchAmbushZone, spawnLocation[1] + getRandomNumber(50, 150), spawnLocation[2], spawnLocation[3] + getRandomNumber(50, 150), pPlayerShip)
+
+		if (pShipAgent ~= nil) then
+			ShipAiAgent(pShipAgent):setMissionOwner(pPlayer)
+			ShipAiAgent(pShipAgent):setWaveAttack()
+			ShipAiAgent(pShipAgent):setDespawnOnNoPlayerInRange(true)
+			ShipAiAgent(pShipAgent):addSpaceFactionEnemy(playerFactionHash)
+			ShipAiAgent(pShipAgent):removeSpaceFactionAlly(playerFactionHash)
+
+			if (pSquadronLeader == nil) then
+				pSquadronLeader = pShipAgent
+				ShipAiAgent(pShipAgent):createSquadron()
+			else
+				ShipAiAgent(pShipAgent):assignToSquadron(pSquadronLeader)
+			end
+
+			ShipAiAgent(pShipAgent):engageShipTarget(pPlayerShip)
+		end
+	end
+
+	CreatureObject(pPlayer):playEffect("clienteffect/ui_quest_spawn_wave.cef", "")
 end
 
 function SpaceAssassinateScreenplay:notifyShipDestroyed(pShipAgent, pKillerShip)
