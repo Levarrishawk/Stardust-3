@@ -931,6 +931,7 @@ inspect_naboo_privateer_tier3_3a = SpaceInspectScreenplay:new {
 	-- Screenplay Specific Variables
 	inspectTargets = {"civshuttle"},
 	inspectCargo = "naboo_priv_tier3_diplomat_cargo",
+	spawnInspectTarget = true,
 
 	targetLocation = {x = 2500, z = -1500, y = 1000},  -- Naboo space coordinates
 }
