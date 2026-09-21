@@ -1648,7 +1648,7 @@ escort_naboo_privateer_tier4_4b = SpaceEscortScreenplay:new {
 
 	escortShips = {"rsf_scanner_tier4"},
 	orderedEscortRoute = true,
-	escortSpeed - 45,
+	escortSpeed = 45,
 
 	escortPoints = {
 		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_1", zoneName = "space_yavin4", x = -4970, z = 4802, y = 873, escortNumber = 1, radius = 250},
