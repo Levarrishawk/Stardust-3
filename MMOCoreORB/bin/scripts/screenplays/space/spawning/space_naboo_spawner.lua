@@ -10,6 +10,12 @@ SpaceNabooSpawner = SpaceSpawnerScreenPlay:new {
 	},
 
 	shipSpawns = {
+		{spawnName = "rsf_tier2_ghost_search_1", spawnType = SHIP_SPAWN_SINGLE, x = 3168, z = -1441, y = -1209, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 45, maxRespawn = 75, minSpawnDistance = 20, maxSpawnDistance = 55, minPatrol = 60, maxPatrol = 180, totalSpawns = 4,
+			shipSpawns = {"aynat_ghost_tier2"}
+		},
+		{spawnName = "rsf_tier2_ghost_search_2", spawnType = SHIP_SPAWN_SINGLE, x = 3142, z = -3591, y = -492, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 45, maxRespawn = 75, minSpawnDistance = 20, maxSpawnDistance = 55, minPatrol = 60, maxPatrol = 180, totalSpawns = 4,
+			shipSpawns = {"aynat_ghost_tier2"}
+		},
 		{spawnName = "inquisition_mission_2_droids_1", spawnType = SHIP_SPAWN_SINGLE, x = 590, z = -3500, y = -6000, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 60, maxRespawn = 120, minSpawnDistance = 16, maxSpawnDistance = 48, minPatrol = 40, maxPatrol = 160, totalSpawns = 4,
 			shipSpawns = {"rogue_droid_fighter_tier1_naboo"}
 		},

@@ -351,21 +351,31 @@ final_train_algorithms = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(final_train_algorithms);
 
--- First Mission: Destroy Ay'Nat Ghost Fighters
+-- First Mission: Destroy the three Ay'Nat Enforcers
 first_mission = ConvoScreen:new {
 	id = "first_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9af8d581", -- Ready to go up against the Ay'Nat Ghost Fighters?
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8b529447", -- Are you ready for your next assignment? There's lots to be done!
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_370822d1", "first_mission_details"}, -- Yes.
+		{"@conversation/naboo_privateer_trainer_2:s_f6ae3b07", "first_mission_situation"}, -- What's the job?
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
 kaydine_convo_template:addScreen(first_mission);
 
+first_mission_situation = ConvoScreen:new {
+	id = "first_mission_situation",
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4a743aa7", -- The Ay'Nat Legion is mounting an aggressive campaign, so we need to strike at its leadership.
+	stopConversation = "false",
+	options = {
+		{"@conversation/naboo_privateer_trainer_2:s_e9c57758", "first_mission_details"}, -- Elite starfighter assassins?
+	}
+}
+kaydine_convo_template:addScreen(first_mission_situation);
+
 first_mission_details = ConvoScreen:new {
 	id = "first_mission_details",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_168f5655", -- Destroy the squadron of Ay'Nat Ghost Fighters sighted outside RSF-controlled space.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_c4ef0e93", -- Slip into Ay'Nat-controlled space and hunt down a trio of Ace outlaws.
 	stopConversation = "false",
 	options = {
 		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "start_first_mission"}, -- Yes, Captain. I'm ready.
@@ -436,13 +446,13 @@ first_mission_success = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(first_mission_success);
 
--- Second Mission: Capture the Ay'Nat Captain's yacht
+-- Second Mission: Search for and destroy Ay'Nat Ghost Fighters
 second_mission = ConvoScreen:new {
 	id = "second_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_35fb22d6", -- A number of Her Majesty's personal freight ships have been hijacked.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_9af8d581", -- Ready to go up against the Ay'Nat Ghost Fighters?
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_7614c65", "accept_escort_details"}, -- Yes, it does.
+		{"@conversation/naboo_privateer_trainer_2:s_370822d1", "accept_escort_details"}, -- Yes.
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
@@ -450,7 +460,7 @@ kaydine_convo_template:addScreen(second_mission);
 
 accept_escort_details = ConvoScreen:new {
 	id = "accept_escort_details",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_130b925b", -- Catch and disable the Ay'Nat Captain's personal starship, then protect the RSF boarding team.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_168f5655", -- Destroy the squadron of Ay'Nat Ghost Fighters sighted outside RSF-controlled space.
 	stopConversation = "false",
 	options = {
 		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "accept_escort"}, -- Yes, Captain. I'm ready.
@@ -529,13 +539,13 @@ here_is_pay = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(here_is_pay);
 
--- Third Mission: Escort the RSF prison ship
+-- Third Mission: Capture the Ay'Nat Captain's yacht
 third_mission = ConvoScreen:new {
 	id = "third_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ec671b3f", -- The Empire has demanded that the prisoners be turned over for questioning.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_35fb22d6", -- A number of Her Majesty's personal freight ships have been hijacked.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_2d67b7a8", "accept_inspect"}, -- Where do I come in?
+		{"@conversation/naboo_privateer_trainer_2:s_7614c65", "accept_inspect"}, -- Yes, it does.
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
@@ -554,7 +564,7 @@ kaydine_convo_template:addScreen(failed_third_mission);
 
 accept_inspect = ConvoScreen:new {
 	id = "accept_inspect",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_287eca83", -- Get the prisoner ship out of Naboo to keep the Empire happy.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_130b925b", -- Catch and disable the Ay'Nat Captain's personal starship, then protect the RSF boarding team.
 	stopConversation = "true",
 	options = {}
 }
@@ -603,31 +613,21 @@ turnover_intelligence = ConvoScreen:new {
 }
 kaydine_convo_template:addScreen(turnover_intelligence);
 
--- Fourth Mission: Hunt Ace Outlaws
+-- Fourth Mission: Escort the RSF prison ship
 fourth_mission = ConvoScreen:new {
 	id = "fourth_mission",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_8b529447", -- Are you ready for your next assignment? There's lots to be done!
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_ec671b3f", -- The Empire has demanded that the prisoners be turned over for questioning.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_f6ae3b07", "fourth_mission_situation"}, -- What's the job?
+		{"@conversation/naboo_privateer_trainer_2:s_2d67b7a8", "fourth_mission_details"}, -- Where do I come in?
 		{"@conversation/naboo_privateer_trainer_2:s_1c2b565d", "not_ready"}, -- Not quite yet, sir.
 	}
 }
 kaydine_convo_template:addScreen(fourth_mission);
 
-fourth_mission_situation = ConvoScreen:new {
-	id = "fourth_mission_situation",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_4a743aa7", -- The Ay'Nat Legion is mounting an aggressive campaign, so we need to strike at its leadership.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_trainer_2:s_e9c57758", "fourth_mission_details"}, -- Elite starfighter assassins?
-	}
-}
-kaydine_convo_template:addScreen(fourth_mission_situation);
-
 fourth_mission_details = ConvoScreen:new {
 	id = "fourth_mission_details",
-	leftDialog = "@conversation/naboo_privateer_trainer_2:s_c4ef0e93", -- Slip into Ay'Nat-controlled space and hunt down a trio of Ace outlaws.
+	leftDialog = "@conversation/naboo_privateer_trainer_2:s_287eca83", -- Get the prisoner ship out of Naboo to keep the Empire happy.
 	stopConversation = "false",
 	options = {
 		{"@conversation/naboo_privateer_trainer_2:s_1b428a9f", "accept_assassinate"}, -- Yes, Captain. I'm ready.

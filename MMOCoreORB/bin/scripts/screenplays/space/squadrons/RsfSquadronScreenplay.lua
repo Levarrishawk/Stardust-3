@@ -274,40 +274,123 @@ registerScreenPlay("escort_duty_naboo_privateer_7", true)
 	Tier 2 -- Captain Kaydine Main Missions
 ]]
 
--- Mission 1: Destroy (5 kills)
+-- Mission 1: Destroy three Ay'Nat Enforcers
+
+assassinate_naboo_privateer_tier2_1a = SpaceAssassinateScreenplay:new {
+	className = "assassinate_naboo_privateer_tier2_1a",
+	questType = "assassinate",
+	questName = "naboo_privateer_tier2_1a",
+	questZone = "space_naboo",
+	creditReward = 0,
+	sideQuest = true,
+	sideQuestType = "assassinate",
+	sideQuestName = "naboo_privateer_tier2_1b",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	sideQuestDelay = 5,
+	arrivalDelay = 7,
+	failTimer = 20,
+	assassinateSpawns = {
+		target = "aynat_enforcer_tier3",
+		escorts = {"aynat_ghost_tier2", "aynat_ghost_tier2"},
+	},
+	targetPatrols = {
+		{patrolPointName = "rsf_tier2_enforcer_1a_1", x = -4200, z = 600, y = -2800},
+		{patrolPointName = "rsf_tier2_enforcer_1a_2", x = -3300, z = 300, y = -1900},
+	},
+}
+
+registerScreenPlay("assassinate_naboo_privateer_tier2_1a", true)
+
+assassinate_naboo_privateer_tier2_1b = SpaceAssassinateScreenplay:new {
+	className = "assassinate_naboo_privateer_tier2_1b",
+	questType = "assassinate",
+	questName = "naboo_privateer_tier2_1b",
+	questZone = "space_naboo",
+	creditReward = 0,
+	sideQuest = true,
+	sideQuestType = "assassinate",
+	sideQuestName = "naboo_privateer_tier2_1c",
+	sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,
+	sideQuestDelay = 5,
+	parentQuest = "assassinate_naboo_privateer_tier2_1a",
+	parentQuestType = "assassinate",
+	parentQuestName = "naboo_privateer_tier2_1a",
+	arrivalDelay = 7,
+	failTimer = 20,
+	assassinateSpawns = {
+		target = "aynat_enforcer_tier3",
+		escorts = {"aynat_ghost_tier2", "aynat_ghost_tier2", "aynat_ghost_tier2"},
+	},
+	targetPatrols = {
+		{patrolPointName = "rsf_tier2_enforcer_1b_1", x = -500, z = -300, y = 3600},
+		{patrolPointName = "rsf_tier2_enforcer_1b_2", x = 500, z = -100, y = 4400},
+	},
+}
+
+registerScreenPlay("assassinate_naboo_privateer_tier2_1b", true)
+
+assassinate_naboo_privateer_tier2_1c = SpaceAssassinateScreenplay:new {
+	className = "assassinate_naboo_privateer_tier2_1c",
+	questType = "assassinate",
+	questName = "naboo_privateer_tier2_1c",
+	questZone = "space_naboo",
+	creditReward = 5000,
+	itemReward = {
+		{species = {-1}, item = "object/tangible/ship/components/booster/bst_mission_reward_neutral_mandal_m_series.iff"},
+	},
+	sideQuest = false,
+	sideQuestType = "",
+	parentQuest = "assassinate_naboo_privateer_tier2_1b",
+	parentQuestType = "assassinate",
+	parentQuestName = "naboo_privateer_tier2_1b",
+	arrivalDelay = 7,
+	failTimer = 20,
+	assassinateSpawns = {
+		target = "aynat_enforcer_tier3",
+		escorts = {"aynat_outlaw_tier2", "aynat_outlaw_tier2"},
+	},
+	targetPatrols = {
+		{patrolPointName = "rsf_tier2_enforcer_1c_1", x = 4300, z = 500, y = 2600},
+		{patrolPointName = "rsf_tier2_enforcer_1c_2", x = 5200, z = 200, y = 1600},
+	},
+}
+
+registerScreenPlay("assassinate_naboo_privateer_tier2_1c", true)
+
+-- Mission 2: Search for and destroy Ay'Nat Ghost Fighters
 
 destroy_naboo_privateer_13a = SpaceDestroyScreenplay:new {
 	className = "destroy_naboo_privateer_13a",
 
-	questName = "naboo_privateer_13a",
+	questName = "naboo_privateer_13",
 	questType = "destroy",
 
 	questZone = "space_naboo",
 
 	creditReward = 5000,
 	itemReward = {
-		{species = {-1}, item = "object/tangible/ship/components/booster/bst_mission_reward_neutral_mandal_m_series.iff"},
+		{species = {-1}, item = "object/tangible/ship/components/weapon/wpn_mission_reward_neutral_hk_military_blaster.iff"},
 	},
 
 	sideQuest = false,
 	sideQuestType = "",
 
 	-- Screenplay Specific Variables
-	killsRequired = 5,
+	killsRequired = 8,
 
-	shipLocations = {},
+	shipLocations = {
+		{patrolPointName = "rsf_tier2_ghost_search_1", x = 3168, z = -1441, y = -1209},
+		{patrolPointName = "rsf_tier2_ghost_search_2", x = 3142, z = -3591, y = -492},
+	},
 
 	shipTypes = {
-		"blacksun_ace_s04_tier2", "blacksun_ace_s04_tier3", "blacksun_aggressor_tier2", "blacksun_aggressor_tier3",
-		"blacksun_bomber_s01_tier2", "blacksun_bomber_s01_tier3", "blacksun_bomber_s02_tier2", "blacksun_bomber_s02_tier3",
-		"blacksun_fighter_s01_tier2", "blacksun_fighter_s01_tier3", "blacksun_fighter_s02_tier2", "blacksun_fighter_s02_tier3",
-		"blacksun_fighter_s03_tier2", "blacksun_fighter_s03_tier3", "blacksun_gunship_tier2", "blacksun_gunship_tier3",
+		"aynat_ghost_tier2",
 	},
 }
 
 registerScreenPlay("destroy_naboo_privateer_13a", true)
 
--- Mission 2: Recover the Ay'Nat Captain's yacht
+-- Mission 3: Recover the Ay'Nat Captain's yacht
 
 recovery_naboo_privateer_14 = SpaceRecoveryScreenplay:new {
 	className = "recovery_naboo_privateer_14",
@@ -319,7 +402,7 @@ recovery_naboo_privateer_14 = SpaceRecoveryScreenplay:new {
 
 	creditReward = 5000,
 	itemReward = {
-		{species = {-1}, item = "object/tangible/ship/components/weapon/wpn_mission_reward_neutral_hk_military_blaster.iff"},
+		{species = {-1}, item = "object/tangible/ship/components/shield_generator/shd_mission_reward_neutral_koensayr_ds23.iff"},
 	},
 
 	sideQuest = false,
@@ -349,7 +432,7 @@ recovery_naboo_privateer_14 = SpaceRecoveryScreenplay:new {
 
 registerScreenPlay("recovery_naboo_privateer_14", true)
 
--- Mission 3: Escort the RSF prison ship
+-- Mission 4: Escort the RSF prison ship
 
 escort_naboo_privateer_15 = SpaceEscortScreenplay:new {
 	className = "escort_naboo_privateer_15",
@@ -361,7 +444,7 @@ escort_naboo_privateer_15 = SpaceEscortScreenplay:new {
 
 	creditReward = 5000,
 	itemReward = {
-		{species = {-1}, item = "object/tangible/ship/components/shield_generator/shd_mission_reward_neutral_koensayr_ds23.iff"},
+		{species = {-1}, item = "object/tangible/ship/components/droid_interface/ddi_mission_reward_neutral_sorosuub_w19.iff"},
 	},
 
 	sideQuest = false,
@@ -384,41 +467,6 @@ escort_naboo_privateer_15 = SpaceEscortScreenplay:new {
 }
 
 registerScreenPlay("escort_naboo_privateer_15", true)
-
--- Mission 4: Assassinate
-
-assassinate_naboo_privateer_tier2_4a = SpaceAssassinateScreenplay:new {
-	className = "assassinate_naboo_privateer_tier2_4a",
-
-	questType = "assassinate",
-	questName = "naboo_privateer_tier2_4a",
-
-	questZone = "space_naboo",
-
-	creditReward = 5000,
-	itemReward = {
-		{species = {-1}, item = "object/tangible/ship/components/droid_interface/ddi_mission_reward_neutral_sorosuub_w19.iff"},
-	},
-
-	sideQuest = false,
-	sideQuestType = "",
-
-	-- Screenplay Specific Variables
-	arrivalDelay = 7,
-	failTimer = 20,
-
-	assassinateSpawns = {
-		target = "blacksun_ace_s04_tier3",
-		escorts = {"blacksun_fighter_s02_tier2", "blacksun_fighter_s02_tier2", "blacksun_bomber_s01_tier2", "blacksun_bomber_s01_tier2", "blacksun_fighter_s03_tier3"},
-	},
-
-	targetPatrols = {
-		{patrolPointName = "rsf_tier2_assassinate_1", x = 1500, z = 600, y = -1500},
-		{patrolPointName = "rsf_tier2_assassinate_2", x = 2000, z = 400, y = -2000},
-	},
-}
-
-registerScreenPlay("assassinate_naboo_privateer_tier2_4a", true)
 
 -- Tier 2 Duty Missions
 
@@ -1805,10 +1853,12 @@ RsfSquadronScreenplay = ScreenPlay:new {
 	QUEST_STRING_DUTY_4_2 = {type = "escort_duty", name = "naboo_privateer_7"},
 
 	-- Tier 2 Quest Strings
-	TIER2_QUEST_STRING_1 = {type = "destroy", name = "naboo_privateer_13a"},
-	TIER2_QUEST_STRING_2 = {type = "recovery", name = "naboo_privateer_14"},
-	TIER2_QUEST_STRING_3 = {type = "escort", name = "naboo_privateer_15"},
-	TIER2_QUEST_STRING_4 = {type = "assassinate", name = "naboo_privateer_tier2_4a"},
+	TIER2_QUEST_STRING_1 = {type = "assassinate", name = "naboo_privateer_tier2_1c"},
+	TIER2_QUEST_STRING_1_START = {type = "assassinate", name = "naboo_privateer_tier2_1a"},
+	TIER2_QUEST_STRING_1_SIDE = {type = "assassinate", name = "naboo_privateer_tier2_1b"},
+	TIER2_QUEST_STRING_2 = {type = "destroy", name = "naboo_privateer_13"},
+	TIER2_QUEST_STRING_3 = {type = "recovery", name = "naboo_privateer_14"},
+	TIER2_QUEST_STRING_4 = {type = "escort", name = "naboo_privateer_15"},
 
 	-- Tier 2 Duty Quest Strings
 	TIER2_QUEST_STRING_DUTY_1 = {type = "escort_duty", name = "naboo_privateer_9"},
@@ -1923,20 +1973,26 @@ function RsfSquadronScreenplay:resetKaydineQuests(pPlayer)
 	PlayerObject(pGhost):setPilotTier(2)
 
 	-- Mission 1
-	destroy_naboo_privateer_13a:resetQuest(pPlayer)
+	assassinate_naboo_privateer_tier2_1a:resetQuest(pPlayer)
+	assassinate_naboo_privateer_tier2_1b:resetQuest(pPlayer)
+	assassinate_naboo_privateer_tier2_1c:resetQuest(pPlayer)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1_START.type, self.TIER2_QUEST_STRING_1_START.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1_SIDE.type, self.TIER2_QUEST_STRING_1_SIDE.name, false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_1.type, self.TIER2_QUEST_STRING_1.name, false)
 
 	-- Mission 2
-	recovery_naboo_privateer_14:resetQuest(pPlayer)
+	destroy_naboo_privateer_13a:resetQuest(pPlayer)
+	SpaceHelpers:clearSpaceQuest(pPlayer, "destroy", "naboo_privateer_13a", false)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_2.type, self.TIER2_QUEST_STRING_2.name, false)
 
 	-- Mission 3
-	escort_naboo_privateer_15:resetQuest(pPlayer)
+	recovery_naboo_privateer_14:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_3.type, self.TIER2_QUEST_STRING_3.name, false)
 
 	-- Mission 4
-	assassinate_naboo_privateer_tier2_4a:resetQuest(pPlayer)
+	escort_naboo_privateer_15:resetQuest(pPlayer)
 	SpaceHelpers:clearSpaceQuest(pPlayer, self.TIER2_QUEST_STRING_4.type, self.TIER2_QUEST_STRING_4.name, false)
+	SpaceHelpers:clearSpaceQuest(pPlayer, "assassinate", "naboo_privateer_tier2_4a", false)
 
 	-- Duty Missions
 	escort_duty_naboo_privateer_9:resetQuest(pPlayer)
