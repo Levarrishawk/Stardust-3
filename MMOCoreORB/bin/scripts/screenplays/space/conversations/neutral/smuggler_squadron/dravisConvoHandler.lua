@@ -191,6 +191,10 @@ function dravisConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 			-- Player has not earned the master box yet (pilot_neutral_master is granted inside the Kessel screenplay)
 			if (not SpaceHelpers:hasMasterSkill(pPlayer, "neutral")) then
+				if (getQuestStatus(playerID .. "SmugglerSquadronScreenplay:reportToBurke") == "1") then
+					return convoTemplate:getScreen("accept_master_mission")
+				end
+
 				return convoTemplate:getScreen("master_mission")
 			else
 				return convoTemplate:getScreen("tier4_completed")

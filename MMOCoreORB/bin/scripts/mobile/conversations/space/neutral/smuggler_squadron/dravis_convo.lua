@@ -2132,61 +2132,57 @@ dravis_convo:addScreen(dravis_tier4_fourth_mission_success);
 
 dravis_master_mission = ConvoScreen:new {
 	id = "master_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_92fa7352", -- I have just been informed that Grand Admiral Nial Declann has ordered that you be transferred to his squadron, effective immediately...
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_303b5f14", -- Hey! There's my favorite bum now. I have some surprising news here for you.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_9fe8c7e7", "master_what_want"}, -- Does it say what they want from me?
-		{"@conversation/naboo_privateer_tier4:s_7177c3f2", "master_who_declann"}, -- Who is Grand Admiral Nial Declann?
-		{"@conversation/naboo_privateer_tier4:s_50d4081c", "master_where_report"}, -- Where do I report?
-		{"@conversation/naboo_privateer_tier4:s_57f232d6", "master_becoming_imperial"}, -- I am going to become an Imperial?
-		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+		{"@conversation/tatooine_privateer_tier4:s_2313ac9e", "master_alliance_request"}, -- What are you talking about?
 	}
 }
 dravis_convo:addScreen(dravis_master_mission);
 
-dravis_master_what_want = ConvoScreen:new {
-	id = "master_what_want",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_492a501d", -- I wish I knew! That's highly classified information. The Admiral will explain everything to you. Pack your bags! The Admiral is waiting.
+dravis_master_alliance_request = ConvoScreen:new {
+	id = "master_alliance_request",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_95b55346", -- Admiral Burke is asking us for help.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+		{"@conversation/tatooine_privateer_tier4:s_bbe3529b", "master_who_burke"}, -- Who is Admiral Burke?
 	}
 }
-dravis_convo:addScreen(dravis_master_what_want);
+dravis_convo:addScreen(dravis_master_alliance_request);
 
-dravis_master_who_declann = ConvoScreen:new {
-	id = "master_who_declann",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_cf0a01fd", -- Well, let me put it this way. In the Imperial Navy, power is held by only a few men...
+dravis_master_who_burke = ConvoScreen:new {
+	id = "master_who_burke",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_5681e74d", -- He is one of the Alliance fleet commanders.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+		{"@conversation/tatooine_privateer_tier4:s_71d95498", "master_no_rebellion"}, -- So you want me to join the Rebellion?
 	}
 }
-dravis_convo:addScreen(dravis_master_who_declann);
+dravis_convo:addScreen(dravis_master_who_burke);
 
-dravis_master_where_report = ConvoScreen:new {
-	id = "master_where_report",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_cd140a4", -- According to this, you are to report directly to the Grand Admiral at the Theed Palace...
+dravis_master_no_rebellion = ConvoScreen:new {
+	id = "master_no_rebellion",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_94e9bd3b", -- I don't want you to join anything.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+		{"@conversation/tatooine_privateer_tier4:s_ac1da756", "master_alliance_plans"}, -- What are the Rebels planning to do?
 	}
 }
-dravis_convo:addScreen(dravis_master_where_report);
+dravis_convo:addScreen(dravis_master_no_rebellion);
 
-dravis_master_becoming_imperial = ConvoScreen:new {
-	id = "master_becoming_imperial",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_5d72fdfa", -- Well, not officially. But this is a big opportunity for you. You will be working under them until they no longer are in need of your services. You will retain all of your RSF rankings and privileges.
+dravis_master_alliance_plans = ConvoScreen:new {
+	id = "master_alliance_plans",
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_1d267ca4", -- See Admiral Burke and hear what he has to say.
 	stopConversation = "false",
 	options = {
-		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
+		{"@conversation/tatooine_privateer_tier4:s_f8674c23", "accept_master_mission"}, -- Where am I supposed to meet him?
 	}
 }
-dravis_convo:addScreen(dravis_master_becoming_imperial);
+dravis_convo:addScreen(dravis_master_alliance_plans);
 
 dravis_accept_master_mission = ConvoScreen:new {
 	id = "accept_master_mission",
-	leftDialog = "@conversation/naboo_privateer_tier4:s_42d6c3ee", -- Go on. Your ship is waiting.
+	leftDialog = "@conversation/tatooine_privateer_tier4:s_b1d60b3e", -- Admiral Burke is expecting you in Doaba Guerfel on Corellia.
 	stopConversation = "true",
 	options = {}
 }
