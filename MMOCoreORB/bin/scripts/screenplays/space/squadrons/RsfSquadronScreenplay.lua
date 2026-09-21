@@ -1363,8 +1363,9 @@ inspect_naboo_privateer_tier4_2a = SpaceInspectScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	inspectTargets = {"freighterheavy_mining"},
+	inspectTargets = {"freighterheavy_tier4_inspect"},
 	inspectCargo = "general_cargo",
+	spawnInspectTarget = true,
 
 	targetLocation = {x = 2100, z = 3300, y = 2600},
 }
@@ -1394,7 +1395,7 @@ destroy_surpriseattack_naboo_privateer_tier4_2b = SpaceSurpriseAttackScreenplay:
 
 	surpriseAttackShips = {
 		zone = "space_endor",
-		spawns = {{count = 2, shipName = "blacksun_fighter_s02_tier4"}, {count = 2, shipName = "blacksun_bomber_s01_tier4"}},
+		spawns = {{count = 5, shipName = "blacksun_vehement_tier4"}},
 	},
 }
 
@@ -1424,11 +1425,11 @@ patrol_naboo_privateer_tier4_2c = SpacePatrolScreenplay:new {
 	-- Screenplay Specific Variables
 
 	patrolPoints = {
-		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_1", x = 1400, z = 2800, y = 2200, patrolNumber = 1, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_2", x = 480, z = 2160, y = 1750, patrolNumber = 2, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_3", x = -620, z = 1420, y = 1280, patrolNumber = 3, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_4", x = -1730, z = 590, y = 830, patrolNumber = 4, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_5", x = -2850, z = -280, y = 360, patrolNumber = 5, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_1", x = 3482, z = -3131, y = -7486, patrolNumber = 1, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_2", x = 5371, z = -1785, y = -7223, patrolNumber = 2, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_3", x = 7304, z = -654, y = -7255, patrolNumber = 3, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_4", x = 6834, z = 3140, y = -7143, patrolNumber = 4, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_2_patrol_one_5", x = 6349, z = 6605, y = -7132, patrolNumber = 5, radius = 150},
 	},
 }
 
@@ -1457,7 +1458,7 @@ destroy_surpriseattack_naboo_privateer_tier4_2c = SpaceSurpriseAttackScreenplay:
 
 	surpriseAttackShips = {
 		zone = "space_endor",
-		spawns = {{count = 3, shipName = "blacksun_fighter_s01_tier4"}, {count = 2, shipName = "blacksun_aggressor_tier4"}},
+		spawns = {{count = 7, shipName = "blacksun_fighter_s01_tier4"}},
 	},
 }
 
@@ -1515,6 +1516,21 @@ delivery_naboo_privateer_tier4_3a = SpaceDeliveryScreenplay:new {
 	sideQuestDelay = 4,
 
 	-- Screenplay Specific Variables
+	pickupShip = "imp_freighterheavy_tier4",
+	pickupPoint = {x = -1306, z = -5141, y = -3812},
+	pickupZone = "space_yavin4",
+
+	deliveryShip = "imp_transport_tier4",
+	deliveryPoint = {x = -3500, z = 0, y = -3500},
+	deliveryZone = "space_yavin4",
+
+	attackDelay = 20,
+	attackWaveDelay = 25,
+	orderedAttackWaves = true,
+	attackShips = {
+		{"reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4"},
+		{"reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4"},
+	},
 }
 
 registerScreenPlay("delivery_naboo_privateer_tier4_3a", true)
@@ -1543,11 +1559,11 @@ patrol_naboo_privateer_tier4_3b = SpacePatrolScreenplay:new {
 	-- Screenplay Specific Variables
 
 	patrolPoints = {
-		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_1", x = 4793, z = -5425, y = 4509, patrolNumber = 1, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_2", x = 4358, z = -4600, y = 4097, patrolNumber = 2, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_3", x = 4040, z = -3996, y = 3796, patrolNumber = 3, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_4", x = 3589, z = -3140, y = 3370, patrolNumber = 4, radius = 150},
-		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_5", x = 3080, z = -2270, y = 2940, patrolNumber = 5, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_1", x = 5163, z = 2236, y = -4059, patrolNumber = 1, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_2", x = 2287, z = 2964, y = -2659, patrolNumber = 2, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_3", x = 419, z = 3437, y = -1750, patrolNumber = 3, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_4", x = -1507, z = 3925, y = -812, patrolNumber = 4, radius = 150},
+		{patrolPointName = "naboo_privateer_tier4_leg_3_patrol_one_5", x = -3815, z = 4509, y = 310, patrolNumber = 5, radius = 150},
 	},
 }
 
@@ -1574,12 +1590,24 @@ survival_naboo_privateer_tier4_3c = SpaceSurvivalScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	survivalWaves = {
-		{{count = 3, shipName = "blacksun_fighter_s02_tier4"}},
-		{{count = 4, shipName = "blacksun_bomber_s02_tier4"}},
-		{{count = 1, shipName = "blacksun_gunship_tier4"}},
+	survivalPoint = {x = -5249, z = 3585, y = -1619},
+	survivalAreaRadius = 400,
+	survivalMaxDistance = 750,
+	retainWaypointDuringSurvival = true,
+	survivalTime = 0,
+	survivalWaves = 8,
+	delayToFirstAttack = 5,
+	waveDelay = 25,
+	attackShips = {
+		{"blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4"},
+		{"blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4"},
+		{"blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier5"},
+		{"blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4"},
+		{"blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier5"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier5"},
 	},
-	waveDelay = 15,
 }
 
 registerScreenPlay("survival_naboo_privateer_tier4_3c", true)
@@ -1610,13 +1638,13 @@ space_battle_naboo_privateer_tier4_4a = SpaceBattleScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	battleLocation = {patrolPointName = "naboo_privateer_tier4_leg_4_space_battle_one", x = -3200, y = 1400, z = 2600},
+	battleLocation = {patrolPointName = "naboo_privateer_tier4_leg_4_space_battle_one_mission", x = 5926, z = 1988, y = -4590},
 
 	supportShipsDelay = 60,
 	enemyShipsDelay = 90,
 
-	supportShips = {"rsf_ace_tier4", "rsf_ace_tier4", "rsf_hunter_tier4", "rsf_stinger_tier4"},
-	enemyShips = {"blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_bomber_s01_tier4", "blacksun_bomber_s01_tier4", "blacksun_fighter_s02_tier4", "blacksun_fighter_s02_tier4"},
+	supportShips = {"rsf_rawl_tier4", "rsf_rawl_tier4", "rsf_hunter_tier4", "rsf_hunter_tier4", "rsf_stinger_tier4"},
+	enemyShips = {"blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4"},
 }
 
 registerScreenPlay("space_battle_naboo_privateer_tier4_4a", true)
@@ -1651,18 +1679,18 @@ escort_naboo_privateer_tier4_4b = SpaceEscortScreenplay:new {
 	escortSpeed = 45,
 
 	escortPoints = {
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_1", zoneName = "space_yavin4", x = -4970, z = 4802, y = 873, escortNumber = 1, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_2", zoneName = "space_yavin4", x = -6367, z = 5156, y = 1553, escortNumber = 2, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_3", zoneName = "space_yavin4", x = -7440, z = 5038, y = 1840, escortNumber = 3, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_4", zoneName = "space_yavin4", x = -5975, z = 3099, y = -130, escortNumber = 4, radius = 250},
-		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_5", zoneName = "space_yavin4", x = -4967, z = 651, y = -1573, escortNumber = 5, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_1_mission", zoneName = "space_yavin4", x = -4970, z = 4802, y = 873, escortNumber = 1, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_2_mission", zoneName = "space_yavin4", x = -6367, z = 5156, y = 1553, escortNumber = 2, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_3_mission", zoneName = "space_yavin4", x = -7440, z = 5038, y = 1840, escortNumber = 3, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_4_mission", zoneName = "space_yavin4", x = -5975, z = 3099, y = -130, escortNumber = 4, radius = 250},
+		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_5_mission", zoneName = "space_yavin4", x = -4967, z = 651, y = -1573, escortNumber = 5, radius = 250},
 	},
 
 	attackDelay = 85,
 
 	attackShips = {
-		{"blacksun_fighter_s03_tier4", "blacksun_fighter_s03_tier4"},
-		{"blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_aggressor_tier4"},
+		{"blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier4", "blacksun_fighter_s01_tier5"},
+		{"blacksun_aggressor_tier5", "blacksun_aggressor_tier5", "blacksun_vehement_tier5"},
 	}
 }
 
@@ -1692,13 +1720,13 @@ space_battle_naboo_privateer_tier4_4c_win = SpaceBattleScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	battleLocation = {patrolPointName = "naboo_privateer_tier4_leg_4_space_battle_two", x = 640, z = 4480, y = -120},
+	battleLocation = {patrolPointName = "naboo_privateer_tier4_leg_4_space_battle_two_win_mission", x = -4578, z = 1604, y = -3839},
 
 	supportShipsDelay = 30,
 	enemyShipsDelay = 90,
 
-	supportShips = {"rsf_ace_tier4", "rsf_hunter_tier4", "rsf_sentinel_tier4", "rsf_stinger_tier4"},
-	enemyShips = {"blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_vehement_tier4", "blacksun_gunship_tier4"},
+	supportShips = {"rsf_rawl_tier4", "rsf_rawl_tier4", "rsf_hunter_tier4", "rsf_hunter_tier4", "rsf_stinger_tier4", "rsf_stinger_tier4", "rsf_stinger_tier4", "rsf_ace_tier4", "rsf_ace_tier4", "rsf_ace_tier4"},
+	enemyShips = {"blacksun_gunship_tier4", "blacksun_gunship_tier4", "blacksun_bomber_s02_tier4", "blacksun_bomber_s02_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4"},
 }
 
 registerScreenPlay("space_battle_naboo_privateer_tier4_4c_win", true)
@@ -1727,15 +1755,13 @@ space_battle_naboo_privateer_tier4_4c_lose = SpaceBattleScreenplay:new {
 
 	-- Screenplay Specific Variables
 
-	battleLocation = {patrolPointName = "naboo_privateer_tier4_leg_4_space_battle_two", x = 640, z = 4480, y = -120},
+	battleLocation = {patrolPointName = "naboo_privateer_tier4_leg_4_space_battle_two_lose_mission", x = -4578, z = 1604, y = -3839},
 
 	supportShipsDelay = 60,
 	enemyShipsDelay = 90,
 
-	supportShips = {"rsf_ace_tier4", "rsf_hunter_tier4", "rsf_sentinel_tier4", "rsf_stinger_tier4"},
-	enemyShips = {"blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_bomber_s02_tier4", "blacksun_bomber_s02_tier4", "blacksun_gunship_tier4", "blacksun_marauder_tier4",
-		"blacksun_marauder_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4"
-	},
+	supportShips = {"rsf_rawl_tier4", "rsf_rawl_tier4", "rsf_hunter_tier4", "rsf_hunter_tier4", "rsf_stinger_tier4", "rsf_stinger_tier4", "rsf_stinger_tier4", "rsf_ace_tier4", "rsf_ace_tier4", "rsf_ace_tier4"},
+	enemyShips = {"blacksun_gunship_tier4", "blacksun_gunship_tier4", "blacksun_bomber_s02_tier4", "blacksun_bomber_s02_tier4", "blacksun_aggressor_tier4", "blacksun_aggressor_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_vehement_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4", "blacksun_marauder_tier4"},
 }
 
 registerScreenPlay("space_battle_naboo_privateer_tier4_4c_lose", true)
