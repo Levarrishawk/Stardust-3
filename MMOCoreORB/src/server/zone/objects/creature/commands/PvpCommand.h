@@ -16,18 +16,14 @@ public:
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
+		if (!PvpStatusCommandChecks::validate(creature))
+			return GENERALERROR;
+
 		if (!checkStateMask(creature))
 			return INVALIDSTATE;
 
 		if (!checkInvalidLocomotions(creature))
 			return INVALIDLOCOMOTION;
-
-		uint32 faction = creature->getFaction();
-
-		if (faction != Factions::FACTIONREBEL && faction != Factions::FACTIONIMPERIAL) {
-			creature->sendSystemMessage("You must be a member of a faction to use this command.");
-			return GENERALERROR;
-		}
 
 		ManagedReference<PlayerObject*> ghost = creature->getPlayerObject();
 
