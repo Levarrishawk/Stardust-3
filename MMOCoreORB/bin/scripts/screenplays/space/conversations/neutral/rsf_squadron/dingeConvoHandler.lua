@@ -72,7 +72,10 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	if (SpaceHelpers:isRSFSquadron(pPlayer)) then
 		local pilotTier = ghost:getPilotTier()
-		local correctTrainer = (pilotTier <= 1 and isDinge) or (pilotTier == 4 and isDiness)
+		local dingeHandoffPending = pilotTier == 2 and isDinge and
+			SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 1) and
+			getQuestStatus(playerID .. "RsfSquadronScreenplay:DingeTier1Handoff") ~= "1"
+		local correctTrainer = (pilotTier <= 1 and isDinge) or dingeHandoffPending or (pilotTier == 4 and isDiness)
 
 		if ((pilotTier < 5 and not correctTrainer) or (pilotTier >= 5 and not isDiness)) then
 			return convoTemplate:getScreen("go_to_next")
@@ -339,17 +342,13 @@ function dingeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 			end
 		end
 
-		if (SpaceHelpers:hasCompletedPilotTier(pPlayer, "neutral", 1) and ghost:getPilotTier() == 1) then
-			ghost:incrementPilotTier()
-			SpaceHelpers:addKaydineWaypoint(pPlayer)
-		end
-
 		return pClonedScreen
 	elseif (screenID == "go_to_tier2") then
-		-- Increment tier when player is sent to Kaydine
+		-- Advance the tier only after Dinge delivers the Kaydine handoff.
 		if (ghost:getPilotTier() == 1) then
 			ghost:incrementPilotTier()
 		end
+		setQuestStatus(playerID .. "RsfSquadronScreenplay:DingeTier1Handoff", 1)
 		SpaceHelpers:addKaydineWaypoint(pPlayer)
 	elseif (screenID == "destroy_duty") then
 		destroy_duty_naboo_privateer_6:startQuest(pPlayer, pNpc)
