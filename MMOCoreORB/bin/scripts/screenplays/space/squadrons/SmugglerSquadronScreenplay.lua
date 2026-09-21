@@ -1086,7 +1086,13 @@ assassinate_tatooine_privateer_tier4_4a = SpaceAssassinateScreenplay:new {
 	className="assassinate_tatooine_privateer_tier4_4a",questName="tatooine_privateer_tier4_4a",questType="assassinate",questZone="space_lok",creditReward=10000,
 	sideQuest=true,sideQuestType="assassinate",sideQuestName="tatooine_privateer_tier4_4b",sideQuestSplitType=SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,sideQuestDelay=3,
 	arrivalDelay=5,failTimer=30,assassinateSpawns={target="imp_tie_oppressor_tier5",escorts={"imp_tie_advanced_tier4","imp_tie_advanced_tier4","imp_tie_advanced_tier4","imp_tie_advanced_tier4"}},
-	targetPatrols={{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_1",zoneName="space_lok"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_2",zoneName="space_lok"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_3",zoneName="space_lok"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_4",zoneName="space_lok"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_5",zoneName="space_lok"}},
+	targetPatrols={
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_1",zoneName="space_lok",x=4997,z=-581,y=-3094},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_2",zoneName="space_lok",x=6185,z=-2341,y=-2760},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_3",zoneName="space_lok",x=5097,z=-5499,y=-1813},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_4",zoneName="space_lok",x=5042,z=-5731,y=-5965},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_one_5",zoneName="space_lok",x=5050,z=-5907,y=-7340},
+	},
 }
 registerScreenPlay("assassinate_tatooine_privateer_tier4_4a", true)
 
@@ -1095,7 +1101,12 @@ assassinate_tatooine_privateer_tier4_4b = SpaceAssassinateScreenplay:new {
 	sideQuest=true,sideQuestType="assassinate",sideQuestName="tatooine_privateer_tier4_4c",sideQuestSplitType=SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION,sideQuestDelay=3,
 	parentQuest="assassinate_tatooine_privateer_tier4_4a",parentQuestType="assassinate",parentQuestName="tatooine_privateer_tier4_4a",
 	arrivalDelay=5,failTimer=30,assassinateSpawns={target="corsec_gunship_tier4",escorts={"corsec_interdiction_craft_tier4","corsec_interdiction_craft_tier4","corsec_interdiction_craft_tier4"}},
-	targetPatrols={{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_1",zoneName="space_lok"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_2",zoneName="space_lok"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_3",zoneName="space_lok"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_4",zoneName="space_lok"}},
+	targetPatrols={
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_1",zoneName="space_lok",x=5743,z=-4656,y=-7302},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_2",zoneName="space_lok",x=1780,z=-2703,y=-5966},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_3",zoneName="space_lok",x=-508,z=-1575,y=-5194},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_two_4",zoneName="space_lok",x=-3582,z=-60,y=-4158},
+	},
 }
 registerScreenPlay("assassinate_tatooine_privateer_tier4_4b", true)
 
@@ -1103,7 +1114,11 @@ assassinate_tatooine_privateer_tier4_4c = SpaceAssassinateScreenplay:new {
 	className="assassinate_tatooine_privateer_tier4_4c",questName="tatooine_privateer_tier4_4c",questType="assassinate",questZone="space_dantooine",creditReward=0,
 	sideQuest=false,sideQuestType="",parentQuest="assassinate_tatooine_privateer_tier4_4b",parentQuestType="assassinate",parentQuestName="tatooine_privateer_tier4_4b",
 	arrivalDelay=5,failTimer=30,assassinateSpawns={target="rsf_ace_tier5",escorts={"rsf_stinger_tier4","rsf_stinger_tier4","rsf_stinger_tier4","rsf_stinger_tier4"}},
-	targetPatrols={{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_three_1",zoneName="space_dantooine"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_three_2",zoneName="space_dantooine"},{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_three_3",zoneName="space_dantooine"}},
+	targetPatrols={
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_three_1",zoneName="space_dantooine",x=1290,z=2226,y=2429},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_three_2",zoneName="space_dantooine",x=3516,z=1605,y=2006},
+		{patrolPointName="tatooine_privateer_tier4_leg_4_assassinate_three_3",zoneName="space_dantooine",x=6047,z=884,y=1422},
+	},
 }
 registerScreenPlay("assassinate_tatooine_privateer_tier4_4c", true)
 
