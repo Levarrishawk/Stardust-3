@@ -1274,6 +1274,8 @@ escort_naboo_privateer_tier4_1a = SpaceEscortScreenplay:new {
 	-- Screenplay Specific Variables
 
 	escortShips = {"rsf_scanner_tier4"},
+	escortSpeed = 45,
+	orderedEscortRoute = true,
 
 	escortPoints = {
 		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_one_1", zoneName = "space_endor", x = 4394, z = -1173, y = -2050, escortNumber = 1, radius = 250},
@@ -1316,6 +1318,8 @@ escort_naboo_privateer_tier4_1b = SpaceEscortScreenplay:new {
 	-- Screenplay Specific Variables
 
 	escortShips = {"imp_lambda_shuttle_tier4"},
+	orderedEscortRoute = true,
+	escortSpeed = 45,
 
 	escortPoints = {
 		{patrolPointName = "naboo_privateer_tier4_leg_1_escort_two_1", zoneName = "space_endor", x = 5815, z = -6701, y = 2035, escortNumber = 1, radius = 250},
@@ -1643,6 +1647,8 @@ escort_naboo_privateer_tier4_4b = SpaceEscortScreenplay:new {
 	-- Screenplay Specific Variables
 
 	escortShips = {"rsf_scanner_tier4"},
+	orderedEscortRoute = true,
+	escortSpeed - 45,
 
 	escortPoints = {
 		{patrolPointName = "naboo_privateer_tier4_leg_4_escort_1", zoneName = "space_yavin4", x = -4970, z = 4802, y = 873, escortNumber = 1, radius = 250},

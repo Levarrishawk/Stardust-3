@@ -541,10 +541,8 @@ dinge_convo_template:addScreen(failed_tier4_first_mission);
 tier4_first_mission_success = ConvoScreen:new {
 	id = "tier4_first_mission_success",
 	leftDialog = "@conversation/naboo_privateer_tier4:s_bdc28bb4", -- You did a nice job protecting that scan vessel. We took a look at the tapes.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_8289ab5b", "tier4_second_mission"}, -- I'm ready for my next mission.
-	}
+	stopConversation = "true",
+	options = {}
 }
 dinge_convo_template:addScreen(tier4_first_mission_success);
 
@@ -599,10 +597,8 @@ dinge_convo_template:addScreen(failed_tier4_second_mission);
 tier4_second_mission_success = ConvoScreen:new {
 	id = "tier4_second_mission_success",
 	leftDialog = "@conversation/naboo_privateer_tier4:s_41799e3b", -- You did good. I have a new mission for you.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_614d7ac4", "tier4_third_mission"}, -- What is the mission?
-	}
+	stopConversation = "true",
+	options = {}
 }
 dinge_convo_template:addScreen(tier4_second_mission_success);
 
@@ -647,10 +643,8 @@ dinge_convo_template:addScreen(failed_tier4_third_mission);
 tier4_third_mission_success = ConvoScreen:new {
 	id = "tier4_third_mission_success",
 	leftDialog = "@conversation/naboo_privateer_tier4:s_44b1cd3c", -- Mm. We'll see. Let's get you going on a new mission.
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_614d7ac4", "tier4_fourth_mission"}, -- What is the mission?
-	}
+	stopConversation = "true",
+	options = {}
 }
 dinge_convo_template:addScreen(tier4_third_mission_success);
 
@@ -696,14 +690,8 @@ dinge_convo_template:addScreen(failed_tier4_fourth_mission);
 tier4_fourth_mission_success = ConvoScreen:new {
 	id = "tier4_fourth_mission_success",
 	leftDialog = "@conversation/naboo_privateer_tier4:s_92fa7352", -- I have just been informed that Grand Admiral Nial Declann has ordered that you be transferred to his squadron, effective immediately...
-	stopConversation = "false",
-	options = {
-		{"@conversation/naboo_privateer_tier4:s_9fe8c7e7", "master_what_want"}, -- Does it say what they want from me?
-		{"@conversation/naboo_privateer_tier4:s_7177c3f2", "master_who_declann"}, -- Who is Grand Admiral Nial Declann?
-		{"@conversation/naboo_privateer_tier4:s_50d4081c", "master_where_report"}, -- Where do I report?
-		{"@conversation/naboo_privateer_tier4:s_57f232d6", "master_becoming_imperial"}, -- I am going to become an Imperial?
-		{"@conversation/naboo_privateer_tier4:s_1adbadc4", "accept_master_mission"}, -- I'm ready.
-	}
+	stopConversation = "true",
+	options = {}
 }
 dinge_convo_template:addScreen(tier4_fourth_mission_success);
 

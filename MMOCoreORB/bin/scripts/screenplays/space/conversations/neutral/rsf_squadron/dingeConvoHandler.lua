@@ -155,7 +155,14 @@ function dingeConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 		-- Reward Checks
 		elseif (t4QuestFourComplete and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward") ~= "1") then
-			return convoTemplate:getScreen("tier4_fourth_mission_success")
+			setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":reward", 1)
+			space_battle_naboo_privateer_tier4_4a:rewardPlayer(pPlayer)
+
+			if (SpaceHelpers:hasExperienceForTraining(pPlayer, 4)) then
+				return convoTemplate:getScreen("ready_train_tier4")
+			end
+
+			return convoTemplate:getScreen("tier4_duty_repeat")
 		elseif (t4QuestThreeComplete and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":reward") ~= "1") then
 			return convoTemplate:getScreen("tier4_third_mission_success")
 		elseif (t4QuestTwoComplete and getQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":reward") ~= "1") then
@@ -470,16 +477,28 @@ function dingeConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selec
 
 	-- Give Tier 4 Missions
 	elseif (screenID == "accept_tier4_fourth_mission" or screenID == "failed_tier4_fourth_mission") then
+		if (SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 4) < 3) then
+			return self:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+		end
+
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_4.name .. ":attempted", 1)
 
 		space_battle_naboo_privateer_tier4_4a:resetQuest(pPlayer)
 		space_battle_naboo_privateer_tier4_4a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_third_mission" or screenID == "failed_tier4_third_mission") then
+		if (SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 4) < 2) then
+			return self:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+		end
+
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_3.name .. ":attempted", 1)
 
 		delivery_naboo_privateer_tier4_3a:resetQuest(pPlayer)
 		delivery_naboo_privateer_tier4_3a:startQuest(pPlayer, pNpc)
 	elseif (screenID == "accept_tier4_second_mission" or screenID == "failed_tier4_second_mission") then
+		if (SpaceHelpers:getPilotTierSkillCount(pPlayer, "neutral", 4) < 1) then
+			return self:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+		end
+
 		setQuestStatus(playerID .. RsfSquadronScreenplay.TIER4_QUEST_STRING_2.name .. ":attempted", 1)
 
 		inspect_naboo_privateer_tier4_2a:resetQuest(pPlayer)
