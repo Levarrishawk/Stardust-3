@@ -5,6 +5,7 @@ SpaceAssassinateScreenplay = SpaceQuestLogic:new {
 
 	arrivalDelay = 5, -- Seconds
 	failTimer = 20, -- Minutes
+	showTargetWaypointOnStart = false,
 
 	assassinateTarget = "",
 	assassinateEscorts = {},
@@ -26,6 +27,27 @@ function SpaceAssassinateScreenplay:startQuest(pPlayer, pNpc)
 	local spaceQuestHash = getHashCode(self.questZone)
 	local zoneName = SceneObject(pPlayer):getZoneName()
 	local playerZoneHash = getHashCode(zoneName)
+
+	-- Some chained missions begin in another system. Give those missions an
+	-- authored destination immediately; updateTargetLocation replaces it with
+	-- the live target position after the ships deploy.
+	if (self.showTargetWaypointOnStart and self.targetPatrols ~= nil and #self.targetPatrols > 0) then
+		local targetPoint = self.targetPatrols[1]
+		local pGhost = CreatureObject(pPlayer):getPlayerObject()
+
+		if (pGhost ~= nil and targetPoint.x ~= nil and targetPoint.z ~= nil and targetPoint.y ~= nil) then
+			SpaceHelpers:clearQuestWaypoint(pPlayer, self.className)
+
+			local waypointID = PlayerObject(pGhost):addWaypoint(self.questZone, "@spacequest/assassinate/" .. self.questName .. ":quest_target_t", "", targetPoint.x, targetPoint.z, targetPoint.y, WAYPOINT_SPACE, true, true, WAYPOINTQUESTTASK)
+			local pWaypoint = getSceneObject(waypointID)
+
+			if (pWaypoint ~= nil) then
+				WaypointObject(pWaypoint):setQuestDetails("@spacequest/" .. self.questType .. "/" .. self.questName .. ":title_d")
+			end
+
+			setQuestStatus(SceneObject(pPlayer):getObjectID() .. ":" .. self.className .. ":waypointID", waypointID)
+		end
+	end
 
 	-- Check if the player is in the proper zone already
 	if (playerZoneHash == spaceQuestHash and not SpaceHelpers:isInYacht(pPlayer)) then

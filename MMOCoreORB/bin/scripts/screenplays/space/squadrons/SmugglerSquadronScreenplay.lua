@@ -1050,6 +1050,7 @@ assassinate_tatooine_privateer_tier4_3b = SpaceAssassinateScreenplay:new {
 	className = "assassinate_tatooine_privateer_tier4_3b", questName = "tatooine_privateer_tier4_3b", questType = "assassinate", questZone = "space_tatooine", creditReward = 0,
 	sideQuest = true, sideQuestType = "destroy_surpriseattack", sideQuestName = "tatooine_privateer_tier4_3c_sa", sideQuestSplitType = SpaceQuestLogic.SIDE_QUEST_SPLIT_TYPES.COMPLETION, sideQuestDelay = 3,
 	parentQuest = "inspect_tatooine_privateer_tier4_3a", parentQuestType = "inspect", parentQuestName = "tatooine_privateer_tier4_3a",
+	showTargetWaypointOnStart = true,
 	arrivalDelay = 5, failTimer = 30, assassinateSpawns = {target="valarian_gunship_tier5",escorts={"valarian_bomber_tier4","valarian_bomber_tier4","valarian_bomber_tier4","valarian_bomber_tier4"}},
 	targetPatrols = {{patrolPointName="tatooine_privateer_tier4_3b_target",zoneName="space_tatooine",x=-1607,z=6008,y=-240}},
 }
