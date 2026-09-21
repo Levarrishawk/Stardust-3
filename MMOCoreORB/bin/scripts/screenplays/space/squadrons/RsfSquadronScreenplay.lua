@@ -1525,8 +1525,6 @@ delivery_naboo_privateer_tier4_3a = SpaceDeliveryScreenplay:new {
 	deliveryZone = "space_yavin4",
 
 	attackDelay = 20,
-	attackWaveDelay = 25,
-	orderedAttackWaves = true,
 	attackShips = {
 		{"reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4"},
 		{"reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4", "reb_awing_tier4"},

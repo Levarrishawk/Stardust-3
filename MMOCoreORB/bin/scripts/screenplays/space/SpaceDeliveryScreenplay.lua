@@ -871,6 +871,17 @@ function SpaceDeliveryScreenplay:checkEnteredZone(pPlayer)
 		return
 	end
 
+	-- Recover deliveries whose final docking task completed before the quest itself
+	-- was finalized. Missions that deliberately wait for attack ships retain their
+	-- existing completion gate.
+	local _, deliveryDockTask = self:getLegTasks("delivery")
+
+	if (not self.orderedAttackWaves and not self.waitForAttackShips and
+			SpaceHelpers:isSpaceQuestTaskComplete(pPlayer, self.questType, self.questName, deliveryDockTask)) then
+		createEvent(1000, self.className, "completeQuest", pPlayer, "true")
+		return
+	end
+
 	local zoneNameHash = getHashCode(SceneObject(pPlayer):getZoneName())
 	local playerID = SceneObject(pPlayer):getObjectID()
 	local legName = readStringData(playerID .. ":" .. self.className .. ":leg:")
