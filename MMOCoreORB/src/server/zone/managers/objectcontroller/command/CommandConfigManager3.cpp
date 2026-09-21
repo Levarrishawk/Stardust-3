@@ -142,6 +142,7 @@
 #include "server/zone/objects/creature/commands/PostureUpAttackCommand.h"
 #include "server/zone/objects/creature/commands/PowerBoostCommand.h"
 #include "server/zone/objects/creature/commands/ProneCommand.h"
+#include "server/zone/objects/creature/commands/PvpCommand.h"
 #include "server/zone/objects/creature/commands/PurchaseReinforcementCommand.h"
 #include "server/zone/objects/creature/commands/PurchaseTicketCommand.h"
 #include "server/zone/objects/creature/commands/QuickHealCommand.h"
