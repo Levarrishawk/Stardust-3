@@ -70,15 +70,15 @@ int indexCallback(DB* secondary, const DBT* key, const DBT* data, DBT* result) {
 		zoneReference = "__packed_structures__";
 	else if (!Serializable::getVariable<String>(STRING_HASHCODE("SceneObject.zone"), &zoneReference, &objectData))
 		return DB_DONOTINDEX;
-	auto data = (uint64*)malloc(sizeof(uint64)); // same size as an oid
-	*data = zoneReference.hashCode();
+	auto indexKeyData = (uint64*)malloc(sizeof(uint64)); // same size as an oid
+	*indexKeyData = zoneReference.hashCode();
 
-	result->data = data;
+	result->data = indexKeyData;
 	result->size = sizeof(uint64);
 
 	result->flags = DB_DBT_APPMALLOC;
 
-	// Logger::console.info("setting new key " + String::valueOf(*data) + " in associate callback", true);
+	// Logger::console.info("setting new key " + String::valueOf(*indexKeyData) + " in associate callback", true);
 
 	return 0;
 }
@@ -349,8 +349,7 @@ int StructureManager::packStructure(CreatureObject* creature, StructureObject* s
 	}
 
 	Locker tokenLocker(token, structure);
-	UnicodeString tokenName = "Packed: ";
-	tokenName += structure->getDisplayedName();
+	String tokenName = String("Packed: ") + structure->getDisplayedName();
 	token->setCustomObjectName(tokenName, false);
 	if (!datapad->transferObject(token, -1, false)) {
 		token->destroyObjectFromDatabase(true);
