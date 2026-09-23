@@ -413,6 +413,65 @@ function AlderaCityScreenPlay:spawnHotelMobiles()
 	end
 end
 
+function AlderaCityScreenPlay:spawnSecondCantinaMobiles()
+	local cantinaCellID = 610000429
+	local cantinaMobiles = {
+		-- Mos Eisley main-room arrangement with an underworld clientele.
+		{"pirate_privateer", 10.65, -0.894992, 1.91, 330, "npc_standing_drinking"},
+		{"smuggler", -4.11, -0.894992, 5.4, 26.8951, "happy"},
+		{"chadra_fan_female", 10.43, -0.894992, -1.47, 123.102, "worried"},
+		{"chadra_fan_male", 10.7, -0.894992, -0.23, 80.4821, ""},
+		{"outlaw", 10.17, -0.894992, 2.74, 125.098, "conversation"},
+		{"pirate_crewman", 2.11, -0.894992, 5.4, 180, "npc_standing_drinking"},
+		{"spice_fiend", -2.2, -0.9, -10.9, 65, "npc_sitting_table_eating"},
+		{"criminal", 3.11, 0, 5.4, 161.005, "bored"},
+		{"pirate_squab", 1.11, 0, 5.4, 330.024, "npc_standing_drinking"},
+		{"thug", -3.11, 0, 5.4, 16.6733, "npc_standing_drinking"},
+		{"pirate", 16.1, -0.9, 4.1, 340, "conversation"},
+		{"pirate_armsman", 4.11, -0.894992, 5.4, 158.443, "npc_standing_drinking"},
+		{"smuggler", 1.99, -0.894992, -8.44, 325.01, "conversation"},
+		{"outlaw", 1.19, -0.894992, -7.63, 152.004, "conversation"},
+		{"entertainer", 9.4, 0, 3.9, 310, "conversation"},
+		{"pirate_captain", -9.34, -0.894992, 5.66, 59.306, "calm"},
+		{"muftak", 20.2, -0.9, 5, 107, "happy"},
+		{"pirate_leader", 8.49, -0.894992, 4.64, 128.74, "conversation"},
+		{"pirate_cutthroat", 14.2, -0.9, -4.8, 67, "npc_sitting_chair"},
+		{"criminal", 14.7, -0.9, -3, 147, "npc_sitting_chair"},
+		{"smuggler", 16.5, -0.9, -4.8, 320, "npc_sitting_chair"},
+		{"pirate_privateer", 24.5, -0.9, -8.1, 51, "npc_sitting_table"},
+		{"outlaw", 26.1, -0.9, -8.2, 317, "npc_sitting_table_eating"},
+		{"pirate_crewman", 8.8, -0.9, -6, 208, "entertained"},
+		{"thug", 6.8, -0.9, -6.5, 230, "entertained"},
+		{"pirate_lieutenant", -2.2, -0.9, 11.8, 97, "npc_sitting_table"},
+		{"pirate_squab", 0.6, -0.9, 11.9, 269, "npc_sitting_chair"},
+		{"patron_chiss", 3.62, -0.894992, -4.77, 184.005, "sad"},
+		{"patron_chiss", 1.74, -0.894992, -4.91, 95.0028, "npc_consoling"},
+		{"patron_devaronian", 21.4, -0.9, 5.4, 161, "npc_sitting_table"},
+		{"patron_ishitib", 22.3, -0.9, 3.1, 339, "npc_sitting_chair"},
+		{"patron_ithorian", 14.9, -0.9, 4.9, 51, "npc_sitting_table"},
+		{"patron_klaatu", 15, -0.9, 6.9, 139, "npc_sitting_chair"},
+		{"patron_nikto", 23.4, -0.9, 4.8, 272, "npc_sitting_chair"},
+		{"patron_quarren", 17, -0.9, 6.8, 226, "npc_sitting_chair"},
+		{"pirate_lieutenant", 2.84, -0.894992, -6.3, 16.0005, "npc_accusing"},
+		{"pirate_cutthroat", 3.62, -0.894992, -6.78, 360.011, "angry"}
+	}
+
+	for i = 1, #cantinaMobiles, 1 do
+		local mobile = cantinaMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], 60, mobile[2], mobile[3], mobile[4], mobile[5], cantinaCellID)
+
+		if (pMobile ~= nil) then
+			if (mobile[6] ~= "") then
+				CreatureObject(pMobile):setMoodString(mobile[6])
+			end
+
+			CreatureObject(pMobile):setPvpStatusBitmask(0)
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+			CreatureObject(pMobile):clearOptionBit(AIENABLED)
+		end
+	end
+end
+
 function AlderaCityScreenPlay:spawnMobiles()
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
@@ -429,6 +488,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 	self:spawnCapitolMobiles()
 	self:spawnTheaterMobiles()
 	self:spawnHotelMobiles()
+	self:spawnSecondCantinaMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
