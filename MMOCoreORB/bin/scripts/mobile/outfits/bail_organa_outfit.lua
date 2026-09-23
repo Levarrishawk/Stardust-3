@@ -5,7 +5,7 @@ bail_organa_outfit = {
 			{"/shared_owner/blend_fat", 0},
 			{"/shared_owner/blend_skinny", 96},
 			{"/private/index_color_2", 1},
-			{"/private/index_style_beard", 0},
+			{"/private/index_style_beard", 7},
 			{"/private/index_color_facial_hair", 10}
 		},
 
