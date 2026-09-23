@@ -727,7 +727,7 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 		SortedVector<ManagedReference<SceneObject*> >* children = packedStructure->getChildObjects();
 		for (int i = 0; i < children->size(); ++i) {
 			ManagedReference<SceneObject*> child = children->get(i);
-			if (child == nullptr || child->getZone() != nullptr)
+			if (child == nullptr || child->getParent() != nullptr || child->getContainmentType() == 4)
 				continue;
 			float dx = child->getPositionX() - oldX;
 			float dy = child->getPositionY() - oldY;
@@ -735,6 +735,8 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 			float newX = x + dx * Math::cos(radians) + dy * Math::sin(radians);
 			float newY = y + dy * Math::cos(radians) - dx * Math::sin(radians);
 			Locker childLocker(child, packedStructure);
+			if (child->getZone() != nullptr)
+				child->destroyObjectFromWorld(true);
 			child->initializePosition(newX, child->getPositionZ() + newZ - oldZ, newY);
 			child->rotate(rotation);
 			zone->transferObject(child, -1, true);
