@@ -74,3 +74,4 @@ SWGEmu.exe.planetmap.bin
 *.pyc
 /.re-tools
 /.re-tools
+/output

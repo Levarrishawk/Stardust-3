@@ -100,6 +100,7 @@ AlderaCityPatrolRoutes = {}
 function AlderaCityScreenPlay:start()
 	if (isZoneEnabled("alderaan")) then
 		self:spawnMobiles()
+		self:spawnTheaterSceneObjects()
 	end
 end
 
@@ -246,6 +247,107 @@ function AlderaCityScreenPlay:patrolDestinationReached(pMobile)
 	return 0
 end
 
+function AlderaCityScreenPlay:spawnCapitolMobiles()
+	local capitolCellID = 610000021
+	local capitolMobiles = {
+		-- Coronet capitol cell 1855463 layout, remapped to Aldera City's main cell.
+		{"noble", 60, 5.22842, 0.3, 2.91677, 0, "conversation"},
+		{"info_broker", 60, 5.22842, 0.3, 4.01677, 180.005, "conversation"},
+		{"corellia_times_reporter", 60, 5.43518, 2.27819, -27.0615, 344.925, "conversation"},
+		{"brawler", 60, -1.72746, 7.9, -32.175, 0, "conversation"},
+		{"comm_operator", 300, -0.332123, 0.3, -2.90219, 134.998, "conversation"},
+		{"entertainer", 60, 0.767877, 0.3, -2.90219, 180.005, "conversation"},
+		{"farmer", 60, -18.6014, 1.30259, -11.3146, 360.011, "conversation"},
+		{"farmer", 60, 0.767877, 0.3, -4.00219, 0, "conversation"},
+		{"medic", 60, -0.332123, 0.3, -4.00219, 45.0054, "conversation"},
+		{"medic", 60, 5.18395, 2.27819, -26.1292, 164.924, "conversation"},
+		{"noble", 60, 4.12842, 0.3, 4.01677, 134.998, "conversation"},
+		{"scientist", 60, -1.72746, 7.9, -31.075, 180.005, "conversation"},
+		{"mercenary", 300, -18.6014, 1.30292, -10.2146, 180.006, "conversation"}
+	}
+
+	for i = 1, #capitolMobiles, 1 do
+		local mobile = capitolMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], mobile[2], mobile[3], mobile[4], mobile[5], mobile[6], capitolCellID)
+
+		if (pMobile ~= nil) then
+			CreatureObject(pMobile):setMoodString(mobile[7])
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
+	end
+end
+
+function AlderaCityScreenPlay:spawnTheaterMobiles()
+	local theaterCellID = 610000087
+	local theaterMobiles = {
+		-- Band on the raised stage, facing the audience.
+		{"droopy_mccool", -5.5, 2.1, 50.5, 180, "themepark_music_3"},
+		{"nalan_cheel", -2.75, 2.1, 51.5, 180, "themepark_music_1"},
+		{"figrin_dan", 0, 2.1, 50.5, 180, "themepark_music_3"},
+		{"doikk_nats", 2.75, 2.1, 51.5, 180, "themepark_music_3"},
+		{"tedn_dahai", 5.5, 2.1, 50.5, 180, "themepark_music_3"},
+
+		-- Audience rows follow the theater's tiered floor and face the stage.
+		{"noble", -6.5, 2.2, 27.3, 5, "entertained"},
+		{"commoner", -3.2, 2.2, 27.3, 355, "applause_polite"},
+		{"artisan", 0, 2.2, 27.3, 2, "entertained"},
+		{"businessman", 3.2, 2.2, 27.3, 358, "applause_excited"},
+		{"commoner_old", 6.5, 2.2, 27.3, 4, "entertained"},
+		{"scientist", -7, 1.8, 31.4, 7, "entertained"},
+		{"commoner", -3.5, 1.8, 31.4, 353, "applause_excited"},
+		{"info_broker", 0, 1.8, 31.4, 0, "entertained"},
+		{"farmer", 3.5, 1.8, 31.4, 6, "applause_polite"},
+		{"noble", 7, 1.8, 31.4, 354, "entertained"},
+		{"commoner_technician", -6.5, 1.4, 35.9, 3, "entertained"},
+		{"medic", -3.2, 1.4, 35.9, 357, "applause_polite"},
+		{"mercenary", 0, 1.4, 35.9, 0, "entertained"},
+		{"commoner", 3.2, 1.4, 35.9, 5, "applause_excited"},
+		{"official", 6.5, 1.4, 35.9, 355, "entertained"},
+		{"brawler", -6, 1.0, 39.7, 8, "applause_excited"},
+		{"commoner", -2, 1.0, 39.7, 356, "entertained"},
+		{"farmer_rancher", 2, 1.0, 39.7, 4, "applause_polite"},
+		{"noble", 6, 1.0, 39.7, 352, "entertained"},
+		{"explorer", -5, 0.7, 43.3, 10, "entertained"},
+		{"commoner", 0, 0.7, 43.3, 0, "applause_excited"},
+		{"gambler", 5, 0.7, 43.3, 350, "entertained"}
+	}
+
+	for i = 1, #theaterMobiles, 1 do
+		local mobile = theaterMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], 60, mobile[2], mobile[3], mobile[4], mobile[5], theaterCellID)
+
+		if (pMobile ~= nil) then
+			CreatureObject(pMobile):setMoodString(mobile[6])
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
+	end
+end
+
+function AlderaCityScreenPlay:spawnTheaterSceneObjects()
+	local theaterCellID = 610000087
+	local lampTemplate = "object/tangible/furniture/all/frn_all_light_lamp_free_s01.iff"
+
+	-- Four stage lamps provide the strongest illumination around the band.
+	spawnSceneObject("alderaan", lampTemplate, -8, 2.1, 48.5, theaterCellID, math.rad(0))
+	spawnSceneObject("alderaan", lampTemplate, 8, 2.1, 48.5, theaterCellID, math.rad(0))
+	spawnSceneObject("alderaan", lampTemplate, -8, 2.1, 53, theaterCellID, math.rad(180))
+	spawnSceneObject("alderaan", lampTemplate, 8, 2.1, 53, theaterCellID, math.rad(180))
+
+	-- Lower-level aisle lighting keeps the audience area readable.
+	spawnSceneObject("alderaan", lampTemplate, -8.5, 1.8, 31.5, theaterCellID, math.rad(0))
+	spawnSceneObject("alderaan", lampTemplate, 8.5, 1.8, 31.5, theaterCellID, math.rad(0))
+	spawnSceneObject("alderaan", lampTemplate, -8.5, 0.7, 43, theaterCellID, math.rad(0))
+	spawnSceneObject("alderaan", lampTemplate, 8.5, 0.7, 43, theaterCellID, math.rad(0))
+end
+
 function AlderaCityScreenPlay:spawnMobiles()
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
@@ -258,6 +360,9 @@ function AlderaCityScreenPlay:spawnMobiles()
 	if (pLeiaOrgana ~= nil and SceneObject(pLeiaOrgana):isAiAgent()) then
 		AiAgent(pLeiaOrgana):addObjectFlag(AI_STATIC)
 	end
+
+	self:spawnCapitolMobiles()
+	self:spawnTheaterMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
