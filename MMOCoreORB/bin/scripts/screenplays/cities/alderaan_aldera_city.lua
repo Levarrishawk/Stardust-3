@@ -460,24 +460,25 @@ end
 
 function AlderaCityScreenPlay:spawnGuildHallMobiles()
 	local guildHallMobiles = {
-		-- Combat guild hall. Coronet cells 1855505, 1855507, and 1855508
-		-- map to the equivalent Aldera rooms 610000143, 145, and 146.
-		{"trainer_scout", 0, -12, 1.13306, 5.5, 180, 610000143, ""},
-		{"junk_dealer", 0, -14.5, 1.1, 3.0, 98, 610000143, ""},
-		{"trainer_marksman", 0, 0, 1.13306, -14, 0, 610000145, ""},
-		{"trainer_brawler", 0, -11, 1.13306, -14, 0, 610000146, ""},
+		-- Combat guild hall. The supplied building cell 610000143 corresponds
+		-- to Coronet's first cell 1855503; preserve Coronet's room offsets.
+		{"trainer_scout", 0, -12, 1.13306, 5.5, 180, 610000145, ""},
+		{"junk_dealer", 0, -14.5, 1.1, 3.0, 98, 610000145, ""},
+		{"trainer_marksman", 0, 0, 1.13306, -14, 0, 610000147, ""},
+		{"trainer_brawler", 0, -11, 1.13306, -14, 0, 610000148, ""},
 
-		-- Universities use Coronet's artisan guild-hall placement.
-		{"trainer_artisan", 0, 0, 1.13306, -14, 0, 610000124, ""},
-		{"trainer_artisan", 0, 0, 1.13306, -14, 0, 610000114, ""},
+		-- Coronet's artisan is four cells beyond each university's supplied
+		-- building cell, placing these coordinates in rooms 118 and 128.
+		{"trainer_artisan", 0, 0, 1.13306, -14, 0, 610000128, ""},
+		{"trainer_artisan", 0, 0, 1.13306, -14, 0, 610000118, ""},
 
-		-- Commerce guild hall. Coronet cells 1855524 through 1855528 map
-		-- directly across the equivalent Aldera room sequence.
-		{"trainer_merchant", 0, 12.1, 1.1, 5.8, 177, 610000134, ""},
-		{"trainer_armorsmith", 0, -12, 1.1, 5, 180, 610000135, ""},
-		{"trainer_architect", 0, 11, 1.13306, -14, 0, 610000136, ""},
-		{"trainer_weaponsmith", 0, -2.5, 1.13306, -8.4, 91, 610000137, ""},
-		{"trainer_droidengineer", 0, -11, 1.13306, -14, 0, 610000138, ""}
+		-- Commerce guild hall. The supplied building cell 610000134 maps to
+		-- Coronet's first cell 1855523, so its occupied rooms begin at +1.
+		{"trainer_merchant", 0, 12.1, 1.1, 5.8, 177, 610000135, ""},
+		{"trainer_armorsmith", 0, -12, 1.1, 5, 180, 610000136, ""},
+		{"trainer_architect", 0, 11, 1.13306, -14, 0, 610000137, ""},
+		{"trainer_weaponsmith", 0, -2.5, 1.13306, -8.4, 91, 610000138, ""},
+		{"trainer_droidengineer", 0, -11, 1.13306, -14, 0, 610000139, ""}
 	}
 
 	for i = 1, #guildHallMobiles, 1 do
