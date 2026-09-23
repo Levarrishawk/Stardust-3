@@ -375,26 +375,21 @@ function AlderaCityScreenPlay:spawnHotelMobiles()
 		{"noble", 23.0, 1.3, -6.4, 165, 610000052, "entertained"},
 
 		-- Entry lobby, cell 610000051.
-		{"townsperson", -6.0, 1.0, 8.0, 120, 610000051, "conversation"},
-		{"townsperson", -4.8, 1.0, 7.2, 300, 610000051, "conversation"},
-		{"townsperson", 4.8, 1.0, 8.5, 215, 610000051, "calm"},
-		{"townsperson", 6.2, 1.0, 6.8, 45, 610000051, "conversation"},
-		{"townsperson", -5.5, 1.0, -7.5, 80, 610000051, "neutral"},
-		{"townsperson", 0.5, 1.0, -2.0, 330, 610000051, "happy"},
-		{"townsperson", 5.8, 1.0, -8.0, 270, 610000051, "conversation"},
-		{"townsperson", 4.5, 1.0, -8.0, 90, 610000051, "conversation"},
+		{"townsperson", 2.6, 1.0, -1.6, 310, 610000051, "neutral"},
+		{"townsperson", -0.9, 1.0, 1.2, 140, 610000051, "conversation"},
+		{"townsperson", 8.4, 1.0, 10.9, 210, 610000051, "calm"},
+		{"townsperson", -5.3, 1.0, 8.5, 35, 610000051, "conversation"},
+		{"townsperson", 8.4, 1.0, -11.2, 270, 610000051, "neutral"},
 
 		-- Adjoining lobby and lounge, cells 610000053 and 610000054.
-		{"townsperson", -13.5, 1.6, 10.5, 210, 610000053, "calm"},
-		{"townsperson", -17.5, 1.6, 8.0, 45, 610000053, "conversation"},
-		{"townsperson", -18.8, 1.6, 9.2, 225, 610000053, "conversation"},
-		{"townsperson", -24.0, 1.6, 4.0, 320, 610000053, "neutral"},
-		{"townsperson", -21.0, 1.6, -3.5, 160, 610000053, "conversation"},
-		{"townsperson", -19.7, 1.6, -4.4, 340, 610000053, "conversation"},
-		{"townsperson", -18.5, 1.6, -11.0, 30, 610000054, "calm"},
-		{"townsperson", -14.5, 1.6, -10.5, 135, 610000054, "conversation"},
-		{"townsperson", -12.8, 1.6, -11.5, 315, 610000054, "conversation"},
-		{"townsperson", -16.0, 1.6, -6.5, 180, 610000054, "neutral"}
+		{"townsperson", -20.4, 1.6, 8.1, 313, 610000053, "conversation"},
+		{"townsperson", -22.3, 1.6, 9.9, 132, 610000053, "conversation"},
+		{"townsperson", -18.9, 1.0, 0.4, 129, 610000053, "conversation"},
+		{"townsperson", -15.8, 1.0, -1.8, 306, 610000053, "conversation"},
+		{"townsperson", -12.8, 1.6, 12.9, 180, 610000053, "calm"},
+		{"townsperson", -26.2, 1.6, -1.5, 90, 610000053, "neutral"},
+		{"townsperson", -19.7, 1.6, -12.5, 45, 610000054, "calm"},
+		{"townsperson", -11.2, 1.6, -12.5, 315, 610000054, "neutral"}
 	}
 
 	for i = 1, #hotelMobiles, 1 do
