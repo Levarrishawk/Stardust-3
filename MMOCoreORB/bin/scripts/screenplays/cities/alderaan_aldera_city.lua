@@ -54,46 +54,46 @@ function AlderaCityScreenPlay:spawnCantinaMobiles()
 	local cantinaCellID = 610000068
 	local cantinaMobiles = {
 		-- Staff work from inside the U-shaped bar.
-		{"bartender", -8.0, -0.9, -2.2, 0, "npc_use_terminal_high"},
-		{"bartender", 5.8, -0.9, 2.8, 180, "conversation"},
+		{"bartender", -11.5, -0.9, 2.0, 230, "conversation"},
+		{"bartender", 8.6, -0.9, 0.6, 90, "neutral"},
 
 		-- Customers line the public side of the bar.
-		{"patron", -8.2, -0.9, -3.8, 0, "npc_standing_drinking"},
-		{"commoner", -4.7, -0.9, -3.8, 0, "npc_standing_drinking"},
-		{"gambler", -1.2, -0.9, -3.8, 0, "npc_standing_drinking"},
-		{"businessman", 2.3, -0.9, -3.8, 0, "npc_standing_drinking"},
-		{"mercenary", 5.5, -0.9, -3.8, 0, "npc_standing_drinking"},
-		{"noble", -7.0, -0.9, 4.5, 180, "npc_standing_drinking"},
-		{"artisan", -2.5, -0.9, 4.5, 180, "conversation"},
-		{"info_broker", 1.0, -0.9, 4.5, 180, "conversation"},
-		{"devaronian_male", 9.5, -0.9, 0.2, -90, "npc_standing_drinking"},
+		{"patron", 10.65, -0.895, 1.91, 330, "npc_standing_drinking"},
+		{"commoner", -4.11, -0.895, 5.4, 27, "happy"},
+		{"gambler", 10.17, -0.895, 2.74, 125, "conversation"},
+		{"businessman", 2.11, -0.895, 5.4, 180, "npc_standing_drinking"},
+		{"mercenary", 3.11, 0, 5.4, 161, "bored"},
+		{"noble", 1.11, 0, 5.4, 330, "npc_standing_drinking"},
+		{"artisan", -3.11, 0, 5.4, 17, "npc_standing_drinking"},
+		{"info_broker", 4.11, -0.895, 5.4, 158, "npc_standing_drinking"},
+		{"devaronian_male", 9.4, 0, 3.9, 310, "conversation"},
 
-		-- Four patrons around the southern table, facing into the group.
-		{"chiss_female", 2.2, -0.9, -8.8, -90, "npc_sitting_chair"},
-		{"sullustan_male", 5.0, -0.9, -8.8, 90, "npc_sitting_table"},
-		{"commoner_old", 3.6, -0.9, -7.4, 180, "npc_sitting_chair"},
-		{"patron", 3.6, -0.9, -10.2, 0, "npc_sitting_table"},
+		-- Seated patrons at the southern tables.
+		{"chiss_female", 13.7, -0.9, -5.6, 67, "npc_sitting_chair"},
+		{"sullustan_male", 13.6, -0.9, -2.4, 147, "npc_sitting_chair"},
+		{"commoner_old", 16.3, -0.9, -5.6, 320, "npc_sitting_chair"},
+		{"patron", -3.2, -0.9, -10.8, 65, "npc_sitting_table_eating"},
 
-		-- Four patrons around the northern table.
-		{"ithorian_male", 1.4, -0.9, 10.0, -90, "npc_sitting_chair"},
-		{"businessman", 4.2, -0.9, 10.0, 90, "npc_sitting_table"},
-		{"commoner", 2.8, -0.9, 8.6, 180, "npc_sitting_chair"},
-		{"noble", 2.8, -0.9, 11.4, 0, "npc_sitting_table"},
+		-- Seated patrons at the northern tables.
+		{"ithorian_male", -3.1, -0.9, 11.6, 97, "npc_sitting_table"},
+		{"businessman", 1.2, -0.9, 11.6, 269, "npc_sitting_chair"},
+		{"commoner", 14.1, -0.9, 4.3, 51, "npc_sitting_table"},
+		{"noble", 14.4, -0.9, 7.5, 139, "npc_sitting_chair"},
 
-		-- A quieter table toward the western wall.
-		{"artisan", -13.7, -0.9, 8.5, -90, "npc_sitting_chair"},
-		{"commoner", -10.9, -0.9, 8.5, 90, "npc_sitting_table"},
-		{"info_broker", -12.3, -0.9, 7.1, 180, "npc_sitting_chair"},
-		{"patron", -12.3, -0.9, 9.9, 0, "npc_sitting_table"},
+		-- Additional occupied tables and a nearby conversation.
+		{"artisan", 17.1, -0.9, 7.8, 226, "npc_sitting_chair"},
+		{"commoner", 23.5, -0.9, -8.9, 51, "npc_sitting_table"},
+		{"info_broker", 26.3, -0.9, -8.8, 317, "npc_sitting_table_eating"},
+		{"patron", 1.99, -0.895, -8.44, 325, "conversation"},
 
 		-- Small standing conversations and activity near the stage side.
-		{"bounty_hunter", 12.7, -0.9, -8.0, 45, "conversation"},
-		{"mercenary", 14.0, -0.9, -6.7, -135, "conversation"},
-		{"commoner", 13.8, -0.9, 7.0, 135, "conversation"},
-		{"commoner_old", 12.5, -0.9, 8.3, -45, "conversation"},
-		{"entertainer", 20.0, -0.9, -2.4, -90, "happy"},
-		{"entertainer", 20.0, -0.9, 1.0, -90, "entertained"},
-		{"patron", 16.5, -0.9, -0.8, 90, "entertained"}
+		{"bounty_hunter", 1.19, -0.895, -7.63, 152, "conversation"},
+		{"mercenary", 8.0, -0.9, -4.5, -21, "angry"},
+		{"commoner", 6.8, -0.9, -4.5, -22, "npc_worried"},
+		{"commoner_old", 16.1, -0.9, 4.1, 340, "conversation"},
+		{"entertainer", 19.1, -0.9, 6.1, 41, "entertained"},
+		{"entertainer", 22.2, -0.9, 4.3, 22, "entertained"},
+		{"patron", 8.49, -0.895, 4.64, 129, "conversation"}
 	}
 
 	for i = 1, #cantinaMobiles, 1 do
@@ -105,6 +105,10 @@ function AlderaCityScreenPlay:spawnCantinaMobiles()
 
 			if (SceneObject(pMobile):isAiAgent()) then
 				AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+				if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+					CreatureObject(pMobile):clearOptionBit(AIENABLED)
+				end
 			end
 		end
 	end
