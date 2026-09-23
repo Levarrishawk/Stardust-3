@@ -423,7 +423,6 @@ function AlderaCityScreenPlay:spawnSecondCantinaMobiles()
 		{"chadra_fan_male", 10.7, -0.894992, -0.23, 80.4821, ""},
 		{"outlaw", 10.17, -0.894992, 2.74, 125.098, "conversation"},
 		{"pirate_crewman", 2.11, -0.894992, 5.4, 180, "npc_standing_drinking"},
-		{"spice_fiend", -2.2, -0.9, -10.9, 65, "npc_sitting_table_eating"},
 		{"criminal", 3.11, 0, 5.4, 161.005, "bored"},
 		{"pirate_squab", 1.11, 0, 5.4, 330.024, "npc_standing_drinking"},
 		{"thug", -3.11, 0, 5.4, 16.6733, "npc_standing_drinking"},
@@ -435,23 +434,10 @@ function AlderaCityScreenPlay:spawnSecondCantinaMobiles()
 		{"pirate_captain", -9.34, -0.894992, 5.66, 59.306, "calm"},
 		{"muftak", 20.2, -0.9, 5, 107, "happy"},
 		{"pirate_leader", 8.49, -0.894992, 4.64, 128.74, "conversation"},
-		{"pirate_cutthroat", 14.2, -0.9, -4.8, 67, "npc_sitting_chair"},
-		{"criminal", 14.7, -0.9, -3, 147, "npc_sitting_chair"},
-		{"smuggler", 16.5, -0.9, -4.8, 320, "npc_sitting_chair"},
-		{"pirate_privateer", 24.5, -0.9, -8.1, 51, "npc_sitting_table"},
-		{"outlaw", 26.1, -0.9, -8.2, 317, "npc_sitting_table_eating"},
 		{"pirate_crewman", 8.8, -0.9, -6, 208, "entertained"},
 		{"thug", 6.8, -0.9, -6.5, 230, "entertained"},
-		{"pirate_lieutenant", -2.2, -0.9, 11.8, 97, "npc_sitting_table"},
-		{"pirate_squab", 0.6, -0.9, 11.9, 269, "npc_sitting_chair"},
 		{"patron_chiss", 3.62, -0.894992, -4.77, 184.005, "sad"},
 		{"patron_chiss", 1.74, -0.894992, -4.91, 95.0028, "npc_consoling"},
-		{"patron_devaronian", 21.4, -0.9, 5.4, 161, "npc_sitting_table"},
-		{"patron_ishitib", 22.3, -0.9, 3.1, 339, "npc_sitting_chair"},
-		{"patron_ithorian", 14.9, -0.9, 4.9, 51, "npc_sitting_table"},
-		{"patron_klaatu", 15, -0.9, 6.9, 139, "npc_sitting_chair"},
-		{"patron_nikto", 23.4, -0.9, 4.8, 272, "npc_sitting_chair"},
-		{"patron_quarren", 17, -0.9, 6.8, 226, "npc_sitting_chair"},
 		{"pirate_lieutenant", 2.84, -0.894992, -6.3, 16.0005, "npc_accusing"},
 		{"pirate_cutthroat", 3.62, -0.894992, -6.78, 360.011, "angry"}
 	}
@@ -468,6 +454,46 @@ function AlderaCityScreenPlay:spawnSecondCantinaMobiles()
 			CreatureObject(pMobile):setPvpStatusBitmask(0)
 			AiAgent(pMobile):addObjectFlag(AI_STATIC)
 			CreatureObject(pMobile):clearOptionBit(AIENABLED)
+		end
+	end
+end
+
+function AlderaCityScreenPlay:spawnGuildHallMobiles()
+	local guildHallMobiles = {
+		-- Combat guild hall. Coronet cells 1855505, 1855507, and 1855508
+		-- map to the equivalent Aldera rooms 610000143, 145, and 146.
+		{"trainer_scout", 0, -12, 1.13306, 5.5, 180, 610000143, ""},
+		{"junk_dealer", 0, -14.5, 1.1, 3.0, 98, 610000143, ""},
+		{"trainer_marksman", 0, 0, 1.13306, -14, 0, 610000145, ""},
+		{"trainer_brawler", 0, -11, 1.13306, -14, 0, 610000146, ""},
+
+		-- Universities use Coronet's artisan guild-hall placement.
+		{"trainer_artisan", 0, 0, 1.13306, -14, 0, 610000124, ""},
+		{"trainer_artisan", 0, 0, 1.13306, -14, 0, 610000114, ""},
+
+		-- Commerce guild hall. Coronet cells 1855524 through 1855528 map
+		-- directly across the equivalent Aldera room sequence.
+		{"trainer_merchant", 0, 12.1, 1.1, 5.8, 177, 610000134, ""},
+		{"trainer_armorsmith", 0, -12, 1.1, 5, 180, 610000135, ""},
+		{"trainer_architect", 0, 11, 1.13306, -14, 0, 610000136, ""},
+		{"trainer_weaponsmith", 0, -2.5, 1.13306, -8.4, 91, 610000137, ""},
+		{"trainer_droidengineer", 0, -11, 1.13306, -14, 0, 610000138, ""}
+	}
+
+	for i = 1, #guildHallMobiles, 1 do
+		local mobile = guildHallMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], mobile[2], mobile[3], mobile[4], mobile[5], mobile[6], mobile[7])
+
+		if (pMobile ~= nil) then
+			if (mobile[8] ~= "") then
+				CreatureObject(pMobile):setMoodString(mobile[8])
+			end
+
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
 		end
 	end
 end
@@ -489,6 +515,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 	self:spawnTheaterMobiles()
 	self:spawnHotelMobiles()
 	self:spawnSecondCantinaMobiles()
+	self:spawnGuildHallMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
