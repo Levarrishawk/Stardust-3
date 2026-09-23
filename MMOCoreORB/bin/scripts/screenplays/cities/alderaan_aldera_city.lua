@@ -1,3 +1,46 @@
+local alderaSidewalkRoutes = {
+	{population = 4, points = {{1181, -1543, 0}, {1181, -1228, 180}}},
+	{population = 4, points = {{1182, -1535, 0}, {1182, -1242, 180}}},
+	{population = 4, points = {{1183, -1522, 0}, {1183, -1260, 180}}},
+	{population = 5, points = {{1184, -1540, 0}, {1184, -1236, 180}}},
+	{population = 4, points = {{1185, -1512, 0}, {1185, -1280, 180}}},
+	{population = 5, points = {{1186, -1543, 0}, {1186, -1305, 180}}},
+	{population = 4, points = {{1187, -1500, 0}, {1187, -1340, 180}}},
+	{population = 4, points = {{1187.75, -1538, 0}, {1187.75, -1380, 180}}},
+	{population = 4, points = {{1188, -1543, 0}, {1188, -1422, 180}}},
+	{population = 4, points = {{1189, -1532, 0}, {1189, -1430, 180}}},
+	{population = 4, points = {{1190.5, -1540, 0}, {1190.5, -1425, 180}}},
+	{population = 4, points = {{1192, -1522, 0}, {1192, -1440, 180}}},
+	{population = 4, points = {{1193.5, -1538, 0}, {1193.5, -1428, 180}}},
+	{population = 3, points = {{1195, -1510, 0}, {1195, -1445, 180}}}
+}
+
+local alderaSidewalkPatrolMobiles = {}
+local alderaSidewalkPatrolPoints = {}
+
+for routeIndex = 1, #alderaSidewalkRoutes, 1 do
+	local route = alderaSidewalkRoutes[routeIndex]
+	local routeName = "alderaSidewalk" .. routeIndex
+	local firstPoint = route.points[1]
+	local secondPoint = route.points[2]
+
+	alderaSidewalkPatrolPoints[routeName] = {
+		{firstPoint[1], 28, firstPoint[2], 0, false},
+		{secondPoint[1], 28, secondPoint[2], 0, false}
+	}
+
+	for i = 1, route.population, 1 do
+		local routeProgress = (i - 0.5) / route.population
+		local spawnX = firstPoint[1] + ((secondPoint[1] - firstPoint[1]) * routeProgress)
+		local spawnY = firstPoint[2] + ((secondPoint[2] - firstPoint[2]) * routeProgress)
+
+		table.insert(alderaSidewalkPatrolMobiles, {
+			routeName, "patrolNpc", spawnX, 28, spawnY,
+			firstPoint[3], 0, "", false
+		})
+	end
+end
+
 AlderaCityScreenPlay = CityScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "AlderaCityScreenPlay",
@@ -8,7 +51,9 @@ AlderaCityScreenPlay = CityScreenPlay:new {
 		"businessman_patrol", "noble_patrol", "scientist_patrol",
 		"explorer_patrol", "gambler_patrol", "commoner_technician_patrol",
 		"official_patrol", "miner_patrol"
-	}
+	},
+	patrolMobiles = alderaSidewalkPatrolMobiles,
+	patrolPoints = alderaSidewalkPatrolPoints
 }
 
 registerScreenPlay("AlderaCityScreenPlay", true)
@@ -228,57 +273,11 @@ function AlderaCityScreenPlay:spawnMobiles()
 		{population = 4, points = {{974, -1061, 0}, {1085, -1061, 0}, {1085, -1024, 0}, {974, -1024, 0}}}
 	}
 
-	-- Dense north-south foot traffic on the sidewalk between the civic center and
-	-- the southern transit area. Routes at x >= 1188 stop south of the building
-	-- whose footprint begins beyond y = -1422.
-	local sidewalkRoutes = {
-		{population = 4, points = {{1181, -1543, 0}, {1181, -1228, 180}}},
-		{population = 4, points = {{1182, -1535, 0}, {1182, -1242, 180}}},
-		{population = 4, points = {{1183, -1522, 0}, {1183, -1260, 180}}},
-		{population = 5, points = {{1184, -1540, 0}, {1184, -1236, 180}}},
-		{population = 4, points = {{1185, -1512, 0}, {1185, -1280, 180}}},
-		{population = 5, points = {{1186, -1543, 0}, {1186, -1305, 180}}},
-		{population = 4, points = {{1187, -1500, 0}, {1187, -1340, 180}}},
-		{population = 4, points = {{1187.75, -1538, 0}, {1187.75, -1380, 180}}},
-		{population = 4, points = {{1188, -1543, 0}, {1188, -1422, 180}}},
-		{population = 4, points = {{1189, -1532, 0}, {1189, -1430, 180}}},
-		{population = 4, points = {{1190.5, -1540, 0}, {1190.5, -1425, 180}}},
-		{population = 4, points = {{1192, -1522, 0}, {1192, -1440, 180}}},
-		{population = 4, points = {{1193.5, -1538, 0}, {1193.5, -1428, 180}}},
-		{population = 3, points = {{1195, -1510, 0}, {1195, -1445, 180}}}
-	}
-
 	self:spawnPatrols(pedestrianRoutes)
 
 	-- Use the stock CityScreenPlay patrol framework used by Mos Eisley's CLL-8
-	-- load lifters. Each NPC is distributed along its assigned straight route,
-	-- then setNextPosition advances it between the two endpoints.
-	self.patrolMobiles = {}
-	self.patrolPoints = {}
-
-	for routeIndex = 1, #sidewalkRoutes, 1 do
-		local route = sidewalkRoutes[routeIndex]
-		local routeName = "alderaSidewalk" .. routeIndex
-		local firstPoint = route.points[1]
-		local secondPoint = route.points[2]
-
-		self.patrolPoints[routeName] = {
-			{firstPoint[1], 28, firstPoint[2], 0, false},
-			{secondPoint[1], 28, secondPoint[2], 0, false}
-		}
-
-		for i = 1, route.population, 1 do
-			local routeProgress = getRandomNumber(0, 100) / 100
-			local spawnX = firstPoint[1] + ((secondPoint[1] - firstPoint[1]) * routeProgress)
-			local spawnY = firstPoint[2] + ((secondPoint[2] - firstPoint[2]) * routeProgress)
-
-			table.insert(self.patrolMobiles, {
-				routeName, "patrolNpc", spawnX, 28, spawnY,
-				firstPoint[3], 0, "", false
-			})
-		end
-	end
-
+	-- load lifters. These tables are attached before screenplay registration so
+	-- delayed callbacks resolve the same patrol definitions used at spawn time.
 	self:spawnPatrolMobiles()
 	self:spawnCantinaMobiles()
 end
