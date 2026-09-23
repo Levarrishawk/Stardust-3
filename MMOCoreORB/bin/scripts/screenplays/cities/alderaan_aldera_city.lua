@@ -16,14 +16,10 @@ local alderaSidewalkRoutes = {
 
 	-- Opposite sidewalk, north of the cross street.
 	{population = 4, points = {{1126, -1410, 0}, {1126, -1230, 180}}},
-	{population = 4, points = {{1116, -1410, 0}, {1116, -1230, 180}}},
-	{population = 4, points = {{1115, -1410, 0}, {1115, -1230, 180}}},
-	{population = 4, points = {{1114, -1410, 0}, {1114, -1230, 180}}},
-	{population = 4, points = {{1113, -1410, 0}, {1113, -1230, 180}}},
-	{population = 4, points = {{1112, -1410, 0}, {1112, -1230, 180}}},
-	{population = 4, points = {{1111, -1410, 0}, {1111, -1230, 180}}},
-	{population = 4, points = {{1110, -1410, 0}, {1110, -1230, 180}}},
-	{population = 4, points = {{1109, -1410, 0}, {1109, -1230, 180}}},
+	{population = 5, points = {{1116, -1410, 0}, {1116, -1230, 180}}},
+	{population = 5, points = {{1113, -1410, 0}, {1113, -1230, 180}}},
+	{population = 5, points = {{1110, -1410, 0}, {1110, -1230, 180}}},
+	{population = 5, points = {{1107, -1410, 0}, {1107, -1230, 180}}},
 	{population = 4, points = {{1100, -1410, 0}, {1100, -1230, 180}}},
 
 	-- Opposite sidewalk, south of the cross street.
