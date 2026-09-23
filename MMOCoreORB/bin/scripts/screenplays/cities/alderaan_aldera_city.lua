@@ -192,7 +192,15 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 			local spawnY = point[2] + ((nextPoint[2] - point[2]) * routeProgress)
 			local templates = route.templates or pedestrians
 			local template = templates[((i + routeIndex - 2) % #templates) + 1]
-			local pMobile = spawnMobile("alderaan", template, 60, spawnX, 28, spawnY, point[3], 0)
+			local direction = point[3]
+
+			if (route.stationary == true) then
+				spawnX = math.max(1219, math.min(1356, spawnX + getRandomNumber(-4, 4) * 0.5))
+				spawnY = math.max(-1729, math.min(-1555, spawnY + getRandomNumber(-4, 4) * 0.5))
+				direction = getRandomNumber(0, 359)
+			end
+
+			local pMobile = spawnMobile("alderaan", template, 60, spawnX, 28, spawnY, direction, 0)
 
 			if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
 				if (route.stationary == true) then
