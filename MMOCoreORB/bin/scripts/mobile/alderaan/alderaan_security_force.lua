@@ -28,7 +28,6 @@ alderaan_security_force = Creature:new {
 	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
 	diet = HERBIVORE,
-	customAiMap = "cityPatrol",
 
 	-- The local force retained Alderaanian field uniforms while serving the Empire.
 	templates = {"object/mobile/dressed_rebel_crewman_human_female_01.iff",

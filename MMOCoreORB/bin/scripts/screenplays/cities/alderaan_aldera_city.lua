@@ -1,6 +1,14 @@
-AlderaCityScreenPlay = ScreenPlay:new {
+AlderaCityScreenPlay = CityScreenPlay:new {
 	numberOfActs = 1,
-	screenplayName = "AlderaCityScreenPlay"
+	screenplayName = "AlderaCityScreenPlay",
+	planet = "alderaan",
+	patrolNpcs = {
+		"commoner_patrol", "commoner_patrol", "commoner_patrol",
+		"commoner_old_patrol", "commoner_fat_patrol", "businessman_patrol",
+		"businessman_patrol", "noble_patrol", "scientist_patrol",
+		"explorer_patrol", "gambler_patrol", "commoner_technician_patrol",
+		"official_patrol", "miner_patrol"
+	}
 }
 
 registerScreenPlay("AlderaCityScreenPlay", true)
@@ -15,11 +23,9 @@ end
 
 function AlderaCityScreenPlay:spawnPatrols(routes)
 	local pedestrians = {
-		"commoner_patrol", "commoner_patrol", "businessman_patrol",
-		"commoner_old_patrol", "commoner_fat_patrol", "noble_patrol",
-		"scientist_patrol", "explorer_patrol", "gambler_patrol",
-		"commoner_technician_patrol", "official_patrol", "miner_patrol",
-		"alderaan_security_force", "alderaan_security_force"
+		"commoner", "commoner", "businessman", "artisan", "commoner", "noble",
+		"commoner", "alderaan_security_force", "commoner", "stormtrooper",
+		"businessman", "alderaan_security_force"
 	}
 
 	AlderaCityPatrolRoutes = routes
@@ -44,11 +50,9 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 				writeData(objectID .. ":AlderaCity:route", routeIndex)
 				writeData(objectID .. ":AlderaCity:point", pointIndex)
 				AiAgent(pMobile):setAITemplate()
-				AiAgent(pMobile):clearPatrolPoints()
-				AiAgent(pMobile):clearCurrentPath()
 				AiAgent(pMobile):setMovementState(AI_PATROLLING)
 				createObserver(DESTINATIONREACHED, "AlderaCityScreenPlay", "patrolDestinationReached", pMobile)
-				createEvent(getRandomNumber(1, 3) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
+				createEvent(getRandomNumber(3, 12) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
 			end
 		end
 	end
@@ -145,8 +149,6 @@ function AlderaCityScreenPlay:walkPatrol(pMobile)
 	local point = route.points[pointIndex]
 
 	writeData(objectID .. ":AlderaCity:point", pointIndex)
-	AiAgent(pMobile):clearPatrolPoints()
-	AiAgent(pMobile):clearCurrentPath()
 	AiAgent(pMobile):setMovementState(AI_PATROLLING)
 	AiAgent(pMobile):stopWaiting()
 	AiAgent(pMobile):setWait(0)
@@ -229,13 +231,6 @@ function AlderaCityScreenPlay:spawnMobiles()
 	-- Dense north-south foot traffic on the sidewalk between the civic center and
 	-- the southern transit area. Routes at x >= 1188 stop south of the building
 	-- whose footprint begins beyond y = -1422.
-	local sidewalkTemplates = {
-		"commoner_patrol", "commoner_patrol", "commoner_patrol",
-		"commoner_old_patrol", "commoner_fat_patrol", "businessman_patrol",
-		"businessman_patrol", "noble_patrol", "scientist_patrol",
-		"explorer_patrol", "gambler_patrol", "commoner_technician_patrol",
-		"official_patrol", "miner_patrol", "alderaan_security_force"
-	}
 	local sidewalkRoutes = {
 		{population = 4, points = {{1181, -1543, 0}, {1181, -1228, 180}}},
 		{population = 4, points = {{1182, -1535, 0}, {1182, -1242, 180}}},
@@ -253,11 +248,37 @@ function AlderaCityScreenPlay:spawnMobiles()
 		{population = 3, points = {{1195, -1510, 0}, {1195, -1445, 180}}}
 	}
 
-	for i = 1, #sidewalkRoutes, 1 do
-		sidewalkRoutes[i].templates = sidewalkTemplates
-		table.insert(pedestrianRoutes, sidewalkRoutes[i])
+	self:spawnPatrols(pedestrianRoutes)
+
+	-- Use the stock CityScreenPlay patrol framework used by Mos Eisley's CLL-8
+	-- load lifters. Each NPC is distributed along its assigned straight route,
+	-- then setNextPosition advances it between the two endpoints.
+	self.patrolMobiles = {}
+	self.patrolPoints = {}
+
+	for routeIndex = 1, #sidewalkRoutes, 1 do
+		local route = sidewalkRoutes[routeIndex]
+		local routeName = "alderaSidewalk" .. routeIndex
+		local firstPoint = route.points[1]
+		local secondPoint = route.points[2]
+
+		self.patrolPoints[routeName] = {
+			{firstPoint[1], 28, firstPoint[2], 0, false},
+			{secondPoint[1], 28, secondPoint[2], 0, false}
+		}
+
+		for i = 1, route.population, 1 do
+			local routeProgress = getRandomNumber(0, 100) / 100
+			local spawnX = firstPoint[1] + ((secondPoint[1] - firstPoint[1]) * routeProgress)
+			local spawnY = firstPoint[2] + ((secondPoint[2] - firstPoint[2]) * routeProgress)
+
+			table.insert(self.patrolMobiles, {
+				routeName, "patrolNpc", spawnX, 28, spawnY,
+				firstPoint[3], 0, "", false
+			})
+		end
 	end
 
-	self:spawnPatrols(pedestrianRoutes)
+	self:spawnPatrolMobiles()
 	self:spawnCantinaMobiles()
 end
