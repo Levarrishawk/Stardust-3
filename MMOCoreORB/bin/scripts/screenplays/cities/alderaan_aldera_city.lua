@@ -553,21 +553,15 @@ function AlderaCityScreenPlay:spawnStarportMobiles()
 
 		-- Additional travelers, workers and waiting passengers at positions
 		-- used by other cities that share this exact starport template.
-		{"trainer_shipwright", 60, 0.1, 0.6, 67.2, 180, 610000002, "neutral"},
-		{"sullustan_male", 300, -1.85381, 0.639422, 56.3013, 180.012, 610000002, "conversation"},
-		{"info_broker", 300, -1.85381, 0.639422, 55.3013, 360.011, 610000002, "conversation"},
-		{"contractor", 300, 31.7104, 0.639212, 63.2998, 354.769, 610000003, "conversation"},
-		{"investigator", 60, 31.6347, 0.63915, 64.1249, 174.754, 610000003, "sad"},
-		{"reporter", 300, 57.1873, -0.521137, 36.2187, 180.007, 610000005, "conversation"},
-		{"medic", 300, 57.1873, -0.521137, 35.1187, 360.011, 610000005, "conversation"},
-		{"bounty_hunter", 60, -33.5, 1.6, 49.2, -88, 610000007, "sad"},
-		{"entertainer", 60, 53.5, 0.6, 47.8, -80, 610000008, "conversation"},
-		{"chiss_male", 60, 36.7068, 0.639417, 40.446, 180.001, 610000008, "conversation"},
-		{"farmer", 60, 36.7068, 0.639417, 39.346, 0, 610000008, "conversation"},
-		{"medic", 60, -62.23, 2.64, 40.83, 180, 610000010, "conversation"},
-		{"reporter", 300, -62.23, 2.64, 39.73, 0.19, 610000010, "conversation"},
-		{"noble", 60, 47.5747, 0.974633, 22.0108, 238.024, 610000011, "calm"},
-		{"chassis_dealer", 60, -56.6993, 0.974563, 8.57384, 27.5028, 610000012, "neutral"}
+		{"trainer_shipwright", 60, 0.1, 0.6, 67.2, 180, 610000005, "neutral"},
+		{"sullustan_male", 300, -1.85381, 0.639422, 56.3013, 180.012, 610000005, "conversation"},
+		{"info_broker", 300, -1.85381, 0.639422, 55.3013, 360.011, 610000005, "conversation"},
+		{"contractor", 300, 31.7104, 0.639212, 63.2998, 354.769, 610000006, "conversation"},
+		{"corellia_times_investigator", 60, 31.6347, 0.63915, 64.1249, 174.754, 610000006, "sad"},
+		{"corellia_times_reporter", 300, 57.1873, -0.521137, 36.2187, 180.007, 610000008, "conversation"},
+		{"medic", 300, 57.1873, -0.521137, 35.1187, 360.011, 610000008, "conversation"},
+		{"noble", 60, 47.5747, 0.974633, 22.0108, 238.024, 610000014, "calm"},
+		{"chassis_dealer", 60, -56.6993, 0.974563, 8.57384, 27.5028, 610000015, "neutral"}
 	}
 
 	for i = 1, #starportMobiles, 1 do
