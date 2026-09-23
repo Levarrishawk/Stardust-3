@@ -31,7 +31,21 @@ local alderaSidewalkRoutes = {
 	{population = 3, points = {{1114, -1547, 0}, {1114, -1481, 180}}},
 	{population = 3, points = {{1112, -1547, 0}, {1112, -1481, 180}}},
 	{population = 3, points = {{1109, -1547, 0}, {1109, -1481, 180}}},
-	{population = 3, points = {{1106, -1547, 0}, {1106, -1481, 180}}}
+	{population = 3, points = {{1106, -1547, 0}, {1106, -1481, 180}}},
+
+	-- East-west pedestrian traffic through the central cross streets.
+	{population = 6, points = {{939, -1406, 90}, {1350, -1406, 270}}},
+	{population = 4, points = {{1351, -1409, 270}, {1263, -1409, 90}}},
+	{population = 4, points = {{1351, -1411, 270}, {1263, -1411, 90}}},
+	{population = 4, points = {{1351, -1414, 270}, {1263, -1414, 90}}},
+	{population = 4, points = {{1351, -1416, 270}, {1263, -1416, 90}}},
+	{population = 4, points = {{1230, -1356, 90}, {1394, -1356, 270}}},
+	{population = 4, points = {{1230, -1353, 90}, {1394, -1353, 270}}},
+	{population = 4, points = {{1230, -1350, 90}, {1394, -1350, 270}}},
+	{population = 4, points = {{1230, -1348, 90}, {1394, -1348, 270}}},
+	{population = 4, points = {{1114, -1359, 270}, {884, -1359, 90}}},
+	{population = 3, points = {{893, -1356, 90}, {948, -1356, 270}}},
+	{population = 3, points = {{958, -1356, 90}, {1046, -1356, 270}}}
 }
 
 local alderaSidewalkPatrolMobiles = {}
