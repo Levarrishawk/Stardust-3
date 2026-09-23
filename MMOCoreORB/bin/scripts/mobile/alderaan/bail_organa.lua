@@ -1,7 +1,7 @@
 bail_organa = Creature:new {
 	customName = "Senator Bail Organa",
-	socialGroup = "townsperson",
-	faction = "townsperson",
+	socialGroup = "rebel",
+  faction = "rebel",
 	mobType = MOB_NPC,
 	level = 100,
 	chanceHit = 1,
