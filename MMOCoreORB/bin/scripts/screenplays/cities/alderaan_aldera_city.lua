@@ -195,14 +195,18 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 			local pMobile = spawnMobile("alderaan", template, 60, spawnX, 28, spawnY, point[3], 0)
 
 			if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
-				local objectID = SceneObject(pMobile):getObjectID()
+				if (route.stationary == true) then
+					AiAgent(pMobile):addObjectFlag(AI_STATIC)
+				else
+					local objectID = SceneObject(pMobile):getObjectID()
 
-				writeData(objectID .. ":AlderaCity:route", routeIndex)
-				writeData(objectID .. ":AlderaCity:point", pointIndex)
-				AiAgent(pMobile):setAITemplate()
-				AiAgent(pMobile):setMovementState(AI_PATROLLING)
-				createObserver(DESTINATIONREACHED, "AlderaCityScreenPlay", "patrolDestinationReached", pMobile)
-				createEvent(getRandomNumber(3, 12) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
+					writeData(objectID .. ":AlderaCity:route", routeIndex)
+					writeData(objectID .. ":AlderaCity:point", pointIndex)
+					AiAgent(pMobile):setAITemplate()
+					AiAgent(pMobile):setMovementState(AI_PATROLLING)
+					createObserver(DESTINATIONREACHED, "AlderaCityScreenPlay", "patrolDestinationReached", pMobile)
+					createEvent(getRandomNumber(3, 12) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
+				end
 			end
 		end
 	end
@@ -719,14 +723,36 @@ function AlderaCityScreenPlay:spawnMobiles()
 		{population = 4, points = {{1242, -1515, 0}, {1340, -1515, 0}, {1340, -1502, 0}, {1242, -1502, 0}}},
 		{population = 4, points = {{1255, -1495, 0}, {1255, -1405, 0}}},
 		{
-			population = 24,
+			population = 44,
+			stationary = true,
 			templates = {
-				"stormtrooper", "stormtrooper", "imperial_trooper", "imperial_private",
-				"imperial_noncom", "imperial_staff_sergeant", "imperial_medic",
-				"imperial_pilot", "imperial_officer", "imperial_first_lieutenant",
-				"alderaan_security_force"
+				"stormtrooper", "stormtrooper", "stormtrooper", "stormtrooper",
+				"stormtrooper", "stormtrooper", "stormtrooper", "stormtrooper",
+				"stormtrooper_rifleman", "stormtrooper_medic", "stormtrooper_squad_leader"
 			},
 			points = {{1218, -1730, 0}, {1357, -1730, 0}, {1357, -1554, 0}, {1218, -1554, 0}}
+		},
+		{
+			population = 32,
+			stationary = true,
+			templates = {
+				"stormtrooper", "stormtrooper", "stormtrooper", "stormtrooper",
+				"stormtrooper", "stormtrooper", "stormtrooper_rifleman",
+				"stormtrooper_medic", "stormtrooper_squad_leader"
+			},
+			points = {{1230, -1716, 0}, {1345, -1716, 0}, {1345, -1568, 0}, {1230, -1568, 0}}
+		},
+		{
+			population = 8,
+			stationary = true,
+			templates = {"stormtrooper", "stormtrooper", "stormtrooper_rifleman", "stormtrooper"},
+			points = {{1242, -1701, 0}, {1242, -1661, 180}}
+		},
+		{
+			population = 8,
+			stationary = true,
+			templates = {"stormtrooper", "stormtrooper", "stormtrooper_rifleman", "stormtrooper"},
+			points = {{1333, -1623, 0}, {1333, -1583, 180}}
 		},
 		{population = 4, points = {{1082, -1737, 0}, {1205, -1737, 0}, {1205, -1702, 0}, {1082, -1702, 0}}},
 		{population = 3, points = {{1130, -1693, 0}, {1171, -1693, 0}, {1171, -1661, 0}, {1130, -1661, 0}}},
