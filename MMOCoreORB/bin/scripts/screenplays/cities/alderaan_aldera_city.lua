@@ -41,7 +41,14 @@ local alderaSidewalkRoutes = {
 	{population = 4, points = {{1230, -1348, 90}, {1394, -1348, 270}}},
 	{population = 4, points = {{1114, -1359, 270}, {884, -1359, 90}}},
 	{population = 3, points = {{893, -1356, 90}, {948, -1356, 270}}},
-	{population = 3, points = {{958, -1356, 90}, {1046, -1356, 270}}}
+	{population = 3, points = {{958, -1356, 90}, {1046, -1356, 270}}},
+
+	-- Starport perimeter traffic. Each path remains at least 38 meters from
+	-- the shuttle landing point at 1150, -1117, leaving its 30 meter circle clear.
+	{population = 4, points = {{1112, -1155, 90}, {1188, -1155, 270}}},
+	{population = 4, points = {{1112, -1079, 90}, {1188, -1079, 270}}},
+	{population = 4, points = {{1112, -1155, 0}, {1112, -1079, 180}}},
+	{population = 4, points = {{1188, -1155, 0}, {1188, -1079, 180}}}
 }
 
 local alderaSidewalkPatrolMobiles = {}
@@ -529,6 +536,58 @@ function AlderaCityScreenPlay:spawnMedicalCenterMobiles()
 	end
 end
 
+function AlderaCityScreenPlay:spawnStarportMobiles()
+	local starportMobiles = {
+		-- Coronet starport population, mapped cell-for-cell into Aldera's
+		-- identical Corellian starport template (cells 610000002-610000017).
+		{"info_broker", 60, 8.5, 0.6, 74.4, -77, 610000002, "conversation"},
+		{"noble", 60, 56.669, -0.521137, 33.7689, 180.017, 610000008, "conversation"},
+		{"contractor", 300, 37.163, 0.639417, 40.7061, 180.01, 610000008, "conversation"},
+		{"mercenary", 300, -4.61669, 0.639424, 67.8263, 180.012, 610000005, "conversation"},
+		{"bounty_hunter", 300, 8.65132, 0.639421, 75.5483, 256.69, 610000002, "calm"},
+		{"businessman", 60, 37.163, 0.639417, 39.6061, 0, 610000008, "conversation"},
+		{"scientist", 60, 56.669, -0.521137, 32.6689, 360.011, 610000008, "conversation"},
+		{"shadowy_figure", 60, -4.61669, 0.639424, 66.7263, 0, 610000005, "conversation"},
+		{"farmer", 60, -62.7673, 2.63942, 40.6604, 360.011, 610000013, "conversation"},
+		{"chassis_dealer", 0, 0.1, 0.6, 72.9, -4, 610000002, ""},
+
+		-- Additional travelers, workers and waiting passengers at positions
+		-- used by other cities that share this exact starport template.
+		{"trainer_shipwright", 60, 0.1, 0.6, 67.2, 180, 610000002, "neutral"},
+		{"sullustan_male", 300, -1.85381, 0.639422, 56.3013, 180.012, 610000002, "conversation"},
+		{"info_broker", 300, -1.85381, 0.639422, 55.3013, 360.011, 610000002, "conversation"},
+		{"contractor", 300, 31.7104, 0.639212, 63.2998, 354.769, 610000003, "conversation"},
+		{"investigator", 60, 31.6347, 0.63915, 64.1249, 174.754, 610000003, "sad"},
+		{"reporter", 300, 57.1873, -0.521137, 36.2187, 180.007, 610000005, "conversation"},
+		{"medic", 300, 57.1873, -0.521137, 35.1187, 360.011, 610000005, "conversation"},
+		{"bounty_hunter", 60, -33.5, 1.6, 49.2, -88, 610000007, "sad"},
+		{"entertainer", 60, 53.5, 0.6, 47.8, -80, 610000008, "conversation"},
+		{"chiss_male", 60, 36.7068, 0.639417, 40.446, 180.001, 610000008, "conversation"},
+		{"farmer", 60, 36.7068, 0.639417, 39.346, 0, 610000008, "conversation"},
+		{"medic", 60, -62.23, 2.64, 40.83, 180, 610000010, "conversation"},
+		{"reporter", 300, -62.23, 2.64, 39.73, 0.19, 610000010, "conversation"},
+		{"noble", 60, 47.5747, 0.974633, 22.0108, 238.024, 610000011, "calm"},
+		{"chassis_dealer", 60, -56.6993, 0.974563, 8.57384, 27.5028, 610000012, "neutral"}
+	}
+
+	for i = 1, #starportMobiles, 1 do
+		local mobile = starportMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], mobile[2], mobile[3], mobile[4], mobile[5], mobile[6], mobile[7])
+
+		if (pMobile ~= nil) then
+			if (mobile[8] ~= "") then
+				CreatureObject(pMobile):setMoodString(mobile[8])
+			end
+
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
+	end
+end
+
 function AlderaCityScreenPlay:spawnMobiles()
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
@@ -548,6 +607,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 	self:spawnSecondCantinaMobiles()
 	self:spawnGuildHallMobiles()
 	self:spawnMedicalCenterMobiles()
+	self:spawnStarportMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
