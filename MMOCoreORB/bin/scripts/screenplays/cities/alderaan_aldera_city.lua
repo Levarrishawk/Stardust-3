@@ -348,6 +348,76 @@ function AlderaCityScreenPlay:spawnTheaterSceneObjects()
 	spawnSceneObject("alderaan", lampTemplate, 8.5, 0.7, 43, theaterCellID, math.rad(0))
 end
 
+function AlderaCityScreenPlay:spawnHotelMobiles()
+	local townspersonTemplates = {
+		"commoner", "commoner", "commoner_old", "commoner_fat", "artisan",
+		"businessman", "farmer", "gambler", "info_broker", "medic",
+		"noble", "official", "pilot", "scientist"
+	}
+	local hotelMobiles = {
+		-- Bar and stage in cell 610000052.
+		{"bartender", 20.1, 1.6, 12.3, 180, 610000052, "neutral"},
+		{"entertainer", 24.3, 2.0, -15.5, 0, 610000052, "entertained"},
+		{"patron", 17.5, 1.3, 9.9, 70, 610000052, "conversation"},
+		{"businessman", 18.9, 1.3, 10.2, 275, 610000052, "conversation"},
+		{"commoner", 21.6, 1.3, 10.6, 351, 610000052, "entertained"},
+		{"noble", 14.2, 1.3, 6.8, 210, 610000052, "entertained"},
+		{"commoner_old", 16.0, 1.3, 5.7, 195, 610000052, "applause_polite"},
+		{"artisan", 19.2, 1.3, 4.8, 185, 610000052, "entertained"},
+		{"gambler", 22.4, 1.3, 5.5, 170, 610000052, "applause_excited"},
+		{"pilot", 25.2, 1.3, 7.2, 155, 610000052, "entertained"},
+		{"info_broker", 14.8, 1.3, 0.6, 205, 610000052, "entertained"},
+		{"farmer", 18.0, 1.3, -0.5, 190, 610000052, "applause_polite"},
+		{"commoner", 21.4, 1.3, 0.2, 175, 610000052, "entertained"},
+		{"medic", 24.8, 1.3, -1.0, 160, 610000052, "applause_excited"},
+		{"mercenary", 15.5, 1.3, -6.2, 210, 610000052, "entertained"},
+		{"commoner", 19.4, 1.3, -7.0, 190, 610000052, "applause_polite"},
+		{"noble", 23.0, 1.3, -6.4, 165, 610000052, "entertained"},
+
+		-- Entry lobby, cell 610000051.
+		{"townsperson", -6.0, 1.0, 8.0, 120, 610000051, "conversation"},
+		{"townsperson", -4.8, 1.0, 7.2, 300, 610000051, "conversation"},
+		{"townsperson", 4.8, 1.0, 8.5, 215, 610000051, "calm"},
+		{"townsperson", 6.2, 1.0, 6.8, 45, 610000051, "conversation"},
+		{"townsperson", -5.5, 1.0, -7.5, 80, 610000051, "neutral"},
+		{"townsperson", 0.5, 1.0, -2.0, 330, 610000051, "happy"},
+		{"townsperson", 5.8, 1.0, -8.0, 270, 610000051, "conversation"},
+		{"townsperson", 4.5, 1.0, -8.0, 90, 610000051, "conversation"},
+
+		-- Adjoining lobby and lounge, cells 610000053 and 610000054.
+		{"townsperson", -13.5, 1.6, 10.5, 210, 610000053, "calm"},
+		{"townsperson", -17.5, 1.6, 8.0, 45, 610000053, "conversation"},
+		{"townsperson", -18.8, 1.6, 9.2, 225, 610000053, "conversation"},
+		{"townsperson", -24.0, 1.6, 4.0, 320, 610000053, "neutral"},
+		{"townsperson", -21.0, 1.6, -3.5, 160, 610000053, "conversation"},
+		{"townsperson", -19.7, 1.6, -4.4, 340, 610000053, "conversation"},
+		{"townsperson", -18.5, 1.6, -11.0, 30, 610000054, "calm"},
+		{"townsperson", -14.5, 1.6, -10.5, 135, 610000054, "conversation"},
+		{"townsperson", -12.8, 1.6, -11.5, 315, 610000054, "conversation"},
+		{"townsperson", -16.0, 1.6, -6.5, 180, 610000054, "neutral"}
+	}
+
+	for i = 1, #hotelMobiles, 1 do
+		local mobile = hotelMobiles[i]
+		local template = mobile[1]
+
+		if (template == "townsperson") then
+			template = townspersonTemplates[getRandomNumber(#townspersonTemplates)]
+		end
+
+		local pMobile = spawnMobile("alderaan", template, 60, mobile[2], mobile[3], mobile[4], mobile[5], mobile[6])
+
+		if (pMobile ~= nil) then
+			CreatureObject(pMobile):setMoodString(mobile[7])
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
+	end
+end
+
 function AlderaCityScreenPlay:spawnMobiles()
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
@@ -363,6 +433,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 
 	self:spawnCapitolMobiles()
 	self:spawnTheaterMobiles()
+	self:spawnHotelMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
