@@ -419,7 +419,7 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 	ManagedReference<Zone*> zone = creature->getZone();
 
 	// Already placing a structure?
-	if (zone == nullptr || creature->containsActiveSession(SessionFacadeType::PLACESTRUCTURE))
+	if (zone == nullptr || (!completeUnpack && creature->containsActiveSession(SessionFacadeType::PLACESTRUCTURE)))
 		return 1;
 
 	if (deed == nullptr && (packedStructure == nullptr || packedToken == nullptr || packedStructure->getObjectTemplate() == nullptr))
