@@ -48,7 +48,11 @@ local alderaSidewalkRoutes = {
 	{population = 4, points = {{1112, -1155, 90}, {1188, -1155, 270}}},
 	{population = 4, points = {{1112, -1079, 90}, {1188, -1079, 270}}},
 	{population = 4, points = {{1112, -1155, 0}, {1112, -1079, 180}}},
-	{population = 4, points = {{1188, -1155, 0}, {1188, -1079, 180}}}
+	{population = 4, points = {{1188, -1155, 0}, {1188, -1079, 180}}},
+
+	-- Pedestrian traffic around the open Bank of Aldera City at 975, -1240.
+	{population = 2, points = {{957, -1221, 90}, {993, -1221, 270}}},
+	{population = 2, points = {{957, -1259, 90}, {993, -1259, 270}}}
 }
 
 local alderaSidewalkPatrolMobiles = {}
@@ -582,6 +586,33 @@ function AlderaCityScreenPlay:spawnStarportMobiles()
 	end
 end
 
+function AlderaCityScreenPlay:spawnBankMobiles()
+	local bankMobiles = {
+		-- The Corellian bank is an open world structure with four terminals at
+		-- the cardinal points, rather than a portal building with interior cells.
+		{"businessman", 60, 975, 28, -1234.3, 180, "calm"},
+		{"scientist", 60, 980.7, 28, -1240, 270, "calm"},
+		{"noble", 60, 975, 28, -1245.7, 0, "calm"},
+		{"commoner", 60, 969.3, 28, -1240, 90, "calm"},
+		{"alderaan_security_force", 60, 963, 28, -1232, 135, "neutral"},
+		{"alderaan_security_force", 60, 987, 28, -1232, 225, "neutral"}
+	}
+
+	for i = 1, #bankMobiles, 1 do
+		local mobile = bankMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], mobile[2], mobile[3], mobile[4], mobile[5], mobile[6], 0)
+
+		if (pMobile ~= nil) then
+			CreatureObject(pMobile):setMoodString(mobile[7])
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
+	end
+end
+
 function AlderaCityScreenPlay:spawnMobiles()
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
@@ -602,6 +633,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 	self:spawnGuildHallMobiles()
 	self:spawnMedicalCenterMobiles()
 	self:spawnStarportMobiles()
+	self:spawnBankMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
