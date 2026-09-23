@@ -89,6 +89,62 @@ for routeIndex = 1, #alderaSidewalkRoutes, 1 do
 	end
 end
 
+local alderaTantiveLandingAreaRoutes = {
+	-- Alderaan Security Force perimeter patrols.
+	{template = "alderaan_security_force", points = {{875, -1153, 90}, {1057, -1153, 270}}},
+	{template = "alderaan_security_force", points = {{875, -1075, 90}, {1057, -1075, 270}}},
+	{template = "alderaan_security_force", points = {{875, -1153, 0}, {875, -1075, 180}}},
+	{template = "alderaan_security_force", points = {{1057, -1153, 0}, {1057, -1075, 180}}},
+	{template = "alderaan_security_force", points = {{900, -1148, 90}, {948, -1148, 270}}},
+	{template = "alderaan_security_force", points = {{984, -1080, 90}, {1038, -1080, 270}}},
+
+	-- Mechanics and technicians circulating between service positions.
+	{template = "commoner_technician_patrol", points = {{892, -1143, 90}, {938, -1143, 270}}},
+	{template = "commoner_technician_patrol", points = {{950, -1147, 90}, {1002, -1147, 270}}},
+	{template = "commoner_technician_patrol", points = {{1012, -1142, 90}, {1045, -1142, 270}}},
+	{template = "commoner_technician_patrol", points = {{890, -1084, 90}, {936, -1084, 270}}},
+	{template = "commoner_technician_patrol", points = {{948, -1081, 90}, {998, -1081, 270}}},
+	{template = "commoner_technician_patrol", points = {{1010, -1086, 90}, {1044, -1086, 270}}},
+
+	-- Cargo handling droids remain in broad lanes along the apron edges.
+	{template = "cll8_binary_load_lifter", points = {{888, -1133, 90}, {930, -1133, 270}}},
+	{template = "cll8_binary_load_lifter", points = {{942, -1137, 90}, {985, -1137, 270}}},
+	{template = "cll8_binary_load_lifter", points = {{997, -1132, 90}, {1042, -1132, 270}}},
+	{template = "cll8_binary_load_lifter", points = {{887, -1093, 90}, {932, -1093, 270}}},
+
+	-- Power droids work shorter routes close to the maintenance crews.
+	{template = "eg6_power_droid", points = {{900, -1123, 90}, {924, -1123, 270}}},
+	{template = "eg6_power_droid", points = {{1018, -1118, 90}, {1042, -1118, 270}}},
+	{template = "eg6_power_droid", points = {{1027, -1102, 0}, {1027, -1088, 180}}},
+
+	-- Astromechs travel between inspection and refueling stations.
+	{template = "r2", points = {{884, -1114, 0}, {884, -1088, 180}}},
+	{template = "r2", points = {{912, -1102, 90}, {944, -1102, 270}}},
+	{template = "r2", points = {{958, -1125, 90}, {990, -1125, 270}}},
+	{template = "r2", points = {{1004, -1098, 90}, {1038, -1098, 270}}},
+	{template = "r2", points = {{1048, -1138, 0}, {1048, -1108, 180}}}
+}
+
+for routeIndex = 1, #alderaTantiveLandingAreaRoutes, 1 do
+	local route = alderaTantiveLandingAreaRoutes[routeIndex]
+	local firstPoint = route.points[1]
+	local secondPoint = route.points[2]
+	local routeName = "alderaTantiveLandingArea" .. routeIndex
+	local routeProgress = getRandomNumber(5, 95) / 100
+	local spawnX = firstPoint[1] + ((secondPoint[1] - firstPoint[1]) * routeProgress)
+	local spawnY = firstPoint[2] + ((secondPoint[2] - firstPoint[2]) * routeProgress)
+
+	alderaSidewalkPatrolPoints[routeName] = {
+		{firstPoint[1], 28, firstPoint[2], 0, false},
+		{secondPoint[1], 28, secondPoint[2], 0, false}
+	}
+
+	table.insert(alderaSidewalkPatrolMobiles, {
+		routeName, route.template, spawnX, 28, spawnY,
+		firstPoint[3], 0, "", false
+	})
+end
+
 AlderaCityScreenPlay = CityScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "AlderaCityScreenPlay",
