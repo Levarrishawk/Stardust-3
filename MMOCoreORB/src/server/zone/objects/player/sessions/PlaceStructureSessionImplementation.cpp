@@ -25,10 +25,11 @@
 
 int PlaceStructureSessionImplementation::constructStructure(float x, float y, int angle) {
 	ManagedReference<StructureDeed*> deed = deedObject.get();
+	ManagedReference<StructureObject*> packed = packedStructure.get();
 	ManagedReference<Zone*> thisZone = zone.get();
 	ManagedReference<CreatureObject*> creature = creatureObject.get();
 
-	if (deed == nullptr || thisZone == nullptr || creature == nullptr)
+	if ((deed == nullptr && packed == nullptr) || thisZone == nullptr || creature == nullptr)
 		return cancelSession();
 
 	positionX = x;
@@ -37,7 +38,7 @@ int PlaceStructureSessionImplementation::constructStructure(float x, float y, in
 
 	TemplateManager* templateManager = TemplateManager::instance();
 
-	String serverTemplatePath = deed->getGeneratedObjectTemplate();
+	String serverTemplatePath = deed != nullptr ? deed->getGeneratedObjectTemplate() : packed->getObjectTemplate()->getFullTemplateString();
 	Reference<const SharedStructureObjectTemplate*> serverTemplate = dynamic_cast<SharedStructureObjectTemplate*>(templateManager->getTemplate(serverTemplatePath.hashCode()));
 
 	if (serverTemplate == nullptr || temporaryNoBuildZone.get() != nullptr)
@@ -138,11 +139,19 @@ int PlaceStructureSessionImplementation::completeSession() {
 	}
 
 	ManagedReference<StructureDeed*> deed = deedObject.get();
+	ManagedReference<StructureObject*> packed = packedStructure.get();
+	ManagedReference<SceneObject*> token = packedToken.get();
 	ManagedReference<CreatureObject*> creature = creatureObject.get();
 	ManagedReference<Zone*> thisZone = zone.get();
 
-	if (deed == nullptr || creature == nullptr || thisZone == nullptr)
+	if ((deed == nullptr && (packed == nullptr || token == nullptr)) || creature == nullptr || thisZone == nullptr)
 		return cancelSession();
+
+	if (packed != nullptr) {
+		removeTemporaryNoBuildZone();
+		StructureManager::instance()->placeStructureFromDeed(creature, nullptr, positionX, positionY, directionAngle, packed, token, true);
+		return cancelSession();
+	}
 
 	String serverTemplatePath = deed->getGeneratedObjectTemplate();
 

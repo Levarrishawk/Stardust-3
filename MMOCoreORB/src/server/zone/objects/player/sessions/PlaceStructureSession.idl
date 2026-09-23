@@ -8,6 +8,7 @@ import engine.util.Facade;
 import server.zone.objects.creature.CreatureObject;
 import server.zone.objects.scene.SceneObject;
 import server.zone.objects.tangible.deed.structure.StructureDeed;
+import server.zone.objects.structure.StructureObject;
 import server.zone.Zone;
 import server.zone.objects.area.ActiveArea;
 include server.zone.objects.scene.SessionFacadeType;
@@ -19,6 +20,10 @@ class PlaceStructureSession extends Facade {
 	protected CreatureObject creatureObject;
 	@weakReference
 	protected StructureDeed deedObject;
+	@weakReference
+	protected StructureObject packedStructure;
+	@weakReference
+	protected SceneObject packedToken;
 
 	protected float positionX;
 	protected float positionY;
@@ -40,6 +45,8 @@ class PlaceStructureSession extends Facade {
 
 		creatureObject = creature;
 		deedObject = deed;
+		packedStructure = null;
+		packedToken = null;
 
 		zone = creature.getZone();
 
@@ -50,6 +57,21 @@ class PlaceStructureSession extends Facade {
 
 		constructionBarricade = null;
 
+		temporaryNoBuildZone = null;
+	}
+
+	public PlaceStructureSession(CreatureObject creature, StructureObject structure, SceneObject token) {
+		Logger.setLoggingName("PlaceStructureSession");
+		Logger.setLogging(true);
+		creatureObject = creature;
+		deedObject = null;
+		packedStructure = structure;
+		packedToken = token;
+		zone = creature.getZone();
+		positionX = 0;
+		positionY = 0;
+		directionAngle = 0;
+		constructionBarricade = null;
 		temporaryNoBuildZone = null;
 	}
 

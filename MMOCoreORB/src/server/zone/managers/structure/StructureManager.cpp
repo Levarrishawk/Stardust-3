@@ -415,7 +415,7 @@ int StructureManager::packStructure(CreatureObject* creature, StructureObject* s
 	return 0;
 }
 
-int StructureManager::placeStructureFromDeed(CreatureObject* creature, StructureDeed* deed, float x, float y, int angle, StructureObject* packedStructure, SceneObject* packedToken) {
+int StructureManager::placeStructureFromDeed(CreatureObject* creature, StructureDeed* deed, float x, float y, int angle, StructureObject* packedStructure, SceneObject* packedToken, bool completeUnpack) {
 	ManagedReference<Zone*> zone = creature->getZone();
 
 	// Already placing a structure?
@@ -618,6 +618,11 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 	// Make sure that the player has zoning rights in the area.
 
 	if (packedStructure != nullptr) {
+		if (!completeUnpack) {
+			ManagedReference<PlaceStructureSession*> session = new PlaceStructureSession(creature, packedStructure, packedToken);
+			creature->addActiveSession(SessionFacadeType::PLACESTRUCTURE, session);
+			return session->constructStructure(x, y, angle);
+		}
 		Locker tokenLocker(packedToken, packedStructure);
 		if (!packedToken->isASubChildOf(creature) || packedStructure->getPackedTokenObjectID() != packedToken->getObjectID())
 			return 1;
@@ -639,6 +644,7 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 			packedStructure->rotate(-rotation);
 			return 1;
 		}
+		packedStructure->broadcastObject(packedStructure, true);
 
 		SortedVector<ManagedReference<SceneObject*> >* children = packedStructure->getChildObjects();
 		for (int i = 0; i < children->size(); ++i) {
