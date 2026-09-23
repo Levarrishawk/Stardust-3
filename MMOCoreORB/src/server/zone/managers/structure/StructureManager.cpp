@@ -46,6 +46,8 @@
 #include "server/zone/objects/intangible/IntangibleObject.h"
 #include "server/zone/objects/waypoint/WaypointObject.h"
 #include "server/zone/managers/creature/PetManager.h"
+#include "server/zone/managers/vendor/VendorManager.h"
+#include "server/chat/ChatManager.h"
 #include "server/zone/objects/installation/harvester/HarvesterObject.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
 #include "templates/faction/Factions.h"
@@ -84,6 +86,27 @@ int indexCallback(DB* secondary, const DBT* key, const DBT* data, DBT* result) {
 }
 
 } // namespace StorageManagerNamespace
+
+class InactiveStructurePackTask : public Task {
+	ManagedWeakReference<StructureObject*> structure;
+public:
+	InactiveStructurePackTask(StructureObject* object) : structure(object) {}
+	void run() {
+		ManagedReference<StructureObject*> building = structure.get();
+		if (building == nullptr || building->isPacked() || building->getZone() == nullptr)
+			return;
+		ZoneServer* zoneServer = building->getZoneServer();
+		if (zoneServer == nullptr || zoneServer->isServerShuttingDown())
+			return;
+		if (zoneServer->isServerLoading()) {
+			reschedule(1000);
+			return;
+		}
+		StructureManager::instance()->packInactiveStructure(building);
+		if (!building->isPacked() && building->getZone() != nullptr)
+			reschedule(24 * 60 * 60 * 1000);
+	}
+};
 
 StructureManager::StructureManager() : Logger("StructureManager") {
 	server = nullptr;
@@ -152,6 +175,10 @@ void StructureManager::loadPlayerStructures(const String& zoneName) {
 			}
 
 			++countLoaded;
+			if (object->isBuildingObject() && !cast<StructureObject*>(object.get())->isPacked()) {
+				Reference<InactiveStructurePackTask*> task = new InactiveStructurePackTask(cast<StructureObject*>(object.get()));
+				task->schedule(60 * 1000);
+			}
 
 			if (!nextReport.isFuture()) {
 				nextReport.updateToCurrentTime();
@@ -298,7 +325,7 @@ Reference<StructureObject*> StructureManager::getPackedStructure(CreatureObject*
 	return nullptr;
 }
 
-int StructureManager::packStructure(CreatureObject* creature, StructureObject* structure) {
+int StructureManager::packStructure(CreatureObject* creature, StructureObject* structure, bool automatic) {
 	if (creature == nullptr || structure == nullptr || !structure->isBuildingObject() || structure->isPacked() || structure->getZone() == nullptr || structure->getOwnerObjectID() != creature->getObjectID())
 		return 1;
 
@@ -337,7 +364,7 @@ int StructureManager::packStructure(CreatureObject* creature, StructureObject* s
 	}
 
 	ManagedReference<SceneObject*> datapad = creature->getSlottedObject("datapad");
-	if (datapad == nullptr || datapad->getContainerObjectsSize() >= datapad->getContainerVolumeLimit()) {
+	if (datapad == nullptr || (!automatic && datapad->getContainerObjectsSize() >= datapad->getContainerVolumeLimit())) {
 		creature->sendSystemMessage("Your datapad is full.");
 		return 1;
 	}
@@ -351,16 +378,15 @@ int StructureManager::packStructure(CreatureObject* creature, StructureObject* s
 	Locker tokenLocker(token, structure);
 	String tokenName = String("Packed: ") + structure->getDisplayedName();
 	token->setCustomObjectName(tokenName, false);
-	if (!datapad->transferObject(token, -1, false)) {
+	if (!datapad->transferObject(token, -1, false, automatic)) {
 		token->destroyObjectFromDatabase(true);
 		creature->sendSystemMessage("Could not add the packed structure to your datapad.");
 		return 1;
 	}
 	structure->setPackedTokenObjectID(token->getObjectID());
 	structure->setPacked(true);
-	float oldX = structure->getPositionX();
-	float oldY = structure->getPositionY();
-	float oldZ = structure->getPositionZ();
+	Vector3 ejectionPoint = building->getEjectionPoint();
+	String zoneName = structure->getZone()->getZoneName();
 	for (int i = 0; i < occupants.size(); ++i) {
 		ManagedReference<CreatureObject*> occupant = occupants.get(i);
 		if (occupant == nullptr)
@@ -368,7 +394,7 @@ int StructureManager::packStructure(CreatureObject* creature, StructureObject* s
 		structure->unlock();
 		{
 			Locker occupantLocker(occupant);
-			occupant->teleport(oldX, oldZ, oldY, 0);
+			occupant->switchZone(zoneName, ejectionPoint.getX(), ejectionPoint.getZ(), ejectionPoint.getY(), 0);
 		}
 		structure->wlock();
 	}
@@ -413,6 +439,58 @@ int StructureManager::packStructure(CreatureObject* creature, StructureObject* s
 	datapad->broadcastObject(token, true);
 	creature->sendSystemMessage("Your building and its contents have been packed into your datapad. Maintenance and lots remain in use.");
 	return 0;
+}
+
+void StructureManager::packInactiveStructure(StructureObject* structure) {
+	if (structure == nullptr || !structure->isBuildingObject() || structure->isPacked() || structure->getZone() == nullptr || server == nullptr)
+		return;
+
+	ManagedReference<CreatureObject*> owner = server->getObject(structure->getOwnerObjectID()).castTo<CreatureObject*>();
+	if (owner == nullptr)
+		return;
+	Locker ownerLocker(owner);
+	ManagedReference<PlayerObject*> ghost = owner->getPlayerObject();
+	if (ghost == nullptr || !ghost->isOffline() || ghost->getDaysSinceLastLogout() < 120)
+		return;
+
+	BuildingObject* building = cast<BuildingObject*>(structure);
+	if (building->isCivicStructure() || building->isGuildHall() || building->isCommercialStructure() || building->isGCWBase())
+		return;
+	if (building->isResidence() && ghost->getDeclaredResidence() != building->getObjectID())
+		return;
+	ManagedReference<SceneObject*> datapad = owner->getSlottedObject("datapad");
+	if (datapad == nullptr)
+		return;
+
+	Locker structureLocker(structure, owner);
+	Vector<ManagedReference<TangibleObject*> > vendors;
+	for (uint32 i = 1; i <= building->getTotalCellNumber(); ++i) {
+		ManagedReference<CellObject*> cell = building->getCell(i);
+		if (cell == nullptr)
+			return;
+		for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
+			ManagedReference<SceneObject*> object = cell->getContainerObject(j);
+			if (object != nullptr && object->isVendor())
+				vendors.add(object.castTo<TangibleObject*>());
+		}
+	}
+	for (int i = 0; i < vendors.size(); ++i) {
+		TangibleObject* vendor = vendors.get(i);
+		if (vendor != nullptr)
+			VendorManager::instance()->destroyVendor(vendor);
+	}
+	if (building->hasChildCreaturesForPacking())
+		return;
+
+	if (packStructure(owner, structure, true) != 0)
+		return;
+
+	ManagedReference<ChatManager*> chatManager = server->getChatManager();
+	if (chatManager != nullptr) {
+		UnicodeString subject = "Your house was packed due to inactivity";
+		UnicodeString body = "You have not logged in for 120 days. Your house and its contents were automatically packed into your datapad. Any vendors in the house were removed before packing. The packed house still uses its lots and continues to consume maintenance and lose condition when maintenance runs out.";
+		chatManager->sendMail("Structure Management", subject, body, owner->getFirstName());
+	}
 }
 
 int StructureManager::placeStructureFromDeed(CreatureObject* creature, StructureDeed* deed, float x, float y, int angle, StructureObject* packedStructure, SceneObject* packedToken, bool completeUnpack) {
@@ -693,6 +771,8 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 		}
 		packedToken->destroyObjectFromWorld(true);
 		packedToken->destroyObjectFromDatabase(true);
+		Reference<InactiveStructurePackTask*> inactivityTask = new InactiveStructurePackTask(packedStructure);
+		inactivityTask->schedule(24 * 60 * 60 * 1000);
 		creature->sendSystemMessage("Your structure has been unpacked.");
 		return 0;
 	}
@@ -802,6 +882,10 @@ StructureObject* StructureManager::placeStructure(CreatureObject* creature, cons
 	structureObject->createChildObjects();
 
 	structureObject->notifyStructurePlaced(creature);
+	if (structureObject->isBuildingObject()) {
+		Reference<InactiveStructurePackTask*> task = new InactiveStructurePackTask(structureObject);
+		task->schedule(24 * 60 * 60 * 1000);
+	}
 
 	return structureObject;
 }
