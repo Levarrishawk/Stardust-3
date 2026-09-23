@@ -247,6 +247,12 @@ function AlderaCityScreenPlay:patrolDestinationReached(pMobile)
 end
 
 function AlderaCityScreenPlay:spawnMobiles()
+	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
+
+	if (pBailOrgana ~= nil and SceneObject(pBailOrgana):isAiAgent()) then
+		AiAgent(pBailOrgana):addObjectFlag(AI_STATIC)
+	end
+
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
 	local pedestrianRoutes = {
