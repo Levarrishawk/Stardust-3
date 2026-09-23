@@ -15,9 +15,11 @@ end
 
 function AlderaCityScreenPlay:spawnPatrols(routes)
 	local pedestrians = {
-		"commoner", "commoner", "businessman", "artisan", "commoner", "noble",
-		"commoner", "alderaan_security_force", "commoner", "stormtrooper",
-		"businessman", "alderaan_security_force"
+		"commoner_patrol", "commoner_patrol", "businessman_patrol",
+		"commoner_old_patrol", "commoner_fat_patrol", "noble_patrol",
+		"scientist_patrol", "explorer_patrol", "gambler_patrol",
+		"commoner_technician_patrol", "official_patrol", "miner_patrol",
+		"alderaan_security_force", "alderaan_security_force"
 	}
 
 	AlderaCityPatrolRoutes = routes
@@ -228,9 +230,11 @@ function AlderaCityScreenPlay:spawnMobiles()
 	-- the southern transit area. Routes at x >= 1188 stop south of the building
 	-- whose footprint begins beyond y = -1422.
 	local sidewalkTemplates = {
-		"commoner", "commoner", "commoner", "commoner_old", "businessman",
-		"businessman", "artisan", "noble", "medic", "scientist", "entertainer",
-		"patron", "info_broker", "alderaan_security_force"
+		"commoner_patrol", "commoner_patrol", "commoner_patrol",
+		"commoner_old_patrol", "commoner_fat_patrol", "businessman_patrol",
+		"businessman_patrol", "noble_patrol", "scientist_patrol",
+		"explorer_patrol", "gambler_patrol", "commoner_technician_patrol",
+		"official_patrol", "miner_patrol", "alderaan_security_force"
 	}
 	local sidewalkRoutes = {
 		{population = 4, points = {{1181, -1543, 0}, {1181, -1228, 180}}},
