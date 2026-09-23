@@ -42,9 +42,12 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 				writeData(objectID .. ":AlderaCity:route", routeIndex)
 				writeData(objectID .. ":AlderaCity:point", pointIndex)
 				AiAgent(pMobile):setAITemplate()
+				AiAgent(pMobile):addObjectFlag(AI_STATIONARY)
+				AiAgent(pMobile):clearPatrolPoints()
+				AiAgent(pMobile):clearCurrentPath()
 				AiAgent(pMobile):setMovementState(AI_PATROLLING)
 				createObserver(DESTINATIONREACHED, "AlderaCityScreenPlay", "patrolDestinationReached", pMobile)
-				createEvent(getRandomNumber(3, 12) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
+				createEvent(getRandomNumber(1, 3) * 1000, "AlderaCityScreenPlay", "walkPatrol", pMobile, "")
 			end
 		end
 	end
@@ -141,6 +144,8 @@ function AlderaCityScreenPlay:walkPatrol(pMobile)
 	local point = route.points[pointIndex]
 
 	writeData(objectID .. ":AlderaCity:point", pointIndex)
+	AiAgent(pMobile):clearPatrolPoints()
+	AiAgent(pMobile):clearCurrentPath()
 	AiAgent(pMobile):setMovementState(AI_PATROLLING)
 	AiAgent(pMobile):stopWaiting()
 	AiAgent(pMobile):setWait(0)
