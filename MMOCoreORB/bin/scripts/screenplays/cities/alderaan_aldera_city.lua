@@ -39,23 +39,31 @@ local alderaSidewalkPatrolPoints = {}
 
 for routeIndex = 1, #alderaSidewalkRoutes, 1 do
 	local route = alderaSidewalkRoutes[routeIndex]
-	local routeName = "alderaSidewalk" .. routeIndex
 	local firstPoint = route.points[1]
 	local secondPoint = route.points[2]
 
-	alderaSidewalkPatrolPoints[routeName] = {
-		{firstPoint[1], 28, firstPoint[2], 0, false},
-		{secondPoint[1], 28, secondPoint[2], 0, false}
-	}
-
 	for i = 1, route.population, 1 do
-		local routeProgress = (i - 0.5) / route.population
-		local spawnX = firstPoint[1] + ((secondPoint[1] - firstPoint[1]) * routeProgress)
-		local spawnY = firstPoint[2] + ((secondPoint[2] - firstPoint[2]) * routeProgress)
+		local routeName = "alderaSidewalk" .. routeIndex .. "Npc" .. i
+		local startPoint = firstPoint
+		local endPoint = secondPoint
+
+		if (getRandomNumber(0, 1) == 1) then
+			startPoint = secondPoint
+			endPoint = firstPoint
+		end
+
+		alderaSidewalkPatrolPoints[routeName] = {
+			{startPoint[1], 28, startPoint[2], 0, false},
+			{endPoint[1], 28, endPoint[2], 0, false}
+		}
+
+		local routeProgress = getRandomNumber(5, 95) / 100
+		local spawnX = startPoint[1] + ((endPoint[1] - startPoint[1]) * routeProgress)
+		local spawnY = startPoint[2] + ((endPoint[2] - startPoint[2]) * routeProgress)
 
 		table.insert(alderaSidewalkPatrolMobiles, {
 			routeName, "patrolNpc", spawnX, 28, spawnY,
-			firstPoint[3], 0, "", false
+			startPoint[3], 0, "", false
 		})
 	end
 end
