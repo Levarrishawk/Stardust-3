@@ -7,12 +7,12 @@ local alderaSidewalkRoutes = {
 	{population = 5, points = {{1186, -1543, 0}, {1186, -1305, 180}}},
 	{population = 4, points = {{1187, -1500, 0}, {1187, -1340, 180}}},
 	{population = 4, points = {{1187.75, -1538, 0}, {1187.75, -1380, 180}}},
-	{population = 4, points = {{1188, -1543, 0}, {1188, -1422, 180}}},
-	{population = 4, points = {{1189, -1532, 0}, {1189, -1430, 180}}},
-	{population = 4, points = {{1190.5, -1540, 0}, {1190.5, -1425, 180}}},
-	{population = 4, points = {{1192, -1522, 0}, {1192, -1440, 180}}},
-	{population = 4, points = {{1193.5, -1538, 0}, {1193.5, -1428, 180}}},
-	{population = 3, points = {{1195, -1510, 0}, {1195, -1445, 180}}}
+	{population = 4, points = {{1188, -1422, 0}, {1188, -1228, 180}}},
+	{population = 4, points = {{1189, -1414, 0}, {1189, -1242, 180}}},
+	{population = 4, points = {{1190.5, -1420, 0}, {1190.5, -1260, 180}}},
+	{population = 4, points = {{1192, -1408, 0}, {1192, -1236, 180}}},
+	{population = 4, points = {{1193.5, -1418, 0}, {1193.5, -1280, 180}}},
+	{population = 3, points = {{1195, -1405, 0}, {1195, -1305, 180}}}
 }
 
 local alderaSidewalkPatrolMobiles = {}
