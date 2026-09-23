@@ -37,6 +37,9 @@ class StructureObject extends TangibleObject {
 	protected unsigned long ownerObjectID;
 	protected unsigned long deedObjectID;
 	protected unsigned long waypointID;
+	protected unsigned long packedTokenObjectID;
+	protected boolean packed;
+	protected boolean packedResidence;
 
 	protected float surplusMaintenance;
 	protected float surplusPower;
@@ -55,6 +58,9 @@ class StructureObject extends TangibleObject {
 		deedObjectID = 0;
 
 		waypointID = 0;
+		packedTokenObjectID = 0;
+		packed = false;
+		packedResidence = false;
 
 		surplusMaintenance = 0;
 
@@ -358,6 +364,36 @@ class StructureObject extends TangibleObject {
 	@read
 	public unsigned long getWaypointID() {
 		return waypointID;
+	}
+
+	@read
+	public boolean isPacked() {
+		return packed;
+	}
+
+	@preLocked
+	public void setPacked(boolean value) {
+		packed = value;
+	}
+
+	@read
+	public boolean wasPackedResidence() {
+		return packedResidence;
+	}
+
+	@preLocked
+	public void setPackedResidence(boolean value) {
+		packedResidence = value;
+	}
+
+	@read
+	public unsigned long getPackedTokenObjectID() {
+		return packedTokenObjectID;
+	}
+
+	@preLocked
+	public void setPackedTokenObjectID(unsigned long objectID) {
+		packedTokenObjectID = objectID;
 	}
 
 	@preLocked

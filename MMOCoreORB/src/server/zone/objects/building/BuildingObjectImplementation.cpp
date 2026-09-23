@@ -130,6 +130,14 @@ void BuildingObjectImplementation::createCellObjects() {
 	updateToDatabase();
 }
 
+bool BuildingObjectImplementation::hasChildCreaturesForPacking() const {
+	for (int i = 0; i < childCreatureObjects.size(); ++i) {
+		if (childCreatureObjects.get(i) != nullptr)
+			return true;
+	}
+	return false;
+}
+
 void BuildingObjectImplementation::sendContainerObjectsTo(SceneObject* player, bool forceLoad) {
 	for (int i = 0; i < cells.size(); ++i) {
 		auto& cell = cells.get(i);
@@ -294,6 +302,27 @@ Vector3 BuildingObjectImplementation::getEjectionPoint() {
 }
 
 void BuildingObjectImplementation::notifyRemoveFromZone() {
+	if (isPacked()) {
+		for (int i = 0; i < cells.size(); ++i) {
+			auto& cell = cells.get(i);
+			for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
+				auto obj = cell->getContainerObject(j);
+				if (obj != nullptr) {
+					Locker objLocker(obj);
+					obj->notifyRemoveFromZone();
+				}
+			}
+		}
+
+		if (signObject != nullptr) {
+			Locker signLocker(signObject);
+			signObject->destroyObjectFromWorld(true);
+		}
+
+		TangibleObjectImplementation::notifyRemoveFromZone();
+		return;
+	}
+
 	for (int i = 0; i < cells.size(); ++i) {
 		auto& cell = cells.get(i);
 
@@ -1073,6 +1102,8 @@ uint32 BuildingObjectImplementation::getMaximumNumberOfPlayerItems() {
 
 int BuildingObjectImplementation::notifyObjectInsertedToChild(SceneObject* object, SceneObject* child, SceneObject* oldParent) {
 	Zone* zone = getZone();
+	if (isPacked() && zone == nullptr)
+		return 0;
 
 	Locker* _locker = nullptr;
 

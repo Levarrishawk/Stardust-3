@@ -46,6 +46,7 @@
 
 -- Server Objects
 includeFile("intangible/data_item/data_geiger_counter.lua")
+includeFile("intangible/data_item/packed_structure.lua")
 includeFile("intangible/data_item/data_imperial.lua")
 includeFile("intangible/data_item/data_item.lua")
 includeFile("intangible/data_item/guild_management_device.lua")

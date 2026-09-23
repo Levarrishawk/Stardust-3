@@ -32,6 +32,11 @@ public:
 		}
 
 		Zone* zone = structure->getZone();
+		if (structure->isPacked()) {
+			if (structure->getOwnerObjectID() == creature->getObjectID())
+				StructureManager::instance()->reportStructureStatus(creature, structure, obj);
+			return;
+		}
 
 		if (zone == nullptr) {
 			return;

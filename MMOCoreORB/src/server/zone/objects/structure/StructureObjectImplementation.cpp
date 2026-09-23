@@ -109,6 +109,26 @@ void StructureObjectImplementation::createNavMesh() {
 
 void StructureObjectImplementation::notifyLoadFromDatabase() {
 	TangibleObjectImplementation::notifyLoadFromDatabase();
+	if (isPacked()) {
+		class SchedulePackedMaintenanceTask : public Task {
+			ManagedReference<StructureObject*> structure;
+		public:
+			SchedulePackedMaintenanceTask(StructureObject* object) : structure(object) {}
+			void run() {
+				if (structure == nullptr || !structure->isPacked())
+					return;
+				ZoneServer* zoneServer = structure->getZoneServer();
+				if (zoneServer == nullptr || zoneServer->isServerLoading()) {
+					reschedule(1000);
+					return;
+				}
+				Locker locker(structure);
+				structure->scheduleMaintenanceExpirationEvent();
+			}
+		};
+		Reference<SchedulePackedMaintenanceTask*> task = new SchedulePackedMaintenanceTask(_this.getReferenceUnsafeStaticCast());
+		task->schedule(1000);
+	}
 
 	if (structurePermissionList.getOwner() != getOwnerObjectID()) {
 		structurePermissionList.setOwner(getOwnerObjectID());

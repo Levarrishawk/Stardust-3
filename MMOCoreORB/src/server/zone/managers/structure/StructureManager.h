@@ -56,7 +56,9 @@ public:
 
 	void loadPlayerStructures(const String& zoneName);
 
-	int placeStructureFromDeed(CreatureObject* creature, StructureDeed* deed, float x, float y, int angle);
+	int placeStructureFromDeed(CreatureObject* creature, StructureDeed* deed, float x, float y, int angle, StructureObject* packedStructure = nullptr, SceneObject* packedToken = nullptr);
+	int packStructure(CreatureObject* creature, StructureObject* structure);
+	Reference<StructureObject*> getPackedStructure(CreatureObject* creature, SceneObject* token);
 
 	/**
 	 * Simply creates and places a structure at the provided coordinates.

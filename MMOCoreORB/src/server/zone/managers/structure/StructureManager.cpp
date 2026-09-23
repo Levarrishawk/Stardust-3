@@ -43,6 +43,8 @@
 #include "terrain/layer/boundaries/BoundaryRectangle.h"
 #include "tasks/DestroyStructureTask.h"
 #include "server/zone/objects/intangible/PetControlDevice.h"
+#include "server/zone/objects/intangible/IntangibleObject.h"
+#include "server/zone/objects/waypoint/WaypointObject.h"
 #include "server/zone/managers/creature/PetManager.h"
 #include "server/zone/objects/installation/harvester/HarvesterObject.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
@@ -50,6 +52,7 @@
 #include "server/zone/objects/player/FactionStatus.h"
 #include "templates/building/CampStructureTemplate.h"
 #include "templates/customization/CustomizationIdManager.h"
+#include <mutex>
 
 namespace StorageManagerNamespace {
 int indexCallback(DB* secondary, const DBT* key, const DBT* data, DBT* result) {
@@ -61,19 +64,21 @@ int indexCallback(DB* secondary, const DBT* key, const DBT* data, DBT* result) {
 
 	String zoneReference;
 
-	if (!Serializable::getVariable<String>(STRING_HASHCODE("SceneObject.zone"), &zoneReference, &objectData)) {
+	bool packed = false;
+	Serializable::getVariable<bool>(STRING_HASHCODE("StructureObject.packed"), &packed, &objectData);
+	if (packed)
+		zoneReference = "__packed_structures__";
+	else if (!Serializable::getVariable<String>(STRING_HASHCODE("SceneObject.zone"), &zoneReference, &objectData))
 		return DB_DONOTINDEX;
-	} else {
-		auto data = (uint64*)malloc(sizeof(uint64)); // same size as an oid
-		*data = zoneReference.hashCode();
+	auto data = (uint64*)malloc(sizeof(uint64)); // same size as an oid
+	*data = zoneReference.hashCode();
 
-		result->data = data;
-		result->size = sizeof(uint64);
+	result->data = data;
+	result->size = sizeof(uint64);
 
-		result->flags = DB_DBT_APPMALLOC;
+	result->flags = DB_DBT_APPMALLOC;
 
-		// Logger::console.info("setting new key " + String::valueOf(*data) + " in associate callback", true);
-	}
+	// Logger::console.info("setting new key " + String::valueOf(*data) + " in associate callback", true);
 
 	return 0;
 }
@@ -115,6 +120,12 @@ void StructureManager::loadPlayerStructures(const String& zoneName) {
 	info("Loading player structures for zone: " + zoneName);
 
 	auto playerStructuresDatabaseIndex = createSubIndex();
+	if (zoneName != "__packed_structures__") {
+		static std::once_flag packedStructuresLoaded;
+		std::call_once(packedStructuresLoaded, [this] {
+			loadPlayerStructures("__packed_structures__");
+		});
+	}
 
 	berkeley::CursorConfig config;
 	config.setReadUncommitted(true);
@@ -267,17 +278,158 @@ int StructureManager::getStructureFootprint(SharedStructureObjectTemplate* objec
 	return 0;
 }
 
-int StructureManager::placeStructureFromDeed(CreatureObject* creature, StructureDeed* deed, float x, float y, int angle) {
+Reference<StructureObject*> StructureManager::getPackedStructure(CreatureObject* creature, SceneObject* token) {
+	if (creature == nullptr || token == nullptr || !token->isASubChildOf(creature))
+		return nullptr;
+	ManagedReference<SceneObject*> datapad = creature->getSlottedObject("datapad");
+	if (datapad == nullptr || token->getParent().get() != datapad.get() || token->getObjectTemplate() == nullptr || token->getObjectTemplate()->getFullTemplateString() != "object/intangible/data_item/packed_structure.iff")
+		return nullptr;
+
+	PlayerObject* ghost = creature->getPlayerObject();
+	if (ghost == nullptr)
+		return nullptr;
+
+	for (int i = 0; i < ghost->getTotalOwnedStructureCount(); ++i) {
+		Reference<StructureObject*> structure = server->getObject(ghost->getOwnedStructure(i)).castTo<StructureObject*>();
+		if (structure != nullptr && structure->isPacked() && structure->getOwnerObjectID() == creature->getObjectID() && structure->getPackedTokenObjectID() == token->getObjectID())
+			return structure;
+	}
+
+	return nullptr;
+}
+
+int StructureManager::packStructure(CreatureObject* creature, StructureObject* structure) {
+	if (creature == nullptr || structure == nullptr || !structure->isBuildingObject() || structure->isPacked() || structure->getZone() == nullptr || structure->getOwnerObjectID() != creature->getObjectID())
+		return 1;
+
+	BuildingObject* building = cast<BuildingObject*>(structure);
+	PlayerObject* ghost = creature->getPlayerObject();
+	if (ghost == nullptr || (building->isResidence() && ghost->getDeclaredResidence() != building->getObjectID()))
+		return 1;
+	if (building->isCivicStructure() || building->isGuildHall() || building->isCommercialStructure() || building->isGCWBase()) {
+		creature->sendSystemMessage("This building cannot be packed.");
+		return 1;
+	}
+	if (building->hasChildCreaturesForPacking()) {
+		creature->sendSystemMessage("Remove building NPCs and vendors before packing this building.");
+		return 1;
+	}
+
+	Vector<ManagedReference<CreatureObject*> > occupants;
+	for (uint32 i = 1; i <= building->getTotalCellNumber(); ++i) {
+		ManagedReference<CellObject*> cell = building->getCell(i);
+		if (cell == nullptr)
+			return 1;
+		for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
+			ManagedReference<SceneObject*> object = cell->getContainerObject(j);
+			if (object == nullptr)
+				continue;
+			if (object->isVendor()) {
+				creature->sendSystemMessage("Remove the vendor before packing this building.");
+				return 1;
+			}
+			if (object->isCreatureObject()) {
+				ManagedReference<CreatureObject*> occupant = object.castTo<CreatureObject*>();
+				if (occupant != nullptr)
+					occupants.add(occupant);
+			}
+		}
+	}
+
+	ManagedReference<SceneObject*> datapad = creature->getSlottedObject("datapad");
+	if (datapad == nullptr || datapad->getContainerObjectsSize() >= datapad->getContainerVolumeLimit()) {
+		creature->sendSystemMessage("Your datapad is full.");
+		return 1;
+	}
+
+	ManagedReference<IntangibleObject*> token = server->createObject(STRING_HASHCODE("object/intangible/data_item/packed_structure.iff"), 1).castTo<IntangibleObject*>();
+	if (token == nullptr) {
+		creature->sendSystemMessage("Could not create the packed structure marker.");
+		return 1;
+	}
+
+	Locker tokenLocker(token, structure);
+	UnicodeString tokenName = "Packed: ";
+	tokenName += structure->getDisplayedName();
+	token->setCustomObjectName(tokenName, false);
+	if (!datapad->transferObject(token, -1, false)) {
+		token->destroyObjectFromDatabase(true);
+		creature->sendSystemMessage("Could not add the packed structure to your datapad.");
+		return 1;
+	}
+	structure->setPackedTokenObjectID(token->getObjectID());
+	structure->setPacked(true);
+	float oldX = structure->getPositionX();
+	float oldY = structure->getPositionY();
+	float oldZ = structure->getPositionZ();
+	for (int i = 0; i < occupants.size(); ++i) {
+		ManagedReference<CreatureObject*> occupant = occupants.get(i);
+		if (occupant == nullptr)
+			continue;
+		structure->unlock();
+		{
+			Locker occupantLocker(occupant);
+			occupant->teleport(oldX, oldZ, oldY, 0);
+		}
+		structure->wlock();
+	}
+	for (uint32 i = 1; i <= building->getTotalCellNumber(); ++i) {
+		ManagedReference<CellObject*> cell = building->getCell(i);
+		if (cell == nullptr)
+			continue;
+		for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
+			ManagedReference<SceneObject*> object = cell->getContainerObject(j);
+			if (object != nullptr && object->isCreatureObject()) {
+				structure->setPacked(false);
+				structure->setPackedTokenObjectID(0);
+				token->destroyObjectFromWorld(true);
+				token->destroyObjectFromDatabase(true);
+				creature->sendSystemMessage("The building is still occupied and cannot be packed.");
+				return 1;
+			}
+		}
+	}
+
+	structure->updateStructureStatus();
+	if (building->isResidence() && ghost != nullptr && ghost->getDeclaredResidence() == building->getObjectID()) {
+		ManagedReference<CityRegion*> residenceCity = building->getCityRegion().get();
+		if (residenceCity != nullptr && server->getCityManager() != nullptr) {
+			structure->unlock();
+			{
+				Locker cityLocker(residenceCity, creature);
+				server->getCityManager()->unregisterCitizen(residenceCity, creature);
+			}
+			structure->wlock();
+		}
+		ghost->setDeclaredResidence(nullptr);
+		building->setResidence(false);
+		structure->setPackedResidence(true);
+	}
+	if (ghost != nullptr && structure->getWaypointID() != 0) {
+		ghost->removeWaypoint(structure->getWaypointID(), true, true);
+		structure->setWaypointID(0);
+	}
+	structure->destroyObjectFromWorld(true);
+	structure->scheduleMaintenanceExpirationEvent();
+	datapad->broadcastObject(token, true);
+	creature->sendSystemMessage("Your building and its contents have been packed into your datapad. Maintenance and lots remain in use.");
+	return 0;
+}
+
+int StructureManager::placeStructureFromDeed(CreatureObject* creature, StructureDeed* deed, float x, float y, int angle, StructureObject* packedStructure, SceneObject* packedToken) {
 	ManagedReference<Zone*> zone = creature->getZone();
 
 	// Already placing a structure?
 	if (zone == nullptr || creature->containsActiveSession(SessionFacadeType::PLACESTRUCTURE))
 		return 1;
 
-	String serverTemplatePath = deed->getGeneratedObjectTemplate();
+	if (deed == nullptr && (packedStructure == nullptr || packedToken == nullptr || packedStructure->getObjectTemplate() == nullptr))
+		return 1;
+
+	String serverTemplatePath = deed != nullptr ? deed->getGeneratedObjectTemplate() : packedStructure->getObjectTemplate()->getFullTemplateString();
 
 	// Check deed faction, player faction and status to make sure they are allowed to place a faction deeds (bases)
-	if (deed->getFaction() != Factions::FACTIONNEUTRAL) {
+	if (deed != nullptr && deed->getFaction() != Factions::FACTIONNEUTRAL) {
 		if (creature->getFaction() == Factions::FACTIONNEUTRAL || creature->getFactionStatus() == FactionStatus::ONLEAVE) {
 			StringIdChatParameter message("@faction_perk:prose_not_neutral"); // You cannot use %TT if you are neutral or on leave.
 			message.setTT(deed->getDisplayedName());
@@ -431,13 +583,16 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 		}
 	}
 
-	Locker _lock(deed, creature);
+	SceneObject* lockTarget = packedStructure != nullptr ? static_cast<SceneObject*>(packedStructure) : static_cast<SceneObject*>(deed);
+	Locker _lock(lockTarget, creature);
 
 	// Ensure that it is the correct deed, and that it is in a container in the creature's inventory.
-	if (!deed->isASubChildOf(creature)) {
+	if (deed != nullptr && !deed->isASubChildOf(creature)) {
 		creature->sendSystemMessage("@player_structure:no_possession"); // You no longer are in possession of the deed for this structure. Aborting construction.
 		return 1;
 	}
+	if (packedStructure != nullptr && (!packedStructure->isPacked() || packedStructure->getOwnerObjectID() != creature->getObjectID() || packedStructure->getPackedTokenObjectID() != packedToken->getObjectID() || !packedToken->isASubChildOf(creature)))
+		return 1;
 
 	ManagedReference<PlayerObject*> ghost = creature->getPlayerObject();
 
@@ -451,7 +606,7 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 
 		int lots = serverTemplate->getLotSize();
 
-		if (!ghost->hasLotsRemaining(lots)) {
+		if (packedStructure == nullptr && !ghost->hasLotsRemaining(lots)) {
 			StringIdChatParameter param("@player_structure:not_enough_lots");
 			param.setDI(lots);
 			creature->sendSystemMessage(param);
@@ -462,6 +617,80 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 	// Validate that the structure can be placed at the given coordinates:
 	// Ensure that no other objects impede on this structures footprint, or overlap any city regions or no build areas.
 	// Make sure that the player has zoning rights in the area.
+
+	if (packedStructure != nullptr) {
+		Locker tokenLocker(packedToken, packedStructure);
+		if (!packedToken->isASubChildOf(creature) || packedStructure->getPackedTokenObjectID() != packedToken->getObjectID())
+			return 1;
+		float oldX = packedStructure->getPositionX();
+		float oldY = packedStructure->getPositionY();
+		float oldZ = packedStructure->getPositionZ();
+		int oldAngle = packedStructure->getDirectionAngle();
+		float newZ = zone->getHeight(x, y);
+		if (serverTemplate->getClearFloraRadius() > 0 && !serverTemplate->getSnapToTerrain())
+			newZ = planetManager->getTerrainManager()->getHighestHeight(x + placingFootprintWidth0, y + placingFootprintLength0, x + placingFootprintWidth1, y + placingFootprintLength1, 1);
+		int rotation = angle - oldAngle;
+
+		packedStructure->initializePosition(x, newZ, y);
+		packedStructure->rotate(rotation);
+		packedStructure->setPacked(false);
+		if (!zone->transferObject(packedStructure, -1, true)) {
+			packedStructure->setPacked(true);
+			packedStructure->initializePosition(oldX, oldZ, oldY);
+			packedStructure->rotate(-rotation);
+			return 1;
+		}
+
+		SortedVector<ManagedReference<SceneObject*> >* children = packedStructure->getChildObjects();
+		for (int i = 0; i < children->size(); ++i) {
+			ManagedReference<SceneObject*> child = children->get(i);
+			if (child == nullptr || child->getZone() != nullptr)
+				continue;
+			float dx = child->getPositionX() - oldX;
+			float dy = child->getPositionY() - oldY;
+			float radians = rotation * Math::PI / 180.f;
+			float newX = x + dx * Math::cos(radians) + dy * Math::sin(radians);
+			float newY = y + dy * Math::cos(radians) - dx * Math::sin(radians);
+			Locker childLocker(child, packedStructure);
+			child->initializePosition(newX, child->getPositionZ() + newZ - oldZ, newY);
+			child->rotate(rotation);
+			zone->transferObject(child, -1, true);
+		}
+
+		packedStructure->setPackedTokenObjectID(0);
+		if (packedStructure->wasPackedResidence()) {
+			if (ghost != nullptr && ghost->getDeclaredResidence() == 0) {
+				BuildingObject* building = cast<BuildingObject*>(packedStructure);
+				ghost->setDeclaredResidence(building);
+				building->setResidence(true);
+				if (city != nullptr && server->getCityManager() != nullptr) {
+					packedStructure->unlock();
+					{
+						Locker cityLocker(city, creature);
+						server->getCityManager()->registerCitizen(city, creature);
+					}
+					packedStructure->wlock();
+				}
+			}
+			packedStructure->setPackedResidence(false);
+		}
+		if (ghost != nullptr) {
+			ManagedReference<WaypointObject*> waypoint = zone->getZoneServer()->createObject(STRING_HASHCODE("object/waypoint/world_waypoint_blue.iff"), 1).castTo<WaypointObject*>();
+			if (waypoint != nullptr) {
+				Locker waypointLocker(waypoint);
+				waypoint->setCustomObjectName(packedStructure->getDisplayedName(), false);
+				waypoint->setActive(true);
+				waypoint->setPosition(x, 0, y);
+				waypoint->setPlanetCRC(zone->getZoneCRC());
+				packedStructure->setWaypointID(waypoint->getObjectID());
+				ghost->addWaypoint(waypoint, false, true);
+			}
+		}
+		packedToken->destroyObjectFromWorld(true);
+		packedToken->destroyObjectFromDatabase(true);
+		creature->sendSystemMessage("Your structure has been unpacked.");
+		return 0;
+	}
 
 	ManagedReference<PlaceStructureSession*> session = new PlaceStructureSession(creature, deed);
 	creature->addActiveSession(SessionFacadeType::PLACESTRUCTURE, session);
@@ -1349,7 +1578,7 @@ void StructureManager::payMaintenance(StructureObject* structure, CreatureObject
 		return;
 	}
 
-	if (creature->getRootParent() != structure && !creature->isInRange(structure, 30.f)) {
+	if (!(structure->isPacked() && structure->getOwnerObjectID() == creature->getObjectID()) && creature->getRootParent() != structure && !creature->isInRange(structure, 30.f)) {
 		creature->sendSystemMessage("@player_structure:pay_out_of_range"); // You have moved out of range of your original /payMaintenance target. Aborting...
 		return;
 	}

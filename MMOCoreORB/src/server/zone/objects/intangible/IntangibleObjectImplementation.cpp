@@ -17,6 +17,13 @@ void IntangibleObjectImplementation::initializeTransientMembers() {
 	setLoggingName("IntangibleObject");
 }
 
+int IntangibleObjectImplementation::canBeDestroyed(CreatureObject* player) {
+	SharedObjectTemplate* objectTemplate = getObjectTemplate();
+	if (objectTemplate != nullptr && objectTemplate->getFullTemplateString() == "object/intangible/data_item/packed_structure.iff")
+		return 1;
+	return 0;
+}
+
 void IntangibleObjectImplementation::sendBaselinesTo(SceneObject* player) {
 	debug("sending intangible object baselines");
 

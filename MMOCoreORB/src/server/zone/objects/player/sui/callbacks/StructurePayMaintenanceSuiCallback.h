@@ -42,7 +42,7 @@ public:
 
 		ManagedReference<Zone*> zone = structure->getZone();
 
-		if (zone == nullptr)
+		if (zone == nullptr && (!structure->isPacked() || structure->getOwnerObjectID() != creature->getObjectID()))
 			return;
 
 		//Creature is already locked (done in handleSuiEventNotification in SuiManager).

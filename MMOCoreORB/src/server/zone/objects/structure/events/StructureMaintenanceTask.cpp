@@ -154,6 +154,26 @@ void StructureMaintenanceTask::destroyStructureWithReason(StructureObject* struc
 	trx.addRelatedObject(structure);
 	trx.setExportRelatedObjects(true);
 	trx.exportRelated();
+	if (structure->isPacked()) {
+		ZoneServer* zoneServer = structure->getZoneServer();
+		if (zoneServer != nullptr) {
+			ManagedReference<SceneObject*> owner = zoneServer->getObject(structure->getOwnerObjectID());
+			if (owner != nullptr) {
+				ManagedReference<PlayerObject*> ghost = owner->getSlottedObject("ghost").castTo<PlayerObject*>();
+				if (ghost != nullptr)
+					ghost->removeOwnedStructure(structure);
+			}
+			ManagedReference<SceneObject*> token = zoneServer->getObject(structure->getPackedTokenObjectID());
+			if (token != nullptr) {
+				Locker tokenLocker(token, structure);
+				token->destroyObjectFromWorld(true);
+				token->destroyObjectFromDatabase(true);
+			}
+		}
+		structure->setPackedTokenObjectID(0);
+		structure->destroyObjectFromDatabase(true);
+		return;
+	}
 
 	StructureManager::instance()->destroyStructure(structure);
 #endif // DEBUG_STRUCTURE_TASK_NO_DESTROY
@@ -165,7 +185,7 @@ void StructureMaintenanceTask::sendMailMaintenanceWithdrawnFromBank(const String
 	if (chatManager != nullptr) {
 		UnicodeString subject = "@player_structure:structure_maintenance_empty_subject";
 
-		String zoneName = "the void";
+		String zoneName = structure->isPacked() ? "packed in your datapad" : "the void";
 		if (structure->getZone() != nullptr) {
 			zoneName = structure->getZone()->getZoneName();
 		}
@@ -192,7 +212,7 @@ void StructureMaintenanceTask::sendMailDecay(const String& creoName, StructureOb
 			bodyName = "mail_structure_damage_condemn";
 		}
 
-		String zoneName = "the void";
+		String zoneName = structure->isPacked() ? "packed in your datapad" : "the void";
 		if (structure->getZone() != nullptr) {
 			zoneName = structure->getZone()->getZoneName();
 		}
@@ -213,7 +233,7 @@ void StructureMaintenanceTask::sendMailCondemned(const String& creoName, Structu
 	if (chatManager != nullptr) {
 		UnicodeString subject = "@player_structure:structure_condemned_subject";
 
-		String zoneName = "the void";
+		String zoneName = structure->isPacked() ? "packed in your datapad" : "the void";
 		if (structure->getZone() != nullptr) {
 			zoneName = structure->getZone()->getZoneName();
 		}
@@ -235,7 +255,7 @@ void StructureMaintenanceTask::sendMailDestroy(const String& creoName, Structure
 
 	UnicodeString subject = "Structure Destroyed!";
 
-	String zoneName = "the void";
+	String zoneName = structure->isPacked() ? "packed in your datapad" : "the void";
 	if (structure->getZone() != nullptr) {
 		zoneName = structure->getZone()->getZoneName();
 	}

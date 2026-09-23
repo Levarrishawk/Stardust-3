@@ -72,6 +72,8 @@ void StructureTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneOb
 		}
 
 		menuResponse->addRadialMenuItemToRadialID(118, 50, 3, "@player_structure:management_name_structure"); //Name Structure
+		if (structureObject->isBuildingObject() && structureObject->getOwnerObjectID() == creature->getObjectID())
+			menuResponse->addRadialMenuItemToRadialID(118, 203, 3, "Pack Up");
 
 		ManagedReference<SceneObject*> datapad = creature->getSlottedObject("datapad");
 		if(datapad != nullptr) {
@@ -187,6 +189,10 @@ int StructureTerminalMenuComponent::handleObjectMenuSelect(SceneObject* sceneObj
 		Locker structureLocker(structureObject, creature);
 
 		switch (selectedID) {
+		case 203:
+			if (structureObject->getOwnerObjectID() == creature->getObjectID())
+				structureManager->packStructure(creature, structureObject);
+			break;
 		case 201:
 			structureManager->promptDeleteAllItems(creature, structureObject);
 			break;

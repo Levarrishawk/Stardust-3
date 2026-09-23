@@ -35,6 +35,9 @@ class IntangibleObject extends SceneObject {
 
 	public native void initializeTransientMembers();
 
+	@dirty
+	public native int canBeDestroyed(CreatureObject player);
+
 	/**
 	 * Reads and sets the template data from a SharedObjectTemplate LuaObject
 	 * @pre { templateData is a valid pointer }

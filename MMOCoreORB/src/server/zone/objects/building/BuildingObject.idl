@@ -95,6 +95,9 @@ class BuildingObject extends StructureObject {
 	@preLocked
 	public native void createCellObjects();
 
+	@read
+	public native boolean hasChildCreaturesForPacking();
+
 	@preLocked
 	public native void destroyObjectFromDatabase(boolean destroyContainedObjects = false);
 

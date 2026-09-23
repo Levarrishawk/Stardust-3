@@ -81,6 +81,7 @@
 #include "server/zone/objects/tangible/terminal/components/EnclaveTerminalMenuComponent.h"
 #include "server/zone/objects/tangible/terminal/components/DestructibleBuildingMenuComponent.h"
 #include "server/zone/objects/tangible/terminal/components/StructureTerminalMenuComponent.h"
+#include "server/zone/objects/scene/components/PackedStructureMenuComponent.h"
 #include "server/zone/objects/tangible/terminal/components/ShipPermissionTerminalMenuComponent.h"
 #include "server/zone/objects/tangible/terminal/components/HQMenuComponent.h"
 #include "server/zone/objects/tangible/terminal/components/UplinkTerminalMenuComponent.h"
@@ -231,6 +232,7 @@ ComponentManager::ComponentManager() {
 	components.put("PlaceCityHallComponent", new PlaceCityHallComponent());
 	components.put("PlaceGCWBaseComponent", new PlaceGCWBaseComponent());
 	components.put("StructureTerminalMenuComponent", new StructureTerminalMenuComponent());
+	components.put("PackedStructureMenuComponent", new PackedStructureMenuComponent());
 	components.put("FactoryObjectMenuComponent", new FactoryObjectMenuComponent());
 	components.put("MinefieldMenuComponent", new MinefieldMenuComponent());
 	components.put("TurretMenuComponent", new TurretMenuComponent());

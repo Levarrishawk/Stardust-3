@@ -7,6 +7,7 @@
 
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/tangible/deed/structure/StructureDeed.h"
+#include "server/zone/managers/structure/StructureManager.h"
 #include "server/zone/managers/planet/PlanetManager.h"
 #include "server/zone/managers/collision/CollisionManager.h"
 #include "QueueCommand.h"
@@ -129,6 +130,12 @@ public:
 
 		if (deed != nullptr)
 			deed->placeStructure(creature, placementLoc.getX(), placementLoc.getY(), angle * 90);
+		else {
+			ManagedReference<SceneObject*> token = server->getZoneServer()->getObject(deedID);
+			Reference<StructureObject*> packed = StructureManager::instance()->getPackedStructure(creature, token);
+			if (packed != nullptr)
+				StructureManager::instance()->placeStructureFromDeed(creature, nullptr, placementLoc.getX(), placementLoc.getY(), angle * 90, packed, token);
+		}
 
 		return SUCCESS;
 	}
