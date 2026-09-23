@@ -499,6 +499,36 @@ function AlderaCityScreenPlay:spawnGuildHallMobiles()
 	end
 end
 
+function AlderaCityScreenPlay:spawnMedicalCenterMobiles()
+	local medicalCenterMobiles = {
+		-- Coronet cells 1855531 and 1855535 map to Aldera cells 610000033
+		-- and 610000037; the Coronet third-floor cell maps to 610000043.
+		{"trainer_combatmedic", 0, 26.676, 0.26, 5.41823, 85, 610000033, ""},
+		{"trainer_medic", 0, 14.2688, 0.26, 4.66124, 159, 610000033, ""},
+		{"trainer_doctor", 0, -25.2731, 0.26, -5, 13, 610000037, ""},
+		{"trainer_medic", 0, -17.7359, 0.26, -0.58142, 137, 610000037, ""},
+		{"corellia_times_investigator", 60, 21.5803, 14.26, -8.84205, 360.011, 610000043, "conversation"},
+		{"artisan", 60, 21.5803, 14.26, -7.84205, 180.006, 610000043, "conversation"}
+	}
+
+	for i = 1, #medicalCenterMobiles, 1 do
+		local mobile = medicalCenterMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], mobile[2], mobile[3], mobile[4], mobile[5], mobile[6], mobile[7])
+
+		if (pMobile ~= nil) then
+			if (mobile[8] ~= "") then
+				CreatureObject(pMobile):setMoodString(mobile[8])
+			end
+
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
+	end
+end
+
 function AlderaCityScreenPlay:spawnMobiles()
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
@@ -517,6 +547,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 	self:spawnHotelMobiles()
 	self:spawnSecondCantinaMobiles()
 	self:spawnGuildHallMobiles()
+	self:spawnMedicalCenterMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
