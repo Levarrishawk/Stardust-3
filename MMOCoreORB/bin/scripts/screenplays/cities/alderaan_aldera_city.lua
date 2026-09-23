@@ -681,6 +681,66 @@ function AlderaCityScreenPlay:spawnBankMobiles()
 	end
 end
 
+function AlderaCityScreenPlay:spawnImperialBaseMobiles()
+	local pBuilding = getSceneObject(610000190)
+
+	if (pBuilding == nil) then
+		return
+	end
+
+	-- Room names come from the Otto police station interior layout. The main
+	-- hall is cell 610000192; the upper floor is seven meters above the first.
+	local baseMobiles = {
+		-- Entrance and public hall: sentries leave the central desk rows clear.
+		{"foyer1", "stormtrooper", -2.6, 1, 12.8, 180},
+		{"foyer1", "stormtrooper", 2.6, 1, 12.8, 180},
+		{"mainhall", "stormtrooper_squad_leader", -10.0, 1, 8.5, 90},
+		{"mainhall", "stormtrooper", 10.0, 1, 8.5, 270},
+		{"mainhall", "stormtrooper_rifleman", -10.0, 1, -4.5, 90},
+		{"mainhall", "stormtrooper", 10.0, 1, -4.5, 270},
+		{"mainhall", "imperial_officer", -10.0, 1, 1.0, 0},
+		{"mainhall", "imperial_private", 10.0, 1, 1.0, 180},
+		{"mainhall", "dark_trooper", -10.5, 1, -12.0, 90},
+		{"mainhall", "dark_trooper", 10.5, 1, -12.0, 270},
+
+		-- Command offices, briefing room, and detention wing.
+		{"meeting1", "imperial_colonel", -18.5, 1, 18.8, 180},
+		{"meeting1", "imperial_officer", -23.0, 1, 18.8, 90},
+		{"meeting2", "imperial_first_lieutenant", 17.0, 1, 17.0, 0},
+		{"meeting2", "imperial_noncom", 20.0, 1, 17.0, 270},
+		{"meeting3", "imperial_staff_sergeant", 15.0, 1, -5.0, 90},
+		{"meeting3", "stormtrooper", 20.0, 1, -5.0, 270},
+		{"jailcell1", "stormtrooper", 10.0, 1, -17.5, 180},
+		{"jailcell1", "imperial_sergeant", 17.0, 1, -17.5, 270},
+		{"storage1", "imperial_trooper", 5.0, 1, -16.0, 180},
+		{"jailcell2", "stormtrooper", -12.0, 1, -17.5, 180},
+		{"jailcell2", "dark_trooper", -18.0, 1, -17.5, 180},
+
+		-- Upper floor: security at the landing and personnel in the hall.
+		{"foyer2", "stormtrooper", 10.0, 7, 4.0, 180},
+		{"foyer2", "stormtrooper", 13.0, 7, 4.0, 180},
+		{"hall2", "imperial_major", 3.0, 7, -4.0, 180},
+		{"hall2", "imperial_officer", 3.0, 7, -13.5, 0},
+		{"hall2", "stormtrooper_rifleman", -5.0, 7, -13.5, 90},
+		{"hall2", "dark_trooper", 10.0, 7, -13.5, 270},
+		{"storage2", "imperial_private", -7.0, 7, 9.0, 90},
+		{"storage2", "imperial_trooper", -3.0, 7, 9.0, 270}
+	}
+
+	for i = 1, #baseMobiles, 1 do
+		local mobile = baseMobiles[i]
+		local pCell = BuildingObject(pBuilding):getNamedCell(mobile[1])
+
+		if (pCell ~= nil) then
+			local pMobile = spawnMobile("alderaan", mobile[2], 60, mobile[3], mobile[4], mobile[5], mobile[6], SceneObject(pCell):getObjectID())
+
+			if (pMobile ~= nil) then
+				AiAgent(pMobile):addObjectFlag(AI_STATIC)
+			end
+		end
+	end
+end
+
 function AlderaCityScreenPlay:spawnMobiles()
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
@@ -702,6 +762,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 	self:spawnMedicalCenterMobiles()
 	self:spawnStarportMobiles()
 	self:spawnBankMobiles()
+	self:spawnImperialBaseMobiles()
 
 	-- Derived from every unambiguous rectangular CityFlattenToo layer beneath
 	-- Aldera City in terrain/alderaan.trn. Every segment stays inside its layer.
