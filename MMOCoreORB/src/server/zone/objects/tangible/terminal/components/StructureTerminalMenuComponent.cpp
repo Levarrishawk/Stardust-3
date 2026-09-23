@@ -18,6 +18,8 @@
 #include "server/chat/StringIdChatParameter.h"
 #include "server/zone/objects/intangible/PetControlDevice.h"
 #include "server/zone/managers/creature/PetManager.h"
+#include "server/zone/objects/player/sui/messagebox/SuiMessageBox.h"
+#include "server/zone/objects/player/sui/callbacks/PackStructureConfirmSuiCallback.h"
 
 void StructureTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, ObjectMenuResponse* menuResponse, CreatureObject* creature) const {
 
@@ -190,8 +192,17 @@ int StructureTerminalMenuComponent::handleObjectMenuSelect(SceneObject* sceneObj
 
 		switch (selectedID) {
 		case 203:
-			if (structureObject->getOwnerObjectID() == creature->getObjectID())
-				structureManager->packStructure(creature, structureObject);
+			if (structureObject->isBuildingObject() && structureObject->getOwnerObjectID() == creature->getObjectID()) {
+				ManagedReference<SuiMessageBox*> box = new SuiMessageBox(creature, 0x00);
+				box->setUsingObject(terminal);
+				box->setPromptTitle("Pack Up Structure");
+				box->setPromptText("Pack this structure and everything inside it into your datapad? It will continue to use lots and maintenance. Vendors must be removed first.");
+				box->setOkButton(true, "@yes");
+				box->setCancelButton(true, "@cancel");
+				box->setCallback(new PackStructureConfirmSuiCallback(creature->getZoneServer()));
+				ghost->addSuiBox(box);
+				creature->sendMessage(box->generateMessage());
+			}
 			break;
 		case 201:
 			structureManager->promptDeleteAllItems(creature, structureObject);
