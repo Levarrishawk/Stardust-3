@@ -23,10 +23,10 @@ bail_organa = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = PACK,
-	optionsBitmask = INVULNERABLE,
+	optionsBitmask = INVULNERABLE + INTERESTING,
 	diet = HERBIVORE,
 
-	templates = {"object/mobile/human_male.iff"},
+	templates = {"object/mobile/bestine_museum_owner.iff"},
 	lootGroups = {},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
