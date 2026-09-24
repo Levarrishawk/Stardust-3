@@ -25,9 +25,7 @@ alderaan_regions = {
 	-- Cities
 	{"@alderaan_region_names:aldera_city", 1151, -1383, {CIRCLE, 600}, CITY + NOSPAWNAREA},
 	{"aldera_nobuild_1", 1151, -1383, {CIRCLE, 1000}, CAMPINGAREA + NOBUILDZONEAREA},
-	
-
-	
+	{"rhu_caenus_house_thul", -690, 5289, {CIRCLE, 1500}, SPAWNAREA + NOWORLDSPAWNAREA, {"alderaan_house_thul"}, 128},
 
 	{"alderaan_world_spawner", 0, 0, {RECTANGLE, 0, 0}, WORLDSPAWNAREA + SPAWNAREA, {"alderaan_world"}, 2048}
 }

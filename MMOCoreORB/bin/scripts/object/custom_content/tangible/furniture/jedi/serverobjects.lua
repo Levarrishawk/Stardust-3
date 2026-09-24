@@ -1,6 +1,6 @@
 includeFile("custom_content/tangible/furniture/jedi/frn_all_banner_dark_s01.lua")
 includeFile("custom_content/tangible/furniture/jedi/frn_all_banner_light_s01.lua")
-includeFile("custom_content/tangible/furniture/jedi/frn_all_banner_light_s02.lua")
+--includeFile("custom_content/tangible/furniture/jedi/frn_all_banner_light_s02.lua")
 includeFile("custom_content/tangible/furniture/jedi/frn_all_dark_chair_s01_hue.lua")
 includeFile("custom_content/tangible/furniture/jedi/frn_all_dark_chair_s02_hue.lua")
 includeFile("custom_content/tangible/furniture/jedi/frn_all_dark_throne_hue.lua")

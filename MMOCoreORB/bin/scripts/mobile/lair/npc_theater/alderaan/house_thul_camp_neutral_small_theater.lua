@@ -1,0 +1,14 @@
+house_thul_camp_neutral_small_theater = Lair:new {
+	mobiles = {{"house_thul_thug",2},{"house_thul_outlaw",1},{"house_thul_pirate",1}},
+	spawnLimit = 15,
+	buildingsVeryEasy = {"object/building/poi/naboo_gunrunners_small2.iff","object/building/poi/tatooine_hutt_businessmen_camp_small1.iff","object/building/poi/tatooine_hutt_businessmen_camp_small2.iff"},
+	buildingsEasy = {"object/building/poi/naboo_gunrunners_small2.iff","object/building/poi/tatooine_hutt_businessmen_camp_small1.iff","object/building/poi/tatooine_hutt_businessmen_camp_small2.iff"},
+	buildingsMedium = {"object/building/poi/naboo_gunrunners_small2.iff","object/building/poi/tatooine_hutt_businessmen_camp_small1.iff","object/building/poi/tatooine_hutt_businessmen_camp_small2.iff"},
+	buildingsHard = {"object/building/poi/naboo_gunrunners_small2.iff","object/building/poi/tatooine_hutt_businessmen_camp_small1.iff","object/building/poi/tatooine_hutt_businessmen_camp_small2.iff"},
+	buildingsVeryHard = {"object/building/poi/naboo_gunrunners_small2.iff","object/building/poi/tatooine_hutt_businessmen_camp_small1.iff","object/building/poi/tatooine_hutt_businessmen_camp_small2.iff"},
+	missionBuilding = "object/tangible/lair/base/objective_banner_generic_2.iff",
+	mobType = "npc",
+	buildingType = "theater"
+}
+
+addLairTemplate("house_thul_camp_neutral_small_theater", house_thul_camp_neutral_small_theater)
