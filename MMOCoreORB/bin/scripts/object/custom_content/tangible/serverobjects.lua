@@ -45,6 +45,7 @@
 --Children folder includes
 
 includeFile("custom_content/tangible/deed/serverobjects.lua")
+includeFile("custom_content/tangible/dance_prop/prop_base.lua")
 includeFile("custom_content/tangible/furniture/serverobjects.lua")
 includeFile("custom_content/tangible/painting/serverobjects.lua")
 includeFile("custom_content/tangible/wearables/serverobjects.lua")

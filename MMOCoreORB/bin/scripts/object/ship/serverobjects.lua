@@ -44,6 +44,7 @@
 
 -- Children folder includes
 includeFile("ship/base/serverobjects.lua")
+includeFile("ship/tieinterceptor_imperial_guard.lua")
 includeFile("ship/player/serverobjects.lua")
 
 -- Server Objects

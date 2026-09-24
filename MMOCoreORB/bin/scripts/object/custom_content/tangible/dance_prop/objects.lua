@@ -1,3 +1,8 @@
+object_tangible_dance_prop_shared_prop_base = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/dance_prop/shared_prop_base.iff"
+}
+ObjectTemplates:addClientTemplate(object_tangible_dance_prop_shared_prop_base, "object/tangible/dance_prop/shared_prop_base.iff")
+
 object_tangible_dance_prop_shared_generic_must_prop_baton_01_l = SharedTangibleObjectTemplate:new {
 	clientTemplateFileName = "object/tangible/dance_prop/shared_generic_must_prop_baton_01_l.iff"
 }

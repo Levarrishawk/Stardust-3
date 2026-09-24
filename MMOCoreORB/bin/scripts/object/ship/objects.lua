@@ -15830,6 +15830,11 @@ object_ship_shared_tiefighter_tier5 = SharedShipObjectTemplate:new {
 
 ObjectTemplates:addClientTemplate(object_ship_shared_tiefighter_tier5, "object/ship/shared_tiefighter_tier5.iff")
 
+object_ship_shared_tieinterceptor_imperial_guard = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_tieinterceptor_imperial_guard.iff"
+}
+ObjectTemplates:addClientTemplate(object_ship_shared_tieinterceptor_imperial_guard, "object/ship/shared_tieinterceptor_imperial_guard.iff")
+
 object_ship_shared_tieinterceptor = SharedShipObjectTemplate:new {
 	clientTemplateFileName = "object/ship/shared_tieinterceptor.iff"
 	--Data below here is deprecated and loaded from the tres, keeping for easy lookups
