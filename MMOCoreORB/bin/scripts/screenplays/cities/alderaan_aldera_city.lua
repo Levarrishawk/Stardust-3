@@ -430,47 +430,112 @@ end
 
 function AlderaCityScreenPlay:spawnGrandTowerLounge()
 	local cellID = 610000834
-	local floorZ = 88.8
 	local furniture = {
-		-- Dining tables flank the route from the elevator landing to the operator.
-		{"object/tangible/furniture/modern/dining_table_modern_style_01.iff", -3.8, -9.3, 0},
-		{"object/tangible/furniture/modern/dining_table_modern_style_01.iff", 3.8, -9.3, 0},
-		{"object/tangible/furniture/modern/chair_modern_style_01.iff", -3.8, -10.7, 0},
-		{"object/tangible/furniture/modern/chair_modern_style_01.iff", -3.8, -7.9, 180},
-		{"object/tangible/furniture/modern/chair_modern_style_01.iff", 3.8, -10.7, 0},
-		{"object/tangible/furniture/modern/chair_modern_style_01.iff", 3.8, -7.9, 180},
+		-- The outer ground-floor ring is lower than the elevator landing.
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", -17, 88.24, -8, 0},
+		{"object/tangible/furniture/elegant/love_seat_s01.iff", -17, 88.24, -9.3, 0},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", -17, 88.24, -8, 0},
+		{"object/tangible/furniture/elegant/chair_s01.iff", -18.5, 88.24, -8, 90},
+		{"object/tangible/furniture/elegant/chair_s01.iff", -15.5, 88.24, -8, -90},
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", 17, 88.24, -8, 0},
+		{"object/tangible/furniture/elegant/love_seat_s01.iff", 17, 88.24, -9.3, 0},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", 17, 88.24, -8, 0},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 15.5, 88.24, -8, 90},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 18.5, 88.24, -8, -90},
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", -17, 88.24, 8, 0},
+		{"object/tangible/furniture/elegant/love_seat_s01.iff", -17, 88.24, 9.3, 180},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", -17, 88.24, 8, 0},
+		{"object/tangible/furniture/elegant/chair_s01.iff", -18.5, 88.24, 8, 90},
+		{"object/tangible/furniture/elegant/chair_s01.iff", -15.5, 88.24, 8, -90},
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", 17, 88.24, 8, 0},
+		{"object/tangible/furniture/elegant/love_seat_s01.iff", 17, 88.24, 9.3, 180},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", 17, 88.24, 8, 0},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 15.5, 88.24, 8, 90},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 18.5, 88.24, 8, -90},
+		{"object/tangible/furniture/elegant/couch_s01.iff", -2, 88.24, 18, 90},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", 0, 88.24, 18, 0},
+		{"object/tangible/furniture/elegant/couch_s01.iff", 2, 88.24, 18, -90},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", -20, 88.24, -12, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", 20, 88.24, -12, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s2.iff", -20, 88.24, 12, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s2.iff", 20, 88.24, 12, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", -20, 88.24, -4, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 20, 88.24, -4, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", -20, 88.24, 4, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 20, 88.24, 4, 0},
 
-		-- A compact seating area and bar give the room its lounge character.
-		{"object/tangible/furniture/modern/couch_modern_style_01.iff", -4.0, -5.0, 90},
-		{"object/tangible/furniture/modern/coffee_table_modern_style_01.iff", -2.8, -5.0, 0},
-		{"object/tangible/furniture/modern/bar_counter_s1.iff", 3.8, -4.8, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_free_s01.iff", -4.8, -12.1, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_free_s01.iff", 4.8, -12.1, 0},
-		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", -4.8, -3.0, 0},
-		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", 4.8, -3.0, 0}
+		-- A small bar stays on the inner ground floor, away from the arrival point.
+		{"object/tangible/furniture/modern/bar_counter_s1.iff", 5.2, 88.89, -4.8, 0},
+		{"object/tangible/furniture/modern/bar_piece_straight_s1.iff", 7.2, 88.89, -4.8, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", -11.5, 88.24, -11.5, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", 11.5, 88.24, -11.5, 0},
+
+		-- The upper floor has a broad center and a higher outer balcony.
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", 3, 93.71, 0, 0},
+		{"object/tangible/furniture/elegant/couch_s01.iff", 1.5, 93.71, 0, 90},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", 3, 93.71, 0, 0},
+		{"object/tangible/furniture/elegant/couch_s01.iff", 4.5, 93.71, 0, -90},
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", -7, 94.08, -8, 0},
+		{"object/tangible/furniture/elegant/love_seat_s01.iff", -7, 94.08, -9.3, 0},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", -7, 94.08, -8, 0},
+		{"object/tangible/furniture/elegant/chair_s01.iff", -8.5, 94.08, -8, 90},
+		{"object/tangible/furniture/elegant/chair_s01.iff", -5.5, 94.08, -8, -90},
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", 7, 94.08, -8, 0},
+		{"object/tangible/furniture/elegant/love_seat_s01.iff", 7, 94.08, -9.3, 0},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", 7, 94.08, -8, 0},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 5.5, 94.08, -8, 90},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 8.5, 94.08, -8, -90},
+		{"object/tangible/furniture/modern/rug_rnd_m_s01.iff", 7, 94.08, 8, 0},
+		{"object/tangible/furniture/elegant/love_seat_s01.iff", 7, 94.08, 9.3, 180},
+		{"object/tangible/furniture/elegant/coffee_table_s01.iff", 7, 94.08, 8, 0},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 5.5, 94.08, 8, 90},
+		{"object/tangible/furniture/elegant/chair_s01.iff", 8.5, 94.08, 8, -90},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", -10, 94.08, -5, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", 10, 94.08, -5, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s2.iff", 10, 94.08, 5, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", -9, 94.08, -4, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 10, 94.08, 0, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 4, 94.08, 10, 0}
 	}
 
 	for i = 1, #furniture, 1 do
 		local item = furniture[i]
-		spawnSceneObject("alderaan", item[1], item[2], floorZ, item[3], cellID, math.rad(item[4]))
+		spawnSceneObject("alderaan", item[1], item[2], item[3], item[4], cellID, math.rad(item[5]))
 	end
 
 	local loungeMobiles = {
-		{"noble", -3.8, -10.7, 0, "npc_sitting_chair", "Lounge Guest"},
-		{"businessman", -3.8, -7.9, 180, "npc_sitting_chair", "Lounge Guest"},
-		{"artisan", 3.8, -10.7, 0, "npc_sitting_chair", "Restaurant Guest"},
-		{"patron", 3.8, -7.9, 180, "npc_sitting_chair", "Restaurant Guest"},
-		{"bartender", 3.8, -3.4, 180, "npc_standing_drinking", "Lounge Bartender"},
-		{"noble", -4.0, -5.0, 90, "npc_sitting_chair", "Lounge Guest"}
+		{"noble", -17, 88.24, -9.3, 0, "npc_sitting_chair", "Lounge Guest"},
+		{"businessman", -18.5, 88.24, -8, 90, "npc_sitting_chair", "Lounge Guest"},
+		{"artisan", 17, 88.24, -9.3, 0, "npc_sitting_chair", "Lounge Guest"},
+		{"patron", 18.5, 88.24, -8, -90, "npc_sitting_chair", "Lounge Guest"},
+		{"commoner_old", -17, 88.24, 9.3, 180, "npc_sitting_chair", "Lounge Guest"},
+		{"noble", -15.5, 88.24, 8, -90, "npc_sitting_chair", "Lounge Guest"},
+		{"businessman", 17, 88.24, 9.3, 180, "npc_sitting_chair", "Lounge Guest"},
+		{"commoner", 15.5, 88.24, 8, 90, "npc_sitting_chair", "Lounge Guest"},
+		{"patron", -2, 88.24, 18, 90, "npc_sitting_chair", "Observation Guest"},
+		{"noble", 2, 88.24, 18, -90, "npc_sitting_chair", "Observation Guest"},
+		{"bartender", 6.2, 88.88, -3.5, 180, "npc_standing_drinking", "Lounge Bartender"},
+		{"patron", -19.5, 88.24, 0, 90, "conversation", "Observation Guest"},
+		{"artisan", 19.5, 88.24, 0, -90, "conversation", "Observation Guest"},
+		{"noble", 1.5, 93.71, 0, 90, "npc_sitting_chair", "Balcony Guest"},
+		{"businessman", 4.5, 93.71, 0, -90, "npc_sitting_chair", "Balcony Guest"},
+		{"patron", -7, 94.08, -9.3, 0, "npc_sitting_chair", "Balcony Guest"},
+		{"noble", -8.5, 94.08, -8, 90, "npc_sitting_chair", "Balcony Guest"},
+		{"artisan", 7, 94.08, -9.3, 0, "npc_sitting_chair", "Balcony Guest"},
+		{"commoner", 8.5, 94.08, -8, -90, "npc_sitting_chair", "Balcony Guest"},
+		{"noble", 7, 94.08, 9.3, 180, "npc_sitting_chair", "Balcony Guest"},
+		{"patron", 5.5, 94.08, 8, 90, "npc_sitting_chair", "Balcony Guest"},
+		{"scientist", 2, 94.08, -10, 0, "conversation", "Observation Guest"},
+		{"entertainer", 10, 94.08, 3, -90, "entertained", "Balcony Guest"}
 	}
 
 	for i = 1, #loungeMobiles, 1 do
 		local mobile = loungeMobiles[i]
-		local pMobile = spawnMobile("alderaan", mobile[1], 60, mobile[2], floorZ, mobile[3], mobile[4], cellID)
+		local pMobile = spawnMobile("alderaan", mobile[1], 60, mobile[2], mobile[3], mobile[4], mobile[5], cellID)
 
 		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
-			CreatureObject(pMobile):setCustomObjectName(mobile[6])
-			CreatureObject(pMobile):setMoodString(mobile[5])
+			CreatureObject(pMobile):setCustomObjectName(mobile[7])
+			CreatureObject(pMobile):setMoodString(mobile[6])
 			AiAgent(pMobile):addObjectFlag(AI_STATIC)
 
 			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
