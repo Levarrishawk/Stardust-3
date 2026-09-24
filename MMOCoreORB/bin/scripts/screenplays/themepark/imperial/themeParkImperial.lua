@@ -22,7 +22,7 @@ kaja_orzee_missions =
 			missionType = "confiscate",
 			primarySpawns =
 			{
-				{ npcTemplate = "theme_park_imperial_rebel_sympathizer",  npcName = "a Rebel Sympathizer" }
+				{ npcTemplate = "theme_park_imperial_rebel_sympathizer",  npcName = "an Insurgent Sympathizer" }
 			},
 			secondarySpawns =
 			{
@@ -346,7 +346,7 @@ thrawn_missions =
 			missionType = "assassinate",
 			primarySpawns =
 			{
-				{ npcTemplate = "rebel_commando",  npcName = "a Rebel Commando" }
+				{ npcTemplate = "rebel_commando",  npcName = "an Insurgent Commando" }
 			},
 			secondarySpawns = {
 				{ npcTemplate = "rebel_trooper",  npcName = "" },
@@ -370,7 +370,7 @@ veers_missions =
 			missionType = "confiscate",
 			primarySpawns =
 			{
-				{ npcTemplate = "theme_park_imperial_rebel_trooper",  npcName = "a Rebel Trooper" },
+				{ npcTemplate = "theme_park_imperial_rebel_trooper",  npcName = "an Insurgent" },
 				{ npcTemplate = "thug",  npcName = "a Thug" },
 				{ npcTemplate = "borvos_thug",  npcName = "Borvo's Thug" },
 			},
@@ -389,7 +389,7 @@ veers_missions =
 			missionType = "assassinate",
 			primarySpawns =
 			{
-				{ npcTemplate = "rebel_trooper",  npcName = "a Rebel Trooper" },
+				{ npcTemplate = "rebel_trooper",  npcName = "an Insurgent" },
 				{ npcTemplate = "thug",  npcName = "a Thug" },
 				{ npcTemplate = "thug",  npcName = "a Thug" },
 			},
@@ -470,7 +470,7 @@ palpatine_missions =
 			missionType = "escort",
 			primarySpawns =
 			{
-				{ npcTemplate = "theme_park_imperial_escort",  npcName = "a Thug Ringleader" }
+				{ npcTemplate = "theme_park_imperial_escort",  npcName = "an Information Broker" }
 			},
 			secondarySpawns =
 			{
@@ -485,14 +485,14 @@ palpatine_missions =
 			missionType = "deliver",
 			primarySpawns =
 			{
-				{ npcTemplate = "theme_park_imperial_escort",  npcName = "a Thug Ringleader" }
+				{ npcTemplate = "theme_park_imperial_escort",  npcName = "a Mercenary Representative" }
 			},
 			secondarySpawns =
 			{
 			},
 			itemSpawns =
 			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Plans" }
+				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Shipping Inquiry" }
 			},
 			rewards =
 			{
@@ -540,7 +540,7 @@ palpatine_missions =
 			missionType = "confiscate",
 			primarySpawns =
 			{
-				{ npcTemplate = "theme_park_imperial_thug_ringleader",  npcName = "a Thug Ringleader" },
+				{ npcTemplate = "theme_park_imperial_thug_ringleader",  npcName = "a Mercenary Leader" },
 				{ npcTemplate = "thug",  npcName = "a Thug" },
 				{ npcTemplate = "thug",  npcName = "a Thug" },
 				{ npcTemplate = "thug",  npcName = "a Thug" }
@@ -549,7 +549,7 @@ palpatine_missions =
 			},
 			itemSpawns =
 			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Plans" }
+				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Transport Records" }
 			},
 			rewards =
 			{
@@ -561,14 +561,14 @@ palpatine_missions =
 			missionType = "deliver",
 			primarySpawns =
 			{
-				{ npcTemplate = "theme_park_imperial_escort",  npcName = "a Parliament Courier" }
+				{ npcTemplate = "theme_park_imperial_escort",  npcName = "a Council Representative" }
 			},
 			secondarySpawns =
 			{
 			},
 			itemSpawns =
 			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "a Holodisc" }
+				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Search Authorization" }
 			},
 			rewards =
 			{
@@ -580,13 +580,13 @@ palpatine_missions =
 			missionType = "assassinate",
 			primarySpawns =
 			{
-				{ npcTemplate = "rebel_general",  npcName = "a Rebel General" }
+				{ npcTemplate = "rebel_general",  npcName = "Erso's Courier" }
 			},
 			secondarySpawns = {
-				{ npcTemplate = "rebel_trooper",  npcName = "a Rebel Trooper" },
-				{ npcTemplate = "rebel_trooper",  npcName = "a Rebel Trooper" },
-				{ npcTemplate = "rebel_trooper",  npcName = "a Rebel Trooper" },
-				{ npcTemplate = "rebel_trooper",  npcName = "a Rebel Trooper" }
+				{ npcTemplate = "rebel_trooper",  npcName = "an Armed Escort" },
+				{ npcTemplate = "rebel_trooper",  npcName = "an Armed Escort" },
+				{ npcTemplate = "rebel_trooper",  npcName = "an Armed Escort" },
+				{ npcTemplate = "rebel_trooper",  npcName = "an Armed Escort" }
 			},
 			itemSpawns =
 			{
@@ -612,7 +612,7 @@ darth_vader_missions =
 			},
 			itemSpawns =
 			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Information" }
+				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Jedi Intelligence" }
 			},
 			rewards =
 			{
@@ -624,7 +624,7 @@ darth_vader_missions =
 			missionType = "retrieve",
 			primarySpawns =
 			{
-				{ npcTemplate = "mara_jade",  npcName = "Mara Jade" }
+				{ npcTemplate = "theme_park_imperial_inquisitor_contact",  npcName = "an Imperial Inquisitor" }
 			},
 			secondarySpawns =
 			{
