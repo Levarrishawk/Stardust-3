@@ -1,5 +1,5 @@
 bolraida = Creature:new {
-	objectName = "Bolraida",
+	customName = "a Bolraida",
 	socialGroup = "bolraida",
 	faction = "",
 	mobType = MOB_CARNIVORE,

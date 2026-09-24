@@ -1,5 +1,5 @@
 stalking_bird = Creature:new {
-	objectName = "Stalking bird",
+	customName = "a Stalking bird",
 	socialGroup = "stalking_bird",
 	faction = "",
 	mobType = MOB_CARNIVORE,

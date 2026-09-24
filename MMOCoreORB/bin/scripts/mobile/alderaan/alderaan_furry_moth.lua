@@ -1,5 +1,5 @@
 alderaan_furry_moth = Creature:new {
-	objectName = "Alderaan furry moth",
+	customName = "an Alderaan furry moth",
 	socialGroup = "alderaan_furry_moth",
 	faction = "",
 	mobType = MOB_HERBIVORE,

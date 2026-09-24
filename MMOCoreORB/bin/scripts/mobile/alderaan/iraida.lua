@@ -1,5 +1,5 @@
 iraida = Creature:new {
-	objectName = "Iraida",
+	customName = "an Iraida",
 	socialGroup = "iraida",
 	faction = "",
 	mobType = MOB_CARNIVORE,

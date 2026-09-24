@@ -1,5 +1,5 @@
 killik = Creature:new {
-	objectName = "Killik",
+	customName = "a Killik",
 	socialGroup = "killik",
 	faction = "",
 	mobType = MOB_CARNIVORE,

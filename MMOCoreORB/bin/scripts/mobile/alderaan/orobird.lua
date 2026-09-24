@@ -1,5 +1,5 @@
 orobird = Creature:new {
-	objectName = "Orobird",
+	customName = "an Orobird",
 	socialGroup = "orobird",
 	faction = "",
 	mobType = MOB_HERBIVORE,

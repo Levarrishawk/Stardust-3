@@ -1,5 +1,5 @@
 vorn_tiger = Creature:new {
-	objectName = "Vorn tiger",
+	customName = "a Vorn tiger",
 	socialGroup = "vorn_tiger",
 	faction = "",
 	mobType = MOB_CARNIVORE,

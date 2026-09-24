@@ -1,5 +1,5 @@
 grazer = Creature:new {
-	objectName = "Grazer",
+	customName = "a Grazer",
 	socialGroup = "grazer",
 	faction = "",
 	mobType = MOB_HERBIVORE,

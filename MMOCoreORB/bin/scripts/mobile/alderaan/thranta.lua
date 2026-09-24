@@ -1,5 +1,5 @@
 thranta = Creature:new {
-	objectName = "Thranta",
+	customName = "a Thranta",
 	socialGroup = "thranta",
 	faction = "",
 	mobType = MOB_HERBIVORE,

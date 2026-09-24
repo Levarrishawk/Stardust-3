@@ -1,5 +1,5 @@
 nerf = Creature:new {
-	objectName = "Nerf",
+	customName = "a Nerf",
 	socialGroup = "nerf",
 	faction = "",
 	mobType = MOB_HERBIVORE,
