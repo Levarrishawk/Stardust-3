@@ -459,10 +459,10 @@ function AlderaCityScreenPlay:spawnGrandTowerLounge()
 		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", 20, 88.24, -12, 0},
 		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s2.iff", -20, 88.24, 12, 0},
 		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s2.iff", 20, 88.24, 12, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", -20, 88.24, -4, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 20, 88.24, -4, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", -20, 88.24, 4, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 20, 88.24, 4, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_tbl_s01.iff", -17, 88.65, -8, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_tbl_s01.iff", 17, 88.65, -8, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_tbl_s01.iff", -17, 88.65, 8, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_tbl_s01.iff", 17, 88.65, 8, 0},
 
 		-- A small bar stays on the inner ground floor, away from the arrival point.
 		{"object/tangible/furniture/modern/bar_counter_s1.iff", 5.2, 88.89, -4.8, 0},
@@ -493,9 +493,9 @@ function AlderaCityScreenPlay:spawnGrandTowerLounge()
 		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", -10, 94.08, -5, 0},
 		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", 10, 94.08, -5, 0},
 		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s2.iff", 10, 94.08, 5, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", -9, 94.08, -4, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 10, 94.08, 0, 0},
-		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_free_s01.iff", 4, 94.08, 10, 0}
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_tbl_s01.iff", -7, 94.49, -8, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_tbl_s01.iff", 7, 94.49, -8, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_candlestick_tbl_s01.iff", 7, 94.49, 8, 0}
 	}
 
 	for i = 1, #furniture, 1 do
