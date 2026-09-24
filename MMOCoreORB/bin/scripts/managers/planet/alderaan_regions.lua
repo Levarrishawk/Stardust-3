@@ -29,5 +29,5 @@ alderaan_regions = {
 
 	
 
-	{"@corellia_region_names:world_spawner", 0, 0, {RECTANGLE, 0, 0}, WORLDSPAWNAREA + SPAWNAREA, {"corellia_world"}, 2048}
+	{"alderaan_world_spawner", 0, 0, {RECTANGLE, 0, 0}, WORLDSPAWNAREA + SPAWNAREA, {"alderaan_world"}, 2048}
 }

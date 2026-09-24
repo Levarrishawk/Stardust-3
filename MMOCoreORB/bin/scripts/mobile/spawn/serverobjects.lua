@@ -638,5 +638,4 @@ includeFile("spawn/mustafar_xandanks.lua")
 includeFile("spawn/mustafar_jundaks.lua")
 includeFile("spawn/mustafar_kubaza_beetles.lua")
 includeFile("spawn/mustafar_storm_lord_minions.lua")
-
-
+includeFile("spawn/alderaan/alderaan_world.lua")
