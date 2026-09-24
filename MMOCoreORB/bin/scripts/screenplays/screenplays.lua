@@ -745,6 +745,7 @@ includeFile("events/ServerEventAutomation.lua")
 -- Custom content - Loads last to allow for overrides
 includeFile("../custom_scripts/screenplays/screenplays.lua")
 
+includeFile("cities/aldera_grand_tower_elevator_conv_handler.lua")
 includeFile("cities/alderaan_aldera_city.lua")
 includeFile("cities/coruscant_entertainment_district.lua")
 includeFile("cities/elysium_spawn.lua")

@@ -740,6 +740,20 @@ function AlderaCityScreenPlay:spawnImperialBaseMobiles()
 end
 
 function AlderaCityScreenPlay:spawnMobiles()
+	local pDoorman = spawnMobile("alderaan", "aldera_grand_tower_attendant", 60, 1011, 28, -1349, 180, 0)
+
+	if (pDoorman ~= nil and SceneObject(pDoorman):isAiAgent()) then
+		CreatureObject(pDoorman):setCustomObjectName("Aldera Grand-Tower Doorman")
+		AiAgent(pDoorman):addObjectFlag(AI_STATIC)
+	end
+
+	local pOperator = spawnMobile("alderaan", "aldera_grand_tower_attendant", 60, -1.6, 88.8, -3.3, -168, 610000834)
+
+	if (pOperator ~= nil and SceneObject(pOperator):isAiAgent()) then
+		CreatureObject(pOperator):setCustomObjectName("Elevator Operator")
+		AiAgent(pOperator):addObjectFlag(AI_STATIC)
+	end
+
 	local pBailOrgana = spawnMobile("alderaan", "bail_organa", 60, -35.3, 1.3, -2.8, 84, 610000025)
 
 	if (pBailOrgana ~= nil and SceneObject(pBailOrgana):isAiAgent()) then

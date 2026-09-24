@@ -1,4 +1,5 @@
 includeFile("alderaan/alderaan_security_force.lua")
+includeFile("alderaan/aldera_grand_tower_attendant.lua")
 includeFile("alderaan/bail_organa.lua")
 includeFile("alderaan/alderaan_furry_moth.lua")
 includeFile("alderaan/bolraida.lua")
