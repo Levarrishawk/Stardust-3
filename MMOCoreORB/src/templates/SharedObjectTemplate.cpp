@@ -370,7 +370,16 @@ void SharedObjectTemplate::readObject(IffStream* iffStream) {
 	uint32 nextType = iffStream->getNextFormType();
 
 	if (nextType != 'SHOT') {
-		warning() << "expecting SHOT got " << getType(nextType) << " in " << iffStream->getFileName();
+		// These four tangible battlefield station IFFs derive from the ship base IFF.
+		bool battlefieldStationShipBase = nextType == 'SSHP' &&
+			iffStream->getFileName() == "object/ship/base/shared_ship_base.iff" &&
+			(fullTemplateString == "object/tangible/space/spacestations/spacestation_imperial_battlefield_control.iff" ||
+			 fullTemplateString == "object/tangible/space/spacestations/spacestation_imperial_battlefield_entry.iff" ||
+			 fullTemplateString == "object/tangible/space/spacestations/spacestation_rebel_battlefield_control.iff" ||
+			 fullTemplateString == "object/tangible/space/spacestations/spacestation_rebel_battlefield_entry.iff");
+
+		if (!battlefieldStationShipBase)
+			warning() << "expecting SHOT got " << getType(nextType) << " in " << iffStream->getFileName();
 
 		iffStream->openForm(nextType);
 		iffStream->closeForm(nextType);
