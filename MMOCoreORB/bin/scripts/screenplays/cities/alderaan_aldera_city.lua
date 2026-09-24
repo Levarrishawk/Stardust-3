@@ -168,6 +168,7 @@ function AlderaCityScreenPlay:start()
 	if (isZoneEnabled("alderaan")) then
 		self:spawnMobiles()
 		self:spawnTheaterSceneObjects()
+		self:spawnGrandTowerLounge()
 	end
 end
 
@@ -425,6 +426,58 @@ function AlderaCityScreenPlay:spawnTheaterSceneObjects()
 	spawnSceneObject("alderaan", lampTemplate, 8.5, 1.8, 31.5, theaterCellID, math.rad(0))
 	spawnSceneObject("alderaan", lampTemplate, -8.5, 0.7, 43, theaterCellID, math.rad(0))
 	spawnSceneObject("alderaan", lampTemplate, 8.5, 0.7, 43, theaterCellID, math.rad(0))
+end
+
+function AlderaCityScreenPlay:spawnGrandTowerLounge()
+	local cellID = 610000834
+	local floorZ = 88.8
+	local furniture = {
+		-- Dining tables flank the route from the elevator landing to the operator.
+		{"object/tangible/furniture/modern/dining_table_modern_style_01.iff", -3.8, -9.3, 0},
+		{"object/tangible/furniture/modern/dining_table_modern_style_01.iff", 3.8, -9.3, 0},
+		{"object/tangible/furniture/modern/chair_modern_style_01.iff", -3.8, -10.7, 0},
+		{"object/tangible/furniture/modern/chair_modern_style_01.iff", -3.8, -7.9, 180},
+		{"object/tangible/furniture/modern/chair_modern_style_01.iff", 3.8, -10.7, 0},
+		{"object/tangible/furniture/modern/chair_modern_style_01.iff", 3.8, -7.9, 180},
+
+		-- A compact seating area and bar give the room its lounge character.
+		{"object/tangible/furniture/modern/couch_modern_style_01.iff", -4.0, -5.0, 90},
+		{"object/tangible/furniture/modern/coffee_table_modern_style_01.iff", -2.8, -5.0, 0},
+		{"object/tangible/furniture/modern/bar_counter_s1.iff", 3.8, -4.8, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_free_s01.iff", -4.8, -12.1, 0},
+		{"object/tangible/furniture/all/frn_all_light_lamp_free_s01.iff", 4.8, -12.1, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", -4.8, -3.0, 0},
+		{"object/tangible/furniture/all/frn_all_plant_potted_lg_s1.iff", 4.8, -3.0, 0}
+	}
+
+	for i = 1, #furniture, 1 do
+		local item = furniture[i]
+		spawnSceneObject("alderaan", item[1], item[2], floorZ, item[3], cellID, math.rad(item[4]))
+	end
+
+	local loungeMobiles = {
+		{"noble", -3.8, -10.7, 0, "npc_sitting_chair", "Lounge Guest"},
+		{"businessman", -3.8, -7.9, 180, "npc_sitting_chair", "Lounge Guest"},
+		{"artisan", 3.8, -10.7, 0, "npc_sitting_chair", "Restaurant Guest"},
+		{"patron", 3.8, -7.9, 180, "npc_sitting_chair", "Restaurant Guest"},
+		{"bartender", 3.8, -3.4, 180, "npc_standing_drinking", "Lounge Bartender"},
+		{"noble", -4.0, -5.0, 90, "npc_sitting_chair", "Lounge Guest"}
+	}
+
+	for i = 1, #loungeMobiles, 1 do
+		local mobile = loungeMobiles[i]
+		local pMobile = spawnMobile("alderaan", mobile[1], 60, mobile[2], floorZ, mobile[3], mobile[4], cellID)
+
+		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+			CreatureObject(pMobile):setCustomObjectName(mobile[6])
+			CreatureObject(pMobile):setMoodString(mobile[5])
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+
+			if (CreatureObject(pMobile):getPvpStatusBitmask() == 0) then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
+	end
 end
 
 function AlderaCityScreenPlay:spawnHotelMobiles()
@@ -740,7 +793,7 @@ function AlderaCityScreenPlay:spawnImperialBaseMobiles()
 end
 
 function AlderaCityScreenPlay:spawnMobiles()
-	local pDoorman = spawnMobile("alderaan", "aldera_grand_tower_attendant", 60, 1011, 28, -1349, 180, 0)
+	local pDoorman = spawnMobile("alderaan", "aldera_grand_tower_attendant", 60, 1011, 28, -1351, 180, 0)
 
 	if (pDoorman ~= nil and SceneObject(pDoorman):isAiAgent()) then
 		CreatureObject(pDoorman):setCustomObjectName("Aldera Grand-Tower Doorman")
