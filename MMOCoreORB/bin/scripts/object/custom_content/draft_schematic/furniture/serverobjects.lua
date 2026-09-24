@@ -56,7 +56,7 @@ includeFile("custom_content/draft_schematic/furniture/furniture_hide_rack_s02.lu
 includeFile("custom_content/draft_schematic/furniture/furniture_hide_rack_s03.lua")
 includeFile("custom_content/draft_schematic/furniture/furniture_hide_rack_s04.lua")
 includeFile("custom_content/draft_schematic/furniture/furniture_house_container_lock.lua")
-includeFile("custom_content/draft_schematic/furniture/furniture_jedi_banner.lua")
+--includeFile("custom_content/draft_schematic/furniture/furniture_jedi_banner.lua")
 includeFile("custom_content/draft_schematic/furniture/furniture_light_gem_green.lua")
 includeFile("custom_content/draft_schematic/furniture/furniture_light_gem_purple.lua")
 includeFile("custom_content/draft_schematic/furniture/furniture_light_gem_red.lua")
