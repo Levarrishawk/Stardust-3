@@ -34,6 +34,22 @@ local attacheMissions = {
 		"A witness to an Imperial reprisal is prepared to testify. Bring him to Alderaanian protection.", "This may be the first time the Empire actively tries to stop you.", "The witness cannot remain in the open.", "Senator Organa has reviewed your work and agreed to meet you privately.")
 }
 
+attacheMissions[1].dialog.introduction = "My name is Mira Tane. I am an Attache to Senator Organa, responsible for coordinating Alderaanian relief work beyond the capital. Imperial inspections have delayed several of our shipments, and one rural clinic is now running short of medicine. I may need your help, but you should understand what you are stepping into first."
+attacheMissions[1].dialog.information = {
+	{
+		prompt = "What does the Relief Office actually do?",
+		text = "We supply clinics, relocate families displaced by Imperial seizures, and document abuses that local authorities are ordered to ignore. Most of that work is legal. The Empire has begun treating compassion as suspicious whenever it reaches the wrong people."
+	},
+	{
+		prompt = "Why do you need someone outside your staff?",
+		text = "My registered couriers are being stopped, searched, and followed. Sending another would draw attention to the clinic and to every family it serves. Your name reached me through someone I trust. You are not tied to this office, and you understand why discretion matters."
+	},
+	{
+		prompt = "What exactly do you need me to do?",
+		text = "A relief worker is waiting outside the capital with a sealed package of medicine. Deliver it to them so it can reach the clinic without passing through an Imperial checkpoint under our name. This is aid work, not a military operation, but discovery could expose the entire route."
+	}
+}
+
 local bailMissions = {
 	makeMission("deliver", "alderaan", "Deliver sealed senatorial correspondence", "noble", "a diplomatic courier", "object/tangible/mission/mission_datadisk.iff", "Sealed correspondence", nil, reward(400),
 		"My office must communicate with people who cannot safely approach the Senate. Deliver this correspondence.", "Discretion protects more lives than courage alone.", "My courier is waiting.", "The message is where it needs to be."),
@@ -137,17 +153,43 @@ local function getDialog(themePark, pPlayer, pNpc)
 	return current ~= nil and current.dialog or nil
 end
 
+local function addInformationOptions(screen, dialog, currentTopic)
+	screen:removeAllOptions()
+
+	if currentTopic == 3 then
+		screen:addOption("I will deliver the medicine.", "accept")
+	end
+
+	for i = 1, #dialog.information do
+		if i ~= currentTopic then
+			screen:addOption(dialog.information[i].prompt, "npc_" .. (i + 3) .. "_n")
+		end
+	end
+
+	screen:addOption("I need some time to consider this.", "npc_3_n")
+end
+
 theme_park_rebel_mission_giver_conv_handler = mission_giver_conv_handler:new {themePark=ThemeParkRebel}
 
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc1(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNpc1(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n)
+	if d~=nil and d.introduction~=nil and d.information~=nil then screen:setCustomDialogText(d.introduction); addInformationOptions(screen,d,0); return result end
 	if d~=nil then screen:setCustomDialogText(d.offer) end; screen:removeAllOptions(); screen:addOption("I can help.","accept"); screen:addOption("Not now.","npc_3_n"); return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc2(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNpc2(self,t,p,n,o,s); local d=getDialog(self.themePark,p,n); if d~=nil then LuaConversationScreen(result):setCustomDialogText(d.accepted) end; return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc3(t,p,n,o,s)
-	local result=mission_giver_conv_handler.handleScreenNpc3(self,t,p,n,o,s); local screen=LuaConversationScreen(result); screen:setCustomDialogText("Then we have nothing further to discuss."); screen:setStopConversation(true); return result
+	local result=mission_giver_conv_handler.handleScreenNpc3(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil and d.introduction~=nil then screen:setCustomDialogText("I understand. The clinic's need will not wait, but this must be your decision. Return if you reconsider.") else screen:setCustomDialogText("Then we have nothing further to discuss.") end; screen:setStopConversation(true); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc4(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNpc4(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil and d.information~=nil then screen:setCustomDialogText(d.information[1].text); addInformationOptions(screen,d,1) end; return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc5(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNpc5(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil and d.information~=nil then screen:setCustomDialogText(d.information[2].text); addInformationOptions(screen,d,2) end; return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc6(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNpc6(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil and d.information~=nil then screen:setCustomDialogText(d.information[3].text); addInformationOptions(screen,d,3) end; return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenWork(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenWork(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil then screen:setCustomDialogText(d.working) end; screen:removeAllOptions(); screen:addOption("I cannot complete this assignment.","npc_reset"); screen:addOption("I am still working on it.","npc_backtowork"); return result
