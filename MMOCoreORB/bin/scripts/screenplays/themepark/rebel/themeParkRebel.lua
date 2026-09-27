@@ -29,7 +29,7 @@ local attacheMissions = {
 	makeMission("escort", "alderaan", "Escort a relief courier", "theme_park_rebel_civilian_contact", "a relief courier", nil, nil, nil, reward(175),
 		"One of our couriers believes she is being followed. Find her and bring her back quietly.", "If anyone asks, she is an employee returning from an inspection.", "Do not leave the courier exposed.", "She arrived safely, and no official report connects her to us."),
 	makeMission("confiscate", "alderaan", "Recover seized relief manifests", "imperial_staff_corporal", "an Imperial quartermaster", "object/tangible/mission/mission_datadisk.iff", "Seized relief manifests", twoTroopers, reward(250),
-		"An Imperial quartermaster seized manifests that identify vulnerable families. Recover them before they are copied.", "There must be no trail leading back to this office.", "The quartermaster still has the manifests.", "The families named in these records can disappear before the Empire comes looking."),
+		"An Imperial quartermaster seized manifests that identify vulnerable families. Recover them before they are copied.", "Recover the disk and bring it directly to me. Once you engage Voss, expect Imperial forces to treat you as a Combatant.", "The quartermaster still has the manifests.", "The families named in these records can disappear before the Empire comes looking."),
 	makeMission("escort", "alderaan", "Extract an Alderaanian witness", "theme_park_rebel_civilian_contact", "an Alderaanian witness", nil, nil, twoTroopers, reward(325, 50),
 		"A witness to an Imperial reprisal is prepared to testify. Bring him to Alderaanian protection.", "This may be the first time the Empire actively tries to stop you.", "The witness cannot remain in the open.", "Senator Organa has reviewed your work and agreed to meet you privately.")
 }
@@ -68,6 +68,25 @@ attacheMissions[2].dialog.information = {
 	{
 		prompt = "How should I bring her back?",
 		text = "Find Sela, confirm that you were sent by Mira Tane, and escort her back here. Do not confront anyone unless they move against you. If questioned, she is an employee returning from a routine inspection. Above all, do not let Imperial Security take her into custody."
+	}
+}
+
+attacheMissions[3].primarySpawns[1].npcName = "Corporal Dalen Voss, an Imperial quartermaster"
+attacheMissions[3].dialog.introduction = "Sela's return confirmed what we feared. The people following her were not watching one courier; they were tracing the entire relief route. An Imperial quartermaster named Dalen Voss has seized our distribution manifests. Those records identify clinics, field workers, and families already marked as politically unreliable. Voss is preparing to transfer them to Imperial Security."
+attacheMissions[3].dialog.acceptText = "I will stop Voss and recover the manifests."
+attacheMissions[3].dialog.declineText = "I understand. This is no longer a simple relief errand. But once those records reach Imperial Security, the people named in them will have nowhere left to hide."
+attacheMissions[3].dialog.information = {
+	{
+		prompt = "What information is in the manifests?",
+		text = "Names, delivery locations, medical requirements, and the identities of our field workers. In ordinary hands they are shipping records. Imperial Security can turn them into a map of everyone who has resisted a seizure, sheltered a fugitive, or accepted help without permission."
+	},
+	{
+		prompt = "Why can Senator Organa not recover them legally?",
+		text = "His office has already filed a formal challenge. Voss answered by moving the transfer forward. A public intervention now would reveal how important the records are and connect the Senator directly to everyone listed. The law may help us eventually. These families do not have eventually."
+	},
+	{
+		prompt = "Are you asking me to attack Imperial personnel?",
+		text = "I am asking you to intercept Voss before the transfer and recover the data disk. He travels with an armed escort and has orders to resist interference, so you should expect a fight. The moment you attack, the Empire will no longer regard you as a civilian; you will be exposed as a Rebel Combatant. I will not conceal that cost from you."
 	}
 }
 
