@@ -10,6 +10,7 @@
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/player/sessions/SlicingSession.h"
+#include "templates/params/creature/PlayerArrangement.h"
 
 int ContainerComponent::canAddObject(SceneObject* sceneObject, SceneObject* object, int containmentType, String& errorDescription) const {
 	if (sceneObject == object) {
@@ -271,6 +272,7 @@ bool ContainerComponent::transferObject(SceneObject* sceneObject, SceneObject* o
 
 	if (containmentType >= 4) {
 		int arrangementGroup = containmentType - 4;
+		bool npcVehicleRider = sceneObject->isVehicleObject() && object->isAiAgent() && containmentType == PlayerArrangement::RIDER;
 
 		if (object->getArrangementDescriptorSize() > arrangementGroup) {
 			const Vector<String>* descriptors = object->getArrangementDescriptor(arrangementGroup);
@@ -286,6 +288,12 @@ bool ContainerComponent::transferObject(SceneObject* sceneObject, SceneObject* o
 			for (int i = 0; i < descriptors->size(); ++i)	{
 				 slottedObjects->put(descriptors->get(i), object);
 			}
+		} else if (npcVehicleRider) {
+			if (slottedObjects->contains("rider")) {
+				return false;
+			}
+
+			slottedObjects->put("rider", object);
 		} else {
 			return false;
 		}
