@@ -2506,7 +2506,16 @@ void AiAgentImplementation::updateCurrentPosition(PatrolPoint* nextPosition) {
 	if (nextPosition == nullptr)
 		return;
 
-	setPosition(nextPosition->getPositionX(), nextPosition->getPositionZ(), nextPosition->getPositionY());
+	ManagedReference<CreatureObject*> mountedVehicle = nullptr;
+
+	if (isRidingMount()) {
+		mountedVehicle = getParent().get().castTo<CreatureObject*>();
+	}
+
+	CreatureObject* movingObject = mountedVehicle != nullptr && mountedVehicle->isVehicleObject() ? mountedVehicle.get() : asCreatureObject();
+
+	movingObject->setPosition(nextPosition->getPositionX(), nextPosition->getPositionZ(), nextPosition->getPositionY());
+	movingObject->setCurrentSpeed(getCurrentSpeed());
 
 	CellObject* cell = nextPosition->getCell();
 
@@ -2515,12 +2524,12 @@ void AiAgentImplementation::updateCurrentPosition(PatrolPoint* nextPosition) {
 	}
 
 	if (cell != nullptr && cell->getParent().get() != nullptr) {
-		updateZoneWithParent(cell, false, false);
+		movingObject->updateZoneWithParent(cell, false, false);
 	} else {
-		updateZone(false, false);
+		movingObject->updateZone(false, false);
 	}
 
-	removeOutOfRangeObjects();
+	movingObject->removeOutOfRangeObjects();
 	broadcastNextPositionUpdate(nextPosition);
 }
 
@@ -2635,6 +2644,16 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 
 	Vector3 currentPosition = getPosition();
 	Vector3 currentWorldPos = getWorldPosition();
+	ManagedReference<CreatureObject*> mountedVehicle = nullptr;
+
+	if (isRidingMount()) {
+		mountedVehicle = getParent().get().castTo<CreatureObject*>();
+
+		if (mountedVehicle != nullptr && mountedVehicle->isVehicleObject()) {
+			currentPosition = currentWorldPos;
+		}
+	}
+
 	PatrolPoint endMovementPosition = getNextPosition();
 
 	Vector3 endDistDiff(currentWorldPos - endMovementPosition.getWorldPosition());
@@ -2661,8 +2680,10 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 			notifyObservers(ObserverEventType::DESTINATIONREACHED);
 		}
 
-		setCurrentSpeed(0.f);
-		updateLocomotion();
+		if (mountedVehicle == nullptr || !mountedVehicle->isVehicleObject()) {
+			setCurrentSpeed(0.f);
+			updateLocomotion();
+		}
 
 		return false;
 	}
@@ -2706,7 +2727,7 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 	*/
 
 	Reference<Vector<WorldCoordinates>* > path = nullptr;
-	ManagedReference<SceneObject*> currentParent = getParent().get();
+	ManagedReference<SceneObject*> currentParent = mountedVehicle != nullptr && mountedVehicle->isVehicleObject() ? nullptr : getParent().get();
 
 	PatrolPoint currentPoint(currentPosition);
 	const WorldCoordinates endMovementCoords = endMovementPosition.getCoordinates();
@@ -2972,7 +2993,11 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 	float error = fabs(directionAngle - direction.getRadians());
 
 	if (error >= 0.05) {
-		setDirection(directionAngle);
+		if (mountedVehicle != nullptr && mountedVehicle->isVehicleObject()) {
+			mountedVehicle->setDirection(directionAngle);
+		} else {
+			setDirection(directionAngle);
+		}
 	}
 
 	auto interval = BEHAVIORINTERVALMIN;
@@ -3939,22 +3964,29 @@ void AiAgentImplementation::setNextStepPosition(float x, float z, float y, CellO
 
 void AiAgentImplementation::broadcastNextPositionUpdate(PatrolPoint* point) {
 	BasePacket* msg = nullptr;
-	++movementCounter;
+	ManagedReference<CreatureObject*> mountedVehicle = nullptr;
+
+	if (isRidingMount()) {
+		mountedVehicle = getParent().get().castTo<CreatureObject*>();
+	}
+
+	CreatureObject* movingObject = mountedVehicle != nullptr && mountedVehicle->isVehicleObject() ? mountedVehicle.get() : asCreatureObject();
+	movingObject->incrementMovementCounter();
 
 	if (point == nullptr) {
-		if (parent.get() != nullptr)
-			msg = new UpdateTransformWithParentMessage(asAiAgent());
+		if (movingObject->getParent().get() != nullptr)
+			msg = new UpdateTransformWithParentMessage(movingObject);
 		else
-			msg = new UpdateTransformMessage(asAiAgent());
+			msg = new UpdateTransformMessage(movingObject);
 	} else {
 		if (point->getCell() != nullptr) {
-			msg = new LightUpdateTransformWithParentMessage(asAiAgent(), point->getPositionX(), point->getPositionZ(), point->getPositionY(), point->getCell()->getObjectID());
+			msg = new LightUpdateTransformWithParentMessage(movingObject, point->getPositionX(), point->getPositionZ(), point->getPositionY(), point->getCell()->getObjectID());
 		} else {
-			msg = new LightUpdateTransformMessage(asAiAgent(), point->getPositionX(), point->getPositionZ(), point->getPositionY());
+			msg = new LightUpdateTransformMessage(movingObject, point->getPositionX(), point->getPositionZ(), point->getPositionY());
 		}
 	}
 
- 	broadcastMessage(msg, false);
+	 movingObject->broadcastMessage(msg, false);
 }
 
 int AiAgentImplementation::notifyObjectDestructionObservers(TangibleObject* attacker, int condition, bool isCombatAction) {

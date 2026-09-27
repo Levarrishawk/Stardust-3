@@ -1,7 +1,15 @@
 CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
-	screenplayName = "CoruscantEntertainmentScreenPlay"
+	screenplayName = "CoruscantEntertainmentScreenPlay",
+
+	mountedSwoopRoute = {
+		{-5746, 0, -5051},
+		{-5660, 0, -5049},
+		{-5659, 0, -4743},
+		{-5862, 0, -4745},
+		{-5865, 0, -5047}
+	}
 }
 
 registerScreenPlay("CoruscantEntertainmentScreenPlay", true)
@@ -10,7 +18,59 @@ function CoruscantEntertainmentScreenPlay:start()
 	if (isZoneEnabled("coruscant")) then
 		self:spawnMobiles()
 		self:spawnSceneObjects()
+		self:spawnMountedSwoopPatrol()
 	end
+end
+
+function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
+	local spawn = self.mountedSwoopRoute[1]
+	local pVehicle = spawnSceneObject("coruscant", "object/mobile/vehicle/speederbike_swoop.iff", spawn[1], spawn[2], spawn[3], 0, math.rad(89))
+	local pRider = spawnMobile("coruscant", "jabba_swooper", 0, spawn[1] + 2, spawn[2], spawn[3], 89, 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+
+		return
+	end
+
+	if not mountNpc(pRider, pVehicle) then
+		AiAgent(pRider):info("Mounted swoop patrol failed to attach to its swoop")
+		return
+	end
+
+	local riderID = SceneObject(pRider):getObjectID()
+
+	writeData(riderID .. ":mountedSwoopRoutePoint", 2)
+	createObserver(DESTINATIONREACHED, self.screenplayName, "mountedSwoopDestinationReached", pRider)
+	AiAgent(pRider):setMovementState(AI_PATROLLING)
+	AiAgent(pRider):setNextPosition(self.mountedSwoopRoute[2][1], self.mountedSwoopRoute[2][2], self.mountedSwoopRoute[2][3], 0)
+end
+
+function CoruscantEntertainmentScreenPlay:mountedSwoopDestinationReached(pRider)
+	if (pRider == nil or CreatureObject(pRider):isDead()) then
+		return 1
+	end
+
+	local riderID = SceneObject(pRider):getObjectID()
+	local nextPoint = readData(riderID .. ":mountedSwoopRoutePoint") + 1
+
+	if (nextPoint > #self.mountedSwoopRoute) then
+		nextPoint = 1
+	end
+
+	writeData(riderID .. ":mountedSwoopRoutePoint", nextPoint)
+	AiAgent(pRider):stopWaiting()
+	AiAgent(pRider):setWait(0)
+	AiAgent(pRider):setNextPosition(self.mountedSwoopRoute[nextPoint][1], self.mountedSwoopRoute[nextPoint][2], self.mountedSwoopRoute[nextPoint][3], 0)
+	AiAgent(pRider):executeBehavior()
+
+	return 0
 end
 
 function CoruscantEntertainmentScreenPlay:animateCabaretDancer(pDancer)
