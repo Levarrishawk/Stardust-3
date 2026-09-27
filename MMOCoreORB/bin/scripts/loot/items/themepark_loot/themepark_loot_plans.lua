@@ -1,7 +1,7 @@
 themepark_loot_plans = {
 	minimumLevel = 0,
 	maximumLevel = 0,
-	customObjectName = "Plans",
+	customObjectName = "Transport Records",
 	directObjectTemplate = "object/tangible/mission/mission_datadisk.iff",
 	craftingValues = {
 	},
