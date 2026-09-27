@@ -24,13 +24,13 @@ local twoTroopers = {
 }
 
 local attacheMissions = {
-	makeMission("deliver", "alderaan", "Deliver relief medicine", "commoner", "a relief worker", "object/tangible/medicine/crafted/medpack_wound_health_a.iff", "Relief medicine", nil, reward(100),
+	makeMission("deliver", "alderaan", "Deliver relief medicine", "theme_park_rebel_civilian_contact", "a relief worker", "object/tangible/medicine/crafted/medpack_wound_health_a.iff", "Relief medicine", nil, reward(100),
 		"A rural clinic missed its relief shipment. Take these medical supplies to our field worker.", "Keep the package sealed and avoid unnecessary Imperial attention.", "The clinic still needs that medicine.", "You helped people who had nowhere else to turn."),
-	makeMission("escort", "alderaan", "Escort a relief courier", "commoner", "a relief courier", nil, nil, nil, reward(175),
+	makeMission("escort", "alderaan", "Escort a relief courier", "theme_park_rebel_civilian_contact", "a relief courier", nil, nil, nil, reward(175),
 		"One of our couriers believes she is being followed. Find her and bring her back quietly.", "If anyone asks, she is an employee returning from an inspection.", "Do not leave the courier exposed.", "She arrived safely, and no official report connects her to us."),
 	makeMission("confiscate", "alderaan", "Recover seized relief manifests", "imperial_staff_corporal", "an Imperial quartermaster", "object/tangible/mission/mission_datadisk.iff", "Seized relief manifests", twoTroopers, reward(250),
 		"An Imperial quartermaster seized manifests that identify vulnerable families. Recover them before they are copied.", "There must be no trail leading back to this office.", "The quartermaster still has the manifests.", "The families named in these records can disappear before the Empire comes looking."),
-	makeMission("escort", "alderaan", "Extract an Alderaanian witness", "noble", "an Alderaanian witness", nil, nil, twoTroopers, reward(325, 50),
+	makeMission("escort", "alderaan", "Extract an Alderaanian witness", "theme_park_rebel_civilian_contact", "an Alderaanian witness", nil, nil, twoTroopers, reward(325, 50),
 		"A witness to an Imperial reprisal is prepared to testify. Bring him to Alderaanian protection.", "This may be the first time the Empire actively tries to stop you.", "The witness cannot remain in the open.", "Senator Organa has reviewed your work and agreed to meet you privately.")
 }
 
@@ -51,22 +51,22 @@ attacheMissions[1].dialog.information = {
 }
 
 local bailMissions = {
-	makeMission("deliver", "alderaan", "Deliver sealed senatorial correspondence", "noble", "a diplomatic courier", "object/tangible/mission/mission_datadisk.iff", "Sealed correspondence", nil, reward(400),
+	makeMission("deliver", "alderaan", "Deliver sealed senatorial correspondence", "theme_park_rebel_civilian_contact", "a diplomatic courier", "object/tangible/mission/mission_datadisk.iff", "Sealed correspondence", nil, reward(400),
 		"My office must communicate with people who cannot safely approach the Senate. Deliver this correspondence.", "Discretion protects more lives than courage alone.", "My courier is waiting.", "The message is where it needs to be."),
 	makeMission("confiscate", "alderaan", "Recover Imperial surveillance records", "imperial_first_lieutenant", "an Imperial surveillance officer", "object/tangible/mission/mission_datadisk.iff", "Surveillance records", twoTroopers, reward(475),
 		"Imperial Security is monitoring several charitable organizations. Obtain its surveillance records before arrests begin.", "Recover the records without creating a public incident.", "Those records continue to endanger innocent people.", "We can warn everyone on this list before the security bureau acts."),
-	makeMission("escort", "alderaan", "Extract a community organizer", "businessman", "a community organizer", nil, nil, twoTroopers, reward(550),
+	makeMission("escort", "alderaan", "Extract a community organizer", "theme_park_rebel_civilian_contact", "a community organizer", nil, nil, twoTroopers, reward(550),
 		"A community organizer refused an Imperial labor decree. See that he reaches Alderaanian protection.", "He will be frightened. Give him reason to trust you.", "The organizer must be moved tonight.", "He is safe, and his people are not without leadership."),
-	makeMission("deliver", "coruscant", "Deliver an antiquities inquiry", "noble", "an antiquities broker", "object/tangible/mission/mission_datadisk.iff", "Antiquities inquiry", nil, reward(625, 75),
+	makeMission("deliver", "coruscant", "Deliver an antiquities inquiry", "theme_park_rebel_civilian_contact", "an antiquities broker", "object/tangible/mission/mission_datadisk.iff", "Antiquities inquiry", nil, reward(625, 75),
 		"I require a discreet appraisal from a Coruscant antiquities dealer named Luthen Rael. Deliver this inquiry, then visit his gallery.", "To anyone who asks, this concerns a private Alderaanian collection.", "The gallery is expecting an inquiry from my office.", "Rael has agreed to receive you. Listen to what he asks, and what he does not say.")
 }
 
 local luthenMissions = {
-	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_pirate", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
+	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_civilian_contact", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
 		"A collector has an object that belongs in my gallery. What is concealed inside is considerably more valuable.", "You are retrieving art. Maintain that fiction.", "The collector still has my property.", "The object will be separated from its more useful contents."),
 	makeMission("confiscate", "coruscant", "Replace an Imperial cargo manifest", "imperial_staff_corporal", "an Imperial freight clerk", "object/tangible/mission/mission_datadisk.iff", "Imperial cargo manifest", twoTroopers, reward(775),
 		"A freight clerk carries tomorrow's inspection manifest. Bring it to me before the first shift.", "The Empire must believe its records were misplaced, not altered.", "We have a narrow window to change that manifest.", "Several crates will now pass inspection as restoration supplies."),
-	makeMission("escort", "coruscant", "Extract a compromised courier", "information_broker", "a compromised courier", nil, nil, twoTroopers, reward(850),
+	makeMission("escort", "coruscant", "Extract a compromised courier", "theme_park_rebel_civilian_contact", "a compromised courier", nil, nil, twoTroopers, reward(850),
 		"A courier missed two check-ins. Find them before Imperial Security does.", "If the courier has been turned, recognize it before they reach this shop.", "Every minute makes the courier easier to find.", "The route is burned, but routes can be rebuilt."),
 	makeMission("assassinate", "coruscant", "Silence an Imperial informant", "theme_park_rebel_bounty_hunter", "an Imperial informant", nil, nil, twoTroopers, reward(925),
 		"An informant sold the names of an entire workers' circle. Ensure the transfer never happens.", "Do not be seen returning here.", "The informant is preparing to deliver the names.", "The circle survives. They will never know why."),
@@ -79,7 +79,7 @@ local sawMissions = {
 		"An Imperial patrol is mapping this region. Wipe it out before it transmits its survey.", "Leave nothing that can identify this camp.", "That patrol is still closing in.", "They will send another. Next time we will be ready sooner."),
 	makeMission("confiscate", "lok", "Recover stolen demolition charges", "theme_park_rebel_pirate", "a pirate quartermaster", "object/tangible/component/item/quest_item/directional_sensor.iff", "Demolition detonators", nil, reward(1150),
 		"Pirates stole detonators from one of my teams. Recover them.", "The detonators belong to the fight, not profiteers.", "The pirates still have our detonators.", "We can replace explosives. Trained people are harder to replace."),
-	makeMission("escort", "lok", "Rescue a Partisan demolition specialist", "rebel_commando", "a Partisan demolition specialist", nil, nil, twoTroopers, reward(1225),
+	makeMission("escort", "lok", "Rescue a Partisan demolition specialist", "theme_park_rebel_field_contact", "a Partisan demolition specialist", nil, nil, twoTroopers, reward(1225),
 		"One of my demolition specialists is cut off beyond an Imperial sweep. Bring her home.", "She knows what this cell is building. Do not let her be captured.", "My specialist is still out there.", "She will be back at work before the next charge is wired."),
 	makeMission("confiscate", "lok", "Seize industrial power converters", "imperial_first_lieutenant", "an Imperial logistics officer", "object/tangible/mission/mission_datadisk.iff", "Power-converter release codes", twoTroopers, reward(1300),
 		"An Imperial convoy carries industrial power converters. Take its release codes.", "We are taking back tools built with stolen labor.", "The convoy will move soon.", "Some converters stay here. The rest go to the jungle cell."),
@@ -88,20 +88,20 @@ local sawMissions = {
 }
 
 local mothmaMissions = {
-	makeMission("deliver", "chandrila", "Deliver protected foundation records", "noble", "a foundation trustee", "object/tangible/mission/mission_datadisk.iff", "Protected foundation records", nil, reward(1450),
+	makeMission("deliver", "chandrila", "Deliver protected foundation records", "theme_park_rebel_civilian_contact", "a foundation trustee", "object/tangible/mission/mission_datadisk.iff", "Protected foundation records", nil, reward(1450),
 		"Deliver these charitable foundation records before an Imperial examiner arrives.", "Nothing in them is illegal. That will not protect the people named.", "The trustee must receive the records first.", "The foundation can continue without exposing its donors."),
-	makeMission("escort", "chandrila", "Protect a Chandrilan labor organizer", "businessman", "a Chandrilan labor organizer", nil, nil, twoTroopers, reward(1525),
+	makeMission("escort", "chandrila", "Protect a Chandrilan labor organizer", "theme_park_rebel_civilian_contact", "a Chandrilan labor organizer", nil, nil, twoTroopers, reward(1525),
 		"A labor organizer is accused of sedition for opposing compulsory quotas. Escort him to a legal delegation.", "His cause must remain public and peaceful.", "The delegation cannot proceed without him.", "The hearing will go forward. Public resistance still matters."),
 	makeMission("confiscate", "chandrila", "Recover an Imperial surveillance index", "imperial_first_lieutenant", "an Imperial security liaison", "object/tangible/mission/mission_datadisk.iff", "Surveillance index", twoTroopers, reward(1600),
 		"A security liaison compiled an index of opposition figures. Recover it before transmission.", "Make its disappearance appear to be bureaucratic incompetence.", "The index remains in Imperial hands.", "We can protect these people without revealing how we learned of the danger."),
-	makeMission("deliver", "chandrila", "Secure a civilian shipping charter", "businessman", "an independent shipping representative", "object/tangible/mission/mission_datadisk.iff", "Civilian shipping charter", nil, reward(1675),
+	makeMission("deliver", "chandrila", "Secure a civilian shipping charter", "theme_park_rebel_civilian_contact", "an independent shipping representative", "object/tangible/mission/mission_datadisk.iff", "Civilian shipping charter", nil, reward(1675),
 		"An independent carrier may service remote settlements. Deliver this charter and confirm its cooperation.", "The cargo is relief and construction material. Much of it truly is.", "We need that shipping commitment.", "A legitimate, regular, unremarkable route is a valuable route."),
-	makeMission("escort", "chandrila", "Extract a threatened industrial supplier", "commoner_technician", "an industrial supplier", nil, nil, twoTroopers, reward(1750, 150),
+	makeMission("escort", "chandrila", "Extract a threatened industrial supplier", "theme_park_rebel_technician_contact", "an industrial supplier", nil, nil, twoTroopers, reward(1750, 150),
 		"The supplier who provided our generators has been threatened. Bring her to the Hanna City hotel.", "She risked herself for people she has never met.", "The supplier must be extracted tonight.", "She is safe. Her equipment is already being routed to Yavin Four.")
 }
 
 local yavinMissions = {
-	makeMission("escort", "yavin4", "Escort a power engineer to the Yavin cell", "commoner_technician", "a resistance power engineer", nil, nil, nil, reward(1825),
+	makeMission("escort", "yavin4", "Escort a power engineer to the Yavin cell", "theme_park_rebel_technician_contact", "a resistance power engineer", nil, nil, nil, reward(1825),
 		"Find the engineer who can synchronize our new generators and escort them through the jungle.", "An Imperial patrol would be worse than the wildlife.", "The engineer has not reached the base.", "We can now power the infirmary and communications room together."),
 	makeMission("confiscate", "yavin4", "Recover stolen construction supplies", "theme_park_rebel_pirate", "a supply thief", "object/tangible/mission/mission_datadisk.iff", "Stolen supply locator", nil, reward(1900),
 		"A thief intercepted part of our construction shipment. Recover its locator.", "We cannot request replacements without exposing the route.", "Recover those supplies.", "The missing crates are accounted for."),
@@ -109,7 +109,7 @@ local yavinMissions = {
 		"A communications team abandoned a transmitter core during an animal attack. Retrieve it.", "Without it, this cell remains isolated.", "The transmitter core is still in the jungle.", "We can communicate without commercial relays."),
 	makeMission("assassinate", "yavin4", "Destroy an Imperial reconnaissance team", "stormtrooper_squad_leader", "an Imperial reconnaissance leader", nil, nil, twoTroopers, reward(2050),
 		"An Imperial reconnaissance team landed beyond our watch. Stop it before it identifies the temple.", "No transmission can leave that team.", "The reconnaissance team is still within reporting range.", "The Empire will record another lost jungle patrol."),
-	makeMission("escort", "yavin4", "Guide the first regular supply convoy to Yavin", "rebel_pilot", "a resistance convoy scout", nil, nil, twoTroopers, reward(2200, 300, true),
+	makeMission("escort", "yavin4", "Guide the first regular supply convoy to Yavin", "theme_park_rebel_field_contact", "a resistance convoy scout", nil, nil, twoTroopers, reward(2200, 300, true),
 		"Meet the first regular convoy's scout and guide them past the Imperial search pattern.", "If this works, Yavin becomes more than a temporary camp.", "The convoy cannot approach until its scout reaches us.", "What began as scattered favors is now a supply line, and a supply line can sustain a rebellion.")
 }
 

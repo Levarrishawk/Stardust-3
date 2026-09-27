@@ -1,0 +1,43 @@
+theme_park_rebel_civilian_contact = Creature:new {
+	objectName = "",
+	randomNameType = NAME_GENERIC,
+	randomNameTag = true,
+	socialGroup = "townsperson",
+	faction = "",
+	mobType = MOB_NPC,
+	level = 10,
+	chanceHit = 0.3,
+	damageMin = 40,
+	damageMax = 75,
+	baseXp = 0,
+	baseHAM = 1000,
+	baseHAMmax = 1000,
+	armor = 0,
+	resists = {0, 0, 0, 0, 0, 0, 0, 0, -1},
+	meatType = "",
+	meatAmount = 0,
+	hideType = "",
+	hideAmount = 0,
+	boneType = "",
+	boneAmount = 0,
+	milk = 0,
+	tamingChance = 0,
+	ferocity = 0,
+	pvpBitmask = NONE,
+	creatureBitmask = PACK,
+	optionsBitmask = AIENABLED + INVULNERABLE + CONVERSABLE,
+	diet = HERBIVORE,
+	templates = {
+		"object/mobile/dressed_commoner_naboo_human_male_08.iff",
+		"object/mobile/dressed_commoner_tatooine_sullustan_male_03.iff",
+		"object/mobile/dressed_noble_human_female_01.iff"
+	},
+	lootGroups = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	conversationTemplate = "theme_park_rebel_mission_target_convotemplate",
+	primaryAttacks = {},
+	secondaryAttacks = {}
+}
+
+CreatureTemplates:addCreatureTemplate(theme_park_rebel_civilian_contact, "theme_park_rebel_civilian_contact")
