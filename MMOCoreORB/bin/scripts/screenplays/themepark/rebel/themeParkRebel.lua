@@ -202,7 +202,7 @@ bailMissions[4].dialog.information = {
 }
 
 local luthenMissions = {
-	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_civilian_contact", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
+	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_private_collector", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
 		"A client has mistaken possession for ownership. Recover a ceremonial vessel from him and return it to this gallery. You are retrieving art. Maintain that fiction.", "Recover the vessel, discuss nothing beyond its provenance, and return directly to me.", "The collector still has my property. Every delay gives him another opportunity to discover what he bought.", "The vessel is intact, and so is what was concealed inside it. You followed the instruction without demanding the whole design. That is rarer than discretion."),
 	makeMission("confiscate", "coruscant", "Replace an Imperial cargo manifest", "imperial_staff_corporal", "an Imperial freight clerk", "object/tangible/mission/mission_datadisk.iff", "Imperial cargo manifest", twoTroopers, reward(775),
 		"An Imperial freight clerk carries tomorrow's inspection manifest. Intercept him, recover it, and bring it here before the first shift. The Empire must believe its records were misplaced, not altered.", "Take the official manifest from the clerk and return it to me. My people will make the substitution.", "The inspection window is closing. If the original manifest reaches its office, the replacement becomes useless.", "The substitution is complete. By morning, several crates of generators, medicine, and communications parts will exist only as restoration supplies for respectable galleries."),
@@ -215,6 +215,14 @@ local luthenMissions = {
 }
 
 luthenMissions[1].primarySpawns[1].npcName = "Calo Venn, a private collector"
+luthenMissions[1].primarySpawns[1].fixedSpawn = {x=6.1, z=-0.7, y=-9.8, direction=-53, cellID=37000316}
+luthenMissions[1].secondarySpawns = {
+	{npcTemplate="bh_bodyguard", npcName="Casino Security", fixedSpawn={x=8.0, z=-0.7, y=-8.5, direction=-125, cellID=37000316}},
+	{npcTemplate="bh_bodyguard", npcName="Casino Security", fixedSpawn={x=4.2, z=-0.7, y=-11.2, direction=40, cellID=37000316}}
+}
+luthenMissions[1].staticCellID = 37000316
+luthenMissions[1].allowTargetCombat = true
+luthenMissions[1].aggroSecondaryOnPrimaryAttack = true
 luthenMissions[1].dialog.introduction = "Ah, Bail's new acquaintance. Welcome. You have arrived at an unusually fortunate moment; I have just received a piece from the old Hosnian schools, all severity from a distance and exquisite compromise up close. That is the trouble with history: everyone admires the finished object, and no one wishes to discuss what it cost. Now, the door is closed, so we can stop admiring it. Bail believes you can follow an instruction without turning curiosity into a liability. I prefer evidence."
 luthenMissions[1].dialog.acceptText = "I will recover the vessel and preserve the fiction."
 luthenMissions[1].dialog.declineText = "Then enjoy the gallery. A person may appreciate history without volunteering to become part of it."

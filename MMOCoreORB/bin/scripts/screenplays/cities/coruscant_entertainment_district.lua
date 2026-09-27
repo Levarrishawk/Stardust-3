@@ -381,6 +381,26 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   --
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000714)
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000316)
+
+  -- Starport District gambling den patrons
+  local jubileeGamblers = {
+    {"gambler", -1.7, -0.7, -6.0, 90},
+    {"gambler", 1.7, -0.7, -6.0, -90},
+    {"gambler", 3.5, -0.7, -7.3, -135},
+    {"gambler", 6.2, -0.7, -9.7, 45},
+    {"gambler", -3.5, -0.7, -7.3, 135},
+    {"gambler", -6.2, -0.7, -9.7, -45}
+  }
+
+  for i = 1, #jubileeGamblers do
+    local gamblerData = jubileeGamblers[i]
+    local pGambler = spawnMobile("coruscant", gamblerData[1], 60, gamblerData[2], gamblerData[3], gamblerData[4], gamblerData[5], 37000316)
+
+    if pGambler ~= nil then
+      AiAgent(pGambler):addObjectFlag(AI_STATIC)
+      self:setMoodString(pGambler, "neutral")
+    end
+  end
  
   
 	--  :: Starport District NPCs :: --

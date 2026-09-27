@@ -907,6 +907,10 @@ function ThemeParkLogic:spawnMissionNpcs(mission, pConversingPlayer, pActiveArea
 			return false
 		end
 
+		if mainNpcs[i].fixedSpawn ~= nil then
+			AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
+		end
+
 		writeData(CreatureObject(pNpc):getObjectID() .. ":missionOwnerID", playerID)
 
 		if i == 1 and currentMissionType == "confiscate" then
@@ -943,17 +947,35 @@ function ThemeParkLogic:spawnMissionNpcs(mission, pConversingPlayer, pActiveArea
 
 			self:normalizeNpc(pNpc, 16, 3000)
 		elseif mission.missionType == "retrieve" or mission.missionType == "deliver" then
-			CreatureObject(pNpc):setPvpStatusBitmask(0)
+			if mission.allowTargetCombat ~= true then
+				CreatureObject(pNpc):setPvpStatusBitmask(0)
+			end
 			CreatureObject(pNpc):setOptionBit(INTERESTING)
+		end
+
+		if i == 1 and mission.aggroSecondaryOnPrimaryAttack == true then
+			createObserver(DEFENDERADDED, self.className, "notifyPrimaryTargetAttacked", pNpc)
+			createObserver(OBJECTDESTRUCTION, self.className, "notifyEscortKilled", pNpc)
 		end
 	end
 
 	local secondaryNpcs = mission.secondarySpawns
 	for i = 1 + #mission.primarySpawns, numberOfSpawns, 1 do
 		local secondaryNpc = secondaryNpcs[i - #mission.primarySpawns]
-		local pNpc = self:spawnNpc(secondaryNpc, spawnPoints[i], pConversingPlayer, i, planetName)
+		local spawnPoint = spawnPoints[i]
+
+		if secondaryNpc.fixedSpawn ~= nil then
+			local fixedSpawn = secondaryNpc.fixedSpawn
+			spawnPoint = {fixedSpawn.x, fixedSpawn.z, fixedSpawn.y, fixedSpawn.cellID, fixedSpawn.direction}
+		end
+
+		local pNpc = self:spawnNpc(secondaryNpc, spawnPoint, pConversingPlayer, i, planetName)
 
 		if pNpc ~= nil and SceneObject(pNpc):isCreatureObject() then
+			if secondaryNpc.fixedSpawn ~= nil then
+				AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
+			end
+
 			writeData(CreatureObject(pNpc):getObjectID() .. ":missionOwnerID", playerID)
 			createObserver(DEFENDERADDED, self.className, "notifyTriggeredBreechAggro", pNpc)
 			if (secondaryNpc.dead ~= nil and secondaryNpc.dead == "true") then
@@ -962,6 +984,20 @@ function ThemeParkLogic:spawnMissionNpcs(mission, pConversingPlayer, pActiveArea
 		end
 	end
 	return true
+end
+
+function ThemeParkLogic:notifyPrimaryTargetAttacked(pNpc, pPlayer)
+	if pNpc == nil or pPlayer == nil or not SceneObject(pNpc):isCreatureObject() or not SceneObject(pPlayer):isCreatureObject() then
+		return 0
+	end
+
+	local ownerID = readData(CreatureObject(pNpc):getObjectID() .. ":missionOwnerID")
+	if ownerID ~= CreatureObject(pPlayer):getObjectID() then
+		return 0
+	end
+
+	self:setNpcDefender(pPlayer, false)
+	return 1
 end
 
 function ThemeParkLogic:addConfiscateItemsToTarget(mission, pTarget)
