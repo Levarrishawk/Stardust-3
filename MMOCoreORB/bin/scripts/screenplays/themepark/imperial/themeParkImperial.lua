@@ -612,7 +612,7 @@ darth_vader_missions =
 			},
 			itemSpawns =
 			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Jedi Intelligence" }
+				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Information" }
 			},
 			rewards =
 			{
