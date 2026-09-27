@@ -83,6 +83,8 @@ function ThemeParkLogic:spawnNpcs()
 				return false
 			end
 
+			self.npcMap[i].spawnedObjectID = SceneObject(pNpc):getObjectID()
+
 			if npcSpawnData.position == SIT then
 				CreatureObject(pNpc):setState(SITTINGONCHAIR)
 			end
@@ -1825,6 +1827,18 @@ function ThemeParkLogic:getNpcWorldPosition(npcNumber)
 	for i = 1, # self.npcMap do
 		local npcSpawnNumber = self.npcMap[i].npcNumber
 		if npcNumber == npcSpawnNumber then
+			local spawnedObjectID = self.npcMap[i].spawnedObjectID
+
+			if self.npcMap[i].useNpcWorldPosition == true and spawnedObjectID ~= nil then
+				local pNpc = getSceneObject(spawnedObjectID)
+
+				if pNpc ~= nil then
+					worldPosition.x = SceneObject(pNpc):getWorldPositionX()
+					worldPosition.y = SceneObject(pNpc):getWorldPositionY()
+					return worldPosition
+				end
+			end
+
 			if self.npcMap[i].spawnData.cellID == 0 then
 				worldPosition.x = self.npcMap[i].spawnData.x
 				worldPosition.y = self.npcMap[i].spawnData.y

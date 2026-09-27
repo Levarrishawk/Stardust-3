@@ -90,6 +90,25 @@ attacheMissions[3].dialog.information = {
 	}
 }
 
+attacheMissions[4].primarySpawns[1].npcName = "Edrin Hal, an Alderaanian relief assessor"
+attacheMissions[4].dialog.introduction = "The manifests are secure, and most of the people named in them are being moved. One of them, Edrin Hal, will not leave quietly. Edrin was a relief assessor in the Kellan district when an Imperial requisition detail opened fire on civilians who resisted the seizure of their winter stores. The official report calls those civilians armed agitators. Edrin saw what happened, and he preserved enough evidence to challenge that lie. Imperial Security now knows that he survived."
+attacheMissions[4].dialog.acceptText = "I will bring Edrin into Alderaanian protection."
+attacheMissions[4].dialog.declineText = "You have already taken considerable risks for us, and I will not pretend this one is smaller. But if Imperial Security reaches Edrin first, they will bury both the witness and the truth he carries."
+attacheMissions[4].dialog.information = {
+	{
+		prompt = "Who is Edrin Hal?",
+		text = "Edrin inspected clinics and food depots receiving aid through this office. He is neither a soldier nor an activist. He is a civil servant who kept careful records and happened to be present when an Imperial officer decided that an example mattered more than Alderaanian lives. That makes his account difficult for the Empire to dismiss and dangerous for it to leave unanswered."
+	},
+	{
+		prompt = "Why not bring him here through official channels?",
+		text = "The local security office has orders to detain him as a material witness to sedition. If Senator Organa intervenes publicly before Edrin is safe, the Empire will know exactly who is protecting him and why. We must first move him beyond their reach, preserve his evidence, and let the Senator decide how it can be used without condemning everyone involved."
+	},
+	{
+		prompt = "What should I expect during the extraction?",
+		text = "Find Edrin at the location I provide, identify yourself as coming from my office, and escort him back to me. An Imperial recovery detail is already searching the district. They may ignore an ordinary traveler, but they will try to stop anyone moving with Edrin. If you defend him, you should expect to be treated as a Combatant. Get him here alive; his testimony is the reason for this mission."
+	}
+}
+
 local bailMissions = {
 	makeMission("deliver", "alderaan", "Deliver sealed senatorial correspondence", "theme_park_rebel_civilian_contact", "a diplomatic courier", "object/tangible/mission/mission_datadisk.iff", "Sealed correspondence", nil, reward(400),
 		"My office must communicate with people who cannot safely approach the Senate. Deliver this correspondence.", "Discretion protects more lives than courage alone.", "My courier is waiting.", "The message is where it needs to be."),
@@ -154,7 +173,7 @@ local yavinMissions = {
 }
 
 local npcMapRebel = {
-	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, npcNumber=1, stfFile="", missions=attacheMissions, noFactionDialog="The Alderaanian Relief Office accepts donations through the public registry. If you require assistance, a clerk can direct you.", lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
+	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, npcNumber=1, stfFile="", missions=attacheMissions, noFactionDialog="The Alderaanian Relief Office accepts donations through the public registry. If you require assistance, a clerk can direct you.", lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
 	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Rael's gallery is on Coruscant."},
 	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=0,z=0,y=0,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, noFactionDialog="I deal in antiquities. If you are not here to acquire something, I have other clients waiting.", lockedDialog="The gallery is open to serious clients only.", completedDialog="Saw Gerrera is waiting on Lok. Do not mistake an introduction for trust."},
 	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=38,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, noFactionDialog="You took a wrong turn. Leave before my people decide you were scouting the camp.", lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
