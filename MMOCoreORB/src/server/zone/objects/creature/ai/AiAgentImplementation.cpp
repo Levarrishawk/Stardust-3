@@ -3097,10 +3097,12 @@ void AiAgentImplementation::runBehaviorTree() {
 #else // DEBUG_AI
 		bool alwaysActive = false;
 #endif // DEBUG_AI
+		ManagedReference<SceneObject*> mountedParent = isRidingMount() ? getParent().get() : nullptr;
+		bool mountedVehicleActive = mountedParent != nullptr && mountedParent->isVehicleObject();
 
 		ZoneServer* zoneServer = getZoneServer();
 
-		if ((!alwaysActive && numberOfPlayersInRange.get() <= 0 && getFollowObject().get() == nullptr && !isRetreating()) || zoneServer == nullptr || zoneServer->isServerLoading() || zoneServer->isServerShuttingDown()) {
+		if ((!alwaysActive && !mountedVehicleActive && numberOfPlayersInRange.get() <= 0 && getFollowObject().get() == nullptr && !isRetreating()) || zoneServer == nullptr || zoneServer->isServerLoading() || zoneServer->isServerShuttingDown()) {
 			cancelBehaviorEvent();
 			setFollowObject(nullptr);
 			return;
@@ -3884,10 +3886,12 @@ void AiAgentImplementation::activateAiBehavior(bool reschedule) {
 #else // DEBUG_AI
 	bool alwaysActive = false;
 #endif // DEBUG_AI
+	ManagedReference<SceneObject*> mountedParent = isRidingMount() ? getParent().get() : nullptr;
+	bool mountedVehicleActive = mountedParent != nullptr && mountedParent->isVehicleObject();
 
 	ZoneServer* zoneServer = getZoneServer();
 
-	if ((!alwaysActive && numberOfPlayersInRange.get() <= 0 && getFollowObject().get() == nullptr && !isRetreating()) || zoneServer == nullptr || zoneServer->isServerLoading() || zoneServer->isServerShuttingDown()) {
+	if ((!alwaysActive && !mountedVehicleActive && numberOfPlayersInRange.get() <= 0 && getFollowObject().get() == nullptr && !isRetreating()) || zoneServer == nullptr || zoneServer->isServerLoading() || zoneServer->isServerShuttingDown()) {
 		cancelBehaviorEvent();
 		return;
 	}

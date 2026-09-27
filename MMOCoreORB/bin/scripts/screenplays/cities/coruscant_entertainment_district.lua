@@ -25,7 +25,7 @@ end
 function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
 	local spawn = self.mountedSwoopRoute[1]
 	local pVehicle = spawnSceneObject("coruscant", "object/mobile/vehicle/speederbike_swoop.iff", spawn[1], spawn[2], spawn[3], 0, math.rad(89))
-	local pRider = spawnMobile("coruscant", "jabba_swooper", 0, spawn[1] + 2, spawn[2], spawn[3], 89, 0)
+	local pRider = spawnMobile("coruscant", "ambient_jabba_swooper", 0, spawn[1] + 2, spawn[2], spawn[3], 89, 0)
 
 	if (pVehicle == nil or pRider == nil) then
 		if (pVehicle ~= nil) then
@@ -50,6 +50,7 @@ function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
 	createObserver(DESTINATIONREACHED, self.screenplayName, "mountedSwoopDestinationReached", pRider)
 	AiAgent(pRider):setMovementState(AI_PATROLLING)
 	AiAgent(pRider):setNextPosition(self.mountedSwoopRoute[2][1], self.mountedSwoopRoute[2][2], self.mountedSwoopRoute[2][3], 0)
+	AiAgent(pRider):executeBehavior()
 end
 
 function CoruscantEntertainmentScreenPlay:mountedSwoopDestinationReached(pRider)
