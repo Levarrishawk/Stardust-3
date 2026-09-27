@@ -363,7 +363,7 @@ local sceneObjectMapRebel = {
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-0,z=1.3,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-0,z=1.75,y=5.1,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Ancient Ceremonial Vessel"},
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.0,z=0.9,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.0,z=1.6,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.0,z=1.3,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=2.0,z=1.75,y=5.1,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Republic Devotional Sculpture"},
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=4.0,z=0.9,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=4.0,z=1.3,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
