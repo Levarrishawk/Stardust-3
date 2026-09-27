@@ -128,7 +128,10 @@ function mission_giver_conv_handler:handleScreenInit(pConvTemplate, pPlayer, pNp
 			end
 		elseif npcCompare == 0 then
 			if self.themePark:missionStatus(pPlayer) == 1 then
-				if self.themePark:getMissionType(activeNpcNumber, pPlayer) == "escort" and self.themePark:escortedNpcCloseEnough(pPlayer) == true then
+				if self.themePark:getMissionType(activeNpcNumber, pPlayer) == "confiscate" and self.themePark:hasLootedRequiredItem(activeNpcNumber, pPlayer) == true then
+					self.themePark:completeMission(pPlayer)
+					nextScreenName = "npc_reward_n"
+				elseif self.themePark:getMissionType(activeNpcNumber, pPlayer) == "escort" and self.themePark:escortedNpcCloseEnough(pPlayer) == true then
 					nextScreenName = "npc_reward_n"
 				else
 					nextScreenName = "npc_work_n"

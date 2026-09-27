@@ -86,7 +86,7 @@ attacheMissions[3].dialog.information = {
 	},
 	{
 		prompt = "Are you asking me to attack Imperial personnel?",
-		text = "I am asking you to intercept Voss before the transfer and recover the data disk. He travels with an armed escort and has orders to resist interference, so you should expect a fight. The moment you attack, the Empire will no longer regard you as a civilian; you will be exposed as a Rebel Combatant. I will not conceal that cost from you."
+		text = "I am asking you to intercept Voss before the transfer and recover the data disk. He travels with an armed escort and has orders to resist interference, so you should expect a fight. The moment you attack, the Empire will no longer regard you as a civilian; they will consider you to be an Insurgent. I will not conceal that cost from you."
 	}
 }
 

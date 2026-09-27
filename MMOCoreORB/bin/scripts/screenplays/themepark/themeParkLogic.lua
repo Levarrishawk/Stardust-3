@@ -882,6 +882,10 @@ function ThemeParkLogic:spawnMissionNpcs(mission, pConversingPlayer, pActiveArea
 
 		writeData(CreatureObject(pNpc):getObjectID() .. ":missionOwnerID", playerID)
 
+		if i == 1 and currentMissionType == "confiscate" then
+			self:addConfiscateItemsToTarget(mission, pNpc)
+		end
+
 		if i == 1 then
 			if (self:isValidConvoString(stfFile, ":npc_breech_" .. missionNumber)) then
 				writeData(playerID .. ":breechNpcID", SceneObject(pNpc):getObjectID())
@@ -931,6 +935,46 @@ function ThemeParkLogic:spawnMissionNpcs(mission, pConversingPlayer, pActiveArea
 		end
 	end
 	return true
+end
+
+function ThemeParkLogic:addConfiscateItemsToTarget(mission, pTarget)
+	if mission == nil or pTarget == nil or mission.itemSpawns == nil then
+		return
+	end
+
+	local pInventory = CreatureObject(pTarget):getSlottedObject("inventory")
+	if pInventory == nil then
+		return
+	end
+
+	for i = 1, #mission.itemSpawns do
+		local requiredItem = mission.itemSpawns[i]
+		local found = false
+		local inventorySize = SceneObject(pInventory):getContainerObjectsSize()
+
+		for j = 0, inventorySize - 1 do
+			local pExistingItem = SceneObject(pInventory):getContainerObject(j)
+
+			if pExistingItem ~= nil then
+				local existingItem = SceneObject(pExistingItem)
+				if requiredItem.itemTemplate == existingItem:getTemplateObjectPath() and
+						(requiredItem.itemName == existingItem:getCustomObjectName() or requiredItem.itemName == existingItem:getDisplayedName()) then
+					found = true
+					break
+				end
+			end
+		end
+
+		if not found then
+			local pItem = giveItem(pInventory, requiredItem.itemTemplate, -1)
+
+			if pItem ~= nil then
+				SceneObject(pItem):setCustomObjectName(requiredItem.itemName)
+			else
+				printLuaError("Unable to add confiscate item " .. requiredItem.itemTemplate .. " to a mission target in " .. self.className)
+			end
+		end
+	end
 end
 
 function ThemeParkLogic:normalizeNpc(pNpc, level, ham)
