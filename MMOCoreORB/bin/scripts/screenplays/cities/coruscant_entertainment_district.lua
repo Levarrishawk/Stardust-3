@@ -339,6 +339,42 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
  
   --  Cantina 1 
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000721)
+
+  -- Entertainment District cabaret stage and audience
+  local pDancer = spawnMobile("coruscant", "twilek_slave", 60, 0.0, 0.5, -11.5, 0, 37000721)
+  if pDancer ~= nil then
+    SceneObject(pDancer):setCustomObjectName("Twi'lek Cabaret Dancer")
+    AiAgent(pDancer):addObjectFlag(AI_STATIC)
+    CreatureObject(pDancer):setPosture(SKILLANIMATING)
+    CreatureObject(pDancer):setPerformanceAnimation("dance_8", true)
+    CreatureObject(pDancer):setPerformanceStartTime(0, true)
+    CreatureObject(pDancer):setPerformanceType(148, true)
+  end
+
+  local cabaretAudience = {
+    {"patron", 0.0, -0.7, -7.3, 180, "npc_sitting_chair"},
+    {"patron", -3.1, -0.7, -8.0, 142, "npc_sitting_chair"},
+    {"patron", 3.1, -0.7, -8.0, -142, "npc_sitting_chair"},
+    {"patron", -6.1, -0.7, -6.9, 142, "npc_sitting_chair"},
+    {"patron", 6.1, -0.7, -6.9, -142, "npc_sitting_chair"},
+    {"commoner", -8.5, 0.5, -9.5, 105, "entertained"},
+    {"commoner", 8.5, 0.5, -9.5, -105, "entertained"}
+  }
+
+  for i = 1, #cabaretAudience do
+    local audienceData = cabaretAudience[i]
+    local pPatron = spawnMobile("coruscant", audienceData[1], 60, audienceData[2], audienceData[3], audienceData[4], audienceData[5], 37000721)
+
+    if pPatron ~= nil then
+      AiAgent(pPatron):addObjectFlag(AI_STATIC)
+      self:setMoodString(pPatron, audienceData[6])
+
+      if pDancer ~= nil then
+        CreatureObject(pPatron):setWatchToID(SceneObject(pDancer):getObjectID())
+      end
+    end
+  end
+
   --
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000714)
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000316)

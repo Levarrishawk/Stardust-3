@@ -519,7 +519,25 @@ function ThemeParkLogic:handleMissionAccept(npcNumber, missionNumber, pConversin
 
 	local areaSpawnPoint = { }
 
-	if (mission.staticLoc ~= nil and #mission.staticLoc > 0) then
+	if (mission.staticCellID ~= nil and mission.staticCellID > 0) then
+		local pCell = getSceneObject(mission.staticCellID)
+
+		if pCell == nil then
+			printLuaError("Unable to locate static mission cell " .. mission.staticCellID .. " for mission #" .. missionNumber .. " in screenplay " .. self.className .. ".")
+			return false
+		end
+
+		local pBuilding = SceneObject(pCell):getParent()
+
+		if pBuilding == nil then
+			printLuaError("Unable to locate the building containing static mission cell " .. mission.staticCellID .. " for mission #" .. missionNumber .. " in screenplay " .. self.className .. ".")
+			return false
+		end
+
+		areaSpawnPoint[1] = SceneObject(pBuilding):getWorldPositionX()
+		areaSpawnPoint[2] = SceneObject(pBuilding):getWorldPositionZ()
+		areaSpawnPoint[3] = SceneObject(pBuilding):getWorldPositionY()
+	elseif (mission.staticLoc ~= nil and #mission.staticLoc > 0) then
 		areaSpawnPoint[1] = mission.staticLoc[1].x
 		areaSpawnPoint[3] = mission.staticLoc[1].y
 		areaSpawnPoint[2] = getTerrainHeight(pConversingPlayer, areaSpawnPoint[1], areaSpawnPoint[3])
@@ -875,7 +893,14 @@ function ThemeParkLogic:spawnMissionNpcs(mission, pConversingPlayer, pActiveArea
 
 	local mainNpcs = mission.primarySpawns
 	for i = 1, #mission.primarySpawns, 1 do
-		local pNpc = self:spawnNpc(mainNpcs[i], spawnPoints[i], pConversingPlayer, i, planetName)
+		local spawnPoint = spawnPoints[i]
+
+		if mainNpcs[i].fixedSpawn ~= nil then
+			local fixedSpawn = mainNpcs[i].fixedSpawn
+			spawnPoint = {fixedSpawn.x, fixedSpawn.z, fixedSpawn.y, fixedSpawn.cellID, fixedSpawn.direction}
+		end
+
+		local pNpc = self:spawnNpc(mainNpcs[i], spawnPoint, pConversingPlayer, i, planetName)
 
 		if pNpc == nil then
 			printLuaError("Failed to spawn quest target number " .. i .. ", part of mission number " .. missionNumber .. "in screenplay " .. self.className .. "")
@@ -1414,7 +1439,12 @@ function ThemeParkLogic:spawnNpc(npcTemplate, position, pConversingPlayer, spawn
 
 	local npcName
 	local playerID = CreatureObject(pConversingPlayer):getObjectID()
-	local pNpc = spawnMobile(planetName, npcTemplate.npcTemplate, 0, position[1], position[2], position[3], getRandomNumber(360) - 180, position[4])
+	local direction = position[5]
+	if direction == nil then
+		direction = getRandomNumber(360) - 180
+	end
+
+	local pNpc = spawnMobile(planetName, npcTemplate.npcTemplate, 0, position[1], position[2], position[3], direction, position[4])
 	if pNpc ~= nil and SceneObject(pNpc):isCreatureObject() then
 		if (spawnNumber == 1) then
 			npcName = readStringData(playerID  .. ":missionSpawn:mainNpcName")

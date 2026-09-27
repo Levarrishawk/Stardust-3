@@ -115,15 +115,16 @@ local bailMissions = {
 	makeMission("confiscate", "alderaan", "Recover Imperial surveillance records", "imperial_first_lieutenant", "an Imperial surveillance officer", "object/tangible/mission/mission_datadisk.iff", "Surveillance records", twoTroopers, reward(475),
 		"Imperial Security is monitoring several charitable organizations. Obtain its surveillance records before arrests begin.", "Recover the records without creating a public incident.", "Those records continue to endanger innocent people.", "We can warn everyone on this list before the security bureau acts."),
 	makeMission("escort", "alderaan", "Extract a community organizer", "theme_park_rebel_civilian_contact", "a community organizer", nil, nil, twoTroopers, reward(550),
-		"A community organizer refused an Imperial labor decree. See that he reaches Alderaanian protection.", "He will be frightened. Give him reason to trust you.", "The organizer must be moved tonight.", "He is safe, and his people are not without leadership."),
+		"A community organizer refused an Imperial labor decree. See that she reaches Alderaanian protection.", "She will be frightened. Give her reason to trust you.", "The organizer must be moved tonight.", "She is safe, and her people are not without leadership."),
 	makeMission("deliver", "coruscant", "Deliver an antiquities inquiry", "theme_park_rebel_civilian_contact", "an antiquities broker", "object/tangible/mission/mission_datadisk.iff", "Antiquities inquiry", nil, reward(625, 75),
-		"I require a discreet appraisal from a Coruscant antiquities dealer named Luthen Rael. Deliver this inquiry, then visit his gallery.", "To anyone who asks, this concerns a private Alderaanian collection.", "The gallery is expecting an inquiry from my office.", "Rael has agreed to receive you. Listen to what he asks, and what he does not say.")
+		"I require a discreet appraisal from a Coruscant antiquities dealer named Luthen Rael. Deliver this inquiry, then visit his gallery.", "To anyone who asks, this concerns a private Alderaanian collection.", "The gallery is expecting an inquiry from my office.", "Luthen has agreed to receive you. Listen to what he asks, and what he does not say.")
 }
 
 bailMissions[1].primarySpawns[1].npcName = "Neris Kaal, a diplomatic courier"
 bailMissions[1].dialog.introduction = "Mira has told me what you did for Edrin Hal and for the families named in those manifests. You acted when the protections promised by law had already failed them. That does not make this an audience for medals or speeches. It means I am prepared to entrust you with something quieter. Reports resembling Edrin's account are reaching me from other worlds. I need this correspondence placed in the hands of Neris Kaal, a courier who can carry it beyond Alderaan without entering it into the Senate registry."
 bailMissions[1].dialog.acceptText = "I will deliver the correspondence to Neris Kaal."
 bailMissions[1].dialog.declineText = "Prudence is not cowardice. If you are uncertain, say nothing about this conversation and return only when you are prepared to see the matter through."
+bailMissions[1].dialog.completed = "Neris has confirmed receipt. The correspondence will now pass through hands that have no visible connection to this office. If the reports agree, we will know these abuses are not isolated, and we can begin warning people before Imperial Security reaches them. You handled this exactly as required: quietly, without exposing anyone else."
 bailMissions[1].dialog.information = {
 	{
 		prompt = "Who will receive the message after Neris?",
@@ -143,6 +144,7 @@ bailMissions[2].primarySpawns[1].npcName = "Lieutenant Arven Rusk, an Imperial s
 bailMissions[2].dialog.introduction = "Neris completed the handoff. The replies confirm that Edrin's district was not an exception: relief offices, labor councils, and local assemblies are being watched wherever they resist Imperial requisitions. Lieutenant Arven Rusk has compiled those connections into a surveillance archive. If his superiors receive it, dozens of lawful organizations will be treated as parts of a single conspiracy, and many of the people helping us will be arrested before they ever understand what they have been accused of joining."
 bailMissions[2].dialog.acceptText = "I will recover Rusk's surveillance archive."
 bailMissions[2].dialog.declineText = "This assignment asks more than discretion, and I will not disguise that fact. But Rusk's archive grows more dangerous with every name added to it."
+bailMissions[2].dialog.completed = "This is more extensive than I feared. Rusk was not merely watching suspected dissidents; he was mapping every relationship around them, including relief workers, legal advocates, donors, and their families. My staff can warn most of the people in this archive before new detention orders are issued. Some, however, cannot simply disappear without abandoning entire communities. Recovering these records has bought us time. Now we must decide how best to use it."
 bailMissions[2].dialog.information = {
 	{
 		prompt = "What is contained in the archive?",
@@ -178,9 +180,11 @@ bailMissions[3].dialog.information = {
 }
 
 bailMissions[4].primarySpawns[1].npcName = "Davo Sorn, an antiquities broker"
+bailMissions[4].primarySpawns[1].fixedSpawn = {x=9.0, z=0.5, y=-2.5, direction=-90, cellID=37000721}
+bailMissions[4].staticCellID = 37000721
 bailMissions[4].dialog.introduction = "Maren is safe, and the communities around her are reorganizing before the Empire can identify their new lines of support. You have now carried information, recovered what Imperial Security stole, and protected someone whose work is larger than any one mission. Those acts have also made you visible. If you intend to continue, you will need contacts beyond Alderaan and a better understanding of how such efforts remain separate while still serving the same purpose. A Coruscant antiquities dealer named Luthen Rael may be willing to speak with you."
-bailMissions[4].dialog.acceptText = "I will deliver the inquiry and visit Rael's gallery."
-bailMissions[4].dialog.declineText = "That may be the wiser choice. Once you enter Rael's world, good intentions will protect neither you nor the people around you."
+bailMissions[4].dialog.acceptText = "I will deliver the inquiry and visit Luthen's gallery."
+bailMissions[4].dialog.declineText = "That may be the wiser choice. Once you enter Luthen's world, good intentions will protect neither you nor the people around you."
 bailMissions[4].dialog.information = {
 	{
 		prompt = "Why an antiquities dealer?",
@@ -188,11 +192,11 @@ bailMissions[4].dialog.information = {
 	},
 	{
 		prompt = "Why introduce me to him now?",
-		text = "Because courage without discipline creates casualties, and a network tied too closely to one senator can be destroyed with one investigation. Rael understands compartmentalization, procurement, and the difference between a useful risk and a wasted life. Your work for Mira suggests you may understand those things as well. He will make his own judgment."
+		text = "Because courage without discipline creates casualties, and a network tied too closely to one senator can be destroyed with one investigation. Luthen understands compartmentalization, procurement, and the difference between a useful risk and a wasted life. Your work for Mira suggests you may understand those things as well. He will make his own judgment."
 	},
 	{
 		prompt = "How do I make contact?",
-		text = "Deliver this antiquities inquiry to Davo Sorn, a broker who handles acquisitions for Rael's gallery. It contains nothing incriminating; its wording is the introduction. After the handoff, go to Rael's shop on Coruscant and approach him as a prospective client. Do not mention me, Mira, or the work you have done unless Rael does so first."
+		text = "Deliver this antiquities inquiry to Davo Sorn, a broker who handles acquisitions for Luthen's gallery. It contains nothing incriminating; its wording is the introduction. After the handoff, go to Luthen's shop on Coruscant and approach him as a prospective client. Do not mention me, Mira, or the work you have done unless Luthen does so first."
 	}
 }
 
@@ -250,7 +254,7 @@ local yavinMissions = {
 
 local npcMapRebel = {
 	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, npcNumber=1, stfFile="", missions=attacheMissions, noFactionDialog="The Alderaanian Relief Office accepts donations through the public registry. If you require assistance, a clerk can direct you.", lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
-	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Rael's gallery is on Coruscant."},
+	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Luthen's gallery is on Coruscant."},
 	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=0,z=0,y=0,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, noFactionDialog="I deal in antiquities. If you are not here to acquire something, I have other clients waiting.", lockedDialog="The gallery is open to serious clients only.", completedDialog="Saw Gerrera is waiting on Lok. Do not mistake an introduction for trust."},
 	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=38,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, noFactionDialog="You took a wrong turn. Leave before my people decide you were scouting the camp.", lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
 	{spawnData = {planetName="chandrila", npcTemplate="mon_mothma", x=6,z=0.6,y=-5.5,direction=-90,cellID=35791665,position=STAND}, worldPosition={x=294,y=-2938}, npcNumber=16, stfFile="", missions=mothmaMissions, noFactionDialog="I am here on senatorial business. Please direct constituency matters to my staff.", lockedDialog="I am here on senatorial business.", completedDialog="The final shipments are being routed to a small cell on Yavin Four."},
