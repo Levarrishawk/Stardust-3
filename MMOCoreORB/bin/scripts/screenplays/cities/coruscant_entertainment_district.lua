@@ -11,7 +11,8 @@ CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 		{-5865, 0, -5047}
 	},
 	mountedSwoopSpeed = 17,
-	mountedSwoopUpdateInterval = 100
+	mountedSwoopUpdateInterval = 100,
+	mountedSwoopRacerCount = 25
 }
 
 registerScreenPlay("CoruscantEntertainmentScreenPlay", true)
@@ -25,9 +26,51 @@ function CoruscantEntertainmentScreenPlay:start()
 end
 
 function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
-	local spawn = self.mountedSwoopRoute[1]
-	local pVehicle = spawnSceneObject("coruscant", "object/mobile/vehicle/speederbike_swoop.iff", spawn[1], spawn[2], spawn[3], 0, math.rad(89))
-	local pRider = spawnMobile("coruscant", "ambient_jabba_swooper", 0, spawn[1] + 2, spawn[2], spawn[3], 89, 0)
+	for racerIndex = 1, self.mountedSwoopRacerCount do
+		self:spawnMountedSwoopRacer(racerIndex)
+	end
+end
+
+function CoruscantEntertainmentScreenPlay:getMountedSwoopRoutePoint(racerIndex, pointIndex)
+	local point = self.mountedSwoopRoute[pointIndex]
+
+	if (racerIndex == 1) then
+		return {point[1], point[2], point[3]}
+	end
+
+	local offsetDistance = 1 + ((racerIndex + pointIndex * 3) % 3) * 0.5
+	local offsetAngle = math.rad((racerIndex * 47 + pointIndex * 73) % 360)
+	local offsetX = math.cos(offsetAngle) * offsetDistance
+	local offsetY = math.sin(offsetAngle) * offsetDistance
+
+	return {point[1] + offsetX, point[2], point[3] + offsetY}
+end
+
+function CoruscantEntertainmentScreenPlay:spawnMountedSwoopRacer(racerIndex)
+	local spawn
+	local pointIndex
+
+	if (racerIndex == 1) then
+		spawn = self:getMountedSwoopRoutePoint(racerIndex, 1)
+		pointIndex = 2
+	else
+		local firstPoint = self:getMountedSwoopRoutePoint(racerIndex, 1)
+		local fourthPoint = self:getMountedSwoopRoutePoint(racerIndex, 5)
+		local progress = (racerIndex - 1) / self.mountedSwoopRacerCount
+
+		spawn = {
+			firstPoint[1] + (fourthPoint[1] - firstPoint[1]) * progress,
+			firstPoint[2] + (fourthPoint[2] - firstPoint[2]) * progress,
+			firstPoint[3] + (fourthPoint[3] - firstPoint[3]) * progress
+		}
+		pointIndex = 1
+	end
+
+	local target = self:getMountedSwoopRoutePoint(racerIndex, pointIndex)
+	local heading = math.atan(target[1] - spawn[1], target[3] - spawn[3])
+	local riderTemplate = racerIndex % 2 == 0 and "ambient_valarian_swooper" or "ambient_jabba_swooper"
+	local pVehicle = spawnSceneObject("coruscant", "object/mobile/vehicle/speederbike_swoop.iff", spawn[1], spawn[2], spawn[3], 0, heading)
+	local pRider = spawnMobile("coruscant", riderTemplate, 0, spawn[1] + 2, spawn[2], spawn[3], math.deg(heading), 0)
 
 	if (pVehicle == nil or pRider == nil) then
 		if (pVehicle ~= nil) then
@@ -50,8 +93,9 @@ function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
 
 	local vehicleID = SceneObject(pVehicle):getObjectID()
 
-	writeData(vehicleID .. ":mountedSwoopRoutePoint", 2)
-	createEvent(self.mountedSwoopUpdateInterval, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
+	writeData(vehicleID .. ":mountedSwoopRacerIndex", racerIndex)
+	writeData(vehicleID .. ":mountedSwoopRoutePoint", pointIndex)
+	createEvent(self.mountedSwoopUpdateInterval + ((racerIndex - 1) % 10) * 10, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
 end
 
 function CoruscantEntertainmentScreenPlay:moveMountedSwoopPatrol(pVehicle)
@@ -61,8 +105,9 @@ function CoruscantEntertainmentScreenPlay:moveMountedSwoopPatrol(pVehicle)
 
 	local vehicle = SceneObject(pVehicle)
 	local vehicleID = vehicle:getObjectID()
+	local racerIndex = readData(vehicleID .. ":mountedSwoopRacerIndex")
 	local pointIndex = readData(vehicleID .. ":mountedSwoopRoutePoint")
-	local target = self.mountedSwoopRoute[pointIndex]
+	local target = self:getMountedSwoopRoutePoint(racerIndex, pointIndex)
 	local currentX = vehicle:getPositionX()
 	local currentZ = vehicle:getPositionZ()
 	local currentY = vehicle:getPositionY()
