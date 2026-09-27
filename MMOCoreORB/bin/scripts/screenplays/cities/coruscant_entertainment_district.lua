@@ -387,7 +387,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
     {"gambler", -1.7, -0.7, -6.0, 90},
     {"gambler", 1.7, -0.7, -6.0, -90},
     {"gambler", 3.5, -0.7, -7.3, -135},
-    {"gambler", 6.2, -0.7, -9.7, 45},
+    {"gambler", 6.2, -0.7, -7.2, -135},
     {"gambler", -3.5, -0.7, -7.3, 135},
     {"gambler", -6.2, -0.7, -9.7, -45}
   }

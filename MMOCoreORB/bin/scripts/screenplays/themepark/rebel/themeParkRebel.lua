@@ -205,7 +205,7 @@ local luthenMissions = {
 	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_private_collector", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
 		"A client has mistaken possession for ownership. Recover a ceremonial vessel from him and return it to this gallery. You are retrieving art. Maintain that fiction.", "Recover the vessel, discuss nothing beyond its provenance, and return directly to me.", "The collector still has my property. Every delay gives him another opportunity to discover what he bought.", "The vessel is intact, and so is what was concealed inside it. You followed the instruction without demanding the whole design. That is rarer than discretion."),
 	makeMission("confiscate", "coruscant", "Replace an Imperial cargo manifest", "imperial_staff_corporal", "an Imperial freight clerk", "object/tangible/mission/mission_datadisk.iff", "Imperial cargo manifest", twoTroopers, reward(775),
-		"An Imperial freight clerk carries tomorrow's inspection manifest. Intercept him, recover it, and bring it here before the first shift. The Empire must believe its records were misplaced, not altered.", "Take the official manifest from the clerk and return it to me. My people will make the substitution.", "The inspection window is closing. If the original manifest reaches its office, the replacement becomes useless.", "The substitution is complete. By morning, several crates of generators, medicine, and communications parts will exist only as restoration supplies for respectable galleries."),
+		"Corporal Jeran Voss carries tomorrow's certified inspection manifest. He spends his after-hours in a bar on lower city level 1312. Recover the manifest there and return it before his next shift.", "Find Jeran in the level 1312 bar, recover the official manifest, and return directly to me. My people will make the substitution.", "Jeran still has the manifest, and his next shift begins soon. The replacement is useless if the original reaches the freight office.", "The substitution is complete. By morning, several crates of generators, medicine, and communications parts will exist only as restoration supplies for respectable galleries."),
 	makeMission("escort", "coruscant", "Extract a compromised courier", "theme_park_rebel_civilian_contact", "a compromised courier", nil, nil, twoTroopers, reward(850),
 		"A courier named Tessa Kord missed two check-ins after reporting surveillance. Find her and bring her here before Imperial Security closes the distance.", "Extract Tessa and watch her as carefully as the streets around her. If she has been turned, I need you to recognize it before she crosses this threshold.", "Every minute makes Tessa easier for Imperial Security to find. Bring her to the gallery.", "Tessa is alive. The route is burned, the safe locations are being emptied, and everyone she knew will have to disappear from her life. Survival has costs the survivor is seldom allowed to choose."),
 	makeMission("assassinate", "coruscant", "Silence an Imperial informant", "theme_park_rebel_bounty_hunter", "an Imperial informant", nil, nil, twoTroopers, reward(925),
@@ -241,9 +241,15 @@ luthenMissions[1].dialog.information = {
 	}
 }
 
-luthenMissions[2].primarySpawns[1].npcName = "Corporal Jeren Voss, an Imperial freight clerk"
-luthenMissions[2].dialog.introduction = "Calo will complain loudly, which is useful. A wounded collector is far more convincing than a silent conspirator. The cipher was untouched, and you did not decorate the assignment with improvisation. Good. Now we move from concealment to sabotage. Tomorrow morning, an Imperial freight office will inspect a shipment entering the district. Its manifest excludes everything we need and identifies everything we cannot afford to lose. We are going to change what the Empire believes it has seen."
-luthenMissions[2].dialog.acceptText = "I will recover the official manifest before the inspection."
+luthenMissions[2].primarySpawns[1].npcName = "Corporal Jeran Voss, an Imperial freight clerk"
+luthenMissions[2].primarySpawns[1].fixedSpawn = {x = -28.3, z = -0.9, y = 22.6, direction = 103, cellID = 37000979}
+luthenMissions[2].secondarySpawns = {
+	{npcTemplate = "stormtrooper", npcName = "an Imperial escort", fixedSpawn = {x = -30.3, z = -0.9, y = 22.6, direction = 103, cellID = 37000979}},
+	{npcTemplate = "stormtrooper", npcName = "an Imperial escort", fixedSpawn = {x = -26.3, z = -0.9, y = 22.6, direction = 103, cellID = 37000979}}
+}
+luthenMissions[2].staticCellID = 37000979
+luthenMissions[2].dialog.introduction = "Calo will complain loudly, which is useful. A wounded collector is far more convincing than a silent conspirator. The cipher was untouched, and you did not decorate the assignment with improvisation. Good. Now we move from concealment to sabotage. Tomorrow morning, an Imperial freight office will inspect a shipment entering the district. Corporal Jeran Voss carries the only certified copy of its manifest. Fortunately, Jeran prefers to spend his after-hours drinking in a bar on lower city level 1312, far from the discipline of his post. We are going to change what the Empire believes it has seen."
+luthenMissions[2].dialog.acceptText = "I will find Jeran, recover the manifest, and return before his shift."
 luthenMissions[2].dialog.declineText = "Then leave it. An operation survives a refusal more easily than a reluctant participant."
 luthenMissions[2].dialog.information = {
 	{
@@ -255,8 +261,8 @@ luthenMissions[2].dialog.information = {
 		text = "The replacement lists the crates as conservation equipment for several respectable galleries. The seals, routing numbers, and authorization chain will agree because careful people have spent weeks making them agree. We do not need to defeat the Imperial system. We need it to perform the wrong task with complete confidence."
 	},
 	{
-		prompt = "What happens to the freight clerk?",
-		text = "Corporal Jeren Voss carries the only certified copy outside the freight office. He will be guarded, and he will not surrender it because you explain that your cause is just. If you act, the Empire will recognize you as an enemy. Decide with that consequence in front of you, not behind you."
+		prompt = "Where will I find Jeran?",
+		text = "In his preferred bar on lower city level 1312. It is a rough district even by lower-city standards. Bar fights, robberies, and bodies in alleys are common enough that the authorities seldom investigate unless someone important complains. Jeran will have two escorts, but no one there will raise an eyebrow if an Imperial freight clerk is gunned down. Once you attack, the Empire will recognize you as an enemy. Recover the manifest and leave before anyone decides the disturbance is worth remembering."
 	}
 }
 
