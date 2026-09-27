@@ -360,7 +360,7 @@ function TatooineMosEisleyScreenPlay:spawnMountedNpcPrototype()
 	local y = -4813
 	local heading = math.rad(40)
 	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/speederbike_swoop.iff", x, z, y, 0, heading)
-	local pRider = spawnMobile(self.planet, "scout_trooper", 0, x, z, y, 40, 0)
+	local pRider = spawnMobile(self.planet, "scout_trooper", 0, x + 2, z, y, 40, 0)
 
 	if (pVehicle == nil or pRider == nil) then
 		if (pVehicle ~= nil) then
@@ -378,8 +378,7 @@ function TatooineMosEisleyScreenPlay:spawnMountedNpcPrototype()
 	CreatureObject(pRider):clearOptionBit(AIENABLED)
 
 	if not mountNpc(pRider, pVehicle) then
-		SceneObject(pRider):destroyObjectFromWorld()
-		SceneObject(pVehicle):destroyObjectFromWorld()
+		AiAgent(pRider):info("Mounted NPC prototype failed to attach to its swoop")
 	end
 end
 

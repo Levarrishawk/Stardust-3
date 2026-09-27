@@ -3163,8 +3163,26 @@ int DirectorManager::mountNpc(lua_State* L) {
 	CreatureObject* vehicle = vehicleObject != nullptr ? vehicleObject->asCreatureObject() : nullptr;
 	CreatureObject* rider = riderObject != nullptr ? riderObject->asCreatureObject() : nullptr;
 
-	if (vehicle == nullptr || rider == nullptr || !rider->isAiAgent() || !vehicle->isVehicleObject() ||
-			rider->getParent() != nullptr || vehicle->getParent() != nullptr || rider->getZone() != vehicle->getZone()) {
+	if (vehicle == nullptr || rider == nullptr) {
+		instance()->error("mountNpc failed: rider or vehicle is not a CreatureObject");
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	if (!rider->isAiAgent() || !vehicle->isVehicleObject()) {
+		instance()->error("mountNpc failed: rider is not an AiAgent or mount is not a VehicleObject");
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	if (rider->getParent() != nullptr || vehicle->getParent() != nullptr) {
+		instance()->error("mountNpc failed: rider or vehicle already has a parent");
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	if (rider->getZone() == nullptr || rider->getZone() != vehicle->getZone()) {
+		instance()->error("mountNpc failed: rider and vehicle are not in the same zone");
 		lua_pushboolean(L, false);
 		return 1;
 	}
@@ -3175,6 +3193,7 @@ int DirectorManager::mountNpc(lua_State* L) {
 
 	if (!vehicle->transferObject(rider, PlayerArrangement::RIDER, true)) {
 		vehicle->clearState(CreatureState::MOUNTEDCREATURE);
+		instance()->error("mountNpc failed: vehicle rejected the rider transfer");
 		lua_pushboolean(L, false);
 		return 1;
 	}
