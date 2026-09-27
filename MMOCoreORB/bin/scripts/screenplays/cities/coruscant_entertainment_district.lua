@@ -13,6 +13,16 @@ function CoruscantEntertainmentScreenPlay:start()
 	end
 end
 
+function CoruscantEntertainmentScreenPlay:animateCabaretDancer(pDancer)
+  if pDancer == nil or not SceneObject(pDancer):isCreatureObject() then
+    return
+  end
+
+  CreatureObject(pDancer):setPosture(SKILLANIMATING)
+  CreatureObject(pDancer):doAnimation("dance_8") -- exotic4
+  createEvent(9000, "CoruscantEntertainmentScreenPlay", "animateCabaretDancer", pDancer, "")
+end
+
 function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
 
 	--Monument Square Cantina Static Objects
@@ -345,10 +355,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   if pDancer ~= nil then
     SceneObject(pDancer):setCustomObjectName("Twi'lek Cabaret Dancer")
     AiAgent(pDancer):addObjectFlag(AI_STATIC)
-    CreatureObject(pDancer):setPosture(SKILLANIMATING)
-    CreatureObject(pDancer):setPerformanceAnimation("dance_8", true)
-    CreatureObject(pDancer):setPerformanceStartTime(0, true)
-    CreatureObject(pDancer):setPerformanceType(148, true)
+    self:animateCabaretDancer(pDancer)
   end
 
   local cabaretAudience = {
@@ -368,10 +375,6 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
     if pPatron ~= nil then
       AiAgent(pPatron):addObjectFlag(AI_STATIC)
       self:setMoodString(pPatron, audienceData[6])
-
-      if pDancer ~= nil then
-        CreatureObject(pPatron):setWatchToID(SceneObject(pDancer):getObjectID())
-      end
     end
   end
 
