@@ -224,8 +224,8 @@ luthenMissions[1].dialog.information = {
 		text = "A ceremonial vessel purchased by Calo Venn, a collector with more appetite than judgment. Publicly, the piece was removed from my inventory during a disputed consignment. Privately, a compartment in its base contains a routing cipher. Calo does not know it is there. I would like to preserve his ignorance."
 	},
 	{
-		prompt = "Why conceal a cipher in an antiquity?",
-		text = "Because Imperial inspectors understand contraband, weapons, and encrypted transmitters. They become impatient when confronted with provenance records and dead civilizations. My profession gives me a reason to move objects, meet wealthy strangers, and resent questions. A useful cover is one that remains true when examined."
+		prompt = "Why is the vessel so important?",
+		text = "Because there is a routing cipher concealed in its base. Imperial inspectors understand contraband, weapons, and encrypted transmitters. They become impatient when confronted with provenance records and dead civilizations. My profession gives me a reason to move objects, meet wealthy strangers, and resent questions. A useful cover is one that remains true when examined."
 	},
 	{
 		prompt = "Why send me?",
