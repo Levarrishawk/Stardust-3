@@ -4,6 +4,7 @@ luthen_rael_outfit = {
 			{"/shared_owner/index_color_skin", 12},
 			{"/shared_owner/blend_fat", 35},
 			{"/shared_owner/blend_skinny", 20},
+			{"/private/index_color_2", 23},
 			{"/private/index_style_beard", 0}
 		},
 
