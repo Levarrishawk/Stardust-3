@@ -875,6 +875,7 @@ function AlderaCityScreenPlay:spawnMobiles()
 
 	if (pBailOrgana ~= nil and SceneObject(pBailOrgana):isAiAgent()) then
 		AiAgent(pBailOrgana):addObjectFlag(AI_STATIC)
+		writeData("alderaCity:bailOrganaObjectID", SceneObject(pBailOrgana):getObjectID())
 	end
 
 	self:spawnCapitolMobiles()

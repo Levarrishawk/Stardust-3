@@ -26,6 +26,7 @@ luthen_rael = Creature:new {
 	optionsBitmask = INVULNERABLE + CONVERSABLE,
 	diet = HERBIVORE,
 	templates = {"object/mobile/bestine_museum_owner.iff"},
+	outfit = "luthen_rael_outfit",
 	lootGroups = {},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",

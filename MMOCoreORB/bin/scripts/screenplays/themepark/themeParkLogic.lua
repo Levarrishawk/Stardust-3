@@ -1858,6 +1858,11 @@ function ThemeParkLogic:getNpcWorldPosition(npcNumber)
 		local npcSpawnNumber = self.npcMap[i].npcNumber
 		if npcNumber == npcSpawnNumber then
 			local spawnedObjectID = self.npcMap[i].spawnedObjectID
+			local existingObjectIdLabel = self.npcMap[i].existingObjectIdLabel
+
+			if existingObjectIdLabel ~= nil and existingObjectIdLabel ~= "" then
+				spawnedObjectID = readData(existingObjectIdLabel)
+			end
 
 			if self.npcMap[i].useNpcWorldPosition == true and spawnedObjectID ~= nil then
 				local pNpc = getSceneObject(spawnedObjectID)
@@ -1866,6 +1871,20 @@ function ThemeParkLogic:getNpcWorldPosition(npcNumber)
 					worldPosition.x = SceneObject(pNpc):getWorldPositionX()
 					worldPosition.y = SceneObject(pNpc):getWorldPositionY()
 					return worldPosition
+				end
+			end
+
+			if self.npcMap[i].useCellWorldPosition == true and self.npcMap[i].spawnData.cellID ~= 0 then
+				local pCell = getSceneObject(self.npcMap[i].spawnData.cellID)
+
+				if pCell ~= nil then
+					local pBuilding = SceneObject(pCell):getParent()
+
+					if pBuilding ~= nil then
+						worldPosition.x = SceneObject(pBuilding):getWorldPositionX()
+						worldPosition.y = SceneObject(pBuilding):getWorldPositionY()
+						return worldPosition
+					end
 				end
 			end
 

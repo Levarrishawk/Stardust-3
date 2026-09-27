@@ -117,7 +117,7 @@ local bailMissions = {
 	makeMission("escort", "alderaan", "Extract a community organizer", "theme_park_rebel_civilian_contact", "a community organizer", nil, nil, twoTroopers, reward(550),
 		"A community organizer refused an Imperial labor decree. See that she reaches Alderaanian protection.", "She will be frightened. Give her reason to trust you.", "The organizer must be moved tonight.", "She is safe, and her people are not without leadership."),
 	makeMission("deliver", "coruscant", "Deliver an antiquities inquiry", "theme_park_rebel_civilian_contact", "an antiquities broker", "object/tangible/mission/mission_datadisk.iff", "Antiquities inquiry", nil, reward(625, 75),
-		"I require a discreet appraisal from a Coruscant antiquities dealer named Luthen Rael. Deliver this inquiry, then visit his gallery.", "To anyone who asks, this concerns a private Alderaanian collection.", "The gallery is expecting an inquiry from my office.", "Luthen has agreed to receive you. Listen to what he asks, and what he does not say.")
+		"I require a discreet appraisal from a Coruscant antiquities dealer named Luthen Rael. Deliver this inquiry to Davo Sorn, then return to me before approaching Luthen.", "Deliver the inquiry to Sorn, then return directly to me. To anyone who asks, this concerns a private Alderaanian collection.", "Davo Sorn is waiting for the inquiry. Return to me after the handoff.", "I have received word from Davo Sorn. The inquiry was accepted, and an appointment has been made for you to meet with Luthen. Proceed to his shop in the Collective Commerce District on Coruscant. Luthen has agreed to receive you. Listen to what he asks, and what he does not say.")
 }
 
 bailMissions[1].primarySpawns[1].npcName = "Neris Kaal, a diplomatic courier"
@@ -183,8 +183,9 @@ bailMissions[4].primarySpawns[1].npcName = "Davo Sorn, an antiquities broker"
 bailMissions[4].primarySpawns[1].fixedSpawn = {x=9.0, z=0.5, y=-2.5, direction=-90, cellID=37000721}
 bailMissions[4].staticCellID = 37000721
 bailMissions[4].dialog.introduction = "Maren is safe, and the communities around her are reorganizing before the Empire can identify their new lines of support. You have now carried information, recovered what Imperial Security stole, and protected someone whose work is larger than any one mission. Those acts have also made you visible. If you intend to continue, you will need contacts beyond Alderaan and a better understanding of how such efforts remain separate while still serving the same purpose. A Coruscant antiquities dealer named Luthen Rael may be willing to speak with you."
-bailMissions[4].dialog.acceptText = "I will deliver the inquiry and visit Luthen's gallery."
+bailMissions[4].dialog.acceptText = "I will deliver the inquiry to Sorn and return to you."
 bailMissions[4].dialog.declineText = "That may be the wiser choice. Once you enter Luthen's world, good intentions will protect neither you nor the people around you."
+bailMissions[4].dialog.completed = "I have received word from Davo Sorn. The inquiry was accepted, and an appointment has been made for you to meet with Luthen. Proceed to his shop in the Collective Commerce District on Coruscant. Luthen has agreed to receive you. Listen to what he asks, and what he does not say."
 bailMissions[4].dialog.information = {
 	{
 		prompt = "Why an antiquities dealer?",
@@ -196,21 +197,116 @@ bailMissions[4].dialog.information = {
 	},
 	{
 		prompt = "How do I make contact?",
-		text = "Deliver this antiquities inquiry to Davo Sorn, a broker who handles acquisitions for Luthen's gallery. It contains nothing incriminating; its wording is the introduction. After the handoff, go to Luthen's shop on Coruscant and approach him as a prospective client. Do not mention me, Mira, or the work you have done unless Luthen does so first."
+		text = "Deliver this antiquities inquiry to Davo Sorn, a broker who handles acquisitions for Luthen's gallery. It contains nothing incriminating; its wording is the introduction. After the handoff, return here and report to me. I will confirm whether Luthen has accepted the introduction and tell you where to meet him. Do not approach Luthen before you have heard that confirmation."
 	}
 }
 
 local luthenMissions = {
 	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_civilian_contact", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
-		"A collector has an object that belongs in my gallery. What is concealed inside is considerably more valuable.", "You are retrieving art. Maintain that fiction.", "The collector still has my property.", "The object will be separated from its more useful contents."),
+		"A client has mistaken possession for ownership. Recover a ceremonial vessel from him and return it to this gallery. You are retrieving art. Maintain that fiction.", "Recover the vessel, discuss nothing beyond its provenance, and return directly to me.", "The collector still has my property. Every delay gives him another opportunity to discover what he bought.", "The vessel is intact, and so is what was concealed inside it. You followed the instruction without demanding the whole design. That is rarer than discretion."),
 	makeMission("confiscate", "coruscant", "Replace an Imperial cargo manifest", "imperial_staff_corporal", "an Imperial freight clerk", "object/tangible/mission/mission_datadisk.iff", "Imperial cargo manifest", twoTroopers, reward(775),
-		"A freight clerk carries tomorrow's inspection manifest. Bring it to me before the first shift.", "The Empire must believe its records were misplaced, not altered.", "We have a narrow window to change that manifest.", "Several crates will now pass inspection as restoration supplies."),
+		"An Imperial freight clerk carries tomorrow's inspection manifest. Intercept him, recover it, and bring it here before the first shift. The Empire must believe its records were misplaced, not altered.", "Take the official manifest from the clerk and return it to me. My people will make the substitution.", "The inspection window is closing. If the original manifest reaches its office, the replacement becomes useless.", "The substitution is complete. By morning, several crates of generators, medicine, and communications parts will exist only as restoration supplies for respectable galleries."),
 	makeMission("escort", "coruscant", "Extract a compromised courier", "theme_park_rebel_civilian_contact", "a compromised courier", nil, nil, twoTroopers, reward(850),
-		"A courier missed two check-ins. Find them before Imperial Security does.", "If the courier has been turned, recognize it before they reach this shop.", "Every minute makes the courier easier to find.", "The route is burned, but routes can be rebuilt."),
+		"A courier named Tessa Kord missed two check-ins after reporting surveillance. Find her and bring her here before Imperial Security closes the distance.", "Extract Tessa and watch her as carefully as the streets around her. If she has been turned, I need you to recognize it before she crosses this threshold.", "Every minute makes Tessa easier for Imperial Security to find. Bring her to the gallery.", "Tessa is alive. The route is burned, the safe locations are being emptied, and everyone she knew will have to disappear from her life. Survival has costs the survivor is seldom allowed to choose."),
 	makeMission("assassinate", "coruscant", "Silence an Imperial informant", "theme_park_rebel_bounty_hunter", "an Imperial informant", nil, nil, twoTroopers, reward(925),
-		"An informant sold the names of an entire workers' circle. Ensure the transfer never happens.", "Do not be seen returning here.", "The informant is preparing to deliver the names.", "The circle survives. They will never know why."),
+		"An informant named Pell Daro has sold the names of an entire workers' circle. He will deliver them to Imperial Security tonight. Stop the transfer permanently.", "Find Pell, make certain the list cannot be recovered, and do not let anyone trace you back to this gallery.", "Pell is preparing to deliver those names. If he reaches Imperial Security, the arrests will begin before dawn.", "The list will not be delivered. The workers will wake tomorrow believing they were merely fortunate. Let them. The people who remain innocent of this work are the reason we accept its cost."),
 	makeMission("retrieve", "coruscant", "Acquire military power regulators", "theme_park_rebel_hyperdrive_seller", "an unlicensed component dealer", "object/tangible/loot/misc/hyperdrive_part_s01.iff", "Military power regulators", nil, reward(1000, 100),
-		"A dealer has military power regulators. Recover them, then take them to Saw Gerrera on Lok.", "Gerrera is not part of my network. Remember that distinction.", "The regulators must not enter the Imperial supply chain.", "Saw will decide whether you are useful to him.")
+		"An unlicensed dealer has military power regulators meant for an Imperial buyer. Acquire them and return them here. They are needed by Saw Gerrera's cell on Lok.", "Recover the regulators and bring them back to me. I will arrange their movement; you will carry only an introduction to Saw.", "The regulators must not enter the Imperial supply chain. Recover them before the dealer completes the sale.", "The regulators are already being moved through channels that cannot identify this shop. Saw Gerrera has been told to expect you on Lok. He is not part of my network, and an introduction is not protection. Remember both facts.")
+}
+
+luthenMissions[1].primarySpawns[1].npcName = "Calo Venn, a private collector"
+luthenMissions[1].dialog.introduction = "Ah, Bail's new acquaintance. Welcome. You have arrived at an unusually fortunate moment; I have just received a piece from the old Hosnian schools, all severity from a distance and exquisite compromise up close. That is the trouble with history: everyone admires the finished object, and no one wishes to discuss what it cost. Now, the door is closed, so we can stop admiring it. Bail believes you can follow an instruction without turning curiosity into a liability. I prefer evidence."
+luthenMissions[1].dialog.acceptText = "I will recover the vessel and preserve the fiction."
+luthenMissions[1].dialog.declineText = "Then enjoy the gallery. A person may appreciate history without volunteering to become part of it."
+luthenMissions[1].dialog.information = {
+	{
+		prompt = "What am I recovering?",
+		text = "A ceremonial vessel purchased by Calo Venn, a collector with more appetite than judgment. Publicly, the piece was removed from my inventory during a disputed consignment. Privately, a compartment in its base contains a routing cipher. Calo does not know it is there. I would like to preserve his ignorance."
+	},
+	{
+		prompt = "Why conceal a cipher in an antiquity?",
+		text = "Because Imperial inspectors understand contraband, weapons, and encrypted transmitters. They become impatient when confronted with provenance records and dead civilizations. My profession gives me a reason to move objects, meet wealthy strangers, and resent questions. A useful cover is one that remains true when examined."
+	},
+	{
+		prompt = "Why send me?",
+		text = "Because Bail trusts your intentions, and intentions are the least interesting part of a person. I need to know whether you can control your curiosity, preserve a harmless explanation, and return with exactly what I requested. Never carry anything you do not control, including the questions you ask."
+	}
+}
+
+luthenMissions[2].primarySpawns[1].npcName = "Corporal Jeren Voss, an Imperial freight clerk"
+luthenMissions[2].dialog.introduction = "Calo will complain loudly, which is useful. A wounded collector is far more convincing than a silent conspirator. The cipher was untouched, and you did not decorate the assignment with improvisation. Good. Now we move from concealment to sabotage. Tomorrow morning, an Imperial freight office will inspect a shipment entering the district. Its manifest excludes everything we need and identifies everything we cannot afford to lose. We are going to change what the Empire believes it has seen."
+luthenMissions[2].dialog.acceptText = "I will recover the official manifest before the inspection."
+luthenMissions[2].dialog.declineText = "Then leave it. An operation survives a refusal more easily than a reluctant participant."
+luthenMissions[2].dialog.information = {
+	{
+		prompt = "What is in the shipment?",
+		text = "Medical stores, compact generators, transmitter components, and machine tools. Nothing glorious. Glory does not keep a clinic lit or a hidden transmitter alive. Rebellion begins with ordinary things placed where the Empire has decided they may not go."
+	},
+	{
+		prompt = "How will changing one manifest help?",
+		text = "The replacement lists the crates as conservation equipment for several respectable galleries. The seals, routing numbers, and authorization chain will agree because careful people have spent weeks making them agree. We do not need to defeat the Imperial system. We need it to perform the wrong task with complete confidence."
+	},
+	{
+		prompt = "What happens to the freight clerk?",
+		text = "Corporal Jeren Voss carries the only certified copy outside the freight office. He will be guarded, and he will not surrender it because you explain that your cause is just. If you act, the Empire will recognize you as an enemy. Decide with that consequence in front of you, not behind you."
+	}
+}
+
+luthenMissions[3].primarySpawns[1].npcName = "Tessa Kord, a compromised courier"
+luthenMissions[3].dialog.introduction = "The shipment cleared inspection. Somewhere beyond this district, people who will never know your name are unpacking the means to endure another month. That is victory at this stage: small, invisible, and never sufficient. One of the couriers who made that route possible has missed two check-ins. Tessa Kord reported surveillance before her comlink went silent. She may be hiding. She may be detained. She may have been turned. You will find out which."
+luthenMissions[3].dialog.acceptText = "I will find Tessa and bring her here if the route is safe."
+luthenMissions[3].dialog.declineText = "Then I will close the route without her. That is colder, but delay would be crueler to everyone else using it."
+luthenMissions[3].dialog.information = {
+	{
+		prompt = "Who is Tessa?",
+		text = "A records clerk who learned that famine figures were being revised to justify new requisitions. She began moving messages for us because facts are useless when they cannot reach anyone willing to act on them. She is disciplined, observant, and now frightened. Do not confuse fear with betrayal. Do not confuse affection with proof of innocence."
+	},
+	{
+		prompt = "What do you mean by compromised?",
+		text = "It means I no longer control the conditions around her. Imperial Security may be following her, feeding her instructions, or waiting to see where she runs. If you find surveillance, break it before approaching. If her account does not hold together, do not lead her blindly to this shop. Judgment is the assignment, not merely the escort."
+	},
+	{
+		prompt = "What happens after I bring her back?",
+		text = "She will be questioned, moved, and given a new identity if we believe she is clean. The route will be dismantled either way. Tessa may survive and still lose her work, her home, and everyone who knows her. We ask people to sacrifice before we have earned the right to promise them a better world. Remember that when this begins to feel simple."
+	}
+}
+
+luthenMissions[4].primarySpawns[1].npcName = "Pell Daro, an Imperial informant"
+luthenMissions[4].dialog.introduction = "Tessa was not turned. She was followed because someone sold the route from the other end. Pell Daro has spent months attending workers' meetings, listening to people speak as though solidarity made a room private. Tonight he intends to sell Imperial Security the names of everyone in that circle. If the transfer occurs, arrests begin before dawn. There is no extraction to arrange and no document we can replace. Pell must not complete the sale."
+luthenMissions[4].dialog.acceptText = "I understand. Pell will not deliver the names."
+luthenMissions[4].dialog.declineText = "Keep your refusal. It may be the last uncomplicated thing you own. I will still stop him."
+luthenMissions[4].dialog.information = {
+	{
+		prompt = "Are you certain he is the informant?",
+		text = "Three fragments of information were given to three people. Only Pell's fragment appeared in an Imperial detention order. We repeated the test. The result was the same. Certainty is expensive, so I paid for it before asking you to pay the consequence."
+	},
+	{
+		prompt = "Can we move the workers instead?",
+		text = "Some care for children, infirm parents, and entire neighborhoods. Moving them all would confirm the conspiracy Pell invented and abandon everyone who depends on them. Even if we succeeded, he would sell the next circle. Mercy for one informant becomes a sentence imposed on strangers."
+	},
+	{
+		prompt = "Why ask me to do this?",
+		text = "Because you have seen what our small victories require, and because I need to know whether you understand that resistance is not made clean by calling it necessary. If you accept, do not tell yourself Pell forced your hand. You will choose a life against many others. Own the choice, or do not make it."
+	}
+}
+
+luthenMissions[5].primarySpawns[1].npcName = "Naro Bel, an unlicensed component dealer"
+luthenMissions[5].dialog.introduction = "The workers' circle is safe. They will never know how close they came to disappearing into detention cells, and they should not have to thank us for preventing it. You have now carried secrets, altered an Imperial process, recovered one of our own, and accepted a consequence no speech can improve. I have one final task before I introduce you to a man who has little use for speeches. Saw Gerrera needs military power regulators on Lok. An unlicensed dealer named Naro Bel has a set promised to an Imperial buyer. Recover them first."
+luthenMissions[5].dialog.acceptText = "I will recover the regulators and return them to you."
+luthenMissions[5].dialog.declineText = "Then Saw remains my problem, not yours. There are worse boundaries to keep."
+luthenMissions[5].dialog.information = {
+	{
+		prompt = "What does Saw need them for?",
+		text = "Field generators, encrypted transmitters, and machinery his people keep alive by rebuilding it faster than it fails. Regulators are mundane enough to disappear in commerce and controlled tightly enough to cripple a cell that lacks them. The Empire understands that wars can be prevented by denying people the parts required to begin one."
+	},
+	{
+		prompt = "Is Saw part of your network?",
+		text = "No. That distinction protects both of us. Saw acts directly, accepts casualties I work to avoid, and believes caution becomes surrender long before I do. He is also fighting the same machinery of fear, and he has people who need what we can provide. Cooperation is not control. Never mistake one for the other."
+	},
+	{
+		prompt = "Why send me to meet him?",
+		text = "Because Saw judges commitment in person, and because the next stage of this work cannot be conducted entirely through galleries and senatorial offices. Return the regulators to me; my channels will move them without tying you to the shipment. Then go to Lok with only my introduction. Saw will decide what use he has for you."
+	}
 }
 
 local sawMissions = {
@@ -254,23 +350,49 @@ local yavinMissions = {
 
 local npcMapRebel = {
 	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, npcNumber=1, stfFile="", missions=attacheMissions, noFactionDialog="The Alderaanian Relief Office accepts donations through the public registry. If you require assistance, a clerk can direct you.", lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
-	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Luthen's gallery is on Coruscant."},
-	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=0,z=0,y=0,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, noFactionDialog="I deal in antiquities. If you are not here to acquire something, I have other clients waiting.", lockedDialog="The gallery is open to serious clients only.", completedDialog="Saw Gerrera is waiting on Lok. Do not mistake an introduction for trust."},
+	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, useCellWorldPosition=true, existingObjectIdLabel="alderaCity:bailOrganaObjectID", npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Luthen's shop is in the Collective Commerce District on Coruscant. He is expecting you."},
+	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=0,z=0,y=0,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, noFactionDialog="Welcome. The gallery is open, though I am afraid today's private appointments are already spoken for. Please, take your time with the collection. Antiquities reward patience, and discretion even more so.", lockedDialog="I remember you, of course. Senatorial circles do send the most fascinating clients. Our business, however, cannot proceed until your earlier obligation is complete. Provenance matters; one unfinished history can compromise an entire collection.", completedDialog="Saw Gerrera is waiting on Lok. Go without the regulators; they are traveling by a safer route. Give him my name once, then let him decide what it is worth. He is not part of my network, and an introduction is not trust."},
 	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=38,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, noFactionDialog="You took a wrong turn. Leave before my people decide you were scouting the camp.", lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
 	{spawnData = {planetName="chandrila", npcTemplate="mon_mothma", x=6,z=0.6,y=-5.5,direction=-90,cellID=35791665,position=STAND}, worldPosition={x=294,y=-2938}, npcNumber=16, stfFile="", missions=mothmaMissions, noFactionDialog="I am here on senatorial business. Please direct constituency matters to my staff.", lockedDialog="I am here on senatorial business.", completedDialog="The final shipments are being routed to a small cell on Yavin Four."},
 	{spawnData = {planetName="yavin4", npcTemplate="yavin_cell_commander", x=-25,z=32,y=68,direction=180,cellID=3465358,position=STAND}, worldPosition={x=-3050,y=-2950}, npcNumber=32, stfFile="", missions=yavinMissions, noFactionDialog="This is restricted territory. Turn around, leave by the route you used, and do not return.", lockedDialog="This facility is not open to visitors.", completedDialog="The route is holding. You helped turn an isolated cell into something that can endure."}
 }
 
 local sceneObjectMapRebel = {
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=-5,z=0,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Display"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-5,z=0.5,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Ancient Ceremonial Vessel"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=0,z=0,y=4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Display"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=0,z=0.5,y=4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Pre-Republic Sculpture"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=5,z=0,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Display"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_02.iff",x=5,z=0.5,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Outer Rim Funerary Urn"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/modern/bar_counter_s1.iff",x=0,z=0,y=-4.5,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Consultation Counter"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_data_terminal_free_s1.iff",x=-3,z=0,y=-2,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Private Catalog Terminal"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/container/drum/large_plain_crate_s01.iff",x=3.5,z=0,y=-3.5,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Uncatalogued Acquisition"}
+	-- Luthen's public gallery. This interior uses a 0.5 meter floor height.
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_rug_rectangle_large_style_02.iff",x=0,z=0.51,y=0.4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Woven Chandrilan Gallery Rug"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-3.0,z=0.5,y=2.2,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Illuminated Antiquities Plinth"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-3.0,z=1.25,y=2.2,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Ancient Ceremonial Vessel"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=0,z=0.5,y=3.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Illuminated Antiquities Plinth"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=0,z=1.25,y=3.1,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Republic Devotional Sculpture"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=3.0,z=0.5,y=2.2,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Illuminated Antiquities Plinth"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_02.iff",x=3.0,z=1.25,y=2.2,cellID=37002117,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Outer Rim Funerary Urn"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_lg_s1.iff",x=-3.3,z=0.5,y=-2.8,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Old Republic Bronze"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_lg_s2.iff",x=3.3,z=0.5,y=-2.8,cellID=37002117,dw=0.7071,dx=0,dy=-0.7071,dz=0},customObjectName="Senatorial Era Sculpture"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=-3.6,z=0.5,y=0.0,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Light"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=3.6,z=0.5,y=0.0,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Light"},
+
+	-- The adjoining room presents as a private appraisal and consultation salon.
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_rug_rectangle_large_style_01.iff",x=0,z=0.51,y=0,cellID=37002118,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Imported Consultation Rug"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/couch_s01.iff",x=0,z=0.5,y=3.0,cellID=37002118,dw=0,dx=0,dy=1,dz=0},customObjectName="Client Divan"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/chair_s01.iff",x=-2.5,z=0.5,y=-0.5,cellID=37002118,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Appraisal Chair"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/chair_s01.iff",x=2.5,z=0.5,y=-0.5,cellID=37002118,dw=0.7071,dx=0,dy=-0.7071,dz=0},customObjectName="Appraisal Chair"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=0,z=0.5,y=0.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Private Appraisal Table"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/decorative/carved_bowl.iff",x=0,z=1.15,y=0.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Carved Naboo Offering Bowl"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-3.2,z=0.5,y=2.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Salon Display Stand"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s1.iff",x=-3.2,z=1.25,y=2.7,cellID=37002118,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Alderaanian Reliquary"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=3.2,z=0.5,y=2.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Salon Display Stand"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s2.iff",x=3.2,z=1.25,y=2.7,cellID=37002118,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Archaic Navigation Instrument"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=-3.4,z=0.5,y=-2.5,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Appraisal Lamp"},
+
+	-- The rear room is deliberately less theatrical: cataloguing in front, operations beneath it.
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_professor_desk.iff",x=0,z=0.5,y=2.8,cellID=37002119,dw=0,dx=0,dy=1,dz=0},customObjectName="Curator's Desk"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/modern/chair_modern_style_01.iff",x=0,z=0.5,y=1.2,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Curator's Chair"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_data_terminal_free_s1.iff",x=-3.0,z=0.5,y=2.8,cellID=37002119,dw=0,dx=0,dy=1,dz=0},customObjectName="Private Catalog Terminal"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_technical_console_s01.iff",x=3.0,z=0.5,y=2.8,cellID=37002119,dw=0,dx=0,dy=1,dz=0},customObjectName="Restoration Analysis Console"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-3.2,z=0.5,y=-2.5,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Uncatalogued Display"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s4.iff",x=-3.2,z=1.25,y=-2.5,cellID=37002119,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Uncatalogued Acquisition"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/container/drum/large_plain_crate_s01.iff",x=3.1,z=0.5,y=-2.8,cellID=37002119,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Restoration Shipment"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/container/drum/large_plain_crate_s01.iff",x=2.1,z=0.5,y=-3.2,cellID=37002119,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Awaiting Cataloguing"}
 	,{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5665,z=38,y=-4818,cellID=0,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Partisan Field Shelter"}
 	,{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5656,z=38,y=-4826,cellID=0,dw=0.3827,dx=0,dy=0.9239,dz=0},customObjectName="Partisan Supply Shelter"}
 	,{spawnData={planetName="lok",objectTemplate="object/static/structure/general/campfire_smoldering.iff",x=-5660,z=38,y=-4823,cellID=0,dw=1,dx=0,dy=0,dz=0},customObjectName="Banked Campfire"}
@@ -360,7 +482,14 @@ end
 
 theme_park_rebel_mission_target_conv_handler = mission_target_conv_handler:new {themePark=ThemeParkRebel}
 function theme_park_rebel_mission_target_conv_handler:handleScreenSmuggle(t,p,n,o,s)
-	local result=mission_target_conv_handler.handleScreenSmuggle(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("You are the contact? Good. Let us finish before anyone notices."); return result
+	local npcNumber=self.themePark:getActiveNpcNumber(p); local missionNumber=self.themePark:getCurrentMissionNumber(npcNumber,p)
+	local result=mission_target_conv_handler.handleScreenSmuggle(self,t,p,n,o,s); local screen=LuaConversationScreen(result)
+	if npcNumber==2 and missionNumber==4 then
+		screen:setCustomDialogText("The inquiry is in order. I will send word through the agreed channel. Return to Senator Organa and wait for him to confirm whether an appointment has been made. Do not approach Luthen's shop before you receive that confirmation.")
+	else
+		screen:setCustomDialogText("You are the contact? Good. Let us finish before anyone notices.")
+	end
+	return result
 end
 function theme_park_rebel_mission_target_conv_handler:handleScreenTakeMe(t,p,n,o,s)
 	local result=mission_target_conv_handler.handleScreenTakeMe(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("I was told someone might come. Get me out of here."); return result
