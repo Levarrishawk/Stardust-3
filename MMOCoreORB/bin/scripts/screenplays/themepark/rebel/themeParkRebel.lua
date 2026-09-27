@@ -358,41 +358,16 @@ local npcMapRebel = {
 }
 
 local sceneObjectMapRebel = {
-	-- Luthen's public gallery. This interior uses a 0.5 meter floor height.
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_rug_rectangle_large_style_02.iff",x=0,z=0.51,y=0.4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Woven Chandrilan Gallery Rug"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-3.0,z=0.5,y=2.2,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Illuminated Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-3.0,z=1.25,y=2.2,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Ancient Ceremonial Vessel"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=0,z=0.5,y=3.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Illuminated Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=0,z=1.25,y=3.1,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Republic Devotional Sculpture"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=3.0,z=0.5,y=2.2,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Illuminated Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_02.iff",x=3.0,z=1.25,y=2.2,cellID=37002117,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Outer Rim Funerary Urn"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_lg_s1.iff",x=-3.3,z=0.5,y=-2.8,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Old Republic Bronze"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_lg_s2.iff",x=3.3,z=0.5,y=-2.8,cellID=37002117,dw=0.7071,dx=0,dy=-0.7071,dz=0},customObjectName="Senatorial Era Sculpture"},
+	-- Luthen's public gallery. The end-table mesh has a low pivot, so the plinths sit at 1.0.
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-3.0,z=1.0,y=2.4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-3.0,z=1.75,y=2.4,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Ancient Ceremonial Vessel"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=0,z=1.0,y=3.3,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=0,z=1.75,y=3.3,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Republic Devotional Sculpture"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=3.0,z=1.0,y=2.4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_02.iff",x=3.0,z=1.75,y=2.4,cellID=37002117,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Outer Rim Funerary Urn"},
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=-3.6,z=0.5,y=0.0,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Light"},
 	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=3.6,z=0.5,y=0.0,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Light"},
 
-	-- The adjoining room presents as a private appraisal and consultation salon.
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_rug_rectangle_large_style_01.iff",x=0,z=0.51,y=0,cellID=37002118,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Imported Consultation Rug"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/couch_s01.iff",x=0,z=0.5,y=3.0,cellID=37002118,dw=0,dx=0,dy=1,dz=0},customObjectName="Client Divan"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/chair_s01.iff",x=-2.5,z=0.5,y=-0.5,cellID=37002118,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Appraisal Chair"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/chair_s01.iff",x=2.5,z=0.5,y=-0.5,cellID=37002118,dw=0.7071,dx=0,dy=-0.7071,dz=0},customObjectName="Appraisal Chair"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=0,z=0.5,y=0.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Private Appraisal Table"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/decorative/carved_bowl.iff",x=0,z=1.15,y=0.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Carved Naboo Offering Bowl"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-3.2,z=0.5,y=2.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Salon Display Stand"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s1.iff",x=-3.2,z=1.25,y=2.7,cellID=37002118,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Alderaanian Reliquary"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=3.2,z=0.5,y=2.7,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Salon Display Stand"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s2.iff",x=3.2,z=1.25,y=2.7,cellID=37002118,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Archaic Navigation Instrument"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=-3.4,z=0.5,y=-2.5,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Appraisal Lamp"},
-
-	-- The rear room is deliberately less theatrical: cataloguing in front, operations beneath it.
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_professor_desk.iff",x=0,z=0.5,y=2.8,cellID=37002119,dw=0,dx=0,dy=1,dz=0},customObjectName="Curator's Desk"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/modern/chair_modern_style_01.iff",x=0,z=0.5,y=1.2,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Curator's Chair"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_data_terminal_free_s1.iff",x=-3.0,z=0.5,y=2.8,cellID=37002119,dw=0,dx=0,dy=1,dz=0},customObjectName="Private Catalog Terminal"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_technical_console_s01.iff",x=3.0,z=0.5,y=2.8,cellID=37002119,dw=0,dx=0,dy=1,dz=0},customObjectName="Restoration Analysis Console"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-3.2,z=0.5,y=-2.5,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Uncatalogued Display"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s4.iff",x=-3.2,z=1.25,y=-2.5,cellID=37002119,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Uncatalogued Acquisition"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/container/drum/large_plain_crate_s01.iff",x=3.1,z=0.5,y=-2.8,cellID=37002119,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Restoration Shipment"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/container/drum/large_plain_crate_s01.iff",x=2.1,z=0.5,y=-3.2,cellID=37002119,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Awaiting Cataloguing"}
 	,{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5665,z=38,y=-4818,cellID=0,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Partisan Field Shelter"}
 	,{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5656,z=38,y=-4826,cellID=0,dw=0.3827,dx=0,dy=0.9239,dz=0},customObjectName="Partisan Supply Shelter"}
 	,{spawnData={planetName="lok",objectTemplate="object/static/structure/general/campfire_smoldering.iff",x=-5660,z=38,y=-4823,cellID=0,dw=1,dx=0,dy=0,dz=0},customObjectName="Banked Campfire"}
