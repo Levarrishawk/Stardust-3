@@ -47,6 +47,7 @@
 #include "templates/params/creature/CreatureAttribute.h"
 #include "templates/params/creature/CreatureState.h"
 #include "templates/params/creature/CreaturePosture.h"
+#include "templates/params/creature/PlayerArrangement.h"
 #include "server/zone/objects/creature/ai/LuaAiAgent.h"
 #include "server/zone/objects/area/LuaActiveArea.h"
 #include "server/zone/objects/creature/conversation/ConversationScreen.h"
@@ -464,6 +465,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->registerFunction("writeStringVectorSharedMemory", writeStringVectorSharedMemory);
 	luaEngine->registerFunction("deleteStringVectorSharedMemory", deleteStringVectorSharedMemory);
 	luaEngine->registerFunction("spawnSceneObject", spawnSceneObject);
+	luaEngine->registerFunction("mountNpc", mountNpc);
 	luaEngine->registerFunction("spawnActiveArea", spawnActiveArea);
 	luaEngine->registerFunction("spawnRectangularActiveArea", spawnRectangularActiveArea);
 	luaEngine->registerFunction("spawnSpaceActiveArea", spawnSpaceActiveArea);
@@ -3143,6 +3145,44 @@ int DirectorManager::spawnSceneObject(lua_State* L) {
 		lua_pushnil(L);
 	}
 
+	return 1;
+}
+
+int DirectorManager::mountNpc(lua_State* L) {
+	int numberOfArguments = lua_gettop(L);
+
+	if (numberOfArguments != 2) {
+		String err = "incorrect number of arguments passed to DirectorManager::mountNpc";
+		printTraceError(L, err);
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	SceneObject* vehicleObject = (SceneObject*) lua_touserdata(L, -1);
+	SceneObject* riderObject = (SceneObject*) lua_touserdata(L, -2);
+	CreatureObject* vehicle = vehicleObject != nullptr ? vehicleObject->asCreatureObject() : nullptr;
+	CreatureObject* rider = riderObject != nullptr ? riderObject->asCreatureObject() : nullptr;
+
+	if (vehicle == nullptr || rider == nullptr || !rider->isAiAgent() || !vehicle->isVehicleObject() ||
+			rider->getParent() != nullptr || vehicle->getParent() != nullptr || rider->getZone() != vehicle->getZone()) {
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	Locker locker(vehicle, rider);
+
+	vehicle->setState(CreatureState::MOUNTEDCREATURE);
+
+	if (!vehicle->transferObject(rider, PlayerArrangement::RIDER, true)) {
+		vehicle->clearState(CreatureState::MOUNTEDCREATURE);
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	rider->synchronizeCloseObjects();
+	rider->setState(CreatureState::RIDINGMOUNT);
+
+	lua_pushboolean(L, true);
 	return 1;
 }
 

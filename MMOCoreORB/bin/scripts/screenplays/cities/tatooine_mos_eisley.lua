@@ -350,6 +350,36 @@ function TatooineMosEisleyScreenPlay:start()
 		self:spawnStationaryMobiles()
 		self:spawnSceneObjects()
 		self:spawnGcwMobiles()
+		self:spawnMountedNpcPrototype()
+	end
+end
+
+function TatooineMosEisleyScreenPlay:spawnMountedNpcPrototype()
+	local x = 3519
+	local z = 5
+	local y = -4813
+	local heading = math.rad(40)
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/speederbike_swoop.iff", x, z, y, 0, heading)
+	local pRider = spawnMobile(self.planet, "scout_trooper", 0, x, z, y, 40, 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+
+		return
+	end
+
+	AiAgent(pRider):addObjectFlag(AI_STATIC)
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+
+	if not mountNpc(pRider, pVehicle) then
+		SceneObject(pRider):destroyObjectFromWorld()
+		SceneObject(pVehicle):destroyObjectFromWorld()
 	end
 end
 
