@@ -1,17 +1,17 @@
-bail_organa = Creature:new {
-	customName = "Senator Bail Organa",
-	socialGroup = "rebel",
-  faction = "rebel",
+luthen_rael = Creature:new {
+	customName = "Luthen Rael",
+	socialGroup = "townsperson",
+	faction = "",
 	mobType = MOB_NPC,
-	level = 100,
-	chanceHit = 1,
-	damageMin = 645,
-	damageMax = 1000,
+	level = 50,
+	chanceHit = 0.75,
+	damageMin = 150,
+	damageMax = 250,
 	baseXp = 0,
-	baseHAM = 240000,
-	baseHAMmax = 300000,
+	baseHAM = 12000,
+	baseHAMmax = 12000,
 	armor = 0,
-	resists = {0,0,0,0,0,0,0,0,-1},
+	resists = {0, 0, 0, 0, 0, 0, 0, 0, -1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -23,17 +23,15 @@ bail_organa = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = PACK,
-	optionsBitmask = INVULNERABLE + CONVERSABLE + INTERESTING,
+	optionsBitmask = INVULNERABLE + CONVERSABLE,
 	diet = HERBIVORE,
-
 	templates = {"object/mobile/bestine_museum_owner.iff"},
 	lootGroups = {},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
 	conversationTemplate = "theme_park_rebel_mission_giver_convotemplate",
-	outfit = "bail_organa_outfit",
 	primaryAttacks = {},
 	secondaryAttacks = {}
 }
 
-CreatureTemplates:addCreatureTemplate(bail_organa, "bail_organa")
+CreatureTemplates:addCreatureTemplate(luthen_rael, "luthen_rael")

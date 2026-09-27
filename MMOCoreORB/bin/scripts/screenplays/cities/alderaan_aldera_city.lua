@@ -878,12 +878,6 @@ function AlderaCityScreenPlay:spawnMobiles()
 		AiAgent(pBailOrgana):addObjectFlag(AI_STATIC)
 	end
 
-	local pLeiaOrgana = spawnMobile("alderaan", "leia_organa", 60, -35.6, 1.3, -0.5, 153, 610000025)
-
-	if (pLeiaOrgana ~= nil and SceneObject(pLeiaOrgana):isAiAgent()) then
-		AiAgent(pLeiaOrgana):addObjectFlag(AI_STATIC)
-	end
-
 	self:spawnCapitolMobiles()
 	self:spawnTheaterMobiles()
 	self:spawnHotelMobiles()

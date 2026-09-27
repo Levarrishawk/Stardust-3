@@ -57,38 +57,43 @@ function ThemeParkLogic:spawnNpcs()
 	for i = 1, # self.npcMap do
 		local npcSpawnData = self.npcMap[i].spawnData
 
-		if (npcSpawnData.npcTemplate == nil or npcSpawnData.npcTemplate == "") then
-			printLuaError("Unable to spawn quest NPC for screenplay " .. self.className .. ", no npc template found in screenplay.")
-			return false
-		end
+		-- Some theme parks attach progression to an NPC that is owned by a city
+		-- screenplay.  Keep that NPC in the map for mission-state and waypoint
+		-- resolution without spawning a duplicate copy.
+		if (npcSpawnData.existingSpawn ~= true) then
+			if (npcSpawnData.npcTemplate == nil or npcSpawnData.npcTemplate == "") then
+				printLuaError("Unable to spawn quest NPC for screenplay " .. self.className .. ", no npc template found in screenplay.")
+				return false
+			end
 
-		if (npcSpawnData.planetName ~= nil and npcSpawnData.planetName ~= "") then
-			planetName = npcSpawnData.planetName
-		end
+			if (npcSpawnData.planetName ~= nil and npcSpawnData.planetName ~= "") then
+				planetName = npcSpawnData.planetName
+			end
 
-		if (planetName == nil or planetName == "") then
-			printLuaError("Unable to spawn quest NPC " .. npcSpawnData.npcTemplate .. " for screenplay " .. self.className .. ", planetName invalid.")
-			return false
-		end
+			if (planetName == nil or planetName == "") then
+				printLuaError("Unable to spawn quest NPC " .. npcSpawnData.npcTemplate .. " for screenplay " .. self.className .. ", planetName invalid.")
+				return false
+			end
 
-		local pNpc = spawnMobile(planetName, npcSpawnData.npcTemplate, 1, npcSpawnData.x, npcSpawnData.z, npcSpawnData.y, npcSpawnData.direction, npcSpawnData.cellID)
+			local pNpc = spawnMobile(planetName, npcSpawnData.npcTemplate, 1, npcSpawnData.x, npcSpawnData.z, npcSpawnData.y, npcSpawnData.direction, npcSpawnData.cellID)
 
-		if (pNpc == nil) then
-			printLuaError("Unable to spawn quest NPC " .. npcSpawnData.npcTemplate .. " for screenplay " .. self.className .. ", spawning failed.")
-			return false
-		end
+			if (pNpc == nil) then
+				printLuaError("Unable to spawn quest NPC " .. npcSpawnData.npcTemplate .. " for screenplay " .. self.className .. ", spawning failed.")
+				return false
+			end
 
-		if npcSpawnData.position == SIT then
-			CreatureObject(pNpc):setState(SITTINGONCHAIR)
-		end
-		if (npcSpawnData.mood ~= nil and npcSpawnData.mood ~= "") then
-			CreatureObject(pNpc):setMoodString(npcSpawnData.mood)
-		end
-		if (npcSpawnData.flags == AI_STATIC) then
-			AiAgent(pNpc):addObjectFlag(AI_STATIC)
-		end
-		if (self.npcMap[i].npcNumber > 0) then
-			CreatureObject(pNpc):setOptionBit(INTERESTING)
+			if npcSpawnData.position == SIT then
+				CreatureObject(pNpc):setState(SITTINGONCHAIR)
+			end
+			if (npcSpawnData.mood ~= nil and npcSpawnData.mood ~= "") then
+				CreatureObject(pNpc):setMoodString(npcSpawnData.mood)
+			end
+			if (npcSpawnData.flags == AI_STATIC) then
+				AiAgent(pNpc):addObjectFlag(AI_STATIC)
+			end
+			if (self.npcMap[i].npcNumber > 0) then
+				CreatureObject(pNpc):setOptionBit(INTERESTING)
+			end
 		end
 	end
 

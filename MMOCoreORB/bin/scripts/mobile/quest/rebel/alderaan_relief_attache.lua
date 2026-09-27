@@ -1,17 +1,17 @@
-bail_organa = Creature:new {
-	customName = "Senator Bail Organa",
+alderaan_relief_attache = Creature:new {
+	customName = "Mira Tane, Alderaanian Relief Attaché",
 	socialGroup = "rebel",
-  faction = "rebel",
+	faction = "rebel",
 	mobType = MOB_NPC,
-	level = 100,
-	chanceHit = 1,
-	damageMin = 645,
-	damageMax = 1000,
+	level = 30,
+	chanceHit = 0.5,
+	damageMin = 50,
+	damageMax = 100,
 	baseXp = 0,
-	baseHAM = 240000,
-	baseHAMmax = 300000,
+	baseHAM = 5000,
+	baseHAMmax = 5000,
 	armor = 0,
-	resists = {0,0,0,0,0,0,0,0,-1},
+	resists = {0, 0, 0, 0, 0, 0, 0, 0, -1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -23,17 +23,15 @@ bail_organa = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = PACK,
-	optionsBitmask = INVULNERABLE + CONVERSABLE + INTERESTING,
+	optionsBitmask = INVULNERABLE + CONVERSABLE,
 	diet = HERBIVORE,
-
-	templates = {"object/mobile/bestine_museum_owner.iff"},
+	templates = {"object/mobile/dressed_noble_human_female_01.iff"},
 	lootGroups = {},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
 	conversationTemplate = "theme_park_rebel_mission_giver_convotemplate",
-	outfit = "bail_organa_outfit",
 	primaryAttacks = {},
 	secondaryAttacks = {}
 }
 
-CreatureTemplates:addCreatureTemplate(bail_organa, "bail_organa")
+CreatureTemplates:addCreatureTemplate(alderaan_relief_attache, "alderaan_relief_attache")

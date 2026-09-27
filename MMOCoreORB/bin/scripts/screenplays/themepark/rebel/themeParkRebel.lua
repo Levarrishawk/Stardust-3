@@ -1,1039 +1,189 @@
 THEME_PARK_REBEL_BADGE = 107
 
-c3po_missions =
-	{
-		{
-			missionType = "deliver",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_selonian_female", npcName = "random" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/food/base/side_dish_base.iff", itemName = "Food" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 50 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_captain", npcName = "Captain Montrasword" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/medicine/crafted/medpack_wound_health_a.iff", itemName = "Medicine" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 100 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_captain", npcName = "Captain Taergle" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 150 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_captain", npcName = "Captain Drexsler" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Contact Information" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 200 },
-				{ rewardType = "faction", faction = "rebel", amount = 50 },
-				{ rewardType = "loot",  lootGroup = "theme_park_reward_rebel_c_3po" }
-			}
-		}
-	}
+local function reward(credits, faction, badge)
+	local result = {{rewardType = "credits", amount = credits}}
+	if faction ~= nil then result[#result + 1] = {rewardType = "faction", faction = "rebel", amount = faction} end
+	if badge == true then result[#result + 1] = {rewardType = "badge", badge = THEME_PARK_REBEL_BADGE} end
+	return result
+end
 
-qualdo_missions =
-	{
-		{
-			missionType = "deliver",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_ithorian", npcName = "I'klee'trao" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/loot/tool/comlink_naboo_broken.iff", itemName = "Comlink" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 200 }
-			}
-		},
-		{
-			missionType = "confiscate",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_sergeant_montage", npcName = "Sergeant Montage" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/component/item/quest_item/particle_sensor.iff", itemName = "Compound" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 250 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_captain_sargon", npcName = "Captain Sargon" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 300 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_ithorian", npcName = "I'klee'trao" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 75 },
-				{ rewardType = "loot", lootGroup = "theme_park_reward_rebel_qualdo_herm" }
-			}
-		}
+local function makeMission(kind, planet, waypoint, target, targetName, item, itemName, guards, rewards, offer, accepted, working, completed)
+	local items = {}
+	if item ~= nil then items = {{itemTemplate = item, itemName = itemName or ""}} end
+	return {
+		missionType = kind, planetName = planet, missionDescription = waypoint,
+		primarySpawns = {{npcTemplate = target, npcName = targetName}},
+		secondarySpawns = guards or {}, itemSpawns = items, rewards = rewards,
+		dialog = {offer = offer, accepted = accepted, working = working, completed = completed}
 	}
+end
 
-wedge_missions =
-	{
-		{
-			missionType = "deliver",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_officer", npcName = "Officer Devlin" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Confirmation Letter" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 350 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_iris", npcName = "Iris" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 400 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_general_graise", npcName = "General Graise" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "imperial_first_lieutenant", npcName = "Imperial First Lieutenant" },
-				{ npcTemplate = "imperial_staff_corporal", npcName = "Imperial Staff Corporal" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 450 }
-			}
-		},
-		{
-			missionType = "confiscate",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_general_boize", npcName = "General Boize" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Documents" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 500 }
-			}
-		},
-		{
-			missionType = "confiscate",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_officer_emil", npcName = "Officer Emil" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/loot/misc/key_electronic_s01.iff", itemName = "Code Cylinder" }
-			},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 100 },
-				{ rewardType = "loot", lootGroup = "theme_park_reward_rebel_wedge_antilles" }
-			}
-		}
-	}
+local twoTroopers = {
+	{npcTemplate = "stormtrooper", npcName = "an Imperial escort"},
+	{npcTemplate = "stormtrooper", npcName = "an Imperial escort"}
+}
 
-leia_missions =
-	{
-		{
-			missionType = "escort",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_deasie_afresel", npcName = "Deasie A'Fresel" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 550 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_officer_tennelt", npcName = "Officer Tennelt" }
-			},
-			secondarySpawns = {},
-			itemSpawns = { },
-			rewards =
-			{
-				{ rewardType = "credits", amount = 600 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_selonian_female", npcName = "random" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 650 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_bothan", npcName = "Fnast" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Imperial Codes" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 700 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "corellia",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_commander", npcName = "Imperial Undercover Commander" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 125 },
-				{ rewardType = "loot", lootGroup = "theme_park_reward_rebel_leia_organa" }
-			}
-		}
-	}
+local attacheMissions = {
+	makeMission("deliver", "alderaan", "Deliver relief medicine", "commoner", "a relief worker", "object/tangible/medicine/crafted/medpack_wound_health_a.iff", "Relief medicine", nil, reward(100),
+		"A rural clinic missed its relief shipment. Take these medical supplies to our field worker.", "Keep the package sealed and avoid unnecessary Imperial attention.", "The clinic still needs that medicine.", "You helped people who had nowhere else to turn."),
+	makeMission("escort", "alderaan", "Escort a relief courier", "commoner", "a relief courier", nil, nil, nil, reward(175),
+		"One of our couriers believes she is being followed. Find her and bring her back quietly.", "If anyone asks, she is an employee returning from an inspection.", "Do not leave the courier exposed.", "She arrived safely, and no official report connects her to us."),
+	makeMission("confiscate", "alderaan", "Recover seized relief manifests", "imperial_staff_corporal", "an Imperial quartermaster", "object/tangible/mission/mission_datadisk.iff", "Seized relief manifests", twoTroopers, reward(250),
+		"An Imperial quartermaster seized manifests that identify vulnerable families. Recover them before they are copied.", "There must be no trail leading back to this office.", "The quartermaster still has the manifests.", "The families named in these records can disappear before the Empire comes looking."),
+	makeMission("escort", "alderaan", "Extract an Alderaanian witness", "noble", "an Alderaanian witness", nil, nil, twoTroopers, reward(325, 50),
+		"A witness to an Imperial reprisal is prepared to testify. Bring him to Alderaanian protection.", "This may be the first time the Empire actively tries to stop you.", "The witness cannot remain in the open.", "Senator Organa has reviewed your work and agreed to meet you privately.")
+}
 
-nien_missions =
-	{
-		{
-			missionType = "escort",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_engineer", npcName = "Engineer" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 750 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_bounty_hunter", npcName = "Bounty Hunter" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 800 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_pirate", npcName = "Pirate" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 850 }
-			}
-		},
-		{
-			missionType = "retrieve",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_hyperdrive_seller", npcName = "Pirate" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/loot/misc/hyperdrive_part_s01.iff", itemName = "Hyperdrive" }
-			},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 150 },
-				{ rewardType = "loot", lootGroup = "theme_park_reward_rebel_nien_nunb" }
-			}
-		}
-	}
+local bailMissions = {
+	makeMission("deliver", "alderaan", "Deliver sealed senatorial correspondence", "noble", "a diplomatic courier", "object/tangible/mission/mission_datadisk.iff", "Sealed correspondence", nil, reward(400),
+		"My office must communicate with people who cannot safely approach the Senate. Deliver this correspondence.", "Discretion protects more lives than courage alone.", "My courier is waiting.", "The message is where it needs to be."),
+	makeMission("confiscate", "alderaan", "Recover Imperial surveillance records", "imperial_first_lieutenant", "an Imperial surveillance officer", "object/tangible/mission/mission_datadisk.iff", "Surveillance records", twoTroopers, reward(475),
+		"Imperial Security is monitoring several charitable organizations. Obtain its surveillance records before arrests begin.", "Recover the records without creating a public incident.", "Those records continue to endanger innocent people.", "We can warn everyone on this list before the security bureau acts."),
+	makeMission("escort", "alderaan", "Extract a community organizer", "businessman", "a community organizer", nil, nil, twoTroopers, reward(550),
+		"A community organizer refused an Imperial labor decree. See that he reaches Alderaanian protection.", "He will be frightened. Give him reason to trust you.", "The organizer must be moved tonight.", "He is safe, and his people are not without leadership."),
+	makeMission("deliver", "coruscant", "Deliver an antiquities inquiry", "noble", "an antiquities broker", "object/tangible/mission/mission_datadisk.iff", "Antiquities inquiry", nil, reward(625, 75),
+		"I require a discreet appraisal from a Coruscant antiquities dealer named Luthen Rael. Deliver this inquiry, then visit his gallery.", "To anyone who asks, this concerns a private Alderaanian collection.", "The gallery is expecting an inquiry from my office.", "Rael has agreed to receive you. Listen to what he asks—and what he does not say.")
+}
 
-han_missions =
-	{
-		{
-			missionType = "escort",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_edycu", npcName = "E'Dycu" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 900 }
-			}
-		},
-		{
-			missionType = "confiscate",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_pirate_holocron", npcName = "random" },
-				{ npcTemplate = "theme_park_rebel_pirate", npcName = "random" },
-				{ npcTemplate = "theme_park_rebel_pirate", npcName = "random" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/loot/misc/holocron_splinters_sith_s01.iff", itemName = "" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 950 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_pirate", npcName = "Bandit Leader" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_pirate", npcName = "Pirate" },
-				{ npcTemplate = "theme_park_rebel_pirate", npcName = "Pirate" },
-				{ npcTemplate = "theme_park_rebel_pirate", npcName = "Pirate" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1000 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_edycu", npcName = "Eso Itrik" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1050 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "lok",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_nym_contact", npcName = "Nateba Kerr" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Payment" }
-			},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 175 },
-				{ rewardType = "loot",  lootGroup = "theme_park_reward_rebel_han_solo" }
-			}
-		}
-	}
+local luthenMissions = {
+	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_pirate", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
+		"A collector has an object that belongs in my gallery. What is concealed inside is considerably more valuable.", "You are retrieving art. Maintain that fiction.", "The collector still has my property.", "The object will be separated from its more useful contents."),
+	makeMission("confiscate", "coruscant", "Replace an Imperial cargo manifest", "imperial_staff_corporal", "an Imperial freight clerk", "object/tangible/mission/mission_datadisk.iff", "Imperial cargo manifest", twoTroopers, reward(775),
+		"A freight clerk carries tomorrow's inspection manifest. Bring it to me before the first shift.", "The Empire must believe its records were misplaced, not altered.", "We have a narrow window to change that manifest.", "Several crates will now pass inspection as restoration supplies."),
+	makeMission("escort", "coruscant", "Extract a compromised courier", "information_broker", "a compromised courier", nil, nil, twoTroopers, reward(850),
+		"A courier missed two check-ins. Find them before Imperial Security does.", "If the courier has been turned, recognize it before they reach this shop.", "Every minute makes the courier easier to find.", "The route is burned, but routes can be rebuilt."),
+	makeMission("assassinate", "coruscant", "Silence an Imperial informant", "theme_park_rebel_bounty_hunter", "an Imperial informant", nil, nil, twoTroopers, reward(925),
+		"An informant sold the names of an entire workers' circle. Ensure the transfer never happens.", "Do not be seen returning here.", "The informant is preparing to deliver the names.", "The circle survives. They will never know why."),
+	makeMission("retrieve", "coruscant", "Acquire military power regulators", "theme_park_rebel_hyperdrive_seller", "an unlicensed component dealer", "object/tangible/loot/misc/hyperdrive_part_s01.iff", "Military power regulators", nil, reward(1000, 100),
+		"A dealer has military power regulators. Recover them, then take them to Saw Gerrera on Lok.", "Gerrera is not part of my network. Remember that distinction.", "The regulators must not enter the Imperial supply chain.", "Saw will decide whether you are useful to him.")
+}
 
-ackbar_missions =
-	{
-		{
-			missionType = "assassinate",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1100 }
-			}
-		},
-		{
-			missionType = "confiscate",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_disgruntled_citizen", npcName = "Disgruntled Citizen" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Information" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1150 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_teria_alessie", npcName = "Teria Alessie" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Corrupted Disk" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1200 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_jeremes_kelton", npcName = "Jeremes Kelton" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" },
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Flight Paths" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1250 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "Stormtrooper" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-437" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-871" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 200 },
-				{ rewardType = "loot",  lootGroup = "theme_park_reward_rebel_captain_ackbar" }
-			}
-		}
-	}
+local sawMissions = {
+	makeMission("assassinate", "lok", "Eliminate an Imperial sensor patrol", "stormtrooper_squad_leader", "an Imperial patrol leader", nil, nil, twoTroopers, reward(1075),
+		"An Imperial patrol is mapping this region. Wipe it out before it transmits its survey.", "Leave nothing that can identify this camp.", "That patrol is still closing in.", "They will send another. Next time we will be ready sooner."),
+	makeMission("confiscate", "lok", "Recover stolen demolition charges", "theme_park_rebel_pirate", "a pirate quartermaster", "object/tangible/component/item/quest_item/directional_sensor.iff", "Demolition detonators", nil, reward(1150),
+		"Pirates stole detonators from one of my teams. Recover them.", "The detonators belong to the fight, not profiteers.", "The pirates still have our detonators.", "We can replace explosives. Trained people are harder to replace."),
+	makeMission("escort", "lok", "Rescue a Partisan demolition specialist", "rebel_commando", "a Partisan demolition specialist", nil, nil, twoTroopers, reward(1225),
+		"One of my demolition specialists is cut off beyond an Imperial sweep. Bring her home.", "She knows what this cell is building. Do not let her be captured.", "My specialist is still out there.", "She will be back at work before the next charge is wired."),
+	makeMission("confiscate", "lok", "Seize industrial power converters", "imperial_first_lieutenant", "an Imperial logistics officer", "object/tangible/mission/mission_datadisk.iff", "Power-converter release codes", twoTroopers, reward(1300),
+		"An Imperial convoy carries industrial power converters. Take its release codes.", "We are taking back tools built with stolen labor.", "The convoy will move soon.", "Some converters stay here. The rest go to the jungle cell."),
+	makeMission("assassinate", "lok", "Destroy an Imperial reprisals unit", "imperial_general", "an Imperial reprisals commander", nil, nil, twoTroopers, reward(1375, 125),
+		"The officer who ordered reprisals against a mining settlement is traveling with his unit. End his campaign.", "This is not a warning. Remove the unit.", "That commander is still free to murder civilians.", "The people he intended to kill will call it survival.")
+}
 
-mon_missions =
-	{
-		{
-			missionType = "deliver",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_bothan_spy", npcName = "Wala Am'kre" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Holovid" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1300 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "stormtrooper_squad_leader", npcName = "Strike Team Leader" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-221" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-982" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1350 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "dantooine",
-			missionDescription = "MON MOTHMA needs you to ESCORT the CAPTAIN of the Corvette back to the REBEL BASE",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_altapi_tmman", npcName = "Altapi T'mman" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-179" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-322" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1400 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "stormtrooper_squad_leader", npcName = "TK-1132" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-658" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-459" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1450 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_engineer", npcName = "Engineer" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-134" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-873" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1500 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "dantooine",
-			primarySpawns =
-			{
-				{ npcTemplate = "imperial_general", npcName = "Imperial General" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-297" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-447" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 225 },
-				{ rewardType = "loot",  lootGroup = "theme_park_reward_rebel_mon_mothma" }
-			}
-		},
-	}
+local mothmaMissions = {
+	makeMission("deliver", "chandrila", "Deliver protected foundation records", "noble", "a foundation trustee", "object/tangible/mission/mission_datadisk.iff", "Protected foundation records", nil, reward(1450),
+		"Deliver these charitable foundation records before an Imperial examiner arrives.", "Nothing in them is illegal. That will not protect the people named.", "The trustee must receive the records first.", "The foundation can continue without exposing its donors."),
+	makeMission("escort", "chandrila", "Protect a Chandrilan labor organizer", "businessman", "a Chandrilan labor organizer", nil, nil, twoTroopers, reward(1525),
+		"A labor organizer is accused of sedition for opposing compulsory quotas. Escort him to a legal delegation.", "His cause must remain public and peaceful.", "The delegation cannot proceed without him.", "The hearing will go forward. Public resistance still matters."),
+	makeMission("confiscate", "chandrila", "Recover an Imperial surveillance index", "imperial_first_lieutenant", "an Imperial security liaison", "object/tangible/mission/mission_datadisk.iff", "Surveillance index", twoTroopers, reward(1600),
+		"A security liaison compiled an index of opposition figures. Recover it before transmission.", "Make its disappearance appear to be bureaucratic incompetence.", "The index remains in Imperial hands.", "We can protect these people without revealing how we learned of the danger."),
+	makeMission("deliver", "chandrila", "Secure a civilian shipping charter", "businessman", "an independent shipping representative", "object/tangible/mission/mission_datadisk.iff", "Civilian shipping charter", nil, reward(1675),
+		"An independent carrier may service remote settlements. Deliver this charter and confirm its cooperation.", "The cargo is relief and construction material. Much of it truly is.", "We need that shipping commitment.", "A legitimate, regular, unremarkable route is a valuable route."),
+	makeMission("escort", "chandrila", "Extract a threatened industrial supplier", "commoner_technician", "an industrial supplier", nil, nil, twoTroopers, reward(1750, 150),
+		"The supplier who provided our generators has been threatened. Bring her to the Hanna City hotel.", "She risked herself for people she has never met.", "The supplier must be extracted tonight.", "She is safe. Her equipment is already being routed to Yavin Four.")
+}
 
-jan_missions =
-	{
-		{
-			missionType = "assassinate",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "stormtrooper_squad_leader", npcName = "TK-419" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-447" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-428" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1550 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_imperial_engineer", npcName = "Rebel Contact" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1600 }
-			}
-		},
-		{
-			missionType = "assassinate",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "stormtrooper_squad_leader", npcName = "TK-770" }
-			},
-			secondarySpawns =
-			{
-				{ npcTemplate = "stormtrooper", npcName = "TK-400" },
-				{ npcTemplate = "stormtrooper", npcName = "TK-105" }
-			},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1650 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_bothan_spy", npcName = "Nateba Kurr" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Information" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1700 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "yavin4",
-			missionDescription = "GENERAL DODONNA needs you to DELIVER the INFORMATION to REBEL PILOT",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_bothan_spy", npcName = "Pilot" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/mission/mission_datadisk.iff", itemName = "Information" }
-			},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 250 },
-				{ rewardType = "loot",  lootGroup = "theme_park_reward_rebel_jan_dodonna" },
-				{ rewardType = "permission", permissionGroup = "@yavin4_region_names:temple_of_exar_kun2" }
-			}
-		},
-	}
+local yavinMissions = {
+	makeMission("escort", "yavin4", "Escort a power engineer to the Yavin cell", "commoner_technician", "a resistance power engineer", nil, nil, nil, reward(1825),
+		"Find the engineer who can synchronize our new generators and escort them through the jungle.", "An Imperial patrol would be worse than the wildlife.", "The engineer has not reached the base.", "We can now power the infirmary and communications room together."),
+	makeMission("confiscate", "yavin4", "Recover stolen construction supplies", "theme_park_rebel_pirate", "a supply thief", "object/tangible/mission/mission_datadisk.iff", "Stolen supply locator", nil, reward(1900),
+		"A thief intercepted part of our construction shipment. Recover its locator.", "We cannot request replacements without exposing the route.", "Recover those supplies.", "The missing crates are accounted for."),
+	makeMission("retrieve", "yavin4", "Retrieve a long-range transmitter", "theme_park_rebel_supervisor", "a stranded communications technician", "object/tangible/loot/tool/recording_rod_broken.iff", "Long-range transmitter core", nil, reward(1975),
+		"A communications team abandoned a transmitter core during an animal attack. Retrieve it.", "Without it, this cell remains isolated.", "The transmitter core is still in the jungle.", "We can communicate without commercial relays."),
+	makeMission("assassinate", "yavin4", "Destroy an Imperial reconnaissance team", "stormtrooper_squad_leader", "an Imperial reconnaissance leader", nil, nil, twoTroopers, reward(2050),
+		"An Imperial reconnaissance team landed beyond our watch. Stop it before it identifies the temple.", "No transmission can leave that team.", "The reconnaissance team is still within reporting range.", "The Empire will record another lost jungle patrol."),
+	makeMission("escort", "yavin4", "Guide the first regular supply convoy to Yavin", "rebel_pilot", "a resistance convoy scout", nil, nil, twoTroopers, reward(2200, 300, true),
+		"Meet the first regular convoy's scout and guide them past the Imperial search pattern.", "If this works, Yavin becomes more than a temporary camp.", "The convoy cannot approach until its scout reaches us.", "What began as scattered favors is now a supply line—and a supply line can sustain a rebellion.")
+}
 
-luke_missions =
-	{
-		{
-			missionType = "escort",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_supervisor", npcName = "Supervisor" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1750 }
-			}
-		},
-		{
-			missionType = "confiscate",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_big_creature", npcName = "Big Creature" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/loot/tool/recording_rod_broken.iff", itemName = "R2 Motivator Unit" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1800 }
-			}
-		},
-		{
-			missionType = "escort",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_supervisor", npcName = "Expedition Team Member" }
-			},
-			secondarySpawns = {},
-			itemSpawns = {},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1850 }
-			}
-		},
-		{
-			missionType = "confiscate",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_big_creature_cage", npcName = "Big Creature" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/loot/misc/cage_s01.iff", itemName = "" }
-			},
-			rewards =
-			{
-				{ rewardType = "credits", amount = 1900 }
-			}
-		},
-		{
-			missionType = "deliver",
-			planetName = "yavin4",
-			primarySpawns =
-			{
-				{ npcTemplate = "theme_park_rebel_supervisor", npcName = "Tribesman" }
-			},
-			secondarySpawns = {},
-			itemSpawns =
-			{
-				{ itemTemplate = "object/tangible/loot/misc/cage_s01.iff", itemName = "An Empty Cage" }
-			},
-			rewards =
-			{
-				{ rewardType = "faction", faction = "rebel", amount = 300 },
-				{ rewardType = "credits", amount = 1950 },
-				{ rewardType = "loot",  lootGroup = "theme_park_reward_rebel_luke_skywalker" },
-				{ rewardType = "badge", badge = THEME_PARK_REBEL_BADGE }
-			}
-		},
-	}
+local npcMapRebel = {
+	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-29.0, z=1.3, y=-2.0, direction=-90, cellID=610000024, position=STAND}, worldPosition={x=1120,y=-1420}, npcNumber=1, stfFile="", missions=attacheMissions, lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
+	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, npcNumber=2, stfFile="", missions=bailMissions, lockedDialog="My attaché handles relief matters. Please speak with her first.", completedDialog="Rael's gallery is on Coruscant."},
+	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=0,z=0,y=0,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, lockedDialog="The gallery is open to serious clients only.", completedDialog="Saw Gerrera is waiting on Lok. Do not mistake an introduction for trust."},
+	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=38,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
+	{spawnData = {planetName="chandrila", npcTemplate="mon_mothma", x=6,z=0.6,y=-5.5,direction=-90,cellID=35791665,position=STAND}, worldPosition={x=294,y=-2938}, npcNumber=16, stfFile="", missions=mothmaMissions, lockedDialog="I am here on senatorial business.", completedDialog="The final shipments are being routed to a small cell on Yavin Four."},
+	{spawnData = {planetName="yavin4", npcTemplate="yavin_cell_commander", x=-25,z=32,y=68,direction=180,cellID=3465358,position=STAND}, worldPosition={x=-3050,y=-2950}, npcNumber=32, stfFile="", missions=yavinMissions, lockedDialog="This facility is not open to visitors.", completedDialog="The route is holding. You helped turn an isolated cell into something that can endure."}
+}
 
-npcMapRebel =
-	{
-		{
-			spawnData = { planetName = "corellia", npcTemplate = "c_3po", x = -2.3, z = 2.0, y = 4.0, direction = 150, cellID = 8555472, position = STAND },
-			worldPosition = { x = -6507.5, y = 5985.7 },
-			npcNumber = 1,
-			stfFile = "@theme_park_rebel/c3po",
-			missions = c3po_missions
-		},
-		{
-			spawnData = { planetName = "corellia", npcTemplate = "r2d2", x = -3.98, z = 1.01, y = -0.67, direction = 58, cellID = 8555472, position = STAND },
-			npcNumber = -1,
-			stfFile = "",
-			missions = {}
-		},
-		{
-			spawnData = { planetName = "corellia", npcTemplate = "record_keeper_rebel", x = 6.0, z = 7.00, y = -5.18, direction = 0, cellID = 8555480, position = STAND },
-			npcNumber = -2,
-			stfFile = "",
-			missions = {}
-		},
-		{
-			spawnData = { planetName = "corellia", npcTemplate = "qualdo_herm", x = 14.91, z = 1.01, y = -6.68, direction = 0, cellID = 8555475, position = STAND },
-			worldPosition = { x = -6512.3, y = 6005.2 },
-			npcNumber = 2,
-			stfFile = "@theme_park_rebel/qualdo_herm",
-			missions = qualdo_missions
-		},
-		{
-			spawnData = { planetName = "corellia", npcTemplate = "wedge_antilles", x = 0.01, z = 1.01, y = -22.01, direction = 0, cellID = 8555477, position = SIT },
-			worldPosition = { x = -6491.1, y = 6005.6 },
-			npcNumber = 4,
-			stfFile = "@theme_park_rebel/wedge_antilles",
-			missions = wedge_missions
-		},
-		{
-			spawnData = { planetName = "corellia", npcTemplate = "leia_organa", x = -11.13, z = 7.00971, y = 11.31, direction = 175, cellID = 8555481, position = STAND },
-			worldPosition = { x = -6506.3, y = 5974.2 },
-			npcNumber = 8,
-			stfFile = "@theme_park_rebel/princess_leia",
-			missions = leia_missions
-		},
-		{
-			spawnData = { planetName = "lok", npcTemplate = "nien_nunb", x = -12.12, z = -0.894992, y = 23.08, direction = 80.0024, cellID = 8145384, position = SIT },
-			worldPosition = { x = 476.2, y = 5075.7 },
-			npcNumber = 16,
-			stfFile = "@theme_park_rebel/nien_nunb",
-			missions = nien_missions
-		},
-		{
-			spawnData = { planetName = "lok", npcTemplate = "chewbacca", x = -28.48, z = -0.519991, y = 5.87, direction = 12.0003, cellID = 8145388, position = STAND },
-			npcNumber = -1,
-			stfFile = "",
-			missions = {}
-		},
-		{
-			spawnData = { planetName = "lok", npcTemplate = "han_solo", x = -30.2, z = -0.519991, y = 7.24, direction = 45.0013, cellID = 8145388, position = STAND },
-			worldPosition = { x = 471.5, y = 5052.1 },
-			npcNumber = 32,
-			stfFile = "@theme_park_rebel/han_solo",
-			missions = han_missions
-		},
-		{
-			spawnData = { planetName = "dantooine", npcTemplate = "ackbar", x = -14.4, z = 1.0, y = -21.7, direction = 0, cellID = 6555566, position = STAND },
-			worldPosition = { x = -6812.5, y = 5560.7 },
-			npcNumber = 64,
-			stfFile = "@theme_park_rebel/captain_ackbar",
-			missions = ackbar_missions
-		},
-		{
-			spawnData = { planetName = "dantooine", npcTemplate = "mon_mothma", x = -3.4, z = 7.0, y = -12.2, direction = -34, cellID = 6555568, position = STAND },
-			worldPosition = { x = -6823.6, y = 5551.2 },
-			npcNumber = 128,
-			stfFile = "@theme_park_rebel/mon_mothma",
-			missions = mon_missions
-		},
-		{
-			spawnData = { planetName = "yavin4", npcTemplate = "jan_dodonna", x = 0, z = 0, y = -41.9, direction = 0, cellID = 3465388, position = STAND },
-			worldPosition = { x = 5014.8, y = 5537.8 },
-			npcNumber = 256,
-			stfFile = "@theme_park_rebel/jan_dodonna",
-			missions = jan_missions
-		},
-		{
-			spawnData = { planetName = "yavin4", npcTemplate = "luke_skywalker", x = 1.2, z = -6.0, y = -26.8, direction = 180, cellID = 3465390, position = STAND },
-			worldPosition = { x = 5029.9, y = 5536.6 },
-			npcNumber = 512,
-			stfFile = "@theme_park_rebel/luke_skywalker",
-			missions = luke_missions
-		}
-	}
-
-permissionMapRebel = {
-	{
-		planetName = "corellia",
-		regionName = "corellia_rebel_hideout",
-		permissions =
-		{
-			{
-				cells = { 8555471, 8555472, 8555473, 8555474, 8555475, 8555476, 8555477, 8555478, 8555479, 8555480, 8555481, 8555482 },
-				conditions =
-				{
-					{ permissionType = "faction" }
-				}
-			}
-		}
-	},
-	{
-		planetName = "dantooine",
-		regionName = "@dantooine_region_names:abandoned_rebel_base_1",
-		permissions =
-		{
-			{
-				cells = { 6555559, 6555560, 6555561, 6555562, 6555563, 6555564, 6555565, 6555566, 6555567, 6555568, 6555569, 6555570 },
-				conditions =
-				{
-					{ permissionType = "faction" }
-				}
-			}
-		}
-	},
-	{
-		planetName = "yavin4",
-		regionName = "@yavin4_region_names:temple_of_exar_kun",
-		permissions =
-		{
-			{
-				cells = { 3465380, 3465381, 3465382, 3465383, 3465384, 3465385, 3465386, 3465387, 3465388, 3465389 },
-				conditions =
-				{
-					{ permissionType = "missionState", mission = "theme_park_rebel", missionState = 128 },
-					{ permissionType = "faction" }
-				}
-			},
-			{
-				cells = { 3465390, 3465391, 3465392, 3465393, 3465394 },
-				conditions =
-				{
-					{ permissionType = "missionState", mission = "theme_park_rebel", missionState = 256 },
-					{ permissionType = "faction" }
-				}
-			}
-		}
-	}
+local sceneObjectMapRebel = {
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=-5,z=0,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Display"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-5,z=0.5,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Ancient Ceremonial Vessel"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=0,z=0,y=4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Display"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=0,z=0.5,y=4,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Pre-Republic Sculpture"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/coffee_table_s01.iff",x=5,z=0,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Display"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_02.iff",x=5,z=0.5,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Outer Rim Funerary Urn"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/modern/bar_counter_s1.iff",x=0,z=0,y=-4.5,cellID=37002118,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Consultation Counter"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_data_terminal_free_s1.iff",x=-3,z=0,y=-2,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Private Catalog Terminal"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/container/drum/large_plain_crate_s01.iff",x=3.5,z=0,y=-3.5,cellID=37002119,dw=1,dx=0,dy=0,dz=0},customObjectName="Uncatalogued Acquisition"}
+	,{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5665,z=38,y=-4818,cellID=0,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Partisan Field Shelter"}
+	,{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5656,z=38,y=-4826,cellID=0,dw=0.3827,dx=0,dy=0.9239,dz=0},customObjectName="Partisan Supply Shelter"}
+	,{spawnData={planetName="lok",objectTemplate="object/static/structure/general/campfire_smoldering.iff",x=-5660,z=38,y=-4823,cellID=0,dw=1,dx=0,dy=0,dz=0},customObjectName="Banked Campfire"}
+	,{spawnData={planetName="lok",objectTemplate="object/static/structure/general/ins_shield_generator_stage1.iff",x=-5652,z=38,y=-4818,cellID=0,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Salvaged Field Generator"}
 }
 
 ThemeParkRebel = ThemeParkLogic:new {
-	npcMap = npcMapRebel,
-	permissionMap = permissionMapRebel,
-	className = "ThemeParkRebel",
-	screenPlayState = "rebel_theme_park",
-	missionDescriptionStf = "@theme_park_rebel/quest_details:rebel_hideout_",
-	missionCompletionMessageStf = "@theme_park/messages:rebel_completion_message",
-	requiredPlanets = { "corellia", "lok", "dantooine", "yavin4" },
-	faction = FACTIONREBEL
+	npcMap=npcMapRebel, sceneObjectMap=sceneObjectMapRebel, permissionMap={},
+	className="ThemeParkRebel", screenPlayState="rebel_theme_park", missionDescriptionStf="",
+	missionCompletionMessageStf="@theme_park/messages:rebel_completion_message",
+	requiredPlanets={"alderaan","coruscant","lok","chandrila","yavin4"}, faction=0
 }
 
 registerScreenPlay("ThemeParkRebel", true)
 
-theme_park_rebel_mission_giver_conv_handler = mission_giver_conv_handler:new {
-	themePark = ThemeParkRebel
-}
-theme_park_rebel_mission_target_conv_handler = mission_target_conv_handler:new {
-	themePark = ThemeParkRebel
-}
+local function getDialog(themePark, pPlayer, pNpc)
+	local number = themePark:getNpcNumber(pNpc)
+	local current = themePark:getMission(number, themePark:getCurrentMissionNumber(number, pPlayer))
+	return current ~= nil and current.dialog or nil
+end
+
+theme_park_rebel_mission_giver_conv_handler = mission_giver_conv_handler:new {themePark=ThemeParkRebel}
+
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc1(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNpc1(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n)
+	if d~=nil then screen:setCustomDialogText(d.offer) end; screen:removeAllOptions(); screen:addOption("I can help.","accept"); screen:addOption("Not now.","npc_3_n"); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc2(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNpc2(self,t,p,n,o,s); local d=getDialog(self.themePark,p,n); if d~=nil then LuaConversationScreen(result):setCustomDialogText(d.accepted) end; return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc3(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNpc3(self,t,p,n,o,s); local screen=LuaConversationScreen(result); screen:setCustomDialogText("Then we have nothing further to discuss."); screen:setStopConversation(true); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenWork(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenWork(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil then screen:setCustomDialogText(d.working) end; screen:removeAllOptions(); screen:addOption("I cannot complete this assignment.","npc_reset"); screen:addOption("I am still working on it.","npc_backtowork"); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenReward(t,p,n,o,s)
+	local d=getDialog(self.themePark,p,n); local result=mission_giver_conv_handler.handleScreenReward(self,t,p,n,o,s); if d~=nil then LuaConversationScreen(result):setCustomDialogText(d.completed) end; return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNotYet(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNotYet(self,t,p,n,o,s); local data=self.themePark:getNpcData(self.themePark:getNpcNumber(n)); if data~=nil then LuaConversationScreen(result):setCustomDialogText(data.lockedDialog) end; return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNext(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNext(self,t,p,n,o,s); local data=self.themePark:getNpcData(self.themePark:getNpcNumber(n)); if data~=nil then LuaConversationScreen(result):setCustomDialogText(data.completedDialog) end; return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenReset(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenReset(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("Understood. This assignment is withdrawn."); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenBackToWork(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenBackToWork(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("Then finish it and return when it is done."); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenFailure(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenFailure(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("The opportunity is gone. We will have to find another way."); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNoLoc(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNoLoc(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("The contact has gone silent. I am withdrawing the assignment."); return result
+end
+function theme_park_rebel_mission_giver_conv_handler:handleScreenNoFaction(t,p,n,o,s)
+	local result=mission_giver_conv_handler.handleScreenNoFaction(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("Your recent associations make this conversation impossible."); return result
+end
+
+theme_park_rebel_mission_target_conv_handler = mission_target_conv_handler:new {themePark=ThemeParkRebel}
+function theme_park_rebel_mission_target_conv_handler:handleScreenSmuggle(t,p,n,o,s)
+	local result=mission_target_conv_handler.handleScreenSmuggle(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("You are the contact? Good. Let us finish before anyone notices."); return result
+end
+function theme_park_rebel_mission_target_conv_handler:handleScreenTakeMe(t,p,n,o,s)
+	local result=mission_target_conv_handler.handleScreenTakeMe(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("I was told someone might come. Get me out of here."); return result
+end
+function theme_park_rebel_mission_target_conv_handler:handleScreenBreech(t,p,n,o,s)
+	local result=mission_target_conv_handler.handleScreenBreech(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("You have made a serious mistake coming here."); return result
+end
