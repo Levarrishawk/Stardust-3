@@ -18,6 +18,7 @@ ThemeParkLogic = ScreenPlay:new {
 	missionCompletionMessageStf = "",
 	planetName = "",
 	faction = 0,
+	allowOnLeave = false,
 	requiredFaction = ""
 }
 

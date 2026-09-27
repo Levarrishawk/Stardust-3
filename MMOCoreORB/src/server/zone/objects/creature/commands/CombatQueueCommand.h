@@ -201,9 +201,6 @@ public:
 									if (targetOwner != nullptr && !creature->hasBountyMissionFor(targetOwner) && !targetOwner->hasBountyMissionFor(creature) && !CombatManager::instance()->areInDuel(creature, targetOwner) && targetOwner->getFactionStatus() == FactionStatus::OVERT) {
 											ghost->doFieldFactionChange(FactionStatus::OVERT);
 									}
-								} else {
-									if (creature->getFactionStatus() == FactionStatus::ONLEAVE)
-										ghost->doFieldFactionChange(FactionStatus::COVERT);
 								}
 							}
 						} else  if (targetTano->isCreatureObject() || targetTano->isTurret()) {

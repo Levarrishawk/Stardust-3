@@ -114,13 +114,13 @@ function mission_giver_conv_handler:handleScreenInit(pConvTemplate, pPlayer, pNp
 		elseif self.themePark:hasEnoughFaction(pPlayer) == false then
 			nextScreenName = "no_faction"
 
-		elseif missionFaction ~= 0 and self.themePark:isInFaction(missionFaction, pPlayer) and self.themePark:isOnLeave(pPlayer) then
+		elseif self.themePark.allowOnLeave ~= true and missionFaction ~= 0 and self.themePark:isInFaction(missionFaction, pPlayer) and self.themePark:isOnLeave(pPlayer) then
 			if self.themePark:isValidConvoString(stfFile, ":notyet") then
 				nextScreenName = "notyet"
 			else
 				nextScreenName = "no_faction"
 			end
-		elseif globalFaction ~= 0 and self.themePark:isInFaction(globalFaction, pPlayer) and self.themePark:isOnLeave(pPlayer) then
+		elseif self.themePark.allowOnLeave ~= true and globalFaction ~= 0 and self.themePark:isInFaction(globalFaction, pPlayer) and self.themePark:isOnLeave(pPlayer) then
 			if self.themePark:isValidConvoString(stfFile, ":notyet") and #self.themePark.npcMap == 1 then
 				nextScreenName = "notyet"
 			else

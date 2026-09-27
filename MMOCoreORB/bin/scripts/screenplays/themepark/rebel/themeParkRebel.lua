@@ -35,6 +35,8 @@ local attacheMissions = {
 }
 
 attacheMissions[1].dialog.introduction = "My name is Mira Tane. I am an Attache to Senator Organa, responsible for coordinating Alderaanian relief work beyond the capital. Imperial inspections have delayed several of our shipments, and one rural clinic is now running short of medicine. I may need your help, but you should understand what you are stepping into first."
+attacheMissions[1].dialog.acceptText = "I will deliver the medicine."
+attacheMissions[1].dialog.declineText = "I understand. The clinic's need will not wait, but this must be your decision. Return if you reconsider."
 attacheMissions[1].dialog.information = {
 	{
 		prompt = "What does the Relief Office actually do?",
@@ -47,6 +49,25 @@ attacheMissions[1].dialog.information = {
 	{
 		prompt = "What exactly do you need me to do?",
 		text = "A relief worker is waiting outside the capital with a sealed package of medicine. Deliver it to them so it can reach the clinic without passing through an Imperial checkpoint under our name. This is aid work, not a military operation, but discovery could expose the entire route."
+	}
+}
+
+attacheMissions[2].primarySpawns[1].npcName = "Sela Venn, a relief courier"
+attacheMissions[2].dialog.introduction = "The medicine reached the clinic, and you handled the delivery without drawing attention to our office. That earns a measure of trust. Unfortunately, one of my couriers, Sela Venn, missed her return check-in. She reported being followed before her comlink went silent. I need her found before whoever is watching her decides to act."
+attacheMissions[2].dialog.acceptText = "I will find Sela and bring her back."
+attacheMissions[2].dialog.declineText = "I will send someone else if I can, but every delay gives her pursuers more time. Return quickly if you change your mind."
+attacheMissions[2].dialog.information = {
+	{
+		prompt = "Who is Sela Venn?",
+		text = "Sela has carried medicine, identity records, and evacuation notices for this office for nearly two years. She is careful and dependable. Missing a check-in is not like her, which is why I believe the danger is real."
+	},
+	{
+		prompt = "Why would anyone follow a relief courier?",
+		text = "Imperial Security has begun mapping everyone connected to aid shipments. Some recipients are families displaced after resisting new labor quotas. The Empire may suspect that our routes move more than medicine, or it may simply want names it can use as leverage."
+	},
+	{
+		prompt = "How should I bring her back?",
+		text = "Find Sela, confirm that you were sent by Mira Tane, and escort her back here. Do not confront anyone unless they move against you. If questioned, she is an employee returning from a routine inspection. Above all, do not let Imperial Security take her into custody."
 	}
 }
 
@@ -142,7 +163,7 @@ ThemeParkRebel = ThemeParkLogic:new {
 	npcMap=npcMapRebel, sceneObjectMap=sceneObjectMapRebel, permissionMap={},
 	className="ThemeParkRebel", screenPlayState="rebel_theme_park", missionDescriptionStf="",
 	missionCompletionMessageStf="@theme_park/messages:rebel_completion_message",
-	requiredPlanets={"alderaan","coruscant","lok","chandrila","yavin4"}, faction=FACTIONREBEL
+	requiredPlanets={"alderaan","coruscant","lok","chandrila","yavin4"}, faction=FACTIONREBEL, allowOnLeave=true
 }
 
 registerScreenPlay("ThemeParkRebel", true)
@@ -157,7 +178,7 @@ local function addInformationOptions(screen, dialog, currentTopic)
 	screen:removeAllOptions()
 
 	if currentTopic == 3 then
-		screen:addOption("I will deliver the medicine.", "accept")
+		screen:addOption(dialog.acceptText or "I will take the assignment.", "accept")
 	end
 
 	for i = 1, #dialog.information do
@@ -180,7 +201,7 @@ function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc2(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNpc2(self,t,p,n,o,s); local d=getDialog(self.themePark,p,n); if d~=nil then LuaConversationScreen(result):setCustomDialogText(d.accepted) end; return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc3(t,p,n,o,s)
-	local result=mission_giver_conv_handler.handleScreenNpc3(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil and d.introduction~=nil then screen:setCustomDialogText("I understand. The clinic's need will not wait, but this must be your decision. Return if you reconsider.") else screen:setCustomDialogText("Then we have nothing further to discuss.") end; screen:setStopConversation(true); return result
+	local result=mission_giver_conv_handler.handleScreenNpc3(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil and d.declineText~=nil then screen:setCustomDialogText(d.declineText) else screen:setCustomDialogText("Then we have nothing further to discuss.") end; screen:setStopConversation(true); return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNpc4(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNpc4(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil and d.information~=nil then screen:setCustomDialogText(d.information[1].text); addInformationOptions(screen,d,1) end; return result

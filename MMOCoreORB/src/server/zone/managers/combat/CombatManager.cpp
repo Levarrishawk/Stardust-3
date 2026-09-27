@@ -745,6 +745,11 @@ int CombatManager::doTargetCombatAction(CreatureObject* attacker, WeaponObject* 
 		return -1;
 	}
 
+	if (attacker->isPlayerCreature() && tano->isAiAgent() && attacker->getFactionStatus() == FactionStatus::ONLEAVE &&
+			attacker->getFaction() != 0 && tano->getFaction() != 0 && attacker->getFaction() != tano->getFaction()) {
+		attacker->setFactionStatus(FactionStatus::COVERT);
+	}
+
 	if (targetDefenders == nullptr) {
 		return -1;
 	}

@@ -4472,9 +4472,8 @@ bool AiAgentImplementation::isAttackableBy(CreatureObject* creature) {
 		if (thisFaction == creatureFaction)
 			return false;
 
-		// Attack creature is not an AiAgent && their faction status is OnLeave
-		if (creatureIsPlayer && creature->getFactionStatus() < FactionStatus::COVERT)
-			return false;
+		// On-leave players may choose to attack an opposing faction NPC. The
+		// combat action immediately returns the attacker to Combatant status.
 	}
 
 	// Ai vs Ai Checks
