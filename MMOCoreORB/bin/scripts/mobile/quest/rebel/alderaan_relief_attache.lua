@@ -1,5 +1,5 @@
 alderaan_relief_attache = Creature:new {
-	customName = "Mira Tane, Alderaanian Relief Attaché",
+	customName = "Mira Tane, Alderaanian Relief Attache",
 	socialGroup = "rebel",
 	faction = "rebel",
 	mobType = MOB_NPC,
