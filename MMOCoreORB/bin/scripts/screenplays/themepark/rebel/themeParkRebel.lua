@@ -120,6 +120,82 @@ local bailMissions = {
 		"I require a discreet appraisal from a Coruscant antiquities dealer named Luthen Rael. Deliver this inquiry, then visit his gallery.", "To anyone who asks, this concerns a private Alderaanian collection.", "The gallery is expecting an inquiry from my office.", "Rael has agreed to receive you. Listen to what he asks, and what he does not say.")
 }
 
+bailMissions[1].primarySpawns[1].npcName = "Neris Kaal, a diplomatic courier"
+bailMissions[1].dialog.introduction = "Mira has told me what you did for Edrin Hal and for the families named in those manifests. You acted when the protections promised by law had already failed them. That does not make this an audience for medals or speeches. It means I am prepared to entrust you with something quieter. Reports resembling Edrin's account are reaching me from other worlds. I need this correspondence placed in the hands of Neris Kaal, a courier who can carry it beyond Alderaan without entering it into the Senate registry."
+bailMissions[1].dialog.acceptText = "I will deliver the correspondence to Neris Kaal."
+bailMissions[1].dialog.declineText = "Prudence is not cowardice. If you are uncertain, say nothing about this conversation and return only when you are prepared to see the matter through."
+bailMissions[1].dialog.information = {
+	{
+		prompt = "Who will receive the message after Neris?",
+		text = "People in public office, relief organizations, and local communities who have each seen part of the same pattern. Most do not know one another, and for now that is safer. I am asking them to compare what they know and determine whether these reprisals are isolated abuses or a policy being repeated across the Empire."
+	},
+	{
+		prompt = "Why not use diplomatic channels?",
+		text = "Official channels preserve a record of every sender and recipient. A routine inquiry can become a list of suspected dissidents in the hands of Imperial Security. Neris carries messages without exposing the entire chain of people involved, and even she will know only where the next handoff occurs."
+	},
+	{
+		prompt = "What do you need me to do?",
+		text = "Carry the sealed correspondence to Neris at the location my office provides, then return here. Do not open it, copy it, or identify yourself as acting for me. If questioned, you are delivering private material concerning an Alderaanian relief dispute. The message matters, but protecting the network around it matters more."
+	}
+}
+
+bailMissions[2].primarySpawns[1].npcName = "Lieutenant Arven Rusk, an Imperial surveillance officer"
+bailMissions[2].dialog.introduction = "Neris completed the handoff. The replies confirm that Edrin's district was not an exception: relief offices, labor councils, and local assemblies are being watched wherever they resist Imperial requisitions. Lieutenant Arven Rusk has compiled those connections into a surveillance archive. If his superiors receive it, dozens of lawful organizations will be treated as parts of a single conspiracy, and many of the people helping us will be arrested before they ever understand what they have been accused of joining."
+bailMissions[2].dialog.acceptText = "I will recover Rusk's surveillance archive."
+bailMissions[2].dialog.declineText = "This assignment asks more than discretion, and I will not disguise that fact. But Rusk's archive grows more dangerous with every name added to it."
+bailMissions[2].dialog.information = {
+	{
+		prompt = "What is contained in the archive?",
+		text = "Intercepted messages, travel records, donor lists, and the names of people who attend perfectly lawful meetings. Individually, most of it proves nothing. Arranged to suit Imperial Security, it can be made to describe a rebellion that does not yet exist and justify punishment before organized resistance can take shape."
+	},
+	{
+		prompt = "Can the archive be challenged publicly?",
+		text = "Only after the arrests begin. Rusk is conducting the surveillance under broad security authority, and a Senate challenge would warn his superiors that the archive matters to us. Recovering it lets us alert those in danger and learn how much of our communication the Empire can already see."
+	},
+	{
+		prompt = "How am I supposed to obtain it?",
+		text = "Intercept Lieutenant Rusk before he transfers the archive and take the data disk from him. He will be protected by Imperial personnel and will not surrender it voluntarily. Once you attack, you will be treated as a Combatant. If you accept, do so knowing this is an act against Imperial Security, not another relief delivery."
+	}
+}
+
+bailMissions[3].primarySpawns[1].npcName = "Maren Quill, a community organizer"
+bailMissions[3].dialog.introduction = "Rusk's archive gave us enough warning to scatter several vulnerable groups, but one name cannot simply disappear. Maren Quill organized dockworkers and farming communities against a new labor decree that permits the Empire to relocate workers without local consent. She has kept those communities supplied and united through peaceful refusal. Imperial Security intends to detain her before the next assembly and make her absence an example to everyone depending on her."
+bailMissions[3].dialog.acceptText = "I will get Maren to safety."
+bailMissions[3].dialog.declineText = "Maren chose to stand where others could see her. That courage deserves an honest answer from us, even if your answer is no."
+bailMissions[3].dialog.information = {
+	{
+		prompt = "Why is Maren so important?",
+		text = "Because she has taught ordinary people that they can protect one another without waiting for permission from Coruscant. She coordinates food, transport, and legal aid across communities the decree was designed to divide. Remove her without preserving that work, and fear will do what the detention order alone cannot."
+	},
+	{
+		prompt = "Why will she agree to leave?",
+		text = "She resisted when my staff first approached her. The surveillance archive changed her mind; it proves the Empire intends to arrest her entire committee if she remains visible. She will leave long enough for us to move the others and preserve their records, but she will need to hear that you were sent by my office."
+	},
+	{
+		prompt = "What is the extraction plan?",
+		text = "Meet Maren at the marked location and escort her back to Alderaanian protection. Rusk's people were already closing in when we last heard from her, so expect an interception. Avoid a confrontation if you can, but do not surrender her. Bringing Maren back alive is the only objective that matters."
+	}
+}
+
+bailMissions[4].primarySpawns[1].npcName = "Davo Sorn, an antiquities broker"
+bailMissions[4].dialog.introduction = "Maren is safe, and the communities around her are reorganizing before the Empire can identify their new lines of support. You have now carried information, recovered what Imperial Security stole, and protected someone whose work is larger than any one mission. Those acts have also made you visible. If you intend to continue, you will need contacts beyond Alderaan and a better understanding of how such efforts remain separate while still serving the same purpose. A Coruscant antiquities dealer named Luthen Rael may be willing to speak with you."
+bailMissions[4].dialog.acceptText = "I will deliver the inquiry and visit Rael's gallery."
+bailMissions[4].dialog.declineText = "That may be the wiser choice. Once you enter Rael's world, good intentions will protect neither you nor the people around you."
+bailMissions[4].dialog.information = {
+	{
+		prompt = "Why an antiquities dealer?",
+		text = "Because Luthen Rael is, quite genuinely, an antiquities dealer. His profession gives him reason to travel, meet private collectors, and move objects whose histories invite few public questions. Anything beyond that is his to tell you, if he decides that you should hear it."
+	},
+	{
+		prompt = "Why introduce me to him now?",
+		text = "Because courage without discipline creates casualties, and a network tied too closely to one senator can be destroyed with one investigation. Rael understands compartmentalization, procurement, and the difference between a useful risk and a wasted life. Your work for Mira suggests you may understand those things as well. He will make his own judgment."
+	},
+	{
+		prompt = "How do I make contact?",
+		text = "Deliver this antiquities inquiry to Davo Sorn, a broker who handles acquisitions for Rael's gallery. It contains nothing incriminating; its wording is the introduction. After the handoff, go to Rael's shop on Coruscant and approach him as a prospective client. Do not mention me, Mira, or the work you have done unless Rael does so first."
+	}
+}
+
 local luthenMissions = {
 	makeMission("retrieve", "coruscant", "Recover a disputed antiquity", "theme_park_rebel_civilian_contact", "a private collector", "object/tangible/loot/misc/artifact_rare_s01.iff", "Disputed antiquity", nil, reward(700),
 		"A collector has an object that belongs in my gallery. What is concealed inside is considerably more valuable.", "You are retrieving art. Maintain that fiction.", "The collector still has my property.", "The object will be separated from its more useful contents."),

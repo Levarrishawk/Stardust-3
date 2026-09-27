@@ -335,7 +335,6 @@ function AlderaCityScreenPlay:spawnCapitolMobiles()
 		{"info_broker", 60, 5.22842, 0.3, 4.01677, 180.005, "conversation"},
 		{"corellia_times_reporter", 60, 5.43518, 2.27819, -27.0615, 344.925, "conversation"},
 		{"brawler", 60, -1.72746, 7.9, -32.175, 0, "conversation"},
-		{"comm_operator", 300, -0.332123, 0.3, -2.90219, 134.998, "conversation"},
 		{"entertainer", 60, 0.767877, 0.3, -2.90219, 180.005, "conversation"},
 		{"farmer", 60, -18.6014, 1.30259, -11.3146, 360.011, "conversation"},
 		{"farmer", 60, 0.767877, 0.3, -4.00219, 0, "conversation"},
