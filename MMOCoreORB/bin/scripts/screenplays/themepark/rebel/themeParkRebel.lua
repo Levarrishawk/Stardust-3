@@ -98,12 +98,12 @@ local yavinMissions = {
 }
 
 local npcMapRebel = {
-	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, npcNumber=1, stfFile="", missions=attacheMissions, lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
-	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, npcNumber=2, stfFile="", missions=bailMissions, lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Rael's gallery is on Coruscant."},
-	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=0,z=0,y=0,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, lockedDialog="The gallery is open to serious clients only.", completedDialog="Saw Gerrera is waiting on Lok. Do not mistake an introduction for trust."},
-	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=38,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
-	{spawnData = {planetName="chandrila", npcTemplate="mon_mothma", x=6,z=0.6,y=-5.5,direction=-90,cellID=35791665,position=STAND}, worldPosition={x=294,y=-2938}, npcNumber=16, stfFile="", missions=mothmaMissions, lockedDialog="I am here on senatorial business.", completedDialog="The final shipments are being routed to a small cell on Yavin Four."},
-	{spawnData = {planetName="yavin4", npcTemplate="yavin_cell_commander", x=-25,z=32,y=68,direction=180,cellID=3465358,position=STAND}, worldPosition={x=-3050,y=-2950}, npcNumber=32, stfFile="", missions=yavinMissions, lockedDialog="This facility is not open to visitors.", completedDialog="The route is holding. You helped turn an isolated cell into something that can endure."}
+	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, npcNumber=1, stfFile="", missions=attacheMissions, noFactionDialog="The Alderaanian Relief Office accepts donations through the public registry. If you require assistance, a clerk can direct you.", lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
+	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Rael's gallery is on Coruscant."},
+	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=0,z=0,y=0,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, noFactionDialog="I deal in antiquities. If you are not here to acquire something, I have other clients waiting.", lockedDialog="The gallery is open to serious clients only.", completedDialog="Saw Gerrera is waiting on Lok. Do not mistake an introduction for trust."},
+	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=38,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, noFactionDialog="You took a wrong turn. Leave before my people decide you were scouting the camp.", lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
+	{spawnData = {planetName="chandrila", npcTemplate="mon_mothma", x=6,z=0.6,y=-5.5,direction=-90,cellID=35791665,position=STAND}, worldPosition={x=294,y=-2938}, npcNumber=16, stfFile="", missions=mothmaMissions, noFactionDialog="I am here on senatorial business. Please direct constituency matters to my staff.", lockedDialog="I am here on senatorial business.", completedDialog="The final shipments are being routed to a small cell on Yavin Four."},
+	{spawnData = {planetName="yavin4", npcTemplate="yavin_cell_commander", x=-25,z=32,y=68,direction=180,cellID=3465358,position=STAND}, worldPosition={x=-3050,y=-2950}, npcNumber=32, stfFile="", missions=yavinMissions, noFactionDialog="This is restricted territory. Turn around, leave by the route you used, and do not return.", lockedDialog="This facility is not open to visitors.", completedDialog="The route is holding. You helped turn an isolated cell into something that can endure."}
 }
 
 local sceneObjectMapRebel = {
@@ -126,7 +126,7 @@ ThemeParkRebel = ThemeParkLogic:new {
 	npcMap=npcMapRebel, sceneObjectMap=sceneObjectMapRebel, permissionMap={},
 	className="ThemeParkRebel", screenPlayState="rebel_theme_park", missionDescriptionStf="",
 	missionCompletionMessageStf="@theme_park/messages:rebel_completion_message",
-	requiredPlanets={"alderaan","coruscant","lok","chandrila","yavin4"}, faction=0
+	requiredPlanets={"alderaan","coruscant","lok","chandrila","yavin4"}, faction=FACTIONREBEL
 }
 
 registerScreenPlay("ThemeParkRebel", true)
@@ -174,7 +174,7 @@ function theme_park_rebel_mission_giver_conv_handler:handleScreenNoLoc(t,p,n,o,s
 	local result=mission_giver_conv_handler.handleScreenNoLoc(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("The contact has gone silent. I am withdrawing the assignment."); return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNoFaction(t,p,n,o,s)
-	local result=mission_giver_conv_handler.handleScreenNoFaction(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("Your recent associations make this conversation impossible."); return result
+	local result=mission_giver_conv_handler.handleScreenNoFaction(self,t,p,n,o,s); local data=self.themePark:getNpcData(self.themePark:getNpcNumber(n)); local dialog="There is nothing I can discuss with you."; if data~=nil and data.noFactionDialog~=nil then dialog=data.noFactionDialog end; LuaConversationScreen(result):setCustomDialogText(dialog); return result
 end
 
 theme_park_rebel_mission_target_conv_handler = mission_target_conv_handler:new {themePark=ThemeParkRebel}
