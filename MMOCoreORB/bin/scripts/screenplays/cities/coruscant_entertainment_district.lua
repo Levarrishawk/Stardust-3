@@ -9,7 +9,9 @@ CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 		{-5659, 0, -4743},
 		{-5862, 0, -4745},
 		{-5865, 0, -5047}
-	}
+	},
+	mountedSwoopSpeed = 17,
+	mountedSwoopUpdateInterval = 100
 }
 
 registerScreenPlay("CoruscantEntertainmentScreenPlay", true)
@@ -44,34 +46,54 @@ function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
 		return
 	end
 
-	local riderID = SceneObject(pRider):getObjectID()
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
 
-	writeData(riderID .. ":mountedSwoopRoutePoint", 2)
-	createObserver(DESTINATIONREACHED, self.screenplayName, "mountedSwoopDestinationReached", pRider)
-	AiAgent(pRider):setMovementState(AI_PATROLLING)
-	AiAgent(pRider):setNextPosition(self.mountedSwoopRoute[2][1], self.mountedSwoopRoute[2][2], self.mountedSwoopRoute[2][3], 0)
-	AiAgent(pRider):executeBehavior()
+	local vehicleID = SceneObject(pVehicle):getObjectID()
+
+	writeData(vehicleID .. ":mountedSwoopRoutePoint", 2)
+	createEvent(self.mountedSwoopUpdateInterval, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
 end
 
-function CoruscantEntertainmentScreenPlay:mountedSwoopDestinationReached(pRider)
-	if (pRider == nil or CreatureObject(pRider):isDead()) then
-		return 1
+function CoruscantEntertainmentScreenPlay:moveMountedSwoopPatrol(pVehicle)
+	if (pVehicle == nil or SceneObject(pVehicle):getZoneName() == "") then
+		return
 	end
 
-	local riderID = SceneObject(pRider):getObjectID()
-	local nextPoint = readData(riderID .. ":mountedSwoopRoutePoint") + 1
+	local vehicle = SceneObject(pVehicle)
+	local vehicleID = vehicle:getObjectID()
+	local pointIndex = readData(vehicleID .. ":mountedSwoopRoutePoint")
+	local target = self.mountedSwoopRoute[pointIndex]
+	local currentX = vehicle:getPositionX()
+	local currentZ = vehicle:getPositionZ()
+	local currentY = vehicle:getPositionY()
+	local dx = target[1] - currentX
+	local dy = target[3] - currentY
+	local distance = math.sqrt(dx * dx + dy * dy)
+	local step = self.mountedSwoopSpeed * self.mountedSwoopUpdateInterval / 1000
 
-	if (nextPoint > #self.mountedSwoopRoute) then
-		nextPoint = 1
+	if (distance <= step) then
+		currentX = target[1]
+		currentZ = target[2]
+		currentY = target[3]
+		pointIndex = pointIndex + 1
+
+		if (pointIndex > #self.mountedSwoopRoute) then
+			pointIndex = 1
+		end
+
+		writeData(vehicleID .. ":mountedSwoopRoutePoint", pointIndex)
+	else
+		currentX = currentX + dx / distance * step
+		currentZ = currentZ + (target[2] - currentZ) / distance * step
+		currentY = currentY + dy / distance * step
 	end
 
-	writeData(riderID .. ":mountedSwoopRoutePoint", nextPoint)
-	AiAgent(pRider):stopWaiting()
-	AiAgent(pRider):setWait(0)
-	AiAgent(pRider):setNextPosition(self.mountedSwoopRoute[nextPoint][1], self.mountedSwoopRoute[nextPoint][2], self.mountedSwoopRoute[nextPoint][3], 0)
-	AiAgent(pRider):executeBehavior()
+	if (distance > 0) then
+		vehicle:setDirectionalHeading(math.atan(dx, dy))
+	end
 
-	return 0
+	vehicle:teleport(currentX, currentZ, currentY, 0)
+	createEvent(self.mountedSwoopUpdateInterval, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
 end
 
 function CoruscantEntertainmentScreenPlay:animateCabaretDancer(pDancer)
