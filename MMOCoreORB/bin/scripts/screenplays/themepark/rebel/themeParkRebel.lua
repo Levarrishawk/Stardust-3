@@ -206,8 +206,8 @@ local luthenMissions = {
 		"A client has mistaken possession for ownership. Recover a ceremonial vessel from him and return it to this gallery. You are retrieving art. Maintain that fiction.", "Recover the vessel, discuss nothing beyond its provenance, and return directly to me.", "The collector still has my property. Every delay gives him another opportunity to discover what he bought.", "The vessel is intact, and so is what was concealed inside it. You followed the instruction without demanding the whole design. That is rarer than discretion."),
 	makeMission("confiscate", "coruscant", "Replace an Imperial cargo manifest", "imperial_staff_corporal", "an Imperial freight clerk", "object/tangible/mission/mission_datadisk.iff", "Imperial cargo manifest", twoTroopers, reward(775),
 		"Corporal Jeran Voss carries tomorrow's certified inspection manifest. He spends his after-hours in a bar on lower city level 1312. Recover the manifest there and return it before his next shift.", "Find Jeran in the level 1312 bar, recover the official manifest, and return directly to me. My people will make the substitution.", "Jeran still has the manifest, and his next shift begins soon. The replacement is useless if the original reaches the freight office.", "The substitution is complete. By morning, several crates of generators, medicine, and communications parts will exist only as restoration supplies for respectable galleries."),
-	makeMission("escort", "coruscant", "Extract a compromised courier", "theme_park_rebel_civilian_contact", "a compromised courier", nil, nil, twoTroopers, reward(850),
-		"A courier named Tessa Kord missed two check-ins after reporting surveillance. Find her and bring her here before Imperial Security closes the distance.", "Extract Tessa and watch her as carefully as the streets around her. If she has been turned, I need you to recognize it before she crosses this threshold.", "Every minute makes Tessa easier for Imperial Security to find. Bring her to the gallery.", "Tessa is alive. The route is burned, the safe locations are being emptied, and everyone she knew will have to disappear from her life. Survival has costs the survivor is seldom allowed to choose."),
+	makeMission("deliver", "coruscant", "Deliver an extraction packet to Tessa Kord", "theme_park_rebel_civilian_contact", "a compromised courier", "object/tangible/mission/mission_datadisk.iff", "Sealed extraction packet", nil, reward(850),
+		"Tessa Kord missed two check-ins after reporting surveillance. She cannot come to this gallery without exposing everyone connected to it. Deliver a sealed extraction packet to her hiding place and return with her account of what happened.", "Give Tessa the packet, ask only whether she was followed to the hiding place, and return directly to me. The credentials inside will let her leave Coruscant through a route neither of you knows.", "Tessa is still waiting. The longer she remains in one place, the more likely Imperial Security is to reconstruct her movements.", "Tessa is alive, and she was not followed to the hiding place. The route is burned, the safe locations are being emptied, and everyone she knew will have to disappear from her life. Survival has costs the survivor is seldom allowed to choose."),
 	makeMission("assassinate", "coruscant", "Silence an Imperial informant", "theme_park_rebel_bounty_hunter", "an Imperial informant", nil, nil, twoTroopers, reward(925),
 		"An informant named Pell Daro has sold the names of an entire workers' circle. He will deliver them to Imperial Security tonight. Stop the transfer permanently.", "Find Pell, make certain the list cannot be recovered, and do not let anyone trace you back to this gallery.", "Pell is preparing to deliver those names. If he reaches Imperial Security, the arrests will begin before dawn.", "The list will not be delivered. The workers will wake tomorrow believing they were merely fortunate. Let them. The people who remain innocent of this work are the reason we accept its cost."),
 	makeMission("retrieve", "coruscant", "Acquire military power regulators", "theme_park_rebel_hyperdrive_seller", "an unlicensed component dealer", "object/tangible/loot/misc/hyperdrive_part_s01.iff", "Military power regulators", nil, reward(1000, 100),
@@ -267,8 +267,10 @@ luthenMissions[2].dialog.information = {
 }
 
 luthenMissions[3].primarySpawns[1].npcName = "Tessa Kord, a compromised courier"
-luthenMissions[3].dialog.introduction = "The shipment cleared inspection. Somewhere beyond this district, people who will never know your name are unpacking the means to endure another month. That is victory at this stage: small, invisible, and never sufficient. One of the couriers who made that route possible has missed two check-ins. Tessa Kord reported surveillance before her comlink went silent. She may be hiding. She may be detained. She may have been turned. You will find out which."
-luthenMissions[3].dialog.acceptText = "I will find Tessa and bring her here if the route is safe."
+luthenMissions[3].primarySpawns[1].fixedSpawn = {x = 4.5, z = -0.9, y = -16.4, direction = -98, cellID = 37000114}
+luthenMissions[3].staticCellID = 37000114
+luthenMissions[3].dialog.introduction = "The shipment cleared inspection. Somewhere beyond this district, people who will never know your name are unpacking the means to endure another month. That is victory at this stage: small, invisible, and never sufficient. One of the couriers who made that route possible has missed two check-ins. Tessa Kord reported surveillance before her comlink went silent. She reached a temporary hiding place, but bringing her to this gallery would turn caution into catastrophe. You will carry the means for her to disappear without bringing her anywhere near me."
+luthenMissions[3].dialog.acceptText = "I will deliver the packet and return with Tessa's account."
 luthenMissions[3].dialog.declineText = "Then I will close the route without her. That is colder, but delay would be crueler to everyone else using it."
 luthenMissions[3].dialog.information = {
 	{
@@ -277,11 +279,15 @@ luthenMissions[3].dialog.information = {
 	},
 	{
 		prompt = "What do you mean by compromised?",
-		text = "It means I no longer control the conditions around her. Imperial Security may be following her, feeding her instructions, or waiting to see where she runs. If you find surveillance, break it before approaching. If her account does not hold together, do not lead her blindly to this shop. Judgment is the assignment, not merely the escort."
+		text = "It means I no longer control the conditions around her. Imperial Security may have followed her, fed her instructions, or allowed her to run so that she would expose the rest of us. You will ask whether anyone followed her to the hiding place and listen carefully to the answer. Do not mention this gallery, and do not invite her to follow you."
 	},
 	{
-		prompt = "What happens after I bring her back?",
-		text = "She will be questioned, moved, and given a new identity if we believe she is clean. The route will be dismantled either way. Tessa may survive and still lose her work, her home, and everyone who knows her. We ask people to sacrifice before we have earned the right to promise them a better world. Remember that when this begins to feel simple."
+		prompt = "What is in the extraction packet?",
+		text = "Forged transit credentials, enough credits to avoid official lodging, and a sequence of instructions that reveals only the next step. Tessa will move herself through people who cannot identify one another. Neither you nor she will know the complete route. That ignorance is part of the protection."
+	},
+	{
+		prompt = "What happens to Tessa afterward?",
+		text = "If her account holds together, the credentials will carry her off Coruscant under a new identity. This route will be dismantled either way. Tessa may survive and still lose her work, her home, and everyone who knows her. We ask people to sacrifice before we have earned the right to promise them a better world. Remember that when this begins to feel simple."
 	}
 }
 
