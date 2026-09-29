@@ -292,6 +292,7 @@ luthenMissions[3].dialog.information = {
 }
 
 luthenMissions[4].primarySpawns[1].npcName = "Pell Daro, an Imperial informant"
+luthenMissions[4].primarySpawns[1].fixedSpawn = {x = -34, z = 40, y = 3120, cellID = 0}
 luthenMissions[4].dialog.introduction = "Tessa was not turned. She was followed because someone sold the route from the other end. Pell Daro has spent months attending workers' meetings, listening to people speak as though solidarity made a room private. Tonight he intends to sell Imperial Security the names of everyone in that circle. If the transfer occurs, arrests begin before dawn. There is no extraction to arrange and no document we can replace. Pell must not complete the sale."
 luthenMissions[4].dialog.acceptText = "I understand. Pell will not deliver the names."
 luthenMissions[4].dialog.declineText = "Keep your refusal. It may be the last uncomplicated thing you own. I will still stop him."
