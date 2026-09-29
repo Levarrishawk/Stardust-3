@@ -313,6 +313,8 @@ luthenMissions[4].dialog.information = {
 }
 
 luthenMissions[5].primarySpawns[1].npcName = "Naro Bel, an unlicensed component dealer"
+luthenMissions[5].primarySpawns[1].fixedSpawn = {x = 0.8, z = 0.2, y = 2.0, direction = -16, cellID = 37000714}
+luthenMissions[5].staticCellID = 37000714
 luthenMissions[5].dialog.introduction = "The workers' circle is safe. They will never know how close they came to disappearing into detention cells, and they should not have to thank us for preventing it. You have now carried secrets, altered an Imperial process, recovered one of our own, and accepted a consequence no speech can improve. I have one final task before I introduce you to a man who has little use for speeches. Saw Gerrera needs military power regulators on Lok. An unlicensed dealer named Naro Bel has a set promised to an Imperial buyer. Recover them first."
 luthenMissions[5].dialog.acceptText = "I will recover the regulators and return them to you."
 luthenMissions[5].dialog.declineText = "Then Saw remains my problem, not yours. There are worse boundaries to keep."
