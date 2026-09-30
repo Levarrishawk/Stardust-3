@@ -376,7 +376,7 @@ local npcMapRebel = {
 	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, npcNumber=1, stfFile="", missions=attacheMissions, noFactionDialog="The Alderaanian Relief Office accepts donations through the public registry. If you require assistance, a clerk can direct you.", lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
 	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, useCellWorldPosition=true, existingObjectIdLabel="alderaCity:bailOrganaObjectID", npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Luthen's shop is in the Collective Commerce District on Coruscant. He is expecting you."},
 	{spawnData = {planetName="coruscant", npcTemplate="luthen_rael", x=1.0,z=0.9,y=3.2,direction=180,cellID=37002117,position=STAND}, worldPosition={x=-1918,y=-134}, npcNumber=4, stfFile="", missions=luthenMissions, noFactionDialog="Welcome. The gallery is open, though I am afraid today's private appointments are already spoken for. Please, take your time with the collection. Antiquities reward patience, and discretion even more so.", lockedDialog="I remember you, of course. Senatorial circles do send the most fascinating clients. Our business, however, cannot proceed until your earlier obligation is complete. Provenance matters; one unfinished history can compromise an entire collection.", completedDialog="Saw Gerrera is waiting on Lok. Go without the regulators; they are traveling by a safer route. Give him my name once, then let him decide what it is worth. He is not part of my network, and an introduction is not trust."},
-	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=38,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, noFactionDialog="You took a wrong turn. Leave before my people decide you were scouting the camp.", lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
+	{spawnData = {planetName="lok", npcTemplate="saw_gerrera", x=-5660,z=62,y=-4820,direction=45,cellID=0,position=STAND}, worldPosition={x=-5660,y=-4820}, npcNumber=8, stfFile="", missions=sawMissions, noFactionDialog="You took a wrong turn. Leave before my people decide you were scouting the camp.", lockedDialog="Luthen did not clear you to speak for him.", completedDialog="The supplies are moving. Mothma will decide what becomes of them."},
 	{spawnData = {planetName="chandrila", npcTemplate="mon_mothma", x=6,z=0.6,y=-5.5,direction=-90,cellID=35791665,position=STAND}, worldPosition={x=294,y=-2938}, npcNumber=16, stfFile="", missions=mothmaMissions, noFactionDialog="I am here on senatorial business. Please direct constituency matters to my staff.", lockedDialog="I am here on senatorial business.", completedDialog="The final shipments are being routed to a small cell on Yavin Four."},
 	{spawnData = {planetName="yavin4", npcTemplate="yavin_cell_commander", x=-25,z=32,y=68,direction=180,cellID=3465358,position=STAND}, worldPosition={x=-3050,y=-2950}, npcNumber=32, stfFile="", missions=yavinMissions, noFactionDialog="This is restricted territory. Turn around, leave by the route you used, and do not return.", lockedDialog="This facility is not open to visitors.", completedDialog="The route is holding. You helped turn an isolated cell into something that can endure."}
 }
@@ -409,10 +409,10 @@ local sceneObjectMapRebel = {
   {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.7,z=1.2,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
   {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s3.iff",x=2.7,z=1.75,y=2.5,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Imperial Court Sculpture"},
 
-	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5665,z=38,y=-4818,cellID=0,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Partisan Field Shelter"},
-	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5656,z=38,y=-4826,cellID=0,dw=0.3827,dx=0,dy=0.9239,dz=0},customObjectName="Partisan Supply Shelter"},
-	{spawnData={planetName="lok",objectTemplate="object/static/structure/general/campfire_smoldering.iff",x=-5660,z=38,y=-4823,cellID=0,dw=1,dx=0,dy=0,dz=0},customObjectName="Banked Campfire"},
-	{spawnData={planetName="lok",objectTemplate="object/static/structure/general/ins_shield_generator_stage1.iff",x=-5652,z=38,y=-4818,cellID=0,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Salvaged Field Generator"}
+	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5665,z=62,y=-4818,cellID=0,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Partisan Field Shelter"},
+	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5656,z=62,y=-4826,cellID=0,dw=0.3827,dx=0,dy=0.9239,dz=0},customObjectName="Partisan Supply Shelter"},
+	{spawnData={planetName="lok",objectTemplate="object/static/structure/general/campfire_smoldering.iff",x=-5660,z=62,y=-4823,cellID=0,dw=1,dx=0,dy=0,dz=0},customObjectName="Banked Campfire"},
+	{spawnData={planetName="lok",objectTemplate="object/static/structure/general/ins_shield_generator_stage1.iff",x=-5652,z=62,y=-4818,cellID=0,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Salvaged Field Generator"}
 }
 
 ThemeParkRebel = ThemeParkLogic:new {
@@ -423,6 +423,35 @@ ThemeParkRebel = ThemeParkLogic:new {
 }
 
 registerScreenPlay("ThemeParkRebel", true)
+
+function ThemeParkRebel:spawnNpcs()
+	if not ThemeParkLogic.spawnNpcs(self) then return false end
+
+	local partisans = {
+		{"rebel_commando", "a Partisan sentry", -5668, -4826, -135},
+		{"rebel_commando", "a Partisan sentry", -5668, -4812, -45},
+		{"rebel_commando", "a Partisan sentry", -5650, -4812, 45},
+		{"rebel_commando", "a Partisan sentry", -5650, -4828, 135},
+		{"rebel_specforce_urban_guerrilla", "a Partisan fighter", -5662, -4825, 45},
+		{"rebel_specforce_urban_guerrilla", "a Partisan fighter", -5659, -4826, -20},
+		{"rebel_specforce_urban_guerrilla", "a Partisan fighter", -5658, -4822, -100},
+		{"rebel_specforce_urban_guerrilla", "a Partisan fighter", -5663, -4822, 110},
+		{"rebel_trooper", "a Partisan supply handler", -5658, -4829, 90},
+		{"rebel_trooper", "a Partisan supply handler", -5653, -4829, -90},
+		{"rebel_trooper", "a Partisan mechanic", -5652, -4815, 180},
+		{"rebel_trooper", "a Partisan mechanic", -5649, -4818, -90}
+	}
+	for _, partisan in ipairs(partisans) do
+		local pNpc = spawnMobile("lok", partisan[1], 60, partisan[3], 62, partisan[4], partisan[5], 0)
+		if pNpc == nil then
+			printLuaError("ThemeParkRebel: unable to spawn Partisan camp NPC.")
+			return false
+		end
+		CreatureObject(pNpc):setCustomObjectName(partisan[2])
+		AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
+	end
+	return true
+end
 
 local function getDialog(themePark, pPlayer, pNpc)
 	local number = themePark:getNpcNumber(pNpc)
@@ -471,14 +500,29 @@ end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenWork(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenWork(self,t,p,n,o,s); local screen=LuaConversationScreen(result); local d=getDialog(self.themePark,p,n); if d~=nil then screen:setCustomDialogText(d.working) end; screen:removeAllOptions(); screen:addOption("I cannot complete this assignment.","npc_reset"); screen:addOption("I am still working on it.","npc_backtowork"); return result
 end
+function theme_park_rebel_mission_giver_conv_handler:giveSawWaypoint(pPlayer)
+	if pPlayer == nil then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	local sawData = self.themePark:getNpcData(8)
+	if pGhost == nil or sawData == nil then return end
+	local spawn = sawData.spawnData
+	PlayerObject(pGhost):removeWaypointBySpecialType(WAYPOINTTHEMEPARK)
+	PlayerObject(pGhost):addWaypoint(spawn.planetName, "Meet Saw Gerrera", "", spawn.x, spawn.z, spawn.y, WAYPOINT_PURPLE, true, true, WAYPOINTTHEMEPARK, 0)
+end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenReward(t,p,n,o,s)
-	local d=getDialog(self.themePark,p,n); local result=mission_giver_conv_handler.handleScreenReward(self,t,p,n,o,s); if d~=nil then LuaConversationScreen(result):setCustomDialogText(d.completed) end; return result
+	local npcNumber = self.themePark:getNpcNumber(n)
+	local missionNumber = self.themePark:getCurrentMissionNumber(npcNumber,p)
+	local d=getDialog(self.themePark,p,n); local result=mission_giver_conv_handler.handleScreenReward(self,t,p,n,o,s); if d~=nil then LuaConversationScreen(result):setCustomDialogText(d.completed) end
+	if npcNumber == 4 and missionNumber == #luthenMissions then self:giveSawWaypoint(p) end
+	return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNotYet(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNotYet(self,t,p,n,o,s); local data=self.themePark:getNpcData(self.themePark:getNpcNumber(n)); if data~=nil then LuaConversationScreen(result):setCustomDialogText(data.lockedDialog) end; return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNext(t,p,n,o,s)
-	local result=mission_giver_conv_handler.handleScreenNext(self,t,p,n,o,s); local data=self.themePark:getNpcData(self.themePark:getNpcNumber(n)); if data~=nil then LuaConversationScreen(result):setCustomDialogText(data.completedDialog) end; return result
+	local result=mission_giver_conv_handler.handleScreenNext(self,t,p,n,o,s); local npcNumber=self.themePark:getNpcNumber(n); local data=self.themePark:getNpcData(npcNumber); if data~=nil then LuaConversationScreen(result):setCustomDialogText(data.completedDialog) end
+	if npcNumber == 4 then self:giveSawWaypoint(p) end
+	return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenReset(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenReset(self,t,p,n,o,s); LuaConversationScreen(result):setCustomDialogText("Understood. This assignment is withdrawn."); return result
