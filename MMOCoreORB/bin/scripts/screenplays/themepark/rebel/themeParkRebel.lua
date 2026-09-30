@@ -412,7 +412,7 @@ local sceneObjectMapRebel = {
 	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5665,z=62,y=-4818,cellID=0,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Partisan Field Shelter"},
 	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5656,z=62,y=-4826,cellID=0,dw=0.3827,dx=0,dy=0.9239,dz=0},customObjectName="Partisan Supply Shelter"},
 	{spawnData={planetName="lok",objectTemplate="object/static/structure/general/campfire_smoldering.iff",x=-5660,z=62,y=-4823,cellID=0,dw=1,dx=0,dy=0,dz=0},customObjectName="Banked Campfire"},
-	{spawnData={planetName="lok",objectTemplate="object/static/structure/general/ins_shield_generator_stage1.iff",x=-5652,z=62,y=-4818,cellID=0,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Salvaged Field Generator"}
+	--{spawnData={planetName="lok",objectTemplate="object/static/structure/general/ins_shield_generator_stage1.iff",x=-5652,z=62,y=-4818,cellID=0,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Salvaged Field Generator"}
 }
 
 ThemeParkRebel = ThemeParkLogic:new {
