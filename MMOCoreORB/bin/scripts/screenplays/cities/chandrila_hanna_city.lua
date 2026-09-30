@@ -22,23 +22,40 @@ function HannaCityScreenPlay:spawnHotelLobbyMobiles()
 		"businessman", "farmer", "gambler", "info_broker", "medic",
 		"noble", "official", "pilot", "scientist"
 	}
-	-- Aldera hotel's adjoining lobby and lounge population.
+	-- Aldera hotel's entry lobby and bar, mapped to Hanna City's matching cells.
 	local hotelMobiles = {
-		{-20.4, 1.6, 8.1, 313, "conversation"},
-		{-22.3, 1.6, 9.9, 132, "conversation"},
-		{-18.9, 1.0, 0.4, 129, "conversation"},
-		{-15.8, 1.0, -1.8, 306, "conversation"},
-		{-12.8, 1.6, 12.9, 180, "calm"},
-		{-26.2, 1.6, -1.5, 90, "neutral"},
-		{-19.7, 1.6, -12.5, 45, "calm"},
-		{-11.2, 1.6, -12.5, 315, "neutral"}
+		{"townsperson", 2.6, 1.0, -1.6, 310, 35791588, "neutral"},
+		{"townsperson", -0.9, 1.0, 1.2, 140, 35791588, "conversation"},
+		{"townsperson", 8.4, 1.0, 10.9, 210, 35791588, "calm"},
+		{"townsperson", -5.3, 1.0, 8.5, 35, 35791588, "conversation"},
+		{"townsperson", 8.4, 1.0, -11.2, 270, 35791588, "neutral"},
+		{"bartender", 20.1, 1.6, 12.3, 180, 35791589, "neutral"},
+		{"entertainer", 24.3, 2.0, -15.5, 0, 35791589, "entertained"},
+		{"patron", 17.5, 1.3, 9.9, 70, 35791589, "conversation"},
+		{"businessman", 18.9, 1.3, 10.2, 275, 35791589, "conversation"},
+		{"commoner", 21.6, 1.3, 10.6, 351, 35791589, "entertained"},
+		{"noble", 14.2, 1.3, 6.8, 210, 35791589, "entertained"},
+		{"commoner_old", 16.0, 1.3, 5.7, 195, 35791589, "applause_polite"},
+		{"artisan", 19.2, 1.3, 4.8, 185, 35791589, "entertained"},
+		{"gambler", 22.4, 1.3, 5.5, 170, 35791589, "applause_excited"},
+		{"pilot", 25.2, 1.3, 7.2, 155, 35791589, "entertained"},
+		{"info_broker", 14.8, 1.3, 0.6, 205, 35791589, "entertained"},
+		{"farmer", 18.0, 1.3, -0.5, 190, 35791589, "applause_polite"},
+		{"commoner", 21.4, 1.3, 0.2, 175, 35791589, "entertained"},
+		{"medic", 24.8, 1.3, -1.0, 160, 35791589, "applause_excited"},
+		{"mercenary", 15.5, 1.3, -6.2, 210, 35791589, "entertained"},
+		{"commoner", 19.4, 1.3, -7.0, 190, 35791589, "applause_polite"},
+		{"noble", 23.0, 1.3, -6.4, 165, 35791589, "entertained"}
 	}
 	for i = 1, #hotelMobiles, 1 do
 		local mobile = hotelMobiles[i]
-		local template = townspersonTemplates[getRandomNumber(#townspersonTemplates)]
-		local pMobile = spawnMobile("chandrila", template, 60, mobile[1], mobile[2], mobile[3], mobile[4], 35791594)
+		local template = mobile[1]
+		if template == "townsperson" then
+			template = townspersonTemplates[getRandomNumber(#townspersonTemplates)]
+		end
+		local pMobile = spawnMobile("chandrila", template, 60, mobile[2], mobile[3], mobile[4], mobile[5], mobile[6])
 		if pMobile ~= nil then
-			CreatureObject(pMobile):setMoodString(mobile[5])
+			CreatureObject(pMobile):setMoodString(mobile[7])
 			AiAgent(pMobile):addObjectFlag(AI_STATIC)
 			if CreatureObject(pMobile):getPvpStatusBitmask() == 0 then
 				CreatureObject(pMobile):clearOptionBit(AIENABLED)
