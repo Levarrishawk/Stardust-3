@@ -432,6 +432,76 @@ local mothmaMissions = {
 		"The supplier who provided our generators has been threatened. Bring her to the Hanna City hotel.", "She risked herself for people she has never met.", "The supplier must be extracted tonight.", "She is safe. Her equipment is already being routed to Yavin Four.")
 }
 
+mothmaMissions[1].dialog = {
+	introduction = "Welcome. I understand you have been assisting with relief arrangements on Lok. Saw's recommendation was brief, but quite definite. Please keep our discussion quiet; the other guests have no part in it. My office supports a foundation supplying medicine and equipment to communities harmed by Imperial requisitions. An examiner has requested its records. The accounts are lawful, but the accompanying correspondence identifies donors and vulnerable recipients. I need you to deliver those protected records to the foundation's trustee before the examination begins.",
+	acceptText = "I will deliver the protected records to the trustee.",
+	declineText = "I understand. You should know the responsibility before accepting it. I will seek another courier; please leave the foundation's affairs out of any discussion of your visit.",
+	accepted = "Take the sealed records to the trustee, then return here. Present yourself as a courier handling foundation correspondence. You need not explain your earlier work or name anyone who directed you to me.",
+	working = "The trustee has not received the records. The examination is approaching, and the people named in that correspondence cannot protect themselves if it is taken.",
+	completed = "The trustee has the correspondence. The examiner will receive the financial accounts to which his office is entitled, without a private list of families and donors to investigate. Our shipments can continue. You have protected people who may never learn they were at risk. That is no less significant than a victory they can see.",
+	information = {
+		{prompt = "Why would an Imperial senator help Saw?", text = "I represent Chandrila's people. Holding a seat in the Senate does not require me to approve of every act committed in its name. Saw and I disagree profoundly about methods, but his people need medicine as surely as anyone else. My position still allows me to obtain hearings, support relief, and protect lawful institutions. I intend to use that access while it remains available."},
+		{prompt = "Are these records evidence of illegal activity?", text = "They are private correspondence concerning lawful donations and relief recipients. The foundation will retain its proper accounts. What concerns me is an examiner turning a family's need, or a donor's generosity, into grounds for suspicion. Under this government, an accusation can travel much faster than an appeal."},
+		{prompt = "Why entrust them to me?", text = "Saw has seen how you act under pressure. My usual staff are recognizable, and their movements invite questions. You can carry a modest packet without making it appear to be a senatorial intervention. Deliver it unopened to the trustee and return to me. The discretion of this task is part of its importance."}
+	}
+}
+
+mothmaMissions[2].dialog = {
+	introduction = "The foundation can continue its work. There is another matter that cannot be resolved by moving documents. A Chandrilan labor organizer has challenged compulsory production quotas that are leaving workers injured and families without adequate food. He has agreed to give testimony to a legal delegation meeting here. Imperial authorities have accused him of sedition, and troops are threatening to prevent his arrival. Please find him and escort him to this hotel. His testimony deserves to be heard before someone decides he should disappear.",
+	acceptText = "I will escort the organizer to the delegation here.",
+	declineText = "I cannot ask you to accept a danger you are unprepared to face. I will seek another escort. His hearing must not become an appointment we make and then fail to protect.",
+	accepted = "Speak to the organizer and escort him back to me at the hotel. Stay with him throughout the journey. Armed troops may intervene; protect him and avoid drawing uninvolved people into the confrontation.",
+	working = "The delegation is waiting, but its witness has not arrived. Please remain with him until he reaches the hotel. An invitation offers very little protection on the road.",
+	completed = "He has arrived, and the delegation will hear him. His account will enter a record the authorities cannot dismiss as easily as an anonymous complaint. I cannot promise a just ruling. I can ensure there are witnesses to what he has said and people prepared to challenge his detention. Thank you for allowing him to speak for himself.",
+	information = {
+		{prompt = "What has the organizer actually done?", text = "Collected workers' accounts and petitioned against quotas they cannot meet safely. He has not called for attacks. The accusation of sedition makes it easier to treat a dispute about conditions as a security problem. We must not accept that description simply because it appears on an official notice."},
+		{prompt = "Can a legal hearing accomplish anything?", text = "Sometimes it can secure a delay, a release, or an official willing to reconsider an order. Sometimes it establishes evidence for the next challenge. I know how limited these institutions have become. But abandoning every remaining avenue would leave the people who depend on them with even fewer choices."},
+		{prompt = "What if the troops try to stop us?", text = "You should expect armed interference. Protect the organizer if he is attacked, and keep him close until you reach me. I am not asking you to provoke a public confrontation. I am asking you to bring a threatened witness safely to a hearing. If force becomes necessary, remember the lives beyond your immediate objective."}
+	}
+}
+
+mothmaMissions[3].dialog = {
+	introduction = "The organizer's testimony has confirmed something disturbing. Several workers who submitted complaints are already being monitored. An Imperial security liaison has compiled an index connecting labor representatives, relief volunteers, and their associates. Once it is transmitted, local harassment may become coordinated arrests. My office cannot request the index without revealing whom we are trying to protect. I need you to recover it from the liaison before that happens. This assignment involves a risk I cannot disguise as ordinary foundation business.",
+	acceptText = "I will recover the surveillance index and bring it here.",
+	declineText = "I understand your hesitation. This crosses a threshold the earlier deliveries did not. I will pursue another means of obtaining the index. Please do not discuss the names or organizations we have mentioned.",
+	accepted = "Recover the liaison's data disk and return directly to me. He has an armed escort. Do not approach the people under surveillance or tell them what you are doing; a hurried warning could identify the very connections we need to conceal.",
+	working = "The liaison still holds the index. Until we know who is listed and what the authorities intend, our attempts to warn people may expose others.",
+	completed = "We have the index. My staff can now arrange separate warnings and legal assistance without sending everyone into hiding at once. We must assume other records exist; this disk is an opportunity to protect people, not proof that the threat has vanished. I know what obtaining it required. I will not make that easier for myself by speaking only of the information you brought back.",
+	information = {
+		{prompt = "How reliable is the warning?", text = "The organizer described visits to households that had submitted testimony privately. We compared those accounts with inquiries received by the foundation. The overlap is too precise to ignore. The liaison is preparing a consolidated report. We need its contents to distinguish an immediate threat from a suspicion."},
+		{prompt = "Why cannot your office intervene openly?", text = "A formal inquiry would tell the liaison which cases concern me and give him time to distribute the index. My office can help contest individual detentions. It cannot safely announce that these people are connected before we know how much the authorities already understand. Public action must be chosen carefully when its consequences fall on others."},
+		{prompt = "Are you asking me to fight an Imperial officer?", text = "Yes. He carries the disk and has armed protection. Recovering it may require lethal force, and attacking him will expose you as an enemy of the Empire. I would prefer a lawful means of preventing these arrests. I have not found one that can act in time. You deserve a clear account of that choice before you accept it."}
+	}
+}
+
+mothmaMissions[4].dialog = {
+	introduction = "The first warnings are being delivered. Now we must protect the relief work those people were sustaining. An independent shipping company is willing to serve remote settlements that larger carriers have abandoned. Its representative needs a signed charter establishing regular deliveries of medical stores, generators, and construction supplies. A dependable civilian route can support isolated communities and people quietly organizing against Imperial abuses. Deliver the charter and obtain the representative's agreement. This must be a service that can withstand ordinary scrutiny.",
+	acceptText = "I will deliver the charter and confirm the carrier's agreement.",
+	declineText = "Then I will arrange another delivery. Please understand that these routes are difficult to establish. A willing carrier needs more than our assurances before committing ships and crews.",
+	accepted = "Deliver the charter to the shipping representative, then return here with confirmation. Discuss the listed cargo and delivery obligations. The representative does not need an account of Saw's camp or the people named in the surveillance index.",
+	working = "The carrier has not received the charter. Until the agreement is confirmed, the next shipments have no dependable route.",
+	completed = "The carrier has agreed. Regular shipments will allow clinics and remote communities to plan instead of waiting for whatever arrives by chance. The papers, payments, and listed cargo will have to remain consistent. That work rarely attracts attention, which is precisely why it can last. You have helped create something people can rely upon.",
+	information = {
+		{prompt = "Is the relief program only a cover?", text = "No. The medicine goes to people who need it. The generators power clinics and shelters. Some recipients are also resisting the Empire, but their suffering is not a fiction we invented to conceal supplies. If we misuse every charitable institution we touch, we will destroy the public trust that allows them to help anyone."},
+		{prompt = "What will the carrier know?", text = "Its crews will know the cargo, the receiving agents, and the terms of the charter. They will be paid for legitimate work. They do not need to know every recipient's political commitments, and we should not casually make them responsible for secrets they never agreed to carry."},
+		{prompt = "What do I need to confirm?", text = "Deliver the signed charter to the representative and obtain acceptance of the route. The agreement covers relief and construction cargo. Return to me afterward so we can authorize the shipments. Do not expand the arrangement with promises of armed cargo or destinations you have not been asked to discuss."}
+	}
+}
+
+mothmaMissions[5].dialog = {
+	introduction = "The shipping agreement is secured, but one of the people making those deliveries possible has received threats. An industrial supplier provided generators at terms our relief projects could afford. Imperial inquiries now suggest she will be detained for questioning. We asked for her assistance; we cannot simply collect the equipment and leave her to face the consequences alone. Please find her and escort her here to the hotel. My staff can arrange legal representation and a safer place for her to stay once she arrives.",
+	acceptText = "I will escort the supplier safely to the hotel.",
+	declineText = "I will find another escort. She deserves more than a message telling her to remain calm while we continue using what she supplied. Please keep her circumstances private.",
+	accepted = "Speak to the supplier and escort her back to me. Imperial troops may try to stop her. Stay with her until she reaches this hotel; the arrangements my staff have made begin here, not somewhere along the road.",
+	working = "The supplier has not arrived. Her protection is arranged here, but it cannot help her while she remains exposed. Please bring her safely to me.",
+	completed = "She is safe, and my staff will remain with her while the next arrangements are made. The shipments she helped assemble can proceed. Some are bound for a small, growing cell on Yavin Four, where equipment is needed to make an isolated refuge sustainable. It is not the center of a united movement. It is a group of people trying to endure long enough for something larger to become possible. You can help them use what we have gathered. Speak to their commander when you arrive. And remember the supplier, the workers, and the donors whose choices made those crates possible. We owe them a future with more freedom to choose, not merely another authority to obey.",
+	information = {
+		{prompt = "Why has the supplier attracted attention?", text = "She questioned requisition terms and continued supplying civilian customers the authorities wanted to discourage. Her business records may be used to pressure her into identifying those customers. She helped us in good faith. That gives us a responsibility to her, even when protecting her becomes inconvenient."},
+		{prompt = "Will bringing her here protect your position?", text = "It may complicate it. I cannot demand that other people risk their livelihoods while treating my own reputation as untouchable. The hotel allows my staff to receive a threatened civilian through an ordinary appointment. What follows will be handled privately, with her consent. She is a person seeking protection, not an asset we are entitled to move."},
+		{prompt = "How do I bring her to safety?", text = "Reach her, explain that I sent you, and escort her back to this hotel. Protect her if the troops intervene, but avoid unnecessary confrontation. Stay close enough that she is not left to negotiate the journey alone. Once she reaches me, my staff will take responsibility for her immediate safety."}
+	}
+}
+
 local yavinMissions = {
 	makeMission("escort", "yavin4", "Escort a power engineer to the Yavin cell", "theme_park_rebel_technician_contact", "a resistance power engineer", nil, nil, nil, reward(1825),
 		"Find the engineer who can synchronize our new generators and escort them through the jungle.", "An Imperial patrol would be worse than the wildlife.", "The engineer has not reached the base.", "We can now power the infirmary and communications room together."),
@@ -455,6 +525,11 @@ local npcMapRebel = {
 }
 
 npcMapRebel[4].completedDialog = sawHandoffDialog
+npcMapRebel[5].spawnData.x = -24.6
+npcMapRebel[5].spawnData.z = 1.6
+npcMapRebel[5].spawnData.y = -12.9
+npcMapRebel[5].spawnData.direction = 3
+npcMapRebel[5].spawnData.cellID = 35791594
 npcMapRebel[5].useCellWorldPosition = true
 
 local sceneObjectMapRebel = {

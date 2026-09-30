@@ -11,7 +11,39 @@ registerScreenPlay("HannaCityScreenPlay", true)
 function HannaCityScreenPlay:start()
 	if (isZoneEnabled("chandrila")) then
 		self:spawnMobiles()
+		self:spawnHotelLobbyMobiles()
 		self:spawnSceneObjects()
+	end
+end
+
+function HannaCityScreenPlay:spawnHotelLobbyMobiles()
+	local townspersonTemplates = {
+		"commoner", "commoner", "commoner_old", "commoner_fat", "artisan",
+		"businessman", "farmer", "gambler", "info_broker", "medic",
+		"noble", "official", "pilot", "scientist"
+	}
+	-- Aldera hotel's adjoining lobby and lounge population.
+	local hotelMobiles = {
+		{-20.4, 1.6, 8.1, 313, "conversation"},
+		{-22.3, 1.6, 9.9, 132, "conversation"},
+		{-18.9, 1.0, 0.4, 129, "conversation"},
+		{-15.8, 1.0, -1.8, 306, "conversation"},
+		{-12.8, 1.6, 12.9, 180, "calm"},
+		{-26.2, 1.6, -1.5, 90, "neutral"},
+		{-19.7, 1.6, -12.5, 45, "calm"},
+		{-11.2, 1.6, -12.5, 315, "neutral"}
+	}
+	for i = 1, #hotelMobiles, 1 do
+		local mobile = hotelMobiles[i]
+		local template = townspersonTemplates[getRandomNumber(#townspersonTemplates)]
+		local pMobile = spawnMobile("chandrila", template, 60, mobile[1], mobile[2], mobile[3], mobile[4], 35791594)
+		if pMobile ~= nil then
+			CreatureObject(pMobile):setMoodString(mobile[5])
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
+			if CreatureObject(pMobile):getPvpStatusBitmask() == 0 then
+				CreatureObject(pMobile):clearOptionBit(AIENABLED)
+			end
+		end
 	end
 end
 
