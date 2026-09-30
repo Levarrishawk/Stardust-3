@@ -416,6 +416,9 @@ sawMissions[5].dialog = {
 	}
 }
 
+local sawHandoffDialog = "Your next contact is Senator Mon Mothma. Yes, a senator in the Imperial Senate. You have seen her public face. That is the face she needs the Empire to see, too. She opposes its seizures and arrests, and she uses the access her office gives her to protect people who cannot protect themselves. Relief foundations, donors, independent carriers: she can reach people who would shut their doors if I arrived with a rifle. Through those contacts, she can arrange money, shipping papers, and legitimate cargo routes for supplies we cannot move openly. I can take converters from an Imperial officer. I cannot make every port inspector look at those crates and see ordinary relief equipment. She can help us do that. Mothma and I disagree about how far resistance must go. But she has put resources into keeping people alive, and I judge that by what reaches them. Do not mistake this introduction for permission to demand secrets from her. She is expecting someone following up on relief arrangements, and she will decide what you need to know once you speak privately. Find her at the hotel in Hanna City on Chandrila. I have marked it on your datapad. In the lobby, keep this camp, my name, and your work here to yourself. Her public position is what makes her useful. Expose what she is helping us do, and you destroy the protection it gives everyone depending on her. You have earned my recommendation. Give her a reason to use it."
+sawMissions[5].dialog.completed = sawMissions[5].dialog.completed .. " " .. sawHandoffDialog
+
 local mothmaMissions = {
 	makeMission("deliver", "chandrila", "Deliver protected foundation records", "theme_park_rebel_civilian_contact", "a foundation trustee", "object/tangible/mission/mission_datadisk.iff", "Protected foundation records", nil, reward(1450),
 		"Deliver these charitable foundation records before an Imperial examiner arrives.", "Nothing in them is illegal. That will not protect the people named.", "The trustee must receive the records first.", "The foundation can continue without exposing its donors."),
@@ -450,6 +453,9 @@ local npcMapRebel = {
 	{spawnData = {planetName="chandrila", npcTemplate="mon_mothma", x=6,z=0.6,y=-5.5,direction=-90,cellID=35791665,position=STAND}, worldPosition={x=294,y=-2938}, npcNumber=16, stfFile="", missions=mothmaMissions, noFactionDialog="I am here on senatorial business. Please direct constituency matters to my staff.", lockedDialog="I am here on senatorial business.", completedDialog="The final shipments are being routed to a small cell on Yavin Four."},
 	{spawnData = {planetName="yavin4", npcTemplate="yavin_cell_commander", x=-25,z=32,y=68,direction=180,cellID=3465358,position=STAND}, worldPosition={x=-3050,y=-2950}, npcNumber=32, stfFile="", missions=yavinMissions, noFactionDialog="This is restricted territory. Turn around, leave by the route you used, and do not return.", lockedDialog="This facility is not open to visitors.", completedDialog="The route is holding. You helped turn an isolated cell into something that can endure."}
 }
+
+npcMapRebel[4].completedDialog = sawHandoffDialog
+npcMapRebel[5].useCellWorldPosition = true
 
 local sceneObjectMapRebel = {
 	-- Luthen's public gallery. The end-table mesh has a low pivot, so the plinths sit at 1.0.
@@ -579,11 +585,21 @@ function theme_park_rebel_mission_giver_conv_handler:giveSawWaypoint(pPlayer)
 	PlayerObject(pGhost):removeWaypointBySpecialType(WAYPOINTTHEMEPARK)
 	PlayerObject(pGhost):addWaypoint(spawn.planetName, "Meet Saw Gerrera", "", spawn.x, spawn.z, spawn.y, WAYPOINT_PURPLE, true, true, WAYPOINTTHEMEPARK, 0)
 end
+function theme_park_rebel_mission_giver_conv_handler:giveMothmaWaypoint(pPlayer)
+	if pPlayer == nil then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	local mothmaData = self.themePark:getNpcData(16)
+	if pGhost == nil or mothmaData == nil then return end
+	local position = self.themePark:getNpcWorldPosition(16)
+	PlayerObject(pGhost):removeWaypointBySpecialType(WAYPOINTTHEMEPARK)
+	PlayerObject(pGhost):addWaypoint(mothmaData.spawnData.planetName, "Meet Mon Mothma - Hanna City Hotel", "", position.x, 0, position.y, WAYPOINT_PURPLE, true, true, WAYPOINTTHEMEPARK, 0)
+end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenReward(t,p,n,o,s)
 	local npcNumber = self.themePark:getNpcNumber(n)
 	local missionNumber = self.themePark:getCurrentMissionNumber(npcNumber,p)
 	local d=getDialog(self.themePark,p,n); local result=mission_giver_conv_handler.handleScreenReward(self,t,p,n,o,s); if d~=nil then LuaConversationScreen(result):setCustomDialogText(d.completed) end
 	if npcNumber == 4 and missionNumber == #luthenMissions then self:giveSawWaypoint(p) end
+	if npcNumber == 8 and missionNumber == #sawMissions then self:giveMothmaWaypoint(p) end
 	return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNotYet(t,p,n,o,s)
@@ -592,6 +608,7 @@ end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNext(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNext(self,t,p,n,o,s); local npcNumber=self.themePark:getNpcNumber(n); local data=self.themePark:getNpcData(npcNumber); if data~=nil then LuaConversationScreen(result):setCustomDialogText(data.completedDialog) end
 	if npcNumber == 4 then self:giveSawWaypoint(p) end
+	if npcNumber == 8 then self:giveMothmaWaypoint(p) end
 	return result
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenReset(t,p,n,o,s)
