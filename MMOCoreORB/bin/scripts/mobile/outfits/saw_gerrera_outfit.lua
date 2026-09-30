@@ -1,7 +1,7 @@
 saw_gerrera_outfit = {
 	{
 		creatureCustomizationVariables = {
-			{"/shared_owner/index_color_skin", 24},
+			{"/shared_owner/index_color_skin", 214},
 			{"/shared_owner/blend_fat", 75},
 			{"/shared_owner/blend_skinny", 0},
 			{"/shared_owner/blend_muscle", 220},
