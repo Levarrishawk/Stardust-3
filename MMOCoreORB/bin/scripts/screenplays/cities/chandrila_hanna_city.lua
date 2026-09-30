@@ -109,7 +109,28 @@ function HannaCityScreenPlay:spawnSceneObjects()
  -- spawnSceneObject("chandrila", "object/tangible/terminal/terminal_event_buffs.iff", 424, 15.0, 4652, 0, 0)
   
 	--Hotel
---	spawnSceneObject("corellia", "object/static/structure/general/droid_r4_powerdown.iff", 6.0, 1.0, 20.2, 2365805, math.rad(143) )
+	local hotelLampTemplate = "object/tangible/furniture/all/frn_all_light_lamp_free_s01.iff"
+	local hotelLamps = {
+		-- Main lobby.
+		{-7.5, 1.0, 10.5, 35791588},
+		{10.5, 1.0, 10.5, 35791588},
+		{-7.5, 1.0, -10.5, 35791588},
+		{10.5, 1.0, -10.5, 35791588},
+		-- Bar and performance area.
+		{12.0, 1.3, 8.0, 35791589},
+		{27.0, 1.3, 8.0, 35791589},
+		{12.0, 1.3, -5.0, 35791589},
+		{27.0, 1.3, -5.0, 35791589},
+		{21.0, 2.0, -16.5, 35791589},
+		{27.0, 2.0, -16.5, 35791589},
+		-- Senator's meeting room.
+		{-27.0, 1.6, -12.9, 35791594},
+		{-20.0, 1.6, -12.9, 35791594}
+	}
+	for i = 1, #hotelLamps, 1 do
+		local lamp = hotelLamps[i]
+		spawnSceneObject("chandrila", hotelLampTemplate, lamp[1], lamp[2], lamp[3], lamp[4], math.rad(0))
+	end
 
 end
 

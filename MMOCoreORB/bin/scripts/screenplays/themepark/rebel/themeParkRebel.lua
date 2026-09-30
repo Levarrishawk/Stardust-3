@@ -531,6 +531,7 @@ npcMapRebel[5].spawnData.y = -12.9
 npcMapRebel[5].spawnData.direction = 3
 npcMapRebel[5].spawnData.cellID = 35791594
 npcMapRebel[5].useCellWorldPosition = true
+npcMapRebel[5].completedDialog = "The shipments you helped secure are bound for a small resistance cell on Yavin Four. Its commander needs help turning those supplies into reliable power, communications, and medical support. Please travel there and offer your assistance. These people are still building a refuge; they cannot yet depend on the strength of a larger movement. Your experience can help them endure. Keep their location private, and remember that every crate arriving there represents someone who chose to help despite the danger. We must be worthy of that trust."
 
 local sceneObjectMapRebel = {
 	-- Luthen's public gallery. The end-table mesh has a low pivot, so the plinths sit at 1.0.
