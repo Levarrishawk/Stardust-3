@@ -346,6 +346,76 @@ local sawMissions = {
 		"The officer who ordered reprisals against a mining settlement is traveling with his unit. End his campaign.", "This is not a warning. Remove the unit.", "That commander is still free to murder civilians.", "The people he intended to kill will call it survival.")
 }
 
+sawMissions[1].dialog = {
+	introduction = "So. Luthen sent you. His regulators arrived ahead of you, which is more than I can say for most of his promises. He tells me you can follow instructions. Here, you will need to understand them. Look around. These people sleep beside their weapons because the Empire does not stop hunting when a senator closes his office. An Imperial sensor patrol is surveying the approaches to this butte. If it reports what it finds, this camp becomes a target. You want to help? Start by keeping my people alive.",
+	acceptText = "I will eliminate the patrol before it exposes the camp.",
+	declineText = "Then stay out of our way. My sentries will hold the approaches while I find someone willing to act. Do not carry what you have seen here into the next cantina.",
+	accepted = "Find the patrol leader and take him down. Expect troopers with him. Keep the fighting away from this butte, then return to me. You are protecting a camp, not announcing where it is.",
+	working = "My sentries are still watching that patrol work its way toward us. Every reading it takes makes this camp harder to hide. Finish the assignment and come back.",
+	completed = "The patrol has stopped advancing. That gives us time to move supplies and change our approaches before the Empire sends someone to ask why it went silent. You did useful work. Do not mistake that for safety. Those people by the fire are alive tonight because someone interrupted the Empire's plans. That is how you earn your place here.",
+	information = {
+		{prompt = "Does Luthen's introduction count for anything?", text = "It got you past the sentries. Luthen supplies things we need, and I deal with him when it serves the fight. But he keeps his reasons locked away and expects other people to pay for them. You answer for what you do here. His name cannot carry that weight for you."},
+		{prompt = "Why not move the camp instead?", text = "We are preparing to. A camp has wounded, ammunition, tools, and people too exhausted to climb down a cliff carrying all three. If the patrol discovers us during that move, we lose more than tents. Stop the patrol and we can leave on our own terms."},
+		{prompt = "What exactly do you need me to do?", text = "Eliminate the patrol leader. His troopers will resist, and attacking them will expose you as an enemy of the Empire. This is an armed reconnaissance detail closing on an occupied camp. There is no harmless errand hidden in the order. If you accept, go prepared for a fight and return here afterward."}
+	}
+}
+
+sawMissions[2].dialog = {
+	introduction = "You bought us breathing room. Now we need to use it. One of our supply teams lost a case of demolition detonators to pirates. They are trying to sell it back to people whose homes the Empire has already stripped bare. I will not spend our medical funds rewarding that. Their quartermaster has the stolen detonators. Recover them. Without those parts, our engineers cannot put a charge where it will disable machinery instead of scattering wreckage across a settlement.",
+	acceptText = "I will recover the stolen detonators and bring them back.",
+	declineText = "Then our engineers keep waiting and the pirates keep naming their price. I will find another way. Do not call this a small loss because the case fits under one arm.",
+	accepted = "Find the pirate quartermaster, recover the detonators from him, and bring them here. My specialist will inspect them before anyone connects a firing circuit. Do not test stolen equipment in the field.",
+	working = "The quartermaster still has our detonators. Until they are back, we have explosives we cannot reliably control and an operation we cannot launch.",
+	completed = "These are ours. The markings match the supply team's inventory. We will check every circuit; pirates are not careful custodians. With working detonators, we can disable an Imperial machine and leave the workers who operate it alive. That takes preparation. People who think sabotage means making the largest explosion usually get someone else buried.",
+	information = {
+		{prompt = "What are the charges intended for?", text = "Imperial extraction equipment and the machinery feeding its local supply operation. A broken drive assembly can stop a work detail without bringing a mine down on the prisoners inside. We need parts and time to make that distinction possible."},
+		{prompt = "Why not buy the detonators back?", text = "Because the next supply team would be robbed before it reached us. And because those credits buy dressings, food, and transport for people who cannot walk out on their own. The quartermaster knew whose equipment he was taking. He is not being paid twice for it."},
+		{prompt = "How do I recover them?", text = "The pirate quartermaster holds the case. Expect resistance. Recover the detonators from his possession and return directly here. Do not promise him access to this camp, and do not let him turn you into a messenger for another ransom demand."}
+	}
+}
+
+sawMissions[3].dialog = {
+	introduction = "The detonators are back. The woman who knows how to use them is not. Our demolition specialist was checking an approach when an Imperial sweep cut her off. She is alive, but she cannot get through alone. Those soldiers are closing on her position. I need you to reach her and bring her back to this camp. We have recovered equipment. Now we recover one of our own.",
+	acceptText = "I will reach the specialist and escort her back to camp.",
+	declineText = "Then I am sending someone else now. She does not have time for us to debate her value. Keep the approach clear for whoever goes.",
+	accepted = "Reach her, speak to her, and bring her back here. Stay close enough to protect her. Imperial troopers are in the area; do not outrun her when they engage. I want her alive, not a report about how close you came.",
+	working = "She has not reached camp. Until she does, that sweep can still take her. Find her and stay with her through the return.",
+	completed = "She is back. Get her water and let the medic look at her before anyone asks about the next operation. You stayed with her when it mattered. I remember people who do that. The Empire counts bodies and calls it progress. We cannot fight it by treating our own people as expendable parts.",
+	information = {
+		{prompt = "Who is the specialist?", text = "A mining engineer who refused to help the Empire increase production while her fellow workers were being worked to death. She knows how a machine is built, where it will fail, and who will be standing beside it when it does. I need that knowledge. More than that, she trusted us enough to come here."},
+		{prompt = "Why risk another person to rescue her?", text = "I have left people behind when there was no way back. I remember every one. On Onderon, my sister Steela fought for people who had almost stopped believing they could be free. Losing her did not teach me to stop caring who survives. It taught me what a victory can cost. We still have a chance to bring this woman home."},
+		{prompt = "What should I expect on the return?", text = "An Imperial sweep, rough terrain, and a woman who has spent too long waiting to hear boots behind her. Speak to her so she knows you are the help I sent. Keep her beside you, deal with the troopers who threaten her, and escort her all the way into this camp. Do not leave her to make the last stretch alone."}
+	}
+}
+
+sawMissions[4].dialog = {
+	introduction = "Our engineer is resting. When she wakes, she will need power for the equipment you helped recover. An Imperial logistics officer carries release codes for a shipment of industrial converters. Those codes are our way into the supply chain. Recover them and bring them to me. Some of the converters will keep this camp running. Others will go to a growing cell far from here. We cannot build resistance out of people waiting in the dark for their transmitters to work.",
+	acceptText = "I will recover the logistics officer's release codes.",
+	declineText = "Then the shipment stays in Imperial hands a little longer. That means fewer working transmitters and another night of choosing which equipment gets power. I will put someone else on it.",
+	accepted = "Intercept the logistics officer and recover his code disk. He has an armed escort. Bring the disk here; our supply people will arrange the collection. You do not need to move a convoy of crates yourself.",
+	working = "The release codes are still with the officer. We need them before that shipment passes beyond the reach of our supply contacts.",
+	completed = "The codes are readable. Our supply team can now divert the converters through the receiving chain. This camp will get its share, and the jungle cell will get theirs. A transmitter that stays powered can warn another camp before a patrol reaches it. You may never meet the people who use these parts. Their survival still belongs in your reckoning.",
+	information = {
+		{prompt = "Why seize converters instead of weapons?", text = "A rifle does not run a medical unit. It does not repair a vehicle or keep a transmitter alive. The Empire can afford to lose a crate of blasters. We cannot afford to have every camp isolated because its generator has failed. We need the ordinary equipment that lets fighters remain fighters tomorrow."},
+		{prompt = "Why share the supplies with another cell?", text = "Because I want the Empire fighting resistance on more than one world. I do not have to agree with every person receiving those parts to understand that. They need power. We have an opportunity to take it. Luthen can arrange a route, but he does not get to turn the people at the other end into names nobody is allowed to ask about."},
+		{prompt = "What am I taking from the officer?", text = "His release-code disk. Recover it from his possession and return it here. The codes authorize the converters to leave storage; our contacts will handle the cargo. Expect his escort to fight. Take the disk, not a story about where you think the shipment went."}
+	}
+}
+
+sawMissions[5].dialog = {
+	introduction = "The supply operation is moving. Now an Imperial commander is threatening to undo everything you have helped protect. He ordered reprisals against a mining settlement after its workers resisted a requisition. His unit burned homes and called the survivors an example. He is traveling with an armed escort, preparing to repeat that lesson elsewhere. We know enough to stop him. I am asking you to do it before another settlement pays for his promotion.",
+	acceptText = "I will eliminate the reprisals commander.",
+	declineText = "Then step aside. You have helped this camp, and I will remember it. But I will not leave that commander free to kill while we wait for a better answer.",
+	accepted = "Find the commander and eliminate him. His escort will resist. Return here when it is done. Keep the operation away from the settlement; the people he threatened have already endured enough fighting at their doors.",
+	working = "The commander is still moving with his escort. Every delay gives him another chance to reach people who cannot defend themselves.",
+	completed = "He will not reach the next settlement. Another officer may replace him, but the people he intended to punish have time to move, hide their supplies, and prepare. That time matters. You have kept this camp alive, recovered our equipment, brought one of our people home, and helped supply fighters beyond Lok. Mon Mothma has contacts we need for the next shipments. Meet her in Hanna City on Chandrila. You may find her methods easier to stomach. Remember that the people waiting for those shipments cannot afford for us to stop working together.",
+	information = {
+		{prompt = "How do you know he ordered the reprisals?", text = "Survivors identified him. We checked their accounts against his unit's movements and intercepted orders bearing his authorization. I do not need an officer to confess before I believe the people whose homes he burned. But I check. An accusation is too easy a weapon to put in careless hands."},
+		{prompt = "Will killing him stop the reprisals?", text = "It stops this commander from carrying out the next one. It forces his unit to regroup and gives the settlement a chance to prepare. I cannot promise you that removing one officer ends Imperial cruelty. I can tell you exactly what leaving him alive allows him to do next."},
+		{prompt = "What is the objective?", text = "Eliminate the reprisals commander. He is an armed officer traveling with troops, and those troops will defend him. This is a deliberate attack against the man directing the operation. If you accept, understand what you are choosing. Do it, then return to me."}
+	}
+}
+
 local mothmaMissions = {
 	makeMission("deliver", "chandrila", "Deliver protected foundation records", "theme_park_rebel_civilian_contact", "a foundation trustee", "object/tangible/mission/mission_datadisk.iff", "Protected foundation records", nil, reward(1450),
 		"Deliver these charitable foundation records before an Imperial examiner arrives.", "Nothing in them is illegal. That will not protect the people named.", "The trustee must receive the records first.", "The foundation can continue without exposing its donors."),
