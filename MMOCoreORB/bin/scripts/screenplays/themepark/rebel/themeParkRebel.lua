@@ -515,6 +515,76 @@ local yavinMissions = {
 		"Meet the first regular convoy's scout and guide them past the Imperial search pattern.", "If this works, Yavin becomes more than a temporary camp.", "The convoy cannot approach until its scout reaches us.", "What began as scattered favors is now a supply line, and a supply line can sustain a rebellion.")
 }
 
+yavinMissions[1].dialog = {
+	introduction = "You must be the help Senator Mothma promised. Tessa Neral. Commander, apparently, though yesterday I spent most of the morning arguing with a leaking water tank. Welcome to Yavin. We have shelter, willing hands, and generators that disagree about how electricity works. An engineer arriving through our supply contacts can synchronize them, but the jungle has made the last part of the journey difficult. Find the engineer and bring them here. I would like our infirmary to stay lit when someone switches on the transmitter.",
+	acceptText = "I will escort the engineer back to you.",
+	declineText = "All right. I will find another escort. Until then, we keep rationing power. Please tell the medic before you plug anything in; she has first claim on what works.",
+	accepted = "Meet the engineer, speak to them, and escort them back here. Stay close through the jungle. They know power systems, not every creature hiding under the canopy. Report to me once they arrive.",
+	working = "The engineer has not arrived. We are still choosing between medical equipment and communications. Please bring them all the way back to us.",
+	completed = "The engineer is here and already asking questions I cannot answer. Excellent. That usually means we have found the right person. Once the generators are synchronized, the medic can stop treating every transmission as a threat to her patients. You have given us a little room to breathe. Around here, we try to put that to use before something else breaks.",
+	information = {
+		{prompt = "How did you become commander?", text = "I coordinated civilian supply depots before the Empire started treating shortages as disobedience. I refused to surrender a medical reserve during a requisition. Friends helped me disappear, and eventually we needed someone to organize more than our next escape. I can count crates, listen to specialists, and admit when I am wrong. For now, that seems to qualify me."},
+		{prompt = "What is this place supposed to become?", text = "A place where people can recover, train, and keep in touch without asking Imperial permission. We are a small cell, not headquarters for a galactic army. Mothma's contacts have helped us gather equipment. Your work has helped get it this far. Now we need to make it useful."},
+		{prompt = "What does the engineer need from me?", text = "A safe escort from their present position to this facility. Speak to them so they know you are the person I sent, then stay close until you reach me. The wildlife is quite capable of ruining a peaceful assignment. Bring the engineer home before you start exploring."}
+	}
+}
+
+yavinMissions[2].dialog = {
+	introduction = "We can finally run the infirmary and a transmitter together. Now I would like to keep the rain out of both. Part of our construction shipment was stolen before our people could collect it. The thief kept the locator used to identify the missing crates. It is a small disk, but without it we would be searching a great deal of jungle for roofing panels, cable, and sealed tools. Recover that locator and bring it to me. Our supply team will handle the crates.",
+	acceptText = "I will recover the stolen shipment's locator.",
+	declineText = "Then we continue repairing the same leaks with the same scraps. I will arrange another attempt. There are worse problems, but damp medical stores become one of them surprisingly quickly.",
+	accepted = "Find the supply thief and recover the locator from their possession. Expect resistance. Return the disk to me; you are not being asked to haul construction crates through the jungle.",
+	working = "The locator is still missing. Our builders are ready, but they cannot put enthusiasm where a roof panel belongs. Recover the disk and return here.",
+	completed = "That is our shipment marker. The supply team can use it to identify and recover the missing crates. We will check the seals before anything enters the stores. You may hear hammering for a while, but it should eventually mean fewer buckets under the ceiling. Keeping a refuge dry is not the sort of victory anyone puts on a banner. The people sleeping in it notice.",
+	information = {
+		{prompt = "How did someone find our shipment?", text = "The cargo passed through civilian hands before the final collection. Someone saw a chance to steal valuable materials. We have no evidence that they found this facility, but we are changing the collection arrangements anyway. Assuming a thief knows nothing can be as dangerous as assuming they know everything."},
+		{prompt = "Can Mothma send replacements?", text = "Perhaps, given time and another carrier willing to make the journey. But every extra shipment means more records and more people asked to take a risk. These materials are already here. Recovering them protects the effort that brought them, as well as our buildings."},
+		{prompt = "What do I need to bring back?", text = "The stolen supply locator carried by the thief. Recover it from their possession and return it to me. It identifies the crates for our collection team. If you discover anything else, report it afterward; do not turn one recovery into an expedition nobody knows you are taking."}
+	}
+}
+
+yavinMissions[3].dialog = {
+	introduction = "The construction supplies are accounted for. Next, we need a transmitter that can reach beyond the local channels. Our communications team was carrying its core when wildlife drove them off their route. A technician has recovered it, but cannot finish the journey with the damaged equipment. Bring the core back here. There are people waiting for confirmation that their donations arrived. More urgently, we need a way to hear warnings before trouble lands on our doorstep.",
+	acceptText = "I will collect the transmitter core and return it here.",
+	declineText = "Then we keep using short-range relays and hoping the next link is listening. I will send someone else. If you hear the communications crew complaining, please let them; they have earned it.",
+	accepted = "Find the stranded technician and collect the transmitter core through conversation. Return it directly to me. The technician's onward travel is being handled separately; your assignment is the equipment.",
+	working = "The core has not reached us. Our equipment is ready to receive it, and our contacts are still waiting for reliable communications.",
+	completed = "The connections are intact. Our communications crew should be able to make this work. Soon we can acknowledge shipments, request help, and receive warnings without sending someone out to find a relay. For people living in hiding, hearing a friendly voice matters too. A working transmitter tells them they have not been forgotten.",
+	information = {
+		{prompt = "Why not use a commercial relay?", text = "Because a commercial service keeps records of who uses it and where. We can conceal occasional messages, but relying on that for every supply request creates a pattern. We need to manage our own transmissions carefully, not leave a convenient history for someone else to examine."},
+		{prompt = "Are the communications team safe?", text = "They survived the attack. The technician stayed with the recovered core while the others sought assistance. Nobody has been ordered to defend a machine with their life. We need the equipment, but I would rather explain a delay than explain why someone was left to die beside it."},
+		{prompt = "How do I collect the core?", text = "Speak to the technician and recover the core they are holding. Bring it here rather than attempting repairs in the field. We have tools, power, and people who know which exposed contacts to avoid touching. I am learning to leave that last part to them."}
+	}
+}
+
+yavinMissions[4].dialog = {
+	introduction = "Our transmitter is working. Unfortunately, we have also received a warning: an Imperial reconnaissance team has landed beyond our watch. It has not identified this facility yet, but its patrol is moving close enough to do so. We need to stop the team before it can make that discovery. I wish this could be solved with another missing part. It cannot. There are wounded people here who would not survive a hurried evacuation.",
+	acceptText = "I will eliminate the reconnaissance leader before the team finds us.",
+	declineText = "I understand. I will assign another team and begin preparing the wounded for a move. Nobody should accept this order without understanding it, but we cannot leave the threat unanswered.",
+	accepted = "Find and eliminate the reconnaissance leader. Armed troopers accompany the team. Keep the engagement away from this facility and return here afterward. We will remain ready to evacuate until you report back.",
+	working = "The reconnaissance leader is still active. Our evacuation preparations are underway, but moving the wounded through this jungle carries its own dangers. Please finish the assignment.",
+	completed = "The patrol has stopped. Our watch will check the approaches before we stand down. You prevented an immediate discovery; we cannot assume the Empire will never return. Tonight, though, the wounded can stay in their beds and the builders can keep working. I know this assignment was different from carrying a component. Thank you for coming back to tell me it was done.",
+	information = {
+		{prompt = "How do you know they have not found us already?", text = "Our observers have tracked their movement, and their search is still directed toward the outer approaches. That is evidence, not certainty. We are preparing to move if necessary. Intercepting them now gives us our best chance to prevent a confirmed report."},
+		{prompt = "Why cannot we simply hide until they leave?", text = "Because they are conducting a search, and this facility leaves signs: movement, cleared approaches, equipment, people. Concealment has bought us time. It does not make us invisible. Waiting for them to reach our patients would leave us with fewer choices and more people in the line of fire."},
+		{prompt = "What exactly is the combat objective?", text = "Eliminate the reconnaissance leader. His escort will defend him, and attacking Imperial troops will expose you as an enemy. We have no separate transmission device for you to disable; the objective is the patrol leader himself. Return to me when he is defeated so I can coordinate the next security measures."}
+	}
+}
+
+yavinMissions[5].dialog = {
+	introduction = "The immediate threat is contained. A civilian supply shipment is now waiting for clearance to approach, and its advance scout needs to reach us before the cargo follows. Imperial search activity has made the usual approach unsafe. Meet the scout and escort them back here. Once they confirm a usable route, the carrier can complete delivery. This is the first shipment under the regular arrangement you helped establish. I would like its crew to have a reason to come back.",
+	acceptText = "I will escort the convoy scout safely to the cell.",
+	declineText = "Then I will tell the carrier to hold and send another escort. It is better to delay than lose a civilian crew because we pretended an approach was clear.",
+	accepted = "Speak to the convoy scout and escort them all the way back to me. Imperial troops may interfere. Stay together; the cargo cannot follow a route its scout has not completed. Report here when you arrive.",
+	working = "The scout has not arrived, and the carrier is still holding its cargo. Bring the scout back safely so we can authorize the final approach.",
+	completed = "The scout is here. We can send clearance to the carrier and begin unloading. Medicine first, then food, then everything our engineers insist they cannot live without. You have helped turn this place into a cell that can sustain itself and stay in contact with others. We are still small. We still have to be careful. But the next people who arrive will find light, shelter, and someone ready to receive them. That is what your work has built. Get something to eat before you leave. For once, I can offer that without recalculating tomorrow's rations.",
+	information = {
+		{prompt = "Am I escorting the whole convoy?", text = "No. You are bringing its advance scout here. The carrier remains clear of the final approach until we receive confirmation. Our supply team will guide the cargo afterward. Keeping those stages separate means a problem on the ground does not immediately trap everyone carrying the shipment."},
+		{prompt = "What makes this shipment different?", text = "It is part of a continuing civilian service rather than a single favor. That lets us plan stocks and maintenance instead of consuming everything before we know when more might arrive. Reliability gives us room to help another cell without leaving our own people short."},
+		{prompt = "What must I do to secure the approach?", text = "Meet the scout, speak to them, and escort them back to me. Expect interference from the Imperial search forces. Protect the scout and stay close until you reach this facility. Their arrival is the confirmation we need; you are not being asked to find or clear every patrol on the moon."}
+	}
+}
+
 local npcMapRebel = {
 	{spawnData = {planetName="alderaan", npcTemplate="alderaan_relief_attache", x=-20.9, z=3.2, y=22.2, direction=-90, cellID=610000026, position=STAND}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, npcNumber=1, stfFile="", missions=attacheMissions, noFactionDialog="The Alderaanian Relief Office accepts donations through the public registry. If you require assistance, a clerk can direct you.", lockedDialog="The relief office cannot discuss protected cases with you.", completedDialog="Senator Organa is expecting you."},
 	{spawnData = {planetName="alderaan", npcTemplate="bail_organa", x=-35.3, z=1.3, y=-2.8, direction=84, cellID=610000025, position=STAND, existingSpawn=true}, worldPosition={x=1120,y=-1420}, useNpcWorldPosition=true, useCellWorldPosition=true, existingObjectIdLabel="alderaCity:bailOrganaObjectID", npcNumber=2, stfFile="", missions=bailMissions, noFactionDialog="I am afraid you have mistaken a public audience for a private appointment. My staff can assist with official senatorial business.", lockedDialog="My Attache handles relief matters. Please speak with her first.", completedDialog="Luthen's shop is in the Collective Commerce District on Coruscant. He is expecting you."},
