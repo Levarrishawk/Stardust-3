@@ -10,14 +10,14 @@ saw_gerrera_outfit = {
 			{"/private/index_color_facial_hair", 10}
 		},
 
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_chest_plate.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bicep_l.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bicep_r.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bracer_l.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bracer_r.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_gloves.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_leggings.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
-		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_boots.iff", customizationVariables = {{"/private/index_color_1", 42}, {"/private/index_color_2", 133}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_chest_plate.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bicep_l.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bicep_r.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bracer_l.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_bracer_r.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_gloves.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_leggings.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
+		{objectTemplate = "object/tangible/wearables/armor/composite/armor_composite_boots.iff", customizationVariables = {{"/private/index_color_1", 142}, {"/private/index_color_2", 143}} },
 		{objectTemplate = "object/tangible/wearables/bandolier/bandolier_s02.iff", customizationVariables = {} }
 	}
 }
