@@ -5,6 +5,29 @@ CorelliaDoabaGuerfelScreenPlay = CityScreenPlay:new {
 
 	planet = "corellia",
 
+	mountedSpeederSpeed = 17,
+	mountedSpeederUpdateInterval = 100,
+	mountedSpeederCount = 18,
+	mountedSpeederTemplates = {
+		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
+		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",
+		"landspeeder_usv5", "landspeeder_organa", "speederbike_swoop",
+		"landspeeder_x34", "barc_speeder"
+	},
+	mountedSpeederRoute = {
+		{3328, 5529}, {3369, 5509}, {3408, 5513}, {3442, 5540},
+		{3462, 5654}, {3380, 5695}, {3338, 5707}, {3337, 5663},
+		{3285, 5595}, {3317, 5548}, {3322, 5524}, {3306, 5490},
+		{3272, 5454}, {3238, 5424}, {3201, 5426}, {3168, 5396},
+		{3181, 5320}, {3173, 5297}, {3147, 5254}, {3121, 5219},
+		{3135, 5193}, {3134, 5165}, {3104, 5147}, {3120, 5135},
+		{3165, 5131}, {3173, 5103}, {3170, 5069}, {3180, 5048},
+		{3180, 4983}, {3092, 4983}, {3095, 4997}, {3171, 4969},
+		{3191, 5019}, {3173, 5077}, {3176, 5159}, {3140, 5164},
+		{3140, 5194}, {3164, 5222}, {3157, 5245}, {3186, 5314},
+		{3255, 5383}, {3140, 5410}, {3312, 5480}, {3324, 5519}
+	},
+
 	gcwMobs = {
 		{"comm_operator", "corsec_inspector_sergeant", 3308, 308, 5485.8, 45, 0, "npc_imperial", "conversation"},
 		{"dark_trooper", "corsec_sergeant", 3173.3, 300, 5302.5, -155, 0, "npc_imperial", "neutral", true},
@@ -217,7 +240,155 @@ function CorelliaDoabaGuerfelScreenPlay:start()
 		self:spawnGcwMobiles()
 		self:spawnPatrolMobiles()
 		self:spawnStationaryMobiles()
+		self:spawnMountedSpeederPatrol()
 	end
+end
+
+function CorelliaDoabaGuerfelScreenPlay:spawnMountedSpeederPatrol()
+	self:spawnMountedSpeederGroup(self.mountedSpeederRoute, self.mountedSpeederCount, 0)
+end
+
+function CorelliaDoabaGuerfelScreenPlay:spawnMountedSpeederGroup(route, count, indexOffset)
+	local routeLength = 0
+	for i = 1, #route do
+		local point = route[i]
+		local nextPoint = route[i % #route + 1]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
+	end
+
+	for trafficIndex = 1, count do
+		local distance = 0
+		if (trafficIndex > 1) then
+			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / count
+		end
+		self:spawnMountedSpeeder(trafficIndex + indexOffset, distance, route)
+	end
+end
+
+function CorelliaDoabaGuerfelScreenPlay:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+	local vehicle = TangibleObject(pVehicle)
+	local combination = colorSet - 1
+	local combinationsAvailable = 1
+	local firstChannel = templateName == "landspeeder_av21" and 1 or 0
+
+	for channel = firstChannel, 3 do
+		local variable = "/private/index_color_" .. channel
+		local colorCount = vehicle:getPaletteColorCount(variable)
+		if (colorCount > 0) then
+			local choices = math.min(colorCount, vehiclesPerType)
+			local colorIndex = math.floor((combination % choices) * colorCount / choices)
+			colorIndex = (colorIndex + ((colorSet - 1) % combinationsAvailable) * 7) % colorCount
+			vehicle:setCustomizationVariable(variable, colorIndex)
+			combination = math.floor(combination / choices)
+			combinationsAvailable = combinationsAvailable * choices
+		end
+	end
+
+	if (colorSet == 1 and combinationsAvailable > 1 and combinationsAvailable < vehiclesPerType) then
+		print(self.screenplayName .. ": limited unique vehicle colors for " .. templateName)
+	end
+end
+
+function CorelliaDoabaGuerfelScreenPlay:spawnMountedSpeeder(trafficIndex, distance, route)
+	local spawn = route[1]
+	local pointIndex = 2
+
+	for i = 1, #route do
+		local point = route[i]
+		local nextIndex = i % #route + 1
+		local nextPoint = route[nextIndex]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		local segmentLength = math.sqrt(dx * dx + dy * dy)
+		if (distance < segmentLength) then
+			spawn = {point[1] + dx * distance / segmentLength, point[2] + dy * distance / segmentLength}
+			pointIndex = nextIndex
+			break
+		end
+		distance = distance - segmentLength
+	end
+
+	local target = route[pointIndex]
+	local heading = math.atan(target[1] - spawn[1], target[2] - spawn[2])
+	local templateName = self.mountedSpeederTemplates[(trafficIndex - 1) % #self.mountedSpeederTemplates + 1]
+	local colorSet = math.floor((trafficIndex - 1) / #self.mountedSpeederTemplates) + 1
+	local vehiclesPerType = math.ceil(self.mountedSpeederCount / #self.mountedSpeederTemplates)
+	local riderTemplate = self.patrolNpcs[getRandomNumber(1, #self.patrolNpcs)]
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/" .. templateName .. ".iff", spawn[1], 308, spawn[2], 0, heading)
+	local pRider = spawnMobile(self.planet, riderTemplate, 0, spawn[1] + 2, 308, spawn[2], math.deg(heading), 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+		return
+	end
+
+	SceneObject(pVehicle):teleport(spawn[1], getTerrainHeight(pVehicle, spawn[1], spawn[2]), spawn[2], 0)
+	CreatureObject(pRider):setCustomObjectName("Townsperson")
+	CreatureObject(pRider):setPvpStatusBitmask(0)
+	CreatureObject(pRider):setOptionBit(INVULNERABLE)
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+	self:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+
+	if not mountNpc(pRider, pVehicle) then
+		AiAgent(pRider):info("Doaba Guerfel traffic failed to attach its driver to " .. templateName)
+		SceneObject(pRider):destroyObjectFromWorld()
+		SceneObject(pVehicle):destroyObjectFromWorld()
+		return
+	end
+
+	writeData(SceneObject(pVehicle):getObjectID() .. ":doabaGuerfelSpeederRoutePoint", pointIndex)
+	createEvent(self.mountedSpeederUpdateInterval + ((trafficIndex - 1) % 50) * 2, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+end
+
+function CorelliaDoabaGuerfelScreenPlay:moveMountedSpeederPatrol(pVehicle)
+	if (pVehicle == nil or SceneObject(pVehicle):getZoneName() ~= self.planet) then
+		return
+	end
+
+	local vehicle = SceneObject(pVehicle)
+	local route = self.mountedSpeederRoute
+	local routeKey = vehicle:getObjectID() .. ":doabaGuerfelSpeederRoutePoint"
+	local pointIndex = readData(routeKey)
+	local currentX = vehicle:getPositionX()
+	local currentY = vehicle:getPositionY()
+	local remaining = self.mountedSpeederSpeed * self.mountedSpeederUpdateInterval / 1000
+	local heading
+
+	while (remaining > 0) do
+		local target = route[pointIndex]
+		local dx = target[1] - currentX
+		local dy = target[2] - currentY
+		local distance = math.sqrt(dx * dx + dy * dy)
+
+		if (distance > 0) then
+			heading = math.atan(dx, dy)
+		end
+
+		if (distance <= remaining) then
+			currentX = target[1]
+			currentY = target[2]
+			remaining = remaining - distance
+			pointIndex = pointIndex % #route + 1
+		else
+			currentX = currentX + dx / distance * remaining
+			currentY = currentY + dy / distance * remaining
+			remaining = 0
+		end
+	end
+
+	writeData(routeKey, pointIndex)
+	if (heading ~= nil) then
+		vehicle:setDirectionalHeading(heading)
+	end
+	vehicle:teleport(currentX, getTerrainHeight(pVehicle, currentX, currentY), currentY, 0)
+	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 
 function CorelliaDoabaGuerfelScreenPlay:spawnSceneObjects()
