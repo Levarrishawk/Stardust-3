@@ -7,7 +7,7 @@ CorelliaKorVellaScreenPlay = CityScreenPlay:new {
 
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
-	mountedSpeederCount = 45,
+	mountedSpeederCount = 18,
 	mountedSpeederTemplates = {
 		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
 		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",
