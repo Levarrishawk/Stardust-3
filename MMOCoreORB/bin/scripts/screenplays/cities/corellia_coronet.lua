@@ -5,6 +5,39 @@ CorelliaCoronetScreenPlay = CityScreenPlay:new {
 
 	planet = "corellia",
 
+	mountedSpeederSpeed = 17,
+	mountedSpeederUpdateInterval = 100,
+	mountedSpeederCount = 54,
+	mountedSpeederTemplates = {
+		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
+		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",
+		"landspeeder_usv5", "landspeeder_organa", "speederbike_swoop",
+		"landspeeder_x34", "barc_speeder"
+	},
+	mountedSpeederRoute = {
+		{-146, -4741}, {-136, -4705}, {-89, -4650}, {35, -4683},
+		{65, -4639}, {-38, -4537}, {-36, -4472}, {-26, -4462},
+		{0, -4459}, {0, -4409}, {-53, -4408}, {-52, -4319},
+		{-95, -4290}, {-234, -4289}, {-247, -4297}, {-299, -4296},
+		{-325, -4230}, {-439, -4204}, {-546, -4312}, {-432, -4425},
+		{-333, -4328}, {-310, -4328}, {-291, -4346}, {-384, -4448},
+		{-398, -4549}, {-400, -4578}, {-416, -4598}, {-418, -4630},
+		{-432, -4647}, {-431, -4694}, {-385, -4699}, {-357, -4715},
+		{-304, -4712}, {-302, -4681}, {-200, -4682}, {-198, -4794},
+		{-236, -4795}, {-237, -4818}, {-404, -4791}, {-447, -4752},
+		{-435, -4739}, {-414, -4597}, {-317, -4601}, {-251, -4617},
+		{-199, -4624}, {-157, -4619}, {-156, -4675}, {-262, -4675},
+		{-259, -4533}, {-236, -4520}, {-234, -4493}, {-199, -4491},
+		{-199, -4359}, {-294, -4338}, {-310, -4322}, {-304, -4238},
+		{-287, -4225}, {-235, -4231}, {-69, -4231}, {-2, -4287},
+		{-3, -4370}, {-5, -4412}, {-3, -4453}, {-31, -4457},
+		{-35, -4470}, {-113, -4473}, {-142, -4462}, {-163, -4471},
+		{-174, -4485}, {-183, -4486}, {-184, -4510}, {-158, -4542},
+		{-121, -4533}, {-31, -4562}, {14, -4596}, {-2, -4659},
+		{75, -4732}, {22, -4792}, {23, -4870}, {170, -4868},
+		{-161, -4768}
+	},
+
 	gcwMobs = {
 		{"stormtrooper_sniper", "corsec_trooper", -501.3, 28, -4644.5, -2, 0, "", "", true},
 		{"stormtrooper_squad_leader", "corsec_trooper", -502.1, 28, -4701.1, 185.005, 0, "", "", true},
@@ -340,7 +373,155 @@ function CorelliaCoronetScreenPlay:start()
 		self:spawnGcwMobiles()
 		self:spawnPatrolMobiles()
 		self:spawnStationaryMobiles()
+		self:spawnMountedSpeederPatrol()
 	end
+end
+
+function CorelliaCoronetScreenPlay:spawnMountedSpeederPatrol()
+	self:spawnMountedSpeederGroup(self.mountedSpeederRoute, self.mountedSpeederCount, 0)
+end
+
+function CorelliaCoronetScreenPlay:spawnMountedSpeederGroup(route, count, indexOffset)
+	local routeLength = 0
+	for i = 1, #route do
+		local point = route[i]
+		local nextPoint = route[i % #route + 1]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
+	end
+
+	for trafficIndex = 1, count do
+		local distance = 0
+		if (trafficIndex > 1) then
+			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / count
+		end
+		self:spawnMountedSpeeder(trafficIndex + indexOffset, distance, route)
+	end
+end
+
+function CorelliaCoronetScreenPlay:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+	local vehicle = TangibleObject(pVehicle)
+	local combination = colorSet - 1
+	local combinationsAvailable = 1
+	local firstChannel = templateName == "landspeeder_av21" and 1 or 0
+
+	for channel = firstChannel, 3 do
+		local variable = "/private/index_color_" .. channel
+		local colorCount = vehicle:getPaletteColorCount(variable)
+		if (colorCount > 0) then
+			local choices = math.min(colorCount, vehiclesPerType)
+			local colorIndex = math.floor((combination % choices) * colorCount / choices)
+			colorIndex = (colorIndex + ((colorSet - 1) % combinationsAvailable) * 7) % colorCount
+			vehicle:setCustomizationVariable(variable, colorIndex)
+			combination = math.floor(combination / choices)
+			combinationsAvailable = combinationsAvailable * choices
+		end
+	end
+
+	if (colorSet == 1 and combinationsAvailable > 1 and combinationsAvailable < vehiclesPerType) then
+		print(self.screenplayName .. ": limited unique vehicle colors for " .. templateName)
+	end
+end
+
+function CorelliaCoronetScreenPlay:spawnMountedSpeeder(trafficIndex, distance, route)
+	local spawn = route[1]
+	local pointIndex = 2
+
+	for i = 1, #route do
+		local point = route[i]
+		local nextIndex = i % #route + 1
+		local nextPoint = route[nextIndex]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		local segmentLength = math.sqrt(dx * dx + dy * dy)
+		if (distance < segmentLength) then
+			spawn = {point[1] + dx * distance / segmentLength, point[2] + dy * distance / segmentLength}
+			pointIndex = nextIndex
+			break
+		end
+		distance = distance - segmentLength
+	end
+
+	local target = route[pointIndex]
+	local heading = math.atan(target[1] - spawn[1], target[2] - spawn[2])
+	local templateName = self.mountedSpeederTemplates[(trafficIndex - 1) % #self.mountedSpeederTemplates + 1]
+	local colorSet = math.floor((trafficIndex - 1) / #self.mountedSpeederTemplates) + 1
+	local vehiclesPerType = math.ceil(self.mountedSpeederCount / #self.mountedSpeederTemplates)
+	local riderTemplate = self.patrolNpcs[getRandomNumber(1, #self.patrolNpcs)]
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/" .. templateName .. ".iff", spawn[1], 28, spawn[2], 0, heading)
+	local pRider = spawnMobile(self.planet, riderTemplate, 0, spawn[1] + 2, 28, spawn[2], math.deg(heading), 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+		return
+	end
+
+	SceneObject(pVehicle):teleport(spawn[1], getTerrainHeight(pVehicle, spawn[1], spawn[2]), spawn[2], 0)
+	CreatureObject(pRider):setCustomObjectName("Townsperson")
+	CreatureObject(pRider):setPvpStatusBitmask(0)
+	CreatureObject(pRider):setOptionBit(INVULNERABLE)
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+	self:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+
+	if not mountNpc(pRider, pVehicle) then
+		AiAgent(pRider):info("Coronet traffic failed to attach its driver to " .. templateName)
+		SceneObject(pRider):destroyObjectFromWorld()
+		SceneObject(pVehicle):destroyObjectFromWorld()
+		return
+	end
+
+	writeData(SceneObject(pVehicle):getObjectID() .. ":coronetSpeederRoutePoint", pointIndex)
+	createEvent(self.mountedSpeederUpdateInterval + ((trafficIndex - 1) % 50) * 2, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+end
+
+function CorelliaCoronetScreenPlay:moveMountedSpeederPatrol(pVehicle)
+	if (pVehicle == nil or SceneObject(pVehicle):getZoneName() ~= self.planet) then
+		return
+	end
+
+	local vehicle = SceneObject(pVehicle)
+	local route = self.mountedSpeederRoute
+	local routeKey = vehicle:getObjectID() .. ":coronetSpeederRoutePoint"
+	local pointIndex = readData(routeKey)
+	local currentX = vehicle:getPositionX()
+	local currentY = vehicle:getPositionY()
+	local remaining = self.mountedSpeederSpeed * self.mountedSpeederUpdateInterval / 1000
+	local heading
+
+	while (remaining > 0) do
+		local target = route[pointIndex]
+		local dx = target[1] - currentX
+		local dy = target[2] - currentY
+		local distance = math.sqrt(dx * dx + dy * dy)
+
+		if (distance > 0) then
+			heading = math.atan(dx, dy)
+		end
+
+		if (distance <= remaining) then
+			currentX = target[1]
+			currentY = target[2]
+			remaining = remaining - distance
+			pointIndex = pointIndex % #route + 1
+		else
+			currentX = currentX + dx / distance * remaining
+			currentY = currentY + dy / distance * remaining
+			remaining = 0
+		end
+	end
+
+	writeData(routeKey, pointIndex)
+	if (heading ~= nil) then
+		vehicle:setDirectionalHeading(heading)
+	end
+	vehicle:teleport(currentX, getTerrainHeight(pVehicle, currentX, currentY), currentY, 0)
+	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 
 function CorelliaCoronetScreenPlay:spawnSceneObjects()
