@@ -5,6 +5,26 @@ TatooineMosEisleyScreenPlay = CityScreenPlay:new {
 
 	planet = "tatooine",
 
+	mountedSpeederSpeed = 17,
+	mountedSpeederUpdateInterval = 100,
+	mountedSpeederCount = 29,
+	mountedSpeederTemplates = {
+		"speederbike_swoop", "landspeeder_x34", "landspeeder_xp38",
+		"speederbike_flash", "landspeeder_ab1"
+	},
+	mountedSpeederRoute = {
+		{3468, -4801}, {3498, -4830}, {3399, -4934}, {3396, -4963},
+		{3320, -5056}, {3457, -5124}, {3555, -5014}, {3665, -4928},
+		{3761, -4867}, {3723, -4848}, {3711, -4748}, {3675, -4736},
+		{3520, -4716}, {3481, -4723}, {3436, -4775}, {3386, -4743},
+		{3388, -4675}, {3305, -4623}, {3263, -4688}, {3353, -4752},
+		{3280, -4845}, {3280, -4901}, {3242, -4962}, {3339, -5038},
+		{3407, -4949}, {3413, -4928}, {3501, -4842}, {3553, -4869},
+		{3588, -4898}, {3612, -4867}, {3703, -4858}, {3709, -4757},
+		{3751, -4740}, {3719, -4689}, {3539, -4583}, {3392, -4652},
+		{3389, -4748}, {3432, -4778}
+	},
+
 	gcwMobs = {
 		{"comm_operator", "mos_eisley_police_officer", 3410.5,5,-4735.8,-154,0, "", "", true},
 		{"elite_sand_trooper", "mos_eisley_police_officer", 3500.8,8,-4683.9,143,0, "", "", true},
@@ -350,7 +370,155 @@ function TatooineMosEisleyScreenPlay:start()
 		self:spawnStationaryMobiles()
 		self:spawnSceneObjects()
 		self:spawnGcwMobiles()
+		self:spawnMountedSpeederPatrol()
 	end
+end
+
+function TatooineMosEisleyScreenPlay:spawnMountedSpeederPatrol()
+	self:spawnMountedSpeederGroup(self.mountedSpeederRoute, self.mountedSpeederCount, 0)
+end
+
+function TatooineMosEisleyScreenPlay:spawnMountedSpeederGroup(route, count, indexOffset)
+	local routeLength = 0
+	for i = 1, #route do
+		local point = route[i]
+		local nextPoint = route[i % #route + 1]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
+	end
+
+	for trafficIndex = 1, count do
+		local distance = 0
+		if (trafficIndex > 1) then
+			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / count
+		end
+		self:spawnMountedSpeeder(trafficIndex + indexOffset, distance, route)
+	end
+end
+
+function TatooineMosEisleyScreenPlay:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+	local vehicle = TangibleObject(pVehicle)
+	local combination = colorSet - 1
+	local combinationsAvailable = 1
+	local firstChannel = templateName == "landspeeder_av21" and 1 or 0
+
+	for channel = firstChannel, 3 do
+		local variable = "/private/index_color_" .. channel
+		local colorCount = vehicle:getPaletteColorCount(variable)
+		if (colorCount > 0) then
+			local choices = math.min(colorCount, vehiclesPerType)
+			local colorIndex = math.floor((combination % choices) * colorCount / choices)
+			colorIndex = (colorIndex + ((colorSet - 1) % combinationsAvailable) * 7) % colorCount
+			vehicle:setCustomizationVariable(variable, colorIndex)
+			combination = math.floor(combination / choices)
+			combinationsAvailable = combinationsAvailable * choices
+		end
+	end
+
+	if (colorSet == 1 and combinationsAvailable > 1 and combinationsAvailable < vehiclesPerType) then
+		print(self.screenplayName .. ": limited unique vehicle colors for " .. templateName)
+	end
+end
+
+function TatooineMosEisleyScreenPlay:spawnMountedSpeeder(trafficIndex, distance, route)
+	local spawn = route[1]
+	local pointIndex = 2
+
+	for i = 1, #route do
+		local point = route[i]
+		local nextIndex = i % #route + 1
+		local nextPoint = route[nextIndex]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		local segmentLength = math.sqrt(dx * dx + dy * dy)
+		if (distance < segmentLength) then
+			spawn = {point[1] + dx * distance / segmentLength, point[2] + dy * distance / segmentLength}
+			pointIndex = nextIndex
+			break
+		end
+		distance = distance - segmentLength
+	end
+
+	local target = route[pointIndex]
+	local heading = math.atan(target[1] - spawn[1], target[2] - spawn[2])
+	local templateName = self.mountedSpeederTemplates[(trafficIndex - 1) % #self.mountedSpeederTemplates + 1]
+	local colorSet = math.floor((trafficIndex - 1) / #self.mountedSpeederTemplates) + 1
+	local vehiclesPerType = math.ceil(self.mountedSpeederCount / #self.mountedSpeederTemplates)
+	local riderTemplate = self.patrolNpcs[getRandomNumber(1, #self.patrolNpcs)]
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/" .. templateName .. ".iff", spawn[1], 5, spawn[2], 0, heading)
+	local pRider = spawnMobile(self.planet, riderTemplate, 0, spawn[1] + 2, 5, spawn[2], math.deg(heading), 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+		return
+	end
+
+	SceneObject(pVehicle):teleport(spawn[1], getTerrainHeight(pVehicle, spawn[1], spawn[2]), spawn[2], 0)
+	CreatureObject(pRider):setCustomObjectName("Townsperson")
+	CreatureObject(pRider):setPvpStatusBitmask(0)
+	CreatureObject(pRider):setOptionBit(INVULNERABLE)
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+	self:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+
+	if not mountNpc(pRider, pVehicle) then
+		AiAgent(pRider):info("Mos Eisley traffic failed to attach its driver to " .. templateName)
+		SceneObject(pRider):destroyObjectFromWorld()
+		SceneObject(pVehicle):destroyObjectFromWorld()
+		return
+	end
+
+	writeData(SceneObject(pVehicle):getObjectID() .. ":mosEisleySpeederRoutePoint", pointIndex)
+	createEvent(self.mountedSpeederUpdateInterval + ((trafficIndex - 1) % 50) * 2, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+end
+
+function TatooineMosEisleyScreenPlay:moveMountedSpeederPatrol(pVehicle)
+	if (pVehicle == nil or SceneObject(pVehicle):getZoneName() ~= self.planet) then
+		return
+	end
+
+	local vehicle = SceneObject(pVehicle)
+	local route = self.mountedSpeederRoute
+	local routeKey = vehicle:getObjectID() .. ":mosEisleySpeederRoutePoint"
+	local pointIndex = readData(routeKey)
+	local currentX = vehicle:getPositionX()
+	local currentY = vehicle:getPositionY()
+	local remaining = self.mountedSpeederSpeed * self.mountedSpeederUpdateInterval / 1000
+	local heading
+
+	while (remaining > 0) do
+		local target = route[pointIndex]
+		local dx = target[1] - currentX
+		local dy = target[2] - currentY
+		local distance = math.sqrt(dx * dx + dy * dy)
+
+		if (distance > 0) then
+			heading = math.atan(dx, dy)
+		end
+
+		if (distance <= remaining) then
+			currentX = target[1]
+			currentY = target[2]
+			remaining = remaining - distance
+			pointIndex = pointIndex % #route + 1
+		else
+			currentX = currentX + dx / distance * remaining
+			currentY = currentY + dy / distance * remaining
+			remaining = 0
+		end
+	end
+
+	writeData(routeKey, pointIndex)
+	if (heading ~= nil) then
+		vehicle:setDirectionalHeading(heading)
+	end
+	vehicle:teleport(currentX, getTerrainHeight(pVehicle, currentX, currentY), currentY, 0)
+	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 
 function TatooineMosEisleyScreenPlay:spawnSceneObjects()
