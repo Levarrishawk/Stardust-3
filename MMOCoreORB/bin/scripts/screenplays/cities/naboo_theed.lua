@@ -5,6 +5,31 @@ NabooTheedScreenPlay = CityScreenPlay:new {
 
 	planet = "naboo",
 
+	mountedSpeederSpeed = 17,
+	mountedSpeederUpdateInterval = 100,
+	mountedSpeederCount = 72,
+	mountedSpeederTemplates = {
+		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
+		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",
+		"landspeeder_usv5", "landspeeder_organa", "speederbike_swoop",
+		"landspeeder_x34", "barc_speeder"
+	},
+	mountedSpeederRoute = {
+		{-4840, 4130}, {-4927, 4211}, {-5029, 4233}, {-5112, 4297},
+		{-5217, 4174}, {-5077, 4029}, {-5026, 4078}, {-4995, 4050},
+		{-4995, 4092}, {-4988, 4121}, {-4950, 4153}, {-5169, 4330},
+		{-5212, 4293}, {-5280, 4326}, {-5485, 4326}, {-5485, 4399},
+		{-5509, 4401}, {-5510, 3997}, {-5505, 3996}, {-5489, 4060},
+		{-5488, 4228}, {-5568, 4285}, {-5581, 4498}, {-5705, 4470},
+		{-5748, 4430}, {-5710, 4362}, {-5715, 4300}, {-5971, 4240},
+		{-5983, 4302}, {-5866, 4352}, {-5842, 4316}, {-5846, 4135},
+		{-5633, 4134}, {-5601, 4158}, {-5658, 4262}, {-5579, 4277},
+		{-5533, 4259}, {-5482, 4321}, {-5352, 4319}, {-5350, 4220},
+		{-5332, 4173}, {-5264, 4215}, {-5179, 4322}, {-5116, 4259},
+		{-5101, 4187}, {-5048, 4134}, {-5010, 4106}, {-4991, 4118},
+		{-4907, 4041}, {-4857, 4098}
+	},
+
 	gcwMobs = {
 		{"stormtrooper", "naboo_police", -5206.32, 6, 4182.8, 329.254, 0, "", "", true},
 		{"stormtrooper", "naboo_police", -4800, 6, 4113, 121.097, 0, "", ""},
@@ -216,7 +241,150 @@ function NabooTheedScreenPlay:start()
 		self:spawnGcwMobiles()
 		self:spawnPatrolMobiles()
 		self:spawnStationaryMobiles()
+		self:spawnMountedSpeederPatrol()
 	end
+end
+
+function NabooTheedScreenPlay:spawnMountedSpeederPatrol()
+	local routeLength = 0
+	for i = 1, #self.mountedSpeederRoute do
+		local point = self.mountedSpeederRoute[i]
+		local nextPoint = self.mountedSpeederRoute[i % #self.mountedSpeederRoute + 1]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
+	end
+
+	for trafficIndex = 1, self.mountedSpeederCount do
+		local distance = 0
+		if (trafficIndex > 1) then
+			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / self.mountedSpeederCount
+		end
+		self:spawnMountedSpeeder(trafficIndex, distance)
+	end
+end
+
+function NabooTheedScreenPlay:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+	local vehicle = TangibleObject(pVehicle)
+	local combination = colorSet - 1
+	local combinationsAvailable = 1
+	local firstChannel = templateName == "landspeeder_av21" and 1 or 0
+
+	for channel = firstChannel, 3 do
+		local variable = "/private/index_color_" .. channel
+		local colorCount = vehicle:getPaletteColorCount(variable)
+		if (colorCount > 0) then
+			local choices = math.min(colorCount, vehiclesPerType)
+			local colorIndex = math.floor((combination % choices) * colorCount / choices)
+			colorIndex = (colorIndex + ((colorSet - 1) % combinationsAvailable) * 7) % colorCount
+			vehicle:setCustomizationVariable(variable, colorIndex)
+			combination = math.floor(combination / choices)
+			combinationsAvailable = combinationsAvailable * choices
+		end
+	end
+
+	if (colorSet == 1 and combinationsAvailable > 1 and combinationsAvailable < vehiclesPerType) then
+		print(self.screenplayName .. ": limited unique vehicle colors for " .. templateName)
+	end
+end
+
+function NabooTheedScreenPlay:spawnMountedSpeeder(trafficIndex, distance)
+	local spawn = self.mountedSpeederRoute[1]
+	local pointIndex = 2
+
+	for i = 1, #self.mountedSpeederRoute do
+		local point = self.mountedSpeederRoute[i]
+		local nextIndex = i % #self.mountedSpeederRoute + 1
+		local nextPoint = self.mountedSpeederRoute[nextIndex]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		local segmentLength = math.sqrt(dx * dx + dy * dy)
+		if (distance < segmentLength) then
+			spawn = {point[1] + dx * distance / segmentLength, point[2] + dy * distance / segmentLength}
+			pointIndex = nextIndex
+			break
+		end
+		distance = distance - segmentLength
+	end
+
+	local target = self.mountedSpeederRoute[pointIndex]
+	local heading = math.atan(target[1] - spawn[1], target[2] - spawn[2])
+	local templateName = self.mountedSpeederTemplates[(trafficIndex - 1) % #self.mountedSpeederTemplates + 1]
+	local colorSet = math.floor((trafficIndex - 1) / #self.mountedSpeederTemplates) + 1
+	local vehiclesPerType = math.ceil(self.mountedSpeederCount / #self.mountedSpeederTemplates)
+	local riderTemplate = self.patrolNpcs[getRandomNumber(1, #self.patrolNpcs)]
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/" .. templateName .. ".iff", spawn[1], 6, spawn[2], 0, heading)
+	local pRider = spawnMobile(self.planet, riderTemplate, 0, spawn[1] + 2, 6, spawn[2], math.deg(heading), 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+		return
+	end
+
+	SceneObject(pVehicle):teleport(spawn[1], getTerrainHeight(pVehicle, spawn[1], spawn[2]), spawn[2], 0)
+	CreatureObject(pRider):setCustomObjectName("Townsperson")
+	CreatureObject(pRider):setPvpStatusBitmask(0)
+	CreatureObject(pRider):setOptionBit(INVULNERABLE)
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+	self:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+
+	if not mountNpc(pRider, pVehicle) then
+		AiAgent(pRider):info("Theed traffic failed to attach its driver to " .. templateName)
+		SceneObject(pRider):destroyObjectFromWorld()
+		SceneObject(pVehicle):destroyObjectFromWorld()
+		return
+	end
+
+	writeData(SceneObject(pVehicle):getObjectID() .. ":theedSpeederRoutePoint", pointIndex)
+	createEvent(self.mountedSpeederUpdateInterval + (trafficIndex - 1) * 2, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+end
+
+function NabooTheedScreenPlay:moveMountedSpeederPatrol(pVehicle)
+	if (pVehicle == nil or SceneObject(pVehicle):getZoneName() ~= self.planet) then
+		return
+	end
+
+	local vehicle = SceneObject(pVehicle)
+	local routeKey = vehicle:getObjectID() .. ":theedSpeederRoutePoint"
+	local pointIndex = readData(routeKey)
+	local currentX = vehicle:getPositionX()
+	local currentY = vehicle:getPositionY()
+	local remaining = self.mountedSpeederSpeed * self.mountedSpeederUpdateInterval / 1000
+	local heading
+
+	while (remaining > 0) do
+		local target = self.mountedSpeederRoute[pointIndex]
+		local dx = target[1] - currentX
+		local dy = target[2] - currentY
+		local distance = math.sqrt(dx * dx + dy * dy)
+
+		if (distance > 0) then
+			heading = math.atan(dx, dy)
+		end
+
+		if (distance <= remaining) then
+			currentX = target[1]
+			currentY = target[2]
+			remaining = remaining - distance
+			pointIndex = pointIndex % #self.mountedSpeederRoute + 1
+		else
+			currentX = currentX + dx / distance * remaining
+			currentY = currentY + dy / distance * remaining
+			remaining = 0
+		end
+	end
+
+	writeData(routeKey, pointIndex)
+	if (heading ~= nil) then
+		vehicle:setDirectionalHeading(heading)
+	end
+	vehicle:teleport(currentX, getTerrainHeight(pVehicle, currentX, currentY), currentY, 0)
+	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 
 function NabooTheedScreenPlay:spawnSceneObjects()
