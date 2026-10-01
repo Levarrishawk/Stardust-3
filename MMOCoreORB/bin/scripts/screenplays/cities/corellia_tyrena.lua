@@ -5,6 +5,30 @@ CorelliaTyrenaScreenPlay = CityScreenPlay:new {
 
 	planet = "corellia",
 
+	mountedSpeederSpeed = 17,
+	mountedSpeederUpdateInterval = 100,
+	mountedSpeederCount = 18,
+	mountedSpeederTemplates = {
+		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
+		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",
+		"landspeeder_usv5", "landspeeder_organa", "speederbike_swoop",
+		"landspeeder_x34", "barc_speeder"
+	},
+	mountedSpeederRoute = {
+		{-5052, -2290}, {-5162, -2383}, {-5061, -2490}, {-5062, -2525},
+		{-5083, -2531}, {-5119, -2503}, {-5149, -2472}, {-5192, -2503},
+		{-5239, -2497}, {-5265, -2475}, {-5298, -2530}, {-5285, -2544},
+		{-5308, -2558}, {-5307, -2566}, {-5407, -2614}, {-5413, -2701},
+		{-5539, -2701}, {-5560, -2667}, {-5619, -2662}, {-5619, -2770},
+		{-5587, -2771}, {-5562, -2830}, {-5529, -2831}, {-5527, -2744},
+		{-5493, -2741}, {-5453, -2652}, {-5406, -2652}, {-5401, -2614},
+		{-5304, -2568}, {-5252, -2640}, {-5234, -2619}, {-5225, -2589},
+		{-5191, -2596}, {-5175, -2644}, {-5153, -2646}, {-5114, -2600},
+		{-5094, -2577}, {-5055, -2572}, {-5009, -2528}, {-5034, -2502},
+		{-5054, -2495}, {-5069, -2477}, {-5049, -2456}, {-5080, -2425},
+		{-5048, -2362}, {-5048, -2325}, {-5034, -2305}
+	},
+
 	gcwMobs = {
 		{"command_security_guard", "corsec_trooper", -5281.9, 21, -2574.6, 80, 0, "", "", true},
 		{"command_security_guard", "corsec_trooper", -5112.1,21,-2279.3,79.0023,0, "", "", true},
@@ -365,7 +389,155 @@ function CorelliaTyrenaScreenPlay:start()
 		self:spawnSceneObjects()
 		self:spawnGcwMobiles()
 		self:spawnPatrolMobiles()
+		self:spawnMountedSpeederPatrol()
 	end
+end
+
+function CorelliaTyrenaScreenPlay:spawnMountedSpeederPatrol()
+	self:spawnMountedSpeederGroup(self.mountedSpeederRoute, self.mountedSpeederCount, 0)
+end
+
+function CorelliaTyrenaScreenPlay:spawnMountedSpeederGroup(route, count, indexOffset)
+	local routeLength = 0
+	for i = 1, #route do
+		local point = route[i]
+		local nextPoint = route[i % #route + 1]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
+	end
+
+	for trafficIndex = 1, count do
+		local distance = 0
+		if (trafficIndex > 1) then
+			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / count
+		end
+		self:spawnMountedSpeeder(trafficIndex + indexOffset, distance, route)
+	end
+end
+
+function CorelliaTyrenaScreenPlay:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+	local vehicle = TangibleObject(pVehicle)
+	local combination = colorSet - 1
+	local combinationsAvailable = 1
+	local firstChannel = templateName == "landspeeder_av21" and 1 or 0
+
+	for channel = firstChannel, 3 do
+		local variable = "/private/index_color_" .. channel
+		local colorCount = vehicle:getPaletteColorCount(variable)
+		if (colorCount > 0) then
+			local choices = math.min(colorCount, vehiclesPerType)
+			local colorIndex = math.floor((combination % choices) * colorCount / choices)
+			colorIndex = (colorIndex + ((colorSet - 1) % combinationsAvailable) * 7) % colorCount
+			vehicle:setCustomizationVariable(variable, colorIndex)
+			combination = math.floor(combination / choices)
+			combinationsAvailable = combinationsAvailable * choices
+		end
+	end
+
+	if (colorSet == 1 and combinationsAvailable > 1 and combinationsAvailable < vehiclesPerType) then
+		print(self.screenplayName .. ": limited unique vehicle colors for " .. templateName)
+	end
+end
+
+function CorelliaTyrenaScreenPlay:spawnMountedSpeeder(trafficIndex, distance, route)
+	local spawn = route[1]
+	local pointIndex = 2
+
+	for i = 1, #route do
+		local point = route[i]
+		local nextIndex = i % #route + 1
+		local nextPoint = route[nextIndex]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		local segmentLength = math.sqrt(dx * dx + dy * dy)
+		if (distance < segmentLength) then
+			spawn = {point[1] + dx * distance / segmentLength, point[2] + dy * distance / segmentLength}
+			pointIndex = nextIndex
+			break
+		end
+		distance = distance - segmentLength
+	end
+
+	local target = route[pointIndex]
+	local heading = math.atan(target[1] - spawn[1], target[2] - spawn[2])
+	local templateName = self.mountedSpeederTemplates[(trafficIndex - 1) % #self.mountedSpeederTemplates + 1]
+	local colorSet = math.floor((trafficIndex - 1) / #self.mountedSpeederTemplates) + 1
+	local vehiclesPerType = math.ceil(self.mountedSpeederCount / #self.mountedSpeederTemplates)
+	local riderTemplate = self.patrolNpcs[getRandomNumber(1, #self.patrolNpcs)]
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/" .. templateName .. ".iff", spawn[1], 21, spawn[2], 0, heading)
+	local pRider = spawnMobile(self.planet, riderTemplate, 0, spawn[1] + 2, 21, spawn[2], math.deg(heading), 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+		return
+	end
+
+	SceneObject(pVehicle):teleport(spawn[1], getTerrainHeight(pVehicle, spawn[1], spawn[2]), spawn[2], 0)
+	CreatureObject(pRider):setCustomObjectName("Townsperson")
+	CreatureObject(pRider):setPvpStatusBitmask(0)
+	CreatureObject(pRider):setOptionBit(INVULNERABLE)
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+	self:customizeMountedSpeeder(pVehicle, templateName, colorSet, vehiclesPerType)
+
+	if not mountNpc(pRider, pVehicle) then
+		AiAgent(pRider):info("Tyrena traffic failed to attach its driver to " .. templateName)
+		SceneObject(pRider):destroyObjectFromWorld()
+		SceneObject(pVehicle):destroyObjectFromWorld()
+		return
+	end
+
+	writeData(SceneObject(pVehicle):getObjectID() .. ":tyrenaSpeederRoutePoint", pointIndex)
+	createEvent(self.mountedSpeederUpdateInterval + ((trafficIndex - 1) % 50) * 2, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+end
+
+function CorelliaTyrenaScreenPlay:moveMountedSpeederPatrol(pVehicle)
+	if (pVehicle == nil or SceneObject(pVehicle):getZoneName() ~= self.planet) then
+		return
+	end
+
+	local vehicle = SceneObject(pVehicle)
+	local route = self.mountedSpeederRoute
+	local routeKey = vehicle:getObjectID() .. ":tyrenaSpeederRoutePoint"
+	local pointIndex = readData(routeKey)
+	local currentX = vehicle:getPositionX()
+	local currentY = vehicle:getPositionY()
+	local remaining = self.mountedSpeederSpeed * self.mountedSpeederUpdateInterval / 1000
+	local heading
+
+	while (remaining > 0) do
+		local target = route[pointIndex]
+		local dx = target[1] - currentX
+		local dy = target[2] - currentY
+		local distance = math.sqrt(dx * dx + dy * dy)
+
+		if (distance > 0) then
+			heading = math.atan(dx, dy)
+		end
+
+		if (distance <= remaining) then
+			currentX = target[1]
+			currentY = target[2]
+			remaining = remaining - distance
+			pointIndex = pointIndex % #route + 1
+		else
+			currentX = currentX + dx / distance * remaining
+			currentY = currentY + dy / distance * remaining
+			remaining = 0
+		end
+	end
+
+	writeData(routeKey, pointIndex)
+	if (heading ~= nil) then
+		vehicle:setDirectionalHeading(heading)
+	end
+	vehicle:teleport(currentX, getTerrainHeight(pVehicle, currentX, currentY), currentY, 0)
+	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 
 function CorelliaTyrenaScreenPlay:spawnSceneObjects()
