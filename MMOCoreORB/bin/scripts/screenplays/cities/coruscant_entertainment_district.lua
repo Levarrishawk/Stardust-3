@@ -31,6 +31,35 @@ function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
 	end
 end
 
+function CoruscantEntertainmentScreenPlay:customizeMountedSwoop(pVehicle, racerIndex)
+	local vehicle = TangibleObject(pVehicle)
+	local variables = {"/private/index_color_1", "/private/index_color_2", "/private/index_color_0"}
+	local combination = racerIndex - 1
+	local combinationsAvailable = 1
+
+	for channel, variable in ipairs(variables) do
+		local colorCount = vehicle:getPaletteColorCount(variable)
+
+		if (colorCount > 0) then
+			local choices = math.min(colorCount, self.mountedSwoopRacerCount)
+			local colorIndex = math.floor((combination % choices) * colorCount / choices)
+
+			-- Rotate the accents without repeating a frame/trim combination.
+			if (channel > 1) then
+				colorIndex = (colorIndex + ((racerIndex - 1) % combinationsAvailable) * 7) % colorCount
+			end
+
+			vehicle:setCustomizationVariable(variable, colorIndex)
+			combination = math.floor(combination / choices)
+			combinationsAvailable = combinationsAvailable * choices
+		end
+	end
+
+	if (racerIndex == 1 and combinationsAvailable < self.mountedSwoopRacerCount) then
+		print(self.screenplayName .. ": swoop palettes provide fewer than " .. self.mountedSwoopRacerCount .. " unique color combinations")
+	end
+end
+
 function CoruscantEntertainmentScreenPlay:getMountedSwoopRoutePoint(racerIndex, pointIndex)
 	local point = self.mountedSwoopRoute[pointIndex]
 
@@ -83,6 +112,8 @@ function CoruscantEntertainmentScreenPlay:spawnMountedSwoopRacer(racerIndex)
 
 		return
 	end
+
+	self:customizeMountedSwoop(pVehicle, racerIndex)
 
 	if not mountNpc(pRider, pVehicle) then
 		AiAgent(pRider):info("Mounted swoop patrol failed to attach to its swoop")
