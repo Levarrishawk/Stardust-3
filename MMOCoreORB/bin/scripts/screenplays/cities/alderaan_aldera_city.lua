@@ -151,6 +151,12 @@ AlderaCityScreenPlay = CityScreenPlay:new {
 	planet = "alderaan",
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
+	mountedSpeederCount = 40,
+	mountedSpeederTemplates = {
+		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
+		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",
+		"landspeeder_usv5", "landspeeder_organa", "xj6_air_speeder"
+	},
 	mountedSpeederRoute = {
 		{1138, -1211}, {1135, -1307}, {1044, -1306}, {1040, -1201},
 		{834, -1201}, {828, -1325}, {805, -1345}, {807, -1417},
@@ -190,11 +196,74 @@ function AlderaCityScreenPlay:start()
 end
 
 function AlderaCityScreenPlay:spawnMountedSpeederPatrol()
+	local routeLength = 0
+	for i = 1, #self.mountedSpeederRoute do
+		local point = self.mountedSpeederRoute[i]
+		local nextPoint = self.mountedSpeederRoute[i % #self.mountedSpeederRoute + 1]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
+	end
+
+	for trafficIndex = 1, self.mountedSpeederCount do
+		local distance = 0
+		if (trafficIndex > 1) then
+			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / self.mountedSpeederCount
+		end
+		self:spawnMountedSpeeder(trafficIndex, distance)
+	end
+end
+
+function AlderaCityScreenPlay:customizeMountedSpeeder(pVehicle, templateName, colorSet)
+	local vehicle = TangibleObject(pVehicle)
+	local combination = colorSet - 1
+	local combinationsAvailable = 1
+	local vehiclesPerType = math.ceil(self.mountedSpeederCount / #self.mountedSpeederTemplates)
+	local firstChannel = templateName == "landspeeder_av21" and 1 or 0
+
+	for channel = firstChannel, 3 do
+		local variable = "/private/index_color_" .. channel
+		local colorCount = vehicle:getPaletteColorCount(variable)
+		if (colorCount > 0) then
+			local choices = math.min(colorCount, vehiclesPerType)
+			local colorIndex = math.floor((combination % choices) * colorCount / choices)
+			colorIndex = (colorIndex + ((colorSet - 1) % combinationsAvailable) * 7) % colorCount
+			vehicle:setCustomizationVariable(variable, colorIndex)
+			combination = math.floor(combination / choices)
+			combinationsAvailable = combinationsAvailable * choices
+		end
+	end
+
+	if (colorSet == 1 and combinationsAvailable > 1 and combinationsAvailable < vehiclesPerType) then
+		print(self.screenplayName .. ": limited unique vehicle colors for " .. templateName)
+	end
+end
+
+function AlderaCityScreenPlay:spawnMountedSpeeder(trafficIndex, distance)
 	local spawn = self.mountedSpeederRoute[1]
-	local target = self.mountedSpeederRoute[2]
+	local pointIndex = 2
+
+	for i = 1, #self.mountedSpeederRoute do
+		local point = self.mountedSpeederRoute[i]
+		local nextIndex = i % #self.mountedSpeederRoute + 1
+		local nextPoint = self.mountedSpeederRoute[nextIndex]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[2] - point[2]
+		local segmentLength = math.sqrt(dx * dx + dy * dy)
+		if (distance < segmentLength) then
+			spawn = {point[1] + dx * distance / segmentLength, point[2] + dy * distance / segmentLength}
+			pointIndex = nextIndex
+			break
+		end
+		distance = distance - segmentLength
+	end
+
+	local target = self.mountedSpeederRoute[pointIndex]
 	local heading = math.atan(target[1] - spawn[1], target[2] - spawn[2])
-	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/landspeeder_av21.iff", spawn[1], 28, spawn[2], 0, heading)
-	local pRider = spawnMobile(self.planet, "ambient_jabba_swooper", 0, spawn[1] + 2, 28, spawn[2], math.deg(heading), 0)
+	local templateName = self.mountedSpeederTemplates[(trafficIndex - 1) % #self.mountedSpeederTemplates + 1]
+	local riderTemplate = self.patrolNpcs[getRandomNumber(1, #self.patrolNpcs)]
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/" .. templateName .. ".iff", spawn[1], 28, spawn[2], 0, heading)
+	local pRider = spawnMobile(self.planet, riderTemplate, 0, spawn[1] + 2, 28, spawn[2], math.deg(heading), 0)
 
 	if (pVehicle == nil or pRider == nil) then
 		if (pVehicle ~= nil) then
@@ -207,17 +276,21 @@ function AlderaCityScreenPlay:spawnMountedSpeederPatrol()
 	end
 
 	SceneObject(pVehicle):teleport(spawn[1], getTerrainHeight(pVehicle, spawn[1], spawn[2]), spawn[2], 0)
+	CreatureObject(pRider):setCustomObjectName("Townsperson")
+	CreatureObject(pRider):setPvpStatusBitmask(0)
+	CreatureObject(pRider):setOptionBit(INVULNERABLE)
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+	self:customizeMountedSpeeder(pVehicle, templateName, math.floor((trafficIndex - 1) / #self.mountedSpeederTemplates) + 1)
 
 	if not mountNpc(pRider, pVehicle) then
-		AiAgent(pRider):info("Aldera AV-21 patrol failed to attach its driver")
+		AiAgent(pRider):info("Aldera traffic failed to attach its driver to " .. templateName)
 		SceneObject(pRider):destroyObjectFromWorld()
 		SceneObject(pVehicle):destroyObjectFromWorld()
 		return
 	end
 
-	CreatureObject(pRider):clearOptionBit(AIENABLED)
-	writeData(SceneObject(pVehicle):getObjectID() .. ":alderaSpeederRoutePoint", 2)
-	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+	writeData(SceneObject(pVehicle):getObjectID() .. ":alderaSpeederRoutePoint", pointIndex)
+	createEvent(self.mountedSpeederUpdateInterval + (trafficIndex - 1) * 2, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 
 function AlderaCityScreenPlay:moveMountedSpeederPatrol(pVehicle)
