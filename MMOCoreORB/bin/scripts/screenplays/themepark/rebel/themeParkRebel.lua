@@ -503,29 +503,29 @@ mothmaMissions[5].dialog = {
 }
 
 local yavinMissions = {
-	makeMission("escort", "yavin4", "Escort a power engineer to the Yavin cell", "theme_park_rebel_technician_contact", "a resistance power engineer", nil, nil, nil, reward(1825),
-		"Find the engineer who can synchronize our new generators and escort them through the jungle.", "An Imperial patrol would be worse than the wildlife.", "The engineer has not reached the base.", "We can now power the infirmary and communications room together."),
+	makeMission("deliver", "yavin4", "Deliver generator specifications", "theme_park_rebel_technician_contact", "a resistance power engineer", "object/tangible/mission/mission_datadisk.iff", "Generator specifications and load readings", nil, reward(1825),
+		"Deliver our generator specifications to the engineer at the field service point.", "Give the engineer the disk and return to me with the configuration instructions.", "The engineer still needs those readings.", "Our technicians can now synchronize the generators."),
 	makeMission("confiscate", "yavin4", "Recover stolen construction supplies", "theme_park_rebel_pirate", "a supply thief", "object/tangible/mission/mission_datadisk.iff", "Stolen supply locator", nil, reward(1900),
 		"A thief intercepted part of our construction shipment. Recover its locator.", "We cannot request replacements without exposing the route.", "Recover those supplies.", "The missing crates are accounted for."),
 	makeMission("retrieve", "yavin4", "Retrieve a long-range transmitter", "theme_park_rebel_supervisor", "a stranded communications technician", "object/tangible/loot/tool/recording_rod_broken.iff", "Long-range transmitter core", nil, reward(1975),
 		"A communications team abandoned a transmitter core during an animal attack. Retrieve it.", "Without it, this cell remains isolated.", "The transmitter core is still in the jungle.", "We can communicate without commercial relays."),
 	makeMission("assassinate", "yavin4", "Destroy an Imperial reconnaissance team", "stormtrooper_squad_leader", "an Imperial reconnaissance leader", nil, nil, twoTroopers, reward(2050),
 		"An Imperial reconnaissance team landed beyond our watch. Stop it before it identifies the temple.", "No transmission can leave that team.", "The reconnaissance team is still within reporting range.", "The Empire will record another lost jungle patrol."),
-	makeMission("escort", "yavin4", "Guide the first regular supply convoy to Yavin", "theme_park_rebel_field_contact", "a resistance convoy scout", nil, nil, twoTroopers, reward(2200, 300, true),
-		"Meet the first regular convoy's scout and guide them past the Imperial search pattern.", "If this works, Yavin becomes more than a temporary camp.", "The convoy cannot approach until its scout reaches us.", "What began as scattered favors is now a supply line, and a supply line can sustain a rebellion.")
+	makeMission("deliver", "yavin4", "Deliver final convoy approach clearance", "theme_park_rebel_field_contact", "a resistance convoy scout", "object/tangible/mission/mission_datadisk.iff", "Sealed convoy approach clearance", nil, reward(2200, 300, true),
+		"Deliver final approach clearance to the convoy scout at the rendezvous.", "The scout will coordinate the carrier independently. Return to me after delivering the disk.", "The carrier is waiting for its clearance.", "What began as scattered favors is now a supply line, and a supply line can sustain a rebellion.")
 }
 
 yavinMissions[1].dialog = {
-	introduction = "You must be the help Senator Mothma promised. Tessa Neral. Commander, apparently, though yesterday I spent most of the morning arguing with a leaking water tank. Welcome to Yavin. We have shelter, willing hands, and generators that disagree about how electricity works. An engineer arriving through our supply contacts can synchronize them, but the jungle has made the last part of the journey difficult. Find the engineer and bring them here. I would like our infirmary to stay lit when someone switches on the transmitter.",
-	acceptText = "I will escort the engineer back to you.",
-	declineText = "All right. I will find another escort. Until then, we keep rationing power. Please tell the medic before you plug anything in; she has first claim on what works.",
-	accepted = "Meet the engineer, speak to them, and escort them back here. Stay close through the jungle. They know power systems, not every creature hiding under the canopy. Report to me once they arrive.",
-	working = "The engineer has not arrived. We are still choosing between medical equipment and communications. Please bring them all the way back to us.",
-	completed = "The engineer is here and already asking questions I cannot answer. Excellent. That usually means we have found the right person. Once the generators are synchronized, the medic can stop treating every transmission as a threat to her patients. You have given us a little room to breathe. Around here, we try to put that to use before something else breaks.",
+	introduction = "You must be the help Senator Mothma promised. Tessa Neral. Commander, apparently, though yesterday I spent most of the morning arguing with a leaking water tank. Welcome to Yavin. We have shelter, willing hands, and generators that disagree about how electricity works. An engineer at our field service point can work out the correct configuration from their specifications and load readings. Take this disk to them, then bring their instructions back to me. I would like our infirmary to stay lit when someone switches on the transmitter.",
+	acceptText = "I will deliver the specifications and return with the instructions.",
+	declineText = "All right. I will find another courier. Until then, we keep rationing power. Please tell the medic before you plug anything in; she has first claim on what works.",
+	accepted = "Take the specifications disk to the engineer and speak to them to make the delivery. They will explain the configuration our technicians need. Return to me afterward; the engineer will remain at the field service point.",
+	working = "The engineer still needs our readings. We are choosing between medical equipment and communications until we have the configuration instructions. Deliver the disk and return here.",
+	completed = "Those instructions give our technicians what they need. The engineer has even explained why our first attempt was wrong without using the word foolish. Very diplomatic. Once the generators are synchronized, the medic can stop treating every transmission as a threat to her patients. You have given us a little room to breathe. Around here, we try to put that to use before something else breaks.",
 	information = {
 		{prompt = "How did you become commander?", text = "I coordinated civilian supply depots before the Empire started treating shortages as disobedience. I refused to surrender a medical reserve during a requisition. Friends helped me disappear, and eventually we needed someone to organize more than our next escape. I can count crates, listen to specialists, and admit when I am wrong. For now, that seems to qualify me."},
 		{prompt = "What is this place supposed to become?", text = "A place where people can recover, train, and keep in touch without asking Imperial permission. We are a small cell, not headquarters for a galactic army. Mothma's contacts have helped us gather equipment. Your work has helped get it this far. Now we need to make it useful."},
-		{prompt = "What does the engineer need from me?", text = "A safe escort from their present position to this facility. Speak to them so they know you are the person I sent, then stay close until you reach me. The wildlife is quite capable of ruining a peaceful assignment. Bring the engineer home before you start exploring."}
+		{prompt = "What does the engineer need from me?", text = "This disk contains the generator models, wiring specifications, and readings our technicians collected under load. Deliver it through conversation at the service point. Listen to the configuration instructions and return to me. The engineer supports other field equipment too; they do not need to come here to diagnose this problem."}
 	}
 }
 
@@ -572,16 +572,16 @@ yavinMissions[4].dialog = {
 }
 
 yavinMissions[5].dialog = {
-	introduction = "The immediate threat is contained. A civilian supply shipment is now waiting for clearance to approach, and its advance scout needs to reach us before the cargo follows. Imperial search activity has made the usual approach unsafe. Meet the scout and escort them back here. Once they confirm a usable route, the carrier can complete delivery. This is the first shipment under the regular arrangement you helped establish. I would like its crew to have a reason to come back.",
-	acceptText = "I will escort the convoy scout safely to the cell.",
-	declineText = "Then I will tell the carrier to hold and send another escort. It is better to delay than lose a civilian crew because we pretended an approach was clear.",
-	accepted = "Speak to the convoy scout and escort them all the way back to me. Imperial troops may interfere. Stay together; the cargo cannot follow a route its scout has not completed. Report here when you arrive.",
-	working = "The scout has not arrived, and the carrier is still holding its cargo. Bring the scout back safely so we can authorize the final approach.",
-	completed = "The scout is here. We can send clearance to the carrier and begin unloading. Medicine first, then food, then everything our engineers insist they cannot live without. You have helped turn this place into a cell that can sustain itself and stay in contact with others. We are still small. We still have to be careful. But the next people who arrive will find light, shelter, and someone ready to receive them. That is what your work has built. Get something to eat before you leave. For once, I can offer that without recalculating tomorrow's rations.",
+	introduction = "The immediate threat is contained. A civilian supply shipment is now holding clear of our final approach. Its advance scout is waiting at a rendezvous for our landing instructions and confirmation that we are ready to receive the cargo. Deliver this sealed clearance disk. The scout will coordinate the carrier from there while you return to me. This is the first shipment under the regular arrangement you helped establish. I would like its crew to have a reason to come back.",
+	acceptText = "I will deliver the approach clearance and return to you.",
+	declineText = "Then the carrier will keep holding while I find another courier. It is better to delay than send a civilian crew toward a landing site without confirmed instructions.",
+	accepted = "Take the sealed clearance disk to the convoy scout and speak to them to deliver it. They will relay the instructions to the carrier independently. Return here afterward so we can prepare to receive the shipment.",
+	working = "The scout still needs the clearance disk, and the carrier is holding its cargo. Deliver the instructions and return to me. Nobody needs to follow you to the temple.",
+	completed = "The scout has our clearance. The carrier can now complete its approach while our supply team prepares to unload. Medicine first, then food, then everything our engineers insist they cannot live without. You have helped turn this place into a cell that can sustain itself and stay in contact with others. We are still small. We still have to be careful. But the next people who arrive will find light, shelter, and someone ready to receive them. That is what your work has built. Get something to eat before you leave. For once, I can offer that without recalculating tomorrow's rations.",
 	information = {
-		{prompt = "Am I escorting the whole convoy?", text = "No. You are bringing its advance scout here. The carrier remains clear of the final approach until we receive confirmation. Our supply team will guide the cargo afterward. Keeping those stages separate means a problem on the ground does not immediately trap everyone carrying the shipment."},
+		{prompt = "How will the scout coordinate the convoy?", text = "The scout stays at the rendezvous with a link to the carrier. Your disk supplies the landing instructions, receiving signals, and our confirmation that the site is ready. Our supply team handles the cargo's arrival. You deliver the clearance and return alone; the scout has work to do where they are."},
 		{prompt = "What makes this shipment different?", text = "It is part of a continuing civilian service rather than a single favor. That lets us plan stocks and maintenance instead of consuming everything before we know when more might arrive. Reliability gives us room to help another cell without leaving our own people short."},
-		{prompt = "What must I do to secure the approach?", text = "Meet the scout, speak to them, and escort them back to me. Expect interference from the Imperial search forces. Protect the scout and stay close until you reach this facility. Their arrival is the confirmation we need; you are not being asked to find or clear every patrol on the moon."}
+		{prompt = "What do I need to deliver?", text = "The sealed convoy approach clearance. Speak to the scout at the rendezvous to hand it over, then return to me. Keep the instructions private. The carrier needs one agreed approach and a receiving team that knows what to expect, not several people improvising different routes."}
 	}
 }
 
@@ -779,6 +779,10 @@ function theme_park_rebel_mission_target_conv_handler:handleScreenSmuggle(t,p,n,
 	local result=mission_target_conv_handler.handleScreenSmuggle(self,t,p,n,o,s); local screen=LuaConversationScreen(result)
 	if npcNumber==2 and missionNumber==4 then
 		screen:setCustomDialogText("The inquiry is in order. I will send word through the agreed channel. Return to Senator Organa and wait for him to confirm whether an appointment has been made. Do not approach Luthen's shop before you receive that confirmation.")
+	elseif npcNumber==32 and missionNumber==1 then
+		screen:setCustomDialogText("These load readings explain the fault. Your generators are sharing a circuit without matching their output settings. Tell Commander Neral to have the technicians isolate them before making adjustments, apply the model-specific settings in the configuration notes, and reconnect them only after checking the outputs separately. Her crew can handle the work at the temple; I will keep the field service point running. Return to her with those instructions.")
+	elseif npcNumber==32 and missionNumber==5 then
+		screen:setCustomDialogText("Clearance received. The landing instructions and receiving signals are complete. I will relay them to the carrier from here and coordinate its final approach with your supply team. Return to Commander Neral and tell her to prepare for unloading. I will remain at the rendezvous until the shipment is through.")
 	else
 		screen:setCustomDialogText("You are the contact? Good. Let us finish before anyone notices.")
 	end
