@@ -149,6 +149,22 @@ AlderaCityScreenPlay = CityScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "AlderaCityScreenPlay",
 	planet = "alderaan",
+	mountedSpeederSpeed = 17,
+	mountedSpeederUpdateInterval = 100,
+	mountedSpeederRoute = {
+		{1138, -1211}, {1135, -1307}, {1044, -1306}, {1040, -1201},
+		{834, -1201}, {828, -1325}, {805, -1345}, {807, -1417},
+		{947, -1419}, {997, -1395}, {1367, -1396}, {1385, -1417},
+		{1424, -1418}, {1426, -1481}, {1353, -1483}, {1352, -1504},
+		{1255, -1508}, {1254, -1371}, {894, -1369}, {896, -1394},
+		{1143, -1398}, {1144, -1535}, {1165, -1534}, {1166, -1396},
+		{1370, -1391}, {1371, -1343}, {1402, -1340}, {1401, -1262},
+		{1375, -1106}, {1216, -1106}, {1216, -1029}, {1022, -1026},
+		{1020, -1054}, {1071, -1057}, {1084, -1033}, {1212, -1033},
+		{1216, -1108}, {1366, -1108}, {1364, -1173}, {1379, -1207},
+		{1377, -1243}, {1455, -1257}, {1455, -1334}, {1361, -1340},
+		{1360, -1365}, {1165, -1365}, {1164, -1212}
+	},
 	patrolNpcs = {
 		"commoner_patrol", "commoner_patrol", "commoner_patrol",
 		"commoner_old_patrol", "commoner_fat_patrol", "businessman_patrol",
@@ -169,7 +185,82 @@ function AlderaCityScreenPlay:start()
 		self:spawnMobiles()
 		self:spawnTheaterSceneObjects()
 		self:spawnGrandTowerLounge()
+		self:spawnMountedSpeederPatrol()
 	end
+end
+
+function AlderaCityScreenPlay:spawnMountedSpeederPatrol()
+	local spawn = self.mountedSpeederRoute[1]
+	local target = self.mountedSpeederRoute[2]
+	local heading = math.atan(target[1] - spawn[1], target[2] - spawn[2])
+	local pVehicle = spawnSceneObject(self.planet, "object/mobile/vehicle/landspeeder_av21.iff", spawn[1], 28, spawn[2], 0, heading)
+	local pRider = spawnMobile(self.planet, "ambient_jabba_swooper", 0, spawn[1] + 2, 28, spawn[2], math.deg(heading), 0)
+
+	if (pVehicle == nil or pRider == nil) then
+		if (pVehicle ~= nil) then
+			SceneObject(pVehicle):destroyObjectFromWorld()
+		end
+		if (pRider ~= nil) then
+			SceneObject(pRider):destroyObjectFromWorld()
+		end
+		return
+	end
+
+	SceneObject(pVehicle):teleport(spawn[1], getTerrainHeight(pVehicle, spawn[1], spawn[2]), spawn[2], 0)
+
+	if not mountNpc(pRider, pVehicle) then
+		AiAgent(pRider):info("Aldera AV-21 patrol failed to attach its driver")
+		SceneObject(pRider):destroyObjectFromWorld()
+		SceneObject(pVehicle):destroyObjectFromWorld()
+		return
+	end
+
+	CreatureObject(pRider):clearOptionBit(AIENABLED)
+	writeData(SceneObject(pVehicle):getObjectID() .. ":alderaSpeederRoutePoint", 2)
+	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+end
+
+function AlderaCityScreenPlay:moveMountedSpeederPatrol(pVehicle)
+	if (pVehicle == nil or SceneObject(pVehicle):getZoneName() ~= self.planet) then
+		return
+	end
+
+	local vehicle = SceneObject(pVehicle)
+	local routeKey = vehicle:getObjectID() .. ":alderaSpeederRoutePoint"
+	local pointIndex = readData(routeKey)
+	local currentX = vehicle:getPositionX()
+	local currentY = vehicle:getPositionY()
+	local remaining = self.mountedSpeederSpeed * self.mountedSpeederUpdateInterval / 1000
+	local heading
+
+	while (remaining > 0) do
+		local target = self.mountedSpeederRoute[pointIndex]
+		local dx = target[1] - currentX
+		local dy = target[2] - currentY
+		local distance = math.sqrt(dx * dx + dy * dy)
+
+		if (distance > 0) then
+			heading = math.atan(dx, dy)
+		end
+
+		if (distance <= remaining) then
+			currentX = target[1]
+			currentY = target[2]
+			remaining = remaining - distance
+			pointIndex = pointIndex % #self.mountedSpeederRoute + 1
+		else
+			currentX = currentX + dx / distance * remaining
+			currentY = currentY + dy / distance * remaining
+			remaining = 0
+		end
+	end
+
+	writeData(routeKey, pointIndex)
+	if (heading ~= nil) then
+		vehicle:setDirectionalHeading(heading)
+	end
+	vehicle:teleport(currentX, getTerrainHeight(pVehicle, currentX, currentY), currentY, 0)
+	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 
 function AlderaCityScreenPlay:spawnPatrols(routes)
