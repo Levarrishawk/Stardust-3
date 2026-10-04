@@ -3175,6 +3175,9 @@ int DirectorManager::mountNpc(lua_State* L) {
 		return 1;
 	}
 
+	Locker riderLocker(rider);
+	Locker locker(vehicle, rider);
+
 	if (rider->getParent() != nullptr || vehicle->getParent() != nullptr) {
 		instance()->error("mountNpc failed: rider or vehicle already has a parent");
 		lua_pushboolean(L, false);
@@ -3186,8 +3189,6 @@ int DirectorManager::mountNpc(lua_State* L) {
 		lua_pushboolean(L, false);
 		return 1;
 	}
-
-	Locker locker(vehicle, rider);
 
 	vehicle->setState(CreatureState::MOUNTEDCREATURE);
 
