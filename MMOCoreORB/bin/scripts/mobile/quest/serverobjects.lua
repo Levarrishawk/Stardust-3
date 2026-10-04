@@ -882,3 +882,4 @@ includeFile("quest/yavin4/yith_seenath.lua")
 
 --new
 includeFile("quest/tatooine/owen_lars.lua")
+includeFile("quest/tatooine/beru_lars.lua")
