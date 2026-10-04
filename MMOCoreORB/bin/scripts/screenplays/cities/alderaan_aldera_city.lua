@@ -343,7 +343,9 @@ function AlderaCityScreenPlay:moveMountedSpeederPatrol(pVehicle)
 	if (heading ~= nil) then
 		vehicle:setDirectionalHeading(heading)
 	end
-	vehicle:teleport(currentX, getTerrainHeight(pVehicle, currentX, currentY), currentY, 0)
+	local nextZ = getTerrainHeight(pVehicle, currentX, currentY)
+	checkVehiclePatrolImpact(pVehicle, currentX, nextZ, currentY)
+	vehicle:teleport(currentX, nextZ, currentY, 0)
 	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end
 

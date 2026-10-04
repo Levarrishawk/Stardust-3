@@ -466,6 +466,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->registerFunction("deleteStringVectorSharedMemory", deleteStringVectorSharedMemory);
 	luaEngine->registerFunction("spawnSceneObject", spawnSceneObject);
 	luaEngine->registerFunction("mountNpc", mountNpc);
+	luaEngine->registerFunction("checkVehiclePatrolImpact", checkVehiclePatrolImpact);
 	luaEngine->registerFunction("spawnActiveArea", spawnActiveArea);
 	luaEngine->registerFunction("spawnRectangularActiveArea", spawnRectangularActiveArea);
 	luaEngine->registerFunction("spawnSpaceActiveArea", spawnSpaceActiveArea);
@@ -3204,6 +3205,68 @@ int DirectorManager::mountNpc(lua_State* L) {
 
 	lua_pushboolean(L, true);
 	return 1;
+}
+
+int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
+	if (lua_gettop(L) != 4) {
+		printTraceError(L, "incorrect number of arguments passed to DirectorManager::checkVehiclePatrolImpact");
+		return 0;
+	}
+
+	SceneObject* vehicle = (SceneObject*) lua_touserdata(L, 1);
+	if (vehicle == nullptr || !vehicle->isVehicleObject())
+		return 0;
+
+	Locker vehicleLocker(vehicle);
+	ManagedReference<Zone*> zone = vehicle->getZone();
+	if (zone == nullptr || vehicle->getParent() != nullptr)
+		return 0;
+
+	Vector3 start = vehicle->getPosition();
+	Vector3 end(lua_tonumber(L, 2), lua_tonumber(L, 4), lua_tonumber(L, 3));
+	Vector3 movement = end - start;
+	float lengthSquared = movement.getX() * movement.getX() + movement.getY() * movement.getY() + movement.getZ() * movement.getZ();
+	if (lengthSquared <= 0)
+		return 0;
+
+	// Approximate contact with a swept radius, rather than the client mesh.
+	const float impactRadius = 2.0f;
+	float range = movement.length() + impactRadius;
+	Reference<SortedVector<ManagedReference<TreeEntry*> >*> players = new SortedVector<ManagedReference<TreeEntry*> >();
+	zone->getInRangePlayers(start.getX(), start.getZ(), start.getY(), range, players);
+
+	for (int i = 0; i < players->size(); ++i) {
+		SceneObject* object = cast<SceneObject*>(players->get(i).get());
+		ManagedReference<CreatureObject*> player = object != nullptr ? object->asCreatureObject() : nullptr;
+		if (player == nullptr)
+			continue;
+
+		Locker playerLocker(player, vehicle);
+		if (vehicle->getZone() != zone || vehicle->getParent() != nullptr ||
+			player->getZone() != zone || !player->isPlayerCreature() || player->getParent() != nullptr ||
+			player->isRidingMount() || player->getPosture() != CreaturePosture::UPRIGHT ||
+			!player->checkCooldownRecovery("vehiclePatrolImpact"))
+			continue;
+
+		Vector3 offset = player->getPosition() - start;
+		float fraction = (offset.getX() * movement.getX() + offset.getY() * movement.getY() + offset.getZ() * movement.getZ()) / lengthSquared;
+		if (fraction < 0)
+			fraction = 0;
+		else if (fraction > 1)
+			fraction = 1;
+
+		float dx = offset.getX() - movement.getX() * fraction;
+		float dy = offset.getY() - movement.getY() * fraction;
+		float dz = offset.getZ() - movement.getZ() * fraction;
+		if (dx * dx + dy * dy + dz * dz > impactRadius * impactRadius)
+			continue;
+
+		player->addCooldown("vehiclePatrolImpact", 15000);
+		player->setPosture(CreaturePosture::KNOCKEDDOWN, true);
+		player->sendSystemMessage("A passing vehicle knocks you off your feet!");
+	}
+
+	return 0;
 }
 
 int DirectorManager::spawnActiveArea(lua_State* L) {

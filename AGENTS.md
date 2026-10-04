@@ -37,6 +37,14 @@ When solving problems:
 - Do not rewrite unrelated code.
 - Preserve compatibility with the existing server architecture and data model.
 
+## Engine3 Protection
+
+- Treat `MMOCoreORB/utils/engine3/` and everything beneath it as read-only.
+- Do not modify Engine3 in any way unless the user explicitly authorizes the specific Engine3 change. This includes editing, adding, deleting, renaming, formatting, regenerating files, or changing the Engine3 repository/submodule revision.
+- A general request to investigate or fix a crash, compiler error, or gameplay issue does not authorize Engine3 changes.
+- Read-only inspection is permitted. If a solution requires an Engine3 change, explain the finding and proposed change and obtain explicit authorization before making it.
+- Do not reapply reverted Engine3 changes without explicit authorization.
+
 ## Code Style
 
 Follow the conventions in the surrounding Core3 files.
