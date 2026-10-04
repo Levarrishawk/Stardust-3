@@ -305,7 +305,7 @@ public:
 		return optionsBitmask;
 	}
 
-	inline uint64 getCustomAiMap() {
+	inline uint64 getCustomAiMap() const {
 		return customAiMap;
 	}
 
