@@ -3236,6 +3236,25 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 	Vector3 start = vehicle->getPosition();
 	Vector3 destination(lua_tonumber(L, 2), lua_tonumber(L, 4), lua_tonumber(L, 3));
 	vehicle->setCurrentSpeed(lua_tonumber(L, 5));
+	if (!rider->peekBlackboard("vehiclePatrolLastPosition")) {
+		rider->writeBlackboard("vehiclePatrolLastPosition", start);
+		vehicle->addCooldown("vehiclePatrolMovementWatch", 8000);
+	} else {
+		Vector3 lastPosition = rider->readBlackboard("vehiclePatrolLastPosition").get<Vector3>();
+		if (start.squaredDistanceTo(lastPosition) > 0.01f) {
+			rider->writeBlackboard("vehiclePatrolLastPosition", start);
+			vehicle->addCooldown("vehiclePatrolMovementWatch", 8000);
+		} else if (vehicle->checkCooldownRecovery("vehiclePatrolMovementWatch")) {
+			vehicle->addCooldown("vehiclePatrolAvoidanceBypass", 2000);
+			vehicle->addCooldown("vehiclePatrolMovementWatch", 8000);
+			rider->eraseBlackboard("vehiclePatrolDetour");
+			rider->eraseBlackboard("vehiclePatrolPassEnd");
+		}
+	}
+	if (!vehicle->checkCooldownRecovery("vehiclePatrolAvoidanceBypass")) {
+		lua_pushboolean(L, true);
+		return 1;
+	}
 	if (rider->peekBlackboard("vehiclePatrolDetour") && vehicle->checkCooldownRecovery("vehiclePatrolDetour")) {
 		rider->eraseBlackboard("vehiclePatrolDetour");
 		rider->eraseBlackboard("vehiclePatrolPassEnd");
