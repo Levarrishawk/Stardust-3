@@ -5,7 +5,7 @@ TatooineLarsHomesteadScreenPlay = ScreenPlay:new {
 	screenplayName = "TatooineLarsHomesteadScreenPlay",
 
 	kenobiCaveCellID = 9995395,
-	kenobiCaveOrigin = {x = 1.1, z = 1, y = -2.1},
+	kenobiCaveOrigin = {x = 1.1, z = 0.6, y = -2.1},
 
 	-- Template, x offset, height offset, y offset, heading.
 	kenobiCaveFurnishings = {
