@@ -3261,9 +3261,18 @@ int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 		if (dx * dx + dy * dy + dz * dz > impactRadius * impactRadius)
 			continue;
 
+		// Reserve the cooldown now so movement updates cannot queue another impact.
 		player->addCooldown("vehiclePatrolImpact", 15000);
-		player->setPosture(CreaturePosture::KNOCKEDDOWN, true);
-		player->sendSystemMessage("A passing vehicle knocks you off your feet!");
+		Core::getTaskManager()->scheduleTask([player, zone] {
+			Locker locker(player);
+			if (!player->isOnline() || player->getZone() != zone || player->getParent() != nullptr ||
+				player->isRidingMount() || player->getPosture() != CreaturePosture::UPRIGHT)
+				return;
+
+			player->addCooldown("vehiclePatrolImpact", 15000);
+			player->setPosture(CreaturePosture::KNOCKEDDOWN, true);
+			player->sendSystemMessage("A passing vehicle knocks you off your feet!");
+		}, "VehiclePatrolImpact", 500);
 	}
 
 	return 0;
