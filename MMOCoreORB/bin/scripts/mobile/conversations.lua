@@ -356,6 +356,7 @@ includeFile("conversations/pet/pets_conv.lua")
 
 -- Misc
 includeFile("conversations/alderaan/aldera_grand_tower_elevator.lua")
+includeFile("conversations/tatooine/lars_homestead_ben.lua")
 includeFile("conversations/misc/bartender_conv.lua")
 includeFile("conversations/misc/philosopher_conv.lua")
 includeFile("conversations/misc/city_authority_warden_conv.lua")
