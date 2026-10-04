@@ -19,11 +19,11 @@ beru_lars_outfit = {
 			{"/shared_owner/blend_nosewidth_1", 0}
 		},
 
-		{objectTemplate = "object/tangible/wearables/robe/robe_s05.iff", customizationVariables = {{"/private/index_color_1", 20}} },
+		{objectTemplate = "object/tangible/wearables/jacket/robe_s02.iff", customizationVariables = {{"/private/index_color_1", 20}} },
 		{objectTemplate = "object/tangible/wearables/shirt/shirt_s11.iff", customizationVariables = {{"/private/index_color_1", 24}} },
 		{objectTemplate = "object/tangible/wearables/pants/pants_s04.iff", customizationVariables = {{"/private/index_color_1", 92}} },
 		{objectTemplate = "object/tangible/wearables/boots/boots_s05.iff", customizationVariables = {{"/private/index_color_1", 97}} },
-		{objectTemplate = "object/tangible/hair/human/hair_human_female_s08.iff", customizationVariables = {{"/private/index_color_1", 21}} }
+		{objectTemplate = "object/tangible/hair/human/hair_human_female_s08.iff", customizationVariables = {{"/private/index_color_1", 18}} }
 	}
 }
 
