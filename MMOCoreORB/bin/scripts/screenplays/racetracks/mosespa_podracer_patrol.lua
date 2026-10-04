@@ -1,8 +1,3 @@
-local mosEspaPodracerRoute = {}
-for _, point in ipairs(mosespa_racetrack_screenplay.trackConfig.waypoints) do
-	table.insert(mosEspaPodracerRoute, {point.x, point.y})
-end
-
 MosEspaPodracerPatrolScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "MosEspaPodracerPatrolScreenPlay",
@@ -10,7 +5,16 @@ MosEspaPodracerPatrolScreenPlay = ScreenPlay:new {
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
 	mountedSpeederCount = 20,
-	mountedSpeederRoute = mosEspaPodracerRoute,
+	mountedSpeederRoute = {
+		{2405, 5006}, {2156, 5062}, {1832, 4673}, {1540, 4951},
+		{1564, 5391}, {1183, 5460}, {955, 5457}, {755, 5443},
+		{184, 5331}, {49, 5291}, {-102, 5043}, {-398, 5130},
+		{-478, 4935}, {-678, 4820}, {-723, 4385}, {-987, 4144},
+		{-707, 3991}, {-552, 3916}, {-149, 3967}, {22, 4047},
+		{444, 4392}, {588, 4341}, {665, 3994}, {926, 3839},
+		{1170, 4002}, {1200, 4383}, {1424, 4509}, {1679, 4288},
+		{2151, 4338}, {2446, 4580}
+	},
 	mountedSpeederTemplates = {
 		"pod_racer_balta_podracer", "pod_racer_ipg_longtail",
 		"pod_racer_one", "pod_racer_two", "podracer_anakin", "fg_8t8_podracer"
