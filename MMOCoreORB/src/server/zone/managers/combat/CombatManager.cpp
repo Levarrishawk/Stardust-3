@@ -159,8 +159,10 @@ namespace {
 		if (zone == nullptr || offender == nullptr)
 			return nullptr;
 
+		const String spawnTemplate = responderTemplate == "stormtrooper" ? "city_authority_stormtrooper" : responderTemplate;
+
 		ManagedReference<AiAgent*> responder = cast<AiAgent*>(zone->getCreatureManager()->spawnCreature(
-				responderTemplate.hashCode(), 0, offender->getPositionX() + offset, offender->getPositionZ(),
+				spawnTemplate.hashCode(), 0, offender->getPositionX() + offset, offender->getPositionZ(),
 				offender->getPositionY() + offset, offender->getParentID(), false, 0));
 
 		if (responder == nullptr)
