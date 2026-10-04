@@ -54,6 +54,7 @@ includeFile("misc/seeker.lua")
 includeFile("misc/sullustan_male.lua")
 includeFile("misc/trials_gungan_captain.lua")
 includeFile("misc/elysium_force_spirit.lua")
+includeFile("misc/elysium_guardian.lua")
 includeFile("misc/elysium2_force_spirits.lua")
 
 includeFile("misc/naboo_heat_memorial.lua")

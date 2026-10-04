@@ -50,6 +50,12 @@ function ElysiumSpawnScreenPlay:spawnSceneObjects()
 end
 
 function ElysiumSpawnScreenPlay:spawnMobiles()
+	local pGuardian = spawnMobile("elysium", "elysium_guardian", 0, 49, 12, -17, 0, 0)
+	if (pGuardian ~= nil) then
+		CreatureObject(pGuardian):clearOptionBit(AIENABLED)
+		self:setMoodString(pGuardian, "neutral")
+	end
+
 	local x = getRandomNumber(-6500, 6500)
 	local y = getRandomNumber(-6500, 6500)
 	local z = getWorldFloor(x, y, "elysium")

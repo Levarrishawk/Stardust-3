@@ -7,6 +7,7 @@ function PlayerTriggers:playerLoggedIn(pPlayer)
 	ServerEventAutomation:playerLoggedIn(pPlayer)
 	BestineElection:playerLoggedIn(pPlayer)
 	MissionJournal:onPlayerLoggedIn(pPlayer)
+	ElysiumGuardian:playerLoggedIn(pPlayer)
 end
 
 function PlayerTriggers:playerLoggedOut(pPlayer)
