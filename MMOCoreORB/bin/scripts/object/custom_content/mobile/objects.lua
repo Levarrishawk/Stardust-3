@@ -6014,6 +6014,11 @@ ObjectTemplates:addClientTemplate(object_mobile_shared_c_syren_3_wire, "object/m
 ------------------------------------------------------------------------------------------------------------------------------------
 
 
+object_mobile_shared_darth_maul_npc = SharedCreatureObjectTemplate:new {
+	clientTemplateFileName = "object/mobile/shared_darth_maul_npc.iff"
+}
+ObjectTemplates:addClientTemplate(object_mobile_shared_darth_maul_npc, "object/mobile/shared_darth_maul_npc.iff")
+
 object_mobile_shared_darth_vader_eow = SharedCreatureObjectTemplate:new {
 	clientTemplateFileName = "object/mobile/shared_darth_vader_eow.iff"
 }
