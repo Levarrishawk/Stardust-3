@@ -50,6 +50,34 @@ function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 
 	local screenID = LuaConversationScreen(pConvScreen):getScreenID()
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
+	if (screenID == "privileged") then
+		if (not self:isPrivileged(pPlayer)) then
+			return convoTemplate:getScreen(self:getEligibilityScreen(pPlayer))
+		end
+
+		local entryTime = tonumber(readScreenPlayData(pPlayer, "ElysiumGuardian", "entryTime"))
+		local text = "Resurrection timer: no Elysium entry time recorded."
+		if (entryTime ~= nil and entryTime > 0) then
+			local remaining = math.max(0, self.waitSeconds - (getTimestamp() - entryTime))
+			local days = math.floor(remaining / 86400)
+			local hours = math.floor((remaining % 86400) / 3600)
+			local minutes = math.floor((remaining % 3600) / 60)
+			local seconds = math.floor(remaining % 60)
+			text = string.format("Time until resurrection timer eligibility: %d days, %d hours, %d minutes, %d seconds.", days, hours, minutes, seconds)
+		end
+
+		local pGhost = CreatureObject(pPlayer):getPlayerObject()
+		if (PlayerObject(pGhost):getJediState() >= 2) then
+			text = text .. " Jedi state prevents normal resurrection."
+		elseif (self:getEligibilityScreen(pPlayer) == "offer") then
+			text = text .. " You are eligible for resurrection."
+		end
+
+		local pClonedScreen = LuaConversationScreen(pConvScreen):cloneScreen()
+		LuaConversationScreen(pClonedScreen):setCustomDialogText(text .. " Which path would you like to test?")
+		return pClonedScreen
+	end
+
 	if (screenID == "test_regular") then
 		return convoTemplate:getScreen(self:getEligibilityScreen(pPlayer))
 	end
