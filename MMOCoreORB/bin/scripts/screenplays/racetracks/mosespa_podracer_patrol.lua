@@ -2,9 +2,9 @@ MosEspaPodracerPatrolScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "MosEspaPodracerPatrolScreenPlay",
 	planet = "tatooine",
-	mountedSpeederSpeed = 17,
+	mountedSpeederSpeed = 25.5,
 	mountedSpeederUpdateInterval = 100,
-	mountedSpeederCount = 20,
+	mountedSpeederCount = 36,
 	mountedSpeederRoute = {
 		{2405, 5006}, {2156, 5062}, {1832, 4673}, {1540, 4951},
 		{1564, 5391}, {1183, 5460}, {955, 5457}, {755, 5443},
