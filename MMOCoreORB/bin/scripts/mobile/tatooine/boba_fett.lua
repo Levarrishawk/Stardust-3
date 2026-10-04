@@ -19,6 +19,7 @@ boba_fett = Creature:new {
 	boneType = "",
 	boneAmount = 0,
 	milk = 0,
+	scale = 0.95,
 	tamingChance = 0,
 	ferocity = 0,
 	pvpBitmask = NONE,
