@@ -125,8 +125,6 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 			float vy = cos(angle);
 			if (vehicle) {
 				if (ahead >= 0 && ahead < distance + 6 && fabs(side) < 3) {
-					if (ux * vx + uy * vy > 0.5f)
-						return false;
 					vehicleBlocked = true;
 				}
 				Reference<SceneObject*> rider = other->getSlottedObject("rider");

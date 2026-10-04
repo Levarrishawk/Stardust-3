@@ -3355,9 +3355,11 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 		}
 		canMove = false;
 	}
-	if (!canMove)
-		vehicle->setCurrentSpeed(0);
-	lua_pushboolean(L, canMove);
+	if (!canMove) {
+		rider->eraseBlackboard("vehiclePatrolDetour");
+		rider->eraseBlackboard("vehiclePatrolPassEnd");
+	}
+	lua_pushboolean(L, true);
 	return 1;
 }
 
