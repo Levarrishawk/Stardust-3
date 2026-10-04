@@ -5,6 +5,36 @@ elysiumGuardianConvoTemplate = ConvoTemplate:new {
 	screens = {}
 }
 
+local privileged = ConvoScreen:new {
+	id = "privileged",
+	leftDialog = "",
+	customDialogText = "Which path would you like to test?",
+	stopConversation = "false",
+	options = {
+		{"Test the regular conversation result.", "test_regular"},
+		{"Bypass the wait and test the teleport exit.", "test_exit"}
+	}
+}
+elysiumGuardianConvoTemplate:addScreen(privileged)
+
+local testRegular = ConvoScreen:new {
+	id = "test_regular",
+	leftDialog = "",
+	customDialogText = "",
+	stopConversation = "true",
+	options = {}
+}
+elysiumGuardianConvoTemplate:addScreen(testRegular)
+
+local testExit = ConvoScreen:new {
+	id = "test_exit",
+	leftDialog = "",
+	customDialogText = "",
+	stopConversation = "true",
+	options = {}
+}
+elysiumGuardianConvoTemplate:addScreen(testExit)
+
 local waiting = ConvoScreen:new {
 	id = "waiting",
 	leftDialog = "",

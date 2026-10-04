@@ -2,6 +2,15 @@ elysiumGuardianConvoHandler = conv_handler:new {
 	waitSeconds = 30 * 24 * 60 * 60,
 }
 
+function elysiumGuardianConvoHandler:isPrivileged(pPlayer)
+	if (pPlayer == nil or SceneObject(pPlayer):getZoneName() ~= "elysium") then
+		return false
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	return pGhost ~= nil and PlayerObject(pGhost):isPrivileged()
+end
+
 function elysiumGuardianConvoHandler:getEligibilityScreen(pPlayer)
 	if (pPlayer == nil or SceneObject(pPlayer):getZoneName() ~= "elysium") then
 		return "waiting"
@@ -27,6 +36,10 @@ function elysiumGuardianConvoHandler:getEligibilityScreen(pPlayer)
 end
 
 function elysiumGuardianConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+	if (self:isPrivileged(pPlayer)) then
+		return LuaConversationTemplate(pConvTemplate):getScreen("privileged")
+	end
+
 	return LuaConversationTemplate(pConvTemplate):getScreen(self:getEligibilityScreen(pPlayer))
 end
 
@@ -35,14 +48,25 @@ function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 		return pConvScreen
 	end
 
-	if (LuaConversationScreen(pConvScreen):getScreenID() ~= "resurrect") then
+	local screenID = LuaConversationScreen(pConvScreen):getScreenID()
+	local convoTemplate = LuaConversationTemplate(pConvTemplate)
+	if (screenID == "test_regular") then
+		return convoTemplate:getScreen(self:getEligibilityScreen(pPlayer))
+	end
+
+	if (screenID ~= "resurrect" and screenID ~= "test_exit") then
 		return pConvScreen
 	end
 
-	local eligibility = self:getEligibilityScreen(pPlayer)
-	local convoTemplate = LuaConversationTemplate(pConvTemplate)
-	if (eligibility ~= "offer") then
-		return convoTemplate:getScreen(eligibility)
+	if (screenID == "test_exit") then
+		if (not self:isPrivileged(pPlayer)) then
+			return convoTemplate:getScreen(self:getEligibilityScreen(pPlayer))
+		end
+	else
+		local eligibility = self:getEligibilityScreen(pPlayer)
+		if (eligibility ~= "offer") then
+			return convoTemplate:getScreen(eligibility)
+		end
 	end
 
 	local shrines = {}
@@ -69,5 +93,5 @@ function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 	local z = getWorldFloor(x, y, shrine[1])
 	SceneObject(pPlayer):switchZone(shrine[1], x, z, y, 0)
 
-	return pConvScreen
+	return convoTemplate:getScreen("resurrect")
 end
