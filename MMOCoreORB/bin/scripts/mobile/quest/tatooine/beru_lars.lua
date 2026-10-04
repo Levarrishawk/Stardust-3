@@ -28,7 +28,7 @@ beru_lars = Creature:new {
 	optionsBitmask = INVULNERABLE,
 	diet = HERBIVORE,
 
-	templates = {"object/mobile/human_female.iff"},
+	templates = {"object/mobile/kaja_orzee.iff"},
 	lootGroups = {},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
