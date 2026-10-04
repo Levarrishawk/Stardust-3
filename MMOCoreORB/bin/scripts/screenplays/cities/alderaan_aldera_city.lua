@@ -149,10 +149,11 @@ AlderaCityScreenPlay = CityScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "AlderaCityScreenPlay",
 	planet = "alderaan",
+	pedestrianPatrolPopulation = 0.8,
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
-	mountedSpeederCount = 54,
-	mountedSpeederBaseCount = 40,
+	mountedSpeederCount = 43,
+	mountedSpeederBaseCount = 32,
 	mountedSpeederTemplates = {
 		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
 		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",

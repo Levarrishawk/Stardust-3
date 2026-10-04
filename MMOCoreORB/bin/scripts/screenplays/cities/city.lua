@@ -126,8 +126,23 @@ end
 
 function CityScreenPlay:spawnPatrolMobiles()
 	if (isZoneEnabled(self.planet)) then
+		local pedestrianCount = 0
 		for i = 1, #self.patrolMobiles do
-			self:spawnPatrol(i)
+			if not self.patrolMobiles[i][9] then
+				pedestrianCount = pedestrianCount + 1
+			end
+		end
+		local retainedCount = math.floor(pedestrianCount * (self.pedestrianPatrolPopulation or 1) + 0.5)
+		local pedestrianIndex = 0
+		for i = 1, #self.patrolMobiles do
+			if self.patrolMobiles[i][9] then
+				self:spawnPatrol(i)
+			else
+				pedestrianIndex = pedestrianIndex + 1
+				if math.floor(pedestrianIndex * retainedCount / pedestrianCount) > math.floor((pedestrianIndex - 1) * retainedCount / pedestrianCount) then
+					self:spawnPatrol(i)
+				end
+			end
 		end
 	end
 end
