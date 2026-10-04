@@ -40,6 +40,8 @@ function ElysiumSpawnScreenPlay:spawnElysiumTwoMobiles()
 end
 
 function ElysiumSpawnScreenPlay:spawnSceneObjects()
+	spawnSceneObject("elysium", "object/static/structure/dantooine/dant_jedi_temple_altar.iff", 49, 12, -13, 0, 0)
+  spawnSceneObject("elysium", "object/static/particle/pt_frn_all_glowing_light_s3.iff", 49, 12, -13, 0, 0)
 	local x = getRandomNumber(-250, 250)
 	local y = getRandomNumber(-250, 250)
 	local z = getWorldFloor(x, y, "elysium")
