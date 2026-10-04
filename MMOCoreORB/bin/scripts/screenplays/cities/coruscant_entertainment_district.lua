@@ -157,13 +157,18 @@ function CoruscantEntertainmentScreenPlay:moveMountedSwoopPatrol(pVehicle)
 			pointIndex = 1
 		end
 
-		writeData(vehicleID .. ":mountedSwoopRoutePoint", pointIndex)
 	else
 		currentX = currentX + dx / distance * step
 		currentZ = currentZ + (target[2] - currentZ) / distance * step
 		currentY = currentY + dy / distance * step
 	end
 
+	if not canMoveVehiclePatrol(pVehicle, currentX, currentZ, currentY, self.mountedSwoopSpeed) then
+		createEvent(self.mountedSwoopUpdateInterval, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
+		return
+	end
+
+	writeData(vehicleID .. ":mountedSwoopRoutePoint", pointIndex)
 	if (distance > 0) then
 		vehicle:setDirectionalHeading(math.atan(dx, dy))
 	end

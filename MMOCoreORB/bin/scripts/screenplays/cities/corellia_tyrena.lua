@@ -532,11 +532,16 @@ function CorelliaTyrenaScreenPlay:moveMountedSpeederPatrol(pVehicle)
 		end
 	end
 
+	local nextZ = getTerrainHeight(pVehicle, currentX, currentY)
+	if not canMoveVehiclePatrol(pVehicle, currentX, nextZ, currentY, self.mountedSpeederSpeed) then
+		createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
+		return
+	end
+
 	writeData(routeKey, pointIndex)
 	if (heading ~= nil) then
 		vehicle:setDirectionalHeading(heading)
 	end
-	local nextZ = getTerrainHeight(pVehicle, currentX, currentY)
 	checkVehiclePatrolImpact(pVehicle, currentX, nextZ, currentY)
 	vehicle:teleport(currentX, nextZ, currentY, 0)
 	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")

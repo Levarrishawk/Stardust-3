@@ -2730,7 +2730,16 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 	ManagedReference<SceneObject*> currentParent = mountedVehicle != nullptr && mountedVehicle->isVehicleObject() ? nullptr : getParent().get();
 
 	PatrolPoint currentPoint(currentPosition);
-	const WorldCoordinates endMovementCoords = endMovementPosition.getCoordinates();
+	WorldCoordinates endMovementCoords = endMovementPosition.getCoordinates();
+	if (peekBlackboard("cityPatrolDetour")) {
+		Vector3 detour = readBlackboard("cityPatrolDetour").get<Vector3>();
+		if (currentWorldPos.squaredDistanceTo(detour) < 0.25f || currentParent != nullptr || isInCombat()) {
+			eraseBlackboard("cityPatrolDetour");
+			currentFoundPath = nullptr;
+		} else {
+			endMovementCoords = WorldCoordinates(detour, nullptr);
+		}
+	}
 	CellObject* endMovementCell = endMovementPosition.getCell();
 
 #ifdef SHOW_NEXT_POSITION
@@ -2951,6 +2960,58 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 		newPosition.setZ(getWorldZ(newPosition));
 	} else {
 		newPosition.setZ(nextMovementPosition.getZ());
+	}
+
+	if (walk && !isInCombat() && currentParent == nullptr && nextMovementCell == nullptr &&
+		npcTemplate.get() != nullptr && npcTemplate.get()->getCustomAiMap() == STRING_HASHCODE("cityPatrol")) {
+		Vector3 adjusted = newPosition;
+		if (!CollisionManager::adjustCityPatrolMovement(asAiAgent(), adjusted, false)) {
+			currentFoundPath = nullptr;
+			setCurrentSpeed(0.f);
+			updateLocomotion();
+			nextBehaviorInterval = 250;
+			return true;
+		}
+		if (!peekBlackboard("cityPatrolDetour") && adjusted.squaredDistanceTo(newPosition) > 0.01f) {
+			adjusted.setZ(getWorldZ(adjusted));
+			Reference<Vector<WorldCoordinates>*> detourPath = pathFinder->findPath(WorldCoordinates(currentWorldPos, nullptr), WorldCoordinates(adjusted, nullptr), getZoneUnsafe());
+			bool validDetour = detourPath != nullptr && detourPath->size() >= 2 &&
+				detourPath->get(detourPath->size() - 1).getWorldPosition().squaredDistanceTo(adjusted) <= 0.25f;
+			Vector3 safeDetour = adjusted;
+			if (validDetour && (!CollisionManager::adjustCityPatrolMovement(asAiAgent(), safeDetour, false) ||
+				safeDetour.squaredDistanceTo(adjusted) > 0.01f))
+				validDetour = false;
+			float detourLength = 0;
+			if (validDetour) {
+				for (int i = 1; i < detourPath->size(); ++i) {
+					detourLength += detourPath->get(i).getWorldPosition().distanceTo(detourPath->get(i - 1).getWorldPosition());
+					if (detourPath->get(i).getCell() != nullptr || detourLength > 4) {
+						validDetour = false;
+						break;
+					}
+				}
+			}
+			if (!validDetour) {
+				currentFoundPath = nullptr;
+				setCurrentSpeed(0.f);
+				updateLocomotion();
+				nextBehaviorInterval = 250;
+				return true;
+			}
+			Vector3 detourStep = detourPath->get(1).getWorldPosition();
+			Vector3 detourDiff = detourStep - currentWorldPos;
+			float detourDistance = Math::sqrt(detourDiff.getX() * detourDiff.getX() + detourDiff.getY() * detourDiff.getY());
+			if (detourDistance > maxSpeed) {
+				detourStep.setX(currentWorldPos.getX() + detourDiff.getX() * maxSpeed / detourDistance);
+				detourStep.setY(currentWorldPos.getY() + detourDiff.getY() * maxSpeed / detourDistance);
+				detourStep.setZ(getWorldZ(detourStep));
+			}
+			writeBlackboard("cityPatrolDetour", adjusted);
+			currentFoundPath = nullptr;
+			newPosition = detourStep;
+			Vector3 actualMovement = newPosition - currentWorldPos;
+			nextMovementDistance = Math::sqrt(actualMovement.getX() * actualMovement.getX() + actualMovement.getY() * actualMovement.getY());
+		}
 	}
 
 	nextMovementPosition.setX(newPosition.getX());

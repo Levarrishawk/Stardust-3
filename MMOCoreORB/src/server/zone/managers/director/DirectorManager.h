@@ -132,6 +132,7 @@ namespace server {
 		static int spawnSceneObject(lua_State* L);
 		static int mountNpc(lua_State* L);
 		static int checkVehiclePatrolImpact(lua_State* L);
+		static int canMoveVehiclePatrol(lua_State* L);
 		static int spawnActiveArea(lua_State* L);
 		static int spawnRectangularActiveArea(lua_State* L);
 		static int spawnSpaceActiveArea(lua_State* L);

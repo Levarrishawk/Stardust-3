@@ -467,6 +467,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->registerFunction("spawnSceneObject", spawnSceneObject);
 	luaEngine->registerFunction("mountNpc", mountNpc);
 	luaEngine->registerFunction("checkVehiclePatrolImpact", checkVehiclePatrolImpact);
+	luaEngine->registerFunction("canMoveVehiclePatrol", canMoveVehiclePatrol);
 	luaEngine->registerFunction("spawnActiveArea", spawnActiveArea);
 	luaEngine->registerFunction("spawnRectangularActiveArea", spawnRectangularActiveArea);
 	luaEngine->registerFunction("spawnSpaceActiveArea", spawnSpaceActiveArea);
@@ -3207,6 +3208,28 @@ int DirectorManager::mountNpc(lua_State* L) {
 	return 1;
 }
 
+int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
+	if (lua_gettop(L) != 5) {
+		printTraceError(L, "incorrect number of arguments passed to DirectorManager::canMoveVehiclePatrol");
+		lua_pushboolean(L, false);
+		return 1;
+	}
+	SceneObject* object = (SceneObject*) lua_touserdata(L, 1);
+	CreatureObject* vehicle = object != nullptr ? object->asCreatureObject() : nullptr;
+	if (vehicle == nullptr || !vehicle->isVehicleObject()) {
+		lua_pushboolean(L, false);
+		return 1;
+	}
+	Locker locker(vehicle);
+	Vector3 destination(lua_tonumber(L, 2), lua_tonumber(L, 4), lua_tonumber(L, 3));
+	vehicle->setCurrentSpeed(lua_tonumber(L, 5));
+	bool canMove = CollisionManager::adjustCityPatrolMovement(vehicle, destination, true);
+	if (!canMove)
+		vehicle->setCurrentSpeed(0);
+	lua_pushboolean(L, canMove);
+	return 1;
+}
+
 int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 	if (lua_gettop(L) != 4) {
 		printTraceError(L, "incorrect number of arguments passed to DirectorManager::checkVehiclePatrolImpact");
@@ -3272,7 +3295,7 @@ int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 			player->addCooldown("vehiclePatrolImpact", 15000);
 			player->setPosture(CreaturePosture::KNOCKEDDOWN, true);
 			player->sendSystemMessage("A passing vehicle knocks you off your feet!");
-		}, "VehiclePatrolImpact", 500);
+		}, "VehiclePatrolImpact", 750);
 	}
 
 	return 0;

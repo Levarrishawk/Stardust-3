@@ -6,6 +6,8 @@
  */
 
 #include "CollisionManager.h"
+#include "server/zone/objects/creature/ai/AiAgent.h"
+#include "server/zone/objects/creature/ai/CreatureTemplate.h"
 #include "server/zone/Zone.h"
 #include "server/zone/SpaceZone.h"
 #include "server/zone/objects/building/BuildingObject.h"
@@ -83,6 +85,108 @@ const AppearanceTemplate* CollisionManager::getCollisionAppearance(SceneObject* 
 	const PortalLayout* portalLayout = templateObject->getPortalLayout();
 
 	return (portalLayout != nullptr) ? portalLayout->getAppearanceTemplate(0) : templateObject->getAppearanceTemplate();
+}
+
+bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector3& destination, bool vehicle) {
+	ManagedReference<Zone*> zone = creature->getZone();
+	if (zone == nullptr || creature->getParent() != nullptr)
+		return false;
+
+	Vector3 start = creature->getPosition();
+	float dx = destination.getX() - start.getX();
+	float dy = destination.getY() - start.getY();
+	float distance = Math::sqrt(dx * dx + dy * dy);
+	if (distance < 0.01f)
+		return true;
+	float ux = dx / distance;
+	float uy = dy / distance;
+
+	SortedVector<ManagedReference<TreeEntry*> > objects;
+	zone->getInRangeObjects(start.getX(), start.getZ(), start.getY(), 20, &objects, true);
+	bool pedestrianBlocked = false;
+	for (int i = 0; i < objects.size(); ++i) {
+		SceneObject* object = static_cast<SceneObject*>(objects.get(i).get());
+		CreatureObject* other = object != nullptr ? object->asCreatureObject() : nullptr;
+		if (other == nullptr || other == creature || other->getZone() != zone || other->getParent() != nullptr)
+			continue;
+
+		Vector3 offset = other->getPosition() - start;
+		if (fabs(offset.getZ()) > 3)
+			continue;
+		float ahead = offset.getX() * ux + offset.getY() * uy;
+		float side = offset.getX() * uy - offset.getY() * ux;
+
+		if (other->isVehicleObject()) {
+			float angle = other->getDirection()->getRadians();
+			float vx = sin(angle);
+			float vy = cos(angle);
+			if (!vehicle) {
+				float toPedestrian = -offset.getX() * vx - offset.getY() * vy;
+				float laneOffset = -offset.getX() * vy + offset.getY() * vx;
+				// Keep clearing the road once inside the lane; the vehicle yields.
+				float endX = dx - offset.getX();
+				float endY = dy - offset.getY();
+				float endDistanceSq = endX * endX + endY * endY;
+				float currentDistanceSq = offset.getX() * offset.getX() + offset.getY() * offset.getY();
+				if (fabs(laneOffset) <= 2.5f && toPedestrian > -3 && endDistanceSq > 9 &&
+					(toPedestrian > 4 || endDistanceSq > currentDistanceSq))
+					continue;
+				float futureLane = laneOffset + dx * vy - dy * vx;
+				if (other->getCurrentSpeed() > 0 && toPedestrian >= -3 && toPedestrian <= 12 &&
+					(fabs(futureLane) <= 3 || laneOffset * futureLane < 0))
+					return false;
+				if (ahead > 0 && ahead < distance + 3 && fabs(side) < 3)
+					return false;
+			} else {
+				// Keep a following gap, including when the vehicle ahead has stopped.
+				if (ahead > 0 && ahead < distance + 6 && fabs(side) < 3)
+					return false;
+				Reference<SceneObject*> rider = other->getSlottedObject("rider");
+				if (rider == nullptr || !rider->isAiAgent())
+					continue;
+				// At crossing routes, one vehicle yields consistently instead of both waiting.
+				float rx = ux * creature->getCurrentSpeed() - vx * other->getCurrentSpeed();
+				float ry = uy * creature->getCurrentSpeed() - vy * other->getCurrentSpeed();
+				float relativeSpeedSq = rx * rx + ry * ry;
+				if (relativeSpeedSq < 0.01f)
+					continue;
+				float time = (offset.getX() * rx + offset.getY() * ry) / relativeSpeedSq;
+				float closestX = offset.getX() - rx * time;
+				float closestY = offset.getY() - ry * time;
+				if (time > 0 && time < 0.75f && closestX * closestX + closestY * closestY < 16 &&
+					creature->getObjectID() > other->getObjectID())
+					return false;
+			}
+			continue;
+		}
+
+		if (!other->isAiAgent() || other->isDead())
+			continue;
+		AiAgent* pedestrian = cast<AiAgent*>(other);
+		const auto npcTemplate = pedestrian->getCreatureTemplate();
+		if (npcTemplate == nullptr || npcTemplate->getCustomAiMap() != STRING_HASHCODE("cityPatrol"))
+			continue;
+
+		if (vehicle) {
+			float angle = pedestrian->getDirection()->getRadians();
+			float speed = pedestrian->getCurrentSpeed();
+			float futureAhead = ahead + sin(angle) * speed * 0.75f * ux + cos(angle) * speed * 0.75f * uy;
+			float futureSide = side + sin(angle) * speed * 0.75f * uy - cos(angle) * speed * 0.75f * ux;
+			if ((ahead > -1 && ahead < distance + 8 && fabs(side) < 2.5f) ||
+				(futureAhead > 0 && futureAhead < distance + 8 &&
+					(fabs(futureSide) < 2.5f || side * futureSide < 0)))
+				return false;
+		} else if (ahead > 0 && ahead < distance + 2 && fabs(side) < 1.25f) {
+			pedestrianBlocked = true;
+		}
+	}
+
+	if (pedestrianBlocked) {
+		// Both walkers pass on their own right; their patrol destinations stay intact.
+		destination.setX(start.getX() + uy * 1.5f + ux * 0.5f);
+		destination.setY(start.getY() - ux * 1.5f + uy * 0.5f);
+	}
+	return true;
 }
 
 bool CollisionManager::checkSphereCollision(const Vector3& origin, float radius, Zone* zone) {
