@@ -545,7 +545,13 @@ function CorelliaKorVellaScreenPlay:moveMountedSpeederPatrol(pVehicle)
 	end
 
 	local nextZ = getTerrainHeight(pVehicle, currentX, currentY)
-	if not canMoveVehiclePatrol(pVehicle, currentX, nextZ, currentY, self.mountedSpeederSpeed) then
+	local canMove, detourX, detourZ, detourY = canMoveVehiclePatrol(pVehicle, currentX, nextZ, currentY, self.mountedSpeederSpeed, self.mountedSpeederUpdateInterval)
+	if not canMove then
+		if (detourX ~= nil) then
+			vehicle:setDirectionalHeading(math.atan(detourX - vehicle:getPositionX(), detourY - vehicle:getPositionY()))
+			checkVehiclePatrolImpact(pVehicle, detourX, detourZ, detourY, self.mountedSpeederSpeed)
+			vehicle:teleport(detourX, detourZ, detourY, 0)
+		end
 		createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 		return
 	end

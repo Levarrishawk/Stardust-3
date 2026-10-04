@@ -3209,7 +3209,7 @@ int DirectorManager::mountNpc(lua_State* L) {
 }
 
 int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
-	if (lua_gettop(L) != 5) {
+	if (lua_gettop(L) != 6) {
 		printTraceError(L, "incorrect number of arguments passed to DirectorManager::canMoveVehiclePatrol");
 		lua_pushboolean(L, false);
 		return 1;
@@ -3221,9 +3221,121 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 		return 1;
 	}
 	Locker locker(vehicle);
+	ManagedReference<SceneObject*> riderObject = vehicle->getSlottedObject("rider");
+	ManagedReference<AiAgent*> rider = riderObject != nullptr && riderObject->isAiAgent() ? cast<AiAgent*>(riderObject.get()) : nullptr;
+	if (rider == nullptr || vehicle->getZone() == nullptr) {
+		lua_pushboolean(L, false);
+		return 1;
+	}
+	Locker riderLocker(rider, vehicle);
+	ManagedReference<Zone*> zone = vehicle->getZone();
+	if (zone == nullptr || rider->getParent().get() != vehicle || vehicle->getParent() != nullptr) {
+		lua_pushboolean(L, false);
+		return 1;
+	}
+	Vector3 start = vehicle->getPosition();
 	Vector3 destination(lua_tonumber(L, 2), lua_tonumber(L, 4), lua_tonumber(L, 3));
 	vehicle->setCurrentSpeed(lua_tonumber(L, 5));
+	if (rider->peekBlackboard("vehiclePatrolDetour") && vehicle->checkCooldownRecovery("vehiclePatrolDetour")) {
+		rider->eraseBlackboard("vehiclePatrolDetour");
+		rider->eraseBlackboard("vehiclePatrolPassEnd");
+	}
+	if (rider->peekBlackboard("vehiclePatrolDetour")) {
+		Vector3 detour = rider->readBlackboard("vehiclePatrolDetour").get<Vector3>();
+		if (start.squaredDistanceTo(detour) < 0.25f) {
+			if (rider->peekBlackboard("vehiclePatrolPassEnd")) {
+				detour = rider->readBlackboard("vehiclePatrolPassEnd").get<Vector3>();
+				rider->eraseBlackboard("vehiclePatrolPassEnd");
+				rider->writeBlackboard("vehiclePatrolDetour", detour);
+				destination = detour;
+			} else {
+				rider->eraseBlackboard("vehiclePatrolDetour");
+			}
+		} else {
+			destination = detour;
+		}
+	}
+	Vector3 requested = destination;
+	bool continuingDetour = rider->peekBlackboard("vehiclePatrolDetour");
 	bool canMove = CollisionManager::adjustCityPatrolMovement(vehicle, destination, true);
+	bool detouring = rider->peekBlackboard("vehiclePatrolDetour") || destination.squaredDistanceTo(requested) > 0.01f;
+	if (canMove && detouring) {
+		if (rider->peekBlackboard("vehiclePatrolDetour"))
+			destination = requested;
+		destination.setZ(CollisionManager::getWorldFloorCollision(destination.getX(), destination.getY(), zone, false));
+		Reference<Vector<WorldCoordinates>*> path = PathFinderManager::instance()->findPath(WorldCoordinates(start, nullptr), WorldCoordinates(destination, nullptr), zone);
+		bool validPath = path != nullptr && path->size() >= 2 &&
+			path->get(path->size() - 1).getWorldPosition().squaredDistanceTo(destination) < 0.25f;
+		float pathLength = 0;
+		if (validPath) {
+			for (int i = 1; i < path->size(); ++i) {
+				pathLength += path->get(i).getWorldPosition().distanceTo(path->get(i - 1).getWorldPosition());
+				if (path->get(i).getCell() != nullptr || pathLength > 14) {
+					validPath = false;
+					break;
+				}
+			}
+		}
+		if (validPath) {
+			Vector3 step = path->get(1).getWorldPosition();
+			Vector3 movement = step - start;
+			float length = movement.length();
+			float stepDistance = lua_tonumber(L, 5) * lua_tonumber(L, 6) / 1000.f;
+			if (length < 0.01f || stepDistance <= 0)
+				validPath = false;
+			if (length > stepDistance && length > 0 && stepDistance > 0)
+				step = start + movement * (stepDistance / length);
+			step.setZ(CollisionManager::getWorldFloorCollision(step.getX(), step.getY(), zone, false));
+			if (fabs(step.getZ() - start.getZ()) > 1.f ||
+				CollisionManager::getWorldFloorCollision(step.getX(), step.getY(), zone, true) > step.getZ() + 0.5f)
+				validPath = false;
+			SortedVector<ManagedReference<TreeEntry*> > nearby;
+			zone->getInRangeObjects(start.getX(), start.getZ(), start.getY(), 20, &nearby, true);
+			for (int i = 0; i < nearby.size(); ++i) {
+				SceneObject* obstacle = static_cast<SceneObject*>(nearby.get(i).get());
+				if (obstacle == nullptr || obstacle == vehicle || obstacle->getParent() != nullptr)
+					continue;
+				if (obstacle->isVehicleObject()) {
+					Vector3 position = obstacle->getPosition();
+					float before = start.squaredDistanceTo(position);
+					float after = step.squaredDistanceTo(position);
+					if (CollisionManager::getPointIntersection(start, step, position, 3.f, start.distanceTo(step)) != FLT_MAX &&
+						(before >= 9 || after <= before))
+						validPath = false;
+				} else if (!obstacle->isCreatureObject() && obstacle->getObjectTemplate() != nullptr &&
+					(obstacle->getObjectTemplate()->getCollisionActionBlockFlags() & 255)) {
+					Vector3 rayStart = start;
+					Vector3 rayEnd = step;
+					rayStart.setZ(rayStart.getZ() + 1);
+					rayEnd.setZ(rayEnd.getZ() + 1);
+					if (CollisionManager::getAppearanceIntersection(obstacle, rayStart, rayEnd, 3.f, rayStart.distanceTo(rayEnd)) != FLT_MAX)
+						validPath = false;
+				}
+				if (!validPath)
+					break;
+			}
+			if (validPath) {
+				if (!continuingDetour) {
+					vehicle->addCooldown("vehiclePatrolDetour", 5000);
+					Vector3 forward = requested - start;
+					float forwardLength = Math::sqrt(forward.getX() * forward.getX() + forward.getY() * forward.getY());
+					if (forwardLength > 0.01f) {
+						Vector3 passEnd = destination;
+						passEnd.setX(passEnd.getX() + forward.getX() * 10.f / forwardLength);
+						passEnd.setY(passEnd.getY() + forward.getY() * 10.f / forwardLength);
+						rider->writeBlackboard("vehiclePatrolPassEnd", passEnd);
+					}
+				}
+				rider->writeBlackboard("vehiclePatrolDetour", destination);
+				lua_pushboolean(L, false);
+				lua_pushnumber(L, step.getX());
+				lua_pushnumber(L, step.getZ());
+				lua_pushnumber(L, step.getY());
+				return 4;
+			}
+		}
+		canMove = false;
+	}
 	if (!canMove)
 		vehicle->setCurrentSpeed(0);
 	lua_pushboolean(L, canMove);
@@ -3256,23 +3368,28 @@ int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 	// Approximate contact with a swept radius, rather than the client mesh.
 	const float impactRadius = 2.0f;
 	float range = movement.length() + impactRadius;
-	Reference<SortedVector<ManagedReference<TreeEntry*> >*> players = new SortedVector<ManagedReference<TreeEntry*> >();
-	zone->getInRangePlayers(start.getX(), start.getZ(), start.getY(), range, players);
+	Reference<SortedVector<ManagedReference<TreeEntry*> >*> targets = new SortedVector<ManagedReference<TreeEntry*> >();
+	zone->getInRangeObjects(start.getX(), start.getZ(), start.getY(), range, targets, true);
 
-	for (int i = 0; i < players->size(); ++i) {
-		SceneObject* object = cast<SceneObject*>(players->get(i).get());
-		ManagedReference<CreatureObject*> player = object != nullptr ? object->asCreatureObject() : nullptr;
-		if (player == nullptr)
+	for (int i = 0; i < targets->size(); ++i) {
+		SceneObject* object = cast<SceneObject*>(targets->get(i).get());
+		ManagedReference<CreatureObject*> target = object != nullptr ? object->asCreatureObject() : nullptr;
+		if (target == nullptr)
 			continue;
 
-		Locker playerLocker(player, vehicle);
+		Locker targetLocker(target, vehicle);
+		bool pedestrian = false;
+		if (target->isAiAgent()) {
+			const auto npcTemplate = cast<AiAgent*>(target.get())->getCreatureTemplate();
+			pedestrian = npcTemplate != nullptr && npcTemplate->getCustomAiMap() == STRING_HASHCODE("cityPatrol") && !target->isInCombat();
+		}
 		if (vehicle->getZone() != zone || vehicle->getParent() != nullptr ||
-			player->getZone() != zone || !player->isPlayerCreature() || player->getParent() != nullptr ||
-			player->isRidingMount() || player->getPosture() != CreaturePosture::UPRIGHT ||
-			!player->checkCooldownRecovery("vehiclePatrolImpact"))
+			target->getZone() != zone || (!target->isPlayerCreature() && !pedestrian) || target->getParent() != nullptr ||
+			target->isRidingMount() || target->getPosture() != CreaturePosture::UPRIGHT ||
+			!target->checkCooldownRecovery("vehiclePatrolImpact"))
 			continue;
 
-		Vector3 offset = player->getPosition() - start;
+		Vector3 offset = target->getPosition() - start;
 		float fraction = (offset.getX() * movement.getX() + offset.getY() * movement.getY() + offset.getZ() * movement.getZ()) / lengthSquared;
 		if (fraction < 0)
 			fraction = 0;
@@ -3286,16 +3403,32 @@ int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 			continue;
 
 		// Reserve the cooldown now so movement updates cannot queue another impact.
-		player->addCooldown("vehiclePatrolImpact", 15000);
-		Core::getTaskManager()->scheduleTask([player, zone] {
-			Locker locker(player);
-			if (!player->isOnline() || player->getZone() != zone || player->getParent() != nullptr ||
-				player->isRidingMount() || player->getPosture() != CreaturePosture::UPRIGHT)
+		target->addCooldown("vehiclePatrolImpact", 15000);
+		Core::getTaskManager()->scheduleTask([target, zone, pedestrian] {
+			Locker locker(target);
+			if ((!pedestrian && !target->isOnline()) || (pedestrian && target->isInCombat()) ||
+				target->getZone() != zone || target->getParent() != nullptr ||
+				target->isRidingMount() || target->getPosture() != CreaturePosture::UPRIGHT)
 				return;
 
-			player->addCooldown("vehiclePatrolImpact", 15000);
-			player->setPosture(CreaturePosture::KNOCKEDDOWN, true);
-			player->sendSystemMessage("A passing vehicle knocks you off your feet!");
+			target->addCooldown("vehiclePatrolImpact", 15000);
+			target->setPosture(CreaturePosture::KNOCKEDDOWN, true);
+			if (!pedestrian) {
+				target->sendSystemMessage("A passing vehicle knocks you off your feet!");
+				return;
+			}
+
+			target->setCurrentSpeed(0.f);
+			target->setPostureChangeDelay(5000);
+			Core::getTaskManager()->scheduleTask([target, zone] {
+				Locker recoveryLocker(target);
+				if (target->getZone() != zone || target->getParent() != nullptr || target->isInCombat() ||
+					!target->isKnockedDown())
+					return;
+
+				target->setPosture(CreaturePosture::UPRIGHT, true);
+				cast<AiAgent*>(target.get())->activateAiBehavior(true);
+			}, "VehiclePatrolPedestrianRecovery", 5000);
 		}, "VehiclePatrolImpact", 750);
 	}
 

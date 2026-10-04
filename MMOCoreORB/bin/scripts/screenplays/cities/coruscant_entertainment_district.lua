@@ -163,7 +163,13 @@ function CoruscantEntertainmentScreenPlay:moveMountedSwoopPatrol(pVehicle)
 		currentY = currentY + dy / distance * step
 	end
 
-	if not canMoveVehiclePatrol(pVehicle, currentX, currentZ, currentY, self.mountedSwoopSpeed) then
+	local canMove, detourX, detourZ, detourY = canMoveVehiclePatrol(pVehicle, currentX, currentZ, currentY, self.mountedSwoopSpeed, self.mountedSwoopUpdateInterval)
+	if not canMove then
+		if (detourX ~= nil) then
+			vehicle:setDirectionalHeading(math.atan(detourX - vehicle:getPositionX(), detourY - vehicle:getPositionY()))
+			checkVehiclePatrolImpact(pVehicle, detourX, detourZ, detourY, self.mountedSwoopSpeed)
+			vehicle:teleport(detourX, detourZ, detourY, 0)
+		end
 		createEvent(self.mountedSwoopUpdateInterval, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
 		return
 	end

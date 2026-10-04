@@ -2621,6 +2621,13 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 
 	int posture = getPosture();
 	int movementState = getMovementState();
+	if (posture == CreaturePosture::KNOCKEDDOWN && !isInCombat() && npcTemplate.get() != nullptr &&
+		npcTemplate.get()->getCustomAiMap() == STRING_HASHCODE("cityPatrol")) {
+		setCurrentSpeed(0.f);
+		updateLocomotion();
+		nextBehaviorInterval = 250;
+		return true;
+	}
 
 	if (posture == CreaturePosture::CROUCHED)
 		return false;

@@ -104,6 +104,7 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 	SortedVector<ManagedReference<TreeEntry*> > objects;
 	zone->getInRangeObjects(start.getX(), start.getZ(), start.getY(), 20, &objects, true);
 	bool pedestrianBlocked = false;
+	bool vehicleBlocked = false;
 	for (int i = 0; i < objects.size(); ++i) {
 		SceneObject* object = static_cast<SceneObject*>(objects.get(i).get());
 		CreatureObject* other = object != nullptr ? object->asCreatureObject() : nullptr;
@@ -123,8 +124,11 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 			float vx = sin(angle);
 			float vy = cos(angle);
 			if (vehicle) {
-				if (ahead > 0 && ahead < distance + 6 && fabs(side) < 3)
-					return false;
+				if (ahead >= 0 && ahead < distance + 6 && fabs(side) < 3) {
+					if (ux * vx + uy * vy > 0.5f)
+						return false;
+					vehicleBlocked = true;
+				}
 				Reference<SceneObject*> rider = other->getSlottedObject("rider");
 				if (rider == nullptr || !rider->isAiAgent())
 					continue;
@@ -138,7 +142,7 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 				float closestY = offset.getY() - ry * time;
 				if (time > 0 && time < 0.75f && closestX * closestX + closestY * closestY < 16 &&
 					creature->getObjectID() > other->getObjectID())
-					return false;
+					vehicleBlocked = true;
 				continue;
 			}
 			float toPedestrian = -offset.getX() * vx - offset.getY() * vy;
@@ -172,7 +176,10 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 		}
 	}
 
-	if (pedestrianBlocked) {
+	if (vehicleBlocked) {
+		destination.setX(start.getX() + uy * 4.f);
+		destination.setY(start.getY() - ux * 4.f);
+	} else if (pedestrianBlocked) {
 		// Both walkers pass on their own right; their patrol destinations stay intact.
 		destination.setX(start.getX() + uy * 1.5f + ux * 0.5f);
 		destination.setY(start.getY() - ux * 1.5f + uy * 0.5f);
