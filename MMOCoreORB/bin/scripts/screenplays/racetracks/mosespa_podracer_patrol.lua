@@ -1,3 +1,8 @@
+local mosEspaPodracerRoute = {}
+for _, point in ipairs(mosespa_racetrack_screenplay.trackConfig.waypoints) do
+	table.insert(mosEspaPodracerRoute, {point.x, point.y})
+end
+
 MosEspaPodracerPatrolScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "MosEspaPodracerPatrolScreenPlay",
@@ -5,6 +10,7 @@ MosEspaPodracerPatrolScreenPlay = ScreenPlay:new {
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
 	mountedSpeederCount = 20,
+	mountedSpeederRoute = mosEspaPodracerRoute,
 	mountedSpeederTemplates = {
 		"pod_racer_balta_podracer", "pod_racer_ipg_longtail",
 		"pod_racer_one", "pod_racer_two", "podracer_anakin", "fg_8t8_podracer"
@@ -19,10 +25,6 @@ registerScreenPlay("MosEspaPodracerPatrolScreenPlay", true)
 
 function MosEspaPodracerPatrolScreenPlay:start()
 	if (isZoneEnabled(self.planet)) then
-		self.mountedSpeederRoute = {}
-		for _, point in ipairs(mosespa_racetrack_screenplay.trackConfig.waypoints) do
-			table.insert(self.mountedSpeederRoute, {point.x, point.y})
-		end
 		self:spawnMountedSpeederPatrol()
 	end
 end
