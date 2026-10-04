@@ -109,6 +109,8 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 		CreatureObject* other = object != nullptr ? object->asCreatureObject() : nullptr;
 		if (other == nullptr || other == creature || other->getZone() != zone || other->getParent() != nullptr)
 			continue;
+		if (vehicle && !other->isVehicleObject())
+			continue;
 
 		Vector3 offset = other->getPosition() - start;
 		if (fabs(offset.getZ()) > 3)
@@ -120,31 +122,12 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 			float angle = other->getDirection()->getRadians();
 			float vx = sin(angle);
 			float vy = cos(angle);
-			if (!vehicle) {
-				float toPedestrian = -offset.getX() * vx - offset.getY() * vy;
-				float laneOffset = -offset.getX() * vy + offset.getY() * vx;
-				// Keep clearing the road once inside the lane; the vehicle yields.
-				float endX = dx - offset.getX();
-				float endY = dy - offset.getY();
-				float endDistanceSq = endX * endX + endY * endY;
-				float currentDistanceSq = offset.getX() * offset.getX() + offset.getY() * offset.getY();
-				if (fabs(laneOffset) <= 2.5f && toPedestrian > -3 && endDistanceSq > 9 &&
-					(toPedestrian > 4 || endDistanceSq > currentDistanceSq))
-					continue;
-				float futureLane = laneOffset + dx * vy - dy * vx;
-				if (other->getCurrentSpeed() > 0 && toPedestrian >= -3 && toPedestrian <= 12 &&
-					(fabs(futureLane) <= 3 || laneOffset * futureLane < 0))
-					return false;
-				if (ahead > 0 && ahead < distance + 3 && fabs(side) < 3)
-					return false;
-			} else {
-				// Keep a following gap, including when the vehicle ahead has stopped.
+			if (vehicle) {
 				if (ahead > 0 && ahead < distance + 6 && fabs(side) < 3)
 					return false;
 				Reference<SceneObject*> rider = other->getSlottedObject("rider");
 				if (rider == nullptr || !rider->isAiAgent())
 					continue;
-				// At crossing routes, one vehicle yields consistently instead of both waiting.
 				float rx = ux * creature->getCurrentSpeed() - vx * other->getCurrentSpeed();
 				float ry = uy * creature->getCurrentSpeed() - vy * other->getCurrentSpeed();
 				float relativeSpeedSq = rx * rx + ry * ry;
@@ -156,7 +139,24 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 				if (time > 0 && time < 0.75f && closestX * closestX + closestY * closestY < 16 &&
 					creature->getObjectID() > other->getObjectID())
 					return false;
+				continue;
 			}
+			float toPedestrian = -offset.getX() * vx - offset.getY() * vy;
+			float laneOffset = -offset.getX() * vy + offset.getY() * vx;
+			// Keep clearing the lane when the next step leaves safe vehicle clearance.
+			float endX = dx - offset.getX();
+			float endY = dy - offset.getY();
+			float endDistanceSq = endX * endX + endY * endY;
+			float currentDistanceSq = offset.getX() * offset.getX() + offset.getY() * offset.getY();
+			if (fabs(laneOffset) <= 2.5f && toPedestrian > -3 && endDistanceSq > 9 &&
+				(toPedestrian > 4 || endDistanceSq > currentDistanceSq))
+				continue;
+			float futureLane = laneOffset + dx * vy - dy * vx;
+			if (other->getCurrentSpeed() > 0 && toPedestrian >= -3 && toPedestrian <= 12 &&
+				(fabs(futureLane) <= 3 || laneOffset * futureLane < 0))
+				return false;
+			if (ahead > 0 && ahead < distance + 3 && fabs(side) < 3)
+				return false;
 			continue;
 		}
 
@@ -167,16 +167,7 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 		if (npcTemplate == nullptr || npcTemplate->getCustomAiMap() != STRING_HASHCODE("cityPatrol"))
 			continue;
 
-		if (vehicle) {
-			float angle = pedestrian->getDirection()->getRadians();
-			float speed = pedestrian->getCurrentSpeed();
-			float futureAhead = ahead + sin(angle) * speed * 0.75f * ux + cos(angle) * speed * 0.75f * uy;
-			float futureSide = side + sin(angle) * speed * 0.75f * uy - cos(angle) * speed * 0.75f * ux;
-			if ((ahead > -1 && ahead < distance + 8 && fabs(side) < 2.5f) ||
-				(futureAhead > 0 && futureAhead < distance + 8 &&
-					(fabs(futureSide) < 2.5f || side * futureSide < 0)))
-				return false;
-		} else if (ahead > 0 && ahead < distance + 2 && fabs(side) < 1.25f) {
+		if (ahead > 0 && ahead < distance + 2 && fabs(side) < 1.25f) {
 			pedestrianBlocked = true;
 		}
 	}

@@ -173,7 +173,7 @@ function CoruscantEntertainmentScreenPlay:moveMountedSwoopPatrol(pVehicle)
 		vehicle:setDirectionalHeading(math.atan(dx, dy))
 	end
 
-	checkVehiclePatrolImpact(pVehicle, currentX, currentZ, currentY)
+	checkVehiclePatrolImpact(pVehicle, currentX, currentZ, currentY, self.mountedSwoopSpeed)
 	vehicle:teleport(currentX, currentZ, currentY, 0)
 	createEvent(self.mountedSwoopUpdateInterval, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
 end

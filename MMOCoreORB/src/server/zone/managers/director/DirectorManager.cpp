@@ -3231,7 +3231,7 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 }
 
 int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
-	if (lua_gettop(L) != 4) {
+	if (lua_gettop(L) != 5) {
 		printTraceError(L, "incorrect number of arguments passed to DirectorManager::checkVehiclePatrolImpact");
 		return 0;
 	}
@@ -3241,6 +3241,7 @@ int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 		return 0;
 
 	Locker vehicleLocker(vehicle);
+	vehicle->asCreatureObject()->setCurrentSpeed(lua_tonumber(L, 5));
 	ManagedReference<Zone*> zone = vehicle->getZone();
 	if (zone == nullptr || vehicle->getParent() != nullptr)
 		return 0;

@@ -407,7 +407,7 @@ function NabooTheedScreenPlay:moveMountedSpeederPatrol(pVehicle)
 	if (heading ~= nil) then
 		vehicle:setDirectionalHeading(heading)
 	end
-	checkVehiclePatrolImpact(pVehicle, currentX, nextZ, currentY)
+	checkVehiclePatrolImpact(pVehicle, currentX, nextZ, currentY, self.mountedSpeederSpeed)
 	vehicle:teleport(currentX, nextZ, currentY, 0)
 	createEvent(self.mountedSpeederUpdateInterval, self.screenplayName, "moveMountedSpeederPatrol", pVehicle, "")
 end

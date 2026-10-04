@@ -2965,7 +2965,7 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 	if (walk && !isInCombat() && currentParent == nullptr && nextMovementCell == nullptr &&
 		npcTemplate.get() != nullptr && npcTemplate.get()->getCustomAiMap() == STRING_HASHCODE("cityPatrol")) {
 		Vector3 adjusted = newPosition;
-		if (!CollisionManager::adjustCityPatrolMovement(asAiAgent(), adjusted, false)) {
+		if (!CollisionManager::adjustCityPatrolMovement(asAiAgent(), adjusted)) {
 			currentFoundPath = nullptr;
 			setCurrentSpeed(0.f);
 			updateLocomotion();
@@ -2978,7 +2978,7 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 			bool validDetour = detourPath != nullptr && detourPath->size() >= 2 &&
 				detourPath->get(detourPath->size() - 1).getWorldPosition().squaredDistanceTo(adjusted) <= 0.25f;
 			Vector3 safeDetour = adjusted;
-			if (validDetour && (!CollisionManager::adjustCityPatrolMovement(asAiAgent(), safeDetour, false) ||
+			if (validDetour && (!CollisionManager::adjustCityPatrolMovement(asAiAgent(), safeDetour) ||
 				safeDetour.squaredDistanceTo(adjusted) > 0.01f))
 				validDetour = false;
 			float detourLength = 0;
