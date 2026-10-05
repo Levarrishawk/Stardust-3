@@ -42,15 +42,15 @@
 --true = 1, false = 0
 
 Saber2hBodyHit2Command = {
-	name = "saber2hbodyhit2",
+        name = "saber2hbodyhit2",
 
-	damageMultiplier = 1.75,
-	accuracyBonus = 50,
-	speedMultiplier = 1.5,
+  damageMultiplier = 1.25,
+	speedMultiplier = 1.75,
 	healthCostMultiplier = 0,
-	actionCostMultiplier = 0,
+	actionCostMultiplier = 1,
 	mindCostMultiplier = 0,
 	forceCostMultiplier = 1.25,
+	accuracyBonus = 50,
 	visMod = 25,
 
 	animation = "combo_3d",
@@ -62,7 +62,7 @@ Saber2hBodyHit2Command = {
 
 	weaponType = TWOHANDJEDIWEAPON,
 
-	range = -1
+	range = 8
 }
 
 AddCommand(Saber2hBodyHit2Command)

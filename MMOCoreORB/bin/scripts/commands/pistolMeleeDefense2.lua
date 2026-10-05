@@ -57,22 +57,22 @@ PistolMeleeDefense2Command = {
 		{ "knockdownRecovery", "lastKnockdown" },
 		{ "knockdown_defense" },
 		{},
-		65,
+		100,
 		0,
 		0
 	  )
 	},
 
-	poolsToDamage = RANDOM_ATTRIBUTE,
+	poolsToDamage = HEALTH_ATTRIBUTE,
 
-	animation = "ranged_melee", 
+	animation = "ranged_melee",
 	animType = GENERATE_INTENSITY,
 
 	combatSpam = "pistolwhip",
 
 	weaponType = PISTOLWEAPON,
 
-	range = 10
+	range = 5
 }
 
 AddCommand(PistolMeleeDefense2Command)

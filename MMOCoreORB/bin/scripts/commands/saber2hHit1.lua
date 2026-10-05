@@ -42,15 +42,15 @@
 --true = 1, false = 0
 
 Saber2hHit1Command = {
-	name = "saber2hhit1",
+        name = "saber2hhit1",
 
-	damageMultiplier = 1.25,
-	accuracyBonus = 50,
-	speedMultiplier = 1.25,
+	damageMultiplier = 2,
+	speedMultiplier = 1,
 	healthCostMultiplier = 0,
-	actionCostMultiplier = 0,
+	actionCostMultiplier = 1,
 	mindCostMultiplier = 0,
-	forceCostMultiplier = 1.0,
+	forceCostMultiplier = 1.5,
+	accuracyBonus = 50,
 	visMod = 25,
 
 	animation = "combo_2c",
@@ -58,11 +58,11 @@ Saber2hHit1Command = {
 
 	combatSpam = "saber2hhit1",
 
-	poolsToDamage = RANDOM_ATTRIBUTE,
+	poolsToDamage = HEALTH_ATTRIBUTE,
 
 	weaponType = TWOHANDJEDIWEAPON,
 
-	range = -1
+	range = 8
 }
 
 AddCommand(Saber2hHit1Command)

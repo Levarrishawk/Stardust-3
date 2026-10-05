@@ -43,12 +43,12 @@
 
 HealHealthSelf2Command = {
 	name = "healhealthself2",
+	forceCost = 50,
 	healAmount = 1500,
-	forceCost = 25,
 	forceCostMultiplier = 0.05,
-	defaultTime = 6,
 	attributesToHeal = HEALTH_ATTRIBUTE,
 	range = 0,
+	defaultTime = 6,
 }
 
 AddCommand(HealHealthSelf2Command)

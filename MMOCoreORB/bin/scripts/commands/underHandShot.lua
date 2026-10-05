@@ -46,9 +46,9 @@ UnderHandShotCommand = {
 
 	damageMultiplier = 3.0,
 	speedMultiplier = 1.5,
-	healthCostMultiplier = 1,
-	actionCostMultiplier = 1,
-	mindCostMultiplier = 1,
+	healthCostMultiplier = 0,
+	actionCostMultiplier = 2,
+	mindCostMultiplier = 0,
 
 	stateEffects = {
 	  StateEffect( 
@@ -62,7 +62,7 @@ UnderHandShotCommand = {
 	  )
 	},
 
-	animation = "fire_7_single", 
+	animation = "fire_7_single",
 	animType = GENERATE_RANGED,
 
 	combatSpam = "underhandshot",

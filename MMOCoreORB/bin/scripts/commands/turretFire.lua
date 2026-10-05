@@ -50,12 +50,12 @@ TurretFireCommand = {
 	mindCostMultiplier = 0,
 	forceCostMultiplier = 0,
 
-	animation = "fire_turret", 
+	animation = "fire_turret",
 	animType = GENERATE_INTENSITY,
 
 	trails = NOTRAIL,
 
-	poolsToDamage = RANDOM_ATTRIBUTE
+	poolsToDamage = HEALTH_ATTRIBUTE
 }
 
 AddCommand(TurretFireCommand)

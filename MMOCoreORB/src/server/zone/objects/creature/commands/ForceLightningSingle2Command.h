@@ -15,6 +15,10 @@ public:
 
 	}
 
+	void applyMovementControlOnHit(CreatureObject* creature, CreatureObject* targetCreature) const override {
+		applyMovementControl(creature, targetCreature, "forcelightningsingle2", "Improved Force Lightning", 24, 0.2f, 12);
+	}
+
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
 
 		if (!checkStateMask(creature))

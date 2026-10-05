@@ -632,6 +632,17 @@ int CombatManager::doCombatAction(CreatureObject* attacker, WeaponObject* weapon
 
 	damage = doTargetCombatAction(attacker, weapon, defenderObject, &targetDefenders, data, &shouldGcwCrackdownTef, &shouldGcwTef, &shouldBhTef);
 
+	// Command execution can succeed on a miss; movement control requires a landed hit on the selected target.
+	if (defenderObject->isCreatureObject()) {
+		for (int i = 0; i < targetDefenders.size(); i++) {
+			DefenderHitList* hit = targetDefenders.get(i);
+			if (hit != nullptr && hit->getDefender() == defenderObject && (hit->getHit() == HIT || hit->getHit() == BLOCK)) {
+				data.getCommand()->applyMovementControlOnHit(attacker, defenderObject->asCreatureObject());
+				break;
+			}
+		}
+	}
+
 	if (data.getCommand()->isAreaAction() || data.getCommand()->isConeAction()) {
 		Reference<SortedVector<ManagedReference<TangibleObject*>>*> areaDefenders = getAreaTargets(attacker, weapon, defenderObject, data);
 

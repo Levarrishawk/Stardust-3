@@ -14,6 +14,10 @@ public:
 		: CombatQueueCommand(name, server) {
 	}
 
+	void applyMovementControlOnHit(CreatureObject* creature, CreatureObject* targetCreature) const override {
+		applyMovementControl(creature, targetCreature, "melee1hbodyhit1", "One-Hand Body Hit", 36, 0.01f, 6);
+	}
+
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
 
 		if (!checkStateMask(creature))

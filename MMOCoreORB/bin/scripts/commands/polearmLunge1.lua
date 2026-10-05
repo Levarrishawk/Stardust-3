@@ -48,9 +48,9 @@ PolearmLunge1Command = {
 	speedMultiplier = 1.5,
 	accuracyBonus = 10,
 	
-	healthCostMultiplier = 0.5,
-	actionCostMultiplier = 1.0,
-	mindCostMultiplier = 0.5,
+	healthCostMultiplier = 0,
+	actionCostMultiplier = 2.5,
+	mindCostMultiplier = 0,
 
 	animation = "lower_posture_polearm_2",
 
@@ -66,7 +66,7 @@ PolearmLunge1Command = {
 		{ "postureDownRecovery" }, 
 		{ "posture_change_down_defense" }, 
 		{},
-		100, 
+		65,
 		0, 
 		0 
 	  )

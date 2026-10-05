@@ -15,6 +15,10 @@ public:
 
 	}
 
+	void applyMovementControlOnHit(CreatureObject* creature, CreatureObject* targetCreature) const override {
+		applyMovementControl(creature, targetCreature, "forcechoke", "Force Choke", 10, 0.01f, 12);
+	}
+
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
 
 		if (!checkStateMask(creature))
@@ -32,6 +36,9 @@ public:
 		if (targetObject == nullptr || !targetObject->isCreatureObject()) {
 			return INVALIDTARGET;
 		}
+
+		if (!checkMovementControlCooldown(creature, "forcechoke", "Force Choke"))
+			return GENERALERROR;
 
 		return doCombatAction(creature, target);
 

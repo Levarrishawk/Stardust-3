@@ -42,13 +42,37 @@
 --true = 1, false = 0
 
 FireLightningSingle2Command = {
-	name = "firelightningsingle2",
+        name = "firelightningsingle2",
 
-	damageMultiplier = 5.0,
-	speedMultiplier = 2.0,
-	healthCostMultiplier = 1,
-	actionCostMultiplier = 1,
-	mindCostMultiplier = 1,
+	damageMultiplier = 2.0,
+  speedMultiplier = 1,
+  healthCostMultiplier = 0,
+  actionCostMultiplier = 0.75,
+  mindCostMultiplier = 0,
+    visMod = 25,
+
+  stateEffects = {
+    StateEffect(
+    STUN_EFFECT,
+    {},
+    { "stun_defense", "resistance_states" },
+    { "jedi_state_defense" },
+    40,
+    100,
+    10
+    ),
+    StateEffect(
+    KNOCKDOWN_EFFECT,
+    { "knockdownRecovery", "lastKnockdown" },
+    { "force_defense" },
+    {},
+    45,
+    0,
+    0
+    )
+  },
+
+  poolsToDamage = HEALTH_ATTRIBUTE,
 
 	animation = "fire_lightning_rifle_single_2",
 	animType = GENERATE_INTENSITY,
@@ -57,7 +81,7 @@ FireLightningSingle2Command = {
 
 	weaponType = SPECIALHEAVYWEAPON,
 
-	range = 16
+	range = 64
 }
 
 AddCommand(FireLightningSingle2Command)

@@ -44,14 +44,14 @@
 DizzyAttackCommand = {
 	name = "dizzyattack",
 	combatSpam = "attack",
-	animation = "creature_attack_special_2", 
+	animation = "creature_attack_special_2",
 	animType = GENERATE_INTENSITY,
 	stateEffects = {
 	  StateEffect( 
 		DIZZY_EFFECT, 
 		{}, 
-		{ "dizzy_defense" }, 
-		{ "jedi_state_defense", "resistance_states" },
+		{ "dizzy_defense", "resistance_states" },
+		{ "jedi_state_defense" },
 		85, 
 		0, 
 		10 

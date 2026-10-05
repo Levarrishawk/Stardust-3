@@ -44,13 +44,13 @@
 PolearmSweep1Command = {
 	name = "polearmsweep1",
 
-	damageMultiplier = 2.0,
+	damageMultiplier = 1.25,
 	speedMultiplier = 1.5,
 	accuracyBonus = 10,
 	
-	healthCostMultiplier = 1.5,
-	actionCostMultiplier = 1.0,
-	mindCostMultiplier = 1.0,
+	healthCostMultiplier = 0,
+	actionCostMultiplier = 2.5,
+	mindCostMultiplier = 0,
 
 	stateEffects = {
 	  StateEffect( 
@@ -58,7 +58,7 @@ PolearmSweep1Command = {
 		{ "knockdownRecovery", "lastKnockdown" }, 
 		{ "knockdown_defense" }, 
 		{},
-		100, 
+		50,
 		0, 
 		0 
 	  )

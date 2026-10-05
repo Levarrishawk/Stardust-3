@@ -43,17 +43,20 @@
 
 Melee2hSpinAttack2Command = {
         name = "melee2hspinattack2",
-	damageMultiplier = 3.0,
-	speedMultiplier = 2.5,
-	healthCostMultiplier = 1.5,
-	actionCostMultiplier = 2.0,
-	mindCostMultiplier = 1.5,
-        accuracyBonus = 10,
+	damageMultiplier = 3.6,
+  speedMultiplier = 2,
+  healthCostMultiplier = 0,
+  actionCostMultiplier = 2,
+  mindCostMultiplier = 0,
+    visMod = 25,
+        --accuracyBonus = 10,
 
-	areaAction = true,
-	areaRange = 16,
+  poolsToDamage = HEALTH_ATTRIBUTE,
 
-	animation = "combo_4b", 
+  areaAction = true,
+  areaRange = 16,
+
+	animation = "combo_4b",
 	animType = GENERATE_INTENSITY,
 
 	combatSpam = "spinslam",

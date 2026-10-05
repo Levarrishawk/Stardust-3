@@ -14,6 +14,10 @@ public:
 	ForceIntimidate2Command(const String& name, ZoneProcessServer* server) : ForcePowersQueueCommand(name, server) {
 	}
 
+	void applyMovementControlOnHit(CreatureObject* creature, CreatureObject* targetCreature) const override {
+		applyMovementControl(creature, targetCreature, "forceintimidate", "Improved Force Intimidate", 36, 0.2f, 20);
+	}
+
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
 		if (!checkStateMask(creature))
 			return INVALIDSTATE;

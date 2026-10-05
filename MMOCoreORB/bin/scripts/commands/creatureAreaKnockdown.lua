@@ -47,7 +47,7 @@ CreatureAreaKnockdownCommand = {
 	speedMultiplier = 1,
 	
 	combatSpam = "attack",
-	animation = "creature_attack_special_2", 
+	animation = "creature_attack_special_2",
 	animType = GENERATE_INTENSITY,
 
 	healthCostMultiplier = 0,
@@ -58,11 +58,11 @@ CreatureAreaKnockdownCommand = {
 	  StateEffect(
 		DIZZY_EFFECT,
 		{},
-		{ "dizzy_defense" },
-		{ "jedi_state_defense", "resistance_states" },
+		{ "dizzy_defense", "resistance_states" },
+		{ "jedi_state_defense" },
 		75,
 		0,
-		10
+		6
 	  ),
 	  StateEffect(
 		KNOCKDOWN_EFFECT, 

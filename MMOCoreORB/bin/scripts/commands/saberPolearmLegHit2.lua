@@ -42,15 +42,15 @@
 --true = 1, false = 0
 
 SaberPolearmLegHit2Command = {
-	name = "saberpolearmleghit2",
+        name = "saberpolearmleghit2",
 
 	damageMultiplier = 1.5,
-	accuracyBonus = 50,
-	speedMultiplier = 1.25,
+	speedMultiplier = 1.5,
 	healthCostMultiplier = 0,
-	actionCostMultiplier = 0,
+	actionCostMultiplier = 2,
 	mindCostMultiplier = 0,
 	forceCostMultiplier = 1.25,
+	accuracyBonus = 50,
 	visMod = 25,
 
 	animation = "combo_3b",
@@ -58,11 +58,23 @@ SaberPolearmLegHit2Command = {
 
 	combatSpam = "saberpolearmleghit2",
 
-	poolsToDamage = ACTION_ATTRIBUTE,
+	poolsToDamage = HEALTH_ATTRIBUTE,
+
+	stateEffects = {
+     StateEffect(
+    KNOCKDOWN_EFFECT,
+    { "knockdownRecovery", "lastKnockdown" },
+    { "knockdown_defense" },
+    {},
+    65,
+    0,
+    0
+    )
+  },
 
 	weaponType = POLEARMJEDIWEAPON,
 
-	range = -1
+	range = 10
 }
 
 AddCommand(SaberPolearmLegHit2Command)

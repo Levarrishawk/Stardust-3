@@ -146,6 +146,48 @@ public:
 		}
 	}
 
+	virtual void applyMovementControlOnHit(CreatureObject* creature, CreatureObject* targetCreature) const {
+	}
+
+	bool checkMovementControlCooldown(CreatureObject* creature, const String& cooldownKey, const String& displayName) const {
+		if (creature->checkCooldownRecovery(cooldownKey))
+			return true;
+
+		const Time* remaining = creature->getCooldownTime(cooldownKey);
+		if (remaining != nullptr) {
+			creature->playMusicMessage("sound/ui_negative.snd");
+			creature->sendSystemMessage("Your target can not be snared with " + displayName + " for another " + String::valueOf((remaining->miliDifference() * -1) / 1000) + " seconds.");
+		}
+		return false;
+	}
+
+	void applyMovementControl(CreatureObject* creature, CreatureObject* targetCreature, const String& cooldownKey, const String& displayName, int cooldownSeconds, float movementMultiplier, int stateSeconds) const {
+		if (creature == nullptr || targetCreature == nullptr)
+			return;
+
+		Locker targetLock(targetCreature, creature);
+
+		if (targetCreature->isDead() || targetCreature->isIncapacitated() || !checkMovementControlCooldown(creature, cooldownKey, displayName))
+			return;
+
+		ManagedReference<Buff*> buff = new Buff(targetCreature, getNameCRC(), 6, BuffType::OTHER);
+		Locker buffLock(buff);
+
+		targetCreature->removeBuff(STRING_HASHCODE("burstrun"));
+		targetCreature->removeBuff(STRING_HASHCODE("retreat"));
+		targetCreature->removeBuff(BuffCRC::JEDI_FORCE_RUN_1);
+		targetCreature->removeBuff(BuffCRC::JEDI_FORCE_RUN_2);
+		targetCreature->removeBuff(BuffCRC::JEDI_FORCE_RUN_3);
+
+		buff->setSpeedMultiplierMod(movementMultiplier);
+		buff->setAccelerationMultiplierMod(movementMultiplier);
+		targetCreature->setSnaredState(stateSeconds);
+		targetCreature->playEffect("clienteffect/commando_position_secured.cef", "");
+		targetCreature->sendSystemMessage(movementMultiplier == 0.01f ? "You have been rooted!" : "You have been snared!");
+		targetCreature->addBuff(buff);
+		creature->updateCooldownTimer(cooldownKey, cooldownSeconds * 1000);
+	}
+
 	int doCombatAction(CreatureObject* creature, const uint64& target, const UnicodeString& arguments = "", ManagedReference<WeaponObject*> weapon = nullptr) const {
 		ManagedReference<SceneObject*> targetObject = server->getZoneServer()->getObject(target);
 

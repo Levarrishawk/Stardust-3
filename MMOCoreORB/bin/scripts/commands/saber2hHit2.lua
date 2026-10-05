@@ -42,15 +42,15 @@
 --true = 1, false = 0
 
 Saber2hHit2Command = {
-	name = "saber2hhit2",
+        name = "saber2hhit2",
 
-	damageMultiplier = 2.0,
-	accuracyBonus = 50,
+	damageMultiplier = 2.2,
 	speedMultiplier = 1.5,
 	healthCostMultiplier = 0,
-	actionCostMultiplier = 0,
+	actionCostMultiplier = 1,
 	mindCostMultiplier = 0,
 	forceCostMultiplier = 1.5,
+	accuracyBonus = 50,
 	visMod = 25,
 
 	animation = "combo_jedi_1",
@@ -58,11 +58,11 @@ Saber2hHit2Command = {
 
 	combatSpam = "saber2hhit2",
 
-	poolsToDamage = RANDOM_ATTRIBUTE,
+	poolsToDamage = HEALTH_ATTRIBUTE,
 
 	weaponType = TWOHANDJEDIWEAPON,
 
-	range = -1
+	range = 8
 }
 
 AddCommand(Saber2hHit2Command)

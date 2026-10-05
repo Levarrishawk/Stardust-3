@@ -44,30 +44,32 @@
 LastDitchCommand = {
         name = "lastditch",
 
-	damageMultiplier = 6.0,
-	speedMultiplier = 4.0,
-	healthCostMultiplier = 0.5,
-	actionCostMultiplier = 1.25,
-	mindCostMultiplier = 0.5,
-	accuracyBonus = 50,
+	damageMultiplier = 4.5,
+  speedMultiplier = 4.0,
+  healthCostMultiplier = 0,
+  actionCostMultiplier = 2.5,
+  mindCostMultiplier = 0,
+  accuracyBonus = 50,
 
-	stateEffects = {
-	  StateEffect( 
-		STUN_EFFECT, 
-		{}, 
-		{ "stun_defense", }, 
-		{ "jedi_state_defense", "resistance_states" },
-		100, 
-		0, 
-		30 
-	  )
-	},
+  stateEffects = {
+    StateEffect(
+    STUN_EFFECT,
+    {},
+    { "stun_defense", "resistance_states" },
+    { "jedi_state_defense" },
+    75,
+    100,
+    30
+    )
+  },
+
+  poolsToDamage = HEALTH_ATTRIBUTE,
 
 	skillMods = {
 		{"pistol_accuracy",10},
 	},
 
-	animation = "fire_1_special_single", 
+	animation = "fire_1_special_single",
 	animType = GENERATE_RANGED,
 
 	combatSpam = "lastditch",
