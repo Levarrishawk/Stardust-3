@@ -11,6 +11,14 @@ the chest's object ID and does not transfer either item. The gameplay wearable
 vector, armor protection lookup, encumbrance, and skill modifiers are unchanged.
 Both initial baselines and subsequent equipment deltas use the substitution.
 
+The first test reached the success message and changed the radial to Remove
+Appearance, but neither client displayed the duster. That confirms the server
+selection succeeded, without establishing how the clients processed the packet.
+The revised experiment sends a remove followed by an add at the same equipment
+list index rather than a replace operation, to test whether rebuilding the client
+wearable is necessary. These two operations advance the equipment list counter
+by two and do not modify the server list or its armor protection map.
+
 The selection is deliberately not persistent. It resets when the creature is
 loaded from the database or the server restarts; a reconnect to an already loaded
 creature may retain it. Removing the chest or moving/removing the duster clears
@@ -47,6 +55,10 @@ generated headers. Start the server under GDB.
    Repeat toggling; there must be no duplicate objects or additional modifiers.
 5. Test a second observer entering range, zone travel, and equipping another item.
    Check whether the client restores the armor visual from containment updates.
+   If toggling has no visible effect, have the observer leave visibility range
+   completely and return with the appearance still active. Record whether the
+   newly received equipment baseline displays the duster. This distinguishes an
+   update problem from a rendering or object identity limitation.
 6. Move the duster into a bag, trade it, drop it, and destroy it in separate tests.
    Each removal from direct inventory must restore the chest visual. Unequip or
    replace the chest while the appearance is active; the selection must clear.

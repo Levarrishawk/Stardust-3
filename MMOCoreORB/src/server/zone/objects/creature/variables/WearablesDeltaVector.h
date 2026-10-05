@@ -158,6 +158,20 @@ public:
 		appearanceCustomization = "";
 	}
 
+	void refreshAppearanceEntry(int index, DeltaMessage* message) {
+		Locker locker(getLock());
+		if (message == nullptr || index < 0 || index >= size())
+			return;
+
+		// Rebuild the client wearable without removing the actual armor or its protection.
+		message->startList(2, getNewUpdateCounter(2));
+		message->insertByte(0);
+		message->insertShort(index);
+		message->insertByte(1);
+		message->insertShort(index);
+		insertItemToMessage(&get(index), message);
+	}
+
 	bool add(const ManagedReference<TangibleObject*>& element, DeltaMessage* message = nullptr, int updates = 1) override {
 		if (element->isArmorObject()) {
 			ManagedReference<ArmorObject*> armor = cast<ArmorObject*>(element.get());

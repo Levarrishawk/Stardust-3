@@ -4202,8 +4202,7 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 
 	CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
 	msg->startUpdate(0x0F);
-	// Refresh the same armor entry; never replace the gameplay object or protection map.
-	wearablesVector.set(index, chest, msg);
+	wearablesVector.refreshAppearanceEntry(index, msg);
 	msg->close();
 	broadcastMessage(msg, true);
 	sendSystemMessage("Duster appearance equipped for testing. Your composite chest remains equipped.");
@@ -4226,7 +4225,7 @@ void CreatureObjectImplementation::clearAppearance(bool notifyClient) {
 
 		CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
 		msg->startUpdate(0x0F);
-		wearablesVector.set(i, wearable, msg);
+		wearablesVector.refreshAppearanceEntry(i, msg);
 		msg->close();
 		broadcastMessage(msg, true);
 		break;
