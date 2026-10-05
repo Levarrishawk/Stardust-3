@@ -73,7 +73,7 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_gen3 = object
 	damageType = LIGHTSABER,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = MEDIUM,
+	armorPiercing = LIGHT,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -99,10 +99,10 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_gen3 = object
 
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 50,
-	actionAttackCost = 85,
-	mindAttackCost = 35,
-	forceCost = 36,
+	healthAttackCost = 0,
+	actionAttackCost = 300,
+	mindAttackCost = 0,
+	forceCost = 12,
 
 	pointBlankRange = 0,
 	pointBlankAccuracy = 20,
@@ -113,8 +113,8 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_gen3 = object
 	maxRange = 5,
 	maxRangeAccuracy = 5,
 
-	minDamage = 195,
-	maxDamage = 285,
+	minDamage = 220,
+	maxDamage = 260,
 
 	attackSpeed = 5.1,
 
@@ -133,8 +133,8 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_gen3 = object
 	experimentalWeights = {1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "expEffeciency", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "forcecost", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 195, 285, 5.1, 19, 40, 50, 85, 35},
-	experimentalMax = {0, 0, 215, 305, 4.8, 31, 36, 45, 55, 30},
+	experimentalMin = {0, 0, 130, 220, 4.0, 19, 12, 0, 300, 0},
+	experimentalMax = {0, 0, 150, 260, 4.0, 31, 12, 0, 300, 0},
 	experimentalPrecision = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
 }

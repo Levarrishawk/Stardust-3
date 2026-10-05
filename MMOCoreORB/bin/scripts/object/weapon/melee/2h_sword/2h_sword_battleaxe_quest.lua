@@ -73,7 +73,7 @@ object_weapon_melee_2h_sword_2h_sword_battleaxe_quest = object_weapon_melee_2h_s
 	damageType = KINETIC,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = MEDIUM,
+	armorPiercing = NONE,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -100,20 +100,20 @@ object_weapon_melee_2h_sword_2h_sword_battleaxe_quest = object_weapon_melee_2h_s
 	damageModifiers = { },
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 33,
-	actionAttackCost = 11,
-	mindAttackCost = 6,
+	healthAttackCost = 42,
+	actionAttackCost = 15,
+	mindAttackCost = 10,
 	forceCost = 0,
 
 	pointBlankRange = 0,
-	pointBlankAccuracy = 7,
-	idealRange = 3,
-	idealAccuracy = 7,
-	maxRange = 4,
-	maxRangeAccuracy = 7,
+	pointBlankAccuracy = 5,
+	idealRange = 5,
+	idealAccuracy = 5,
+	maxRange = 5,
+	maxRangeAccuracy = 5,
 
-	minDamage = 86,
-	maxDamage = 144,
+	minDamage = 60,
+	maxDamage = 250,
 	attackSpeed = 4.5,
 	woundsRatio = 17,
 }

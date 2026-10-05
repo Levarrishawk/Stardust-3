@@ -73,7 +73,7 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s2_gen4_range
 	damageType = LIGHTSABER,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = MEDIUM,
+	armorPiercing = LIGHT,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -99,10 +99,10 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s2_gen4_range
 
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 60,
-	actionAttackCost = 95,
-	mindAttackCost = 45,
-	forceCost = 48,
+	healthAttackCost = 0,
+	actionAttackCost = 300,
+	mindAttackCost = 0,
+	forceCost = 12,
 
 	pointBlankRange = 0,
 	pointBlankAccuracy = 20,
@@ -116,7 +116,7 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s2_gen4_range
 	minDamage = 225,
 	maxDamage = 305,
 
-	attackSpeed = 5.1,
+	attackSpeed = 1.0,
 
 	woundsRatio = 37,
 
@@ -133,8 +133,8 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s2_gen4_range
 	experimentalWeights = {1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "expEffeciency", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "forcecost", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 225, 305, 5.1, 25, 55, 60, 95, 45},
-	experimentalMax = {0, 0, 235, 325, 4.8, 50, 48, 45, 65, 40},
+	experimentalMin = {0, 0, 240, 330, 4.0, 25, 12, 0, 300, 0},
+	experimentalMax = {0, 0, 260, 370, 4.0, 50, 12, 0, 300, 0},
 	experimentalPrecision = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
 }

@@ -55,7 +55,7 @@ object_weapon_mine_wp_mine_drx55 = object_weapon_mine_shared_wp_mine_drx55:new {
 	minDamage = 150,
 	maxDamage = 400,
 
-	attackSpeed = 0.5,
+	attackSpeed = .5,
 
 	woundsRatio = 25,
 

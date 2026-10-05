@@ -73,7 +73,7 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s1_gen1 = obj
 	damageType = LIGHTSABER,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = MEDIUM,
+	armorPiercing = LIGHT,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -99,9 +99,9 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s1_gen1 = obj
 
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 35,
-	actionAttackCost = 40,
-	mindAttackCost = 20,
+	healthAttackCost = 0,
+	actionAttackCost = 300,
+	mindAttackCost = 0,
 	forceCost = 12,
 
 	pointBlankRange = 0,
@@ -116,7 +116,7 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s1_gen1 = obj
 	minDamage = 105,
 	maxDamage = 195,
 
-	attackSpeed = 5.1,
+	attackSpeed = 1.0,
 
 	woundsRatio = 15,
 
@@ -133,8 +133,8 @@ object_weapon_melee_polearm_crafted_saber_sword_lightsaber_polearm_s1_gen1 = obj
 	experimentalWeights = {1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "expEffeciency", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "forcecost", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 105, 195, 5.1, 10, 15, 35, 40, 20},
-	experimentalMax = {0, 0, 125, 235, 4.8, 20, 12, 25, 25, 15},
+	experimentalMin = {0, 0, 70, 160, 4.0, 10, 15, 0, 300, 0},
+	experimentalMax = {0, 0, 90, 200, 4.0, 20, 12, 0, 300, 0},
 	experimentalPrecision = {0, 0, 0, 0, 1, 0, 1, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
 }

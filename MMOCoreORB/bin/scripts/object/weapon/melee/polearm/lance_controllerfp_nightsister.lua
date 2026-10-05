@@ -73,7 +73,7 @@ object_weapon_melee_polearm_lance_controllerfp_nightsister = object_weapon_melee
 	damageType = KINETIC,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = NONE,
+	armorPiercing = LIGHT,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -101,21 +101,21 @@ object_weapon_melee_polearm_lance_controllerfp_nightsister = object_weapon_melee
 	
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 26,
-	actionAttackCost = 59,
-	mindAttackCost = 29,
+	healthAttackCost = 0,
+	actionAttackCost = 300,
+	mindAttackCost = 0,
 	forceCost = 0,
 
-	pointBlankRange = 0,
-	pointBlankAccuracy = 7,
-	idealRange = 3,
-	idealAccuracy = 7,
+	pointBlankRange = 5,
+	pointBlankAccuracy = 0,
+	idealRange = 5,
+	idealAccuracy = 3,
 	maxRange = 5,
-	maxRangeAccuracy = 7,
+	maxRangeAccuracy = 5,
 
 	minDamage = 10,
 	maxDamage = 190,
-	attackSpeed = 5.15,
+	attackSpeed = 1,
 	woundsRatio = 14,
 }
 

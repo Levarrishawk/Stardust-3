@@ -73,7 +73,7 @@ object_weapon_melee_sword_sword_curved_nyax = object_weapon_melee_sword_shared_s
 	damageType = KINETIC,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = NONE,
+	armorPiercing = LIGHT,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -101,21 +101,21 @@ object_weapon_melee_sword_sword_curved_nyax = object_weapon_melee_sword_shared_s
 	
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 23,
-	actionAttackCost = 52,
-	mindAttackCost = 32,
+	healthAttackCost = 0,
+	actionAttackCost = 300,
+	mindAttackCost = 0,
 	forceCost = 0,
 
-	pointBlankRange = 0,
-	pointBlankAccuracy = 7,
+	pointBlankRange = 3,
+	pointBlankAccuracy = 0,
 	idealRange = 3,
-	idealAccuracy = 7,
-	maxRange = 4,
-	maxRangeAccuracy = 7,
+	idealAccuracy = 3,
+	maxRange = 3,
+	maxRangeAccuracy = 4,
 
 	minDamage = 17,
-	maxDamage = 78,
-	attackSpeed = 4,
+	maxDamage = 228,
+	attackSpeed = 2,
 	woundsRatio = 15,
 }
 

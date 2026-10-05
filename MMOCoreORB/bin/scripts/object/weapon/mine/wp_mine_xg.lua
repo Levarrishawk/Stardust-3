@@ -56,7 +56,7 @@ object_weapon_mine_wp_mine_xg = object_weapon_mine_shared_wp_mine_xg:new {
 	minDamage = 100,
 	maxDamage = 350,
 
-	attackSpeed = 1.0,
+	attackSpeed = 1,
 
 	woundsRatio = 20,
 
