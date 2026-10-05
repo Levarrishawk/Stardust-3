@@ -458,7 +458,7 @@ void ReactionManagerImplementation::doKnockdown(CreatureObject* victim, AiAgent*
 		knockdownAnim = "attack_high_center_light_0";
 
 
-	victim->inflictDamage(attacker, CreatureAttribute::MIND, victim->getHAM(CreatureAttribute::MIND) + 200, true, true, true);
+	victim->inflictDamage(attacker, CreatureAttribute::HEALTH, victim->getHAM(CreatureAttribute::HEALTH) + 200, true, true, true);
 
 
 	victim->updatePostures(); // set posture, don't send posture message, but send DeltaCreo3

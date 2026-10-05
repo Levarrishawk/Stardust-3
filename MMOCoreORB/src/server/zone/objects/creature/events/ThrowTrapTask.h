@@ -114,7 +114,7 @@ public:
 		bool isAoeTrap = trapData->isAoeTrap();
 
 		int debuffDuration = trapData->getDuration();
-		short hamPool = trapData->getPoolToDamage();
+		short hamPool = CreatureAttribute::HEALTH;
 		const auto skillMods = trapData->getSkillMods();
 		float maxDamage = trapData->getMaxDamage();
 		float minDamage = trapData->getMinDamage();

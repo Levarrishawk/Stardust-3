@@ -7,6 +7,7 @@
 
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/managers/player/PlayerManager.h"
+#include "templates/params/creature/CreatureAttribute.h"
 
 namespace server {
 namespace zone {
@@ -32,7 +33,7 @@ public:
 		buff = b;
 		message = m;
 		damage = d;
-		pool = po;
+		pool = CreatureAttribute::HEALTH;
 		hit = h;
 	}
 

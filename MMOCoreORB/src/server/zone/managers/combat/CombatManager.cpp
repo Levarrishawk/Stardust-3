@@ -1805,15 +1805,7 @@ void CombatManager::getFrsModifiedForceAttackDamage(CreatureObject* attacker, fl
 
 int CombatManager::calculatePoolsToDamage(int poolsToDamage) const {
 	if (poolsToDamage & RANDOM) {
-		int rand = System::random(100);
-
-		if (rand <= 60) {
-			poolsToDamage = HEALTH;
-		} else if (rand <= 95) {
-			poolsToDamage = ACTION;
-		} else {
-			poolsToDamage = MIND;
-		}
+		poolsToDamage = HEALTH;
 	}
 
 	return poolsToDamage;
@@ -1935,9 +1927,9 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 		spillOverDebug << " Action Spill Over Amount: " << spilledDamage << "\n";
 #endif
 
-		defender->inflictDamage(attacker, CreatureAttribute::ACTION, (int)actionDamage, true, xpType, true, true);
+		defender->inflictDamage(attacker, CreatureAttribute::HEALTH, (int)actionDamage, true, xpType, true, true);
 
-		poolsToWound.add(CreatureAttribute::ACTION);
+		poolsToWound.add(CreatureAttribute::HEALTH);
 	}
 
 	if (mindDamaged) {
@@ -1969,9 +1961,9 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 		spillOverDebug << " Mind Spill Over Amount: " << spilledDamage << "\n";
 #endif
 
-		defender->inflictDamage(attacker, CreatureAttribute::MIND, (int)mindDamage, true, xpType, true, true);
+		defender->inflictDamage(attacker, CreatureAttribute::HEALTH, (int)mindDamage, true, xpType, true, true);
 
-		poolsToWound.add(CreatureAttribute::MIND);
+		poolsToWound.add(CreatureAttribute::HEALTH);
 	}
 
 	if (numSpillOverPools > 0) {
@@ -1994,14 +1986,14 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 #ifdef DEBUG_SPILL_DAMAGE
 			spillOverDebug << " Action Spill Over Damage: " << spillToApply << "\n";
 #endif
-			defender->inflictDamage(attacker, CreatureAttribute::ACTION, spillToApply, true, xpType, true, true);
+			defender->inflictDamage(attacker, CreatureAttribute::HEALTH, spillToApply, true, xpType, true, true);
 		}
 
 		if ((poolsToDamage ^ 0x7) & MIND) {
 #ifdef DEBUG_SPILL_DAMAGE
 			spillOverDebug << " Mind Spill Over Damage: " << spillToApply << "\n";
 #endif
-			defender->inflictDamage(attacker, CreatureAttribute::MIND, spillToApply, true, xpType, true, true);
+			defender->inflictDamage(attacker, CreatureAttribute::HEALTH, spillToApply, true, xpType, true, true);
 		}
 	}
 
@@ -2926,11 +2918,7 @@ int CombatManager::getArmorReduction(TangibleObject* attacker, WeaponObject* wea
 			if (forceDefense > 0)
 				feedbackDmg *= 1.f / (1.f + ((float)forceDefense / 100.f));
 
-			float splitDmg = feedbackDmg / 3;
-
-			attacker->inflictDamage(defender, CreatureAttribute::HEALTH, splitDmg, true, true, true);
-			attacker->inflictDamage(defender, CreatureAttribute::ACTION, splitDmg, true, true, true);
-			attacker->inflictDamage(defender, CreatureAttribute::MIND, splitDmg, true, true, true);
+			attacker->inflictDamage(defender, CreatureAttribute::HEALTH, feedbackDmg, true, true, true);
 			defender->notifyObservers(ObserverEventType::FORCEFEEDBACK, attacker, feedbackDmg);
 			defender->playEffect("clienteffect/pl_force_feedback_block.cef", "");
 			hitList->setForceFeedback(feedbackDmg);
@@ -3123,12 +3111,10 @@ float CombatManager::doObjectDetonation(TangibleObject* attackerTanO, CreatureOb
 			case ACTION: {
 				static const uint8 legLocations[] = {HIT_LLEG, HIT_RLEG};
 				hitLocation = legLocations[System::random(1)];
-				attribute = CreatureAttribute::ACTION;
 				break;
 			}
 			case MIND: {
 				hitLocation = HIT_HEAD;
-				attribute = CreatureAttribute::MIND;
 				break;
 			}
 			default:
@@ -3214,11 +3200,11 @@ float CombatManager::doObjectDetonation(TangibleObject* attackerTanO, CreatureOb
 			}
 
 			if ((pool ^ 0x7) & ACTION) {
-				defender->inflictDamage(attackerTanO, CreatureAttribute::ACTION, spillToApply, true, true, false);
+				defender->inflictDamage(attackerTanO, CreatureAttribute::HEALTH, spillToApply, true, true, false);
 			}
 
 			if ((pool ^ 0x7) & MIND) {
-				defender->inflictDamage(attackerTanO, CreatureAttribute::MIND, spillToApply, true, true, false);
+				defender->inflictDamage(attackerTanO, CreatureAttribute::HEALTH, spillToApply, true, true, false);
 			}
 		}
 

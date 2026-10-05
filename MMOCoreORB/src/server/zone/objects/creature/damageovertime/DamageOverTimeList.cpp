@@ -129,9 +129,8 @@ uint32 DamageOverTimeList::addDot(CreatureObject* victim, CreatureObject* attack
 		return 0;
 	}
 
-	if (pool == CreatureAttribute::UNKNOWN) {
-		pool = getRandomPool(dotType);
-	}
+	// All DOT sources, including medical packs and scripts, target Health.
+	pool = CreatureAttribute::HEALTH;
 
 	int oldStrength = getStrength(pool, dotType);
 

@@ -169,9 +169,7 @@ public:
 				Locker locker(targetCreature, creature);
 				// Deal damage if target is an attackable creature, in range, and not a player or pet
 				if (targetCreature->isAttackableBy(creature) && creature->isInRange(targetObject, range) && !targetObject->isPlayerCreature() && !targetObject->isPet()) {
-					targetCreature->inflictDamage(creature, 0, healthDamage, true, true);
-					targetCreature->inflictDamage(creature, 3, actionDamage, true, true);
-					targetCreature->inflictDamage(creature, 6, mindDamage, true, true);
+					targetCreature->inflictDamage(creature, 0, (float)healthDamage + actionDamage + mindDamage, true, true);
 				}
 			}
 			return SUCCESS;
@@ -183,9 +181,7 @@ public:
 				if (!targetCreature->isPlayerCreature() && !targetObject->isPet()) {
 					Locker locker(targetCreature, creature);
 
-					targetCreature->inflictDamage(creature, 0, healthDamage, true, true);
-					targetCreature->inflictDamage(creature, 3, actionDamage, true, true);
-					targetCreature->inflictDamage(creature, 6, mindDamage, true, true);
+					targetCreature->inflictDamage(creature, 0, (float)healthDamage + actionDamage + mindDamage, true, true);
 					return SUCCESS;
 				}
 			// Deal damage if target is a lair

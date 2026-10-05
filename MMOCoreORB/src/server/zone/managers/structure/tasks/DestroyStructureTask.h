@@ -88,8 +88,6 @@ public:
 
 							if (killOccupants) {
 								playerCreature->inflictDamage(playerCreature, 0, 9999999, true, true);
-								playerCreature->inflictDamage(playerCreature, 3, 9999999, true, true);
-								playerCreature->inflictDamage(playerCreature, 6, 9999999, true, true);
 							}
 
 							playerCreature->teleport(x, z, y, 0);

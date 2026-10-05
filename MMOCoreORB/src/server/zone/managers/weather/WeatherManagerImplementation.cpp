@@ -192,9 +192,7 @@ void WeatherManagerImplementation::applySandstormDamage(CreatureObject* player) 
 	//Apply wounds.
 	int applicableDamage = sandstormDamage - totalCoverings;
 	if (applicableDamage > 0) {
-		player->inflictDamage(nullptr, CreatureAttribute::HEALTH, applicableDamage, true, true);
-		player->inflictDamage(nullptr, CreatureAttribute::ACTION, applicableDamage, true, true);
-		player->inflictDamage(nullptr, CreatureAttribute::MIND, applicableDamage, true, true);
+		player->inflictDamage(nullptr, CreatureAttribute::HEALTH, applicableDamage * 3, true, true);
 	}
 
 	//Apply knockdown.

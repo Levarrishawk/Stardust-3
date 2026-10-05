@@ -183,9 +183,7 @@ public:
 						Locker locker(targetPlayer, creature);
 						// Deal damage if target is in range and is a player or pet
 						if (creature->isInRange(targetPlayer, range) && (targetPlayer->isPlayerCreature() || targetPlayer->isPet()) && targetPlayer != creature) {
-							targetPlayer->inflictDamage(creature, 0, healthDamage, true, true);
-							targetPlayer->inflictDamage(creature, 3, actionDamage, true, true);
-							targetPlayer->inflictDamage(creature, 6, mindDamage, true, true);
+							targetPlayer->inflictDamage(creature, 0, (float)healthDamage + actionDamage + mindDamage, true, true);
 
 							if (wounds) {
 								targetPlayer->addWounds(0, healthDamage, true);
@@ -246,9 +244,7 @@ public:
 				if (targetPlayer->isPlayerCreature() || targetPlayer->isPet()) {
 					Locker locker(targetPlayer, creature);
 
-					targetPlayer->inflictDamage(creature, 0, healthDamage, true, true);
-					targetPlayer->inflictDamage(creature, 3, actionDamage, true, true);
-					targetPlayer->inflictDamage(creature, 6, mindDamage, true, true);
+					targetPlayer->inflictDamage(creature, 0, (float)healthDamage + actionDamage + mindDamage, true, true);
 
 					if (wounds) {
 						targetPlayer->addWounds(0, healthDamage, true);

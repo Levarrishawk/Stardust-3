@@ -1331,7 +1331,6 @@ void PobShipObjectImplementation::doInteriorEffect(Zone* zone, CellObject* cell,
 	uint64 cellID = cell->getObjectID();
 
 	const Vector<int> damageAmount = {0, 15, 30, 75};
-	const Vector<uint8> type = {CreatureAttribute::HEALTH, CreatureAttribute::ACTION, CreatureAttribute::MIND};
 
 	// info(true) << "doInteriorEffect -- Random Cell: " << randomCell << " Count: " << count << " Chance: " << chance << " Conduit Chance: " << conduitChance;
 
@@ -1373,17 +1372,16 @@ void PobShipObjectImplementation::doInteriorEffect(Zone* zone, CellObject* cell,
 					continue;
 				}
 
-				uint8 randomType = type.get(System::random(type.size() - 1));
 				int randomAmount = System::random(damageAmount.get((int)randomSelection));
 
-				Core::getTaskManager()->executeTask([shipMember, randomType, randomAmount]() {
+				Core::getTaskManager()->executeTask([shipMember, randomAmount]() {
 					if (shipMember == nullptr) {
 						return;
 					}
 
 					Locker lock(shipMember);
 
-					shipMember->inflictDamage(nullptr, randomType, randomAmount, true, true);
+					shipMember->inflictDamage(nullptr, CreatureAttribute::HEALTH, randomAmount, true, true);
 				}, "PobInternalDamageLambda");
 			}
 		}

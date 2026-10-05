@@ -226,7 +226,10 @@ uint32 DamageOverTime::initDot(CreatureObject* victim, CreatureObject* attacker)
 	return power;
 }
 
+// Existing serialized DOTs can still name other pools; all ticks target Health.
 uint32 DamageOverTime::doBleedingTick(CreatureObject* victim, CreatureObject* attacker) {
+	const uint8 attribute = CreatureAttribute::HEALTH;
+
 	// TODO: Do we try to resist again?
 	// we need to allow dots to tick while incapped, but not do damage
 	if (victim->isIncapacitated() && victim->isFeigningDeath() == false)
@@ -244,7 +247,6 @@ uint32 DamageOverTime::doBleedingTick(CreatureObject* victim, CreatureObject* at
 
 	Reference<CreatureObject*> attackerRef = attacker;
 	Reference<CreatureObject*> victimRef = victim;
-	auto attribute = this->attribute;
 
 	Core::getTaskManager()->executeTask([victimRef, attackerRef, attribute, damage] () {
 		Locker locker(victimRef);
@@ -267,6 +269,8 @@ uint32 DamageOverTime::doBleedingTick(CreatureObject* victim, CreatureObject* at
 }
 
 uint32 DamageOverTime::doFireTick(CreatureObject* victim, CreatureObject* attacker) {
+	const uint8 attribute = CreatureAttribute::HEALTH;
+
 	// we need to allow dots to tick while incapped, but not do damage
 	if (victim->isIncapacitated() && victim->isFeigningDeath() == false)
 		return 0;
@@ -288,7 +292,6 @@ uint32 DamageOverTime::doFireTick(CreatureObject* victim, CreatureObject* attack
 
 	Reference<CreatureObject*> attackerRef = attacker;
 	Reference<CreatureObject*> victimRef = victim;
-	auto attribute = this->attribute;
 	auto secondaryStrength = this->secondaryStrength;
 
 	Core::getTaskManager()->executeTask([victimRef, attackerRef, attribute, woundsToApply, secondaryStrength, damage] () {
@@ -322,6 +325,8 @@ uint32 DamageOverTime::doFireTick(CreatureObject* victim, CreatureObject* attack
 }
 
 uint32 DamageOverTime::doPoisonTick(CreatureObject* victim, CreatureObject* attacker) {
+	const uint8 attribute = CreatureAttribute::HEALTH;
+
 	if (victim == nullptr || attacker == nullptr)
 		return 0;
 
@@ -353,7 +358,6 @@ uint32 DamageOverTime::doPoisonTick(CreatureObject* victim, CreatureObject* atta
 
 	Reference<CreatureObject*> attackerRef = attacker;
 	Reference<CreatureObject*> victimRef = victim;
-	auto attribute = this->attribute;
 
 	Core::getTaskManager()->executeTask([victimRef, attackerRef, attribute, damage] () {
 		Locker locker(victimRef);
@@ -375,6 +379,8 @@ uint32 DamageOverTime::doPoisonTick(CreatureObject* victim, CreatureObject* atta
 }
 
 uint32 DamageOverTime::doDiseaseTick(CreatureObject* victim, CreatureObject* attacker) {
+	const uint8 attribute = CreatureAttribute::HEALTH;
+
 	// we need to allow dots to tick while incapped, but not do damage
 	if (victim->isIncapacitated() && !victim->isFeigningDeath()) {
 		return 0;
@@ -391,7 +397,6 @@ uint32 DamageOverTime::doDiseaseTick(CreatureObject* victim, CreatureObject* att
 
 	Reference<CreatureObject*> attackerRef = attacker;
 	Reference<CreatureObject*> victimRef = victim;
-	auto attribute = this->attribute;
 	auto strength = this->strength;
 
 	Core::getTaskManager()->executeTask([victimRef, attackerRef, attribute, damage, strength] () {
@@ -432,13 +437,14 @@ uint32 DamageOverTime::doDiseaseTick(CreatureObject* victim, CreatureObject* att
 }
 
 uint32 DamageOverTime::doForceChokeTick(CreatureObject* victim, CreatureObject* attacker) {
+	const uint8 attribute = CreatureAttribute::HEALTH;
+
 	// we need to allow dots to tick while incapped, but not do damage
 	if (victim->isIncapacitated() && victim->isFeigningDeath() == false)
 		return 0;
 
 	Reference<CreatureObject*> attackerRef = attacker;
 	Reference<CreatureObject*> victimRef = victim;
-	auto attribute = this->attribute;
 	auto strength = this->strength;
 
 	Core::getTaskManager()->executeTask([victimRef, attackerRef, attribute, strength] () {

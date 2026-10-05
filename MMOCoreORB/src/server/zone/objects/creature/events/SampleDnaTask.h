@@ -204,8 +204,6 @@ public:
 	void killCreature() {
 		int dam = 9999999;
 		creature->inflictDamage(creature, 0, dam, true, false);
-		creature->inflictDamage(creature, 3, dam, true, false);
-		creature->inflictDamage(creature, 6, dam, true, false);
 		StringIdChatParameter str("@bio_engineer:harvest_dna_creature_killed");
 		str.setTT(creature->getObjectID());
 		creature->addAlreadyHarvested(player);

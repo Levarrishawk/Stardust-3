@@ -1930,9 +1930,7 @@ function VolcanoBattlefield:eventFourForceDrainAE(pNil, args)
 		return
 	end
 
-	-- live drainAttributes(target, 1000, 0). Port: inflictDamage on ACTION (3)
-	-- and MIND (6) by 1000 each -- closest honest primitive; it is damage
-	-- rather than a drain (part one §6).
+	-- Route the combined drain damage to Health.
 	local players = SceneObject(pBoss):getPlayersInRange(200)
 
 	if (players ~= nil) then
@@ -1940,8 +1938,7 @@ function VolcanoBattlefield:eventFourForceDrainAE(pNil, args)
 			local pPlayer = players[i]
 
 			if (pPlayer ~= nil and SceneObject(pPlayer):isPlayerCreature() and not CreatureObject(pPlayer):isDead()) then
-				CreatureObject(pPlayer):inflictDamage(pBoss, 3, 1000, false)
-				CreatureObject(pPlayer):inflictDamage(pBoss, 6, 1000, false)
+				CreatureObject(pPlayer):inflictDamage(pBoss, 0, 2000, false)
 			end
 		end
 	end
