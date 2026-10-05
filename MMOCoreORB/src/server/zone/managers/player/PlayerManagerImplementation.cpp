@@ -1971,6 +1971,10 @@ void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) 
 	ghost->setCloning(true);
 
 	player->switchZone("elysium", 47, 12, -14, 0);
+	ghost->setCloneCounter(5);
+
+	Time entryTime;
+	ghost->setScreenPlayData("ElysiumGuardian", "entryTime", String::valueOf(entryTime.getTime()));
 
 	if (ConfigManager::instance()->getBool("Core3.PlayerManager.WipeFillingOnClone", false)) {
 			ghost->setFoodFilling(0);
@@ -1989,7 +1993,6 @@ void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) 
 
 	player->sendSystemMessage("Your clone data has degraded to the point of no return.  You have died and transformed to the nether world of the force.   Enjoy your eternity!");
 
-	ghost->resetCloneCounter();
 }
 
 
