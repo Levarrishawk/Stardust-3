@@ -33,9 +33,16 @@ private:
 protected:
 	VectorMap<uint8, Vector<ManagedReference<ArmorObject*> > > protectionArmorMap;
 
+	// Temporary client appearance test; these values are deliberately not serialized.
+	uint64 appearanceTargetID;
+	uint64 appearanceSourceID;
+	uint32 appearanceCRC;
+	int appearanceArrangement;
+	String appearanceCustomization;
+
 public:
 
-	WearablesDeltaVector() : DeltaVector<ManagedReference<TangibleObject*> >() {
+	WearablesDeltaVector() : DeltaVector<ManagedReference<TangibleObject*> >(), appearanceTargetID(0), appearanceSourceID(0), appearanceCRC(0), appearanceArrangement(4) {
 		protectionArmorMap.setAllowOverwriteInsertPlan();
 
 		//addSerializableVariable("protectionArmorMap", &protectionArmorMap);
@@ -107,6 +114,14 @@ public:
 	void insertItemToMessage(ManagedReference<TangibleObject*>* item, BaseMessage* msg) const override {
 		TangibleObject* object = item->get();
 
+		if (appearanceTargetID != 0 && object->getObjectID() == appearanceTargetID) {
+			msg->insertAscii(appearanceCustomization);
+			msg->insertInt(appearanceArrangement);
+			msg->insertLong(object->getObjectID());
+			msg->insertInt(appearanceCRC);
+			return;
+		}
+
 		String custString;
 		object->getCustomizationString(custString);
 
@@ -114,6 +129,33 @@ public:
 		msg->insertInt(object->getContainmentType()); //Equipped
 		msg->insertLong(object->getObjectID()); //object id
 		msg->insertInt(object->getClientObjectCRC()); //CRC of the object
+	}
+
+	uint64 getAppearanceSourceID() const {
+		ReadLocker locker(getLock());
+		return appearanceSourceID;
+	}
+
+	uint64 getAppearanceTargetID() const {
+		ReadLocker locker(getLock());
+		return appearanceTargetID;
+	}
+
+	void setAppearance(uint64 targetID, uint64 sourceID, uint32 crc, int arrangement, const String& customization) {
+		Locker locker(getLock());
+		appearanceTargetID = targetID;
+		appearanceSourceID = sourceID;
+		appearanceCRC = crc;
+		appearanceArrangement = arrangement;
+		appearanceCustomization = customization;
+	}
+
+	void clearAppearance() {
+		Locker locker(getLock());
+		appearanceTargetID = 0;
+		appearanceSourceID = 0;
+		appearanceCRC = 0;
+		appearanceCustomization = "";
 	}
 
 	bool add(const ManagedReference<TangibleObject*>& element, DeltaMessage* message = nullptr, int updates = 1) override {

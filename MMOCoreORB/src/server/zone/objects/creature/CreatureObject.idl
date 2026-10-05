@@ -764,6 +764,19 @@ class CreatureObject extends TangibleObject {
 	@preLocked
 	public native void removeWearableObject(TangibleObject object, boolean notifyClient = true);
 
+	@preLocked
+	public native boolean equipAppearance(TangibleObject object);
+
+	@preLocked
+	public native void clearAppearance(boolean notifyClient = true);
+
+	public native int notifyObjectRemovedFromChild(SceneObject object, SceneObject child);
+
+	@read
+	public unsigned long getAppearanceSourceID() {
+		return wearablesVector.getAppearanceSourceID();
+	}
+
 	@local
 	@read
 	public final WearablesDeltaVector getWearablesDeltaVector() {

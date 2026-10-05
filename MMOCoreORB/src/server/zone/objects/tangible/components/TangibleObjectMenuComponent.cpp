@@ -20,6 +20,16 @@ void TangibleObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObjec
 
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
 
+	if (player->isPlayerCreature() && tano->getServerObjectCRC() == String("object/tangible/wearables/robe/robe_s27.iff").hashCode()) {
+		ManagedReference<SceneObject*> inventory = player->getSlottedObject("inventory");
+		if (inventory != nullptr && tano->getParent() == inventory) {
+			if (player->getAppearanceSourceID() == tano->getObjectID())
+				menuResponse->addRadialMenuItem(221, 3, "Remove Appearance");
+			else
+				menuResponse->addRadialMenuItem(220, 3, "Equip Appearance");
+		}
+	}
+
 	// Figure out what the object is and if its able to be Sliced.
 	if(tano->isSliceable() && !tano->isSecurityTerminal()) { // Check to see if the player has the correct skill level
 
@@ -65,6 +75,19 @@ int TangibleObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject
 		return 0;
 
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
+
+	if ((selectedID == 220 || selectedID == 221) && player->isPlayerCreature() &&
+			tano->getServerObjectCRC() == String("object/tangible/wearables/robe/robe_s27.iff").hashCode()) {
+		ManagedReference<SceneObject*> inventory = player->getSlottedObject("inventory");
+		if (inventory == nullptr || tano->getParent() != inventory)
+			return 0;
+
+		if (selectedID == 220)
+			player->equipAppearance(tano);
+		else if (player->getAppearanceSourceID() == tano->getObjectID())
+			player->clearAppearance();
+		return 0;
+	}
 
 
 	if (selectedID == 69 && player->hasSkill("combat_smuggler_novice") ) { // Slice [PlayerLootCrate]

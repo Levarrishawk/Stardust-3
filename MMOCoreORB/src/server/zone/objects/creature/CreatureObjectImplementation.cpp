@@ -98,6 +98,7 @@ float CreatureObjectImplementation::DEFAULTRUNSPEED = 5.376f;
 
 void CreatureObjectImplementation::initializeTransientMembers() {
 	TangibleObjectImplementation::initializeTransientMembers();
+	wearablesVector.clearAppearance();
 
 	groupInviterID = 0;
 	groupInviteCounter = 0;
@@ -4134,6 +4135,115 @@ void CreatureObjectImplementation::createChildObjects() {
 	}
 }
 
+bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
+	if (!isPlayerCreature() || object == nullptr || !object->isWearableObject() || object->isDestroyed())
+		return false;
+
+	if (object->getServerObjectCRC() != String("object/tangible/wearables/robe/robe_s27.iff").hashCode())
+		return false;
+
+	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
+	if (inventory == nullptr || object->getParent() != inventory || containsActiveSession(SessionFacadeType::TRADE)) {
+		sendSystemMessage("Keep the gunman's duster directly in your inventory and finish any trade first.");
+		return false;
+	}
+
+	if (!object->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVECONTAINER) ||
+			!inventory->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVEOUT))
+		return false;
+
+	String errorDescription;
+	int result = canAddObject(object, 4, errorDescription);
+	if (result != 0 && result != TransferErrorCode::SLOTOCCUPIED) {
+		if (!errorDescription.isEmpty())
+			sendSystemMessage(errorDescription);
+		return false;
+	}
+
+	ManagedReference<TangibleObject*> chest;
+	for (int i = 0; i < wearablesVector.size(); ++i) {
+		ManagedReference<TangibleObject*> wearable = wearablesVector.get(i);
+		if (wearable != nullptr && wearable->getServerObjectCRC() == String("object/tangible/wearables/armor/composite/armor_composite_chest_plate.iff").hashCode()) {
+			chest = wearable;
+			break;
+		}
+	}
+
+	if (chest == nullptr || chest->getParent() != asCreatureObject()) {
+		sendSystemMessage("Equip a composite armor chest plate before testing the duster appearance.");
+		return false;
+	}
+
+	Locker chestLocker(chest, asCreatureObject());
+	int index = wearablesVector.find(chest);
+	if (index == -1 || chest->getParent() != asCreatureObject())
+		return false;
+
+	if (object->getArrangementDescriptorSize() == 0)
+		return false;
+
+	const Vector<String>* descriptors = object->getArrangementDescriptor(0);
+	bool sharedSlot = false;
+	for (int i = 0; i < descriptors->size(); ++i) {
+		if (getSlottedObject(descriptors->get(i)) == chest) {
+			sharedSlot = true;
+			break;
+		}
+	}
+
+	if (!sharedSlot) {
+		sendSystemMessage("The loaded duster arrangement does not share the composite chest slot.");
+		return false;
+	}
+
+	String customization;
+	object->getCustomizationString(customization);
+	wearablesVector.setAppearance(chest->getObjectID(), object->getObjectID(), object->getClientObjectCRC(), 4, customization);
+
+	CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
+	msg->startUpdate(0x0F);
+	// Refresh the same armor entry; never replace the gameplay object or protection map.
+	wearablesVector.set(index, chest, msg);
+	msg->close();
+	broadcastMessage(msg, true);
+	sendSystemMessage("Duster appearance equipped for testing. Your composite chest remains equipped.");
+	return true;
+}
+
+void CreatureObjectImplementation::clearAppearance(bool notifyClient) {
+	uint64 targetID = wearablesVector.getAppearanceTargetID();
+	if (targetID == 0)
+		return;
+
+	wearablesVector.clearAppearance();
+	if (!notifyClient)
+		return;
+
+	for (int i = 0; i < wearablesVector.size(); ++i) {
+		ManagedReference<TangibleObject*> wearable = wearablesVector.get(i);
+		if (wearable == nullptr || wearable->getObjectID() != targetID)
+			continue;
+
+		CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
+		msg->startUpdate(0x0F);
+		wearablesVector.set(i, wearable, msg);
+		msg->close();
+		broadcastMessage(msg, true);
+		break;
+	}
+}
+
+int CreatureObjectImplementation::notifyObjectRemovedFromChild(SceneObject* object, SceneObject* child) {
+	if (object == nullptr)
+		return TangibleObjectImplementation::notifyObjectRemovedFromChild(object, child);
+
+	Locker locker(asCreatureObject(), object);
+	if (object->getObjectID() == wearablesVector.getAppearanceSourceID())
+		clearAppearance();
+
+	return TangibleObjectImplementation::notifyObjectRemovedFromChild(object, child);
+}
+
 void CreatureObjectImplementation::addWearableObject(TangibleObject* object, bool notifyClient) {
 	if (wearablesVector.contains(object))
 		return;
@@ -4155,6 +4265,9 @@ void CreatureObjectImplementation::removeWearableObject(TangibleObject* object, 
 
 	if (index == -1)
 		return;
+
+	if (object->getObjectID() == wearablesVector.getAppearanceTargetID())
+		clearAppearance(false);
 
 	if (notifyClient) {
 		CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
