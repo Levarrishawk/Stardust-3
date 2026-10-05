@@ -770,6 +770,9 @@ class CreatureObject extends TangibleObject {
 	@preLocked
 	public native void clearAppearance(boolean notifyClient = true);
 
+	@local
+	public native void sendAppearanceToOwner(boolean restore = false);
+
 	public native int notifyObjectRemovedFromChild(SceneObject object, SceneObject child);
 
 	@read

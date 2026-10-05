@@ -539,6 +539,9 @@ void CreatureObjectImplementation::sendSlottedObjectsTo(SceneObject* player) {
 		error(e.getMessage());
 		e.printStackTrace();
 	}
+
+	if (player == asCreatureObject())
+		sendAppearanceToOwner();
 }
 
 void CreatureObjectImplementation::sendSystemMessage(const String& message) {
@@ -4209,8 +4212,44 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 	Vector<BasePacket*> messages;
 	messages.add(msg);
 	broadcastMessages(&messages, false);
+	sendAppearanceToOwner();
 	sendSystemMessage("Duster appearance equipped for testing. Your composite chest remains equipped.");
 	return true;
+}
+
+void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
+	uint64 targetID = wearablesVector.getAppearanceTargetID();
+	uint64 sourceID = wearablesVector.getAppearanceSourceID();
+	if (targetID == 0 || sourceID == 0 || getClient() == nullptr)
+		return;
+
+	auto zoneServer = getZoneServer();
+	if (zoneServer == nullptr)
+		return;
+
+	ManagedReference<SceneObject*> target = zoneServer->getObject(targetID);
+	ManagedReference<SceneObject*> source = zoneServer->getObject(sourceID);
+	if (restore) {
+		// Restore actual containment, including a null parent during item removal.
+		if (source != nullptr) {
+			ManagedReference<SceneObject*> parent = source->getParent().get();
+			sendMessage(source->link(parent != nullptr ? parent->getObjectID() : 0, source->getContainmentType()));
+		}
+		if (target != nullptr) {
+			ManagedReference<SceneObject*> parent = target->getParent().get();
+			sendMessage(target->link(parent != nullptr ? parent->getObjectID() : 0, target->getContainmentType()));
+		}
+		return;
+	}
+
+	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
+	if (inventory == nullptr || target == nullptr || source == nullptr ||
+			target->getParent() != asCreatureObject() || source->getParent() != inventory)
+		return;
+
+	// Only the owner's client sees these links; server equipment is never transferred.
+	sendMessage(target->link((uint64) 0, 0xFFFFFFFF));
+	sendMessage(source->link(getObjectID(), 4));
 }
 
 void CreatureObjectImplementation::clearAppearance(bool notifyClient) {
@@ -4218,6 +4257,7 @@ void CreatureObjectImplementation::clearAppearance(bool notifyClient) {
 	if (targetID == 0)
 		return;
 
+	sendAppearanceToOwner(true);
 	wearablesVector.clearAppearance();
 	if (!notifyClient)
 		return;

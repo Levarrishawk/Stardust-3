@@ -27,6 +27,22 @@ duplicate remove/add delta to the owner. The existing multi-message broadcast
 handles that exclusion in both packet-buffer configurations. If the owner still
 sees armor, owner delivery alone does not resolve the rendering difference.
 
+Explicit owner delivery also left the wearer displaying armor. The next
+experiment keeps the working observer equipment updates and sends owner-only
+containment links: detach the chest visually and attach the duster to the
+creature in arrangement 4. No server parent, slot, or containment type is changed.
+Removing the appearance sends each object's actual server containment back to
+the owner, including during automatic cleanup. Sending the owner's slotted
+objects on reload/travel reapplies the visual links after the real objects arrive.
+
+This is a containment experiment, not a finished independent appearance UI.
+The owner's equipment panel may display the duster and hide the actual chest;
+the duster may disappear from the visible inventory while appearance is active.
+Use Remove Appearance from the duster's radial to restore the real display before
+normal inventory/equipment operations. Test restoration before adopting this
+approach for ordinary gameplay. Whether this resolves owner rendering remains
+unverified.
+
 The selection is deliberately not persistent. It resets when the creature is
 loaded from the database or the server restarts; a reconnect to an already loaded
 creature may retain it. Removing the chest or moving/removing the duster clears
@@ -36,7 +52,7 @@ again after removing the appearance, because customization is captured on use.
 ## Files
 
 - `CreatureObject.idl` and `CreatureObjectImplementation.cpp`: validation, apply,
-  clear, and inventory removal handling.
+  clear, inventory removal handling, and owner-only containment messages.
 - `WearablesDeltaVector.h`: temporary visual state and equipment serialization.
 - `TangibleObjectMenuComponent.cpp`: the two radial actions for this duster.
 
@@ -61,6 +77,10 @@ generated headers. Start the server under GDB.
    the appearance. The armor must continue supplying protection and taking decay.
 4. Select Remove Appearance. The original chest visual must return on both clients.
    Repeat toggling; there must be no duplicate objects or additional modifiers.
+   For the containment experiment, also confirm the duster returns to the owner's
+   inventory display and the chest returns to the equipment panel. Record whether
+   the duster radial remains accessible while visually equipped. Do not use normal
+   Equip/Unequip actions as a substitute for Remove Appearance during this test.
 5. Test a second observer entering range, zone travel, and equipping another item.
    Check whether the client restores the armor visual from containment updates.
    If toggling has no visible effect, have the observer leave visibility range
