@@ -391,7 +391,10 @@ void AiAgentImplementation::loadTemplateData(CreatureTemplate* templateData) {
 		if (secondaryWeaponString != "" && secondaryWeaponHash != noneHash) {
 			if (secondaryWeaponHash == unarmedHash || secondaryWeaponString.indexOf(".iff") != -1) {
 				secondaryWeaponCrc = secondaryWeaponHash;
-			} else if (secondaryWeaponHash == STRING_HASHCODE("dark_jedi_weapons_ranged") || secondaryWeaponHash == STRING_HASHCODE("light_jedi_weapons_ranged") || secondaryWeaponHash == STRING_HASHCODE("force_sword_ranged") || secondaryWeaponHash == STRING_HASHCODE("force_polearm_ranged")) {
+			} else if ((secondaryWeaponHash == STRING_HASHCODE("dark_jedi_weapons_ranged") || secondaryWeaponHash == STRING_HASHCODE("light_jedi_weapons_ranged") || secondaryWeaponHash == STRING_HASHCODE("force_sword_ranged") || secondaryWeaponHash == STRING_HASHCODE("force_polearm_ranged"))
+					&& primaryWeaponString != "object/weapon/melee/baton/baton_stun.iff"
+					&& primaryWeaponString != "object/weapon/melee/2h_sword/2h_sword_maul.iff"
+					&& primaryWeaponString != "object/weapon/melee/sword/sword_nyax.iff") {
 				secondaryWeaponString = primaryWeaponString.replaceFirst(".iff", "_ranged.iff");
 				secondaryWeaponCrc = secondaryWeaponString.hashCode();
 			} else {
