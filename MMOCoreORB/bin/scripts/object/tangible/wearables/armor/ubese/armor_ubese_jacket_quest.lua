@@ -88,7 +88,7 @@ object_tangible_wearables_armor_ubese_armor_ubese_jacket_quest = object_tangible
 				"object/mobile/vendor/zabrak_male.iff" },
 	
 	-- Damage types in WeaponObject
-	vulnerability = HEAT + COLD + STUN + LIGHTSABER,
+	vulnerability = STUN + LIGHTSABER,
 
 	-- These are default Blue Frog stats
 	healthEncumbrance = 106,
@@ -109,6 +109,7 @@ object_tangible_wearables_armor_ubese_armor_ubese_jacket_quest = object_tangible
 	cold = 0,
 	acid = 15,
 	lightSaber = 0
+	specialResists = KINETIC,
 }
 
 ObjectTemplates:addTemplate(object_tangible_wearables_armor_ubese_armor_ubese_jacket_quest, "object/tangible/wearables/armor/ubese/armor_ubese_jacket_quest.iff")

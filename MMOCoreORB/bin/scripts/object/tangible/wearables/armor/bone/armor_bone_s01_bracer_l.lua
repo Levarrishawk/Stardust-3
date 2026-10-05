@@ -88,35 +88,36 @@ object_tangible_wearables_armor_bone_armor_bone_s01_bracer_l = object_tangible_w
 				"object/mobile/vendor/zabrak_male.iff" },
 
 	-- kineticeffectiveness, energyeffectiveness, electricaleffectiveness, stuneffectiveness, blasteffectiveness, heateffectiveness, coldeffectiveness, acideffectiveness, restraineffectiveness
-	vulnerability = KINETIC + BLAST + STUN + HEAT + COLD + ACID + LIGHTSABER,
+	vulnerability = ACID + ELECTRICITY + LIGHTSABER,
 
 	-- These are default Blue Frog stats
-	healthEncumbrance = 6,
-	actionEncumbrance = 8,
-	mindEncumbrance = 4,
+	healthEncumbrance = 0,
+	actionEncumbrance = 0,
+	mindEncumbrance = 0,
 
 	-- LIGHT, MEDIUM, HEAVY
 	rating = LIGHT,
 
-	kinetic = 0,
-	energy = 20,
-	electricity = 10,
-	stun = 0,
-	blast = 0,
-	heat = 0,
-	cold = 0,
-	acid = 0,
+	kinetic = 35,
+	energy = 35,
+	electricity = 35,
+	stun = 35,
+	blast = 35,
+	heat = 35,
+	cold = 35,
+	acid = 35,
 	lightSaber = 0,
 
 	numberExperimentalProperties = {1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1},
-	experimentalProperties = {"XX", "XX", "XX", "OQ", "SR", "OQ", "SR", "OQ", "UT", "MA", "OQ", "MA", "OQ", "MA", "OQ", "XX", "XX", "OQ", "SR", "XX"},
+	experimentalProperties = {"XX", "XX", "XX", "OQ", "SR", "OQ", "SR", "OQ", "UT", "MA", "OQ", "MA", "OQ", "XX", "XX", "XX", "XX", "OQ", "SR", "XX"},
 	experimentalWeights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	experimentalGroupTitles = {"null", "null", "null", "exp_durability", "exp_quality", "exp_durability", "exp_durability", "exp_durability", "exp_durability", "null", "null", "exp_resistance", "null"},
+	experimentalGroupTitles = {"null", "null", "null", "exp_durability", "exp_quality", "exp_resistance", "null", "null", "null", "null", "null", "exp_resistance", "null"},
 	experimentalSubGroupTitles = {"null", "null", "sockets", "hit_points", "armor_effectiveness", "armor_integrity", "armor_health_encumbrance", "armor_action_encumbrance", "armor_mind_encumbrance", "armor_rating", "armor_special_type", "armor_special_effectiveness", "armor_special_integrity"},
-	experimentalMin = {0, 0, 0, 1000, 5, 7500, 6, 8, 4, 1, 2, 5, 7500},
-	experimentalMax = {0, 0, 0, 1000, 20, 12500, 4, 4, 2, 1, 2, 30, 12500},
+	experimentalMin = {0, 0, 0, 1000, 1, 30000, 0, 0, 0, 1, 0, 0, 0},
+	experimentalMax = {0, 0, 0, 1000, 30, 50000, 0, 0, 0, 1, 0, 0, 0},
 	experimentalPrecision = {0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0},
 	experimentalCombineType = {0, 0, 4, 1, 1, 1, 1, 1, 1, 4, 4, 4, 1},
+	maxCondition = 15000,
 }
 
 ObjectTemplates:addTemplate(object_tangible_wearables_armor_bone_armor_bone_s01_bracer_l, "object/tangible/wearables/armor/bone/armor_bone_s01_bracer_l.iff")

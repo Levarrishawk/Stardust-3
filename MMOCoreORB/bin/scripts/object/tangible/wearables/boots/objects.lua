@@ -866,3 +866,8 @@ object_tangible_wearables_boots_shared_singing_mountain_clan_boots = SharedTangi
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_wearables_boots_shared_singing_mountain_clan_boots, "object/tangible/wearables/boots/shared_singing_mountain_clan_boots.iff")
+
+object_tangible_wearables_boots_shared_boots_tusken_raider_crafted = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/wearables/boots/shared_boots_tusken_raider_crafted.iff"}
+ObjectTemplates:addClientTemplate(object_tangible_wearables_boots_shared_boots_tusken_raider_crafted,
+"object/tangible/wearables/boots/shared_boots_tusken_raider_crafted.iff")

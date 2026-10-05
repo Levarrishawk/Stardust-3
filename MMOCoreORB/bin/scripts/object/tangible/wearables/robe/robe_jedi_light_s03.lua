@@ -68,8 +68,13 @@ object_tangible_wearables_robe_robe_jedi_light_s03 = object_tangible_wearables_r
 	jediRobe = true,
 
 	skillMods = {
-		{"jedi_force_power_max", 250},
-		{"jedi_force_power_regen", 10}
+		{"jedi_force_power_max", 325},
+		{"jedi_force_power_regen", 25},
+		{"melee_defense", 90},
+		{"ranged_defense", 90},
+		{"force_power_light", 10},
+		{"force_control_light", 10},
+		{"force_manipulation_light", 10}
 	},
 
 	noTrade = 1,

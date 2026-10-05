@@ -44,6 +44,7 @@
 
 --Children folder includes
 includeFile("tangible/component/armor/serverobjects.lua")
+includeFile("tangible/component/armored_clothing/serverobjects.lua")
 includeFile("tangible/component/base/serverobjects.lua")
 includeFile("tangible/component/bio/serverobjects.lua")
 includeFile("tangible/component/chemistry/serverobjects.lua")

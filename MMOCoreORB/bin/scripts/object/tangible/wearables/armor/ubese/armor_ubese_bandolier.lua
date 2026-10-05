@@ -100,21 +100,21 @@ object_tangible_wearables_armor_ubese_armor_ubese_bandolier = object_tangible_we
 	vulnerability = NONE,
 
 	-- These are default Blue Frog stats
-	healthEncumbrance = 1,
-	actionEncumbrance = 1,
-	mindEncumbrance = 1,
+	healthEncumbrance = 0,
+	actionEncumbrance = 0,
+	mindEncumbrance = 0,
 
 	-- LIGHT, MEDIUM, HEAVY
 	rating = LIGHT,
 
-	kinetic = 0,
-	energy = 0,
-	electricity = 0,
-	stun = 0,
-	blast = 0,
-	heat = 0,
-	cold = 0,
-	acid = 0,
+	kinetic = 70,
+	energy = 70,
+	electricity = 70,
+	stun = 70,
+	blast = 70,
+	heat = 70,
+	cold = 70,
+	acid = 70,
 	lightSaber = 0,
 
 	numberExperimentalProperties = {1, 1, 1, 1},

@@ -42,6 +42,7 @@
 
 --Children folder includes
 includeFile("draft_schematic/armor/serverobjects.lua")
+includeFile("draft_schematic/armored_clothing/serverobjects.lua")
 includeFile("draft_schematic/base/serverobjects.lua")
 includeFile("draft_schematic/bio_engineer/serverobjects.lua")
 includeFile("draft_schematic/chemistry/serverobjects.lua")
