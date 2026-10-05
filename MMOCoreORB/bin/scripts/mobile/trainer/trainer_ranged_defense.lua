@@ -1,5 +1,5 @@
 trainer_ranged_defense = Creature:new {
-	objectName = "Ranged Defense Trainer",
+	objectName = "@mob/creature_names:trainer_ranged_defense",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
 	mobType = MOB_NPC,

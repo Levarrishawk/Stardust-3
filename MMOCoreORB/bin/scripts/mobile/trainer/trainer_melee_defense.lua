@@ -1,5 +1,5 @@
 trainer_melee_defense = Creature:new {
-	objectName = "Melee Defense Trainer",
+	objectName = "@mob/creature_names:trainer_melee_defense",
 	randomNameType = NAME_GENERIC,
 	randomNameTag = true,
 	mobType = MOB_NPC,
