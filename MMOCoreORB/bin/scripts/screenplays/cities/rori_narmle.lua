@@ -95,7 +95,9 @@ RoriNarmleScreenPlay = CityScreenPlay:new {
 		{"trainer_artisan", 1, 0, 1.1, -13, 0, 4615384, ""},
 		{"trainer_bountyhunter", 1, -5232, 80, -2241, 120, 0, ""},
 		{"trainer_brawler", 1, -11, 1.133, -13, 0, 4615375, ""},
+		{"trainer_melee_defense", 1, -9.5, 1.133, -13, 0, 4615375, ""},
 		{"trainer_brawler", 1, -5212, 80, -2449, 180, 0, ""},
+		{"trainer_melee_defense", 1, -5210.5, 80, -2449, 180, 0, ""},
 		{"trainer_carbine", 1, -5139, 80, -2517, 90, 0, ""},
 		{"trainer_chef", 1, -5169, 80, -2326, 140, 0, ""},
 		{"trainer_combatmedic", 1, -16.4, 0.26, 10.9, 180, 4635424, ""},
@@ -127,7 +129,8 @@ RoriNarmleScreenPlay = CityScreenPlay:new {
 		{"trainer_musician", 0, 21.8, 2.1, 76.4, 180, 4635403, ""},
 		{"trainer_entertainer", 0, 29.5159, 2.12878, 73.6413, 88, 4635403, ""},
 		{"trainer_imagedesigner", 0, -21.5126, 2.12878, 74.0536, 181, 4635404, ""},
-		{"trainer_marksman", 0, 0, 1.13306, -13, 0, 4615374, ""}
+		{"trainer_marksman", 0, 0, 1.13306, -13, 0, 4615374, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.13306, -13, 0, 4615374, ""},
 	}
 }
 

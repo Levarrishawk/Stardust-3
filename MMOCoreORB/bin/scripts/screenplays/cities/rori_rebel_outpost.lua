@@ -64,6 +64,7 @@ RoriRebelOutpostScreenPlay = CityScreenPlay:new {
 		{"trainer_chef", 60, 3681, 96, -6426, 180, 0, ""},
 		{"trainer_commando", 60, -1.6, 0.7, 2.7, 180, 4505792, ""},
 		{"trainer_marksman", 60, 3684.5, 104, -6488.5, 260, 0, ""},
+		{"trainer_ranged_defense", 60, 3686, 104, -6488.5, 260, 0, ""},
 		{"trainer_rifleman", 60, 3649, 104, -6491.5, 315, 0, ""},
 		{"trainer_weaponsmith", 60, 3681, 96, -6420, 0, 0, ""},
 

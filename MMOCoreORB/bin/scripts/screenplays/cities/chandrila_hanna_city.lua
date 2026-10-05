@@ -454,11 +454,13 @@ function HannaCityScreenPlay:spawnMobiles()
   spawnMobile("chandrila", "trainer_shipwright",60,-11.6,1.1,5.1,177,35791520)
   
   spawnMobile("chandrila", "trainer_marksman",60,-0.4,1.1,-14.4,-7,35791512)
+  spawnMobile("chandrila", "trainer_ranged_defense", 60, 1.1, 1.1, -14.4, -7, 35791512)
   spawnMobile("chandrila", "trainer_pistol",60,4.2,1.1,-13.7,-50,35791512)
   spawnMobile("chandrila", "trainer_carbine",60,3.3,1.1,-9.0,-90,35791512)
   spawnMobile("chandrila", "trainer_rifleman",60,-3.8,1.1,-13.2,90,35791512)
   
   spawnMobile("chandrila", "trainer_brawler",60,-8.8,1.1,-13.3,-50,35791513)
+  spawnMobile("chandrila", "trainer_melee_defense", 60, -7.3, 1.1, -13.3, -50, 35791513)
   spawnMobile("chandrila", "trainer_unarmed",60,-7.0,1.1,-11.3,-95,35791513)
   spawnMobile("chandrila", "trainer_1hsword",60,-14.6,1.1,-12.4,60,35791513)
   spawnMobile("chandrila", "trainer_2hsword",60,-14.6,1.1,-9.4,60,35791513)

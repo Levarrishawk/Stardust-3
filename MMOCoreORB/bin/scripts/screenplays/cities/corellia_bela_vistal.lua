@@ -108,7 +108,9 @@ CorelliaBelaVistalScreenPlay = CityScreenPlay:new {
 		{"businessman", 60, 3.32, 1.13306, -8.49, 228.007, 2365769, ""},
 		{"brawler", 300, -14.01, 1.13306, -8.53, 120.004, 2365770, ""},
 		{"trainer_brawler", 0, -11, 1.13306, -14,0, 2365770, ""},
+		{"trainer_melee_defense", 0, -9.5, 1.13306, -14, 0, 2365770, ""},
 		{"trainer_marksman", 0, 0, 1.13306, -14, 0, 2365769, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.13306, -14, 0, 2365769, ""},
 
 		--Guild Hall regular
 		{"artisan",60,4.7,2.3,10.4,-4,2365923, "npc_use_terminal_high"},
@@ -156,6 +158,7 @@ CorelliaBelaVistalScreenPlay = CityScreenPlay:new {
 		{"trainer_artisan", 0, 6755.99, 314.994, -5655.01, 269, 0, ""},
 		{"trainer_entertainer", 0, 6829, 330, -5429, 184, 0, ""},
 		{"trainer_marksman", 0,6770,315,-5714,-100,0, ""},
+		{"trainer_ranged_defense", 0, 6771.5, 315, -5714, -100, 0, ""},
 		{"trainer_scout", 0, 6737.85, 315, -5491.3, 31, 0, ""},
 		{"trainer_scout",  0, 6724, 315, -5682, 0, 0, ""},
 

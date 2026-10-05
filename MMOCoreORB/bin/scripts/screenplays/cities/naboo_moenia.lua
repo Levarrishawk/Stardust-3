@@ -82,13 +82,16 @@ NabooMoeniaScreenPlay = CityScreenPlay:new {
 		{"trainer_architect",0,4779,3.75,-4973,0,0, ""},
 		{"trainer_artisan",0,4823.13,4.17,-4705.34,81,0, ""},
 		{"trainer_brawler",0,4800,4.17,-4734,151,0, ""},
+		{"trainer_melee_defense", 0, 4801.5, 4.17, -4734, 151, 0, ""},
 		{"trainer_brawler",0,4999,3.8,-4926,-12,0, ""},
+		{"trainer_melee_defense", 0, 5000.5, 3.8, -4926, -12, 0, ""},
 		{"trainer_chef",0,4942,3.8,-4837,180,0, ""},
 		{"trainer_dancer",0,4730,3.75,-4872,44,0, ""},
 		{"trainer_doctor",0,4887,3.8,-4899,180,0, ""},
 		{"trainer_droidengineer",0,4654,4.3,-4692,0,0, ""},
 		{"trainer_entertainer",0,4846,4.17,-4658,258,0, ""},
 		{"trainer_marksman",0,4794,4.17,-4730,0,0, ""},
+		{"trainer_ranged_defense", 0, 4795.5, 4.17, -4730, 0, 0, ""},
 		{"trainer_medic",0,4808,4.17,-4724,0,0, ""},
 		{"trainer_medic",0,4772,3.7,-4814,164,0, ""},
 		{"trainer_merchant",0,4819,4.17,-4704,81,0, ""},
@@ -116,7 +119,9 @@ NabooMoeniaScreenPlay = CityScreenPlay:new {
 
 		--Guild Hall 4721 -4966
 		{"trainer_brawler",0,-11.0386,1.13306,-13.0273,0,1717535, ""},
+		{"trainer_melee_defense", 0, -9.5386, 1.13306, -13.0273, 0, 1717535, ""},
 		{"trainer_marksman",0,0,1.13306,-13,0,1717534, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.13306, -13, 0, 1717534, ""},
 		{"trainer_scout",0,-11.303,1.13306,4.63738,199,1717532, ""},
 
 		--Guild Hall 4805 -4980

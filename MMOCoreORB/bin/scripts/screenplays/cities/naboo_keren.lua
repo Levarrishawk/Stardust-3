@@ -71,7 +71,9 @@ NabooKerenScreenPlay = CityScreenPlay:new {
 
 		--Guild Hall 1851 2613
 		{"trainer_brawler",0,-11,1.13306,-12.5,0,1650535, ""},
+		{"trainer_melee_defense", 0, -9.5, 1.13306, -12.5, 0, 1650535, ""},
 		{"trainer_marksman", 0, 0, 1.133, -13, 0, 1650534, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.133, -13, 0, 1650534, ""},
 		{"trainer_scout",0,-12.0327,1.13306,4.62955,179,1650532, ""},
 		{"junk_dealer", 0, -14.5, 1.1, 2.9, 119, 1650532, ""},
 
@@ -98,7 +100,9 @@ NabooKerenScreenPlay = CityScreenPlay:new {
 		{"trainer_artisan",0,1522,25,2781,180,0, ""},
 		{"trainer_artisan",0,2003.71,12,2484.06,243,0, ""},
 		{"trainer_brawler",0,1890,12,2725,0,0, ""},
+		{"trainer_melee_defense", 0, 1891.5, 12, 2725, 0, 0, ""},
 		{"trainer_brawler",0,1537,25,2757,0,0, ""},
+		{"trainer_melee_defense", 0, 1538.5, 25, 2757, 0, 0, ""},
 		{"trainer_carbine",0,1265.08,13,2677.88,9,0, ""},
 		{"trainer_chef",0,1840,12,2672,180,0, ""},
 		{"trainer_combatmedic",0,1927,12,2729.93,264,0, ""},
@@ -111,7 +115,9 @@ NabooKerenScreenPlay = CityScreenPlay:new {
 		{"trainer_entertainer",0,1772.77,12,2744.98,179,0, ""},
 		{"trainer_imagedesigner",0,1253,13,2711,0,0, ""},
 		{"trainer_marksman",0,1538,25,2751,180,0, ""},
+		{"trainer_ranged_defense", 0, 1539.5, 25, 2751, 180, 0, ""},
 		{"trainer_marksman",0,1992,12,2515,180,0, ""},
+		{"trainer_ranged_defense", 0, 1993.5, 12, 2515, 180, 0, ""},
 		{"trainer_medic",0,1982,12,2598,0,0, ""},
 		{"trainer_medic",0,1541,25,2789,0,0, ""},
 		{"trainer_medic",0,1784,12,2714,0,0, ""},

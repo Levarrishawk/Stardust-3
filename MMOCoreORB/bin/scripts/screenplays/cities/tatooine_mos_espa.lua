@@ -230,7 +230,9 @@ TatooineMosEspaScreenPlay = CityScreenPlay:new {
 
 		--Guild Hall -2997 2426
 		{"trainer_brawler",0,-11,1.1,-14,0,1255994, ""},
+		{"trainer_melee_defense", 0, -9.5, 1.1, -14, 0, 1255994, ""},
 		{"trainer_marksman",0,0,1.13306,-13,0,1255993, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.13306, -13, 0, 1255993, ""},
 		{"trainer_scout",0,-13,1.1,4.8,180,1255991, ""},
 		{"junk_dealer", 0, -14.3, 1.1, 2.9, 105, 1255991, ""},
 
@@ -332,10 +334,12 @@ TatooineMosEspaScreenPlay = CityScreenPlay:new {
 		{"trainer_architect",0,-2872,5,2159,180,0, ""},
 		{"trainer_artisan",0,-2890,5,2142,19,0, ""},
 		{"trainer_brawler",0,-2933,5,2125,97,0, ""},
+		{"trainer_melee_defense", 0, -2931.5, 5, 2125, 97, 0, ""},
 		{"trainer_creaturehandler",0,-2994,5,2530,0,0, ""},
 		{"trainer_doctor",0,-3163.63,5,2122.39,18,0, ""},
 		{"trainer_entertainer",0,-2889,5,2178,161,0, ""},
 		{"trainer_marksman",0,-2931,5,2121,91,0, ""},
+		{"trainer_ranged_defense", 0, -2929.5, 5, 2121, 91, 0, ""},
 		{"trainer_medic",0,-3158,5,2122,5,0, ""},
 		{"trainer_medic",0,-2931,5,2116,65,0, ""},
 		{"trainer_musician",0,-2882,5,2171,180,0, ""},

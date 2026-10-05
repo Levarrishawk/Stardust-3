@@ -115,6 +115,7 @@ NabooDeejaPeakScreenPlay = CityScreenPlay:new {
 		{"trainer_artisan", 0,4715,330,-1393,77,0, ""},
 		{"trainer_politician", 0,4702,330,-1368,84,0, ""},
 		{"trainer_marksman", 0,4980,360,-1425,-100,0, ""},
+		{"trainer_ranged_defense", 0, 4981.5, 360, -1425, -100, 0, ""},
 		{"junk_dealer", 0, 5135.46, 346.5, -1514.92, 90, 0, ""},
 	}
 }

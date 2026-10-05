@@ -275,9 +275,11 @@ CorelliaTyrenaScreenPlay = CityScreenPlay:new {
 
 		--Guild Hall -5463 -2722
 		{"trainer_marksman", 0,0,1.13306,-14,0,1935444, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.13306, -14, 0, 1935444, ""},
 		{"businessman", 60,3.32,1.13306,-8.49,228.007,1935444, ""},
 		{"bounty_hunter", 300,-14.01,1.13306,-8.53,120.004,1935445, ""},
 		{"trainer_brawler", 0,-11,1.13306,-14,0,1935445, ""},
+		{"trainer_melee_defense", 0, -9.5, 1.13306, -14, 0, 1935445, ""},
 		{"trainer_scout", 0,-12,1.13306,5.5,180,1935442, ""},
 
 		--Guild Hall -5502 -2678
@@ -360,7 +362,9 @@ CorelliaTyrenaScreenPlay = CityScreenPlay:new {
 		{"trainer_entertainer", 0,-5661,21.6,-2599.57,14,0, ""},
 		{"trainer_entertainer", 0,-5062,21,-2291,124,0, ""},
 		{"trainer_marksman", 0,-5041,21,-2324,91,0, ""},
+		{"trainer_ranged_defense", 0, -5039.5, 21, -2324, 91, 0, ""},
 		{"trainer_marksman", 0,-5249,21,-2306,180,0, ""},
+		{"trainer_ranged_defense", 0, -5247.5, 21, -2306, 180, 0, ""},
 		{"trainer_medic", 0,-5027,21,-2311,266,0, ""},
 		{"trainer_musician", 0,-5067,21,-2296,158,0, ""},
 		{"trainer_pistol", 0,-5220,21,-2488,180,0, ""},

@@ -256,7 +256,9 @@ CorelliaCoronetScreenPlay = CityScreenPlay:new {
 
 		-- Guild Hall -243 -4389
 		{"trainer_brawler",0,-11,1.13306,-14,0,1855508, ""},
+		{"trainer_melee_defense", 0, -9.5, 1.13306, -14, 0, 1855508, ""},
 		{"trainer_marksman",0,0,1.13306,-14,0,1855507, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.13306, -14, 0, 1855507, ""},
 		{"trainer_scout",0,-12,1.13306,5.5,180,1855505, ""},
 		{"junk_dealer", 0, -14.5, 1.1, 3.0, 98, 1855505, ""},
 
@@ -346,12 +348,15 @@ CorelliaCoronetScreenPlay = CityScreenPlay:new {
 		{"trainer_artisan",0,-187,28,-4700,92,0, ""},
 		{"trainer_bioengineer",0,-424.092,28,-4651.85,94,0, ""},
 		{"trainer_brawler",0,-164,28,-4754,88,0, ""},
+		{"trainer_melee_defense", 0, -162.5, 28, -4754, 88, 0, ""},
 		{"trainer_combatmedic",0,-33.9759,28,-4435.08,95,0, ""},
 		{"trainer_creaturehandler",0,-55,28,-4566,0,0, ""},
 		{"trainer_entertainer",0,-173,28,-4739,0,0, ""},
 		{"trainer_entertainer",0,-228,28.6,-4118,0,0, ""},
 		{"trainer_marksman",0,-165,28,-4746,92,0, ""},
+		{"trainer_ranged_defense", 0, -163.5, 28, -4746, 92, 0, ""},
 		{"trainer_marksman",0,-35,28,-4372,269,0, ""},
+		{"trainer_ranged_defense", 0, -33.5, 28, -4372, 269, 0, ""},
 		{"trainer_medic",0,-33,28,-4422,72,0, ""},
 		{"trainer_medic",0,-172,28,-4691,0,0, ""},
 		{"trainer_merchant",0,-369,28,-4533,92,0, ""},

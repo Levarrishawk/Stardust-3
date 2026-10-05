@@ -850,7 +850,9 @@ function AlderaCityScreenPlay:spawnGuildHallMobiles()
 		{"trainer_scout", 0, -12, 1.13306, 5.5, 180, 610000145, ""},
 		{"junk_dealer", 0, -14.5, 1.1, 3.0, 98, 610000145, ""},
 		{"trainer_marksman", 0, 0, 1.13306, -14, 0, 610000147, ""},
+		{"trainer_ranged_defense", 0, 1.5, 1.13306, -14, 0, 610000147, ""},
 		{"trainer_brawler", 0, -11, 1.13306, -14, 0, 610000148, ""},
+		{"trainer_melee_defense", 0, -9.5, 1.13306, -14, 0, 610000148, ""},
 
 		-- Coronet's artisan is four cells beyond each university's supplied
 		-- building cell, placing these coordinates in rooms 118 and 128.
