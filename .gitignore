@@ -75,3 +75,5 @@ SWGEmu.exe.planetmap.bin
 /.re-tools
 /.re-tools
 /output
+/tmp
+/outputs
