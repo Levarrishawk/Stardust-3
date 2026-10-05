@@ -441,11 +441,22 @@ void CommandQueue::enqueueCommand(unsigned int actionCRC, unsigned int actionCou
 
 	int commandPriority = priority < 0 ? queueCommand->getDefaultPriority() : priority;
 
-	if (queueVector.size() > 1 && commandPriority != QueueCommand::FRONT && commandPriority != QueueCommand::IMMEDIATE) {
-		clearQueueAction(actionCount, 0, 0, 0);
-		creature->sendSystemMessage("You can not activate another combat ability while one is in progress!");
-		creature->playMusicMessage("sound/ui_negative.snd");
-		return;
+	if (creature->isPlayerCreature() && queueCommand->addToCombatQueue() && commandPriority == QueueCommand::NORMAL) {
+		for (int i = 0; i < queueVector.size(); i++) {
+			CommandQueueAction* queuedAction = queueVector.get(i);
+
+			if (queuedAction == nullptr)
+				continue;
+
+			const QueueCommand* queuedCommand = objectController->getQueueCommand(queuedAction->getCommand());
+
+			if (queuedCommand != nullptr && queuedCommand->addToCombatQueue() && queuedCommand->getDefaultPriority() == QueueCommand::NORMAL) {
+				clearQueueAction(actionCount, 0, 0, 0);
+				creature->sendSystemMessage("You can not activate another combat ability while one is in progress!");
+				creature->playMusicMessage("sound/ui_negative.snd");
+				return;
+			}
+		}
 	}
 
 	if (creature->isPlayerCreature() && queueCommand->addToCombatQueue()) {
