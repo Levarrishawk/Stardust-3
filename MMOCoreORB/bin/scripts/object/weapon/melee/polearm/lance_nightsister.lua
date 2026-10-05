@@ -42,33 +42,34 @@
 
 
 object_weapon_melee_polearm_lance_nightsister = object_weapon_melee_polearm_shared_lance_nightsister:new {
-
-	playerRaces = { "object/creature/player/bothan_male.iff",
-				"object/creature/player/bothan_female.iff",
-				"object/creature/player/human_male.iff",
-				"object/creature/player/human_female.iff",
-				"object/creature/player/ithorian_male.iff",
-				"object/creature/player/ithorian_female.iff",
-				"object/creature/player/moncal_male.iff",
-				"object/creature/player/moncal_female.iff",
-				"object/creature/player/rodian_male.iff",
-				"object/creature/player/rodian_female.iff",
-				"object/creature/player/sullustan_male.iff",
-				"object/creature/player/sullustan_female.iff",
-				"object/creature/player/trandoshan_male.iff",
-				"object/creature/player/trandoshan_female.iff",
-				"object/creature/player/twilek_male.iff",
-				"object/creature/player/twilek_female.iff",
-				"object/creature/player/wookiee_male.iff",
-				"object/creature/player/wookiee_female.iff",
-				"object/creature/player/zabrak_male.iff",
-				"object/creature/player/zabrak_female.iff" },
+	playerRaces = {
+		"object/creature/player/bothan_male.iff",
+		"object/creature/player/bothan_female.iff",
+		"object/creature/player/human_male.iff",
+		"object/creature/player/human_female.iff",
+		"object/creature/player/ithorian_male.iff",
+		"object/creature/player/ithorian_female.iff",
+		"object/creature/player/moncal_male.iff",
+		"object/creature/player/moncal_female.iff",
+		"object/creature/player/rodian_male.iff",
+		"object/creature/player/rodian_female.iff",
+		"object/creature/player/sullustan_male.iff",
+		"object/creature/player/sullustan_female.iff",
+		"object/creature/player/trandoshan_male.iff",
+		"object/creature/player/trandoshan_female.iff",
+		"object/creature/player/twilek_male.iff",
+		"object/creature/player/twilek_female.iff",
+		"object/creature/player/wookiee_male.iff",
+		"object/creature/player/wookiee_female.iff",
+		"object/creature/player/zabrak_male.iff",
+		"object/creature/player/zabrak_female.iff"
+	},
 
 	-- RANGEDATTACK, MELEEATTACK, FORCEATTACK, TRAPATTACK, GRENADEATTACK, HEAVYACIDBEAMATTACK, 
 	-- HEAVYLIGHTNINGBEAMATTACK, HEAVYPARTICLEBEAMATTACK, HEAVYROCKETLAUNCHERATTACK, HEAVYLAUNCHERATTACK
 	attackType = MELEEATTACK,
 
-	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, FORCE, LIGHTSABER
+	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, LIGHTSABER
 	damageType = ENERGY,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
@@ -100,9 +101,9 @@ object_weapon_melee_polearm_lance_nightsister = object_weapon_melee_polearm_shar
 	
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 0,
-	actionAttackCost = 300,
-	mindAttackCost = 0,
+	healthAttackCost = 40,
+	actionAttackCost = 66,
+	mindAttackCost = 56,
 	forceCost = 0,
 
 	pointBlankRange = 0,
@@ -114,10 +115,10 @@ object_weapon_melee_polearm_lance_nightsister = object_weapon_melee_polearm_shar
 	maxRange = 6,
 	maxRangeAccuracy = 7,
 
-	minDamage = 110,
-	maxDamage = 414,
+	minDamage = 11,
+	maxDamage = 214,
 
-	attackSpeed = 1,
+	attackSpeed = 3.0,
 
 	woundsRatio = 18,
 
@@ -126,8 +127,8 @@ object_weapon_melee_polearm_lance_nightsister = object_weapon_melee_polearm_shar
 	experimentalWeights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "exp_durability", "expRange", "expRange", "null", "expRange", "null", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "hitpoints", "zerorangemod", "maxrangemod", "midrange", "midrangemod", "maxrange", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 123, 213, 4, 11, 750, -5, -5, 6, -5, 6, 0, 300, 0},
-	experimentalMax = {0, 0, 135, 425, 4, 25, 1500, 10, 10, 6, 10, 6, 0, 300, 0},
+	experimentalMin = {0, 0, 23, 213, 6.3, 11, 750, -5, -5, 6, -5, 6, 38, 78, 54},
+	experimentalMax = {0, 0, 35, 305, 4, 25, 1500, 10, 10, 6, 10, 6, 20, 42, 32},
 	experimentalPrecision = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }

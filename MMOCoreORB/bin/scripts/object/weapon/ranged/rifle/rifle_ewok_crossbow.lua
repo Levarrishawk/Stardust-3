@@ -42,37 +42,38 @@
 
 
 object_weapon_ranged_rifle_rifle_ewok_crossbow = object_weapon_ranged_rifle_shared_rifle_ewok_crossbow:new {
-
-	playerRaces = { "object/creature/player/bothan_male.iff",
-				"object/creature/player/bothan_female.iff",
-				"object/creature/player/human_male.iff",
-				"object/creature/player/human_female.iff",
-				"object/creature/player/ithorian_male.iff",
-				"object/creature/player/ithorian_female.iff",
-				"object/creature/player/moncal_male.iff",
-				"object/creature/player/moncal_female.iff",
-				"object/creature/player/rodian_male.iff",
-				"object/creature/player/rodian_female.iff",
-				"object/creature/player/sullustan_male.iff",
-				"object/creature/player/sullustan_female.iff",
-				"object/creature/player/trandoshan_male.iff",
-				"object/creature/player/trandoshan_female.iff",
-				"object/creature/player/twilek_male.iff",
-				"object/creature/player/twilek_female.iff",
-				"object/creature/player/wookiee_male.iff",
-				"object/creature/player/wookiee_female.iff",
-				"object/creature/player/zabrak_male.iff",
-				"object/creature/player/zabrak_female.iff" },
+	playerRaces = {
+		"object/creature/player/bothan_male.iff",
+		"object/creature/player/bothan_female.iff",
+		"object/creature/player/human_male.iff",
+		"object/creature/player/human_female.iff",
+		"object/creature/player/ithorian_male.iff",
+		"object/creature/player/ithorian_female.iff",
+		"object/creature/player/moncal_male.iff",
+		"object/creature/player/moncal_female.iff",
+		"object/creature/player/rodian_male.iff",
+		"object/creature/player/rodian_female.iff",
+		"object/creature/player/sullustan_male.iff",
+		"object/creature/player/sullustan_female.iff",
+		"object/creature/player/trandoshan_male.iff",
+		"object/creature/player/trandoshan_female.iff",
+		"object/creature/player/twilek_male.iff",
+		"object/creature/player/twilek_female.iff",
+		"object/creature/player/wookiee_male.iff",
+		"object/creature/player/wookiee_female.iff",
+		"object/creature/player/zabrak_male.iff",
+		"object/creature/player/zabrak_female.iff"
+	},
 
 	-- RANGEDATTACK, MELEEATTACK, FORCEATTACK, TRAPATTACK, GRENADEATTACK, HEAVYACIDBEAMATTACK, 
 	-- HEAVYLIGHTNINGBEAMATTACK, HEAVYPARTICLEBEAMATTACK, HEAVYROCKETLAUNCHERATTACK, HEAVYLAUNCHERATTACK
 	attackType = RANGEDATTACK,
 
-	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, FORCE, LIGHTSABER
+	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, LIGHTSABER
 	damageType = ENERGY,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = LIGHT,
+	armorPiercing = NONE,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -100,9 +101,9 @@ object_weapon_ranged_rifle_rifle_ewok_crossbow = object_weapon_ranged_rifle_shar
 	
 
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 0,
-	actionAttackCost = 300,
-	mindAttackCost = 0,
+	healthAttackCost = 34,
+	actionAttackCost = 34,
+	mindAttackCost = 48,
 	forceCost = 0,
 
 	pointBlankAccuracy = -40,
@@ -112,12 +113,12 @@ object_weapon_ranged_rifle_rifle_ewok_crossbow = object_weapon_ranged_rifle_shar
 	idealAccuracy = 0,
 	
 	minDamage = 77,
-	maxDamage = 231,
+	maxDamage = 131,
 
 	maxRange = 65,
 	maxRangeAccuracy = -60,
 		
-	attackSpeed = 1,
+	attackSpeed = 8,
 
 	woundsRatio = 11
 

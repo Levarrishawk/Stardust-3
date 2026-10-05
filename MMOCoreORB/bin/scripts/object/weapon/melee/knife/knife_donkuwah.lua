@@ -42,37 +42,38 @@
 
 
 object_weapon_melee_knife_knife_donkuwah = object_weapon_melee_knife_shared_knife_donkuwah:new {
-
-	playerRaces = { "object/creature/player/bothan_male.iff",
-				"object/creature/player/bothan_female.iff",
-				"object/creature/player/human_male.iff",
-				"object/creature/player/human_female.iff",
-				"object/creature/player/ithorian_male.iff",
-				"object/creature/player/ithorian_female.iff",
-				"object/creature/player/moncal_male.iff",
-				"object/creature/player/moncal_female.iff",
-				"object/creature/player/rodian_male.iff",
-				"object/creature/player/rodian_female.iff",
-				"object/creature/player/sullustan_male.iff",
-				"object/creature/player/sullustan_female.iff",
-				"object/creature/player/trandoshan_male.iff",
-				"object/creature/player/trandoshan_female.iff",
-				"object/creature/player/twilek_male.iff",
-				"object/creature/player/twilek_female.iff",
-				"object/creature/player/wookiee_male.iff",
-				"object/creature/player/wookiee_female.iff",
-				"object/creature/player/zabrak_male.iff",
-				"object/creature/player/zabrak_female.iff" },
+	playerRaces = {
+		"object/creature/player/bothan_male.iff",
+		"object/creature/player/bothan_female.iff",
+		"object/creature/player/human_male.iff",
+		"object/creature/player/human_female.iff",
+		"object/creature/player/ithorian_male.iff",
+		"object/creature/player/ithorian_female.iff",
+		"object/creature/player/moncal_male.iff",
+		"object/creature/player/moncal_female.iff",
+		"object/creature/player/rodian_male.iff",
+		"object/creature/player/rodian_female.iff",
+		"object/creature/player/sullustan_male.iff",
+		"object/creature/player/sullustan_female.iff",
+		"object/creature/player/trandoshan_male.iff",
+		"object/creature/player/trandoshan_female.iff",
+		"object/creature/player/twilek_male.iff",
+		"object/creature/player/twilek_female.iff",
+		"object/creature/player/wookiee_male.iff",
+		"object/creature/player/wookiee_female.iff",
+		"object/creature/player/zabrak_male.iff",
+		"object/creature/player/zabrak_female.iff"
+	},
 	
 	-- RANGEDATTACK, MELEEATTACK, FORCEATTACK, TRAPATTACK, GRENADEATTACK, HEAVYACIDBEAMATTACK,
 	-- HEAVYLIGHTNINGBEAMATTACK, HEAVYPARTICLEBEAMATTACK, HEAVYROCKETLAUNCHERATTACK, HEAVYLAUNCHERATTACK
 	attackType = MELEEATTACK,
 	
-	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, FORCE, LIGHTSABER
+	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, LIGHTSABER
 	damageType = KINETIC,
 	
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = LIGHT,
+	armorPiercing = NONE,
 	
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -96,29 +97,25 @@ object_weapon_melee_knife_knife_donkuwah = object_weapon_melee_knife_shared_knif
 	speedModifiers = { "onehandmelee_speed" },
 	
 	-- Leave blank for now
-	damageModifiers = { "frenzy" },
+	damageModifiers = { },
 	       
 	
 	-- The values below are the default values.  To be used for blue frog objects primarily
-	healthAttackCost = 0,
-	actionAttackCost = 300,
-	mindAttackCost = 0,
+	healthAttackCost = 6,
+	actionAttackCost = 6,
+	mindAttackCost = 2,
 	forceCost = 0,
-	
-	pointBlankAccuracy = 0,
-	pointBlankRange = 3,
-	
+
+	pointBlankRange = 0,
+	pointBlankAccuracy = 3,
 	idealRange = 3,
 	idealAccuracy = 3,
-	
-	maxRange = 3,
-	maxRangeAccuracy = 4,
+	maxRange = 4,
+	maxRangeAccuracy = 3,
 
-	minDamage = 124,
-	maxDamage = 136,
-	
-	attackSpeed = 1,
-
+	minDamage = 24,
+	maxDamage = 36,
+	attackSpeed = 4.5,
 	woundsRatio = 6,
 }
 
