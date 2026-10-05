@@ -4204,7 +4204,11 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 	msg->startUpdate(0x0F);
 	wearablesVector.refreshAppearanceEntry(index, msg);
 	msg->close();
-	broadcastMessage(msg, true);
+	// Owner delivery must not depend on membership in the nearby receiver list.
+	sendMessage(msg->clone());
+	Vector<BasePacket*> messages;
+	messages.add(msg);
+	broadcastMessages(&messages, false);
 	sendSystemMessage("Duster appearance equipped for testing. Your composite chest remains equipped.");
 	return true;
 }
@@ -4227,7 +4231,10 @@ void CreatureObjectImplementation::clearAppearance(bool notifyClient) {
 		msg->startUpdate(0x0F);
 		wearablesVector.refreshAppearanceEntry(i, msg);
 		msg->close();
-		broadcastMessage(msg, true);
+		sendMessage(msg->clone());
+		Vector<BasePacket*> messages;
+		messages.add(msg);
+		broadcastMessages(&messages, false);
 		break;
 	}
 }

@@ -19,6 +19,14 @@ list index rather than a replace operation, to test whether rebuilding the clien
 wearable is necessary. These two operations advance the equipment list counter
 by two and do not modify the server list or its armor protection map.
 
+The remove/add revision displayed the duster on the observing client but not the
+wearer's client. The next revision sends the same equipment delta explicitly to
+the owner and broadcasts it to observers with the owner excluded. This removes
+dependence on the nearby receiver list for owner delivery, without sending a
+duplicate remove/add delta to the owner. The existing multi-message broadcast
+handles that exclusion in both packet-buffer configurations. If the owner still
+sees armor, owner delivery alone does not resolve the rendering difference.
+
 The selection is deliberately not persistent. It resets when the creature is
 loaded from the database or the server restarts; a reconnect to an already loaded
 creature may retain it. Removing the chest or moving/removing the duster clears
