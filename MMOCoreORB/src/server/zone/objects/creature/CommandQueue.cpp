@@ -439,6 +439,15 @@ void CommandQueue::enqueueCommand(unsigned int actionCRC, unsigned int actionCou
 		return;
 	}
 
+	int commandPriority = priority < 0 ? queueCommand->getDefaultPriority() : priority;
+
+	if (queueVector.size() > 1 && commandPriority != QueueCommand::FRONT && commandPriority != QueueCommand::IMMEDIATE) {
+		clearQueueAction(actionCount, 0, 0, 0);
+		creature->sendSystemMessage("You can not activate another combat ability while one is in progress!");
+		creature->playMusicMessage("sound/ui_negative.snd");
+		return;
+	}
+
 	if (creature->isPlayerCreature() && queueCommand->addToCombatQueue()) {
 		creature->notifyObservers(ObserverEventType::COMBATCOMMANDENQUEUED);
 	}

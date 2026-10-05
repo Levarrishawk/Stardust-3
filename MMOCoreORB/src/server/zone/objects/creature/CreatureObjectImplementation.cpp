@@ -1200,11 +1200,24 @@ int CreatureObjectImplementation::inflictDamage(TangibleObject* attacker, int da
 		return 0;
 
 	int currentValue = hamList.get(damageType);
+
+	int action = getHAM(CreatureAttribute::ACTION);
+	if (action < 300)
+		setHAM(CreatureAttribute::ACTION, 300);
+
+	int mind = getHAM(CreatureAttribute::MIND);
+	if (mind < 2000)
+		setHAM(CreatureAttribute::MIND, 2000);
+
 	int newValue = currentValue - (int)damage;
 
 	// info(true) << "Inflict Damage: Type = " << damageType << " Damage Amount = " << damage << " Current Value = " << currentValue;
 
 	if (!destroy && newValue <= 0)
+		newValue = 1;
+
+	// Action and Mind are resource pools and must not trigger incapacitation.
+	if ((damageType == CreatureAttribute::ACTION || damageType == CreatureAttribute::MIND) && newValue <= 0)
 		newValue = 1;
 
 	if (getSkillMod("avoid_incapacitation") > 0 && newValue <= 0)
@@ -3198,21 +3211,17 @@ void CreatureObjectImplementation::activateHAMRegeneration(int latency) {
 	if (isIncapacitated() || isDead())
 		return;
 
-	if (!isPlayerCreature() && isInCombat())
-		return;
-
 	float modifier = (float)latency/1000.f;
 
 	if (isKneeling())
 		modifier *= 1.25f;
 	else if (isSitting())
-		modifier *= 1.75f;
+		modifier *= 25.5f;
 
 	// this formula gives the amount of regen per second
 	uint32 healthTick = (uint32) ceil((float) Math::max(0, getHAM(
 			CreatureAttribute::CONSTITUTION)) * 13.0f / 2100.0f * modifier);
-	uint32 actionTick = (uint32) ceil((float) Math::max(0, getHAM(
-			CreatureAttribute::STAMINA)) * 13.0f / 2100.0f * modifier);
+	uint32 actionTick = getMaxHAM(CreatureAttribute::ACTION) * 0.125;
 	uint32 mindTick = (uint32) ceil((float) Math::max(0, getHAM(
 			CreatureAttribute::WILLPOWER)) * 13.0f / 2100.0f * modifier);
 
