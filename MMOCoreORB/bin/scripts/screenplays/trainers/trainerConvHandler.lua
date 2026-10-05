@@ -36,6 +36,10 @@ function trainerConvHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, sele
 
 		if (isJediTrainer) then
 			clonedConversation:setDialogTextStringId(stringTable .. "greeting")
+		elseif (trainerType == "trainer_melee_defense") then
+			clonedConversation:setCustomDialogText("I teach melee defense, balance, and resistance to disabling attacks. What would you like to learn?")
+		elseif (trainerType == "trainer_ranged_defense") then
+			clonedConversation:setCustomDialogText("I teach ranged defense and techniques for maintaining your footing and focus under fire. What would you like to learn?")
 		else
 			clonedConversation:setDialogTextStringId(stringTable .. trainerType)
 		end

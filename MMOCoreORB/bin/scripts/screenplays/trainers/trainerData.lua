@@ -1,4 +1,22 @@
 trainerSkills = {
+	trainer_melee_defense = {
+		"combat_melee_defense_novice",
+		"combat_melee_defense_01",
+		"combat_melee_defense_02",
+		"combat_melee_defense_03",
+		"combat_melee_defense_04",
+		"combat_melee_defense_master"
+	},
+
+	trainer_ranged_defense = {
+		"combat_ranged_defense_novice",
+		"combat_ranged_defense_01",
+		"combat_ranged_defense_02",
+		"combat_ranged_defense_03",
+		"combat_ranged_defense_04",
+		"combat_ranged_defense_master"
+	},
+
 	-- Starter Professions
 	trainer_artisan = {
 		"crafting_artisan_novice",

@@ -114,6 +114,8 @@ createTrainerConversationTemplate("artisanTrainerConvoTemplate", "trainer_artisa
 createTrainerConversationTemplate("brawlerTrainerConvoTemplate", "trainer_brawler")
 createTrainerConversationTemplate("entertainerTrainerConvoTemplate", "trainer_entertainer")
 createTrainerConversationTemplate("marksmanTrainerConvoTemplate", "trainer_marksman")
+createTrainerConversationTemplate("meleeDefenseTrainerConvoTemplate", "trainer_melee_defense")
+createTrainerConversationTemplate("rangedDefenseTrainerConvoTemplate", "trainer_ranged_defense")
 createTrainerConversationTemplate("medicTrainerConvoTemplate", "trainer_medic")
 createTrainerConversationTemplate("scoutTrainerConvoTemplate", "trainer_scout")
 
