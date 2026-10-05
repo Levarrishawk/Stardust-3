@@ -35,12 +35,38 @@ function elysiumGuardianConvoHandler:getEligibilityScreen(pPlayer)
 	return "waiting"
 end
 
+function elysiumGuardianConvoHandler:formatRemainingTime(entryTime)
+	local remaining = math.max(0, self.waitSeconds - (getTimestamp() - entryTime))
+	local days = math.floor(remaining / 86400)
+	local hours = math.floor((remaining % 86400) / 3600)
+	local minutes = math.floor((remaining % 3600) / 60)
+	local seconds = math.floor(remaining % 60)
+	return string.format("%d days, %d hours, %d minutes, %d seconds", days, hours, minutes, seconds)
+end
+
+function elysiumGuardianConvoHandler:getEligibilityConversationScreen(pPlayer, pConvTemplate)
+	local screenID = self:getEligibilityScreen(pPlayer)
+	local pScreen = LuaConversationTemplate(pConvTemplate):getScreen(screenID)
+	if (screenID ~= "waiting" or pPlayer == nil or CreatureObject(pPlayer):getPlayerObject() == nil) then
+		return pScreen
+	end
+
+	local entryTime = tonumber(readScreenPlayData(pPlayer, "ElysiumGuardian", "entryTime"))
+	if (entryTime == nil or entryTime <= 0) then
+		return pScreen
+	end
+
+	local pClonedScreen = LuaConversationScreen(pScreen):cloneScreen()
+	LuaConversationScreen(pClonedScreen):setCustomDialogText("You must continue to contemplate your existence. Return to me once sufficient time has passed. Time remaining: " .. self:formatRemainingTime(entryTime) .. ".")
+	return pClonedScreen
+end
+
 function elysiumGuardianConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	if (self:isPrivileged(pPlayer)) then
 		return LuaConversationTemplate(pConvTemplate):getScreen("privileged")
 	end
 
-	return LuaConversationTemplate(pConvTemplate):getScreen(self:getEligibilityScreen(pPlayer))
+	return self:getEligibilityConversationScreen(pPlayer, pConvTemplate)
 end
 
 function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
@@ -52,18 +78,13 @@ function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 	if (screenID == "privileged") then
 		if (not self:isPrivileged(pPlayer)) then
-			return convoTemplate:getScreen(self:getEligibilityScreen(pPlayer))
+			return self:getEligibilityConversationScreen(pPlayer, pConvTemplate)
 		end
 
 		local entryTime = tonumber(readScreenPlayData(pPlayer, "ElysiumGuardian", "entryTime"))
 		local text = "Resurrection timer: no Elysium entry time recorded."
 		if (entryTime ~= nil and entryTime > 0) then
-			local remaining = math.max(0, self.waitSeconds - (getTimestamp() - entryTime))
-			local days = math.floor(remaining / 86400)
-			local hours = math.floor((remaining % 86400) / 3600)
-			local minutes = math.floor((remaining % 3600) / 60)
-			local seconds = math.floor(remaining % 60)
-			text = string.format("Time until resurrection timer eligibility: %d days, %d hours, %d minutes, %d seconds.", days, hours, minutes, seconds)
+			text = "Time until resurrection timer eligibility: " .. self:formatRemainingTime(entryTime) .. "."
 		end
 
 		local pGhost = CreatureObject(pPlayer):getPlayerObject()
@@ -79,7 +100,7 @@ function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 	end
 
 	if (screenID == "test_regular") then
-		return convoTemplate:getScreen(self:getEligibilityScreen(pPlayer))
+		return self:getEligibilityConversationScreen(pPlayer, pConvTemplate)
 	end
 
 	if (screenID ~= "resurrect" and screenID ~= "test_exit") then
@@ -88,12 +109,12 @@ function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 
 	if (screenID == "test_exit") then
 		if (not self:isPrivileged(pPlayer)) then
-			return convoTemplate:getScreen(self:getEligibilityScreen(pPlayer))
+			return self:getEligibilityConversationScreen(pPlayer, pConvTemplate)
 		end
 	else
 		local eligibility = self:getEligibilityScreen(pPlayer)
 		if (eligibility ~= "offer") then
-			return convoTemplate:getScreen(eligibility)
+			return self:getEligibilityConversationScreen(pPlayer, pConvTemplate)
 		end
 	end
 
