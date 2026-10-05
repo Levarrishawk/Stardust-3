@@ -76,7 +76,7 @@ object_tangible_wearables_armor_stormtrooper_armor_stormtrooper_helmet_quest = o
 	heat = 60,
 	cold = 60,
 	acid = 60,
-	lightSaber = 0
+	lightSaber = 0,
 	specialResists = KINETIC,
 }
 

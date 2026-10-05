@@ -1,11 +1,5 @@
 
 
-object_tangible_wearables_armored_clothing_boots_shared_boots_tusken_raider_armored = SharedTangibleObjectTemplate:new {
-	clientTemplateFileName = "object/tangible/wearables/armored_clothing/boots/shared_boots_tusken_raider_armored.iff"
-	
-}
-
-ObjectTemplates:addClientTemplate(object_tangible_wearables_armored_clothing_boots_shared_boots_tusken_raider_armored, "object/tangible/wearables/armored_clothing/boots/shared_boots_tusken_raider_armored.iff")
 ----------------------------------------------------------------------------------------------------------------------
 
 object_tangible_wearables_armored_clothing_boots_shared_boots_s04_armored = SharedTangibleObjectTemplate:new {

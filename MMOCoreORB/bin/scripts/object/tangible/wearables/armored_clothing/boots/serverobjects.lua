@@ -12,5 +12,3 @@ includeFile("tangible/wearables/armored_clothing/boots/boots_s14_armored.lua")
 includeFile("tangible/wearables/armored_clothing/boots/boots_s15_armored.lua")
 includeFile("tangible/wearables/armored_clothing/boots/boots_s19_armored.lua")
 includeFile("tangible/wearables/armored_clothing/boots/boots_s21_armored.lua")
-
-includeFile("tangible/wearables/armored_clothing/boots/boots_tusken_raider_armored.lua")

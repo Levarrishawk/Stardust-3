@@ -18,17 +18,10 @@ includeFile("draft_schematic/armored_clothing/boots_s14_armored.lua")
 includeFile("draft_schematic/armored_clothing/boots_s15_armored.lua")
 includeFile("draft_schematic/armored_clothing/boots_s19_armored.lua")
 includeFile("draft_schematic/armored_clothing/boots_s21_armored.lua")
-includeFile("draft_schematic/armored_clothing/boots_tusken_raider_armored.lua")
 
 includeFile("draft_schematic/armored_clothing/hat_invis_armored.lua")
 includeFile("draft_schematic/armored_clothing/hat_s04_armored.lua")
 includeFile("draft_schematic/armored_clothing/hat_s10_armored.lua")
-includeFile("draft_schematic/armored_clothing/hat_tusken_raider_armored.lua")
-includeFile("draft_schematic/armored_clothing/hat_twilek_s01_armored.lua")
-includeFile("draft_schematic/armored_clothing/hat_twilek_s02_armored.lua")
-includeFile("draft_schematic/armored_clothing/hat_twilek_s03_armored.lua")
-includeFile("draft_schematic/armored_clothing/hat_twilek_s04_armored.lua")
-includeFile("draft_schematic/armored_clothing/hat_twilek_s05_armored.lua")
 
 includeFile("draft_schematic/armored_clothing/ith_hat_s01_armored.lua")
 includeFile("draft_schematic/armored_clothing/ith_hat_s03_armored.lua")
@@ -60,8 +53,6 @@ includeFile("draft_schematic/armored_clothing/pants_s22_armored.lua")
 includeFile("draft_schematic/armored_clothing/pants_s28_armored.lua")
 
 includeFile("draft_schematic/armored_clothing/robe_s27_armored.lua")
-includeFile("draft_schematic/armored_clothing/robe_tusken_raider_s01_armored.lua")
-includeFile("draft_schematic/armored_clothing/robe_tusken_raider_s02_armored.lua")
 
 includeFile("draft_schematic/armored_clothing/skirt_s04_armored.lua")
 includeFile("draft_schematic/armored_clothing/skirt_s05_armored.lua")
@@ -91,6 +82,3 @@ includeFile("draft_schematic/armored_clothing/wke_shirt_s04_armored.lua")
 
 includeFile("draft_schematic/armored_clothing/wke_shoulder_pad_s01_armored.lua")
 includeFile("draft_schematic/armored_clothing/wke_shoulder_pad_s02_armored.lua")
-
-includeFile("draft_schematic/armored_clothing/bracer_l_tusken_raider_armored.lua")
-includeFile("draft_schematic/armored_clothing/bracer_r_tusken_raider_armored.lua")

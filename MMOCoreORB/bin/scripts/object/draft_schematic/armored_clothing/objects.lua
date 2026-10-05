@@ -1,89 +1,23 @@
-object_draft_schematic_armored_clothing_shared_robe_tusken_raider_s01_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_robe_tusken_raider_s01_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_robe_tusken_raider_s01_armored, "object/draft_schematic/armored_clothing/shared_robe_tusken_raider_s01_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_robe_tusken_raider_s02_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_robe_tusken_raider_s02_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_robe_tusken_raider_s02_armored, "object/draft_schematic/armored_clothing/shared_robe_tusken_raider_s02_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_bracer_l_tusken_raider_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_bracer_l_tusken_raider_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_bracer_l_tusken_raider_armored, "object/draft_schematic/armored_clothing/shared_bracer_l_tusken_raider_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_bracer_r_tusken_raider_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_bracer_r_tusken_raider_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_bracer_r_tusken_raider_armored, "object/draft_schematic/armored_clothing/shared_bracer_r_tusken_raider_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_hat_tusken_raider_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_hat_tusken_raider_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_hat_tusken_raider_armored, "object/draft_schematic/armored_clothing/shared_hat_tusken_raider_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_boots_tusken_raider_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_boots_tusken_raider_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_boots_tusken_raider_armored, "object/draft_schematic/armored_clothing/shared_boots_tusken_raider_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_clothing_hat_twilek_s01_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s01_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_clothing_hat_twilek_s01_armored, "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s01_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_hat_twilek_s02_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s02_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_hat_twilek_s02_armored, "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s02_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_hat_twilek_s03_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s03_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_hat_twilek_s03_armored, "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s03_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_hat_twilek_s04_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s04_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_hat_twilek_s04_armored, "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s04_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
-object_draft_schematic_armored_clothing_shared_hat_twilek_s05_armored = SharedDraftSchematicObjectTemplate:new {
-  clientTemplateFileName = "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s05_armored.iff"
-
-}
-
-ObjectTemplates:addClientTemplate(object_draft_schematic_armored_clothing_shared_hat_twilek_s05_armored, "object/draft_schematic/armored_clothing/shared_clothing_hat_twilek_s05_armored.iff")
 --------------------------------------------------------------------------------------------------------------
 
 object_draft_schematic_armored_clothing_shared_jacket_s08_armored = SharedDraftSchematicObjectTemplate:new {

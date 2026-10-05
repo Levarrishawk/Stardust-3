@@ -13,4 +13,3 @@ includeFile("tangible/wearables/armored_clothing/pants/pants_s09_armored.lua")
 includeFile("tangible/wearables/armored_clothing/pants/pants_s21_armored.lua")
 includeFile("tangible/wearables/armored_clothing/pants/pants_s22_armored.lua")
 includeFile("tangible/wearables/armored_clothing/pants/pants_s28_armored.lua")
-

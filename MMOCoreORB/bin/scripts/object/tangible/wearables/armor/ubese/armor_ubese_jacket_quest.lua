@@ -108,7 +108,7 @@ object_tangible_wearables_armor_ubese_armor_ubese_jacket_quest = object_tangible
 	heat = 0,
 	cold = 0,
 	acid = 15,
-	lightSaber = 0
+	lightSaber = 0,
 	specialResists = KINETIC,
 }
 
