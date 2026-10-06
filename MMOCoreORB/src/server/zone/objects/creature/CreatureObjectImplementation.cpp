@@ -508,10 +508,19 @@ void CreatureObjectImplementation::sendBaselinesTo(SceneObject* player) {
 void CreatureObjectImplementation::sendSlottedObjectsTo(SceneObject* player) {
 	SortedVector<SceneObject*> objects(getSlottedObjectsSize(), getSlottedObjectsSize());
 	objects.setNoDuplicateInsertPlan();
+	uint64 appearanceTargetID = wearablesVector.getAppearanceTargetID();
 
 	try {
 		for (int i = 0; i < getSlottedObjectsSize(); ++i) {
 			Reference<SceneObject*> object = getSlottedObject(i);
+			if (object == nullptr)
+				continue;
+
+			if (player != asCreatureObject() && appearanceTargetID != 0 &&
+					object->getObjectID() == appearanceTargetID) {
+				// CREO6 already creates the cosmetic wearable using this ID for observers.
+				continue;
+			}
 
 			int arrangementSize = object->getArrangementDescriptorSize();
 
