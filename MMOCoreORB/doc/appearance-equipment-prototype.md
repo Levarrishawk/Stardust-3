@@ -59,9 +59,10 @@ normal inventory/equipment operations. Test restoration before adopting this
 approach for ordinary gameplay. Inventory visibility and nested-container
 selection in this revision require client testing.
 
-The selection is deliberately not persistent. It resets when the creature is
-loaded from the database or the server restarts; a reconnect to an already loaded
-creature may retain it. Removing the chest, moving/removing the duster, or moving
+The source and target object IDs are now serialized on CreatureObject. Older
+characters default to zero IDs. The transient rendering cache is rebuilt from
+validated live items before the first baseline after database load. Invalid
+selections are cleared and marked for database saving. Removing the chest, moving/removing the duster, or moving
 any container holding the duster clears the selection, even when moving that
 container elsewhere within the player's own storage. Removal notifications are
 also forwarded to the owning player indoors when the root parent is a building.
@@ -128,5 +129,32 @@ generated headers. Start the server under GDB.
    cleanup by moving the first duster out of inventory. Future multi-item tests
    must include partial overlaps with biceps/bracers and disjoint arrangements.
 
-Do not broaden the feature or add persistent selections until the client tests
-establish that this rendering method works.
+Client tests have verified the rendering method, normal versus cosmetic
+highlights, nested backpack restoration, observer zoning, and reconnect behavior.
+The new serialized selection still requires a Debian build and restart testing.
+
+
+## Persistent selection validation
+
+CreatureObject.idl adds appearanceSourceObjectID and appearanceTargetObjectID
+as normal serialized unsigned-long fields, plus a transient restore-pending
+flag and a local native restoreAppearanceSelection method. initializeMembers
+sets zero defaults; initializeTransientMembers clears only the runtime visual
+cache and flags saved IDs for reconstruction. Before the first baseline in a
+zone, reconstruction validates both objects, exact prototype templates, source
+inventory/worn-container ancestry and permissions, equipped chest membership,
+shared arrangements, and normal equip eligibility (allowing slot occupancy).
+Customization and reserved slots come from the current source object.
+
+Equip saves both IDs and marks the creature dirty through updateToDatabase.
+Manual/automatic clear saves zero IDs. No item is duplicated or moved and no
+new SQL schema, client packet layout, Engine3 source or client binary is needed.
+The existing version-6 client markers are emitted from reconstructed state.
+
+Rebuild on Debian with CreatureObject IDL regeneration. After that build,
+equip appearance again so the new IDs can be saved; pre-upgrade transient
+selections cannot be recovered. Use a graceful server shutdown/restart to test
+saving, then verify both clients, both inventory highlights, and Remove
+Appearance. Also remove appearance and restart to confirm it stays removed;
+repeat with a nested backpack source. Verify an older character loads with no
+selection. Persistence and generated interfaces are not compiled/tested locally.
