@@ -20,9 +20,9 @@ void TangibleObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObjec
 
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
 
-	if (player->isPlayerCreature() && tano->getServerObjectCRC() == String("object/tangible/wearables/robe/robe_s27.iff").hashCode()) {
+	if (player->isPlayerCreature() && tano->isWearableObject() && !tano->isWearableContainerObject()) {
 		if (player->isAppearanceInventoryItem(tano)) {
-			if (player->getAppearanceSourceID() == tano->getObjectID())
+			if (player->isAppearanceEquipped(tano->getObjectID()))
 				menuResponse->addRadialMenuItem(221, 3, "Remove Appearance");
 			else
 				menuResponse->addRadialMenuItem(220, 3, "Equip Appearance");
@@ -76,14 +76,14 @@ int TangibleObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
 
 	if ((selectedID == 220 || selectedID == 221) && player->isPlayerCreature() &&
-			tano->getServerObjectCRC() == String("object/tangible/wearables/robe/robe_s27.iff").hashCode()) {
+			tano->isWearableObject() && !tano->isWearableContainerObject()) {
 		if (!player->isAppearanceInventoryItem(tano))
 			return 0;
 
 		if (selectedID == 220)
 			player->equipAppearance(tano);
-		else if (player->getAppearanceSourceID() == tano->getObjectID())
-			player->clearAppearance();
+		else if (player->isAppearanceEquipped(tano->getObjectID()))
+			player->clearAppearance(true, tano->getObjectID());
 		return 0;
 	}
 

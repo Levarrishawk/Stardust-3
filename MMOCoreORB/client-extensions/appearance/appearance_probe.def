@@ -1,0 +1,6 @@
+LIBRARY d3d9
+EXPORTS
+ D3DPERF_BeginEvent @1
+ D3DPERF_EndEvent @2
+ D3DPERF_SetMarker @3
+ Direct3DCreate9 @4

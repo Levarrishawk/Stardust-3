@@ -100,7 +100,7 @@ float CreatureObjectImplementation::DEFAULTRUNSPEED = 5.376f;
 void CreatureObjectImplementation::initializeTransientMembers() {
 	TangibleObjectImplementation::initializeTransientMembers();
 	wearablesVector.clearAppearance();
-	appearanceRestorePending = appearanceSourceObjectID != 0 || appearanceTargetObjectID != 0;
+	appearanceRestorePending = appearanceSourceObjectIDs.size() != 0 || appearanceSourceObjectID != 0 || appearanceTargetObjectID != 0;
 
 	groupInviterID = 0;
 	groupInviteCounter = 0;
@@ -128,6 +128,7 @@ void CreatureObjectImplementation::initializeTransientMembers() {
 }
 
 void CreatureObjectImplementation::initializeMembers() {
+	appearanceSourceObjectIDs.removeAll();
 	appearanceSourceObjectID = 0;
 	appearanceTargetObjectID = 0;
 	appearanceRestorePending = false;
@@ -514,7 +515,6 @@ void CreatureObjectImplementation::sendBaselinesTo(SceneObject* player) {
 void CreatureObjectImplementation::sendSlottedObjectsTo(SceneObject* player) {
 	SortedVector<SceneObject*> objects(getSlottedObjectsSize(), getSlottedObjectsSize());
 	objects.setNoDuplicateInsertPlan();
-	uint64 appearanceTargetID = wearablesVector.getAppearanceTargetID();
 
 	try {
 		for (int i = 0; i < getSlottedObjectsSize(); ++i) {
@@ -522,8 +522,7 @@ void CreatureObjectImplementation::sendSlottedObjectsTo(SceneObject* player) {
 			if (object == nullptr)
 				continue;
 
-			if (player != asCreatureObject() && appearanceTargetID != 0 &&
-					object->getObjectID() == appearanceTargetID) {
+			if (player != asCreatureObject() && wearablesVector.isAppearanceTarget(object->getObjectID())) {
 				// CREO6 already creates the cosmetic wearable using this ID for observers.
 				continue;
 			}
@@ -556,15 +555,8 @@ void CreatureObjectImplementation::sendSlottedObjectsTo(SceneObject* player) {
 		e.printStackTrace();
 	}
 
-	if (player == asCreatureObject()) {
-		if (wearablesVector.getAppearanceSourceID() == 0 &&
-				ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false)) {
-			ManagedReference<SceneObject*> parent = getParent().get();
-			sendMessage(new UpdateContainmentMessage(getObjectID(),
-					parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0100));
-		}
+	if (player == asCreatureObject())
 		sendAppearanceToOwner();
-	}
 }
 
 void CreatureObjectImplementation::sendSystemMessage(const String& message) {
@@ -4180,15 +4172,13 @@ bool CreatureObjectImplementation::isAppearanceInventoryItem(SceneObject* object
 }
 
 bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
-	if (!isPlayerCreature() || object == nullptr || !object->isWearableObject() || object->isDestroyed())
+	if (!isPlayerCreature() || object == nullptr || !object->isWearableObject() || object->isWearableContainerObject() || object->isDestroyed())
 		return false;
 
-	if (object->getServerObjectCRC() != String("object/tangible/wearables/robe/robe_s27.iff").hashCode())
-		return false;
 
 	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
 	if (inventory == nullptr || !isAppearanceInventoryItem(object) || containsActiveSession(SessionFacadeType::TRADE)) {
-		sendSystemMessage("Keep the gunman's duster in your inventory or a carried wearable container and finish any trade first.");
+		sendSystemMessage("Keep the appearance item in your inventory or a carried wearable container and finish any trade first.");
 		return false;
 	}
 
@@ -4205,30 +4195,28 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 		return false;
 	}
 
-	ManagedReference<TangibleObject*> chest;
-	for (int i = 0; i < wearablesVector.size(); ++i) {
-		ManagedReference<TangibleObject*> wearable = wearablesVector.get(i);
-		if (wearable != nullptr && wearable->getServerObjectCRC() == String("object/tangible/wearables/armor/composite/armor_composite_chest_plate.iff").hashCode()) {
-			chest = wearable;
+	if (object->getArrangementDescriptorSize() == 0)
+		return false;
+	const Vector<String>* descriptors = object->getArrangementDescriptor(0);
+	if (descriptors == nullptr || descriptors->size() == 0)
+		return false;
+
+	ManagedReference<TangibleObject*> target;
+	for (int i = 0; i < descriptors->size(); ++i) {
+		ManagedReference<SceneObject*> equipped = getSlottedObject(descriptors->get(i));
+		if (equipped != nullptr && equipped->isWearableObject() && !equipped->isWearableContainerObject() &&
+				equipped->isTangibleObject() && equipped->getParent() == asCreatureObject()) {
+			target = cast<TangibleObject*>(equipped.get());
 			break;
 		}
 	}
-
-	if (chest == nullptr || chest->getParent() != asCreatureObject()) {
-		sendSystemMessage("Equip a composite armor chest plate before testing the duster appearance.");
+	if (target == nullptr) {
+		sendSystemMessage("Equip a wearable sharing an appearance slot first.");
 		return false;
 	}
-
-	Locker chestLocker(chest, asCreatureObject());
-	int index = wearablesVector.find(chest);
-	if (index == -1 || chest->getParent() != asCreatureObject() || !isAppearanceInventoryItem(object))
-		return false;
-
-	if (object->getArrangementDescriptorSize() == 0)
-		return false;
-
-	const Vector<String>* descriptors = object->getArrangementDescriptor(0);
-	if (descriptors == nullptr || descriptors->size() == 0)
+	Locker targetLocker(target, asCreatureObject());
+	int index = wearablesVector.find(target);
+	if (index == -1 || target->getParent() != asCreatureObject() || !isAppearanceInventoryItem(object))
 		return false;
 
 	String occupiedSlot = wearablesVector.getAppearanceSlotConflict(object->getObjectID(), *descriptors);
@@ -4237,36 +4225,38 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 		return false;
 	}
 
-	uint64 appearanceSourceID = wearablesVector.getAppearanceSourceID();
-	if (appearanceSourceID != 0 && appearanceSourceID != object->getObjectID()) {
-		sendSystemMessage("This prototype supports one appearance item. Remove the current appearance first.");
+	if (wearablesVector.isAppearanceEquipped(object->getObjectID()))
+		return true;
+
+	// The native marker cache has the same bounds; reject before changing any state.
+	if (appearanceSourceObjectIDs.size() >= 64) {
+		sendSystemMessage("Too many appearance items are equipped.");
 		return false;
 	}
-
 	bool sharedSlot = false;
 	for (int i = 0; i < descriptors->size(); ++i) {
-		if (getSlottedObject(descriptors->get(i)) == chest) {
+		if (getSlottedObject(descriptors->get(i)) == target) {
 			sharedSlot = true;
 			break;
 		}
 	}
 
 	if (!sharedSlot) {
-		sendSystemMessage("The loaded duster arrangement does not share the composite chest slot.");
+		sendSystemMessage("The appearance item no longer shares an equipped slot.");
 		return false;
 	}
 
-	String customization;
-	object->getCustomizationString(customization);
-	wearablesVector.setAppearance(chest->getObjectID(), object->getObjectID(), object->getClientObjectCRC(), 4, customization, *descriptors);
-	appearanceSourceObjectID = object->getObjectID();
-	appearanceTargetObjectID = chest->getObjectID();
+	if (!cacheAppearanceSelection(object)) {
+		sendSystemMessage("Unable to apply this appearance to the current equipment.");
+		return false;
+	}
+	appearanceSourceObjectIDs.add(object->getObjectID());
 	appearanceRestorePending = false;
 	asCreatureObject()->updateToDatabase();
 
 	CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
 	msg->startUpdate(0x0F);
-	wearablesVector.refreshAppearanceEntry(index, msg);
+	wearablesVector.refreshAppearance(msg);
 	msg->close();
 	// Owner delivery must not depend on membership in the nearby receiver list.
 	sendMessage(msg->clone());
@@ -4274,201 +4264,237 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 	messages.add(msg);
 	broadcastMessages(&messages, false);
 	sendAppearanceToOwner();
-	sendSystemMessage("Duster appearance equipped for testing. Your composite chest remains equipped.");
+	sendSystemMessage("Appearance equipped. Your normal equipment remains equipped.");
+	return true;
+}
+
+bool CreatureObjectImplementation::cacheAppearanceSelection(TangibleObject* source) {
+	if (!isPlayerCreature() || source == nullptr || !source->isWearableObject() || source->isWearableContainerObject() ||
+			source->isDestroyed() || !isAppearanceInventoryItem(source) || source->getArrangementDescriptorSize() == 0)
+		return false;
+	const Vector<String>* descriptors = source->getArrangementDescriptor(0);
+	if (descriptors == nullptr || descriptors->size() == 0 ||
+			!wearablesVector.getAppearanceSlotConflict(source->getObjectID(), *descriptors).isEmpty())
+		return false;
+	ManagedReference<SceneObject*> parent = source->getParent().get();
+	if (parent == nullptr || !source->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVECONTAINER) ||
+			!parent->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVEOUT))
+		return false;
+	String error;
+	int result = canAddObject(source, 4, error);
+	if (result != 0 && result != TransferErrorCode::SLOTOCCUPIED)
+		return false;
+
+	WearablesDeltaVector::AppearanceSelection selection;
+	selection.sourceID = source->getObjectID();
+	selection.crc = source->getClientObjectCRC();
+	selection.slots = *descriptors;
+	source->getCustomizationString(selection.customization);
+	for (int i = 0; i < wearablesVector.size(); ++i) {
+		ManagedReference<TangibleObject*> target = wearablesVector.get(i);
+		if (target == nullptr || target == source || !target->isWearableObject() || target->isWearableContainerObject() ||
+				target->isDestroyed() || target->getParent() != asCreatureObject())
+			continue;
+		for (int j = 0; j < descriptors->size(); ++j) {
+			if (getSlottedObject(descriptors->get(j)) == target) {
+				// An equipped multi-slot item cannot be claimed by two cosmetic selections.
+				if (wearablesVector.isAppearanceTarget(target->getObjectID()))
+					return false;
+				selection.targets.add(target->getObjectID());
+				break;
+			}
+		}
+	}
+	if (selection.targets.size() == 0)
+		return false;
+	Vector<WearablesDeltaVector::AppearanceSelection> current = wearablesVector.getAppearances();
+	int count = selection.targets.size();
+	for (int i = 0; i < current.size(); ++i)
+		count += current.get(i).targets.size();
+	if (current.size() >= 64 || count > 256)
+		return false;
+	wearablesVector.addAppearance(selection);
 	return true;
 }
 
 void CreatureObjectImplementation::restoreAppearanceSelection() {
 	if (!appearanceRestorePending)
 		return;
-
 	auto zoneServer = getZoneServer();
 	if (zoneServer == nullptr)
 		return;
 
-	ManagedReference<SceneObject*> sourceObject = zoneServer->getObject(appearanceSourceObjectID);
-	ManagedReference<SceneObject*> targetObject = zoneServer->getObject(appearanceTargetObjectID);
-	ManagedReference<TangibleObject*> source;
-	ManagedReference<TangibleObject*> target;
-	if (sourceObject != nullptr && sourceObject->isTangibleObject())
-		source = cast<TangibleObject*>(sourceObject.get());
-	if (targetObject != nullptr && targetObject->isTangibleObject())
-		target = cast<TangibleObject*>(targetObject.get());
-
-	bool valid = isPlayerCreature() && source != nullptr && target != nullptr && source != target &&
-			source->getServerObjectCRC() == String("object/tangible/wearables/robe/robe_s27.iff").hashCode() &&
-			target->getServerObjectCRC() == String("object/tangible/wearables/armor/composite/armor_composite_chest_plate.iff").hashCode() &&
-			target->getParent() == asCreatureObject() && wearablesVector.find(target) != -1 &&
-			isAppearanceInventoryItem(source) && source->getArrangementDescriptorSize() > 0;
-	const Vector<String>* descriptors = valid ? source->getArrangementDescriptor(0) : nullptr;
-	valid = valid && descriptors != nullptr && descriptors->size() > 0;
-	bool sharedSlot = false;
-	if (valid) {
-		ManagedReference<SceneObject*> sourceParent = source->getParent().get();
-		valid = sourceParent != nullptr && source->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVECONTAINER) &&
-				sourceParent->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVEOUT);
-		for (int i = 0; i < descriptors->size(); ++i) {
-			if (getSlottedObject(descriptors->get(i)) == target) {
-				sharedSlot = true;
-				break;
-			}
+	bool changed = appearanceSourceObjectID != 0 || appearanceTargetObjectID != 0;
+	// Migrate the previously tested single-selection format on first load.
+	if (appearanceSourceObjectIDs.size() == 0 && appearanceSourceObjectID != 0)
+		appearanceSourceObjectIDs.add(appearanceSourceObjectID);
+	appearanceSourceObjectID = 0;
+	appearanceTargetObjectID = 0;
+	wearablesVector.clearAppearance();
+	Vector<uint64> validSources;
+	for (int i = 0; i < appearanceSourceObjectIDs.size(); ++i) {
+		uint64 sourceID = appearanceSourceObjectIDs.get(i);
+		ManagedReference<SceneObject*> object = zoneServer->getObject(sourceID);
+		if (validSources.contains(sourceID) || object == nullptr || !object->isTangibleObject()) {
+			changed = true;
+			continue;
 		}
-		String errorDescription;
-		int result = canAddObject(source, 4, errorDescription);
-		valid = valid && sharedSlot && (result == 0 || result == TransferErrorCode::SLOTOCCUPIED);
+		Locker locker(object, asCreatureObject());
+		if (cacheAppearanceSelection(cast<TangibleObject*>(object.get())))
+			validSources.add(sourceID);
+		else
+			changed = true;
 	}
-
+	appearanceSourceObjectIDs = validSources;
 	appearanceRestorePending = false;
-	if (!valid) {
-		appearanceSourceObjectID = 0;
-		appearanceTargetObjectID = 0;
-		wearablesVector.clearAppearance();
+	if (changed)
 		asCreatureObject()->updateToDatabase();
-		return;
-	}
-
-	String customization;
-	source->getCustomizationString(customization);
-	wearablesVector.setAppearance(target->getObjectID(), source->getObjectID(), source->getClientObjectCRC(), 4, customization, *descriptors);
 }
 
 void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
-	uint64 targetID = wearablesVector.getAppearanceTargetID();
-	uint64 sourceID = wearablesVector.getAppearanceSourceID();
-	if (targetID == 0 || sourceID == 0 || getClient() == nullptr)
+	if (getClient() == nullptr)
 		return;
-
 	auto zoneServer = getZoneServer();
 	if (zoneServer == nullptr)
 		return;
-
-	ManagedReference<SceneObject*> target = zoneServer->getObject(targetID);
-	ManagedReference<SceneObject*> source = zoneServer->getObject(sourceID);
-	bool clientStateMarkers = ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false);
-	if (restore) {
-		// Restore actual containment, including a null parent during item removal.
+	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
+	if (!restore && inventory == nullptr)
+		return;
+	bool markers = ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false);
+	if (markers) {
+		ManagedReference<SceneObject*> parent = getParent().get();
+		sendMessage(new UpdateContainmentMessage(getObjectID(), parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0100));
+	}
+	Vector<WearablesDeltaVector::AppearanceSelection> appearances = wearablesVector.getAppearances();
+	for (int i = 0; i < appearances.size(); ++i) {
+		const WearablesDeltaVector::AppearanceSelection& selection = appearances.get(i);
+		ManagedReference<SceneObject*> source = zoneServer->getObject(selection.sourceID);
+		if (!restore && (source == nullptr || !isAppearanceInventoryItem(source)))
+			continue;
 		if (source != nullptr) {
 			ManagedReference<SceneObject*> parent = source->getParent().get();
-			sendMessage(source->link(parent != nullptr ? parent->getObjectID() : 0, source->getContainmentType()));
+			if (restore)
+				sendMessage(source->link(parent != nullptr ? parent->getObjectID() : 0, source->getContainmentType()));
+			else if (markers && parent != nullptr)
+				sendMessage(new UpdateContainmentMessage(selection.sourceID, parent->getObjectID(), 0x7FFF0101));
 		}
-		if (target != nullptr) {
+		for (int j = 0; j < selection.targets.size(); ++j) {
+			ManagedReference<SceneObject*> target = zoneServer->getObject(selection.targets.get(j));
+			if (target == nullptr)
+				continue;
 			ManagedReference<SceneObject*> parent = target->getParent().get();
-			sendMessage(target->link(parent != nullptr ? parent->getObjectID() : 0, target->getContainmentType()));
+			if (restore) {
+				sendMessage(target->link(parent != nullptr ? parent->getObjectID() : 0, target->getContainmentType()));
+			} else if (parent == asCreatureObject()) {
+				if (markers)
+					sendMessage(new UpdateContainmentMessage(target->getObjectID(), getObjectID(), 0x7FFF0102));
+				sendMessage(target->link(inventory->getObjectID(), 0xFFFFFFFF));
+			}
 		}
-		if (clientStateMarkers) {
-			ManagedReference<SceneObject*> parent = getParent().get();
-			sendMessage(new UpdateContainmentMessage(getObjectID(),
-					parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0100));
-		}
-		return;
+		if (!restore)
+			sendMessage(source->link(getObjectID(), 4));
 	}
-
-	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
-	if (inventory == nullptr || target == nullptr || source == nullptr ||
-			target->getParent() != asCreatureObject() || !isAppearanceInventoryItem(source))
-		return;
-
-	// Only the owner's client sees these links; server equipment is never transferred.
-	if (clientStateMarkers) {
-		ManagedReference<SceneObject*> sourceParent = source->getParent().get();
-		if (sourceParent == nullptr)
-			return;
-		// Reserved arrangements are consumed by the experimental client before containment is applied.
-		sendMessage(new UpdateContainmentMessage(sourceID, sourceParent->getObjectID(), 0x7FFF0101));
-		sendMessage(new UpdateContainmentMessage(targetID, getObjectID(), 0x7FFF0102));
-	}
-	sendMessage(target->link(inventory->getObjectID(), 0xFFFFFFFF));
-	sendMessage(source->link(getObjectID(), 4));
 }
 
-void CreatureObjectImplementation::clearAppearance(bool notifyClient) {
-	uint64 targetID = wearablesVector.getAppearanceTargetID();
-	if (appearanceSourceObjectID != 0 || appearanceTargetObjectID != 0) {
-		appearanceSourceObjectID = 0;
-		appearanceTargetObjectID = 0;
-		appearanceRestorePending = false;
-		asCreatureObject()->updateToDatabase();
-	}
-	if (targetID == 0)
+void CreatureObjectImplementation::clearAppearance(bool notifyClient, uint64 sourceID) {
+	if (sourceID != 0 && !appearanceSourceObjectIDs.contains(sourceID))
 		return;
-
 	sendAppearanceToOwner(true);
-	wearablesVector.clearAppearance();
-	if (!notifyClient)
-		return;
-
-	for (int i = 0; i < wearablesVector.size(); ++i) {
-		ManagedReference<TangibleObject*> wearable = wearablesVector.get(i);
-		if (wearable == nullptr || wearable->getObjectID() != targetID)
-			continue;
-
+	if (sourceID == 0)
+		appearanceSourceObjectIDs.removeAll();
+	else
+		appearanceSourceObjectIDs.removeElement(sourceID);
+	appearanceSourceObjectID = 0;
+	appearanceTargetObjectID = 0;
+	appearanceRestorePending = false;
+	wearablesVector.clearAppearance(sourceID);
+	asCreatureObject()->updateToDatabase();
+	if (notifyClient) {
 		CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
 		msg->startUpdate(0x0F);
-		wearablesVector.refreshAppearanceEntry(i, msg);
+		wearablesVector.refreshAppearance(msg);
 		msg->close();
 		sendMessage(msg->clone());
 		Vector<BasePacket*> messages;
 		messages.add(msg);
 		broadcastMessages(&messages, false);
-		break;
 	}
+	sendAppearanceToOwner();
 }
 
 int CreatureObjectImplementation::notifyObjectRemovedFromChild(SceneObject* object, SceneObject* child) {
 	if (object == nullptr)
 		return TangibleObjectImplementation::notifyObjectRemovedFromChild(object, child);
-
 	Locker locker(asCreatureObject(), object);
-	uint64 sourceID = wearablesVector.getAppearanceSourceID();
-	if (object->getObjectID() == sourceID) {
-		clearAppearance();
-	} else if (sourceID != 0) {
-		auto zoneServer = getZoneServer();
-		if (zoneServer != nullptr) {
-			ManagedReference<SceneObject*> source = zoneServer->getObject(sourceID);
-			if (source != nullptr && source->isASubChildOf(object))
-				clearAppearance();
-		}
+	auto zoneServer = getZoneServer();
+	Vector<uint64> sources = appearanceSourceObjectIDs;
+	for (int i = 0; i < sources.size(); ++i) {
+		ManagedReference<SceneObject*> source = zoneServer != nullptr ? zoneServer->getObject(sources.get(i)) : nullptr;
+		if (object->getObjectID() == sources.get(i) || (source != nullptr && source->isASubChildOf(object)))
+			clearAppearance(true, sources.get(i));
 	}
-
 	return TangibleObjectImplementation::notifyObjectRemovedFromChild(object, child);
 }
 
 void CreatureObjectImplementation::addWearableObject(TangibleObject* object, bool notifyClient) {
 	if (wearablesVector.contains(object))
 		return;
-
-	if (notifyClient) {
-		CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
+	bool project = wearablesVector.getAppearanceSourceID() != 0;
+	if (project)
+		sendAppearanceToOwner(true);
+	CreatureObjectDeltaMessage6* msg = notifyClient ? new CreatureObjectDeltaMessage6(asCreatureObject()) : nullptr;
+	if (msg != nullptr)
 		msg->startUpdate(0x0F);
-		wearablesVector.add(object, msg);
-		msg->close();
-
-		broadcastMessage(msg, true);
-	} else {
-		wearablesVector.add(object);
+	wearablesVector.add(object, project ? nullptr : msg, project ? 0 : 1);
+	if (project) {
+		appearanceRestorePending = true;
+		restoreAppearanceSelection();
+		wearablesVector.refreshAppearance(msg);
 	}
+	if (msg != nullptr) {
+		msg->close();
+		if (project) {
+			sendMessage(msg->clone());
+			Vector<BasePacket*> messages;
+			messages.add(msg);
+			broadcastMessages(&messages, false);
+		} else {
+			broadcastMessage(msg, true);
+		}
+	}
+	if (project)
+		sendAppearanceToOwner();
 }
 
 void CreatureObjectImplementation::removeWearableObject(TangibleObject* object, bool notifyClient) {
 	int index = wearablesVector.find(object);
-
 	if (index == -1)
 		return;
-
-	if (object->getObjectID() == wearablesVector.getAppearanceTargetID())
-		clearAppearance(false);
-
-	if (notifyClient) {
-		CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
+	bool project = wearablesVector.getAppearanceSourceID() != 0;
+	if (project)
+		sendAppearanceToOwner(true);
+	CreatureObjectDeltaMessage6* msg = notifyClient ? new CreatureObjectDeltaMessage6(asCreatureObject()) : nullptr;
+	if (msg != nullptr)
 		msg->startUpdate(0x0F);
-		wearablesVector.remove(index, msg);
-		msg->close();
-
-		broadcastMessage(msg, true);
-	} else {
-		wearablesVector.remove(index);
+	wearablesVector.remove(index, project ? nullptr : msg, project ? 0 : 1);
+	if (project) {
+		appearanceRestorePending = true;
+		restoreAppearanceSelection();
+		wearablesVector.refreshAppearance(msg);
 	}
+	if (msg != nullptr) {
+		msg->close();
+		if (project) {
+			sendMessage(msg->clone());
+			Vector<BasePacket*> messages;
+			messages.add(msg);
+			broadcastMessages(&messages, false);
+		} else {
+			broadcastMessage(msg, true);
+		}
+	}
+	if (project)
+		sendAppearanceToOwner();
 }
 
 CampSiteActiveArea* CreatureObjectImplementation::getCurrentCamp() {

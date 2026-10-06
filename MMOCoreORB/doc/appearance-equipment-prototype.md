@@ -1,160 +1,94 @@
-# Appearance equipment prototype
+# Appearance equipment: multiple selections
 
-The owner-containment revision was reported working on both clients. Appearance
-selections now reserve every slot in the loaded arrangement group, separately
-from actual equipment. A different appearance item sharing any reserved slot
-is rejected with the conflicting slot name; the existing appearance is kept.
-Selecting the same item again remains safe. Removing the appearance clears all
-its reservations. This prototype still supports only one appearance item and
-only the original duster/composite pair; it does not yet support independent
-appearance selections in other slots.
+Wearable objects can supply cosmetic appearances over real equipped wearables.
+Several appearances can coexist when their arrangement-0 slots do not overlap.
+The gunman's duster reserves all its slots, including chest, biceps and bracers;
+another appearance claiming any of those slots is rejected. Wearable containers
+are excluded as cosmetic sources, but sources inside a carried backpack or any
+nested inventory container remain supported.
 
-This experiment is limited to an equipped composite armor chest plate and a
-gunman's duster (`object/tangible/wearables/robe/robe_s27.iff`) in the player's
-inventory, any nested container beneath it, or a container nested beneath a
-wearable container equipped by the player. Bank and other players' storage are
-excluded. Right-click the duster and select **Equip Appearance** or
-**Remove Appearance**.
+At least one real equipped wearable must share a source slot. The source stays
+in its original server container. The real equipment retains its armor protection,
+encumbrance and modifiers. This increment does not add appearances in entirely
+empty equipment slots or a separate inventory tab.
 
-The server substitutes the duster's client template CRC, customization string,
-and first arrangement in the chest's existing CREO6 equipment entry. It retains
-the chest's object ID and does not transfer either item. The gameplay wearable
-vector, armor protection lookup, encumbrance, and skill modifiers are unchanged.
-Both initial baselines and subsequent equipment deltas use the substitution.
+## Rendering and removal
 
-The first test reached the success message and changed the radial to Remove
-Appearance, but neither client displayed the duster. That confirms the server
-selection succeeded, without establishing how the clients processed the packet.
-The revised experiment sends a remove followed by an add at the same equipment
-list index rather than a replace operation, to test whether rebuilding the client
-wearable is necessary. These two operations advance the equipment list counter
-by two and do not modify the server list or its armor protection map.
+CreatureObject retains a collection of source IDs. WearablesDeltaVector builds
+an ephemeral selection for each source with all covered real wearable IDs. The
+first covered real item supplies the cosmetic's wire object ID; subsequent
+covered items are omitted from the visible list. Uncovered wearables serialize
+normally. The gameplay vector and protection map are never projected or filtered.
 
-The remove/add revision displayed the duster on the observing client but not the
-wearer's client. The next revision sends the same equipment delta explicitly to
-the owner and broadcasts it to observers with the owner excluded. This removes
-dependence on the nearby receiver list for owner delivery, without sending a
-duplicate remove/add delta to the owner. The existing multi-message broadcast
-handles that exclusion in both packet-buffer configurations. If the owner still
-sees armor, owner delivery alone does not resolve the rendering difference.
+Changing an appearance sends a CREO6 wearable-list clear followed by adds using
+projected indices and counts. Normal equipment changes rebuild this projection
+when appearances are active. Owner delivery is explicit, with observers receiving
+the same delta once. Observer slotted-object creation skips every covered target
+so real item templates do not overwrite cosmetic baseline entries after zoning.
 
-Explicit owner delivery also left the wearer displaying armor. The next
-experiment keeps the working observer equipment updates and sends owner-only
-containment links: detach the chest visually and attach the duster to the
-creature in arrangement 4. No server parent, slot, or containment type is changed.
-Removing the appearance sends each object's actual server containment back to
-the owner, including during automatic cleanup. Sending the owner's slotted
-objects on reload/travel reapplies the visual links after the real objects arrive.
+Owner-only visual containment links place covered real items in the inventory
+and attach cosmetic sources to the creature. The updated DEV client classifies
+all covered real items as equipped at the inventory color decision, and gives
+all explicit cosmetic sources the accepted yellow highlight. Actual containment
+is restored before removal or equipment changes, then remaining appearances are
+reapplied. Removing one cosmetic removes only that selection. Removing real gear
+reanchors its cosmetic to any remaining covered item; removing its last covered
+item clears that selection. Moving a source or its containing bag clears affected
+selections while retaining unrelated ones.
 
-The latest revision links the chest to the owner's inventory on the client
-instead of detaching it to a null parent, so it should remain visible and
-accessible. The chest remains equipped on the server. Its client equipment
-indicator may therefore differ from its actual server state. This is still a
-containment experiment, not a finished independent appearance UI. The owner's
-equipment panel displays the duster; the duster may disappear from its original
-visible container while appearance is active. Removing appearance restores each
-item's actual server parent, including the original nested bag for the duster.
-Use Remove Appearance from the duster's radial to restore the real display before
-normal inventory/equipment operations. Test restoration before adopting this
-approach for ordinary gameplay. Inventory visibility and nested-container
-selection in this revision require client testing.
+## Persistence and compatibility
 
-The source and target object IDs are now serialized on CreatureObject. Older
-characters default to zero IDs. The transient rendering cache is rebuilt from
-validated live items before the first baseline after database load. Invalid
-selections are cleared and marked for database saving. Removing the chest, moving/removing the duster, or moving
-any container holding the duster clears the selection, even when moving that
-container elsewhere within the player's own storage. Removal notifications are
-also forwarded to the owning player indoors when the root parent is a building.
-Changing the duster's colors requires selecting Equip Appearance
-again after removing the appearance, because customization is captured on use.
+`appearanceSourceObjectIDs` is a serialized CreatureObject vector. Old characters
+start with an empty vector. The previous single source/target fields remain for
+migration: the saved source is validated and moved to the new collection on load,
+then the legacy fields are zeroed. Targets and slot reservations are reconstructed
+from current equipment before the first baseline, rather than persisted separately.
+Invalid, duplicate or conflicting saved selections are removed and marked dirty.
+No SQL schema change is needed. Customization is captured on selection or restore;
+remove/reapply an appearance after changing its colors.
 
-## Files
+The existing `Core3.AppearanceEquipment.ClientStateMarkers` option still defaults
+to false. Keep it enabled only on the isolated test server with both clients
+updated to version 8. Version 6/7 marker caches understand only one selection;
+unpatched clients do not understand the reserved containment arrangements.
+This remains a DEV prototype without client capability negotiation.
 
-- `CreatureObject.idl` and `CreatureObjectImplementation.cpp`: validation, apply,
-  clear, inventory removal handling, and owner-only containment messages.
-- `WearablesDeltaVector.h`: temporary visual state and equipment serialization.
-- `TangibleObjectMenuComponent.cpp`: the two radial actions for this duster.
-- `ContainerComponent.cpp`: appearance cleanup notifications to the owner when
-  the root parent is a building or another object above the player.
+Version 8 consumes a reset marker, then each source marker followed by all its
+target markers. Caches contain IDs only, with bounds of 64 sources and 256 targets;
+the server rejects selections exceeding those bounds before applying them.
 
-No Engine3, client assets, database schema, or packet layout changes are required
-by this prototype. Client compatibility is unverified: the client may reconcile
-the chest's object ID with its original template or containment updates. The
-robe may also visually cover other armor even though only the chest entry is
-substituted. This experiment does not implement multi-slot cosmetic outfits.
+## Files and validation
 
-## Debian build and client verification
+- CreatureObject.idl / CreatureObjectImplementation.cpp: persistent collection,
+  legacy migration, validation, lifecycle rebuilding, containment and delivery.
+- WearablesDeltaVector.h: projected baseline/delta serialization and slot checks.
+- TangibleObjectMenuComponent.cpp: independent Equip/Remove Appearance actions.
+- ../client-extensions/appearance/: tracked native source, installer and tests.
 
-Regenerate the CreatureObject interfaces through the normal IDL build and do a
-clean Core3 rebuild using the existing Debian workflow. Do not manually edit
-generated headers. Start the server under GDB.
+Native ABI/marker tests and four-export Direct3D forwarding smoke tests passed.
+The actual WearablesDeltaVector header also passes an isolated projection test
+with engine stand-ins: baseline counts, target suppression, slot conflicts,
+list reset/add counters, selective removal and preserved armor protection.
+These checks do not replace a Debian server build or gameplay testing.
 
-1. Equip a composite chest and keep the ordinary gunman's duster in inventory.
-   Repeat with the duster in a bag, in a bag inside another bag, and inside an
-   equipped wearable container. Record armor protection, condition, encumbrance,
-   and skill modifiers. Verify the radial is absent for items in bank storage.
-2. Select Equip Appearance. Verify the duster and its colors on the wearer and
-   a second player's client. Confirm the chest remains equipped and the duster
-   remains in inventory with no additional equipment modifiers.
-   On the wearer's client, verify the chest remains visible in inventory while
-   the duster is displayed on the character. The duster's actual server storage
-   remains its original container, even though its client representation is worn.
-3. Compare combat protection and armor condition loss before and after applying
-   the appearance. The armor must continue supplying protection and taking decay.
-4. Select Remove Appearance. The original chest visual must return on both clients.
-   Repeat toggling; there must be no duplicate objects or additional modifiers.
-   For the containment experiment, also confirm the duster returns to the owner's
-   inventory display and the chest returns to the equipment panel. Record whether
-   the duster radial remains accessible while visually equipped. Do not use normal
-   Equip/Unequip actions as a substitute for Remove Appearance during this test.
-5. Test a second observer entering range, zone travel, and equipping another item.
-   Check whether the client restores the armor visual from containment updates.
-   If toggling has no visible effect, have the observer leave visibility range
-   completely and return with the appearance still active. Record whether the
-   newly received equipment baseline displays the duster. This distinguishes an
-   update problem from a rendering or object identity limitation.
-6. Move the duster, trade it, drop it, and destroy it in separate tests. Also move
-   a containing bag or an outer bag while appearance is active, indoors and
-   outdoors. Each removal must restore the chest visual and release appearance
-   slot reservations. Unequip or
-   replace the chest while the appearance is active; the selection must clear.
-7. Restart the server and verify normal armor appearance and intact inventory.
-   Also test relog, death/cloning, incompatible species, and attempts without the
-   composite chest. Invalid selections must not alter actual equipment.
-8. Keep two ordinary gunman's dusters in inventory. Apply the first, then attempt
-   Equip Appearance on the second. It must report an occupied appearance slot
-   and preserve the first item's appearance on both clients. Remove the first
-   appearance and apply the second; it must succeed. Repeat after automatic
-   cleanup by moving the first duster out of inventory. Future multi-item tests
-   must include partial overlaps with biceps/bracers and disjoint arrangements.
+Regenerate IDL interfaces through the normal Debian build and perform a clean
+Core3 rebuild. Do not hand-edit generated headers or Engine3. The client update
+is installed only in C:/Stardust-DEV. Original post-processing DLL/configuration
+were verified unchanged; C:/Stardust remains protected.
 
-Client tests have verified the rendering method, normal versus cosmetic
-highlights, nested backpack restoration, observer zoning, and reconnect behavior.
-The new serialized selection still requires a Debian build and restart testing.
+## Gameplay verification
 
-
-## Persistent selection validation
-
-CreatureObject.idl adds appearanceSourceObjectID and appearanceTargetObjectID
-as normal serialized unsigned-long fields, plus a transient restore-pending
-flag and a local native restoreAppearanceSelection method. initializeMembers
-sets zero defaults; initializeTransientMembers clears only the runtime visual
-cache and flags saved IDs for reconstruction. Before the first baseline in a
-zone, reconstruction validates both objects, exact prototype templates, source
-inventory/worn-container ancestry and permissions, equipped chest membership,
-shared arrangements, and normal equip eligibility (allowing slot occupancy).
-Customization and reserved slots come from the current source object.
-
-Equip saves both IDs and marks the creature dirty through updateToDatabase.
-Manual/automatic clear saves zero IDs. No item is duplicated or moved and no
-new SQL schema, client packet layout, Engine3 source or client binary is needed.
-The existing version-6 client markers are emitted from reconstructed state.
-
-Rebuild on Debian with CreatureObject IDL regeneration. After that build,
-equip appearance again so the new IDs can be saved; pre-upgrade transient
-selections cannot be recovered. Use a graceful server shutdown/restart to test
-saving, then verify both clients, both inventory highlights, and Remove
-Appearance. Also remove appearance and restart to confirm it stays removed;
-repeat with a nested backpack source. Verify an older character loads with no
-selection. Persistence and generated interfaces are not compiled/tested locally.
+1. Keep the established duster/composite case working, including both highlights.
+2. Equip composite chest, biceps and bracers, then the duster appearance. Observe
+   from both clients: one duster, all covered armor hidden, all real armor still
+   equipped and highlighted normally. Confirm protection/encumbrance stay intact.
+3. Add a disjoint cosmetic, such as shoes over equipped boots. Both appearances
+   should display and receive the alternate highlight.
+4. Reject a second chest/arm appearance without changing either active selection.
+5. Remove either appearance independently, in both orders, restoring only its gear.
+6. Unequip/re-equip covered real armor, including the anchor item; verify remaining
+   coverage and unrelated appearances. Removing the last covered wearable should
+   clear only its cosmetic. Also change unrelated equipped gear.
+7. Repeat nested-bag, bag-transfer cleanup, zoning/observer, relog and server-restart
+   tests with multiple selections. Load the previously saved single duster selection
+   to verify migration, then restart again with multiple selections saved.

@@ -33,17 +33,21 @@ private:
 protected:
 	VectorMap<uint8, Vector<ManagedReference<ArmorObject*> > > protectionArmorMap;
 
-	// Temporary client appearance test; these values are deliberately not serialized.
-	uint64 appearanceTargetID;
-	uint64 appearanceSourceID;
-	uint32 appearanceCRC;
-	int appearanceArrangement;
-	String appearanceCustomization;
-	Vector<String> appearanceSlots;
+public:
+	struct AppearanceSelection {
+		uint64 sourceID;
+		Vector<uint64> targets;
+		uint32 crc;
+		String customization;
+		Vector<String> slots;
+	};
+
+protected:
+	// Derived from the creature's persisted source IDs and current equipment.
+	Vector<AppearanceSelection> appearances;
 
 public:
-
-	WearablesDeltaVector() : DeltaVector<ManagedReference<TangibleObject*> >(), appearanceTargetID(0), appearanceSourceID(0), appearanceCRC(0), appearanceArrangement(4) {
+	WearablesDeltaVector() : DeltaVector<ManagedReference<TangibleObject*> >() {
 		protectionArmorMap.setAllowOverwriteInsertPlan();
 
 		//addSerializableVariable("protectionArmorMap", &protectionArmorMap);
@@ -114,77 +118,127 @@ public:
 
 	void insertItemToMessage(ManagedReference<TangibleObject*>* item, BaseMessage* msg) const override {
 		TangibleObject* object = item->get();
-
-		if (appearanceTargetID != 0 && object->getObjectID() == appearanceTargetID) {
-			msg->insertAscii(appearanceCustomization);
-			msg->insertInt(appearanceArrangement);
-			msg->insertLong(object->getObjectID());
-			msg->insertInt(appearanceCRC);
-			return;
+		for (int i = 0; i < appearances.size(); ++i) {
+			const AppearanceSelection& appearance = appearances.get(i);
+			if (appearance.targets.size() != 0 && appearance.targets.get(0) == object->getObjectID()) {
+				msg->insertAscii(appearance.customization);
+				msg->insertInt(4);
+				msg->insertLong(object->getObjectID());
+				msg->insertInt(appearance.crc);
+				return;
+			}
 		}
+		String customization;
+		object->getCustomizationString(customization);
+		msg->insertAscii(customization);
+		msg->insertInt(object->getContainmentType());
+		msg->insertLong(object->getObjectID());
+		msg->insertInt(object->getClientObjectCRC());
+	}
 
-		String custString;
-		object->getCustomizationString(custString);
+	bool isSuppressed(uint64 targetID) const {
+		for (int i = 0; i < appearances.size(); ++i) {
+			const Vector<uint64>& targets = appearances.get(i).targets;
+			if (targets.contains(targetID))
+				return targets.get(0) != targetID;
+		}
+		return false;
+	}
 
-		msg->insertAscii(custString);
-		msg->insertInt(object->getContainmentType()); //Equipped
-		msg->insertLong(object->getObjectID()); //object id
-		msg->insertInt(object->getClientObjectCRC()); //CRC of the object
+	void insertToMessage(BaseMessage* message) const override {
+		ReadLocker locker(getLock());
+		int count = 0;
+		for (int i = 0; i < size(); ++i) {
+			if (!isSuppressed(get(i)->getObjectID()))
+				++count;
+		}
+		message->insertInt(count);
+		message->insertInt(updateCounter);
+		for (int i = 0; i < size(); ++i) {
+			if (!isSuppressed(get(i)->getObjectID()))
+				insertItemToMessage(&get(i), message);
+		}
+	}
+
+	Vector<AppearanceSelection> getAppearances() const {
+		ReadLocker locker(getLock());
+		return appearances;
 	}
 
 	uint64 getAppearanceSourceID() const {
 		ReadLocker locker(getLock());
-		return appearanceSourceID;
+		return appearances.size() == 0 ? 0 : appearances.get(0).sourceID;
 	}
 
-	uint64 getAppearanceTargetID() const {
+	bool isAppearanceEquipped(uint64 sourceID) const {
 		ReadLocker locker(getLock());
-		return appearanceTargetID;
+		for (int i = 0; i < appearances.size(); ++i) {
+			if (appearances.get(i).sourceID == sourceID)
+				return true;
+		}
+		return false;
+	}
+
+	bool isAppearanceTarget(uint64 targetID) const {
+		ReadLocker locker(getLock());
+		for (int i = 0; i < appearances.size(); ++i) {
+			if (appearances.get(i).targets.contains(targetID))
+				return true;
+		}
+		return false;
 	}
 
 	String getAppearanceSlotConflict(uint64 sourceID, const Vector<String>& slots) const {
 		ReadLocker locker(getLock());
-		if (appearanceSourceID == 0 || appearanceSourceID == sourceID)
-			return "";
-
-		for (int i = 0; i < slots.size(); ++i) {
-			if (appearanceSlots.contains(slots.get(i)))
-				return slots.get(i);
+		for (int i = 0; i < appearances.size(); ++i) {
+			const AppearanceSelection& appearance = appearances.get(i);
+			if (appearance.sourceID == sourceID)
+				continue;
+			for (int j = 0; j < slots.size(); ++j) {
+				if (appearance.slots.contains(slots.get(j)))
+					return slots.get(j);
+			}
 		}
 		return "";
 	}
 
-	void setAppearance(uint64 targetID, uint64 sourceID, uint32 crc, int arrangement, const String& customization, const Vector<String>& slots) {
+	void addAppearance(const AppearanceSelection& appearance) {
 		Locker locker(getLock());
-		appearanceTargetID = targetID;
-		appearanceSourceID = sourceID;
-		appearanceCRC = crc;
-		appearanceArrangement = arrangement;
-		appearanceCustomization = customization;
-		appearanceSlots = slots;
+		appearances.add(appearance);
 	}
 
-	void clearAppearance() {
+	void clearAppearance(uint64 sourceID = 0) {
 		Locker locker(getLock());
-		appearanceTargetID = 0;
-		appearanceSourceID = 0;
-		appearanceCRC = 0;
-		appearanceCustomization = "";
-		appearanceSlots.removeAll();
-	}
-
-	void refreshAppearanceEntry(int index, DeltaMessage* message) {
-		Locker locker(getLock());
-		if (message == nullptr || index < 0 || index >= size())
+		if (sourceID == 0) {
+			appearances.removeAll();
 			return;
+		}
+		for (int i = appearances.size() - 1; i >= 0; --i) {
+			if (appearances.get(i).sourceID == sourceID)
+				appearances.remove(i);
+		}
+	}
 
-		// Rebuild the client wearable without removing the actual armor or its protection.
-		message->startList(2, getNewUpdateCounter(2));
-		message->insertByte(0);
-		message->insertShort(index);
-		message->insertByte(1);
-		message->insertShort(index);
-		insertItemToMessage(&get(index), message);
+	void refreshAppearance(DeltaMessage* message) {
+		Locker locker(getLock());
+		if (message == nullptr)
+			return;
+		int count = 0;
+		for (int i = 0; i < size(); ++i) {
+			if (!isSuppressed(get(i)->getObjectID()))
+				++count;
+		}
+		// Reset the projected client list; gameplay equipment and armor stay intact.
+		message->startList(count + 1, getNewUpdateCounter(count + 1));
+		message->insertByte(4);
+		int index = 0;
+		for (int i = 0; i < size(); ++i) {
+			if (isSuppressed(get(i)->getObjectID()))
+				continue;
+			message->insertByte(1);
+			message->insertShort(index++);
+			insertItemToMessage(&get(i), message);
+		}
 	}
 
 	bool add(const ManagedReference<TangibleObject*>& element, DeltaMessage* message = nullptr, int updates = 1) override {

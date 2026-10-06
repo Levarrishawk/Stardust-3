@@ -38,6 +38,7 @@ import system.thread.ReadWriteLock;
 import server.zone.objects.creature.credits.CreditObject;
 include engine.util.u3d.Vector3;
 include system.util.SortedVector;
+include system.util.Vector;
 include system.lang.ref.WeakReference;
 include engine.log.Logger;
 include server.zone.CloseObjectsVector;
@@ -89,6 +90,8 @@ class CreatureObject extends TangibleObject {
 
 	@dereferenced
 	protected WearablesDeltaVector wearablesVector;
+	@dereferenced
+	protected Vector<unsigned long> appearanceSourceObjectIDs;
 	protected unsigned long appearanceSourceObjectID;
 	protected unsigned long appearanceTargetObjectID;
 	protected transient boolean appearanceRestorePending;
@@ -774,13 +777,21 @@ class CreatureObject extends TangibleObject {
 	public native boolean isAppearanceInventoryItem(SceneObject object);
 
 	@preLocked
-	public native void clearAppearance(boolean notifyClient = true);
+	public native void clearAppearance(boolean notifyClient = true, unsigned long sourceID = 0);
 
 	@local
 	public native void sendAppearanceToOwner(boolean restore = false);
 
 	@local
 	public native void restoreAppearanceSelection();
+
+	@local
+	public native boolean cacheAppearanceSelection(TangibleObject object);
+
+	@read
+	public boolean isAppearanceEquipped(unsigned long sourceID) {
+		return wearablesVector.isAppearanceEquipped(sourceID);
+	}
 
 	public native int notifyObjectRemovedFromChild(SceneObject object, SceneObject child);
 
