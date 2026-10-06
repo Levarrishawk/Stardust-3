@@ -26,6 +26,7 @@
 #include "server/zone/packets/creature/CreatureObjectDeltaMessage4.h"
 #include "server/zone/packets/creature/CreatureObjectDeltaMessage6.h"
 #include "server/zone/packets/chat/ChatSystemMessage.h"
+#include "server/zone/packets/scene/UpdateContainmentMessage.h"
 #include "server/zone/packets/object/CombatSpam.h"
 #include "server/zone/packets/object/PostureMessage.h"
 #include "server/zone/packets/object/SitOnObject.h"
@@ -540,8 +541,15 @@ void CreatureObjectImplementation::sendSlottedObjectsTo(SceneObject* player) {
 		e.printStackTrace();
 	}
 
-	if (player == asCreatureObject())
+	if (player == asCreatureObject()) {
+		if (wearablesVector.getAppearanceSourceID() == 0 &&
+				ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false)) {
+			ManagedReference<SceneObject*> parent = getParent().get();
+			sendMessage(new UpdateContainmentMessage(getObjectID(),
+					parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0100));
+		}
 		sendAppearanceToOwner();
+	}
 }
 
 void CreatureObjectImplementation::sendSystemMessage(const String& message) {
@@ -4263,6 +4271,7 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 
 	ManagedReference<SceneObject*> target = zoneServer->getObject(targetID);
 	ManagedReference<SceneObject*> source = zoneServer->getObject(sourceID);
+	bool clientStateMarkers = ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false);
 	if (restore) {
 		// Restore actual containment, including a null parent during item removal.
 		if (source != nullptr) {
@@ -4273,6 +4282,11 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 			ManagedReference<SceneObject*> parent = target->getParent().get();
 			sendMessage(target->link(parent != nullptr ? parent->getObjectID() : 0, target->getContainmentType()));
 		}
+		if (clientStateMarkers) {
+			ManagedReference<SceneObject*> parent = getParent().get();
+			sendMessage(new UpdateContainmentMessage(getObjectID(),
+					parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0100));
+		}
 		return;
 	}
 
@@ -4282,6 +4296,14 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 		return;
 
 	// Only the owner's client sees these links; server equipment is never transferred.
+	if (clientStateMarkers) {
+		ManagedReference<SceneObject*> sourceParent = source->getParent().get();
+		if (sourceParent == nullptr)
+			return;
+		// Reserved arrangements are consumed by the experimental client before containment is applied.
+		sendMessage(new UpdateContainmentMessage(sourceID, sourceParent->getObjectID(), 0x7FFF0101));
+		sendMessage(new UpdateContainmentMessage(targetID, getObjectID(), 0x7FFF0102));
+	}
 	sendMessage(target->link(inventory->getObjectID(), 0xFFFFFFFF));
 	sendMessage(source->link(getObjectID(), 4));
 }
