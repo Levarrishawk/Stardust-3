@@ -7,13 +7,31 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <type_traits>
+#include <utility>
 using uint64=uint64_t;using uint32=uint32_t;using uint16=uint16_t;using uint8=uint8_t;
 class ObjectOutputStream {public: int getOffset(){return 0;}void writeInt(int){}void writeInt(int,int){}void writeShort(int){}void writeShort(int,int){}};
 class ObjectInputStream {public: int readShort(){return 0;}int readInt(){return 0;}int getOffset(){return 0;}void setOffset(int){}};
 class String:public std::string {public:using std::string::string; String()=default; String(const char*s):std::string(s){}bool toBinaryStream(ObjectOutputStream*){return true;}bool parseFromBinaryStream(ObjectInputStream*){return true;} };
-template<class T>class Vector { std::vector<T> v;public:Vector()=default;int size()const{return (int)v.size();}bool isEmpty()const{return v.empty();}T&get(int i)const{return const_cast<T&>(v.at(i));}void add(const T&t){v.push_back(t);}void remove(int i){v.erase(v.begin()+i);}void removeAll(){v.clear();}bool contains(const T&t)const{return std::find(v.begin(),v.end(),t)!=v.end();}bool removeElement(const T&t){auto i=std::find(v.begin(),v.end(),t);if(i==v.end())return false;v.erase(i);return true;} };
+template<class T>class ArrayList { std::vector<T> v;public:ArrayList()=default;int size()const{return (int)v.size();}bool isEmpty()const{return v.empty();}T&get(int i)const{return const_cast<T&>(v.at(i));}void add(const T&t){v.push_back(t);}void remove(int i){v.erase(v.begin()+i);}void removeAll(){v.clear();}bool contains(const T&t)const{return std::find(v.begin(),v.end(),t)!=v.end();}bool removeElement(const T&t){auto i=std::find(v.begin(),v.end(),t);if(i==v.end())return false;v.erase(i);return true;} };
+// Engine Vector's virtual stream functions instantiate element serialization,
+// even for a runtime-only vector. ArrayList has no such virtual stream contract.
+template<class T,class=void>struct HasStreams:std::false_type {};
+template<class T>struct HasStreams<T,std::void_t<
+ decltype(std::declval<T&>().toBinaryStream((ObjectOutputStream*)nullptr)),
+ decltype(std::declval<T&>().parseFromBinaryStream((ObjectInputStream*)nullptr))>>:std::true_type {};
+template<class T>class Vector:public ArrayList<T> {
+public:
+ virtual ~Vector()=default;
+ virtual bool toBinaryStream(ObjectOutputStream*) {
+  static_assert(std::is_arithmetic<T>::value || HasStreams<T>::value,"Engine Vector element requires toBinaryStream and parseFromBinaryStream");return true;
+ }
+ virtual bool parseFromBinaryStream(ObjectInputStream*) {
+  static_assert(std::is_arithmetic<T>::value || HasStreams<T>::value,"Engine Vector element requires toBinaryStream and parseFromBinaryStream");return true;
+ }
+};
 template<class K,class V>class VectorMap {std::map<K,V> v;public:void setAllowOverwriteInsertPlan(){} V get(K k)const{auto i=v.find(k);return i==v.end()?V():i->second;}void drop(K k){v.erase(k);}void put(K k,const V&value){v[k]=value;}};
-template<class T>class ManagedReference {T v;public:ManagedReference(T t=nullptr):v(t){}T get()const{return v;}T operator->()const{return v;} operator T()const{return v;}bool operator==(const ManagedReference&o)const{return v==o.v;}bool operator==(T t)const{return v==t;}};
+template<class T>class ManagedReference {T v;public:ManagedReference(T t=nullptr):v(t){}bool toBinaryStream(ObjectOutputStream*){return true;}bool parseFromBinaryStream(ObjectInputStream*){return true;}T get()const{return v;}T operator->()const{return v;} operator T()const{return v;}bool operator==(const ManagedReference&o)const{return v==o.v;}bool operator==(T t)const{return v==t;}};
 template<class T,class U>T cast(U u){return static_cast<T>(u);}
 struct ReadLocker {explicit ReadLocker(void*){}};struct Locker {explicit Locker(void*){}};
 struct Event {char kind;uint64 value;String text;};

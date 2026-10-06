@@ -43,8 +43,8 @@ public:
 	};
 
 protected:
-	// Derived from the creature's persisted source IDs and current equipment.
-	Vector<AppearanceSelection> appearances;
+	// Runtime-only records; ArrayList avoids Vector's virtual element serialization.
+	ArrayList<AppearanceSelection> appearances;
 
 public:
 	WearablesDeltaVector() : DeltaVector<ManagedReference<TangibleObject*> >() {
@@ -160,7 +160,7 @@ public:
 		}
 	}
 
-	Vector<AppearanceSelection> getAppearances() const {
+	ArrayList<AppearanceSelection> getAppearances() const {
 		ReadLocker locker(getLock());
 		return appearances;
 	}

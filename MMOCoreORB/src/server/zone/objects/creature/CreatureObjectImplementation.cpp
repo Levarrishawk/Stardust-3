@@ -4307,7 +4307,7 @@ bool CreatureObjectImplementation::cacheAppearanceSelection(TangibleObject* sour
 	}
 	if (selection.targets.size() == 0)
 		return false;
-	Vector<WearablesDeltaVector::AppearanceSelection> current = wearablesVector.getAppearances();
+	ArrayList<WearablesDeltaVector::AppearanceSelection> current = wearablesVector.getAppearances();
 	int count = selection.targets.size();
 	for (int i = 0; i < current.size(); ++i)
 		count += current.get(i).targets.size();
@@ -4365,7 +4365,7 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 		ManagedReference<SceneObject*> parent = getParent().get();
 		sendMessage(new UpdateContainmentMessage(getObjectID(), parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0100));
 	}
-	Vector<WearablesDeltaVector::AppearanceSelection> appearances = wearablesVector.getAppearances();
+	ArrayList<WearablesDeltaVector::AppearanceSelection> appearances = wearablesVector.getAppearances();
 	for (int i = 0; i < appearances.size(); ++i) {
 		const WearablesDeltaVector::AppearanceSelection& selection = appearances.get(i);
 		ManagedReference<SceneObject*> source = zoneServer->getObject(selection.sourceID);

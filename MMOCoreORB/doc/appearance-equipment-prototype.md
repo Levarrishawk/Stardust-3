@@ -44,7 +44,9 @@ migration: the saved source is validated and moved to the new collection on load
 then the legacy fields are zeroed. Targets and slot reservations are reconstructed
 from current equipment before the first baseline, rather than persisted separately.
 Invalid, duplicate or conflicting saved selections are removed and marked dirty.
-No SQL schema change is needed. Customization is captured on selection or restore;
+The transient selection records use Engine3 ArrayList rather than Vector: Vector
+instantiates element serialization even when the collection is not saved. Only
+the source-ID Vector is persisted. No SQL schema change is needed. Customization is captured on selection or restore;
 remove/reapply an appearance after changing its colors.
 
 The existing `Core3.AppearanceEquipment.ClientStateMarkers` option still defaults
