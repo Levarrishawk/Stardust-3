@@ -4138,6 +4138,24 @@ void CreatureObjectImplementation::createChildObjects() {
 	}
 }
 
+bool CreatureObjectImplementation::isAppearanceInventoryItem(SceneObject* object) {
+	if (object == nullptr || !isPlayerCreature())
+		return false;
+
+	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
+	ManagedReference<SceneObject*> parent = object->getParent().get();
+	while (parent != nullptr && parent != asCreatureObject()) {
+		if (inventory != nullptr && parent == inventory)
+			return true;
+
+		ManagedReference<SceneObject*> nextParent = parent->getParent().get();
+		if (parent->isWearableContainerObject() && nextParent == asCreatureObject())
+			return true;
+		parent = nextParent;
+	}
+	return false;
+}
+
 bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 	if (!isPlayerCreature() || object == nullptr || !object->isWearableObject() || object->isDestroyed())
 		return false;
@@ -4146,13 +4164,14 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 		return false;
 
 	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
-	if (inventory == nullptr || object->getParent() != inventory || containsActiveSession(SessionFacadeType::TRADE)) {
-		sendSystemMessage("Keep the gunman's duster directly in your inventory and finish any trade first.");
+	if (inventory == nullptr || !isAppearanceInventoryItem(object) || containsActiveSession(SessionFacadeType::TRADE)) {
+		sendSystemMessage("Keep the gunman's duster in your inventory or a carried wearable container and finish any trade first.");
 		return false;
 	}
 
-	if (!object->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVECONTAINER) ||
-			!inventory->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVEOUT))
+	ManagedReference<SceneObject*> objectParent = object->getParent().get();
+	if (objectParent == nullptr || !object->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVECONTAINER) ||
+			!objectParent->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVEOUT))
 		return false;
 
 	String errorDescription;
@@ -4179,13 +4198,28 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 
 	Locker chestLocker(chest, asCreatureObject());
 	int index = wearablesVector.find(chest);
-	if (index == -1 || chest->getParent() != asCreatureObject())
+	if (index == -1 || chest->getParent() != asCreatureObject() || !isAppearanceInventoryItem(object))
 		return false;
 
 	if (object->getArrangementDescriptorSize() == 0)
 		return false;
 
 	const Vector<String>* descriptors = object->getArrangementDescriptor(0);
+	if (descriptors == nullptr || descriptors->size() == 0)
+		return false;
+
+	String occupiedSlot = wearablesVector.getAppearanceSlotConflict(object->getObjectID(), *descriptors);
+	if (!occupiedSlot.isEmpty()) {
+		sendSystemMessage("An appearance item already occupies slot " + occupiedSlot + ". Remove its appearance first.");
+		return false;
+	}
+
+	uint64 appearanceSourceID = wearablesVector.getAppearanceSourceID();
+	if (appearanceSourceID != 0 && appearanceSourceID != object->getObjectID()) {
+		sendSystemMessage("This prototype supports one appearance item. Remove the current appearance first.");
+		return false;
+	}
+
 	bool sharedSlot = false;
 	for (int i = 0; i < descriptors->size(); ++i) {
 		if (getSlottedObject(descriptors->get(i)) == chest) {
@@ -4201,7 +4235,7 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 
 	String customization;
 	object->getCustomizationString(customization);
-	wearablesVector.setAppearance(chest->getObjectID(), object->getObjectID(), object->getClientObjectCRC(), 4, customization);
+	wearablesVector.setAppearance(chest->getObjectID(), object->getObjectID(), object->getClientObjectCRC(), 4, customization, *descriptors);
 
 	CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
 	msg->startUpdate(0x0F);
@@ -4244,11 +4278,11 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 
 	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
 	if (inventory == nullptr || target == nullptr || source == nullptr ||
-			target->getParent() != asCreatureObject() || source->getParent() != inventory)
+			target->getParent() != asCreatureObject() || !isAppearanceInventoryItem(source))
 		return;
 
 	// Only the owner's client sees these links; server equipment is never transferred.
-	sendMessage(target->link((uint64) 0, 0xFFFFFFFF));
+	sendMessage(target->link(inventory->getObjectID(), 0xFFFFFFFF));
 	sendMessage(source->link(getObjectID(), 4));
 }
 
@@ -4284,8 +4318,17 @@ int CreatureObjectImplementation::notifyObjectRemovedFromChild(SceneObject* obje
 		return TangibleObjectImplementation::notifyObjectRemovedFromChild(object, child);
 
 	Locker locker(asCreatureObject(), object);
-	if (object->getObjectID() == wearablesVector.getAppearanceSourceID())
+	uint64 sourceID = wearablesVector.getAppearanceSourceID();
+	if (object->getObjectID() == sourceID) {
 		clearAppearance();
+	} else if (sourceID != 0) {
+		auto zoneServer = getZoneServer();
+		if (zoneServer != nullptr) {
+			ManagedReference<SceneObject*> source = zoneServer->getObject(sourceID);
+			if (source != nullptr && source->isASubChildOf(object))
+				clearAppearance();
+		}
+	}
 
 	return TangibleObjectImplementation::notifyObjectRemovedFromChild(object, child);
 }

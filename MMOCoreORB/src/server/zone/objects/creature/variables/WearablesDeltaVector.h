@@ -39,6 +39,7 @@ protected:
 	uint32 appearanceCRC;
 	int appearanceArrangement;
 	String appearanceCustomization;
+	Vector<String> appearanceSlots;
 
 public:
 
@@ -141,13 +142,26 @@ public:
 		return appearanceTargetID;
 	}
 
-	void setAppearance(uint64 targetID, uint64 sourceID, uint32 crc, int arrangement, const String& customization) {
+	String getAppearanceSlotConflict(uint64 sourceID, const Vector<String>& slots) const {
+		ReadLocker locker(getLock());
+		if (appearanceSourceID == 0 || appearanceSourceID == sourceID)
+			return "";
+
+		for (int i = 0; i < slots.size(); ++i) {
+			if (appearanceSlots.contains(slots.get(i)))
+				return slots.get(i);
+		}
+		return "";
+	}
+
+	void setAppearance(uint64 targetID, uint64 sourceID, uint32 crc, int arrangement, const String& customization, const Vector<String>& slots) {
 		Locker locker(getLock());
 		appearanceTargetID = targetID;
 		appearanceSourceID = sourceID;
 		appearanceCRC = crc;
 		appearanceArrangement = arrangement;
 		appearanceCustomization = customization;
+		appearanceSlots = slots;
 	}
 
 	void clearAppearance() {
@@ -156,6 +170,7 @@ public:
 		appearanceSourceID = 0;
 		appearanceCRC = 0;
 		appearanceCustomization = "";
+		appearanceSlots.removeAll();
 	}
 
 	void refreshAppearanceEntry(int index, DeltaMessage* message) {

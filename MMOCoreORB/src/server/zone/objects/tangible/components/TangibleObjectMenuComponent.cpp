@@ -21,8 +21,7 @@ void TangibleObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObjec
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
 
 	if (player->isPlayerCreature() && tano->getServerObjectCRC() == String("object/tangible/wearables/robe/robe_s27.iff").hashCode()) {
-		ManagedReference<SceneObject*> inventory = player->getSlottedObject("inventory");
-		if (inventory != nullptr && tano->getParent() == inventory) {
+		if (player->isAppearanceInventoryItem(tano)) {
 			if (player->getAppearanceSourceID() == tano->getObjectID())
 				menuResponse->addRadialMenuItem(221, 3, "Remove Appearance");
 			else
@@ -78,8 +77,7 @@ int TangibleObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject
 
 	if ((selectedID == 220 || selectedID == 221) && player->isPlayerCreature() &&
 			tano->getServerObjectCRC() == String("object/tangible/wearables/robe/robe_s27.iff").hashCode()) {
-		ManagedReference<SceneObject*> inventory = player->getSlottedObject("inventory");
-		if (inventory == nullptr || tano->getParent() != inventory)
+		if (!player->isAppearanceInventoryItem(tano))
 			return 0;
 
 		if (selectedID == 220)

@@ -468,6 +468,18 @@ bool ContainerComponent::removeObject(SceneObject* sceneObject, SceneObject* obj
 	} else {
 		ManagedReference<SceneObject*> rootParent = sceneObject->getRootParent();
 
+		// Indoors, the root may be a building rather than the owner of a nested item.
+		ManagedReference<SceneObject*> playerParent;
+		if (sceneObject->isPlayerCreature())
+			playerParent = sceneObject;
+		else
+			playerParent = sceneObject->getParentRecursively(SceneObjectType::PLAYERCREATURE);
+		if (playerParent != nullptr && playerParent != rootParent) {
+			CreatureObject* player = cast<CreatureObject*>(playerParent.get());
+			if (player->getAppearanceSourceID() != 0)
+				player->notifyObjectRemovedFromChild(object, sceneObject);
+		}
+
 		if (rootParent != nullptr) {
 			rootParent->notifyObjectRemovedFromChild(object, sceneObject);
 		} else {

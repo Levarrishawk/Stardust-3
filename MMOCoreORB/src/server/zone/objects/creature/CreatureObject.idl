@@ -767,6 +767,9 @@ class CreatureObject extends TangibleObject {
 	@preLocked
 	public native boolean equipAppearance(TangibleObject object);
 
+	@read
+	public native boolean isAppearanceInventoryItem(SceneObject object);
+
 	@preLocked
 	public native void clearAppearance(boolean notifyClient = true);
 
