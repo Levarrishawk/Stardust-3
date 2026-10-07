@@ -5,7 +5,10 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Diagnostic call-site hooks only. Object metadata is read in bounded snapshots. */
+/* Set to 1 only for local diagnostics; distributed builds log startup status only. */
+#ifndef APPEARANCE_DIAGNOSTICS
+#define APPEARANCE_DIAGNOSTICS 0
+#endif
 typedef void (__attribute__((thiscall)) *WearFunction)(void *, void *);
 typedef void (__attribute__((thiscall)) *ColorFunction)(void *, const DWORD *);
 typedef IDirect3D9 *(WINAPI *CreateFunction)(UINT);
@@ -17,13 +20,19 @@ static CreateFunction create9;
 static BeginFunction beginEvent;
 static EndFunction endEvent;
 static MarkerFunction marker;
+#if APPEARANCE_DIAGNOSTICS
 static WearFunction wear;
+#endif
 static ColorFunction setColor;
 typedef const char *(__attribute__((thiscall)) *NameFunction)(void *);
+#if APPEARANCE_DIAGNOSTICS
 static NameFunction templateName;
+#endif
 typedef void (__attribute__((thiscall)) *ContainmentFunction)(void *, const ULONGLONG *, int);
 static ContainmentFunction applyContainment;
+#if APPEARANCE_DIAGNOSTICS
 static LONG containmentCount;
+#endif
 static CRITICAL_SECTION logLock;
 #define MAX_APPEARANCE_SOURCES 64
 #define MAX_APPEARANCE_TARGETS 256
@@ -60,7 +69,9 @@ static void * __attribute__((cdecl)) inventoryParentHook(void *object) {
 }
 
 static char logPath[MAX_PATH];
+#if APPEARANCE_DIAGNOSTICS
 static LONG wearCount, colorCount;
+#endif
 static BOOL installed;
 
 static void logEvent(const char *kind, DWORD site, void *receiver,
@@ -81,6 +92,7 @@ static void logEvent(const char *kind, DWORD site, void *receiver,
 	LeaveCriticalSection(&logLock);
 }
 
+#if APPEARANCE_DIAGNOSTICS
 static BOOL logObject(const char *kind, DWORD site, void *object) {
  DWORD templateAddress = 0, vtable = 0, getter = 0, nameAddress;
  SIZE_T bytes;
@@ -121,6 +133,13 @@ static BOOL logObject(const char *kind, DWORD site, void *object) {
  return strcmp(name, "object/tangible/wearables/robe/shared_robe_s27.iff") == 0;
 }
 
+#else
+static BOOL __attribute__((unused)) logObject(const char *kind, DWORD site, void *object) {
+ (void)kind; (void)site; (void)object; return FALSE;
+}
+#endif
+
+#if APPEARANCE_DIAGNOSTICS
 static void observeWear(DWORD site, void *receiver, void *object) {
 	LONG count = InterlockedIncrement(&wearCount);
 	if (count <= 4096) {
@@ -140,11 +159,15 @@ WEAR_HOOK(wear2, 0x6474e1)
 WEAR_HOOK(wear3, 0x67a0c1)
 WEAR_HOOK(wear4, 0x6ff10d)
 
+#endif
+
 static void __attribute__((stdcall, used, noinline)) observeColor(void *receiver,
  const DWORD *color, void *object) {
  DWORD cyan = 0xff00ffff;
  BOOL cosmetic;
+#if APPEARANCE_DIAGNOSTICS
  logObject("inventory-template", 0x9d71fd, object);
+#endif
  ULONGLONG id = objectID(object);
  EnterCriticalSection(&logLock);
  cosmetic = FALSE;
@@ -152,10 +175,14 @@ static void __attribute__((stdcall, used, noinline)) observeColor(void *receiver
   if (id == appearanceTargets[i].source) { cosmetic = TRUE; break; }
  }
  LeaveCriticalSection(&logLock);
+#if APPEARANCE_DIAGNOSTICS
  if (InterlockedIncrement(&colorCount) <= 8192)
   logEvent("equipped-color", 0x9d71fd, receiver, (void *)color, *color);
+#endif
  if (cosmetic) {
-  logEvent("duster-cyan-test", 0x9d71fd, receiver, object, cyan);
+#if APPEARANCE_DIAGNOSTICS
+  logEvent("appearance-color", 0x9d71fd, receiver, object, cyan);
+#endif
   setColor(receiver, &cyan);
  } else {
   setColor(receiver, color);
@@ -176,7 +203,9 @@ static void __attribute__((thiscall)) containmentHook(void *object,
  const ULONGLONG *destination, int arrangement) {
  ULONGLONG id = objectID(object), parent = 0;
  SIZE_T bytes;
+#if APPEARANCE_DIAGNOSTICS
  FILE *file;
+#endif
  if (arrangement >= 0x7fff0100 && arrangement <= 0x7fff0102) {
   if (id == 0 || !ReadProcessMemory(GetCurrentProcess(), destination,
       &parent, sizeof(parent), &bytes) || bytes != sizeof(parent)) return;
@@ -207,9 +236,12 @@ static void __attribute__((thiscall)) containmentHook(void *object,
    }
   }
   LeaveCriticalSection(&logLock);
+#if APPEARANCE_DIAGNOSTICS
   logEvent("appearance-state-marker", 0x51c022, object, (void *)destination, arrangement);
+#endif
   return;
  }
+#if APPEARANCE_DIAGNOSTICS
  if (InterlockedIncrement(&containmentCount) <= 4096 && object != NULL &&
      ReadProcessMemory(GetCurrentProcess(), (BYTE *)object + 0x20,
          &id, sizeof(id), &bytes) && bytes == sizeof(id) &&
@@ -226,6 +258,7 @@ static void __attribute__((thiscall)) containmentHook(void *object,
   LeaveCriticalSection(&logLock);
   logObject("containment-template", 0x51c022, object);
  }
+#endif
  applyContainment(object, destination, arrangement);
 }
 
@@ -268,10 +301,12 @@ done:
 static void installProbe(void) {
 	struct Hook { DWORD rva; BYTE bytes[5]; void *target; };
 	struct Hook hooks[] = {
+#if APPEARANCE_DIAGNOSTICS
 		{0x376d8, {0xe8,0x73,0x23,0x39,0x00}, (void *)wear1},
 		{0x2474e1, {0xe8,0x6a,0x25,0x18,0x00}, (void *)wear2},
 		{0x27a0c1, {0xe8,0x8a,0xf9,0x14,0x00}, (void *)wear3},
 		{0x2ff10d, {0xe8,0x3e,0xa9,0x0c,0x00}, (void *)wear4},
+#endif
 		{0x5d71fd, {0xe8,0x4e,0x58,0x73,0x00}, (void *)colorHook},
 		{0x11c022, {0xe8,0xf9,0x8f,0x03,0x00}, (void *)containmentHook},
 		{0x5d7169, {0xe8,0x02,0xe0,0xc7,0xff}, (void *)inventoryParentHook}
@@ -281,6 +316,7 @@ static void installProbe(void) {
 	IMAGE_NT_HEADERS *nt;
 	DWORD protection[7], unused, displacement;
 	unsigned int i, protectedCount = 0;
+	const unsigned int hookCount = sizeof(hooks) / sizeof(hooks[0]);
 	if (installed) return;
 	installed = TRUE;
 	if (!executableMatches() || dos->e_magic != IMAGE_DOS_SIGNATURE) goto rejected;
@@ -289,34 +325,38 @@ static void installProbe(void) {
 		nt->FileHeader.Machine != IMAGE_FILE_MACHINE_I386 ||
 		nt->FileHeader.TimeDateStamp != 0x425ed458 ||
 		nt->OptionalHeader.SizeOfImage != 0x15c0000) goto rejected;
-	for (i = 0; i < 7; ++i)
+	for (i = 0; i < hookCount; ++i)
 		if (memcmp(base + hooks[i].rva, hooks[i].bytes, 5) != 0) goto rejected;
 	/* Obtain all write permissions before changing any call. */
-	for (i = 0; i < 7; ++i) {
+	for (i = 0; i < hookCount; ++i) {
 		if (!VirtualProtect(base + hooks[i].rva, 5, PAGE_EXECUTE_READWRITE,
 			&protection[i])) goto restore;
 		++protectedCount;
 	}
+#if APPEARANCE_DIAGNOSTICS
 	wear = (WearFunction)(base + 0x3c9a50);
+#endif
 	setColor = (ColorFunction)(base + 0xd0ca50);
+#if APPEARANCE_DIAGNOSTICS
 	templateName = (NameFunction)(base + 0x723c40);
+#endif
 	applyContainment = (ContainmentFunction)(base + 0x155020);
  actualParent = (ParentFunction)(base + 0x255170);
  lookupObject = (LookupFunction)(base + 0x7380e0);
-	for (i = 0; i < 7; ++i) {
+	for (i = 0; i < hookCount; ++i) {
 		displacement = (DWORD)((BYTE *)hooks[i].target - (base + hooks[i].rva + 5));
 		memcpy(base + hooks[i].rva + 1, &displacement, 4);
 		FlushInstructionCache(GetCurrentProcess(), base + hooks[i].rva, 5);
 	}
-	for (i = 0; i < 7; ++i)
+	for (i = 0; i < hookCount; ++i)
 		VirtualProtect(base + hooks[i].rva, 5, protection[i], &unused);
-	logEvent("probe-installed", 0, base, NULL, 1);
+	logEvent("appearance-installed", 0, base, NULL, 1);
 	return;
 restore:
 	for (i = 0; i < protectedCount; ++i)
 		VirtualProtect(base + hooks[i].rva, 5, protection[i], &unused);
 rejected:
-	logEvent("probe-rejected", 0, base, NULL, 0);
+	logEvent("appearance-rejected", 0, base, NULL, 0);
 }
 
 static BOOL loadBase(void) {
@@ -366,7 +406,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
 		while (separator > logPath && separator[-1] != '\\' && separator[-1] != '/')
 			--separator;
 		if (separator - logPath + 24 >= MAX_PATH) return FALSE;
-		strcpy(separator, "appearance-probe.log");
+		strcpy(separator, "appearance-client.log");
 	}
 	return TRUE;
 }

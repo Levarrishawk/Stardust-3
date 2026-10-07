@@ -1,7 +1,8 @@
 param(
     [ValidateSet('Install', 'Restore')][string]$Mode = 'Install',
     [string[]]$ClientDirectories = @('C:\Stardust-DEV'),
-    [string]$ProbeDll
+    [string]$ProbeDll,
+    [string]$BackupRoot
 )
 $ErrorActionPreference = 'Stop'
 $originalHash = '7ED32D3EEF4AF5D48710478030E37949A376D002188EFDCB6CD26C2844A0A876'
@@ -13,7 +14,12 @@ $fourthProbeHash = '88B2AE8B94414D80370CE08424FC5F82CD452BAB18564FF93B22C4F31BCE
 $fifthProbeHash = 'CD5BA68677646EA73769E570C75E9AAB749AE20CF10A7B6814CE2CC0A8615F6D'
 $sixthProbeHash = '56E3A04443FA11917781528969E36C8EA58BC4BEF10E1105DB1F3A84724C9299'
 $seventhProbeHash = '85F0E8AB18BA71F8972E07B8617C2F612A93F7B5B0C39DE536F6A4AA64E6EF02'
-$probeHash = 'F120E847275E1C7657D443D603937FDD70563B8E2D299F5B3709E3D87956E403'
+$eighthProbeHash = 'F120E847275E1C7657D443D603937FDD70563B8E2D299F5B3709E3D87956E403'
+$probeHash = 'CA94D80303688D9E1C7D5B24D6BE8E442FC1D27A1751EE3C41AD03FA796763B8'
+if (-not $BackupRoot) {
+    $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
+    $BackupRoot = Join-Path $repositoryRoot 'client-tools\deployment-backups'
+}
 function Assert-Hash([string]$Path, [string]$Expected) {
     if ((Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash -ne $Expected) {
         throw "File identity differs: $Path"
@@ -31,16 +37,16 @@ $plans = foreach ($directory in $ClientDirectories) {
     if ($root -eq 'C:\Stardust') { throw 'The public-release client is protected; use C:\Stardust-DEV.' }
     $active = Join-Path $root 'd3d9.dll'
     $base = Join-Path $root 'd3d9-appearance-base.dll'
-    $backup = Join-Path $root 'appearance-probe-backup-v1'
+    $backup = Join-Path $BackupRoot (Split-Path $root -Leaf)
     $saved = Join-Path $backup 'd3d9.dll'
     $config = Join-Path $root 'd3d9-postfx.ini'
     Assert-Hash (Join-Path $root 'Stardust.exe') $executableHash
     if ($Mode -eq 'Install') {
         $activeHash = (Get-FileHash -LiteralPath $active -Algorithm SHA256).Hash
-        if ($activeHash -notin @($originalHash, $previousProbeHash, $secondProbeHash, $thirdProbeHash, $fourthProbeHash, $fifthProbeHash, $sixthProbeHash, $seventhProbeHash, $probeHash)) {
+        if ($activeHash -notin @($originalHash, $previousProbeHash, $secondProbeHash, $thirdProbeHash, $fourthProbeHash, $fifthProbeHash, $sixthProbeHash, $seventhProbeHash, $eighthProbeHash, $probeHash)) {
             throw "Unexpected active DLL: $active"
         }
-        if ($activeHash -in @($previousProbeHash, $secondProbeHash, $thirdProbeHash, $fourthProbeHash, $fifthProbeHash, $sixthProbeHash, $seventhProbeHash, $probeHash)) {
+        if ($activeHash -in @($previousProbeHash, $secondProbeHash, $thirdProbeHash, $fourthProbeHash, $fifthProbeHash, $sixthProbeHash, $seventhProbeHash, $eighthProbeHash, $probeHash)) {
             Assert-Hash $saved $originalHash
             Assert-Hash $base $originalHash
         }
@@ -48,7 +54,7 @@ $plans = foreach ($directory in $ClientDirectories) {
         if (Test-Path -LiteralPath $saved) { Assert-Hash $saved $originalHash }
     } else {
         Assert-Hash $saved $originalHash
-        if ((Get-FileHash -LiteralPath $active -Algorithm SHA256).Hash -notin @($previousProbeHash, $secondProbeHash, $thirdProbeHash, $fourthProbeHash, $fifthProbeHash, $sixthProbeHash, $seventhProbeHash, $probeHash)) {
+        if ((Get-FileHash -LiteralPath $active -Algorithm SHA256).Hash -notin @($previousProbeHash, $secondProbeHash, $thirdProbeHash, $fourthProbeHash, $fifthProbeHash, $sixthProbeHash, $seventhProbeHash, $eighthProbeHash, $probeHash)) {
             throw "Unexpected active DLL: $active"
         }
     }

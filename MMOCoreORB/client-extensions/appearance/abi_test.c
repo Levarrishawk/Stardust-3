@@ -17,7 +17,10 @@ int main(void){
  const char *name="object/tangible/wearables/robe/shared_robe_s27.iff";
  DWORD t=(DWORD)templ,n=(DWORD)name; DWORD vt[2]={0,(DWORD)fakeName}, v=(DWORD)vt; (void)n;
  InitializeCriticalSection(&logLock);strcpy(logPath,"abi-test.log");setColor=capture;
- memcpy(object+16,&t,4);memcpy(templ+4,&v,4);templateName=fakeName;
+ memcpy(object+16,&t,4);memcpy(templ+4,&v,4);
+#if APPEARANCE_DIAGNOSTICS
+ templateName=fakeName;
+#endif
  ULONGLONG sourceID=111, targetID=222, ownerID=333, originalParent=444;
  BYTE target[64]={0}; memcpy(object+0x20,&sourceID,8);memcpy(target+0x20,&targetID,8);
  applyContainment=captureContainment;actualParent=fakeParent;lookupObject=fakeLookup;
