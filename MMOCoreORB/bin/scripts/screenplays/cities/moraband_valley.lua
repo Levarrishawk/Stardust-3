@@ -135,6 +135,23 @@ function MorabandValleyScreenPlay:spawnSceneObjects()
   spawnSceneObject("moraband", "object/static/particle/pt_flocking_glowzees.iff", 0, -23, 0, 42000040, math.rad(0) )
   spawnSceneObject("moraband", "object/static/particle/pt_flocking_glowzees.iff", 0, -18, 0, 42000040, math.rad(0) )
   
+  --lighting
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -66.6, 6.5, 90.4, 42000028, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -66.5, 6.5, 80.6, 42000028, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -80.5, 6.5, 72.5, 42000029, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -80.4, 16.5, 42.5, 42000031, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -41.6, 36.5, 42.5, 42000032, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -29.4, 36.5, 30.6, 42000032, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -21.1, 36.5, 30.5, 42000032, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -38.4, 36.5, 51.6, 42000032, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -38.4, 36.5, 59.9, 42000032, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -31.7, 36.5, 74.9, 42000032, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 7.1, 61.5, 74.9, 42000035, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 13.9, 61.5, 71.0, 42000035, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 5.8, 61.5, 67.5, 42000036, 0, 0, 0, 1 )
+  spawnSceneObject("moraband", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -6.0, 61.5, 67.5, 42000035, 0, 0, 0, 1 )
+  
+  
   spawnSceneObject("moraband", "object/static/particle/pt_poi_electricity_2x2.iff", 0, -5, 0, 42000040, math.rad(0) )
   
   
