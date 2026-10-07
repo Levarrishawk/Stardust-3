@@ -3321,7 +3321,23 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 					if (CollisionManager::getPointIntersection(start, step, position, 3.f, start.distanceTo(step)) != FLT_MAX &&
 						(before >= 9 || after <= before))
 						validPath = false;
-				} else if (!obstacle->isCreatureObject() && obstacle->getObjectTemplate() != nullptr &&
+				} else if (obstacle->isCreatureObject()) {
+					CreatureObject* target = obstacle->asCreatureObject();
+					bool pedestrian = target->isPlayerCreature();
+					if (target->isAiAgent() && !target->isInCombat()) {
+						const auto npcTemplate = cast<AiAgent*>(target)->getCreatureTemplate();
+						pedestrian = npcTemplate != nullptr && npcTemplate->getCustomAiMap() == STRING_HASHCODE("cityPatrol");
+					}
+					if (pedestrian && target->getZone() == zone && !target->isRidingMount() &&
+						target->getPosture() == CreaturePosture::UPRIGHT) {
+						Vector3 position = target->getPosition();
+						float before = start.squaredDistanceTo(position);
+						float after = step.squaredDistanceTo(position);
+						if (CollisionManager::getPointIntersection(start, step, position, 2.f, start.distanceTo(step)) != FLT_MAX &&
+							(before >= 4 || after <= before))
+							validPath = false;
+					}
+				} else if (obstacle->getObjectTemplate() != nullptr &&
 					(obstacle->getObjectTemplate()->getCollisionActionBlockFlags() & 255)) {
 					Vector3 rayStart = start;
 					Vector3 rayEnd = step;

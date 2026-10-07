@@ -13,6 +13,7 @@
 #include "server/zone/objects/building/BuildingObject.h"
 #include "server/zone/objects/cell/CellObject.h"
 #include "templates/SharedObjectTemplate.h"
+#include "templates/params/creature/CreaturePosture.h"
 #include "templates/appearance/PortalLayout.h"
 #include "templates/appearance/FloorMesh.h"
 #include "templates/appearance/PathGraph.h"
@@ -110,8 +111,6 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 		CreatureObject* other = object != nullptr ? object->asCreatureObject() : nullptr;
 		if (other == nullptr || other == creature || other->getZone() != zone || other->getParent() != nullptr)
 			continue;
-		if (vehicle && !other->isVehicleObject())
-			continue;
 
 		Vector3 offset = other->getPosition() - start;
 		if (fabs(offset.getZ()) > 3)
@@ -161,6 +160,18 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 				return false;
 			continue;
 		}
+
+		if (vehicle && other->getPosture() == CreaturePosture::UPRIGHT && !other->isRidingMount()) {
+			bool pedestrian = other->isPlayerCreature();
+			if (other->isAiAgent() && !other->isInCombat()) {
+				const auto npcTemplate = cast<AiAgent*>(other)->getCreatureTemplate();
+				pedestrian = npcTemplate != nullptr && npcTemplate->getCustomAiMap() == STRING_HASHCODE("cityPatrol");
+			}
+			if (pedestrian && ahead >= 0 && ahead < distance + 6 && fabs(side) < 2.5f)
+				vehicleBlocked = true;
+		}
+		if (vehicle)
+			continue;
 
 		if (!other->isAiAgent() || other->isDead())
 			continue;
