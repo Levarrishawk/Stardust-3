@@ -1,4 +1,4 @@
-# Appearance client prototype, release version 9
+# Appearance client prototype, release version 10
 
 The client caches several cosmetic sources and their covered real equipment IDs.
 Sources retain the accepted yellow inventory highlight; real equipment retains
@@ -24,7 +24,7 @@ Core3.AppearanceEquipment = Core3.AppearanceEquipment or {}
 Core3.AppearanceEquipment.ClientStateMarkers = true
 ```
 
-Both test clients must use release version 9 before testing several selections. The
+Both test clients must use release version 10 before testing several selections. The
 option defaults false and is not negotiated with each client. Version 6/7 replaces
 its single cached pair on each source marker; unpatched clients treat control
 records as real containment. Public distribution is handled by the user, including the updated wearer DLL.
@@ -54,7 +54,7 @@ wire projection and protection-map preservation; it does not compile the server
 against Engine3. The full Debian build and in-game tests remain required.
 
 The built release DLL SHA256 is
-`CA94D80303688D9E1C7D5B24D6BE8E442FC1D27A1751EE3C41AD03FA796763B8`.
+`CF843206F23B2BE3DFE235BA0B5B18E4F0C6B1110432C51A634E38FFA9908BF4`.
 A rebuild can change the binary hash; update the installer pin only after validating
 that build. See ../../doc/appearance-equipment-prototype.md for runtime checks.
 
@@ -72,3 +72,38 @@ byte-for-byte. Old snapshots and captured logs have been archived outside the
 client under client-tools/deployment-backups/Stardust-DEV/archive-before-release-v9.
 The installer now keeps its rollback copies outside the deployment as well.
 See DISTRIBUTION.md for the exact runtime files and package.
+
+## Inventory volume correction (version 10)
+
+Version 9's visual containment counted hidden armor as inventory contents and
+removed the cosmetic's volume from its real bag. Five covered pieces therefore
+changed 3/80 into 7/80. Version 10 neutralizes native volume charges for those
+visual transfers. The cosmetic continues to count in its original server container,
+and covered real gear continues to consume no inventory volume.
+
+The server now brackets each owner visual transaction with markers 0x7fff0103
+(begin) and 0x7fff0104 (end), around the existing reset/source/target messages.
+Accounting records survive reset during restoration and are pruned at end.
+Recalculation excludes covered targets and includes the source in its original
+container, including bag/ancestor volumes. Original bags are recalculated after
+cleanup so moving/removing a source does not leave an extra charged slot.
+Actual object volume attributes, native inventory limits and server inventory
+accounting remain unchanged. The patch changes five verified call/instruction
+sites within client VolumeContainer accounting, alongside the existing three
+appearance hooks. Diagnostic builds additionally install four tracing hooks.
+
+Build the matching CreatureObjectImplementation.cpp update on Debian before
+in-game verification. No IDL regeneration or database migration is needed for
+this fix. Wearers must use version 10 with the updated server markers; observers
+receive no control markers. A version-10 client against the previous server
+keeps its previous behavior rather than applying partial volume accounting.
+
+`volume_test.c` exercises the real helpers/adapters with synthetic native objects:
+3/80 and 80/80, five covered items, nested bag and parent totals, simultaneous
+appearances and independent removal, recalculation, repeated cycles, moved-source
+cleanup, and old-server fallback. Ordinary items still cost their original volume.
+Compile/run like abi_test.c; no game client is launched by the tests.
+
+The refreshed package is client-tools/appearance-release-v10/stardust-appearance-update.zip.
+Version 9's ZIP is archived as superseded. Version 10 still needs real-client
+verification at nearly full/full inventory before distribution.

@@ -94,3 +94,22 @@ were verified unchanged; C:/Stardust remains protected.
 7. Repeat nested-bag, bag-transfer cleanup, zoning/observer, relog and server-restart
    tests with multiple selections. Load the previously saved single duster selection
    to verify migration, then restart again with multiple selections saved.
+
+## Inventory-capacity regression correction
+
+The reported 3/80 to 7/80 increase was caused by owner-only client containment:
+five covered armor items added five volume units and the duster removed one.
+Version 10's native accounting treats those visual transfers as zero-volume
+changes, while retaining the source's charge in its original bag. Container
+recalculation and ancestor volume propagation preserve those logical totals.
+Server begin/end markers bracket restoration and replay; the real server
+containers, equipment, protection and serialized selection IDs remain unchanged.
+
+This fix requires a normal Debian rebuild of CreatureObjectImplementation.cpp
+and a server restart, paired with version 10 on the wearer. No Engine3, IDL,
+TRE, executable or post-processing change is involved. Synthetic full-inventory,
+recalculation, multiple-selection and moved-source checks passed; in-game
+verification remains pending. Confirm capacity remains constant for appearance
+apply/remove at 3/80, 79/80 and 80/80, including a nested bag and opening/closing
+inventory. Confirm ordinary items still consume space and remain blocked at full
+capacity. Repeat observer rendering/highlights and relog/restart checks.

@@ -4363,6 +4363,7 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 	bool markers = ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false);
 	if (markers) {
 		ManagedReference<SceneObject*> parent = getParent().get();
+		sendMessage(new UpdateContainmentMessage(getObjectID(), parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0103));
 		sendMessage(new UpdateContainmentMessage(getObjectID(), parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0100));
 	}
 	ArrayList<WearablesDeltaVector::AppearanceSelection> appearances = wearablesVector.getAppearances();
@@ -4394,6 +4395,11 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 		if (!restore)
 			sendMessage(source->link(getObjectID(), 4));
 	}
+	if (markers) {
+		ManagedReference<SceneObject*> parent = getParent().get();
+		sendMessage(new UpdateContainmentMessage(getObjectID(), parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0104));
+	}
+
 }
 
 void CreatureObjectImplementation::clearAppearance(bool notifyClient, uint64 sourceID) {

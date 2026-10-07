@@ -4,6 +4,7 @@
 #include <d3d9.h>
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 
 /* Set to 1 only for local diagnostics; distributed builds log startup status only. */
 #ifndef APPEARANCE_DIAGNOSTICS
@@ -39,6 +40,20 @@ static CRITICAL_SECTION logLock;
 static ULONGLONG appearanceSources[MAX_APPEARANCE_SOURCES], pendingAppearanceSource;
 static struct { ULONGLONG target, owner, source; } appearanceTargets[MAX_APPEARANCE_TARGETS];
 static unsigned appearanceSourceCount, appearanceTargetCount;
+/* Accounting survives a reset until the transaction's end marker. */
+#define MAX_VOLUME_SOURCES (MAX_APPEARANCE_SOURCES * 2)
+#define MAX_VOLUME_TARGETS (MAX_APPEARANCE_TARGETS * 2)
+static struct { ULONGLONG id, parent; } volumeSources[MAX_VOLUME_SOURCES];
+static ULONGLONG volumeTargets[MAX_VOLUME_TARGETS];
+static unsigned volumeSourceCount, volumeTargetCount;
+static BOOL visualTransaction;
+typedef void *(__attribute__((thiscall)) *VolumePropertyFunction)(void *, const DWORD *);
+typedef int (__attribute__((thiscall)) *VolumeFunction)(void *);
+static VolumePropertyFunction volumeProperty;
+static VolumeFunction originalVolume, recalculateContainer;
+typedef void *(__attribute__((cdecl)) *VolumeContainerFunction)(void *);
+static VolumeContainerFunction volumeContainer;
+
 typedef void *(__attribute__((cdecl)) *ParentFunction)(void *);
 typedef void *(__attribute__((cdecl)) *LookupFunction)(const ULONGLONG *);
 static ParentFunction actualParent;
@@ -66,6 +81,87 @@ static void * __attribute__((cdecl)) inventoryParentHook(void *object) {
   if (parent != NULL) return parent;
  }
  return actualParent(object);
+}
+
+static void *propertyOwner(void *property) {
+ void *owner = NULL; SIZE_T bytes;
+ if (property == NULL || !ReadProcessMemory(GetCurrentProcess(), (BYTE *)property + 4,
+     &owner, sizeof(owner), &bytes) || bytes != sizeof(owner)) return NULL;
+ return owner;
+}
+static int sourceVolume(void *object) {
+ const DWORD propertyID = 0x8701647c;
+ void *property = object != NULL ? volumeProperty(object, &propertyID) : NULL;
+ return property != NULL ? originalVolume(property) : 0;
+}
+static BOOL volumeIdentity(ULONGLONG id, ULONGLONG *originalParent, BOOL *target) {
+ BOOL found = FALSE;
+ *originalParent = 0; *target = FALSE;
+ EnterCriticalSection(&logLock);
+ for (unsigned i = 0; id != 0 && i < volumeSourceCount; ++i) {
+  if (volumeSources[i].id == id) { *originalParent = volumeSources[i].parent; found = TRUE; break; }
+ }
+ for (unsigned i = 0; id != 0 && i < volumeTargetCount; ++i) {
+  if (volumeTargets[i] == id) { *target = TRUE; found = TRUE; break; }
+ }
+ LeaveCriticalSection(&logLock);
+ return found;
+}
+static int __attribute__((thiscall)) accountedVolume(void *property) {
+ ULONGLONG parent; BOOL target, transaction;
+ EnterCriticalSection(&logLock); transaction = visualTransaction; LeaveCriticalSection(&logLock);
+ if (transaction && volumeIdentity(objectID(propertyOwner(property)), &parent, &target)) return 0;
+ return originalVolume(property);
+}
+static int __attribute__((stdcall,used,noinline)) recalculatedItemVolume(void *property, void *container) {
+ void *object = propertyOwner(property);
+ ULONGLONG parent; BOOL target;
+ if (volumeIdentity(objectID(object), &parent, &target)) {
+  if (target) return 0;
+  if (parent != objectID(propertyOwner(container))) return 0;
+ }
+ return originalVolume(property);
+}
+static int __attribute__((stdcall,used,noinline)) recalculatedVolume(void *container, int physical) {
+ ULONGLONG sources[MAX_VOLUME_SOURCES], parents[MAX_VOLUME_SOURCES];
+ unsigned count;
+ ULONGLONG containerID = objectID(propertyOwner(container));
+ if (containerID == 0) return physical;
+ EnterCriticalSection(&logLock);
+ count = volumeSourceCount;
+ for (unsigned i = 0; i < count; ++i) { sources[i] = volumeSources[i].id; parents[i] = volumeSources[i].parent; }
+ LeaveCriticalSection(&logLock);
+ for (unsigned i = 0; i < count; ++i) {
+  if (parents[i] != containerID) continue;
+  void *source = lookupObject(&sources[i]);
+  if (source != NULL && objectID(actualParent(source)) != containerID) {
+   int volume = sourceVolume(source);
+   if (volume > 0 && physical <= INT_MAX - volume) physical += volume;
+  }
+ }
+ return physical;
+}
+static void __attribute__((naked)) recalcItemHook(void) {
+ __asm__ volatile("pushl %edi\n\tpushl %ecx\n\tcalll _recalculatedItemVolume@8\n\tretl\n\t");
+}
+/* Replaces load sum, push container, store sum; retain the original cdecl argument. */
+static void __attribute__((naked)) recalcSumHook(void) {
+ __asm__ volatile("pushl -0x14(%ebp)\n\tpushl %edi\n\tcalll _recalculatedVolume@8\n\tmovl %eax,-0x14(%ebp)\n\tmovl %eax,0x20(%edi)\n\tpopl %edx\n\tpushl %edi\n\tpushl %edx\n\tretl\n\t");
+}
+static void finishVisualTransaction(void) {
+ unsigned out = 0;
+ for (unsigned i = 0; i < volumeSourceCount; ++i) {
+  for (unsigned j = 0; j < appearanceSourceCount; ++j) {
+   if (volumeSources[i].id == appearanceSources[j]) { volumeSources[out++] = volumeSources[i]; break; }
+  }
+ }
+ volumeSourceCount = out; out = 0;
+ for (unsigned i = 0; i < volumeTargetCount; ++i) {
+  for (unsigned j = 0; j < appearanceTargetCount; ++j) {
+   if (volumeTargets[i] == appearanceTargets[j].target) { volumeTargets[out++] = volumeTargets[i]; break; }
+  }
+ }
+ volumeTargetCount = out; visualTransaction = FALSE;
 }
 
 static char logPath[MAX_PATH];
@@ -202,16 +298,36 @@ static void __attribute__((naked)) colorHook(void) {
 static void __attribute__((thiscall)) containmentHook(void *object,
  const ULONGLONG *destination, int arrangement) {
  ULONGLONG id = objectID(object), parent = 0;
+ ULONGLONG affectedParents[MAX_VOLUME_SOURCES];
+ unsigned affectedCount = 0;
  SIZE_T bytes;
 #if APPEARANCE_DIAGNOSTICS
  FILE *file;
 #endif
- if (arrangement >= 0x7fff0100 && arrangement <= 0x7fff0102) {
+ if (arrangement >= 0x7fff0100 && arrangement <= 0x7fff0104) {
   if (id == 0 || !ReadProcessMemory(GetCurrentProcess(), destination,
       &parent, sizeof(parent), &bytes) || bytes != sizeof(parent)) return;
   EnterCriticalSection(&logLock);
-  if (arrangement == 0x7fff0100) clearAppearanceState();
+  if (arrangement == 0x7fff0100) {
+   clearAppearanceState();
+   if (!visualTransaction) { volumeSourceCount = volumeTargetCount = 0; }
+  }
+  else if (arrangement == 0x7fff0103) visualTransaction = TRUE;
+  else if (arrangement == 0x7fff0104) {
+   for (unsigned i = 0; i < volumeSourceCount; ++i) {
+    unsigned j;
+    for (j = 0; j < affectedCount; ++j) if (affectedParents[j] == volumeSources[i].parent) break;
+    if (j == affectedCount) affectedParents[affectedCount++] = volumeSources[i].parent;
+   }
+   finishVisualTransaction();
+  }
   else if (arrangement == 0x7fff0101) {
+   unsigned v;
+   for (v = 0; v < volumeSourceCount; ++v) if (volumeSources[v].id == id) break;
+   if (visualTransaction && (v < volumeSourceCount || v < MAX_VOLUME_SOURCES)) {
+    volumeSources[v].id = id; volumeSources[v].parent = parent;
+    if (v == volumeSourceCount) ++volumeSourceCount;
+   }
    pendingAppearanceSource = 0;
    for (unsigned i = 0; i < appearanceSourceCount; ++i) {
     if (appearanceSources[i] == id) { pendingAppearanceSource = id; break; }
@@ -221,6 +337,9 @@ static void __attribute__((thiscall)) containmentHook(void *object,
     pendingAppearanceSource = id;
    }
   } else if (pendingAppearanceSource != 0 && parent != 0 && id != pendingAppearanceSource) {
+   unsigned v;
+   for (v = 0; v < volumeTargetCount; ++v) if (volumeTargets[v] == id) break;
+   if (visualTransaction && v == volumeTargetCount && v < MAX_VOLUME_TARGETS) volumeTargets[volumeTargetCount++] = id;
    unsigned i;
    for (i = 0; i < appearanceTargetCount; ++i) {
     if (appearanceTargets[i].target == id) break;
@@ -236,6 +355,12 @@ static void __attribute__((thiscall)) containmentHook(void *object,
    }
   }
   LeaveCriticalSection(&logLock);
+  /* Recompute after pruning: a moved/removed source must stop charging its old bag. */
+  for (unsigned i = 0; i < affectedCount; ++i) {
+   void *owner = lookupObject(&affectedParents[i]);
+   void *container = owner != NULL ? volumeContainer(owner) : NULL;
+   if (container != NULL) recalculateContainer(container);
+  }
 #if APPEARANCE_DIAGNOSTICS
   logEvent("appearance-state-marker", 0x51c022, object, (void *)destination, arrangement);
 #endif
@@ -299,22 +424,27 @@ done:
 }
 
 static void installProbe(void) {
-	struct Hook { DWORD rva; BYTE bytes[5]; void *target; };
+	struct Hook { DWORD rva; BYTE bytes[7]; void *target; unsigned int length; };
 	struct Hook hooks[] = {
 #if APPEARANCE_DIAGNOSTICS
-		{0x376d8, {0xe8,0x73,0x23,0x39,0x00}, (void *)wear1},
-		{0x2474e1, {0xe8,0x6a,0x25,0x18,0x00}, (void *)wear2},
-		{0x27a0c1, {0xe8,0x8a,0xf9,0x14,0x00}, (void *)wear3},
-		{0x2ff10d, {0xe8,0x3e,0xa9,0x0c,0x00}, (void *)wear4},
+		{0x376d8, {0xe8,0x73,0x23,0x39,0x00}, (void *)wear1, 5},
+		{0x2474e1, {0xe8,0x6a,0x25,0x18,0x00}, (void *)wear2, 5},
+		{0x27a0c1, {0xe8,0x8a,0xf9,0x14,0x00}, (void *)wear3, 5},
+		{0x2ff10d, {0xe8,0x3e,0xa9,0x0c,0x00}, (void *)wear4, 5},
 #endif
-		{0x5d71fd, {0xe8,0x4e,0x58,0x73,0x00}, (void *)colorHook},
-		{0x11c022, {0xe8,0xf9,0x8f,0x03,0x00}, (void *)containmentHook},
-		{0x5d7169, {0xe8,0x02,0xe0,0xc7,0xff}, (void *)inventoryParentHook}
+		{0x5d71fd, {0xe8,0x4e,0x58,0x73,0x00}, (void *)colorHook, 5},
+		{0x11c022, {0xe8,0xf9,0x8f,0x03,0x00}, (void *)containmentHook, 5},
+		{0x5d7169, {0xe8,0x02,0xe0,0xc7,0xff}, (void *)inventoryParentHook, 5},
+		{0x741de1, {0xe8,0xea,0xfd,0xff,0xff}, (void *)accountedVolume, 5},
+		{0x742349, {0xe8,0x82,0xf8,0xff,0xff}, (void *)accountedVolume, 5},
+		{0x741ee9, {0xe8,0xe2,0xfc,0xff,0xff}, (void *)accountedVolume, 5},
+		{0x7421ca, {0xe8,0x01,0xfa,0xff,0xff}, (void *)recalcItemHook, 5},
+		{0x74220d, {0x8b,0x45,0xec,0x57,0x89,0x47,0x20}, (void *)recalcSumHook, 7}
 	};
 	BYTE *base = (BYTE *)GetModuleHandleW(NULL);
 	IMAGE_DOS_HEADER *dos = (IMAGE_DOS_HEADER *)base;
 	IMAGE_NT_HEADERS *nt;
-	DWORD protection[7], unused, displacement;
+	DWORD protection[12], unused, displacement;
 	unsigned int i, protectedCount = 0;
 	const unsigned int hookCount = sizeof(hooks) / sizeof(hooks[0]);
 	if (installed) return;
@@ -326,16 +456,20 @@ static void installProbe(void) {
 		nt->FileHeader.TimeDateStamp != 0x425ed458 ||
 		nt->OptionalHeader.SizeOfImage != 0x15c0000) goto rejected;
 	for (i = 0; i < hookCount; ++i)
-		if (memcmp(base + hooks[i].rva, hooks[i].bytes, 5) != 0) goto rejected;
+		if (memcmp(base + hooks[i].rva, hooks[i].bytes, hooks[i].length) != 0) goto rejected;
 	/* Obtain all write permissions before changing any call. */
 	for (i = 0; i < hookCount; ++i) {
-		if (!VirtualProtect(base + hooks[i].rva, 5, PAGE_EXECUTE_READWRITE,
+		if (!VirtualProtect(base + hooks[i].rva, hooks[i].length, PAGE_EXECUTE_READWRITE,
 			&protection[i])) goto restore;
 		++protectedCount;
 	}
 #if APPEARANCE_DIAGNOSTICS
 	wear = (WearFunction)(base + 0x3c9a50);
 #endif
+	volumeProperty = (VolumePropertyFunction)(base + 0x723ee0);
+	originalVolume = (VolumeFunction)(base + 0x741bd0);
+	recalculateContainer = (VolumeFunction)(base + 0x742060);
+	volumeContainer = (VolumeContainerFunction)(base + 0x2550a0);
 	setColor = (ColorFunction)(base + 0xd0ca50);
 #if APPEARANCE_DIAGNOSTICS
 	templateName = (NameFunction)(base + 0x723c40);
@@ -345,16 +479,18 @@ static void installProbe(void) {
  lookupObject = (LookupFunction)(base + 0x7380e0);
 	for (i = 0; i < hookCount; ++i) {
 		displacement = (DWORD)((BYTE *)hooks[i].target - (base + hooks[i].rva + 5));
+		base[hooks[i].rva] = 0xe8;
 		memcpy(base + hooks[i].rva + 1, &displacement, 4);
-		FlushInstructionCache(GetCurrentProcess(), base + hooks[i].rva, 5);
+		for (unsigned int j = 5; j < hooks[i].length; ++j) base[hooks[i].rva + j] = 0x90;
+		FlushInstructionCache(GetCurrentProcess(), base + hooks[i].rva, hooks[i].length);
 	}
 	for (i = 0; i < hookCount; ++i)
-		VirtualProtect(base + hooks[i].rva, 5, protection[i], &unused);
+		VirtualProtect(base + hooks[i].rva, hooks[i].length, protection[i], &unused);
 	logEvent("appearance-installed", 0, base, NULL, 1);
 	return;
 restore:
 	for (i = 0; i < protectedCount; ++i)
-		VirtualProtect(base + hooks[i].rva, 5, protection[i], &unused);
+		VirtualProtect(base + hooks[i].rva, hooks[i].length, protection[i], &unused);
 rejected:
 	logEvent("appearance-rejected", 0, base, NULL, 0);
 }
