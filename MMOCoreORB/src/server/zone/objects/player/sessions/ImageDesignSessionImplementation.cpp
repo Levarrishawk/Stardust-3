@@ -131,9 +131,16 @@ void ImageDesignSessionImplementation::startImageDesign(CreatureObject* designer
 			}
 		}
 
-		// Baselines need the zone context, but the preview never enters the zone tree.
+		vendorPreview->initializePosition(targetPlayer->getPositionX(), targetPlayer->getPositionZ(), targetPlayer->getPositionY());
+		vendorPreview->setDirection(*targetPlayer->getDirection());
+		vendorPreview->setContainmentType(targetPlayer->getContainmentType());
+		ManagedReference<SceneObject*> vendorParent = targetPlayer->getParent().get();
+		// Send the vendor's cell and local position so the client's range check succeeds.
+		// These references provide packet context without inserting the preview into the world.
+		vendorPreview->setParent(vendorParent, false);
 		vendorPreview->setZone(designer->getZone());
 		vendorPreview->sendTo(designer, true);
+		vendorPreview->setParent(nullptr, false);
 		vendorPreview->setZone(nullptr);
 
 		// The native Image Design window reads the designer's skill modifiers.
