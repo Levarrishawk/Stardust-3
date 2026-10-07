@@ -779,8 +779,16 @@ class CreatureObject extends TangibleObject {
 	@preLocked
 	public native void setBackpackHidden(TangibleObject object, boolean hidden);
 
+	@preLocked
+	public native void setWearableHidden(TangibleObject object, boolean hidden);
+
 	@read
 	public boolean isBackpackHidden(unsigned long objectID) {
+		return hiddenWearableContainerObjectIDs.contains(objectID);
+	}
+
+	@read
+	public boolean isWearableHidden(unsigned long objectID) {
 		return hiddenWearableContainerObjectIDs.contains(objectID);
 	}
 

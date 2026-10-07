@@ -19,6 +19,12 @@ int main(){
  assert((ids(hiddenBag)==std::vector<uint64>{1,2,4}) && v.size()==4 && v.isContainerHidden(5));
  DeltaMessage hideDelta;v.refreshAppearance(&hideDelta);assert(hideDelta.operations==4 && ids(hideDelta)==ids(hiddenBag));
  v.addAppearance(b);BaseMessage both;v.insertToMessage(&both);assert((crcs(both)==std::vector<uint64>{101,102,901}));
+
+ // Hidden head equipment suppresses its cosmetic replacement independently of the bag.
+ hidden.add(4);v.setHiddenContainers(hidden);BaseMessage hiddenHead;v.insertToMessage(&hiddenHead);
+ assert((ids(hiddenHead)==std::vector<uint64>{1,2}) && v.isAppearanceEquipped(222) && v.size()==4);
+ hidden.removeAll();hidden.add(5);v.setHiddenContainers(hidden);BaseMessage shownHead;v.insertToMessage(&shownHead);
+ assert(crcs(shownHead)==crcs(both) && v.isContainerHidden(5));
  v.clearAppearance();assert(v.isContainerHidden(5));hidden.removeAll();v.setHiddenContainers(hidden);
  BaseMessage shown;v.insertToMessage(&shown);assert(ids(shown)==ids(restored) && !v.isContainerHidden(5));
  std::cout<<"PASS: actual WearablesDeltaVector projects all covered targets once, preserves armor, uses projected counts and delta counters, rejects slot conflicts, and removes one selection independently. Engine dependencies are stand-ins; Debian compilation remains required.\n";

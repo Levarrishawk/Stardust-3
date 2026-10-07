@@ -19,6 +19,10 @@ void TangibleObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObjec
 		return;
 
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
+	if (player->isPlayerCreature() && player->getSlottedObject("hat") == tano && tano->getParent() == player) {
+		bool hidden = player->isWearableHidden(tano->getObjectID());
+		menuResponse->addRadialMenuItem(hidden ? 225 : 224, 3, hidden ? "Show Headwear" : "Hide Headwear");
+	}
 
 	if (player->isPlayerCreature() && tano->isWearableContainerObject() &&
 			tano->getParent() == player && tano->getContainmentType() != -1) {
@@ -80,6 +84,11 @@ int TangibleObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject
 		return 0;
 
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
+	if (selectedID == 224 || selectedID == 225) {
+		if (player->isPlayerCreature() && player->getSlottedObject("hat") == tano)
+			player->setWearableHidden(tano, selectedID == 224);
+		return 0;
+	}
 
 	if (selectedID == 222 || selectedID == 223) {
 		if (player->isPlayerCreature() && tano->isWearableContainerObject())

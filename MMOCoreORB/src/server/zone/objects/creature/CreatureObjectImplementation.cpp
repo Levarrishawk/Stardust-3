@@ -4353,7 +4353,8 @@ void CreatureObjectImplementation::restoreAppearanceSelection() {
 	for (int i = 0; i < hiddenWearableContainerObjectIDs.size(); ++i) {
 		uint64 objectID = hiddenWearableContainerObjectIDs.get(i);
 		ManagedReference<SceneObject*> object = zoneServer->getObject(objectID);
-		if (object == nullptr || !object->isWearableContainerObject() || cast<TangibleObject*>(object.get())->isDestroyed() ||
+		if (object == nullptr || (!object->isWearableContainerObject() && getSlottedObject("hat") != object) ||
+				!object->isTangibleObject() || cast<TangibleObject*>(object.get())->isDestroyed() ||
 				object->getParent() != asCreatureObject() || object->getContainmentType() == -1 ||
 				!wearablesVector.contains(cast<TangibleObject*>(object.get())) || hiddenContainers.contains(objectID) ||
 				hiddenContainers.size() >= 64) {
@@ -4380,11 +4381,20 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 		return;
 	bool markers = ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false);
 	if (markers && !restore) {
-		// Backpack state changes mesh collection only; its containment stays genuine.
+		// Hidden equipment changes mesh collection only; its containment stays genuine.
 		sendMessage(new UpdateContainmentMessage(getObjectID(), getObjectID(), 0x7FFF0107));
 		Vector<uint64> hiddenContainers = wearablesVector.getHiddenContainers();
-		for (int i = 0; i < hiddenContainers.size(); ++i)
-			sendMessage(new UpdateContainmentMessage(hiddenContainers.get(i), getObjectID(), 0x7FFF0105));
+		ArrayList<WearablesDeltaVector::AppearanceSelection> selections = wearablesVector.getAppearances();
+		for (int i = 0; i < hiddenContainers.size(); ++i) {
+			uint64 visualID = hiddenContainers.get(i);
+			for (int j = 0; j < selections.size(); ++j) {
+				if (selections.get(j).targets.contains(visualID)) {
+					visualID = selections.get(j).sourceID;
+					break;
+				}
+			}
+			sendMessage(new UpdateContainmentMessage(visualID, getObjectID(), 0x7FFF0105));
+		}
 	}
 	if (markers) {
 		ManagedReference<SceneObject*> parent = getParent().get();
@@ -4428,11 +4438,17 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 }
 
 void CreatureObjectImplementation::setBackpackHidden(TangibleObject* object, bool hidden) {
-	if (!isPlayerCreature() || object == nullptr || !object->isWearableContainerObject() || object->isDestroyed() ||
+	if (object != nullptr && object->isWearableContainerObject())
+		setWearableHidden(object, hidden);
+}
+
+void CreatureObjectImplementation::setWearableHidden(TangibleObject* object, bool hidden) {
+	if (!isPlayerCreature() || object == nullptr ||
+			(!object->isWearableContainerObject() && getSlottedObject("hat") != object) || object->isDestroyed() ||
 			object->getParent() != asCreatureObject() || object->getContainmentType() == -1 || !wearablesVector.contains(object))
 		return;
 	if (!ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false)) {
-		sendSystemMessage("Backpack visibility is not enabled on this server.");
+		sendSystemMessage("Equipment visibility is not enabled on this server.");
 		return;
 	}
 	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
@@ -4464,7 +4480,10 @@ void CreatureObjectImplementation::setBackpackHidden(TangibleObject* object, boo
 	messages.add(msg);
 	broadcastMessages(&messages, false);
 	sendAppearanceToOwner();
-	sendSystemMessage(hidden ? "Backpack hidden. It remains equipped and usable." : "Backpack shown.");
+	if (object->isWearableContainerObject())
+		sendSystemMessage(hidden ? "Backpack hidden. It remains equipped and usable." : "Backpack shown.");
+	else
+		sendSystemMessage(hidden ? "Headwear hidden. It remains equipped." : "Headwear shown.");
 }
 
 void CreatureObjectImplementation::clearAppearance(bool notifyClient, uint64 sourceID) {

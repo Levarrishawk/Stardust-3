@@ -463,27 +463,39 @@ bool ContainerComponent::removeObject(SceneObject* sceneObject, SceneObject* obj
 	sceneObject->updateToDatabase();
 	object->updateToDatabase();
 
+	ManagedReference<SceneObject*> playerParent;
+	if (sceneObject->isPlayerCreature())
+		playerParent = sceneObject;
+	else
+		playerParent = sceneObject->getParentRecursively(SceneObjectType::PLAYERCREATURE);
+
+	bool preserveContainedAppearances = false;
+	if (playerParent != nullptr && destination != nullptr && object->isWearableContainerObject()) {
+		ManagedReference<SceneObject*> inventory = playerParent->getSlottedObject("inventory");
+		// Unequipping a backpack is an owned inventory transfer, not loss of its contents.
+		preserveContainedAppearances = inventory != nullptr &&
+				(destination == inventory || destination->isASubChildOf(inventory));
+	}
+
 	if (sceneObject->getParent() == nullptr) {
-		sceneObject->notifyObjectRemovedFromChild(object, sceneObject);
+		if (!preserveContainedAppearances || sceneObject != playerParent)
+			sceneObject->notifyObjectRemovedFromChild(object, sceneObject);
 	} else {
 		ManagedReference<SceneObject*> rootParent = sceneObject->getRootParent();
 
 		// Indoors, the root may be a building rather than the owner of a nested item.
-		ManagedReference<SceneObject*> playerParent;
-		if (sceneObject->isPlayerCreature())
-			playerParent = sceneObject;
-		else
-			playerParent = sceneObject->getParentRecursively(SceneObjectType::PLAYERCREATURE);
-		if (playerParent != nullptr && playerParent != rootParent) {
+		if (playerParent != nullptr && playerParent != rootParent && !preserveContainedAppearances) {
 			CreatureObject* player = cast<CreatureObject*>(playerParent.get());
 			if (player->getAppearanceSourceID() != 0)
 				player->notifyObjectRemovedFromChild(object, sceneObject);
 		}
 
 		if (rootParent != nullptr) {
-			rootParent->notifyObjectRemovedFromChild(object, sceneObject);
+			if (!preserveContainedAppearances || rootParent != playerParent)
+				rootParent->notifyObjectRemovedFromChild(object, sceneObject);
 		} else {
-			sceneObject->notifyObjectRemovedFromChild(object, sceneObject);
+			if (!preserveContainedAppearances || sceneObject != playerParent)
+				sceneObject->notifyObjectRemovedFromChild(object, sceneObject);
 		}
 	}
 

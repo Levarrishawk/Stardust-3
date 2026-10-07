@@ -35,8 +35,16 @@ int main(void) {
  assert(collects == 1 && seenAppearance == (void *)0x1234 && seenMesh == (void *)0x5678 && seenLod == 3);
  invokeMesh((void *)0x1234,(void *)0x5678,3,bag,otherAppearance); assert(collects == 2);
  containmentHook(bag,&destination,0x7fff0105); assert(hiddenContainerCount == 1);
+ /* The same protocol supports headwear independently of the backpack. */
+ containmentHook(clothing,&destination,0x7fff0105); assert(hiddenContainerCount == 2);
+ unsigned beforeHead = collects;
+ invokeMesh((void *)0x1234,(void *)0x5678,3,clothing,appearance); assert(collects == beforeHead);
+ containmentHook(owner,&destination,0x7fff0107);
+ containmentHook(bag,&destination,0x7fff0105);
+ invokeMesh((void *)0x1234,(void *)0x5678,3,clothing,appearance); assert(collects == ++beforeHead);
+ invokeMesh((void *)0x1234,(void *)0x5678,3,bag,appearance); assert(collects == beforeHead);
  containmentHook(owner,&destination,0x7fff0107); assert(hiddenContainerCount == 0 && moves == 0);
- invokeMesh((void *)0x1234,(void *)0x5678,3,bag,appearance); assert(collects == 3);
+ invokeMesh((void *)0x1234,(void *)0x5678,3,bag,appearance); assert(collects == beforeHead + 1);
  destination = 444; containmentHook(bag,&destination,0x7fff0105);
  destination = 333; containmentHook(owner,&destination,0x7fff0107); assert(hiddenContainerCount == 0);
  destination = 444; containmentHook(otherOwner,&destination,0x7fff0107); assert(hiddenContainerCount == 0);
