@@ -45,6 +45,7 @@ public:
 protected:
 	// Runtime-only records; ArrayList avoids Vector's virtual element serialization.
 	ArrayList<AppearanceSelection> appearances;
+	Vector<uint64> hiddenContainers;
 
 public:
 	WearablesDeltaVector() : DeltaVector<ManagedReference<TangibleObject*> >() {
@@ -137,6 +138,8 @@ public:
 	}
 
 	bool isSuppressed(uint64 targetID) const {
+		if (hiddenContainers.contains(targetID))
+			return true;
 		for (int i = 0; i < appearances.size(); ++i) {
 			const Vector<uint64>& targets = appearances.get(i).targets;
 			if (targets.contains(targetID))
@@ -163,6 +166,21 @@ public:
 	ArrayList<AppearanceSelection> getAppearances() const {
 		ReadLocker locker(getLock());
 		return appearances;
+	}
+
+	void setHiddenContainers(const Vector<uint64>& objectIDs) {
+		Locker locker(getLock());
+		hiddenContainers = objectIDs;
+	}
+
+	Vector<uint64> getHiddenContainers() const {
+		ReadLocker locker(getLock());
+		return hiddenContainers;
+	}
+
+	bool isContainerHidden(uint64 objectID) const {
+		ReadLocker locker(getLock());
+		return hiddenContainers.contains(objectID);
 	}
 
 	uint64 getAppearanceSourceID() const {

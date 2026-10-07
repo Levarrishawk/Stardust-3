@@ -88,7 +88,7 @@ const AppearanceTemplate* CollisionManager::getCollisionAppearance(SceneObject* 
 	return (portalLayout != nullptr) ? portalLayout->getAppearanceTemplate(0) : templateObject->getAppearanceTemplate();
 }
 
-bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector3& destination, bool vehicle) {
+bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector3& destination, bool vehicle, bool passLeft) {
 	ManagedReference<Zone*> zone = creature->getZone();
 	if (zone == nullptr || creature->getParent() != nullptr)
 		return false;
@@ -186,8 +186,9 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 	}
 
 	if (vehicleBlocked) {
-		destination.setX(start.getX() + uy * 4.f);
-		destination.setY(start.getY() - ux * 4.f);
+		float side = passLeft ? -4.f : 4.f;
+		destination.setX(start.getX() + uy * side);
+		destination.setY(start.getY() - ux * side);
 	} else if (pedestrianBlocked) {
 		// Both walkers pass on their own right; their patrol destinations stay intact.
 		destination.setX(start.getX() + uy * 1.5f + ux * 0.5f);

@@ -15,5 +15,11 @@ int main(){
  v.clearAppearance(111);DeltaMessage removed;v.refreshAppearance(&removed);assert(removed.operations==6);assert((ids(removed)==std::vector<uint64>{1,2,3,4,5}));assert((crcs(removed)==std::vector<uint64>{101,102,103,901,105}));assert(v.isAppearanceEquipped(222) && !v.isAppearanceEquipped(111));
  v.remove(2,nullptr,0);DeltaMessage equipped;v.refreshAppearance(&equipped);assert(equipped.operations==5);assert((ids(equipped)==std::vector<uint64>{1,2,4,5}));assert(v.getArmorAtHitLocation(0).size()==2);
  v.clearAppearance();BaseMessage restored;v.insertToMessage(&restored);assert((crcs(restored)==std::vector<uint64>{101,102,104,105}));
+ Vector<uint64> hidden;hidden.add(5);v.setHiddenContainers(hidden);BaseMessage hiddenBag;v.insertToMessage(&hiddenBag);
+ assert((ids(hiddenBag)==std::vector<uint64>{1,2,4}) && v.size()==4 && v.isContainerHidden(5));
+ DeltaMessage hideDelta;v.refreshAppearance(&hideDelta);assert(hideDelta.operations==4 && ids(hideDelta)==ids(hiddenBag));
+ v.addAppearance(b);BaseMessage both;v.insertToMessage(&both);assert((crcs(both)==std::vector<uint64>{101,102,901}));
+ v.clearAppearance();assert(v.isContainerHidden(5));hidden.removeAll();v.setHiddenContainers(hidden);
+ BaseMessage shown;v.insertToMessage(&shown);assert(ids(shown)==ids(restored) && !v.isContainerHidden(5));
  std::cout<<"PASS: actual WearablesDeltaVector projects all covered targets once, preserves armor, uses projected counts and delta counters, rejects slot conflicts, and removes one selection independently. Engine dependencies are stand-ins; Debian compilation remains required.\n";
 }

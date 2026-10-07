@@ -3276,7 +3276,8 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 	}
 	Vector3 requested = destination;
 	bool continuingDetour = rider->peekBlackboard("vehiclePatrolDetour");
-	bool canMove = CollisionManager::adjustCityPatrolMovement(vehicle, destination, true);
+	bool passLeft = rider->peekBlackboard("vehiclePatrolNextDetourLeft");
+	bool canMove = CollisionManager::adjustCityPatrolMovement(vehicle, destination, true, passLeft);
 	bool detouring = rider->peekBlackboard("vehiclePatrolDetour") || destination.squaredDistanceTo(requested) > 0.01f;
 	if (canMove && detouring) {
 		if (rider->peekBlackboard("vehiclePatrolDetour"))
@@ -3351,6 +3352,10 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 			}
 			if (validPath) {
 				if (!continuingDetour) {
+					if (passLeft)
+						rider->eraseBlackboard("vehiclePatrolNextDetourLeft");
+					else
+						rider->writeBlackboard("vehiclePatrolNextDetourLeft", true);
 					vehicle->addCooldown("vehiclePatrolDetour", 5000);
 					Vector3 forward = requested - start;
 					float forwardLength = Math::sqrt(forward.getX() * forward.getX() + forward.getY() * forward.getY());

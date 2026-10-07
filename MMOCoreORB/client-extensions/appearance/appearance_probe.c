@@ -58,11 +58,66 @@ typedef void *(__attribute__((cdecl)) *ParentFunction)(void *);
 typedef void *(__attribute__((cdecl)) *LookupFunction)(const ULONGLONG *);
 static ParentFunction actualParent;
 static LookupFunction lookupObject;
+typedef void (__attribute__((thiscall)) *CollectMeshFunction)(void *, void *, int);
+typedef void (__attribute__((thiscall)) *DirtyMeshFunction)(void *);
+typedef void *(__attribute__((thiscall)) *SkeletalFunction)(void *);
+static CollectMeshFunction collectMesh;
+static DirtyMeshFunction dirtyMesh;
+#define MAX_HIDDEN_CONTAINERS 64
+static struct { ULONGLONG id, owner; } hiddenContainers[MAX_HIDDEN_CONTAINERS];
+static unsigned hiddenContainerCount;
 static ULONGLONG objectID(void *object) {
  ULONGLONG id = 0; SIZE_T bytes;
  if (object == NULL || !ReadProcessMemory(GetCurrentProcess(),
      (BYTE *)object + 0x20, &id, sizeof(id), &bytes) || bytes != sizeof(id)) return 0;
  return id;
+}
+static void *readPointer(void *object, unsigned offset) {
+ void *result = NULL; SIZE_T bytes;
+ if (object != NULL && ReadProcessMemory(GetCurrentProcess(), (BYTE *)object + offset,
+     &result, sizeof(result), &bytes) && bytes == sizeof(result)) return result;
+ return NULL;
+}
+static void invalidateOwnerMesh(ULONGLONG ownerID) {
+ void *owner = lookupObject(&ownerID);
+ void *appearance = readPointer(owner, 0x28);
+ void *vtable = readPointer(appearance, 0);
+ SkeletalFunction asSkeletal = (SkeletalFunction)readPointer(vtable, 0x74);
+ void *skeletal = asSkeletal != NULL ? asSkeletal(appearance) : NULL;
+ if (skeletal != NULL) dirtyMesh(skeletal);
+}
+static void setContainerVisibility(ULONGLONG id, ULONGLONG owner, BOOL reset) {
+ EnterCriticalSection(&logLock);
+ if (reset) {
+  /* Owner-only snapshots also clear the previous character on a soft relog. */
+  hiddenContainerCount = 0;
+ } else {
+  unsigned i;
+  for (i = 0; i < hiddenContainerCount; ++i) if (hiddenContainers[i].id == id) break;
+  if (i < MAX_HIDDEN_CONTAINERS) {
+   hiddenContainers[i].id = id; hiddenContainers[i].owner = owner;
+   if (i == hiddenContainerCount) ++hiddenContainerCount;
+  }
+ }
+ LeaveCriticalSection(&logLock);
+ invalidateOwnerMesh(owner);
+}
+static void __attribute__((stdcall,used,noinline)) collectVisibleMesh(void *appearance,
+ void *mesh, int lod, void *object, void *wearerAppearance) {
+ ULONGLONG id = objectID(object);
+ /* This recursive call collects a worn child's mesh, never its inventory icon. */
+ ULONGLONG owner = objectID(readPointer(wearerAppearance, 0x0c));
+ BOOL hidden = FALSE;
+ EnterCriticalSection(&logLock);
+ for (unsigned i = 0; id != 0 && i < hiddenContainerCount; ++i) {
+  if (hiddenContainers[i].id == id && hiddenContainers[i].owner == owner) { hidden = TRUE; break; }
+ }
+ LeaveCriticalSection(&logLock);
+ if (!hidden) collectMesh(appearance, mesh, lod);
+}
+static void __attribute__((naked)) containerMeshHook(void) {
+ __asm__ volatile("pushl -4(%ebp)\n\tpushl %eax\n\tpushl 16(%esp)\n\tpushl 16(%esp)\n\tpushl %ecx\n\t"
+  "calll _collectVisibleMesh@20\n\tretl $8\n\t");
 }
 static void clearAppearanceState(void) {
  appearanceSourceCount = appearanceTargetCount = 0;
@@ -304,6 +359,12 @@ static void __attribute__((thiscall)) containmentHook(void *object,
 #if APPEARANCE_DIAGNOSTICS
  FILE *file;
 #endif
+ if (arrangement == 0x7fff0105 || arrangement == 0x7fff0107) {
+  if (id == 0 || !ReadProcessMemory(GetCurrentProcess(), destination,
+      &parent, sizeof(parent), &bytes) || bytes != sizeof(parent) || parent == 0) return;
+  setContainerVisibility(id, parent, arrangement == 0x7fff0107);
+  return;
+ }
  if (arrangement >= 0x7fff0100 && arrangement <= 0x7fff0104) {
   if (id == 0 || !ReadProcessMemory(GetCurrentProcess(), destination,
       &parent, sizeof(parent), &bytes) || bytes != sizeof(parent)) return;
@@ -435,6 +496,7 @@ static void installProbe(void) {
 		{0x5d71fd, {0xe8,0x4e,0x58,0x73,0x00}, (void *)colorHook, 5},
 		{0x11c022, {0xe8,0xf9,0x8f,0x03,0x00}, (void *)containmentHook, 5},
 		{0x5d7169, {0xe8,0x02,0xe0,0xc7,0xff}, (void *)inventoryParentHook, 5},
+		{0x3cae5e, {0xe8,0x5d,0xff,0xff,0xff}, (void *)containerMeshHook, 5},
 		{0x741de1, {0xe8,0xea,0xfd,0xff,0xff}, (void *)accountedVolume, 5},
 		{0x742349, {0xe8,0x82,0xf8,0xff,0xff}, (void *)accountedVolume, 5},
 		{0x741ee9, {0xe8,0xe2,0xfc,0xff,0xff}, (void *)accountedVolume, 5},
@@ -444,7 +506,7 @@ static void installProbe(void) {
 	BYTE *base = (BYTE *)GetModuleHandleW(NULL);
 	IMAGE_DOS_HEADER *dos = (IMAGE_DOS_HEADER *)base;
 	IMAGE_NT_HEADERS *nt;
-	DWORD protection[12], unused, displacement;
+	DWORD protection[13], unused, displacement;
 	unsigned int i, protectedCount = 0;
 	const unsigned int hookCount = sizeof(hooks) / sizeof(hooks[0]);
 	if (installed) return;
@@ -477,6 +539,8 @@ static void installProbe(void) {
 	applyContainment = (ContainmentFunction)(base + 0x155020);
  actualParent = (ParentFunction)(base + 0x255170);
  lookupObject = (LookupFunction)(base + 0x7380e0);
+	collectMesh = (CollectMeshFunction)(base + 0x3cadc0);
+	dirtyMesh = (DirtyMeshFunction)(base + 0x3cb440);
 	for (i = 0; i < hookCount; ++i) {
 		displacement = (DWORD)((BYTE *)hooks[i].target - (base + hooks[i].rva + 5));
 		base[hooks[i].rva] = 0xe8;

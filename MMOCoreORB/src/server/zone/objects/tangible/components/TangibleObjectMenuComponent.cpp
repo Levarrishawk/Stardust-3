@@ -20,6 +20,12 @@ void TangibleObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObjec
 
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
 
+	if (player->isPlayerCreature() && tano->isWearableContainerObject() &&
+			tano->getParent() == player && tano->getContainmentType() != -1) {
+		menuResponse->addRadialMenuItem(player->isBackpackHidden(tano->getObjectID()) ? 223 : 222,
+				3, player->isBackpackHidden(tano->getObjectID()) ? "Show Backpack" : "Hide Backpack");
+	}
+
 	if (player->isPlayerCreature() && tano->isWearableObject() && !tano->isWearableContainerObject()) {
 		if (player->isAppearanceInventoryItem(tano)) {
 			if (player->isAppearanceEquipped(tano->getObjectID()))
@@ -74,6 +80,12 @@ int TangibleObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject
 		return 0;
 
 	TangibleObject* tano = cast<TangibleObject*>( sceneObject);
+
+	if (selectedID == 222 || selectedID == 223) {
+		if (player->isPlayerCreature() && tano->isWearableContainerObject())
+			player->setBackpackHidden(tano, selectedID == 222);
+		return 0;
+	}
 
 	if ((selectedID == 220 || selectedID == 221) && player->isPlayerCreature() &&
 			tano->isWearableObject() && !tano->isWearableContainerObject()) {

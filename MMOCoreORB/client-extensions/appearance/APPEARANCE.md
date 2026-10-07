@@ -104,6 +104,51 @@ appearances and independent removal, recalculation, repeated cycles, moved-sourc
 cleanup, and old-server fallback. Ordinary items still cost their original volume.
 Compile/run like abi_test.c; no game client is launched by the tests.
 
-The refreshed package is client-tools/appearance-release-v10/stardust-appearance-update.zip.
-Version 9's ZIP is archived as superseded. Version 10 still needs real-client
-verification at nearly full/full inventory before distribution.
+The version-10 package remains a rollback candidate. Its capacity correction
+is retained in version 11 and still requires real-client verification.
+
+## Hide Backpack (version 11)
+
+Equipped wearable containers offer Hide Backpack (222) and Show Backpack (223).
+The selection is stored as container IDs on the player, restored before CREO6,
+and cleared when that bag is unequipped or fails ownership/equipment validation.
+Other players' bags and unequipped bags cannot be toggled. Existing characters
+default to visible. No database schema or Engine3 change is involved.
+
+Observers omit hidden containers from the projected wearables and slotted-object
+creation. An already known observer object receives a visual inventory link to
+detach it; Show restores its genuine equipment link and projected list entry.
+The owner's backpack never receives a fake containment link. Opening, contents,
+skill mods, inventory volume and equipped highlighting use its genuine state.
+
+Owner-only marker 0x7fff0107 resets the hidden-container snapshot; 0x7fff0105
+adds a hidden container ID with its wearer ID. These are separate from cosmetic
+volume transactions. The client invalidates the wearer's skeletal mesh and skips
+the matching worn child's mesh collection at the verified recursive call
+0x7cae5e -> 0x7cadc0. The saved parent appearance is EBP-4, the child object is
+EAX, and the two native arguments are a mesh accumulator and LOD index. Skipping
+this call leaves the real object, container hierarchy and inventory icon intact.
+The native dirty method is 0x7cb440. Exact executable identity and hook bytes are
+checked before installation. No raw game-object pointers are cached.
+
+The related [SkeletalAppearance2 source](https://github.com/SWG-Source/client-tools/blob/master/src/engine/client/library/clientSkeletalAnimation/src/shared/appearance/SkeletalAppearance2.cpp)
+helped distinguish hardpoint attachments from worn skeletal meshes; the Stardust
+addresses and calling convention were checked against its own executable.
+
+Release builds now use nine hooks; diagnostic builds use thirteen. The matching
+version-11 client is required for wearers because earlier DLLs do not consume
+the backpack markers. Existing unpatched observer clients use server projection.
+Compile the changed CreatureObject.idl and C++ on Debian with generated interfaces
+refreshed by the normal build, then restart. Keep ClientStateMarkers enabled.
+
+backpack_test.c verifies the native stack adapter, hide/show mesh filtering,
+owner isolation, duplicate/reset markers and cache bounds. It also verifies that
+markers do not call native containment or populate volume accounting. Existing
+appearance ABI, volume and projection tests remain required. These tests use
+stand-ins; they do not establish actual client rendering or server compilation.
+
+Before distribution, test a loaded backpack from wearer and observer, including
+hide/show, normal highlighting, opening and moving contents, full inventory,
+clothing appearances sourced inside the hidden bag, zoning, relog and server
+restart. Unequip/re-equip should restore the default visible state. Version 11 is
+a test candidate until that sequence passes.

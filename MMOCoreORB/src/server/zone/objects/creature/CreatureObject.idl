@@ -92,6 +92,9 @@ class CreatureObject extends TangibleObject {
 	protected WearablesDeltaVector wearablesVector;
 	@dereferenced
 	protected Vector<unsigned long> appearanceSourceObjectIDs;
+
+	@dereferenced
+	protected Vector<unsigned long> hiddenWearableContainerObjectIDs;
 	protected unsigned long appearanceSourceObjectID;
 	protected unsigned long appearanceTargetObjectID;
 	protected transient boolean appearanceRestorePending;
@@ -772,6 +775,14 @@ class CreatureObject extends TangibleObject {
 
 	@preLocked
 	public native boolean equipAppearance(TangibleObject object);
+
+	@preLocked
+	public native void setBackpackHidden(TangibleObject object, boolean hidden);
+
+	@read
+	public boolean isBackpackHidden(unsigned long objectID) {
+		return hiddenWearableContainerObjectIDs.contains(objectID);
+	}
 
 	@dirty
 	public native boolean isAppearanceInventoryItem(SceneObject object);

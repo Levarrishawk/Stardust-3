@@ -1,8 +1,9 @@
 # Appearance release deployment
 
 C:/Stardust-DEV now contains the quiet release module. The public client folder
-C:/Stardust was not changed. Version 10 also requires the matching server visual transaction begin/end
-messages. Server gameplay, real inventory limits and serialization are unchanged.
+C:/Stardust was not changed. Version 11 requires the matching server backpack
+snapshot markers and the version-10 visual volume transactions. Backpack hide
+choices are now persisted on the character; server inventory limits are unchanged.
 
 ## Runtime files
 
@@ -10,7 +11,7 @@ Place these together beside the tested Stardust.exe:
 
 | File | Purpose |
 | --- | --- |
-| d3d9.dll | Appearance inventory state/color hooks and graphics forwarding |
+| d3d9.dll | Appearance state/color, volume and backpack mesh hooks; graphics forwarding |
 | d3d9-appearance-base.dll | Unmodified existing post-processing extension; required |
 | d3d9-postfx.ini | Tested post-processing configuration |
 
@@ -20,7 +21,7 @@ configuration can be retained. No executable, TRE, UI resource or other game
 asset was modified by this cleanup.
 
 The user manages public distribution. A local package is prepared at:
-client-tools/appearance-release-v10/stardust-appearance-update.zip
+client-tools/appearance-release-v11/stardust-appearance-update.zip
 Its entries are exactly the three runtime files above, with no logs, test
 binaries, backups or developer installer. SHA256.json beside the ZIP lists
 per-file hashes. The client-tools directory remains ignored by Git.
@@ -36,8 +37,10 @@ appearance DLL is also retained there as d3d9-tested-v8.dll.
 Both release and diagnostic ABI tests passed, including several sources and
 covered targets, independent reset/replay, ordinary-color fallback, cache bounds
 and unchanged containment forwarding. Four-export graphics forwarding and
-executable-mismatch rejection passed. Version 10 needs real-client capacity verification at 3/80 and nearly/full 80/80
-before distribution, after building/restarting the matching server update.
+executable-mismatch rejection passed. Backpack mesh adapter and state tests pass.
+Version 11 needs real-client hide/show, loaded-bag access, persistence, observer
+and nearly/full inventory verification before distribution, after rebuilding
+generated IDL/C++ and restarting the matching server update. See APPEARANCE.md.
 
 The appearance module writes one startup status to appearance-client.log.
 Existing post-processing logging remains unchanged. Runtime-generated logs and

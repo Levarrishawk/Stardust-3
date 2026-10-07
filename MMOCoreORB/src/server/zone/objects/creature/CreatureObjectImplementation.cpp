@@ -100,7 +100,8 @@ float CreatureObjectImplementation::DEFAULTRUNSPEED = 5.376f;
 void CreatureObjectImplementation::initializeTransientMembers() {
 	TangibleObjectImplementation::initializeTransientMembers();
 	wearablesVector.clearAppearance();
-	appearanceRestorePending = appearanceSourceObjectIDs.size() != 0 || appearanceSourceObjectID != 0 || appearanceTargetObjectID != 0;
+	wearablesVector.setHiddenContainers(Vector<uint64>());
+	appearanceRestorePending = appearanceSourceObjectIDs.size() != 0 || appearanceSourceObjectID != 0 || appearanceTargetObjectID != 0 || hiddenWearableContainerObjectIDs.size() != 0;
 
 	groupInviterID = 0;
 	groupInviteCounter = 0;
@@ -129,6 +130,7 @@ void CreatureObjectImplementation::initializeTransientMembers() {
 
 void CreatureObjectImplementation::initializeMembers() {
 	appearanceSourceObjectIDs.removeAll();
+	hiddenWearableContainerObjectIDs.removeAll();
 	appearanceSourceObjectID = 0;
 	appearanceTargetObjectID = 0;
 	appearanceRestorePending = false;
@@ -522,8 +524,9 @@ void CreatureObjectImplementation::sendSlottedObjectsTo(SceneObject* player) {
 			if (object == nullptr)
 				continue;
 
-			if (player != asCreatureObject() && wearablesVector.isAppearanceTarget(object->getObjectID())) {
-				// CREO6 already creates the cosmetic wearable using this ID for observers.
+			if (player != asCreatureObject() && (wearablesVector.isAppearanceTarget(object->getObjectID()) ||
+					wearablesVector.isContainerHidden(object->getObjectID()))) {
+				// Observers receive cosmetic replacements or omit hidden containers in CREO6.
 				continue;
 			}
 
@@ -4346,6 +4349,21 @@ void CreatureObjectImplementation::restoreAppearanceSelection() {
 			changed = true;
 	}
 	appearanceSourceObjectIDs = validSources;
+	Vector<uint64> hiddenContainers;
+	for (int i = 0; i < hiddenWearableContainerObjectIDs.size(); ++i) {
+		uint64 objectID = hiddenWearableContainerObjectIDs.get(i);
+		ManagedReference<SceneObject*> object = zoneServer->getObject(objectID);
+		if (object == nullptr || !object->isWearableContainerObject() || cast<TangibleObject*>(object.get())->isDestroyed() ||
+				object->getParent() != asCreatureObject() || object->getContainmentType() == -1 ||
+				!wearablesVector.contains(cast<TangibleObject*>(object.get())) || hiddenContainers.contains(objectID) ||
+				hiddenContainers.size() >= 64) {
+			changed = true;
+			continue;
+		}
+		hiddenContainers.add(objectID);
+	}
+	hiddenWearableContainerObjectIDs = hiddenContainers;
+	wearablesVector.setHiddenContainers(hiddenContainers);
 	appearanceRestorePending = false;
 	if (changed)
 		asCreatureObject()->updateToDatabase();
@@ -4361,6 +4379,13 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 	if (!restore && inventory == nullptr)
 		return;
 	bool markers = ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false);
+	if (markers && !restore) {
+		// Backpack state changes mesh collection only; its containment stays genuine.
+		sendMessage(new UpdateContainmentMessage(getObjectID(), getObjectID(), 0x7FFF0107));
+		Vector<uint64> hiddenContainers = wearablesVector.getHiddenContainers();
+		for (int i = 0; i < hiddenContainers.size(); ++i)
+			sendMessage(new UpdateContainmentMessage(hiddenContainers.get(i), getObjectID(), 0x7FFF0105));
+	}
 	if (markers) {
 		ManagedReference<SceneObject*> parent = getParent().get();
 		sendMessage(new UpdateContainmentMessage(getObjectID(), parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0103));
@@ -4400,6 +4425,46 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 		sendMessage(new UpdateContainmentMessage(getObjectID(), parent != nullptr ? parent->getObjectID() : 0, 0x7FFF0104));
 	}
 
+}
+
+void CreatureObjectImplementation::setBackpackHidden(TangibleObject* object, bool hidden) {
+	if (!isPlayerCreature() || object == nullptr || !object->isWearableContainerObject() || object->isDestroyed() ||
+			object->getParent() != asCreatureObject() || object->getContainmentType() == -1 || !wearablesVector.contains(object))
+		return;
+	if (!ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false)) {
+		sendSystemMessage("Backpack visibility is not enabled on this server.");
+		return;
+	}
+	ManagedReference<SceneObject*> inventory = getSlottedObject("inventory");
+	if (inventory == nullptr || getZone() == nullptr || getClient() == nullptr)
+		return;
+	uint64 objectID = object->getObjectID();
+	if (hiddenWearableContainerObjectIDs.contains(objectID) == hidden)
+		return;
+	if (hidden) {
+		if (hiddenWearableContainerObjectIDs.size() >= 64)
+			return;
+		hiddenWearableContainerObjectIDs.add(objectID);
+	} else {
+		hiddenWearableContainerObjectIDs.removeElement(objectID);
+	}
+	appearanceRestorePending = true;
+	restoreAppearanceSelection();
+	asCreatureObject()->updateToDatabase();
+	sendAppearanceToOwner();
+	// Detach an already known observer object; newly arriving observers omit it entirely.
+	broadcastMessage(object->link(hidden ? inventory->getObjectID() : getObjectID(),
+			hidden ? -1 : object->getContainmentType()), false);
+	CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(asCreatureObject());
+	msg->startUpdate(0x0F);
+	wearablesVector.refreshAppearance(msg);
+	msg->close();
+	sendMessage(msg->clone());
+	Vector<BasePacket*> messages;
+	messages.add(msg);
+	broadcastMessages(&messages, false);
+	sendAppearanceToOwner();
+	sendSystemMessage(hidden ? "Backpack hidden. It remains equipped and usable." : "Backpack shown.");
 }
 
 void CreatureObjectImplementation::clearAppearance(bool notifyClient, uint64 sourceID) {
@@ -4445,7 +4510,7 @@ int CreatureObjectImplementation::notifyObjectRemovedFromChild(SceneObject* obje
 void CreatureObjectImplementation::addWearableObject(TangibleObject* object, bool notifyClient) {
 	if (wearablesVector.contains(object))
 		return;
-	bool project = wearablesVector.getAppearanceSourceID() != 0;
+	bool project = wearablesVector.getAppearanceSourceID() != 0 || hiddenWearableContainerObjectIDs.size() != 0;
 	if (project)
 		sendAppearanceToOwner(true);
 	CreatureObjectDeltaMessage6* msg = notifyClient ? new CreatureObjectDeltaMessage6(asCreatureObject()) : nullptr;
@@ -4476,7 +4541,7 @@ void CreatureObjectImplementation::removeWearableObject(TangibleObject* object, 
 	int index = wearablesVector.find(object);
 	if (index == -1)
 		return;
-	bool project = wearablesVector.getAppearanceSourceID() != 0;
+	bool project = wearablesVector.getAppearanceSourceID() != 0 || hiddenWearableContainerObjectIDs.size() != 0;
 	if (project)
 		sendAppearanceToOwner(true);
 	CreatureObjectDeltaMessage6* msg = notifyClient ? new CreatureObjectDeltaMessage6(asCreatureObject()) : nullptr;

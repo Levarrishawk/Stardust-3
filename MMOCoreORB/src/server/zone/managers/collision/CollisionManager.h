@@ -62,7 +62,7 @@ public:
 	static bool checkLineOfSightWorldToCell(const Vector3& rayOrigin, const Vector3& rayEnd, float distance, CellObject* cell);
 	static bool checkMovementCollision(CreatureObject* creature, CloseObjectsVector* closeObjectsVector, Zone* zone, const Vector3& lastValidWorld, const Vector3& transformPosition);
 	static float getRayOriginPoint(CreatureObject* creature);
-	static bool adjustCityPatrolMovement(CreatureObject* creature, Vector3& destination, bool vehicle = false);
+	static bool adjustCityPatrolMovement(CreatureObject* creature, Vector3& destination, bool vehicle = false, bool passLeft = false);
 
 	static float getWorldFloorCollision(float x, float y, Zone* zone, bool testWater);
 	static float getWorldFloorCollision(float x, float y, float z, Zone* zone, bool testWater);
