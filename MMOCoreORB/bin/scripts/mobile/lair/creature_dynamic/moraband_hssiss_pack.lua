@@ -1,11 +1,12 @@
 moraband_hssiss_pack = Lair:new {
-	mobiles = {{"hssiss",2},{"hssiss",1}},
-	spawnLimit = 35,
+	mobiles = {{"hssiss",1}},
+	spawnLimit = 2,
 	buildingsVeryEasy = {},
-  buildingsEasy = {},
-  buildingsMedium = {},
-  buildingsHard = {},
-  buildingsVeryHard = {},
+	buildingsEasy = {},
+	buildingsMedium = {},
+	buildingsHard = {},
+	buildingsVeryHard = {},
+	mobType = "creature",
 	buildingType = "none"
 }
 

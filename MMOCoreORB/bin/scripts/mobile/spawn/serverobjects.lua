@@ -643,3 +643,6 @@ includeFile("spawn/alderaan/alderaan_house_thul.lua")
 
 -- Hutta
 includeFile("spawn/hutta_world.lua")
+
+-- Moraband
+includeFile("spawn/moraband_world.lua")

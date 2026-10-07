@@ -1,6 +1,6 @@
 terentatek = Creature:new {
 	customName = "a Terentatek",
-	socialGroup = "graul",
+	socialGroup = "terentatek",
   pvpFaction = "",
   faction = "",
   mobType = MOB_CARNIVORE,
@@ -27,11 +27,13 @@ terentatek = Creature:new {
   optionsBitmask = AIENABLED,
   diet = CARNIVORE,
 
-	templates = {"object/mobile/wod_mutant_rancor_boss.iff"},
+	templates = {"object/mobile/mutant_rancor.iff"},
 	lootGroups = {},
-  weapons = {},
+  primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	secondaryAttacks = {},
   conversationTemplate = "",
-  attacks = {
+  primaryAttacks = {
     {"intimidationattack","intimidationChance=50"},
     {"stunattack","stunChance=50"},
     {"knockdownattack","knockdownChance=95"}

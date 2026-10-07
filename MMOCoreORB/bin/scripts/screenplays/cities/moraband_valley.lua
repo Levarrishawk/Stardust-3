@@ -1,5 +1,3 @@
-local ObjectManager = require("managers.object.object_manager")
-
 MorabandValleyScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
@@ -275,19 +273,19 @@ function MorabandValleyScreenPlay:spawnMobiles()
     
     spawnMobile("moraband", "tukata", 60, -64.7, -37, -17.2, 70, 42000060)
     
-    spawnMobile("yavin4", "klor_slug",600,-9,-37.3,-9,48,42000040)
-    spawnMobile("yavin4", "klor_slug",600,-10.5,-37.3,4.2,111,42000040)
-    spawnMobile("yavin4", "klor_slug",600,6.6,-37.3,12.8,-149,42000040)
-    spawnMobile("yavin4", "klor_slug",600,10.2,-37.3,4.8,-110,42000040)
-    spawnMobile("yavin4", "klor_slug",600,10.9,-37.3,-3.9,-69,42000040)
-    spawnMobile("yavin4", "klor_slug",600,-12.1,-37.3,18.2,74,42000040)
+    spawnMobile("moraband", "klor_slug",600,-9,-37.3,-9,48,42000040)
+    spawnMobile("moraband", "klor_slug",600,-10.5,-37.3,4.2,111,42000040)
+    spawnMobile("moraband", "klor_slug",600,6.6,-37.3,12.8,-149,42000040)
+    spawnMobile("moraband", "klor_slug",600,10.2,-37.3,4.8,-110,42000040)
+    spawnMobile("moraband", "klor_slug",600,10.9,-37.3,-3.9,-69,42000040)
+    spawnMobile("moraband", "klor_slug",600,-12.1,-37.3,18.2,74,42000040)
     
-    spawnMobile("yavin4", "klor_slug",600,-0.6,-37.3,-28.3,-19,42000040)
+    spawnMobile("moraband", "klor_slug",600,-0.6,-37.3,-28.3,-19,42000040)
     
-    spawnMobile("yavin4", "klor_slug",600,-24,-1.3,10.3,93,42000040)
-    spawnMobile("yavin4", "klor_slug",600,-16.4,-1.3,-21,49,42000040)
-    spawnMobile("yavin4", "klor_slug",600,12.1,-1.3,-23.4,21,42000040)
-    spawnMobile("yavin4", "klor_slug",600,23.4,-1.3,11,-77,42000040)
+    spawnMobile("moraband", "klor_slug",600,-24,-1.3,10.3,93,42000040)
+    spawnMobile("moraband", "klor_slug",600,-16.4,-1.3,-21,49,42000040)
+    spawnMobile("moraband", "klor_slug",600,12.1,-1.3,-23.4,21,42000040)
+    spawnMobile("moraband", "klor_slug",600,23.4,-1.3,11,-77,42000040)
       
    end
 
@@ -295,20 +293,16 @@ function MorabandValleyScreenPlay:spawnMobiles()
 
 
 function MorabandValleyScreenPlay:spawnActiveArea1()
-  local pSpawnArea1 = spawnSceneObject("moraband", "object/active_area.iff", -1319, 14, -585, 0, 0)
+  local pSpawnArea1 = spawnActiveArea("moraband", "object/active_area.iff", -1319, 14, -585, 32, 0)
     
   if (pSpawnArea1 ~= nil) then
-    local activeArea1 = LuaActiveArea(pSpawnArea1)
-          activeArea1:setCellObjectID(0)
-          activeArea1:setRadius(32)
           createObserver(ENTEREDAREA, "MorabandValleyScreenPlay", "notifySpawnArea1", pSpawnArea1)
-          --createObserver(EXITEDAREA, "MorabandValleyScreenPlay", "notifySpawnAreaLeave", pSpawnArea1)
       end
 end
 
 function MorabandValleyScreenPlay:notifySpawnArea1(pActiveArea1, pMovingObject, pPlayer)
   
-    if (not SceneObject(pMovingObject):isPlayerCreature()) then
+    if (pMovingObject == nil or not SceneObject(pMovingObject):isPlayerCreature()) then
       return 0
     else
       CreatureObject(pMovingObject):sendSystemMessage("You feel cold as you approach the edifice of the Tomb.")
@@ -320,25 +314,27 @@ end
 
 
 function MorabandValleyScreenPlay:spawnActiveArea2()
-  local pSpawnArea2 = spawnSceneObject("moraband", "object/active_area.iff", -1102, 93, -484, 0, 42000220)
+  local pCell = getSceneObject(42000220)
+  if (pCell == nil or not SceneObject(pCell):isCellObject()) then
+    print("MorabandValleyScreenPlay: missing building cell 42000220; skipping interior active area.")
+    return
+  end
+
+  local pSpawnArea2 = spawnActiveArea("moraband", "object/active_area.iff", -1102, 93, -484, 512, 42000220)
     
   if (pSpawnArea2 ~= nil) then
-    local activeArea2 = LuaActiveArea(pSpawnArea2)
-          activeArea2:setCellObjectID(42000220)
-          activeArea2:setRadius(512)
           createObserver(ENTEREDAREA, "MorabandValleyScreenPlay", "notifySpawnArea2", pSpawnArea2)
-          --createObserver(EXITEDAREA, "MorabandValleyScreenPlay", "notifySpawnAreaLeave", pSpawnArea1)
       end
 end
 
 function MorabandValleyScreenPlay:notifySpawnArea2(pActiveArea2, pMovingObject, pPlayer)
   
-  if (not SceneObject(pMovingObject):isCreatureObject()) then
+  if (pMovingObject == nil or not SceneObject(pMovingObject):isPlayerCreature()) then
     return 0
   end    
     if  (CreatureObject(pMovingObject):isRebel() or CreatureObject(pMovingObject):isNeutral()) then
       CreatureObject(pMovingObject):sendSystemMessage("You feel uneasy as you enter the building.  The Dark Side is strong here.")
-      CreatureObject(pMovingObject):playMusicMessage("sound/music_bcome_light_jedi.snd")      
+      CreatureObject(pMovingObject):playMusicMessage("sound/music_become_light_jedi.snd")
     else    
       CreatureObject(pMovingObject):sendSystemMessage("You feel a rush of energy.  The Dark Side is strong here.")
       CreatureObject(pMovingObject):playMusicMessage("sound/music_become_dark_jedi.snd")
@@ -349,19 +345,15 @@ end
 
 
 function MorabandValleyScreenPlay:spawnActiveArea3()
-  local pSpawnArea3 = spawnSceneObject("moraband", "object/active_area.iff", -1159, 12, -1021, 0, 0)
+  local pSpawnArea3 = spawnActiveArea("moraband", "object/active_area.iff", -1159, 12, -1021, 20, 0)
     
   if (pSpawnArea3 ~= nil) then
-    local activeArea3 = LuaActiveArea(pSpawnArea3)
-          activeArea3:setCellObjectID(0)
-          activeArea3:setRadius(20)
           createObserver(ENTEREDAREA, "MorabandValleyScreenPlay", "notifySpawnArea3", pSpawnArea3)
-          --createObserver(EXITEDAREA, "MorabandValleyScreenPlay", "notifySpawnAreaLeave", pSpawnArea1)
       end
 end
 
 function MorabandValleyScreenPlay:notifySpawnArea3(pActiveArea2, pMovingObject, pPlayer) 
-    if (not SceneObject(pMovingObject):isPlayerCreature()) then
+    if (pMovingObject == nil or not SceneObject(pMovingObject):isPlayerCreature()) then
         return 0
     else
         CreatureObject(pMovingObject):sendSystemMessage("You feel an uncontrollable sense of anger as you approach the edifice of the Tomb.")

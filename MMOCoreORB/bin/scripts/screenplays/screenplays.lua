@@ -891,3 +891,6 @@ includeFile("mustafar/regions/mensix_facility_region.lua")
 includeFile("mustafar/regions/north_west_region.lua")
 includeFile("mustafar/regions/smoking_forest_region.lua")
 includeFile("mustafar/regions/storm_lord_region.lua")
+
+-- Moraband
+includeFile("cities/moraband_valley.lua")

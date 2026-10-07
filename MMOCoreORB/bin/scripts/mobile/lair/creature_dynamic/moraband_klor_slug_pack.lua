@@ -1,11 +1,12 @@
 moraband_klor_slug_pack = Lair:new {
-	mobiles = {{"klor_slug",2},{"klor_slug",1}},
-	spawnLimit = 35,
+	mobiles = {{"klor_slug",1}},
+	spawnLimit = 6,
 	buildingsVeryEasy = {},
-  buildingsEasy = {},
-  buildingsMedium = {},
-  buildingsHard = {},
-  buildingsVeryHard = {},
+	buildingsEasy = {},
+	buildingsMedium = {},
+	buildingsHard = {},
+	buildingsVeryHard = {},
+	mobType = "creature",
 	buildingType = "none"
 }
 

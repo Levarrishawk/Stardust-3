@@ -3,3 +3,6 @@ includeFile("moraband/creatures/klor_slug.lua")
 includeFile("moraband/creatures/hssiss.lua")
 includeFile("moraband/creatures/terentatek.lua")
 includeFile("moraband/creatures/shyrack.lua")
+
+includeFile("moraband/creatures/wraid.lua")
+includeFile("moraband/creatures/pelko_bug.lua")

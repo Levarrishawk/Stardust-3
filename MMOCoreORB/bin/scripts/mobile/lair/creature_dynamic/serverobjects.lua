@@ -591,3 +591,12 @@ includeFile("lair/creature_dynamic/hutta_bog_rodent_pack.lua")
 includeFile("lair/creature_dynamic/hutta_chemilizard_pack.lua")
 includeFile("lair/creature_dynamic/hutta_dragonsnake_pack.lua")
 includeFile("lair/creature_dynamic/hutta_xuuva_pack.lua")
+
+-- Moraband
+includeFile("lair/creature_dynamic/moraband_tukata_pack.lua")
+includeFile("lair/creature_dynamic/moraband_shyrack_pack.lua")
+includeFile("lair/creature_dynamic/moraband_klor_slug_pack.lua")
+includeFile("lair/creature_dynamic/moraband_hssiss_pack.lua")
+includeFile("lair/creature_dynamic/moraband_terentatek_pack.lua")
+includeFile("lair/creature_dynamic/moraband_wraid_pack.lua")
+includeFile("lair/creature_dynamic/moraband_pelko_bug_pack.lua")

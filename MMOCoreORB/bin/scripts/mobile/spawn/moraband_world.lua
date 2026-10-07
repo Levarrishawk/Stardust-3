@@ -1,151 +1,141 @@
 moraband_world = {
-
 	lairSpawns = {
 		{
-			lairTemplateName = "moraband_terentatek_pack",
+			lairTemplateName = "moraband_pelko_bug_pack",
 			spawnLimit = -1,
-			minDifficulty = 3,
-			maxDifficulty = 7,
+			minDifficulty = 8,
+			maxDifficulty = 12,
+			numberToSpawn = 0,
+			weighting = 25,
+			size = 25
+		},
+		{
+			lairTemplateName = "moraband_pelko_bug_lair",
+			spawnLimit = -1,
+			minDifficulty = 8,
+			maxDifficulty = 12,
 			numberToSpawn = 0,
 			weighting = 15,
 			size = 25
 		},
 		{
-			lairTemplateName = "moraband_tukata_pack",
+			lairTemplateName = "moraband_shyrack_pack",
 			spawnLimit = -1,
-			minDifficulty = 4,
-			maxDifficulty = 18,
+			minDifficulty = 19,
+			maxDifficulty = 23,
+			numberToSpawn = 0,
+			weighting = 20,
+			size = 25
+		},
+		{
+			lairTemplateName = "moraband_shyrack_lair",
+			spawnLimit = -1,
+			minDifficulty = 19,
+			maxDifficulty = 23,
+			numberToSpawn = 0,
+			weighting = 10,
+			size = 25
+		},
+		{
+			lairTemplateName = "moraband_wraid_pack",
+			spawnLimit = -1,
+			minDifficulty = 50,
+			maxDifficulty = 54,
 			numberToSpawn = 0,
 			weighting = 15,
 			size = 25
 		},
 		{
 			lairTemplateName = "moraband_klor_slug_pack",
-			spawnLimit = -1,
-			minDifficulty = 5,
-			maxDifficulty = 9,
+			spawnLimit = 4,
+			minDifficulty = 230,
+			maxDifficulty = 234,
 			numberToSpawn = 0,
-			weighting = 15,
+			weighting = 8,
+			size = 25
+		},
+		{
+			lairTemplateName = "moraband_klor_slug_lair",
+			spawnLimit = 3,
+			minDifficulty = 230,
+			maxDifficulty = 234,
+			numberToSpawn = 0,
+			weighting = 5,
+			size = 25
+		},
+		{
+			lairTemplateName = "moraband_tukata_pack",
+			spawnLimit = -1,
+			minDifficulty = 70,
+			maxDifficulty = 74,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "moraband_tukata_lair",
+			spawnLimit = -1,
+			minDifficulty = 70,
+			maxDifficulty = 74,
+			numberToSpawn = 0,
+			weighting = 8,
 			size = 25
 		},
 		{
 			lairTemplateName = "moraband_hssiss_pack",
-			spawnLimit = -1,
-			minDifficulty = 5,
-			maxDifficulty = 19,
+			spawnLimit = 1,
+			minDifficulty = 215,
+			maxDifficulty = 219,
 			numberToSpawn = 0,
-			weighting = 15,
+			weighting = 1,
 			size = 25
 		},
 		{
-			lairTemplateName = "lok_marooned_pirate_patrol_neutral_none",
-			spawnLimit = -1,
+			lairTemplateName = "moraband_terentatek_pack",
+			spawnLimit = 1,
+			minDifficulty = 100,
+			maxDifficulty = 104,
+			numberToSpawn = 0,
+			weighting = 1,
+			size = 25
+		},
+		{
+			lairTemplateName = "moraband_pirate_patrol",
+			spawnLimit = 2,
 			minDifficulty = 19,
-			maxDifficulty = 23,
+			maxDifficulty = 29,
 			numberToSpawn = 0,
-			weighting = 15,
+			weighting = 2,
 			size = 25
-		},		
+		},
 		{
-			lairTemplateName = "lok_marooned_pirate_camp_neutral_medium_theater",
-			spawnLimit = -1,
+			lairTemplateName = "moraband_pirate_camp",
+			spawnLimit = 1,
 			minDifficulty = 19,
-			maxDifficulty = 28,
+			maxDifficulty = 29,
 			numberToSpawn = 0,
-			weighting = 15,
-			size = 25
-		},	
-		{
-			lairTemplateName = "lok_marooned_pirate_patrol2_neutral_none",
-			spawnLimit = -1,
-			minDifficulty = 22,
-			maxDifficulty = 26,
-			numberToSpawn = 0,
-			weighting = 15,
-			size = 25
-		},		
-		{
-			lairTemplateName = "moraband_shyrack_pack",
-			spawnLimit = -1,
-			minDifficulty = 23,
-			maxDifficulty = 27,
-			numberToSpawn = 0,
-			weighting = 15,
+			weighting = 1,
 			size = 25
 		},
 		{
-			lairTemplateName = "lok_mynock_lair_neutral_medium",
-			spawnLimit = -1,
-			minDifficulty = 23,
-			maxDifficulty = 27,
+			lairTemplateName = "moraband_tomb_robber_patrol",
+			spawnLimit = 2,
+			minDifficulty = 19,
+			maxDifficulty = 29,
 			numberToSpawn = 0,
-			weighting = 15,
-			size = 25
-		},		
-		{
-			lairTemplateName = "lok_mynock_pack2_neutral_none",
-			spawnLimit = -1,
-			minDifficulty = 30,
-			maxDifficulty = 34,
-			numberToSpawn = 0,
-			weighting = 15,
+			weighting = 2,
 			size = 25
 		},
 		{
-          lairTemplateName = "dantooine_dark_side_savage_neutral_none",
-          spawnLimit = -1,
-          minDifficulty = 75,
-          maxDifficulty = 79,
-          numberToSpawn = 0,
-          weighting = 15,
-          size = 40
-        },
-        {
-          lairTemplateName = "dantooine_force_renegade_neutral_none",
-          spawnLimit = -1,
-          minDifficulty = 80,
-          maxDifficulty = 84,
-          numberToSpawn = 0,
-          weighting = 15,
-          size = 40
-        },
-        {
-          lairTemplateName = "dantooine_force_archaist_neutral_none",
-          spawnLimit = -1,
-          minDifficulty = 90,
-          maxDifficulty = 94,
-          numberToSpawn = 0,
-          weighting = 15,
-          size = 40
-        },
-        {
-          lairTemplateName = "dantooine_force_crypt_crawler_neutral_none",
-          spawnLimit = -1,
-          minDifficulty = 95,
-          maxDifficulty = 99,
-          numberToSpawn = 0,
-          weighting = 15,
-          size = 40
-        },
-        {
-          lairTemplateName = "dantooine_force_wilder_neutral_none",
-          spawnLimit = -1,
-          minDifficulty = 115,
-          maxDifficulty = 119,
-          numberToSpawn = 0,
-          weighting = 15,
-          size = 40
-        },
-        {
-          lairTemplateName = "dantooine_force_crystal_hunter_neutral_none",
-          spawnLimit = -1,
-          minDifficulty = 115,
-          maxDifficulty = 119,
-          numberToSpawn = 0,
-          weighting = 15,
-          size = 40
-        },		
+			lairTemplateName = "moraband_tomb_robber_camp",
+			spawnLimit = 1,
+			minDifficulty = 19,
+			maxDifficulty = 29,
+			numberToSpawn = 0,
+			weighting = 1,
+			size = 25
+		},
 	}
 }
 
-addSpawnGroup("moraband_world", moraband_world);
+addSpawnGroup("moraband_world", moraband_world)

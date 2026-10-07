@@ -18,5 +18,5 @@ moraband_regions = {
   {"shyrack_cave", 457, -235, {CIRCLE, 250}, NOBUILDZONEAREA},
   {"archaeological_outpost", -1712, -679, {CIRCLE, 200}, NOBUILDZONEAREA + NOSPAWNAREA},
   {"@moraband_region_names:dreshdae_valley", 1081, -5333, {CIRCLE, 500}, CITY + NOSPAWNAREA},
- -- {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"moraband_world", "global_hard"}, 2048}
+  {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"moraband_world"}, 128}
 }

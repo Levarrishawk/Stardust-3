@@ -600,3 +600,9 @@ includeFile("lair/creature_lair/hutta_anooba_lair.lua")
 includeFile("lair/creature_lair/hutta_akk_dog_lair.lua")
 includeFile("lair/creature_lair/hutta_whirlbat_lair.lua")
 includeFile("lair/creature_lair/hutta_navora_frog_lair.lua")
+
+-- Moraband
+includeFile("lair/creature_lair/moraband_tukata_lair.lua")
+includeFile("lair/creature_lair/moraband_shyrack_lair.lua")
+includeFile("lair/creature_lair/moraband_klor_slug_lair.lua")
+includeFile("lair/creature_lair/moraband_pelko_bug_lair.lua")

@@ -1,6 +1,6 @@
 klor_slug = Creature:new {
     customName = "a K'lor'slug",
-	socialGroup = "kun",
+	socialGroup = "klor_slug",
 	faction = "",
 	mobType = MOB_CARNIVORE,
 	level = 230,
@@ -42,9 +42,11 @@ klor_slug = Creature:new {
       lootChance = 3000000
     }
   },
-  weapons = {},
+  primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	secondaryAttacks = {},
   conversationTemplate = "",
-  attacks = {
+  primaryAttacks = {
     {"creatureareableeding",""},
     {"creatureareacombo",""}
   }

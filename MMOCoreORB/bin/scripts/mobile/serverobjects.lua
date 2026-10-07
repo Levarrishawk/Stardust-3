@@ -55,3 +55,7 @@ includeFile("../custom_scripts/mobile/serverobjects.lua")
 
 --Hutta
 includeFile("hutta/serverobjects.lua")
+
+-- Moraband
+includeFile("moraband/creatures/serverobjects.lua")
+includeFile("moraband/world_npcs.lua")

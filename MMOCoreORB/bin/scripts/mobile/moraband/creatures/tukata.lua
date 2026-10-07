@@ -1,8 +1,8 @@
 tukata = Creature:new {
 	customName = "a Tuk'ata",
-	socialGroup = "townsperson",
+	socialGroup = "tukata",
 	faction = "",
-	mobType = MOB_NPC,
+	mobType = MOB_CARNIVORE,
 	level = 70,
 	chanceHit = 0.27,
 	damageMin = 550,
@@ -33,9 +33,11 @@ tukata = Creature:new {
 			lootChance = 2100000
 		}
 	},
-	weapons = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	secondaryAttacks = {},
 	conversationTemplate = "",
-	attacks = {
+	primaryAttacks = {
     {"creatureareableeding",""},
     {"creatureareacombo",""}
   }

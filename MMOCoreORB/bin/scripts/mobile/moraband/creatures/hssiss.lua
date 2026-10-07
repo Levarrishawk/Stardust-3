@@ -1,8 +1,8 @@
 hssiss= Creature:new {
     customName = "a Hssiss",
-	socialGroup = "kun",
+	socialGroup = "hssiss",
 	faction = "",
-	mobType = MOB_HERBIVORE,
+	mobType = MOB_CARNIVORE,
 	level = 215,
 	chanceHit = 2.75,
 	damageMin = 800,
@@ -26,11 +26,11 @@ hssiss= Creature:new {
 	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
 	creatureBitmask = PACK,
 	optionsBitmask = AIENABLED,
-	diet = HERBIVORE,
-  scale = .3,
+	diet = CARNIVORE,
+  scale = 0.85,
 
 	templates = {
-		"object/mobile/vog_eel.iff"},
+		"object/mobile/kimogila_hue.iff"},
 
 	lootGroups = {
     {
@@ -43,9 +43,11 @@ hssiss= Creature:new {
       lootChance = 3000000
     }
   },
-  weapons = {},
+  primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	secondaryAttacks = {},
   conversationTemplate = "",
-  attacks = {
+  primaryAttacks = {
     {"creatureareableeding",""},
     {"creatureareacombo",""}
   }

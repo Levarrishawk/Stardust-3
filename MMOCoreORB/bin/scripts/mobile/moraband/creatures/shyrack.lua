@@ -31,10 +31,11 @@ shyrack = Creature:new {
 	controlDeviceTemplate = "object/intangible/pet/flewt_hue.iff",
 	scale = 3.5,
 	lootGroups = {},
-	weapons = {},
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	secondaryAttacks = {},
 	conversationTemplate = "",
-	attacks = {
-		{"",""},
+	primaryAttacks = {
 		{"dizzyattack",""}
 	}
 }

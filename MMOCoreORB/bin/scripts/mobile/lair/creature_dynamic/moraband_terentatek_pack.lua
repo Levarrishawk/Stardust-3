@@ -1,11 +1,12 @@
 moraband_terentatek_pack = Lair:new {
-	mobiles = {{"terentatek",2},{"terentatek",1}},
-	spawnLimit = 35,
+	mobiles = {{"terentatek",1}},
+	spawnLimit = 1,
 	buildingsVeryEasy = {},
-  buildingsEasy = {},
-  buildingsMedium = {},
-  buildingsHard = {},
-  buildingsVeryHard = {},
+	buildingsEasy = {},
+	buildingsMedium = {},
+	buildingsHard = {},
+	buildingsVeryHard = {},
+	mobType = "creature",
 	buildingType = "none"
 }
 

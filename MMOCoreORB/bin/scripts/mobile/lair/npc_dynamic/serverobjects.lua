@@ -196,3 +196,7 @@ includeFile("lair/npc_dynamic/hutta_spice_smuggler_patrol.lua")
 includeFile("lair/npc_dynamic/hutta_cartel_patrol.lua")
 includeFile("lair/npc_dynamic/hutta_weequay_gang.lua")
 includeFile("lair/npc_dynamic/hutta_evocii_refugees.lua")
+
+-- Moraband
+includeFile("lair/npc_dynamic/moraband_pirate_patrol.lua")
+includeFile("lair/npc_dynamic/moraband_tomb_robber_patrol.lua")

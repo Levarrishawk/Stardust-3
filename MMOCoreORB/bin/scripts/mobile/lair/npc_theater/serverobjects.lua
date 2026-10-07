@@ -289,3 +289,7 @@ includeFile("lair/npc_theater/yavin4/yavin4_stranded_imperial_patrol_imperial_me
 includeFile("lair/npc_theater/alderaan/house_thul_camp_neutral_small_theater.lua")
 includeFile("lair/npc_theater/alderaan/house_thul_camp_neutral_medium_theater.lua")
 includeFile("lair/npc_theater/alderaan/house_thul_camp_neutral_large_theater.lua")
+
+-- Moraband
+includeFile("lair/npc_theater/moraband_pirate_camp.lua")
+includeFile("lair/npc_theater/moraband_tomb_robber_camp.lua")

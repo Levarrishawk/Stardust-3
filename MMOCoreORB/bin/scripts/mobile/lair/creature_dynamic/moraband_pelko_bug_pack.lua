@@ -1,5 +1,5 @@
-moraband_shyrack_pack = Lair:new {
-	mobiles = {{"shyrack",1}},
+moraband_pelko_bug_pack = Lair:new {
+	mobiles = {{"pelko_bug",1}},
 	spawnLimit = 8,
 	buildingsVeryEasy = {},
 	buildingsEasy = {},
@@ -10,4 +10,4 @@ moraband_shyrack_pack = Lair:new {
 	buildingType = "none"
 }
 
-addLairTemplate("moraband_shyrack_pack", moraband_shyrack_pack)
+addLairTemplate("moraband_pelko_bug_pack", moraband_pelko_bug_pack)
