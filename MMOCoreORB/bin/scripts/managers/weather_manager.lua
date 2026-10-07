@@ -252,6 +252,17 @@ elysium = {
   weatherStability = 100, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
 }
 
+-----------------
+--   Mortis
+-----------------
+mortis = {
+
+  defaultWeather = 0, -- Sunny
+
+  averageWeatherDuration = 900, -- In seconds
+
+  weatherStability = 100, -- Range 0 - 100, Higher = Less weather changes, Overall better weather
+}
 
 -----------------
 --     Hutta

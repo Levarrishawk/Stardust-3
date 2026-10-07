@@ -651,6 +651,23 @@ elysium2 = {
   }
 }
 
+mortis = {
+  weatherEnabled = 1,
+  gcwEnabled = 0,
+
+  planetTravelPoints = {
+  },
+
+  badgeAreas = {
+  },
+
+  navAreas = { 
+  },
+
+  planetObjects = {
+  }
+}
+
 hutta = { -- 23
   weatherEnabled = 1,
   gcwEnabled = 1,
