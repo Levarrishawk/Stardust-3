@@ -18,6 +18,8 @@
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
 #include "server/zone/managers/skill/SkillModManager.h"
+#include "templates/manager/TemplateManager.h"
+#include "server/zone/packets/scene/SceneObjectDestroyMessage.h"
 
 // #define DEBUG_ID
 
@@ -28,6 +30,16 @@ void ImageDesignSessionImplementation::initializeTransientMembers() {
 int ImageDesignSessionImplementation::cancelSession() {
 	ManagedReference<CreatureObject*> designerCreature = this->designerCreature.get();
 	ManagedReference<CreatureObject*> targetCreature = this->targetCreature.get();
+
+	if (vendorPreview != nullptr) {
+		ManagedReference<CreatureObject*> preview = vendorPreview;
+		vendorPreview = nullptr;
+		Locker locker(preview);
+		if (designerCreature != nullptr)
+			designerCreature->sendMessage(new SceneObjectDestroyMessage(preview));
+		preview->setZone(nullptr);
+		preview->destroyObjectFromDatabase(true);
+	}
 
 	if (designerCreature != nullptr) {
 		for (int i = 0; i < vendorSkillMods.size(); ++i) {
@@ -63,6 +75,66 @@ void ImageDesignSessionImplementation::startImageDesign(CreatureObject* designer
 		if (!ImageDesignManager::canDesignVendor(designer, targetPlayer))
 			return;
 		vendorDesignSession = true;
+
+		designerCreature = designer;
+		targetCreature = targetPlayer;
+
+		// The editor needs a player client template for its preview and hair catalogue.
+		// The real vendor remains the session target; this copy is sent only to its owner.
+		auto playerTemplate = TemplateManager::instance()->getTemplate(ImageDesignManager::getCustomizationTemplateCRC(targetPlayer));
+		auto zoneServer = designer->getZoneServer();
+		if (playerTemplate == nullptr || zoneServer == nullptr) {
+			cancelSession();
+			return;
+		}
+
+		vendorPreview = zoneServer->createObject(targetPlayer->getServerObjectCRC(), 0).castTo<CreatureObject*>();
+		if (vendorPreview == nullptr) {
+			designer->sendSystemMessage("Unable to create the vendor Image Design preview.");
+			cancelSession();
+			return;
+		}
+
+		ManagedReference<CreatureObject*> preview = vendorPreview;
+		Locker previewLocker(preview, designer);
+		vendorPreview->setClientObjectCRC(playerTemplate->getClientObjectCRC());
+		vendorPreview->setCustomObjectName(targetPlayer->getDisplayedName(), false);
+		vendorPreview->setHeight(targetPlayer->getHeight(), false);
+		String customization;
+		targetPlayer->getCustomizationString(customization);
+		vendorPreview->setCustomizationString(customization);
+
+		SortedVector<uint64> copiedObjects;
+		copiedObjects.setNoDuplicateInsertPlan();
+		ManagedReference<SceneObject*> vendorHair = targetPlayer->getSlottedObject("hair");
+		for (int i = 0; i < targetPlayer->getSlottedObjectsSize(); ++i) {
+			ManagedReference<SceneObject*> equipped = targetPlayer->getSlottedObject(i);
+			if (equipped == nullptr || !equipped->isTangibleObject() ||
+					(!equipped->isWearableObject() && !equipped->isWearableContainerObject() && !equipped->isWeaponObject() && equipped != vendorHair) ||
+					copiedObjects.put(equipped->getObjectID()) == -1)
+				continue;
+
+			Locker equippedLocker(equipped, targetPlayer);
+			ManagedReference<TangibleObject*> copy = zoneServer->createObject(equipped->getServerObjectCRC(), 0).castTo<TangibleObject*>();
+			if (copy == nullptr) {
+				cancelSession();
+				return;
+			}
+
+			Locker copyLocker(copy, vendorPreview);
+			equipped->asTangibleObject()->getCustomizationString(customization);
+			copy->setCustomizationString(customization);
+			if (!vendorPreview->transferObject(copy, equipped->getContainmentType(), false)) {
+				copy->destroyObjectFromDatabase(true);
+				cancelSession();
+				return;
+			}
+		}
+
+		// Baselines need the zone context, but the preview never enters the zone tree.
+		vendorPreview->setZone(designer->getZone());
+		vendorPreview->sendTo(designer, true);
+		vendorPreview->setZone(nullptr);
 
 		// The native Image Design window reads the designer's skill modifiers.
 		VectorMap<String, int> mods;
@@ -117,7 +189,7 @@ void ImageDesignSessionImplementation::startImageDesign(CreatureObject* designer
 		holoemote = ghost->getInstalledHoloEmote();
 	}
 
-	ImageDesignStartMessage* msg = new ImageDesignStartMessage(designer, designer, targetPlayer, designerTentID, holoemote);
+	ImageDesignStartMessage* msg = new ImageDesignStartMessage(designer, designer, vendorDesign ? vendorPreview.get() : targetPlayer, designerTentID, holoemote);
 	designer->sendMessage(msg);
 
 	if (designer != targetPlayer) {
@@ -156,7 +228,8 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 	Locker clocker(strongReferenceTarget, strongReferenceDesigner);
 
 	bool vendorDesign = vendorDesignSession;
-	if (vendorDesign && (updater != strongReferenceDesigner ||
+	if (vendorDesign && (vendorPreview == nullptr || designer != strongReferenceDesigner->getObjectID() ||
+			targetPlayer != vendorPreview->getObjectID() || updater != strongReferenceDesigner ||
 			!ImageDesignManager::canDesignVendor(strongReferenceDesigner, strongReferenceTarget) ||
 			strongReferenceDesigner->getZone() == nullptr || strongReferenceDesigner->getZone() != strongReferenceTarget->getZone() ||
 			!strongReferenceDesigner->isInRange(strongReferenceTarget, 6) || strongReferenceTarget->isDead())) {
@@ -354,8 +427,9 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 			playerManager->awardExperience(strongReferenceDesigner, "imagedesigner", xpGranted, true);
 		}
 
-		// End the session
-		cancelSession();
+		// Keep the vendor preview available until the client receives acceptance.
+		if (!vendorDesign)
+			cancelSession();
 	}
 
 	if (vendorDesign)
@@ -365,6 +439,8 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 	imageDesignData.insertToMessage(message);
 
 	targetObject->sendMessage(message);
+	if (vendorDesign && commitChanges)
+		cancelSession();
 }
 
 bool ImageDesignSessionImplementation::doPayment() {
@@ -483,6 +559,8 @@ void ImageDesignSessionImplementation::cancelImageDesign(uint64 designer, uint64
 
 	Locker locker(designerCreature);
 	Locker clocker(targetCreature, designerCreature);
+	if (vendorDesignSession && vendorPreview != nullptr)
+		targetPlayer = vendorPreview->getObjectID();
 
 	imageDesignData = data;
 
