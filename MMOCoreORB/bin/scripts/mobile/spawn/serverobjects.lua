@@ -640,3 +640,6 @@ includeFile("spawn/mustafar_kubaza_beetles.lua")
 includeFile("spawn/mustafar_storm_lord_minions.lua")
 includeFile("spawn/alderaan/alderaan_world.lua")
 includeFile("spawn/alderaan/alderaan_house_thul.lua")
+
+-- Hutta
+includeFile("spawn/hutta_world.lua")

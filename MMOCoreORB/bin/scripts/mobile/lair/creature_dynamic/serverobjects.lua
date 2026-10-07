@@ -578,3 +578,16 @@ includeFile("lair/creature_dynamic/alderaan/alderaan_great_thranta_flight_neutra
 includeFile("lair/creature_dynamic/alderaan/alderaan_pilotta_thranta_flight_neutral_none.lua")
 includeFile("lair/creature_dynamic/alderaan/alderaan_vorn_tiger_hunt_neutral_none.lua")
 includeFile("lair/creature_dynamic/alderaan/alderaan_killik_colony_neutral_none.lua")
+
+includeFile("lair/creature_dynamic/hutta_anooba_pack.lua")
+includeFile("lair/creature_dynamic/hutta_akk_dog_pack.lua")
+includeFile("lair/creature_dynamic/hutta_whirlbat_pack.lua")
+includeFile("lair/creature_dynamic/hutta_navora_frog_pack.lua")
+includeFile("lair/creature_dynamic/hutta_slime_pod_pack.lua")
+includeFile("lair/creature_dynamic/hutta_marsh_spider_pack.lua")
+includeFile("lair/creature_dynamic/hutta_bog_rodent_pack.lua")
+
+-- Existing Hutta wildlife
+includeFile("lair/creature_dynamic/hutta_chemilizard_pack.lua")
+includeFile("lair/creature_dynamic/hutta_dragonsnake_pack.lua")
+includeFile("lair/creature_dynamic/hutta_xuuva_pack.lua")

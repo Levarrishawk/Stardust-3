@@ -595,3 +595,8 @@ includeFile("lair/creature_lair/yavin4/yavin4_whisper_bird_lair2_neutral_medium.
 includeFile("lair/creature_lair/yavin4/yavin4_whisper_bird_lair_neutral_medium.lua")
 includeFile("lair/creature_lair/yavin4/yavin4_whisper_bird_male_neutral_medium_boss_01.lua")
 
+
+includeFile("lair/creature_lair/hutta_anooba_lair.lua")
+includeFile("lair/creature_lair/hutta_akk_dog_lair.lua")
+includeFile("lair/creature_lair/hutta_whirlbat_lair.lua")
+includeFile("lair/creature_lair/hutta_navora_frog_lair.lua")

@@ -190,3 +190,9 @@ includeFile("lair/npc_dynamic/tatooine/tatooine_tusken_raider_warband_neutral_no
 includeFile("lair/npc_dynamic/tatooine/tatooine_wandering_kitonak_neutral_none.lua")
 includeFile("lair/npc_dynamic/alderaan/house_thul_patrol_neutral_none.lua")
 includeFile("lair/npc_dynamic/alderaan/house_thul_guard_patrol_neutral_none.lua")
+
+includeFile("lair/npc_dynamic/hutta_pirate_patrol.lua")
+includeFile("lair/npc_dynamic/hutta_spice_smuggler_patrol.lua")
+includeFile("lair/npc_dynamic/hutta_cartel_patrol.lua")
+includeFile("lair/npc_dynamic/hutta_weequay_gang.lua")
+includeFile("lair/npc_dynamic/hutta_evocii_refugees.lua")

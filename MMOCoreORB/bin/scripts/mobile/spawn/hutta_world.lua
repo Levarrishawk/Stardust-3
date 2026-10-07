@@ -2,6 +2,150 @@ hutta_world = {
 
 	lairSpawns = {
 		{
+			lairTemplateName = "hutta_anooba_pack",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_akk_dog_pack",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_whirlbat_pack",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_navora_frog_pack",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_slime_pod_pack",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_marsh_spider_pack",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_bog_rodent_pack",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_anooba_lair",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 6,
+			size = 30
+		},
+		{
+			lairTemplateName = "hutta_akk_dog_lair",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 6,
+			size = 30
+		},
+		{
+			lairTemplateName = "hutta_whirlbat_lair",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 6,
+			size = 30
+		},
+		{
+			lairTemplateName = "hutta_navora_frog_lair",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 6,
+			size = 30
+		},
+		{
+			lairTemplateName = "hutta_pirate_patrol",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_spice_smuggler_patrol",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_cartel_patrol",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 12,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_weequay_gang",
+			spawnLimit = -1,
+			minDifficulty = 3,
+			maxDifficulty = 7,
+			numberToSpawn = 0,
+			weighting = 10,
+			size = 25
+		},
+		{
+			lairTemplateName = "hutta_evocii_refugees",
+			spawnLimit = -1,
+			minDifficulty = 2,
+			maxDifficulty = 4,
+			numberToSpawn = 0,
+			weighting = 6,
+			size = 25
+		},
+		{
 			lairTemplateName = "hutta_chemilizard_pack",
 			spawnLimit = -1,
 			minDifficulty = 3,

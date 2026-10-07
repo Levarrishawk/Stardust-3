@@ -1,0 +1,43 @@
+hutta_whirlbat = Creature:new {
+	objectName = "",
+	customName = "a whirlbat",
+	socialGroup = "hutta_whirlbat",
+	faction = "",
+	mobType = MOB_CARNIVORE,
+	level = 10,
+	chanceHit = 0.28,
+	damageMin = 120,
+	damageMax = 130,
+	baseXp = 356,
+	baseHAM = 405,
+	baseHAMmax = 495,
+	armor = 0,
+	resists = {0,0,0,0,0,0,0,-1,-1},
+	meatType = "meat_carnivore",
+	meatAmount = 4,
+	hideType = "hide_bristley",
+	hideAmount = 2,
+	boneType = "bone_mammal",
+	boneAmount = 3,
+	milk = 0,
+	tamingChance = 0,
+	ferocity = 0,
+	pvpBitmask = AGGRESSIVE + ATTACKABLE + ENEMY,
+	creatureBitmask = PACK,
+	optionsBitmask = AIENABLED,
+	diet = CARNIVORE,
+
+	templates = {"object/mobile/gackle_bat_hue.iff"},
+	hues = { 0, 1, 2, 3, 4, 5, 6, 7 },
+	controlDeviceTemplate = "object/intangible/pet/gackle_bat_hue.iff",
+	lootGroups = {},
+
+	primaryWeapon = "unarmed",
+	secondaryWeapon = "none",
+	conversationTemplate = "",
+	
+	primaryAttacks = { {"intimidationattack",""} },
+	secondaryAttacks = { }
+}
+
+CreatureTemplates:addCreatureTemplate(hutta_whirlbat, "hutta_whirlbat")
