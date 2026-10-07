@@ -14,6 +14,7 @@ include server.zone.objects.player.sessions.ImageDesignData;
 import server.zone.objects.player.sessions.ImageDesignPositionObserver;
 import system.thread.ReadWriteLock;
 import system.lang.Time;
+import system.util.VectorMap;
 
 class ImageDesignSession extends Facade {
 	@dereferenced
