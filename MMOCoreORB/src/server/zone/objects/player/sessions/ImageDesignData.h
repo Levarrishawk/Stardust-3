@@ -209,6 +209,14 @@ public:
 		return (bool) designerAccepted;
 	}
 
+	void acceptVendorDesign() {
+		targetAccepted = designerAccepted;
+		requiredPayment = 0;
+		offeredPayment = 0;
+		statMigrationRequested = 0;
+		holoEmote = "";
+	}
+
 	inline bool isAcceptedByTarget() {
 		return (bool) targetAccepted;
 	}

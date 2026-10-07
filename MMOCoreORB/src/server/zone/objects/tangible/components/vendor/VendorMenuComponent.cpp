@@ -14,6 +14,10 @@
 #include "server/zone/objects/player/sessions/vendor/VendorAdBarkingSession.h"
 #include "server/zone/managers/vendor/VendorManager.h"
 #include "server/zone/ZoneProcessServer.h"
+#include "server/zone/ZoneServer.h"
+#include "server/zone/managers/skill/imagedesign/ImageDesignManager.h"
+#include "server/zone/managers/objectcontroller/ObjectController.h"
+#include "server/zone/objects/creature/commands/QueueCommand.h"
 
 void VendorMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, ObjectMenuResponse* menuResponse, CreatureObject* player) const {
 	if (sceneObject == nullptr || !sceneObject->isVendor() || player == nullptr) {
@@ -78,6 +82,9 @@ void VendorMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, Objec
 		menuResponse->addRadialMenuItemToRadialID(70, 73, 3, "@player_structure:pay_vendor_t");
 		menuResponse->addRadialMenuItemToRadialID(70, 74, 3, "@player_structure:withdraw_vendor_t");
 
+		if (sceneObject->isCreatureObject() && ImageDesignManager::canDesignVendor(player, cast<CreatureObject*>(sceneObject)))
+			menuResponse->addRadialMenuItemToRadialID(70, 80, 3, "Image Design");
+
 		if (vendorData->isVendorSearchEnabled()) {
 			menuResponse->addRadialMenuItemToRadialID(70, 75, 3, "@player_structure:disable_vendor_search");
 		} else if (!vendorData->isOnStrike()) {
@@ -107,7 +114,7 @@ void VendorMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, Objec
 int VendorMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject,
 		CreatureObject* player, byte selectedID) const {
 
-	if (!sceneObject->isVendor())
+	if (sceneObject == nullptr || player == nullptr || !sceneObject->isVendor())
 		return 0;
 
 	DataObjectComponentReference* data = sceneObject->getDataObjectComponent();
@@ -141,6 +148,20 @@ int VendorMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject,
 	}
 
 	switch (selectedID) {
+	case 80: {
+		if (sceneObject->isCreatureObject() && ImageDesignManager::canDesignVendor(player, cast<CreatureObject*>(sceneObject))) {
+			auto zoneServer = player->getZoneServer();
+			if (zoneServer == nullptr || zoneServer->getObjectController() == nullptr)
+				return 0;
+
+			// Vendor access is checked by the command rather than an entertainer ability.
+			const QueueCommand* command = zoneServer->getObjectController()->getQueueCommand(STRING_HASHCODE("imagedesign"));
+			if (command != nullptr)
+				command->doQueueCommand(player, sceneObject->getObjectID(), UnicodeString(""));
+		}
+		return 0;
+	}
+
 	case 71: {
 		VendorManager::instance()->handleDisplayStatus(player, vendor);
 		return 0;

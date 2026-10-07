@@ -30,6 +30,14 @@ class ImageDesignSession extends Facade {
 
 	protected TangibleObject hairObject;
 
+	@dereferenced
+	protected transient VectorMap<string, int> vendorSkillMods;
+	protected transient boolean vendorDesignSession;
+
+	public boolean isVendorDesignSession() {
+		return vendorDesignSession;
+	}
+
 	protected ImageDesignPositionObserver positionObserver;
 
 	protected transient ImageDesignTimeoutEvent idTimeoutEvent;
@@ -72,6 +80,8 @@ class ImageDesignSession extends Facade {
 	public native void cancelImageDesign(unsigned long designer, unsigned long targetPlayer, unsigned long tent, int type, @dereferenced final ImageDesignData data);
 
 	public int initializeSession() {
+		vendorDesignSession = false;
+		vendorSkillMods.removeAll();
 		designerCreature = null;
 		targetCreature = null;
 		idTimeoutEvent = null;

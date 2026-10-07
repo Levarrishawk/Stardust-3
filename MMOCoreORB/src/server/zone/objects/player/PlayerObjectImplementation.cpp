@@ -72,6 +72,7 @@
 #include "server/login/account/AccountManager.h"
 #include "templates/creature/SharedCreatureObjectTemplate.h"
 #include "server/zone/objects/player/sessions/survey/SurveySession.h"
+#include "server/zone/objects/player/sessions/ImageDesignSession.h"
 
 #include "server/zone/objects/tangible/deed/eventperk/EventPerkDeed.h"
 #include "server/zone/managers/player/QuestInfo.h"
@@ -1855,6 +1856,10 @@ void PlayerObjectImplementation::notifyOffline() {
 			otherPlayer->sendMessage(notifyStatus);
 		}
 	}
+
+	ManagedReference<ImageDesignSession*> imageDesignSession = playerCreature->getActiveSession(SessionFacadeType::IMAGEDESIGN).castTo<ImageDesignSession*>();
+	if (imageDesignSession != nullptr && imageDesignSession->isVendorDesignSession())
+		imageDesignSession->cancelSession();
 
 	//Remove player from visibility list
 	VisibilityManager::instance()->removeFromVisibilityList(playerCreature);

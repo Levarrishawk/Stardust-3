@@ -7,6 +7,7 @@
 
 #include "server/zone/objects/scene/SceneObject.h"
 #include "server/zone/objects/player/sessions/ImageDesignSession.h"
+#include "server/zone/managers/skill/imagedesign/ImageDesignManager.h"
 
 class ImagedesignCommand : public QueueCommand {
 public:
@@ -27,7 +28,11 @@ public:
 		if (!creature->isPlayerCreature())
 			return GENERALERROR;
 
-		if (!creature->hasSkill("social_entertainer_novice")) {
+		ManagedReference<SceneObject*> object = server->getZoneServer()->getObject(target);
+		CreatureObject* vendorTarget = object != nullptr && object->isVendor() && object->isCreatureObject() ? cast<CreatureObject*>(object.get()) : nullptr;
+		bool vendorDesign = vendorTarget != nullptr;
+
+		if (!vendorDesign && !creature->hasSkill("social_entertainer_novice")) {
 			creature->sendSystemMessage("@ui_imagedesigner:noskill"); // You don't have any image designer skills
 			return GENERALERROR;
 		}
@@ -35,16 +40,23 @@ public:
 		//Disabled again for public use until bugs can be worked out.
 		//return SUCCESS;
 
-		ManagedReference<SceneObject*> object = server->getZoneServer()->getObject(target);
 		CreatureObject* playerTarget = nullptr;
 		CreatureObject* designer = cast<CreatureObject*>( creature);
 
-		if (object == nullptr || !object->isPlayerCreature())
+		if (vendorDesign)
+			playerTarget = vendorTarget;
+		else if (object == nullptr || !object->isPlayerCreature())
 			playerTarget = designer;
 		else
 			playerTarget = cast<CreatureObject*>( object.get());
 
 		Locker clocker(playerTarget, creature);
+
+		if (vendorDesign && (!ImageDesignManager::canDesignVendor(designer, playerTarget) ||
+				designer->getZone() == nullptr || designer->getZone() != playerTarget->getZone() || !designer->isInRange(playerTarget, 6))) {
+			designer->sendSystemMessage("You must be a master merchant near your own initialized NPC vendor to image design it.");
+			return GENERALERROR;
+		}
 
 		if (playerTarget->isDead()) {
 			designer->sendSystemMessage("@image_designer:target_dead");
@@ -57,7 +69,7 @@ public:
 		}
 
 		// --- GROUP CHECKING
-		if (designer != playerTarget) {
+		if (designer != playerTarget && !vendorDesign) {
 			StringIdChatParameter stringIdNotGrp;
 			stringIdNotGrp.setStringId("@image_designer:not_in_same_group");
 			stringIdNotGrp.setTT(playerTarget->getObjectID());

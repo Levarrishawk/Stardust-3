@@ -17,6 +17,7 @@
 #include "server/zone/packets/object/ImageDesignMessage.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
+#include "server/zone/managers/skill/SkillModManager.h"
 
 // #define DEBUG_ID
 
@@ -29,6 +30,11 @@ int ImageDesignSessionImplementation::cancelSession() {
 	ManagedReference<CreatureObject*> targetCreature = this->targetCreature.get();
 
 	if (designerCreature != nullptr) {
+		for (int i = 0; i < vendorSkillMods.size(); ++i) {
+			designerCreature->removeSkillMod(SkillModManager::VENDORIMAGEDESIGN, vendorSkillMods.elementAt(i).getKey(), vendorSkillMods.elementAt(i).getValue());
+		}
+		vendorSkillMods.removeAll();
+
 		designerCreature->dropActiveSession(SessionFacadeType::IMAGEDESIGN);
 
 		if (positionObserver != nullptr)
@@ -43,17 +49,40 @@ int ImageDesignSessionImplementation::cancelSession() {
 	}
 
 	dequeueIdTimeoutEvent();
+	if (vendorDesignSession) {
+		this->designerCreature = nullptr;
+		this->targetCreature = nullptr;
+	}
 
 	return 0;
 }
 
 void ImageDesignSessionImplementation::startImageDesign(CreatureObject* designer, CreatureObject* targetPlayer) {
+	bool vendorDesign = targetPlayer->isVendor();
+	if (vendorDesign) {
+		if (!ImageDesignManager::canDesignVendor(designer, targetPlayer))
+			return;
+		vendorDesignSession = true;
+
+		// The native Image Design window reads the designer's skill modifiers.
+		VectorMap<String, int> mods;
+		ImageDesignManager::getVendorDesignSkillMods(mods);
+		for (int i = 0; i < mods.size(); ++i) {
+			const String& name = mods.elementAt(i).getKey();
+			int bonus = Math::max(0, mods.elementAt(i).getValue() - designer->getSkillMod(name));
+			if (bonus > 0) {
+				vendorSkillMods.put(name, bonus);
+				designer->addSkillMod(SkillModManager::VENDORIMAGEDESIGN, name, bonus);
+			}
+		}
+	}
+
 	sessionStartTime.updateToCurrentTime();
 
 	uint64 designerTentID = 0; // Equals False, that controls if you can stat migrate or not (only in a Salon).
 	uint64 targetTentID = 0;
 
-	ManagedReference<SceneObject*> obj = designer->getParentRecursively(SceneObjectType::SALONBUILDING);
+	ManagedReference<SceneObject*> obj = vendorDesign ? nullptr : designer->getParentRecursively(SceneObjectType::SALONBUILDING);
 
 	if (obj != nullptr) // If they are in a salon, enable the tickmark for stat migration.
 		designerTentID = obj->getObjectID();
@@ -94,14 +123,18 @@ void ImageDesignSessionImplementation::startImageDesign(CreatureObject* designer
 	if (designer != targetPlayer) {
 		targetPlayer->addActiveSession(SessionFacadeType::IMAGEDESIGN, _this.getReferenceUnsafeStaticCast());
 
-		ImageDesignStartMessage* msg2 = new ImageDesignStartMessage(targetPlayer, designer, targetPlayer, targetTentID, holoemote);
-		targetPlayer->sendMessage(msg2);
+		if (!vendorDesign) {
+			ImageDesignStartMessage* msg2 = new ImageDesignStartMessage(targetPlayer, designer, targetPlayer, targetTentID, holoemote);
+			targetPlayer->sendMessage(msg2);
+		}
 	}
 
 	designerCreature = designer;
 	targetCreature = targetPlayer;
 
 	idTimeoutEvent = new ImageDesignTimeoutEvent(_this.getReferenceUnsafeStaticCast());
+	if (vendorDesign)
+		idTimeoutEvent->schedule(600000);
 
 #ifdef DEBUG_ID
 	info(true) << "startImageDesign - for Target Player: " << targetPlayer->getFirstName() << " Target Tent ID = " <<  targetTentID << " Designer Tent ID = " << designerTentID << " Holoemote = " << holoemote;
@@ -122,7 +155,18 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 	Locker locker(strongReferenceDesigner);
 	Locker clocker(strongReferenceTarget, strongReferenceDesigner);
 
+	bool vendorDesign = vendorDesignSession;
+	if (vendorDesign && (updater != strongReferenceDesigner ||
+			!ImageDesignManager::canDesignVendor(strongReferenceDesigner, strongReferenceTarget) ||
+			strongReferenceDesigner->getZone() == nullptr || strongReferenceDesigner->getZone() != strongReferenceTarget->getZone() ||
+			!strongReferenceDesigner->isInRange(strongReferenceTarget, 6) || strongReferenceTarget->isDead())) {
+		cancelImageDesign(strongReferenceDesigner->getObjectID(), strongReferenceTarget->getObjectID(), 0, type, data);
+		return;
+	}
+
 	imageDesignData = data;
+	if (vendorDesign)
+		imageDesignData.acceptVendorDesign();
 
 	CreatureObject* targetObject = nullptr;
 
@@ -133,6 +177,8 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 
 	bool statMig = imageDesignData.isStatMigrationRequested();
 	bool designerAccepted = imageDesignData.isAcceptedByDesigner();
+	if (vendorDesign)
+		statMig = false;
 
 	// Check time since session started to ensure timer is not bypassed client side
 	if (statMig && strongReferenceDesigner != strongReferenceTarget) {
@@ -175,7 +221,7 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 	if (designerAccepted) {
 		commitChanges = true;
 
-		if (strongReferenceDesigner != strongReferenceTarget && !imageDesignData.isAcceptedByTarget()) {
+		if (!vendorDesign && strongReferenceDesigner != strongReferenceTarget && !imageDesignData.isAcceptedByTarget()) {
 			commitChanges = false;
 
 			if (idTimeoutEvent == nullptr)
@@ -184,7 +230,7 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 			if (!idTimeoutEvent->isScheduled())
 				idTimeoutEvent->schedule(120000); // 2 minutes
 		} else {
-			commitChanges = doPayment();
+			commitChanges = vendorDesign || doPayment();
 		}
 	}
 
@@ -234,7 +280,8 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 			// Create new hair for the player. Returns nullptr if the creature type can be bald and that is selected.
 			hairObject = imageDesignManager->createHairObject(strongReferenceDesigner, strongReferenceTarget, hairTempString, oldCustomization);
 
-			strongReferenceDesigner->notifyObservers(ObserverEventType::IMAGEDESIGNHAIR, nullptr, 0);
+			if (!vendorDesign)
+				strongReferenceDesigner->notifyObservers(ObserverEventType::IMAGEDESIGNHAIR, nullptr, 0);
 
 			if (xpGranted < 100)
 				xpGranted = 100;
@@ -299,7 +346,7 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 		// Award XP.
 		PlayerManager* playerManager = strongReferenceDesigner->getZoneServer()->getPlayerManager();
 
-		if (playerManager != nullptr && xpGranted > 0) {
+		if (!vendorDesign && playerManager != nullptr && xpGranted > 0) {
 			if (strongReferenceDesigner == strongReferenceTarget) {
 				xpGranted /= 2;
 			}
@@ -310,6 +357,9 @@ void ImageDesignSessionImplementation::updateImageDesign(CreatureObject* updater
 		// End the session
 		cancelSession();
 	}
+
+	if (vendorDesign)
+		targetObject = strongReferenceDesigner;
 
 	ImageDesignChangeMessage* message = new ImageDesignChangeMessage(targetObject->getObjectID(), designer, targetPlayer, tent, type);
 	imageDesignData.insertToMessage(message);
@@ -385,6 +435,18 @@ void ImageDesignSessionImplementation::checkDequeueEvent(SceneObject* scene) {
 void ImageDesignSessionImplementation::sessionTimeout() {
 	ManagedReference<CreatureObject*> designerCreature = this->designerCreature.get();
 	ManagedReference<CreatureObject*> targetCreature = this->targetCreature.get();
+
+	if (designerCreature == nullptr || targetCreature == nullptr) {
+		cancelSession();
+		return;
+	}
+
+	if (vendorDesignSession) {
+		Locker locker(designerCreature);
+		designerCreature->sendSystemMessage("Vendor Image Design session has timed out. Changes aborted.");
+		cancelImageDesign(designerCreature->getObjectID(), targetCreature->getObjectID(), 0, 0, imageDesignData);
+		return;
+	}
 
 	if (designerCreature != nullptr) {
 		Locker locker(designerCreature);

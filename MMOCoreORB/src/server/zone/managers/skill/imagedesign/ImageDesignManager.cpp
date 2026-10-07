@@ -11,6 +11,9 @@
 #include "templates/creature/PlayerCreatureTemplate.h"
 #include "templates/customization/AssetCustomizationManagerTemplate.h"
 #include "templates/customization/BasicRangedIntCustomizationVariable.h"
+#include "server/zone/objects/scene/components/DataObjectComponentReference.h"
+#include "server/zone/objects/tangible/components/vendor/VendorDataComponent.h"
+#include "server/zone/managers/skill/SkillManager.h"
 
 // #define DEBUG_ID
 
@@ -21,6 +24,61 @@ ImageDesignManager::ImageDesignManager() {
 }
 
 ImageDesignManager::~ImageDesignManager() {
+}
+
+uint32 ImageDesignManager::getCustomizationTemplateCRC(CreatureObject* creature) {
+	if (creature == nullptr || creature->getObjectTemplate() == nullptr)
+		return 0;
+
+	String path = creature->getObjectTemplate()->getFullTemplateString();
+	String prefix = "object/mobile/vendor/";
+
+	if (creature->isVendor() && path.indexOf(prefix) == 0)
+		return String("object/creature/player/" + path.subString(prefix.length())).hashCode();
+
+	return creature->getServerObjectCRC();
+}
+
+bool ImageDesignManager::canDesignVendor(CreatureObject* designer, CreatureObject* vendor) {
+	if (designer == nullptr || vendor == nullptr || !designer->isPlayerCreature() ||
+			!designer->hasSkill("crafting_merchant_master") || !vendor->isVendor() || vendor->isPlayerCreature())
+		return false;
+
+	DataObjectComponentReference* data = vendor->getDataObjectComponent();
+	if (data == nullptr || data->get() == nullptr || !data->get()->isVendorData())
+		return false;
+
+	VendorDataComponent* vendorData = cast<VendorDataComponent*>(data->get());
+	if (vendorData == nullptr || vendorData->getOwnerId() != designer->getObjectID() || !vendorData->isInitialized())
+		return false;
+
+	return dynamic_cast<PlayerCreatureTemplate*>(TemplateManager::instance()->getTemplate(getCustomizationTemplateCRC(vendor))) != nullptr;
+}
+
+void ImageDesignManager::getVendorDesignSkillMods(VectorMap<String, int>& mods) {
+	Vector<String> skills;
+	skills.add("social_imagedesigner_master");
+	mods.setAllowOverwriteInsertPlan();
+	mods.setNullValue(0);
+
+	for (int i = 0; i < skills.size(); ++i) {
+		Skill* skill = SkillManager::instance()->getSkill(skills.get(i));
+		if (skill == nullptr)
+			continue;
+
+		const VectorMap<String, int>* skillMods = skill->getSkillModifiers();
+		for (int j = 0; j < skillMods->size(); ++j) {
+			const String& name = skillMods->elementAt(j).getKey();
+			if (name == "body" || name == "face" || name == "hair" || name == "markings")
+				mods.put(name, mods.get(name) + skillMods->elementAt(j).getValue());
+		}
+
+		const Vector<String>* required = skill->getSkillsRequired();
+		for (int j = 0; j < required->size(); ++j) {
+			if (!skills.contains(required->get(j)))
+				skills.add(required->get(j));
+		}
+	}
 }
 
 void ImageDesignManager::updateCustomization(CreatureObject* imageDesigner, CustomizationData* customData, float value, CreatureObject* creo) {
@@ -125,7 +183,7 @@ void ImageDesignManager::updateCustomization(CreatureObject* imageDesigner, cons
 		return;
 	}
 
-	uint32 objectCRC = creo->getServerObjectCRC();
+	uint32 objectCRC = getCustomizationTemplateCRC(creo);
 
 	const Vector<CustomizationData>* data = getCustomizationData(objectCRC, customizationName);
 
@@ -262,7 +320,7 @@ void ImageDesignManager::updateColorCustomization(CreatureObject* imageDesigner,
 		return;
 	}
 
-	uint32 objectCRC = creo->getServerObjectCRC();
+	uint32 objectCRC = getCustomizationTemplateCRC(creo);
 
 	const Vector<CustomizationData>* data = getCustomizationData(objectCRC, customizationName);
 
@@ -384,7 +442,7 @@ const Vector<CustomizationData>* ImageDesignManager::getCustomizationData(uint32
 		return nullptr;
 	}
 
-	PlayerCreatureTemplate* tmpl = cast<PlayerCreatureTemplate*>(templateManager->getTemplate(objectCRC));
+	PlayerCreatureTemplate* tmpl = dynamic_cast<PlayerCreatureTemplate*>(templateManager->getTemplate(objectCRC));
 
 	if (tmpl == nullptr) {
 		return nullptr;
@@ -399,7 +457,7 @@ TangibleObject* ImageDesignManager::createHairObject(CreatureObject* imageDesign
 	HairAssetData* hairAssetData = CustomizationIdManager::instance()->getHairAssetData(hairTemplate);
 
 	if (hairTemplate.isEmpty()) {
-		if (!CustomizationIdManager::instance()->canBeBald(targetObject->getServerObjectCRC())) {
+		if (!CustomizationIdManager::instance()->canBeBald(getCustomizationTemplateCRC(targetObject))) {
 			return oldHair;
 		} else {
 			removeHairObject(targetObject);
@@ -416,7 +474,7 @@ TangibleObject* ImageDesignManager::createHairObject(CreatureObject* imageDesign
 	if (imageDesigner->getSkillMod("hair") < skillMod)
 		return oldHair;
 
-	if (hairAssetData->getServerPlayerTemplate().hashCode() != targetObject->getObjectTemplate()->getFullTemplateString().hashCode()) {
+	if (hairAssetData->getServerPlayerTemplate().hashCode() != getCustomizationTemplateCRC(targetObject)) {
 		error("hair " + hairTemplate + " is not compatible with this creature player " + targetObject->getObjectTemplate()->getFullTemplateString());
 		return oldHair;
 	}
@@ -461,6 +519,20 @@ TangibleObject* ImageDesignManager::updateHairObject(CreatureObject* creo, Tangi
 #endif
 	if (creo == nullptr || hairObject == nullptr)
 		return nullptr;
+
+	if (creo->isVendor()) {
+		Locker locker(hairObject, creo);
+		if (hairObject->getParent().get() == creo)
+			return hairObject;
+
+		if (creo->transferObject(hairObject, 4)) {
+			creo->broadcastObject(hairObject, true);
+			return hairObject;
+		}
+
+		hairObject->destroyObjectFromDatabase(true);
+		return nullptr;
+	}
 
 	// Task out inserting hair into the slot to avoid incidents where the client places the hair into the players inventory
 	ManagedReference<CreatureObject*> strongCreo = creo;

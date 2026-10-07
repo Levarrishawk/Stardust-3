@@ -17,6 +17,8 @@
 #include "server/zone/packets/creature/CreatureObjectDeltaMessage6.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
+#include "server/zone/objects/player/sessions/ImageDesignSession.h"
+#include "server/zone/managers/skill/SkillModManager.h"
 #include "server/chat/ChatManager.h"
 #include "server/zone/objects/player/events/DisconnectClientEvent.h"
 #include "server/zone/managers/collision/CollisionManager.h"
@@ -99,6 +101,13 @@ public:
 			return;
 		}
 #endif // WITH_SWGREALMS_API
+
+		// Discard vendor Image Design access left by a disconnect or server restart.
+		ManagedReference<ImageDesignSession*> imageDesignSession = player->getActiveSession(SessionFacadeType::IMAGEDESIGN).castTo<ImageDesignSession*>();
+		if (imageDesignSession != nullptr && imageDesignSession->isVendorDesignSession())
+			imageDesignSession->cancelSession();
+
+		player->removeAllSkillModsOfType(SkillModManager::VENDORIMAGEDESIGN, false);
 
 		// Tie client to player object
 		player->setClient(client);

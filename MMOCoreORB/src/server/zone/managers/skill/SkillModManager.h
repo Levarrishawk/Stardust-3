@@ -56,6 +56,7 @@ public:
 	const static int TEMPORARYMOD = 0x10000;
 	const static int BUFF = 0x10001; /// From temporary buffs
 	const static int ABILITYBONUS = 0x10002; /// From CombatQueueCommands
+	const static int VENDORIMAGEDESIGN = 0x10101; // Session-only Image Design access for vendor owners
 
 private:
 	VectorMap<uint32, int> skillModMax;

@@ -31,6 +31,10 @@ public:
 	ImageDesignManager();
 	~ImageDesignManager();
 
+	static uint32 getCustomizationTemplateCRC(CreatureObject* creature);
+	static bool canDesignVendor(CreatureObject* designer, CreatureObject* vendor);
+	static void getVendorDesignSkillMods(VectorMap<String, int>& mods);
+
 	void updateCustomization(CreatureObject* imageDesigner, const String& customizationName, float value, int& modificationType, CreatureObject* creo = nullptr);
 	void updateColorCustomization(CreatureObject* imageDesigner, const String& customizationName, uint32 value, TangibleObject* hairObject, int& modificationType, CreatureObject* creo = nullptr);
 
