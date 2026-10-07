@@ -99,7 +99,11 @@ void ImageDesignSessionImplementation::startImageDesign(CreatureObject* designer
 		Locker previewLocker(preview, designer);
 		vendorPreview->setClientObjectCRC(playerTemplate->getClientObjectCRC());
 		vendorPreview->setCustomObjectName(targetPlayer->getDisplayedName(), false);
-		vendorPreview->setHeight(targetPlayer->getHeight(), false);
+		float previewHeight = Math::max(playerTemplate->getMinScale(), Math::min(targetPlayer->getHeight(), playerTemplate->getMaxScale()));
+		vendorPreview->setHeight(previewHeight, false);
+		info(true) << "Vendor Image Design preview: vendor=" << targetPlayer->getObjectID()
+				<< " height=" << targetPlayer->getHeight() << " previewHeight=" << previewHeight
+				<< " minScale=" << playerTemplate->getMinScale() << " maxScale=" << playerTemplate->getMaxScale();
 		String customization;
 		targetPlayer->getCustomizationString(customization);
 		vendorPreview->setCustomizationString(customization);
