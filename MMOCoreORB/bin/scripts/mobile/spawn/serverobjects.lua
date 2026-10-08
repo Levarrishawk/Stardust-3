@@ -646,3 +646,7 @@ includeFile("spawn/hutta_world.lua")
 
 -- Moraband
 includeFile("spawn/moraband_world.lua")
+
+-- Mortis
+includeFile("spawn/mortis/mortis_daughter.lua")
+includeFile("spawn/mortis/mortis_son.lua")

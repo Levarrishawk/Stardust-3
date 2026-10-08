@@ -1792,7 +1792,10 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 		return;
 	}
 
-	if (ghost->getCloneCounter() >= 5) {
+	Zone* playerZone = player->getZone();
+	bool onMortis = playerZone != nullptr && playerZone->getZoneName() == "mortis";
+
+	if (!onMortis && ghost->getCloneCounter() >= 5) {
 		player->sendSystemMessage("Critical Error: Clone data corrupted from degradation!");
 		sendPlayerToAfterlife(player);
 		return;
@@ -1929,7 +1932,8 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 		ghost->setDrinkFilling(0);
 	}
 
-	ghost->addCloneCounter();
+	if (!onMortis)
+		ghost->addCloneCounter();
 
 	Reference<Task*> task = new PlayerIncapacitationRecoverTask(player, true);
 	task->schedule(3 * 1000);
