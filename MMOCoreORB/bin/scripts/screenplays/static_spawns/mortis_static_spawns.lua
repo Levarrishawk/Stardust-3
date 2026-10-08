@@ -53,6 +53,16 @@ registerScreenPlay("MortisStaticSpawnsScreenPlay", true)
 function MortisStaticSpawnsScreenPlay:start()
 	if (isZoneEnabled("mortis")) then
 		self:spawnTrainers()
+		self:spawnJediTrainer()
+	end
+end
+
+function MortisStaticSpawnsScreenPlay:spawnJediTrainer()
+	local pNpc = spawnMobile("mortis", "trainer_jedi", 0, self.bankX, self.plateauHeight, self.bankY + 40, 180, 0)
+	if (pNpc ~= nil) then
+		self:setMoodString(pNpc, "npc_imperial")
+	else
+		printLuaError("Mortis Jedi trainer failed to spawn")
 	end
 end
 
