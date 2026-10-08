@@ -42,11 +42,23 @@ end
 function ElysiumSpawnScreenPlay:spawnSceneObjects()
 	spawnSceneObject("elysium", "object/static/structure/dantooine/dant_jedi_temple_altar.iff", 49, 12, -13, 0, 0)
   spawnSceneObject("elysium", "object/static/particle/pt_frn_all_glowing_light_s3.iff", 49, 12, -13, 0, 0)
-	local x = getRandomNumber(-250, 250)
-	local y = getRandomNumber(-250, 250)
-	local z = getWorldFloor(x, y, "elysium")
+	self:spawnForceShrine()
+end
 
-	spawnSceneObject("elysium", "object/tangible/jedi/elysium_force_shrine_stone.iff", x, z, y, 0, 180)
+function ElysiumSpawnScreenPlay:spawnForceShrine()
+	if (not isZoneEnabled("elysium")) then
+		return
+	end
+
+	-- Keep forceSpawn disabled so water, terrain and collision checks are enforced.
+	local spawnPoint = getSpawnPoint("elysium", 0, 0, 0, 250, false)
+
+	if (spawnPoint == nil) then
+		createEvent(60000, self.screenplayName, "spawnForceShrine", nil, "")
+		return
+	end
+
+	spawnSceneObject("elysium", "object/tangible/jedi/elysium_force_shrine_stone.iff", spawnPoint[1], spawnPoint[2], spawnPoint[3], 0, 180)
 end
 
 function ElysiumSpawnScreenPlay:spawnMobiles()
