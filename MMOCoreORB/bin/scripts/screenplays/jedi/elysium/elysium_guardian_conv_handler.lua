@@ -22,7 +22,7 @@ function elysiumGuardianConvoHandler:getEligibilityScreen(pPlayer)
 	end
 
 	if (PlayerObject(pGhost):getJediState() >= 2) then
-		return "rejected"
+		return "mortis_offer"
 	end
 
 	local entryTime = tonumber(readScreenPlayData(pPlayer, "ElysiumGuardian", "entryTime"))
@@ -101,6 +101,22 @@ function elysiumGuardianConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, p
 
 	if (screenID == "test_regular") then
 		return self:getEligibilityConversationScreen(pPlayer, pConvTemplate)
+	end
+
+	if (screenID == "mortis_accept") then
+		if (self:getEligibilityScreen(pPlayer) ~= "mortis_offer") then
+			return self:getEligibilityConversationScreen(pPlayer, pConvTemplate)
+		end
+
+		if (not isZoneEnabled("mortis")) then
+			return convoTemplate:getScreen("mortis_unavailable")
+		end
+
+		local x = 0
+		local y = -77
+		local z = getWorldFloor(x, y, "mortis")
+		SceneObject(pPlayer):switchZone("mortis", x, z, y, 0)
+		return pConvScreen
 	end
 
 	if (screenID ~= "resurrect" and screenID ~= "test_exit") then

@@ -44,14 +44,44 @@ local waiting = ConvoScreen:new {
 }
 elysiumGuardianConvoTemplate:addScreen(waiting)
 
-local rejected = ConvoScreen:new {
-	id = "rejected",
+local mortisOffer = ConvoScreen:new {
+	id = "mortis_offer",
 	leftDialog = "",
-	customDialogText = "There are no second chances for people like you.",
+	customDialogText = "Your path no longer leads back to the living world, Jedi. Death has called you to a greater purpose. Beyond Elysium lies Mortis, where others who once walked your path wage an unending struggle for the balance of the Force. Your arrival may turn the tide. Will you answer that calling?",
+	stopConversation = "false",
+	options = {
+		{"I will answer the call. Take me to Mortis.", "mortis_accept"},
+		{"I am not ready. I will remain here.", "mortis_decline"}
+	}
+}
+elysiumGuardianConvoTemplate:addScreen(mortisOffer)
+
+local mortisAccept = ConvoScreen:new {
+	id = "mortis_accept",
+	leftDialog = "",
+	customDialogText = "Then go, and carry your purpose into the struggle. The balance of the Force awaits you on Mortis.",
 	stopConversation = "true",
 	options = {}
 }
-elysiumGuardianConvoTemplate:addScreen(rejected)
+elysiumGuardianConvoTemplate:addScreen(mortisAccept)
+
+local mortisDecline = ConvoScreen:new {
+	id = "mortis_decline",
+	leftDialog = "",
+	customDialogText = "Remain in Elysium and seek clarity. When you are ready to face what lies beyond, return to me.",
+	stopConversation = "true",
+	options = {}
+}
+elysiumGuardianConvoTemplate:addScreen(mortisDecline)
+
+local mortisUnavailable = ConvoScreen:new {
+	id = "mortis_unavailable",
+	leftDialog = "",
+	customDialogText = "The passage to Mortis is closed for now. Remain here, and return to me when the way opens.",
+	stopConversation = "true",
+	options = {}
+}
+elysiumGuardianConvoTemplate:addScreen(mortisUnavailable)
 
 local offer = ConvoScreen:new {
 	id = "offer",
