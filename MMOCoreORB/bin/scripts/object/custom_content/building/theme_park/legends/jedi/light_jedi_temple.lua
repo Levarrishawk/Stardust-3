@@ -1,0 +1,4 @@
+object_building_theme_park_legends_jedi_light_jedi_temple = object_building_theme_park_legends_jedi_shared_light_jedi_temple:new {
+}
+
+ObjectTemplates:addTemplate(object_building_theme_park_legends_jedi_light_jedi_temple, "object/building/theme_park/legends/jedi/light_jedi_temple.iff")

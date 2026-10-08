@@ -1,0 +1,4 @@
+object_building_player_player_house_thesenate = object_building_player_shared_player_house_thesenate:new {
+}
+
+ObjectTemplates:addTemplate(object_building_player_player_house_thesenate, "object/building/player/player_house_thesenate.iff")

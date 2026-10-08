@@ -890,6 +890,7 @@ includeFile("custom_content/building/player/city/objects.lua")
 includeFile("custom_content/building/player/construction/objects.lua")
 includeFile("custom_content/building/poi/objects.lua")
 includeFile("custom_content/building/restuss/objects.lua")
+includeFile("custom_content/building/theme_park/legends/jedi/objects.lua")
 includeFile("custom_content/building/tatooine/objects.lua")
 
 

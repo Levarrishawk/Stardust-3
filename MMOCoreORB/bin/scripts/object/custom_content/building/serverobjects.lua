@@ -12,6 +12,7 @@ includeFile("custom_content/building/player/serverobjects.lua")
 includeFile("custom_content/building/poi/serverobjects.lua")
 includeFile("custom_content/building/restuss/serverobjects.lua")
 includeFile("custom_content/building/tatooine/serverobjects.lua")
+includeFile("custom_content/building/theme_park/legends/jedi/serverobjects.lua")
 --includeFile("custom_content/building/test/serverobjects.lua")
 
 -- Root Folder

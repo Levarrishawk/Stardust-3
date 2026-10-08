@@ -361,3 +361,9 @@ object_building_player_shared_player_pgc_merchant_tent_s01 = SharedBuildingObjec
 	clientTemplateFileName = "object/building/player/shared_player_pgc_merchant_tent_s01.iff"
 }
 ObjectTemplates:addClientTemplate(object_building_player_shared_player_pgc_merchant_tent_s01, "object/building/player/shared_player_pgc_merchant_tent_s01.iff")
+
+object_building_player_shared_player_house_thesenate = SharedBuildingObjectTemplate:new {
+	clientTemplateFileName = "object/building/player/shared_player_house_thesenate.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_building_player_shared_player_house_thesenate, "object/building/player/shared_player_house_thesenate.iff")

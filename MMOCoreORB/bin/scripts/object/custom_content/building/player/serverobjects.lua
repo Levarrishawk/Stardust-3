@@ -28,6 +28,7 @@ includeFile("custom_content/building/player/player_house_tcg_vip_bunker.lua")
 includeFile("custom_content/building/player/player_house_tree_house_01.lua")
 includeFile("custom_content/building/player/player_house_wod_ns_hut.lua")
 includeFile("custom_content/building/player/player_house_wod_sm_hut.lua")
+includeFile("custom_content/building/player/player_house_thesenate.lua")
 includeFile("custom_content/building/player/player_house_yt1300.lua")
 includeFile("custom_content/building/player/player_mustafar_house_lg.lua")
 
