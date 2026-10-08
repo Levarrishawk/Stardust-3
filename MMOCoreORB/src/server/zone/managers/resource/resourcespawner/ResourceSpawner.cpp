@@ -88,7 +88,8 @@ void ResourceSpawner::initializeNativePool(const String& includes,
 
 void ResourceSpawner::addZone(const String& zoneName) {
 	activeResourceZones.add(zoneName);
-	nativePool->addZone(zoneName);
+	if (zoneName != "mortis")
+		nativePool->addZone(zoneName);
 }
 
 void ResourceSpawner::removeZone(const String& zoneName) {
@@ -126,6 +127,38 @@ void ResourceSpawner::start() {
 	shiftResources();
 }
 
+void ResourceSpawner::mirrorResourceSpawnToMortis(ResourceSpawn* spawn) {
+	if (spawn == nullptr || server->getZone("mortis") == nullptr)
+		return;
+
+	Locker locker(spawn);
+	if (!spawn->inShift())
+		return;
+
+	bool hasSource = false;
+
+	for (int i = 0; i < spawn->getSpawnMapSize(); ++i) {
+		String zoneName = spawn->getSpawnMapZone(i);
+		if (zoneName == "mortis")
+			return;
+
+		if (activeResourceZones.contains(zoneName) && server->getZone(zoneName) != nullptr)
+			hasSource = true;
+	}
+
+	if (!hasSource)
+		return;
+
+	auto entry = resourceTree->getEntry(spawn->getType());
+	if (entry == nullptr)
+		return;
+
+	// Add a map to the same spawn, preserving its attributes and expiration.
+	Vector<String> mirrorZones;
+	mirrorZones.add("mortis");
+	spawn->createSpawnMaps(entry->isJTL(), 1, 1, "mortis", mirrorZones);
+}
+
 void ResourceSpawner::loadResourceSpawns() {
 
 	ObjectDatabase* resourceDatabase =
@@ -154,10 +187,16 @@ void ResourceSpawner::loadResourceSpawns() {
 			if (resourceEntry != nullptr) {
 				int minPool = resourceEntry->getMinpool();
 				int spawnMapSize = resourceSpawn->getSpawnMapSize();
+				int sourceMapSize = spawnMapSize;
+				for (int i = 0; i < spawnMapSize; ++i) {
+					if (resourceSpawn->getSpawnMapZone(i) == "mortis")
+						--sourceMapSize;
+				}
 
-				if (spawnMapSize < minPool) {
+				if (sourceMapSize < minPool) {
 					Vector<String> activeZones;
 					activeResourceZones.clone(activeZones);
+					activeZones.removeElement("mortis");
 
 					for (int i = 0; i < spawnMapSize; i++) {
 						activeZones.removeElement(resourceSpawn->getSpawnMapZone(i));
@@ -165,12 +204,13 @@ void ResourceSpawner::loadResourceSpawns() {
 
 					Locker locker(resourceSpawn);
 
-					resourceSpawn->createSpawnMaps(resourceEntry->isJTL(), minPool - spawnMapSize,
-							resourceEntry->getMaxpool() - spawnMapSize, resourceEntry->getZoneRestriction(), activeZones);
+					resourceSpawn->createSpawnMaps(resourceEntry->isJTL(), minPool - sourceMapSize,
+							resourceEntry->getMaxpool() - sourceMapSize, resourceEntry->getZoneRestriction(), activeZones);
 				}
 			}
 		}
 
+		mirrorResourceSpawnToMortis(resourceSpawn);
 		resourceMap->add(resourceSpawn->getName(), resourceSpawn);
 
 		if (!resourceSpawn->inShift()) {
@@ -539,6 +579,7 @@ ResourceSpawn* ResourceSpawner::createResourceSpawn(const String& type,
 
 	Vector<String> activeZones;
 	activeResourceZones.clone(activeZones);
+	activeZones.removeElement("mortis");
 
 	newSpawn->createSpawnMaps(resourceEntry->isJTL(),
 			resourceEntry->getMinpool(), resourceEntry->getMaxpool(),
@@ -547,6 +588,7 @@ ResourceSpawn* ResourceSpawner::createResourceSpawn(const String& type,
 	if (newSpawn->isType("energy") || newSpawn->isType("radioactive"))
 		newSpawn->setIsEnergy(true);
 
+	mirrorResourceSpawnToMortis(newSpawn);
 	resourceMap->add(name, newSpawn);
 
 	//resourceEntry->toString();

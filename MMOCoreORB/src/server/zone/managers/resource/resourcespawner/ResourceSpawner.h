@@ -154,6 +154,7 @@ public:
 private:
 
 	void loadResourceSpawns();
+	void mirrorResourceSpawnToMortis(ResourceSpawn* spawn);
 	String makeResourceName(const String& randomNameClass);
 	int randomizeValue(int min, int max);
 	long getRandomExpirationTime(const ResourceTreeEntry* resourceEntry);
