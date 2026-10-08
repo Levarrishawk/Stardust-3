@@ -537,8 +537,8 @@ int StructureManager::placeStructureFromDeed(CreatureObject* creature, Structure
 
 	Reference<SharedStructureObjectTemplate*> serverTemplate = dynamic_cast<SharedStructureObjectTemplate*>(templateManager->getTemplate(serverTemplatePath.hashCode()));
 
-	// Check to see if this zone allows this structure.
-	if (serverTemplate == nullptr || !serverTemplate->isAllowedZone(zone->getZoneName())) {
+	// Mortis accepts all structure styles without adding it to the deed's displayed planet list.
+	if (serverTemplate == nullptr || (zone->getZoneName() != "mortis" && !serverTemplate->isAllowedZone(zone->getZoneName()))) {
 		creature->sendSystemMessage("@player_structure:wrong_planet"); // That deed cannot be used on this planet.
 		return 1;
 	}
