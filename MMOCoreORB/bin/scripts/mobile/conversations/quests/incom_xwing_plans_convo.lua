@@ -43,6 +43,7 @@ local screens = {
 	{"not_ready", "We haven't completed the operation yet. Bring me the technical plans from Incom's archive.", true, {}},
 	{"waypoint", "I've refreshed the mission waypoint on your datapad.", true, {}},
 	{"imperial", "An Imperial in Saw's camp? Leave. You won't learn anything from me.", true, {}},
+	{"not_rebel", "This operation is for members of the Rebel Alliance. Join the Rebellion, then we can talk.", true, {}},
 	{"decline", "Keep your eyes open out there.", true, {}}
 }
 

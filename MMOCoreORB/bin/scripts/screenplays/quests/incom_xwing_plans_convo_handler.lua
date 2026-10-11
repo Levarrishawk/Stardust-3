@@ -8,6 +8,9 @@ function incomXwingPlansConvoHandler:getInitialScreen(pPlayer, pNpc, pTemplate)
 	if (CreatureObject(pPlayer):isImperial()) then
 		return template:getScreen("imperial")
 	end
+	if (not CreatureObject(pPlayer):isRebel()) then
+		return template:getScreen("not_rebel")
+	end
 	local stage = IncomXwingPlans:getStage(pPlayer)
 	if (stage == 3) then
 		return template:getScreen("already_complete")
@@ -26,6 +29,9 @@ function incomXwingPlansConvoHandler:runScreenHandlers(pTemplate, pPlayer, pNpc,
 	local template = LuaConversationTemplate(pTemplate)
 	if (CreatureObject(pPlayer):isImperial()) then
 		return template:getScreen("imperial")
+	end
+	if (not CreatureObject(pPlayer):isRebel()) then
+		return template:getScreen("not_rebel")
 	end
 	local screenID = LuaConversationScreen(pScreen):getScreenID()
 	if (screenID == "accept") then

@@ -40,7 +40,26 @@ registerScreenPlay("CorelliaIncomTestingSiteScreenPlay", true)
 function CorelliaIncomTestingSiteScreenPlay:start()
 	if (isZoneEnabled("corellia")) then
 		self:spawnMobiles()
+		self:spawnDetectionArea()
 	end
+end
+
+function CorelliaIncomTestingSiteScreenPlay:spawnDetectionArea()
+	local pArea = spawnActiveArea("corellia", "object/active_area.iff", -5717, 5, -6441, 75, 0)
+	if (pArea ~= nil) then
+		createObserver(ENTEREDAREA, self.screenplayName, "notifyEnteredDetectionArea", pArea)
+	end
+end
+
+function CorelliaIncomTestingSiteScreenPlay:notifyEnteredDetectionArea(pArea, pPlayer)
+	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+		return 0
+	end
+	if (CreatureObject(pPlayer):isRebel()) then
+		CreatureObject(pPlayer):sendSystemMessage("Warning: Incom facility proximity sensors have detected unauthorized intrusion. Your faction status has been set to covert. Imperial security forces will attack on sight.")
+		CreatureObject(pPlayer):setFactionStatus(COVERT)
+	end
+	return 0
 end
 
 function CorelliaIncomTestingSiteScreenPlay:spawnMobiles()

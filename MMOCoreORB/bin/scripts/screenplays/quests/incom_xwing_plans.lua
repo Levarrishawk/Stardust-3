@@ -69,7 +69,7 @@ function IncomXwingPlans:canSpeak(pPlayer, pNpc)
 end
 
 function IncomXwingPlans:accept(pPlayer, pNpc)
-	if (not self:canSpeak(pPlayer, pNpc) or CreatureObject(pPlayer):isImperial() or self:getStage(pPlayer) ~= 0) then
+	if (not self:canSpeak(pPlayer, pNpc) or not CreatureObject(pPlayer):isRebel() or self:getStage(pPlayer) ~= 0) then
 		return false
 	end
 	self:setStage(pPlayer, 1)
@@ -99,7 +99,7 @@ function IncomXwingPlans:canUseTerminal(pPlayer, pTerminal)
 		return false
 	end
 	local stage = self:getStage(pPlayer)
-	return (stage == 1 or stage == 2) and not CreatureObject(pPlayer):isImperial()
+	return (stage == 1 or stage == 2) and CreatureObject(pPlayer):isRebel()
 		and not CreatureObject(pPlayer):isInCombat() and not CreatureObject(pPlayer):isDead()
 		and SceneObject(pPlayer):getZoneName() == "corellia"
 		and SceneObject(pPlayer):getParentID() == self.terminalCell
@@ -171,7 +171,7 @@ function IncomXwingPlans:downloadCallback(pPlayer, pSui, eventIndex)
 end
 
 function IncomXwingPlans:complete(pPlayer, pNpc)
-	if (not self:canSpeak(pPlayer, pNpc) or CreatureObject(pPlayer):isImperial() or self:getStage(pPlayer) ~= 2) then
+	if (not self:canSpeak(pPlayer, pNpc) or not CreatureObject(pPlayer):isRebel() or self:getStage(pPlayer) ~= 2) then
 		return "not_ready"
 	end
 	local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")

@@ -16,6 +16,9 @@ local function object(fields)
 	function o:getSlottedObject(slot) return self[slot] end
 	function o:getPlayerObject() return self.ghost end
 	function o:isImperial() return self.imperial or false end
+	function o:isRebel() return self.rebel == true and not self.imperial end
+	function o:isPlayerCreature() return self.ghost ~= nil end
+	function o:setFactionStatus(status) self.status = status end
 	function o:isDead() return self.dead or false end
 	function o:isInCombat() return self.combat or false end
 	function o:isInRangeWithObject(target, range) return self.inRange ~= false end
@@ -29,7 +32,7 @@ local function object(fields)
 end
 
 local function player()
-	local p = object({zone = "lok", data = {}})
+	local p = object({zone = "lok", data = {}, rebel = true})
 	p.inventory = object()
 	p.ghost = {journal = {}, waypoints = {}}
 	local g = p.ghost
@@ -108,6 +111,9 @@ assert(q:getStage(other) == 0)
 other.imperial = true
 assert(not q:accept(other, npc))
 other.imperial = false
+other.rebel = false
+assert(not q:accept(other, npc))
+other.rebel = true
 assert(q:accept(other, npc))
 
 local function open(who)
@@ -127,10 +133,10 @@ assert(q:getPlans(p) == nil)
 q:downloadCallback(p, second, 1)
 assert(q:getPlans(p) == nil)
 
-for _, change in ipairs({"zone", "parentID", "inRange", "combat", "dead", "imperial"}) do
+for _, change in ipairs({"zone", "parentID", "inRange", "combat", "dead", "imperial", "rebel"}) do
 	local page = open(p)
 	local old = p[change]
-	p[change] = ({zone = "lok", parentID = 0, inRange = false, combat = true, dead = true, imperial = true})[change]
+	p[change] = ({zone = "lok", parentID = 0, inRange = false, combat = true, dead = true, imperial = true, rebel = false})[change]
 	q:downloadCallback(p, page, 0)
 	assert(q:getPlans(p) == nil, change)
 	p[change] = old
@@ -172,6 +178,9 @@ dofile(root .. "screenplays/quests/incom_xwing_plans.lua")
 q = IncomXwingPlans
 assert(q:getStage(p) == 2 and q:getPlans(p) == disk)
 p.zone = "lok"
+p.rebel = false
+assert(q:complete(p, npc) == "not_ready" and objects[disk.id] == disk)
+p.rebel = true
 p.inventory.full = true
 assert(q:complete(p, npc) == "inventory_full" and objects[disk.id] == disk)
 p.inventory.full = false
@@ -243,3 +252,50 @@ chassisDealerConvoHandler:purchaseChassisConfirmation(p, oldList, 0, "0")
 chassisDealerConvoHandler:purchaseChassisConfirmation(p, oldList, 0, "999")
 assert(readData(p.id .. ":ChassisDealer:BlueprintID:") == 0)
 print("PASS: standard X-wing dealer exclusion, other chassis retained, stale confirmation rejected, invalid selection rejected.")
+
+-- Membership is checked again when following an already-open conversation.
+fresh.rebel = false
+assert(incomXwingPlansConvoHandler:getInitialScreen(fresh, npc, template).id == "not_rebel")
+assert(incomXwingPlansConvoHandler:runScreenHandlers(template, fresh, npc, 0, template:getScreen("accept")).id == "not_rebel")
+assert(q:getStage(fresh) == 0)
+fresh.imperial = true
+assert(incomXwingPlansConvoHandler:getInitialScreen(fresh, npc, template).id == "imperial")
+
+-- Detection targets Rebel players only, independently of quest progress.
+COVERT, ENTEREDAREA = 1, 1
+local area = object()
+spawnActiveArea = function(zone, path, x, z, y, radius, cell)
+	assert(zone == "corellia" and path == "object/active_area.iff")
+	assert(x == -5717 and z == 5 and y == -6441 and radius == 75 and cell == 0)
+	return area
+end
+local observerCount = 0
+createObserver = function(event, screenplay, callback, target)
+	assert(event == ENTEREDAREA and screenplay == "CorelliaIncomTestingSiteScreenPlay")
+	assert(callback == "notifyEnteredDetectionArea" and target == area)
+	observerCount = observerCount + 1
+end
+dofile(root .. "screenplays/poi/corellia_incom_testing_site.lua")
+local site = CorelliaIncomTestingSiteScreenPlay
+site:spawnDetectionArea()
+assert(observerCount == 1)
+spawnActiveArea = function() return nil end
+site:spawnDetectionArea()
+assert(observerCount == 1)
+assert(site:notifyEnteredDetectionArea(area, nil) == 0)
+assert(site:notifyEnteredDetectionArea(area, object()) == 0)
+for _, faction in ipairs({"rebel", "neutral", "imperial"}) do
+	for status = 0, 2 do
+		local visitor = player()
+		visitor.rebel = faction == "rebel"
+		visitor.imperial = faction == "imperial"
+		visitor.status = status
+		assert(site:notifyEnteredDetectionArea(area, visitor) == 0)
+		if faction == "rebel" then
+			assert(visitor.status == COVERT and visitor.message:find("unauthorized intrusion", 1, true))
+		else
+			assert(visitor.status == status and visitor.message == nil)
+		end
+	end
+end
+print("PASS: Rebel-only conversation, quest actions and 75m intrusion detection; non-Rebel players and NPCs unaffected.")
