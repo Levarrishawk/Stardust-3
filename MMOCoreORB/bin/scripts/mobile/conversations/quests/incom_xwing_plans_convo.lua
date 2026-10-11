@@ -20,7 +20,7 @@ local screens = {
 		{"I'll steal the plans.", "accept"},
 		{"Not this time.", "decline"}
 	}},
-	{"reward", "We have people who can put those plans to use. Bring me the complete technical archive and you'll receive a deed for a T-65 X-Wing chassis of your own. You'll still need the proper Rebel pilot training and flight components. One successful delivery, one deed. No second payments for copied files.", false, {
+	{"reward", "We have people who can put those plans to use. Bring me the complete technical archive and you'll receive a deed for this new \"X-Wing\" fighter. You'll still need the proper Rebel pilot training and flight components. One successful delivery, one deed. No second payments for copied files.", false, {
 		{"I'm in. Give me the location.", "accept"},
 		{"I'll pass.", "decline"}
 	}},
