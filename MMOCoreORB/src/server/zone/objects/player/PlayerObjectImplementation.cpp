@@ -9,6 +9,7 @@
 #include "server/zone/managers/skill/SkillManager.h"
 #include "server/zone/managers/planet/PlanetManager.h"
 #include "terrain/manager/TerrainManager.h"
+#include "templates/params/creature/CreatureAttribute.h"
 #include "server/zone/managers/mission/MissionManager.h"
 #include "server/zone/managers/combat/CombatManager.h"
 #include "server/zone/managers/structure/StructureManager.h"
