@@ -1,0 +1,8 @@
+includeFile("chandrila/chandrila_squall.lua")
+includeFile("chandrila/chandrila_fecklen.lua")
+includeFile("chandrila/chandrila_cairnmog.lua")
+includeFile("chandrila/chandrila_ghorla.lua")
+includeFile("chandrila/chandrila_blackback.lua")
+includeFile("chandrila/chandrila_bulabird.lua")
+includeFile("chandrila/chandrila_preepnob.lua")
+includeFile("chandrila/chandrila_silverwing.lua")

@@ -606,3 +606,13 @@ includeFile("lair/creature_lair/moraband_tukata_lair.lua")
 includeFile("lair/creature_lair/moraband_shyrack_lair.lua")
 includeFile("lair/creature_lair/moraband_klor_slug_lair.lua")
 includeFile("lair/creature_lair/moraband_pelko_bug_lair.lua")
+
+-- Chandrila
+includeFile("lair/creature_lair/chandrila/chandrila_squall_lair.lua")
+includeFile("lair/creature_lair/chandrila/chandrila_fecklen_lair.lua")
+includeFile("lair/creature_lair/chandrila/chandrila_cairnmog_lair.lua")
+includeFile("lair/creature_lair/chandrila/chandrila_ghorla_lair.lua")
+includeFile("lair/creature_lair/chandrila/chandrila_blackback_lair.lua")
+includeFile("lair/creature_lair/chandrila/chandrila_bulabird_lair.lua")
+includeFile("lair/creature_lair/chandrila/chandrila_preepnob_lair.lua")
+includeFile("lair/creature_lair/chandrila/chandrila_silverwing_lair.lua")

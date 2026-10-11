@@ -600,3 +600,13 @@ includeFile("lair/creature_dynamic/moraband_hssiss_pack.lua")
 includeFile("lair/creature_dynamic/moraband_terentatek_pack.lua")
 includeFile("lair/creature_dynamic/moraband_wraid_pack.lua")
 includeFile("lair/creature_dynamic/moraband_pelko_bug_pack.lua")
+
+-- Chandrila
+includeFile("lair/creature_dynamic/chandrila/chandrila_squall_group.lua")
+includeFile("lair/creature_dynamic/chandrila/chandrila_fecklen_group.lua")
+includeFile("lair/creature_dynamic/chandrila/chandrila_cairnmog_group.lua")
+includeFile("lair/creature_dynamic/chandrila/chandrila_ghorla_group.lua")
+includeFile("lair/creature_dynamic/chandrila/chandrila_blackback_group.lua")
+includeFile("lair/creature_dynamic/chandrila/chandrila_bulabird_group.lua")
+includeFile("lair/creature_dynamic/chandrila/chandrila_preepnob_group.lua")
+includeFile("lair/creature_dynamic/chandrila/chandrila_silverwing_group.lua")

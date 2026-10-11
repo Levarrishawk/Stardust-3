@@ -490,6 +490,7 @@ includeFile("spawn/yavin4/yavin4_western_peak.lua")
 includeFile("spawn/yavin4/yavin4_world.lua")
 
 -- destroy_mission
+includeFile("spawn/destroy_mission/chandrila_destroy_missions.lua")
 includeFile("spawn/destroy_mission/alderaan_destroy_missions.lua")
 includeFile("spawn/destroy_mission/hutta_destroy_missions.lua")
 includeFile("spawn/destroy_mission/moraband_destroy_missions.lua")
@@ -654,3 +655,6 @@ includeFile("spawn/moraband_world.lua")
 -- Mortis
 includeFile("spawn/mortis/mortis_daughter.lua")
 includeFile("spawn/mortis/mortis_son.lua")
+
+-- Chandrila
+includeFile("spawn/chandrila_world.lua")
