@@ -13,11 +13,17 @@
 class ShipDeedTemplate : public DeedTemplate {
 	String shipControlDevice;
 	int shipType;
+	float chassisMaxHealth;
+	float chassisMaxMass;
+	String certificationRequired;
+	Vector<String> skillsRequired;
 
 public:
 	ShipDeedTemplate() {
 		shipControlDevice = "";
 		shipType = 0;
+		chassisMaxHealth = 0;
+		chassisMaxMass = 0;
 
 		setLoggingName("ShipDeedTemplate");
 	}
@@ -30,6 +36,16 @@ public:
 
 		shipControlDevice = templateData->getStringField("shipControlDevice");
 		shipType = templateData->getIntField("shipType");
+		chassisMaxHealth = templateData->getFloatField("chassisMaxHealth");
+		chassisMaxMass = templateData->getFloatField("chassisMaxMass");
+		certificationRequired = templateData->getStringField("certificationRequired");
+
+		auto skillTable = templateData->getObjectField("skillRequired");
+		if (skillTable.isValidTable()) {
+			for (int i = 1; i <= skillTable.getTableSize(); ++i)
+				skillsRequired.add(skillTable.getStringAt(i));
+		}
+		skillTable.pop();
 	}
 
 	inline const String& getShipControlDeviceTemplate() {
@@ -42,6 +58,22 @@ public:
 
 	bool isShipDeedTemplate() {
 		return true;
+	}
+
+	inline float getChassisMaxHealth() const {
+		return chassisMaxHealth;
+	}
+
+	inline float getChassisMaxMass() const {
+		return chassisMaxMass;
+	}
+
+	inline const String& getCertificationRequired() const {
+		return certificationRequired;
+	}
+
+	inline const Vector<String>& getSkillsRequired() const {
+		return skillsRequired;
 	}
 };
 

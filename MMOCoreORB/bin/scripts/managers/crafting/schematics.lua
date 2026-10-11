@@ -1515,7 +1515,6 @@ schematics = {
 	{path="object/draft_schematic/space/chassis/tiefighter_body.iff"},
 	{path="object/draft_schematic/space/chassis/tieinterceptor.iff"},
 	{path="object/draft_schematic/space/chassis/tieoppressor.iff"},
-	{path="object/draft_schematic/space/chassis/xwing.iff"},
 	{path="object/draft_schematic/space/chassis/xwing_body.iff"},
 	{path="object/draft_schematic/space/chassis/xwing_cockpit.iff"},
 	{path="object/draft_schematic/space/chassis/xwing_customization_kit.iff"},

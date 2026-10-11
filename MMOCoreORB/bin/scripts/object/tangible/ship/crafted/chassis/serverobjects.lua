@@ -100,6 +100,7 @@ includeFile("tangible/ship/crafted/chassis/tieinterceptor_imperial_guard_reward_
 includeFile("tangible/ship/crafted/chassis/tieoppressor_deed.lua")
 includeFile("tangible/ship/crafted/chassis/xwing_customization_kit.lua")
 includeFile("tangible/ship/crafted/chassis/xwing_deed.lua")
+includeFile("tangible/ship/crafted/chassis/incom_xwing_reward_deed.lua")
 includeFile("tangible/ship/crafted/chassis/ykl37r_deed.lua")
 includeFile("tangible/ship/crafted/chassis/yt1300_deed.lua")
 includeFile("tangible/ship/crafted/chassis/ywing_deed.lua")

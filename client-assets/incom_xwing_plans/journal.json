@@ -1,0 +1,47 @@
+{
+  "key": "quest/incom_xwing_plans",
+  "crc": "0xd955de48",
+  "strings": {
+    "category": "Rebel Operations",
+    "journal_entry_title": "Incom: A New Hope in the Skies",
+    "journal_entry_description": "Kessa Venn, an intelligence operative at Saw Gerrera's camp on Lok, has uncovered an Incom fighter project for the Empire. Infiltrate the guarded testing facility on Vreni Island, Corellia, steal the T-65 X-Wing technical plans and return them to Kessa. Reward: one T-65 X-Wing chassis deed. This mission can only be rewarded once per character.",
+    "task00_journal_entry_title": "Steal the T-65 technical plans",
+    "task00_journal_entry_description": "Reach the Incom testing facility near (-5717, -6441) on Corellia. Enter the officer's shed near (-5697, -6422), access the Incom Flight Test Archive and download the technical plans onto a datadisk. Expect strong stormtroopers, officers and AT-STs. Leave room in your inventory.",
+    "task01_journal_entry_title": "Deliver the plans to Kessa Venn",
+    "task01_journal_entry_description": "Bring the X-Wing Technical plans to Kessa Venn at Saw Gerrera's camp on Lok (-5655, -4815). Keep the datadisk in your inventory and leave one free slot for the reward deed. If the disk is destroyed, return to the Incom archive for a replacement. The deed grants a chassis; normal Rebel pilot training and flight components are still required."
+  },
+  "quest": {
+    "JOURNAL_ENTRY_TITLE": "@quest/ground/incom_xwing_plans:journal_entry_title",
+    "JOURNAL_ENTRY_DESCRIPTION": "@quest/ground/incom_xwing_plans:journal_entry_description",
+    "CATEGORY": "@quest/ground/incom_xwing_plans:category"
+  },
+  "tasks": [
+    {
+      "JOURNAL_ENTRY_TITLE": "@quest/ground/incom_xwing_plans:task00_journal_entry_title",
+      "JOURNAL_ENTRY_DESCRIPTION": "@quest/ground/incom_xwing_plans:task00_journal_entry_description",
+      "TASK_NAME": "download_plans",
+      "IS_VISIBLE": 1,
+      "SHOW_SYSTEM_MESSAGES": 1,
+      "PLANET_NAME": "corellia",
+      "LOCATION_X": "-5697",
+      "LOCATION_Y": "5",
+      "LOCATION_Z": "-6422",
+      "RADIUS": "5",
+      "PREREQUISITE_TASKS": ""
+    },
+    {
+      "JOURNAL_ENTRY_TITLE": "@quest/ground/incom_xwing_plans:task01_journal_entry_title",
+      "JOURNAL_ENTRY_DESCRIPTION": "@quest/ground/incom_xwing_plans:task01_journal_entry_description",
+      "TASK_NAME": "deliver_plans",
+      "IS_VISIBLE": 1,
+      "SHOW_SYSTEM_MESSAGES": 1,
+      "PLANET_NAME": "lok",
+      "LOCATION_X": "-5655",
+      "LOCATION_Y": "62",
+      "LOCATION_Z": "-4815",
+      "RADIUS": "5",
+      "PREREQUISITE_TASKS": "0"
+    }
+  ],
+  "crc_table_base": "C:/Stardust-DEV/mtg_patch_019.tre"
+}

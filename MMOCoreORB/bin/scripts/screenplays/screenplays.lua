@@ -638,6 +638,7 @@ includeFile("cities/yavin4_mining_outpost.lua")
 
 -- POIs
 includeFile("poi/corellia_incom_testing_site.lua")
+includeFile("quests/incom_xwing_plans.lua")
 includeFile("poi/corellia_rogue_corsec_base.lua")
 --includeFile("poi/corellia_rebel_hideout.lua")
 includeFile("poi/corellia_stronghold.lua")

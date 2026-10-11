@@ -1,0 +1,9 @@
+incom_partisan_contact = theme_park_rebel_field_contact:new {
+	customName = "Kessa Venn (Partisan Intelligence)",
+	randomNameTag = false,
+	optionsBitmask = INVULNERABLE + CONVERSABLE,
+	templates = {"object/mobile/dressed_rebel_commando_human_female_01.iff"},
+	conversationTemplate = "incomXwingPlansConvoTemplate",
+}
+
+CreatureTemplates:addCreatureTemplate(incom_partisan_contact, "incom_partisan_contact")

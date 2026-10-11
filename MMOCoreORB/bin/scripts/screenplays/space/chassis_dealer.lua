@@ -39,7 +39,6 @@ ChassisDealer = ScreenPlay:new {
 		{name = "player_awing", certification = "cert_starships_awing", chassisToken = "awing_chassis_token"},
 		{name = "player_bwing", certification = "cert_starships_bwing", chassisToken = "bwing_chassis_token"},
 		--{name = "player_prototype_z95", certification = "cert_starships_z95headhunter", chassisToken = "z95_chassis_token"},
-		{name = "player_xwing", certification = "cert_starships_xwing", chassisToken = "xwing_chassis_token"},
 		{name = "player_ykl37r", certification = "cert_starships_ykl37r", chassisToken = "ykl37r_chassis_token"},
 		{name = "player_ywing", certification = "cert_starships_ywing", chassisToken = "ywing_chassis_token"},
 		{name = "player_ywing_longprobe", certification = "cert_starships_ywinglongprobe", chassisToken = "ywing_longprobe_chassis_token"},
@@ -86,7 +85,8 @@ function ChassisDealer:getValidBlueprints(pPlayer)
 	for i = 1, SceneObject(pInventory):getContainerObjectsSize(), 1 do
 		local pObject = SceneObject(pInventory):getContainerObject(i - 1)
 
-		if (pObject ~= nil and SceneObject(pObject):getGameObjectType() == 1073741836) then -- SHIPCHASSIS
+		if (pObject ~= nil and SceneObject(pObject):getGameObjectType() == 1073741836
+			and SceneObject(pObject):getTemplateObjectPath() ~= "object/tangible/ship/components/chassis/xwing_chassis_token.iff") then -- SHIPCHASSIS
 			local option = {SceneObject(pObject):getDisplayedName(), SceneObject(pObject):getObjectID()}
 			table.insert(returnBluePrints, option)
 		end

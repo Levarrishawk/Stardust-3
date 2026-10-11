@@ -108,17 +108,20 @@ end
 function chassisDealerConvoHandler:purchaseChassisConfirmation(pPlayer, pSui, eventIndex, arg0)
 	local cancelPressed = (eventIndex == 1)
 
-	if (cancelPressed) then
+	if (cancelPressed or pPlayer == nil or pSui == nil) then
 		return
 	end
 
 	local suiManager = LuaSuiManager()
-	local selection = arg0 + 1
-
-	local blueprintTable = ChassisDealer:getValidBlueprints(pPlayer)
-
-	local chassisName = blueprintTable[selection][1]
-	local chassisID = blueprintTable[selection][2]
+	local selection = tonumber(arg0)
+	if (selection == nil or selection < 0 or selection ~= math.floor(selection)) then
+		return
+	end
+	local listBox = LuaSuiListBox(pSui)
+	if (selection >= listBox:getMenuSize()) then
+		return
+	end
+	local chassisID = listBox:getMenuObjectID(selection)
 
 	local pBlueprint = getSceneObject(chassisID)
 
@@ -126,6 +129,13 @@ function chassisDealerConvoHandler:purchaseChassisConfirmation(pPlayer, pSui, ev
 		CreatureObject(pPlayer):sendSystemMessage("@chassis_npc:failed")
 		return
 	end
+
+	local pInventory = SceneObject(pPlayer):getSlottedObject("inventory")
+	if (pInventory == nil or SceneObject(pBlueprint):getParentID() ~= SceneObject(pInventory):getObjectID()
+		or SceneObject(pBlueprint):getTemplateObjectPath() == "object/tangible/ship/components/chassis/xwing_chassis_token.iff") then
+		return
+	end
+	local chassisName = SceneObject(pBlueprint):getDisplayedName()
 
 	if (ChassisDealer.CHASSIS_DEBUG) then
 		print("purchaseChassisConfirmation - Selected BluePrint: " .. chassisName .. " Chassis Object ID: " .. chassisID)
@@ -185,6 +195,11 @@ function chassisDealerConvoHandler:purchaseChassis(pPlayer, pSui, eventIndex, ar
 	end
 
 	-- Generates the Deed, sets values, deducts credits and transfers to player
+	if (SceneObject(pBlueprint):getTemplateObjectPath() == "object/tangible/ship/components/chassis/xwing_chassis_token.iff") then
+		CreatureObject(pPlayer):sendSystemMessage("Standard T-65 X-Wing deeds are only available through Kessa Venn at Saw Gerrera's camp on Lok.")
+		return
+	end
+
 	if (generateShipDeed(pPlayer, pBlueprint, pNpc)) then
 		local boughtMsg = LuaStringIdChatParameter("@chassis_npc:bought_chassis")
 		spatialChat(pNpc, boughtMsg:_getObject())

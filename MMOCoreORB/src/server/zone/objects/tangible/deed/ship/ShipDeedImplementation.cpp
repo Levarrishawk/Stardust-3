@@ -35,6 +35,14 @@ void ShipDeedImplementation::loadTemplateData(SharedObjectTemplate* templateData
 	generatedObjectTemplate = shipDeedData->getGeneratedObjectTemplate();
 	controlDeviceTemplate = shipDeedData->getShipControlDeviceTemplate();
 	shipType = shipDeedData->getShipType();
+
+	// Direct quest rewards need chassis values before any dealer or crafting step.
+	if (shipDeedData->getChassisMaxHealth() > 0 && shipDeedData->getChassisMaxMass() > 0) {
+		maxHitPoints = shipDeedData->getChassisMaxHealth();
+		mass = shipDeedData->getChassisMaxMass();
+		certRequired = shipDeedData->getCertificationRequired();
+		skillsRequired = shipDeedData->getSkillsRequired();
+	}
 }
 
 void ShipDeedImplementation::fillAttributeList(AttributeListMessage* alm, CreatureObject* object) {
@@ -196,7 +204,7 @@ int ShipDeedImplementation::handleObjectMenuSelect(CreatureObject* player, byte 
 
 		Locker deviceLock(shipControlDevice, player);
 
-		if (isYachtDeed) {
+		if (isYachtDeed || getParkingLocation().isEmpty()) {
 			shipControlDevice->setParkingLocation(travelPoint->getPointName());
 		} else {
 			shipControlDevice->setParkingLocation(getParkingLocation());
