@@ -2498,7 +2498,9 @@ void AiAgentImplementation::activateHAMRegeneration(int latency) {
 	uint32 actionTick = (uint32) Math::max(1.f, (float) ceil(getMaxHAM(CreatureAttribute::ACTION) / 300000.f * latency));
 	uint32 mindTick   = (uint32) Math::max(1.f, (float) ceil(getMaxHAM(CreatureAttribute::MIND) / 300000.f * latency));
 
-	healDamage(asCreatureObject(), CreatureAttribute::HEALTH, healthTick, true, false);
+	if (!isInCombat())
+		healDamage(asCreatureObject(), CreatureAttribute::HEALTH, healthTick, true, false);
+
 	healDamage(asCreatureObject(), CreatureAttribute::ACTION, actionTick, true, false);
 	healDamage(asCreatureObject(), CreatureAttribute::MIND,   mindTick,   true, false);
 

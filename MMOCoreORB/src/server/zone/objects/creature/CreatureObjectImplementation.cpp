@@ -3256,7 +3256,9 @@ void CreatureObjectImplementation::activateHAMRegeneration(int latency) {
 	if (mindTick < 1)
 		mindTick = 1;
 
-	healDamage(asCreatureObject(), CreatureAttribute::HEALTH, healthTick, true, false);
+	if (!isInCombat())
+		healDamage(asCreatureObject(), CreatureAttribute::HEALTH, healthTick, true, false);
+
 	healDamage(asCreatureObject(), CreatureAttribute::ACTION, actionTick, true, false);
 	healDamage(asCreatureObject(), CreatureAttribute::MIND, mindTick, true, false);
 
