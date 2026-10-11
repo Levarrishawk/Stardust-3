@@ -9,6 +9,7 @@ registerScreenPlay("MorabandValleyScreenPlay", true)
 function MorabandValleyScreenPlay:start()
 	if (isZoneEnabled("moraband")) then
 		self:spawnMobiles()
+		self:spawnRuinsMobiles()
 		self:spawnSceneObjects()
 		self:spawnActiveArea1()
 		self:spawnActiveArea2()
@@ -377,4 +378,51 @@ function MorabandValleyScreenPlay:notifySpawnArea3(pActiveArea2, pMovingObject, 
         CreatureObject(pMovingObject):playMusicMessage("sound/music_event_danger.snd")     
     end       
   return 0   
+end
+
+function MorabandValleyScreenPlay:spawnRuinsMobiles()
+	local mobiles = {
+		{"klor_slug", -1550, -610, 47},
+		{"tukata", -1470, -610, 94},
+		{"klor_slug", -1390, -610, 141},
+		{"klor_slug", -1310, -610, 188},
+		{"tukata", -1230, -610, 235},
+		{"klor_slug", -1150, -610, 282},
+		{"klor_slug", -1550, -705, 329},
+		{"wraid", -1470, -705, 16},
+		{"klor_slug", -1390, -705, 63},
+		{"klor_slug", -1310, -705, 110},
+		{"tukata", -1230, -705, 157},
+		{"klor_slug", -1150, -705, 204},
+		{"klor_slug", -1550, -800, 251},
+		{"tukata", -1470, -800, 298},
+		{"klor_slug", -1390, -800, 345},
+		{"klor_slug", -1310, -800, 32},
+		{"hssiss", -1230, -800, 79},
+		{"klor_slug", -1150, -800, 126},
+		{"klor_slug", -1550, -895, 173},
+		{"tukata", -1470, -895, 220},
+		{"klor_slug", -1390, -895, 267},
+		{"klor_slug", -1310, -895, 314},
+		{"tukata", -1230, -895, 1},
+		{"klor_slug", -1150, -895, 48},
+		{"klor_slug", -1550, -990, 95},
+		{"wraid", -1470, -990, 142},
+		{"klor_slug", -1390, -990, 189},
+		{"klor_slug", -1310, -990, 236},
+		{"tukata", -1230, -990, 283},
+		{"klor_slug", -1150, -990, 330},
+		{"klor_slug", -1550, -1085, 17},
+		{"tukata", -1470, -1085, 64},
+		{"klor_slug", -1390, -1085, 111},
+		{"klor_slug", -1310, -1085, 158},
+		{"hssiss", -1230, -1085, 205},
+		{"klor_slug", -1150, -1085, 252},
+	}
+
+	for i = 1, #mobiles do
+		local mobile = mobiles[i]
+		local z = getWorldFloor(mobile[2], mobile[3], "moraband")
+		spawnMobile("moraband", mobile[1], 600, mobile[2], z, mobile[3], mobile[4], 0)
+	end
 end
