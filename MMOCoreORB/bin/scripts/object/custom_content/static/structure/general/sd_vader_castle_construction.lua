@@ -1,0 +1,5 @@
+object_static_structure_general_sd_vader_castle_construction = object_static_structure_general_shared_sd_vader_castle_construction:new {
+
+}
+
+ObjectTemplates:addTemplate(object_static_structure_general_sd_vader_castle_construction, "object/static/structure/general/sd_vader_castle_construction.iff")

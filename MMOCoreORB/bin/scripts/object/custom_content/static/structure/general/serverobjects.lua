@@ -1,4 +1,5 @@
 -- Server Objects
+includeFile("custom_content/static/structure/general/sd_vader_castle_construction.lua")
 
 includeFile("custom_content/static/structure/general/cave_column_snow_style_01.lua")
 includeFile("custom_content/static/structure/general/cave_column_snow_style_02.lua")

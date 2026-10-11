@@ -8,6 +8,7 @@
 #include "server/zone/managers/player/PlayerManager.h"
 #include "server/zone/managers/skill/SkillManager.h"
 #include "server/zone/managers/planet/PlanetManager.h"
+#include "terrain/manager/TerrainManager.h"
 #include "server/zone/managers/mission/MissionManager.h"
 #include "server/zone/managers/combat/CombatManager.h"
 #include "server/zone/managers/structure/StructureManager.h"
@@ -92,6 +93,8 @@
 #endif // WITH_SWGREALMS_API
 
 void PlayerObjectImplementation::initializeTransientMembers() {
+	lavaDamageActive = false;
+
 	playerLogLevel = ConfigManager::instance()->getPlayerLogLevel();
 
 	IntangibleObjectImplementation::initializeTransientMembers();
@@ -2385,6 +2388,57 @@ void PlayerObjectImplementation::doRecovery(int latency) {
 	creature->activateStateRecovery();
 
 	CooldownTimerMap* cooldownTimerMap = creature->getCooldownTimerMap();
+
+	bool inLava = false;
+	bool lavaProtected = false;
+	auto lavaZone = creature->getZone();
+
+	if (lavaZone != nullptr && lavaZone->getZoneName() == "mustafar" && !isTeleporting()) {
+		ManagedReference<SceneObject*> mount = creature->getParent().get();
+		SceneObject* contactObject = creature;
+
+		if (creature->isRidingMount() && mount != nullptr && mount->isCreatureObject() && mount->getParent() == nullptr) {
+			contactObject = mount;
+			auto mountTemplate = mount->getObjectTemplate();
+
+			if (mountTemplate != nullptr) {
+				const String& templateName = mountTemplate->getFullTemplateString();
+				lavaProtected = templateName == "object/mobile/vehicle/landspeeder_desert_skiff.iff" ||
+					templateName == "object/mobile/vehicle/landspeeder_lava_skiff.iff" ||
+					templateName == "object/mobile/vehicle/temp_walker1.iff" ||
+					templateName == "object/mobile/vehicle/walker_at_rt_reg.iff" ||
+					templateName == "object/mobile/vehicle/walker_at_rt_camo.iff" ||
+					templateName == "object/mobile/som/lava_flea.iff";
+			}
+		}
+
+		auto planetManager = lavaZone->getPlanetManager();
+
+		if (contactObject->getParent() == nullptr && planetManager != nullptr) {
+			TerrainManager* terrainManager = planetManager->getTerrainManager();
+			float waterHeight;
+
+			if (terrainManager != nullptr && terrainManager->getWaterHeight(contactObject->getPositionX(), contactObject->getPositionY(), waterHeight)) {
+				inLava = contactObject->getPositionZ() <= waterHeight + 0.2f;
+			}
+		}
+	}
+
+	if (inLava && !creature->isDead()) {
+		creature->playEffect("clienteffect/lava_player_burning.cef", "");
+	}
+
+	if (inLava && !lavaProtected && !creature->isDead() && !creature->isIncapacitated()) {
+		if (!lavaDamageActive) {
+			lavaDamageActive = true;
+			cooldownTimerMap->updateToCurrentAndAddMili("mustafarLavaDamage", 2000);
+		} else if (cooldownTimerMap->isPast("mustafarLavaDamage")) {
+			cooldownTimerMap->updateToCurrentAndAddMili("mustafarLavaDamage", 2000);
+			creature->inflictDamage(nullptr, CreatureAttribute::HEALTH, 1500, true, true, false);
+		}
+	} else {
+		lavaDamageActive = false;
+	}
 
 	if (cooldownTimerMap->isPast("digestEvent")) {
 		Time currentTime;

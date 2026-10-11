@@ -213,6 +213,8 @@ class PlayerObject extends IntangibleObject {
 	@dereferenced
 	protected transient Reference<PlayerRecoveryEvent> recoveryEvent;
 
+	protected transient boolean lavaDamageActive;
+
 	@dereferenced
 	protected transient Reference<ForceRegenerationEvent> forceRegenerationEvent;
 

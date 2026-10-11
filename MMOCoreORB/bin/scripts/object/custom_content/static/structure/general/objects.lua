@@ -1,4 +1,9 @@
 --New
+object_static_structure_general_shared_sd_vader_castle_construction = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/general/shared_sd_vader_castle_construction.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_general_shared_sd_vader_castle_construction, "object/static/structure/general/shared_sd_vader_castle_construction.iff")
+
 object_static_structure_general_shared_cave_column_snow_style_01 = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/static/structure/general/shared_cave_column_snow_style_01.iff"
 }

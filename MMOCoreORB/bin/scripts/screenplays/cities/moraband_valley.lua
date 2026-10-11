@@ -9,6 +9,7 @@ registerScreenPlay("MorabandValleyScreenPlay", true)
 function MorabandValleyScreenPlay:start()
 	if (isZoneEnabled("moraband")) then
 		self:spawnMobiles()
+		self:spawnOutpostMobiles()
 		self:spawnRuinsMobiles()
 		self:spawnSceneObjects()
 		self:spawnActiveArea1()
@@ -378,6 +379,33 @@ function MorabandValleyScreenPlay:notifySpawnArea3(pActiveArea2, pMovingObject, 
         CreatureObject(pMovingObject):playMusicMessage("sound/music_event_danger.snd")     
     end       
   return 0   
+end
+
+function MorabandValleyScreenPlay:spawnOutpostMobiles()
+	local mobiles = {
+		{"stormtrooper", -1718, -624, 90},
+		{"stormtrooper", -1674, -624, -90},
+		{"stormtrooper", -1758, -663, 0},
+		{"stormtrooper", -1758, -707, 180},
+		{"stormtrooper", -1654, -661, 90},
+		{"stormtrooper", -1654, -713, 90},
+		{"stormtrooper", -1715, -741, 180},
+		{"stormtrooper", -1687, -741, 180},
+		{"imperial_officer", -1709, -649, 135},
+		{"imperial_scientist", -1725, -677, 90},
+		{"imperial_scientist", -1721, -677, -90},
+		{"imperial_scientist", -1691, -704, 45},
+		{"imperial_scientist", -1687, -700, -135},
+		{"imperial_scientist", -1737, -715, 120},
+		{"imperial_inquisitor", -1678, -656, -135},
+		{"imperial_inquisitor", -1726, -731, 45},
+	}
+
+	for i = 1, #mobiles do
+		local mobile = mobiles[i]
+		local z = getWorldFloor(mobile[2], mobile[3], "moraband")
+		spawnMobile("moraband", mobile[1], 600, mobile[2], z, mobile[3], mobile[4], 0)
+	end
 end
 
 function MorabandValleyScreenPlay:spawnRuinsMobiles()
