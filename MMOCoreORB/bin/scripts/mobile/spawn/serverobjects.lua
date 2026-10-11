@@ -490,6 +490,10 @@ includeFile("spawn/yavin4/yavin4_western_peak.lua")
 includeFile("spawn/yavin4/yavin4_world.lua")
 
 -- destroy_mission
+includeFile("spawn/destroy_mission/alderaan_destroy_missions.lua")
+includeFile("spawn/destroy_mission/hutta_destroy_missions.lua")
+includeFile("spawn/destroy_mission/moraband_destroy_missions.lua")
+includeFile("spawn/destroy_mission/mortis_destroy_missions.lua")
 includeFile("spawn/destroy_mission/corellia_destroy_missions.lua")
 includeFile("spawn/destroy_mission/dantooine_destroy_missions.lua")
 includeFile("spawn/destroy_mission/dathomir_destroy_missions.lua")
