@@ -2436,6 +2436,8 @@ void PlayerObjectImplementation::doRecovery(int latency) {
 		} else if (cooldownTimerMap->isPast("mustafarLavaDamage")) {
 			cooldownTimerMap->updateToCurrentAndAddMili("mustafarLavaDamage", 2000);
 			creature->inflictDamage(nullptr, CreatureAttribute::HEALTH, 1500, true, true, false);
+			creature->showFlyText("", "LAVA DAMAGE", 0xFF, 0, 0);
+			creature->sendSystemMessage("You are taking Lava Damage!");
 		}
 	} else {
 		lavaDamageActive = false;
