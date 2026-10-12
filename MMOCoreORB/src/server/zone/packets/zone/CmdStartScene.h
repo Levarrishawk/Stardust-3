@@ -29,6 +29,11 @@ public:
 
 		Vector3 worldPosition = creo->getWorldPosition();
 
+		if (zone->getZoneName() == "kashyyyk_main") {
+			creo->info(true) << "Kashyyyk scene start -- local=" << creo->getPosition().toString()
+				<< " world=" << worldPosition.toString() << " parent=" << creo->getParentID();
+		}
+
 	 	insertFloat(worldPosition.getX()); //X
 	 	insertFloat(worldPosition.getZ()); //Z
 	 	insertFloat(worldPosition.getY()); //Y

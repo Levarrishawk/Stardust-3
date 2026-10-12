@@ -9,6 +9,7 @@
 #define CMDSCENEREADYCALLBACK_H_
 
 #include "server/zone/packets/MessageCallback.h"
+#include "server/zone/Zone.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 
 #include "CmdSceneReady.h"
@@ -29,6 +30,12 @@ public:
 		}
 
 		Locker _locker(player);
+
+		auto zone = player->getZone();
+		if (zone != nullptr && zone->getZoneName() == "kashyyyk_main") {
+			player->info(true) << "Kashyyyk scene ready -- local=" << player->getPosition().toString()
+				<< " world=" << player->getWorldPosition().toString() << " parent=" << player->getParentID();
+		}
 
 		auto ghost = player->getPlayerObject();
 

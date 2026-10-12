@@ -112,6 +112,12 @@ public:
 	}
 
 	void updateError(CreatureObject* creO, const String& message, bool bounceBack = false, float bounceDistance = 0.f) const {
+		auto zone = creO->getZone();
+		if (bounceBack && zone != nullptr && zone->getZoneName() == "kashyyyk_main") {
+			creO->info(true) << "Kashyyyk outdoor movement rejected -- reason=" << message
+				<< " received(x,z,y)=" << transform.getPositionX() << "," << transform.getPositionZ() << "," << transform.getPositionY()
+				<< " server=" << creO->getPosition().toString() << " parent=" << creO->getParentID();
+		}
 		if (!message.isEmpty() && message.beginsWith("@")) {
 			creO->sendSystemMessage(message);
 		}
