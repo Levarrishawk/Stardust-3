@@ -765,6 +765,7 @@ includeFile("kashyyyk/kashyyyk_patrol_paths.lua")
 includeFile("kashyyyk/kashyyyk_patrols.lua")
 includeFile("kashyyyk/kashyyyk_static_npcs.lua")
 includeFile("kashyyyk/kashyyyk_travel.lua")
+includeFile("kashyyyk/kashyyyk_zone_transitions.lua")
 -- Quest XP first so every Kachirho screenplay below can call KashyyykQuestXp.
 -- Shape is mustafar_quest_xp.lua (OURS). Journal.* is not called; the client
 -- ships quest/ep3_kachirho_*.qst and the journal row comes later.

@@ -781,6 +781,23 @@ kashyyyk_main = {
 	}
 }
 
+-- Separate surface zones reached through the Kachirho gates; no shuttleports.
+kashyyyk_hunting = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+	planetTravelPoints = {},
+	badgeAreas = {},
+	planetObjects = {}
+}
+
+kashyyyk_dead_forest = {
+	weatherEnabled = 0,
+	gcwEnabled = 0,
+	planetTravelPoints = {},
+	badgeAreas = {},
+	planetObjects = {}
+}
+
 -- ===========================================================================
 -- KASHYYYK DUNGEON ZONES -- PROVENANCE
 -- ===========================================================================
