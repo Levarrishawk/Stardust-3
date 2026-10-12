@@ -6,17 +6,16 @@
 KashyyykTravelScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "KashyyykTravelScreenPlay",
-	planet = "kashyyyk",
+	planet = "kashyyyk_main",
 
-	-- snapshot node for mun_kash_shuttlepost_s01 at the Hunting Grounds
-	-- Outpost travel point
-	POST_ID = 6295268,
+	-- Kachirho starport in snapshot/kashyyyk_main.ws.
+	POST_ID = 14602401,
 
-	-- offsets / headings copied from mun_kash_shuttlepost_s01.lua childObjects
+	-- Offsets, cells and headings from mun_kachirho_starport.lua childObjects.
 	travelChildren = {
-		{templateFile = "object/tangible/terminal/terminal_travel.iff", x = -8, z = 0, y = -6, ox = 0, oy = -0.707107, oz = 0, ow = 0.707107},
-		{templateFile = "object/tangible/travel/ticket_collector/ticket_collector.iff", x = -8, z = 0, y = 6, ox = 0, oy = -0.707107, oz = 0, ow = 0.707107},
-		{templateFile = "object/creature/npc/theme_park/player_shuttle.iff", x = 0, z = 0, y = 0, ox = 0, oy = 1, oz = 0, ow = 0}
+		{templateFile = "object/tangible/terminal/terminal_travel.iff", x = -3.12, z = 0.14659503, y = -17.57, ox = 0, oy = 0.707107, oz = 0, ow = -0.707107, cell = 1},
+		{templateFile = "object/tangible/travel/ticket_collector/ticket_collector.iff", x = 1, z = 0, y = -10, ox = 0, oy = 0, oz = 0, ow = 1},
+		{templateFile = "object/mobile/player_transport.iff", x = 0, z = 7, y = 0, ox = 0, oy = 0.707107, oz = 0, ow = 0.707107}
 	}
 }
 
@@ -27,7 +26,7 @@ function KashyyykTravelScreenPlay:start()
 		self.present = 0
 		self.spawned = 0
 		self:ensureTravelChildren()
-		print("[kashyyyk] travel children: present=" .. self.present .. " spawned=" .. self.spawned)
+		print("[kashyyyk_main] travel children: present=" .. self.present .. " spawned=" .. self.spawned)
 	end
 end
 
@@ -59,7 +58,7 @@ function KashyyykTravelScreenPlay:worldPose(pBuilding, entry)
 end
 
 function KashyyykTravelScreenPlay:childPresent(pBuilding, entry, index)
-	local oid = readData("KashyyykTravel:oid:" .. index)
+	local oid = readData("KashyyykTravel:" .. self.planet .. ":oid:" .. index)
 	local pObj = getSceneObject(oid)
 
 	if (self:matchesChild(pBuilding, pObj, entry)) then
@@ -70,7 +69,7 @@ function KashyyykTravelScreenPlay:childPresent(pBuilding, entry, index)
 	local pChild = SceneObject(pBuilding):getChildObject(childIndex)
 	while (pChild ~= nil) do
 		if (self:matchesChild(pBuilding, pChild, entry)) then
-			writeData("KashyyykTravel:oid:" .. index, SceneObject(pChild):getObjectID())
+			writeData("KashyyykTravel:" .. self.planet .. ":oid:" .. index, SceneObject(pChild):getObjectID())
 			return true
 		end
 		childIndex = childIndex + 1
@@ -85,6 +84,12 @@ function KashyyykTravelScreenPlay:matchesChild(pBuilding, pObj, entry)
 		return false
 	end
 
+	if (entry.cell ~= nil) then
+		local pCell = BuildingObject(pBuilding):getCell(entry.cell)
+		return pCell ~= nil and SceneObject(pObj):getParentID() == SceneObject(pCell):getObjectID()
+			and SceneObject(pObj):getTemplateObjectPath() == entry.templateFile
+	end
+
 	return SceneObject(pObj):getTemplateObjectPath() == entry.templateFile
 		and SceneObject(pBuilding):getDistanceTo(pObj) <= 20
 end
@@ -96,25 +101,36 @@ function KashyyykTravelScreenPlay:spawnIfMissing(pBuilding, entry, index)
 	end
 
 	local wx, wz, wy, ow, ox, oy, oz = self:worldPose(pBuilding, entry)
+	local parentID = 0
+	if (entry.cell ~= nil) then
+		local pCell = BuildingObject(pBuilding):getCell(entry.cell)
+		if (pCell == nil) then
+			print("[kashyyyk_main] travel: missing starport cell " .. entry.cell)
+			return
+		end
+		parentID = SceneObject(pCell):getObjectID()
+		wx, wz, wy = entry.x, entry.z, entry.y
+		ow, ox, oy, oz = entry.ow, entry.ox, entry.oy, entry.oz
+	end
 	-- parent 0: outdoor. spawnSceneObject zone-transfers, which is what
 	-- ShuttleZoneComponent::notifyInsertToZone needs to ScheduleShuttleTask
 	-- and PlanetTravelPoint::setShuttle.
-	local pObj = spawnSceneObject(self.planet, entry.templateFile, wx, wz, wy, 0, ow, ox, oy, oz)
+	local pObj = spawnSceneObject(self.planet, entry.templateFile, wx, wz, wy, parentID, ow, ox, oy, oz)
 
 	if (pObj == nil) then
-		print("[kashyyyk] travel spawn failed: " .. entry.templateFile)
+		print("[kashyyyk_main] travel spawn failed: " .. entry.templateFile)
 		return
 	end
 
-	writeData("KashyyykTravel:oid:" .. index, SceneObject(pObj):getObjectID())
+	writeData("KashyyykTravel:" .. self.planet .. ":oid:" .. index, SceneObject(pObj):getObjectID())
 	self.spawned = self.spawned + 1
 end
 
 function KashyyykTravelScreenPlay:ensureTravelChildren()
 	local pBuilding = getSceneObject(self.POST_ID)
 
-	if (pBuilding == nil) then
-		print("[kashyyyk] travel: shuttlepost " .. self.POST_ID .. " not in zone")
+	if (pBuilding == nil or SceneObject(pBuilding):getZoneName() ~= self.planet) then
+		print("[kashyyyk_main] travel: starport " .. self.POST_ID .. " not in zone")
 		return
 	end
 

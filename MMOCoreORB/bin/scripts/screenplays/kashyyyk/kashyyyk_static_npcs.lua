@@ -11,7 +11,7 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 	screenplayName = "KashyyykStaticNpcsScreenPlay",
 
 	-- {template, x, z, y, heading, "<SOE spawns name> (main|hunting|dead forest row N)"}
-	npcs = {
+	mainNpcs = {
 		{"ep3_tien_wallub", -508.77, 18.2927, -66.29, 80.787, "ep3_tien_wallub (main row 9)"}, -- registered name equals spawns
 		{"ep3_kymayrr", -502.2, 18.7602, -74.1, -73.339, "ep3_kymayrr (main row 15)"}, -- registered name equals spawns
 		{"ep3_etyyy_kerssoc", 577.3, 23.9216, -639.23, -37.724, "ep3_etyyy_kerssoc (main row 1615)"}, -- registered name equals spawns
@@ -61,6 +61,10 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 		{"ep3_chewbacca", -587.29, 18.5615, -104.16, -21.772, "chewbacca (main row 1660)"}, -- single repo candidate
 		{"ep3_wke_vryyyr", -589.23, 18.4857, -103.28, 26.357, "ep3_wke_vryyyr (main row 1661)"}, -- registered name equals spawns
 		{"ep3_hssissk_bloodscale", 517.05, 24.7059, 426.54, 88.808, "ep3_hssissk_bloodscale (main row 1672)"}, -- registered name equals spawns
+	},
+
+	-- These placements still use the legacy combined-map coordinates.
+	npcs = {
 		{"ep3_etyyy_sordaan_xris", 276.31, 48, -2505.77, -72.766, "ep3_etyyy_sordaan_xris (hunting row 356)"}, -- registered name equals spawns
 		{"ep3_etyyy_ziven_tissak", 419.72, 47.8055, -2478.99, 204.878, "ep3_etyyy_ziven_tissak (hunting row 357)"}, -- registered name equals spawns
 		{"ep3_etyyy_banol_starkiller", 246.27, 40.9675, -2540.74, 25.628, "ep3_etyyy_banol_starkiller (hunting row 358)"}, -- registered name equals spawns
@@ -90,16 +94,18 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 registerScreenPlay("KashyyykStaticNpcsScreenPlay", true)
 
 function KashyyykStaticNpcsScreenPlay:start()
+	if (isZoneEnabled("kashyyyk_main")) then
+		self:spawnNpcs("kashyyyk_main", self.mainNpcs)
+	end
+
 	if (isZoneEnabled("kashyyyk")) then
-		self:spawnNpcs()
+		self:spawnNpcs("kashyyyk", self.npcs)
 	end
 end
 
-function KashyyykStaticNpcsScreenPlay:spawnNpcs()
-	local npcs = self.npcs
-
+function KashyyykStaticNpcsScreenPlay:spawnNpcs(zone, npcs)
 	for i = 1, #npcs, 1 do
 		local npc = npcs[i]
-		spawnMobile("kashyyyk", npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
+		spawnMobile(zone, npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
 	end
 end

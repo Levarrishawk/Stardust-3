@@ -740,7 +740,7 @@ mustafar = {
   gcwEnabled = 0,
   
   planetTravelPoints = {
-    {name = "Mensix Mining Facility", x = -2471, z = 230, y = 1620, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 0},
+    {name = "Mensix Mining Facility", x = -2471, z = 230, y = 1620, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1},
     },
     
     badgeAreas = {   
@@ -749,39 +749,9 @@ mustafar = {
   },
 }
 
--- ===========================================================================
--- KASHYYYK -- PROVENANCE
--- ===========================================================================
--- Zone "kashyyyk" loads snapshot/kashyyyk.ws: PlanetManagerImplementation.cpp:633
--- opens "snapshot/" + zone->getZoneName() + ".ws". That is the MERGED whole-surface
--- map shipped in mtg_patch_022.tre, NOT kashyyyk_main.ws. Every figure below was
--- measured against that merged file, the same governing-file reasoning already
--- recorded in kashyyyk_regions.lua.
---
--- AXIS MAPPING (matches kashyyyk_regions.lua)
---   The .ws DATA chunk stores (x, y, z) with y as HEIGHT. A travel point row is
---   read by PlanetTravelPoint.h:79-83 as arrivalVector.set(field "x", field "z",
---   field "y"), and Vector3.h:379 declares set(float x, float z, float y). So the
---   lua "z" slot is HEIGHT and the lua "y" slot is the ground-plane second axis:
---     lua-x = ws-x    lua-z = ws-height    lua-y = ws-z
---   The height is not cosmetic here -- BoardShuttleCommand.h:339 sets the arriving
---   player's Z straight from getArrivalPositionZ().
---
--- KEYS WRITTEN, AND WHERE THEY ARE READ
---   weatherEnabled      PlanetManagerImplementation.cpp:164 (int)
---   gcwEnabled          PlanetManagerImplementation.cpp:173 (int)
---   planetTravelPoints  PlanetManagerImplementation.cpp:182 -> PlanetTravelPointList.h:118
---   badgeAreas          PlanetManagerImplementation.cpp:200
---   planetObjects       PlanetManagerImplementation.cpp:196
---   No navAreas table. Every other entry in this file carries one, but nothing in
---   MMOCoreORB/src reads planet_manager's navAreas -- the only navAreas symbol in
---   the C++ is a local built from regionMap in PlanetManagerImplementation.cpp:361.
---   Nav areas come from the *_regions.lua rows, not from here.
---   jtlLaunchPoint      PlanetManagerImplementation.cpp:251-265 (loadJTLData)
---     Settled by datatables/space_zones/launch_locations.tab:35: Kachirho Starport
---     -> space_kashyyyk -5000, 100, -5000, station_kashyyyk. Lua slot order is
---     {"<space_zone>", x, z, y}, same as corellia (this file line 76).
-kashyyyk = {
+-- Kachirho hub: snapshot/kashyyyk_main.ws.
+-- Travel coordinates use x/y on the ground plane and z for height.
+kashyyyk_main = {
 	-- WeatherManagerImplementation.cpp:60 looks the zone name up as a global table in
 	-- scripts/managers/weather_manager.lua. That file has no kashyyyk table (its zone
 	-- tables run corellia..chandrila, lines 105-296), so weatherEnabled = 1 would take
@@ -793,24 +763,9 @@ kashyyyk = {
 	gcwEnabled = 0,
 
 	planetTravelPoints = {
-		-- The only shuttle/starport structure anywhere on the merged surface.
-		-- snapshot/kashyyyk.ws (448 templates / 4679 nodes) contains exactly one:
-		--   object/building/kashyyyk/shared_mun_kash_shuttlepost_s01.iff
-		--   ws x=398.22  height=41.08  z=-2399.41  cell=0  parent=0
-		-- It is the kashyyyk_hunting sub-zone's shuttlepost (same node at hunting-local
-		-- z=600.59, i.e. the proved dz -3000 merge offset), and it sits inside the
-		-- shipped-measured hunting_grounds_outpost circle in kashyyyk_regions.lua:161.
-		-- The name follows that region row; no localized Kashyyyk string exists for it
-		-- (kashyyyk_region_names.stf ships only the kachirho key), and travel point
-		-- names are raw ASCII, not STF keys (PlanetTravelPointList.h:65).
-		-- mun_kachirho_starport is present in kashyyyk_main.ws but ABSENT from the
-		-- merged kashyyyk.ws, so there is no Kachirho travel structure to point at.
-		-- Flags follow the shipped outpost-only planets, which are the exact structural
-		-- match -- one or more shuttle-class points, no starport, so the shuttle-class
-		-- point carries interplanetary travel: endor (lines 206-207), dantooine
-		-- (108-110), dathomir (145-146), lok (245), yavin4 (568-570) all use
-		-- interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3.
-		{name = "Hunting Grounds Outpost", x = 398.22, z = 41.08, y = -2399.41, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+		-- Outdoor ticket collector at the main snapshot's Kachirho starport
+		-- (node 14602401), using its template's x=1, y=-10 child offset.
+		{name = "Kachirho Starport", x = -668.73, z = 18.8475, y = -158.48, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
 	},
 
 	-- datatables/space_zones/launch_locations.tab:35 (Kachirho Starport).

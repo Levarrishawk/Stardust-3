@@ -79,3 +79,5 @@ SWGEmu.exe.planetmap.bin
 /outputs
 /MMOCoreORB/tools
 /client-assets
+/MMOCoreORB/client-extensions
+*.log

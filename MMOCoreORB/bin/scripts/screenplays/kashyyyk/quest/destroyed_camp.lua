@@ -60,30 +60,30 @@ kachirhoDestroyedCampScreenPlay = ScreenPlay:new {
 registerScreenPlay("kachirhoDestroyedCampScreenPlay", true)
 
 function kachirhoDestroyedCampScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_main")) then
 		self:spawnRadio()
 		self:spawnProps()
 	end
 end
 
 function kachirhoDestroyedCampScreenPlay:spawnRadio()
-	local z = getWorldFloor(self.radioX, self.radioY, "kashyyyk")
+	local z = getWorldFloor(self.radioX, self.radioY, "kashyyyk_main")
 
 	if (z == nil or z == 0) then
 		z = self.radioZ
 	end
 
-	spawnMobile("kashyyyk", "ep3_kachirho_qst_radio", 0, self.radioX, z, self.radioY, 0, 0)
+	spawnMobile("kashyyyk_main", "ep3_kachirho_qst_radio", 0, self.radioX, z, self.radioY, 0, 0)
 end
 
 function kachirhoDestroyedCampScreenPlay:spawnProps()
-	local z = getWorldFloor(self.radioX, self.radioY, "kashyyyk")
+	local z = getWorldFloor(self.radioX, self.radioY, "kashyyyk_main")
 
 	if (z == nil or z == 0) then
 		z = self.radioZ
 	end
 
-	local pDrum = spawnSceneObject("kashyyyk", self.drumTemplate, self.radioX + 2, z, self.radioY, 0, 0)
+	local pDrum = spawnSceneObject("kashyyyk_main", self.drumTemplate, self.radioX + 2, z, self.radioY, 0, 0)
 
 	if (pDrum ~= nil) then
 		writeStringData(SceneObject(pDrum):getObjectID() .. ":kashCamp", "drum")
@@ -91,7 +91,7 @@ function kachirhoDestroyedCampScreenPlay:spawnProps()
 	end
 
 	-- Bag: iff exists. Canopy-camp origin was not in the transcription. OPEN placement, radio camp.
-	local pBag = spawnSceneObject("kashyyyk", self.bagTemplate, self.radioX - 2, z, self.radioY, 0, 0)
+	local pBag = spawnSceneObject("kashyyyk_main", self.bagTemplate, self.radioX - 2, z, self.radioY, 0, 0)
 
 	if (pBag ~= nil) then
 		writeStringData(SceneObject(pBag):getObjectID() .. ":kashCamp", "bag")

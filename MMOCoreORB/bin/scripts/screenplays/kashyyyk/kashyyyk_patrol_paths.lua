@@ -13,7 +13,7 @@
 -- placed points keep their order and the gaps are simply skipped.
 KashyyykPatrolPaths = {
 	{
-		name = "kachirho_wke_village_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 167, typeTable = "kashyyyk/kash_kachirho_guard_wookiee",
+		name = "kachirho_wke_village_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 167, typeTable = "kashyyyk/kash_kachirho_guard_wookiee",
 		mobiles = {"ep3_village_guard_01"},
 		count = 4, respawnMin = 200, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -27,7 +27,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_wke_village_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 175, typeTable = "kashyyyk/kash_kachirho_guard_wookiee",
+		name = "kachirho_wke_village_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 175, typeTable = "kashyyyk/kash_kachirho_guard_wookiee",
 		mobiles = {"ep3_village_guard_01"},
 		count = 3, respawnMin = 200, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -38,7 +38,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_trn_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 181, typeTable = "kashyyyk/kash_kachirho_guard_trando",
+		name = "kachirho_trn_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 181, typeTable = "kashyyyk/kash_kachirho_guard_trando",
 		mobiles = {"ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver"},
 		count = 1, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -47,7 +47,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_trn_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 184, typeTable = "kashyyyk/kash_kachirho_guard_trando",
+		name = "kachirho_trn_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 184, typeTable = "kashyyyk/kash_kachirho_guard_trando",
 		mobiles = {"ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -60,7 +60,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_trn_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 191, typeTable = "kashyyyk/kash_kachirho_guard_trando",
+		name = "kachirho_trn_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 191, typeTable = "kashyyyk/kash_kachirho_guard_trando",
 		mobiles = {"ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver"},
 		count = 2, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -71,7 +71,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_trn_patrol_04", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 196, typeTable = "kashyyyk/kash_kachirho_guard_trando",
+		name = "kachirho_trn_patrol_04", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 196, typeTable = "kashyyyk/kash_kachirho_guard_trando",
 		mobiles = {"ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -83,7 +83,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_trn_patrol_05", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 202, typeTable = "kashyyyk/kash_kachirho_guard_trando",
+		name = "kachirho_trn_patrol_05", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 202, typeTable = "kashyyyk/kash_kachirho_guard_trando",
 		mobiles = {"ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -97,7 +97,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_trn_patrol_06", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 210, typeTable = "kashyyyk/kash_kachirho_guard_trando",
+		name = "kachirho_trn_patrol_06", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 210, typeTable = "kashyyyk/kash_kachirho_guard_trando",
 		mobiles = {"ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -109,7 +109,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_trn_patrol_08", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 216, typeTable = "kashyyyk/kash_kachirho_guard_trando",
+		name = "kachirho_trn_patrol_08", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 216, typeTable = "kashyyyk/kash_kachirho_guard_trando",
 		mobiles = {"ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver", "ep3_trando_slaver"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -119,7 +119,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_sathog_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 223, typeTable = "kashyyyk/kashyyyk_sathog",
+		name = "kachirho_sathog_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 223, typeTable = "kashyyyk/kashyyyk_sathog",
 		mobiles = {"ep3_sathog"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -131,7 +131,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_bantha_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 231, typeTable = "kashyyyk/kash_kachirho_bantha",
+		name = "kachirho_bantha_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 231, typeTable = "kashyyyk/kash_kachirho_bantha",
 		mobiles = {"kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_matriarch_bantha"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -142,7 +142,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_chiss_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 240, typeTable = "kashyyyk/etyyy_chiss_poacher",
+		name = "kachirho_chiss_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 240, typeTable = "kashyyyk/etyyy_chiss_poacher",
 		mobiles = {"ep3_etyyy_chiss_poacher_01", "ep3_etyyy_chiss_poacher_02", "ep3_etyyy_chiss_poacher_03"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -153,7 +153,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_chiss_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 245, typeTable = "kashyyyk/etyyy_chiss_poacher",
+		name = "kachirho_chiss_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 245, typeTable = "kashyyyk/etyyy_chiss_poacher",
 		mobiles = {"ep3_etyyy_chiss_poacher_01", "ep3_etyyy_chiss_poacher_02", "ep3_etyyy_chiss_poacher_03"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -165,7 +165,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_varactyl_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 256, typeTable = "kashyyyk/kash_kachirho_varactyl_hard",
+		name = "kachirho_varactyl_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 256, typeTable = "kashyyyk/kash_kachirho_varactyl_hard",
 		mobiles = {"varactyl_preystalker", "varactyl_preystalker", "varactyl_preystalker", "varactyl_deathspine"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -175,7 +175,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_wke_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 262, typeTable = "kashyyyk/kash_kachirho_guard_wookiee",
+		name = "kachirho_wke_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 262, typeTable = "kashyyyk/kash_kachirho_guard_wookiee",
 		mobiles = {"ep3_village_guard_01"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -191,7 +191,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_bantha_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 272, typeTable = "kashyyyk/kash_kachirho_bantha",
+		name = "kachirho_bantha_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 272, typeTable = "kashyyyk/kash_kachirho_bantha",
 		mobiles = {"kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_matriarch_bantha"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "cycle",
 		points = {
@@ -204,7 +204,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_varactyl_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 281, typeTable = "kashyyyk/kash_kachirho_varactyl",
+		name = "kachirho_varactyl_patrol_03", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 281, typeTable = "kashyyyk/kash_kachirho_varactyl",
 		mobiles = {"varactyl_deathspine", "varactyl_deathspine", "varactyl_deathspine", "varactyl_deathspine", "varactyl_preystalker"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -215,7 +215,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_bantha_patrol_05", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 293, typeTable = "kashyyyk/kash_kachirho_bantha",
+		name = "kachirho_bantha_patrol_05", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 293, typeTable = "kashyyyk/kash_kachirho_bantha",
 		mobiles = {"kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_matriarch_bantha"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -228,7 +228,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_bantha_patrol_05", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 307, typeTable = "kashyyyk/kash_kachirho_bantha",
+		name = "kachirho_bantha_patrol_05", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 307, typeTable = "kashyyyk/kash_kachirho_bantha",
 		mobiles = {"kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_bull_bantha", "kashyyyk_matriarch_bantha"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -240,7 +240,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_blackscale_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 332, typeTable = "kashyyyk/kash_blackscale_guard",
+		name = "kachirho_blackscale_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 332, typeTable = "kashyyyk/kash_blackscale_guard",
 		mobiles = {"ep3_blackscale_guard_m_01", "ep3_blackscale_guard_m_02", "ep3_blackscale_guard_m_03"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -252,7 +252,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_canopy_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 344, typeTable = "kashyyyk/kash_kachirho_canopy_bandits",
+		name = "kachirho_canopy_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 344, typeTable = "kashyyyk/kash_kachirho_canopy_bandits",
 		mobiles = {"ep3_canopy_reaper_01"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -262,7 +262,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_bolotaur_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 349, typeTable = "kashyyyk/kash_kachirho_bolotaur",
+		name = "kachirho_bolotaur_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 349, typeTable = "kashyyyk/kash_kachirho_bolotaur",
 		mobiles = {"bolotaur"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -272,7 +272,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_bolotaur_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 353, typeTable = "kashyyyk/kash_kachirho_bolotaur",
+		name = "kachirho_bolotaur_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 353, typeTable = "kashyyyk/kash_kachirho_bolotaur",
 		mobiles = {"bolotaur"},
 		count = 3, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -283,7 +283,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_canopy_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 363, typeTable = "kashyyyk/kash_kachirho_canopy_bandits",
+		name = "kachirho_canopy_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 363, typeTable = "kashyyyk/kash_kachirho_canopy_bandits",
 		mobiles = {"ep3_canopy_reaper_01"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -295,7 +295,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_wke_fighter_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 371, typeTable = "kashyyyk/kash_kachirho_wke_fighters",
+		name = "kachirho_wke_fighter_patrol_01", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 371, typeTable = "kashyyyk/kash_kachirho_wke_fighters",
 		mobiles = {"ep3_wke_freedom_fighter_01", "ep3_wke_freedom_fighter_02", "ep3_wke_freedom_fighter_03", "ep3_wke_freedom_fighter_04", "ep3_wke_forest_stalker_01", "ep3_wke_forest_stalker_02"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -305,7 +305,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "kachirho_wke_fighter_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 376, typeTable = "kashyyyk/kash_kachirho_wke_fighters",
+		name = "kachirho_wke_fighter_patrol_02", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 376, typeTable = "kashyyyk/kash_kachirho_wke_fighters",
 		mobiles = {"ep3_wke_freedom_fighter_01", "ep3_wke_freedom_fighter_02", "ep3_wke_freedom_fighter_03", "ep3_wke_freedom_fighter_04", "ep3_wke_forest_stalker_01", "ep3_wke_forest_stalker_02"},
 		count = 4, respawnMin = 240, respawnMax = 400, pathType = "oscillate",
 		points = {
@@ -315,7 +315,7 @@ KashyyykPatrolPaths = {
 		},
 	},
 	{
-		name = "rodian_camp_04", zone = "kashyyyk_main", spawnZone = "kashyyyk", row = 1665, typeTable = "kashyyyk/etyyy_clan_lesser",
+		name = "rodian_camp_04", zone = "kashyyyk_main", spawnZone = "kashyyyk_main", row = 1665, typeTable = "kashyyyk/etyyy_clan_lesser",
 		mobiles = {"ep3_etyyy_hunter_lesser_rodian_01"},
 		count = 1, respawnMin = 23, respawnMax = 32, pathType = "oscillate",
 		points = {
