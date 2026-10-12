@@ -764,6 +764,8 @@ includeFile("poi/naboo_memorial.lua")
 includeFile("kashyyyk/kashyyyk_patrol_paths.lua")
 includeFile("kashyyyk/kashyyyk_patrols.lua")
 includeFile("kashyyyk/kashyyyk_static_npcs.lua")
+includeFile("kashyyyk/kashyyyk_main_population_data.lua")
+includeFile("kashyyyk/kashyyyk_main_population.lua")
 includeFile("kashyyyk/kashyyyk_travel.lua")
 includeFile("kashyyyk/kashyyyk_zone_transitions.lua")
 -- Quest XP first so every Kachirho screenplay below can call KashyyykQuestXp.
