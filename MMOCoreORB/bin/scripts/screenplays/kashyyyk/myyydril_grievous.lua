@@ -1156,9 +1156,8 @@ function MyyydrilMagicStoneMenuComponent:handleObjectMenuSelect(pSceneObject, pP
 		return 0
 	end
 
-	-- magic_stone.java:44 kashyyyk_main (-568, 0, -100). Merged kashyyyk_main
-	-- snapshot offset is dx 0 / dz 0 (kashyyyk_regions.lua).
-	if (not isZoneEnabled("kashyyyk")) then
+	-- magic_stone.java:44 returns to kashyyyk_main (-568, 0, -100).
+	if (not isZoneEnabled("kashyyyk_main")) then
 		return 0
 	end
 
@@ -1166,6 +1165,6 @@ function MyyydrilMagicStoneMenuComponent:handleObjectMenuSelect(pSceneObject, pP
 		CreatureObject(pPlayer):dismount()
 	end
 
-	SceneObject(pPlayer):switchZone("kashyyyk", -568, 0, -100, 0)
+	SceneObject(pPlayer):switchZone("kashyyyk_main", -568, 0, -100, 0)
 	return 0
 end

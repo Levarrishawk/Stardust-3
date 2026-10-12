@@ -36,19 +36,19 @@ kachirhoTakookCommScreenPlay = ScreenPlay:new {
 registerScreenPlay("kachirhoTakookCommScreenPlay", true)
 
 function kachirhoTakookCommScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_main")) then
 		self:spawnRecorder()
 	end
 end
 
 function kachirhoTakookCommScreenPlay:spawnRecorder()
-	local z = getWorldFloor(self.recorderX, self.recorderY, "kashyyyk")
+	local z = getWorldFloor(self.recorderX, self.recorderY, "kashyyyk_main")
 
 	if (z == nil or z == 0) then
 		z = self.recorderZ
 	end
 
-	local pObj = spawnSceneObject("kashyyyk", self.recorderTemplate, self.recorderX, z, self.recorderY, 0, 0)
+	local pObj = spawnSceneObject("kashyyyk_main", self.recorderTemplate, self.recorderX, z, self.recorderY, 0, 0)
 
 	if (pObj ~= nil) then
 		SceneObject(pObj):setObjectMenuComponent("KashTakookRecorderMenuComponent")
@@ -110,7 +110,7 @@ function KashTakookRecorderMenuComponent:handleObjectMenuSelect(pSceneObject, pP
 	local y = SceneObject(pSceneObject):getWorldPositionY()
 	local z = SceneObject(pSceneObject):getWorldPositionZ()
 
-	spawnSceneObject("kashyyyk", "object/static/particle/pt_light_blink_green.iff", x, z, y, 0, 0)
+	spawnSceneObject("kashyyyk_main", "object/static/particle/pt_light_blink_green.iff", x, z, y, 0, 0)
 
 	return 0
 end

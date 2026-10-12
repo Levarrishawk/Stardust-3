@@ -24,7 +24,7 @@ trandoBoshazZssik02ScreenPlay = ScreenPlay:new {
 	gotoZ = 22.0,
 	gotoY = 848.00,
 	gotoRadius = 15,
-	gotoZone = "kashyyyk",
+	gotoZone = "kashyyyk_main",
 	killCount = 5,
 	killTemplates = {
 		"ep3_blackscale_guard_m_01",

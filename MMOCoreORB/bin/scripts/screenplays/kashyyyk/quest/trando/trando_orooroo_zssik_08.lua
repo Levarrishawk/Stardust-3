@@ -29,7 +29,7 @@ trandoOroorooZssik08ScreenPlay = ScreenPlay:new {
 	gotoZ = 18.00,
 	gotoY = -100.00,
 	gotoRadius = 25,
-	gotoZone = "kashyyyk",
+	gotoZone = "kashyyyk_main",
 }
 
 registerScreenPlay("trandoOroorooZssik08ScreenPlay", true)

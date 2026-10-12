@@ -31,7 +31,7 @@ trandoSsiksikScreenPlay = ScreenPlay:new {
 	gotoZ = 18.0,
 	gotoY = 97.00,
 	gotoRadius = 25,
-	gotoZone = "kashyyyk",
+	gotoZone = "kashyyyk_main",
 	killCount = 5,
 	killTemplates = {
 		"ep3_wke_freedom_fighter_01",

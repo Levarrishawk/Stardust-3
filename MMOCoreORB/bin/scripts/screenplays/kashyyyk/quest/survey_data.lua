@@ -43,7 +43,7 @@ kachirhoSurveyDataScreenPlay = ScreenPlay:new {
 registerScreenPlay("kachirhoSurveyDataScreenPlay", true)
 
 function kachirhoSurveyDataScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_main")) then
 		self:spawnDevices()
 	end
 end
@@ -51,13 +51,13 @@ end
 function kachirhoSurveyDataScreenPlay:spawnDevices()
 	for i = 1, #self.devices do
 		local d = self.devices[i]
-		local z = getWorldFloor(d.x, d.y, "kashyyyk")
+		local z = getWorldFloor(d.x, d.y, "kashyyyk_main")
 
 		if (z == nil or z == 0) then
 			z = d.z
 		end
 
-		local pObj = spawnSceneObject("kashyyyk", d.template, d.x, z, d.y, 0, 0)
+		local pObj = spawnSceneObject("kashyyyk_main", d.template, d.x, z, d.y, 0, 0)
 
 		if (pObj ~= nil) then
 			writeStringData(SceneObject(pObj):getObjectID() .. ":kashSurvey", d.key)

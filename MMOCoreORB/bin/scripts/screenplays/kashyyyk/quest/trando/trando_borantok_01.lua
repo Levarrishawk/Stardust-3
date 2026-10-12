@@ -22,7 +22,7 @@ trandoBorantok01ScreenPlay = ScreenPlay:new {
 	gotoZ = 18.0,
 	gotoY = -100.00,
 	gotoRadius = 50,
-	gotoZone = "kashyyyk",
+	gotoZone = "kashyyyk_main",
 	bagTemplate = "object/tangible/quest/rodian_body_bag.iff",
 	bagNeed = 2,
 }
@@ -144,7 +144,7 @@ function trandoBorantok01ScreenPlay:notifyEnteredGoto(pArea, pPlayer)
 end
 
 function trandoBorantok01ScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_main")) then
 		self:spawnBags()
 	end
 end
@@ -152,13 +152,13 @@ end
 function trandoBorantok01ScreenPlay:spawnBags()
 	for i = 1, 2 do
 		local x = self.gotoX + ((i == 1) and 2 or -2)
-		local z = getWorldFloor(x, self.gotoY, "kashyyyk")
+		local z = getWorldFloor(x, self.gotoY, "kashyyyk_main")
 
 		if (z == nil or z == 0) then
 			z = self.gotoZ
 		end
 
-		local pObj = spawnSceneObject("kashyyyk", self.bagTemplate, x, z, self.gotoY, 0, 0)
+		local pObj = spawnSceneObject("kashyyyk_main", self.bagTemplate, x, z, self.gotoY, 0, 0)
 
 		if (pObj ~= nil) then
 			writeStringData(SceneObject(pObj):getObjectID() .. ":trandoBag", "bag")

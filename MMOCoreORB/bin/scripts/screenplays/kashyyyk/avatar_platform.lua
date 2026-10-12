@@ -121,7 +121,7 @@ AvatarPlatform = ScreenPlay:new {
 	buildingID = 14400801,
 	stf = "@dungeon/avatar_platform:",
 
-	-- terminal_launch.java:45, :58 no-session warp. Merged surface is kashyyyk.
+	-- terminal_launch.java:45, :58 no-session warp to the Kachirho hub in kashyyyk_main.
 	-- Session confirm (avatar_player.java) stays OPEN.
 	launchDest = { x = -670, z = 18, y = -137 },
 
@@ -848,7 +848,7 @@ function AvatarPlatform:warpOut(pPlayer)
 		return
 	end
 
-	if (not isZoneEnabled("kashyyyk")) then
+	if (not isZoneEnabled("kashyyyk_main")) then
 		return
 	end
 
@@ -857,7 +857,7 @@ function AvatarPlatform:warpOut(pPlayer)
 	end
 
 	local dest = self.launchDest
-	SceneObject(pPlayer):switchZone("kashyyyk", dest.x, dest.z, dest.y, 0)
+	SceneObject(pPlayer):switchZone("kashyyyk_main", dest.x, dest.z, dest.y, 0)
 	self:scheduleRecycle()
 end
 

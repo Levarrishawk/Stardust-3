@@ -35,19 +35,19 @@ kachirhoVaractylEggScreenPlay = ScreenPlay:new {
 registerScreenPlay("kachirhoVaractylEggScreenPlay", true)
 
 function kachirhoVaractylEggScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_main")) then
 		self:spawnEgg()
 	end
 end
 
 function kachirhoVaractylEggScreenPlay:spawnEgg()
-	local z = getWorldFloor(self.eggX, self.eggY, "kashyyyk")
+	local z = getWorldFloor(self.eggX, self.eggY, "kashyyyk_main")
 
 	if (z == nil or z == 0) then
 		z = self.eggZ
 	end
 
-	local pEgg = spawnSceneObject("kashyyyk", self.eggTemplate, self.eggX, z, self.eggY, 0, 0)
+	local pEgg = spawnSceneObject("kashyyyk_main", self.eggTemplate, self.eggX, z, self.eggY, 0, 0)
 
 	if (pEgg ~= nil) then
 		SceneObject(pEgg):setObjectMenuComponent("KashVaractylEggMenuComponent")

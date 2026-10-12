@@ -83,7 +83,7 @@ TrandoSlaveCamp = ScreenPlay:new {
 	screenplayName = "TrandoSlaveCamp",
 
 	zoneDungeon = "kashyyyk_north_dungeons",
-	zoneMain = "kashyyyk",
+	zoneMain = "kashyyyk_main",
 
 	bunkerID = 13680785,
 

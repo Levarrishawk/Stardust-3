@@ -29,7 +29,7 @@ trandoBorantok02ScreenPlay = ScreenPlay:new {
 	gotoZ = 18.00,
 	gotoY = -100.00,
 	gotoRadius = 50,
-	gotoZone = "kashyyyk",
+	gotoZone = "kashyyyk_main",
 }
 
 registerScreenPlay("trandoBorantok02ScreenPlay", true)
