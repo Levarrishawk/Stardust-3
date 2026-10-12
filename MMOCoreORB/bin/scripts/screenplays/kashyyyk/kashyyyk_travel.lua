@@ -14,8 +14,9 @@ KashyyykTravelScreenPlay = ScreenPlay:new {
 	-- Offsets, cells and headings from mun_kachirho_starport.lua childObjects.
 	travelChildren = {
 		{templateFile = "object/tangible/terminal/terminal_travel.iff", x = -3.12, z = 0.14659503, y = -17.57, ox = 0, oy = 0.707107, oz = 0, ow = -0.707107, cell = 1},
-		{templateFile = "object/tangible/travel/ticket_collector/ticket_collector.iff", x = 1, z = 0, y = -10, ox = 0, oy = 0, oz = 0, ow = 1},
-		{templateFile = "object/mobile/player_transport.iff", x = 0, z = 7, y = 0, ox = 0, oy = 0.707107, oz = 0, ow = 0.707107}
+		{templateFile = "object/tangible/travel/ticket_collector/ticket_collector.iff", x = 1, z = 0, y = -7, ox = 0, oy = 0, oz = 0, ow = 1, repositionExisting = true},
+		{templateFile = "object/mobile/player_transport.iff", x = 0, z = 7, y = 0, ox = 0, oy = 0.707107, oz = 0, ow = 0.707107},
+		{templateFile = "object/tangible/terminal/terminal_space.iff", x = -7.42, z = 0.14659503, y = -19.23, ox = 0, oy = 0, oz = 0, ow = 1, cell = 1}
 	}
 }
 
@@ -96,6 +97,14 @@ end
 
 function KashyyykTravelScreenPlay:spawnIfMissing(pBuilding, entry, index)
 	if (self:childPresent(pBuilding, entry, index)) then
+		-- Existing database children retain their old template offsets.
+		if (entry.repositionExisting == true) then
+			local pObj = getSceneObject(readData("KashyyykTravel:" .. self.planet .. ":oid:" .. index))
+			if (pObj ~= nil and SceneObject(pObj):getParentID() == 0) then
+				local wx, wz, wy = self:worldPose(pBuilding, entry)
+				SceneObject(pObj):teleport(wx, wz, wy, 0)
+			end
+		end
 		self.present = self.present + 1
 		return
 	end
