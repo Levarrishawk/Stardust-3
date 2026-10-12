@@ -1,4 +1,4 @@
--- Lolo -- ground tree for ep3_kachirho_trando_rifle_crafting. Mobile already carries ep3_wke_lolo_convotemplate (space inspect); this file is not attached.
+-- Lolo's ground screens are included by the attached space conversation for Kressik's rifle quest.
 -- ruling 2026-09-04: "ensure kashyyyk is done in full"
 -- Transcribed from the giver's java branches. Strings are shipped keys.
 -- The journal row for quest/ep3_kachirho_*.qst comes from the integration branch later; do not call Journal.*.

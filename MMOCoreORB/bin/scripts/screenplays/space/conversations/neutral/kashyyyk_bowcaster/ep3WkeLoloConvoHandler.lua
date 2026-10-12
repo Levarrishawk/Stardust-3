@@ -53,13 +53,10 @@
 	called anyway to match every other handler in this directory; it is a no-op on text without the
 	token.
 
-	REACHABILITY, STATED PLAINLY. ep3_wke_lolo is not spawned anywhere in this repo -- grep finds the
-	mobile name only in its own creature template, its object template and the two serverobjects.lua
-	include lists -- there are no Kashyyyk ground spawn areas, and bin/conf/config.lua ZonesEnabled has
-	no Kashyyyk ground zone at all (only SpaceZonesEnabled carries "space_kashyyyk"). No spawn is
-	created here because no client attestation for Lolo's exact Kachirho coordinates was available to
-	this pass. This handler is correct and INERT until a Kachirho spawn exists AND the Kashyyyk ground
-	zone is enabled.
+	REACHABILITY. Lolo's exact Kachirho placement remains unresolved; no spawn is created here.
+	The attached conversation includes his ground screens for Kressik's rifle quest. During its
+	talk-to-Lolo stage this handler delegates to the ground handler, including its language check,
+	and starts the space mission for an eligible pilot without replacing an existing mission.
 ]]
 
 Ep3WkeLoloConvoHandler = conv_handler:new {}
@@ -119,6 +116,10 @@ function Ep3WkeLoloConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
+	if (kachirhoTrandoRifleCraftingScreenPlay ~= nil and kachirhoTrandoRifleCraftingScreenPlay:getStage(pPlayer) == 1) then
+		return ep3_wke_lolo_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
+	end
+
 	-- Leg running: he has already said everything he knows and is waiting on the parts.
 	if (SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_LOLO_QUEST.type, EP3_LOLO_QUEST.name)) then
 		return convoTemplate:getScreen("ep3_lolo_active")
@@ -156,6 +157,21 @@ function Ep3WkeLoloConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, 
 
 	local screen = LuaConversationScreen(pConvScreen)
 	local screenID = screen:getScreenID()
+
+	if (string.sub(screenID, 1, 2) == "s_") then
+		local pGroundScreen = ep3_wke_lolo_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
+
+		if (screenID == "s_104" and self:canFly(pPlayer)
+			and not SpaceHelpers:isSpaceQuestActive(pPlayer, EP3_LOLO_QUEST.type, EP3_LOLO_QUEST.name)
+			and not SpaceHelpers:isSpaceQuestComplete(pPlayer, EP3_LOLO_QUEST.type, EP3_LOLO_QUEST.name)) then
+			if (self:grant(pPlayer, pNpc, inspect_ep3_wke_bowcaster_crafting, EP3_LOLO_QUEST)) then
+				self:setFlag(pPlayer, EP3_LOLO_TAKEN_KEY, 1)
+				self:setFlag(pPlayer, EP3_LOLO_DEBRIEFED_KEY, 0)
+			end
+		end
+
+		return pGroundScreen
+	end
 
 	local pScreenClone = screen:cloneScreen()
 	local pClonedConvo = LuaConversationScreen(pScreenClone)

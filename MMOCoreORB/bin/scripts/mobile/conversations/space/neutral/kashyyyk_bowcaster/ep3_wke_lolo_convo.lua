@@ -61,16 +61,10 @@
 --
 -- UNUSED SHIPPED KEYS:
 --   s_86 -- empty in the client.
---   s_87 "Rowarro. Grrrrllll. Roorroww." -- Lolo speaking Shyriiwook. The client must switch to it on
---   something this repo cannot read (there is no language-comprehension hook on the conversation
---   path), so no screen is built on it rather than inventing a trigger.
+-- The included ground tree uses s_87 for its Shyriiwook-comprehension check.
 --
--- REACHABILITY: ep3_wke_lolo is not spawned anywhere in this repo -- nothing outside
--- mobile/custom_content/ep3/ep3_wke_lolo.lua and its object template references the mobile at all --
--- there are no Kashyyyk ground spawn areas, and bin/conf/config.lua ZonesEnabled contains no
--- Kashyyyk ground zone (only SpaceZonesEnabled carries "space_kashyyyk"). This conversation is
--- correct and inert until all three of those are addressed. The mobile itself is now conversable:
--- see mobile/custom_content/ep3/ep3_wke_lolo.lua.
+-- REACHABILITY: Lolo's exact Kachirho placement remains unresolved. His mobile is conversable,
+-- and this template includes both the space screens and the ground rifle-quest screens.
 
 ep3_wke_lolo_convotemplate = ConvoTemplate:new {
 	initialScreen = "ep3_lolo_greeting",
@@ -319,5 +313,11 @@ ep3_lolo_waiting_list = ConvoScreen:new {
 	options = {}
 }
 ep3_wke_lolo_convotemplate:addScreen(ep3_lolo_waiting_list);
+
+-- Share the ground screens with the attached handler before registration.
+includeFile("conversations/kashyyyk/ep3_wke_lolo_convo.lua")
+for i = 1, #ep3_wke_lolo_ground_convo.screens do
+	ep3_wke_lolo_convotemplate:addScreen(ep3_wke_lolo_ground_convo.screens[i])
+end
 
 addConversationTemplate("ep3_wke_lolo_convotemplate", ep3_wke_lolo_convotemplate);

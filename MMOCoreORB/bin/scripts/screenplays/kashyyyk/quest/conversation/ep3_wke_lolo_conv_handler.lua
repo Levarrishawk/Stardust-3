@@ -1,4 +1,4 @@
--- Lolo -- ground tree for ep3_kachirho_trando_rifle_crafting. Mobile already carries ep3_wke_lolo_convotemplate (space inspect); this file is not attached.
+-- Lolo's attached space handler delegates here while Kressik's rifle quest requires speaking to him.
 -- ruling 2026-09-04: "ensure kashyyyk is done in full"
 -- getInitialScreen is live condition order. runScreenHandlers fires grant / signal / turn-in.
 -- No Journal.*: this branch has no managers/quest/journal.lua.

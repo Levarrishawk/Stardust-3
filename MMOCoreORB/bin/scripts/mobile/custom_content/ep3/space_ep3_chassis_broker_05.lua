@@ -26,13 +26,13 @@ space_ep3_chassis_broker_05 = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE + JTLINTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/space_ep3_chassis_broker_05.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "",
+	conversationTemplate = "chassis_dealer_convo_template",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }

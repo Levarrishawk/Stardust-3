@@ -14,9 +14,9 @@
 
 	Givers ep3_trando_kressik and ep3_wke_lolo have no buildout row (SOE script spawn).
 	Quest text: "Lolo has a little shop in Kachirho" -- no coordinates. Placement OPEN;
-	not spawned here. conversationTemplate is set on Kressik (empty). Lolo already
-	carries ep3_wke_lolo_convotemplate (space inspect); that template is left alone.
-	The ground Lolo handler and convo are kept and not attached.
+	not spawned here. Kressik carries ep3_trando_kressik_convo. Lolo carries
+	ep3_wke_lolo_convotemplate (space inspect).
+	The attached space conversation also includes the ground screens and handler.
 
 	OPEN: the quest cannot progress past questionLolo until Lolo is placed. Do not
 	bypass him. Kressik's bowcaster turn-in requires the Lolo stage to have been
@@ -28,8 +28,8 @@
 	object/tangible/loot/loot/schematic/trandoshan_hunter_rifle_schematic.iff
 	(repo template). Barrel schematic grant is OPEN (no distinct barrel loot schematic).
 
-	Space inspect ep3_wke_bowcaster_crafting is already granted by the existing Lolo
-	handler. grantSpaceMission here is a no-op flag so the ground tree can record it.
+	Space inspect ep3_wke_bowcaster_crafting is granted by the attached Lolo
+	handler. grantSpaceMission here records the ground quest's dialogue progress.
 
 	NO JOURNAL: do not call Journal.*. The client ships the .qst; the journal row
 	comes from the integration branch later.
@@ -120,7 +120,7 @@ function kachirhoTrandoRifleCraftingScreenPlay:grantSpaceMission(pPlayer)
 	writeScreenPlayData(pPlayer, self.screenplayName, "space", "1")
 
 	-- Space inspect is already granted by Ep3WkeLoloConvoHandler when that tree is live.
-	-- This flag lets the unattached ground Lolo tree record the same beat.
+	-- The ground Lolo tree records the dialogue; the attached handler starts the space mission.
 	if (self:getStage(pPlayer) == 1) then
 		self:signalQuestionLolo(pPlayer)
 	end

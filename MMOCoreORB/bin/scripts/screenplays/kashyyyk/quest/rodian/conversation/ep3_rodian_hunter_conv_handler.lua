@@ -57,16 +57,16 @@ end
 function ep3_rodian_hunter_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	if (not self:finished(pPlayer, rodianHunter1ScreenPlay)) then
-		return convoTemplate:getScreen("s_31d7e474")
-	elseif (self:onQuest(pPlayer, rodianHunter1ScreenPlay)) then
+	if (self:onQuest(pPlayer, rodianHunter1ScreenPlay)) then
 		return convoTemplate:getScreen("s_225d3518")
+	elseif (not self:finished(pPlayer, rodianHunter1ScreenPlay)) then
+		return convoTemplate:getScreen("s_31d7e474")
 	elseif (not self:hasFinishedWookieeBenefactor(pPlayer)) then
 		return convoTemplate:getScreen("s_b26194cb")
-	elseif (not self:finished(pPlayer, rodianHunter2ScreenPlay)) then
-		return convoTemplate:getScreen("s_cf298387")
 	elseif (self:onQuest(pPlayer, rodianHunter2ScreenPlay)) then
 		return convoTemplate:getScreen("s_d2849e62")
+	elseif (not self:finished(pPlayer, rodianHunter2ScreenPlay)) then
+		return convoTemplate:getScreen("s_cf298387")
 	elseif (not self:finished(pPlayer, rodianHunter3ScreenPlay)) then
 		return convoTemplate:getScreen("s_b21a191")
 	end
