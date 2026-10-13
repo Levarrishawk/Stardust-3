@@ -749,8 +749,10 @@ bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* objec
 
 				if (app->intersects(ray, dist, intersectionDistance, triangle, true)) {
 					if (trace) {
+						auto blockerTemplate = scno->getObjectTemplate();
 						object1->info(true) << "Conversation collision -- blocker=" << scno->getObjectID()
-							<< " template=" << scno->getTemplateObjectPath() << " appearance=" << app->getFileName()
+							<< " template=" << (blockerTemplate != nullptr ? blockerTemplate->getFullTemplateString() : String("unknown"))
+							<< " appearance=" << app->getFileName()
 							<< " position=" << scno->getPosition() << " parent=" << scno->getParentID()
 							<< " rayOrigin=" << rayOrigin << " rayEnd=" << rayEnd
 							<< " distance=" << dist << " hitDistance=" << intersectionDistance;
