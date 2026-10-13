@@ -63,8 +63,24 @@ public:
 				Vector3 agentPosition = agent->getPosition();
 				uint64 agentParentID = agent->getParentID();
 
+				// Trace administrator attempts here to distinguish tree collision from dialogue failures.
+				auto traceConversation = [&](const char* result) {
+					auto zone = creature->getZone();
+					if (!ghost->isPrivileged() || zone == nullptr || zone->getZoneName() != "kashyyyk_main")
+						return;
+
+					creature->info(true) << "Kashyyyk converse -- " << result
+						<< " npc=" << agent->getDisplayedName() << " id=" << agent->getObjectID()
+						<< " template=" << agent->getConvoTemplateCRC()
+						<< " player=" << creature->getPosition() << " validated=" << playerPosition
+						<< " npcPosition=" << agentPosition
+						<< " playerParent=" << creature->getParentID() << " validatedParent=" << playerParentID
+						<< " npcParent=" << agentParentID;
+				};
+
 				// No conversing from different cells
 				if (playerParentID != agentParentID) {
+					traceConversation("rejected: different parents");
 					return TOOFAR;
 				}
 
@@ -74,21 +90,27 @@ public:
 					float distanceSq = playerPosition.squaredDistanceTo2d(agentPosition);
 
 					if (distanceSq > 25) {
+						traceConversation("rejected: outdoor range");
 						return TOOFAR;
 					}
 				} else if (playerPosition.squaredDistanceTo(agentPosition) > 25) {
+					traceConversation("rejected: indoor range");
 					return TOOFAR;
 				}
 
 				// No conversing without LoS
 				if (!CollisionManager::checkLineOfSight(agent, creature)) {
+					traceConversation("rejected: line of sight");
 					return GENERALERROR;
 				}
 
 				ghost->setConversatingObject(agent);
 
 				if (agent->sendConversationStartTo(creature)) {
+					traceConversation("start sent; invoking conversation handler");
 					agent->notifyObservers(ObserverEventType::STARTCONVERSATION, creature);
+				} else {
+					traceConversation("rejected: conversation start");
 				}
 			} catch (Exception& e) {
 				e.printStackTrace();
