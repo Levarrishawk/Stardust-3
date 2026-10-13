@@ -159,6 +159,7 @@ public:
 	 * Checks for all intersections
 	 */
 	virtual int intersects(const Ray& ray, float maxDistance, SortedVector<IntersectionResult>& result) const {
+		int intersections = 0;
 
 		for(int i=0; i<meshes.size(); i++) {
 			const ComponentMeshAppearanceTemplate *mesh = meshes.get(i);
@@ -167,11 +168,10 @@ public:
 			Vector3 end = ray.getDirection() * mesh->getInverseTransform();
 			Ray transformedRay(start, end);
 
-			if(mesh->getMeshTemplate()->intersects(transformedRay, maxDistance, result))
-				return true;
+			intersections += mesh->getMeshTemplate()->intersects(transformedRay, maxDistance, result);
 		}
 
-		return false;
+		return intersections;
 	}
 
 	virtual Vector<Reference<MeshData* > > getTransformedMeshData(const Matrix4& parentTransform) const {
