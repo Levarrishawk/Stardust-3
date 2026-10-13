@@ -119,9 +119,9 @@ function KashyyykMainPopulation:spawnSlot(pUnused, args)
 	if (SceneObject(pMobile):isAiAgent()) then
 		-- Only the idle behaviour changes; normal combat and template stats remain intact.
 		if (controller.behavior == 1) then
-			AiAgent(pMobile):addObjectFlag(STATIONARY)
+			AiAgent(pMobile):addObjectFlag(AI_STATIONARY)
 		else
-			AiAgent(pMobile):addObjectFlag(STATIC)
+			AiAgent(pMobile):addObjectFlag(AI_STATIC)
 		end
 	end
 	createObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyDestroyed", pMobile)

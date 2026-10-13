@@ -108,7 +108,7 @@ function KashyyykStaticNpcsScreenPlay:spawnNpcs(zone, npcs)
 		local npc = npcs[i]
 		local pMobile = spawnMobile(zone, npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
 		if (zone == "kashyyyk_main" and pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
-			AiAgent(pMobile):addObjectFlag(STATIONARY)
+			AiAgent(pMobile):addObjectFlag(AI_STATIONARY)
 		end
 	end
 end
