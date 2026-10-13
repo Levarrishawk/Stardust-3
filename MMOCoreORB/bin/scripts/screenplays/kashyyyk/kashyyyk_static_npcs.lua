@@ -39,7 +39,7 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 		{"ep3_clone_relics_wookie_prisoner_04", 546.26, 30.9634, 463.49, 206.447, "ep3_clone_relics_wookiee_prisoner_04 (main row 1638)"}, -- numbered variant _04 (no exact name, no _01)
 		{"ep3_dr_farnsworth", -504.27, 179.411, -98.91, 150.87, "ep3_dr_farnsworth (main row 1639)"}, -- registered name equals spawns
 		{"ep3_unluto_bartender", -465.44, 158.143, -19.46, 225.544, "ep3_unluto_bartender (main row 1640)"}, -- registered name equals spawns
-		{"ep3_col_gurnst", -457.65, 158.415, -26.9, -72.766, "ep3_col_gurnst (main row 1641)"}, -- registered name equals spawns
+		{"ep3_col_gurnst", -457.8, 158.5, -26.2, -72.766, "ep3_col_gurnst (main row 1641)"}, -- first tree level; position verified in game
 		{"ep3_orooroo_betrayer", 545.23, 24.7059, 402.08, -54.431, "ep3_orooroo_betrayer (main row 1642)"}, -- registered name equals spawns
 		{"ep3_kachirho_chatook", -448.43, 158.584, -102.85, -28.073, "ep3_kachirho_chatook (main row 1643)"}, -- registered name equals spawns
 		{"ep3_fezrik_bendledon", -442.75, 211.198, -74.56, 232.803, "ep3_fezrik_bendledon (main row 1644)"}, -- registered name equals spawns
@@ -106,6 +106,9 @@ end
 function KashyyykStaticNpcsScreenPlay:spawnNpcs(zone, npcs)
 	for i = 1, #npcs, 1 do
 		local npc = npcs[i]
-		spawnMobile(zone, npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
+		local pMobile = spawnMobile(zone, npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
+		if (zone == "kashyyyk_main" and pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+			AiAgent(pMobile):addObjectFlag(STATIONARY)
+		end
 	end
 end
