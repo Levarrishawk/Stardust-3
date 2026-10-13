@@ -86,7 +86,7 @@ bool MeshAppearanceTemplate::testCollide(float x, float z, float y, float radius
 
 	//Logger::console.info("checking collide in mesh", true);
 
-	return aabbTree->testCollide(sphere);
+	return aabbTree != nullptr && aabbTree->testCollide(sphere);
 }
 
 void MeshAppearanceTemplate::parseSPS(IffStream* iffStream) {
@@ -145,7 +145,13 @@ void MeshAppearanceTemplate::parseVertexData(IffStream* iffStream, int idx) {
 
 	Reference<MeshData*> meshData = new MeshData;
 	meshData->readObject(iffStream);
-	meshes.emplace(std::move(meshData));
+
+	// Transparent Wroshyr leaf polygons must not become solid floors or sight blockers.
+	bool wroshyrFoliage = getFileName().beginsWith("appearance/mesh/decd_wroshyr_tree_") &&
+		shaderName.beginsWith("shader/tree_") && shaderName.contains("_leaves_");
+	if (!wroshyrFoliage) {
+		meshes.emplace(std::move(meshData));
+	}
 
 	iffStream->closeForm(nextVersion);
 

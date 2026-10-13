@@ -70,7 +70,7 @@ public:
 	}
 
 	virtual bool testCollide(const Sphere& testsphere) const {
-		return aabbTree->testCollide(testsphere);
+		return aabbTree != nullptr && aabbTree->testCollide(testsphere);
 	}
 
 	/**
@@ -78,14 +78,14 @@ public:
 	 * @return intersectionDistance, triangle which it intersects
 	 */
 	virtual bool intersects(const Ray& ray, float distance, float& intersectionDistance, Triangle*& triangle, bool checkPrimitives = false) const {
-		return aabbTree->intersects(ray, distance, intersectionDistance, triangle, checkPrimitives);
+		return aabbTree != nullptr && aabbTree->intersects(ray, distance, intersectionDistance, triangle, checkPrimitives);
 	}
 
 	/**
 	 * Checks for all intersections
 	 */
 	virtual int intersects(const Ray& ray, float maxDistance, SortedVector<IntersectionResult>& result) const {
-		return aabbTree->intersects(ray, maxDistance, result);
+		return aabbTree != nullptr ? aabbTree->intersects(ray, maxDistance, result) : 0;
 	}
 
 	virtual Vector<Reference<MeshData* > > getTransformedMeshData(const Matrix4& parentTransform) const {
