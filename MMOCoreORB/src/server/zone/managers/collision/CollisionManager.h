@@ -58,7 +58,7 @@ public:
 	static const PathNode* findNearestPathNode(const TriangleNode* triangle, const FloorMesh* floor, const Vector3& finalTarget);
 
 	static bool checkLineOfSightInBuilding(SceneObject* object1, SceneObject* object2, SceneObject* building);
-	static bool checkLineOfSight(SceneObject* object1, SceneObject* object2);
+	static bool checkLineOfSight(SceneObject* object1, SceneObject* object2, bool trace = false);
 	static bool checkLineOfSightWorldToCell(const Vector3& rayOrigin, const Vector3& rayEnd, float distance, CellObject* cell);
 	static bool checkMovementCollision(CreatureObject* creature, CloseObjectsVector* closeObjectsVector, Zone* zone, const Vector3& lastValidWorld, const Vector3& transformPosition);
 	static float getRayOriginPoint(CreatureObject* creature);

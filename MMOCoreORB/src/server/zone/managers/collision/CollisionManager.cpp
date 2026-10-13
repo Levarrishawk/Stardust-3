@@ -647,7 +647,7 @@ void CollisionManager::getWorldFloorCollisions(float x, float y, Zone* zone, Sor
 	}
 }
 
-bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* object2) {
+bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* object2, bool trace) {
 	Zone* zone = object1->getZone();
 
 	if (zone == nullptr)
@@ -748,6 +748,13 @@ bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* objec
 				//structure->info("checking ray with building dir" + String::valueOf(structure->getDirectionAngle()), true);
 
 				if (app->intersects(ray, dist, intersectionDistance, triangle, true)) {
+					if (trace) {
+						object1->info(true) << "Conversation collision -- blocker=" << scno->getObjectID()
+							<< " template=" << scno->getTemplateObjectPath() << " appearance=" << app->getFileName()
+							<< " position=" << scno->getPosition() << " parent=" << scno->getParentID()
+							<< " rayOrigin=" << rayOrigin << " rayEnd=" << rayEnd
+							<< " distance=" << dist << " hitDistance=" << intersectionDistance;
+					}
 					return false;
 				}
 			}

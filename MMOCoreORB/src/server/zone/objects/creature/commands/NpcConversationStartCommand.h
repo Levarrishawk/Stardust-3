@@ -64,9 +64,10 @@ public:
 				uint64 agentParentID = agent->getParentID();
 
 				// Trace administrator attempts here to distinguish tree collision from dialogue failures.
+				auto zone = creature->getZone();
+				bool trace = ghost->isPrivileged() && zone != nullptr && zone->getZoneName() == "kashyyyk_main";
 				auto traceConversation = [&](const char* result) {
-					auto zone = creature->getZone();
-					if (!ghost->isPrivileged() || zone == nullptr || zone->getZoneName() != "kashyyyk_main")
+					if (!trace)
 						return;
 
 					creature->info(true) << "Kashyyyk converse -- " << result
@@ -99,7 +100,7 @@ public:
 				}
 
 				// No conversing without LoS
-				if (!CollisionManager::checkLineOfSight(agent, creature)) {
+				if (!CollisionManager::checkLineOfSight(agent, creature, trace)) {
 					traceConversation("rejected: line of sight");
 					return GENERALERROR;
 				}
