@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	@quest/ground/ep3_trando_dakar_zssik_03:journal_entry_title  --  ep3_trando_dakar_zssik_03
 
@@ -11,8 +13,7 @@
 		task 2  Wait for Signal  Return to Dakar
 		task 3  Reward  Reward Issued
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[34][TIER_3] = 14850. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 	ALLOW_REPEATS 1.
@@ -47,6 +48,7 @@ end
 
 function trandoDakarZssik03ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoDakarZssik03ScreenPlay:getRuns(pPlayer)
@@ -79,6 +81,8 @@ function trandoDakarZssik03ScreenPlay:clearQuest(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+
+	KashyyykQuestJournal.clear(self, pPlayer)
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:detachGoto(pPlayer)
@@ -91,6 +95,7 @@ function trandoDakarZssik03ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_dakar_zssik_03:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_dakar_zssik_03:task00_journal_entry_title")
@@ -224,6 +229,7 @@ function trandoDakarZssik03ScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_dakar_zssik_03:task01_journal_entry_title")
 
 	if (n >= self.killCount) then
@@ -245,6 +251,7 @@ function trandoDakarZssik03ScreenPlay:signalRewardDakar(pPlayer)
 end
 
 function trandoDakarZssik03ScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_dakar_zssik_03")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

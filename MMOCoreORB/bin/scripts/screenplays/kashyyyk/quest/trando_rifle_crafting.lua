@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	Trandoshan Hunting Rifle  --  ep3_kachirho_trando_rifle_crafting
 
@@ -31,8 +33,7 @@
 	Space inspect ep3_wke_bowcaster_crafting is granted by the attached Lolo
 	handler. grantSpaceMission here records the ground quest's dialogue progress.
 
-	NO JOURNAL: do not call Journal.*. The client ships the .qst; the journal row
-	comes from the integration branch later.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[30][TIER_3] = 11842. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 ]]
@@ -56,6 +57,7 @@ end
 
 function kachirhoTrandoRifleCraftingScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoTrandoRifleCraftingScreenPlay:getRuns(pPlayer)
@@ -79,6 +81,9 @@ function kachirhoTrandoRifleCraftingScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
+	dropObserver(PROTOTYPECREATED, self.screenplayName, "notifyBowcasterCrafted", pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "lolo")
 	deleteScreenPlayData(pPlayer, self.screenplayName, "space")
 	deleteScreenPlayData(pPlayer, self.screenplayName, "pieces")
@@ -91,6 +96,7 @@ function kachirhoTrandoRifleCraftingScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_trandoshan_quest_accept.snd")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_trando_rifle_crafting:journal_entry_title")
@@ -106,6 +112,7 @@ function kachirhoTrandoRifleCraftingScreenPlay:signalQuestionLolo(pPlayer)
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "lolo", "1")
 	self:setStage(pPlayer, 2)
+	self:attachCraftObserver(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_trando_rifle_crafting:task02_journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_trando_rifle_crafting:task02_journal_entry_description")
 
@@ -162,7 +169,9 @@ function kachirhoTrandoRifleCraftingScreenPlay:hasBowcaster(pPlayer)
 end
 
 function kachirhoTrandoRifleCraftingScreenPlay:canTurnInBowcaster(pPlayer)
-	return self:getStage(pPlayer) == 2 and self:hasBowcaster(pPlayer)
+	local ready = self:getStage(pPlayer) == 2 and self:hasBowcaster(pPlayer)
+	if (ready) then KashyyykQuestJournal.sync(self, pPlayer, 2) end
+	return ready
 end
 
 function kachirhoTrandoRifleCraftingScreenPlay:signalTurnIn(pPlayer)
@@ -183,9 +192,23 @@ function kachirhoTrandoRifleCraftingScreenPlay:signalTurnIn(pPlayer)
 	end
 
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_trandoshan_quest_sucess.snd")
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_trando_rifle_crafting")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:clearQuest(pPlayer)
 
 	return true
+end
+
+function kachirhoTrandoRifleCraftingScreenPlay:attachCraftObserver(pPlayer)
+	dropObserver(PROTOTYPECREATED, self.screenplayName, "notifyBowcasterCrafted", pPlayer)
+	createObserver(PROTOTYPECREATED, self.screenplayName, "notifyBowcasterCrafted", pPlayer, 1)
+end
+
+function kachirhoTrandoRifleCraftingScreenPlay:notifyBowcasterCrafted(pPlayer, pItem, practice)
+	if (pPlayer == nil or pItem == nil or practice == 1) then return 0 end
+	if (self:getStage(pPlayer) ~= 2) then return 1 end
+	if (SceneObject(pItem):getTemplateObjectPath() ~= self.bowcasterTemplate) then return 0 end
+	KashyyykQuestJournal.crafted(self, pPlayer)
+	return 1
 end

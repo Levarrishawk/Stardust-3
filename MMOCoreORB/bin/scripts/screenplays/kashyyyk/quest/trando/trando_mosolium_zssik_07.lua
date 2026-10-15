@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_trando_mosolium_zssik_07  --  ep3_trando_mosolium_zssik_07
 
@@ -10,8 +12,7 @@
 		task 9  Retrieve Item  Retrieve the Avatar Access Codes / 
 		task 10  Wait for Signal  Return to Mosolium / rewardMosolium02
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	OPEN:
 		no grantQuest for ep3_trando_mosolium_zssik_07 in this arc's conversation java
@@ -39,6 +40,7 @@ end
 
 function trandoMosoliumZssik07ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoMosoliumZssik07ScreenPlay:getRuns(pPlayer)
@@ -72,6 +74,8 @@ function trandoMosoliumZssik07ScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
@@ -83,6 +87,7 @@ function trandoMosoliumZssik07ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_mosolium_zssik_07:journal_entry_title")
 	return true
@@ -100,6 +105,7 @@ function trandoMosoliumZssik07ScreenPlay:signalTrandoBunkerEntryBreach(pPlayer)
 	end
 
 	if (1 == 3) then
+		KashyyykQuestJournal.complete(self, pPlayer)
 		KashyyykQuestXp:award(pPlayer, "ep3_trando_mosolium_zssik_07")
 		writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 		self:clearQuest(pPlayer)
@@ -116,6 +122,7 @@ function trandoMosoliumZssik07ScreenPlay:signalTrandoPowerFlipped(pPlayer)
 	end
 
 	if (2 == 3) then
+		KashyyykQuestJournal.complete(self, pPlayer)
 		KashyyykQuestXp:award(pPlayer, "ep3_trando_mosolium_zssik_07")
 		writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 		self:clearQuest(pPlayer)
@@ -132,6 +139,7 @@ function trandoMosoliumZssik07ScreenPlay:signalRewardMosolium02(pPlayer)
 	end
 
 	if (3 == 3) then
+		KashyyykQuestJournal.complete(self, pPlayer)
 		KashyyykQuestXp:award(pPlayer, "ep3_trando_mosolium_zssik_07")
 		writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 		self:clearQuest(pPlayer)

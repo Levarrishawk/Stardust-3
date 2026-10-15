@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	@quest/ground/ep3_trando_orooroo_zssik_08:journal_entry_title  --  ep3_trando_orooroo_zssik_08
 
@@ -11,8 +13,7 @@
 		task 2  Wait for Signal  Return to Orooroo
 		task 3  Reward  Reward Issued
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[80][TIER_1] = 435. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 	ALLOW_REPEATS 1.
@@ -43,6 +44,7 @@ end
 
 function trandoOroorooZssik08ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoOroorooZssik08ScreenPlay:getRuns(pPlayer)
@@ -75,6 +77,8 @@ function trandoOroorooZssik08ScreenPlay:clearQuest(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+
+	KashyyykQuestJournal.clear(self, pPlayer)
 	self:detachGoto(pPlayer)
 	self:setStage(pPlayer, 0)
 end
@@ -85,6 +89,7 @@ function trandoOroorooZssik08ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_orooroo_zssik_08:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_orooroo_zssik_08:task00_journal_entry_title")
@@ -190,6 +195,7 @@ function trandoOroorooZssik08ScreenPlay:signalRewardOrooroo(pPlayer)
 end
 
 function trandoOroorooZssik08ScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_orooroo_zssik_08")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

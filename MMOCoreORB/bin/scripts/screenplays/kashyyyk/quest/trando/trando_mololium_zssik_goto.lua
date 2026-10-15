@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	@quest/ground/ep3_trando_mololium_zssik_goto:journal_entry_title  --  ep3_trando_mololium_zssik_goto
 
@@ -8,8 +10,7 @@
 	THE TASK TREE
 		task 0  Wait for Signal    readyForMosoliumMission
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: LEVEL 80 TIER 1 = 435.
 ]]
@@ -33,6 +34,7 @@ end
 
 function trandoMololiumZssikGotoScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoMololiumZssikGotoScreenPlay:getRuns(pPlayer)
@@ -66,6 +68,8 @@ function trandoMololiumZssikGotoScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:setStage(pPlayer, 0)
 end
 
@@ -73,6 +77,8 @@ function trandoMololiumZssikGotoScreenPlay:grantQuest(pPlayer)
 	if (not self:canGrantQuest(pPlayer)) then
 		return false
 	end
+
+	KashyyykQuestJournal.begin(self, pPlayer)
 
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_mololium_zssik_goto:journal_entry_title")
@@ -84,6 +90,7 @@ function trandoMololiumZssikGotoScreenPlay:signalReadyForMosoliumMission(pPlayer
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_mololium_zssik_goto")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:clearQuest(pPlayer)

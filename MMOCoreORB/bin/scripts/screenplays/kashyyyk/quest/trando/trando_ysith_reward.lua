@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_trando_ysith_reward  --  ep3_trando_ysith_reward
 
@@ -6,8 +8,7 @@
 	THE TASK TREE
 		task 0  Reward  Bank Credits 10000
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	OPEN: no conversation in this arc grants this quest.
 ]]
@@ -31,6 +32,7 @@ end
 
 function trandoYsithRewardScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoYsithRewardScreenPlay:getRuns(pPlayer)
@@ -64,6 +66,8 @@ function trandoYsithRewardScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:setStage(pPlayer, 0)
 end
 
@@ -72,6 +76,9 @@ function trandoYsithRewardScreenPlay:grantQuest(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.begin(self, pPlayer)
+
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_ysith_reward")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

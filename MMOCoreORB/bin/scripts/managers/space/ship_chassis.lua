@@ -258,6 +258,7 @@ chassisData = {
 	{"spacestation_tatooine", "spacestation_neutral", "object/ship/spacestation_tatooine.iff"},
 	{"spacestation_yavin4", "spacestation_neutral", "object/ship/spacestation_yavin4.iff"},
 	{"star_destroyer", "star_destroyer", "object/ship/star_destroyer.iff"},
+	{"imperial_venator", "imperial_venator", "object/ship/imperial_venator.iff"},
 --	{"supplyship", "", "object/ship/supplyship.iff"},
 	{"tie_in", "tie_in", "object/ship/tie_in.iff"},
 	{"tie_light_duty", "tie_light_duty", "object/ship/tie_light_duty.iff"},

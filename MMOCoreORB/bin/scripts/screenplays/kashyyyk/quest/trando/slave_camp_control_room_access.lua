@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_slave_camp_control_room_access  --  ep3_slave_camp_control_room_access
 
@@ -7,8 +9,7 @@
 		task 0  Destroy Multiple and Loot  Warden Tosk / ep3_slaver_blackscale_warden_tosk
 		task 1  Wait for Signal  Power Room / signalSlaverDisableLocks
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	IFF MATCH (not a look-alike): creatures.tab:1567 maps
 		ep3_slaver_blackscale_warden_tosk -> ep3/ep3_blackscale_warden_tosk.iff;
@@ -44,6 +45,7 @@ end
 
 function slaveCampControlRoomAccessScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function slaveCampControlRoomAccessScreenPlay:getRuns(pPlayer)
@@ -119,6 +121,7 @@ function slaveCampControlRoomAccessScreenPlay:notifyKilledCreature(pPlayer, pVic
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_slave_camp_control_room_access:task00_journal_entry_title")
 
 	if (n >= self.killCount) then
@@ -133,6 +136,8 @@ function slaveCampControlRoomAccessScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
@@ -144,6 +149,7 @@ function slaveCampControlRoomAccessScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	self:attachKillObserver(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_slave_camp_control_room_access:journal_entry_title")
@@ -167,6 +173,7 @@ function slaveCampControlRoomAccessScreenPlay:signalSlaverDisableLocks(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_slave_camp_control_room_access")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:clearQuest(pPlayer)

@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	Quelling the Varactyl  --  ep3_kachirho_varactyl_hunt
 
@@ -23,8 +25,7 @@
 	Journal text names the turn-in "Janno". The buildout giver is ep3_ortha_ledox,
 	already standing via kashyyyk_static_npcs.lua. Quoted; not renamed.
 
-	NO JOURNAL: do not call Journal.*. The client ships quest/ep3_kachirho_varactyl_hunt.qst;
-	the journal row comes from the integration branch later.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[28][TIER_1] = 165. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 ]]
@@ -54,6 +55,7 @@ end
 
 function kachirhoVaractylHuntScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoVaractylHuntScreenPlay:getRuns(pPlayer)
@@ -82,6 +84,8 @@ function kachirhoVaractylHuntScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "plumes")
 	self:setStage(pPlayer, 0)
@@ -91,6 +95,8 @@ function kachirhoVaractylHuntScreenPlay:grantQuest(pPlayer)
 	if (not self:canGrantQuest(pPlayer)) then
 		return false
 	end
+
+	KashyyykQuestJournal.begin(self, pPlayer)
 
 	deleteScreenPlayData(pPlayer, self.screenplayName, "plumes")
 	self:setStage(pPlayer, 1)
@@ -113,6 +119,7 @@ function kachirhoVaractylHuntScreenPlay:signalTurnIn(pPlayer)
 end
 
 function kachirhoVaractylHuntScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_varactyl_hunt")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)
@@ -168,6 +175,7 @@ function kachirhoVaractylHuntScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local plumes = self:getPlumes(pPlayer) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "plumes", tostring(plumes))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_varactyl_hunt:task00_journal_entry_title")
 
 	if (plumes >= self.killCount) then

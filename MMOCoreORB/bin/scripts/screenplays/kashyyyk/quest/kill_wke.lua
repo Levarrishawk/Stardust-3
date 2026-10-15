@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	Task Force Bravo  --  ep3_kachirho_kill_wke
 
@@ -15,9 +17,7 @@
 		ep3_wke_freedom_fighter_01..05
 		ep3_wke_forest_stalker_01..03  (same kash_kachirho_wke_fighters lair)
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships quest/ep3_kachirho_kill_wke.qst; the journal row comes from the
-	integration branch later. Do not call Journal.*.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	Giver ep3_col_gurnst already stands via kashyyyk_static_npcs.lua. Not spawned here.
 
@@ -53,6 +53,7 @@ end
 
 function kachirhoKillWkeScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoKillWkeScreenPlay:getRuns(pPlayer)
@@ -80,6 +81,8 @@ function kachirhoKillWkeScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
@@ -89,6 +92,8 @@ function kachirhoKillWkeScreenPlay:grantQuest(pPlayer)
 	if (not self:canGrantQuest(pPlayer)) then
 		return false
 	end
+
+	KashyyykQuestJournal.begin(self, pPlayer)
 
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 1)
@@ -111,6 +116,7 @@ function kachirhoKillWkeScreenPlay:signalTurnIn(pPlayer)
 end
 
 function kachirhoKillWkeScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_kill_wke")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)
@@ -162,6 +168,7 @@ function kachirhoKillWkeScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local kills = self:getKills(pPlayer) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(kills))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_kill_wke:task00_journal_entry_title")
 
 	if (kills >= self.killCount) then

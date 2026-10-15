@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	@quest/ground/ep3_trando_harwakokok_zssik_09:journal_entry_title  --  ep3_trando_harwakokok_zssik_09
 
@@ -9,8 +11,7 @@
 		task 0  Destroy Multiple and Loot  Scratch One Head
 		task 1  Wait for Signal  Return to Harwakokok
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[82][TIER_3] = 110902. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 	ALLOW_REPEATS 1.
@@ -39,6 +40,7 @@ end
 
 function trandoHarwakokokZssik09ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoHarwakokokZssik09ScreenPlay:getRuns(pPlayer)
@@ -71,6 +73,8 @@ function trandoHarwakokokZssik09ScreenPlay:clearQuest(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+
+	KashyyykQuestJournal.clear(self, pPlayer)
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
@@ -82,6 +86,7 @@ function trandoHarwakokokZssik09ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_harwakokok_zssik_09:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_harwakokok_zssik_09:task00_journal_entry_title")
@@ -137,6 +142,7 @@ function trandoHarwakokokZssik09ScreenPlay:notifyKilledCreature(pPlayer, pVictim
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_harwakokok_zssik_09:task00_journal_entry_title")
 
 	if (n >= self.killCount) then
@@ -158,6 +164,7 @@ function trandoHarwakokokZssik09ScreenPlay:signalCompletedHarwakokok(pPlayer)
 end
 
 function trandoHarwakokokZssik09ScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_harwakokok_zssik_09")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_trandoshan_quest_sucess.snd")

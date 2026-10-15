@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	The Arena Challenge  --  ep3_arena_challenge
 
@@ -6,8 +8,7 @@
 	THE TASK TREE
 		task 0  Wait for Signal    signalArenaChallengeAccepted
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	OPEN:
 		Grant site is conversation/ep3_forest_kerritamba (forest epic). Not transcribed here.
@@ -33,6 +34,7 @@ end
 
 function arenaChallengeScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function arenaChallengeScreenPlay:getRuns(pPlayer)
@@ -66,6 +68,8 @@ function arenaChallengeScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:setStage(pPlayer, 0)
 end
 
@@ -73,6 +77,8 @@ function arenaChallengeScreenPlay:grantQuest(pPlayer)
 	if (not self:canGrantQuest(pPlayer)) then
 		return false
 	end
+
+	KashyyykQuestJournal.begin(self, pPlayer)
 
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_arena_challenge:journal_entry_title")
@@ -84,6 +90,7 @@ function arenaChallengeScreenPlay:signalArenaChallengeAccepted(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_arena_challenge")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:clearQuest(pPlayer)

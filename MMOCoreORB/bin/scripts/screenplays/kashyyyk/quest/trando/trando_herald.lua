@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_trando_herald
 
@@ -7,8 +9,7 @@
 		task 0  Destroy Multiple   wookiee_brawler x1
 		task 2  Reward             10000
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 ]]
 
 trandoHeraldScreenPlay = ScreenPlay:new {
@@ -32,6 +33,7 @@ end
 
 function trandoHeraldScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoHeraldScreenPlay:getRuns(pPlayer)
@@ -107,6 +109,7 @@ function trandoHeraldScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_herald:task00_journal_entry_title")
 
 	if (n >= self.killCount) then
@@ -121,6 +124,8 @@ function trandoHeraldScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
@@ -132,6 +137,7 @@ function trandoHeraldScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	self:attachKillObserver(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_herald:journal_entry_title")
@@ -139,6 +145,7 @@ function trandoHeraldScreenPlay:grantQuest(pPlayer)
 end
 
 function trandoHeraldScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_herald")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

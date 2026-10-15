@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	@quest/ground/ep3_trando_olima_grunc:journal_entry_title  --  ep3_trando_olima_grunc
 
@@ -11,8 +13,7 @@
 		task 6  Wait for Signal  Return to Olima Grunc
 		task 7  Reward  Reward Issued
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[45][TIER_1] = 237. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 	ALLOW_REPEATS 1.
@@ -47,6 +48,7 @@ end
 
 function trandoOlimaGruncScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoOlimaGruncScreenPlay:getRuns(pPlayer)
@@ -79,6 +81,8 @@ function trandoOlimaGruncScreenPlay:clearQuest(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+
+	KashyyykQuestJournal.clear(self, pPlayer)
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:detachGoto(pPlayer)
@@ -91,6 +95,7 @@ function trandoOlimaGruncScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_olima_grunc:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_olima_grunc:task00_journal_entry_title")
@@ -223,6 +228,7 @@ function trandoOlimaGruncScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_olima_grunc:task01_journal_entry_title")
 
 	if (n >= self.killCount) then
@@ -244,6 +250,7 @@ function trandoOlimaGruncScreenPlay:signalRewardOlima(pPlayer)
 end
 
 function trandoOlimaGruncScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_olima_grunc")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

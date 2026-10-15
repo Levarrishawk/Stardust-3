@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_trando_boshaz_zssik_02
 
@@ -10,8 +12,7 @@
 		task 4  Wait for Signal  rewardBoshaz
 		task 6  Reward           2000
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 ]]
 
 trandoBoshazZssik02ScreenPlay = ScreenPlay:new {
@@ -45,6 +46,7 @@ end
 
 function trandoBoshazZssik02ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoBoshazZssik02ScreenPlay:getRuns(pPlayer)
@@ -127,9 +129,6 @@ function trandoBoshazZssik02ScreenPlay:completeGoto(pPlayer)
 	self:onGotoComplete(pPlayer)
 end
 
-function trandoBoshazZssik02ScreenPlay:onGotoComplete(pPlayer)
-end
-
 function trandoBoshazZssik02ScreenPlay:notifyEnteredGoto(pArea, pPlayer)
 	if (pArea == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
 		return 0
@@ -173,6 +172,17 @@ function trandoBoshazZssik02ScreenPlay:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "observer")
 end
 
+function trandoBoshazZssik02ScreenPlay:notifyEncounterDestroyed(pVictim, pKiller)
+	if (pVictim == nil) then return 1 end
+	local key = SceneObject(pVictim):getObjectID() .. ":" .. self.screenplayName .. ":owner"
+	local pPlayer = getSceneObject(readData(key))
+	if (pPlayer ~= nil and SceneObject(pPlayer):isPlayerCreature()) then
+		self:notifyKilledCreature(pPlayer, pVictim)
+	end
+	deleteData(key)
+	return 1
+end
+
 function trandoBoshazZssik02ScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	if (pPlayer == nil or pVictim == nil) then
 		return 0
@@ -183,11 +193,18 @@ function trandoBoshazZssik02ScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 1
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
-
-	if (victimTemplate == nil or not self:isKillTemplate(victimTemplate)) then
-		return 0
+	local victimOid = SceneObject(pVictim):getObjectID()
+	local slot = nil
+	for i = 1, self.killCount do
+		if (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "ambush" .. i)) == victimOid) then
+			slot = i
+			break
+		end
 	end
+	if (slot == nil) then return 0 end
+	-- Consume before either death observer can deliver the same victim again.
+	writeScreenPlayData(pPlayer, self.screenplayName, "ambush" .. slot, "-1")
+	deleteData(victimOid .. ":" .. self.screenplayName .. ":owner")
 
 	if (self.lootDropPercent ~= nil and getRandomNumber(100) > self.lootDropPercent) then
 		return 0
@@ -196,6 +213,7 @@ function trandoBoshazZssik02ScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_boshaz_zssik_02:task01_journal_entry_title")
 
 	if (n >= self.killCount) then
@@ -212,6 +230,9 @@ function trandoBoshazZssik02ScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
+	self:clearAmbush(pPlayer)
 	self:detachKillObserver(pPlayer)
 	self:detachGoto(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
@@ -224,6 +245,7 @@ function trandoBoshazZssik02ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_boshaz_zssik_02:journal_entry_title")
 	self:attachGoto(pPlayer)
@@ -236,14 +258,25 @@ function trandoBoshazZssik02ScreenPlay:onGotoComplete(pPlayer)
 end
 
 function trandoBoshazZssik02ScreenPlay:spawnAmbush(pPlayer)
+	if (self:getStage(pPlayer) ~= 2) then return end
 	local x = SceneObject(pPlayer):getWorldPositionX()
 	local y = SceneObject(pPlayer):getWorldPositionY()
 	local z = SceneObject(pPlayer):getWorldPositionZ()
 	local zone = CreatureObject(pPlayer):getZoneName()
 
-	for i = 1, 5 do
-		local tpl = self.killTemplates[((i - 1) % #self.killTemplates) + 1]
-		spawnMobile(zone, tpl, 0, x + getRandomNumber(-12, 12), z, y + getRandomNumber(-12, 12), 0, 0)
+	for i = 1, self.killCount do
+		local key = "ambush" .. i
+		local stored = tonumber(readScreenPlayData(pPlayer, self.screenplayName, key)) or 0
+		if (stored ~= -1 and getSceneObject(stored) == nil) then
+			local tpl = self.killTemplates[((i - 1) % #self.killTemplates) + 1]
+			local pMob = spawnMobile(zone, tpl, 0, x + getRandomNumber(-12, 12), z, y + getRandomNumber(-12, 12), 0, 0)
+			if (pMob ~= nil) then
+				local oid = SceneObject(pMob):getObjectID()
+				writeScreenPlayData(pPlayer, self.screenplayName, key, tostring(oid))
+				writeData(oid .. ":" .. self.screenplayName .. ":owner", SceneObject(pPlayer):getObjectID())
+				createObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyEncounterDestroyed", pMob)
+			end
+		end
 	end
 end
 
@@ -261,9 +294,48 @@ function trandoBoshazZssik02ScreenPlay:signalRewardBoshaz(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_boshaz_zssik_02")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)
 	self:clearQuest(pPlayer)
 	return true
+end
+
+function trandoBoshazZssik02ScreenPlay:clearAmbush(pPlayer)
+	for i = 1, self.killCount do
+		local key = "ambush" .. i
+		local oid = tonumber(readScreenPlayData(pPlayer, self.screenplayName, key)) or 0
+		local pMob = getSceneObject(oid)
+		if (pMob ~= nil) then
+			dropObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyEncounterDestroyed", pMob)
+		end
+		deleteData(oid .. ":" .. self.screenplayName .. ":owner")
+		deleteScreenPlayData(pPlayer, self.screenplayName, key)
+	end
+end
+
+function trandoBoshazZssik02ScreenPlay:playerLoggedIn(pPlayer)
+	if (self:getStage(pPlayer) ~= 2) then return end
+	local credited = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0
+	for i = 1, self.killCount do
+		local key = "ambush" .. i
+		if (i <= credited and readScreenPlayData(pPlayer, self.screenplayName, key) == "") then
+			writeScreenPlayData(pPlayer, self.screenplayName, key, "-1")
+		end
+		local oid = tonumber(readScreenPlayData(pPlayer, self.screenplayName, key)) or 0
+		local pMob = getSceneObject(oid)
+		if (pMob ~= nil and CreatureObject(pMob):isDead()) then
+			self:notifyKilledCreature(pPlayer, pMob)
+		elseif (pMob ~= nil and oid > 0) then
+			writeData(oid .. ":" .. self.screenplayName .. ":owner", SceneObject(pPlayer):getObjectID())
+			dropObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyEncounterDestroyed", pMob)
+			createObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyEncounterDestroyed", pMob)
+		end
+	end
+	self:spawnAmbush(pPlayer)
+	self:detachKillObserver(pPlayer)
+	if (self:getStage(pPlayer) == 2) then
+		self:attachKillObserver(pPlayer)
+	end
 end

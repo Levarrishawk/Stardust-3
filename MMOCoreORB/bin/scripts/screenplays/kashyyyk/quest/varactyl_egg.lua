@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	Varactyl Eggs  --  ep3_kachirho_varactyl_egg
 
@@ -15,8 +17,7 @@
 	Giver ep3_pirus_gue has no celebrity buildout row (row 2141 is the egg object).
 	Placement OPEN -- not spawned here. Conversation is attached to the mobile template.
 
-	NO JOURNAL: do not call Journal.*. The client ships the .qst; the journal row
-	comes from the integration branch later.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[55][TIER_4] = 50754. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 ]]
@@ -60,6 +61,7 @@ end
 
 function kachirhoVaractylEggScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoVaractylEggScreenPlay:getRuns(pPlayer)
@@ -83,6 +85,8 @@ function kachirhoVaractylEggScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	self:setStage(pPlayer, 0)
 end
@@ -91,6 +95,8 @@ function kachirhoVaractylEggScreenPlay:grantQuest(pPlayer)
 	if (not self:canGrantQuest(pPlayer)) then
 		return false
 	end
+
+	KashyyykQuestJournal.begin(self, pPlayer)
 
 	self:setStage(pPlayer, 1)
 	self:attachKillObserver(pPlayer)
@@ -103,6 +109,7 @@ end
 
 function kachirhoVaractylEggScreenPlay:awardQuest(pPlayer)
 	-- Reward Item object/tangible/loot/quest/ep3/varactyl_egg.iff is OPEN: no repo template.
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_varactyl_egg")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:setStage(pPlayer, 0)

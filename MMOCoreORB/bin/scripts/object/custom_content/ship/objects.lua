@@ -1,4 +1,9 @@
 --New
+object_ship_shared_imperial_venator = SharedShipObjectTemplate:new {
+	clientTemplateFileName = "object/ship/shared_imperial_venator.iff"
+}
+ObjectTemplates:addClientTemplate(object_ship_shared_imperial_venator, "object/ship/shared_imperial_venator.iff")
+
 object_ship_shared_grievous_starship = SharedShipObjectTemplate:new {
 	clientTemplateFileName = "object/ship/shared_grievous_starship.iff"
 }

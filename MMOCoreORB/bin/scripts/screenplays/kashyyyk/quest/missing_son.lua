@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	Find Missing Son  --  ep3_kachirho_missing_son
 
@@ -20,8 +22,7 @@
 
 	Giver ep3_kachirho_chatook already stands via kashyyyk_static_npcs.lua. Not spawned here.
 
-	NO JOURNAL: do not call Journal.*. The client ships the .qst; the journal row
-	comes from the integration branch later.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[60][TIER_4] = 62139. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 ]]
@@ -47,6 +48,7 @@ end
 
 function kachirhoMissingSonScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoMissingSonScreenPlay:getRuns(pPlayer)
@@ -70,6 +72,8 @@ function kachirhoMissingSonScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "spear")
 	self:setStage(pPlayer, 0)
@@ -81,6 +85,7 @@ function kachirhoMissingSonScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_wookiee_quest_accept.snd")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_missing_son:journal_entry_title")
@@ -108,6 +113,7 @@ function kachirhoMissingSonScreenPlay:signalTurnIn(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_missing_son")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

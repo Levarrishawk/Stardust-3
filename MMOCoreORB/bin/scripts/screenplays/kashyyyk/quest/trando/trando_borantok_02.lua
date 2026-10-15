@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	@quest/ground/ep3_trando_borantok_02:journal_entry_title  --  ep3_trando_borantok_02
 
@@ -12,8 +14,7 @@
 		task 9  Wait for Signal  Return to Borantok
 		task 10  Reward  Reward Issued
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[35][TIER_2] = 11325. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 	ALLOW_REPEATS 1.
@@ -43,6 +44,7 @@ end
 
 function trandoBorantok02ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoBorantok02ScreenPlay:getRuns(pPlayer)
@@ -75,6 +77,8 @@ function trandoBorantok02ScreenPlay:clearQuest(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+
+	KashyyykQuestJournal.clear(self, pPlayer)
 	self:detachGoto(pPlayer)
 	self:setStage(pPlayer, 0)
 end
@@ -85,6 +89,7 @@ function trandoBorantok02ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_borantok_02:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_borantok_02:task00_journal_entry_title")
@@ -200,6 +205,7 @@ function trandoBorantok02ScreenPlay:signalRewardBorantok(pPlayer)
 end
 
 function trandoBorantok02ScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_borantok_02")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

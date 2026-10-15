@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_trando_borantok_01
 
@@ -9,8 +11,7 @@
 		task 8  Go to Location   Get to Negal Tek'lon  kashyyyk_rryatt_trail  OPEN
 		task 12 Wait for Signal  hideBodies
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 ]]
 
 trandoBorantok01ScreenPlay = ScreenPlay:new {
@@ -39,6 +40,7 @@ end
 
 function trandoBorantok01ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoBorantok01ScreenPlay:getRuns(pPlayer)
@@ -172,6 +174,8 @@ function trandoBorantok01ScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachGoto(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "bags")
 	self:setStage(pPlayer, 0)
@@ -183,6 +187,7 @@ function trandoBorantok01ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_borantok_01:journal_entry_title")
 	self:attachGoto(pPlayer)
@@ -197,6 +202,7 @@ function trandoBorantok01ScreenPlay:collectBag(pPlayer)
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "bags")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "bags", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_borantok_01:task01_journal_entry_title")
 
 	if (n >= self.bagNeed) then
@@ -212,6 +218,7 @@ function trandoBorantok01ScreenPlay:signalHideBodies(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_borantok_01")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:clearQuest(pPlayer)

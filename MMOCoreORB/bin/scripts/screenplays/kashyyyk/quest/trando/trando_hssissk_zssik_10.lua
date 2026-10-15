@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_trando_hssissk_zssik_10  --  ep3_trando_hssissk_zssik_10
 
@@ -10,8 +12,7 @@
 		task 3  Wait for Signal  Return to Hssissk / rewardHssissk
 		task 4  Reward  Reward Issued / 
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	OPEN:
 		ep3_avatar_blackscale_captain has no lair map / repo template
@@ -39,6 +40,7 @@ end
 
 function trandoHssisskZssik10ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoHssisskZssik10ScreenPlay:getRuns(pPlayer)
@@ -72,6 +74,8 @@ function trandoHssisskZssik10ScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
@@ -83,6 +87,7 @@ function trandoHssisskZssik10ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_hssissk_zssik_10:journal_entry_title")
 	return true
@@ -100,6 +105,7 @@ function trandoHssisskZssik10ScreenPlay:signalAvatarDestructSequence(pPlayer)
 	end
 
 	if (1 == 2) then
+		KashyyykQuestJournal.complete(self, pPlayer)
 		KashyyykQuestXp:award(pPlayer, "ep3_trando_hssissk_zssik_10")
 		writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 		self:clearQuest(pPlayer)
@@ -116,6 +122,7 @@ function trandoHssisskZssik10ScreenPlay:signalRewardHssissk(pPlayer)
 	end
 
 	if (2 == 2) then
+		KashyyykQuestJournal.complete(self, pPlayer)
 		KashyyykQuestXp:award(pPlayer, "ep3_trando_hssissk_zssik_10")
 		writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 		self:clearQuest(pPlayer)

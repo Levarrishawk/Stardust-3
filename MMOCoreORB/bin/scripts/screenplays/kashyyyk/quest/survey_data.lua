@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	Collecting Survery Data  --  ep3_kachirho_survey_data
 
@@ -20,8 +22,7 @@
 
 	Giver ep3_dr_farnsworth already stands via kashyyyk_static_npcs.lua. Not spawned here.
 
-	NO JOURNAL: do not call Journal.*. The client ships the .qst; the journal row
-	comes from the integration branch later.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[27][TIER_2] = 7123. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 ]]
@@ -72,6 +73,7 @@ end
 
 function kachirhoSurveyDataScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoSurveyDataScreenPlay:getRuns(pPlayer)
@@ -111,6 +113,8 @@ function kachirhoSurveyDataScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	for i = 1, #self.devices do
 		deleteScreenPlayData(pPlayer, self.screenplayName, self.devices[i].key)
 	end
@@ -124,6 +128,7 @@ function kachirhoSurveyDataScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_survey_data:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_survey_data:task00_journal_entry_title")
@@ -136,6 +141,7 @@ function kachirhoSurveyDataScreenPlay:signalTurnIn(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_survey_data")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)
@@ -164,6 +170,7 @@ function kachirhoSurveyDataScreenPlay:collectDevice(pPlayer, key)
 	end
 
 	writeScreenPlayData(pPlayer, self.screenplayName, key, "1")
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_survey_data:task00_item_name")
 
 	if (self:deviceCount(pPlayer) >= #self.devices) then

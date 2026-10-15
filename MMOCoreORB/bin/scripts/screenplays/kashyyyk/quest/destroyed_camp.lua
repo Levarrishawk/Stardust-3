@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	The Missing Researchers  --  ep3_kachirho_destroyed_camp
 
@@ -28,8 +30,7 @@
 
 	Giver conversation is attached to ep3_kachirho_qst_radio.
 
-	NO JOURNAL: do not call Journal.*. The client ships the .qst; the journal row
-	comes from the integration branch later.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[27][TIER_3] = 9862. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 	ALLOW_REPEATS 0.
@@ -198,6 +199,7 @@ end
 
 function kachirhoDestroyedCampScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoDestroyedCampScreenPlay:getRuns(pPlayer)
@@ -225,6 +227,8 @@ function kachirhoDestroyedCampScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:closeContainerKeypad(pPlayer)
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
@@ -239,6 +243,7 @@ function kachirhoDestroyedCampScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_destroyed_camp:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_destroyed_camp:task00_journal_entry_title")
@@ -286,6 +291,7 @@ function kachirhoDestroyedCampScreenPlay:signalCodeEntered(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_destroyed_camp")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:clearQuest(pPlayer)
@@ -336,6 +342,7 @@ function kachirhoDestroyedCampScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local kills = self:getKills(pPlayer) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(kills))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_destroyed_camp:task04_journal_entry_title")
 
 	if (kills >= self.killCount) then

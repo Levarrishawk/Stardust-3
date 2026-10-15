@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	@quest/ground/ep3_trando_mosolium_zssik_05:journal_entry_title  --  ep3_trando_mosolium_zssik_05
 
@@ -11,8 +13,7 @@
 		task 2  Wait for Signal  Return to Mosolium
 		task 3  Reward  Reward Issued
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-		ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: quest_experience[50][TIER_3] = 32137. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 	ALLOW_REPEATS 1.
@@ -47,6 +48,7 @@ end
 
 function trandoMosoliumZssik05ScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoMosoliumZssik05ScreenPlay:getRuns(pPlayer)
@@ -79,6 +81,8 @@ function trandoMosoliumZssik05ScreenPlay:clearQuest(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+
+	KashyyykQuestJournal.clear(self, pPlayer)
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:detachGoto(pPlayer)
@@ -91,6 +95,7 @@ function trandoMosoliumZssik05ScreenPlay:grantQuest(pPlayer)
 	end
 
 	self:clearQuest(pPlayer)
+	KashyyykQuestJournal.begin(self, pPlayer)
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_mosolium_zssik_05:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_mosolium_zssik_05:task00_journal_entry_title")
@@ -224,6 +229,7 @@ function trandoMosoliumZssik05ScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
 
 	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
+	KashyyykQuestJournal.sync(self, pPlayer, self:getStage(pPlayer))
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_mosolium_zssik_05:task01_journal_entry_title")
 
 	if (n >= self.killCount) then
@@ -245,6 +251,7 @@ function trandoMosoliumZssik05ScreenPlay:signalRewardMosolium01(pPlayer)
 end
 
 function trandoMosoliumZssik05ScreenPlay:awardQuest(pPlayer)
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_trando_mosolium_zssik_05")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)

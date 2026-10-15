@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	Takook's Last Message  --  ep3_kachirho_takook_comm
 
@@ -17,8 +19,7 @@
 	Comm Player is implemented as a system message from the shipped comm-text key.
 	completeWhenTasksComplete is true, so the comm is the whole quest.
 
-	NO JOURNAL: do not call Journal.*. The client ships the .qst; the journal row
-	comes from the integration branch later.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	XP: LEVEL 1 TIER -1 passthrough of stored 0. See kashyyyk_quest_xp.lua / mustafar_quest_xp.lua.
 ]]
@@ -61,6 +62,7 @@ end
 
 function kachirhoTakookCommScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function kachirhoTakookCommScreenPlay:getRuns(pPlayer)
@@ -72,8 +74,11 @@ function kachirhoTakookCommScreenPlay:playRecording(pPlayer)
 		return false
 	end
 
+	KashyyykQuestJournal.begin(self, pPlayer)
+
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_takook_comm:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_kachirho_takook_comm:task00_comm_message_text")
+	KashyyykQuestJournal.complete(self, pPlayer)
 	KashyyykQuestXp:award(pPlayer, "ep3_kachirho_takook_comm")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	self:setStage(pPlayer, 0)

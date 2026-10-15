@@ -1,3 +1,5 @@
+local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+
 --[[
 	ep3_trando_jessokk
 
@@ -10,8 +12,7 @@
 			task 6  Timer -> task 7 Encounter -> task 8 Immediately Clear
 		task 4  Escort -> task 9 Immediately Clear
 
-	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
-	ships the .qst; the journal row comes from the integration branch later. Do not call the journal engine.
+	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
 	OPEN: see header list. grantQuest exists so a later raise can start the machine; escort and blank encounter do not complete.
 ]]
@@ -34,6 +35,7 @@ end
 
 function trandoJessokkScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
+	KashyyykQuestJournal.sync(self, pPlayer, stage)
 end
 
 function trandoJessokkScreenPlay:getRuns(pPlayer)
@@ -67,6 +69,8 @@ function trandoJessokkScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	KashyyykQuestJournal.clear(self, pPlayer)
+
 	self:setStage(pPlayer, 0)
 end
 
@@ -74,6 +78,8 @@ function trandoJessokkScreenPlay:grantQuest(pPlayer)
 	if (not self:canGrantQuest(pPlayer)) then
 		return false
 	end
+
+	KashyyykQuestJournal.begin(self, pPlayer)
 
 	self:setStage(pPlayer, 1)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_trando_jessokk:journal_entry_title")
