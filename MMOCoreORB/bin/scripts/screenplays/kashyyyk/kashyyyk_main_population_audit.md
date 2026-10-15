@@ -12,11 +12,11 @@ Zero-radius controllers retain authored height, including upper tree landings. O
 
 Patrol and celebrity controllers remain owned by their existing screenplays. The old 239 main-map dynamic SPAWNAREA rows are removed; named, no-build and no-spawn regions remain.
 
-239 controllers can populate 578 slots with available templates. The ceremonial captain controller is withheld. Wookiee battle-leader selections in the commando table retry after the configured interval; available commandos can fill those slots, but the original leader mix cannot yet be reproduced. Five prior wildlife compatibility substitutions are retained and disclosed below.
+240 controllers can populate all 579 slots with available templates. The ceremonial captain now resolves to its DSRC appearance through ep3_wke_cerimonial_captain; its creature definition inherits the existing Core3 ceremonial-guard combat, XP and empty-loot profile unchanged. DSRC's different captain level, specials and elite loot are not imported. Wookiee battle-leader selections in the commando table retry after the configured interval; available commandos can fill those slots, but the original leader mix cannot yet be reproduced. Five prior wildlife compatibility substitutions are retained and disclosed below.
 
-Deployment requires the two population Lua files, their screenplays.lua includes and the main-region update together, followed by a server restart. No C++ rebuild or client TRE change is required. Allow 20 seconds for first spawns; packs fill gradually at authored intervals. On Debian, inspect packs in the south/east wildlife areas and the northern camps, kill a pack member and verify its replacement, then restart and confirm populations do not duplicate.
+Deployment requires the two population Lua files, their screenplays.lua includes, the main-region update, and the captain creature definition with its mobile and object serverobjects.lua registrations together, followed by a server restart. No C++ rebuild or client TRE change is required. Allow 20 seconds for first spawns; packs fill gradually at authored intervals. On Debian, inspect packs in the south/east wildlife areas and the northern camps, kill a pack member and verify its replacement, then restart and confirm populations do not duplicate.
 
-Local verification: Lua 5.1 simulation covers all supported slots, local bounds, zero-radius platform heights, AI flags, failed-spawn retries, stale events, repeated startup, reserved dead slots and disabled-zone recovery. Separate source checks compare all 240 controllers to the buildout and confirm all 90 selected mobiles are in the active mobile include chain. Runtime terrain, water and pathing still require in-game checks.
+Local verification: Lua 5.1 simulation covers all supported slots, local bounds, zero-radius platform heights, AI flags, failed-spawn retries, stale events, repeated startup, reserved dead slots and disabled-zone recovery. Separate source checks compare all 240 controllers to the buildout and confirm all 91 selected mobiles are in the active mobile include chain. Runtime terrain, water and pathing still require in-game checks.
 
 The regeneration utility at MMOCoreORB/utils/kashyyyk/build_main_population.py is local and excluded by the repository-wide *.py rule; deployment does not depend on it. Generated data and this audit are ordinary repository files.
 
@@ -49,7 +49,7 @@ The regeneration utility at MMOCoreORB/utils/kashyyyk/build_main_population.py i
 | ep3_kachirho_wke_bloodsample | ep3_wke_civilian_01 |  |
 | ep3_kachirho_wke_healthy | ep3_wke_civilian_05 |  |
 | ep3_kklyyytt | ep3_kklyyytt |  |
-| ep3_npc_ceremonial_captain | **Unresolved** | UNRESOLVED: no unambiguous registered creature mapping. Missing or ambiguous appearances: ep3/ep3_wke_cerimonial_captain.iff |
+| ep3_npc_ceremonial_captain | ep3_wke_cerimonial_captain | DSRC creatures.tab appearance ep3/ep3_wke_cerimonial_captain.iff; inherits existing ceremonial-guard combat, XP and loot profile. |
 | ep3_npc_ceremonial_guard | ep3_wke_cerimonial_guard_01, ep3_wke_cerimonial_guard_02, ep3_wke_cerimonial_guard_03, ep3_wke_cerimonial_guard_04 |  |
 | ep3_npc_dead_guard | ep3_wke_dead_guard_01, ep3_wke_dead_guard_02, ep3_wke_dead_guard_03 |  |
 | ep3_npc_rodian_lesser_hunter | ep3_etyyy_hunter_lesser_rodian_01, ep3_etyyy_hunter_lesser_rodian_02, ep3_etyyy_hunter_lesser_rodian_03, ep3_etyyy_hunter_lesser_rodian_04 |  |

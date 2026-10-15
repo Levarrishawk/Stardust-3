@@ -129,7 +129,7 @@ KashyyykMainPopulationData = {
 			{item = "ep3_kachirho_wke_bloodsample", clearance = 1, mobiles = {"ep3_wke_civilian_01"}},
 		},
 		["kashyyyk/kash_kachirho_wke_ceremonial_captain"] = {
-			{item = "ep3_npc_ceremonial_captain", clearance = 1, mobiles = {}},
+			{item = "ep3_npc_ceremonial_captain", clearance = 1, mobiles = {"ep3_wke_cerimonial_captain"}},
 		},
 		["kashyyyk/kash_kachirho_wke_ceremonial_guard"] = {
 			{item = "ep3_npc_ceremonial_guard", clearance = 1, mobiles = {"ep3_wke_cerimonial_guard_01", "ep3_wke_cerimonial_guard_02", "ep3_wke_cerimonial_guard_03", "ep3_wke_cerimonial_guard_04"}},
