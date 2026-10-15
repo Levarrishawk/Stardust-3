@@ -24,6 +24,8 @@ The two inner Venators are about 1,400 m and 1,406 m from the station. The forma
 
 Coruscant's launch/load-in position and `space_coruscant_0` hyperspace arrival are both **(-5369, 1521, 548)** in x, z (height), y order. In `hyperspace_locations.iff`, whose columns are X/Y/Z, this is X=-5369, Y=548, Z=1521. The other 40 hyperspace rows are preserved.
 
+For inter-system hyperspace, the authoritative destination is the Debian server's `datatables/space/hyperspace/hyperspace_locations.iff`, loaded into ShipManager at startup. The Lua `jtlLaunchPoint` entries control ground launch and do not override this table. The corrected IFF must be installed under the server's runtime working directory, normally `MMOCoreORB/bin/datatables/space/hyperspace/hyperspace_locations.iff`, followed by a server restart. `client-extensions/` is a staging folder, and Git pull does not deploy these ignored binaries. If the DEV client has the correct arrival but the server still places a ship at the origin, check the server's table and startup cache. A minimal deployment ZIP is staged at `client-assets/coruscant_hyperspace_server_fix/coruscant_hyperspace_server_fix.zip`; extract it into the stopped server's runtime directory. This table deployment needs no C++ rebuild or TRE change.
+
 ## Traffic
 
 | Population | Ships |
