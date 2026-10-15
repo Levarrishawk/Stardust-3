@@ -765,9 +765,8 @@ kashyyyk_main = {
 	gcwEnabled = 0,
 
 	planetTravelPoints = {
-		-- Outdoor ticket collector at the main snapshot's Kachirho starport
-		-- (node 14602401), using its template's x=1, y=-10 child offset.
-		{name = "Kachirho Starport", x = -668.73, z = 18.8475, y = -158.48, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 3},
+		-- Fixed outdoor arrival point shared with space landings.
+		{name = "Kachirho Starport", x = -673, z = 18, y = -152, interplanetaryTravelAllowed = 1, incomingTravelAllowed = 1, landingRange = 0},
 	},
 
 	-- datatables/space_zones/launch_locations.tab:35 (Kachirho Starport).

@@ -25,11 +25,15 @@ ep3_trandoshan_chawroo_zssik_01a_conv_handler.screenAnimations = {
 function ep3_trandoshan_chawroo_zssik_01a_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	if (CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01")) then
+	local stage = trandoBoshazZssik02ScreenPlay:getStage(pPlayer)
+	if (not CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01")
+		and not CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend")) then
 		return convoTemplate:getScreen("s_70")
-	elseif (trandoBoshazZssik02ScreenPlay:isTurnIn(pPlayer)) then
+	elseif (stage == 4 or (stage == 0 and trandoBoshazZssik02ScreenPlay:getRuns(pPlayer) > 0)) then
+		return convoTemplate:getScreen("s_747")
+	elseif (stage == 3) then
 		return convoTemplate:getScreen("s_753")
-	elseif (trandoBoshazZssik02ScreenPlay:isTurnIn(pPlayer)) then
+	elseif (stage == 2) then
 		return convoTemplate:getScreen("s_791")
 	end
 	return convoTemplate:getScreen("s_793")

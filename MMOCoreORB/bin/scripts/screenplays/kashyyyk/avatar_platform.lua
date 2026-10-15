@@ -104,7 +104,7 @@ OPEN
 	destruct terminal event and to launch/eject once the building is empty
 	(5 s delay, matching the controller's messageTo). Session launch/eject
 	confirm (Really launch? / Really eject?) stays OPEN; no-session warp
-	is kashyyyk_main (-670, 18, -137).
+	is kashyyyk_main (-673, 18, -152).
 	Prisoner / jawa / trando rows are adopted by cell + populator template
 	name (AiAgent:getCreatureTemplateName). Guards / jailer / watch
 	commander SOE names have no registered template: trando01/02 still
@@ -123,7 +123,7 @@ AvatarPlatform = ScreenPlay:new {
 
 	-- terminal_launch.java:45, :58 no-session warp to the Kachirho hub in kashyyyk_main.
 	-- Session confirm (avatar_player.java) stays OPEN.
-	launchDest = { x = -670, z = 18, y = -137 },
+	launchDest = { x = -673, z = 18, y = -152 },
 
 	lockedCells = { "techhall06", "techhall04", "techhall01", "room", "commanddeck" },
 

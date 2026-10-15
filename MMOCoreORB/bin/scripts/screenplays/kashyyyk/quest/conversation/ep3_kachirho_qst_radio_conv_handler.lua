@@ -45,7 +45,6 @@ function ep3_kachirho_qst_radio_conv_handler:runScreenHandlers(pConvTemplate, pP
 
 	if (screenID == "s_413") then
 		kachirhoDestroyedCampScreenPlay:signalCodeReceived(pPlayer)
-		kachirhoDestroyedCampScreenPlay:signalCodeEntered(pPlayer)
 	elseif (screenID == "s_76") then
 		kachirhoDestroyedCampScreenPlay:signalHuntCanopy(pPlayer)
 	elseif (screenID == "s_461") then

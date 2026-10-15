@@ -25,16 +25,17 @@ ep3_harwakokok_mighty_conv_handler.screenAnimations = {
 function ep3_harwakokok_mighty_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	if (CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01")) then
+	if (not CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01")
+		and not CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend")) then
 		return convoTemplate:getScreen("s_122")
-	elseif ((trandoHarwakokokZssik09ScreenPlay:getStage(pPlayer) == 0 and trandoHarwakokokZssik09ScreenPlay:getRuns(pPlayer) > 0)) then
-		return convoTemplate:getScreen("s_886")
 	elseif (trandoHarwakokokZssik09ScreenPlay:isTurnIn(pPlayer)) then
 		return convoTemplate:getScreen("s_888")
 	elseif ((trandoHarwakokokZssik09ScreenPlay:getStage(pPlayer) > 0 and not trandoHarwakokokZssik09ScreenPlay:isTurnIn(pPlayer))) then
 		return convoTemplate:getScreen("s_894")
-	elseif (trandoOroorooZssik08ScreenPlay:isTurnIn(pPlayer)) then
+	elseif (trandoOroorooZssik08ScreenPlay:getStage(pPlayer) == 2) then
 		return convoTemplate:getScreen("s_896")
+	elseif (trandoHarwakokokZssik09ScreenPlay:getRuns(pPlayer) > 0) then
+		return convoTemplate:getScreen("s_886")
 	end
 	return convoTemplate:getScreen("s_930")
 end
@@ -50,8 +51,9 @@ function ep3_harwakokok_mighty_conv_handler:runScreenHandlers(pConvTemplate, pPl
 	end
 
 	if (screenID == "s_892") then
-		trandoHarwakokokZssik09ScreenPlay:signalCompletedHarwakokok(pPlayer)
-		trandoOroorooZssik08ScreenPlay:signalReturnToOrooroo(pPlayer)
+		if (trandoHarwakokokZssik09ScreenPlay:signalCompletedHarwakokok(pPlayer)) then
+			trandoOroorooZssik08ScreenPlay:signalReturnToOrooroo(pPlayer)
+		end
 	elseif (screenID == "s_924") then
 		trandoHarwakokokZssik09ScreenPlay:grantQuest(pPlayer)
 	end

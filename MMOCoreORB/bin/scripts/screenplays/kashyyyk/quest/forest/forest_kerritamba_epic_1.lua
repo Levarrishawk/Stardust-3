@@ -32,30 +32,30 @@ forestKerritambaEpic1ScreenPlay = ScreenPlay:new {
 		{ key = "r1", template = "object/tangible/quest/naktra_crystals.iff", count = 1, title = "@quest/ground/ep3_forest_kerritamba_epic_1:task02_journal_entry_title" },
 		{ key = "r2", template = "object/tangible/quest/luilris_mushrooms.iff", count = 1, title = "@quest/ground/ep3_forest_kerritamba_epic_1:task03_journal_entry_title" },
 	},
-	propX = -1641.5200,
+	propX = -141.5200,
 	propZ = 33.0841,
-	propY = 1401.1500,
+	propY = -98.8500,
 }
 
 registerScreenPlay("forestKerritambaEpic1ScreenPlay", true)
 
 function forestKerritambaEpic1ScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_dead_forest")) then
 		self:spawnGiver()
 		self:spawnProps()
 	end
 end
 
 function forestKerritambaEpic1ScreenPlay:spawnGiver()
-	local z = getWorldFloor(-1641.5200, 1401.1500, "kashyyyk")
+	local z = getWorldFloor(-141.5200, -98.8500, "kashyyyk_dead_forest")
 	if (z == nil or z == 0) then
 		z = 33.0841
 	end
-	spawnMobile("kashyyyk", "dressed_chief_kerritamba", 0, -1641.5200, z, 1401.1500, 218, 0)
+	spawnMobile("kashyyyk_dead_forest", "dressed_chief_kerritamba", 0, -141.5200, z, -98.8500, 218, 0)
 end
 
 function forestKerritambaEpic1ScreenPlay:spawnProps()
-	local z = getWorldFloor(self.propX, self.propY, "kashyyyk")
+	local z = getWorldFloor(self.propX, self.propY, "kashyyyk_dead_forest")
 	if (z == nil or z == 0) then
 		z = self.propZ
 	end
@@ -65,7 +65,7 @@ function forestKerritambaEpic1ScreenPlay:spawnProps()
 		if (r.template ~= nil and r.template ~= "") then
 			for c = 1, r.count do
 				n = n + 1
-				local pObj = spawnSceneObject("kashyyyk", r.template, self.propX + (n * 1.5), z, self.propY + (n * 0.8), 0, 0)
+				local pObj = spawnSceneObject("kashyyyk_dead_forest", r.template, self.propX + (n * 1.5), z, self.propY + (n * 0.8), 0, 0)
 				if (pObj ~= nil) then
 					writeStringData(SceneObject(pObj):getObjectID() .. ":kashForestRet", r.key)
 					SceneObject(pObj):setObjectMenuComponent("forestKerritambaEpic1ScreenPlayMenuComponent")

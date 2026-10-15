@@ -332,8 +332,10 @@ private:
 		if (region == nullptr || region->isClientRegion()) {
 			float range = arrivalPoint->getLandingRange();
 
-			// Get a random landing position
-			position.randomizePosition(range);
+			// A zero landing range keeps the configured arrival point exact.
+			if (range > 0.f) {
+				position.randomizePosition(range);
+			}
 
 			// Set the Z using travel point for NPC cities
 			position.setPositionZ(arrivalPoint->getArrivalPositionZ());

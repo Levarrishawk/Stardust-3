@@ -41,7 +41,7 @@ SpaceStationScreenPlay = ScreenPlay:new {
 		labor = {"yavin4", -6921, 73, -5726},
 		yavin4_imperial = {"yavin4", 4054, 37, -6216},
 		yavin4_hidden_rebel_base = {"yavin4", -3177, 70, -3111},
-		kachirho = {"kashyyyk_main", -670, 18, -137},
+		kachirho = {"kashyyyk_main", -673, 18, -152},
 	},
 }
 

@@ -130,8 +130,9 @@ ep3_harwakokok_mighty_convo_s_888 = ConvoScreen:new {
 	id = "s_888",
 	animation = "pose_proudly",
 	leftDialog = "@conversation/ep3_trandoshan_harwakokok_zssik_05:s_888",
-	stopConversation = "true",
+	stopConversation = "false",
 	options = {
+		{"@conversation/ep3_trandoshan_harwakokok_zssik_05:s_890", "s_892"},
 	}
 }
 ep3_harwakokok_mighty_convo:addScreen(ep3_harwakokok_mighty_convo_s_888)
@@ -150,8 +151,9 @@ ep3_harwakokok_mighty_convo_s_896 = ConvoScreen:new {
 	id = "s_896",
 	animation = "rub_chin_thoughtful",
 	leftDialog = "@conversation/ep3_trandoshan_harwakokok_zssik_05:s_896",
-	stopConversation = "true",
+	stopConversation = "false",
 	options = {
+		{"@conversation/ep3_trandoshan_harwakokok_zssik_05:s_898", "s_900"},
 	}
 }
 ep3_harwakokok_mighty_convo:addScreen(ep3_harwakokok_mighty_convo_s_896)

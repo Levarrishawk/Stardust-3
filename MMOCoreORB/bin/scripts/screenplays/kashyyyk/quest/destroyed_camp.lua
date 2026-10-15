@@ -13,11 +13,8 @@
 		task 2  Destroy Multiple   Count 15, Social Group canopy_bandit
 		task 4  Wait for Signal    codeReceived  (radio s_413 / doSignal03)
 		task 7  Wait for Signal    codeEntered
-			OPEN: no sealed-container object/radial in the repo. The radio
-			java never raises codeEntered (doSignal03 is codeReceived only).
-			Closest honest raise: the radio's final screen s_413, which is
-			the only shipped line that states the code 25854. codeReceived
-			advances the stage; s_413 then fires codeEntered for the award.
+			Use the sealed container and enter 25854. Completion retains the existing
+			XP award; DSRC credit/item reward changes are deferred.
 
 	Radio is kashyyyk_main row 1792 at wx=116.17, wz=813.43. static NPCs did not
 	place this mobile (it is not a celebrity row); spawned here. Conversation table is
@@ -48,6 +45,12 @@ kachirhoDestroyedCampScreenPlay = ScreenPlay:new {
 	radioY = 813.43,
 	drumTemplate = "object/tangible/quest/kachirho_destroyed_camp.iff",
 	bagTemplate = "object/tangible/quest/kachirho_qst_bag.iff",
+	-- Main buildout row 1793; preserve the authored height and tilted quaternion.
+	containerTemplate = "object/tangible/item/ep3/kachirho_locked_container.iff",
+	containerX = 116.49,
+	containerZ = 7.97043,
+	containerY = 799.86,
+	containerCode = "25854",
 	killTemplates = {
 		"ep3_canopy_bandit_01",
 		"ep3_canopy_bandit_02",
@@ -63,6 +66,7 @@ function kachirhoDestroyedCampScreenPlay:start()
 	if (isZoneEnabled("kashyyyk_main")) then
 		self:spawnRadio()
 		self:spawnProps()
+		self:spawnContainer()
 	end
 end
 
@@ -103,6 +107,95 @@ function kachirhoDestroyedCampScreenPlay:getStage(pPlayer)
 	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "stage")) or 0
 end
 
+function kachirhoDestroyedCampScreenPlay:spawnContainer()
+	local key = self.screenplayName .. ":container"
+	local pContainer = getSceneObject(readData(key))
+	if (pContainer ~= nil and SceneObject(pContainer):getZoneName() == "kashyyyk_main"
+		and SceneObject(pContainer):getTemplateObjectPath() == self.containerTemplate) then
+		return
+	end
+
+	pContainer = spawnSceneObject("kashyyyk_main", self.containerTemplate,
+		self.containerX, self.containerZ, self.containerY, 0, 0.902856, 0.0266465, -0.422878, 0.0729082)
+	if (pContainer == nil) then
+		printLuaError("kachirhoDestroyedCampScreenPlay: failed to spawn the locked container")
+		return
+	end
+
+	SceneObject(pContainer):setObjectMenuComponent("KashDestroyedCampContainerMenuComponent")
+	writeData(key, SceneObject(pContainer):getObjectID())
+end
+
+function kachirhoDestroyedCampScreenPlay:containerPageKey(pPlayer)
+	return SceneObject(pPlayer):getObjectID() .. ":" .. self.screenplayName .. ":keypad"
+end
+
+function kachirhoDestroyedCampScreenPlay:canUseContainer(pPlayer, pContainer)
+	return pPlayer ~= nil and pContainer ~= nil and SceneObject(pPlayer):isPlayerCreature()
+		and SceneObject(pContainer):getObjectID() == readData(self.screenplayName .. ":container")
+		and SceneObject(pContainer):getTemplateObjectPath() == self.containerTemplate
+		and SceneObject(pContainer):getZoneName() == "kashyyyk_main"
+		and SceneObject(pPlayer):getZoneName() == "kashyyyk_main"
+		and SceneObject(pContainer):getParentID() == 0 and SceneObject(pPlayer):getParentID() == 0
+		and CreatureObject(pPlayer):isInRangeWithObject(pContainer, 6)
+		and not CreatureObject(pPlayer):isDead() and not CreatureObject(pPlayer):isIncapacitated()
+		and self:getStage(pPlayer) == 7
+end
+
+function kachirhoDestroyedCampScreenPlay:closeContainerKeypad(pPlayer)
+	local key = self:containerPageKey(pPlayer)
+	local page = readData(key)
+	deleteData(key)
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (page ~= 0 and pGhost ~= nil) then
+		PlayerObject(pGhost):removeSuiBox(page)
+	end
+end
+
+function kachirhoDestroyedCampScreenPlay:openContainer(pPlayer, pContainer)
+	if (not self:canUseContainer(pPlayer, pContainer)
+		or CreatureObject(pPlayer):getPlayerObject() == nil) then
+		return
+	end
+	self:closeContainerKeypad(pPlayer)
+	local sui = SuiKeypad.new(self.screenplayName, "containerKeypadCallback")
+	sui.hideSliceButton()
+	sui.hideKeycardButton()
+	sui.setTargetNetworkId(SceneObject(pContainer):getObjectID())
+	sui.setForceCloseDistance(6)
+	writeData(self:containerPageKey(pPlayer), sui.sendTo(pPlayer))
+end
+
+function kachirhoDestroyedCampScreenPlay:containerKeypadCallback(pPlayer, pSui, eventIndex, code, pressedButton)
+	if (pPlayer == nil or pSui == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+		return
+	end
+	local pPage = LuaSuiBoxPage(pSui):getSuiPageData()
+	if (pPage == nil) then
+		return
+	end
+	local page = LuaSuiPageData(pPage)
+	local key = self:containerPageKey(pPlayer)
+	if (readData(key) ~= page:getPageId()) then
+		return
+	end
+	deleteData(key)
+	if (eventIndex == 1 or pressedButton ~= "enter") then
+		return
+	end
+	local pContainer = getSceneObject(page:getTargetNetworkId())
+	if (not self:canUseContainer(pPlayer, pContainer)) then
+		return
+	end
+	if (code ~= self.containerCode) then
+		CreatureObject(pPlayer):sendSystemMessage("@ep3/sidequests:incorrect_code")
+		return
+	end
+	if (self:signalCodeEntered(pPlayer)) then
+		CreatureObject(pPlayer):sendSystemMessage("@ep3/sidequests:unlocked")
+	end
+end
+
 function kachirhoDestroyedCampScreenPlay:setStage(pPlayer, stage)
 	writeScreenPlayData(pPlayer, self.screenplayName, "stage", tostring(stage))
 end
@@ -132,6 +225,7 @@ function kachirhoDestroyedCampScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	self:closeContainerKeypad(pPlayer)
 	self:detachKillObserver(pPlayer)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	deleteScreenPlayData(pPlayer, self.screenplayName, "drum")
@@ -288,6 +382,21 @@ function kachirhoDestroyedCampScreenPlay:collectProp(pPlayer, role)
 end
 
 KashDestroyedCampMenuComponent = {}
+
+KashDestroyedCampContainerMenuComponent = {}
+
+function KashDestroyedCampContainerMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResponse, pPlayer)
+	if (kachirhoDestroyedCampScreenPlay:canUseContainer(pPlayer, pSceneObject)) then
+		LuaObjectMenuResponse(pMenuResponse):addRadialMenuItem(20, 3, "@ep3/sidequests:enter_code")
+	end
+end
+
+function KashDestroyedCampContainerMenuComponent:handleObjectMenuSelect(pSceneObject, pPlayer, selectedID)
+	if (selectedID == 20) then
+		kachirhoDestroyedCampScreenPlay:openContainer(pPlayer, pSceneObject)
+	end
+	return 0
+end
 
 function KashDestroyedCampMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResponse, pPlayer)
 	if (pSceneObject == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then

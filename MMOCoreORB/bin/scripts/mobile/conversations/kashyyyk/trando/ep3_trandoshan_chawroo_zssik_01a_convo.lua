@@ -131,8 +131,9 @@ ep3_trandoshan_chawroo_zssik_01a_convo_s_747 = ConvoScreen:new {
 	id = "s_747",
 	animation = "sigh_deeply",
 	leftDialog = "@conversation/ep3_trandoshan_chawroo_zssik_01a:s_747",
-	stopConversation = "true",
+	stopConversation = "false",
 	options = {
+		{"@conversation/ep3_trandoshan_chawroo_zssik_01a:s_749", "s_751"},
 	}
 }
 ep3_trandoshan_chawroo_zssik_01a_convo:addScreen(ep3_trandoshan_chawroo_zssik_01a_convo_s_747)
@@ -141,8 +142,9 @@ ep3_trandoshan_chawroo_zssik_01a_convo_s_753 = ConvoScreen:new {
 	id = "s_753",
 	animation = "embarrassed",
 	leftDialog = "@conversation/ep3_trandoshan_chawroo_zssik_01a:s_753",
-	stopConversation = "true",
+	stopConversation = "false",
 	options = {
+		{"@conversation/ep3_trandoshan_chawroo_zssik_01a:s_755", "s_757"},
 	}
 }
 ep3_trandoshan_chawroo_zssik_01a_convo:addScreen(ep3_trandoshan_chawroo_zssik_01a_convo_s_753)

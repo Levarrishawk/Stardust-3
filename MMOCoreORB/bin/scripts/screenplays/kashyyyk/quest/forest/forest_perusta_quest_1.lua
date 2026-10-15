@@ -26,30 +26,30 @@ forestPerustaQuest1ScreenPlay = ScreenPlay:new {
 	retrieves = {
 		{ key = "r0", template = "object/tangible/quest/dead_forest_stump.iff", count = 5, title = "@quest/ground/ep3_forest_perusta_quest_1:task00_journal_entry_title" },
 	},
-	propX = -1686.7100,
+	propX = -186.7100,
 	propZ = 31.6392,
-	propY = 1382.3900,
+	propY = -117.6100,
 }
 
 registerScreenPlay("forestPerustaQuest1ScreenPlay", true)
 
 function forestPerustaQuest1ScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_dead_forest")) then
 		self:spawnGiver()
 		self:spawnProps()
 	end
 end
 
 function forestPerustaQuest1ScreenPlay:spawnGiver()
-	local z = getWorldFloor(-1686.7100, 1382.3900, "kashyyyk")
+	local z = getWorldFloor(-186.7100, -117.6100, "kashyyyk_dead_forest")
 	if (z == nil or z == 0) then
 		z = 31.6392
 	end
-	spawnMobile("kashyyyk", "dressed_shoartu_mystic_03", 0, -1686.7100, z, 1382.3900, 135, 0)
+	spawnMobile("kashyyyk_dead_forest", "dressed_shoartu_mystic_03", 0, -186.7100, z, -117.6100, 135, 0)
 end
 
 function forestPerustaQuest1ScreenPlay:spawnProps()
-	local z = getWorldFloor(self.propX, self.propY, "kashyyyk")
+	local z = getWorldFloor(self.propX, self.propY, "kashyyyk_dead_forest")
 	if (z == nil or z == 0) then
 		z = self.propZ
 	end
@@ -59,7 +59,7 @@ function forestPerustaQuest1ScreenPlay:spawnProps()
 		if (r.template ~= nil and r.template ~= "") then
 			for c = 1, r.count do
 				n = n + 1
-				local pObj = spawnSceneObject("kashyyyk", r.template, self.propX + (n * 1.5), z, self.propY + (n * 0.8), 0, 0)
+				local pObj = spawnSceneObject("kashyyyk_dead_forest", r.template, self.propX + (n * 1.5), z, self.propY + (n * 0.8), 0, 0)
 				if (pObj ~= nil) then
 					writeStringData(SceneObject(pObj):getObjectID() .. ":kashForestRet", r.key)
 					SceneObject(pObj):setObjectMenuComponent("forestPerustaQuest1ScreenPlayMenuComponent")

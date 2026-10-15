@@ -34,17 +34,17 @@ forestMeustQuest1ScreenPlay = ScreenPlay:new {
 registerScreenPlay("forestMeustQuest1ScreenPlay", true)
 
 function forestMeustQuest1ScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_dead_forest")) then
 		self:spawnGiver()
 	end
 end
 
 function forestMeustQuest1ScreenPlay:spawnGiver()
-	local z = getWorldFloor(-1640.5100, 1336.7500, "kashyyyk")
+	local z = getWorldFloor(-140.5100, -163.2500, "kashyyyk_dead_forest")
 	if (z == nil or z == 0) then
 		z = 31.6400
 	end
-	spawnMobile("kashyyyk", "dressed_shoartu_mystic_01", 0, -1640.5100, z, 1336.7500, 0, 0)
+	spawnMobile("kashyyyk_dead_forest", "dressed_shoartu_mystic_01", 0, -140.5100, z, -163.2500, 0, 0)
 end
 
 function forestMeustQuest1ScreenPlay:getStage(pPlayer)

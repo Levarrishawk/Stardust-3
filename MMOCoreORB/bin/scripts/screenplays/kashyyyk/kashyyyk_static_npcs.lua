@@ -30,6 +30,7 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 		{"ep3_tempal_buncho", 497.19, 27.0588, 275.74, 0, "ep3_tempal_buncho (main row 1628)"}, -- registered name equals spawns
 		{"ep3_musolium", 518.99, 24.7059, 433.37, 84.798, "ep3_musolium (main row 1629)"}, -- registered name equals spawns
 		{"ep3_lesnorr", 539.24, 30.7403, 482.95, 206.265, "ep3_lesnorr (main row 1630)"}, -- registered name equals spawns
+		{"ep3_chawroo", -133.77, 22.7451, 864.98, 235.095, "ep3_chawroo (main row 1631)"},
 		{"ep3_pressk", -93.15, 18.3847, 98.56, -25.783, "ep3_pressk (main row 1632)"}, -- registered name equals spawns
 		{"ep3_eyma", -549.64, 18.9918, -132.42, -46.262, "ep3_eyma (main row 1633)"}, -- registered name equals spawns
 		{"ep3_clone_relics_ovarra", -425.85, 179.545, -85.21, 187.54, "ep3_clone_relics_ovarra (main row 1634)"}, -- registered name equals spawns
@@ -63,31 +64,33 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 		{"ep3_hssissk_bloodscale", 517.05, 24.7059, 426.54, 88.808, "ep3_hssissk_bloodscale (main row 1672)"}, -- registered name equals spawns
 	},
 
-	-- These placements still use the legacy combined-map coordinates.
-	npcs = {
-		{"ep3_etyyy_sordaan_xris", 276.31, 48, -2505.77, -72.766, "ep3_etyyy_sordaan_xris (hunting row 356)"}, -- registered name equals spawns
-		{"ep3_etyyy_ziven_tissak", 419.72, 47.8055, -2478.99, 204.878, "ep3_etyyy_ziven_tissak (hunting row 357)"}, -- registered name equals spawns
-		{"ep3_etyyy_banol_starkiller", 246.27, 40.9675, -2540.74, 25.628, "ep3_etyyy_banol_starkiller (hunting row 358)"}, -- registered name equals spawns
-		{"ep3_etyyy_manfred_carter", 115.31, 33.4733, -2554.67, 175.382, "ep3_etyyy_manfred_carter (hunting row 359)"}, -- registered name equals spawns
-		{"ep3_etyyy_tripp_rar", 169.81, 43.9677, -2391.63, 157.915, "ep3_etyyy_tripp_rar (hunting row 360)"}, -- registered name equals spawns
-		{"ep3_etyyy_ehartt_brihnt", 182.29, 24.7251, -2537.58, 126.051, "ep3_etyyy_ehartt_brihnt (hunting row 361)"}, -- registered name equals spawns
-		{"ep3_etyyy_harroom", 292.17, 48, -2491.05, 237.918, "ep3_etyyy_harroom (hunting row 362)"}, -- registered name equals spawns
-		{"ep3_etyyy_iluna_mystuk", 176.94, 40.3682, -2450.12, 33.905, "ep3_etyyy_iluna_mystuk (hunting row 363)"}, -- registered name equals spawns
-		{"ep3_etyyy_kint_zsam", -99.77, 25.7985, -3249.88, 42.543, "ep3_etyyy_kint_zsam (hunting row 364)"}, -- registered name equals spawns
-		{"ep3_etyyy_tuwezz_vol", -28.78, 17.5286, -3201.51, 157.341, "ep3_etyyy_tuwezz_vol (hunting row 365)"}, -- registered name equals spawns
-		{"ep3_etyyy_johnson_smith", -392.8, 80.5588, -2132.74, 218.18, "ep3_etyyy_johnson_smith (hunting row 366)"}, -- registered name equals spawns
-		{"ep3_etyyy_kara_corlon", -383.62, 80.5588, -2146.36, -58.206, "ep3_etyyy_kara_corlon (hunting row 367)"}, -- registered name equals spawns
-		{"ep3_etyyy_jerrol_chupapa", -621.99, 9.0258, -2085, 132.52, "ep3_etyyy_jerrol_chupapa (hunting row 368)"}, -- registered name equals spawns
-		{"ep3_etyyy_ryoo_finn", -614.96, 8.7683, -2148.77, 0, "ep3_etyyy_ryoo_finn (hunting row 369)"}, -- registered name equals spawns
-		{"ep3_etyyy_pilot_to_bocctyyy", 381.47, 41.7397, -2388.2, 243.577, "ep3_etyyy_pilot_to_bocctyyy (hunting row 370)"}, -- registered name equals spawns
-		{"ep3_rodian_camp_doctor_01", 224.39, 23.0029, -2429, 119.358, "ep3_etyyy_rodian_camp_doctor_01 (hunting row 371)"}, -- single repo candidate
-		{"ep3_rodian_trader", 185.39, 40.3779, -2452.82, -64.174, "ep3_etyyy_rodian_trader (hunting row 372)"}, -- single repo candidate
-		{"dressed_forest_outcast_informant", -1616.63, 31.9644, 1332.17, 0, "ep3_forest_outcast_informant (dead forest row 123)"}, -- single repo candidate
-		{"dressed_ep3_forest_outcast_male_02", -1708.35, 17.4895, 1338.09, 180.664, "ep3_forest_outcast_male_02 (dead forest row 125)"}, -- single repo candidate
-		{"arena_guard_outer", -1799.65, 38.7284, 1288.17, -22.345, "ep3_forest_arena_guard_outer (dead forest row 126)"}, -- single repo candidate
-		{"dressed_ep3_forest_ardon", -1690.23, 31.6392, 1375.36, 95.684, "ep3_forest_ardon (dead forest row 131)"}, -- single repo candidate
-		{"dressed_ep3_forest_kerritamba_dealer", -1663.23, 31.64, 1326.31, -20.626, "ep3_forest_kerritamba_dealer (dead forest row 132)"}, -- single repo candidate
-		{"dressed_ep3_forest_npc_greeter", -1477.77, 26.4235, 1147.87, 126.806, "ep3_forest_npc_greeter (dead forest row 133)"}, -- single repo candidate
+	-- Separated surface zones use buildout coordinates minus 2048 on both axes.
+	huntingNpcs = {
+		{"ep3_etyyy_sordaan_xris", 276.31, 48, 494.23, -72.766, "ep3_etyyy_sordaan_xris (hunting row 356)"}, -- registered name equals spawns
+		{"ep3_etyyy_ziven_tissak", 419.72, 47.8055, 521.01, 204.878, "ep3_etyyy_ziven_tissak (hunting row 357)"}, -- registered name equals spawns
+		{"ep3_etyyy_banol_starkiller", 246.27, 40.9675, 459.26, 25.628, "ep3_etyyy_banol_starkiller (hunting row 358)"}, -- registered name equals spawns
+		{"ep3_etyyy_manfred_carter", 115.31, 33.4733, 445.33, 175.382, "ep3_etyyy_manfred_carter (hunting row 359)"}, -- registered name equals spawns
+		{"ep3_etyyy_tripp_rar", 169.81, 43.9677, 608.37, 157.915, "ep3_etyyy_tripp_rar (hunting row 360)"}, -- registered name equals spawns
+		{"ep3_etyyy_ehartt_brihnt", 182.29, 24.7251, 462.42, 126.051, "ep3_etyyy_ehartt_brihnt (hunting row 361)"}, -- registered name equals spawns
+		{"ep3_etyyy_harroom", 292.17, 48, 508.95, 237.918, "ep3_etyyy_harroom (hunting row 362)"}, -- registered name equals spawns
+		{"ep3_etyyy_iluna_mystuk", 176.94, 40.3682, 549.88, 33.905, "ep3_etyyy_iluna_mystuk (hunting row 363)"}, -- registered name equals spawns
+		{"ep3_etyyy_kint_zsam", -99.77, 25.7985, -249.88, 42.543, "ep3_etyyy_kint_zsam (hunting row 364)"}, -- registered name equals spawns
+		{"ep3_etyyy_tuwezz_vol", -28.78, 17.5286, -201.51, 157.341, "ep3_etyyy_tuwezz_vol (hunting row 365)"}, -- registered name equals spawns
+		{"ep3_etyyy_johnson_smith", -392.80, 80.5588, 867.26, 218.18, "ep3_etyyy_johnson_smith (hunting row 366)"}, -- registered name equals spawns
+		{"ep3_etyyy_kara_corlon", -383.62, 80.5588, 853.64, -58.206, "ep3_etyyy_kara_corlon (hunting row 367)"}, -- registered name equals spawns
+		{"ep3_etyyy_jerrol_chupapa", -621.99, 9.0258, 915.00, 132.52, "ep3_etyyy_jerrol_chupapa (hunting row 368)"}, -- registered name equals spawns
+		{"ep3_etyyy_ryoo_finn", -614.96, 8.7683, 851.23, 0, "ep3_etyyy_ryoo_finn (hunting row 369)"}, -- registered name equals spawns
+		{"ep3_etyyy_pilot_to_bocctyyy", 381.47, 41.7397, 611.80, 243.577, "ep3_etyyy_pilot_to_bocctyyy (hunting row 370)"}, -- registered name equals spawns
+		{"ep3_rodian_camp_doctor_01", 224.39, 23.0029, 571.00, 119.358, "ep3_etyyy_rodian_camp_doctor_01 (hunting row 371)"}, -- single repo candidate
+		{"ep3_rodian_trader", 185.39, 40.3779, 547.18, -64.174, "ep3_etyyy_rodian_trader (hunting row 372)"}, -- single repo candidate
+	},
+	forestNpcs = {
+		{"dressed_forest_outcast_informant", -116.63, 31.9644, -167.83, 0, "ep3_forest_outcast_informant (dead forest row 123)"}, -- single repo candidate
+		{"dressed_ep3_forest_outcast_male_02", -208.35, 17.4895, -161.91, 180.664, "ep3_forest_outcast_male_02 (dead forest row 125)"}, -- single repo candidate
+		{"arena_guard_outer", -299.65, 38.7284, -211.83, -22.345, "ep3_forest_arena_guard_outer (dead forest row 126)"}, -- single repo candidate
+		{"dressed_ep3_forest_ardon", -190.23, 31.6392, -124.64, 95.684, "ep3_forest_ardon (dead forest row 131)"}, -- single repo candidate
+		{"dressed_ep3_forest_kerritamba_dealer", -163.23, 31.64, -173.69, -20.626, "ep3_forest_kerritamba_dealer (dead forest row 132)"}, -- single repo candidate
+		{"dressed_ep3_forest_npc_greeter", 22.23, 26.4235, -352.13, 126.806, "ep3_forest_npc_greeter (dead forest row 133)"}, -- single repo candidate
 	}
 }
 
@@ -98,8 +101,12 @@ function KashyyykStaticNpcsScreenPlay:start()
 		self:spawnNpcs("kashyyyk_main", self.mainNpcs)
 	end
 
-	if (isZoneEnabled("kashyyyk")) then
-		self:spawnNpcs("kashyyyk", self.npcs)
+	if (isZoneEnabled("kashyyyk_hunting")) then
+		self:spawnNpcs("kashyyyk_hunting", self.huntingNpcs)
+	end
+
+	if (isZoneEnabled("kashyyyk_dead_forest")) then
+		self:spawnNpcs("kashyyyk_dead_forest", self.forestNpcs)
 	end
 end
 
@@ -107,7 +114,7 @@ function KashyyykStaticNpcsScreenPlay:spawnNpcs(zone, npcs)
 	for i = 1, #npcs, 1 do
 		local npc = npcs[i]
 		local pMobile = spawnMobile(zone, npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
-		if (zone == "kashyyyk_main" and pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
 			AiAgent(pMobile):addObjectFlag(AI_STATIONARY)
 		end
 	end

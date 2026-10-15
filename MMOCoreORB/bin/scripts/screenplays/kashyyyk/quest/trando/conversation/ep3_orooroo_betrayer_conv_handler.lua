@@ -25,7 +25,8 @@ ep3_orooroo_betrayer_conv_handler.screenAnimations = {
 function ep3_orooroo_betrayer_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	if (CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01")) then
+	if (not CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01")
+		and not CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend")) then
 		return convoTemplate:getScreen("s_97")
 	elseif ((trandoOroorooZssik08ScreenPlay:getStage(pPlayer) == 0 and trandoOroorooZssik08ScreenPlay:getRuns(pPlayer) > 0)) then
 		return convoTemplate:getScreen("s_153")
@@ -33,7 +34,7 @@ function ep3_orooroo_betrayer_conv_handler:getInitialScreen(pPlayer, pNpc, pConv
 		return convoTemplate:getScreen("s_155")
 	elseif ((trandoOroorooZssik08ScreenPlay:getStage(pPlayer) > 0 and not trandoOroorooZssik08ScreenPlay:isTurnIn(pPlayer))) then
 		return convoTemplate:getScreen("s_166")
-	elseif ((trandoMosoliumTransferScreenPlay:getStage(pPlayer) > 0 and not trandoMosoliumTransferScreenPlay:isTurnIn(pPlayer))) then
+	elseif (trandoMosoliumTransferScreenPlay:getStage(pPlayer) > 0) then
 		return convoTemplate:getScreen("s_168")
 	elseif ((trandoMosoliumZssik05ScreenPlay:getStage(pPlayer) == 0 and trandoMosoliumZssik05ScreenPlay:getRuns(pPlayer) > 0)) then
 		return convoTemplate:getScreen("s_200")

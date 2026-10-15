@@ -130,8 +130,9 @@ ep3_orooroo_betrayer_convo_s_155 = ConvoScreen:new {
 	id = "s_155",
 	animation = "whisper",
 	leftDialog = "@conversation/ep3_trandoshan_orooroo_zssik_04:s_155",
-	stopConversation = "true",
+	stopConversation = "false",
 	options = {
+		{"@conversation/ep3_trandoshan_orooroo_zssik_04:s_157", "s_159"},
 	}
 }
 ep3_orooroo_betrayer_convo:addScreen(ep3_orooroo_betrayer_convo_s_155)
@@ -150,8 +151,10 @@ ep3_orooroo_betrayer_convo_s_168 = ConvoScreen:new {
 	id = "s_168",
 	animation = "whisper",
 	leftDialog = "@conversation/ep3_trandoshan_orooroo_zssik_04:s_168",
-	stopConversation = "true",
+	stopConversation = "false",
 	options = {
+		{"@conversation/ep3_trandoshan_orooroo_zssik_04:s_170", "s_172"},
+		{"@conversation/ep3_trandoshan_orooroo_zssik_04:s_194", "s_196"},
 	}
 }
 ep3_orooroo_betrayer_convo:addScreen(ep3_orooroo_betrayer_convo_s_168)

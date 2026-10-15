@@ -56,17 +56,17 @@ forestAthnaluQuest1ScreenPlay = ScreenPlay:new {
 registerScreenPlay("forestAthnaluQuest1ScreenPlay", true)
 
 function forestAthnaluQuest1ScreenPlay:start()
-	if (isZoneEnabled("kashyyyk")) then
+	if (isZoneEnabled("kashyyyk_dead_forest")) then
 		self:spawnGiver()
 	end
 end
 
 function forestAthnaluQuest1ScreenPlay:spawnGiver()
-	local z = getWorldFloor(-1679.6500, 1325.8300, "kashyyyk")
+	local z = getWorldFloor(-179.6500, -174.1700, "kashyyyk_dead_forest")
 	if (z == nil or z == 0) then
 		z = 31.6392
 	end
-	spawnMobile("kashyyyk", "dressed_shoartu_mystic_02", 0, -1679.6500, z, 1325.8300, 61, 0)
+	spawnMobile("kashyyyk_dead_forest", "dressed_shoartu_mystic_02", 0, -179.6500, z, -174.1700, 61, 0)
 end
 
 function forestAthnaluQuest1ScreenPlay:getStage(pPlayer)
