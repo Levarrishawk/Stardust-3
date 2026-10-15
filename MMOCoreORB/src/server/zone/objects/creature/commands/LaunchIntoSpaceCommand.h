@@ -72,6 +72,11 @@ public:
 
 		// JTL Fast Travel
 		if (arrivalPlanet != "") {
+			if (arrivalPlanet == "mustafar") {
+				creature->sendSystemMessage("Per Imperial Decree 14D-33677A Personal Travel to the Mustafar system is restricted to authorized craft only.  Purchase a ticket through the Imperial Travel Commission to Travel There.");
+				return GENERALERROR;
+			}
+
 			if (ship->getComponentObject(Components::REACTOR) == nullptr) {
 				creature->sendSystemMessage("There is no reactor in this ship, it cannot be use to travel.");
 				return GENERALERROR;
@@ -123,7 +128,9 @@ public:
 
 				// Get a random landing position
 				Coordinate newPosition(arrivalPosition);
-				newPosition.randomizePosition(landingRange);
+				if (landingRange > 0.f) {
+					newPosition.randomizePosition(landingRange);
+				}
 
 				Locker memLock(memberScno, creature);
 
@@ -132,7 +139,9 @@ public:
 
 			// Get a random landing position
 			Coordinate pilotPosition(arrivalPosition);
-			pilotPosition.randomizePosition(landingRange);
+			if (landingRange > 0.f) {
+				pilotPosition.randomizePosition(landingRange);
+			}
 
 			creature->switchZone(arrivalPlanet, pilotPosition.getPositionX(), arrivalZ, pilotPosition.getPositionY(), 0);
 
