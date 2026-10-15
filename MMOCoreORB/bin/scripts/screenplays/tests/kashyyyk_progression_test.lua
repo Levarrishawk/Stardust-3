@@ -81,7 +81,27 @@ local function player()
 end
 
 SceneObject = function(p) assert(p); return p end
-CreatureObject, PlayerObject, AiAgent = SceneObject, SceneObject, SceneObject
+-- Enforce native method visibility: CreatureObject and AiAgent are distinct Lua bindings.
+local function nativeWrapper(className, sourcePath)
+	local file = assert(io.open(sourcePath, "r"))
+	local source = file:read("*a"); file:close()
+	source = source:gsub("/%*.-%*/", ""):gsub("//[^\n]*", "")
+	local register = assert(source:match("Register%[%]%s*=%s*{(.-)};"))
+	local methods = {}
+	for method in register:gmatch('{%s*"([^"]+)"%s*,') do methods[method] = true end
+	assert(next(methods), "Empty native binding " .. className)
+	return function(p)
+		assert(p)
+		return setmetatable({}, {__index = function(self, method)
+			if (not methods[method]) then return nil end
+			assert(type(p[method]) == "function", "Missing mock for " .. className .. ":" .. method)
+			return function(self, ...) return p[method](p, ...) end
+		end})
+	end
+end
+CreatureObject = nativeWrapper("CreatureObject", "MMOCoreORB/src/server/zone/objects/creature/LuaCreatureObject.cpp")
+AiAgent = nativeWrapper("AiAgent", "MMOCoreORB/src/server/zone/objects/creature/ai/LuaAiAgent.cpp")
+PlayerObject = SceneObject
 ScreenPlay = {new = function(self, o) return o end}
 conv_handler = ScreenPlay
 registerScreenPlay, createObserver, dropObserver = function() end, function() end, function() end
@@ -571,6 +591,11 @@ load("mobile/conversations/kashyyyk/rryatt/rryatt_trail_guide_convo.lua")
 load("mobile/conversations/kashyyyk/rryatt/rryatt_trail_guide_up_convo.lua")
 load("mobile/conversations/kashyyyk/rryatt/ep3_achonnko_convo.lua")
 local rryatt, mastery = KashyyykRryattNpcs, rryattTrailMasteryScreenPlay
+local bindingProbe = object()
+assert(not pcall(function() CreatureObject(bindingProbe):addObjectFlag(AI_STATIONARY) end),
+	"CreatureObject mock incorrectly exposes AiAgent-only methods")
+AiAgent(bindingProbe):addObjectFlag(AI_STATIONARY)
+assert(bindingProbe.flag == AI_STATIONARY)
 local function rryattNpc(template)
 	for i, entry in ipairs(rryatt.npcs) do
 		if (entry[1] == template) then return assert(getSceneObject(readData(rryatt.screenplayName .. ":npc:" .. i))), entry end

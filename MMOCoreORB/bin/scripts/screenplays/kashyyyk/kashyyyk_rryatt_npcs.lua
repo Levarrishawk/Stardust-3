@@ -86,7 +86,7 @@ function KashyyykRryattNpcs:spawnNpcs()
 				writeStringData(oid .. ":zoneLine", npc.zoneLine)
 				writeStringData(oid .. ":startingLocation", npc.startingLocation)
 			end
-			CreatureObject(pNpc):addObjectFlag(AI_STATIONARY)
+			AiAgent(pNpc):addObjectFlag(AI_STATIONARY)
 			placed = placed + 1
 		else
 			print("KashyyykRryattNpcs: failed to spawn " .. npc[1])
