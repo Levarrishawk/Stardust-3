@@ -37,6 +37,11 @@ public:
 				<< " world=" << player->getWorldPosition().toString() << " parent=" << player->getParentID();
 		}
 
+		if (zone != nullptr && zone->isSpaceZone()) {
+			player->info(true) << "Space scene ready -- zone=" << zone->getZoneName()
+				<< " player=" << player->getObjectID() << " parent=" << player->getParentID();
+		}
+
 		auto ghost = player->getPlayerObject();
 
 		if (ghost != nullptr) {
