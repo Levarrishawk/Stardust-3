@@ -1,9 +1,3 @@
--- Rryatt Trail Guide -- raise site for ep3_rryatt_trail_mastery signals
--- ruling 2026-09-04: "ensure kashyyyk is fully done"
--- Transcribed from rryatt_trail_guide.java (not in java-rryatt.json; found as the signal raise site).
--- OPEN: handleZoneTransitionRequest is not implemented. Signals fire only when zoneLine is set.
--- Do not call the journal engine.
-
 rryatt_trail_guide_convo = ConvoTemplate:new {
 	initialScreen = "s_61",
 	templateType = "Lua",

@@ -1,4 +1,5 @@
 includeFile("custom_content/mobile/ep3/ep3_lord_cyssc.lua")
+includeFile("custom_content/mobile/ep3/ep3_achonnko.lua")
 includeFile("custom_content/mobile/ep3/ep3_chawroo.lua")
 includeFile("custom_content/mobile/ep3/ep3_omwaan.lua")
 includeFile("custom_content/mobile/ep3/ep3_trando_kressik.lua")

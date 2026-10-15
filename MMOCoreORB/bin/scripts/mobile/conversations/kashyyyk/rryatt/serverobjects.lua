@@ -6,3 +6,5 @@ includeFile("conversations/kashyyyk/rryatt/ep3_rryatt_tressk_convo.lua")
 includeFile("conversations/kashyyyk/rryatt/ep3_rryatt_vritol_convo.lua")
 includeFile("conversations/kashyyyk/rryatt/ep3_achonnko_convo.lua")
 includeFile("conversations/kashyyyk/rryatt/rryatt_trail_guide_convo.lua")
+
+includeFile("conversations/kashyyyk/rryatt/rryatt_trail_guide_up_convo.lua")

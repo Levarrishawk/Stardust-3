@@ -1,10 +1,3 @@
--- Achonnko -- grant site for ep3_rryatt_trail_mastery
--- ruling 2026-09-04: "ensure kashyyyk is fully done"
--- Transcribed from ep3_achonnko.java (not in java-rryatt.json; found as the grant site).
--- OPEN: camo-kit quest and zone warps are not this arc. Warp options are listed and idle.
--- OPEN: no Creature:new for ep3_achonnko; convo cannot be attached on this branch.
--- Do not call the journal engine.
-
 ep3_achonnko_convo = ConvoTemplate:new {
 	initialScreen = "s_171",
 	templateType = "Lua",

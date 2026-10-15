@@ -1,10 +1,4 @@
--- Achonnko -- grant site for ep3_rryatt_trail_mastery
--- ruling 2026-09-04: "ensure kashyyyk is fully done"
--- getInitialScreen is live condition order. runScreenHandlers fires grant.
--- OPEN: no Creature:new; this handler is included but cannot be attached.
--- OPEN: camo-kit and zone warps are not this arc. Warp screens are idle.
--- NO JOURNAL: this branch has no managers/quest/journal.lua.
-
+-- Achonnko grants trail mastery and offers travel only to levels the player has unlocked.
 ep3_achonnko_conv_handler = conv_handler:new {}
 
 ep3_achonnko_conv_handler.screenAnimations = {
@@ -14,7 +8,10 @@ function ep3_achonnko_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 	local sp = rryattTrailMasteryScreenPlay
 
-	if (not CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend")) then
+	if (not KashyyykRryattNpcs:canUseNpc(pPlayer, pNpc)) then
+		return nil
+	elseif (not CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend")
+		and not CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01")) then
 		return convoTemplate:getScreen("s_169")
 	elseif (sp:getStage(pPlayer) == 0 and sp:getRuns(pPlayer) == 0) then
 		return convoTemplate:getScreen("s_171")
@@ -51,7 +48,20 @@ function ep3_achonnko_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pNp
 
 		clonedConversation:addOption("@conversation/ep3_achonnko:s_203", "s_205")
 	elseif (screenID == "s_183") then
-		sp:grantQuest(pPlayer)
+		local npc = KashyyykRryattNpcs:getNpc(pNpc)
+		if (npc ~= nil and npc.mastery and KashyyykRryattNpcs:canUseNpc(pPlayer, pNpc)
+			and (CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend")
+			or CreatureObject(pPlayer):hasSkill("combat_smuggler_underworld_01"))) then
+			sp:grantQuest(pPlayer)
+		end
+	elseif (screenID == "s_189") then
+		KashyyykRryattNpcs:travel(pPlayer, pNpc, true, 1)
+	elseif (screenID == "s_193") then
+		KashyyykRryattNpcs:travel(pPlayer, pNpc, true, 2)
+	elseif (screenID == "s_197") then
+		KashyyykRryattNpcs:travel(pPlayer, pNpc, true, 3)
+	elseif (screenID == "s_201") then
+		KashyyykRryattNpcs:travel(pPlayer, pNpc, true, 4)
 	end
 
 	return pClonedScreen

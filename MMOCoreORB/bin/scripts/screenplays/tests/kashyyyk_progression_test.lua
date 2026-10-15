@@ -23,6 +23,20 @@ local function object(o)
 	function o:isInRangeWithObject(other, range) return self.near ~= false end
 	function o:isDead() return self.dead == true end
 	function o:isIncapacitated() return self.incapacitated == true end
+	function o:isInCombat() return self.combat == true end
+	function o:isRidingMount() return self.mounted == true end
+	function o:dismount()
+		if self.failDismount then return end
+		self.mounted, self.parent = false, 0; self.dismounts = (self.dismounts or 0) + 1
+	end
+	function o:getDistanceTo3d(other)
+		return math.sqrt(((self.x or 0) - (other.x or 0))^2 + ((self.z or 0) - (other.z or 0))^2 + ((self.y or 0) - (other.y or 0))^2)
+	end
+	function o:teleport(x, z, y, parent)
+		if (self.failTeleport) then return end
+		self.x, self.z, self.y, self.parent = x, z, y, parent
+		self.teleports = (self.teleports or 0) + 1
+	end
 	function o:sendSystemMessage(message) self.message = message end
 	function o:playMusicMessage() end
 	function o:doAnimation() end
@@ -118,6 +132,8 @@ end}
 ConvoScreen = {new = function(self, o)
 	function o:getScreenID() return self.id end
 	function o:cloneScreen() return self end
+	function o:removeAllOptions() self.options = {} end
+	function o:addOption(label, target) table.insert(self.options, {label, target}) end
 	return o
 end}
 addConversationTemplate = function() end
@@ -322,6 +338,7 @@ for name in pairs(Mirror.quests) do
 	if (_G[name] == nil) then
 		-- Screenplay registration is global in the server, so load the same files here.
 		local files = {
+			rryattTrailMasteryScreenPlay = "rryatt/rryatt_trail_mastery",
 			kachirhoKillWkeScreenPlay = "kill_wke", kachirhoVaractylHuntScreenPlay = "varactyl_hunt",
 			kachirhoSurveyDataScreenPlay = "survey_data", kachirhoVaractylEggScreenPlay = "varactyl_egg",
 			kachirhoTakookCommScreenPlay = "takook_comm", kachirhoTrandoRifleCraftingScreenPlay = "trando_rifle_crafting",
@@ -366,7 +383,7 @@ for name, spec in pairs(Mirror.quests) do
 		assert(p.ghost.quests["quest/" .. spec.quest] == nil)
 	end
 end
-assert(mapped == 31)
+assert(mapped == 32)
 
 local p = player()
 assert(kachirhoKillWkeScreenPlay:grantQuest(p))
@@ -462,7 +479,7 @@ sp:notifyEncounterDestroyed(beshk, helper)
 sp:notifyKilledCreature(p, beshk)
 assert(sp:getStage(p) == 3 and journal(p, "ep3_slaver_gursan_entry_quest").active[10])
 assert(sp:signalSlaverCampEntered(p) and journal(p, "ep3_slaver_gursan_entry_quest").done)
-print("Kashyyyk journal (31 quests) and encounter credit regression checks passed")
+print("Kashyyyk journal (32 quests) and encounter credit regression checks passed")
 
 -- Craft journal advances only for a real bowcaster prototype; inventory still gates rewards.
 local sp, p = kachirhoTrandoRifleCraftingScreenPlay, player()
@@ -545,3 +562,178 @@ PlayerTriggers:playerLoggedIn(p)
 assert(q == journal(p, "ep3_kachirho_missing_son") and not q.done)
 assert(kachirhoMissingSonScreenPlay:signalTurnIn(p) and q.done and p.credits == 2500)
 print("PASS: concurrent encounter owners, duplicate callback ordering, real player login hook")
+
+-- Rryatt: use real NPC placements, both conversation trees, mastery flags and the login hook.
+screenplay("kashyyyk_rryatt_npcs")
+screenplay("quest/rryatt/conversation/rryatt_trail_guide_conv_handler")
+screenplay("quest/rryatt/conversation/ep3_achonnko_conv_handler")
+load("mobile/conversations/kashyyyk/rryatt/rryatt_trail_guide_convo.lua")
+load("mobile/conversations/kashyyyk/rryatt/rryatt_trail_guide_up_convo.lua")
+load("mobile/conversations/kashyyyk/rryatt/ep3_achonnko_convo.lua")
+local rryatt, mastery = KashyyykRryattNpcs, rryattTrailMasteryScreenPlay
+local function rryattNpc(template)
+	for i, entry in ipairs(rryatt.npcs) do
+		if (entry[1] == template) then return assert(getSceneObject(readData(rryatt.screenplayName .. ":npc:" .. i))), entry end
+	end
+	error("Unspawned Rryatt actor " .. template)
+end
+local function beside(p, npc)
+	p.zone, p.x, p.z, p.y, p.parent = npc.zone, npc.x, npc.z, npc.y, 0
+end
+local function close(a, b) assert(math.abs(a - b) < 0.01, tostring(a) .. " differs from " .. tostring(b)) end
+local before = #spawned
+rryatt:start()
+assert(#spawned == before, "Disabled zone spawned NPCs")
+enabled.kashyyyk_rryatt_trail = true
+rryatt:start()
+assert(#spawned == before + 15)
+rryatt:start()
+assert(#spawned == before + 15, "Restart duplicated static NPCs")
+local actors = {}
+for i, entry in ipairs(rryatt.npcs) do
+	local npc = rryattNpc(entry[1])
+	actors[entry[1]] = npc
+	assert(npc.flag == AI_STATIONARY)
+	if (entry.zoneLine) then
+		assert(readStringData(npc.id .. ":zoneLine") == entry.zoneLine)
+		assert(readStringData(npc.id .. ":startingLocation") == entry.startingLocation)
+	end
+end
+local achonnko, p = rryattNpc("ep3_achonnko"), player()
+beside(p, achonnko)
+local handler, convo = ep3_achonnko_conv_handler, ep3_achonnko_convo
+assert(handler:getInitialScreen(p, achonnko, convo).id == "s_169")
+handler:runScreenHandlers(convo, p, achonnko, 1, convo:getScreen("s_183"))
+assert(mastery:getStage(p) == 0, "Forged accept bypassed language")
+p.skills.combat_smuggler_underworld_01 = true
+assert(handler:getInitialScreen(p, achonnko, convo).id == "s_171")
+local screen = handler:getInitialScreen(p, achonnko, convo)
+while screen.stopConversation ~= "true" do
+	screen = convo:getScreen(screen.options[1][2])
+	handler:runScreenHandlers(convo, p, achonnko, 1, screen)
+end
+assert(mastery:getStage(p) == 1)
+local q = journal(p, "ep3_rryatt_trail_mastery")
+assert(q.completed[0] and q.active[1] and q.active[14] and q.active[13] and q.active[12] and q.active[11])
+assert(not rryatt:travel(p, achonnko, true, 1), "Locked mastery warp accepted")
+assert(not rryatt:travel(p, achonnko, true, 0))
+assert(not rryatt:travel(p, achonnko, true, 1.5))
+assert(not mastery:signalLevel(p, 0) and not mastery:signalLevel(p, 1.5) and not mastery:hasLevel(p, 5))
+
+-- Expected landing coordinates are independently calculated from DSRC offsets and verified snapshot origins.
+local down = {
+	{"ep3_rryatt_trail_guide_f_01", -2949.251, 69.405, 4256.97},
+	{"ep3_rryatt_trail_guide_f_02", -1839.67, 182.3, 3004.16},
+	{"ep3_rryatt_trail_guide_f_03", -3590.499, 142.038, 2831.8},
+	{"ep3_rryatt_trail_guide_f_04", -1876.03, -23.653, 2360.039},
+}
+local up = {
+	{"ep3_rryatt_trail_guide_m_01", -3185.898, 113.1953, 4079.578},
+	{"ep3_rryatt_trail_guide_m_02", -2696.83, 121.824, 4212},
+	{"ep3_rryatt_trail_guide_m_03", -1295.582, 186, 4061.839},
+	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2826.039},
+}
+local guide = rryatt_trail_guide_conv_handler
+local indices = {14, 13, 12, 11}
+for level, destination in ipairs(down) do
+	local npc = actors[destination[1]]
+	beside(p, npc)
+	assert(guide:getInitialScreen(p, npc, rryatt_trail_guide_convo).id == "s_61")
+	if (level == 1) then
+		-- Same-screen retries, stale callbacks, nil/unregistered actors and invalid player states give no credit.
+		for _, case in ipairs({{"dead", true}, {"incapacitated", true}, {"combat", true}, {"parent", 9}, {"zone", "tatooine"}, {"failTeleport", true}}) do
+			local old = p[case[1]]; p[case[1]] = case[2]
+			assert(not rryatt:travel(p, npc, false))
+			assert(mastery:levelCount(p) == 0)
+			p[case[1]] = old
+		end
+		p.x = p.x + 7
+		assert(not rryatt:travel(p, npc, false))
+		beside(p, npc)
+		assert(not rryatt:travel(p, object({zone = npc.zone, template = npc.template}), false))
+		assert(not rryatt:travel(nil, npc, false) and not rryatt:travel(p, nil, false))
+		p.mounted, p.parent, p.failDismount = true, 1234, true
+		assert(not rryatt:travel(p, npc, false), "Failed dismount still teleported")
+		assert(mastery:levelCount(p) == 0)
+		p.failDismount = nil
+	end
+	guide:runScreenHandlers(rryatt_trail_guide_convo, p, npc, 1, rryatt_trail_guide_convo:getScreen("s_65"))
+	close(p.x, destination[2]); close(p.z, destination[3]); close(p.y, destination[4])
+	assert(q.completed[indices[level]])
+	assert(not rryatt:travel(p, npc, false), "Stale screen teleported again")
+	if (level < 4) then
+		assert(mastery:levelCount(p) == level and not q.done and p.xpAwards == nil)
+		local stranger = player()
+		assert(not mastery:hasLevel(stranger, level))
+	end
+	local ascending = actors[up[level][1]]
+	beside(p, ascending)
+	assert(guide:getInitialScreen(p, ascending, rryatt_trail_guide_up_convo).id == "s_86")
+	local count, runs, xp = mastery:levelCount(p), mastery:getRuns(p), p.xpAwards
+	guide:runScreenHandlers(rryatt_trail_guide_up_convo, p, ascending, 1, rryatt_trail_guide_up_convo:getScreen("s_90"))
+	close(p.x, up[level][2]); close(p.z, up[level][3]); close(p.y, up[level][4])
+	assert(mastery:levelCount(p) == count and mastery:getRuns(p) == runs and p.xpAwards == xp)
+end
+assert(p.dismounts == 1 and not p.mounted)
+assert(mastery:isComplete(p) and mastery:getRuns(p) == 1 and p.xpAwards == 1 and p.credits == nil and q.done)
+assert(q.completed[1] and next(q.active) == nil)
+
+local warps = {{-2955.1,69.417,4257.29},{-1840.1,182.317,3004.09},{-3592.4,140.117,2831.29},{-1876.1,-23.583,2358.29}}
+local screens = {"s_189", "s_193", "s_197", "s_201"}
+for level = 1, 4 do
+	beside(p, achonnko)
+	local menu = handler:runScreenHandlers(convo, p, achonnko, 1, convo:getScreen("s_185"))
+	assert(#menu.options == 5)
+	handler:runScreenHandlers(convo, p, achonnko, 1, convo:getScreen(screens[level]))
+	close(p.x, warps[level][1]); close(p.z, warps[level][2]); close(p.y, warps[level][3])
+	assert(p.xpAwards == 1 and mastery:getRuns(p) == 1)
+end
+
+-- Every guide's return option lands near the original public entry controller and gives no mastery credit.
+for _, route in ipairs({down, up}) do
+	for _, destination in ipairs(route) do
+		local npc = actors[destination[1]]
+		local p = player(); beside(p, npc)
+		assert(mastery:grantQuest(p))
+		local convo = route == up and rryatt_trail_guide_up_convo or rryatt_trail_guide_convo
+		local screen = route == up and "s_94" or "s_69"
+		guide:runScreenHandlers(convo, p, npc, 2, convo:getScreen(screen))
+		assert(p.x > -3785 and p.x < -3770 and p.y > 3600 and p.y < 3620 and p.z > 167 and p.z < 172)
+		assert(mastery:levelCount(p) == 0 and mastery:getRuns(p) == 0)
+	end
+end
+
+-- Existing flags hydrate on relog; completion and unlocked travel survive Lua/server restart.
+local p = player()
+writeScreenPlayData(p, mastery.screenplayName, "stage", "1")
+writeScreenPlayData(p, mastery.screenplayName, "l2", "1")
+writeScreenPlayData(p, mastery.screenplayName, "l4", "1")
+PlayerTriggers:playerLoggedIn(p)
+q = journal(p, "ep3_rryatt_trail_mastery")
+assert(q.completed[13] and q.completed[11] and q.active[14] and q.active[12])
+screenplay("quest/rryatt/rryatt_trail_mastery")
+assert(rryattTrailMasteryScreenPlay:hasLevel(p, 2) and not rryattTrailMasteryScreenPlay:hasLevel(p, 1))
+assert(rryattTrailMasteryScreenPlay:signalLevel(p, 1))
+assert(rryattTrailMasteryScreenPlay:signalLevel(p, 3))
+assert(p.xpAwards == 1 and q.done)
+assert(not rryattTrailMasteryScreenPlay:signalLevel(p, 3))
+assert(rryattTrailMasteryScreenPlay:grantQuest(p))
+assert(rryattTrailMasteryScreenPlay:hasLevel(p, 1), "A repeat erased permanent travel access")
+rryattTrailMasteryScreenPlay:clearQuest(p)
+assert(p.xpAwards == 1)
+print("PASS: all 15 Rryatt NPCs, eight guide routes/returns, four mastery warps, journal and persistence")
+
+-- Retry a single failed static spawn without duplicating the other fourteen actors.
+local missing = actors.ep3_carl_mosik
+objects[missing.id] = nil
+local realSpawnMobile = spawnMobile
+spawnMobile = function(zone, template, ...)
+	if template == "ep3_carl_mosik" then return nil end
+	return realSpawnMobile(zone, template, ...)
+end
+local before = #spawned
+assert(not rryatt:spawnNpcs() and #spawned == before)
+spawnMobile = realSpawnMobile
+assert(rryatt:spawnNpcs() and #spawned == before + 1)
+assert(rryatt:getNpc(missing) == nil)
+print("PASS: failed-spawn retry and stale NPC rejection")

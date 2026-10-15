@@ -32,7 +32,7 @@ ep3_rryatt_trail_guide_m_04 = Creature:new {
 	templates = {"object/mobile/ep3/ep3_rryatt_trail_guide_m_04.iff"},
 	lootGroups = {},
 	weapons = {},
-	conversationTemplate = "rryatt_trail_guide_convo",
+	conversationTemplate = "rryatt_trail_guide_up_convo",
 	reactionStf = "@npc_reaction/slang",
 	attacks = merge(brawlermaster,marksmanmaster)
 }

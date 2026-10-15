@@ -3,6 +3,7 @@ local Journal = require("managers.quest.journal")
 local KashyyykQuestJournal = {}
 
 KashyyykQuestJournal.quests = {
+	rryattTrailMasteryScreenPlay = { quest = "ep3_rryatt_trail_mastery", stages = {{1, 14, 13, 12, 11}}, initial = {0}, flags = {[14] = "l1", [13] = "l2", [12] = "l3", [11] = "l4"} },
 	kachirhoKillWkeScreenPlay = { quest = "ep3_kachirho_kill_wke", stages = {{0}, {1}}, reward = {2}, counter = {"kills", 1, 0} },
 	kachirhoVaractylHuntScreenPlay = { quest = "ep3_kachirho_varactyl_hunt", stages = {{0}, {1}}, reward = {2}, counter = {"plumes", 1, 0}, loot = true },
 	kachirhoSurveyDataScreenPlay = { quest = "ep3_kachirho_survey_data", stages = {{0, 1, 2, 3, 4}, {5}}, reward = {6}, survey = true },
@@ -71,6 +72,9 @@ function KashyyykQuestJournal.sync(screenplay, pPlayer, stage)
 			if (id == 0) then hasTaskZero = true end
 			if (i <= stage) then
 				local complete = i < stage
+				if (spec.flags ~= nil and spec.flags[id] ~= nil) then
+					complete = complete or tonumber(readScreenPlayData(pPlayer, screenplay.screenplayName, spec.flags[id])) == 1
+				end
 				if (spec.survey and i == 1) then
 					complete = complete or tonumber(readScreenPlayData(pPlayer, screenplay.screenplayName, "d" .. id)) == 1
 				end
