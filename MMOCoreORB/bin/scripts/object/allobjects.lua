@@ -859,6 +859,7 @@ includeFile("custom_content/mobile/vehicle/objects.lua")
 
 
 includeFile("custom_content/building/content/objects.lua")
+includeFile("custom_content/building/coruscant/objects.lua")
 includeFile("custom_content/building/content/aurilia/objects.lua")
 includeFile("custom_content/building/content/aurilia/loot/objects.lua")
 includeFile("custom_content/building/content/imperial_theme_park/objects.lua")

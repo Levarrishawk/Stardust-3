@@ -1,0 +1,4 @@
+object_building_coruscant_sd_imperial_palace_interior = object_building_coruscant_shared_sd_imperial_palace_interior:new {
+}
+
+ObjectTemplates:addTemplate(object_building_coruscant_sd_imperial_palace_interior, "object/building/coruscant/sd_imperial_palace_interior.iff")
