@@ -34,11 +34,13 @@ public:
 				<< " world=" << worldPosition.toString() << " parent=" << creo->getParentID();
 		}
 
+		/* Space launch diagnostics.
 		if (zone->isSpaceZone()) {
 			creo->info(true) << "Space scene start -- zone=" << zone->getZoneName()
 				<< " player=" << creo->getObjectID() << " parent=" << creo->getParentID()
 				<< " world=" << worldPosition.toString() << " clientCRC=" << creo->getClientObjectCRC();
 		}
+		*/
 
 	 	insertFloat(worldPosition.getX()); //X
 	 	insertFloat(worldPosition.getZ()); //Z

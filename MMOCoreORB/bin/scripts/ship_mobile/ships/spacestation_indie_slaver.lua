@@ -1,8 +1,8 @@
 -- Independent Slavers' Base - clientpoi kashyyyk_independent_slavers
--- (-6830, -350, 4200). Hull spacestation_rori is ours. No independent-slaver comm
+-- (-6830, -350, 4200). No independent-slaver comm
 -- portrait ships; trn_slaver_01 is the nearest shipped slaver portrait.
 spacestation_indie_slaver = ShipAgent:new {
-	template = "spacestation_rori",
+	template = "spacestation_indie_slaver",
 	shipType = "capital",
 
 	lootChance = 0,

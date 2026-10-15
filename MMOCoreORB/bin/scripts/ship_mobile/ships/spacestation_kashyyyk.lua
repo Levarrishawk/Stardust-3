@@ -1,8 +1,7 @@
 -- Kashyyyk Space Station - Civilian Protection Guild, commander Rian Ry.
 -- clientpoi station_kashyyyk (-5000, 250, -5000).
--- Hull spacestation_neutral is ours - no kashyyyk station hull is registered.
 spacestation_kashyyyk = ShipAgent:new {
-	template = "spacestation_neutral",
+	template = "spacestation_kashyyyk",
 	shipType = "capital",
 
 	lootChance = 0,

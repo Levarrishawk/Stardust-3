@@ -220,12 +220,14 @@ void ShipObjectImplementation::sendTo(SceneObject* player, bool doClose, bool fo
 		return;
 	}
 
+	/* Space launch diagnostics.
 	auto playerZone = player->getZone();
 	if (playerZone != nullptr && playerZone->isSpaceZone() && player->isPlayerCreature() && player->getRootParent() == asShipObject()) {
 		info(true) << "Space scene ship -- player=" << player->getObjectID() << " ship=" << getObjectID()
 			<< " launched=" << isShipLaunched() << " owner=" << getOwnerID() << " invisible=" << isInvisible()
 			<< " pilotSlot=" << hasObjectInSlottedContainer(player) << " playerInOctree=" << player->isInOctree();
 	}
+	*/
 
 	// info(true) << "ShipObjectImplementation::sendTo - Ship Location: " << getWorldPosition().toString() << " sending to: " << player->getDisplayedName() << " Player Loc: " << player->getWorldPosition().toString()
 	//	<< " Containment Type: " << player->getContainmentType();

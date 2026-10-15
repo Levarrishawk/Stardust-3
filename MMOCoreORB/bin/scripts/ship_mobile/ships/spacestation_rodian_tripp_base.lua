@@ -1,7 +1,7 @@
 -- Tripp's Rodian Hunter Outpost - clientpoi kashyyyk_tripp_outpost
--- (-2618, 70, 2624). Hull spacestation_dathomir is ours.
+-- (-2618, 70, 2624).
 spacestation_rodian_tripp_base = ShipAgent:new {
-	template = "spacestation_dathomir",
+	template = "spacestation_rodian_tripp_base",
 	shipType = "capital",
 
 	lootChance = 0,

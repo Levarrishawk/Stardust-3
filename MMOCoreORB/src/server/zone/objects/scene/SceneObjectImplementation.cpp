@@ -361,6 +361,7 @@ void SceneObjectImplementation::sendWithoutParentTo(SceneObject* player) {
 }
 
 void SceneObjectImplementation::sendTo(SceneObject* player, bool doClose, bool forceLoadContainer) {
+	/* Space launch diagnostics. Re-enable all three blocks in this method together.
 	auto playerZone = player != nullptr ? player->getZone() : nullptr;
 	bool traceSpaceScene = playerZone != nullptr && playerZone->isSpaceZone() && player->isPlayerCreature() &&
 		(player == asSceneObject() || player->getRootParent() == asSceneObject());
@@ -370,6 +371,7 @@ void SceneObjectImplementation::sendTo(SceneObject* player, bool doClose, bool f
 			<< " parent=" << getParentID() << " clientCRC=" << getClientObjectCRC()
 			<< " clientObject=" << isClientObject() << " forceSend=" << forceSend << " sendToClient=" << sendToClient;
 	}
+	*/
 
 	if ((isClientObject() && !forceSend) || !sendToClient || player == nullptr || player->getClient() == nullptr)
 		return;
@@ -391,9 +393,11 @@ void SceneObjectImplementation::sendTo(SceneObject* player, bool doClose, bool f
 	try {
 		sendBaselinesTo(player);
 
+		/* Space launch diagnostics.
 		if (traceSpaceScene) {
 			info(true) << "Space scene object -- baselines queued player=" << player->getObjectID() << " object=" << getObjectID();
 		}
+		*/
 
 		sendContainerObjectsTo(player, forceLoadContainer);
 
@@ -407,9 +411,11 @@ void SceneObjectImplementation::sendTo(SceneObject* player, bool doClose, bool f
 		SceneObjectImplementation::close(player);
 	}
 
+	/* Space launch diagnostics.
 	if (traceSpaceScene) {
 		info(true) << "Space scene object -- complete player=" << player->getObjectID() << " object=" << getObjectID() << " close=" << doClose;
 	}
+	*/
 }
 
 void SceneObjectImplementation::sendWithoutContainerObjectsTo(SceneObject* player) {

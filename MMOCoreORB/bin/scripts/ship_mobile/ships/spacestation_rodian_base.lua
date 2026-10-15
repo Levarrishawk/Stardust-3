@@ -1,7 +1,7 @@
 -- Sordaan's Rodian Hunter Outpost - clientpoi kashyyyk_sordaan_outpost
--- (2556, 3225, 3890). Hull spacestation_lok is ours.
+-- (2556, 3225, 3890).
 spacestation_rodian_base = ShipAgent:new {
-	template = "spacestation_lok",
+	template = "spacestation_rodian_base",
 	shipType = "capital",
 
 	lootChance = 0,

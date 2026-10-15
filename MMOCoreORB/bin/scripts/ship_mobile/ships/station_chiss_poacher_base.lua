@@ -1,8 +1,7 @@
 -- Chiss Poachers' Base - clientpoi kashyyyk_chiss_poacher_base
 -- (-6825, 763, 2065). Hostile: no conversation ships for this base.
--- Hull spacestation_yavin4 is ours.
 station_chiss_poacher_base = ShipAgent:new {
-	template = "spacestation_yavin4",
+	template = "station_chiss_poacher_base",
 	shipType = "capital",
 
 	lootChance = 0,

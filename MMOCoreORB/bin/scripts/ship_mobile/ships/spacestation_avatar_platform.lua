@@ -1,9 +1,9 @@
 -- Avatar Platform. No clientpoi row ships for this station - its position is ours,
--- not Live-attested. Hull spacestation_corellia is ours. No avatar-platform comm
+-- not Live-attested. No avatar-platform comm
 -- portrait ships; imperial_officer_01 matches the .stf voice ("You are not
 -- authorized to be in this area").
 spacestation_avatar_platform = ShipAgent:new {
-	template = "spacestation_corellia",
+	template = "spacestation_avatar_platform",
 	shipType = "capital",
 
 	lootChance = 0,

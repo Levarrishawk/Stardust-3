@@ -1,8 +1,7 @@
 -- The Gotal Pirates' Base - clientpoi kashyyyk_gotal_pirate_base
 -- (-5950, 2700, 4575). Hostile: no conversation ships for this base.
--- Hull spacestation_talus is ours.
 station_gotal_pirate_base = ShipAgent:new {
-	template = "spacestation_talus",
+	template = "station_gotal_pirate_base",
 	shipType = "capital",
 
 	lootChance = 0,
