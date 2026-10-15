@@ -125,6 +125,10 @@ Do not move a method between `PlayerObject.idl` and `PlayerManager.idl` merely t
 - Prefer server-side changes that work independently.
 - Clearly identify when mirrored client and server changes are required.
 - Do not fabricate client file names, template paths, CRC values, or TRE contents.
+- Client tests must use loose client mods only. Never create or load temporary test TREs.
+- Do not alter the client's configuration-loading path or archive priorities for tests.
+- The user alone incorporates files into public distribution TREs and compiles those TREs. Stage loose files for the user; do not modify or rebuild distribution archives.
+- When client feature testing is complete, clean the client folder of obsolete test logs, configuration files, DLLs, executables, and other diagnostic files. Retain runtime files still required by the completed feature and identify them for distribution.
 
 ## Build Environment
 
