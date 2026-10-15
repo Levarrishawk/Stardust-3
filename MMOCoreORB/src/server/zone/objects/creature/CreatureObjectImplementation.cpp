@@ -4383,8 +4383,8 @@ void CreatureObjectImplementation::sendAppearanceToOwner(bool restore) {
 		return;
 	bool markers = ConfigManager::instance()->getBool("Core3.AppearanceEquipment.ClientStateMarkers", false);
 	if (markers && !restore) {
-		// Hidden equipment changes mesh collection only; its containment stays genuine.
-		sendMessage(new UpdateContainmentMessage(getObjectID(), getObjectID(), 0x7FFF0107));
+		// The client handles dismounts before consuming markers, so preserve the inventory's real parent.
+		sendMessage(new UpdateContainmentMessage(inventory->getObjectID(), getObjectID(), 0x7FFF0107));
 		Vector<uint64> hiddenContainers = wearablesVector.getHiddenContainers();
 		ArrayList<WearablesDeltaVector::AppearanceSelection> selections = wearablesVector.getAppearances();
 		for (int i = 0; i < hiddenContainers.size(); ++i) {
