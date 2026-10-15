@@ -27,7 +27,10 @@ function ep3_achonnko_conv_handler:runScreenHandlers(pConvTemplate, pPlayer, pNp
 	local clonedConversation = LuaConversationScreen(pClonedScreen)
 	local sp = rryattTrailMasteryScreenPlay
 
-	if (screenID == "s_185") then
+	if (screenID == "s_169") then
+		-- DSRC emoteWookieeConfusion supplies the explanation alongside the growl.
+		CreatureObject(pPlayer):sendSystemMessage("@ep3/sidequests:wke_convo_failure")
+	elseif (screenID == "s_185") then
 		clonedConversation:removeAllOptions()
 
 		if (sp:hasLevel(pPlayer, 1)) then

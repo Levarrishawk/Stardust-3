@@ -99,6 +99,9 @@ function KashyyykMainPopulation:spawnSlot(pUnused, args)
 		local radius = math.floor(controller.radius * 1000)
 		x = x + getRandomNumber(-radius, radius) / 1000
 		y = y + getRandomNumber(-radius, radius) / 1000
+	end
+	if (controller.radius > 0 or controller.snapToFloor) then
+		-- Ground guards must use the current floor; other fixed spawns retain platform heights.
 		z = getWorldFloor(x, y, self.zone)
 	end
 	local pMobile = nil

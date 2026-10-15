@@ -590,6 +590,8 @@ screenplay("quest/rryatt/conversation/ep3_achonnko_conv_handler")
 load("mobile/conversations/kashyyyk/rryatt/rryatt_trail_guide_convo.lua")
 load("mobile/conversations/kashyyyk/rryatt/rryatt_trail_guide_up_convo.lua")
 load("mobile/conversations/kashyyyk/rryatt/ep3_achonnko_convo.lua")
+load("mobile/custom_content/ep3/ep3_achonnko.lua")
+assert(ep3_achonnko.customName == "Achonnko the Trail Master" and ep3_achonnko.conversationTemplate == "ep3_achonnko_convo")
 local rryatt, mastery = KashyyykRryattNpcs, rryattTrailMasteryScreenPlay
 local bindingProbe = object()
 assert(not pcall(function() CreatureObject(bindingProbe):addObjectFlag(AI_STATIONARY) end),
@@ -628,6 +630,13 @@ local achonnko, p = rryattNpc("ep3_achonnko"), player()
 beside(p, achonnko)
 local handler, convo = ep3_achonnko_conv_handler, ep3_achonnko_convo
 assert(handler:getInitialScreen(p, achonnko, convo).id == "s_169")
+handler:runScreenHandlers(convo, p, achonnko, 0, convo:getScreen("s_169"))
+assert(p.message == "@ep3/sidequests:wke_convo_failure")
+assert(mastery:getStage(p) == 0 and p.ghost.quests["quest/ep3_rryatt_trail_mastery"] == nil)
+-- Understanding Shyriiwook unlocks the same offer as the existing smuggler exception.
+p.skills.social_language_wookiee_comprehend = true
+assert(handler:getInitialScreen(p, achonnko, convo).id == "s_171")
+p.skills.social_language_wookiee_comprehend = nil
 handler:runScreenHandlers(convo, p, achonnko, 1, convo:getScreen("s_183"))
 assert(mastery:getStage(p) == 0, "Forged accept bypassed language")
 p.skills.combat_smuggler_underworld_01 = true

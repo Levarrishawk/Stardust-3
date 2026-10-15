@@ -1,5 +1,5 @@
 ep3_achonnko = Creature:new {
-	customName = "Achonnko",
+	customName = "Achonnko the Trail Master",
 	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
