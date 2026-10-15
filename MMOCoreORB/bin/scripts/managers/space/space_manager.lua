@@ -45,6 +45,10 @@ tutorial = {
 dungeon1 = {
 }
 
+kashyyyk_main = {
+  jtlLaunchPoint = {"space_kashyyyk", -5000, 100, -5000},
+}
+
 space_corellia = {
 	spaceStations = {
 		{templateFile = "spacestation_talus", x = -6345.5, z = -5274.5, y = -3957.25, ow = 0.640802, ox = 0.015822, oy = 0.76738, oz = -0.0158223, parentid = 0},
