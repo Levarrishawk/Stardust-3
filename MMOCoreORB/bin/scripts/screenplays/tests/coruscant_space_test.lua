@@ -71,12 +71,26 @@ assert(agents.spacestation_coruscant.pvpBitmask == NONE)
 assert(agents.spacestation_coruscant.customShipAiMap == "spaceStations")
 assert(agents.spacestation_coruscant.conversationMessage:sub(1, 1) == "@", "Comm message requires a client string reference")
 ObjectTemplates = {}
-function ObjectTemplates:addTemplate(object, path) self[path] = object end
-object_ship_shared_spacestation_imperial = prototype:new {clientTemplateFileName = "object/ship/shared_spacestation_imperial.iff"}
+local nativeObjectTypes = {}
+function ObjectTemplates:addTemplate(object, path)
+	self[path] = object
+	-- SharedObjectTemplate::readObject uses lua_next, which skips metatable fields.
+	for key, value in pairs(object) do
+		if (key == "gameObjectType") then nativeObjectTypes[path] = value end
+	end
+end
+load("object/object.lua")
+object_ship_shared_spacestation_imperial = Object:new {clientTemplateFileName = "object/ship/shared_spacestation_imperial.iff"}
+object_ship_shared_star_destroyer = Object:new {clientTemplateFileName = "object/ship/shared_star_destroyer.iff"}
 load("object/ship/spacestation_imperial.lua")
+load("object/ship/star_destroyer.lua")
 load("object/custom_content/ship/spacestation_coruscant.lua")
+load("object/custom_content/ship/imperial_venator.lua")
 local object = assert(ObjectTemplates["object/ship/spacestation_coruscant.iff"])
 assert(object.clientTemplateFileName == object_ship_shared_spacestation_imperial.clientTemplateFileName)
+assert(nativeObjectTypes["object/ship/spacestation_coruscant.iff"] == 536870920, "Station must explicitly register the native SpaceStationObject type")
+assert(nativeObjectTypes["object/ship/imperial_venator.iff"] == 536870920, "Venator must explicitly register the native SpaceStationObject type")
+assert(ObjectTemplates["object/ship/imperial_venator.iff"].clientTemplateFileName == "object/ship/shared_imperial_venator.iff")
 load("managers/space/ship_chassis.lua")
 local collisionRegistered = false
 for _, row in ipairs(chassisData) do
