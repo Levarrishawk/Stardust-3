@@ -695,6 +695,8 @@ coruscant = { -- 24
     {name = "Coruscant Federal District", x = -120, z = 0, y = 5528, interplanetaryTravelAllowed = 0, incomingTravelAllowed = 1, landingRange = 3},
     },
     
+    jtlLaunchPoint = {"space_coruscant", -5000, 100, -5000},
+    
     badgeAreas = { 
       {"coruscant_imperial_palace", -120,3311,0,30,146},   
   }
