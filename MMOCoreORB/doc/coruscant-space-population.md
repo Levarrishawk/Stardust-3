@@ -10,17 +10,19 @@ Coordinates below use the scripts' order: **x, z (height), y**, in metres. Dista
 | --- | ---: | ---: | ---: |
 | Coruscant Orbital Control | 0 | 0 | 0 |
 | Inner port Venator | -1400 | 0 | 0 |
-| Inner starboard Venator | 1400 | 0 | 0 |
-| Outer port Venator | -4200 | 350 | 0 |
-| Outer starboard Venator | 4200 | 350 | 0 |
-| Aft port ISD | -2000 | 400 | -3600 |
-| Aft starboard ISD | 2000 | 400 | -3600 |
-| Forward port ISD | -2000 | 400 | 3600 |
-| Forward starboard ISD | 2000 | 400 | 3600 |
-| Forward outer port ISD | -5400 | 400 | 3600 |
-| Forward outer starboard ISD | 5400 | 400 | 3600 |
+| Inner starboard Venator | 1400 | 125 | 0 |
+| Outer port Venator | -4200 | 275 | 0 |
+| Outer starboard Venator | 4200 | 400 | 0 |
+| Aft port ISD | -2000 | 25 | -3600 |
+| Aft starboard ISD | 2000 | 175 | -3600 |
+| Forward port ISD | -2000 | 325 | 3600 |
+| Forward starboard ISD | 2000 | 475 | 3600 |
+| Forward outer port ISD | -5400 | 625 | 3600 |
+| Forward outer starboard ISD | 5400 | 775 | 3600 |
 
-The two inner Venators are each 1,400 m from the station. The formation accounts for the current 2,000 m Venator hull and approximately 2,587 m stock ISD hull; their appearance bounds do not intersect one another or the station. Capital ships use the existing stationary AI and identity spawn rotation. The imported Venator's bow points opposite the stock ISD's bow at that rotation. Capitals respawn 30–60 minutes after destruction.
+The two inner Venators are about 1,400 m and 1,406 m from the station. The formation accounts for the current 2,000 m Venator hull and approximately 2,587 m stock ISD hull; their rotated appearance bounds do not intersect one another or the station. The four Venators face 180 degrees from their original orientation, aligning their bows with the ISDs. The station faces 90 degrees to the right of its original orientation. Capital ships retain their stationary AI and respawn 30–60 minutes after destruction with the same headings and heights. ISD heights span 750 m; Venator heights span 400 m.
+
+Coruscant's launch/load-in position and `space_coruscant_0` hyperspace arrival are both **(-5369, 1521, 548)** in x, z (height), y order. In `hyperspace_locations.iff`, whose columns are X/Y/Z, this is X=-5369, Y=548, Z=1521. The other 40 hyperspace rows are preserved.
 
 ## Traffic
 
@@ -47,9 +49,9 @@ Ambient replacements use the existing spawner's timers: 45–120 seconds for fig
 - `bin/scripts/mobile/conversations/space/spacestation_coruscant.lua` and `bin/scripts/screenplays/space/spacestations/spacestation_coruscant_conv_handler.lua`: station services.
 - Existing registration files load these definitions; `managers/space/space_manager.lua` places the station, `managers/space/ship_chassis.lua` registers its collision lookup, and `screenplays/space/spacestations/spacestation.lua` adds the landing destination.
 
-Deploy the Lua files and restart the Debian server. No C++ compilation, generated interfaces, database changes or Engine3 changes are required. Ensure `space_coruscant` is listed in the deployed configuration's `SpaceZonesEnabled`; enable the ground `coruscant` zone for landing. The ignored local development configuration currently disables space zones and is not changed by this feature.
+Deploy the Lua files and the `DirectorManager.cpp` update, build on Debian with `make -j$(nproc)`, and restart the server. The spawner's optional numeric sixth argument now supplies yaw in degrees; existing calls with five arguments or a sixth ship target retain their behavior. Initial position, home heading, quaternion and ship collision/movement transform are initialized together before insertion into the zone. No IDL, generated-interface, database or Engine3 changes are required. Ensure `space_coruscant` is listed in the deployed configuration's `SpaceZonesEnabled`; enable the ground `coruscant` zone for landing. The ignored local development configuration currently disables space zones and is not changed by this feature.
 
-The previously created 2 km Venator loose assets must be installed on the server and clients through the established mod workflow (`client-assets/imperial_venator/` at the repository root). The station and ambient ships reuse existing client resources. No TREs or client configuration files were changed.
+The 2 km Venator loose assets must be installed on the server and clients through the established mod workflow (`client-assets/imperial_venator/` at the repository root). The follow-up package `client-assets/coruscant_space_updates/` stages twelve changed/new runtime files: the arrival table, three merged English STFs, the corrected Venator client template, its LOD/three hull meshes with an engine-on hardpoint, and a fitted glow mesh, appearance and client-data file. The glow reuses the ISD's original engine mesh geometry, emissive shader and texture at all twelve source-model exhaust openings; the stock ISD assets are unchanged. Server names resolve to `@space/space_mobile_type:imperial_venator` and `@space/ship_names:spacestation_coruscant`. The English `space_ship.stf` also provides both chassis labels. Existing string IDs/text and other hyperspace rows are retained. No TREs or client configuration files were changed.
 
 ## Verification
 

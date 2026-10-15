@@ -7,16 +7,16 @@ SpaceCoruscantSpawner = SpaceSpawnerScreenPlay:new {
 	-- The inner Venators' origins are 1.4 km from the station. Capital ships
 	-- retain their stationary chassis and spawn in a layered defensive formation.
 	primarySpawns = {
-		{spawnName = "coruscant_venator_inner_port", shipName = "imperial_venator", x = -1400, z = 0, y = 0, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_venator_inner_starboard", shipName = "imperial_venator", x = 1400, z = 0, y = 0, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_venator_outer_port", shipName = "imperial_venator", x = -4200, z = 350, y = 0, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_venator_outer_starboard", shipName = "imperial_venator", x = 4200, z = 350, y = 0, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_isd_aft_port", shipName = "star_destroyer", x = -2000, z = 400, y = -3600, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_isd_aft_starboard", shipName = "star_destroyer", x = 2000, z = 400, y = -3600, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_isd_forward_port", shipName = "star_destroyer", x = -2000, z = 400, y = 3600, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_isd_forward_starboard", shipName = "star_destroyer", x = 2000, z = 400, y = 3600, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_isd_flank_port", shipName = "star_destroyer", x = -5400, z = 400, y = 3600, minRespawn = 1800, maxRespawn = 3600},
-		{spawnName = "coruscant_isd_flank_starboard", shipName = "star_destroyer", x = 5400, z = 400, y = 3600, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_venator_inner_port", shipName = "imperial_venator", x = -1400, z = 0, y = 0, heading = 180, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_venator_inner_starboard", shipName = "imperial_venator", x = 1400, z = 125, y = 0, heading = 180, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_venator_outer_port", shipName = "imperial_venator", x = -4200, z = 275, y = 0, heading = 180, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_venator_outer_starboard", shipName = "imperial_venator", x = 4200, z = 400, y = 0, heading = 180, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_isd_aft_port", shipName = "star_destroyer", x = -2000, z = 25, y = -3600, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_isd_aft_starboard", shipName = "star_destroyer", x = 2000, z = 175, y = -3600, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_isd_forward_port", shipName = "star_destroyer", x = -2000, z = 325, y = 3600, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_isd_forward_starboard", shipName = "star_destroyer", x = 2000, z = 475, y = 3600, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_isd_flank_port", shipName = "star_destroyer", x = -5400, z = 625, y = 3600, minRespawn = 1800, maxRespawn = 3600},
+		{spawnName = "coruscant_isd_flank_starboard", shipName = "star_destroyer", x = 5400, z = 775, y = 3600, minRespawn = 1800, maxRespawn = 3600},
 	},
 
 	shipSpawns = {

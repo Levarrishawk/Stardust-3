@@ -2822,6 +2822,7 @@ int DirectorManager::spawnShipAgent(lua_State* L) {
 	Vector3 spawnPosition = Vector3::ZERO;
 	String shipName, zoneName;
 	ShipObject* targetShip = nullptr;
+	bool hasHeading = numberOfArguments == 6 && lua_isnumber(L, -1);
 	int shipNameIndex = numberOfArguments == 6 ? -6 : -5;
 	int zoneNameIndex = numberOfArguments == 6 ? -5 : -4;
 
@@ -2834,7 +2835,9 @@ int DirectorManager::spawnShipAgent(lua_State* L) {
 	}
 
 	if (numberOfArguments == 6) {
-		targetShip = (ShipObject*) lua_touserdata(L, -1);
+		if (!hasHeading) {
+			targetShip = (ShipObject*) lua_touserdata(L, -1);
+		}
 		spawnPosition.setY(lua_tonumber(L, -2));
 		spawnPosition.setZ(lua_tonumber(L, -3));
 		spawnPosition.setX(lua_tonumber(L, -4));
@@ -2873,7 +2876,11 @@ int DirectorManager::spawnShipAgent(lua_State* L) {
 
 	Quaternion targetDirection = Quaternion::IDENTITY;
 
-	if (targetShip != nullptr) {
+	// A numeric sixth argument specifies yaw in degrees; ship targets retain their existing behavior.
+	if (hasHeading) {
+		float halfHeading = lua_tonumber(L, -1) * Math::DEG2RAD * 0.5f;
+		targetDirection = Quaternion(cosf(halfHeading), 0.f, sinf(halfHeading), 0.f);
+	} else if (targetShip != nullptr) {
 		const auto& targetPosition = targetShip->getPosition();
 
 		Vector3 velocity = targetPosition - spawnPosition; // direction to target

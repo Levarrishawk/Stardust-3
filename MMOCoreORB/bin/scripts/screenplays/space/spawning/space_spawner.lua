@@ -336,7 +336,12 @@ function SpaceSpawnerScreenPlay:spawnPrimaryTarget(pNil, indexString)
 		return
 	end
 
-	local pShipAgent = spawnShipAgent(spawnTable.shipName, self.spaceZone, spawnTable.x, spawnTable.z, spawnTable.y)
+	local pShipAgent
+	if (spawnTable.heading ~= nil) then
+		pShipAgent = spawnShipAgent(spawnTable.shipName, self.spaceZone, spawnTable.x, spawnTable.z, spawnTable.y, spawnTable.heading)
+	else
+		pShipAgent = spawnShipAgent(spawnTable.shipName, self.spaceZone, spawnTable.x, spawnTable.z, spawnTable.y)
+	end
 
 	if (pShipAgent == nil) then
 		Logger:log(self.screenplayName .. " -- ERROR: Failed to spawn primary Ship Agent: " .. spawnTable.shipName .. " Spawner Name: " .. spawnTable.spawnName, LT_ERROR)

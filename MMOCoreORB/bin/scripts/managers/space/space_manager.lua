@@ -50,12 +50,12 @@ kashyyyk_main = {
 }
 
 coruscant = {
-  jtlLaunchPoint = {"space_coruscant", -5000, 100, -5000},
+  jtlLaunchPoint = {"space_coruscant", -5369, 1521, 548},
 }
 
 space_coruscant = {
 	spaceStations = {
-		{templateFile = "spacestation_coruscant", x = 0, z = 0, y = 0, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
+		{templateFile = "spacestation_coruscant", x = 0, z = 0, y = 0, ow = 0.7071067811865476, ox = 0, oy = 0.7071067811865476, oz = 0, parentid = 0},
 	}
 }
 

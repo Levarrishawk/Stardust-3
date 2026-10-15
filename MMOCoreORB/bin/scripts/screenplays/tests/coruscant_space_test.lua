@@ -51,10 +51,10 @@ function shipMethods:addFixedPatrolPoint(name)
 end
 function shipMethods:createSquadron(formation) assert(formation) end
 function shipMethods:assignToSquadron(leader) self.leader = leader end
-function spawnShipAgent(name, zone, x, z, y)
+function spawnShipAgent(name, zone, x, z, y, heading)
 	if (not agents[name]) then load("ship_mobile/ships/" .. name .. ".lua") end
 	assert(agents[name] and zone == "space_coruscant", name)
-	local ship = shipMethods:new {id = #ships + 1, name = name, x = x, z = z, y = y, points = {}}
+	local ship = shipMethods:new {id = #ships + 1, name = name, x = x, z = z, y = y, heading = heading, points = {}}
 	table.insert(ships, ship)
 	return ship
 end
@@ -91,6 +91,8 @@ assert(object.clientTemplateFileName == object_ship_shared_spacestation_imperial
 assert(nativeObjectTypes["object/ship/spacestation_coruscant.iff"] == 536870920, "Station must explicitly register the native SpaceStationObject type")
 assert(nativeObjectTypes["object/ship/imperial_venator.iff"] == 536870920, "Venator must explicitly register the native SpaceStationObject type")
 assert(ObjectTemplates["object/ship/imperial_venator.iff"].clientTemplateFileName == "object/ship/shared_imperial_venator.iff")
+assert(object.objectName == "@space/ship_names:spacestation_coruscant")
+assert(ObjectTemplates["object/ship/imperial_venator.iff"].objectName == "@space/space_mobile_type:imperial_venator")
 load("managers/space/ship_chassis.lua")
 local collisionRegistered = false
 for _, row in ipairs(chassisData) do
@@ -101,9 +103,14 @@ for _, row in ipairs(chassisData) do
 end
 assert(collisionRegistered)
 load("managers/space/space_manager.lua")
+assert(coruscant.jtlLaunchPoint[1] == "space_coruscant" and coruscant.jtlLaunchPoint[2] == -5369 and coruscant.jtlLaunchPoint[3] == 1521 and coruscant.jtlLaunchPoint[4] == 548)
+local spaceLaunch = coruscant.jtlLaunchPoint
+load("managers/planet/planet_manager.lua")
+for i = 1, 4 do assert(coruscant.jtlLaunchPoint[i] == spaceLaunch[i], "Planet/space launch points differ") end
 assert(#space_coruscant.spaceStations == 1)
 local station = space_coruscant.spaceStations[1]
 assert(station.templateFile == "spacestation_coruscant" and station.x == 0 and station.z == 0 and station.y == 0)
+assert(math.abs(station.ow - math.sqrt(0.5)) < 1e-7 and math.abs(station.oy - math.sqrt(0.5)) < 1e-7 and station.ox == 0 and station.oz == 0)
 load("ship_mobile/space_patrol_points.lua")
 function addSpacePatrolPoints(zone, list)
 	assert(zone == "space_coruscant" and #list == 84)
@@ -131,10 +138,22 @@ local bounds = {
 	imperial_venator = {{-486, -160, -1005}, {486, 160, 1005}},
 }
 local function box(ship, limits)
-	local origin, result = {ship.x, ship.z, ship.y}, {{}, {}}
+	local origin, result = {ship.x, ship.z, ship.y}, {{math.huge, math.huge, math.huge}, {-math.huge, -math.huge, -math.huge}}
+	local angle = ship.ow and 2 * math.atan2(ship.oy, ship.ow) or math.rad(ship.heading or 0)
+	local cosine, sine = math.cos(angle), math.sin(angle)
+	for ix = 1, 2 do
+		for iz = 1, 2 do
+			for iy = 1, 2 do
+				local x, z, y = limits[ix][1], limits[iz][2], limits[iy][3]
+				local rotated = {cosine * x + sine * y, z, -sine * x + cosine * y}
+				for axis = 1, 3 do
+					result[1][axis] = math.min(result[1][axis], origin[axis] + rotated[axis])
+					result[2][axis] = math.max(result[2][axis], origin[axis] + rotated[axis])
+				end
+			end
+		end
+	end
 	for axis = 1, 3 do
-		result[1][axis] = origin[axis] + limits[1][axis]
-		result[2][axis] = origin[axis] + limits[2][axis]
 		assert(result[1][axis] > -8000 and result[2][axis] < 8000)
 	end
 	return result
@@ -142,10 +161,19 @@ end
 boxes[1] = box(station, {{-147, -152, -90}, {147, 152, 90}})
 for _, ship in ipairs(ships) do
 	counts[ship.name] = (counts[ship.name] or 0) + 1
+	if (ship.name == "imperial_venator") then assert(ship.heading == 180) else assert(ship.heading == nil) end
 	assert(ship.despawn == false)
 	table.insert(boxes, box(ship, bounds[ship.name]))
 end
 assert(counts.star_destroyer == 6 and counts.imperial_venator == 4)
+local heights = {star_destroyer = {}, imperial_venator = {}}
+for _, ship in ipairs(ships) do
+	assert(not heights[ship.name][ship.z], "Capital ships must have different heights")
+	heights[ship.name][ship.z] = true
+	if (ship.name == "star_destroyer") then assert(ship.z >= 25 and ship.z <= 775) else assert(ship.z >= 0 and ship.z <= 400) end
+end
+assert(heights.star_destroyer[25] and heights.star_destroyer[775])
+assert(heights.imperial_venator[0] and heights.imperial_venator[400])
 for i = 1, 2 do
 	local ship = ships[i]
 	assert(math.sqrt(ship.x^2 + ship.z^2 + ship.y^2) <= 1500)
