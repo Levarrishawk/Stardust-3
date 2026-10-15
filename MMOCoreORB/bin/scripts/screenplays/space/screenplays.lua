@@ -38,6 +38,7 @@ includeFile("space/chassis_dealer.lua")
 
 includeFile("space/spacestations/spacestation.lua")
 includeFile("space/spacestations/spacestation_corellia_conv_handler.lua")
+includeFile("space/spacestations/spacestation_coruscant_conv_handler.lua")
 includeFile("space/spacestations/spacestation_dantooine_conv_handler.lua")
 includeFile("space/spacestations/spacestation_dathomir_conv_handler.lua")
 includeFile("space/spacestations/spacestation_endor_conv_handler.lua")

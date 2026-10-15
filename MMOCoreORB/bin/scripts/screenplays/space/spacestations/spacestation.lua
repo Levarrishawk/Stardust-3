@@ -9,6 +9,7 @@ SpaceStationScreenPlay = ScreenPlay:new {
 	REPAIR_DELAY = 360 * 1000, -- 6 Minutes in miliseconds
 
 	travelPoints = {
+		coruscant_spaceport = {"coruscant", -96, 40, 3149},
 		coronet = {"corellia", -66, 28, -4705},
 		kor_vella = {"corellia", -3155, 31, 2880},
 		doaba_guerfel = {"corellia", 3349, 308, 5598},

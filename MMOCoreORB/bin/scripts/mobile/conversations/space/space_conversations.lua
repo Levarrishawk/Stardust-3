@@ -6,6 +6,7 @@ includeFile("conversations/space/chassis_dealer_conv.lua")
 
 -- Space Stations
 includeFile("conversations/space/spacestation_corellia.lua")
+includeFile("conversations/space/spacestation_coruscant.lua")
 includeFile("conversations/space/spacestation_dantooine.lua")
 includeFile("conversations/space/spacestation_dathomir.lua")
 includeFile("conversations/space/spacestation_endor.lua")

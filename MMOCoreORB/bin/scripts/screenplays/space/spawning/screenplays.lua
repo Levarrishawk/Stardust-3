@@ -3,6 +3,7 @@ includeFile("space/spawning/space_objects.lua")
 includeFile("space/spawning/space_spawner.lua")
 
 includeFile("space/spawning/space_corellia_spawner.lua")
+includeFile("space/spawning/space_coruscant_spawner.lua")
 includeFile("space/spawning/space_dantooine_spawner.lua")
 includeFile("space/spawning/space_dathomir_spawner.lua")
 includeFile("space/spawning/space_endor_spawner.lua")
