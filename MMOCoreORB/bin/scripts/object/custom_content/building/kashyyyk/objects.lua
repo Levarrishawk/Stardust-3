@@ -1152,6 +1152,14 @@ object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a2 = SharedSta
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a2.iff"
 }
 ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a2, "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a2.iff")
+object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing = object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a2:new {
+	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing.iff")
+object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02 = object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a2:new {
+	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02.iff")
 --***********************************************************************************************************
 object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a3 = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a3.iff"
