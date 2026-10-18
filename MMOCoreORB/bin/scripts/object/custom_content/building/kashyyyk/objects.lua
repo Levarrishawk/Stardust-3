@@ -1157,6 +1157,11 @@ object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a3 = SharedSta
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a3.iff"
 }
 ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a3, "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a3.iff")
+-- Return crossing for Vritol's public tree, snapshot object 100000019.
+object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a3_crossing = object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a3:new {
+	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a3_crossing.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a3_crossing, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a3_crossing.iff")
 --***********************************************************************************************************
 object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a4 = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a4.iff"
