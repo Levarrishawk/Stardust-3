@@ -687,7 +687,7 @@ local down = {
 }
 local up = {
 	{"ep3_rryatt_trail_guide_m_01", -3155.343185, 115.620025, 4021.710658},
-	{"ep3_rryatt_trail_guide_m_02", -2696.83, 121.824, 4212},
+	{"ep3_rryatt_trail_guide_m_02", -2719.16, 121.824, 4210.84},
 	{"ep3_rryatt_trail_guide_m_03", -1295.582, 186, 4061.839},
 	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2826.039},
 }

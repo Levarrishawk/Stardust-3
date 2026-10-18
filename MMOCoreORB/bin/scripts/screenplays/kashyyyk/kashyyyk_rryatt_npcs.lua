@@ -18,7 +18,7 @@ KashyyykRryattNpcs = ScreenPlay:new {
 		{"ep3_rryatt_tressk", -3040.29, 120, 4554.44, 123.186},
 		{"ep3_rryatt_trail_guide_f_01", -3154.228535, 116.723890, 4028.306705, 189.396454, level = 1, zoneLine = "rryattOne_rryattTwo", startingLocation = "rryattOneF_zoneIn"},
 		{"ep3_rryatt_trail_guide_m_01", -2945.898, 70.1953, 4256.578, -66.457, level = 2, up = true, zoneLine = "rryattTwo_rryattOne", startingLocation = "rryattTwoM_zoneIn"},
-		{"ep3_rryatt_trail_guide_f_02", -2692.67, 120, 4210.16, -55.302, level = 2, zoneLine = "rryattTwo_rryattThree", startingLocation = "rryattTwoF_zoneIn"},
+		{"ep3_rryatt_trail_guide_f_02", -2715, 120, 4209, -55.302, level = 2, zoneLine = "rryattTwo_rryattThree", startingLocation = "rryattTwoF_zoneIn"},
 		{"ep3_achonnko", -3782.1, 169.417, 3582.29, 53.286, level = 1, mastery = true},
 		{"ep3_rryatt_trail_guide_m_02", -1840.83, 184.024, 3008, 130.135, level = 3, up = true, zoneLine = "rryattThree_rryattTwo", startingLocation = "rryattThreeM_zoneIn"},
 		{"ep3_rryatt_trail_guide_f_03", -1296.499, 188.038, 4059.8, 10.629, level = 3, zoneLine = "rryattThree_rryattFour", startingLocation = "rryattThreeF_zoneIn"},
@@ -27,18 +27,18 @@ KashyyykRryattNpcs = ScreenPlay:new {
 		{"ep3_rryatt_trail_guide_m_04", -1878.51, -23.4006, 2360.739, 137.177, level = 5, up = true, zoneLine = "rryattFive_rryattFour", startingLocation = "rryattFiveM_zoneIn"},
 	},
 
-	-- DSRC travel offsets; level-one guide offsets follow its individually aligned treetop.
+	-- DSRC destinations; offsets follow the individually relocated level-one and level-two guides.
 	transitions = {
 		rryattOne_rryattTwo = {204.977535, -47.318890, 228.663295, 2},
 		rryattTwo_rryattOne = {-209.445185, 45.424725, -234.867342, 1},
-		rryattTwo_rryattThree = {853, 62.3, -955, 3},
-		rryattThree_rryattTwo = {-856, -62.2, 953, 2},
+		rryattTwo_rryattThree = {875.33, 62.3, -953.84, 3},
+		rryattThree_rryattTwo = {-878.33, -62.2, 951.84, 2},
 		rryattThree_rryattFour = {-2294, -46, -1228, 4},
 		rryattFour_rryattThree = {2300, 46, 1232, 3},
 		rryattFour_rryattFive = {716.5, -166.3, -467.2, 5},
 		rryattFive_rryattFour = {-718.5, 166, 465.3, 4},
 		rryattOneF_zoneIn = {-621.522465, 51.581110, -418.536705, 1},
-		rryattTwoF_zoneIn = {-1083, 48.2, -600, 1},
+		rryattTwoF_zoneIn = {-1060.67, 48.2, -598.84, 1},
 		rryattTwoM_zoneIn = {-830, 98.2, -641.6, 1},
 		rryattThreeF_zoneIn = {-2481, -18, -698, 1},
 		rryattThreeM_zoneIn = {-1934.5, -14, 351, 1},
