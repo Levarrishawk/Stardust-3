@@ -14,7 +14,7 @@ KashyyykRryattNpcs = ScreenPlay:new {
 		{"ep3_zhailaut", -3767.72, 168.235, 3589.84, 0},
 		-- Vritol follows the individually aligned tree 100000019 and bridge 100000030.
 		{"ep3_rryatt_vritol", -3512.059545, 144.314383, 4001.166023, 126.218},
-		{"ep3_negal_teklon", -3337.896, 140, 4039.61, -51.457},
+		{"ep3_negal_teklon", -3338.126529, 140, 3958.999730, -51.457},
 		{"ep3_rryatt_tressk", -3040.29, 120, 4554.44, 123.186},
 		{"ep3_rryatt_trail_guide_f_01", -3182.251, 114.705, 4073.97, -33.232, level = 1, zoneLine = "rryattOne_rryattTwo", startingLocation = "rryattOneF_zoneIn"},
 		{"ep3_rryatt_trail_guide_m_01", -2945.898, 70.1953, 4256.578, -66.457, level = 2, up = true, zoneLine = "rryattTwo_rryattOne", startingLocation = "rryattTwoM_zoneIn"},
