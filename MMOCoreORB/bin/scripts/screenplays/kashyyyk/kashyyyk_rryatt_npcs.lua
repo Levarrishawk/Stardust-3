@@ -64,10 +64,13 @@ function KashyyykRryattNpcs:start()
 end
 
 function KashyyykRryattNpcs:matchesNpc(pNpc, npc)
-	return pNpc ~= nil and SceneObject(pNpc):isAiAgent()
-		and SceneObject(pNpc):getZoneName() == self.zoneName
-		and SceneObject(pNpc):getParentID() == 0
-		and AiAgent(pNpc):getCreatureTemplateName() == npc[1]
+	if (pNpc == nil or not SceneObject(pNpc):isAiAgent()
+		or SceneObject(pNpc):getZoneName() ~= self.zoneName or SceneObject(pNpc):getParentID() ~= 0) then
+		return false
+	end
+	local template = AiAgent(pNpc):getCreatureTemplateName()
+	template = template:gsub("^ep3_rryatt_trail_guild_f_(0[1-4])$", "ep3_rryatt_trail_guide_f_%1")
+	return template == npc[1]
 end
 
 function KashyyykRryattNpcs:spawnNpcs()
@@ -102,6 +105,13 @@ function KashyyykRryattNpcs:getNpc(pNpc)
 	local index = tonumber(readData(self.screenplayName .. ":index:" .. oid)) or 0
 	local npc = self.npcs[index]
 	if (npc == nil or readData(self.screenplayName .. ":npc:" .. index) ~= oid or not self:matchesNpc(pNpc, npc)) then
+		-- Recover the reverse lookup only for an NPC already owned by this screenplay.
+		for i, entry in ipairs(self.npcs) do
+			if (readData(self.screenplayName .. ":npc:" .. i) == oid and self:matchesNpc(pNpc, entry)) then
+				writeData(self.screenplayName .. ":index:" .. oid, i)
+				return entry
+			end
+		end
 		return nil
 	end
 	return npc

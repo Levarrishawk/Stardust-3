@@ -3,7 +3,17 @@ rryatt_trail_guide_conv_handler = conv_handler:new {}
 
 function rryatt_trail_guide_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local npc = KashyyykRryattNpcs:getNpc(pNpc)
-	if (npc == nil or not KashyyykRryattNpcs:canUseNpc(pPlayer, pNpc)) then
+	if (npc == nil) then
+		print("Rryatt trail guide: conversation rejected for unregistered NPC "
+			.. tostring(pNpc ~= nil and SceneObject(pNpc):getObjectID() or 0))
+		return nil
+	elseif (not KashyyykRryattNpcs:canUseNpc(pPlayer, pNpc)) then
+		if (pPlayer ~= nil) then
+			print("Rryatt trail guide: conversation eligibility rejected; npc=" .. SceneObject(pNpc):getObjectID()
+				.. " distance=" .. SceneObject(pPlayer):getDistanceTo3d(pNpc)
+				.. " playerZone=" .. SceneObject(pPlayer):getZoneName()
+				.. " playerParent=" .. SceneObject(pPlayer):getParentID())
+		end
 		return nil
 	end
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)

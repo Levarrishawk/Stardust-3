@@ -592,6 +592,14 @@ load("mobile/conversations/kashyyyk/rryatt/rryatt_trail_guide_up_convo.lua")
 load("mobile/conversations/kashyyyk/rryatt/ep3_achonnko_convo.lua")
 load("mobile/custom_content/ep3/ep3_achonnko.lua")
 assert(ep3_achonnko.customName == "Achonnko the Trail Master" and ep3_achonnko.conversationTemplate == "ep3_achonnko_convo")
+for _, spelling in ipairs({"guide_f", "guild_f", "guide_m"}) do
+	for level = 1, 4 do
+		local name = "ep3_rryatt_trail_" .. spelling .. "_0" .. level
+		load("mobile/custom_content/ep3/" .. name .. ".lua")
+		local expected = spelling == "guide_m" and "rryatt_trail_guide_up_convo" or "rryatt_trail_guide_convo"
+		assert(_G[name].conversationTemplate == expected and _G[name].optionsBitmask == AIENABLED + CONVERSABLE)
+	end
+end
 local rryatt, mastery = KashyyykRryattNpcs, rryattTrailMasteryScreenPlay
 local bindingProbe = object()
 assert(not pcall(function() CreatureObject(bindingProbe):addObjectFlag(AI_STATIONARY) end),
@@ -626,6 +634,22 @@ for i, entry in ipairs(rryatt.npcs) do
 		assert(readStringData(npc.id .. ":startingLocation") == entry.startingLocation)
 	end
 end
+-- Both female-template spellings keep the same owned NPC and conversation role.
+for _, entry in ipairs(rryatt.npcs) do
+	local legacy = entry[1]:gsub("_guide_f_", "_guild_f_")
+	if (legacy ~= entry[1]) then
+		local npc = actors[entry[1]]
+		npc.template = legacy
+		deleteData(rryatt.screenplayName .. ":index:" .. npc.id)
+		assert(rryatt:getNpc(npc) == entry, "Registered legacy guide lost its dialogue role")
+		local listener = player(); beside(listener, npc)
+		assert(rryatt_trail_guide_conv_handler:getInitialScreen(listener, npc, rryatt_trail_guide_convo).id == "s_61")
+		npc.template = entry[1]
+	end
+end
+local unowned = object({zone = rryatt.zoneName, template = "ep3_rryatt_trail_guide_f_01"})
+writeData(rryatt.screenplayName .. ":index:" .. unowned.id, 7)
+assert(rryatt:getNpc(unowned) == nil, "Unregistered guide gained a travel role")
 local achonnko, p = rryattNpc("ep3_achonnko"), player()
 beside(p, achonnko)
 local handler, convo = ep3_achonnko_conv_handler, ep3_achonnko_convo
@@ -662,7 +686,7 @@ local down = {
 	{"ep3_rryatt_trail_guide_f_04", -1876.03, -23.653, 2360.039},
 }
 local up = {
-	{"ep3_rryatt_trail_guide_m_01", -3185.898, 113.1953, 4079.578},
+	{"ep3_rryatt_trail_guide_m_01", -3155.343185, 115.620025, 4021.710658},
 	{"ep3_rryatt_trail_guide_m_02", -2696.83, 121.824, 4212},
 	{"ep3_rryatt_trail_guide_m_03", -1295.582, 186, 4061.839},
 	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2826.039},
