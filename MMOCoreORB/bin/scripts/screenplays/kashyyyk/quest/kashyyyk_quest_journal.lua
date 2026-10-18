@@ -1,9 +1,9 @@
--- Client .qst task IDs, not DSRC questtask row numbers. Screenplay data remains authoritative.
+-- Journal task IDs must match the compiled client questtask rows. Screenplay data remains authoritative.
 local Journal = require("managers.quest.journal")
 local KashyyykQuestJournal = {}
 
 KashyyykQuestJournal.quests = {
-	rryattTrailMasteryScreenPlay = { quest = "ep3_rryatt_trail_mastery", stages = {{1, 14, 13, 12, 11}}, initial = {0}, flags = {[14] = "l1", [13] = "l2", [12] = "l3", [11] = "l4"} },
+	rryattTrailMasteryScreenPlay = { quest = "ep3_rryatt_trail_mastery", stages = {{1, 2, 3, 4, 5}}, initial = {0}, flags = {[2] = "l1", [3] = "l2", [4] = "l3", [5] = "l4"}, obsoleteTasks = {11, 12, 13, 14} },
 	kachirhoKillWkeScreenPlay = { quest = "ep3_kachirho_kill_wke", stages = {{0}, {1}}, reward = {2}, counter = {"kills", 1, 0} },
 	kachirhoVaractylHuntScreenPlay = { quest = "ep3_kachirho_varactyl_hunt", stages = {{0}, {1}}, reward = {2}, counter = {"plumes", 1, 0}, loot = true },
 	kachirhoSurveyDataScreenPlay = { quest = "ep3_kachirho_survey_data", stages = {{0, 1, 2, 3, 4}, {5}}, reward = {6}, survey = true },
@@ -65,6 +65,12 @@ function KashyyykQuestJournal.sync(screenplay, pPlayer, stage)
 		Journal.regrant(pPlayer, key, false)
 	else
 		Journal.begin(pPlayer, key, false)
+	end
+	-- Earlier Rryatt mirrors used XML editor IDs instead of compiled task rows.
+	for _, id in ipairs(spec.obsoleteTasks or {}) do
+		if (Journal.taskActive(pPlayer, key, id) or Journal.taskDone(pPlayer, key, id)) then
+			Journal.task(pPlayer, key, id, "clear", false)
+		end
 	end
 	local hasTaskZero = false
 	for i = 1, #spec.stages do
@@ -148,6 +154,16 @@ function KashyyykQuestJournal.playerLoggedIn(pPlayer)
 		local screenplay = _G[name]
 		if (screenplay ~= nil) then
 			local stage = tonumber(readScreenPlayData(pPlayer, name, "stage")) or 0
+			if (stage == 0 and spec.obsoleteTasks ~= nil and screenplay:getRuns(pPlayer) > 0) then
+				local key = Journal.key(spec.quest)
+				for _, id in ipairs(spec.obsoleteTasks) do
+					if (Journal.taskActive(pPlayer, key, id) or Journal.taskDone(pPlayer, key, id)) then
+						-- Rebuild only the completed journal mirror; never replay quest rewards.
+						KashyyykQuestJournal.complete(screenplay, pPlayer)
+						break
+					end
+				end
+			end
 			KashyyykQuestJournal.sync(screenplay, pPlayer, stage)
 			if (spec.craft and stage == 2) then screenplay:attachCraftObserver(pPlayer) end
 		end

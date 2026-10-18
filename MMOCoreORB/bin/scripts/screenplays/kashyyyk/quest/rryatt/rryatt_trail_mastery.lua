@@ -1,7 +1,7 @@
 local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
 
 -- DSRC ep3_rryatt_trail_mastery: four independent downward-travel signals.
--- Preserve the existing repeat policy and XP award; journal task IDs are from the client .qst.
+-- Preserve the existing repeat policy and XP award; journal task IDs match compiled questtask rows.
 rryattTrailMasteryScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "rryattTrailMasteryScreenPlay",

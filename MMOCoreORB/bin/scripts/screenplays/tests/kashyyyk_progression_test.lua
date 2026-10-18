@@ -648,7 +648,7 @@ while screen.stopConversation ~= "true" do
 end
 assert(mastery:getStage(p) == 1)
 local q = journal(p, "ep3_rryatt_trail_mastery")
-assert(q.completed[0] and q.active[1] and q.active[14] and q.active[13] and q.active[12] and q.active[11])
+assert(q.completed[0] and q.active[1] and q.active[2] and q.active[3] and q.active[4] and q.active[5])
 assert(not rryatt:travel(p, achonnko, true, 1), "Locked mastery warp accepted")
 assert(not rryatt:travel(p, achonnko, true, 0))
 assert(not rryatt:travel(p, achonnko, true, 1.5))
@@ -668,7 +668,7 @@ local up = {
 	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2826.039},
 }
 local guide = rryatt_trail_guide_conv_handler
-local indices = {14, 13, 12, 11}
+local indices = {2, 3, 4, 5}
 for level, destination in ipairs(down) do
 	local npc = actors[destination[1]]
 	beside(p, npc)
@@ -742,20 +742,38 @@ local p = player()
 writeScreenPlayData(p, mastery.screenplayName, "stage", "1")
 writeScreenPlayData(p, mastery.screenplayName, "l2", "1")
 writeScreenPlayData(p, mastery.screenplayName, "l4", "1")
+-- Seed the old XML-ID journal masks and verify migration preserves persistent travel flags.
+p.ghost:activateJournalQuest("quest/ep3_rryatt_trail_mastery")
+q = journal(p, "ep3_rryatt_trail_mastery")
+q.active[14], q.active[12], q.completed[13], q.completed[11] = true, true, true, true
 PlayerTriggers:playerLoggedIn(p)
 q = journal(p, "ep3_rryatt_trail_mastery")
-assert(q.completed[13] and q.completed[11] and q.active[14] and q.active[12])
+assert(q.completed[3] and q.completed[5] and q.active[2] and q.active[4])
+for id = 11, 14 do assert(q.active[id] == nil and q.completed[id] == nil) end
+assert(mastery:getRuns(p) == 0 and mastery:levelCount(p) == 2 and p.xpAwards == nil)
+PlayerTriggers:playerLoggedIn(p)
+assert(mastery:levelCount(p) == 2 and p.xpAwards == nil)
 screenplay("quest/rryatt/rryatt_trail_mastery")
 assert(rryattTrailMasteryScreenPlay:hasLevel(p, 2) and not rryattTrailMasteryScreenPlay:hasLevel(p, 1))
 assert(rryattTrailMasteryScreenPlay:signalLevel(p, 1))
 assert(rryattTrailMasteryScreenPlay:signalLevel(p, 3))
 assert(p.xpAwards == 1 and q.done)
 assert(not rryattTrailMasteryScreenPlay:signalLevel(p, 3))
+-- Completed legacy entries migrate once without replaying the completion award.
+q.completed[2], q.completed[3], q.completed[4], q.completed[5] = nil, nil, nil, nil
+for id = 11, 14 do q.completed[id] = true end
+PlayerTriggers:playerLoggedIn(p)
+q = journal(p, "ep3_rryatt_trail_mastery")
+assert(q.done and q.completed[2] and q.completed[3] and q.completed[4] and q.completed[5])
+for id = 11, 14 do assert(q.active[id] == nil and q.completed[id] == nil) end
+assert(rryattTrailMasteryScreenPlay:getStage(p) == 0 and rryattTrailMasteryScreenPlay:getRuns(p) == 1 and p.xpAwards == 1)
+PlayerTriggers:playerLoggedIn(p)
+assert(q == journal(p, "ep3_rryatt_trail_mastery") and q.done and p.xpAwards == 1)
 assert(rryattTrailMasteryScreenPlay:grantQuest(p))
 assert(rryattTrailMasteryScreenPlay:hasLevel(p, 1), "A repeat erased permanent travel access")
 rryattTrailMasteryScreenPlay:clearQuest(p)
 assert(p.xpAwards == 1)
-print("PASS: all 15 Rryatt NPCs, eight guide routes/returns, four mastery warps, journal and persistence")
+print("PASS: all 15 Rryatt NPCs, eight guide routes/returns, four mastery warps, compiled journal task IDs, legacy migration and persistence")
 
 -- Retry a single failed static spawn without duplicating the other fourteen actors.
 local missing = actors.ep3_carl_mosik
