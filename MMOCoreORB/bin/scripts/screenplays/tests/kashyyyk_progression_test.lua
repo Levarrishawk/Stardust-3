@@ -698,6 +698,17 @@ for level, destination in ipairs(down) do
 	beside(p, npc)
 	assert(guide:getInitialScreen(p, npc, rryatt_trail_guide_convo).id == "s_61")
 	if (level == 1) then
+		-- Report a server/client height mismatch without bypassing travel eligibility.
+		local messages, oldPrint = {}, print
+		print = function(message) messages[#messages + 1] = message end
+		p.z = npc.z - 30
+		local rejected = guide:getInitialScreen(p, npc, rryatt_trail_guide_convo)
+		print = oldPrint
+		assert(rejected == nil and not rryatt:travel(p, npc, false))
+		assert(messages[1]:find("player=(x=", 1, true) and messages[1]:find(" guide=(x=", 1, true))
+		assert(messages[1]:find("expectedGuide=(x=", 1, true))
+		assert(messages[2]:find("tree100000109=missing", 1, true) and messages[2]:find("hut100000111=missing", 1, true))
+		beside(p, npc)
 		-- Same-screen retries, stale callbacks, nil/unregistered actors and invalid player states give no credit.
 		for _, case in ipairs({{"dead", true}, {"incapacitated", true}, {"combat", true}, {"parent", 9}, {"zone", "tatooine"}, {"failTeleport", true}}) do
 			local old = p[case[1]]; p[case[1]] = case[2]
