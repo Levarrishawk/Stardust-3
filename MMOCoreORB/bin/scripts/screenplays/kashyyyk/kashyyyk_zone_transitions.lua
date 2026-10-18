@@ -1,6 +1,6 @@
 -- Gate rows: retail datatables/buildout/<zone>/<zone>.tab.
 -- Surface buildout coordinates are local coordinates plus 2048 (main: 4096).
--- Rryatt uses the same first layout as KashyyykRryattNpcs: x-3908, y+3114.
+-- Rryatt uses the same first layout as KashyyykRryattNpcs: x-3908, y+3365.
 KashyyykZoneTransitions = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "KashyyykZoneTransitions",
@@ -13,7 +13,7 @@ KashyyykZoneTransitions = ScreenPlay:new {
 		{line = "kachirho_rryatt", zone = "kashyyyk_main", x = -58.63, z = 21.5704, y = 843.85, ow = -0.150225, oy = 0.988652},
 		{line = "deadforest_kachirho", zone = "kashyyyk_dead_forest", x = 87.68, z = 29.3555, y = -477.38, ow = 0.995953, oy = -0.0898784, snapshotID = 14913591},
 		{line = "huntinggrounds_kachirho", zone = "kashyyyk_hunting", x = 670.77, z = 10.4887, y = 676.16, ow = -0.540302, oy = 0.841471, snapshotID = 12118091},
-		{line = "rryatt_kachirho", zone = "kashyyyk_rryatt_trail", x = -3837.6797, z = 173.457, y = 3362.17, ow = 0.702713, oy = 0.711473},
+		{line = "rryatt_kachirho", zone = "kashyyyk_rryatt_trail", x = -3837.6797, z = 173.457, y = 3613.17, ow = 0.702713, oy = 0.711473},
 		-- Three elevator doors at each landing, already present in kashyyyk_main.ws.
 		{key = "tree_ground_first", line = "kachirho_tree_first_level", zone = "kashyyyk_main", template = "object/building/kashyyyk/mun_kash_tree_door_level1_main.iff", snapshotID = 14602795, x = -478.73, z = 29.8601, y = -12.33, ow = 0.346843, oy = 0.937923},
 		{key = "tree_ground_second", line = "kachirho_tree_second_level", zone = "kashyyyk_main", template = "object/building/kashyyyk/mun_kash_tree_door_level2_main.iff", snapshotID = 14602796, x = -472.64, z = 29.8355, y = -9.26, ow = -0.209239, oy = 0.977865},
@@ -34,7 +34,7 @@ KashyyykZoneTransitions = ScreenPlay:new {
 	destinations = {
 		kachirho_deadforest = {zone = "kashyyyk_dead_forest", x = 84, z = 26, y = -460},
 		kachirho_huntinggrounds = {zone = "kashyyyk_hunting", x = 658, z = 8, y = 666, requiresLicence = true},
-		kachirho_rryatt = {zone = "kashyyyk_rryatt_trail", x = -3817.315, z = 171.735, y = 3361.33},
+		kachirho_rryatt = {zone = "kashyyyk_rryatt_trail", x = -3817.315, z = 171.735, y = 3612.33},
 		deadforest_kachirho = {zone = "kashyyyk_main", x = -756, z = 18, y = 245},
 		huntinggrounds_kachirho = {zone = "kashyyyk_main", x = 203, z = 18, y = -425},
 		rryatt_kachirho = {zone = "kashyyyk_main", x = -63, z = 19, y = 827},

@@ -31,19 +31,19 @@
 --   (src/tre3/TreeDirectory.h:16 setNoDuplicateInsertPlan); with 022 above 023
 --   the 023-only path is still found because 022 does not carry it.
 --
--- BUILDOUT -> WORLD CONVERSION {#kash-offset}
--- Public Levels 1-2 now use the DSRC areas_kashyyyk_rryatt_trail.tab origin.
--- The legacy snapshot offset was 251m north of the terrain/buildout origin.
+-- BUILDOUT -> WORLD CONVERSION {#kash-offset} (measured against
+-- snapshot/kashyyyk_rryatt_trail.ws from mtg_patch_023.tre)
 --   Trap 4: five levels are stacked by height in one zone, not separated in
 --   x/z. Each tab has its own offset. The 023 snapshot carries SIX copies of
 --   every level layout (two x-columns at approx -3908 and approx +444, three
 --   z-bands). Levels 4 and 5 sit in the column x approx -3908 at
---   dz +2115. The public levels 1-2 layout previously used dz +3365;
---   it now uses the terrain/buildout origin below. Other copies are unchanged.
+--   dz +2115. This pass places levels 1-2 in that SAME instance copy
+--   (dz +3365). Which of the six copies should be live is the maintainer's
+--   decision (same question as the POB copies).
 --   Level 1-2 (kashyyyk_rryatt_trail_lvl_1_and_2.tab, 13-column):
---     world_x = buildout_x - 3908    world_z = buildout_z + 3114
---     evidence: DSRC area rectangle starts (-3908, 3114); 503 public static
---     objects were displaced north by 251m. Other copies retain (-3892, 69), (-3924, -3371),
+--     world_x = buildout_x - 3908    world_z = buildout_z + 3365
+--     evidence: 30 building rows voted (-3908, 3365, dy 0) against the
+--     snapshot. The other five copies vote (-3892, 69), (-3924, -3371),
 --     (444, 3381), (460, 85), (428, -3355).
 --   Level 3 (kashyyyk_rryatt_trail_lvl_3.tab, 11-column) is OPEN: the tab
 --     does not match the snapshot under any constant offset. Its building
@@ -83,8 +83,8 @@
 --     are NOT in this file -- OPEN for the behaviours pass.
 --   * Levels 1-2 area_spawners (, ruling 2026-09-04): sourced from
 --     kashyyyk_rryatt_trail_lvl_1_and_2.tab area_spawner.iff. Name is
---     rryatt_sp_12_<buildout_row>. World coords use (x - 3908, z + 3114)
---     so they follow the corrected public snapshot layout. A type table
+--     rryatt_sp_12_<buildout_row>. World coords use (x - 3908, z + 3365)
+--     so they sit in the same instance copy as levels 4-5. A type table
 --     already on disk is reused by name; new rryatt_* tables get a lair
 --     + group. Mouf type tables stay commented (no repo mouf template;
 --     surface rounds established this).
@@ -251,50 +251,50 @@ kashyyyk_rryatt_trail_regions = {
 	-- Sourced area_spawner.iff from kashyyyk_rryatt_trail_lvl_1_and_2.tab.
 	-- Live rows: 34. Commented OPEN: 12 (mouf type tables; no repo mouf template).
 	-- Radius floor 32 m: a Core3 spawn area needs room for a lair.
-	{"rryatt_sp_12_4", -3453.43, 3485.96, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
-	{"rryatt_sp_12_5", -3484.54, 3544.70, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 1},
-	{"rryatt_sp_12_6", -3450.85, 3589.89, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
-	{"rryatt_sp_12_7", -3409.23, 3299.21, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
-	{"rryatt_sp_12_8", -3377.95, 3366.92, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
-	{"rryatt_sp_12_9", -3336.24, 3291.66, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 5},
-	{"rryatt_sp_12_10", -3339.77, 3313.71, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 3},
-	{"rryatt_sp_12_11", -3364.17, 3787.98, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_bolotaur"}, 1},
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_12", -3162.50, 4111.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_13", -3277.40, 4162.61, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 1}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=5.0 soe_count=1
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_14", -3406.41, 4224.40, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_15", -3386.38, 4255.88, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_16", -3450.99, 4343.34, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	{"rryatt_sp_12_17", -3548.65, 4462.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 3},
-	{"rryatt_sp_12_18", -3544.97, 4484.73, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 4},
-	{"rryatt_sp_12_19", -3532.49, 4421.79, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 2},
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_20", -3361.24, 4316.85, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw_elite"}, 2}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw_elite soe_radius=8.0 soe_count=2
-	{"rryatt_sp_12_21", -3386.04, 3683.10, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_scout_troopers"}, 4},
-	{"rryatt_sp_12_22", -3467.99, 3513.81, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
-	{"rryatt_sp_12_23", -3445.49, 3551.62, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 1},
-	{"rryatt_sp_12_24", -3479.82, 3626.73, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
-	{"rryatt_sp_12_25", -3409.23, 3299.21, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
-	{"rryatt_sp_12_26", -3377.95, 3366.92, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
-	{"rryatt_sp_12_27", -3336.24, 3291.66, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 5},
-	{"rryatt_sp_12_28", -3339.78, 3313.71, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 3},
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_29", -3162.50, 4111.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_30", -3277.40, 4162.61, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 1}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=5.0 soe_count=1
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_31", -3383.06, 4205.37, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_32", -3370.19, 4281.93, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_33", -3448.34, 4309.20, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
-	{"rryatt_sp_12_34", -3529.47, 4454.01, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 3},
-	{"rryatt_sp_12_35", -3557.00, 4474.49, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 4},
-	{"rryatt_sp_12_36", -3533.01, 4434.79, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 2},
-	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_37", -3344.45, 4323.53, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw_boss"}, 1}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw_boss soe_radius=8.0 soe_count=1
-	{"rryatt_sp_12_38", -2854.26, 4276.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_bolotaur_special"}, 1},
-	{"rryatt_sp_12_39", -2822.07, 4448.29, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_crazed_jedi"}, 1},
-	{"rryatt_sp_12_40", -3487.16, 3596.63, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 2},
-	{"rryatt_sp_12_41", -3416.62, 3753.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 2},
-	{"rryatt_sp_12_42", -3341.93, 3923.17, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 4},
-	{"rryatt_sp_12_43", -3317.30, 3947.86, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher_elite"}, 2},
-	{"rryatt_sp_12_44", -3337.05, 3984.10, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
-	{"rryatt_sp_12_45", -3332.24, 3950.43, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher_boss"}, 1},
-	{"rryatt_sp_12_57", -3051.16, 4286.55, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_ziven"}, 1},
-	{"rryatt_sp_12_58", -3023.55, 4308.61, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_ziven"}, 1},
-	{"rryatt_sp_12_64", -3057.89, 4317.54, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_ziven"}, 1},
-	{"rryatt_sp_12_72", -3771.80, 3390.95, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_clone_droid"}, 1},
+	{"rryatt_sp_12_4", -3453.43, 3736.96, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
+	{"rryatt_sp_12_5", -3484.54, 3795.70, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 1},
+	{"rryatt_sp_12_6", -3450.85, 3840.89, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
+	{"rryatt_sp_12_7", -3409.23, 3550.21, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
+	{"rryatt_sp_12_8", -3377.95, 3617.92, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
+	{"rryatt_sp_12_9", -3336.24, 3542.66, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 5},
+	{"rryatt_sp_12_10", -3339.77, 3564.71, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 3},
+	{"rryatt_sp_12_11", -3364.17, 4038.98, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_bolotaur"}, 1},
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_12", -3162.50, 4362.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_13", -3277.40, 4413.61, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 1}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=5.0 soe_count=1
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_14", -3406.41, 4475.40, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_15", -3386.38, 4506.88, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_16", -3450.99, 4594.34, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	{"rryatt_sp_12_17", -3548.65, 4713.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 3},
+	{"rryatt_sp_12_18", -3544.97, 4735.73, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 4},
+	{"rryatt_sp_12_19", -3532.49, 4672.79, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 2},
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_20", -3361.24, 4567.85, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw_elite"}, 2}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw_elite soe_radius=8.0 soe_count=2
+	{"rryatt_sp_12_21", -3386.04, 3934.10, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_scout_troopers"}, 4},
+	{"rryatt_sp_12_22", -3467.99, 3764.81, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
+	{"rryatt_sp_12_23", -3445.49, 3802.62, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 1},
+	{"rryatt_sp_12_24", -3479.82, 3877.73, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
+	{"rryatt_sp_12_25", -3409.23, 3550.21, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
+	{"rryatt_sp_12_26", -3377.95, 3617.92, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 2},
+	{"rryatt_sp_12_27", -3336.24, 3542.66, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 5},
+	{"rryatt_sp_12_28", -3339.78, 3564.71, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_rebels"}, 3},
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_29", -3162.50, 4362.44, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_30", -3277.40, 4413.61, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 1}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=5.0 soe_count=1
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_31", -3383.06, 4456.37, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_32", -3370.19, 4532.93, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_33", -3448.34, 4560.20, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw"}, 4}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw soe_radius=8.0 soe_count=4
+	{"rryatt_sp_12_34", -3529.47, 4705.01, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 3},
+	{"rryatt_sp_12_35", -3557.00, 4725.49, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 4},
+	{"rryatt_sp_12_36", -3533.01, 4685.79, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_escaped_wookiees"}, 2},
+	-- OPEN (type table fully unmatched, ruling 2026-09-04: no repo mouf template): {"rryatt_sp_12_37", -3344.45, 4574.53, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_mouf_bloodclaw_boss"}, 1}, -- strSpawns=kashyyyk/rryatt_mouf_bloodclaw_boss soe_radius=8.0 soe_count=1
+	{"rryatt_sp_12_38", -2854.26, 4527.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_bolotaur_special"}, 1},
+	{"rryatt_sp_12_39", -2822.07, 4699.29, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_crazed_jedi"}, 1},
+	{"rryatt_sp_12_40", -3487.16, 3847.63, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 2},
+	{"rryatt_sp_12_41", -3416.62, 4004.15, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 2},
+	{"rryatt_sp_12_42", -3341.93, 4174.17, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 4},
+	{"rryatt_sp_12_43", -3317.30, 4198.86, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher_elite"}, 2},
+	{"rryatt_sp_12_44", -3337.05, 4235.10, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher"}, 3},
+	{"rryatt_sp_12_45", -3332.24, 4201.43, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_rryatt_walluga_smasher_boss"}, 1},
+	{"rryatt_sp_12_57", -3051.16, 4537.55, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_ziven"}, 1},
+	{"rryatt_sp_12_58", -3023.55, 4559.61, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_ziven"}, 1},
+	{"rryatt_sp_12_64", -3057.89, 4568.54, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_etyyy_clan_ziven"}, 1},
+	{"rryatt_sp_12_72", -3771.80, 3641.95, {CIRCLE, 32}, SPAWNAREA, {"kashyyyk_clone_droid"}, 1},
 }

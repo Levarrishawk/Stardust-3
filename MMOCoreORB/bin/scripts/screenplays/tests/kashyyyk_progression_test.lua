@@ -656,14 +656,14 @@ assert(not mastery:signalLevel(p, 0) and not mastery:signalLevel(p, 1.5) and not
 
 -- Expected landing coordinates are independently calculated from DSRC offsets and verified snapshot origins.
 local down = {
-	{"ep3_rryatt_trail_guide_f_01", -2949.251, 69.405, 4005.97},
+	{"ep3_rryatt_trail_guide_f_01", -2949.251, 69.405, 4256.97},
 	{"ep3_rryatt_trail_guide_f_02", -1839.67, 182.3, 3004.16},
 	{"ep3_rryatt_trail_guide_f_03", -3590.499, 142.038, 2831.8},
 	{"ep3_rryatt_trail_guide_f_04", -1876.03, -23.653, 2360.039},
 }
 local up = {
-	{"ep3_rryatt_trail_guide_m_01", -3185.898, 113.1953, 3828.578},
-	{"ep3_rryatt_trail_guide_m_02", -2696.83, 121.824, 3961},
+	{"ep3_rryatt_trail_guide_m_01", -3185.898, 113.1953, 4079.578},
+	{"ep3_rryatt_trail_guide_m_02", -2696.83, 121.824, 4212},
 	{"ep3_rryatt_trail_guide_m_03", -1295.582, 186, 4061.839},
 	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2826.039},
 }
@@ -712,7 +712,7 @@ assert(p.dismounts == 1 and not p.mounted)
 assert(mastery:isComplete(p) and mastery:getRuns(p) == 1 and p.xpAwards == 1 and p.credits == nil and q.done)
 assert(q.completed[1] and next(q.active) == nil)
 
-local warps = {{-2955.1,69.417,4006.29},{-1840.1,182.317,3004.09},{-3592.4,140.117,2831.29},{-1876.1,-23.583,2358.29}}
+local warps = {{-2955.1,69.417,4257.29},{-1840.1,182.317,3004.09},{-3592.4,140.117,2831.29},{-1876.1,-23.583,2358.29}}
 local screens = {"s_189", "s_193", "s_197", "s_201"}
 for level = 1, 4 do
 	beside(p, achonnko)
@@ -732,7 +732,7 @@ for _, route in ipairs({down, up}) do
 		local convo = route == up and rryatt_trail_guide_up_convo or rryatt_trail_guide_convo
 		local screen = route == up and "s_94" or "s_69"
 		guide:runScreenHandlers(convo, p, npc, 2, convo:getScreen(screen))
-		assert(p.x > -3785 and p.x < -3770 and p.y > 3349 and p.y < 3369 and p.z > 167 and p.z < 172)
+		assert(p.x > -3785 and p.x < -3770 and p.y > 3600 and p.y < 3620 and p.z > 167 and p.z < 172)
 		assert(mastery:levelCount(p) == 0 and mastery:getRuns(p) == 0)
 	end
 end
