@@ -1142,6 +1142,11 @@ object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a1_crossing = object
 	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a1_crossing.iff"
 }
 ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a1_crossing, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a1_crossing.iff")
+-- Separate bridge connections for public snapshot object 100000001.
+object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a1_crossing_02 = object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a1:new {
+	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a1_crossing_02.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a1_crossing_02, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a1_crossing_02.iff")
 --***********************************************************************************************************
 object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a2 = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a2.iff"

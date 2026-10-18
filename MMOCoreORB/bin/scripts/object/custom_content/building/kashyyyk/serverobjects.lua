@@ -260,6 +260,7 @@ includeFile("custom_content/building/kashyyyk/poi_kash_rryatt_lvl1_near_canopy_a
 includeFile("custom_content/building/kashyyyk/poi_kash_rryatt_lvl1_near_canopy_a4.lua")
 includeFile("custom_content/building/kashyyyk/poi_kash_rryatt_lvl1_walk_treetop_a1.lua")
 includeFile("custom_content/building/kashyyyk/sd_rryatt_lvl1_walk_treetop_a1_crossing.lua")
+includeFile("custom_content/building/kashyyyk/sd_rryatt_lvl1_walk_treetop_a1_crossing_02.lua")
 includeFile("custom_content/building/kashyyyk/poi_kash_rryatt_lvl1_walk_treetop_a2.lua")
 includeFile("custom_content/building/kashyyyk/poi_kash_rryatt_lvl1_walk_treetop_a3.lua")
 includeFile("custom_content/building/kashyyyk/poi_kash_rryatt_lvl1_walk_treetop_a4.lua")
