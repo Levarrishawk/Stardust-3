@@ -1137,6 +1137,11 @@ object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a1 = SharedSta
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a1.iff"
 }
 ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a1, "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a1.iff")
+-- Isolated collision test for public Rryatt snapshot object 100000004.
+object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a1_crossing = object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a1:new {
+	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a1_crossing.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a1_crossing, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a1_crossing.iff")
 --***********************************************************************************************************
 object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a2 = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a2.iff"
