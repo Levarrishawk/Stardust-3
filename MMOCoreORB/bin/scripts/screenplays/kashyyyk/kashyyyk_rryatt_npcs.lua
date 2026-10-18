@@ -1,6 +1,6 @@
 -- Public Rryatt layout (copy 0). Placements: DSRC buildout/kashyyyk_rryatt_trail/*.tab.
 -- DSRC creatures.tab maps the rryatt_* spawn names to these existing mobile templates.
--- Snapshot geometry uses origins (-3908,3365), (-2208,2614), (-3908,1864), (-2208,1864).
+-- Snapshot geometry uses origins (-3908,3114), (-2208,2614), (-3908,1864), (-2208,1864).
 KashyyykRryattNpcs = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "KashyyykRryattNpcs",
@@ -9,16 +9,16 @@ KashyyykRryattNpcs = ScreenPlay:new {
 
 	-- {template, world x, height, world y, heading}; level is the NPC's trail level.
 	npcs = {
-		{"ep3_rryatt_krepauk", -3766.64, 168.235, 3637.19, 183.919},
-		{"ep3_carl_mosik", -3764.73, 168.235, 3590.66, -10.886},
-		{"ep3_zhailaut", -3767.72, 168.235, 3589.84, 0},
-		{"ep3_rryatt_vritol", -3513.75, 143.421, 4058.75, 126.218},
-		{"ep3_negal_teklon", -3337.896, 140, 4039.61, -51.457},
-		{"ep3_rryatt_tressk", -3040.29, 120, 4554.44, 123.186},
-		{"ep3_rryatt_trail_guide_f_01", -3182.251, 114.705, 4073.97, -33.232, level = 1, zoneLine = "rryattOne_rryattTwo", startingLocation = "rryattOneF_zoneIn"},
-		{"ep3_rryatt_trail_guide_m_01", -2945.898, 70.1953, 4256.578, -66.457, level = 2, up = true, zoneLine = "rryattTwo_rryattOne", startingLocation = "rryattTwoM_zoneIn"},
-		{"ep3_rryatt_trail_guide_f_02", -2692.67, 120, 4210.16, -55.302, level = 2, zoneLine = "rryattTwo_rryattThree", startingLocation = "rryattTwoF_zoneIn"},
-		{"ep3_achonnko", -3782.1, 169.417, 3582.29, 53.286, level = 1, mastery = true},
+		{"ep3_rryatt_krepauk", -3766.64, 168.235, 3386.19, 183.919},
+		{"ep3_carl_mosik", -3764.73, 168.235, 3339.66, -10.886},
+		{"ep3_zhailaut", -3767.72, 168.235, 3338.84, 0},
+		{"ep3_rryatt_vritol", -3513.75, 143.421, 3807.75, 126.218},
+		{"ep3_negal_teklon", -3337.896, 140, 3788.61, -51.457},
+		{"ep3_rryatt_tressk", -3040.29, 120, 4303.44, 123.186},
+		{"ep3_rryatt_trail_guide_f_01", -3182.251, 114.705, 3822.97, -33.232, level = 1, zoneLine = "rryattOne_rryattTwo", startingLocation = "rryattOneF_zoneIn"},
+		{"ep3_rryatt_trail_guide_m_01", -2945.898, 70.1953, 4005.578, -66.457, level = 2, up = true, zoneLine = "rryattTwo_rryattOne", startingLocation = "rryattTwoM_zoneIn"},
+		{"ep3_rryatt_trail_guide_f_02", -2692.67, 120, 3959.16, -55.302, level = 2, zoneLine = "rryattTwo_rryattThree", startingLocation = "rryattTwoF_zoneIn"},
+		{"ep3_achonnko", -3782.1, 169.417, 3331.29, 53.286, level = 1, mastery = true},
 		{"ep3_rryatt_trail_guide_m_02", -1840.83, 184.024, 3008, 130.135, level = 3, up = true, zoneLine = "rryattThree_rryattTwo", startingLocation = "rryattThreeM_zoneIn"},
 		{"ep3_rryatt_trail_guide_f_03", -1296.499, 188.038, 4059.8, 10.629, level = 3, zoneLine = "rryattThree_rryattFour", startingLocation = "rryattThreeF_zoneIn"},
 		{"ep3_rryatt_trail_guide_m_03", -3595.582, 140, 2829.839, 64.77, level = 4, up = true, zoneLine = "rryattFour_rryattThree", startingLocation = "rryattFourM_zoneIn"},
@@ -50,8 +50,8 @@ KashyyykRryattNpcs = ScreenPlay:new {
 		rryattGate_rryattFive = {1906, -193, -973, 5},
 	},
 	masteryDestinations = {"rryattGate_rryattTwo", "rryattGate_rryattThree", "rryattGate_rryattFour", "rryattGate_rryattFive"},
-	-- Only the converted first layout is shifted north from DSRC areas_* origins.
-	layoutShift = {251, 251, 0, 0, 0},
+	-- Public layouts now use the DSRC areas_* origins.
+	layoutShift = {0, 0, 0, 0, 0},
 }
 
 registerScreenPlay("KashyyykRryattNpcs", true)
