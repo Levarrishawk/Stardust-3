@@ -1160,6 +1160,11 @@ object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02 = obj
 	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02.iff"
 }
 ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_02.iff")
+-- West-NW bridge connection beneath the level-two entry guide, snapshot object 100000224.
+object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_03 = object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a2:new {
+	clientTemplateFileName = "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_03.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_03, "object/building/kashyyyk/shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_03.iff")
 --***********************************************************************************************************
 object_building_kashyyyk_shared_poi_kash_rryatt_lvl1_walk_treetop_a3 = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/building/kashyyyk/shared_poi_kash_rryatt_lvl1_walk_treetop_a3.iff"

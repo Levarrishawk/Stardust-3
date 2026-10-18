@@ -1,0 +1,3 @@
+object_building_kashyyyk_sd_rryatt_lvl1_walk_treetop_a2_crossing_03 = object_building_kashyyyk_shared_sd_rryatt_lvl1_walk_treetop_a2_crossing_03:new {
+}
+ObjectTemplates:addTemplate(object_building_kashyyyk_sd_rryatt_lvl1_walk_treetop_a2_crossing_03, "object/building/kashyyyk/sd_rryatt_lvl1_walk_treetop_a2_crossing_03.iff")
