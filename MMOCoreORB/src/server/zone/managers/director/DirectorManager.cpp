@@ -3452,7 +3452,7 @@ int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 			continue;
 
 		// Reserve the cooldown now so movement updates cannot queue another impact.
-		target->addCooldown("vehiclePatrolImpact", 15000);
+		target->addCooldown("vehiclePatrolImpact", 60000);
 		Core::getTaskManager()->scheduleTask([target, zone, pedestrian] {
 			Locker locker(target);
 			if ((!pedestrian && !target->isOnline()) || (pedestrian && target->isInCombat()) ||
@@ -3460,7 +3460,7 @@ int DirectorManager::checkVehiclePatrolImpact(lua_State* L) {
 				target->isRidingMount() || target->getPosture() != CreaturePosture::UPRIGHT)
 				return;
 
-			target->addCooldown("vehiclePatrolImpact", 15000);
+			target->addCooldown("vehiclePatrolImpact", 60000);
 			target->setPosture(CreaturePosture::KNOCKEDDOWN, true);
 			if (!pedestrian) {
 				target->sendSystemMessage("A passing vehicle knocks you off your feet!");
