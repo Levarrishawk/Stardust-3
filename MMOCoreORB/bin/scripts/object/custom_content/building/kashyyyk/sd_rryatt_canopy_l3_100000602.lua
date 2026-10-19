@@ -1,0 +1,3 @@
+object_building_kashyyyk_sd_rryatt_canopy_l3_100000602 = object_building_kashyyyk_shared_sd_rryatt_canopy_l3_100000602:new {
+}
+ObjectTemplates:addTemplate(object_building_kashyyyk_sd_rryatt_canopy_l3_100000602, "object/building/kashyyyk/sd_rryatt_canopy_l3_100000602.iff")
