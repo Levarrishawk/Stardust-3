@@ -30,7 +30,7 @@ ep3_eyma = Creature:new {
 	-- any mobile carrying the CONVERSE option bit has a non-empty conversationTemplate. The template is
 	-- ep3_eyma_convotemplate, defined in
 	-- mobile/conversations/space/neutral/kashyyyk_station/ep3_eyma_convo.lua.
-	optionsBitmask = AIENABLED + CONVERSABLE,
+	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_eyma.iff"},

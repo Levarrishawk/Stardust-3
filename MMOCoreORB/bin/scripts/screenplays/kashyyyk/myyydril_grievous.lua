@@ -1104,6 +1104,7 @@ function MyyydrilGrievous:notifyWirartuDamaged(pWirartu, pAttacker)
 		-- in this tree: OPEN (call still made so the bind is not dropped).
 		AiAgent(pWirartu):setConvoTemplate("ep3_forest_wirartu_attack")
 		TangibleObject(pWirartu):setOptionBit(CONVERSABLE)
+		TangibleObject(pWirartu):setOptionBit(INTERESTING)
 	else
 		CreatureObject(pWirartu):clearCombatState(true)
 	end

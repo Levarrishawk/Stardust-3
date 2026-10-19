@@ -29,7 +29,7 @@ ep3_wke_lolo = Creature:new {
 	-- ep3_wke_lolo_convotemplate, defined in
 	-- mobile/conversations/space/neutral/kashyyyk_bowcaster/ep3_wke_lolo_convo.lua. Lolo is the ground
 	-- giver for inspect/ep3_wke_bowcaster_crafting.
-	optionsBitmask = AIENABLED + CONVERSABLE,
+	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_wke_lolo.iff"},

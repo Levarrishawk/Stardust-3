@@ -253,13 +253,13 @@ assert(kachirhoMissingSonScreenPlay:getStage(other) == 3)
 
 Creature = ScreenPlay
 CreatureTemplates = {addCreatureTemplate = function() end}
-NONE, ATTACKABLE, MOB_NPC, AIENABLED, CONVERSABLE = 0, 1, 1, 1, 2
+NONE, ATTACKABLE, MOB_NPC, AIENABLED, CONVERSABLE, INTERESTING = 0, 1, 1, 1, 2, 4
 brawlermaster, marksmanmaster = {}, {}
 merge = function() return {} end
 load("mobile/custom_content/ep3/ep3_kachirho_lobarorr.lua")
 load("mobile/custom_content/ep3/ep3_chawroo.lua")
 assert(ep3_kachirho_lobarorr.pvpBitmask == ATTACKABLE)
-assert(ep3_chawroo.pvpBitmask == NONE and ep3_chawroo.optionsBitmask == AIENABLED + CONVERSABLE)
+assert(ep3_chawroo.pvpBitmask == NONE and ep3_chawroo.optionsBitmask == AIENABLED + CONVERSABLE + INTERESTING)
 assert(ep3_chawroo.conversationTemplate == "ep3_trandoshan_chawroo_zssik_01a_convo")
 
 screenplay("quest/destroyed_camp")
@@ -597,7 +597,7 @@ for _, spelling in ipairs({"guide_f", "guild_f", "guide_m"}) do
 		local name = "ep3_rryatt_trail_" .. spelling .. "_0" .. level
 		load("mobile/custom_content/ep3/" .. name .. ".lua")
 		local expected = spelling == "guide_m" and "rryatt_trail_guide_up_convo" or "rryatt_trail_guide_convo"
-		assert(_G[name].conversationTemplate == expected and _G[name].optionsBitmask == AIENABLED + CONVERSABLE)
+		assert(_G[name].conversationTemplate == expected and _G[name].optionsBitmask == AIENABLED + CONVERSABLE + INTERESTING)
 	end
 end
 local rryatt, mastery = KashyyykRryattNpcs, rryattTrailMasteryScreenPlay

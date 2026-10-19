@@ -26,7 +26,7 @@ space_ep3_chassis_broker_05 = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED + CONVERSABLE + JTLINTERESTING,
+	optionsBitmask = AIENABLED + CONVERSABLE + JTLINTERESTING + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/space_ep3_chassis_broker_05.iff"},

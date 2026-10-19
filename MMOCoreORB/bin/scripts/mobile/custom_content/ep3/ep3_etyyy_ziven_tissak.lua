@@ -30,7 +30,7 @@ ep3_etyyy_ziven_tissak = Creature:new {
 	-- observer for a mobile that carries the CONVERSE option bit, and src/tests/LuaMobileTest.cpp
 	-- (the repo gauntlet) asserts that a mobile with the bit also has a conversationTemplate. The
 	-- two below must therefore be set together.
-	optionsBitmask = AIENABLED + CONVERSABLE,
+	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_etyyy_ziven_tissak.iff"},

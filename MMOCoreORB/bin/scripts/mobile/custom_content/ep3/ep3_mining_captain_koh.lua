@@ -30,7 +30,7 @@ ep3_mining_captain_koh = Creature:new {
 	-- any mobile carrying the CONVERSE option bit has a non-empty conversationTemplate. The template is
 	-- ep3_mining_captain_koh_convotemplate, defined in
 	-- mobile/conversations/space/neutral/kashyyyk_mining/ep3_mining_captain_koh_convo.lua.
-	optionsBitmask = AIENABLED + CONVERSABLE,
+	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_mining_captain_koh.iff"},

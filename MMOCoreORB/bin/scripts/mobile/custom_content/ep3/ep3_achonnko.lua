@@ -8,7 +8,7 @@ ep3_achonnko = Creature:new {
 	baseHAMmax = 1000,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED + CONVERSABLE,
+	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	templates = {"object/mobile/ep3/ep3_achonnko.iff"},
 	conversationTemplate = "ep3_achonnko_convo",
 }
