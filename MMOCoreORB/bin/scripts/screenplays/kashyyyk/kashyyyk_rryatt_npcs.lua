@@ -1,6 +1,7 @@
 -- Public Rryatt layout (copy 0). Placements: DSRC buildout/kashyyyk_rryatt_trail/*.tab.
 -- DSRC creatures.tab maps the rryatt_* spawn names to these existing mobile templates.
 -- Snapshot geometry uses origins (-3908,3365), (-2208,2614), (-3908,1864), (-2208,1864).
+-- The public Webweaver Path (level four) is shifted 80 m north of that origin.
 KashyyykRryattNpcs = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "KashyyykRryattNpcs",
@@ -22,8 +23,8 @@ KashyyykRryattNpcs = ScreenPlay:new {
 		{"ep3_achonnko", -3782.1, 169.417, 3582.29, 53.286, level = 1, mastery = true},
 		{"ep3_rryatt_trail_guide_m_02", -1840.83, 182.3, 3008, 130.135, level = 3, up = true, zoneLine = "rryattThree_rryattTwo", startingLocation = "rryattThreeM_zoneIn"},
 		{"ep3_rryatt_trail_guide_f_03", -1296.499, 188.038, 4059.8, 10.629, level = 3, zoneLine = "rryattThree_rryattFour", startingLocation = "rryattThreeF_zoneIn"},
-		{"ep3_rryatt_trail_guide_m_03", -3595.582, 140, 2829.839, 64.77, level = 4, up = true, zoneLine = "rryattFour_rryattThree", startingLocation = "rryattFourM_zoneIn"},
-		{"ep3_rryatt_trail_guide_f_04", -2592.53, 142.647, 2827.239, 252.596, level = 4, zoneLine = "rryattFour_rryattFive", startingLocation = "rryattFourF_zoneIn"},
+		{"ep3_rryatt_trail_guide_m_03", -3595.582, 140, 2909.839, 64.77, level = 4, up = true, zoneLine = "rryattFour_rryattThree", startingLocation = "rryattFourM_zoneIn"},
+		{"ep3_rryatt_trail_guide_f_04", -2592.53, 142.647, 2907.239, 252.596, level = 4, zoneLine = "rryattFour_rryattFive", startingLocation = "rryattFourF_zoneIn"},
 		{"ep3_rryatt_trail_guide_m_04", -1878.51, -23.4006, 2360.739, 137.177, level = 5, up = true, zoneLine = "rryattFive_rryattFour", startingLocation = "rryattFiveM_zoneIn"},
 	},
 
@@ -51,8 +52,8 @@ KashyyykRryattNpcs = ScreenPlay:new {
 		rryattGate_rryattFive = {1906, -193, -973, 5},
 	},
 	masteryDestinations = {"rryattGate_rryattTwo", "rryattGate_rryattThree", "rryattGate_rryattFour", "rryattGate_rryattFive"},
-	-- Only the converted first layout is shifted north from DSRC areas_* origins.
-	layoutShift = {251, 251, 0, 0, 0},
+	-- Northward offsets from DSRC areas_* origins; applied to both ends of travel.
+	layoutShift = {251, 251, 0, 80, 0},
 }
 
 registerScreenPlay("KashyyykRryattNpcs", true)

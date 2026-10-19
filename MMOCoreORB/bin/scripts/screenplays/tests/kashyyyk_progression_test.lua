@@ -682,14 +682,14 @@ assert(not mastery:signalLevel(p, 0) and not mastery:signalLevel(p, 1.5) and not
 local down = {
 	{"ep3_rryatt_trail_guide_f_01", -2949.251, 69.405, 4256.97},
 	{"ep3_rryatt_trail_guide_f_02", -1839.67, 182.3, 3004.16},
-	{"ep3_rryatt_trail_guide_f_03", -3590.499, 142.038, 2831.8},
+	{"ep3_rryatt_trail_guide_f_03", -3590.499, 142.038, 2911.8},
 	{"ep3_rryatt_trail_guide_f_04", -1876.03, -23.653, 2360.039},
 }
 local up = {
 	{"ep3_rryatt_trail_guide_m_01", -3155.343185, 115.620025, 4021.710658},
 	{"ep3_rryatt_trail_guide_m_02", -2719.16, 121.824, 4210.84},
 	{"ep3_rryatt_trail_guide_m_03", -1295.582, 186, 4061.839},
-	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2826.039},
+	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2906.039},
 }
 local guide = rryatt_trail_guide_conv_handler
 local indices = {2, 3, 4, 5}
@@ -747,7 +747,7 @@ assert(p.dismounts == 1 and not p.mounted)
 assert(mastery:isComplete(p) and mastery:getRuns(p) == 1 and p.xpAwards == 1 and p.credits == nil and q.done)
 assert(q.completed[1] and next(q.active) == nil)
 
-local warps = {{-2955.1,69.417,4257.29},{-1840.1,182.317,3004.09},{-3592.4,140.117,2831.29},{-1876.1,-23.583,2358.29}}
+local warps = {{-2955.1,69.417,4257.29},{-1840.1,182.317,3004.09},{-3592.4,140.117,2911.29},{-1876.1,-23.583,2358.29}}
 local screens = {"s_189", "s_193", "s_197", "s_201"}
 for level = 1, 4 do
 	beside(p, achonnko)
