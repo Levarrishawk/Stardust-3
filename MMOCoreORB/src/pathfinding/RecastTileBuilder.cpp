@@ -137,7 +137,7 @@ void RecastTileBuilder::markRibbonWater() {
 				for (unsigned int span = cell.index; span < cell.index + cell.count; ++span) {
 					float floorHeight = m_chf->bmin[1] + m_chf->spans[span].y * m_chf->ch;
 					if (m_chf->areas[span] != RC_NULL_AREA && floorHeight <= height)
-						m_chf->areas[span] = surface.waterType == 0 ? SAMPLE_POLYAREA_WATER : RC_NULL_AREA;
+						m_chf->areas[span] = surface.waterType == 0 ? static_cast<unsigned char>(SAMPLE_POLYAREA_WATER) : RC_NULL_AREA;
 				}
 			}
 		}
