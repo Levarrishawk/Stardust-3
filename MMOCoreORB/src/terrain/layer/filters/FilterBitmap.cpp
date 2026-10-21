@@ -136,7 +136,13 @@ float FilterBitmap::process(float x, float y, float transformValue, float& baseV
 			+ v31 * v30 * (long double)arg1 * 0.003921568859368563
 			+ (1.0 - v31) * (1.0 - v30) * (long double)v28 * 0.003921568859368563
 			+ (1.0 - v31) * v30 * (long double)arg2 * 0.003921568859368563;
-	if ( mapResult == 1.0 )
+	if (hasGain) {
+		mapResult += gain;
+		if (mapResult < 0.f)
+			mapResult = 0.f;
+		else if (mapResult >= 1.f)
+			mapResult = 0.99999f;
+	} else if ( mapResult == 1.0 )
 		mapResult = 0.9999899864196777;
 	float v32 = featheringAmount;
 	float v33 = max;

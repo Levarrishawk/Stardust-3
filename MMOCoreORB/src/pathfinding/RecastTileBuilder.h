@@ -24,6 +24,7 @@
 #include "pathfinding/recast/Recast.h"
 
 #include "RecastPolygon.h"
+#include "terrain/TerrainWaterSurface.h"
 
 class MeshData;
 
@@ -98,6 +99,8 @@ protected:
 	void cleanup();
 
 	Vector <Reference<RecastPolygon*>> water;
+	Vector<TerrainWaterSurface> ribbonWater;
+	void markRibbonWater();
 
 	//void buildTile(const Vector3& pos);
 	void getTilePos(const Vector3& pos, int& tx, int& ty);
@@ -117,6 +120,9 @@ public:
 
 	inline void setWater(const Vector<Reference<RecastPolygon*> >& waterBoundaries) {
 		water = waterBoundaries;
+	}
+	void setRibbonWater(const Vector<TerrainWaterSurface>& surfaces) {
+		ribbonWater = surfaces;
 	}
 
 	virtual unsigned char* build(float x, float y, const AABB& tileBounds, int& dataSize);

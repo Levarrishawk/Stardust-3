@@ -30,6 +30,9 @@ public:
 		case '0003':
 			parseFromIffStream(iffStream, Version<'0003'>());
 			break;
+		case '0004':
+			parseFromIffStream(iffStream, true);
+			break;
 		default:
 			System::out << "unknown RGRP version " << version << endl;
 			break;
@@ -39,11 +42,15 @@ public:
 	}
 
 	void parseFromIffStream(engine::util::IffStream* iffStream, Version<'0003'>) {
+		parseFromIffStream(iffStream, false);
+	}
+
+	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasSizeRanges) {
 		int number = iffStream->getSubChunksNumber();
 
 		for (int i = 0; i < number; ++i) {
 			RadialFamily* ffam = new RadialFamily();
-			ffam->readObject(iffStream);
+			ffam->readObject(iffStream, hasSizeRanges);
 
 			data.add(ffam);
 		}

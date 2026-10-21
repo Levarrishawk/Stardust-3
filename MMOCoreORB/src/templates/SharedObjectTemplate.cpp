@@ -67,7 +67,7 @@ void SharedObjectTemplate::parseVariableData(const String& varName, LuaObject* t
 		containerType = Lua::getIntParameter(state);
 	} else if (varName == "containerVolumeLimit") {
 		containerVolumeLimit = Lua::getIntParameter(state);
-	} else if (varName == "tintPallete") {
+	} else if (varName == "tintPallete" || varName == "tintPalette") {
 		tintPallete = Lua::getStringParameter(state);
 	} else if (varName == "slotDescriptorFilename") {
 		String slotDescriptorFilename = Lua::getStringParameter(state);
@@ -226,7 +226,7 @@ void SharedObjectTemplate::parseVariableData(const String& varName, Chunk* data)
 		containerType.parse(data);
 	} else if (varName == "containerVolumeLimit") {
 		containerVolumeLimit.parse(data);
-	} else if (varName == "tintPallete") {
+	} else if (varName == "tintPallete" || varName == "tintPalette") {
 		tintPallete.parse(data);
 	} else if (varName == "slotDescriptorFilename") {
 		StringParam slotDescriptorFilename;

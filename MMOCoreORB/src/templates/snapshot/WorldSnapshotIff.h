@@ -20,6 +20,15 @@ public:
 
 	void readObject(IffStream* iffStream);
 
+	void addBuildoutNode(const BuildoutObject& object, uint32 templateIndex) {
+		nodes.add(WorldSnapshotNode(object, templateIndex));
+	}
+
+	uint32 addObjectTemplate(const String& name) {
+		objectTemplateNameList.add(name);
+		return objectTemplateNameList.size() - 1;
+	}
+
 	inline int getNodeCount() {
 		return nodes.size();
 	}

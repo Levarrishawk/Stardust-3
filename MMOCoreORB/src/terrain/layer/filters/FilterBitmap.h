@@ -21,11 +21,13 @@ class FilterBitmap : public FilterProceduralRule {
 	//float featheringAmount;
 	float min;
 	float max;
+	float gain;
+	bool hasGain;
 
 	TargaBitmap* map;
 
 public:
-	FilterBitmap() : FilterProceduralRule(5, 'FBIT'), bitmapId(0), min(0), max(0), map(nullptr) { //magic numbers from the client
+	FilterBitmap() : FilterProceduralRule(5, 'FBIT'), bitmapId(0), min(0), max(0), gain(0), hasGain(false), map(nullptr) { //magic numbers from the client
 	}
 
 	void parseFromIffStream(engine::util::IffStream* iffStream) {
@@ -37,6 +39,9 @@ public:
 		case '0000':
 			parseFromIffStream(iffStream, Version<'0000'>());
 			break;
+		case '0001':
+			parseFromIffStream(iffStream, true);
+			break;
 		default:
 			System::out << "unknown FilterBIT version 0x" << hex << version << endl;
 			break;
@@ -46,6 +51,13 @@ public:
 	}
 
 	void parseFromIffStream(engine::util::IffStream* iffStream, Version<'0000'>) {
+		parseFromIffStream(iffStream, false);
+	}
+
+	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasGainField) {
+		hasGain = hasGainField;
+		gain = 0;
+
 		informationHeader.readObject(iffStream);
 
 		iffStream->openForm('DATA');
@@ -58,6 +70,8 @@ public:
 		featheringAmount = iffStream->getFloat();
 		min = iffStream->getFloat();
 		max = iffStream->getFloat();
+		if (hasGain)
+			gain = iffStream->getFloat();
 
 		iffStream->closeChunk('PARM');
 

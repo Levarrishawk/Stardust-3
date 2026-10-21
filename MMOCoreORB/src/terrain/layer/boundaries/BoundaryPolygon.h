@@ -282,6 +282,10 @@ public:
 		case '0007':
 			parseFromIffStream(iffStream, Version<'0007'>());
 			break;
+		case '0006':
+			parseFromIffStream(iffStream, Version<'0007'>());
+			waterType = 0; // 0006's extra field was reserved, not a water type
+			break;
 		case '0005':
 			parseFromIffStream(iffStream, Version<'0005'>());
 			break;
@@ -301,7 +305,7 @@ public:
 		parseFromIffStream(iffStream, true);
 	}
 
-	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasTrailingField) {
+	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasWaterType) {
 		informationHeader.readObject(iffStream);
 
 		iffStream->openChunk('DATA');
@@ -321,10 +325,10 @@ public:
 		localWaterTableEnabled = iffStream->getInt(); // local water table enabled?
 		localWaterTableHeight = iffStream->getFloat(); // water height
 		shaderSize = iffStream->getFloat();
-		iffStream->getString(shaderName);
 
-		if (hasTrailingField)
-			iffStream->getInt();
+		waterType = hasWaterType ? iffStream->getInt() : 0;
+
+		iffStream->getString(shaderName);
 
 		iffStream->closeChunk('DATA');
 

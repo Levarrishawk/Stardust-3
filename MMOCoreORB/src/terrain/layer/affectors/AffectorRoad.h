@@ -122,11 +122,15 @@ class AffectorRoad : public ProceduralRule<'AROA'>, public AffectorProceduralRul
 	float featheringAmount;
 	int featheringShader;
 	float featheringShaderDistance;
+	Vector<float> fixedHeights;
+	bool hasFixedHeights;
 
 	static const int OUT_OF_RANGE = 500;
+	void processFixedHeights(float x, float y, float transformValue, float& baseValue) const;
+	const Point2D& getControlPoint(int index) const;
 
 public:
-	AffectorRoad() : coordinateCount(0), width(0.f), familyID(0), featheringType(0), featheringAmount(0), featheringShader(0), featheringShaderDistance(0.5f) {
+	AffectorRoad() : coordinateCount(0), width(0.f), familyID(0), featheringType(0), featheringAmount(0), featheringShader(0), featheringShaderDistance(0.5f), hasFixedHeights(false) {
 		affectorType = HEIGHTROAD;
 	}
 
@@ -146,6 +150,7 @@ public:
 
 	void parseFromIffStream(engine::util::IffStream* iffStream);
 	void parseFromIffStream(engine::util::IffStream* iffStream, Version<'0005'>);
+	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasHeightList);
 	void addNewRectangle(float x1, float y1, float x2, float y2);
 	void generateRectangles();
 	void sendDebugMessage(String message);

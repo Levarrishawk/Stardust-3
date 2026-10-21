@@ -34,12 +34,32 @@ class FloraFamily : public TemplateVariable<'FFAM'> {
 
 
 public:
+	int getFamilyID() const { return familyId; }
+	const FloraData* chooseChild(float choice) const {
+		if (data.size() == 0)
+			return nullptr;
+		float weightSum = 0;
+		for (int i = 0; i < data.size(); ++i)
+			weightSum += data.get(i)->var1;
+		float value = choice * weightSum;
+		for (int i = 0; i < data.size(); ++i) {
+			if (value <= data.get(i)->var1)
+				return data.get(i);
+			value -= data.get(i)->var1;
+		}
+		return data.get(0);
+	}
+
 	~FloraFamily() {
 		while (data.size() > 0)
 			delete data.remove(0);
 	}
 
 	void readObject(IffStream* iffStream) {
+		readObject(iffStream, '0008');
+	}
+
+	void readObject(IffStream* iffStream, uint32 version) {
 		iffStream->openChunk('FFAM');
 
 		familyId = iffStream->getInt();
@@ -61,10 +81,10 @@ public:
 			floraData->var2 = iffStream->getUnsignedInt();
 			floraData->var3 = iffStream->getFloat();
 			floraData->var4 = iffStream->getFloat();
-			floraData->var5 = iffStream->getUnsignedInt();
-			floraData->var6 = iffStream->getInt();
-			floraData->var7 = iffStream->getFloat();
-			floraData->var8 = iffStream->getFloat();
+			floraData->var5 = version >= '0007' ? iffStream->getUnsignedInt() : 0;
+			floraData->var6 = version >= '0008' ? iffStream->getInt() : 0;
+			floraData->var7 = version >= '0008' ? iffStream->getFloat() : 1.f;
+			floraData->var8 = version >= '0008' ? iffStream->getFloat() : 1.f;
 
 			data.add(floraData);
 		}

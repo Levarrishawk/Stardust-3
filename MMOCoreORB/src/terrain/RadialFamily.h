@@ -18,6 +18,9 @@ public:
 	float var2;
 	float var3;
 	float var4;
+	float maxWidth;
+	float maxHeight;
+	int maintainAspectRatio;
 	int var5;
 	float var6;
 	float var7;
@@ -41,6 +44,10 @@ public:
 	}
 
 	void readObject(IffStream* iffStream) {
+		readObject(iffStream, false);
+	}
+
+	void readObject(IffStream* iffStream, bool hasSizeRanges) {
 		iffStream->openChunk('RFAM');
 
 		familyId = iffStream->getInt();
@@ -62,7 +69,10 @@ public:
 			rdata->var1 = iffStream->getFloat();
 			rdata->var2 = iffStream->getFloat();
 			rdata->var3 = iffStream->getFloat();
+			rdata->maxWidth = hasSizeRanges ? iffStream->getFloat() : rdata->var3;
 			rdata->var4 = iffStream->getFloat();
+			rdata->maxHeight = hasSizeRanges ? iffStream->getFloat() : rdata->var4;
+			rdata->maintainAspectRatio = hasSizeRanges ? iffStream->getInt() : 0;
 			rdata->var5 = iffStream->getInt();
 			rdata->var6 = iffStream->getFloat();
 			rdata->var7 = iffStream->getFloat();

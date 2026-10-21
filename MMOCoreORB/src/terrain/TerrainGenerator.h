@@ -53,6 +53,10 @@ public:
 		return &mapGroup;
 	}
 
+	const FloraGroup& getFloraGroup() const {
+		return floraGroup;
+	}
+
 	inline LayersGroup* getLayersGroup() {
 		return &layers;
 	}

@@ -17,6 +17,7 @@ protected:
 
 	int featheringType = 0;
 	float featheringAmount = 0;
+	int waterType = 0;
 
 	const uint32 formType;
 
@@ -49,6 +50,10 @@ public:
 
 	virtual float getLocalWaterTableHeight() const {
 		return -16000;
+	}
+
+	int getWaterType() const {
+		return waterType;
 	}
 
 	virtual float process(float x, float y) const = 0;

@@ -298,6 +298,7 @@ void RecastNavMeshBuilder::buildAllTiles(const AABB& area) {
 	RecastTileBuilder builder(waterTableHeight, 0, 0, lastTileBounds, chunkyMesh, settings);
 	builder.changeMesh(m_geom);
 	builder.setWater(water);
+	builder.setRibbonWater(ribbonWater);
 
 	//info("Bounds: " + bounds.getMinBound()->toString() + " | " + bounds.getMaxBound()->toString() + "\n", true);
 
@@ -418,6 +419,7 @@ void RecastNavMeshBuilder::buildAllTiles() {
 	RecastTileBuilder builder(waterTableHeight, 0, 0, lastTileBounds, chunkyMesh, settings);
 	builder.changeMesh(m_geom);
 	builder.setWater(water);
+	builder.setRibbonWater(ribbonWater);
 
 	for (int y = 0; y < th; ++y) {
 
@@ -477,6 +479,14 @@ RecastNavMeshBuilder::initialize(Vector<Reference<MeshData*> >& meshData, const 
 #endif
 	meshData.add(getTerrainMesh(center, boundsRadius, terrainManager, 32,
 								distanceBetweenHeights));
+	Vector<StaticFloraInstance> flora;
+	terrainManager->getStaticFloraInAABB(bounds, flora);
+	for (int i = 0; i < flora.size(); ++i) {
+		const StaticFloraInstance& instance = flora.get(i);
+		meshData.addAll(instance.appearance->getTransformedMeshData(instance.getNavMeshTransform()));
+	}
+	ribbonWater.removeAll();
+	terrainManager->getProceduralTerrainAppearance()->getRibbonWaterInAABB(bounds, ribbonWater);
 
 	Reference < MeshData * > flattened = flattenMeshData(meshData);
 
@@ -504,7 +514,8 @@ RecastNavMeshBuilder::initialize(Vector<Reference<MeshData*> >& meshData, const 
 			const Vector<Point2D*>& points = bPoly->getVertices();
 
 			Reference < RecastPolygon * > poly = new RecastPolygon(points.size());
-			poly->type = SAMPLE_POLYAREA_WATER;
+			poly->type = terrainManager->getProceduralTerrainAppearance()->hasNgeTerrainData() && boundary->getWaterType() != 0 ?
+				static_cast<SamplePolyAreas>(RC_NULL_AREA) : SAMPLE_POLYAREA_WATER;
 
 			for (int i = points.size() - 1; i >= 0; i--) {
 				const Point2D& point = *points.get(i);
@@ -524,7 +535,8 @@ RecastNavMeshBuilder::initialize(Vector<Reference<MeshData*> >& meshData, const 
 
 		} else if (bRect != NULL) {
 			Reference < RecastPolygon * > poly = new RecastPolygon(4);
-			poly->type = SAMPLE_POLYAREA_WATER;
+			poly->type = terrainManager->getProceduralTerrainAppearance()->hasNgeTerrainData() && boundary->getWaterType() != 0 ?
+				static_cast<SamplePolyAreas>(RC_NULL_AREA) : SAMPLE_POLYAREA_WATER;
 			float tableHeight = bRect->getLocalWaterTableHeight();
 			poly->verts[0] = bRect->getMinX();
 			poly->verts[1] = tableHeight;

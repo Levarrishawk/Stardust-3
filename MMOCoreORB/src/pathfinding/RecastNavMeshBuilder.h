@@ -64,6 +64,7 @@ protected:
 	void cleanup();
 
 	Vector <Reference<RecastPolygon*>> water;
+	Vector<TerrainWaterSurface> ribbonWater;
 
 	float waterTableHeight;
 	bool destroyMesh;

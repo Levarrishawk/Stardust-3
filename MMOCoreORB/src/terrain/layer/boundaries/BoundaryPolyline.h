@@ -42,6 +42,7 @@ public:
 
 		switch (version) {
 		case '0001':
+		case '0003':
 			parseFromIffStream(iffStream, Version<'0001'>());
 			break;
 		default:
@@ -75,7 +76,7 @@ public:
 		featheringAmount = iffStream->getFloat();
 		lineWidth = iffStream->getFloat();
 
-		iffStream->closeForm('DATA');
+		iffStream->closeChunk('DATA');
 
 		initialize();
 	}

@@ -14,6 +14,11 @@
 #include "../HeightData.h"
 
 void AffectorRoad::process(float x, float y, float transformValue, float& baseValue, TerrainGenerator* terrainGenerator) {
+	if (hasFixedHeights) {
+		processFixedHeights(x, y, transformValue, baseValue);
+		return;
+	}
+
 #ifdef DEBUG_AFFECTOR_ROAD
 	StringBuffer msg;
 	msg << "process function called for location X: " << x << " Y: " << y << " transformValue: " << transformValue << " baseValue: " << baseValue << endl;
@@ -93,6 +98,9 @@ void AffectorRoad::parseFromIffStream(engine::util::IffStream* iffStream) {
 		case '0005':
 			parseFromIffStream(iffStream, Version<'0005'>());
 			break;
+		case '0006':
+			parseFromIffStream(iffStream, true);
+			break;
 		default:
 			Logger::console.error() << "unknown AffectorRoad version 0x" << hex << version << endl;
 			break;
@@ -102,6 +110,12 @@ void AffectorRoad::parseFromIffStream(engine::util::IffStream* iffStream) {
 }
 
 void AffectorRoad::parseFromIffStream(engine::util::IffStream* iffStream, Version<'0005'>) {
+	parseFromIffStream(iffStream, false);
+}
+
+void AffectorRoad::parseFromIffStream(engine::util::IffStream* iffStream, bool hasHeightList) {
+	hasFixedHeights = false;
+	fixedHeights.removeAll();
 	informationHeader.readObject(iffStream);
 
 	iffStream->openForm('DATA');
@@ -123,6 +137,8 @@ void AffectorRoad::parseFromIffStream(engine::util::IffStream* iffStream, Versio
 	iffStream->openChunk('DATA');
 
 	coordinateCount = iffStream->getInt();
+	if (hasHeightList && (coordinateCount < 2 || coordinateCount > iffStream->getDataSize() / 8))
+		throw Exception("Invalid AROA control point count in " + iffStream->getFileName());
 
 #ifdef DEBUG_AFFECTOR_ROAD
 	StringBuffer msg;
@@ -155,12 +171,25 @@ void AffectorRoad::parseFromIffStream(engine::util::IffStream* iffStream, Versio
 		}
 	}
 
-	width = iffStream->getFloat() * 0.7f;
+	if (hasHeightList) {
+		int count = iffStream->getInt();
+		if (count < 0 || count > iffStream->getDataSize() / 4)
+			throw Exception("Invalid AROA height count in " + iffStream->getFileName());
+		for (int i = 0; i < count; ++i)
+			fixedHeights.add(iffStream->getFloat());
+	}
+
+	width = iffStream->getFloat() * (hasHeightList ? 1.f : 0.7f);
 	familyID = iffStream->getInt();
 	featheringType = iffStream->getInt();
 	featheringAmount = Math::clamp(0.f, iffStream->getFloat(), 1.f);
 	featheringShader = iffStream->getInt();
 	featheringShaderDistance = Math::clamp(0.f, iffStream->getFloat(), 1.f);
+	if (hasHeightList) {
+		hasFixedHeights = iffStream->getInt() != 0;
+		if (coordinateCount < 2 || (hasFixedHeights && fixedHeights.size() != coordinateCount))
+			throw Exception("Invalid AROA control/height list in " + iffStream->getFileName());
+	}
 
 #ifdef DEBUG_AFFECTOR_ROAD
 	sendDebugMessage(msg.toString());
@@ -172,6 +201,76 @@ void AffectorRoad::parseFromIffStream(engine::util::IffStream* iffStream, Versio
 
 	// Generate rectangles for roadways
 	generateRectangles();
+}
+
+const Point2D& AffectorRoad::getControlPoint(int index) const {
+	if (index == 0)
+		return startPoint;
+	if (index == coordinateCount - 1)
+		return endPoint;
+	return *midPositions.get(index - 1);
+}
+
+void AffectorRoad::processFixedHeights(float x, float y, float transformValue, float& baseValue) const {
+	if (transformValue == 0 || width <= 0)
+		return;
+
+	float halfWidth = width / 2.f;
+	float distanceSquared = halfWidth * halfWidth;
+	int nearest = -1;
+	float fraction = 0;
+
+	for (int i = 0; i < coordinateCount; ++i) {
+		const Point2D& point = getControlPoint(i);
+		float dx = x - point.x;
+		float dy = y - point.y;
+		float distance = dx * dx + dy * dy;
+		if (distance < distanceSquared) {
+			distanceSquared = distance;
+			nearest = i;
+			fraction = 0;
+		}
+	}
+
+	for (int i = 0; i < coordinateCount - 1; ++i) {
+		const Point2D& start = getControlPoint(i);
+		const Point2D& end = getControlPoint(i + 1);
+		float dx = end.x - start.x;
+		float dy = end.y - start.y;
+		float lengthSquared = dx * dx + dy * dy;
+		if (lengthSquared == 0)
+			continue;
+		float u = ((x - start.x) * dx + (y - start.y) * dy) / lengthSquared;
+		if (u < 0 || u > 1)
+			continue;
+		float offsetX = x - (start.x + u * dx);
+		float offsetY = y - (start.y + u * dy);
+		float distance = offsetX * offsetX + offsetY * offsetY;
+		if (distance < distanceSquared) {
+			distanceSquared = distance;
+			nearest = i;
+			fraction = u;
+		}
+	}
+
+	if (nearest < 0)
+		return;
+
+	float height = fixedHeights.get(nearest);
+	if (nearest < coordinateCount - 1)
+		height += fraction * (fixedHeights.get(nearest + 1) - height);
+
+	float feather = 1.f;
+	float innerWidth = halfWidth * (1.f - featheringAmount);
+	if (featheringAmount > 0 && distanceSquared >= innerWidth * innerWidth) {
+		feather = 1.f - (sqrt(distanceSquared) - innerWidth) / (halfWidth - innerWidth);
+		switch (featheringType) {
+		case 1: feather *= feather; break;
+		case 2: feather = sqrt(feather); break;
+		case 3: feather = feather * feather * (3.f - 2.f * feather); break;
+		}
+	}
+	baseValue += (height - baseValue) * feather * transformValue;
 }
 
 void AffectorRoad::generateRectangles() {

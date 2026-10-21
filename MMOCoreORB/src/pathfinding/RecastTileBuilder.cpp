@@ -113,6 +113,37 @@ RecastTileBuilder::RecastTileBuilder(float waterTableHeight, float x, float y, c
 	chunkyMesh = mesh;
 }
 
+void RecastTileBuilder::markRibbonWater() {
+	for (int i = 0; i < ribbonWater.size(); ++i) {
+		const TerrainWaterSurface& surface = ribbonWater.get(i);
+		float minX = Math::min(surface.points[0].getX(), Math::min(surface.points[1].getX(), surface.points[2].getX()));
+		float maxX = Math::max(surface.points[0].getX(), Math::max(surface.points[1].getX(), surface.points[2].getX()));
+		float minZ = -Math::max(surface.points[0].getY(), Math::max(surface.points[1].getY(), surface.points[2].getY()));
+		float maxZ = -Math::min(surface.points[0].getY(), Math::min(surface.points[1].getY(), surface.points[2].getY()));
+		if (maxX < m_chf->bmin[0] || minX > m_chf->bmax[0] || maxZ < m_chf->bmin[2] || minZ > m_chf->bmax[2])
+			continue;
+		int x0 = Math::clamp(0, (int) floor((minX - m_chf->bmin[0]) / m_chf->cs), m_chf->width - 1);
+		int x1 = Math::clamp(0, (int) floor((maxX - m_chf->bmin[0]) / m_chf->cs), m_chf->width - 1);
+		int z0 = Math::clamp(0, (int) floor((minZ - m_chf->bmin[2]) / m_chf->cs), m_chf->height - 1);
+		int z1 = Math::clamp(0, (int) floor((maxZ - m_chf->bmin[2]) / m_chf->cs), m_chf->height - 1);
+		for (int z = z0; z <= z1; ++z) {
+			for (int x = x0; x <= x1; ++x) {
+				float height;
+				float worldX = m_chf->bmin[0] + (x + 0.5f) * m_chf->cs;
+				float worldY = -(m_chf->bmin[2] + (z + 0.5f) * m_chf->cs);
+				if (!surface.getHeight(worldX, worldY, height))
+					continue;
+				const rcCompactCell& cell = m_chf->cells[x + z * m_chf->width];
+				for (unsigned int span = cell.index; span < cell.index + cell.count; ++span) {
+					float floorHeight = m_chf->bmin[1] + m_chf->spans[span].y * m_chf->ch;
+					if (m_chf->areas[span] != RC_NULL_AREA && floorHeight <= height)
+						m_chf->areas[span] = surface.waterType == 0 ? SAMPLE_POLYAREA_WATER : RC_NULL_AREA;
+				}
+			}
+		}
+	}
+}
+
 RecastTileBuilder::~RecastTileBuilder() {
 	m_geom = NULL;
 	cleanup();
@@ -349,6 +380,7 @@ unsigned char* RecastTileBuilder::buildTileMesh(const int tx, const int ty, int&
 	max[2] = bmax.getZ();
 
 	rcMarkBoxArea(m_ctx, min, max, SAMPLE_POLYAREA_WATER, *m_chf);
+	markRibbonWater();
 
 
 	rcMedianFilterWalkableArea(m_ctx, *m_chf);

@@ -77,6 +77,9 @@ public:
 		case '0005':
 			parseFromIffStream(iffStream, Version<'0005'>());
 			break;
+		case '0006':
+			parseFromIffStream(iffStream, true);
+			break;
 		default:
 			System::out << "unknown AffectorRiver version 0x" << hex << version << endl;
 			break;
@@ -86,6 +89,10 @@ public:
 	}
 
 	void parseFromIffStream(engine::util::IffStream* iffStream, Version<'0005'>) {
+		parseFromIffStream(iffStream, false);
+	}
+
+	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasWaterType) {
 		informationHeader.readObject(iffStream);
 
 		iffStream->openForm('DATA');
@@ -129,6 +136,8 @@ public:
 		var12 = iffStream->getFloat();
 
 		iffStream->getString(var15);
+		if (hasWaterType)
+			iffStream->getInt(); // water type; Core3 does not simulate river water
 
 		iffStream->closeChunk('DATA');
 

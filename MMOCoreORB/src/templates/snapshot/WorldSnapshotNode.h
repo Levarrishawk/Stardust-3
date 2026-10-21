@@ -10,12 +10,14 @@
 
 #include "engine/util/u3d/Quaternion.h"
 #include "engine/util/iffstream/IffStream.h"
+#include "BuildoutData.h"
 
 class WorldSnapshotNode : public Object {
 	Vector<WorldSnapshotNode> childNodes;
 
-	uint32 objectID;
-	uint32 parentID;
+	uint64 objectID;
+	uint64 parentID;
+	bool buildout = false;
 	uint32 nameID;
 	uint32 cellid; //cellid in the cells
 
@@ -30,10 +32,23 @@ public:
 
 	}
 
+	WorldSnapshotNode(const BuildoutObject& object, uint32 templateIndex) : WorldSnapshotNode() {
+		objectID = object.objectID;
+		parentID = object.parentID;
+		nameID = templateIndex;
+		cellid = object.cellIndex;
+		position = object.position;
+		direction = object.direction;
+		gameObjectType = object.radius;
+		unknown2 = object.portalLayoutCRC;
+		buildout = true;
+	}
+
 	WorldSnapshotNode(const WorldSnapshotNode& wsn) : Object() {
 		childNodes = wsn.childNodes;
 		objectID = wsn.objectID;
 		parentID = wsn.parentID;
+		buildout = wsn.buildout;
 		nameID = wsn.nameID;
 		cellid = wsn.cellid;
 		direction = wsn.direction;
@@ -49,6 +64,7 @@ public:
 		childNodes = wsn.childNodes;
 		objectID = wsn.objectID;
 		parentID = wsn.parentID;
+		buildout = wsn.buildout;
 		nameID = wsn.nameID;
 		cellid = wsn.cellid;
 		direction = wsn.direction;
@@ -119,11 +135,13 @@ public:
 		return nameID;
 	}
 
-	uint32 getObjectID() const {
+	bool isBuildout() const { return buildout; }
+
+	uint64 getObjectID() const {
 		return objectID;
 	}
 
-	uint32 getParentID() const {
+	uint64 getParentID() const {
 		return parentID;
 	}
 

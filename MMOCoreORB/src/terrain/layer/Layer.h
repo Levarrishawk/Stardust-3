@@ -48,6 +48,7 @@ public:
 
 	void parseFromIffStream(engine::util::IffStream* iffStream);
 	void parseFromIffStream(engine::util::IffStream* iffStream, Version<'0003'>);
+	void parseFromIffStream(engine::util::IffStream* iffStream, bool hasUnusedField);
 
 	IffTemplateVariable* parseAffector(IffStream* iffStream);
 	Boundary* parseBoundary(IffStream* iffStream);

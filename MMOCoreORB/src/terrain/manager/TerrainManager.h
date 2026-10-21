@@ -13,6 +13,8 @@
 #include "gmock/gmock.h"
 #endif
 #include "TerrainCache.h"
+#include "terrain/StaticFlora.h"
+#include "templates/snapshot/BuildoutData.h"
 
 class ProceduralTerrainAppearance;
 
@@ -22,6 +24,9 @@ class TerrainManager : public Logger, public Object {
 	TerrainCache* heightCache;
 
 	float min, max;
+	ReadWriteLock floraClearGuard;
+	VectorMap<uint64, Sphere> floraClearAreas;
+	BuildoutData buildoutData;
 
 protected:
 	void clearCache(TerrainGenerator* generator);
@@ -31,6 +36,13 @@ public:
 	~TerrainManager();
 
 	bool initialize(const String& terrainFile);
+	BuildoutData& getBuildoutData() { return buildoutData; }
+	const BuildoutData& getBuildoutData() const { return buildoutData; }
+	bool hasNativeStaticFlora() const;
+	void updateFloraClearArea(uint64 objectID, const Vector3& position, float radius);
+	void removeFloraClearArea(uint64 objectID);
+	void getStaticFloraInAABB(const AABB& bounds, Vector<StaticFloraInstance>& instances) const;
+	bool getWaterSurface(float x, float y, float& height, int& waterType) const;
 
 	inline bool getWaterHeight(float x, float y, float& waterHeight) const {
 		return terrainData->getWater(x, y, waterHeight);

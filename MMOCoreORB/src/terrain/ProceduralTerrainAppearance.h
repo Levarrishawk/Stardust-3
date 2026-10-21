@@ -11,6 +11,8 @@
 #include "TemplateVariable.h"
 #include "TerrainAppearance.h"
 #include "engine/util/u3d/AABB.h"
+#include "TerrainWaterSurface.h"
+#include "StaticFlora.h"
 
 class TerrainGenerator;
 class Boundary;
@@ -22,6 +24,9 @@ class ProceduralTerrainAppearance : public TemplateVariable<'PTAT'>, public Logg
 	TerrainGenerator* terrainGenerator;
 
 	Vector<Boundary*> waterBoundaries;
+	Vector<TerrainWaterSurface> ribbonWater;
+	bool ngeTerrainData = false;
+	StaticFlora staticFlora;
 
 	TerrainMaps* terrainMaps;
 
@@ -38,6 +43,7 @@ class ProceduralTerrainAppearance : public TemplateVariable<'PTAT'>, public Logg
 	String globalWaterTableShader;
 
 	float timeCycle;
+	bool legacyMap;
 
 	uint32 floraCollidableMinDistance;
 	float floraCollidableMaxDistance;
@@ -80,6 +86,7 @@ protected:
 
 	void translateBoundaries(Layer* layer, float x, float y);
 	void setHeight(Layer* layer, float height);
+	void collectRibbonWater(const Layer* layer);
 
 public:
 	ProceduralTerrainAppearance();
@@ -95,6 +102,13 @@ public:
 	}
 
 	void getWaterBoundariesInAABB(const AABB& bounds, Vector<const Boundary*>* boundariesOut) const;
+	void getRibbonWaterInAABB(const AABB& bounds, Vector<TerrainWaterSurface>& surfaces) const;
+	bool getWaterSurface(float x, float y, float& waterHeight, int& waterType) const;
+	bool hasNgeTerrainData() const {
+		return ngeTerrainData;
+	}
+	bool hasStaticFlora() const { return staticFlora.hasInstances(); }
+	void getStaticFloraInAABB(const AABB& bounds, Vector<StaticFloraInstance>& instances) const;
 
 	/**
 	 * Returns the size of the terrain.
@@ -114,6 +128,10 @@ public:
 
 	float getGlobalWaterTableHeight() const {
 		return globalWaterTableHeight;
+	}
+
+	bool isLegacyMap() const {
+		return legacyMap;
 	}
 
 	bool getUseGlobalWaterTable() const {

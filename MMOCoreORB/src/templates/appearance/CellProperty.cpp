@@ -113,7 +113,10 @@ void CellProperty::loadVersion5(IffStream* iffStream) {
 		String floorFile;
 		iffStream->getString(floorFile);
 		floorMesh = TemplateManager::instance()->getFloorMesh(floorFile);
-		floorMesh->setCellID(cellID);
+		if (floorMesh != nullptr)
+			floorMesh->setCellID(cellID);
+		else
+			warning("Could not load floor " + floorFile + " for cell " + name + " in " + iffStream->getFileName());
 
 	}
 

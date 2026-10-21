@@ -42,6 +42,9 @@ void Layer::parseFromIffStream(engine::util::IffStream* iffStream) {
 	case '0003':
 		parseFromIffStream(iffStream, Version<'0003'>());
 		break;
+	case '0004':
+		parseFromIffStream(iffStream, true);
+		break;
 	default:
 		System::out << "unknown Layer version 0x" << hex << version << endl;
 		break;
@@ -51,12 +54,18 @@ void Layer::parseFromIffStream(engine::util::IffStream* iffStream) {
 }
 
 void Layer::parseFromIffStream(engine::util::IffStream* iffStream, Version<'0003'>) {
+	parseFromIffStream(iffStream, false);
+}
+
+void Layer::parseFromIffStream(engine::util::IffStream* iffStream, bool hasUnusedField) {
 	infoHeader.readObject(iffStream);
 
 	iffStream->openChunk('ADTA');
 
 	boundariesFlag = iffStream->getUnsignedInt();
 	filterFlag = iffStream->getUnsignedInt();
+	if (hasUnusedField)
+		iffStream->getInt();
 	uint32 var3 = iffStream->getUnsignedInt();
 
 	String var4;
@@ -201,6 +210,10 @@ IffTemplateVariable* Layer::parseAffector(IffStream* iffStream) {
 		res = new AffectorRiver();
 		break;
 	}
+	case ('ARIB'): {
+		res = new AffectorRibbon();
+		break;
+	}
 	case ('AROA'): {
 		res = new AffectorRoad();
 		break;
@@ -218,8 +231,14 @@ IffTemplateVariable* Layer::parseAffector(IffStream* iffStream) {
 		break;
 	}
 
-	if (res != nullptr)
-		res->readObject(iffStream);
+	if (res != nullptr) {
+		try {
+			res->readObject(iffStream);
+		} catch (...) {
+			delete res;
+			throw;
+		}
+	}
 
 	return res;
 }

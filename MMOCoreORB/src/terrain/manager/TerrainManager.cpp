@@ -24,7 +24,8 @@ TerrainManager::~TerrainManager() {
 }
 
 bool TerrainManager::initialize(const String& terrainFile) {
-	IffStream* iffStream = TemplateManager::instance()->openIffFile(terrainFile);
+	buildoutData.clear();
+	UniqueReference<IffStream*> iffStream(TemplateManager::instance()->openIffFile(terrainFile));
 
 	if (iffStream == nullptr)
 		return false;
@@ -33,11 +34,12 @@ bool TerrainManager::initialize(const String& terrainFile) {
 		terrainData = new ProceduralTerrainAppearance();
 	} else if (iffStream->getNextFormType() == 'STAT') {
 		terrainData = new SpaceTerrainAppearance();
+	} else {
+		error("Unsupported terrain appearance in " + terrainFile);
+		return false;
 	}
 
 	bool val = terrainData->load(iffStream);
-
-	delete iffStream;
 
 	if (heightCache != nullptr) {
 		delete heightCache;
@@ -49,6 +51,54 @@ bool TerrainManager::initialize(const String& terrainFile) {
 	max = getMax();
 
 	return val;
+}
+
+bool TerrainManager::hasNativeStaticFlora() const {
+	const ProceduralTerrainAppearance* terrain = dynamic_cast<const ProceduralTerrainAppearance*>(terrainData.get());
+	return terrain != nullptr && terrain->hasNgeTerrainData() && !terrain->isLegacyMap();
+}
+
+void TerrainManager::updateFloraClearArea(uint64 objectID, const Vector3& position, float radius) {
+	if (!hasNativeStaticFlora())
+		return;
+	Locker locker(&floraClearGuard);
+	if (radius > 0)
+		floraClearAreas.put(objectID, Sphere(position, radius));
+	else
+		floraClearAreas.drop(objectID);
+}
+
+void TerrainManager::removeFloraClearArea(uint64 objectID) {
+	if (!hasNativeStaticFlora())
+		return;
+	Locker locker(&floraClearGuard);
+	floraClearAreas.drop(objectID);
+}
+
+void TerrainManager::getStaticFloraInAABB(const AABB& bounds, Vector<StaticFloraInstance>& instances) const {
+	const ProceduralTerrainAppearance* terrain = dynamic_cast<const ProceduralTerrainAppearance*>(terrainData.get());
+	if (terrain == nullptr || !terrain->hasStaticFlora())
+		return;
+	Vector<StaticFloraInstance> candidates;
+	terrain->getStaticFloraInAABB(bounds, candidates);
+	ReadLocker locker(&floraClearGuard);
+	Vector<Sphere> clearAreas;
+	for (int i = 0; i < floraClearAreas.size(); ++i)
+		clearAreas.add(floraClearAreas.get(i));
+	locker.release();
+	for (int i = 0; i < candidates.size(); ++i) {
+		if (!StaticFlora::isCleared(candidates.get(i), clearAreas))
+			instances.add(candidates.get(i));
+	}
+}
+
+bool TerrainManager::getWaterSurface(float x, float y, float& height, int& waterType) const {
+	const ProceduralTerrainAppearance* terrain = dynamic_cast<const ProceduralTerrainAppearance*>(terrainData.get());
+	if (terrain != nullptr && terrain->hasNgeTerrainData())
+		return terrain->getWaterSurface(x, y, height, waterType);
+	bool found = terrainData != nullptr && terrainData->getWater(x, y, height);
+	waterType = found ? 0 : -1;
+	return found;
 }
 
 /**

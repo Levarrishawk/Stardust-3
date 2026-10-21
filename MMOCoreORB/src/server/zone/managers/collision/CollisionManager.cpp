@@ -25,6 +25,67 @@
 
 // #define DEBUG_MOVEMENT_COLLISION
 
+namespace {
+
+TerrainManager* getFloraTerrain(Zone* zone) {
+	if (zone == nullptr || zone->getPlanetManager() == nullptr)
+		return nullptr;
+	return zone->getPlanetManager()->getTerrainManager();
+}
+
+float traceTerrainFlora(Zone* zone, const Vector3& start, const Vector3& end, SortedVector<IntersectionResult>* hits = nullptr) {
+	TerrainManager* terrain = getFloraTerrain(zone);
+	if (terrain == nullptr || !terrain->hasNativeStaticFlora())
+		return FLT_MAX;
+	float distance = start.distanceTo(end);
+	if (distance == 0)
+		return FLT_MAX;
+	AABB bounds(Vector3(Math::min(start.getX(), end.getX()), Math::min(start.getZ(), end.getZ()), Math::min(start.getY(), end.getY())),
+		Vector3(Math::max(start.getX(), end.getX()), Math::max(start.getZ(), end.getZ()), Math::max(start.getY(), end.getY())));
+	Vector<StaticFloraInstance> instances;
+	terrain->getStaticFloraInAABB(bounds, instances);
+	float closest = FLT_MAX;
+	for (int i = 0; i < instances.size(); ++i) {
+		const StaticFloraInstance& instance = instances.get(i);
+		Vector3 origin = instance.toModelSpace(start);
+		Vector3 direction = instance.toModelSpace(end) - origin;
+		direction.normalize();
+		Ray ray(origin, direction);
+		if (hits != nullptr) {
+			SortedVector<IntersectionResult> localHits;
+			instance.appearance->intersects(ray, distance / instance.scale, localHits);
+			for (int j = 0; j < localHits.size(); ++j) {
+				float hit = localHits.get(j).getIntersectionDistance() * instance.scale;
+				hits->add(IntersectionResult(hit, localHits.get(j).getTriangle()));
+				closest = Math::min(closest, hit);
+			}
+		} else {
+			float hit;
+			Triangle* triangle = nullptr;
+			if (instance.appearance->intersects(ray, distance / instance.scale, hit, triangle, true))
+				closest = Math::min(closest, hit * instance.scale);
+		}
+	}
+	return closest;
+}
+
+bool sphereIntersectsTerrainFlora(Zone* zone, const Vector3& origin, float radius) {
+	TerrainManager* terrain = getFloraTerrain(zone);
+	if (terrain == nullptr || !terrain->hasNativeStaticFlora())
+		return false;
+	Vector<StaticFloraInstance> instances;
+	terrain->getStaticFloraInAABB(AABB(Vector3(origin.getX() - radius, origin.getZ() - radius, origin.getY() - radius),
+		Vector3(origin.getX() + radius, origin.getZ() + radius, origin.getY() + radius)), instances);
+	for (int i = 0; i < instances.size(); ++i) {
+		const StaticFloraInstance& instance = instances.get(i);
+		if (instance.appearance->testCollide(Sphere(instance.toModelSpace(origin), radius / instance.scale)))
+			return true;
+	}
+	return false;
+}
+
+} // namespace
+
 float CollisionManager::getRayOriginPoint(CreatureObject* creature) {
 	float heightOrigin = creature->getHeight() - 0.3f;
 
@@ -198,6 +259,10 @@ bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector
 }
 
 bool CollisionManager::checkSphereCollision(const Vector3& origin, float radius, Zone* zone) {
+	if (zone == nullptr)
+		return false;
+	if (sphereIntersectsTerrainFlora(zone, origin, radius))
+		return true;
 	Vector3 sphereOrigin(origin.getX(), origin.getZ(), origin.getY());
 
 	SortedVector<ManagedReference<TreeEntry*> > objects(512, 512);
@@ -327,6 +392,10 @@ bool CollisionManager::checkMovementCollision(CreatureObject* player, CloseObjec
 #endif // DEBUG_MOVEMENT_COLLISION
 
 	float maxDistance = rayStart.distanceTo(rayEnd);
+	Vector3 floraEnd = transformPosition;
+	floraEnd.setZ(floraEnd.getZ() + rayHeight);
+	if (traceTerrainFlora(zone, rayStart, floraEnd) != FLT_MAX)
+		return false;
 
 #ifdef DEBUG_MOVEMENT_COLLISION
 	player->info(true) << "Movement Collision -- Max Dist: " << maxDistance << " Ray Start: " << rayStart.toString() << " Ray End: " << rayEnd.toString() << " Transform Position: " << transformPosition.toString();
@@ -542,6 +611,9 @@ float CollisionManager::getWorldFloorCollision(float x, float y, float z, Zone* 
 		}
 	}
 
+	float floraDistance = traceTerrainFlora(zone, Vector3(x, y, z + 2.f), Vector3(x, y, z + 2.f - 32768.f));
+	if (floraDistance != FLT_MAX)
+		height = Math::max(height, z + 2.f - floraDistance);
 	return height;
 }
 
@@ -595,6 +667,9 @@ float CollisionManager::getWorldFloorCollision(float x, float y, Zone* zone, boo
 		}
 	}
 
+	float floraDistance = traceTerrainFlora(zone, Vector3(x, y, 16384.f), Vector3(x, y, -16384.f));
+	if (floraDistance != FLT_MAX)
+		height = Math::max(height, 16384.f - floraDistance);
 	return height;
 }
 
@@ -617,6 +692,7 @@ void CollisionManager::getWorldFloorCollisions(float x, float y, Zone* zone, Sor
 }
 
 void CollisionManager::getWorldFloorCollisions(float x, float y, Zone* zone, SortedVector<IntersectionResult>* result, const SortedVector<ManagedReference<TreeEntry*> >& inRangeObjects) {
+	traceTerrainFlora(zone, Vector3(x, y, 16384.f), Vector3(x, y, -16384.f), result);
 	Vector3 rayStart(x, 16384.f, y);
 	Vector3 rayEnd(x, -16384.f, y);
 
@@ -633,6 +709,7 @@ void CollisionManager::getWorldFloorCollisions(float x, float y, Zone* zone, Sor
 }
 
 void CollisionManager::getWorldFloorCollisions(float x, float y, Zone* zone, SortedVector<IntersectionResult>* result, const Vector<TreeEntry*>& inRangeObjects) {
+	traceTerrainFlora(zone, Vector3(x, y, 16384.f), Vector3(x, y, -16384.f), result);
 	Vector3 rayStart(x, 16384.f, y);
 	Vector3 rayEnd(x, -16384.f, y);
 
@@ -717,6 +794,8 @@ bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* objec
 	Triangle* triangle = nullptr;
 
 	try {
+		if (traceTerrainFlora(zone, rayOrigin, rayEnd) != FLT_MAX)
+			return false;
 		for (int i = 0; i < (closeObjects != nullptr ? closeObjects->size() : closeObjectsNonReference->size()); ++i) {
 			const AppearanceTemplate* app = nullptr;
 

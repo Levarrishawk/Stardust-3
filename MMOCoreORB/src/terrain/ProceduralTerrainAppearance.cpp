@@ -10,6 +10,7 @@
 #include "TerrainMaps.h"
 #include "layer/boundaries/Boundary.h"
 #include "layer/affectors/AffectorHeightConstant.h"
+#include "layer/affectors/AffectorRibbon.h"
 
 ProceduralTerrainAppearance::ProceduralTerrainAppearance() : Logger("ProceduralTerrainAppearance") {
 	terrainGenerator = new TerrainGenerator(this);
@@ -26,6 +27,7 @@ ProceduralTerrainAppearance::ProceduralTerrainAppearance() : Logger("ProceduralT
 	globalWaterTableShaderSize = 0;
 
 	timeCycle = 0;
+	legacyMap = true;
 
 	floraCollidableMinDistance = 0;
 	floraCollidableMaxDistance = 0;
@@ -71,6 +73,8 @@ ProceduralTerrainAppearance::~ProceduralTerrainAppearance() {
 
 bool ProceduralTerrainAppearance::load(IffStream* iffStream) {
 	waterBoundaries.removeAll();
+	ribbonWater.removeAll();
+	staticFlora.clear();
 
 	delete terrainGenerator;
 	delete terrainMaps;
@@ -82,6 +86,13 @@ bool ProceduralTerrainAppearance::load(IffStream* iffStream) {
 	hasPassabilityAffectors = containsPassabilityAffector(terrainGenerator);
 
 	terrainGenerator->processLayers();
+	if (ngeTerrainData) {
+		const Vector<Layer*>* layers = terrainGenerator->getLayersGroup()->getLayers();
+		for (int i = 0; i < layers->size(); ++i)
+			collectRibbonWater(layers->get(i));
+		if (!legacyMap)
+			staticFlora.initialize(size, floraCollidableTileBorder, terrainGenerator->getFloraGroup());
+	}
 
 	return true;
 }
@@ -108,18 +119,18 @@ void ProceduralTerrainAppearance::parseFromIffStream(engine::util::IffStream* if
 	// known terrain versions
 	case '0013': // old test-style
 	case '0014': // normal zones
-	//case '0015': // Post-CU zones: TODO: add these
+	case '0015': // Post-CU/NGE zones
 		parseFromIffStream(iffStream, version);
 		break;
 	default:
-		error("unknown version in ProceduralTerrainAppearance::parseFromIffStream " + String::valueOf(version));
-		break;
+		throw Exception("Unsupported PTAT version " + String::hexvalueOf((int64) version) + " in " + iffStream->getFileName());
 	}
 
 	iffStream->closeForm(version);
 }
 
 void ProceduralTerrainAppearance::parseFromIffStream(engine::util::IffStream* iffStream, uint32 version) {
+	ngeTerrainData = version == '0015';
 	iffStream->openChunk('DATA');
 
 	iffStream->getString(terrainFile);
@@ -177,7 +188,7 @@ void ProceduralTerrainAppearance::parseFromIffStream(engine::util::IffStream* if
 	radialFarTileBorder = iffStream->getFloat();
 	radialFarSeed = iffStream->getUnsignedInt();
 
-	// TODO: 0015 -- extra byte here
+	legacyMap = version == '0015' ? iffStream->getByte() != 0 : true;
 
 	iffStream->closeChunk('DATA');
 
@@ -185,10 +196,22 @@ void ProceduralTerrainAppearance::parseFromIffStream(engine::util::IffStream* if
 
 	terrainMaps->readObject(iffStream);
 
-	// TODO: some other stuff down here for version 0015 (everything else is the same)
+	if (version == '0015') {
+		staticFlora.readObject(iffStream);
+	}
+}
+
+void ProceduralTerrainAppearance::getStaticFloraInAABB(const AABB& bounds, Vector<StaticFloraInstance>& instances) const {
+	ReadLocker locker(&guard);
+	staticFlora.getInstances(bounds, instances);
 }
 
 bool ProceduralTerrainAppearance::getWater(float x, float y, float& waterHeight) const {
+	if (ngeTerrainData) {
+		int waterType;
+		return getWaterSurface(x, y, waterHeight, waterType);
+	}
+
 	ReadLocker locker(&guard);
 
 	for (int i = 0; i < waterBoundaries.size(); ++i) {
@@ -206,6 +229,55 @@ bool ProceduralTerrainAppearance::getWater(float x, float y, float& waterHeight)
 	}
 
 	return false;
+}
+
+void ProceduralTerrainAppearance::collectRibbonWater(const Layer* layer) {
+	if (!layer->isEnabled())
+		return;
+	const Vector<AffectorProceduralRule*>* affectors = layer->getAffectors();
+	for (int i = 0; i < affectors->size(); ++i) {
+		const AffectorRibbon* ribbon = dynamic_cast<const AffectorRibbon*>(affectors->get(i));
+		if (ribbon != nullptr && affectors->get(i)->isEnabled())
+			ribbonWater.addAll(ribbon->getWaterSurfaces());
+	}
+	const Vector<Layer*>* children = layer->getChildren();
+	for (int i = 0; i < children->size(); ++i)
+		collectRibbonWater(children->get(i));
+}
+
+void ProceduralTerrainAppearance::getRibbonWaterInAABB(const AABB& bounds, Vector<TerrainWaterSurface>& surfaces) const {
+	ReadLocker locker(&guard);
+	for (int i = 0; i < ribbonWater.size(); ++i) {
+		if (ribbonWater.get(i).overlaps(bounds))
+			surfaces.add(ribbonWater.get(i));
+	}
+}
+
+bool ProceduralTerrainAppearance::getWaterSurface(float x, float y, float& waterHeight, int& waterType) const {
+	ReadLocker locker(&guard);
+	bool found = useGlobalWaterTable != 0;
+	float height = found ? globalWaterTableHeight : -FLT_MAX;
+	int type = found ? 0 : -1;
+	for (int i = 0; i < waterBoundaries.size(); ++i) {
+		const Boundary* boundary = waterBoundaries.get(i);
+		if (boundary->containsPoint(x, y) && (!found || boundary->getLocalWaterTableHeight() > height)) {
+			height = boundary->getLocalWaterTableHeight();
+			type = boundary->getWaterType();
+			found = true;
+		}
+	}
+	for (int i = 0; i < ribbonWater.size(); ++i) {
+		float surfaceHeight;
+		if (ribbonWater.get(i).getHeight(x, y, surfaceHeight) && (!found || surfaceHeight > height)) {
+			height = surfaceHeight;
+			type = ribbonWater.get(i).waterType;
+			found = true;
+		}
+	}
+	if (found)
+		waterHeight = height;
+	waterType = type;
+	return found;
 }
 
 Layer* ProceduralTerrainAppearance::getLayerRecursive(float x, float y, Layer* rootParent) const {

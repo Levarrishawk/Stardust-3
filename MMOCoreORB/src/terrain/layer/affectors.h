@@ -25,6 +25,7 @@
 #include "affectors/AffectorPassable.h"
 #include "affectors/AffectorRCN.h"
 #include "affectors/AffectorRiver.h"
+#include "affectors/AffectorRibbon.h"
 #include "affectors/AffectorRoad.h"
 #include "affectors/AffectorShaderConstant.h"
 #include "affectors/AffectorShaderReplace.h"

@@ -24,6 +24,26 @@
 #include "server/zone/managers/collision/NavMeshManager.h"
 #include "server/zone/ActiveAreaQuadTree.h"
 
+namespace {
+
+void updateTerrainFloraClearArea(PlanetManager* planet, SceneObject* object) {
+	if (planet == nullptr || object == nullptr)
+		return;
+	TerrainManager* terrain = planet->getTerrainManager();
+	if (terrain == nullptr || !terrain->hasNativeStaticFlora())
+		return;
+	SharedObjectTemplate* objectTemplate = object->getObjectTemplate();
+	float radius = objectTemplate != nullptr && object->getParentID() == 0 ? objectTemplate->getClearFloraRadius() : 0;
+	terrain->updateFloraClearArea(object->getObjectID(), object->getPosition(), radius);
+}
+
+void removeTerrainFloraClearArea(PlanetManager* planet, TreeEntry* entry) {
+	if (planet != nullptr && entry != nullptr && planet->getTerrainManager() != nullptr)
+		planet->getTerrainManager()->removeFloraClearArea(entry->getObjectID());
+}
+
+} // namespace
+
 GroundZoneImplementation::GroundZoneImplementation(ZoneProcessServer* serv, const String& name) : ZoneImplementation(serv, name) {
 	areaTree = new server::zone::ActiveAreaQuadTree(-8192, -8192, 8192, 8192);
 	quadTree = new server::zone::QuadTree(-8192, -8192, 8192, 8192);
@@ -158,6 +178,7 @@ void GroundZoneImplementation::insert(TreeEntry* entry) {
 	Locker locker(_this.getReferenceUnsafeStaticCast());
 
 	quadTree->insert(entry);
+	updateTerrainFloraClearArea(planetManager, dynamic_cast<SceneObject*>(entry));
 
 	/*
 	SceneObject* sceneO = cast<SceneObject*>(entry);
@@ -169,6 +190,7 @@ void GroundZoneImplementation::insert(TreeEntry* entry) {
 
 void GroundZoneImplementation::remove(TreeEntry* entry) {
 	Locker locker(_this.getReferenceUnsafeStaticCast());
+	removeTerrainFloraClearArea(planetManager, entry);
 
 	if (entry->isInQuadTree()) {
 		quadTree->remove(entry);
@@ -186,6 +208,7 @@ void GroundZoneImplementation::update(TreeEntry* entry) {
 	Locker locker(_this.getReferenceUnsafeStaticCast());
 
 	quadTree->update(entry);
+	updateTerrainFloraClearArea(planetManager, dynamic_cast<SceneObject*>(entry));
 
 	/*
 	SceneObject* sceneO = cast<SceneObject*>(entry);
@@ -287,6 +310,7 @@ void GroundZoneImplementation::updateActiveAreas(TangibleObject* tano) {
 
 void GroundZoneImplementation::addSceneObject(SceneObject* object) {
 	ManagedReference<SceneObject*> old = objectMap->put(object->getObjectID(), object);
+	updateTerrainFloraClearArea(planetManager, object);
 
 	//Civic and commercial structures map registration will be handled by their city
 	if (object->isStructureObject()) {
@@ -312,6 +336,7 @@ void GroundZoneImplementation::addSceneObject(SceneObject* object) {
 
 void GroundZoneImplementation::dropSceneObject(SceneObject* object)  {
 	ManagedReference<SceneObject*> oldObject = objectMap->remove(object->getObjectID());
+	removeTerrainFloraClearArea(planetManager, object);
 
 	unregisterObjectWithPlanetaryMap(object);
 

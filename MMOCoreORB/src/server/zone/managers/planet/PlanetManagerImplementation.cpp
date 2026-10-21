@@ -19,6 +19,7 @@
 #include "templates/snapshot/WorldSnapshotIff.h"
 #include "templates/datatables/DataTableIff.h"
 #include "templates/datatables/DataTableRow.h"
+#include "templates/crcstringtable/CrcStringTable.h"
 #include "server/zone/managers/stringid/StringIdManager.h"
 
 #include "server/zone/objects/creature/CreatureObject.h"
@@ -42,6 +43,94 @@
 #include "server/zone/managers/collision/NavMeshManager.h"
 
 //#define DEBUG_REGIONS
+
+namespace {
+
+void collectSnapshotIDs(WorldSnapshotNode* node, VectorMap<uint64, bool>& ids) {
+	ids.put(node->getObjectID(), true);
+	for (int i = 0; i < node->getNodeCount(); ++i)
+		collectSnapshotIDs(node->getNode(i), ids);
+}
+
+bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff* snapshot) {
+	TemplateManager* manager = TemplateManager::instance();
+	UniqueReference<IffStream*> sceneStream(manager->openIffFile("datatables/buildout/buildout_scenes.iff"));
+	if (sceneStream == nullptr)
+		throw Exception("NGE buildout scene list was not found");
+	DataTableIff scenes;
+	scenes.readObject(sceneStream);
+	int sceneIndex = BuildoutData::findSceneIndex(scenes, zone->getZoneName());
+	if (sceneIndex < 0)
+		return false;
+	String areaFile = "datatables/buildout/areas_" + zone->getZoneName() + ".iff";
+	UniqueReference<IffStream*> areaStream(manager->openIffFile(areaFile));
+	if (areaStream == nullptr)
+		throw Exception("Missing buildout area table " + areaFile);
+	DataTableIff areaTable;
+	areaTable.readObject(areaStream);
+	buildout.readAreas(areaTable, sceneIndex);
+	VectorMap<uint32, String> crcNames;
+	UniqueReference<IffStream*> crcStream(manager->openIffFile("misc/object_template_crc_string_table.iff"));
+	if (crcStream != nullptr) {
+		CrcStringTable crcTable;
+		crcTable.readObject(crcStream);
+		crcNames = crcTable.getTableData();
+	}
+	VectorMap<uint64, bool> ids;
+	for (int i = 0; i < snapshot->getNodeCount(); ++i)
+		collectSnapshotIDs(snapshot->getNode(i), ids);
+	VectorMap<uint32, uint32> templateIndices;
+	int added = 0;
+	const Vector<BuildoutArea>& areas = buildout.getAreas();
+	for (int i = 0; i < areas.size(); ++i) {
+		const BuildoutArea& area = areas.get(i);
+		if (area.name.isEmpty() || !area.requiredEvent.isEmpty())
+			continue;
+		String filename = "datatables/buildout/" + zone->getZoneName() + "/" + area.name + ".iff";
+		try {
+			UniqueReference<IffStream*> stream(manager->openIffFile(filename));
+			if (stream == nullptr)
+				throw Exception("Missing object table");
+			DataTableIff table;
+			table.readObject(stream);
+			Vector<BuildoutObject> objects;
+			BuildoutData::readObjects(table, area, objects);
+			Vector<String> names;
+			VectorMap<uint64, bool> areaIDs;
+			// Resolve the entire area before adding any of its nodes.
+			for (int j = 0; j < objects.size(); ++j) {
+				const BuildoutObject& object = objects.get(j);
+				if (ids.contains(object.objectID))
+					throw Exception("Duplicate snapshot/buildout ID " + String::valueOf(object.objectID));
+				if (object.parentID != 0 && !ids.contains(object.parentID) && !areaIDs.contains(object.parentID))
+					throw Exception("Missing container " + String::valueOf(object.parentID));
+				String name;
+				if (crcNames.contains(object.templateCRC))
+					name = crcNames.get(object.templateCRC);
+				else
+					name = manager->getTemplateFile(object.templateCRC);
+				if (!name.beginsWith("object/") || name.hashCode() != object.templateCRC)
+					throw Exception("Invalid shared template CRC resolution");
+				names.add(name);
+				areaIDs.put(object.objectID, true);
+			}
+			for (int j = 0; j < objects.size(); ++j) {
+				const BuildoutObject& object = objects.get(j);
+				if (!templateIndices.contains(object.templateCRC))
+					templateIndices.put(object.templateCRC, snapshot->addObjectTemplate(names.get(j)));
+				snapshot->addBuildoutNode(object, templateIndices.get(object.templateCRC));
+				ids.put(object.objectID, true);
+				++added;
+			}
+		} catch (Exception& e) {
+			Logger::console.error("Buildout " + filename + " area index " + String::valueOf(area.index) + ": " + e.getMessage());
+		}
+	}
+	Logger::console.info("Loaded " + String::valueOf(added) + " buildout nodes for " + zone->getZoneName(), true);
+	return added != 0;
+}
+
+} // namespace
 
 ClientPoiDataTable PlanetManagerImplementation::clientPoiDataTable;
 Mutex PlanetManagerImplementation::poiMutex;
@@ -572,11 +661,29 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 		return nullptr;
 
 	Reference<SceneObject*> parentObject = zoneServer->getObject(node->getParentID());
+	if (node->isBuildout() && node->getParentID() != 0 && (parentObject == nullptr || parentObject->getZone() != zone)) {
+		error("Skipping buildout object " + String::valueOf(objectID) + " with unavailable container " + String::valueOf(node->getParentID()));
+		return nullptr;
+	}
 
 	String serverTemplate = templateName.replaceFirst("shared_", "");
 	Vector3 position = node->getPosition();
 
-	object = zoneServer->createClientObject(serverTemplate.hashCode(), objectID);
+	if (node->isBuildout()) {
+		// Native negative IDs use the upper bits for area identity, not a database ID.
+		try {
+			object = zoneServer->getObjectManager()->createObject(serverTemplate.hashCode(), 0, "", objectID, false);
+			if (object != nullptr) {
+				object->setClientObject(true);
+				object->initializeTransientMembers();
+			}
+		} catch (Exception& e) {
+			error("Could not create buildout object " + String::valueOf(objectID) + " template " + serverTemplate + ": " + e.getMessage());
+			return nullptr;
+		}
+	} else {
+		object = zoneServer->createClientObject(serverTemplate.hashCode(), objectID);
+	}
 
 	// Snapshot may reference a client template that isn't in the loaded TRE set
 	// (known asset-absent items). createClientObject returns null in that case;
@@ -600,16 +707,26 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 		building->addCell(cell, node->getCellID());
 	}
 
-	if (parentObject != nullptr)
-		parentObject->transferObject(object, -1);
-	else if (node->getParentID() != 0)
+	if (parentObject != nullptr) {
+		bool transferred = parentObject->transferObject(object, -1);
+		if (node->isBuildout() && !transferred) {
+			error("Could not transfer buildout object " + String::valueOf(objectID) + " to its container");
+			object->destroyObjectFromDatabase(true);
+			return nullptr;
+		}
+	} else if (node->getParentID() != 0)
 		error("parent id " + String::valueOf(node->getParentID()));
 
 	if (parentObject == nullptr) {
 		//object->insertToZone(zone);
 		Locker clocker(object);
 
-		zone->transferObject(object, -1, true);
+		bool transferred = zone->transferObject(object, -1, true);
+		if (node->isBuildout() && !transferred) {
+			error("Could not transfer buildout object " + String::valueOf(objectID) + " to its zone");
+			object->destroyObjectFromDatabase(true);
+			return nullptr;
+		}
 	}
 
 	//Load child nodes
@@ -630,17 +747,31 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 void PlanetManagerImplementation::loadSnapshotObjects() {
 	TemplateManager* templateManager = TemplateManager::instance();
 
-	IffStream* iffStream = templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws");
+	UniqueReference<IffStream*> iffStream(templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
+	// Keep the compatibility framework dormant until buildout activation is requested.
+	const bool useBuildouts = false;
 
 	if (iffStream == nullptr) {
 		info("Snapshot wasn't found.", true);
-		return;
+		if (!useBuildouts)
+			return;
 	}
 
 	info(true) << "----- Loading World snapshot objects for Zone: " << zone->getZoneName() << " -----";
 
 	Reference<WorldSnapshotIff*> wsiff = new WorldSnapshotIff();
-	wsiff->readObject(iffStream);
+	if (iffStream != nullptr)
+		wsiff->readObject(iffStream);
+	bool hasBuildouts = false;
+	terrainManager->getBuildoutData().clear();
+	if (useBuildouts) {
+		try {
+			hasBuildouts = appendBuildoutObjects(zone, terrainManager->getBuildoutData(), wsiff);
+		} catch (Exception& e) {
+			terrainManager->getBuildoutData().clear();
+			error("Could not load buildouts for " + zone->getZoneName() + ": " + e.getMessage());
+		}
+	}
 
 	int totalObjects = 0;
 	Vector<SceneObject*> objects;
@@ -652,28 +783,28 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 			continue;
 
 #ifdef PARALLEL_SNAPSHOT_LOADING
-		++totalObjects;
+		if (!hasBuildouts) {
+			++totalObjects;
 
-		Core::getTaskManager()->executeTask([this, node, wsiff, totalObjects]() mutable {
-			auto sceno = loadSnapshotObject(node, wsiff, totalObjects);
+			Core::getTaskManager()->executeTask([this, node, wsiff, totalObjects]() mutable {
+				auto sceno = loadSnapshotObject(node, wsiff, totalObjects);
 
-			if (sceno != nullptr) {
-				Locker locker(sceno);
+				if (sceno != nullptr) {
+					Locker locker(sceno);
 
-				sceno->createChildObjects();
-			}
-		}, "LoadSnapshotObjectLambda");
-
-#else
-		auto sceno = loadSnapshotObject(node, wsiff, totalObjects);
-
-		if (sceno != nullptr) {
-			objects.emplace(sceno);
+					sceno->createChildObjects();
+				}
+			}, "LoadSnapshotObjectLambda");
+			continue;
 		}
 #endif
+		auto sceno = loadSnapshotObject(node, wsiff, totalObjects);
+
+		if (sceno != nullptr && (!node->isBuildout() || node->getParentID() == 0)) {
+			objects.emplace(sceno);
+		}
 	}
 
-#ifndef PARALLEL_SNAPSHOT_LOADING
 	for (int i = 0; i < objects.size(); ++i) {
 		SceneObject* sceno = objects.get(i);
 
@@ -681,12 +812,9 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 
 		sceno->createChildObjects();
 	}
-#endif
-
-	delete iffStream;
 
 	printf("\n");
-	info("Loaded " + String::valueOf(totalObjects) + " client objects from world snapshot.", true);
+	info("Loaded " + String::valueOf(totalObjects) + " client objects from world snapshot" + (hasBuildouts ? " and buildouts." : "."), true);
 }
 
 bool PlanetManagerImplementation::isTravelToLocationPermitted(const String& departurePoint, const String& arrivalPlanet, const String& arrivalPoint) {

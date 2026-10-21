@@ -6,6 +6,7 @@
  */
 
 #include "TerrainGenerator.h"
+#include "ProceduralTerrainAppearance.h"
 #include "engine/util/u3d/AABB.h"
 
 void TerrainGenerator::processLayers() {
@@ -91,10 +92,13 @@ void TerrainGenerator::getFullBoundaryCircle(const Layer* layer, float& minX, fl
 }
 
 void TerrainGenerator::processLayer(Layer* layer) {
+	if (terrain->hasNgeTerrainData() && !layer->isEnabled())
+		return;
 	Vector<Boundary*>* terrainRules = layer->getBoundaries();
 
 	for (int i = 0; i < terrainRules->size(); ++i) {
-		terrainRules->get(i)->executeRule(terrain);
+		if (!terrain->hasNgeTerrainData() || terrainRules->get(i)->isEnabled())
+			terrainRules->get(i)->executeRule(terrain);
 	}
 
 	Vector<Layer*>* childrenLayers = layer->getChildren();

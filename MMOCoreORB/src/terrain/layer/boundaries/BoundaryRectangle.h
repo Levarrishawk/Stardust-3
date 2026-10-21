@@ -154,8 +154,7 @@ public:
 		shaderSize = iffStream->getFloat();
 		iffStream->getString(shaderName);
 
-		if (hasTrailingField)
-			iffStream->getInt();
+		waterType = hasTrailingField ? iffStream->getInt() : 0;
 
 		iffStream->closeChunk('DATA');
 
