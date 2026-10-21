@@ -182,6 +182,54 @@ There are 19 NgeTerrainTest fixtures. Existing BasicTerrainTest adds archive-bac
 height checks. The full C++ unit-test suite and Debian build have not been run
 on this Windows workstation.
 
+## Pre-rebuild compile audit, 2026-10-21
+
+Reviewed the complete NGE patch and subsequent compile fixes for protected
+container APIs, enum/byte conditionals, macro leakage, direct includes, method
+declarations, const access, and generated-interface call signatures. Navigation's
+new flora mesh call now directly includes `AppearanceTemplate.h`, instead of
+depending on a generated scene header to supply that definition indirectly.
+No Engine3 or generated sources were changed. Buildout activation remains false.
+
+Expanded local C++ validation used the actual Engine3 `ArrayList`, `Vector`,
+`SortedVector`, and `VectorMap` definitions. Thirteen existing terrain implementation
+files compiled together under warnings-as-errors with the project's relevant
+warning exclusions. The 18 terrain fixtures and the named-object fixture passed;
+the six structure fixtures also passed. A separate runner compiled Core3's actual
+datatable, snapshot, and buildout readers with the real container definitions:
+all ten buildout fixtures and the 5,917 reference Mustafar placements passed.
+These are isolated runners reusing the fixture bodies, not a completed run of
+Core3's Google Test executable.
+
+The full production ribbon-stamping method also compiled and ran with actual
+Recast compact heightfields and allocation support. Water, non-water exclusion,
+already-blocked spans, floors above the surface, and empty ribbon input passed.
+The empty-input path preserves older terrain navigation behavior. The earlier
+packed-map check used actual container definitions and verified all 2,097,152
+Mustafar packed values. Perlin's header check verified Lua buffer declarations
+after the terrain header and 139,400 unchanged noise values.
+
+The current loader successfully loaded the ten older planet files listed above;
+their NGE/static-flora flags stayed off. The Mustafar decoder consumed the full
+actual file, with appearance-asset initialization excluded in that decoder check.
+Independent structural checks again passed 3,185 selected older-terrain payloads
+and 626 Mustafar payloads without version coverage gaps.
+
+For a direct backward-compatibility comparison, compiled the terrain readers from
+`d94d37fa26^` and the current readers with identical containers and validation
+adapters. At 81 locations per older planet (810 total), terrain height, water
+height, water presence, and passability matched **bit-for-bit**. Both versions used
+the same input files and compiler settings. The compared output's SHA-256 is
+`a1920a202140c094be8538582a6336ac88c890913fbf6a38b7cb8b81d631a92c`.
+
+The local runners substitute IFF transport, geometry support, asset retrieval,
+logging, synchronization, and test assertions where needed. They do not establish
+full Engine3 linkage, concurrency correctness, generated server compilation,
+Debian/GCC warning compatibility, or live client/server agreement. Server-zone
+integration and IDL call signatures were inspected against their declarations;
+those translation units still need the authoritative Debian build. Reports and
+validation files remain under ignored `scratch/nge-reader-check/`.
+
 After compilation, start under GDB, load both an unchanged older planet and
 Mustafar, and compare known client/server heights at road centers/edges, bitmap
 boundaries, lava pools, and ribbons. Verify movement and line of sight against

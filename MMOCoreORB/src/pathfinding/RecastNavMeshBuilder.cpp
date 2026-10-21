@@ -18,6 +18,7 @@
 
 #include "RecastNavMeshBuilder.h"
 #include "server/zone/managers/planet/PlanetManager.h"
+#include "templates/appearance/AppearanceTemplate.h"
 #include "templates/appearance/MeshData.h"
 #include "ChunkyTriMesh.h"
 #include "terrain/layer/boundaries/BoundaryRectangle.h"
