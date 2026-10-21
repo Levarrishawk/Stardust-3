@@ -13,17 +13,18 @@
 /* coherent noise function over 1, 2 or 3 dimensions */
 /* (copyright Ken Perlin) */
 
-#define B 0x100
-#define BM 0xff
-
-#define N 0x1000
-#define NP 12   /* 2^N */
-#define NM 0xfff
-
 #include "Random.h"
 #include <cmath>
 
 class PerlinNoise {
+	enum {
+		B = 0x100,
+		BM = 0xff,
+		N = 0x1000,
+		NP = 12,
+		NM = 0xfff
+	};
+
 	int p[B + B + 2];
 	//float g3[B + B + 2][3];
 	float g2[B + B + 2][2];
@@ -191,5 +192,10 @@ public:
 	}
 
 };
+
+#undef s_curve
+#undef lerp
+#undef setup
+#undef at2
 
 #endif /* PERLINNOISE_H_ */
