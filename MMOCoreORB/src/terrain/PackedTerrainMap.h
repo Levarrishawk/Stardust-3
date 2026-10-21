@@ -39,7 +39,9 @@ public:
 		Chunk* chunk = stream->openChunk('DATA');
 		if (chunk == nullptr || bytes != (uint64) chunk->getChunkSize())
 			throw Exception("Invalid packed terrain map byte count in " + stream->getFileName());
-		data.setSize((int) bytes);
+		data.removeAll((int) bytes);
+		for (int i = 0; i < (int) bytes; ++i)
+			data.add(0);
 		stream->getBytes((int) bytes, &data.getUnsafe(0));
 		stream->closeChunk('DATA');
 		stream->closeForm('0000');
