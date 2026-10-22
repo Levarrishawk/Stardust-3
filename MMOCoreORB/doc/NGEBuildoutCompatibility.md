@@ -1,10 +1,12 @@
 # NGE buildout datatables
 
-The shared-client buildout compatibility framework is implemented but **dormant**.
-`PlanetManagerImplementation::loadSnapshotObjects` keeps `useBuildouts` false for
-all terrains. No buildout datatables are opened at startup, no buildout objects
-are spawned, and normal path checks do not consult buildout area rules. Existing
-snapshot loading remains active. Activation is deferred until explicitly requested.
+Native shared-client buildouts are enabled **only for kashyyyk_rryatt_trail**,
+using the first four native area rows and all four section tables (1,709 objects).
+The Rryatt loader skips the legacy snapshot entirely and rejects incomplete or
+stale instance data before publishing runtime objects. See the matching asset,
+NPC/travel and deployment receipt in [RryattSingleInstanceMigration.md](RryattSingleInstanceMigration.md).
+The framework remains dormant for other worlds, which retain their existing
+snapshot loading. Normal path checks do not consult buildout area rules.
 
 ## Inputs and source rules
 
@@ -52,17 +54,18 @@ rejects duplicate IDs, cycles, missing schema columns, invalid geometry values,
 unparented interiors and invalid portal-building containment. The scene loader
 resolves an area's template names and checks its IDs and container references
 before appending any of its nodes. Invalid or missing area files produce a
-diagnostic naming the file and area index; unrelated areas continue loading.
+diagnostic naming the file and area index. Rryatt rejects the whole load; the
+framework's dormant general-world branch can continue with unrelated areas.
 
-The dormant `PlanetManagerImplementation::loadSnapshotObjects` buildout branch
-can append these nodes to the existing snapshot adapter. Buildings, cells and
-other objects would use Core3's normal
+`PlanetManagerImplementation::loadSnapshotObjects` appends these nodes to the
+existing snapshot adapter for Rryatt. Buildings, cells and other objects use
+Core3's normal
 scene-object factory and transfers. Buildout loads run in dependency order even
 when `PARALLEL_SNAPSHOT_LOADING` is enabled. A missing runtime parent causes the
 child to be skipped rather than inserted at cell-local coordinates in the world.
 Failed native transfers are logged and use the existing object cleanup path.
 
-When activated, new buildout objects would be **transient client objects**,
+Native buildout objects are **transient client objects**,
 regenerated from the tables on startup. Their upper ID bits identify buildout areas and must not be
 registered as Core3 database table IDs. Ordinary snapshot objects retain their
 existing persistence behavior. Existing objects are checked by ID before creation.
@@ -131,8 +134,9 @@ existing `COMPILE_TESTS` option enabled, run from `MMOCoreORB/bin`:
 ```
 
 The framework has not yet passed a complete Debian build or live server/client
-verification. The following deployment checks apply only after future activation;
-no table deployment or activation is part of the current change.
+verification. Rryatt is implemented locally with matching loose client assets;
+its server build/deployment and live checks remain pending. The Mustafar checks
+below describe future activation of that world, which remains dormant.
 
 Use matching native terrain, scene/area/object tables, CRC string table, templates
 and collision assets on the server and NGE client. A legacy custom `.ws` that

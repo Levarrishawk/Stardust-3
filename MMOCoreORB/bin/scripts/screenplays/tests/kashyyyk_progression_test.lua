@@ -44,6 +44,7 @@ local function object(o)
 	function o:addBankCredits(amount) self.credits = (self.credits or 0) + amount end
 	function o:getCreatureTemplateName() return self.template end
 	function o:addObjectFlag(flag) self.flag = flag end
+	function o:setDirectionalHeading(heading) self.heading = heading end
 	function o:setObjectMenuComponent(component) self.component = component end
 	function o:destroyObjectFromWorld() objects[self.id] = nil end
 	return o
@@ -621,6 +622,10 @@ rryatt:start()
 assert(#spawned == before, "Disabled zone spawned NPCs")
 enabled.kashyyyk_rryatt_trail = true
 rryatt:start()
+assert(#spawned == before, "Missing native geometry still spawned NPCs")
+local nativeGate = object({zone = rryatt.zoneName, template = "object/tangible/door/thm_kash_zonegate_door_simple.iff"})
+objects[nativeGate.id] = nil; nativeGate.id = rryatt.nativeGateID; objects[nativeGate.id] = nativeGate
+rryatt:start()
 assert(#spawned == before + 15)
 rryatt:start()
 assert(#spawned == before + 15, "Restart duplicated static NPCs")
@@ -634,6 +639,12 @@ for i, entry in ipairs(rryatt.npcs) do
 		assert(readStringData(npc.id .. ":startingLocation") == entry.startingLocation)
 	end
 end
+-- Reusing an owned NPC repairs its old custom-snapshot placement without duplicating it.
+local moved = actors.ep3_rryatt_krepauk
+moved.x, moved.z, moved.y = moved.x + 10, moved.z + 3, moved.y + 251
+rryatt:start()
+close(moved.x, -3766.64); close(moved.z, 168.235); close(moved.y, 3386.19)
+assert(#spawned == before + 15, "Native-placement repair duplicated NPCs")
 -- Both female-template spellings keep the same owned NPC and conversation role.
 for _, entry in ipairs(rryatt.npcs) do
 	local legacy = entry[1]:gsub("_guide_f_", "_guild_f_")
@@ -678,18 +689,18 @@ assert(not rryatt:travel(p, achonnko, true, 0))
 assert(not rryatt:travel(p, achonnko, true, 1.5))
 assert(not mastery:signalLevel(p, 0) and not mastery:signalLevel(p, 1.5) and not mastery:hasLevel(p, 5))
 
--- Expected landing coordinates are independently calculated from DSRC offsets and verified snapshot origins.
+-- Native public-instance landings: independently calculated from DSRC NPC rows and travel offsets.
 local down = {
-	{"ep3_rryatt_trail_guide_f_01", -2949.251, 69.405, 4256.97},
+	{"ep3_rryatt_trail_guide_f_01", -2949.251, 69.405, 4005.97},
 	{"ep3_rryatt_trail_guide_f_02", -1839.67, 182.3, 3004.16},
-	{"ep3_rryatt_trail_guide_f_03", -3590.499, 142.038, 2911.8},
+	{"ep3_rryatt_trail_guide_f_03", -3590.499, 142.038, 2831.8},
 	{"ep3_rryatt_trail_guide_f_04", -1876.03, -23.653, 2360.039},
 }
 local up = {
-	{"ep3_rryatt_trail_guide_m_01", -3155.343185, 115.620025, 4021.710658},
-	{"ep3_rryatt_trail_guide_m_02", -2719.16, 121.824, 4210.84},
+	{"ep3_rryatt_trail_guide_m_01", -3185.898, 113.1953, 3828.578},
+	{"ep3_rryatt_trail_guide_m_02", -2696.83, 121.824, 3961},
 	{"ep3_rryatt_trail_guide_m_03", -1295.582, 186, 4061.839},
-	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2906.039},
+	{"ep3_rryatt_trail_guide_m_04", -2597.01, 142.5994, 2826.039},
 }
 local guide = rryatt_trail_guide_conv_handler
 local indices = {2, 3, 4, 5}
@@ -747,7 +758,7 @@ assert(p.dismounts == 1 and not p.mounted)
 assert(mastery:isComplete(p) and mastery:getRuns(p) == 1 and p.xpAwards == 1 and p.credits == nil and q.done)
 assert(q.completed[1] and next(q.active) == nil)
 
-local warps = {{-2955.1,69.417,4257.29},{-1840.1,182.317,3004.09},{-3592.4,140.117,2911.29},{-1876.1,-23.583,2358.29}}
+local warps = {{-2955.1,69.417,4006.29},{-1840.1,182.317,3004.09},{-3592.4,140.117,2831.29},{-1876.1,-23.583,2358.29}}
 local screens = {"s_189", "s_193", "s_197", "s_201"}
 for level = 1, 4 do
 	beside(p, achonnko)
@@ -767,7 +778,7 @@ for _, route in ipairs({down, up}) do
 		local convo = route == up and rryatt_trail_guide_up_convo or rryatt_trail_guide_convo
 		local screen = route == up and "s_94" or "s_69"
 		guide:runScreenHandlers(convo, p, npc, 2, convo:getScreen(screen))
-		assert(p.x > -3785 and p.x < -3770 and p.y > 3600 and p.y < 3620 and p.z > 167 and p.z < 172)
+		assert(p.x > -3785 and p.x < -3770 and p.y > 3349 and p.y < 3369 and p.z > 167 and p.z < 172)
 		assert(mastery:levelCount(p) == 0 and mastery:getRuns(p) == 0)
 	end
 end

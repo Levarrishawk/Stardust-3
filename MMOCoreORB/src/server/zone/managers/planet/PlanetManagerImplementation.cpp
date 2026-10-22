@@ -60,15 +60,31 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 	DataTableIff scenes;
 	scenes.readObject(sceneStream);
 	int sceneIndex = BuildoutData::findSceneIndex(scenes, zone->getZoneName());
-	if (sceneIndex < 0)
+	if (sceneIndex < 0) {
+		if (zone->getZoneName() == "kashyyyk_rryatt_trail")
+			throw Exception("Rryatt is missing from the native buildout scene list");
 		return false;
+	}
 	String areaFile = "datatables/buildout/areas_" + zone->getZoneName() + ".iff";
 	UniqueReference<IffStream*> areaStream(manager->openIffFile(areaFile));
 	if (areaStream == nullptr)
 		throw Exception("Missing buildout area table " + areaFile);
 	DataTableIff areaTable;
 	areaTable.readObject(areaStream);
+	const bool singleRryatt = zone->getZoneName() == "kashyyyk_rryatt_trail";
+	if (singleRryatt && (sceneIndex != 5 || areaTable.getTotalRows() != 4))
+		throw Exception("Rryatt requires scene row 5 and exactly the first four native area rows");
 	buildout.readAreas(areaTable, sceneIndex);
+	if (singleRryatt) {
+		const char* names[] = {"kashyyyk_rryatt_trail_lvl_1_and_2", "kashyyyk_rryatt_trail_lvl_3", "kashyyyk_rryatt_trail_lvl_4", "kashyyyk_rryatt_trail_lvl_5"};
+		const float bounds[][4] = {{-3908, 3114, -2208, 4614}, {-2208, 2614, -408, 4614}, {-3908, 1864, -2208, 3114}, {-2208, 1864, -708, 2614}};
+		for (int i = 0; i < 4; ++i) {
+			const BuildoutArea& area = buildout.getAreas().get(i);
+			if (area.name != names[i] || area.bounds.x1 != bounds[i][0] || area.bounds.y1 != bounds[i][1]
+				|| area.bounds.x2 != bounds[i][2] || area.bounds.y2 != bounds[i][3] || !area.requiredEvent.isEmpty())
+				throw Exception("Rryatt area table is not the native public instance");
+		}
+	}
 	VectorMap<uint32, String> crcNames;
 	UniqueReference<IffStream*> crcStream(manager->openIffFile("misc/object_template_crc_string_table.iff"));
 	if (crcStream != nullptr) {
@@ -93,6 +109,9 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				throw Exception("Missing object table");
 			DataTableIff table;
 			table.readObject(stream);
+			const int rryattRows[] = {506, 469, 385, 349};
+			if (singleRryatt && table.getTotalRows() != rryattRows[i])
+				throw Exception("Rryatt section has an unexpected placement count");
 			Vector<BuildoutObject> objects;
 			BuildoutData::readObjects(table, area, objects);
 			Vector<String> names;
@@ -123,9 +142,13 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				++added;
 			}
 		} catch (Exception& e) {
+			if (singleRryatt)
+				throw Exception("Buildout " + filename + ": " + e.getMessage());
 			Logger::console.error("Buildout " + filename + " area index " + String::valueOf(area.index) + ": " + e.getMessage());
 		}
 	}
+	if (singleRryatt && added != 1709)
+		throw Exception("Rryatt requires all 1709 native placements");
 	Logger::console.info("Loaded " + String::valueOf(added) + " buildout nodes for " + zone->getZoneName(), true);
 	return added != 0;
 }
@@ -747,14 +770,14 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 void PlanetManagerImplementation::loadSnapshotObjects() {
 	TemplateManager* templateManager = TemplateManager::instance();
 
-	UniqueReference<IffStream*> iffStream(templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
-	// Keep the compatibility framework dormant until buildout activation is requested.
-	const bool useBuildouts = false;
+	// Rryatt's native buildouts replace its relocated snapshot; never request the old IDs.
+	// Other scenes retain their existing snapshot loader and dormant buildout behavior.
+	const bool useBuildouts = zone->getZoneName() == "kashyyyk_rryatt_trail";
+	UniqueReference<IffStream*> iffStream(useBuildouts ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
 
-	if (iffStream == nullptr) {
+	if (!useBuildouts && iffStream == nullptr) {
 		info("Snapshot wasn't found.", true);
-		if (!useBuildouts)
-			return;
+		return;
 	}
 
 	info(true) << "----- Loading World snapshot objects for Zone: " << zone->getZoneName() << " -----";
@@ -770,6 +793,7 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 		} catch (Exception& e) {
 			terrainManager->getBuildoutData().clear();
 			error("Could not load buildouts for " + zone->getZoneName() + ": " + e.getMessage());
+			return; // Never publish a partial Rryatt instance or fall back to its legacy snapshot.
 		}
 	}
 
