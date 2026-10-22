@@ -187,6 +187,33 @@ TEST(NgeTerrainTest, Road0005RemainsReadableAndHasNoFixedHeightEffect) {
 	EXPECT_FLOAT_EQ(7.f, height);
 }
 
+TEST(NgeTerrainTest, TerrainBitmapSupportsWideTallAndSquareMasks) {
+	const int dimensions[][2] = {{3, 2}, {2, 3}, {2, 2}, {1, 3}, {3, 1}, {1, 1}};
+	for (const auto& dimensionsCase : dimensions) {
+		int width = dimensionsCase[0];
+		int height = dimensionsCase[1];
+		std::string image(18, char(0));
+		image[2] = 3;
+		image[12] = char(width);
+		image[14] = char(height);
+		image[16] = 8;
+		for (int i = 0; i < width * height; ++i)
+			image += char(i + 1);
+		ObjectInputStream stream((char*)image.data(), image.size());
+		TargaBitmap bitmap;
+		bitmap.readObject(&stream);
+		ASSERT_EQ(width, bitmap.getWidth());
+		ASSERT_EQ(height, bitmap.getHeight());
+		for (int y = 0; y < height; ++y) {
+			for (int x = 0; x < width; ++x) {
+				EXPECT_EQ((height - 1 - y) * width + x + 1, bitmap.getData(y * width + x));
+			}
+		}
+		EXPECT_THROW(bitmap.getData(-1), ArrayIndexOutOfBoundsException);
+		EXPECT_THROW(bitmap.getData(width * height), ArrayIndexOutOfBoundsException);
+	}
+}
+
 TEST(NgeTerrainTest, BitmapGainIsVersionedAndClamped) {
 	TerrainGenerator generator(nullptr);
 	IffStream groupStream;

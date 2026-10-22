@@ -237,3 +237,44 @@ rocks/spires, standing on rock tops, AI routes after navigation regeneration, an
 flora clearing after object placement, movement, removal, relog, and zone transfer.
 Also check an unchanged older planet's water and collision behavior. Use loose
 client files for tests; do not rebuild distribution TREs.
+
+## October 22, 2026: rectangular terrain bitmap startup crash
+
+Operator GDB evidence identifies `terrain/kashyyyk_main_height.tga`, an
+uncompressed 8-bit grayscale mask with width 1000 and height 800. The crash is in
+`TargaBitmap::readObject`, at i=999/j=0. The old loops use width as the number of
+rows and height as the pixels per row, so the first index is 999000 in an array
+of 800000 pointers. This occurs during terrain parsing, before snapshot/buildout
+loading. The bitmap destructor has the same dimensional error.
+
+The reader now iterates height rows and width columns, retaining its existing
+vertical orientation. The destructor deletes each of width*height entries once.
+Square-mask data is unchanged. The new `NgeTerrainTest` fixture covers wide, tall,
+square, single-row/column and one-pixel layouts, every pixel value and invalid
+getData offsets. No terrain assets, configuration, Engine3 or client code changes
+are required for this repair.
+
+The offline runner `SD-Src-Client/tools/python/run_terrain_bitmap_tests.py`
+compiles the production reader before and after the repair with a small bounded
+input-stream adapter. The unchanged reader reproduces access violation
+0xC0000005 on the exact 1000x800 Kashyyyk Main mask. The repaired reader passes
+all 42 real/synthetic inputs and 13,040,274 reference pixel comparisons, including
+destruction. The 23 square inputs also pass against the original reader, matching
+10,029,317 pixels. Inputs are extracted read-only from the current Experimental
+loose files/TRE overlay, with hashes recorded privately.
+
+A second fixture compiles the production terrain translation units with the
+existing Core3 container/IFF/asset adapters and actual external bitmap data.
+The complete terrain serialization parses for Mustafar, Kashyyyk, Kashyyyk Main,
+Dead Forest, Hunting, Rryatt, North Dungeons and South Dungeons all succeed with
+no missing bitmap inputs (36 external masks). All 19 terrain fixture bodies pass,
+including the new rectangular-mask case; the separate object-template fixture is
+outside that terrain runner. This does not change or supply dungeon snapshots.
+
+Private inputs, manifests, baseline reproduction, compiled fixtures and logs:
+`C:/SWG-DEV/SRC-Client-Dev/diagnostics/terrain-bitmap-fix-20261022`.
+The broader decoder test excludes static-flora appearance/collision mesh
+initialization and full server startup. The authoritative Debian server must
+still be rebuilt and restarted for live acceptance. No TRE rebuild is needed
+for this code-only repair; config.lua is left to the operator. Run the normal
+Core3 tests with `NgeTerrainTest.*:BasicTerrainTest.*` after building.
