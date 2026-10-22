@@ -112,3 +112,29 @@ instance copies and that other planets retain their current behavior.
 Existing saved player positions are not moved automatically; use a normal
 operator travel action if a character was saved in the old displaced frame.
 Database cleanup is outside this migration.
+
+## Original object appearance restoration, October 22
+
+The follow-up asset audit traced all 1,709 placements through 294 native object
+templates and 2,296 object/appearance/collision/shader dependencies. All placed
+templates already matched NGE; none of the 302 distinct asset paths produced by
+the earlier custom Rryatt object patches is referenced by the native chain.
+However, older MTG and Stardust archives still supplied altered original assets.
+
+Restored 163 files byte-for-byte from the archived NGE originals: 14 collision
+floors, 40 LODs, 102 meshes, one component and six shaders. These are installed
+loose in `C:/Stardust-Experimental` and staged in `C:/SWG-DEV/stardust_3_04` for the
+operator's TRE rebuild and matching server deployment. Shared assets affect
+their other placements too. Four differing inherited game-wide object base
+templates remain outside this object-specific restoration. Terrain, snapshot,
+buildouts, CRC registry, configuration, server source and Engine3 are unchanged.
+
+The private loose package and source manifest are under
+`client-assets/rryatt_native_object_restore/`; the delivery receipt is under
+`C:/SWG-DEV/SRC-Client-Dev/diagnostics/rryatt-native-object-restore-20261022`.
+All restored payloads match original SHA-256 hashes and pass IFF/ZIP validation.
+All 46 native floor dependencies pass vertex, triangle, neighbor and boundary
+record checks. Both destination copies were verified, with protected runtime
+files and existing TREs unchanged. Live collision/traversal is still required.
+This asset-only restoration requires no C++ rebuild; restart both sides with
+matching assets and regenerate affected navigation caches after distribution.
