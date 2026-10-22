@@ -105,7 +105,7 @@ public:
 		return 0;
 	}
 
-	uint64 getWaypointBySpecialType(const int specialTypeID) const {
+	uint64 getWaypointBySpecialType(const uint8 specialTypeID) const {
 		if (specialTypeID == 0)
 			return 0;
 

@@ -14,8 +14,6 @@
 #include "server/zone/packets/mission/MissionObjectDeltaMessage3.h"
 #include "server/zone/ZoneServer.h"
 #include "server/zone/objects/group/GroupObject.h"
-#include "server/zone/objects/player/PlayerObject.h"
-#include "server/zone/objects/waypoint/WaypointObject.h"
 
 void MissionObjectImplementation::initializeTransientMembers() {
 	SceneObjectImplementation::initializeTransientMembers();
@@ -237,23 +235,6 @@ void MissionObjectImplementation::updateMissionLocation() {
 		dmiso3->close();
 
 		playerCreature->sendMessage(dmiso3);
-
-		// The journal owns a separate personal waypoint keyed by the ground quest CRC.
-		if (questType == "mission" && !questName.isEmpty()) {
-			ManagedReference<PlayerObject*> ghost = playerCreature->getPlayerObject();
-
-			if (ghost != nullptr) {
-				int journalWaypointType = (String("mission/") + questName).hashCode();
-				ManagedReference<WaypointObject*> journalWaypoint = ghost->getWaypointBySpecialType(journalWaypointType);
-
-				if (journalWaypoint != nullptr) {
-					Locker journalLocker(journalWaypoint);
-					journalWaypoint->setPlanetCRC(waypointToMission->getPlanetCRC());
-					journalWaypoint->setPosition(waypointToMission->getPositionX(), waypointToMission->getPositionZ(), waypointToMission->getPositionY());
-					ghost->updateWaypoint(journalWaypoint->getObjectID());
-				}
-			}
-		}
 
 		if (playerCreature->isGrouped() && playerCreature->getGroup() != nullptr) {
 			Reference<GroupObject*> group = playerCreature->getGroup();
