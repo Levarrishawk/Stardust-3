@@ -35,6 +35,9 @@ rryattKrepaukWallugaSmashersScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 16,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_walluga_smasher",
+		"rryatt_native_ep3_rryatt_walluga_smasher_boss",
+		"rryatt_native_ep3_rryatt_walluga_smasher_elite",
 		"walluga"
 	},
 }

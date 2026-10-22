@@ -40,6 +40,10 @@ rryattTresskGotalHuntersScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 18,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_gotal_hunter",
+		"rryatt_native_ep3_rryatt_gotal_hunter_champion",
+		"rryatt_native_ep3_rryatt_gotal_hunter_leader",
+		"rryatt_native_ep3_rryatt_gotal_hunter_trapper",
 		"ep3_rryatt_gotal_hunter_01",
 		"ep3_rryatt_gotal_hunter_02",
 		"ep3_rryatt_gotal_hunter_trapper_01",

@@ -52,15 +52,20 @@ CIRCLE,RECTANGLE,SPAWNAREA,NOBUILDZONEAREA=1,2,3,4
 dofile("MMOCoreORB/bin/scripts/managers/planet/kashyyyk_rryatt_trail_regions.lua")
 local regions={}
 for _, r in ipairs(kashyyyk_rryatt_trail_regions) do regions[r[1]]=r end
-assert(math.abs(regions.rryatt_sp_4_4[2]+3503.619)<.001 and math.abs(regions.rryatt_sp_4_4[3]-2825.425)<.001)
-assert(math.abs(regions.rryatt_sp_12_34[2]+3529.468)<.001 and math.abs(regions.rryatt_sp_12_34[3]-4454.01)<.001)
+assert(#kashyyyk_rryatt_trail_regions==4)
+for _, r in ipairs(kashyyyk_rryatt_trail_regions) do assert(r[5]==NOBUILDZONEAREA) end
+dofile("MMOCoreORB/bin/scripts/screenplays/kashyyyk/kashyyyk_rryatt_population_data.lua")
+local controllers={}
+for _, c in ipairs(KashyyykRryattPopulationData.controllers) do controllers[c.id]=c end
+assert(controllers["kashyyyk_rryatt_trail_lvl_4:4"].x==-3503.619)
+assert(controllers["kashyyyk_rryatt_trail_lvl_1_and_2:34"].y==4454.01)
 dofile("MMOCoreORB/bin/scripts/screenplays/kashyyyk/kashyyyk_patrol_paths.lua")
 local trails=0
 for _, route in ipairs(KashyyykPatrolPaths) do
  if route.spawnZone=="kashyyyk_rryatt_trail" then
   trails=trails+1
-  assert(route.points[1][3]>4290 and route.points[1][3]<4300)
  end
 end
-assert(trails==2)
+assert(trails==0, "Rryatt patrols must have exactly one owner")
+assert(#KashyyykRryattPopulationData.patrols==2)
 print("PASS: native 64-bit Rryatt gate binding, overlap retirement, no missing-data fallback, repeated setup, unchanged other-zone gate creation, region/patrol anchors")

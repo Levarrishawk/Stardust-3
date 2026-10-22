@@ -31,6 +31,9 @@ rryattTresskLostRodianHuntersScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 28,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_lost_rodian_hunter_deranged",
+		"rryatt_native_ep3_rryatt_lost_rodian_hunter_frantic",
+		"rryatt_native_ep3_rryatt_lost_rodian_hunter_maddened",
 		"ep3_rryatt_lost_rodian_maddened_01",
 		"ep3_rryatt_lost_rodian_maddened_02",
 		"ep3_rryatt_lost_rodian_maddened_03",

@@ -32,6 +32,7 @@ rryattKrepaukDefeatExjediScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 1,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_crazed_jedi",
 		"ep3_rryatt_crazed_jedi"
 	},
 }

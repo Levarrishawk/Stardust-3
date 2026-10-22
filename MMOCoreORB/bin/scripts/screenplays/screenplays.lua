@@ -806,6 +806,9 @@ includeFile("kashyyyk/myyydril_compactor.lua")
 includeFile("kashyyyk/avatar_platform.lua")
 includeFile("kashyyyk/kashyyyk_arena.lua")
 includeFile("kashyyyk/kashyyyk_rryatt_npcs.lua")
+includeFile("kashyyyk/kashyyyk_rryatt_population_data.lua")
+includeFile("kashyyyk/kashyyyk_rryatt_population.lua")
+includeFile("kashyyyk/kashyyyk_rryatt_rroot.lua")
 
 -- Mustafar
 -- Quest XP table first so every Mustafar screenplay below can call MustafarQuestXp.

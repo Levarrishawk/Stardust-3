@@ -138,3 +138,45 @@ record checks. Both destination copies were verified, with protected runtime
 files and existing TREs unchanged. Live collision/traversal is still required.
 This asset-only restoration requires no C++ rebuild; restart both sides with
 matching assets and regenerate affected navigation caches after distribution.
+
+## Native floor-contact scene table, October 22
+
+The first bridge-to-treetop fall revealed a missing client dependency:
+`datatables/planet/footprint_force_reattach.iff`. Its original 116-byte NGE file
+lists Rryatt Trail and North Dungeons, matching DSRC. The configured Experimental
+archives lacked it, so the NGE manager cached an empty scene list and disabled
+the existing post-resolve footprint-contact reattachment for Rryatt.
+
+Installed the original file loose in `C:/Stardust-Experimental`; the identical
+file was already staged in `C:/SWG-DEV/stardust_3_04`. Fully restart the client
+to clear its cached scene list, then retest the bridge and later transitions.
+The reported fall has not yet been verified as resolved in game. No geometry,
+floor flags, terrain, source code, configuration or TRE was changed.
+
+The unchanged production NGE manager and actual client datatable libraries
+reproduced disabled Rryatt handling without the file and enabled handling with
+it, including through the installed overlay. Nine control scene names remain
+disabled. Core3's current production DataTableIff/cell readers also decoded both
+rows in an isolated runner with bounded IFF/container adapters. No reader change
+is needed. Core3 has no consumer for this client-specific scene table: movement
+uses CollisionManager geometry and PlanetManager::findClosestWorldFloor instead.
+This does not establish full client collision or live server acceptance.
+
+The private loose package is `client-assets/rryatt_floor_reattach/`; test logs and
+the delivery receipt are under
+`C:/SWG-DEV/SRC-Client-Dev/diagnostics/rryatt-floor-reattach-20261022`. No executable
+rebuild is required. Include the original table in the next operator-built TRE.
+
+## Static Y-wing override, October 22
+
+The level 1-and-2 buildout's sole static X-wing, data row 339 (local object ID
+`-15027663`), now uses `object/static/structure/general/shared_ywing.iff`, CRC
+`279568107`. Only the shared-template CRC field changes; the placement, quaternion,
+ID, radius and every other row are unchanged. Existing assets, CRC mapping and
+server Lua registration support the Y-wing without source changes or rebuilding.
+The modified table is installed loose in Experimental and staged in
+`C:/SWG-DEV/stardust_3_04` for matching client/server distribution. Restart both
+sides after deploying the asset override. Preserve this intentional one-row
+exception when restaging original NGE tables. The private package is under
+`client-assets/rryatt_ywing_buildout/`; backups and receipt are under
+`C:/SWG-DEV/SRC-Client-Dev/diagnostics/rryatt-ywing-buildout-20261022`.

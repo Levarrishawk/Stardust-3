@@ -22,8 +22,7 @@
 	XP: quest_experience[87][TIER_5] = 205931. See rryatt_quest_xp.lua / kashyyyk_quest_xp.lua.
 	ALLOW_REPEATS 1.
 
-	OPEN: katarn ships pvpBitmask NONE, so the kill cannot land. Observer still
-	matches that template.
+	The native Rryatt Katarn profile is attackable; the generic template is unchanged.
 	OPEN: java grants badge bdg_kash_katarn on turn-in; this repo has no such badge.
 ]]
 
@@ -35,6 +34,7 @@ rryattKrepaukDefeatKatarnScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 1,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_katarn",
 		"katarn"
 	},
 }

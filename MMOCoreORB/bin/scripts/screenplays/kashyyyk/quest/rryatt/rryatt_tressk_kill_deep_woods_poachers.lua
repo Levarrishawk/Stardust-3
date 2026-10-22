@@ -34,6 +34,7 @@ rryattTresskDeepWoodsPoachersScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 25,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_deep_woods_poacher",
 		"ep3_rryatt_deep_woods_poacher_01",
 		"ep3_rryatt_deep_woods_poacher_02",
 		"ep3_rryatt_deep_woods_poacher_03",

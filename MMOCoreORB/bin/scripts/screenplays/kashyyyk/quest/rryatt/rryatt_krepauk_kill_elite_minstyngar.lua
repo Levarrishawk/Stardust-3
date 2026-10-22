@@ -10,12 +10,8 @@
 		task 1  Destroy Multiple   Count 24, Social Group minstyngar_elite (bloodspillers, deathcallers, bonecrushers)
 		task 2  Wait for Signal    krepauk_eliteMinstyngarHuntCompleted  -- conversation turn-in
 
-	OPEN: social group minstyngar_elite has no exact repo template. Lair headers
-	map named creatures ep3_rryatt_minstyngar_elite_bloodspiller / deathcaller /
-	bonecrusher onto minstyngar by iff (kashyyyk_rryatt_minstyngar_elite_*.lua
-	line 10), but that name is not the social group, and counting minstyngar
-	would also count non-elite spawns. No observer is attached. The stage
-	machine still exists; the kill task cannot land.
+	The native Rryatt profiles separate minstyngar_elite from ordinary
+	Minstyngars. Only identities in that source social group count below.
 
 	Giver ep3_rryatt_krepauk is placed by the Rryatt NPC screenplay.
 
@@ -34,6 +30,10 @@ rryattKrepaukEliteMinstyngarScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 24,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_minstyngar_elite_bloodspiller",
+		"rryatt_native_ep3_rryatt_minstyngar_elite_bonecrusher",
+		"rryatt_native_ep3_rryatt_minstyngar_elite_deathcaller",
+		"rryatt_native_ep3_rryatt_qst_minstyngar",
 	},
 }
 
@@ -91,6 +91,7 @@ function rryattKrepaukEliteMinstyngarScreenPlay:grantQuest(pPlayer)
 
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 1)
+	self:attachKillObserver(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@" .. self.stf .. ":journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@" .. self.stf .. ":journal_entry_description")
 	CreatureObject(pPlayer):sendSystemMessage("@" .. self.stf .. ":task01_journal_entry_title")
@@ -123,7 +124,11 @@ function rryattKrepaukEliteMinstyngarScreenPlay:isKillTemplate(name)
 end
 
 function rryattKrepaukEliteMinstyngarScreenPlay:attachKillObserver(pPlayer)
-	return
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "observer")) or 0) == 1) then
+		return
+	end
+	createObserver(KILLEDCREATURE, self.screenplayName, "notifyKilledCreature", pPlayer, 1)
+	writeScreenPlayData(pPlayer, self.screenplayName, "observer", "1")
 end
 
 function rryattKrepaukEliteMinstyngarScreenPlay:detachKillObserver(pPlayer)

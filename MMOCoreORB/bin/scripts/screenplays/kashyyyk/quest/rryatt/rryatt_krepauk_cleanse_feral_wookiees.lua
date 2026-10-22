@@ -32,6 +32,7 @@ rryattKrepaukCleanseFeralWookieesScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	killCount = 24,
 	killTemplates = {
+		"rryatt_native_ep3_rryatt_feral_wookiee",
 		"ep3_rryatt_feral_wookiee_01",
 		"ep3_rryatt_feral_wookiee_02",
 		"ep3_rryatt_feral_wookiee_03",
