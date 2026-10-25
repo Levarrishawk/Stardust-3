@@ -2621,6 +2621,7 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 	int patrolsSize = getPatrolPointSize();
 
 	if (isDead() || patrolsSize < 1) {
+		eraseBlackboard("cityPatrolLastPosition");
 		return false;
 	}
 
@@ -2628,14 +2629,17 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 	int movementState = getMovementState();
 	if (posture == CreaturePosture::KNOCKEDDOWN && !isInCombat() && npcTemplate.get() != nullptr &&
 		npcTemplate.get()->getCustomAiMap() == STRING_HASHCODE("cityPatrol")) {
+		eraseBlackboard("cityPatrolLastPosition");
 		setCurrentSpeed(0.f);
 		updateLocomotion();
 		nextBehaviorInterval = 250;
 		return true;
 	}
 
-	if (posture == CreaturePosture::CROUCHED)
+	if (posture == CreaturePosture::CROUCHED) {
+		eraseBlackboard("cityPatrolLastPosition");
 		return false;
+	}
 
 	float newSpeed = runSpeed;
 
@@ -2681,6 +2685,7 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 
 	if (endDistanceSq <= maxSquared && fabs(endDistZSq) < (maxDistance + 1.f)) {
 		currentFoundPath = nullptr;
+		eraseBlackboard("cityPatrolLastPosition");
 
 		// We have reached our next position mark it arrived
 		setPatrolArrived(true);
@@ -2743,6 +2748,30 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 
 	PatrolPoint currentPoint(currentPosition);
 	WorldCoordinates endMovementCoords = endMovementPosition.getCoordinates();
+	CellObject* endMovementCell = endMovementPosition.getCell();
+	bool bypassCityPatrolAvoidance = false;
+	if (walk && !isInCombat() && currentParent == nullptr && endMovementCell == nullptr && getZoneUnsafe() != nullptr &&
+		npcTemplate.get() != nullptr && npcTemplate.get()->getCustomAiMap() == STRING_HASHCODE("cityPatrol")) {
+		if (!peekBlackboard("cityPatrolLastPosition")) {
+			writeBlackboard("cityPatrolLastPosition", currentWorldPos);
+			addCooldown("cityPatrolMovementWatch", 8000);
+			addCooldown("cityPatrolAvoidanceBypass", 0);
+		} else {
+			Vector3 lastPosition = readBlackboard("cityPatrolLastPosition").get<Vector3>();
+			if (currentWorldPos.squaredDistanceTo(lastPosition) > 0.01f) {
+				writeBlackboard("cityPatrolLastPosition", currentWorldPos);
+				addCooldown("cityPatrolMovementWatch", 8000);
+			} else if (checkCooldownRecovery("cityPatrolMovementWatch")) {
+				addCooldown("cityPatrolAvoidanceBypass", 2000);
+				addCooldown("cityPatrolMovementWatch", 8000);
+				eraseBlackboard("cityPatrolDetour");
+				currentFoundPath = nullptr;
+			}
+			bypassCityPatrolAvoidance = !checkCooldownRecovery("cityPatrolAvoidanceBypass");
+		}
+	} else {
+		eraseBlackboard("cityPatrolLastPosition");
+	}
 	if (peekBlackboard("cityPatrolDetour")) {
 		Vector3 detour = readBlackboard("cityPatrolDetour").get<Vector3>();
 		if (currentWorldPos.squaredDistanceTo(detour) < 0.25f || currentParent != nullptr || isInCombat()) {
@@ -2752,7 +2781,6 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 			endMovementCoords = WorldCoordinates(detour, nullptr);
 		}
 	}
-	CellObject* endMovementCell = endMovementPosition.getCell();
 
 #ifdef SHOW_NEXT_POSITION
 	bool newPath = false;
@@ -2974,7 +3002,7 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 		newPosition.setZ(nextMovementPosition.getZ());
 	}
 
-	if (walk && !isInCombat() && currentParent == nullptr && nextMovementCell == nullptr &&
+	if (!bypassCityPatrolAvoidance && walk && !isInCombat() && currentParent == nullptr && nextMovementCell == nullptr &&
 		npcTemplate.get() != nullptr && npcTemplate.get()->getCustomAiMap() == STRING_HASHCODE("cityPatrol")) {
 		Vector3 adjusted = newPosition;
 		if (!CollisionManager::adjustCityPatrolMovement(asAiAgent(), adjusted)) {
