@@ -1,4 +1,9 @@
 --New
+object_static_structure_general_shared_sd_tma1_monolith = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/general/shared_sd_tma1_monolith.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_general_shared_sd_tma1_monolith, "object/static/structure/general/shared_sd_tma1_monolith.iff")
+
 object_static_structure_general_shared_sd_vader_castle_construction = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/static/structure/general/shared_sd_vader_castle_construction.iff"
 }

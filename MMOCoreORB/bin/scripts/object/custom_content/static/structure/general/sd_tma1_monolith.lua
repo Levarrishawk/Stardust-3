@@ -1,0 +1,5 @@
+object_static_structure_general_sd_tma1_monolith = object_static_structure_general_shared_sd_tma1_monolith:new {
+
+}
+
+ObjectTemplates:addTemplate(object_static_structure_general_sd_tma1_monolith, "object/static/structure/general/sd_tma1_monolith.iff")
