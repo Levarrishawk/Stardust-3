@@ -1,3 +1,5 @@
+local alderaPedestrianPatrolMultiplier = 2 / 3
+
 local alderaSidewalkRoutes = {
 	{population = 3, points = {{1181, -1543, 0}, {1181, -1228, 180}}},
 	{population = 3, points = {{1182, -1535, 0}, {1182, -1242, 180}}},
@@ -149,7 +151,7 @@ AlderaCityScreenPlay = CityScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "AlderaCityScreenPlay",
 	planet = "alderaan",
-	pedestrianPatrolPopulation = 0.8,
+	pedestrianPatrolPopulation = 0.8 * alderaPedestrianPatrolMultiplier,
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
 	mountedSpeederCount = 43,
@@ -369,11 +371,18 @@ function AlderaCityScreenPlay:spawnPatrols(routes)
 	}
 
 	AlderaCityPatrolRoutes = routes
+	local pedestrianCount = 0
 
 	for routeIndex = 1, #routes, 1 do
 		local route = routes[routeIndex]
+		local population = route.population
+		if (route.stationary ~= true) then
+			population = math.floor((pedestrianCount + route.population) * alderaPedestrianPatrolMultiplier) -
+				math.floor(pedestrianCount * alderaPedestrianPatrolMultiplier)
+			pedestrianCount = pedestrianCount + route.population
+		end
 
-		for i = 1, route.population, 1 do
+		for i = 1, population, 1 do
 			local pointIndex = getRandomNumber(1, #route.points)
 			local point = route.points[pointIndex]
 			local nextPoint = route.points[(pointIndex % #route.points) + 1]

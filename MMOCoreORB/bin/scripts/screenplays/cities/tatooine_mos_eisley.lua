@@ -7,7 +7,7 @@ TatooineMosEisleyScreenPlay = CityScreenPlay:new {
 
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
-	mountedSpeederCount = 29,
+	mountedSpeederCount = 12,
 	mountedSpeederTemplates = {
 		"speederbike_swoop", "landspeeder_x34", "landspeeder_xp38",
 		"speederbike_flash", "landspeeder_ab1"

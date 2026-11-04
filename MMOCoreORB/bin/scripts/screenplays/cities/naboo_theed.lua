@@ -7,8 +7,8 @@ NabooTheedScreenPlay = CityScreenPlay:new {
 
 	mountedSpeederSpeed = 17,
 	mountedSpeederUpdateInterval = 100,
-	mountedSpeederCount = 29,
-	mountedSpeederSecondCount = 29,
+	mountedSpeederCount = 15,
+	mountedSpeederSecondCount = 14,
 	mountedSpeederTemplates = {
 		"landspeeder_av21", "landspeeder_xp38", "landspeeder_v35",
 		"landspeeder_ab1", "speederbike_flash", "koro2_speeder",
