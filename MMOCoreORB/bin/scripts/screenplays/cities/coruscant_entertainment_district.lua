@@ -26,8 +26,9 @@ function CoruscantEntertainmentScreenPlay:start()
 end
 
 function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
-	for racerIndex = 1, self.mountedSwoopRacerCount do
-		self:spawnMountedSwoopRacer(racerIndex)
+	local distances = CityScreenPlay:getVehiclePatrolSpawnDistances(self.mountedSwoopRoute, self.mountedSwoopRacerCount)
+	for racerIndex, distance in ipairs(distances) do
+		self:spawnMountedSwoopRacer(racerIndex, distance)
 	end
 end
 
@@ -75,24 +76,23 @@ function CoruscantEntertainmentScreenPlay:getMountedSwoopRoutePoint(racerIndex, 
 	return {point[1] + offsetX, point[2], point[3] + offsetY}
 end
 
-function CoruscantEntertainmentScreenPlay:spawnMountedSwoopRacer(racerIndex)
-	local spawn
-	local pointIndex
-
-	if (racerIndex == 1) then
-		spawn = self:getMountedSwoopRoutePoint(racerIndex, 1)
-		pointIndex = 2
-	else
-		local firstPoint = self:getMountedSwoopRoutePoint(racerIndex, 1)
-		local fourthPoint = self:getMountedSwoopRoutePoint(racerIndex, 5)
-		local progress = (racerIndex - 1) / self.mountedSwoopRacerCount
-
-		spawn = {
-			firstPoint[1] + (fourthPoint[1] - firstPoint[1]) * progress,
-			firstPoint[2] + (fourthPoint[2] - firstPoint[2]) * progress,
-			firstPoint[3] + (fourthPoint[3] - firstPoint[3]) * progress
-		}
-		pointIndex = 1
+function CoruscantEntertainmentScreenPlay:spawnMountedSwoopRacer(racerIndex, distance)
+	local spawn = self.mountedSwoopRoute[1]
+	local pointIndex = 2
+	for i = 1, #self.mountedSwoopRoute do
+		local point = self.mountedSwoopRoute[i]
+		local nextIndex = i % #self.mountedSwoopRoute + 1
+		local nextPoint = self.mountedSwoopRoute[nextIndex]
+		local dx = nextPoint[1] - point[1]
+		local dy = nextPoint[3] - point[3]
+		local segmentLength = math.sqrt(dx * dx + dy * dy)
+		if (distance < segmentLength) then
+			local progress = distance / segmentLength
+			spawn = {point[1] + dx * progress, point[2] + (nextPoint[2] - point[2]) * progress, point[3] + dy * progress}
+			pointIndex = nextIndex
+			break
+		end
+		distance = distance - segmentLength
 	end
 
 	local target = self:getMountedSwoopRoutePoint(racerIndex, pointIndex)

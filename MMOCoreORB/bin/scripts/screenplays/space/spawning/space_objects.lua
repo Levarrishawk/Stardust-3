@@ -145,14 +145,19 @@ SpaceObjects = ScreenPlay:new {
 		-- Space Heavy1
 
 		-- Kashyyyk Space
-		-- The nine stations are placed by space_manager.lua, so nothing here repeats them.
-		-- The five asteroid clientpoi rows get real rock; the rest marks the belt lane and
-		-- the wrecks the station missions keep talking about.
-		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", -2339, -5828, -5821},
-		{"space_kashyyyk", "object/static/space/asteroid/asteroid_mammoth_01.iff", -824, -2002, -999},
-		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", -5951, -14, 1034},
-		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", 3340, 2308, 3473},
-		{"space_kashyyyk", "object/static/space/asteroid/asteroid_mammoth_01.iff", 3011, 1962, 4304},
+		-- DSRC landmarks and markers for the six asteroid spawners.
+		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -7117.65, 3513.53, 4096.32, 1, 0, 0, 0},
+		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -7049.04, 835.72, 2227.36, 1, 0, 0, 0},
+		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -6770.96, 901.40, 2218.57, 1, 0, 0, 0},
+		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -6907.19, 919.46, 2302.56, 1, 0, 0, 0},
+		{"space_kashyyyk", "object/static/space/spacestation/tradefed_destroyed_hulk.iff", -7522.20, -3528.43, -5674.25, 1, 0, 0, 0},
+		{"space_kashyyyk", "object/static/space/spacestation/destroyed_rebel_spacestation_01.iff", 4449.60, 57.98, 1222.69, 0.907251, -0.074107, 0.413953, -0.006784},
+		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", -2338.94, -5827.57, -5820.98},
+		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", -5951.11, -13.67, 1033.72},
+		{"space_kashyyyk", "object/static/space/asteroid/asteroid_mammoth_01.iff", -823.76, -2001.53, -999.05},
+		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", -4067.26, 1957.82, 3941.53},
+		{"space_kashyyyk", "object/static/space/asteroid/planetoid_iron_01.iff", 3339.70, 2307.69, 3472.76},
+		{"space_kashyyyk", "object/static/space/asteroid/asteroid_mammoth_01.iff", 3011.08, 1961.97, 4303.60},
 		-- Belt lane beacons between the station and the organometallic rocks the CPG Veteran works.
 		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -5400, 120, -3400},
 		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -5700, 40, -1300},
@@ -312,7 +317,8 @@ function SpaceObjects:spawnSceneObjects()
 
 		if (isZoneEnabled(zoneName)) then
 			-- spawnSceneObject("zoneName", "object.iff", x, z, y, cellID, ow, ox, oy, oz)
-			local pObject = spawnSceneObject(zoneName, spawnInfo[2], spawnInfo[3], spawnInfo[4], spawnInfo[5], 0, 0, 1, 0, 0)
+			local pObject = spawnSceneObject(zoneName, spawnInfo[2], spawnInfo[3], spawnInfo[4], spawnInfo[5], 0,
+				spawnInfo[6] or 0, spawnInfo[7] or 1, spawnInfo[8] or 0, spawnInfo[9] or 0)
 
 			-- print("Spawning Space Object in " .. zoneName .. " Object: " .. spawnInfo[2] .. " -- Object type: " .. SceneObject(pObject):getGameObjectType())
 		end

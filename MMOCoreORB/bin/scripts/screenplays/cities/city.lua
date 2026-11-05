@@ -17,6 +17,94 @@ CityScreenPlay = ScreenPlay:new {
 	stationaryMobiles = {},
 }
 
+function CityScreenPlay:getVehiclePatrolSpawnDistances(route, count, occupied)
+	local distances = {}
+	if (count < 1 or #route < 2) then
+		return distances
+	end
+
+	occupied = occupied or {}
+	local lengths = {}
+	local routeLength = 0
+	for i = 1, #route do
+		local point = route[i]
+		local nextPoint = route[i % #route + 1]
+		local dx = nextPoint[1] - point[1]
+		local dy = (nextPoint[3] or nextPoint[2]) - (point[3] or point[2])
+		lengths[i] = math.sqrt(dx * dx + dy * dy)
+		routeLength = routeLength + lengths[i]
+	end
+	if (routeLength == 0) then
+		return distances
+	end
+
+	local spacing = routeLength / count
+	local jitter = math.max(0, math.min(spacing * 0.25, (spacing - 35) / 2))
+	local bestPositions = {}
+	for layoutAttempt = 1, 32 do
+		local positions = {}
+		local candidates = {}
+		local phase = getRandomNumber(0, 999) / 1000 * spacing
+		local cursor = phase
+		for i = 1, count do
+			for attempt = 1, 64 do
+				local distance = (phase + (i - 1) * spacing + getRandomNumber(-1000, 1000) / 1000 * jitter) % routeLength
+				-- Dense loops need room at corners as well as along straight segments.
+				if (layoutAttempt > 16) then
+					distance = cursor % routeLength
+					cursor = cursor + 1
+				elseif (attempt > 16) then
+					distance = getRandomNumber(0, 999999) / 1000000 * routeLength
+				end
+				local remaining = distance
+				local x, y
+				for pointIndex = 1, #route do
+					if (remaining < lengths[pointIndex]) then
+						local point = route[pointIndex]
+						local nextPoint = route[pointIndex % #route + 1]
+						local progress = remaining / lengths[pointIndex]
+						x = point[1] + (nextPoint[1] - point[1]) * progress
+						y = (point[3] or point[2]) + ((nextPoint[3] or nextPoint[2]) - (point[3] or point[2])) * progress
+						break
+					end
+					remaining = remaining - lengths[pointIndex]
+				end
+				local clear = x ~= nil
+				-- Check physical distance as loops can cross or double back.
+				for _, group in ipairs({occupied, positions}) do
+					for _, position in ipairs(group) do
+						if (clear and (x - position[1]) ^ 2 + (y - position[2]) ^ 2 < 35 * 35) then
+							clear = false
+						end
+					end
+				end
+				if (clear) then
+					table.insert(candidates, distance)
+					table.insert(positions, {x, y})
+					if (layoutAttempt > 16) then
+						cursor = cursor + 34 + getRandomNumber(0, 1000) / 1000 * math.max(0, spacing - 35) * 0.5
+					end
+					break
+				end
+			end
+		end
+		if (#candidates > #distances) then
+			distances = candidates
+			bestPositions = positions
+		end
+		if (#distances == count) then
+			break
+		end
+	end
+	for _, position in ipairs(bestPositions) do
+		table.insert(occupied, position)
+	end
+	if (#distances < count) then
+		print("Could place " .. #distances .. " of " .. count .. " patrol vehicles with 35m spacing")
+	end
+	return distances
+end
+
 function CityScreenPlay:spawnGcwMobiles()
 	if (isZoneEnabled(self.planet)) then
 		local controllingFaction = getControllingFaction(self.planet)

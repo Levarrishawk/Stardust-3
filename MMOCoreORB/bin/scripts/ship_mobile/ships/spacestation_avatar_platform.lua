@@ -1,7 +1,4 @@
--- Avatar Platform. No clientpoi row ships for this station - its position is ours,
--- not Live-attested. No avatar-platform comm
--- portrait ships; imperial_officer_01 matches the .stf voice ("You are not
--- authorized to be in this area").
+-- Avatar Platform uses the hull and comm portrait from the Kashyyyk buildout.
 spacestation_avatar_platform = ShipAgent:new {
 	template = "spacestation_avatar_platform",
 	shipType = "capital",
@@ -24,7 +21,7 @@ spacestation_avatar_platform = ShipAgent:new {
 	customShipAiMap = "spaceStations",
 
 	conversationTemplate = "spacestation_avatar_platform_convotemplate",
-	conversationMobile = "object/mobile/shared_space_comm_imperial_officer_01.iff",
+	conversationMobile = "object/mobile/shared_space_comm_rebel_transport_02.iff",
 	conversationMessage = "@conversation/station_avatar_platform:s_60", -- Too Far Message
 }
 

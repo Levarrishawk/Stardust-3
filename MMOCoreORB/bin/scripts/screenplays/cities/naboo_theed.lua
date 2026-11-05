@@ -262,25 +262,14 @@ function NabooTheedScreenPlay:start()
 end
 
 function NabooTheedScreenPlay:spawnMountedSpeederPatrol()
-	self:spawnMountedSpeederGroup(1, self.mountedSpeederRoute, self.mountedSpeederCount, 0)
-	self:spawnMountedSpeederGroup(2, self.mountedSpeederSecondRoute, self.mountedSpeederSecondCount, self.mountedSpeederCount)
+	local spawnPositions = {}
+	self:spawnMountedSpeederGroup(1, self.mountedSpeederRoute, self.mountedSpeederCount, 0, spawnPositions)
+	self:spawnMountedSpeederGroup(2, self.mountedSpeederSecondRoute, self.mountedSpeederSecondCount, self.mountedSpeederCount, spawnPositions)
 end
 
-function NabooTheedScreenPlay:spawnMountedSpeederGroup(routeIndex, route, count, indexOffset)
-	local routeLength = 0
-	for i = 1, #route do
-		local point = route[i]
-		local nextPoint = route[i % #route + 1]
-		local dx = nextPoint[1] - point[1]
-		local dy = nextPoint[2] - point[2]
-		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
-	end
-
-	for trafficIndex = 1, count do
-		local distance = 0
-		if (trafficIndex > 1) then
-			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / count
-		end
+function NabooTheedScreenPlay:spawnMountedSpeederGroup(routeIndex, route, count, indexOffset, spawnPositions)
+	local distances = CityScreenPlay:getVehiclePatrolSpawnDistances(route, count, spawnPositions)
+	for trafficIndex, distance in ipairs(distances) do
 		self:spawnMountedSpeeder(trafficIndex + indexOffset, distance, routeIndex, route)
 	end
 end

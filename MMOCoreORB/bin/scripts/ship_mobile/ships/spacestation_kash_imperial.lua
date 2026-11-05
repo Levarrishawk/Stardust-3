@@ -1,7 +1,6 @@
--- Kashyyyk Imperial Overseers Base. No clientpoi row ships for this station - its
--- position is ours, not Live-attested. Hull spacestation_imperial is ours.
+-- Both Kashyyyk Imperial stations use the same base conversation.
 spacestation_kash_imperial = ShipAgent:new {
-	template = "spacestation_imperial",
+	template = "spacestation_imperial_outpost",
 	shipType = "capital",
 
 	lootChance = 0,
@@ -30,3 +29,7 @@ spacestation_kash_imperial = ShipAgent:new {
 }
 
 ShipAgentTemplates:addShipAgentTemplate(spacestation_kash_imperial, "spacestation_kash_imperial")
+
+ShipAgentTemplates:addShipAgentTemplate(spacestation_kash_imperial:new {
+	template = "spacestation_imperial",
+}, "spacestation_kash_imperial_decoration")

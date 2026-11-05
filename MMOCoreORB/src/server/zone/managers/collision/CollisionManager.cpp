@@ -149,6 +149,54 @@ const AppearanceTemplate* CollisionManager::getCollisionAppearance(SceneObject* 
 	return (portalLayout != nullptr) ? portalLayout->getAppearanceTemplate(0) : templateObject->getAppearanceTemplate();
 }
 
+bool CollisionManager::checkVehiclePatrolSpacing(CreatureObject* vehicle, const Vector3& destination) {
+	ManagedReference<Zone*> zone = vehicle->getZone();
+	if (zone == nullptr || vehicle->getParent() != nullptr)
+		return false;
+
+	Vector3 start = vehicle->getPosition();
+	float dx = destination.getX() - start.getX();
+	float dy = destination.getY() - start.getY();
+	float distance = Math::sqrt(dx * dx + dy * dy);
+	if (distance < 0.01f)
+		return true;
+
+	SortedVector<ManagedReference<TreeEntry*> > objects;
+	zone->getInRangeObjects(start.getX(), start.getZ(), start.getY(), 35.f + distance, &objects, true);
+	for (int i = 0; i < objects.size(); ++i) {
+		SceneObject* object = static_cast<SceneObject*>(objects.get(i).get());
+		CreatureObject* other = object != nullptr ? object->asCreatureObject() : nullptr;
+		if (other == nullptr || other == vehicle || !other->isVehicleObject() ||
+			other->getZone() != zone || other->getParent() != nullptr)
+			continue;
+		ManagedReference<SceneObject*> rider = other->getSlottedObject("rider");
+		if (rider == nullptr || !rider->isAiAgent())
+			continue;
+
+		Vector3 offset = other->getPosition() - start;
+		if (fabs(offset.getZ()) > 3.f)
+			continue;
+		float before = offset.getX() * offset.getX() + offset.getY() * offset.getY();
+		float endX = offset.getX() - dx;
+		float endY = offset.getY() - dy;
+		float after = endX * endX + endY * endY;
+		if (after > before + 0.01f)
+			continue;
+		float progress = Math::max(0.f, Math::min(1.f, (offset.getX() * dx + offset.getY() * dy) / (distance * distance)));
+		float closestX = offset.getX() - dx * progress;
+		float closestY = offset.getY() - dy * progress;
+		if (closestX * closestX + closestY * closestY >= 35.f * 35.f)
+			continue;
+
+		float angle = other->getDirection()->getRadians();
+		float alignment = (dx * sin(angle) + dy * cos(angle)) / distance;
+		// Followers hold their gap; crossing traffic gets a stable right of way.
+		if (alignment >= 0.5f || vehicle->getObjectID() > other->getObjectID())
+			return false;
+	}
+	return true;
+}
+
 bool CollisionManager::adjustCityPatrolMovement(CreatureObject* creature, Vector3& destination, bool vehicle, bool passLeft) {
 	ManagedReference<Zone*> zone = creature->getZone();
 	if (zone == nullptr || creature->getParent() != nullptr)

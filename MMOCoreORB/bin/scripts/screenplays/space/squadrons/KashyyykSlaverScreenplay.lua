@@ -619,14 +619,13 @@ escort_ep3_trando_boshaz_zssik_01 = SpaceEscortScreenplay:new {
 		{"wke_resist_tier5", "wke_resist_tier4", "wke_resist_tier3"},
 	},
 
-	-- "The slave shuttle will meet you in orbit around Kashyyyk." then out to the Avatar's
-	-- zone of control -- no clientpoi row exists for the Avatar Platform, positions are ours
+	-- Rendezvous in orbit, then escort the shuttle to the Avatar Platform.
 	escortPoints = {
 		{patrolPointName = "boshaz_escort_1", zoneName = "space_kashyyyk", x = 700, z = -150, y = -300, escortNumber = 1, radius = 150},
 		{patrolPointName = "boshaz_escort_2", zoneName = "space_kashyyyk", x = 2100, z = -450, y = -1200, escortNumber = 2, radius = 150},
-		{patrolPointName = "boshaz_escort_3", zoneName = "space_kashyyyk", x = 3400, z = -750, y = -2000, escortNumber = 3, radius = 150},
-		{patrolPointName = "boshaz_escort_4", zoneName = "space_kashyyyk", x = 4600, z = -1000, y = -2750, escortNumber = 4, radius = 150},
-		{patrolPointName = "boshaz_escort_5", zoneName = "space_kashyyyk", x = 5900, z = -1200, y = -3400, escortNumber = 5, radius = 200},
+		{patrolPointName = "boshaz_escort_3", zoneName = "space_kashyyyk", x = 2350, z = -175, y = -1725, escortNumber = 3, radius = 150},
+		{patrolPointName = "boshaz_escort_4", zoneName = "space_kashyyyk", x = 2500, z = 100, y = -2250, escortNumber = 4, radius = 150},
+		{patrolPointName = "boshaz_escort_5", zoneName = "space_kashyyyk", x = 2640.71, z = 374.04, y = -2800.62, escortNumber = 5, radius = 200},
 	},
 }
 
@@ -653,16 +652,12 @@ inspect_ep3_trando_mosolium_zssik_04 = SpaceInspectScreenplay:new {
 
 	-- "capture and inspect a Blackscale Flight Leader until you can locate one that has
 	-- the approach codes for the Avatar Space Platform"
-	inspectTargets = {"trn_slaver_fighter_tier5"},
+	inspectTargets = {"ep3_trandoshan_blackscale_leader"},
 
-	-- The gate is cargoString (NOT questLoot -- ShipAgentTemplate.h:169 getQuestLoot() has zero
-	-- callers); trn_slaver_fighter_tier5.lua declares the matching cargoString.
-	-- Key is CLIENT-ATTESTED: string/en/space/cargo.stf carries "avatar_landing_codes" =
-	-- "Avatar Platform Landing Code" (no "avatar_approach_codes" row exists).
+	-- The Blackscale Flight Leader carries the DSRC quest's matching cargo.
 	inspectCargo = "avatar_landing_codes",
 
-	-- Blackscale patrol short of the Avatar Platform (position ours)
-	targetLocation = {x = 4600, z = -1000, y = -2750},
+	targetLocation = {x = 4434.92, z = -929.23, y = -4334.19},
 }
 
 registerScreenPlay("inspect_ep3_trando_mosolium_zssik_04", true)

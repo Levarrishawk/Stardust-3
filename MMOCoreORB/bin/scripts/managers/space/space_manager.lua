@@ -169,19 +169,17 @@ space_heavy1 = {
 -- anything else for this zone (SpaceManagerImplementation.cpp:379-380).
 space_kashyyyk = {
 	spaceStations = {
-		{templateFile = "spacestation_kashyyyk", x = -5000, z = 250, y = -5000, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		{templateFile = "spacestation_rodian_base", x = 2556, z = 3225, y = 3890, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		{templateFile = "spacestation_rodian_tripp_base", x = -2618, z = 70, y = 2624, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		{templateFile = "station_gotal_pirate_base", x = -5950, z = 2700, y = 4575, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		{templateFile = "station_chiss_poacher_base", x = -6825, z = 763, y = 2065, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		{templateFile = "spacestation_indie_slaver", x = -6830, z = -350, y = 4200, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		-- The Trandoshan Avatar Platform ships no clientpoi row, so this position is
-		-- ours, not Live-attested. Set opposite the independent slavers who prey on
-		-- its transports (station_indie_slaver:s_193).
-		{templateFile = "spacestation_avatar_platform", x = 5900, z = -1200, y = -3400, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0},
-		-- The Kashyyyk Imperial Base ships no clientpoi row, so this position is ours,
-		-- not Live-attested.
-		{templateFile = "spacestation_kash_imperial", x = 6100, z = 2900, y = -1800, ow = 1, ox = 0, oy = 0, oz = 0, parentid = 0}
+		-- Positions and orientations come from DSRC's space_zones/buildout/space_kashyyyk.tab.
+		{templateFile = "spacestation_kashyyyk", x = -5000.64, z = 249.27, y = -4998.20, ow = 0.979511, ox = 0.118489, oy = 0.150086, oz = 0.063194},
+		{templateFile = "spacestation_avatar_platform", x = 2640.71, z = 374.04, y = -2800.62, ow = 0.879679, ox = -0.023775, oy = -0.427952, oz = -0.206051},
+		{templateFile = "spacestation_kash_imperial", x = 5412.52, z = 2360.67, y = -6877.65, ow = 1, ox = 0, oy = 0, oz = 0},
+		{templateFile = "spacestation_kash_imperial_decoration", x = -2524.98, z = -2535.72, y = -1184.85, ow = 0.190723, ox = 0.739050, oy = 0.341712, oz = 0.548327},
+		-- Stardust's interactive stations occupy the five DSRC static outpost sites.
+		{templateFile = "spacestation_rodian_base", x = 2490.07, z = 3314.55, y = 3988.16, ow = 1, ox = 0, oy = 0, oz = 0},
+		{templateFile = "spacestation_rodian_tripp_base", x = -3000.34, z = 354.26, y = 3055.27, ow = 1, ox = 0, oy = 0, oz = 0},
+		{templateFile = "station_gotal_pirate_base", x = -6040.71, z = 2810.14, y = 4581.19, ow = 1, ox = 0, oy = 0, oz = 0},
+		{templateFile = "station_chiss_poacher_base", x = -6919.89, z = 912.14, y = 1971.74, ow = 1, ox = 0, oy = 0, oz = 0},
+		{templateFile = "spacestation_indie_slaver", x = -6832.73, z = -375.01, y = 4230.35, ow = 1, ox = 0, oy = 0, oz = 0}
 	}
 }
 
@@ -193,9 +191,7 @@ space_kashyyyk = {
 -- lok 24, naboo 23, nova_orion 1, ord_mantell 4, tatooine 24, yavin4 17,
 -- light1 0), so no Kessel station has a Live-attested position.  The client does
 -- ship object/ship/shared_kessel_mine_turret_tier1..5.iff and the names
--- space/space_mobile_type:kessel_mine_turret_tier1..5 ("Defense Turret"), but no
--- shared template for them is registered under bin/scripts/object/ - see the
--- report's unbuildable list.
+-- space/space_mobile_type:kessel_mine_turret_tier1..5 ("Defense Turret").
 space_light1 = {
 	spaceStations = {
 	}

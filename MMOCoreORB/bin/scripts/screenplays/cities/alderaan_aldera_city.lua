@@ -203,20 +203,8 @@ function AlderaCityScreenPlay:start()
 end
 
 function AlderaCityScreenPlay:spawnMountedSpeederPatrol()
-	local routeLength = 0
-	for i = 1, #self.mountedSpeederRoute do
-		local point = self.mountedSpeederRoute[i]
-		local nextPoint = self.mountedSpeederRoute[i % #self.mountedSpeederRoute + 1]
-		local dx = nextPoint[1] - point[1]
-		local dy = nextPoint[2] - point[2]
-		routeLength = routeLength + math.sqrt(dx * dx + dy * dy)
-	end
-
-	for trafficIndex = 1, self.mountedSpeederCount do
-		local distance = 0
-		if (trafficIndex > 1) then
-			distance = (trafficIndex - 1 + getRandomNumber(20, 80) / 100) * routeLength / self.mountedSpeederCount
-		end
+	local distances = self:getVehiclePatrolSpawnDistances(self.mountedSpeederRoute, self.mountedSpeederCount)
+	for trafficIndex, distance in ipairs(distances) do
 		self:spawnMountedSpeeder(trafficIndex, distance)
 	end
 end

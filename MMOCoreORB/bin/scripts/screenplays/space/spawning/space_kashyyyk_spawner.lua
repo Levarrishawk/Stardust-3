@@ -10,6 +10,171 @@ SpaceKashyyykSpawner = SpaceSpawnerScreenPlay:new {
 	},
 
 	shipSpawns = {
+		-- Positions and patrol routes from DSRC space_zones/buildout/space_kashyyyk.tab.
+		-- Avatar Platform defenses and Blackscale patrols
+		{spawnName = "ep3_ap_turret_mine_general_05", spawnType = SHIP_SPAWN_SINGLE, x = 1582.81, z = 1014.92, y = -3608.26, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 4, maxSpawnDistance = 9, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier3"}
+		},
+		{spawnName = "avatar_platform_patrol_bravo", spawnType = SHIP_SPAWN_SINGLE, x = 1123.60, z = 1109.85, y = -3431.31, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 8, maxRespawn = 24, minSpawnDistance = 12, maxSpawnDistance = 64, totalSpawns = 5,
+			patrolsToAssign = 8, fixedPatrolPoints = {"avatar_platform_patrol_bravo_00", "avatar_platform_patrol_bravo_01", "avatar_platform_patrol_bravo_02", "avatar_platform_patrol_bravo_03", "avatar_platform_patrol_bravo_04", "avatar_platform_patrol_bravo_05", "avatar_platform_patrol_bravo_06", "avatar_platform_patrol_bravo_07"},
+			shipSpawns = {"ep3_trandoshan_fighter"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_01", spawnType = SHIP_SPAWN_SINGLE, x = 2581.38, z = 38.09, y = -1752.98, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 4, maxSpawnDistance = 8, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier2"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_02", spawnType = SHIP_SPAWN_SINGLE, x = 2420.00, z = 160.65, y = -2099.43, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 4, maxSpawnDistance = 9, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier4"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_03", spawnType = SHIP_SPAWN_SINGLE, x = 2072.57, z = 399.18, y = -2655.35, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 4, maxSpawnDistance = 9, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier2"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_04", spawnType = SHIP_SPAWN_SINGLE, x = 1751.76, z = 603.05, y = -3080.17, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 4, maxSpawnDistance = 9, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier1"}
+		},
+		{spawnName = "avatar_platform_patrol_alpha", spawnType = SHIP_SPAWN_SINGLE, x = 3013.94, z = 574.37, y = -3575.55, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 12, maxRespawn = 24, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 2,
+			patrolsToAssign = 6, fixedPatrolPoints = {"avatar_platform_patrol_alpha_00", "avatar_platform_patrol_alpha_01", "avatar_platform_patrol_alpha_02", "avatar_platform_patrol_alpha_03", "avatar_platform_patrol_alpha_04", "avatar_platform_patrol_alpha_05"},
+			shipSpawns = {"ep3_trandoshan_fighter"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_06", spawnType = SHIP_SPAWN_SINGLE, x = 2099.19, z = 926.54, y = -3693.47, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 2, maxSpawnDistance = 6, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier3"}
+		},
+		{spawnName = "avatar_platform_slave_shuttles", spawnType = SHIP_SPAWN_SINGLE, x = 3208.84, z = 464.86, y = -3235.94, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 4, maxRespawn = 12, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 1,
+			patrolsToAssign = 4, fixedPatrolPoints = {"avatar_platform_slave_shuttles_00", "avatar_platform_slave_shuttles_01", "avatar_platform_slave_shuttles_02", "avatar_platform_slave_shuttles_03"},
+			shipSpawns = {"ep3_trandoshan_slave_shuttle"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_07", spawnType = SHIP_SPAWN_SINGLE, x = 2561.11, z = 594.74, y = -3474.23, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 2, maxSpawnDistance = 8, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier5"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_08", spawnType = SHIP_SPAWN_SINGLE, x = 3343.36, z = 117.68, y = -2736.41, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 2, maxSpawnDistance = 6, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier5"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_10", spawnType = SHIP_SPAWN_SINGLE, x = 2615.80, z = 657.73, y = -2636.31, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 10, maxRespawn = 59, minSpawnDistance = 2, maxSpawnDistance = 6, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier3"}
+		},
+		{spawnName = "ep3_ap_turret_mine_general_09", spawnType = SHIP_SPAWN_SINGLE, x = 2750.33, z = 229.26, y = -2914.64, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 2, maxSpawnDistance = 6, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier3"}
+		},
+		{spawnName = "ep3_trando_mosolium_blackscale_leader", spawnType = SHIP_SPAWN_SINGLE, x = 4434.92, z = -929.23, y = -4334.19, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 8, maxRespawn = 12, minSpawnDistance = 32, maxSpawnDistance = 82, totalSpawns = 1,
+			minPatrol = 128, maxPatrol = 212,
+			shipSpawns = {"ep3_trandoshan_blackscale_leader"}
+		},
+		{spawnName = "ep3_trando_mosolium_blackscale_fighters_01", spawnType = SHIP_SPAWN_SINGLE, x = 3978.30, z = -992.79, y = -4867.89, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 12, maxRespawn = 24, minSpawnDistance = 64, maxSpawnDistance = 92, totalSpawns = 5,
+			patrolsToAssign = 5, fixedPatrolPoints = {"ep3_trando_mosolium_blackscale_fighters_01_00", "ep3_trando_mosolium_blackscale_fighters_01_01", "ep3_trando_mosolium_blackscale_fighters_01_02", "ep3_trando_mosolium_blackscale_fighters_01_03", "ep3_trando_mosolium_blackscale_fighters_01_04"},
+			shipSpawns = {"ep3_trandoshan_blackscale_fighter", "ep3_trandoshan_blackscale_fighter", "ep3_trandoshan_blackscale_bomber"}
+		},
+		{spawnName = "ep3_trando_mosolium_blackscale_fighters_02", spawnType = SHIP_SPAWN_SINGLE, x = 3476.56, z = -947.05, y = -5011.27, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 12, maxRespawn = 24, minSpawnDistance = 24, maxSpawnDistance = 48, totalSpawns = 5,
+			patrolsToAssign = 4, fixedPatrolPoints = {"ep3_trando_mosolium_blackscale_fighters_02_00", "ep3_trando_mosolium_blackscale_fighters_02_01", "ep3_trando_mosolium_blackscale_fighters_02_02", "ep3_trando_mosolium_blackscale_fighters_02_03"},
+			shipSpawns = {"ep3_trandoshan_blackscale_fighter", "ep3_trandoshan_blackscale_bomber", "ep3_trandoshan_blackscale_bomber"}
+		},
+		{spawnName = "ep3_ap_turret_mine_entrance_01", spawnType = SHIP_SPAWN_SINGLE, x = 764.92, z = 1037.63, y = -2338.45, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 22, maxRespawn = 49, minSpawnDistance = 2, maxSpawnDistance = 6, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier3"}
+		},
+		{spawnName = "ep3_ap_turret_mine_entrance_03", spawnType = SHIP_SPAWN_SINGLE, x = 2002.50, z = 372.08, y = -1387.74, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 4, maxSpawnDistance = 8, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier3"}
+		},
+		{spawnName = "ep3_ap_turret_spawner_entrance_02", spawnType = SHIP_SPAWN_SINGLE, x = 1285.68, z = 662.13, y = -1845.27, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 20, maxRespawn = 49, minSpawnDistance = 4, maxSpawnDistance = 8, totalSpawns = 1,
+			minPatrol = 10, maxPatrol = 20,
+			shipSpawns = {"ep3_avatar_platform_turret_mine_tier5"}
+		},
+
+		-- Imperial outpost and Overseer patrols
+		{spawnName = "ep3_imperial_spacestation_tie_patrol_01", spawnType = SHIP_SPAWN_SQUADRON, x = 5266.60, z = 2340.74, y = -7402.56, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 12, maxRespawn = 42, minSpawnDistance = 14, maxSpawnDistance = 34, totalSpawns = 1,
+			patrolsToAssign = 7, fixedPatrolPoints = {"ep3_imperial_spacestation_tie_patrol_01_00", "ep3_imperial_spacestation_tie_patrol_01_01", "ep3_imperial_spacestation_tie_patrol_01_02", "ep3_imperial_spacestation_tie_patrol_01_03", "ep3_imperial_spacestation_tie_patrol_01_04", "ep3_imperial_spacestation_tie_patrol_01_05", "ep3_imperial_spacestation_tie_patrol_01_06"},
+			shipSpawns = {"squad_tie_standard_average"}
+		},
+		{spawnName = "ep3_imperial_spacestation_tie_patrol_basement", spawnType = SHIP_SPAWN_SQUADRON, x = 5154.84, z = 2539.87, y = -6269.54, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 15, maxRespawn = 38, minSpawnDistance = 32, maxSpawnDistance = 68, totalSpawns = 1,
+			patrolsToAssign = 10, fixedPatrolPoints = {"ep3_imperial_spacestation_tie_patrol_basement_00", "ep3_imperial_spacestation_tie_patrol_basement_01", "ep3_imperial_spacestation_tie_patrol_basement_02", "ep3_imperial_spacestation_tie_patrol_basement_03", "ep3_imperial_spacestation_tie_patrol_basement_04", "ep3_imperial_spacestation_tie_patrol_basement_05", "ep3_imperial_spacestation_tie_patrol_basement_06", "ep3_imperial_spacestation_tie_patrol_basement_07", "ep3_imperial_spacestation_tie_patrol_basement_08", "ep3_imperial_spacestation_tie_patrol_basement_09"},
+			shipSpawns = {"squad_tie_standard_average"}
+		},
+		{spawnName = "ep3_imperial_spacestation_transport_orbit", spawnType = SHIP_SPAWN_SQUADRON, x = 5547.40, z = 1986.90, y = -6293.42, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 15, maxRespawn = 42, minSpawnDistance = 12, maxSpawnDistance = 67, totalSpawns = 1,
+			patrolsToAssign = 6, fixedPatrolPoints = {"ep3_imperial_spacestation_transport_orbit_00", "ep3_imperial_spacestation_transport_orbit_01", "ep3_imperial_spacestation_transport_orbit_02", "ep3_imperial_spacestation_transport_orbit_03", "ep3_imperial_spacestation_transport_orbit_04", "ep3_imperial_spacestation_transport_orbit_05"},
+			shipSpawns = {"squad_civilian_traffic_light"}
+		},
+		{spawnName = "ep3_imperial_spacestation_tie_patrol_halo", spawnType = SHIP_SPAWN_SQUADRON, x = 5264.42, z = 1720.04, y = -6457.06, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 14, maxRespawn = 42, minSpawnDistance = 12, maxSpawnDistance = 34, totalSpawns = 1,
+			patrolsToAssign = 6, fixedPatrolPoints = {"ep3_imperial_spacestation_tie_patrol_halo_00", "ep3_imperial_spacestation_tie_patrol_halo_01", "ep3_imperial_spacestation_tie_patrol_halo_02", "ep3_imperial_spacestation_tie_patrol_halo_03", "ep3_imperial_spacestation_tie_patrol_halo_04", "ep3_imperial_spacestation_tie_patrol_halo_05"},
+			shipSpawns = {"squad_tie_standard_average"}
+		},
+		{spawnName = "ep3_imperial_overseer_squad_01", spawnType = SHIP_SPAWN_SQUADRON, x = -2737.88, z = -2565.51, y = -1063.26, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 12, maxRespawn = 29, minSpawnDistance = 4, maxSpawnDistance = 12, totalSpawns = 1,
+			patrolsToAssign = 12, fixedPatrolPoints = {"ep3_imperial_overseer_squad_01_00", "ep3_imperial_overseer_squad_01_01", "ep3_imperial_overseer_squad_01_02", "ep3_imperial_overseer_squad_01_03", "ep3_imperial_overseer_squad_01_04", "ep3_imperial_overseer_squad_01_05", "ep3_imperial_overseer_squad_01_06", "ep3_imperial_overseer_squad_01_07", "ep3_imperial_overseer_squad_01_08", "ep3_imperial_overseer_squad_01_09", "ep3_imperial_overseer_squad_01_10", "ep3_imperial_overseer_squad_01_11"},
+			shipSpawns = {"squad_tie_standard_average"}
+		},
+		{spawnName = "ep3_imperial_overseer_squad_01_ace", spawnType = SHIP_SPAWN_SQUADRON, x = -2737.88, z = -2565.51, y = -1063.26, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 12, maxRespawn = 29, minSpawnDistance = 4, maxSpawnDistance = 12, totalSpawns = 1,
+			patrolsToAssign = 12, fixedPatrolPoints = {"ep3_imperial_overseer_squad_01_00", "ep3_imperial_overseer_squad_01_01", "ep3_imperial_overseer_squad_01_02", "ep3_imperial_overseer_squad_01_03", "ep3_imperial_overseer_squad_01_04", "ep3_imperial_overseer_squad_01_05", "ep3_imperial_overseer_squad_01_06", "ep3_imperial_overseer_squad_01_07", "ep3_imperial_overseer_squad_01_08", "ep3_imperial_overseer_squad_01_09", "ep3_imperial_overseer_squad_01_10", "ep3_imperial_overseer_squad_01_11"},
+			shipSpawns = {"squad_tie_standard_ace"}
+		},
+		{spawnName = "imperial_overseer_patrol_alpha", spawnType = SHIP_SPAWN_SINGLE, x = -2545.24, z = -2480.79, y = -1237.59, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 8, maxRespawn = 14, minSpawnDistance = 4, maxSpawnDistance = 32, totalSpawns = 2,
+			patrolsToAssign = 6, fixedPatrolPoints = {"imperial_overseer_patrol_alpha_00", "imperial_overseer_patrol_alpha_01", "imperial_overseer_patrol_alpha_02", "imperial_overseer_patrol_alpha_03", "imperial_overseer_patrol_alpha_04", "imperial_overseer_patrol_alpha_05"},
+			shipSpawns = {"imp_tie_interceptor_tier3"}
+		},
+
+		-- Landing station and Tripp outpost traffic
+		{spawnName = "ep3_tripp_base_traffic_02", spawnType = SHIP_SPAWN_SQUADRON, x = -2537.66, z = -918.70, y = 2057.76, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 9, maxRespawn = 21, minSpawnDistance = 4, maxSpawnDistance = 16, totalSpawns = 1,
+			patrolsToAssign = 7, fixedPatrolPoints = {"ep3_tripp_base_traffic_02_00", "ep3_tripp_base_traffic_02_01", "ep3_tripp_base_traffic_02_02", "ep3_tripp_base_traffic_02_03", "ep3_tripp_base_traffic_02_04", "ep3_tripp_base_traffic_02_05", "ep3_tripp_base_traffic_02_06"},
+			shipSpawns = {"squad_civilian_traffic_light"}
+		},
+		{spawnName = "ep3_tripp_base_traffic_01", spawnType = SHIP_SPAWN_SQUADRON, x = -2092.42, z = 384.07, y = 3159.80, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 6, maxRespawn = 18, minSpawnDistance = 2, maxSpawnDistance = 16, totalSpawns = 1,
+			patrolsToAssign = 7, fixedPatrolPoints = {"ep3_tripp_base_traffic_01_00", "ep3_tripp_base_traffic_01_01", "ep3_tripp_base_traffic_01_02", "ep3_tripp_base_traffic_01_03", "ep3_tripp_base_traffic_01_04", "ep3_tripp_base_traffic_01_05", "ep3_tripp_base_traffic_01_06"},
+			shipSpawns = {"squad_civilian_traffic_heavy"}
+		},
+		{spawnName = "kashyyyk_landing_station_traffic_gamma", spawnType = SHIP_SPAWN_SINGLE, x = -4999.18, z = 176.03, y = -3629.51, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 12, maxRespawn = 24, minSpawnDistance = 21, maxSpawnDistance = 42, totalSpawns = 1,
+			patrolsToAssign = 9, fixedPatrolPoints = {"kashyyyk_landing_station_traffic_gamma_00", "kashyyyk_landing_station_traffic_gamma_01", "kashyyyk_landing_station_traffic_gamma_02", "kashyyyk_landing_station_traffic_gamma_03", "kashyyyk_landing_station_traffic_gamma_04", "kashyyyk_landing_station_traffic_gamma_05", "kashyyyk_landing_station_traffic_gamma_06", "kashyyyk_landing_station_traffic_gamma_07", "kashyyyk_landing_station_traffic_gamma_08"},
+			shipSpawns = {"civtransport", "civspeeder", "civilian_science_transport_tier1"}
+		},
+		{spawnName = "ep3_landing_traffic_asteroid_patrol_02", spawnType = SHIP_SPAWN_SQUADRON, x = -5571.16, z = 749.31, y = -5158.28, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 9, maxRespawn = 33, minSpawnDistance = 12, maxSpawnDistance = 32, totalSpawns = 2,
+			patrolsToAssign = 11, fixedPatrolPoints = {"ep3_landing_traffic_asteroid_patrol_02_00", "ep3_landing_traffic_asteroid_patrol_02_01", "ep3_landing_traffic_asteroid_patrol_02_02", "ep3_landing_traffic_asteroid_patrol_02_03", "ep3_landing_traffic_asteroid_patrol_02_04", "ep3_landing_traffic_asteroid_patrol_02_05", "ep3_landing_traffic_asteroid_patrol_02_06", "ep3_landing_traffic_asteroid_patrol_02_07", "ep3_landing_traffic_asteroid_patrol_02_08", "ep3_landing_traffic_asteroid_patrol_02_09", "ep3_landing_traffic_asteroid_patrol_02_10"},
+			shipSpawns = {"squad_civilian_traffic_light"}
+		},
+		{spawnName = "kashyyyk_landing_station_traffic_alpha", spawnType = SHIP_SPAWN_SINGLE, x = -5675.47, z = 490.74, y = -5377.12, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 6, maxRespawn = 17, minSpawnDistance = 8, maxSpawnDistance = 16, totalSpawns = 1,
+			patrolsToAssign = 5, fixedPatrolPoints = {"kashyyyk_landing_station_traffic_alpha_00", "kashyyyk_landing_station_traffic_alpha_01", "kashyyyk_landing_station_traffic_alpha_02", "kashyyyk_landing_station_traffic_alpha_03", "kashyyyk_landing_station_traffic_alpha_04"},
+			shipSpawns = {"civilian_science_transport_tier1"}
+		},
+		{spawnName = "ep3_landing_traffic_asteroid_patrol_01", spawnType = SHIP_SPAWN_SQUADRON, x = -4974.76, z = -36.62, y = -5337.81, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 6, maxRespawn = 22, minSpawnDistance = 4, maxSpawnDistance = 24, totalSpawns = 1,
+			patrolsToAssign = 10, fixedPatrolPoints = {"ep3_landing_traffic_asteroid_patrol_01_00", "ep3_landing_traffic_asteroid_patrol_01_01", "ep3_landing_traffic_asteroid_patrol_01_02", "ep3_landing_traffic_asteroid_patrol_01_03", "ep3_landing_traffic_asteroid_patrol_01_04", "ep3_landing_traffic_asteroid_patrol_01_05", "ep3_landing_traffic_asteroid_patrol_01_06", "ep3_landing_traffic_asteroid_patrol_01_07", "ep3_landing_traffic_asteroid_patrol_01_08", "ep3_landing_traffic_asteroid_patrol_01_09"},
+			shipSpawns = {"squad_civilian_traffic_heavy"}
+		},
+		{spawnName = "kashyyyk_landing_station_traffic_bravo", spawnType = SHIP_SPAWN_SINGLE, x = -4889.07, z = 125.49, y = -5918.88, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 9, maxRespawn = 18, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
+			patrolsToAssign = 4, fixedPatrolPoints = {"kashyyyk_landing_station_traffic_bravo_00", "kashyyyk_landing_station_traffic_bravo_01", "kashyyyk_landing_station_traffic_bravo_02", "kashyyyk_landing_station_traffic_bravo_03"},
+			shipSpawns = {"civtransport"}
+		},
+
+		-- Resistance flights and capital convoys
+		{spawnName = "ep3_nebulon_xwing_escort", spawnType = SHIP_SPAWN_SQUADRON, x = -1248.82, z = -1332.56, y = -7311.99, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 6, maxRespawn = 19, minSpawnDistance = 4, maxSpawnDistance = 24, totalSpawns = 1,
+			patrolsToAssign = 4, fixedPatrolPoints = {"ep3_nebulon_xwing_escort_00", "ep3_nebulon_xwing_escort_01", "ep3_nebulon_xwing_escort_02", "ep3_nebulon_xwing_escort_03"},
+			shipSpawns = {"squad_wookiee_resistance_fighters"}
+		},
+		{spawnName = "ep3_wookiee_resistance_02", spawnType = SHIP_SPAWN_SINGLE, x = 4294.02, z = 33.69, y = 1297.50, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 12, maxRespawn = 32, minSpawnDistance = 69, maxSpawnDistance = 94, totalSpawns = 5,
+			patrolsToAssign = 4, fixedPatrolPoints = {"ep3_wookiee_resistance_02_00", "ep3_wookiee_resistance_02_01", "ep3_wookiee_resistance_02_02", "ep3_wookiee_resistance_02_03"},
+			shipSpawns = {"ep3_wookiee_resistance_fighter", "ep3_wookiee_resistance_bomber", "ep3_wookiee_resistance_bomber"}
+		},
+		{spawnName = "ep3_wookiee_resistance_01", spawnType = SHIP_SPAWN_SINGLE, x = 4266.91, z = 273.49, y = 1100.11, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 20, maxRespawn = 30, minSpawnDistance = 24, maxSpawnDistance = 48, totalSpawns = 5,
+			patrolsToAssign = 5, fixedPatrolPoints = {"ep3_wookiee_resistance_01_00", "ep3_wookiee_resistance_01_01", "ep3_wookiee_resistance_01_02", "ep3_wookiee_resistance_01_03", "ep3_wookiee_resistance_01_04"},
+			shipSpawns = {"ep3_wookiee_resistance_fighter", "ep3_wookiee_resistance_fighter", "ep3_wookiee_resistance_bomber"}
+		},
+		{spawnName = "ep3_wookiee_resistance_commander", spawnType = SHIP_SPAWN_SINGLE, x = -1230.69, z = -143.80, y = 2231.67, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 12, maxRespawn = 24, minSpawnDistance = 48, maxSpawnDistance = 92, totalSpawns = 1,
+			minPatrol = 128, maxPatrol = 256,
+			shipSpawns = {"ep3_wookiee_resistance_commander"}
+		},
+		{spawnName = "collection_hiddendaggers_corvette_01", spawnType = SHIP_SPAWN_SQUADRON, x = 7109.94, z = 4366.37, y = 360.45, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 600, minSpawnDistance = 100, maxSpawnDistance = 300, totalSpawns = 2,
+			patrolsToAssign = 9, fixedPatrolPoints = {"collection_hiddendaggers_corvette_01_00", "collection_hiddendaggers_corvette_01_01", "collection_hiddendaggers_corvette_01_02", "collection_hiddendaggers_corvette_01_03", "collection_hiddendaggers_corvette_01_04", "collection_hiddendaggers_corvette_01_05", "collection_hiddendaggers_corvette_01_06", "collection_hiddendaggers_corvette_01_07", "collection_hiddendaggers_corvette_01_08"},
+			shipSpawns = {"squad_capital_ship_convoy_hidden_daggers"}
+		},
+		{spawnName = "collection_voidwing_corvette_01", spawnType = SHIP_SPAWN_SQUADRON, x = -6378.06, z = -6593.63, y = -6823.55, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 60, maxRespawn = 600, minSpawnDistance = 100, maxSpawnDistance = 300, totalSpawns = 2,
+			patrolsToAssign = 9, fixedPatrolPoints = {"collection_voidwing_corvette_01_00", "collection_voidwing_corvette_01_01", "collection_voidwing_corvette_01_02", "collection_voidwing_corvette_01_03", "collection_voidwing_corvette_01_04", "collection_voidwing_corvette_01_05", "collection_voidwing_corvette_01_06", "collection_voidwing_corvette_01_07", "collection_voidwing_corvette_01_08"},
+			shipSpawns = {"squad_capital_ship_convoy_void_wing"}
+		},
+
 		-- Ghrag Mercenaries. The zone's primary antagonist, so they get the widest
 		-- coverage and the boss/ace tiers. The Tyyyn Nebula is their home ground.
 		{spawnName = "kash_ghrag_tyyyn_1", spawnType = SHIP_SPAWN_SINGLE, x = -6200, z = -3500, y = -4500, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 100, maxRespawn = 300, minSpawnDistance = 64, maxSpawnDistance = 128, totalSpawns = 6,
@@ -123,7 +288,7 @@ SpaceKashyyykSpawner = SpaceSpawnerScreenPlay:new {
 		{spawnName = "kash_slaver_base_patrol_2", spawnType = SHIP_SPAWN_SQUADRON, x = -6700, z = -500, y = 4350, patrolType = SHIP_AI_GUARD_PATROL, minRespawn = 900, maxRespawn = 1800, minSpawnDistance = 32, maxSpawnDistance = 96, minPatrol = 128, maxPatrol = 512, totalSpawns = 1,
 			shipSpawns = {"squad_kash_slaver_raid_tier5"}
 		},
-		{spawnName = "kash_slaver_convoy_1", spawnType = SHIP_SPAWN_SQUADRON, x = -6200, z = -900, y = 5200, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 900, maxRespawn = 1800, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
+		{spawnName = "kash_slaver_convoy_1", spawnType = SHIP_SPAWN_SQUADRON, x = -6200, z = -900, y = 5200, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 900, maxRespawn = 1800, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"kash_slaver_convoy_1_00", "kash_slaver_convoy_1_01", "kash_slaver_convoy_1_02", "kash_slaver_convoy_1_03", "kash_slaver_convoy_1_04", "kash_slaver_convoy_1_05", "kash_slaver_convoy_1_06", "kash_slaver_convoy_1_07"},
 			shipSpawns = {"squad_kash_slaver_convoy_tier5"}
 		},
@@ -198,7 +363,7 @@ SpaceKashyyykSpawner = SpaceSpawnerScreenPlay:new {
 		-- to be standing in the world for the quest to be completable. Placed on the quest's own
 		-- targetLocation (-1800, 500, 900) and given the same shape as the corsec entry: SINGLE,
 		-- random patrol, fast respawn, one ship.
-		{spawnName = "kash_wke_bowcaster_parts_inspect", spawnType = SHIP_SPAWN_SINGLE, x = -1800, z = 500, y = 900, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 45, maxRespawn = 60, minSpawnDistance = 10, maxSpawnDistance = 120, minPatrol = 200, maxPatrol = 500, totalSpawns = 1,
+		{spawnName = "kash_wke_bowcaster_parts_inspect", spawnType = SHIP_SPAWN_SINGLE, x = 5952, z = 5432, y = -3024, patrolType = SHIP_AI_RANDOM_PATROL, minRespawn = 15, maxRespawn = 45, minSpawnDistance = 32, maxSpawnDistance = 128, minPatrol = 100, maxPatrol = 400, totalSpawns = 1,
 			shipSpawns = {"wke_resist_tier3_bowcaster_parts"}
 		},
 
@@ -214,7 +379,7 @@ SpaceKashyyykSpawner = SpaceSpawnerScreenPlay:new {
 			patrolsToAssign = 5, fixedPatrolPoints = {"kash_cpg_station_patrol_1_00", "kash_cpg_station_patrol_1_01", "kash_cpg_station_patrol_1_02", "kash_cpg_station_patrol_1_03", "kash_cpg_station_patrol_1_04", "kash_cpg_station_patrol_1_05", "kash_cpg_station_patrol_1_06", "kash_cpg_station_patrol_1_07"},
 			shipSpawns = {"ep3_cpg_ace_tier5", "ep3_cpg_ace_tier4"}
 		},
-		{spawnName = "kash_cpg_veteran_escort_1", spawnType = SHIP_SPAWN_SQUADRON, x = -4400, z = 600, y = -4100, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 600, maxRespawn = 1200, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
+		{spawnName = "kash_cpg_veteran_escort_1", spawnType = SHIP_SPAWN_SQUADRON, x = -4400, z = 600, y = -4100, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 600, maxRespawn = 1200, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"kash_cpg_veteran_escort_1_00", "kash_cpg_veteran_escort_1_01", "kash_cpg_veteran_escort_1_02", "kash_cpg_veteran_escort_1_03", "kash_cpg_veteran_escort_1_04", "kash_cpg_veteran_escort_1_05", "kash_cpg_veteran_escort_1_06", "kash_cpg_veteran_escort_1_07"},
 			shipSpawns = {"squad_kash_cpg_veteran_escort"}
 		},
@@ -234,11 +399,11 @@ SpaceKashyyykSpawner = SpaceSpawnerScreenPlay:new {
 
 		-- Civilian traffic. The scrapbook puts CPG civilian traffic through the belt,
 		-- and the shipped mission text puts transports in distress in the Tyyyn Nebula.
-		{spawnName = "kash_civilian_belt_traffic_1", spawnType = SHIP_SPAWN_SQUADRON, x = -4700, z = 400, y = -4600, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 600, maxRespawn = 1200, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
+		{spawnName = "kash_civilian_belt_traffic_1", spawnType = SHIP_SPAWN_SQUADRON, x = -4700, z = 400, y = -4600, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 600, maxRespawn = 1200, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"kash_civilian_belt_traffic_1_00", "kash_civilian_belt_traffic_1_01", "kash_civilian_belt_traffic_1_02", "kash_civilian_belt_traffic_1_03", "kash_civilian_belt_traffic_1_04", "kash_civilian_belt_traffic_1_05", "kash_civilian_belt_traffic_1_06", "kash_civilian_belt_traffic_1_07"},
 			shipSpawns = {"squad_civilian_traffic_heavy"}
 		},
-		{spawnName = "kash_civilian_belt_traffic_2", spawnType = SHIP_SPAWN_SQUADRON, x = 3340, z = 2308, y = 3473, patrolType = SHIP_AI_SINGLE_PATROL_ROTATION, minRespawn = 605, maxRespawn = 1205, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
+		{spawnName = "kash_civilian_belt_traffic_2", spawnType = SHIP_SPAWN_SQUADRON, x = 3340, z = 2308, y = 3473, patrolType = SHIP_AI_FIXED_PATROL, minRespawn = 605, maxRespawn = 1205, minSpawnDistance = 32, maxSpawnDistance = 64, totalSpawns = 1,
 			patrolsToAssign = 5, fixedPatrolPoints = {"kash_civilian_belt_traffic_2_00", "kash_civilian_belt_traffic_2_01", "kash_civilian_belt_traffic_2_02", "kash_civilian_belt_traffic_2_03", "kash_civilian_belt_traffic_2_04", "kash_civilian_belt_traffic_2_05", "kash_civilian_belt_traffic_2_06"},
 			shipSpawns = {"squad_civilian_traffic_heavy"}
 		},

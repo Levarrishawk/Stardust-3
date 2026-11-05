@@ -387,13 +387,6 @@ void SpaceManagerImplementation::loadLuaConfig() {
 
 			String templateFile = stationObject.getStringField("templateFile");
 
-			ManagedReference<ShipAiAgent*> shipAgent = ShipManager::instance()->createAiShip(templateFile);
-
-			if (shipAgent == nullptr)
-				continue;
-
-			Locker shipLocker(shipAgent);
-
 			float x = stationObject.getFloatField("x");
 			float y = stationObject.getFloatField("y");
 			float z = stationObject.getFloatField("z");
@@ -402,7 +395,14 @@ void SpaceManagerImplementation::loadLuaConfig() {
 			float oz = stationObject.getFloatField("oz");
 			float ow = stationObject.getFloatField("ow");
 
-			uint64 parentID = stationObject.getLongField("parent");
+			stationObject.pop();
+
+			ManagedReference<ShipAiAgent*> shipAgent = ShipManager::instance()->createAiShip(templateFile);
+
+			if (shipAgent == nullptr)
+				continue;
+
+			Locker shipLocker(shipAgent);
 
 			Quaternion direction(ow, ox, oy, oz);
 			direction.normalize();
@@ -420,11 +420,8 @@ void SpaceManagerImplementation::loadLuaConfig() {
 			uint64 stationID = shipAgent->getObjectID();
 			Vector3 stationPosition = shipAgent->getPosition();
 
-			spaceStationMap.get(factionHash).put(stationID, stationPosition);
-
-			// info(true) << "SpaceStation Added: " << shipAgent->getDisplayedName() << " Location: " + shipAgent->getPosition().toString();
-
-			stationObject.pop();
+			if (spaceStationMap.contains(factionHash))
+				spaceStationMap.get(factionHash).put(stationID, stationPosition);
 		}
 
 		try {

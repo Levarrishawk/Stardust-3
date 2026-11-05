@@ -11,12 +11,7 @@
 	client text is silent (exact coordinates, credit values, tier of the ship agent used)
 	the value is marked as ours on the line.
 
-	Station positions referenced below come from bin/scripts/managers/space/space_manager.lua:
-		Kashyyyk Space Station  -5000, 250, -5000    (clientpoi station_kashyyyk)
-		Tyyyn Nebula            -6200, -3500, -4500  (clientpoi kashyyyk_tyyyn_center)
-		Gotal Pirates' Base     -5950, 2700, 4575    (clientpoi kashyyyk_gotal_pirate_base)
-		Rebel Outpost            1200, -2600, -6100  (no clientpoi row - position is ours)
-		Imperial Base            6100, 2900, -1800   (no clientpoi row - position is ours)
+	The Imperial escort routes use the outpost placement in space_manager.lua.
 
 ]]
 
@@ -240,7 +235,7 @@ escort_ep3_kash_station_imperial_escort_alpha = SpaceEscortScreenplay:new {
 	-- says the transport is departing the system, so the run heads outbound. That station position
 	-- and the three outbound legs are ours - no clientpoi row ships for it.
 	escortPoints = {
-		{patrolPointName = "kash_station_imperial_escort_alpha_1", zoneName = "space_kashyyyk", x = 6100, z = 2900, y = -1800, escortNumber = 1, radius = 250},
+		{patrolPointName = "kash_station_imperial_escort_alpha_1", zoneName = "space_kashyyyk", x = 5412.52, z = 2360.67, y = -6877.65, escortNumber = 1, radius = 250},
 		{patrolPointName = "kash_station_imperial_escort_alpha_2", zoneName = "space_kashyyyk", x = 5200, z = 2300, y = -2900, escortNumber = 2, radius = 250},
 		{patrolPointName = "kash_station_imperial_escort_alpha_3", zoneName = "space_kashyyyk", x = 4100, z = 1600, y = -4100, escortNumber = 3, radius = 250},
 		{patrolPointName = "kash_station_imperial_escort_alpha_4", zoneName = "space_kashyyyk", x = 3000, z = 900, y = -5200, escortNumber = 4, radius = 250},
@@ -931,12 +926,12 @@ escort_duty_ep3_kash_station_escort_duty_imperial = SpaceDutyEscortScreenplay:ne
 
 	escortShips = {"imp_transport_tier4", "imp_transport_tier5", "freighterheavy_imperial"},
 
-	-- Lane running in to the Kashyyyk Imperial Base (6100, 2900, -1800). All four points are ours.
+	-- Lane running in to the Kashyyyk Imperial Outpost.
 	escortPoints = {
 		{patrolPointName = "kash_station_imperial_escort_duty_1", zoneName = "space_kashyyyk", x = 2600, z = 900, y = -4600, escortNumber = 1, radius = 250},
 		{patrolPointName = "kash_station_imperial_escort_duty_2", zoneName = "space_kashyyyk", x = 3800, z = 1600, y = -3700, escortNumber = 2, radius = 250},
 		{patrolPointName = "kash_station_imperial_escort_duty_3", zoneName = "space_kashyyyk", x = 5000, z = 2300, y = -2700, escortNumber = 3, radius = 250},
-		{patrolPointName = "kash_station_imperial_escort_duty_4", zoneName = "space_kashyyyk", x = 6100, z = 2900, y = -1800, escortNumber = 4, radius = 250},
+		{patrolPointName = "kash_station_imperial_escort_duty_4", zoneName = "space_kashyyyk", x = 5412.52, z = 2360.67, y = -6877.65, escortNumber = 4, radius = 250},
 	},
 
 	attackDelay = 90, -- In Seconds; ours

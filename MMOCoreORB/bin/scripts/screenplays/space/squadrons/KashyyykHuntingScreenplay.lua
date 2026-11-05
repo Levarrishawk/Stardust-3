@@ -677,11 +677,10 @@ destroy_surpriseattack_ep3_avatar_defensive_attack = SpaceSurpriseAttackScreenpl
 
 	-- Screenplay Specific Variables
 
-	-- STF title_d: "an attack by the stations defensive fighters". The .stf does not name the
-	-- ship type and no Avatar Platform ship agent exists; the Wookiee resistance agents are ours.
+	-- DSRC's ep3_avatar_defensive_attack uses three Blackscale fighters.
 	surpriseAttackShips = {
 		zone = "space_kashyyyk",
-		spawns = {{count = 2, shipName = "wke_resist_tier4"}, {count = 1, shipName = "wke_resist_tier5"}},
+		spawns = {{count = 3, shipName = "ep3_trandoshan_blackscale_fighter"}},
 	},
 }
 
@@ -719,7 +718,7 @@ inspect_ep3_wke_bowcaster_crafting = SpaceInspectScreenplay:new {
 	inspectTargets = {"wke_resist_tier3_bowcaster_parts"},
 	inspectCargo = "ep3_wke_bowcaster_parts", -- ours; the .stf carries no cargo identifier
 
-	targetLocation = {x = -1800, z = 500, y = 900}, -- ours; the .stf gives no coordinate
+	targetLocation = {x = 5952, z = 5432, y = -3024},
 }
 
 registerScreenPlay("inspect_ep3_wke_bowcaster_crafting", true)
