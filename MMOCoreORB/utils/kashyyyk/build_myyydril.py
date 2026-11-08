@@ -160,8 +160,13 @@ def generate(dsrc):
                 row_conversations[item] = script
         respawn = (int(row.get('respawn_time') or 0) or 30) if row.get('script') == 'theme_park.dungeon.generic_death' else 0
         mobile = 'myyydril_' + item
-        rows.append([line, item if is_object else mobile, row['room'],
-                     *[float(row[k]) for k in ('loc_x', 'loc_y', 'loc_z', 'yaw')], -1 if is_object else respawn])
+        room = row['room']
+        position = [float(row[k]) for k in ('loc_x', 'loc_y', 'loc_z')]
+        if item == 'ep3_myyydril_kirrir' and room == 'lightningroom34':
+            # The authored position is above the hut and outside the cell floor. Use the ground beside its steps.
+            position = [222.5, -111.5766, -346.5]
+        rows.append([line, item if is_object else mobile, room, *position, float(row['yaw']),
+                     -1 if is_object else respawn])
     assert Counter(row[-1] < 0 for row in rows) == {False: 352, True: 565}
     result = {SCRIPTS / 'screenplays/kashyyyk/myyydril_data.lua': (
         '-- Generated from DSRC. Rows are source line, template, cell, x, height, y, heading, respawn.\n'
@@ -273,14 +278,18 @@ def generate(dsrc):
         '\tlocal template = SharedTangibleObjectTemplate:new {clientTemplateFileName = client}\n'
         '\tObjectTemplates:addClientTemplate(template, client)\n'
         '\tObjectTemplates:addTemplate(template:new {}, path)\nend\n')
-    result[SCRIPTS / 'loot/items/kashyyyk/myyydril_urnsoris.lua'] = header + (
-        'for _, path in ipairs(' + item_paths + ') do\n'
-        '\tlocal name = path:match("([^/]+)%.iff$")\n'
-        '\taddLootItemTemplate("myyydril_" .. name, {\n'
-        '\t\tminimumLevel = 0, maximumLevel = -1, customObjectName = "", directObjectTemplate = path,\n'
-        '\t\tcraftingValues = {}, customizationStringNames = {}, customizationValues = {}\n\t})\nend\n')
-    urnsoris_loot = [dict(itemTemplate='myyydril_' + PurePosixPath(path).stem, weight=weight * count)
-                     for path, count in urnsoris_counts.items()]
+    item_includes, urnsoris_loot = [], []
+    for path, count in urnsoris_counts.items():
+        name = 'myyydril_' + PurePosixPath(path).stem
+        filename = f'items/kashyyyk/{name}.lua'
+        item_includes.append(f'includeFile("{filename}")\n')
+        result[SCRIPTS / 'loot' / filename] = header + (
+            f'addLootItemTemplate("{name}", {{\n'
+            '\tminimumLevel = 0,\n\tmaximumLevel = -1,\n\tcustomObjectName = "",\n'
+            f'\tdirectObjectTemplate = {lua(path)},\n'
+            '\tcraftingValues = {},\n\tcustomizationStringNames = {},\n\tcustomizationValues = {}\n})\n')
+        urnsoris_loot.append(dict(itemTemplate=name, weight=weight * count))
+    result[SCRIPTS / 'loot/items/kashyyyk/myyydril_urnsoris.lua'] = header + ''.join(item_includes)
     result[SCRIPTS / 'loot/groups/kashyyyk/urnsoris.lua'] = header + (
         'addLootGroupTemplate("urnsoris", {\n\tdescription = "", minimumLevel = 0, maximumLevel = -1,\n'
         '\tlootItems = {\n' + ''.join('\t\t' + lua(item) + ',\n' for item in urnsoris_loot) + '\t}\n})\n')

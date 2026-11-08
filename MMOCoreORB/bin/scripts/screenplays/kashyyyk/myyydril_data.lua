@@ -172,7 +172,7 @@ MyyydrilData = {
 		{170, "myyydril_ep3_myyydril_kivvaaa", "hall33", 230.436, -123.529, -235.86, -41, 0},
 		{171, "myyydril_ep3_myyydril_talaoree", "hall33", 230.962, -123.39, -239.278, -41, 0},
 		{172, "myyydril_ep3_myyydril_kiaanta", "hall33", 231.423, -123.363, -233.263, -41, 0},
-		{173, "myyydril_ep3_myyydril_kirrir", "lightningroom34", 228, 110, -339, -138, 0},
+		{173, "myyydril_ep3_myyydril_kirrir", "lightningroom34", 222.5, -111.5766, -346.5, -138, 0},
 		{174, "myyydril_ep3_myyydril_isdan", "lightningroom34", 178, -117, -374, 0, 0},
 		{175, "myyydril_ep3_myyydril_nawika", "lightningroom34", 224.398, -111.58, -353.986, -68.5096, 0},
 		{176, "myyydril_ep3_myyydril_herder", "hall30", 146.032, -90.9052, -33.8932, -27.6245, 0},
