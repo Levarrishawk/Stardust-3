@@ -1,98 +1,15 @@
---[[
-Myyydril Grievous encounter  --  theme_park.dungeon.myyydril.grievous_*
-
-ruling 2026-09-04: "ensure kashyyyk is fully done"
-
-WHAT THIS IS
-
-Live attached grievous_encounter_lock to the caverns BUILDING. The lock
-creates (and later finds) object/tangible/theme_park/myyydril/myyydril_grievous_encounter_manager.iff
-in the encounter cells; the manager is the 31-minute spawn state machine.
-This screenplay is both lock and manager, on snapshot copy #0 only
-(node 14400001). Core3 has no per-building script attach; ENTEREDBUILDING
-on that node is the cell-entry shape (trando_slave_camp.lua:333).
-
-JAVA -> LUA
-
-	grievous_encounter_lock.java     session, grace, hall56-58 containment,
-	                                 beginEncounter, eject to hall59
-	grievous_encounter_manager.java  Grievous + 2 NK-3, machine, power cells,
-	                                 spawn-speed vs generator health, wipe
-	grievous_ai.java                 absorb countdown; DAMAGERECEIVED interrupt
-	grievous_death.java              loot roll (tab rows; java also hard-codes
-	                                 items that are OPEN here)
-	grievous_player.java             OnAttach signalLornRetrieveCompleted
-	grievous_guard.java              OBJECTDESTRUCTION -> numMobs
-	power_cell.java / machine.java   OPEN: neither IFF is in the tree
-	myyydril_player.java             OPEN: uncontained-in-pob warp to dead
-	                                 forest; no Lua binding for that attach
-	cantina_setup.java               lightningroom34 special_room
-	magic_stone.java                 OPEN: no caverns.tab object row, no IFF
-	wirartu_attack.java              50% HAM -> chat + peace; arena champion
-
-WHO MAY START  --  lock.java:388-402 plus the servant conversation
-
-	beginEncounter checks isQuestEligible before a session is allocated:
-	  non-god callers need myyydrilLornRetrieve6ScreenPlay stage == 2
-	  (readScreenPlayData under that screenplay name; refused if the
-	  global is absent). God callers skip the quest gate.
-	ep3_myyydril_lorn_servant.java is the live quest gate:
-	  lockout objvar instance_lockout.myyydril_grievous.lockout_end
-	    -> writeScreenPlayData(pPlayer, "MyyydrilGrievous", "lockout_end")
-	  isTaskActive(ep3_myyydril_lorn_retrieve_6, "lornRetrieveCompleted")
-	    -> readScreenPlayData(pPlayer, "myyydrilLornRetrieve6ScreenPlay", "stage") == 2
-	  isTaskActive(..., "taskRetrieveCrystal") is stage 1 (refuse start, wait)
-	  hasBadge is hardcoded false in the java (line 29) -- never a gate
-	  isGod skips lockout and may start via s_492
-	The servant row is OPEN (no repo template). Conversation is the arc's
-	job; this file exports MyyydrilGrievous.beginEncounter(pPlayer).
-
-COORDINATE TRANSFORM  --  POB interior, KashyyykPobPopulation axis mapping
-
-	repo x        <-  loc_x / java x
-	repo z        <-  loc_y / java y     (height)
-	repo y        <-  loc_z / java z
-	spawnMobile heading is degrees. spawnSceneObject heading is a quat
-	from yaw degrees (trando_slave_camp.lua:273-275).
-
-CELL NAMES
-
-	lock.java:17-24. Lookup is BuildingObject:getNamedCell, the same call
-	KashyyykPobPopulation:resolveCell uses. The caverns POB has 79 cells
-	(copy stride 80). Room names encode the cell index (hallN is cell N).
-	Derived name->index:
-
-		hall55  55  start_cell                 lock.java:17
-		hall56  56  entry_cell                 lock.java:18
-		hall57  57  encounter + machine/mobs   lock.java:22, manager.java:55
-		hall58  58  encounter                  lock.java:23
-		hall59  59  exit_cell                  lock.java:19
-
-	buildCellMap walks getCellName(i) at boot and records the live table.
-	Spawn-tab rooms prove hall55 / hall57 / hall58.
-	hall56 and hall59 are layout-only warp cells (no spawn row).
---]]
+-- The Grievous encounter uses the selected cavern building as its session owner.
 
 MyyydrilGrievous = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "MyyydrilGrievous",
 
 	zoneName = "kashyyyk_pob_dungeons",
-	buildingID = 14400001,
 
-	-- lock.java:17-24. Name->index derived from the POB cell list
-	-- (room name encodes the index; 79 cells, copy stride 80).
 	startCell = "hall55",
 	entryCell = "hall56",
 	exitCell = "hall59",
 	encounterCells = { "hall56", "hall57", "hall58" },
-	cellIndex = {
-		hall55 = 55,
-		hall56 = 56,
-		hall57 = 57,
-		hall58 = 58,
-		hall59 = 59,
-	},
 
 	-- lock.java:36-37
 	gracePeriod = 300,
@@ -100,13 +17,8 @@ MyyydrilGrievous = ScreenPlay:new {
 	-- lock.java:164
 	lockoutSeconds = 1800,
 
-	-- manager.java:92-106. Java spawn name ep3_general_grievous is not a
-	-- CreatureTemplates key; general_grievous is the same IFF
-	-- object/mobile/ep3/general_grievous.iff. Guards: ep3_myyydril_nk3
-	-- exists; it is a level-4 townsperson (pvpBitmask NONE) -- spawn it,
-	-- do not substitute. No creature edits.
-	grievousTemplate = "general_grievous",
-	guardTemplate = "ep3_myyydril_nk3",
+	grievousTemplate = "myyydril_ep3_general_grievous",
+	guardTemplate = "myyydril_ep3_myyydril_nk3",
 
 	-- manager.java:57-58, 88-98. Interior, so no world offset.
 	machineLoc = { x = -227.2, z = -92.6, y = 156.2, cell = "hall57" },
@@ -131,11 +43,10 @@ MyyydrilGrievous = ScreenPlay:new {
 	wirartuMaxAttempts = 12,
 	wirartuRetryMs = 5000,
 
-	-- OPEN: object/tangible/theme_park/myyydril/myyydril_machine.iff
-	-- OPEN: object/tangible/theme_park/myyydril/myyydril_power_cell.iff
-	-- OPEN: object/tangible/theme_park/myyydril/myyydril_grievous_encounter_manager.iff
 	machineTemplate = "object/tangible/theme_park/myyydril/myyydril_machine.iff",
 	powerCellTemplate = "object/tangible/theme_park/myyydril/myyydril_power_cell.iff",
+	managerTemplate = "object/tangible/theme_park/myyydril/myyydril_grievous_encounter_manager.iff",
+	managerLoc = { x = -217.655, z = -92.8194, y = 149.159 },
 
 	-- loot_items/kashyyyk/myyydril_grievous.tab rows 3-14. No grievous_loot.tab
 	-- in sys.server datatables. Every listed IFF is in this tree.
@@ -160,16 +71,6 @@ MyyydrilGrievous = ScreenPlay:new {
 		"object/tangible/wearables/cybernetic/s02/cybernetic_s02_arm_r.iff",
 	},
 
-	-- ep3_myyydril_caverns.tab file lines cited by the arc. Axis mapping
-	-- as KashyyykPobPopulation: x=loc_x, z=loc_y, y=loc_z, yaw degrees.
-	retrieveObjects = {
-		{ line = 593, template = "object/tangible/quest/pod_egg_sacs.iff", cell = "hall74", x = -73.5749, z = -201.75, y = -159.047, yaw = -37.302, arc = "myyydrilKallaaracRetrieve1ScreenPlay" },
-		{ line = 292, template = "object/tangible/quest/warl_cave_plant.iff", cell = "hall18", x = 147.374, z = -41.3962, y = -11.4858, yaw = 168, arc = "myyydrilKirirrGather1ScreenPlay" },
-		{ line = 765, template = "object/tangible/quest/r_naktra_crystals.iff", cell = "borglestatue49", x = -365.355, z = -256.536, y = -119.002, yaw = -104.164, arc = "myyydrilLornRetrieve6ScreenPlay" },
-		{ line = 834, template = "object/tangible/quest/nawika_jewel_box.iff", cell = "bigroom40", x = -10.6357, z = -213.658, y = -166.037, yaw = -43.6363, arc = "myyydrilNawikaEscort1ScreenPlay" },
-		{ line = 454, template = "object/tangible/quest/luilris_mushrooms.iff", cell = "hall26", x = 161.75, z = -58.5727, y = -10.5915, yaw = 33.6729, arc = "myyydrilYrakaRetrieve2ScreenPlay" },
-	},
-
 	lornScreenPlay = "myyydrilLornRetrieve6ScreenPlay",
 	stf = "@dungeon/myyydril:",
 }
@@ -177,60 +78,26 @@ MyyydrilGrievous = ScreenPlay:new {
 registerScreenPlay("MyyydrilGrievous", true)
 
 function MyyydrilGrievous:start()
-	if (not isZoneEnabled(self.zoneName)) then
-		return
-	end
-
-	local pBuilding = getSceneObject(self.buildingID)
-
-	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
-		print("MyyydrilGrievous: building " .. self.buildingID .. " is missing; encounter is idle")
-		return
-	end
-
-	local cellsLoaded = self:buildCellMap(pBuilding)
-	self:resetEncounter()
-	local objectsLoaded = self:spawnRetrieveObjects(pBuilding)
-	local cantinaLoaded = self:setupCantina(pBuilding)
-	self:attachWirartuAttack()
-
-	createObserver(ENTEREDBUILDING, "MyyydrilGrievous", "notifyEnteredBuilding", pBuilding)
-
-	if (cellsLoaded and objectsLoaded and cantinaLoaded) then
-		print("MyyydrilGrievous: screenplay loaded successfully")
+	if (isZoneEnabled(self.zoneName)) then
+		self:attachWirartuAttack()
 	end
 end
 
-function MyyydrilGrievous:buildCellMap(pBuilding)
-	local total = BuildingObject(pBuilding):getTotalCellNumber()
-	self.cellIndex = {}
-
-	for i = 1, total do
-		local name = BuildingObject(pBuilding):getCellName(i)
-
-		if (name == nil) then
-			name = ""
-		end
-
-		if (name ~= "") then
-			self.cellIndex[name] = i
-		end
-
+function MyyydrilGrievous:forBuilding(pBuilding)
+	if (MyyydrilCaverns:isBuilding(pBuilding)) then
+		return setmetatable({buildingID = SceneObject(pBuilding):getObjectID()}, {__index = MyyydrilGrievous})
 	end
+end
 
-	local names = { "hall55", "hall56", "hall57", "hall58", "hall59" }
-	local loaded = true
-
-	for i = 1, #names do
-		local idx = self.cellIndex[names[i]]
-
-		if (idx == nil) then
-			print("MyyydrilGrievous: name->index '" .. names[i] .. "' MISSING")
-			loaded = false
-		end
+function MyyydrilGrievous:forEncounterObject(pObject)
+	if (pObject ~= nil) then
+		local key = SceneObject(pObject):getObjectID() .. ":MyyydrilGrievous:building"
+		return self:forBuilding(getSceneObject(readData(key)))
 	end
+end
 
-	return loaded
+function MyyydrilGrievous:setupCopy(pBuilding)
+	createObserver(ENTEREDBUILDING, self.screenplayName, "notifyEnteredBuilding", pBuilding)
 end
 
 function MyyydrilGrievous:resolveCell(pBuilding, cellName)
@@ -290,7 +157,7 @@ function MyyydrilGrievous:isQuestEligible(pPlayer)
 end
 
 function MyyydrilGrievous:dataKey(suffix)
-	return "MyyydrilGrievous:" .. suffix
+	return "MyyydrilGrievous:" .. self.buildingID .. ":" .. suffix
 end
 
 function MyyydrilGrievous:getSessionId()
@@ -302,7 +169,7 @@ function MyyydrilGrievous:isActive()
 end
 
 function MyyydrilGrievous:playerSessionKey(pPlayer)
-	return SceneObject(pPlayer):getObjectID() .. ":MyyydrilGrievous:session"
+	return self:dataKey("player:" .. SceneObject(pPlayer):getObjectID())
 end
 
 function MyyydrilGrievous:isEventPlayer(pPlayer)
@@ -310,7 +177,7 @@ function MyyydrilGrievous:isEventPlayer(pPlayer)
 		return false
 	end
 
-	if (readData(SceneObject(pPlayer):getObjectID() .. ":MyyydrilGrievous:god") == 1) then
+	if (readData(self:playerSessionKey(pPlayer) .. ":god") == 1) then
 		return true
 	end
 
@@ -335,7 +202,17 @@ end
 
 -- Conversation / god start. lock.java:388 beginEncounter.
 function MyyydrilGrievous.beginEncounter(pPlayer)
-	MyyydrilGrievous:doBeginEncounter(pPlayer)
+	local pBuilding = MyyydrilCaverns:getBuilding(pPlayer)
+	if (pBuilding ~= nil) then
+		createEvent(1000, MyyydrilGrievous.screenplayName, "requestEncounter", pBuilding, tostring(SceneObject(pPlayer):getObjectID()))
+	end
+end
+
+function MyyydrilGrievous:requestEncounter(pBuilding, playerID)
+	local encounter = self:forBuilding(pBuilding)
+	if (encounter ~= nil) then
+		encounter:doBeginEncounter(getSceneObject(tonumber(playerID) or 0))
+	end
 end
 
 function MyyydrilGrievous:doBeginEncounter(pPlayer)
@@ -345,7 +222,8 @@ function MyyydrilGrievous:doBeginEncounter(pPlayer)
 
 	local pBuilding = getSceneObject(self.buildingID)
 
-	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+	if (not MyyydrilCaverns:isReady(pBuilding) or MyyydrilCaverns:getBuilding(pPlayer) ~= pBuilding
+		or SceneObject(pPlayer):getParentID() ~= self:resolveCell(pBuilding, self.startCell)) then
 		return
 	end
 
@@ -367,11 +245,19 @@ function MyyydrilGrievous:doBeginEncounter(pPlayer)
 	end
 
 	local sessionId = self:setSessionIds()
-	self:moveGroupIntoEncounter(pPlayer, pBuilding, sessionId)
 	writeData(self:dataKey("active"), 1)
+	myyydrilLornTalktoScreenPlay:grantQuest(pPlayer)
+	self:moveGroupIntoEncounter(pPlayer, pBuilding, sessionId)
 	self:raiseSignal(pPlayer, "signalCompleteGrievousPrequest")
 	self:startEventTimer(sessionId)
-	createEvent(5000, "MyyydrilGrievous", "handleBeginEncounter", pBuilding, "")
+end
+
+function MyyydrilGrievous:beginCombat(pPlayer)
+	local pBuilding = MyyydrilCaverns:getBuilding(pPlayer)
+	local encounter = self:forBuilding(pBuilding)
+	if (encounter ~= nil and encounter:isActive() and encounter:isEventPlayer(pPlayer)) then
+		createEvent(5000, self.screenplayName, "handleBeginEncounter", pBuilding, tostring(encounter:getSessionId()))
+	end
 end
 
 function MyyydrilGrievous:setSessionIds()
@@ -452,11 +338,10 @@ function MyyydrilGrievous:moveSinglePlayerIntoEncounter(pPlayer, pBuilding, sess
 	end
 
 	writeData(self:playerSessionKey(pPlayer), sessionId)
-	writeData(SceneObject(pPlayer):getObjectID() .. ":MyyydrilGrievous:player", 1)
 	writeScreenPlayData(pPlayer, self.screenplayName, "lockout_end", tostring(getTimestamp() + self.lockoutSeconds))
 
 	if (self:isGod(pPlayer)) then
-		writeData(SceneObject(pPlayer):getObjectID() .. ":MyyydrilGrievous:god", 1)
+		writeData(self:playerSessionKey(pPlayer) .. ":god", 1)
 	end
 
 	-- grievous_player.java:16 OnAttach
@@ -497,10 +382,8 @@ function MyyydrilGrievous:clearPlayerSession(pPlayer)
 		return
 	end
 
-	local playerID = SceneObject(pPlayer):getObjectID()
-	deleteData(playerID .. ":MyyydrilGrievous:session")
-	deleteData(playerID .. ":MyyydrilGrievous:player")
-	deleteData(playerID .. ":MyyydrilGrievous:god")
+	deleteData(self:playerSessionKey(pPlayer))
+	deleteData(self:playerSessionKey(pPlayer) .. ":god")
 end
 
 function MyyydrilGrievous:getPlayersInEncounterArea(pBuilding)
@@ -529,10 +412,10 @@ end
 
 function MyyydrilGrievous:getEventPlayersInDungeon(pBuilding)
 	local players = {}
-	local total = BuildingObject(pBuilding):getTotalCellNumber()
-
-	for i = 1, total do
-		local pCell = BuildingObject(pBuilding):getCell(i)
+	local building = BuildingObject(pBuilding)
+	for i = 1, building:getTotalCellNumber() do
+		local name = building:getCellName(i)
+		local pCell = name and name ~= "" and building:getNamedCell(name) or nil
 
 		if (pCell ~= nil) then
 			for j = 0, SceneObject(pCell):getContainerObjectsSize() - 1 do
@@ -584,6 +467,7 @@ function MyyydrilGrievous:notifyEnteredBuilding(pBuilding, pPlayer)
 end
 
 function MyyydrilGrievous:validatePlayersInEvent(pBuilding)
+	self = self:forBuilding(pBuilding)
 	if (pBuilding == nil) then
 		return
 	end
@@ -606,7 +490,8 @@ function MyyydrilGrievous:startEventTimer(sessionId)
 end
 
 function MyyydrilGrievous:handleSessionTimerUpdate(pBuilding, sessionStr)
-	if (pBuilding == nil) then
+	self = self:forBuilding(pBuilding)
+	if (self == nil) then
 		return
 	end
 
@@ -663,40 +548,94 @@ function MyyydrilGrievous:calculateNextMessage(remaining)
 	return remaining
 end
 
-function MyyydrilGrievous:handleBeginEncounter(pBuilding)
-	if (pBuilding == nil or not self:isActive()) then
+function MyyydrilGrievous:handleBeginEncounter(pBuilding, sessionStr)
+	self = self:forBuilding(pBuilding)
+	if (self == nil or not self:isActive() or self:getSessionId() ~= tonumber(sessionStr)
+		or readData(self:dataKey("manager")) ~= 0) then
 		return
 	end
-
-	writeData(self:dataKey("numMobs"), 3)
-	writeData(self:dataKey("powerCellsActive"), 0)
-	writeData(self:dataKey("powerSpawn"), 20)
-	writeData(self:dataKey("cleaning"), 0)
 
 	local hall57 = self:resolveCell(pBuilding, "hall57")
-
 	if (hall57 == 0) then
-		print("MyyydrilGrievous: no cell named 'hall57'; encounter mobs not spawned")
+		self:resetEncounter()
 		return
 	end
-
+	local loc = self.managerLoc
+	local pManager = spawnSceneObject(self.zoneName, self.managerTemplate, loc.x, loc.z, loc.y, hall57, 1, 0, 0, 0)
+	if (pManager == nil) then
+		self:resetEncounter()
+		return
+	end
+	writeData(self:dataKey("manager"), SceneObject(pManager):getObjectID())
+	writeData(self:dataKey("numMobs"), 3)
 	self:spawnMachine(hall57)
-	self:spawnInitialPowerCells(pBuilding, hall57)
+	self:spawnPowerCell(hall57, 1)
+	self:spawnPowerCell(hall57, 2)
 	self:spawnGrievous(hall57)
 	self:spawnGuard(self.guard1Loc, hall57, "guard1")
 	self:spawnGuard(self.guard2Loc, hall57, "guard2")
+	for _, object in ipairs({"machine", "grievous", "guard1", "guard2", "powerCell1", "powerCell2"}) do
+		if (readData(self:dataKey(object)) == 0) then
+			self:resetEncounter()
+			return
+		end
+	end
 end
 
 function MyyydrilGrievous:spawnMachine(cellID)
-	-- OPEN: myyydril_machine.iff is not in the tree. Never a look-alike.
-	-- Generator-health spawn-speed stays at the java default 20s.
-	print("MyyydrilGrievous: OPEN spawn " .. self.machineTemplate)
+	local loc = self.machineLoc
+	local pMachine = spawnSceneObject(self.zoneName, self.machineTemplate, loc.x, loc.z, loc.y, cellID, 1, 0, 0, 0)
+	if (pMachine ~= nil) then
+		TangibleObject(pMachine):setPvpStatusBitmask(ATTACKABLE)
+		writeData(self:dataKey("machine"), SceneObject(pMachine):getObjectID())
+	end
 end
 
-function MyyydrilGrievous:spawnInitialPowerCells(pBuilding, cellID)
-	-- OPEN: myyydril_power_cell.iff is not in the tree. Never a look-alike.
-	-- Absorb loop and respawn therefore have nothing to find.
-	print("MyyydrilGrievous: OPEN spawn " .. self.powerCellTemplate .. " x2")
+function MyyydrilGrievous:spawnPowerCell(cellID, slot)
+	local loc = self.powerCellLocs[getRandomNumber(1, #self.powerCellLocs)]
+	local pCell = spawnSceneObject(self.zoneName, self.powerCellTemplate, loc.x, loc.z, loc.y, cellID, 1, 0, 0, 0)
+	if (pCell == nil) then
+		return
+	end
+	local id = SceneObject(pCell):getObjectID()
+	TangibleObject(pCell):setPvpStatusBitmask(ATTACKABLE)
+	writeData(self:dataKey("powerCell" .. slot), id)
+	writeData(id .. ":MyyydrilGrievous:building", self.buildingID)
+	writeData(id .. ":MyyydrilGrievous:slot", slot)
+	createObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyPowerCellDestroyed", pCell)
+end
+
+function MyyydrilGrievous:notifyPowerCellDestroyed(pCell)
+	local encounter = self:forEncounterObject(pCell)
+	if (encounter == nil or not encounter:isActive()) then
+		return 1
+	end
+	local id = SceneObject(pCell):getObjectID()
+	local slotKey = id .. ":MyyydrilGrievous:slot"
+	local slot = readData(slotKey)
+	if (readData(encounter:dataKey("powerCell" .. slot)) ~= id) then
+		return 1
+	end
+	deleteData(slotKey)
+	deleteData(id .. ":MyyydrilGrievous:building")
+	deleteData(encounter:dataKey("powerCell" .. slot))
+	local pMachine = getSceneObject(readData(encounter:dataKey("machine")))
+	local damage = pMachine and TangibleObject(pMachine):getConditionDamage() or 1000
+	local delay = damage < 250 and 20 or damage < 500 and 40 or damage < 750 and 60 or 80
+	createEvent(delay * 1000, self.screenplayName, "replacePowerCell", getSceneObject(encounter.buildingID), encounter:getSessionId() .. ":" .. slot)
+	return 1
+end
+
+function MyyydrilGrievous:replacePowerCell(pBuilding, args)
+	local encounter = self:forBuilding(pBuilding)
+	local session, slot = string.match(args or "", "^(%d+):([12])$")
+	if (encounter ~= nil and encounter:isActive() and encounter:getSessionId() == tonumber(session)
+		and readData(encounter:dataKey("powerCell" .. slot)) == 0) then
+		local cellID = encounter:resolveCell(pBuilding, "hall57")
+		if (cellID ~= 0) then
+			encounter:spawnPowerCell(cellID, tonumber(slot))
+		end
+	end
 end
 
 function MyyydrilGrievous:spawnGrievous(cellID)
@@ -716,6 +655,7 @@ function MyyydrilGrievous:spawnGrievous(cellID)
 	writeData(self:dataKey("grievous"), SceneObject(pMob):getObjectID())
 	writeData(SceneObject(pMob):getObjectID() .. ":MyyydrilGrievous:power", 0)
 	writeData(SceneObject(pMob):getObjectID() .. ":MyyydrilGrievous:absorbing", 0)
+	writeData(SceneObject(pMob):getObjectID() .. ":MyyydrilGrievous:building", self.buildingID)
 	createObserver(OBJECTDESTRUCTION, "MyyydrilGrievous", "notifyGrievousKilled", pMob)
 	createObserver(DAMAGERECEIVED, "MyyydrilGrievous", "notifyGrievousDamaged", pMob)
 	createEvent(10000, "MyyydrilGrievous", "handleGrievousAiLoop", pMob, "")
@@ -735,6 +675,7 @@ function MyyydrilGrievous:spawnGuard(loc, cellID, key)
 	end
 
 	writeData(self:dataKey(key), SceneObject(pMob):getObjectID())
+	writeData(SceneObject(pMob):getObjectID() .. ":MyyydrilGrievous:building", self.buildingID)
 	createObserver(OBJECTDESTRUCTION, "MyyydrilGrievous", "notifyGuardKilled", pMob)
 end
 
@@ -749,7 +690,8 @@ function MyyydrilGrievous:notifyGrievousDamaged(pGrievous, pAttacker)
 end
 
 function MyyydrilGrievous:handleGrievousAiLoop(pGrievous)
-	if (pGrievous == nil or readData(self:dataKey("cleaning")) == 1) then
+	self = self:forEncounterObject(pGrievous)
+	if (self == nil or readData(self:dataKey("cleaning")) == 1) then
 		return
 	end
 
@@ -772,11 +714,7 @@ function MyyydrilGrievous:handleGrievousAiLoop(pGrievous)
 end
 
 function MyyydrilGrievous:lookForPowerCells(pGrievous)
-	-- Power-cell IFF is OPEN. When that template lands, spawn IDs are stored
-	-- under MyyydrilGrievous:powerCellN and this loop can follow them.
-	local n = readData(self:dataKey("powerCellsActive"))
-
-	for i = 1, n do
+	for i = 1, 2 do
 		local oid = readData(self:dataKey("powerCell" .. i))
 		local pCell = getSceneObject(oid)
 
@@ -838,16 +776,21 @@ function MyyydrilGrievous:onAbsorbTick(pGrievous, remainingStr)
 end
 
 function MyyydrilGrievous:handleAbsorb0(pGrievous)
-	if (pGrievous == nil or readData(SceneObject(pGrievous):getObjectID() .. ":MyyydrilGrievous:absorbing") ~= 1) then
+	self = self:forEncounterObject(pGrievous)
+	if (self == nil or not self:isActive() or readData(SceneObject(pGrievous):getObjectID() .. ":MyyydrilGrievous:absorbing") ~= 1) then
 		return
 	end
 
 	local oid = readData(SceneObject(pGrievous):getObjectID() .. ":MyyydrilGrievous:targetCell")
 	local pCell = getSceneObject(oid)
 
-	if (pCell ~= nil) then
-		SceneObject(pCell):destroyObjectFromWorld()
+	local owner = self:forEncounterObject(pCell)
+	if (owner == nil or owner.buildingID ~= self.buildingID) then
+		writeData(SceneObject(pGrievous):getObjectID() .. ":MyyydrilGrievous:absorbing", 0)
+		return
 	end
+	self:notifyPowerCellDestroyed(pCell)
+	SceneObject(pCell):destroyObjectFromWorld()
 
 	local level = readData(SceneObject(pGrievous):getObjectID() .. ":MyyydrilGrievous:power")
 
@@ -865,7 +808,8 @@ function MyyydrilGrievous:handleAbsorb0(pGrievous)
 end
 
 function MyyydrilGrievous:notifyGrievousKilled(pVictim, pKiller)
-	if (pVictim == nil) then
+	self = self:forEncounterObject(pVictim)
+	if (self == nil or not self:isActive()) then
 		return 1
 	end
 
@@ -873,15 +817,18 @@ function MyyydrilGrievous:notifyGrievousKilled(pVictim, pKiller)
 		self:createDeathLoot(pVictim)
 	end
 
+	deleteData(SceneObject(pVictim):getObjectID() .. ":MyyydrilGrievous:building")
 	self:handleNpcDeath()
 	return 1
 end
 
 function MyyydrilGrievous:notifyGuardKilled(pVictim, pKiller)
-	if (pVictim == nil) then
+	self = self:forEncounterObject(pVictim)
+	if (self == nil or not self:isActive()) then
 		return 1
 	end
 
+	deleteData(SceneObject(pVictim):getObjectID() .. ":MyyydrilGrievous:building")
 	self:handleNpcDeath()
 	return 1
 end
@@ -926,18 +873,18 @@ function MyyydrilGrievous:handleNpcDeath()
 		CreatureObject(players[i]):sendSystemMessage(self.stf .. "encounter_ending")
 	end
 
-	createEvent(60000, "MyyydrilGrievous", "handleEndEncounter", pBuilding, "")
+	createEvent(60000, "MyyydrilGrievous", "handleEndEncounter", pBuilding, tostring(self:getSessionId()))
 end
 
-function MyyydrilGrievous:handleEndEncounter(pBuilding)
-	self:resetEncounter()
+function MyyydrilGrievous:handleEndEncounter(pBuilding, sessionStr)
+	self = self:forBuilding(pBuilding)
+	if (self ~= nil and self:getSessionId() == tonumber(sessionStr)) then
+		self:resetEncounter()
+	end
 end
 
 function MyyydrilGrievous:resetEncounter()
 	writeData(self:dataKey("cleaning"), 1)
-	writeData(self:dataKey("active"), 0)
-	writeData(self:dataKey("session"), 0)
-	writeData(self:dataKey("powerCellsActive"), 0)
 	writeData(self:dataKey("graceEnd"), 0)
 
 	local pBuilding = getSceneObject(self.buildingID)
@@ -953,14 +900,14 @@ function MyyydrilGrievous:resetEncounter()
 		self:ejectInvalidPlayers(pBuilding)
 	end
 
+	writeData(self:dataKey("active"), 0)
+	writeData(self:dataKey("session"), 0)
 	self:destroyTracked("grievous")
 	self:destroyTracked("guard1")
 	self:destroyTracked("guard2")
 	self:destroyTracked("machine")
-
-	local n = 8
-
-	for i = 1, n do
+	self:destroyTracked("manager")
+	for i = 1, 2 do
 		self:destroyTracked("powerCell" .. i)
 	end
 
@@ -974,6 +921,13 @@ function MyyydrilGrievous:destroyTracked(key)
 		return
 	end
 
+	deleteData(oid .. ":MyyydrilGrievous:building")
+	deleteData(oid .. ":MyyydrilGrievous:slot")
+	if (key == "grievous") then
+		deleteData(oid .. ":MyyydrilGrievous:power")
+		deleteData(oid .. ":MyyydrilGrievous:absorbing")
+		deleteData(oid .. ":MyyydrilGrievous:targetCell")
+	end
 	local pObj = getSceneObject(oid)
 
 	if (pObj ~= nil) then
@@ -983,64 +937,12 @@ function MyyydrilGrievous:destroyTracked(key)
 	deleteData(self:dataKey(key))
 end
 
-function MyyydrilGrievous:spawnRetrieveObjects(pBuilding)
-	local loaded = true
-
-	for i = 1, #self.retrieveObjects do
-		local row = self.retrieveObjects[i]
-		local cellID = self:resolveCell(pBuilding, row.cell)
-
-		if (cellID == 0) then
-			print("MyyydrilGrievous: no cell named '" .. row.cell .. "'; tab line " .. row.line .. " skipped")
-			loaded = false
-		else
-			local qw, qx, qy, qz = self:headingToQuat(row.yaw)
-			local pObject = spawnSceneObject(self.zoneName, row.template, row.x, row.z, row.y, cellID, qw, qx, qy, qz)
-
-			if (pObject == nil) then
-				print("MyyydrilGrievous: failed to spawn " .. row.template .. " from tab line " .. row.line)
-				loaded = false
-			else
-				loaded = self:attachRetrieveObject(pObject, row.arc, row.line) and loaded
-			end
-		end
-	end
-
-	return loaded
-end
-
-function MyyydrilGrievous:attachRetrieveObject(pObject, arcName, line)
-	local arc = _G[arcName]
-
-	if (arc ~= nil and arc.attachObject ~= nil) then
-		arc:attachObject(pObject)
-		return true
-	else
-		print("myyydril_grievous.lua: " .. arcName .. " absent; attachObject not raised for tab line " .. line)
-		return false
-	end
-end
-
--- cantina_setup.java on lightningroom34 (caverns.tab special_room_script).
--- Sets healing.canhealshock. Core3 has no Lua binding for that objvar: OPEN.
-function MyyydrilGrievous:setupCantina(pBuilding)
-	local cellID = self:resolveCell(pBuilding, "lightningroom34")
-
-	if (cellID == 0) then
-		print("MyyydrilGrievous: no cell named 'lightningroom34'; cantina_setup skipped")
-		return false
-	end
-
-	writeData(self:dataKey("cantina"), cellID)
-	return true
-end
-
 -- wirartu_attack.java is the creatures.tab script on ep3_forest_wirartu.
 -- KashyyykArena already spawned dressed_arena_champion; attach here so the
 -- arena file is not edited. Retry until the champion exists.
 -- OURS bound: wirartuMaxAttempts * wirartuRetryMs (12 x 5 s).
 function MyyydrilGrievous:attachWirartuAttack()
-	self:tryAttachWirartu(getSceneObject(self.buildingID), "1")
+	self:tryAttachWirartu(nil, "1")
 end
 
 function MyyydrilGrievous:tryAttachWirartu(pBuilding, attemptStr)
@@ -1069,7 +971,7 @@ function MyyydrilGrievous:notifyWirartuDamaged(pWirartu, pAttacker)
 		return 0
 	end
 
-	if (readData(self:dataKey("wirartuYielded")) == 1) then
+	if (readData("MyyydrilGrievous:wirartuYielded") == 1) then
 		return 0
 	end
 
@@ -1080,7 +982,7 @@ function MyyydrilGrievous:notifyWirartuDamaged(pWirartu, pAttacker)
 		return 0
 	end
 
-	writeData(self:dataKey("wirartuYielded"), 1)
+	writeData("MyyydrilGrievous:wirartuYielded", 1)
 
 	-- wirartu_attack.java:24 setInvulnerable(self, true). No setInvulnerable
 	-- Lua binding; the fork substitute is INVULNERABLE
@@ -1115,8 +1017,7 @@ function MyyydrilGrievous:notifyWirartuDamaged(pWirartu, pAttacker)
 end
 
 -- magic_stone.java: inventory radial teleports to kashyyyk_main (-568, 0, -100)
--- when the top container is the caverns building. No caverns.tab object row
--- and no IFF in the tree. Menu component is exported for when the item lands.
+-- when the top container is the caverns building.
 MyyydrilMagicStoneMenuComponent = {}
 
 function MyyydrilMagicStoneMenuComponent:fillObjectMenuResponse(pSceneObject, pMenuResponse, pPlayer)
@@ -1140,19 +1041,7 @@ function MyyydrilMagicStoneMenuComponent:handleObjectMenuSelect(pSceneObject, pP
 		return 0
 	end
 
-	local pTop = SceneObject(pPlayer):getParent()
-
-	if (pTop ~= nil) then
-		pTop = SceneObject(pTop):getParent()
-	end
-
-	local inCaverns = false
-
-	if (pTop ~= nil and SceneObject(pTop):isBuildingObject() and SceneObject(pTop):getObjectID() == MyyydrilGrievous.buildingID) then
-		inCaverns = true
-	end
-
-	if (not inCaverns) then
+	if (MyyydrilCaverns:getBuilding(pPlayer) == nil) then
 		CreatureObject(pPlayer):sendSystemMessage("@dungeon/myyydril:cantusestone")
 		return 0
 	end
@@ -1162,10 +1051,6 @@ function MyyydrilMagicStoneMenuComponent:handleObjectMenuSelect(pSceneObject, pP
 		return 0
 	end
 
-	if (CreatureObject(pPlayer):isRidingMount()) then
-		CreatureObject(pPlayer):dismount()
-	end
-
-	SceneObject(pPlayer):switchZone("kashyyyk_main", -568, 0, -100, 0)
+	MyyydrilCaverns:travel(pPlayer, "kashyyyk_main", -568, 0, -100, 0)
 	return 0
 end

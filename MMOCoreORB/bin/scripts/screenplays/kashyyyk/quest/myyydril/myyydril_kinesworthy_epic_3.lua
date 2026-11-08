@@ -34,6 +34,7 @@ myyydrilKinesworthyEpic3ScreenPlay = ScreenPlay:new {
 	rewardItem = "object/tangible/wearables/cybernetic/s03/cybernetic_s03_arm_r.iff",
 	killTemplates = {
 		"ep3_myyydril_nk3",
+		"myyydril_ep3_myyydril_nk3",
 	},
 }
 

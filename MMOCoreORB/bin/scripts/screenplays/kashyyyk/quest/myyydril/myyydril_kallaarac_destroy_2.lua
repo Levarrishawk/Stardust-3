@@ -153,7 +153,7 @@ function myyydrilKallaaracDestroy2ScreenPlay:detachKillObserver(pPlayer)
 end
 
 function myyydrilKallaaracDestroy2ScreenPlay:notifyKilledCreature(pPlayer, pVictim)
-	if (pPlayer == nil or pVictim == nil) then
+	if (pPlayer == nil or pVictim == nil or not SceneObject(pVictim):isAiAgent()) then
 		return 0
 	end
 
@@ -162,9 +162,8 @@ function myyydrilKallaaracDestroy2ScreenPlay:notifyKilledCreature(pPlayer, pVict
 		return 1
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
-
-	if (victimTemplate == nil or not self:isKillTemplate(victimTemplate)) then
+	local victim = AiAgent(pVictim)
+	if (victim:getSocialGroup() ~= "myyydril_urn" and not self:isKillTemplate(victim:getCreatureTemplateName())) then
 		return 0
 	end
 

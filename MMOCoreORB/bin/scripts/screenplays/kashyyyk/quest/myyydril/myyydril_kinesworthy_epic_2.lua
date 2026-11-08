@@ -35,6 +35,7 @@ myyydrilKinesworthyEpic2ScreenPlay = ScreenPlay:new {
 	rewardItem = "object/tangible/wearables/cybernetic/s02/cybernetic_s02_arm_l.iff",
 	killTemplates = {
 		"dressed_myyydril_lost_erriya",
+		"myyydril_ep3_myyydril_erriya",
 	},
 }
 

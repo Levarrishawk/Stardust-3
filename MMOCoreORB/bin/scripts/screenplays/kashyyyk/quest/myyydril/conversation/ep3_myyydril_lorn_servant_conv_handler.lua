@@ -8,7 +8,9 @@ ep3_myyydril_lorn_servant_conv_handler = conv_handler:new {}
 function ep3_myyydril_lorn_servant_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	if ((myyydrilLornRetrieve6ScreenPlay:getStage(pPlayer) == 2)) then
+	if (not MyyydrilGrievous:isLockoutClear(pPlayer)) then
+		return convoTemplate:getScreen("s_418")
+	elseif (myyydrilLornRetrieve6ScreenPlay:getStage(pPlayer) == 2) then
 		return convoTemplate:getScreen("s_434")
 	elseif ((myyydrilLornRetrieve6ScreenPlay:getStage(pPlayer) == 1)) then
 		return convoTemplate:getScreen("s_438")
@@ -22,12 +24,14 @@ function ep3_myyydril_lorn_servant_conv_handler:runScreenHandlers(pConvTemplate,
 	local screenID = screen:getScreenID()
 	local pClonedScreen = screen:cloneScreen()
 
-	if (screenID == "s_496") then
-		myyydrilLornTalktoScreenPlay:grantQuest(pPlayer)
+	if (screenID == "s_434" or (screenID == "s_496" and MyyydrilGrievous:isGod(pPlayer))) then
+		MyyydrilGrievous.beginEncounter(pPlayer)
+	elseif (screenID == "s_442" and not MyyydrilGrievous:isGod(pPlayer)) then
+		local clone = LuaConversationScreen(pClonedScreen)
+		clone:removeAllOptions()
+		clone:addOption("@conversation/ep3_myyydril_lorn_servant:s_446", "s_450")
 	elseif (screenID == "s_488") then
 		myyydrilLornRetrieve6ScreenPlay:grantQuest(pPlayer)
-	elseif (screenID == "s_434") then
-		myyydrilLornTalktoScreenPlay:grantQuest(pPlayer)
 	end
 
 	return pClonedScreen

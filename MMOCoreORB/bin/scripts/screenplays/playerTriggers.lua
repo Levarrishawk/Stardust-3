@@ -10,6 +10,9 @@ function PlayerTriggers:playerLoggedIn(pPlayer)
 	BestineElection:playerLoggedIn(pPlayer)
 	MissionJournal:onPlayerLoggedIn(pPlayer)
 	KashyyykQuestJournal.playerLoggedIn(pPlayer)
+	if (MyyydrilCaverns ~= nil) then
+		MyyydrilCaverns:playerLoggedIn(pPlayer)
+	end
 	for _, name in ipairs({"trandoBoshazZssik02ScreenPlay", "trandoSsiksikScreenPlay", "slaverGursanEntryQuestScreenPlay"}) do
 		if (_G[name] ~= nil) then _G[name]:playerLoggedIn(pPlayer) end
 	end

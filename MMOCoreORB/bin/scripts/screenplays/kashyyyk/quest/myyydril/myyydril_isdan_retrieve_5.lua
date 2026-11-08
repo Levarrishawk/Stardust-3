@@ -14,9 +14,6 @@
 
 	SOURCED spawn: kashyyyk_dead_forest.tab:1209 (and sibling rows of the same iff),
 	merged-zone frame {#kash-offset} dead forest dx -3548 dz -548.
-	OPEN: object/tangible/theme_park/myyydril/myyydril_magic_stone.iff has no repo template; not granted.
-	Credits and XP still award.
-
 	Giver is not spawned here. Dungeon rows already stand via the POB populator, or are OPEN.
 
 	NO JOURNAL: this branch has no managers/quest/journal.lua. The client already
@@ -31,6 +28,7 @@ myyydrilIsdanRetrieve5ScreenPlay = ScreenPlay:new {
 	screenplayName = "myyydrilIsdanRetrieve5ScreenPlay",
 	repeatable = false,
 	rewardCredits = 2000,
+	rewardItem = "object/tangible/theme_park/myyydril/myyydril_magic_stone.iff",
 	itemTemplate = "object/tangible/quest/forest_smooth_rocks.iff",
 	items = {
 		{ row = 1209, x = -1789.94, z = 0.389601, y = 1599.84, qw = 1, qx = 0, qy = 0, qz = 0 },
@@ -170,11 +168,16 @@ function myyydrilIsdanRetrieve5ScreenPlay:grantQuest(pPlayer)
 end
 
 function myyydrilIsdanRetrieve5ScreenPlay:awardQuest(pPlayer)
+	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
+	if (pInventory == nil or giveItem(pInventory, self.rewardItem, -1) == nil) then
+		CreatureObject(pPlayer):sendSystemMessage("@error_message:inv_full")
+		return false
+	end
 	MyyydrilQuestXp:award(pPlayer, "ep3_myyydril_isdan_retrieve_5")
 	writeScreenPlayData(pPlayer, self.screenplayName, "runs", tostring(self:getRuns(pPlayer) + 1))
 	CreatureObject(pPlayer):addBankCredits(self.rewardCredits, true)
 	self:clearQuest(pPlayer)
-
+	return true
 end
 
 function myyydrilIsdanRetrieve5ScreenPlay:signalTurnIn(pPlayer)
@@ -182,9 +185,7 @@ function myyydrilIsdanRetrieve5ScreenPlay:signalTurnIn(pPlayer)
 		return false
 	end
 
-	self:awardQuest(pPlayer)
-
-	return true
+	return self:awardQuest(pPlayer)
 end
 
 function myyydrilIsdanRetrieve5ScreenPlay:attachKillObserver(pPlayer)

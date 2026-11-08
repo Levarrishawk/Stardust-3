@@ -34,6 +34,7 @@ myyydrilYrakaEpic1ScreenPlay = ScreenPlay:new {
 	rewardItem = "object/tangible/wearables/cybernetic/s03/cybernetic_s03_arm_l.iff",
 	killTemplates = {
 		"urnsoris_queen",
+		"myyydril_ep3_urnsoris_queen",
 	},
 }
 

@@ -29,7 +29,7 @@ myyydrilKallaaracDestroy3ScreenPlay = ScreenPlay:new {
 	repeatable = false,
 	rewardCredits = 10000,
 	killCredits = 3000,
-	killTemplate = "urnsoris_queen",
+	killTemplates = {"urnsoris_queen", "myyydril_ep3_urnsoris_queen"},
 }
 
 registerScreenPlay("myyydrilKallaaracDestroy3ScreenPlay", true)

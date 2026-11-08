@@ -5,3 +5,4 @@ includeFile("custom_content/tangible/dungeon/mustafar/serverobjects.lua")
 includeFile("custom_content/tangible/dungeon/restuss_event/serverobjects.lua")
 
 -- Server Objects
+includeFile("custom_content/tangible/dungeon/myyydril.lua")

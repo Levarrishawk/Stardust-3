@@ -34,6 +34,7 @@ myyydrilTalaoreeDestroy1ScreenPlay = ScreenPlay:new {
 		"uwari_beetle_aggro",
 		"uwari_beetle_aggro_1",
 		"uwari_beetle_aggro_2",
+		"myyydril_ep3_myyydril_uwari_aggro",
 	},
 }
 

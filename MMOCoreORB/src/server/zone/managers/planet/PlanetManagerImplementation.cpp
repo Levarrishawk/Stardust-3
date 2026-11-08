@@ -46,6 +46,8 @@
 
 namespace {
 
+const char* const myyydrilBuildingTemplate = "object/building/kashyyyk/shared_thm_kash_myyydril_caverns.iff";
+
 void collectSnapshotIDs(WorldSnapshotNode* node, VectorMap<uint64, bool>& ids) {
 	ids.put(node->getObjectID(), true);
 	for (int i = 0; i < node->getNodeCount(); ++i)
@@ -53,6 +55,7 @@ void collectSnapshotIDs(WorldSnapshotNode* node, VectorMap<uint64, bool>& ids) {
 }
 
 bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff* snapshot) {
+	const bool myyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
 	TemplateManager* manager = TemplateManager::instance();
 	UniqueReference<IffStream*> sceneStream(manager->openIffFile("datatables/buildout/buildout_scenes.iff"));
 	if (sceneStream == nullptr)
@@ -63,8 +66,12 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 	if (sceneIndex < 0) {
 		if (zone->getZoneName() == "kashyyyk_rryatt_trail")
 			throw Exception("Rryatt is missing from the native buildout scene list");
+		if (myyydril)
+			throw Exception("Myyydril is missing from the native buildout scene list");
 		return false;
 	}
+	if (myyydril && sceneIndex != 4)
+		throw Exception("Myyydril requires the native POB scene index");
 	String areaFile = "datatables/buildout/areas_" + zone->getZoneName() + ".iff";
 	UniqueReference<IffStream*> areaStream(manager->openIffFile(areaFile));
 	if (areaStream == nullptr)
@@ -97,10 +104,13 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		collectSnapshotIDs(snapshot->getNode(i), ids);
 	VectorMap<uint32, uint32> templateIndices;
 	int added = 0;
+	int myyydrilCopies = 0;
 	const Vector<BuildoutArea>& areas = buildout.getAreas();
 	for (int i = 0; i < areas.size(); ++i) {
 		const BuildoutArea& area = areas.get(i);
 		if (area.name.isEmpty() || !area.requiredEvent.isEmpty())
+			continue;
+		if (myyydril && area.name != "myyydril_caverns")
 			continue;
 		String filename = "datatables/buildout/" + zone->getZoneName() + "/" + area.name + ".iff";
 		try {
@@ -114,6 +124,17 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				throw Exception("Rryatt section has an unexpected placement count");
 			Vector<BuildoutObject> objects;
 			BuildoutData::readObjects(table, area, objects);
+			if (myyydril) {
+				if (area.index != 420 + myyydrilCopies || objects.size() != 80 ||
+					objects.get(0).templateCRC != String(myyydrilBuildingTemplate).hashCode() || objects.get(0).portalLayoutCRC != 2326037494u)
+					throw Exception("Invalid Myyydril buildout area or building");
+				for (int cell = 1; cell < objects.size(); ++cell) {
+					const auto& entry = objects.get(cell);
+					if (entry.parentID != objects.get(0).objectID || entry.cellIndex != cell || entry.templateCRC != 0x0c5401ee)
+						throw Exception("Invalid Myyydril buildout cell");
+				}
+				++myyydrilCopies;
+			}
 			Vector<String> names;
 			VectorMap<uint64, bool> areaIDs;
 			// Resolve the entire area before adding any of its nodes.
@@ -142,13 +163,15 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				++added;
 			}
 		} catch (Exception& e) {
-			if (singleRryatt)
+			if (singleRryatt || myyydril)
 				throw Exception("Buildout " + filename + ": " + e.getMessage());
 			Logger::console.error("Buildout " + filename + " area index " + String::valueOf(area.index) + ": " + e.getMessage());
 		}
 	}
 	if (singleRryatt && added != 1709)
 		throw Exception("Rryatt requires all 1709 native placements");
+	if (myyydril && myyydrilCopies != 10)
+		throw Exception("Myyydril requires all ten public buildout copies");
 	Logger::console.info("Loaded " + String::valueOf(added) + " buildout nodes for " + zone->getZoneName(), true);
 	return added != 0;
 }
@@ -771,9 +794,10 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 	TemplateManager* templateManager = TemplateManager::instance();
 
 	// Rryatt's native buildouts replace its relocated snapshot; never request the old IDs.
-	// Other scenes retain their existing snapshot loader and dormant buildout behavior.
-	const bool useBuildouts = zone->getZoneName() == "kashyyyk_rryatt_trail";
-	UniqueReference<IffStream*> iffStream(useBuildouts ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
+	const bool nativeRryatt = zone->getZoneName() == "kashyyyk_rryatt_trail";
+	const bool nativeMyyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
+	const bool useBuildouts = nativeRryatt || nativeMyyydril;
+	UniqueReference<IffStream*> iffStream(nativeRryatt ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
 
 	if (!useBuildouts && iffStream == nullptr) {
 		info("Snapshot wasn't found.", true);
@@ -785,6 +809,7 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 	Reference<WorldSnapshotIff*> wsiff = new WorldSnapshotIff();
 	if (iffStream != nullptr)
 		wsiff->readObject(iffStream);
+	const int legacyNodes = wsiff->getNodeCount();
 	bool hasBuildouts = false;
 	terrainManager->getBuildoutData().clear();
 	if (useBuildouts) {
@@ -793,17 +818,22 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 		} catch (Exception& e) {
 			terrainManager->getBuildoutData().clear();
 			error("Could not load buildouts for " + zone->getZoneName() + ": " + e.getMessage());
-			return; // Never publish a partial Rryatt instance or fall back to its legacy snapshot.
+			if (nativeRryatt)
+				return;
+			// Preserve Avatar even when the matching Myyydril assets are unavailable.
 		}
 	}
 
 	int totalObjects = 0;
 	Vector<SceneObject*> objects;
 
-	for (int i = 0; i < wsiff->getNodeCount(); ++i) {
+	const int nodeCount = nativeMyyydril && !hasBuildouts ? legacyNodes : wsiff->getNodeCount();
+	for (int i = 0; i < nodeCount; ++i) {
 		auto node = wsiff->getNode(i);
 
 		if (node == nullptr)
+			continue;
+		if (nativeMyyydril && !node->isBuildout() && wsiff->getObjectTemplateName(node->getNameID()) == myyydrilBuildingTemplate)
 			continue;
 
 #ifdef PARALLEL_SNAPSHOT_LOADING

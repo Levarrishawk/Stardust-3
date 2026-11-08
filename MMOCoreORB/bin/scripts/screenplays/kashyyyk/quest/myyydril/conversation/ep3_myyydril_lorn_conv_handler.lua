@@ -20,8 +20,17 @@ function ep3_myyydril_lorn_conv_handler:runScreenHandlers(pConvTemplate, pPlayer
 	local screenID = screen:getScreenID()
 	local pClonedScreen = screen:cloneScreen()
 
-	if (screenID == "s_66") then
+	if (screenID == "s_54") then
+		local clone = LuaConversationScreen(pClonedScreen)
+		clone:removeAllOptions()
+		if (myyydrilLornTalktoScreenPlay:getStage(pPlayer) == 1) then
+			clone:addOption("@conversation/ep3_myyydril_lorn:s_56", "s_58")
+		else
+			clone:addOption("@conversation/ep3_myyydril_lorn:s_68", "s_70")
+		end
+	elseif (screenID == "s_66") then
 		MyyydrilSignals:send(pPlayer, "lorn")
+		MyyydrilGrievous:beginCombat(pPlayer)
 	end
 
 	return pClonedScreen
