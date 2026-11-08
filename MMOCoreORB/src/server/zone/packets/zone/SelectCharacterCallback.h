@@ -326,6 +326,9 @@ public:
 				playerParent = nullptr;
 			// Structure or building exists, transfer player back into their parent cell
 			} else {
+				if (rootParent->isBuildingObject() && rootParent->isClientObject() && playerParent->isClientObject())
+					ghost->setOnLoadScreen(true);
+
 				playerParent->transferObject(player, -1, true);
 
 				player->sendToOwner(true);

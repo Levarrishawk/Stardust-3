@@ -95,6 +95,7 @@
 
 void PlayerObjectImplementation::initializeTransientMembers() {
 	lavaDamageActive = false;
+	streamedBuildingID = 0;
 
 	playerLogLevel = ConfigManager::instance()->getPlayerLogLevel();
 

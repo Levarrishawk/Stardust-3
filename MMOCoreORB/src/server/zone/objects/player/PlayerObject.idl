@@ -98,6 +98,8 @@ class PlayerObject extends IntangibleObject {
 
 	protected boolean onLoadScreen;
 
+	protected transient unsigned long streamedBuildingID;
+
 	protected boolean forcedTransform;
 
 	protected boolean muted;
@@ -1327,6 +1329,11 @@ class PlayerObject extends IntangibleObject {
 		onLoadScreen = val;
 	}
 
+	@local
+	public void setStreamedBuildingID(unsigned long buildingID) {
+		streamedBuildingID = buildingID;
+	}
+
 	public void setForcedTransform(boolean val) {
 		forcedTransform = val;
 	}
@@ -1593,6 +1600,12 @@ class PlayerObject extends IntangibleObject {
 	@read
 	public boolean isOnLoadScreen() {
 		return onLoadScreen;
+	}
+
+	@local
+	@read
+	public unsigned long getStreamedBuildingID() {
+		return streamedBuildingID;
 	}
 
 	@read
