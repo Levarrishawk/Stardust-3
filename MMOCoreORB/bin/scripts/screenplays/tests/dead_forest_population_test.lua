@@ -6,7 +6,10 @@ AI_STATIONARY, AI_STATIC, AI_PATROLLING = 1, 2, 3
 OBJECTDESTRUCTION, DESTINATIONREACHED = 1, 2
 local native, merged = "kashyyyk_dead_forest", "kashyyyk"
 local enabled, objects, memory, events, spawned, now = {}, {}, {}, {}, {}, 0
-isZoneEnabled = function(zone) return enabled[zone] end
+isZoneEnabled = function(zone)
+	assert(type(zone) == "string", "isZoneEnabled requires a zone name")
+	return enabled[zone]
+end
 readData = function(k) return memory[k] or 0 end
 writeData = function(k, v) memory[k] = v end
 deleteData = function(k) memory[k] = nil end
@@ -61,6 +64,11 @@ local function makeCave(id, zone)
 		function cell:getCellNumber() return self.index end
 	end
 end
+-- Core3 loads screenplays on worker threads without calling start() there.
+local worker = setmetatable({}, {__index = _G})
+for _, file in ipairs({"kashyyyk_patrols", "kashyyyk_spawn_controller", "kashyyyk_dead_forest_data", "kashyyyk_dead_forest_population"}) do
+	assert(loadfile(root .. file .. ".lua", "t", worker))()
+end
 local function advance(to)
 	while true do
 		local index
@@ -70,7 +78,8 @@ local function advance(to)
 		if (index == nil) then break end
 		local e = table.remove(events, index)
 		now = e.at
-		_G[e.sp][e.method](_G[e.sp], e.object, e.args)
+		local screenplay = worker[e.sp]
+		screenplay[e.method](screenplay, e.object, e.args)
 	end
 	now = to
 end
@@ -116,7 +125,9 @@ end
 local c = source.controllers[1]
 local victim = getSceneObject(readData(forest:slotKey(c, 1)))
 assert(victim.template == "dead_forest_rebel_trooper")
-victim.dead = true; forest:notifyDestroyed(victim); forest:notifyDestroyed(victim)
+victim.dead = true
+worker.KashyyykDeadForestPopulation:notifyDestroyed(victim)
+worker.KashyyykDeadForestPopulation:notifyDestroyed(victim)
 assert(#events == 1 and events[1].at - now == c.respawnMin * 1000 + 2000)
 advance(events[1].at)
 assert(#spawned == 293 and getSceneObject(readData(forest:slotKey(c, 1))) ~= victim)
@@ -127,6 +138,15 @@ makeCave(6292864, merged)
 forest:start(); cave:start(); assert(#spawned == 64)
 assert(spawned[1].zone == merged and spawned[1].x == source.npcs[1].x - 1500)
 assert(spawned[12].cell >= 6292865 and spawned[12].cell <= 6292875)
+advance(20000)
+local route = source.patrols[1]
+local patrol = assert(getSceneObject(readData(forest:slotKey(route, 1))))
+assert(patrol.zone == merged and patrol.x == route.points[1][1] - 1500 and patrol.y == route.points[1][3] + 1500)
+assert(patrol.next[1] == route.points[2][1] - 1500 and patrol.next[3] == route.points[2][3] + 1500)
+worker.KashyyykDeadForestPopulation:notifyDestinationReached(patrol)
+assert(patrol.next[1] == route.points[3][1] - 1500 and patrol.next[3] == route.points[3][3] + 1500)
+local ambient = assert(getSceneObject(readData(forest:slotKey(c, 1))))
+assert(ambient.zone == merged and ambient.x == c.x - c.radius - 1500 and ambient.y == c.y - c.radius + 1500)
 
 dofile(root .. "quest/forest/forest_rhiek_quest_1.lua")
 dofile(root .. "quest/forest/forest_rhiek_quest_3.lua")
@@ -162,6 +182,7 @@ spawnMobile = function(...)
 	return o
 end
 events, spawned = {}, {}
+now = 0
 dofile(root .. "quest/forest/forest_dahlia_epic_4.lua")
 local dahlia = forestDahliaEpic4ScreenPlay
 assert(dahlia:grantQuest(player) and #events == 2)

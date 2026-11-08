@@ -1,5 +1,12 @@
 KashyyykSpawnController = ScreenPlay:new {}
 
+-- A callback may run in a Lua state that never ran start().
+function KashyyykSpawnController:getLayout()
+	if (self.zone ~= nil and isZoneEnabled(self.zone)) then
+		return self.zone, 0, 0
+	end
+end
+
 function KashyyykSpawnController:controllerAt(index)
 	local data = self.data
 	if (index <= #data.controllers) then
@@ -12,8 +19,8 @@ function KashyyykSpawnController:slotKey(controller, slot)
 	return self.screenplayName .. ":" .. controller.id .. ":" .. slot
 end
 
-function KashyyykSpawnController:isAlive(pMobile)
-	return pMobile ~= nil and SceneObject(pMobile):getZoneName() == self.zone
+function KashyyykSpawnController:isAlive(pMobile, zone)
+	return pMobile ~= nil and SceneObject(pMobile):getZoneName() == zone
 		and not CreatureObject(pMobile):isDead() and not CreatureObject(pMobile):isIncapacitated()
 end
 
@@ -22,7 +29,8 @@ function KashyyykSpawnController:respawnDelay(controller)
 end
 
 function KashyyykSpawnController:start()
-	if (not isZoneEnabled(self.zone)) then
+	local zone = self:getLayout()
+	if (zone == nil) then
 		return
 	end
 
@@ -32,7 +40,7 @@ function KashyyykSpawnController:start()
 		local delay = c.points ~= nil and 10000 or 20000
 		for slot = 1, c.count do
 			local key = self:slotKey(c, slot)
-			if (not self:isAlive(getSceneObject(readData(key)))) then
+			if (not self:isAlive(getSceneObject(readData(key)), zone)) then
 				self:scheduleSpawn(index, slot, delay)
 			end
 			if (c.points == nil) then
@@ -65,7 +73,8 @@ function KashyyykSpawnController:spawnSlot(pUnused, args)
 		return
 	end
 	deleteData(key .. ":pending")
-	if (not isZoneEnabled(self.zone) or self:isAlive(getSceneObject(readData(key)))) then
+	local zone, offsetX, offsetY = self:getLayout()
+	if (zone == nil or self:isAlive(getSceneObject(readData(key)), zone)) then
 		return
 	end
 
@@ -83,7 +92,7 @@ function KashyyykSpawnController:spawnSlot(pUnused, args)
 	end
 	-- DSRC's helper changes only the horizontal axes. A highest-floor lookup
 	-- can select a different floor above the controller's authored platform.
-	local pMobile = spawnMobile(self.zone, entry.mobile, 0, x + (self.offsetX or 0), z, y + (self.offsetY or 0), c.heading, 0)
+	local pMobile = spawnMobile(zone, entry.mobile, 0, x + offsetX, z, y + offsetY, c.heading, 0)
 	if (pMobile == nil) then
 		print(self.screenplayName .. ": spawn failed for " .. c.id .. " (" .. entry.mobile .. ")")
 		self:scheduleSpawn(index, slot, self:respawnDelay(c))
@@ -136,7 +145,8 @@ function KashyyykSpawnController:notifyDestroyed(pMobile, pAttacker)
 end
 
 function KashyyykSpawnController:walkStep(pMobile)
-	if (not self:isAlive(pMobile)) then
+	local zone, offsetX, offsetY = self:getLayout()
+	if (zone == nil or not self:isAlive(pMobile, zone)) then
 		return
 	end
 	local oid = SceneObject(pMobile):getObjectID()
@@ -153,13 +163,14 @@ function KashyyykSpawnController:walkStep(pMobile)
 		AiAgent(pMobile):setMovementState(AI_PATROLLING)
 		AiAgent(pMobile):stopWaiting()
 		AiAgent(pMobile):setWait(0)
-		AiAgent(pMobile):setNextPosition(point[1] + (self.offsetX or 0), point[2], point[3] + (self.offsetY or 0), 0)
+		AiAgent(pMobile):setNextPosition(point[1] + offsetX, point[2], point[3] + offsetY, 0)
 		AiAgent(pMobile):executeBehavior()
 	end
 end
 
 function KashyyykSpawnController:notifyDestinationReached(pMobile)
-	if (not self:isAlive(pMobile)) then
+	local zone = self:getLayout()
+	if (zone == nil or not self:isAlive(pMobile, zone)) then
 		return 0
 	end
 	local oid = SceneObject(pMobile):getObjectID()

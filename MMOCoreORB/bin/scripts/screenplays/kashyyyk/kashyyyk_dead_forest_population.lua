@@ -21,7 +21,6 @@ function KashyyykDeadForestPopulation:start()
 	if (zone == nil) then
 		return
 	end
-	self.zone, self.offsetX, self.offsetY = zone, offsetX, offsetY
 	for _, npc in ipairs(self.data.npcs) do
 		local key = self.screenplayName .. ":npc:" .. npc.id
 		if (getSceneObject(readData(key)) == nil) then
