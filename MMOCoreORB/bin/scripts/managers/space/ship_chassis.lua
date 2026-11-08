@@ -254,7 +254,6 @@ chassisData = {
 	{"spacestation_kashyyyk", "spacestation_neutral", "object/ship/spacestation_kashyyyk.iff"},
 	{"spacestation_rodian_base", "spacestation_neutral", "object/ship/spacestation_rodian_base.iff"},
 	{"spacestation_rodian_tripp_base", "spacestation_neutral", "object/ship/spacestation_rodian_tripp_base.iff"},
-	{"station_gotal_pirate_base", "spacestation_neutral", "object/ship/station_gotal_pirate_base.iff"},
 	{"station_chiss_poacher_base", "spacestation_neutral", "object/ship/station_chiss_poacher_base.iff"},
 	{"spacestation_indie_slaver", "spacestation_neutral", "object/ship/spacestation_indie_slaver.iff"},
 	{"kessel_mine_turret_tier1", "kessel_mine_turret_tier1", "object/ship/kessel_mine_turret_tier1.iff"},

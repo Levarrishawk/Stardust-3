@@ -146,6 +146,7 @@ SpaceObjects = ScreenPlay:new {
 
 		-- Kashyyyk Space
 		-- DSRC landmarks and markers for the six asteroid spawners.
+		{"space_kashyyyk", "object/static/space/spacestation/pirate_outpost_01.iff", -6040.71, 2810.14, 4581.19, 1, 0, 0, 0},
 		{"space_kashyyyk", "object/static/space/beacon/hyperspace_route_beacon_01.iff", -7117.65, 3513.53, 4096.32, 1, 0, 0, 0},
 		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -7049.04, 835.72, 2227.36, 1, 0, 0, 0},
 		{"space_kashyyyk", "object/static/space/ship/cargo_freighter.iff", -6770.96, 901.40, 2218.57, 1, 0, 0, 0},

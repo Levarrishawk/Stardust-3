@@ -6,30 +6,28 @@ object_ship_spacestation_kashyyyk = object_ship_spacestation_neutral:new {
 ObjectTemplates:addTemplate(object_ship_spacestation_kashyyyk, "object/ship/spacestation_kashyyyk.iff")
 
 object_ship_spacestation_rodian_base = object_ship_spacestation_neutral:new {
+	clientTemplateFileName = "object/ship/shared_spacestation_rsf.iff",
 	gameObjectType = 536870920,
 	objectName = "@clientpoi_n:kashyyyk_sordaan_outpost",
 }
 ObjectTemplates:addTemplate(object_ship_spacestation_rodian_base, "object/ship/spacestation_rodian_base.iff")
 
 object_ship_spacestation_rodian_tripp_base = object_ship_spacestation_neutral:new {
+	clientTemplateFileName = "object/ship/shared_spacestation_rsf.iff",
 	gameObjectType = 536870920,
 	objectName = "@clientpoi_n:kashyyyk_tripp_outpost",
 }
 ObjectTemplates:addTemplate(object_ship_spacestation_rodian_tripp_base, "object/ship/spacestation_rodian_tripp_base.iff")
 
-object_ship_station_gotal_pirate_base = object_ship_spacestation_neutral:new {
-	gameObjectType = 536870920,
-	objectName = "@clientpoi_n:kashyyyk_gotal_pirate_base",
-}
-ObjectTemplates:addTemplate(object_ship_station_gotal_pirate_base, "object/ship/station_gotal_pirate_base.iff")
-
 object_ship_station_chiss_poacher_base = object_ship_spacestation_neutral:new {
+	clientTemplateFileName = "object/ship/shared_spacestation_corsec.iff",
 	gameObjectType = 536870920,
 	objectName = "@clientpoi_n:kashyyyk_chiss_poacher_base",
 }
 ObjectTemplates:addTemplate(object_ship_station_chiss_poacher_base, "object/ship/station_chiss_poacher_base.iff")
 
 object_ship_spacestation_indie_slaver = object_ship_spacestation_neutral:new {
+	clientTemplateFileName = "object/ship/shared_spacestation_trade_fed.iff",
 	gameObjectType = 536870920,
 	objectName = "@clientpoi_n:kashyyyk_independent_slavers",
 }

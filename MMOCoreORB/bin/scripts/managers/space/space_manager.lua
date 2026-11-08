@@ -174,10 +174,9 @@ space_kashyyyk = {
 		{templateFile = "spacestation_avatar_platform", x = 2640.71, z = 374.04, y = -2800.62, ow = 0.879679, ox = -0.023775, oy = -0.427952, oz = -0.206051},
 		{templateFile = "spacestation_kash_imperial", x = 5412.52, z = 2360.67, y = -6877.65, ow = 1, ox = 0, oy = 0, oz = 0},
 		{templateFile = "spacestation_kash_imperial_decoration", x = -2524.98, z = -2535.72, y = -1184.85, ow = 0.190723, ox = 0.739050, oy = 0.341712, oz = 0.548327},
-		-- Stardust's interactive stations occupy the five DSRC static outpost sites.
+		-- Use the ship templates that share these DSRC outposts' appearances.
 		{templateFile = "spacestation_rodian_base", x = 2490.07, z = 3314.55, y = 3988.16, ow = 1, ox = 0, oy = 0, oz = 0},
 		{templateFile = "spacestation_rodian_tripp_base", x = -3000.34, z = 354.26, y = 3055.27, ow = 1, ox = 0, oy = 0, oz = 0},
-		{templateFile = "station_gotal_pirate_base", x = -6040.71, z = 2810.14, y = 4581.19, ow = 1, ox = 0, oy = 0, oz = 0},
 		{templateFile = "station_chiss_poacher_base", x = -6919.89, z = 912.14, y = 1971.74, ow = 1, ox = 0, oy = 0, oz = 0},
 		{templateFile = "spacestation_indie_slaver", x = -6832.73, z = -375.01, y = 4230.35, ow = 1, ox = 0, oy = 0, oz = 0}
 	}
