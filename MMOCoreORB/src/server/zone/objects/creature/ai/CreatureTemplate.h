@@ -77,6 +77,8 @@ protected:
 	float attackSpeed;
 
 	float scale;
+	float spawnScaleMin;
+	float spawnScaleMax;
 
 	int baseXp;
 	int baseHAM;
@@ -324,6 +326,8 @@ public:
 	inline float getScale() const {
 		return scale;
 	}
+
+	float getSpawnScale() const;
 
 	inline int getDamageMin() const {
 		return damageMin;

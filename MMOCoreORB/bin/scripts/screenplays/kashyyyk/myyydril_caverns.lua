@@ -81,7 +81,7 @@ function MyyydrilCaverns:populate(pBuilding, attempt)
 	local ready = true
 	local cells = {}
 	for _, row in ipairs(MyyydrilData.rows) do
-		local line, template, room, x, height, y, yaw, respawn = table.unpack(row)
+		local line, room = row[1], row[3]
 		if (cells[room] == nil) then
 			local pCell = BuildingObject(pBuilding):getNamedCell(room)
 			cells[room] = pCell and SceneObject(pCell):getObjectID() or 0
@@ -90,36 +90,8 @@ function MyyydrilCaverns:populate(pBuilding, attempt)
 			end
 		end
 		local key = self:key(id, line)
-		if (cells[room] == 0) then
+		if (cells[room] == 0 or (readData(key) == 0 and not self:spawnRow(id, row, cells[room]))) then
 			ready = false
-		elseif (readData(key) == 0) then
-			local pObject
-			if (respawn < 0) then
-				local angle = math.rad(yaw) * 0.5
-				pObject = spawnSceneObject(self.zone, template, x, height, y, cells[room], math.cos(angle), 0, math.sin(angle), 0)
-			else
-				pObject = spawnMobile(self.zone, template, respawn, x, height, y, yaw, cells[room])
-			end
-			if (pObject ~= nil and SceneObject(pObject):getParentID() ~= cells[room]) then
-				SceneObject(pObject):destroyObjectFromWorld()
-				pObject = nil
-			end
-			if (pObject == nil) then
-				print("MyyydrilCaverns: could not place DSRC row " .. line .. " (" .. template .. ") in " .. id)
-				ready = false
-			else
-				writeData(key, SceneObject(pObject):getObjectID())
-				if (template == self.doorTemplate) then
-					SceneObject(pObject):setObjectMenuComponent("MyyydrilCavernsDoorMenuComponent")
-					writeData(self:key(id, "exit"), SceneObject(pObject):getObjectID())
-				elseif (self.forestQuestProps[template] ~= nil) then
-					SceneObject(pObject):setObjectMenuComponent("MyyydrilCavernsGatherMenuComponent")
-				elseif (self.collectors[template] ~= nil) then
-					_G[self.collectors[template]]:attachObject(pObject)
-				elseif (respawn == 0 and SceneObject(pObject):isAiAgent()) then
-					AiAgent(pObject):addObjectFlag(AI_STATIONARY)
-				end
-			end
 		end
 	end
 	if (ready) then
@@ -131,6 +103,86 @@ function MyyydrilCaverns:populate(pBuilding, attempt)
 		return
 	end
 	deleteData(self:key(id, "queued"))
+end
+
+function MyyydrilCaverns:spawnRow(buildingID, row, cellID)
+	local line, template, _, x, height, y, yaw, respawn = table.unpack(row)
+	local pObject
+	if (respawn < 0) then
+		local angle = math.rad(yaw) * 0.5
+		pObject = spawnSceneObject(self.zone, template, x, height, y, cellID, math.cos(angle), 0, math.sin(angle), 0)
+	else
+		-- DSRC leaves the creature's randomized heading in place when the row specifies zero.
+		local heading = yaw ~= 0 and yaw or getRandomNumber(0, 359999) / 1000
+		pObject = spawnMobile(self.zone, template, 0, x, height, y, heading, cellID)
+	end
+	if (pObject ~= nil and SceneObject(pObject):getParentID() ~= cellID) then
+		SceneObject(pObject):destroyObjectFromWorld()
+		pObject = nil
+	end
+	if (pObject == nil) then
+		print("MyyydrilCaverns: could not place DSRC row " .. line .. " (" .. template .. ") in " .. buildingID)
+		return false
+	end
+
+	local oid = SceneObject(pObject):getObjectID()
+	writeData(self:key(buildingID, line), oid)
+	if (respawn > 0) then
+		writeData(self:key(oid, "spawnLine"), line)
+		writeData(self:key(oid, "spawnBuilding"), buildingID)
+		createObserver(OBJECTDESTRUCTION, self.screenplayName, "notifySpawnDeath", pObject)
+	elseif (template == self.doorTemplate) then
+		SceneObject(pObject):setObjectMenuComponent("MyyydrilCavernsDoorMenuComponent")
+		writeData(self:key(buildingID, "exit"), oid)
+	elseif (self.forestQuestProps[template] ~= nil) then
+		SceneObject(pObject):setObjectMenuComponent("MyyydrilCavernsGatherMenuComponent")
+	elseif (self.collectors[template] ~= nil) then
+		_G[self.collectors[template]]:attachObject(pObject)
+	elseif (respawn == 0 and SceneObject(pObject):isAiAgent()) then
+		AiAgent(pObject):addObjectFlag(AI_STATIONARY)
+	end
+	return true
+end
+
+function MyyydrilCaverns:notifySpawnDeath(pMobile)
+	if (pMobile == nil) then
+		return 1
+	end
+	local oid = SceneObject(pMobile):getObjectID()
+	local lineKey, buildingKey = self:key(oid, "spawnLine"), self:key(oid, "spawnBuilding")
+	local line, buildingID = readData(lineKey), readData(buildingKey)
+	if (line == 0 or buildingID == 0) then
+		return 1
+	end
+	deleteData(lineKey)
+	deleteData(buildingKey)
+	-- The DSRC table has two header lines, followed by contiguous spawn rows.
+	local row = MyyydrilData.rows[line - 2]
+	local pBuilding = getSceneObject(buildingID)
+	if (row ~= nil and row[8] > 0 and self:isBuilding(pBuilding) and readData(self:key(buildingID, line)) == oid) then
+		createEvent(row[8] * 1000, self.screenplayName, "respawnRow", pBuilding, line .. ":" .. oid .. ":1")
+	end
+	return 1
+end
+
+function MyyydrilCaverns:respawnRow(pBuilding, args)
+	if (not self:isBuilding(pBuilding)) then
+		return
+	end
+	local line, previous, attempt = string.match(args or "", "^(%d+):(-?%d+):(%d+)$")
+	line, previous, attempt = tonumber(line), tonumber(previous), tonumber(attempt)
+	local row = line and MyyydrilData.rows[line - 2]
+	local buildingID = SceneObject(pBuilding):getObjectID()
+	if (row == nil or row[8] <= 0 or readData(self:key(buildingID, line)) ~= previous) then
+		return
+	end
+	local pCell = BuildingObject(pBuilding):getNamedCell(row[3])
+	if (pCell ~= nil and self:spawnRow(buildingID, row, SceneObject(pCell):getObjectID())) then
+		return
+	end
+	if (attempt < 3) then
+		createEvent(5000, self.screenplayName, "respawnRow", pBuilding, line .. ":" .. previous .. ":" .. (attempt + 1))
+	end
 end
 
 MyyydrilCavernsGatherMenuComponent = {}

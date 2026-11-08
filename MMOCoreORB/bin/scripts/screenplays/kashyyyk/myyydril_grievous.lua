@@ -645,7 +645,7 @@ function MyyydrilGrievous:spawnGrievous(cellID)
 	end
 
 	local loc = self.grievousLoc
-	local pMob = spawnMobile(self.zoneName, self.grievousTemplate, 0, loc.x, loc.z, loc.y, 0, cellID)
+	local pMob = spawnMobile(self.zoneName, self.grievousTemplate, 0, loc.x, loc.z, loc.y, getRandomNumber(0, 359999) / 1000, cellID)
 
 	if (pMob == nil) then
 		print("MyyydrilGrievous: failed to spawn " .. self.grievousTemplate)
@@ -667,7 +667,7 @@ function MyyydrilGrievous:spawnGuard(loc, cellID, key)
 		return
 	end
 
-	local pMob = spawnMobile(self.zoneName, self.guardTemplate, 0, loc.x, loc.z, loc.y, 0, cellID)
+	local pMob = spawnMobile(self.zoneName, self.guardTemplate, 0, loc.x, loc.z, loc.y, getRandomNumber(0, 359999) / 1000, cellID)
 
 	if (pMob == nil) then
 		print("MyyydrilGrievous: failed to spawn " .. self.guardTemplate)

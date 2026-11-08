@@ -26,6 +26,19 @@ def shared(path):
     return str(path.with_name('shared_' + path.name))
 
 
+def model_scale(source, path):
+    while path:
+        template = (source / PurePosixPath(path).with_suffix('.tpf')).read_text()
+        scale = re.search(r'^\s*scale\s*=\s*([\d.]+?)\.\.([\d.]+)\s*$', template, re.M)
+        if scale:
+            minimum, maximum = map(float, scale.groups())
+            assert minimum == maximum, (path, minimum, maximum)
+            return minimum
+        base = re.search(r'^@base\s+(\S+)', template, re.M)
+        path = base[1] if base else None
+    return 1.0
+
+
 def datatable(columns, types, rows):
     fmt = {'f': '<f', 'i': '<i', 'h': '<I', 'b': '<i'}
     encoded = b''.join(string(value) if kind[0] == 's' else struct.pack(fmt[kind[0]], value)
@@ -171,7 +184,18 @@ def generate(dsrc):
     includes = (active_mobile / 'serverobjects.lua').read_text()
     old_profiles = {path.stem for path in active_mobile.glob('*.lua')
                     if f'"custom_content/mobile/{path.name}"' in includes}
-    lines = ['-- Generated from DSRC creature and dressed-species tables.', 'local profiles = {']
+    weapon_sets = {row['weapon_id']: [path for column, path in row.items() if column != 'weapon_id' and path]
+                   for row in table(dt / 'ai/ai_weapons.tab')}
+    cave_weapons = {creature_table[item][field] for item in identities
+                    for field in ('primary_weapon', 'secondary_weapon') if creature_table[item][field]}
+    lines = ['-- Generated from DSRC creature, dressed-species, and AI weapon tables.']
+    lines.extend(f'addWeapon("myyydril_{name}", {lua(weapon_sets[name])})' for name in sorted(cave_weapons))
+    lines += ['', 'local profiles = {']
+    urnsoris_items = [r['strItemType'] for r in table(dt / 'loot/loot_items/kashyyyk/urnsoris.tab')]
+    assert urnsoris_items == [r['urnsoris'] for r in table(dt / 'loot/dungeon/ep3_myyydril_caverns_loot.tab')]
+    urnsoris_counts = Counter(urnsoris_items)
+    weight = 10000000 // len(urnsoris_items)
+    assert weight * len(urnsoris_items) == 10000000
     dialogue = []
     for item in sorted(identities):
         r = creature_table[item]
@@ -192,25 +216,45 @@ def generate(dsrc):
                 display = '@' + ':'.join(next(iter(names)))
             if not (SCRIPTS / f'mobile/conversations/kashyyyk/myyydril/{convo}_convo.lua').is_file():
                 dialogue.append((convo, *conversation(path, convo)))
-        level = int(r['BaseLevel'])
+        base_level = int(r['BaseLevel'])
+        stat_level, damage_level, hit_level, armor_level = (
+            max(1, base_level + int(r[key] or 0)) for key in
+            ('StatLevelModifier', 'Damagelevelmodifier', 'ToHitLevelModifier', 'ArmorLevelModifier'))
+        level = (stat_level * 6 + damage_level * 6 + hit_level * 2 + armor_level * 4) // 18
         cls = {'NORMAL': '', 'ELITE': 'Elite_', 'BOSS': 'Boss_'}[r['difficultyClass']]
 
-        def stat(modifier, column):
-            return float(stats[max(1, level + int(r[modifier] or 0)) - 1][cls + column])
+        def stat(level, column):
+            return float(stats[level - 1][cls + column])
 
-        hp = stat('StatLevelModifier', 'HP')
-        damage = stat('Damagelevelmodifier', 'damagePerSecond') * float(r['primary_weapon_speed'] or 2)
+        hp = stat(stat_level, 'HP')
+        attack_speed = float(r['primary_weapon_speed'] or 2)
+        damage = stat(damage_level, 'damagePerSecond') * attack_speed
         radius = int(r['aggressive'] or 0)
         invulnerable = r['invulnerable'] == '1' or item == 'clone_droid'
+        app_scales = {model_scale(client, shared('object/mobile/' + a)) for a in apps}
+        assert len(app_scales) == 1, (item, app_scales)
+        base_scale = app_scales.pop()
+        scale_min, scale_max = (base_scale * float(r[key] or 1) for key in ('minScale', 'maxScale'))
+        assert 0 < scale_min <= scale_max, (item, scale_min, scale_max)
         fields = dict(objectName=display, customName='', conversationTemplate=convo + '_convo' if convo else '',
                       socialGroup=r['socialGroup'], faction=r['pvpFaction'], aggroRadius=radius,
                       templates=['object/mobile/' + a for a in apps], level=level, baseHAM=int(hp * .9),
                       baseHAMmax=int(hp * 1.1), damageMin=math.floor(damage * .5 + .5),
-                      damageMax=math.floor(damage * 1.5 + .5), chanceHit=stat('ToHitLevelModifier', 'ToHit') / 100,
-                      baseXp=int(stats[level - 1]['XP']), scale=(float(r['minScale'] or 1) + float(r['maxScale'] or 1)) / 2)
+                      damageMax=math.floor(damage * 1.5 + .5), chanceHit=stat(hit_level, 'ToHit') / 100,
+                      attackSpeed=attack_speed,
+                      baseXp=int(stats[level - 1]['XP']), scale=(scale_min + scale_max) / 2)
+        for field, source, default in (('primaryWeapon', 'primary_weapon', 'unarmed'),
+                                       ('secondaryWeapon', 'secondary_weapon', 'none')):
+            fields[field] = 'myyydril_' + r[source] if r[source] else default
+        if scale_min != scale_max:
+            fields.update(spawnScaleMin=scale_min, spawnScaleMax=scale_max)
+        hue = int(r['hue'] or 0)
+        if hue:
+            fields['hues'] = list(range((hue - 1) * 8, hue * 8))
         if item == 'ep3_general_grievous':
             fields['lootGroups'] = []
-        elif r['lootList'] and (SCRIPTS / 'loot/groups/kashyyyk' / (r['lootList'] + '.lua')).is_file():
+        elif r['lootList'] == 'urnsoris' or (
+                r['lootList'] and (SCRIPTS / 'loot/groups/kashyyyk' / (r['lootList'] + '.lua')).is_file()):
             fields['lootGroups'] = [dict(groups=[dict(group=r['lootList'], chance=10000000)], lootChance=10000000)]
         options = 'AIENABLED' + (' + INVULNERABLE' if invulnerable else '') + (' + CONVERSABLE + INTERESTING' if convo else '')
         flags = 'NONE' if invulnerable else 'ATTACKABLE' + (' + AGGRESSIVE + ENEMY' if radius else '')
@@ -221,6 +265,25 @@ def generate(dsrc):
     lines += ['}', '', 'for _, profile in ipairs(profiles) do',
               '\tCreatureTemplates:addCreatureTemplate(profile[1]:new(profile[3]), profile[2])', 'end', '']
     result[SCRIPTS / 'mobile/custom_content/myyydril_profiles.lua'] = '\n'.join(lines)
+    header = '-- Generated from DSRC loot/loot_items/kashyyyk/urnsoris.tab.\n'
+    item_paths = '{\n' + ''.join('\t' + lua(path) + ',\n' for path in urnsoris_counts) + '}'
+    result[SCRIPTS / 'object/tangible/loot/quest/myyydril_urnsoris.lua'] = header + (
+        'for _, path in ipairs(' + item_paths + ') do\n'
+        '\tlocal client = path:gsub("([^/]+)$", "shared_%1")\n'
+        '\tlocal template = SharedTangibleObjectTemplate:new {clientTemplateFileName = client}\n'
+        '\tObjectTemplates:addClientTemplate(template, client)\n'
+        '\tObjectTemplates:addTemplate(template:new {}, path)\nend\n')
+    result[SCRIPTS / 'loot/items/kashyyyk/myyydril_urnsoris.lua'] = header + (
+        'for _, path in ipairs(' + item_paths + ') do\n'
+        '\tlocal name = path:match("([^/]+)%.iff$")\n'
+        '\taddLootItemTemplate("myyydril_" .. name, {\n'
+        '\t\tminimumLevel = 0, maximumLevel = -1, customObjectName = "", directObjectTemplate = path,\n'
+        '\t\tcraftingValues = {}, customizationStringNames = {}, customizationValues = {}\n\t})\nend\n')
+    urnsoris_loot = [dict(itemTemplate='myyydril_' + PurePosixPath(path).stem, weight=weight * count)
+                     for path, count in urnsoris_counts.items()]
+    result[SCRIPTS / 'loot/groups/kashyyyk/urnsoris.lua'] = header + (
+        'addLootGroupTemplate("urnsoris", {\n\tdescription = "", minimumLevel = 0, maximumLevel = -1,\n'
+        '\tlootItems = {\n' + ''.join('\t\t' + lua(item) + ',\n' for item in urnsoris_loot) + '\t}\n})\n')
     assert len(dialogue) == 10
     header = '-- Generated from the corresponding DSRC conversation scripts.\n'
     result[SCRIPTS / 'screenplays/kashyyyk/myyydril_dialogue_data.lua'] = header + (

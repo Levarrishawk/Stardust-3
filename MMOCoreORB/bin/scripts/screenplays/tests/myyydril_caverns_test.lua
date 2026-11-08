@@ -3,7 +3,7 @@ local root = "MMOCoreORB/bin/scripts/screenplays/kashyyyk/"
 local zone = "kashyyyk_pob_dungeons"
 local forest = "kashyyyk_dead_forest"
 local objects, data, events, observations = {}, {}, {}, {}
-local counts = {mobile = 0, static = 0, respawn = 0}
+local counts = {mobile = 0, static = 0}
 local nextID = 20000000
 
 ScreenPlay = {new = function(self, value) return setmetatable(value, {__index = self}) end}
@@ -27,7 +27,10 @@ function SceneObject(p) return p end
 CreatureObject, BuildingObject, AiAgent, TangibleObject = SceneObject, SceneObject, SceneObject, SceneObject
 ENTEREDBUILDING, AI_STATIONARY, OBJECTDESTRUCTION, DAMAGERECEIVED, ATTACKABLE = 1, 2, 3, 4, 5
 function creatureTemplateExists() return true end
-function getRandomNumber(first) return first end
+function getRandomNumber(first, last)
+	if (first == 0 and last == 359999) then return 123456 end
+	return first
+end
 
 local function object(id, template, scene, parent, kind)
 	local p = {id = id, template = template, zone = scene, parent = parent, kind = kind, contents = {}}
@@ -73,12 +76,15 @@ end
 
 function spawnSceneObject(scene, template, x, h, y, parent, w, qx, qy, qz)
 	assert(math.abs(w * w + qy * qy - 1) < 1e-12 and qx == 0 and qz == 0)
-	return spawn("static", scene, template, parent)
+	local p = spawn("static", scene, template, parent)
+	if (p ~= nil) then p.placement = {x, h, y, w, qy} end
+	return p
 end
 
 function spawnMobile(scene, template, seconds, x, h, y, yaw, parent)
+	assert(seconds == 0)
 	local p = spawn("mobile", scene, template, parent)
-	if (p ~= nil and seconds > 0) then counts.respawn = counts.respawn + 1 end
+	if (p ~= nil) then p.placement = {x, h, y, yaw} end
 	return p
 end
 
@@ -121,9 +127,33 @@ assert(not caves:isReady(first) and caves:isReady(second))
 assert(#events == 11 and events[11][5] == 30000)
 run(events[11])
 caves:start()
-assert(#events == 11 and counts.mobile == 3520 and counts.static == 5650 and counts.respawn == 2420)
+assert(#events == 11 and counts.mobile == 3520 and counts.static == 5650)
+local shortRespawn, longRespawn
 for _, id in ipairs(MyyydrilData.copies) do
-	assert(caves:isReady(objects[id]) and observations[objects[id]][ENTEREDBUILDING] == "notifyEnteredBuilding")
+	local copy = objects[id]
+	assert(caves:isReady(copy) and observations[copy][ENTEREDBUILDING] == "notifyEnteredBuilding")
+	local timed = 0
+	for _, row in ipairs(MyyydrilData.rows) do
+		local line, template, room, x, height, y, yaw, respawn = table.unpack(row)
+		local p = objects[readData(caves:key(id, line))]
+		assert(p.template == template and p.parent == copy.rooms[room].id)
+		assert(p.placement[1] == x and p.placement[2] == height and p.placement[3] == y)
+		if (respawn < 0) then
+			assert(p.placement[4] == math.cos(math.rad(yaw) * 0.5))
+			assert(p.placement[5] == math.sin(math.rad(yaw) * 0.5))
+		else
+			assert(p.placement[4] == (yaw ~= 0 and yaw or 123.456))
+		end
+		if (respawn > 0) then
+			assert(observations[p][OBJECTDESTRUCTION] == "notifySpawnDeath")
+			timed = timed + 1
+			if (respawn == 30) then shortRespawn = row end
+			if (respawn == 1800) then longRespawn = row end
+		else
+			assert(not observations[p] or not observations[p][OBJECTDESTRUCTION])
+		end
+	end
+	assert(timed == 242)
 end
 
 local nativeEntrance = object(caves.nativeEntranceID, caves.doorTemplate, forest, 0, "static")
@@ -132,6 +162,26 @@ assert(nativeEntrance.menu == entrance.menu and #events == 11)
 nativeEntrance.zone = zone
 assert(not caves:isEntrance(nativeEntrance))
 nativeEntrance.zone = forest
+
+for _, row in ipairs({assert(shortRespawn), assert(longRespawn)}) do
+	local key, otherKey = caves:key(first.id, row[1]), caves:key(second.id, row[1])
+	local dead, otherID = objects[readData(key)], readData(otherKey)
+	local eventCount, mobileCount = #events, counts.mobile
+	assert(caves:notifySpawnDeath(dead) == 1)
+	assert(caves:notifySpawnDeath(dead) == 1 and #events == eventCount + 1)
+	local event = events[#events]
+	assert(event[2] == "respawnRow" and event[3] == first and event[5] == row[8] * 1000)
+	assert(readData(key) == dead.id)
+	failOnce = true
+	run(event)
+	assert(readData(key) == dead.id and #events == eventCount + 2 and events[#events][5] == 5000)
+	run(events[#events])
+	local replacement = objects[readData(key)]
+	assert(replacement ~= dead and replacement.parent == dead.parent and replacement.template == dead.template)
+	assert(observations[replacement][OBJECTDESTRUCTION] == "notifySpawnDeath")
+	run(event)
+	assert(readData(key) == replacement.id and readData(otherKey) == otherID and counts.mobile == mobileCount + 1)
+end
 
 first.nearbyPlayers = {player}
 for i = 1, 20 do
@@ -205,6 +255,19 @@ grievous:handleBeginEncounter(second, "1")
 assert(readData(a:dataKey("manager")) ~= 0 and readData(b:dataKey("manager")) == 0)
 grievous:handleBeginEncounter(second, "2")
 assert(readData(b:dataKey("manager")) ~= 0)
+for _, encounter in ipairs({a, b}) do
+	local hall = objects[encounter.buildingID].rooms.hall57
+	for _, spec in ipairs({
+		{"grievous", encounter.grievousTemplate, encounter.grievousLoc},
+		{"guard1", encounter.guardTemplate, encounter.guard1Loc},
+		{"guard2", encounter.guardTemplate, encounter.guard2Loc},
+	}) do
+		local p = objects[readData(encounter:dataKey(spec[1]))]
+		local loc = spec[3]
+		assert(p.template == spec[2] and p.parent == hall.id)
+		assert(p.placement[1] == loc.x and p.placement[2] == loc.z and p.placement[3] == loc.y and p.placement[4] == 123.456)
+	end
+end
 local powerCell = objects[readData(a:dataKey("powerCell1"))]
 local otherCell = readData(b:dataKey("powerCell1"))
 grievous:notifyPowerCellDestroyed(powerCell)

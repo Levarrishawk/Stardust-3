@@ -21,6 +21,8 @@ CreatureTemplate::CreatureTemplate() {
 	lightSaber = 0;
 
 	scale = 1.f;
+	spawnScaleMin = 0.f;
+	spawnScaleMax = 0.f;
 
 	objectName = "";
 	randomNameType = 0;
@@ -92,6 +94,13 @@ CreatureTemplate::~CreatureTemplate() {
 	secondaryAttacks = nullptr;
 }
 
+float CreatureTemplate::getSpawnScale() const {
+	if (spawnScaleMin > 0.f && spawnScaleMax > spawnScaleMin)
+		return spawnScaleMin + System::frandom(spawnScaleMax - spawnScaleMin);
+
+	return scale;
+}
+
 void CreatureTemplate::readObject(LuaObject* templateData) {
 	conversationTemplate = String(templateData->getStringField("conversationTemplate").trim()).hashCode();
 	objectName = templateData->getStringField("objectName").trim();
@@ -147,6 +156,8 @@ void CreatureTemplate::readObject(LuaObject* templateData) {
 		customAiMap = templateData->getStringField("customAiMap").hashCode();
 
 	scale = templateData->getFloatField("scale");
+	spawnScaleMin = templateData->getFloatField("spawnScaleMin");
+	spawnScaleMax = templateData->getFloatField("spawnScaleMax");
 
 	if (!templateData->getStringField("milkType").isEmpty()) {
 		milkType = templateData->getStringField("milkType").trim();
