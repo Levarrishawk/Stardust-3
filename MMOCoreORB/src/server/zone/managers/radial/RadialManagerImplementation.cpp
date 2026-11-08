@@ -9,7 +9,31 @@
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/building/BuildingObject.h"
 #include "server/zone/packets/object/ObjectMenuResponse.h"
+#include "server/zone/Zone.h"
 #include "server/zone/ZoneServer.h"
+#include "templates/snapshot/BuildoutData.h"
+
+namespace {
+
+ManagedReference<SceneObject*> resolveMenuObject(ZoneServer* server, CreatureObject* player, uint64 objectID) {
+	ManagedReference<SceneObject*> object = server->getObject(objectID);
+	if (object != nullptr || objectID != BuildoutData::getObjectID(-27501, 0))
+		return object;
+
+	// Dead Forest's native buildout and legacy snapshot use different IDs for the same stone door.
+	Zone* zone = player->getZone();
+	if (zone == nullptr || zone->getZoneName() != "kashyyyk_dead_forest")
+		return nullptr;
+
+	object = server->getObject(14913592);
+	if (object == nullptr || object->getZone() != zone || object->getParentID() != 0 ||
+		object->getServerObjectCRC() != STRING_HASHCODE("object/tangible/door/thm_kash_cave_myyydril_door.iff"))
+		return nullptr;
+
+	return object;
+}
+
+} // namespace
 
 RadialManagerImplementation::RadialManagerImplementation(ZoneServer* server) : ManagedObjectImplementation(), Logger() {
 	setLoggingName("RadialManager");
@@ -23,7 +47,7 @@ RadialManagerImplementation::RadialManagerImplementation(ZoneServer* server) : M
 void RadialManagerImplementation::handleObjectMenuRequest(CreatureObject* player, ObjectMenuResponse* defaultMenuResponse, uint64 objectID) {
 	//Pre: Player is WLOCKED
 	//Post: Player is WLOCKED
-	ManagedReference<SceneObject*> menuObject = zoneServer->getObject(objectID);
+	ManagedReference<SceneObject*> menuObject = resolveMenuObject(zoneServer, player, objectID);
 
 	if (menuObject != nullptr) {
 		Locker clocker(menuObject, player);
@@ -53,7 +77,7 @@ void RadialManagerImplementation::handleObjectMenuSelect(CreatureObject* player,
 		return;
 	}
 
-	ManagedReference<SceneObject*> selectedObject = zoneServer->getObject(objectID);
+	ManagedReference<SceneObject*> selectedObject = resolveMenuObject(zoneServer, player, objectID);
 
 	if (selectedObject == nullptr) {
 		player->error() << "RadialManagerImplementation::handleObjectMenuSelect(player=" << player->getObjectID() << ", selectID=" << selectID << ", objectID=" << objectID << "): Failed to get selectedObject from zone server.";

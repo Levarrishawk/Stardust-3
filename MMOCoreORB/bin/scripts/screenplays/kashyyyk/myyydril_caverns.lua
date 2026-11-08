@@ -4,6 +4,7 @@ MyyydrilCaverns = ScreenPlay:new {
 	buildingTemplate = "object/building/kashyyyk/thm_kash_myyydril_caverns.iff",
 	doorTemplate = "object/tangible/door/thm_kash_cave_myyydril_door.iff",
 	entranceID = 14913592,
+	nativeEntranceID = -27501 ~ (1 << 48), -- Dead Forest buildout area 0.
 	entranceZone = "kashyyyk_dead_forest",
 	collectors = {
 		["object/tangible/quest/warl_cave_plant.iff"] = "myyydrilKirirrGather1ScreenPlay",
@@ -46,11 +47,16 @@ function MyyydrilCaverns:start()
 	if (not isZoneEnabled(self.zone)) then
 		return
 	end
-	local pDoor = getSceneObject(self.entranceID)
-	if (self:isEntrance(pDoor)) then
-		SceneObject(pDoor):setObjectMenuComponent("MyyydrilCavernsDoorMenuComponent")
-	else
-		print("MyyydrilCaverns: missing Dead Forest stone door " .. self.entranceID)
+	local foundEntrance = false
+	for _, id in ipairs({self.entranceID, self.nativeEntranceID}) do
+		local pDoor = getSceneObject(id)
+		if (self:isEntrance(pDoor)) then
+			SceneObject(pDoor):setObjectMenuComponent("MyyydrilCavernsDoorMenuComponent")
+			foundEntrance = true
+		end
+	end
+	if (not foundEntrance) then
+		print("MyyydrilCaverns: missing Dead Forest stone door")
 	end
 	for index, buildingID in ipairs(MyyydrilData.copies) do
 		local pBuilding = getSceneObject(buildingID)
@@ -169,9 +175,14 @@ function MyyydrilCaverns:isReady(pBuilding)
 end
 
 function MyyydrilCaverns:isEntrance(pDoor)
-	return pDoor ~= nil and SceneObject(pDoor):getObjectID() == self.entranceID
-		and SceneObject(pDoor):getZoneName() == self.entranceZone
-		and SceneObject(pDoor):getTemplateObjectPath() == self.doorTemplate
+	if (pDoor == nil) then
+		return false
+	end
+	local door = SceneObject(pDoor)
+	local id = door:getObjectID()
+	return (id == self.entranceID or id == self.nativeEntranceID)
+		and door:getZoneName() == self.entranceZone and door:getParentID() == 0
+		and door:getTemplateObjectPath() == self.doorTemplate
 end
 
 function MyyydrilCaverns:getDirection(pDoor)
@@ -191,22 +202,18 @@ function MyyydrilCaverns:canUse(pDoor, pPlayer)
 		and SceneObject(pPlayer):getDistanceTo(pDoor) <= 6
 end
 
-function MyyydrilCaverns:populationLabel(pBuilding)
-	local building = BuildingObject(pBuilding)
-	local population = 0
-	for index = 1, building:getTotalCellNumber() do
-		local name = building:getCellName(index)
-		local pCell = name and name ~= "" and building:getNamedCell(name)
-		if (pCell) then
-			local cell = SceneObject(pCell)
-			for slot = 0, cell:getContainerObjectsSize() - 1 do
-				local pObject = cell:getContainerObject(slot)
-				if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
-					population = population + 1
-				end
-			end
+function MyyydrilCaverns:getPlayersInCopy(pBuilding)
+	local players = {}
+	for _, pPlayer in ipairs(SceneObject(pBuilding):getPlayersInRange(512) or {}) do
+		if (SceneObject(pPlayer):getRootParent() == pBuilding) then
+			players[#players + 1] = pPlayer
 		end
 	end
+	return players
+end
+
+function MyyydrilCaverns:populationLabel(pBuilding)
+	local population = #self:getPlayersInCopy(pBuilding)
 	if (population < 20) then return "Light" end
 	if (population < 40) then return "Medium" end
 	if (population < 60) then return "Heavy" end
@@ -224,22 +231,38 @@ function MyyydrilCaverns:selectCopy(pDoor, pPlayer)
 	if (#rows == 1) then
 		self:enter(pPlayer, rows[1][2])
 	elseif (#rows > 1) then
-		LuaSuiManager():sendListBox(pDoor, pPlayer, "Select Zone Instance", "Choose a Myyydril Caverns instance.", 2,
-			"@cancel", "", "@ok", self.screenplayName, "onCopySelected", 6, rows)
+		local sui = SuiListBox.new(self.screenplayName, "onCopySelected")
+		sui.setTitle("Select Zone Instance")
+		sui.setPrompt("Choose a Myyydril Caverns instance.")
+		-- Keep the server door ID in page data. The client may know it by a different ID.
+		sui.setStoredData("door", tostring(SceneObject(pDoor):getObjectID()))
+		for _, row in ipairs(rows) do
+			sui.add(row[1], tostring(row[2]))
+		end
+		sui.sendTo(pPlayer)
 	else
 		CreatureObject(pPlayer):sendSystemMessage("@travel/zone_transition:zone_unavailable")
 	end
 end
 
-function MyyydrilCaverns:onCopySelected(pPlayer, pSui, eventIndex, _, selected)
-	local row = tonumber(selected)
-	if (pPlayer == nil or pSui == nil or tonumber(eventIndex) == 1 or row == nil or row < 0) then
+function MyyydrilCaverns:onCopySelected(pPlayer, pSui, eventIndex, selected)
+	local row = math.tointeger(tonumber(selected))
+	if (pPlayer == nil or pSui == nil or tonumber(eventIndex) ~= 0 or row == nil or row < 0) then
 		return
 	end
-	local list = LuaSuiListBox(pSui)
-	local pDoor = list:getUsingObject()
+	local pPage = LuaSuiBoxPage(pSui):getSuiPageData()
+	if (pPage == nil) then
+		return
+	end
+	local page = LuaSuiPageData(pPage)
+	local id = tonumber(page:getStoredData(tostring(row)))
+	local doorID = tonumber(page:getStoredData("door"))
+	if (id == nil or doorID == nil) then
+		return
+	end
+	local pDoor = getSceneObject(doorID)
 	if (self:isEntrance(pDoor) and self:canUse(pDoor, pPlayer)) then
-		self:enter(pPlayer, list:getMenuObjectID(row))
+		self:enter(pPlayer, id)
 	end
 end
 

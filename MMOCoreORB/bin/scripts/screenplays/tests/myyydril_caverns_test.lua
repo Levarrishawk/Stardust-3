@@ -39,7 +39,8 @@ local function object(id, template, scene, parent, kind)
 	function p:isBuildingObject() return self.kind == "building" end
 	function p:isPlayerCreature() return self.kind == "player" end
 	function p:isAiAgent() return self.kind == "mobile" end
-	function p:getDistanceTo() return 1 end
+	function p:getDistanceTo() return self.distance or 1 end
+	function p:getPlayersInRange() return self.nearbyPlayers end
 	function p:setObjectMenuComponent(component) self.menu = component end
 	function p:getContainerObjectsSize() return #self.contents end
 	function p:getContainerObject(index) return self.contents[index + 1] end
@@ -107,6 +108,7 @@ for _, quest in pairs(caves.collectors) do
 	_G[quest] = {attachObject = function(self, p) assert(p.parent ~= 0); p.collector = self end}
 end
 local entrance = object(caves.entranceID, caves.doorTemplate, forest, 0, "static")
+assert(caves.nativeEntranceID == -281474976738157)
 local player = object(19999999, "player", forest, 0, "player")
 local first, second = objects[MyyydrilData.copies[1]], objects[MyyydrilData.copies[2]]
 local function run(event) _G[event[1]][event[2]](_G[event[1]], event[3], event[4]) end
@@ -124,28 +126,71 @@ for _, id in ipairs(MyyydrilData.copies) do
 	assert(caves:isReady(objects[id]) and observations[objects[id]][ENTEREDBUILDING] == "notifyEnteredBuilding")
 end
 
+local nativeEntrance = object(caves.nativeEntranceID, caves.doorTemplate, forest, 0, "static")
+caves:start()
+assert(nativeEntrance.menu == entrance.menu and #events == 11)
+nativeEntrance.zone = zone
+assert(not caves:isEntrance(nativeEntrance))
+nativeEntrance.zone = forest
+
+first.nearbyPlayers = {player}
+for i = 1, 20 do
+	first.nearbyPlayers[#first.nearbyPlayers + 1] = object(30000000 + i, "player", zone, first.rooms.hall1.id, "player")
+end
+first.nearbyPlayers[#first.nearbyPlayers + 1] = object(30000021, "player", zone, second.rooms.hall1.id, "player")
+assert(#caves:getPlayersInCopy(first) == 20)
+
 local selection
+function LuaSuiPageData(arg)
+	if (type(arg) == "table") then return arg end
+	assert(arg == "Script.listBox")
+	local page = {stored = {}, labels = {}}
+	function page:_getObject() return self end
+	function page:setDefaultCallback(callback) self.callback = callback end
+	function page:subscribeToPropertyForEvent(event, widget, property)
+		assert(event == 9 and widget == "List.lstList" and property == "SelectedRow")
+	end
+	function page:addDataItem() end
+	function page:setProperty(widget, property, value) self.labels[widget] = value end
+	function page:setStoredData(key, value) self.stored[key] = value end
+	function page:getStoredData(key) return self.stored[key] end
+	return page
+end
 function LuaSuiManager()
-	return {sendListBox = function(self, door, who, title, prompt, buttons, cancel, middle, ok, name, callback, distance, rows)
-		assert(door == entrance and who == player and #rows == 10 and callback == "onCopySelected")
-		assert(rows[1][2] == first.id and rows[2][2] == second.id)
-		selection = rows
+	return {sendSuiPage = function(self, who, page, name, callback)
+		assert(who == player and name == caves.screenplayName and callback == "onCopySelected")
+		assert(page.stored["0"] == tostring(first.id) and page.stored["1"] == tostring(second.id))
+		assert(page.stored["9"] ~= nil and page.stored["10"] == nil)
+		assert(page.labels["List.dataList.0"] == "Myyydril Caverns 1 - Medium")
+		assert(page.labels["List.dataList.1"] == "Myyydril Caverns 2 - Light")
+		selection = page
 	end}
 end
-function LuaSuiListBox(p) return p end
-local sui = {getUsingObject = function() return entrance end,
-	getMenuObjectID = function(self, index) return selection[index + 1][2] end}
+dofile("MMOCoreORB/bin/scripts/screenplays/sui/SuiTemplate.lua")
+dofile("MMOCoreORB/bin/scripts/screenplays/sui/SuiListBox.lua")
+function LuaSuiBoxPage(pSui) return pSui end
+local suiBox = {getSuiPageData = function() return selection end}
 MyyydrilCavernsDoorMenuComponent:handleObjectMenuSelect(entrance, player, 20)
-caves:onCopySelected(player, sui, 1, "", "1")
+assert(selection.stored.door == tostring(entrance.id))
+caves:onCopySelected(player, suiBox, 1, "1")
+for _, invalid in ipairs({"", "-1", "1.5", "10", "999"}) do
+	caves:onCopySelected(player, suiBox, 0, invalid)
+end
+player.distance = 7
+caves:onCopySelected(player, suiBox, 0, "1")
 assert(player.zone == forest)
-caves:onCopySelected(player, sui, 0, "", "1")
+player.distance = 1
+caves:onCopySelected(player, suiBox, 0, "1")
 assert(player.parent == second.rooms.hall1.id and table.concat(player.travel, ",") == "-4,-4,-12")
 local exit = objects[readData(caves:key(second.id, "exit"))]
 player.parent = exit.parent
 MyyydrilCavernsDoorMenuComponent:handleObjectMenuSelect(exit, player, 20)
 assert(player.zone == forest and player.parent == 0 and table.concat(player.travel, ",") == "-242,38,302")
 assert(readScreenPlayData(player, caves.screenplayName, "entered") == "")
-caves:enter(player, first.id)
+MyyydrilCavernsDoorMenuComponent:handleObjectMenuSelect(nativeEntrance, player, 20)
+assert(selection.stored.door == tostring(nativeEntrance.id))
+caves:onCopySelected(player, suiBox, 0, "0")
+assert(player.parent == first.rooms.hall1.id)
 player.parent = 0
 caves:playerLoggedIn(player)
 run(events[#events])
