@@ -3243,12 +3243,7 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 	Vector3 start = vehicle->getPosition();
 	Vector3 destination(lua_tonumber(L, 2), lua_tonumber(L, 4), lua_tonumber(L, 3));
 	vehicle->setCurrentSpeed(lua_tonumber(L, 5));
-	if (!CollisionManager::checkVehiclePatrolSpacing(vehicle, destination)) {
-		vehicle->setCurrentSpeed(0.f);
-		vehicle->addCooldown("vehiclePatrolMovementWatch", 8000);
-		lua_pushboolean(L, false);
-		return 1;
-	}
+	// Include spacing waits in the watchdog so a traffic jam can clear itself.
 	if (!rider->peekBlackboard("vehiclePatrolLastPosition")) {
 		rider->writeBlackboard("vehiclePatrolLastPosition", start);
 		vehicle->addCooldown("vehiclePatrolMovementWatch", 8000);
@@ -3266,6 +3261,11 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 	}
 	if (!vehicle->checkCooldownRecovery("vehiclePatrolAvoidanceBypass")) {
 		lua_pushboolean(L, true);
+		return 1;
+	}
+	if (!CollisionManager::checkVehiclePatrolSpacing(vehicle, destination)) {
+		vehicle->setCurrentSpeed(0.f);
+		lua_pushboolean(L, false);
 		return 1;
 	}
 	if (rider->peekBlackboard("vehiclePatrolDetour") && vehicle->checkCooldownRecovery("vehiclePatrolDetour")) {
@@ -3366,7 +3366,6 @@ int DirectorManager::canMoveVehiclePatrol(lua_State* L) {
 			if (validPath) {
 				if (!CollisionManager::checkVehiclePatrolSpacing(vehicle, step)) {
 					vehicle->setCurrentSpeed(0.f);
-					vehicle->addCooldown("vehiclePatrolMovementWatch", 8000);
 					lua_pushboolean(L, false);
 					return 1;
 				}
