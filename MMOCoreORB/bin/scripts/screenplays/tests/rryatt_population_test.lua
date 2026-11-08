@@ -1,6 +1,6 @@
 -- Standalone Lua 5.3+: public Rryatt controller ownership and quest-spawn lifecycle.
 local root = "MMOCoreORB/bin/scripts/"
-ScreenPlay = {new = function(self, t) return t end}
+ScreenPlay = {new = function(self, t) return setmetatable(t, {__index = self}) end}
 registerScreenPlay = function() end
 AI_STATIONARY, AI_STATIC, AI_PATROLLING = 1, 2, 4
 OBJECTDESTRUCTION, DESTINATIONREACHED, ENTEREDAREA, EXITEDAREA = 1, 2, 3, 4
@@ -85,6 +85,7 @@ local function advance(untilTime)
 end
 dofile(root .. "screenplays/kashyyyk/kashyyyk_rryatt_population_data.lua")
 dofile(root .. "screenplays/kashyyyk/kashyyyk_patrols.lua")
+dofile(root .. "screenplays/kashyyyk/kashyyyk_spawn_controller.lua")
 dofile(root .. "screenplays/kashyyyk/kashyyyk_rryatt_population.lua")
 dofile(root .. "screenplays/kashyyyk/kashyyyk_rryatt_rroot.lua")
 local sp, source = KashyyykRryattPopulation, KashyyykRryattPopulationData

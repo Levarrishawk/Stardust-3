@@ -13,9 +13,6 @@
 		task 6  Reward  credits 10000 item   [Reward Issued]
 		task 9  Destroy Multiple  Count 1 ep3_forest_sayormi_cyrans  [Cyrans the Unfeeling]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_sayormi_queen, dressed_cyrans_unfeeling
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_kerritamba_epic_5.qst; the journal row comes from the
@@ -32,10 +29,10 @@ forestKerritambaEpic5ScreenPlay = ScreenPlay:new {
 	rewardCredits = 15000,
 	killGroups = {
 		{ key = "kills0", count = 1, pct = 100, templates = {
-			"dressed_sayormi_queen",
+			"dead_forest_ep3_forest_sayormi_queen",
 		} },
 		{ key = "kills1", count = 1, pct = 100, templates = {
-			"dressed_cyrans_unfeeling",
+			"dead_forest_ep3_forest_sayormi_cyrans",
 		} },
 	},
 }

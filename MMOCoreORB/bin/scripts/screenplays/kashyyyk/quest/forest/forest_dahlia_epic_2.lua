@@ -10,9 +10,6 @@
 		task 1  Wait for Signal  Signal war
 		task 2  Reward  credits 5000 item   [Reward Issued]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_ep3_forest_warchief
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_dahlia_epic_2.qst; the journal row comes from the
@@ -30,7 +27,7 @@ forestDahliaEpic2ScreenPlay = ScreenPlay:new {
 	killCount = 1,
 	lootDropPercent = 100,
 	killTemplates = {
-		"dressed_ep3_forest_warchief",
+		"dead_forest_ep3_forest_warchief",
 	},
 }
 

@@ -12,7 +12,8 @@ ep3_forest_athnalu_convo = ConvoTemplate:new {
 
 ep3_forest_athnalu_convo_s_1136 = ConvoScreen:new {
 	id = "s_1136",
-	leftDialog = "@conversation/ep3_forest_athnalu:s_1136", -- 
+	-- DSRC's language-failure action uses this shipped line; s_1136 is absent.
+	leftDialog = "@ep3/sidequests:wke_convo_failure",
 	stopConversation = "true",
 	options = {}
 }

@@ -10,9 +10,6 @@
 		task 1  Wait for Signal  Signal sayormi
 		task 2  Reward  credits 5000 item   [Reward Issued]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_sayormi_witch, dressed_sayormi_witch_01, dressed_sayormi_witch_02, dressed_sayormi_witch_03, dressed_sayormi_witch_04, dressed_sayormi_witch_05, dressed_sayormi_witch_06, dressed_sayormi_witch_07, dressed_sayormi_warrior_01, dressed_sayormi_warrior_02, dressed_sayormi_warrior_03, dressed_sayormi_warrior_04
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_kerritamba_epic_4.qst; the journal row comes from the
@@ -30,26 +27,11 @@ forestKerritambaEpic4ScreenPlay = ScreenPlay:new {
 	killCount = 20,
 	lootDropPercent = 100,
 	killTemplates = {
-		"dressed_sayormi_witch",
-		"dressed_sayormi_witch_01",
-		"dressed_sayormi_witch_02",
-		"dressed_sayormi_witch_03",
-		"dressed_sayormi_witch_04",
-		"dressed_sayormi_witch_05",
-		"dressed_sayormi_witch_06",
-		"dressed_sayormi_witch_07",
-		"dressed_sayormi_warrior_01",
-		"dressed_sayormi_warrior_02",
-		"dressed_sayormi_warrior_03",
-		"dressed_sayormi_warrior_04",
-		"dressed_sayormi_warrior_05",
-		"dressed_sayormi_warrior_06",
-		"dressed_sayromi_monk_01",
-		"dressed_sayromi_monk_02",
-		"dressed_sayromi_monk_03",
-		"dressed_sayromi_monk_04",
-		"dressed_sayromi_monk_05",
-		"dressed_sayromi_monk_06",
+		"dead_forest_ep3_forest_sayormi_cyrans",
+		"dead_forest_ep3_forest_sayormi_monk",
+		"dead_forest_ep3_forest_sayormi_queen",
+		"dead_forest_ep3_forest_sayormi_warrior",
+		"dead_forest_ep3_forest_sayormi_witch",
 	},
 }
 

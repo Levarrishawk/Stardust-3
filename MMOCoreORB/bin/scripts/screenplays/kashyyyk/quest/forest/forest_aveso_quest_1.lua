@@ -16,9 +16,6 @@
 	OPEN
 		Destroy-and-Loot Social Group forest_mouf has no lair mapping (not substituted)
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		webweaver
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_aveso_quest_1.qst; the journal row comes from the
@@ -35,9 +32,18 @@ forestAvesoQuest1ScreenPlay = ScreenPlay:new {
 	rewardCredits = 3000,
 	killGroups = {
 		{ key = "loot0", count = 20, pct = 70, templates = {
-			"webweaver",
+			"dead_forest_ep3_forest_exemplar_zheus",
+			"dead_forest_ep3_forest_mother_vesad",
+			"dead_forest_ep3_forest_outcast_assassin",
+			"dead_forest_ep3_forest_webweaver_bloodseeker",
+			"dead_forest_ep3_forest_webweaver_gravespinner",
+			"dead_forest_ep3_forest_webweaver_tombsinger",
 		} },
-		{ key = "loot1", count = 20, pct = 80, templates = {} },
+		{ key = "loot1", count = 20, pct = 80, templates = {
+			"dead_forest_ep3_forest_great_mouf",
+			"dead_forest_ep3_forest_mouf",
+			"dead_forest_ep3_forest_steelclaw",
+		} },
 	},
 }
 

@@ -57,7 +57,6 @@ KashyyykArena = ScreenPlay:new {
 	screenplayName = "KashyyykArena",
 
 	zoneDungeon = "kashyyyk_north_dungeons",
-	zoneMain = "kashyyyk",
 
 	championTemplate = "dressed_arena_champion",
 	championYaw = 171,
@@ -74,8 +73,7 @@ KashyyykArena = ScreenPlay:new {
 	},
 
 	-- space_dungeon.tab exit_planet kashyyyk_dead_forest (-302, 38, -208)
-	-- plus the merged-surface dx -1500 / dz +1500
-	ejectPoint = { x = -302 - 1500, z = 38, y = -208 + 1500 },
+	ejectPoint = { x = -302, z = 38, y = -208 },
 
 	deathMessage = "@dungeon/kash_the_arena:ejected_by_death",
 	ejectMs = 3 * 1000,
@@ -200,7 +198,8 @@ function KashyyykArena:eject(pPlayer)
 		return
 	end
 
-	if (not isZoneEnabled(self.zoneMain)) then
+	local zone, offsetX, offsetY = KashyyykDeadForestPopulation:getLayout()
+	if (zone == nil) then
 		return
 	end
 
@@ -209,5 +208,5 @@ function KashyyykArena:eject(pPlayer)
 	end
 
 	local dest = self.ejectPoint
-	SceneObject(pPlayer):switchZone(self.zoneMain, dest.x, dest.z, dest.y, 0)
+	SceneObject(pPlayer):switchZone(zone, dest.x + offsetX, dest.z, dest.y + offsetY, 0)
 end

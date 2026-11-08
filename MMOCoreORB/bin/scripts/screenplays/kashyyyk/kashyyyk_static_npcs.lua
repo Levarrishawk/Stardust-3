@@ -1,5 +1,5 @@
 -- Kashyyyk surface static NPCs (ruling 2026-09-04: "ensure kashyyyk is done in full").
--- Celebrity spawners from the three surface buildout tabs. World coords are
+-- Celebrity spawners from the main and hunting buildout tabs. World coords are
 -- x, z, y = wx, py, wz. Heading is baked as degrees(2 * atan2(qy, qw)) from the
 -- placement quaternion: no quaternion-to-heading converter exists in tools/ or
 -- screenplays (qx = qz = 0 on these rows). spawnMobile respawn is 0, matching unique
@@ -10,7 +10,7 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "KashyyykStaticNpcsScreenPlay",
 
-	-- {template, x, z, y, heading, "<SOE spawns name> (main|hunting|dead forest row N)"}
+	-- {template, x, z, y, heading, "<SOE spawns name> (main|hunting row N)"}
 	mainNpcs = {
 		{"ep3_tien_wallub", -508.77, 18.2927, -66.29, 80.787, "ep3_tien_wallub (main row 9)"}, -- registered name equals spawns
 		{"ep3_kymayrr", -502.2, 18.7602, -74.1, -73.339, "ep3_kymayrr (main row 15)"}, -- registered name equals spawns
@@ -84,14 +84,6 @@ KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 		{"ep3_rodian_camp_doctor_01", 224.39, 23.0029, 571.00, 119.358, "ep3_etyyy_rodian_camp_doctor_01 (hunting row 371)"}, -- single repo candidate
 		{"ep3_rodian_trader", 185.39, 40.3779, 547.18, -64.174, "ep3_etyyy_rodian_trader (hunting row 372)"}, -- single repo candidate
 	},
-	forestNpcs = {
-		{"dressed_forest_outcast_informant", -116.63, 31.9644, -167.83, 0, "ep3_forest_outcast_informant (dead forest row 123)"}, -- single repo candidate
-		{"dressed_ep3_forest_outcast_male_02", -208.35, 17.4895, -161.91, 180.664, "ep3_forest_outcast_male_02 (dead forest row 125)"}, -- single repo candidate
-		{"arena_guard_outer", -299.65, 38.7284, -211.83, -22.345, "ep3_forest_arena_guard_outer (dead forest row 126)"}, -- single repo candidate
-		{"dressed_ep3_forest_ardon", -190.23, 31.6392, -124.64, 95.684, "ep3_forest_ardon (dead forest row 131)"}, -- single repo candidate
-		{"dressed_ep3_forest_kerritamba_dealer", -163.23, 31.64, -173.69, -20.626, "ep3_forest_kerritamba_dealer (dead forest row 132)"}, -- single repo candidate
-		{"dressed_ep3_forest_npc_greeter", 22.23, 26.4235, -352.13, 126.806, "ep3_forest_npc_greeter (dead forest row 133)"}, -- single repo candidate
-	}
 }
 
 registerScreenPlay("KashyyykStaticNpcsScreenPlay", true)
@@ -103,10 +95,6 @@ function KashyyykStaticNpcsScreenPlay:start()
 
 	if (isZoneEnabled("kashyyyk_hunting")) then
 		self:spawnNpcs("kashyyyk_hunting", self.huntingNpcs)
-	end
-
-	if (isZoneEnabled("kashyyyk_dead_forest")) then
-		self:spawnNpcs("kashyyyk_dead_forest", self.forestNpcs)
 	end
 end
 

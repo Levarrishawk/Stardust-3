@@ -41,18 +41,10 @@ registerScreenPlay("forestKerritambaEpic1ScreenPlay", true)
 
 function forestKerritambaEpic1ScreenPlay:start()
 	if (isZoneEnabled("kashyyyk_dead_forest")) then
-		self:spawnGiver()
 		self:spawnProps()
 	end
 end
 
-function forestKerritambaEpic1ScreenPlay:spawnGiver()
-	local z = getWorldFloor(-141.5200, -98.8500, "kashyyyk_dead_forest")
-	if (z == nil or z == 0) then
-		z = 33.0841
-	end
-	spawnMobile("kashyyyk_dead_forest", "dressed_chief_kerritamba", 0, -141.5200, z, -98.8500, 218, 0)
-end
 
 function forestKerritambaEpic1ScreenPlay:spawnProps()
 	local z = getWorldFloor(self.propX, self.propY, "kashyyyk_dead_forest")

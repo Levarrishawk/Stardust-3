@@ -10,9 +10,6 @@
 		task 1  Wait for Signal  Signal bones
 		task 3  Reward  credits 5000 item   [Reward Issued]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		webweaver
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_rhiek_quest_2.qst; the journal row comes from the
@@ -30,7 +27,7 @@ forestRhiekQuest2ScreenPlay = ScreenPlay:new {
 	killCount = 7,
 	lootDropPercent = 40,
 	killTemplates = {
-		"webweaver",
+		"dead_forest_ep3_forest_webweaver_tombsinger",
 	},
 }
 

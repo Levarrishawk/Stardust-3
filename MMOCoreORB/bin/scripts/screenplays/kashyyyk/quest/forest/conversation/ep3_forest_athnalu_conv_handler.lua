@@ -45,7 +45,9 @@ function ep3_forest_athnalu_conv_handler:condition_hasCompletedQuestTwo(pPlayer,
 end
 
 function ep3_forest_athnalu_conv_handler:condition_hasLanguage(pPlayer, pNpc)
-	return (not CreatureObject(pPlayer):hasSkill("social_language_wookiee_comprehend"))
+	local player = CreatureObject(pPlayer)
+	return not player:hasSkill("social_language_wookiee_comprehend")
+		and not player:hasSkill("combat_smuggler_underworld_01")
 end
 
 function ep3_forest_athnalu_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)

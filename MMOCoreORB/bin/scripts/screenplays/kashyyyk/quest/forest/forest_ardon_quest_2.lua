@@ -10,9 +10,6 @@
 		task 6  Wait for Signal  Signal exemplar
 		task 7  Reward  credits 5000 item   [Reward Issued]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_ep3_forest_outcast_assassin_01, dressed_ep3_forest_outcast_assassin_02
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_ardon_quest_2.qst; the journal row comes from the
@@ -30,8 +27,7 @@ forestArdonQuest2ScreenPlay = ScreenPlay:new {
 	killCount = 1,
 	lootDropPercent = 100,
 	killTemplates = {
-		"dressed_ep3_forest_outcast_assassin_01",
-		"dressed_ep3_forest_outcast_assassin_02",
+		"dead_forest_ep3_forest_exemplar_zheus",
 	},
 }
 

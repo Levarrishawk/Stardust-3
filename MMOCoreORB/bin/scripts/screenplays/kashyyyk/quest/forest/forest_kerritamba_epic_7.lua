@@ -13,9 +13,6 @@
 		task 3  Wait for Signal  Signal alldone
 		task 4  Reward  credits 3000 item   [Reward Issued]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_sayormi_witch, dressed_sayormi_witch_01, dressed_sayormi_witch_02, dressed_sayormi_witch_03, dressed_sayormi_witch_04, dressed_sayormi_witch_05, dressed_sayormi_witch_06, dressed_sayormi_witch_07
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_kerritamba_epic_7.qst; the journal row comes from the
@@ -33,14 +30,7 @@ forestKerritambaEpic7ScreenPlay = ScreenPlay:new {
 	killCount = 1,
 	lootDropPercent = 40,
 	killTemplates = {
-		"dressed_sayormi_witch",
-		"dressed_sayormi_witch_01",
-		"dressed_sayormi_witch_02",
-		"dressed_sayormi_witch_03",
-		"dressed_sayormi_witch_04",
-		"dressed_sayormi_witch_05",
-		"dressed_sayormi_witch_06",
-		"dressed_sayormi_witch_07",
+		"dead_forest_ep3_forest_sayormi_witch",
 	},
 	retrieves = {
 		{ key = "r0", template = "object/tangible/quest/mysess_blossom.iff", count = 1, title = "@quest/ground/ep3_forest_kerritamba_epic_7:task01_journal_entry_title" },

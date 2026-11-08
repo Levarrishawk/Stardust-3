@@ -11,7 +11,7 @@ ep3_forest_arena_guard_conv_handler.screenAnimations = {
 function ep3_forest_arena_guard_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
-	if ((arenaChallengeScreenPlay:getStage(pPlayer) > 0 and not arenaChallengeScreenPlay:isTurnIn(pPlayer))) then
+	if (pPlayer ~= nil and arenaChallengeScreenPlay:getStage(pPlayer) == 1) then
 		return convoTemplate:getScreen("s_575")
 	end
 	return convoTemplate:getScreen("s_581")
@@ -27,8 +27,8 @@ function ep3_forest_arena_guard_conv_handler:runScreenHandlers(pConvTemplate, pP
 		CreatureObject(pNpc):doAnimation(self.screenAnimations[screenID])
 	end
 
-	if (screenID == "s_579") then
-		-- OPEN: dungeon send is not implemented on this fence
+	if (screenID == "s_579" and pPlayer ~= nil and arenaChallengeScreenPlay:getStage(pPlayer) == 1) then
+		KashyyykArena.enter(pPlayer)
 	end
 
 	return pClonedScreen

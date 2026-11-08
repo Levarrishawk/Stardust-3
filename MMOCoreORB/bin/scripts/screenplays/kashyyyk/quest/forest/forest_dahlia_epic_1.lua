@@ -10,9 +10,6 @@
 		task 1  Wait for Signal  Signal warriors
 		task 2  Reward  credits 5000 item   [Reward Issued]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_ep3_forest_kerritamba_warrior, dressed_ep3_forest_kerritamba_warrior_01, dressed_ep3_forest_kerritamba_warrior_02, dressed_ep3_forest_kerritamba_warrior_03, dressed_ep3_forest_kerritamba_warrior_04, dressed_ep3_forest_kerritamba_warrior_05, dressed_ep3_forest_kerritamba_warrior_06, dressed_ep3_forest_kerritamba_warrior_07, dressed_ep3_forest_kerritamba_warrior_08
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_dahlia_epic_1.qst; the journal row comes from the
@@ -30,15 +27,7 @@ forestDahliaEpic1ScreenPlay = ScreenPlay:new {
 	killCount = 10,
 	lootDropPercent = 100,
 	killTemplates = {
-		"dressed_ep3_forest_kerritamba_warrior",
-		"dressed_ep3_forest_kerritamba_warrior_01",
-		"dressed_ep3_forest_kerritamba_warrior_02",
-		"dressed_ep3_forest_kerritamba_warrior_03",
-		"dressed_ep3_forest_kerritamba_warrior_04",
-		"dressed_ep3_forest_kerritamba_warrior_05",
-		"dressed_ep3_forest_kerritamba_warrior_06",
-		"dressed_ep3_forest_kerritamba_warrior_07",
-		"dressed_ep3_forest_kerritamba_warrior_08",
+		"dead_forest_ep3_forest_kerritamba_warrior",
 	},
 }
 

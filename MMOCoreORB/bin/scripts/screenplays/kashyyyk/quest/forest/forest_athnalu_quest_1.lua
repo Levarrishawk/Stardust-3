@@ -10,9 +10,6 @@
 		task 1  Wait for Signal  Signal dolls
 		task 2  Reward  credits 5000 item   [Reward Issued]
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_sayormi_witch, dressed_sayormi_witch_01, dressed_sayormi_witch_02, dressed_sayormi_witch_03, dressed_sayormi_witch_04, dressed_sayormi_witch_05, dressed_sayormi_witch_06, dressed_sayormi_witch_07, dressed_sayormi_warrior_01, dressed_sayormi_warrior_02, dressed_sayormi_warrior_03, dressed_sayormi_warrior_04
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_athnalu_quest_1.qst; the journal row comes from the
@@ -30,44 +27,19 @@ forestAthnaluQuest1ScreenPlay = ScreenPlay:new {
 	killCount = 5,
 	lootDropPercent = 60,
 	killTemplates = {
-		"dressed_sayormi_witch",
-		"dressed_sayormi_witch_01",
-		"dressed_sayormi_witch_02",
-		"dressed_sayormi_witch_03",
-		"dressed_sayormi_witch_04",
-		"dressed_sayormi_witch_05",
-		"dressed_sayormi_witch_06",
-		"dressed_sayormi_witch_07",
-		"dressed_sayormi_warrior_01",
-		"dressed_sayormi_warrior_02",
-		"dressed_sayormi_warrior_03",
-		"dressed_sayormi_warrior_04",
-		"dressed_sayormi_warrior_05",
-		"dressed_sayormi_warrior_06",
-		"dressed_sayromi_monk_01",
-		"dressed_sayromi_monk_02",
-		"dressed_sayromi_monk_03",
-		"dressed_sayromi_monk_04",
-		"dressed_sayromi_monk_05",
-		"dressed_sayromi_monk_06",
+		"dead_forest_ep3_forest_sayormi_cyrans",
+		"dead_forest_ep3_forest_sayormi_monk",
+		"dead_forest_ep3_forest_sayormi_queen",
+		"dead_forest_ep3_forest_sayormi_warrior",
+		"dead_forest_ep3_forest_sayormi_witch",
 	},
 }
 
 registerScreenPlay("forestAthnaluQuest1ScreenPlay", true)
 
 function forestAthnaluQuest1ScreenPlay:start()
-	if (isZoneEnabled("kashyyyk_dead_forest")) then
-		self:spawnGiver()
-	end
 end
 
-function forestAthnaluQuest1ScreenPlay:spawnGiver()
-	local z = getWorldFloor(-179.6500, -174.1700, "kashyyyk_dead_forest")
-	if (z == nil or z == 0) then
-		z = 31.6392
-	end
-	spawnMobile("kashyyyk_dead_forest", "dressed_shoartu_mystic_02", 0, -179.6500, z, -174.1700, 61, 0)
-end
 
 function forestAthnaluQuest1ScreenPlay:getStage(pPlayer)
 	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "stage")) or 0

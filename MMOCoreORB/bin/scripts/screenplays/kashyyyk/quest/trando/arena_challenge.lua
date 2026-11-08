@@ -10,9 +10,7 @@ local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_
 
 	Journal stages mirror the existing screenplay state through KashyyykQuestJournal.
 
-	OPEN:
-		Grant site is conversation/ep3_forest_kerritamba (forest epic). Not transcribed here.
-		Dungeon send on the outer guard is OPEN.
+	Granted by Chief Kerritamba when the Forest epic reaches the Arena Challenge.
 ]]
 
 arenaChallengeScreenPlay = ScreenPlay:new {

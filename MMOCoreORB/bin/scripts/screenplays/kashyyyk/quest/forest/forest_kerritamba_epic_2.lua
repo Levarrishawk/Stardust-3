@@ -18,9 +18,6 @@
 	OPEN
 		Destroy-and-Loot Social Group forest_mouf has no lair mapping (not substituted)
 
-	Kill/encounter templates that ship pvpBitmask NONE (observer still matches):
-		dressed_sayormi_witch, dressed_sayormi_witch_01, dressed_sayormi_witch_02, dressed_sayormi_witch_03, dressed_sayormi_witch_04, dressed_sayormi_witch_05, dressed_sayormi_witch_06, dressed_sayormi_witch_07, webweaver
-		repo template ships pvpBitmask NONE; observer still matches (Kachirho lobarorr shape)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_kerritamba_epic_2.qst; the journal row comes from the
@@ -36,19 +33,21 @@ forestKerritambaEpic2ScreenPlay = ScreenPlay:new {
 	repeatable = false,
 	rewardCredits = 0,
 	killGroups = {
-		{ key = "loot0", count = 1, pct = 70, templates = {} },
+		{ key = "loot0", count = 1, pct = 70, templates = {
+			"dead_forest_ep3_forest_great_mouf",
+			"dead_forest_ep3_forest_mouf",
+			"dead_forest_ep3_forest_steelclaw",
+		} },
 		{ key = "loot1", count = 1, pct = 70, templates = {
-			"dressed_sayormi_witch",
-			"dressed_sayormi_witch_01",
-			"dressed_sayormi_witch_02",
-			"dressed_sayormi_witch_03",
-			"dressed_sayormi_witch_04",
-			"dressed_sayormi_witch_05",
-			"dressed_sayormi_witch_06",
-			"dressed_sayormi_witch_07",
+			"dead_forest_ep3_forest_sayormi_witch",
 		} },
 		{ key = "loot2", count = 1, pct = 50, templates = {
-			"webweaver",
+			"dead_forest_ep3_forest_exemplar_zheus",
+			"dead_forest_ep3_forest_mother_vesad",
+			"dead_forest_ep3_forest_outcast_assassin",
+			"dead_forest_ep3_forest_webweaver_bloodseeker",
+			"dead_forest_ep3_forest_webweaver_gravespinner",
+			"dead_forest_ep3_forest_webweaver_tombsinger",
 		} },
 	},
 	retrieves = {

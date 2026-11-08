@@ -16,7 +16,6 @@
 
 	OPEN
 		Escort — Core3 has no SOE escort destination (Planet tatooine 0,0,0); not faked
-		Encounter Creature Type ep3_forest_kerritamba_assassin has no repo template
 		Go to Location is tatooine 0,0,0 (editor default) — OPEN, no area spawned
 
 	The journal engine lives on the journal branches. The client already
@@ -33,7 +32,7 @@ forestAvesoQuest3ScreenPlay = ScreenPlay:new {
 	repeatable = false,
 	rewardCredits = 0,
 	encounters = {
-		{ soe = "ep3_forest_kerritamba_assassin", template = "", count = 1, minDist = 5, maxDist = 50 },
+		{ soe = "ep3_forest_kerritamba_assassin", template = "dead_forest_ep3_forest_kerritamba_assassin", count = 1, minDist = 5, maxDist = 50 },
 	},
 	timers = {
 		{ min = 60, max = 60 },
@@ -170,7 +169,7 @@ function forestAvesoQuest3ScreenPlay:startTimers(pPlayer)
 end
 
 function forestAvesoQuest3ScreenPlay:onTimer(pPlayer, arg)
-	if (pPlayer == nil or self:getStage(pPlayer) < 1) then
+	if (pPlayer == nil or self:getStage(pPlayer) ~= 1) then
 		return
 	end
 	local idx = tonumber(arg) or 1
@@ -197,7 +196,10 @@ function forestAvesoQuest3ScreenPlay:spawnEncounter(pPlayer, enc)
 		if (getRandomNumber(1, 2) == 1) then
 			dy = 0 - dy
 		end
-		spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		local pMobile = spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+			AiAgent(pMobile):setDefender(pPlayer)
+		end
 	end
 end
 

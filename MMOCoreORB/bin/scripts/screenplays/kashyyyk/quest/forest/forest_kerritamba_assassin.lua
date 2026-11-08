@@ -10,8 +10,6 @@
 		task 1  Encounter  ep3_forest_kerritamba_assassin x2
 		task 2  Immediately Complete Quest
 
-	OPEN
-		Encounter Creature Type ep3_forest_kerritamba_assassin has no repo template
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_kerritamba_assassin.qst; the journal row comes from the
@@ -27,7 +25,7 @@ forestKerritambaAssassinScreenPlay = ScreenPlay:new {
 	repeatable = false,
 	rewardCredits = 0,
 	encounters = {
-		{ soe = "ep3_forest_kerritamba_assassin", template = "", count = 2, minDist = 5, maxDist = 10 },
+		{ soe = "ep3_forest_kerritamba_assassin", template = "dead_forest_ep3_forest_kerritamba_assassin", count = 2, minDist = 5, maxDist = 10 },
 	},
 	timers = {
 		{ min = 60, max = 60 },
@@ -157,7 +155,7 @@ function forestKerritambaAssassinScreenPlay:startTimers(pPlayer)
 end
 
 function forestKerritambaAssassinScreenPlay:onTimer(pPlayer, arg)
-	if (pPlayer == nil or self:getStage(pPlayer) < 1) then
+	if (pPlayer == nil or self:getStage(pPlayer) ~= 1) then
 		return
 	end
 	local idx = tonumber(arg) or 1
@@ -184,7 +182,10 @@ function forestKerritambaAssassinScreenPlay:spawnEncounter(pPlayer, enc)
 		if (getRandomNumber(1, 2) == 1) then
 			dy = 0 - dy
 		end
-		spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		local pMobile = spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+			AiAgent(pMobile):setDefender(pPlayer)
+		end
 	end
 end
 

@@ -320,14 +320,14 @@ screenplay("kashyyyk_static_npcs")
 enabled = {kashyyyk_main = true, kashyyyk_hunting = true, kashyyyk_dead_forest = true}
 spawned = {}
 KashyyykStaticNpcsScreenPlay:start()
-assert(#spawned == 73) -- 50 main, 17 hunting, 6 dead forest
+assert(#spawned == 67) -- Dead Forest has its own population controller.
 local counts = {}
 for _, npc in ipairs(spawned) do
 	counts[npc.zone] = (counts[npc.zone] or 0) + 1
 	assert(npc.flag == AI_STATIONARY)
 	if (npc.zone ~= "kashyyyk_main") then assert(math.abs(npc.x) < 2048 and math.abs(npc.y) < 2048) end
 end
-assert(counts.kashyyyk_main == 50 and counts.kashyyyk_hunting == 17 and counts.kashyyyk_dead_forest == 6)
+assert(counts.kashyyyk_main == 50 and counts.kashyyyk_hunting == 17 and counts.kashyyyk_dead_forest == nil)
 for _, name in ipairs({"forest_athnalu_quest_1", "forest_meust_quest_1", "forest_kerritamba_epic_1", "forest_perusta_quest_1"}) do
 	screenplay("quest/forest/" .. name)
 end
@@ -336,7 +336,7 @@ forestAthnaluQuest1ScreenPlay:start()
 forestMeustQuest1ScreenPlay:start()
 forestKerritambaEpic1ScreenPlay:start()
 forestPerustaQuest1ScreenPlay:start()
-assert(#spawned > before + 4) -- four givers and their existing nearby retrieval props
+assert(#spawned > before) -- Existing nearby retrieval props; the controller owns the givers.
 for i = before + 1, #spawned do
 	assert(spawned[i].zone == "kashyyyk_dead_forest")
 	assert(math.abs(spawned[i].x) < 2048 and math.abs(spawned[i].y) < 2048)

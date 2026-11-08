@@ -32,8 +32,15 @@ forestAthnaluQuest2ScreenPlay = ScreenPlay:new {
 	repeatable = false,
 	rewardCredits = 5000,
 	killGroups = {
-		{ key = "loot0", count = 2, pct = 90, templates = {} },
-		{ key = "loot1", count = 2, pct = 80, templates = {} },
+		{ key = "loot0", count = 2, pct = 90, templates = {
+			"dead_forest_ep3_forest_great_mouf",
+			"dead_forest_ep3_forest_mouf",
+			"dead_forest_ep3_forest_steelclaw",
+		} },
+		{ key = "loot1", count = 2, pct = 80, templates = {
+			"dead_forest_ep3_forest_shadevale_stalker",
+			"dead_forest_ep3_forest_shadevale_venomsting",
+		} },
 	},
 	retrieves = {
 		{ key = "r0", template = "object/tangible/quest/mysess_blossom.iff", count = 1, title = "@quest/ground/ep3_forest_athnalu_quest_2:task03_journal_entry_title" },

@@ -35,18 +35,10 @@ registerScreenPlay("forestPerustaQuest1ScreenPlay", true)
 
 function forestPerustaQuest1ScreenPlay:start()
 	if (isZoneEnabled("kashyyyk_dead_forest")) then
-		self:spawnGiver()
 		self:spawnProps()
 	end
 end
 
-function forestPerustaQuest1ScreenPlay:spawnGiver()
-	local z = getWorldFloor(-186.7100, -117.6100, "kashyyyk_dead_forest")
-	if (z == nil or z == 0) then
-		z = 31.6392
-	end
-	spawnMobile("kashyyyk_dead_forest", "dressed_shoartu_mystic_03", 0, -186.7100, z, -117.6100, 135, 0)
-end
 
 function forestPerustaQuest1ScreenPlay:spawnProps()
 	local z = getWorldFloor(self.propX, self.propY, "kashyyyk_dead_forest")

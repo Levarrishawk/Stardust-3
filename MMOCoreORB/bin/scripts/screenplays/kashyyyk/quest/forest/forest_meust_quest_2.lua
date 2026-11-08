@@ -10,8 +10,6 @@
 		task 1  Wait for Signal  Signal steelhoof
 		task 2  Reward  credits 5000 item   [Reward Issued]
 
-	OPEN
-		Destroy-and-Loot CreatureType ep3_forest_steelclaw has no repo template
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_meust_quest_2.qst; the journal row comes from the
@@ -28,7 +26,9 @@ forestMeustQuest2ScreenPlay = ScreenPlay:new {
 	rewardCredits = 5000,
 	killCount = 1,
 	lootDropPercent = 100,
-	killTemplates = {},
+	killTemplates = {
+		"dead_forest_ep3_forest_steelclaw",
+	},
 }
 
 registerScreenPlay("forestMeustQuest2ScreenPlay", true)

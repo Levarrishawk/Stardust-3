@@ -22,8 +22,9 @@ ep3_forest_arena_guard_convo:addScreen(ep3_forest_arena_guard_convo_s_579)
 ep3_forest_arena_guard_convo_s_575 = ConvoScreen:new {
 	id = "s_575",
 	leftDialog = "@conversation/ep3_forest_arena_guard:s_575",
-	stopConversation = "true",
+	stopConversation = "false",
 	options = {
+		{"@conversation/ep3_forest_arena_guard:s_577", "s_579"},
 	}
 }
 ep3_forest_arena_guard_convo:addScreen(ep3_forest_arena_guard_convo_s_575)

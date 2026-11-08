@@ -14,8 +14,6 @@
 		task 2  Timer  Min 10 Max 10
 		task 3  Encounter  ep3_forest_kerritamba_warrior x5
 
-	OPEN
-		Encounter Creature Type ep3_forest_kerritamba_leader has no repo template
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_dahlia_epic_4.qst; the journal row comes from the
@@ -31,8 +29,8 @@ forestDahliaEpic4ScreenPlay = ScreenPlay:new {
 	repeatable = false,
 	rewardCredits = 5000,
 	encounters = {
-		{ soe = "ep3_forest_kerritamba_leader", template = "", count = 1, minDist = 5, maxDist = 10 },
-		{ soe = "ep3_forest_kerritamba_warrior", template = "dressed_ep3_forest_kerritamba_warrior", count = 5, minDist = 5, maxDist = 10 },
+		{ soe = "ep3_forest_kerritamba_leader", template = "dead_forest_ep3_forest_kerritamba_leader", count = 1, minDist = 5, maxDist = 10 },
+		{ soe = "ep3_forest_kerritamba_warrior", template = "dead_forest_ep3_forest_kerritamba_warrior", count = 5, minDist = 5, maxDist = 10 },
 	},
 	timers = {
 		{ min = 120, max = 120 },
@@ -71,7 +69,9 @@ function forestDahliaEpic4ScreenPlay:clearQuest(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+	cancelEvent(self.screenplayName, "onTimer", pPlayer)
 	self:detachKillObserver(pPlayer)
+	deleteScreenPlayData(pPlayer, self.screenplayName, "leader")
 	self:setStage(pPlayer, 0)
 end
 
@@ -81,6 +81,7 @@ function forestDahliaEpic4ScreenPlay:grantQuest(pPlayer)
 	end
 	self:clearQuest(pPlayer)
 	self:setStage(pPlayer, 1)
+	self:startTimers(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_forest_dahlia_epic_4:journal_entry_title")
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_forest_dahlia_epic_4:journal_entry_description")
 	return true
@@ -116,17 +117,6 @@ function forestDahliaEpic4ScreenPlay:onWorkComplete(pPlayer)
 	self:detachKillObserver(pPlayer)
 end
 
-function forestDahliaEpic4ScreenPlay:isKillTemplate(name)
-	if (self.encounters ~= nil) then
-		for i = 1, #self.encounters do
-			if (self.encounters[i].template ~= nil and self.encounters[i].template == name) then
-				return true
-			end
-		end
-	end
-	return false
-end
-
 function forestDahliaEpic4ScreenPlay:attachKillObserver(pPlayer)
 	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "observer")) or 0) == 1) then
 		return
@@ -141,20 +131,17 @@ function forestDahliaEpic4ScreenPlay:detachKillObserver(pPlayer)
 end
 
 function forestDahliaEpic4ScreenPlay:notifyKilledCreature(pPlayer, pVictim)
-	if (pPlayer == nil or pVictim == nil) then
+	if (pPlayer == nil or pVictim == nil or not SceneObject(pVictim):isAiAgent()) then
 		return 0
 	end
 	if (self:getStage(pPlayer) ~= 1) then
 		deleteScreenPlayData(pPlayer, self.screenplayName, "observer")
 		return 1
 	end
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
-	if (victimTemplate == nil or not self:isKillTemplate(victimTemplate)) then
-		return 0
-	end
-	local n = (tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0) + 1
-	writeScreenPlayData(pPlayer, self.screenplayName, "kills", tostring(n))
-	if (n >= 5) then
+	-- The five warriors are a parallel ambush; defeating the leader opens turn-in.
+	local leaderID = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "leader"))
+	if (SceneObject(pVictim):getObjectID() == leaderID) then
+		deleteScreenPlayData(pPlayer, self.screenplayName, "leader")
 		self:onWorkComplete(pPlayer)
 	end
 	return 0
@@ -172,14 +159,15 @@ function forestDahliaEpic4ScreenPlay:startTimers(pPlayer)
 end
 
 function forestDahliaEpic4ScreenPlay:onTimer(pPlayer, arg)
-	if (pPlayer == nil or self:getStage(pPlayer) < 1) then
+	if (pPlayer == nil or self:getStage(pPlayer) ~= 1) then
 		return
 	end
-	local idx = tonumber(arg) or 1
-	if (self.encounters ~= nil and self.encounters[idx] ~= nil) then
-		self:spawnEncounter(pPlayer, self.encounters[idx])
+	local idx = tonumber(arg)
+	local enc = self.encounters[idx]
+	if (enc == nil) then
+		return
 	end
-	self:attachKillObserver(pPlayer)
+	self:spawnEncounter(pPlayer, enc)
 end
 
 function forestDahliaEpic4ScreenPlay:spawnEncounter(pPlayer, enc)
@@ -187,6 +175,9 @@ function forestDahliaEpic4ScreenPlay:spawnEncounter(pPlayer, enc)
 		return
 	end
 	local zone = SceneObject(pPlayer):getZoneName()
+	if (zone == nil or zone == "") then
+		return
+	end
 	local x = SceneObject(pPlayer):getWorldPositionX()
 	local y = SceneObject(pPlayer):getWorldPositionY()
 	local z = SceneObject(pPlayer):getWorldPositionZ()
@@ -199,7 +190,14 @@ function forestDahliaEpic4ScreenPlay:spawnEncounter(pPlayer, enc)
 		if (getRandomNumber(1, 2) == 1) then
 			dy = 0 - dy
 		end
-		spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		local pMobile = spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+			if (enc == self.encounters[1]) then
+				writeScreenPlayData(pPlayer, self.screenplayName, "leader", tostring(SceneObject(pMobile):getObjectID()))
+				self:attachKillObserver(pPlayer)
+			end
+			AiAgent(pMobile):setDefender(pPlayer)
+		end
 	end
 end
 

@@ -6,12 +6,10 @@
 	SOURCE: quest/ep3_forest_ardon_quest_1.qst and string/en/quest/ground/ep3_forest_ardon_quest_1.stf.
 
 	THE TASK TREE
-		task 0  Destroy Multiple  Count 5 Social Group forest_outcast  [Business As Usual]
+		task 0  Destroy Multiple  Count 5 ep3_forest_outcast_assassin  [Business As Usual]
 		task 1  Wait for Signal  Signal outcasts
 		task 2  Reward  credits 0 item   [Reward Issued]
 
-	OPEN
-		Destroy Multiple Social Group forest_outcast has no lair mapping (not substituted)
 
 	The journal engine lives on the journal branches. The client already
 	ships quest/ep3_forest_ardon_quest_1.qst; the journal row comes from the
@@ -28,7 +26,9 @@ forestArdonQuest1ScreenPlay = ScreenPlay:new {
 	rewardCredits = 3000,
 	killCount = 5,
 	lootDropPercent = 100,
-	killTemplates = {},
+	killTemplates = {
+		"dead_forest_ep3_forest_outcast_assassin",
+	},
 }
 
 registerScreenPlay("forestArdonQuest1ScreenPlay", true)

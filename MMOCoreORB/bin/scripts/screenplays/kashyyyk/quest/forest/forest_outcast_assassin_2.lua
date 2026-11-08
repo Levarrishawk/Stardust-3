@@ -26,8 +26,8 @@ forestOutcastAssassin2ScreenPlay = ScreenPlay:new {
 	repeatable = false,
 	rewardCredits = 0,
 	encounters = {
-		{ soe = "ep3_forest_outcast_assassin", template = "dressed_ep3_forest_outcast_assassin_01", count = 1, minDist = 5, maxDist = 10 },
-		{ soe = "ep3_forest_outcast_assassin", template = "dressed_ep3_forest_outcast_assassin_01", count = 2, minDist = 5, maxDist = 10 },
+		{ soe = "ep3_forest_outcast_assassin", template = "dead_forest_ep3_forest_outcast_assassin", count = 1, minDist = 5, maxDist = 10 },
+		{ soe = "ep3_forest_outcast_assassin", template = "dead_forest_ep3_forest_outcast_assassin", count = 2, minDist = 5, maxDist = 10 },
 	},
 	timers = {
 		{ min = 50, max = 50 },
@@ -161,7 +161,7 @@ function forestOutcastAssassin2ScreenPlay:startTimers(pPlayer)
 end
 
 function forestOutcastAssassin2ScreenPlay:onTimer(pPlayer, arg)
-	if (pPlayer == nil or self:getStage(pPlayer) < 1) then
+	if (pPlayer == nil or self:getStage(pPlayer) ~= 1) then
 		return
 	end
 	local idx = tonumber(arg) or 1
@@ -188,7 +188,10 @@ function forestOutcastAssassin2ScreenPlay:spawnEncounter(pPlayer, enc)
 		if (getRandomNumber(1, 2) == 1) then
 			dy = 0 - dy
 		end
-		spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		local pMobile = spawnMobile(zone, enc.template, 0, x + dx, z, y + dy, 0, 0)
+		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+			AiAgent(pMobile):setDefender(pPlayer)
+		end
 	end
 end
 

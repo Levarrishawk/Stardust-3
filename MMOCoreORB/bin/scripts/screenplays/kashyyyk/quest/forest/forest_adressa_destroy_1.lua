@@ -26,7 +26,9 @@ forestAdressaDestroy1ScreenPlay = ScreenPlay:new {
 	rewardCredits = 0,
 	killCount = 1,
 	lootDropPercent = 100,
-	killTemplates = {},
+	killTemplates = {
+		"dead_forest_ep3_forest_sayormi_queen",
+	},
 }
 
 registerScreenPlay("forestAdressaDestroy1ScreenPlay", true)

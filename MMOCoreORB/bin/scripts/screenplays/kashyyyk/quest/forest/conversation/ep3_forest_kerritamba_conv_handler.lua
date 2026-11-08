@@ -135,6 +135,7 @@ function ep3_forest_kerritamba_conv_handler:getInitialScreen(pPlayer, pNpc, pCon
 	elseif (self:condition_isEpicTaskActiveGood(pPlayer, pNpc)) then
 		return convoTemplate:getScreen("s_639")
 	elseif (self:condition_isEpicTaskActiveSix(pPlayer, pNpc)) then
+		arenaChallengeScreenPlay:grantQuest(pPlayer)
 		return convoTemplate:getScreen("s_645")
 	elseif (self:condition_hasCompletedQuestFive(pPlayer, pNpc)) then
 		return convoTemplate:getScreen("s_647")
@@ -195,8 +196,7 @@ function ep3_forest_kerritamba_conv_handler:runScreenHandlers(pConvTemplate, pPl
 	elseif (screenID == "s_663") then
 		forestKerritambaEpic6ScreenPlay:clearQuest(pPlayer)
 		forestKerritambaEpic6ScreenPlay:grantQuest(pPlayer)
-		writeScreenPlayData(pPlayer, "forestKerritambaEpic6ScreenPlay", "arena", "1")
-		-- OPEN: ep3_arena_challenge is not in this arc; arena flag lives on epic_6
+		arenaChallengeScreenPlay:grantQuest(pPlayer)
 	elseif (screenID == "s_677") then
 		forestKerritambaEpic5ScreenPlay:signalEpic5(pPlayer)
 	elseif (screenID == "s_709") then
