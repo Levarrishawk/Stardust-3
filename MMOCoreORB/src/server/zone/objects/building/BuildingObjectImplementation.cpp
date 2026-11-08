@@ -38,8 +38,36 @@
 #include "server/zone/objects/building/components/DestructibleBuildingDataComponent.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
 #include "server/zone/objects/player/FactionStatus.h"
+#include "server/zone/objects/player/PlayerObject.h"
 
 // #define DEBUG_COV
+
+namespace {
+
+ManagedReference<CellObject*> getMyyydrilPlayerCell(BuildingObject* building, SceneObject* player) {
+	if (player == nullptr || !player->isPlayerCreature() || !building->isClientObject() ||
+			building->getServerObjectCRC() != STRING_HASHCODE("object/building/kashyyyk/thm_kash_myyydril_caverns.iff"))
+		return nullptr;
+
+	auto cell = player->getParent().get().castTo<CellObject*>();
+	if (cell == nullptr || cell->getParent().get() != building)
+		return nullptr;
+
+	return cell;
+}
+
+const CellProperty* getPortalCell(BuildingObject* building, CellObject* cell) {
+	auto objectTemplate = building->getObjectTemplate();
+	const auto* layout = objectTemplate != nullptr ? objectTemplate->getPortalLayout() : nullptr;
+	const int number = cell->getCellNumber();
+	return layout != nullptr && number > 0 && number < layout->getAppearanceTemplatesSize() ? layout->getCellProperty(number) : nullptr;
+}
+
+bool isNearbyCaveCell(CellObject* cell, CellObject* current, const CellProperty* portalCell) {
+	return cell == current || (portalCell != nullptr && portalCell->hasConnectedCell(cell->getCellNumber()));
+}
+
+}
 
 void BuildingObjectImplementation::initializeTransientMembers() {
 	cooldownTimerMap = new CooldownTimerMap();
@@ -156,6 +184,12 @@ void BuildingObjectImplementation::sendTo(SceneObject* player, bool doClose, boo
 	} //else { // just send the objects that are in the building, without the cells because they are static in the client
 
 	auto closeObjects = player->getCloseObjects();
+	auto caveCell = getMyyydrilPlayerCell(asBuildingObject(), player);
+	const auto* portalCell = caveCell != nullptr ? getPortalCell(asBuildingObject(), caveCell) : nullptr;
+
+	// The cave's native cells already exist on the client. Create the owner before their nearby contents.
+	if (caveCell != nullptr && player->getMovementCounter() == 0)
+		player->sendTo(player, true, false);
 
 	// for some reason client doesnt like when you send cell creatures while sending cells?
 	for (int i = 0; i < cells.size(); ++i) {
@@ -172,7 +206,7 @@ void BuildingObjectImplementation::sendTo(SceneObject* player, bool doClose, boo
 			}
 		}
 
-		if (!cell->isContainerLoaded())
+		if (!cell->isContainerLoaded() || (caveCell != nullptr && !isNearbyCaveCell(cell, caveCell, portalCell)))
 			continue;
 
 		for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
@@ -182,14 +216,15 @@ void BuildingObjectImplementation::sendTo(SceneObject* player, bool doClose, boo
 			}
 
 			if (containerObject == player) {
-				if (containerObject->getMovementCounter() == 0) {
+				if (caveCell == nullptr && containerObject->getMovementCounter() == 0) {
 					containerObject->sendTo(player, true, false);
 				}
 
 				continue;
 			}
 
-			if ((containerObject->isCreatureObject() && publicStructure) || (closeObjects != nullptr && closeObjects->contains(containerObject.get())))
+			if (caveCell != nullptr || (containerObject->isCreatureObject() && publicStructure) ||
+					(closeObjects != nullptr && closeObjects->contains(containerObject.get())))
 				containerObject->sendTo(player, true, false);
 		}
 	}
@@ -502,6 +537,9 @@ void BuildingObjectImplementation::notifyObjectInsertedToZone(SceneObject* objec
 
 void BuildingObjectImplementation::notifyInsert(TreeEntry* object) {
 	auto sceneO = static_cast<SceneObject*>(object);
+	if (getMyyydrilPlayerCell(asBuildingObject(), sceneO) != nullptr)
+		return; // Cave player insertion is handled cell by cell below.
+
 	uint64 scnoID = sceneO->getObjectID();
 
 #ifdef DEBUG_COV
@@ -1116,6 +1154,9 @@ int BuildingObjectImplementation::notifyObjectInsertedToChild(SceneObject* objec
 
 		if (child->isCellObject()) {
 			bool runInRange = true;
+			auto caveCell = getMyyydrilPlayerCell(asBuildingObject(), object);
+			auto ghost = caveCell != nullptr ? object->asCreatureObject()->getPlayerObject() : nullptr;
+			const bool loadingScene = ghost != nullptr && ghost->isOnLoadScreen();
 
 			if ((oldParent == nullptr || !oldParent->isCellObject()) || oldParent == child) {
 
@@ -1130,7 +1171,35 @@ int BuildingObjectImplementation::notifyObjectInsertedToChild(SceneObject* objec
 				}
 			}
 
-			if (runInRange) {
+			if (caveCell != nullptr) {
+				auto previousCell = oldParent != nullptr && oldParent->isCellObject() && oldParent->getParent().get() == asBuildingObject()
+						? static_cast<CellObject*>(oldParent) : nullptr;
+				const auto* previousPortalCell = previousCell != nullptr ? getPortalCell(asBuildingObject(), previousCell) : nullptr;
+				const auto* portalCell = getPortalCell(asBuildingObject(), caveCell);
+
+				for (int i = 0; i < cells.size(); ++i) {
+					const auto& cell = cells.get(i);
+					if (!cell->isContainerLoaded() || !isNearbyCaveCell(cell, caveCell, portalCell))
+						continue;
+
+					// sendTo sends the initial contents after CmdStartScene, including on relog.
+					const bool sendContents = !loadingScene && !isNearbyCaveCell(cell, previousCell, previousPortalCell);
+					for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
+						auto cobj = cell->getContainerObject(j);
+						if (cobj == nullptr || cobj == object)
+							continue;
+
+						if (cobj->getCloseObjects() != nullptr && !cobj->getCloseObjects()->contains(object)) {
+							cobj->addInRangeObject(object, false);
+							object->sendTo(cobj, true, false);
+						}
+
+						object->addInRangeObject(cobj, false);
+						if (sendContents)
+							cobj->sendTo(object, true, false);
+					}
+				}
+			} else if (runInRange) {
 				CellObject* cell = static_cast<CellObject*>(child);
 
 				if (cell != nullptr) {
