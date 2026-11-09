@@ -865,7 +865,9 @@ kashyyyk_pob_dungeons = {
 	weatherEnabled = 0,
 	gcwEnabled = 0,
 
-	-- Dungeon zone reached from the surface; no shuttle.
+	-- Avatar Platform's ship terminal uses the standard Kashyyyk space departure.
+	jtlLaunchPoint = kashyyyk_main.jtlLaunchPoint,
+
 	planetTravelPoints = {
 	},
 
