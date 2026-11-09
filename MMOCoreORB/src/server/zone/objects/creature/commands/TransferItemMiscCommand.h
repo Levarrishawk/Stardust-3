@@ -67,7 +67,10 @@ public:
 		auto objectToTransfer = zoneServer->getObject(target);
 
 		if (objectToTransfer == nullptr) {
-			creature->error("objectToTransfer nullptr in transferItemMisc command");
+			auto zone = creature->getZone();
+			creature->error() << "transferItemMisc: command target not found, target=" << target
+				<< " destination=" << destinationID << " transferType=" << transferType
+				<< " zone=" << (zone != nullptr ? zone->getZoneName() : "none");
 			return GENERALERROR;
 		}
 
@@ -106,7 +109,7 @@ public:
 		trx.addState("transferType", transferType);
 
 		if (objectToTransfer == nullptr) {
-			creature->error("objectToTransfer nullptr in transferItemMisc command");
+			creature->error("transferItemMisc: server-side transfer called without a source object");
 			trx.abort() << "objectToTransfer nullptr";
 			return GENERALERROR;
 		}
