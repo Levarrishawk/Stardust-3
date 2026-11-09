@@ -762,11 +762,11 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 		object = zoneServer->createClientObject(serverTemplate.hashCode(), objectID);
 	}
 
-	// Snapshot may reference a client template that isn't in the loaded TRE set
-	// (known asset-absent items). createClientObject returns null in that case;
-	// skip the object instead of dereferencing null.
 	if (object == nullptr) {
-		error("could not create snapshot object for template " + serverTemplate);
+		if (node->isBuildout())
+			error("Could not create buildout object " + String::valueOf(objectID) + " template " + serverTemplate);
+		else
+			error("could not create snapshot object for template " + serverTemplate);
 		return nullptr;
 	}
 
