@@ -17,7 +17,13 @@ includeFile("custom_content/draft_schematic/serverobjects.lua")
      which would register 355 never-loaded templates in one go. Ordering is safe: main.lua
      runs allobjects.lua (which defines the shared parent) before this file. ]]
 includeFile("custom_content/weapon/melee/som_sword_obsidian.lua")
+
+-- Weapon templates used by the Kachirho and Myyydril mobile groups.
+includeFile("custom_content/weapon/melee/2h_sword_kashyyk.lua")
 includeFile("custom_content/weapon/melee/lance_kaminoan.lua")
+includeFile("custom_content/weapon/melee/lance_kashyyk.lua")
+includeFile("custom_content/weapon/melee/lance_shock.lua")
+includeFile("custom_content/weapon/melee/sword_lightsaber_ranged_donotuse_s01.lua")
 
 --[[ The same shape one directory over: custom_content/tangible/serverobjects.lua
      includes every sibling except container/, so
