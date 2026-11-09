@@ -12,7 +12,7 @@ KashyyykIslands.travelTo(pPlayer, "bocctyyy") -- defined in hracca_monster_islan
 The hunt-arc pilot conversation then calls BocctyyyTheBet:enter(pPlayer).
 
 CONCURRENCY: OPEN. The island is shared outdoor surface. A second hunter is not
-refused. Animals spawn on the first enter that still has a mapped template; a
+refused. Animals spawn when the first player with an active bet arrives; a
 later hunter with a different bet sees whatever is already standing. Occupancy
 hits zero -> despawn. No party cap (live's pilot conversation capped at 6).
 
@@ -29,10 +29,7 @@ JAVA -> LUA
 
 OPEN
 
-	Outdoor isolation / the space-dungeon session model. ep3_etyyy_mouf_roarlord
-	has no repo template (the etyyy_mouf lair header leaves it commented; same ruling). A mouf
-	bet still raises sordaan_moufGoToBocctyyy and still ejects; it does not
-	spawn a look-alike. walluga / webweaver placeholders are pvpBitmask NONE.
+	Outdoor isolation / the space-dungeon session model.
 
 THE SPAWNER ROWS
 
@@ -41,12 +38,8 @@ THE SPAWNER ROWS
 	bocctyyy_bet_spawner.java getSpawnType:
 		ep3_hunt_sordaan_uller_bet     -> ep3_etyyy_uller_warhoof
 		ep3_hunt_sordaan_walluga_bet   -> ep3_etyyy_walluga_frenzied
-		ep3_hunt_sordaan_mouf_bet      -> ep3_etyyy_mouf_roarlord   OPEN
+		ep3_hunt_sordaan_mouf_bet      -> ep3_etyyy_mouf_roarlord
 		ep3_hunt_sordaan_webweaver_bet -> ep3_etyyy_webweaver_spiker
-	Mapped from the kashyyyk_* lair headers:
-		ep3_etyyy_uller_warhoof     -> uller_stoneclaw
-		ep3_etyyy_walluga_frenzied  -> walluga
-		ep3_etyyy_webweaver_spiker  -> webweaver
 
 ARRIVAL SIGNALS  --  EtyyyHuntState:raise, guarded
 
@@ -66,27 +59,28 @@ BocctyyyTheBet = ScreenPlay:new {
 	zoneName = "kashyyyk_south_dungeons",
 	ejectMs = 5 * 60 * 1000,
 	perSpawner = 3,
+	spawnRadiusMm = 3000,
 
 	bets = {
 		{
 			quest = "huntSordaanUllerBetScreenPlay",
 			signal = "sordaan_ullerGoToBocctyyy",
-			template = "uller_stoneclaw",
+			template = "hunting_ep3_etyyy_uller_warhoof",
 		},
 		{
 			quest = "huntSordaanWallugaBetScreenPlay",
 			signal = "sordaan_wallugaGoToBocctyyy",
-			template = "walluga",
+			template = "hunting_ep3_etyyy_walluga_frenzied",
 		},
 		{
 			quest = "huntSordaanMoufBetScreenPlay",
 			signal = "sordaan_moufGoToBocctyyy",
-			template = nil, -- OPEN: no repo mouf template
+			template = "hunting_ep3_etyyy_mouf_roarlord",
 		},
 		{
 			quest = "huntSordaanWebweaverBetScreenPlay",
 			signal = "sordaan_webweaverGoToBocctyyy",
-			template = "webweaver",
+			template = "hunting_ep3_etyyy_webweaver_spiker",
 		},
 	},
 
@@ -147,7 +141,7 @@ function BocctyyyTheBet:start()
 end
 
 function BocctyyyTheBet:worldFromBuildout(px, py, pz)
-	return px - 3968, py, pz + 2944
+	return px + 128, py, pz - 256
 end
 
 function BocctyyyTheBet:getActiveBet(pPlayer)
@@ -169,7 +163,7 @@ end
 
 -- Pilot conversation calls this after KashyyykIslands.travelTo(pPlayer, "bocctyyy").
 function BocctyyyTheBet:enter(pPlayer)
-	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature() or not isZoneEnabled(self.zoneName)) then
 		return
 	end
 
@@ -201,11 +195,6 @@ function BocctyyyTheBet:enter(pPlayer)
 end
 
 function BocctyyyTheBet:spawnAnimals(bet)
-	if (bet.template == nil) then
-		print("BocctyyyTheBet: " .. bet.quest .. " is OPEN (no repo template); arrival signal still raised")
-		return
-	end
-
 	local spawned = 0
 
 	for i = 1, #self.spawners do
@@ -213,8 +202,9 @@ function BocctyyyTheBet:spawnAnimals(bet)
 		local x, z, y = self:worldFromBuildout(row[1], row[2], row[3])
 
 		for n = 1, self.perSpawner do
-			local ox = (n - 2) * 1.2
-			local pMobile = spawnMobile(self.zoneName, bet.template, 0, x + ox, z, y, 0, 0)
+			local dx = getRandomNumber(-self.spawnRadiusMm, self.spawnRadiusMm) / 1000
+			local dy = getRandomNumber(-self.spawnRadiusMm, self.spawnRadiusMm) / 1000
+			local pMobile = spawnMobile(self.zoneName, bet.template, 0, x + dx, z, y + dy, 0, 0)
 
 			if (pMobile ~= nil) then
 				spawned = spawned + 1

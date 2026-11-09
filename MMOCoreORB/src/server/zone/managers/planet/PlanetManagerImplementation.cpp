@@ -57,6 +57,7 @@ void collectSnapshotIDs(WorldSnapshotNode* node, VectorMap<uint64, bool>& ids) {
 bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff* snapshot) {
 	const bool myyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
 	const bool huntingGrounds = zone->getZoneName() == "kashyyyk_hunting";
+	const bool southDungeons = zone->getZoneName() == "kashyyyk_south_dungeons";
 	TemplateManager* manager = TemplateManager::instance();
 	UniqueReference<IffStream*> sceneStream(manager->openIffFile("datatables/buildout/buildout_scenes.iff"));
 	if (sceneStream == nullptr)
@@ -66,6 +67,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 	int sceneIndex = BuildoutData::findSceneIndex(scenes, zone->getZoneName());
 	if (huntingGrounds && sceneIndex != 1)
 		throw Exception("Hunting Grounds requires the native buildout scene index");
+	if (southDungeons && sceneIndex != 6)
+		throw Exception("South Dungeons requires the native buildout scene index");
 	if (sceneIndex < 0) {
 		if (zone->getZoneName() == "kashyyyk_rryatt_trail")
 			throw Exception("Rryatt is missing from the native buildout scene list");
@@ -173,7 +176,7 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				++added;
 			}
 		} catch (Exception& e) {
-			if (singleRryatt || myyydril || huntingGrounds)
+			if (singleRryatt || myyydril || huntingGrounds || southDungeons)
 				throw Exception("Buildout " + filename + ": " + e.getMessage());
 			Logger::console.error("Buildout " + filename + " area index " + String::valueOf(area.index) + ": " + e.getMessage());
 		}
@@ -184,6 +187,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		throw Exception("Myyydril requires all ten public buildout copies");
 	if (huntingGrounds && added == 0)
 		throw Exception("Hunting Grounds buildout has no placements");
+	if (southDungeons && added == 0)
+		throw Exception("South Dungeons buildout has no placements");
 	Logger::console.info("Loaded " + String::valueOf(added) + " buildout nodes for " + zone->getZoneName(), true);
 	return added != 0;
 }
@@ -805,8 +810,9 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 void PlanetManagerImplementation::loadSnapshotObjects() {
 	TemplateManager* templateManager = TemplateManager::instance();
 
-	// Rryatt and Hunting Grounds use the IDs from their native buildout tables.
-	const bool buildoutOnly = zone->getZoneName() == "kashyyyk_rryatt_trail" || zone->getZoneName() == "kashyyyk_hunting";
+	// These zones use the IDs from their native buildout tables.
+	const bool buildoutOnly = zone->getZoneName() == "kashyyyk_rryatt_trail"
+		|| zone->getZoneName() == "kashyyyk_hunting" || zone->getZoneName() == "kashyyyk_south_dungeons";
 	const bool nativeMyyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
 	const bool useBuildouts = buildoutOnly || nativeMyyydril;
 	UniqueReference<IffStream*> iffStream(buildoutOnly ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
@@ -880,7 +886,8 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 	}
 
 	printf("\n");
-	info("Loaded " + String::valueOf(totalObjects) + " client objects from world snapshot" + (hasBuildouts ? " and buildouts." : "."), true);
+	const char* source = buildoutOnly ? "buildouts." : hasBuildouts ? "world snapshot and buildouts." : "world snapshot.";
+	info("Loaded " + String::valueOf(totalObjects) + " client objects from " + source, true);
 }
 
 bool PlanetManagerImplementation::isTravelToLocationPermitted(const String& departurePoint, const String& arrivalPlanet, const String& arrivalPoint) {

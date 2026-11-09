@@ -15,7 +15,6 @@
 		task 4  d3  Wait for Signal  sordaan_moufBetWon  signal sordaan_moufBetWon
 		task 7  d4  Immediately Complete Quest
 
-	OPEN: no repo template for ep3_etyyy_mouf_roarlord
 	Bocctyyy contract (ruling 2026-09-04): the dungeon calls
 		EtyyyHuntState:raise(pPlayer, "sordaan_ullerGoToBocctyyy") and reads
 		readScreenPlayData(pPlayer, "huntSordaanUllerBetScreenPlay", "stage").
@@ -57,7 +56,7 @@ huntSordaanMoufBetScreenPlay = ScreenPlay:new {
 	timerSeconds = 1200,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = {  },
+	killTemplates = { "hunting_ep3_etyyy_mouf_roarlord" },
 	taskStages = { sordaan_moufGoToBocctyyy = 1,
 		sordaan_moufBet = 2,
 		sordaan_moufBetWon = 3,
@@ -118,6 +117,32 @@ function huntSordaanMoufBetScreenPlay:canGrantQuest(pPlayer)
 		return false
 	end
 	return self.repeatable or self:getRuns(pPlayer) == 0
+end
+
+function huntSordaanMoufBetScreenPlay:getKills(pPlayer)
+	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "kills")) or 0
+end
+
+function huntSordaanMoufBetScreenPlay:isKillTemplate(name)
+	for i = 1, #self.killTemplates do
+		if (self.killTemplates[i] == name) then
+			return true
+		end
+	end
+	return false
+end
+
+function huntSordaanMoufBetScreenPlay:attachKillObserver(pPlayer)
+	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "observer")) or 0) == 1) then
+		return
+	end
+	createObserver(KILLEDCREATURE, self.screenplayName, "notifyKilledCreature", pPlayer, 1)
+	writeScreenPlayData(pPlayer, self.screenplayName, "observer", "1")
+end
+
+function huntSordaanMoufBetScreenPlay:detachKillObserver(pPlayer)
+	dropObserver(KILLEDCREATURE, self.screenplayName, "notifyKilledCreature", pPlayer)
+	deleteScreenPlayData(pPlayer, self.screenplayName, "observer")
 end
 
 function huntSordaanMoufBetScreenPlay:clearQuest(pPlayer)

@@ -163,10 +163,15 @@ function ep3_etyyy_kint_zsam_conv_handler:runScreenHandlers(pConvTemplate, pPlay
 			KashyyykIslands.travelTo(pPlayer, "hracca")
 		end
 	elseif (screenID == "god_mode_enter") then
-		if (not self:isInGodMode(pPlayer) or KashyyykIslands == nil or not isZoneEnabled(KashyyykIslands.zoneDungeon)) then
-			return LuaConversationTemplate(pConvTemplate):getScreen("s_208")
+		if (not self:isInGodMode(pPlayer)) then
+			clonedConversation:setCustomDialogText("Enable God Mode to use this entry option.")
+		elseif (KashyyykIslands == nil) then
+			clonedConversation:setCustomDialogText("The Hracca Glade travel screenplay is unavailable.")
+		elseif (not isZoneEnabled(KashyyykIslands.zoneDungeon)) then
+			clonedConversation:setCustomDialogText("Hracca Glade is unavailable because the server has not loaded " .. KashyyykIslands.zoneDungeon .. ".")
+		else
+			KashyyykIslands.travelTo(pPlayer, "hracca")
 		end
-		KashyyykIslands.travelTo(pPlayer, "hracca")
 	elseif (screenID == "s_254") then
 		EtyyyHuntState:raise(pPlayer, "johnson_talkToKint")
 		huntHraccaKkorrwrotHuntScreenPlay:grantQuest(pPlayer)

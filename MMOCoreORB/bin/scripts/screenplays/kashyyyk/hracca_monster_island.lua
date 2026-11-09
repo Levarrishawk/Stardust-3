@@ -19,15 +19,14 @@ JAVA -> LUA
 	hracca_monster_island/player.java
 	                             OPEN: instance attach, five-minute dungeon timer,
 	                             session verify, CS logs
-	exit_terminal.java           spawnExitTerminal + SUI confirm + travelBack
+	exit_terminal.java           setupExitTerminal + SUI confirm + travelBack
 
 OPEN
 
 	Outdoor isolation / concurrency / the space-dungeon session model. Copy #0
 	is a shared surface. Kill count is island-wide (writeData), not per party.
 	The shared encounter resets five minutes after boss completion.
-	Chiss fog particles and the fog-end PRT are not placed. The boss inherits
-	the existing level-4 stats; the level curve remains an open ruling.
+	Chiss fog particles and the fog-end PRT are not placed.
 
 COORDINATE TRANSFORM
 
@@ -35,9 +34,9 @@ COORDINATE TRANSFORM
 		world_x = buildout_x - 3968
 		world_y = buildout_z + 2944    -- Core3 y is SOE pz
 		world_z = buildout_y           -- height
-	kashyyyk_hunting (merged zone kashyyyk), kashyyyk_regions.lua {#kash-offset}:
+	kashyyyk_hunting:
 		world_x = buildout_x - 2048
-		world_y = buildout_z - 5048
+		world_y = buildout_z - 2048
 
 	spawnMobile wants x, z(height), y, heading-degrees.
 
@@ -45,10 +44,7 @@ THE 40 SPAWNER ROWS
 
 	datatables/buildout/kashyyyk_south_dungeons/hracca.tab rows 4-43:
 	39 chiss (spawnType chiss) + row 24 kkorrwrot. intSpawnCount 1.
-	Live create.object("ep3_hracca_chiss_poacher_hunter") / "ep3_hracca_kkorrwrot".
-	Mapped like the kashyyyk_* lair headers under mobile/lair/creature_dynamic/ (rotate numbered set members):
-		ep3_hracca_chiss_poacher_hunter -> ep3_etyyy_chiss_poacher_hracca_01..08
-		ep3_hracca_kkorrwrot            -> kkorrwrot
+	Uses DSRC creature profiles ep3_hracca_chiss_poacher_hunter and ep3_hracca_kkorrwrot.
 	Boss spawn is the kkorrwrot spawner row, not the control object -- that is
 	what hracca_spawner.java does when spawnKkorrwrot is set. The control object
 	is the travel landing.
@@ -68,23 +64,15 @@ TELEPORT  --  KashyyykIslands
 
 KashyyykIslands = {
 	zoneDungeon = "kashyyyk_south_dungeons",
-	zoneHunt = "kashyyyk",
+	zoneHunt = "kashyyyk_hunting",
 
-	-- hracca.tab row 3, hracca_control_object.iff
-	-- buildout (863.474, 12.9327, 395.632)
-	hraccaLanding = { x = 863.474 - 3968, z = 12.9327, y = 395.632 + 2944 },
+	-- Control objects plus the start offsets in datatables/dungeon/space_dungeon.tab.
+	hraccaLanding = { x = 863.474 - 3968 + 24, z = 12.9327 + 3, y = 395.632 + 2944 + 41 },
+	bocctyyyLanding = { x = 55.6356 + 128 + 4.9, z = 11.5686, y = 63.7562 - 256 + 4.2 },
 
-	-- bocctyyy.tab row 3, bocctyyy_bet_control_object.iff
-	-- buildout (55.6356, 11.5686, 63.7562)
-	bocctyyyLanding = { x = 55.6356 - 3968, z = 11.5686, y = 63.7562 + 2944 },
-
-	-- kashyyyk_hunting.tab etyyy_kint_zsam.iff (ticket NPC for monster_island_hracca)
-	-- buildout (1948.23, 25.7985, 1798.12) -> merged kashyyyk
-	hraccaCamp = { x = 1948.23 - 2048, z = 25.7985, y = 1798.12 - 5048 },
-
-	-- kashyyyk_hunting.tab etyyy_pilot_to_bocctyyy.iff (ticket NPC for the_bet_bocctyyy)
-	-- buildout (2429.47, 41.7397, 2659.8) -> merged kashyyyk
-	bocctyyyCamp = { x = 2429.47 - 2048, z = 41.7397, y = 2659.8 - 5048 },
+	-- Authored return points in the standalone Hunting Grounds.
+	hraccaCamp = { x = -99, z = 25, y = -244 },
+	bocctyyyCamp = { x = 369, z = 41, y = 616 },
 }
 
 function KashyyykIslands.travelTo(pPlayer, island)
@@ -169,20 +157,8 @@ HraccaMonsterIsland = ScreenPlay:new {
 
 	zoneName = "kashyyyk_south_dungeons",
 
-	-- Live create.object("ep3_hracca_chiss_poacher_hunter"); numbered set
-	-- ep3_etyyy_chiss_poacher_hracca_01..08, rotated row by row.
-	poacherTemplates = {
-		"ep3_etyyy_chiss_poacher_hracca_01",
-		"ep3_etyyy_chiss_poacher_hracca_02",
-		"ep3_etyyy_chiss_poacher_hracca_03",
-		"ep3_etyyy_chiss_poacher_hracca_04",
-		"ep3_etyyy_chiss_poacher_hracca_05",
-		"ep3_etyyy_chiss_poacher_hracca_06",
-		"ep3_etyyy_chiss_poacher_hracca_07",
-		"ep3_etyyy_chiss_poacher_hracca_08",
-	},
-
-	bossTemplate = "kashyyyk_hracca_kkorrwrot",
+	poacherTemplate = "south_ep3_hracca_chiss_poacher_hunter",
+	bossTemplate = "south_ep3_hracca_kkorrwrot",
 	resetDelay = 5 * 60 * 1000,
 
 	-- theme_park/kashyyyk/hracca.stf -- hracca_controller.java:85-110
@@ -254,10 +230,9 @@ HraccaMonsterIsland = ScreenPlay:new {
 	-- hracca.tab row 24 hracca_kkorrwrot_spawner.iff
 	bossRow = { 267.698, 13.5824, 579.107, 1, 0 },
 
-	-- hracca.tab row 242 thm_kash_zonegate_door_simple.iff (exit_terminal script)
-	-- Prompt named terminal_free_sui.iff; this tree registers terminal_free_s1.iff.
-	exitRow = { 888.169, 17.8734, 449.382, -0.0107962, 0, 0.999942, 0 },
-	exitTemplate = "object/tangible/dungeon/terminal_free_s1.iff",
+	-- hracca.tab row 242, compiled placement index 198 in buildout area 600.
+	exitID = -18027802,
+	exitTemplate = "object/tangible/door/thm_kash_zonegate_door_simple.iff",
 }
 
 registerScreenPlay("HraccaMonsterIsland", true)
@@ -268,7 +243,7 @@ function HraccaMonsterIsland:start()
 	end
 
 	local poachersLoaded = self:spawnPoachers()
-	local terminalLoaded = self:spawnExitTerminal()
+	local terminalLoaded = self:setupExitTerminal()
 
 	if (poachersLoaded and terminalLoaded) then
 		print("HraccaMonsterIsland: screenplay loaded successfully")
@@ -290,14 +265,13 @@ function HraccaMonsterIsland:spawnPoachers()
 		local row = self.poachers[i]
 		local x, z, y = self:worldFromBuildout(row[1], row[2], row[3])
 		local heading = self:headingFromQuat(row[4], row[5])
-		local template = self.poacherTemplates[((i - 1) % #self.poacherTemplates) + 1]
-		local pMobile = spawnMobile(self.zoneName, template, 0, x, z, y, heading, 0)
+		local pMobile = spawnMobile(self.zoneName, self.poacherTemplate, 0, x, z, y, heading, 0)
 
 		if (pMobile ~= nil) then
 			createObserver(OBJECTDESTRUCTION, "HraccaMonsterIsland", "notifyPoacherKilled", pMobile)
 			spawned = spawned + 1
 		else
-			print("HraccaMonsterIsland: failed to spawn " .. template .. " at hracca.tab poacher " .. i)
+			print("HraccaMonsterIsland: failed to spawn " .. self.poacherTemplate .. " at hracca.tab poacher " .. i)
 		end
 	end
 
@@ -306,23 +280,34 @@ function HraccaMonsterIsland:spawnPoachers()
 	return spawned == #self.poachers
 end
 
-function HraccaMonsterIsland:spawnExitTerminal()
-	local row = self.exitRow
-	local x, z, y = self:worldFromBuildout(row[1], row[2], row[3])
-	local pTerminal = spawnSceneObject(self.zoneName, self.exitTemplate, x, z, y, 0, row[4], row[5], row[6], row[7])
-
-	if (pTerminal == nil) then
-		print("HraccaMonsterIsland: failed to spawn the exit terminal at hracca.tab row 242")
+function HraccaMonsterIsland:setupExitTerminal()
+	local pTerminal = getSceneObject(self.exitID)
+	if (pTerminal == nil or SceneObject(pTerminal):getZoneName() ~= self.zoneName
+		or SceneObject(pTerminal):getTemplateObjectPath() ~= self.exitTemplate) then
+		print("HraccaMonsterIsland: native exit gate is unavailable; check the South Dungeons buildout assets")
 		return false
 	end
 
-	createObserver(OBJECTRADIALUSED, "HraccaMonsterIsland", "notifyExitUsed", pTerminal)
-	writeData("HraccaMonsterIsland:terminal", SceneObject(pTerminal):getObjectID())
+	SceneObject(pTerminal):setObjectMenuComponent("HraccaExitMenuComponent")
 	return true
 end
 
+HraccaExitMenuComponent = {}
+
+function HraccaExitMenuComponent:fillObjectMenuResponse(pTerminal, pMenuResponse, pPlayer)
+	LuaObjectMenuResponse(pMenuResponse):addRadialMenuItem(20, 3, HraccaMonsterIsland.exitTitle)
+end
+
+function HraccaExitMenuComponent:handleObjectMenuSelect(pTerminal, pPlayer, selectedID)
+	if (selectedID == 20) then
+		return HraccaMonsterIsland:notifyExitUsed(pTerminal, pPlayer)
+	end
+	return 0
+end
+
 function HraccaMonsterIsland:notifyExitUsed(pTerminal, pPlayer)
-	if (pTerminal == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+	if (pTerminal == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()
+		or SceneObject(pPlayer):getZoneName() ~= self.zoneName or SceneObject(pPlayer):getDistanceTo(pTerminal) > 8) then
 		return 0
 	end
 
@@ -489,11 +474,7 @@ end
 
 function HraccaMonsterIsland:playersInRange(pFrom)
 	if (pFrom == nil) then
-		local terminalID = readData("HraccaMonsterIsland:terminal")
-
-		if (terminalID ~= 0) then
-			pFrom = getSceneObject(terminalID)
-		end
+		pFrom = getSceneObject(self.exitID)
 	end
 
 	if (pFrom == nil) then

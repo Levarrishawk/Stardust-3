@@ -56,7 +56,7 @@ huntSordaanWebweaverBetScreenPlay = ScreenPlay:new {
 	timerSeconds = 1200,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "webweaver" },
+	killTemplates = { "hunting_ep3_etyyy_webweaver_spiker" },
 	taskStages = { sordaan_webweaverGoToBocctyyy = 1,
 		sordaan_webweaverBet = 2,
 		sordaan_webweaverBetWon = 3,

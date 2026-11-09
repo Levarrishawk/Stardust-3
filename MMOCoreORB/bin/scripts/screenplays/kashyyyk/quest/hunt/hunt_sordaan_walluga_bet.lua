@@ -56,7 +56,7 @@ huntSordaanWallugaBetScreenPlay = ScreenPlay:new {
 	timerSeconds = 1200,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "walluga" },
+	killTemplates = { "hunting_ep3_etyyy_walluga_frenzied" },
 	taskStages = { sordaan_wallugaGoToBocctyyy = 1,
 		sordaan_wallugaBet = 2,
 		sordaan_wallugaBetWon = 3,

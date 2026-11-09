@@ -38,7 +38,7 @@ huntHraccaKkorrwrotHuntScreenPlay = ScreenPlay:new {
 	timerSeconds = 0,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "kashyyyk_hracca_kkorrwrot" },
+	killTemplates = { "south_ep3_hracca_kkorrwrot" },
 	taskStages = { hracca_huntKkorrwrot = 1,
 		hracca_kkorrwrotKilled = 2 },
 }

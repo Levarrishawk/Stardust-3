@@ -55,7 +55,7 @@ huntSordaanUllerBetScreenPlay = ScreenPlay:new {
 	timerSeconds = 1200,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "uller_stoneclaw" },
+	killTemplates = { "hunting_ep3_etyyy_uller_warhoof" },
 	taskStages = { sordaan_ullerGoToBocctyyy = 1,
 		sordaan_ullerBet = 2,
 		sordaan_ullerBetWon = 3,
