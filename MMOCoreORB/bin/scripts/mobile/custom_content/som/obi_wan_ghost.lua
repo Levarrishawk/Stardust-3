@@ -1,5 +1,5 @@
 obi_wan_ghost = Creature:new {
-	customName = "Ben Kenobi (a Hermit)",
+	customName = "Qui-Gon Jinn",
 	socialGroup = "townsperson",
 	faction = "",
 	level = 70,
