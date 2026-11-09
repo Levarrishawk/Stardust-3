@@ -578,18 +578,32 @@ function TrandoSlaveCamp:canUseGate(pGate, pPlayer)
 		and SceneObject(pPlayer):getDistanceTo(pGate) <= self.gateRange
 end
 
+local godModeEntryRadial = 68
+
 TrandoSlaveCampEntryMenuComponent = {}
+
+function TrandoSlaveCampEntryMenuComponent:canBypassQuest(pPlayer)
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	return pGhost ~= nil and PlayerObject(pGhost):hasGodMode()
+end
 
 function TrandoSlaveCampEntryMenuComponent:fillObjectMenuResponse(pGate, pMenuResponse, pPlayer)
 	local camp = TrandoSlaveCamp
 	if (camp:canUseGate(pGate, pPlayer)) then
-		LuaObjectMenuResponse(pMenuResponse):addRadialMenuItem(20, 3, "@" .. camp.gateLabelFile .. ":" .. camp.gateLabelKey)
+		local menu = LuaObjectMenuResponse(pMenuResponse)
+		menu:addRadialMenuItem(20, 3, "@" .. camp.gateLabelFile .. ":" .. camp.gateLabelKey)
+		if (self:canBypassQuest(pPlayer)) then
+			menu:addRadialMenuItem(godModeEntryRadial, 3, "[God Mode] Enter Blackscale Compound")
+		end
 	end
 end
 
 function TrandoSlaveCampEntryMenuComponent:handleObjectMenuSelect(pGate, pPlayer, selectedID)
+	local camp = TrandoSlaveCamp
 	if (selectedID == 20) then
-		return TrandoSlaveCamp:notifyGateUsed(pGate, pPlayer)
+		return camp:notifyGateUsed(pGate, pPlayer)
+	elseif (selectedID == godModeEntryRadial and camp:canUseGate(pGate, pPlayer) and self:canBypassQuest(pPlayer)) then
+		camp:travelTo(pPlayer, true)
 	end
 	return 0
 end
@@ -624,7 +638,7 @@ function TrandoSlaveCamp:notifyGateUsed(pGate, pPlayer)
 	return 0
 end
 
-function TrandoSlaveCamp:travelTo(pPlayer)
+function TrandoSlaveCamp:travelTo(pPlayer, skipQuestSignal)
 	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
 		return
 	end
@@ -640,7 +654,9 @@ function TrandoSlaveCamp:travelTo(pPlayer)
 
 	local dest = self.arrival
 	SceneObject(pPlayer):switchZone(self.zoneDungeon, dest.x, dest.z, dest.y, 0)
-	createEvent(self.arrivalSignalMs, "TrandoSlaveCamp", "onCampEntered", pPlayer, "")
+	if (not skipQuestSignal) then
+		createEvent(self.arrivalSignalMs, "TrandoSlaveCamp", "onCampEntered", pPlayer, "")
+	end
 end
 
 function TrandoSlaveCamp:onCampEntered(pPlayer)

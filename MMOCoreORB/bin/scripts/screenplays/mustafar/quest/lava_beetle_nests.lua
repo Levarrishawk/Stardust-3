@@ -316,7 +316,7 @@ lavaBeetleNestsScreenPlay = ScreenPlay:new {
 	nests = {
 		{
 			n = 1,
-			nodeID = 12111378,
+			nodeID = MustafarBuildout.objects[12111378],
 			taskName = "destroy_lava_beetle_nest_one",		-- task 11
 			signal = "lava_beetle_nest_one_destroyed",
 			waitTask = "destroyed_beetle_soldiers_one",		-- task 10, Task1
@@ -324,7 +324,7 @@ lavaBeetleNestsScreenPlay = ScreenPlay:new {
 		},
 		{
 			n = 2,
-			nodeID = 12111377,
+			nodeID = MustafarBuildout.objects[12111377],
 			taskName = "destroy_lava_beetle_nest_two",		-- task 12
 			signal = "lava_beetle_nest_two_destroyed",
 			waitTask = "destroyed_beetle_soldiers_two",		-- task 10, Task2
@@ -332,7 +332,7 @@ lavaBeetleNestsScreenPlay = ScreenPlay:new {
 		},
 		{
 			n = 3,
-			nodeID = 12111376,
+			nodeID = MustafarBuildout.objects[12111376],
 			taskName = "destroy_lava_beetle_nest_three",	-- task 13
 			signal = "lava_beetle_nest_three_destroyed",
 			waitTask = "destroyed_beetle_soldier_three",	-- task 10, Task3
@@ -340,7 +340,7 @@ lavaBeetleNestsScreenPlay = ScreenPlay:new {
 		},
 		{
 			n = 4,
-			nodeID = 12111375,
+			nodeID = MustafarBuildout.objects[12111375],
 			taskName = "destroy_lava_beetle_nest_four",		-- task 14
 			signal = "lava_beetle_nest_four_destroyed",
 			waitTask = "destroyed_beetle_soldier_four",		-- task 10, Task4
@@ -405,7 +405,7 @@ function lavaBeetleNestsScreenPlay:attachNests()
 		local pNest = getSceneObject(nest.nodeID)
 
 		if (pNest == nil) then
-			print("lavaBeetleNestsScreenPlay: nest snapshot object " .. nest.nodeID .. " was not found; nest " .. nest.n .. " cannot be destroyed and the quest cannot be finished")
+			print("lavaBeetleNestsScreenPlay: nest buildout object " .. nest.nodeID .. " was not found; nest " .. nest.n .. " cannot be destroyed and the quest cannot be finished")
 		else
 			writeStringData(nest.nodeID .. ":lavaBeetleNest", tostring(nest.n))
 			SceneObject(pNest):setObjectMenuComponent("LavaBeetleNestsMenuComponent")

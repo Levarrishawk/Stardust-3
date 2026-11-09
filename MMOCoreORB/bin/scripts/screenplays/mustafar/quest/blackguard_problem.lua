@@ -329,16 +329,9 @@ somBlackguardProblemScreenPlay = ScreenPlay:new {
 	-- THE GIVER. Converted from a live-era community waypoint through the proven
 	-- Mustafar offset (shipped = way_x - 2880, way_z + 2976). No height ships, so
 	-- the floor is resolved at spawn. See THE GIVER in the header.
-	questGiver = {
-		template = "doc_lu",
-		x = -4635,
-		y = 3296,
-		heading = 0,
-	},
 
 	-- The stage the ladder reaches when task 7 has paid out.
 	finishedStage = 7,
-	questGiverID = 0,
 }
 
 -- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
@@ -353,27 +346,10 @@ somBlackguardProblemScreenPlay.journalMap = {
 	[7] = { quest = "som_blackguard_problem", complete = {6}, activate = {7}, finish = true }, -- 7→t7 Reward (then reset 0)
 }
 
-registerScreenPlay("somBlackguardProblemScreenPlay", true)
+registerScreenPlay("somBlackguardProblemScreenPlay", false)
 
 -- start() exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
 -- calls "start" by name on every screenplay registered with true.
-function somBlackguardProblemScreenPlay:start()
-	if (isZoneEnabled("mustafar")) then
-		self:spawnGiver()
-	end
-end
-
-function somBlackguardProblemScreenPlay:spawnGiver()
-	local giver = self.questGiver
-	local pNpc = spawnMobile("mustafar", giver.template, 0, giver.x, getWorldFloor(giver.x, giver.y, "mustafar"), giver.y, giver.heading, 0)
-
-	if (pNpc == nil) then
-		print("somBlackguardProblemScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
-	else
-		self.questGiverID = SceneObject(pNpc):getObjectID()
-	end
-end
-
 --[[ State
 
 Persistent screenplay data on the player, so the ladder survives a restart.
@@ -599,7 +575,7 @@ function somBlackguardProblemScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 0
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil or leg.killTemplates[victimTemplate] == nil) then
 		return 0

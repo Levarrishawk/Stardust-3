@@ -287,18 +287,14 @@ jediDogScreenPlay = ScreenPlay:new {
 	collarItemName = "The tag on the collar reads: Cobak - 78452",
 	collarsRequired = 1,
 	collarDropPercent = 100,
-	cobakTemplate = "som_xandank_cobak",
-	cobakName = "Cobak",
+	cobakTemplate = "mustafar_world_xandank_cobak",
 	-- Respawning, not one-shot: he is a permanent world guard shared by every
 	-- player and the quest is repeatable.  Respawn re-inserts the SAME object,
 	-- so the objectID recorded at start() survives it and is what the kill
 	-- observer matches on.  trophy_hunts.lua:564-566 documents the same rule.
-	cobakRespawn = 300,
 	-- Placed, not quoted.  Derived at runtime from the chest node's own world
 	-- position; the offset is MINE, chosen so the guard stands beside the thing
 	-- he is guarding rather than inside its mesh.
-	cobakOffsetX = 3,
-	cobakOffsetY = 3,
 
 	-- task 3, Wait for Signal (mustafar_jedi_dog_three).
 	-- Signal Name mustafar_jedi_dog_reward.  Fired by the chest radial.
@@ -312,10 +308,9 @@ jediDogScreenPlay = ScreenPlay:new {
 	rewardName = "robe from the Jedi's chest",
 
 	-- snapshot/mustafar.ws.  See WHAT THE WORLD DOES SHIP in the header.
-	datapadNodeID = 12113081,
-	chestNodeID = 12110930,
+	datapadNodeID = MustafarBuildout.objects[12113081],
+	chestNodeID = MustafarBuildout.objects[12110930],
 
-	cobakID = 0,
 }
 
 -- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
@@ -338,7 +333,6 @@ registerScreenPlay("jediDogScreenPlay", true)
 function jediDogScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachProps()
-		self:spawnCobak()
 	end
 end
 
@@ -346,7 +340,7 @@ function jediDogScreenPlay:attachProp(nodeID, role, whatBreaks)
 	local pProp = getSceneObject(nodeID)
 
 	if (pProp == nil) then
-		print("jediDogScreenPlay: snapshot object " .. nodeID .. " (" .. role .. ") was not found; " .. whatBreaks)
+		print("jediDogScreenPlay: buildout object " .. nodeID .. " (" .. role .. ") was not found; " .. whatBreaks)
 		return nil
 	end
 
@@ -364,29 +358,6 @@ end
 -- Cobak stands on the chest's own shipped position, offset far enough not to
 -- sit inside its mesh.  Reading the chest's world position rather than
 -- hard-coding one keeps him on the prop even if the snapshot ever moves.
-function jediDogScreenPlay:spawnCobak()
-	local pChest = getSceneObject(self.chestNodeID)
-
-	if (pChest == nil) then
-		print("jediDogScreenPlay: the chest snapshot object was not found; Cobak cannot be placed and som_jedi_dog cannot be finished")
-		return
-	end
-
-	local x = SceneObject(pChest):getWorldPositionX() + self.cobakOffsetX
-	local z = SceneObject(pChest):getWorldPositionZ()
-	local y = SceneObject(pChest):getWorldPositionY() + self.cobakOffsetY
-
-	local pCobak = spawnMobile("mustafar", self.cobakTemplate, self.cobakRespawn, x, z, y, 0, 0)
-
-	if (pCobak == nil) then
-		print("jediDogScreenPlay: " .. self.cobakTemplate .. " failed to spawn beside the chest; som_jedi_dog cannot be finished")
-		return
-	end
-
-	CreatureObject(pCobak):setCustomObjectName(self.cobakName)
-	self.cobakID = SceneObject(pCobak):getObjectID()
-end
-
 -- ====================================================================
 -- Player state
 --
@@ -503,21 +474,21 @@ function jediDogScreenPlay:detachKillObserver(pPlayer)
 end
 
 function jediDogScreenPlay:notifyKilledCreature(pPlayer, pVictim)
-	if (pPlayer == nil or pVictim == nil) then
+	if (pPlayer == nil or pVictim == nil or not SceneObject(pVictim):isAiAgent()) then
 		return 0
 	end
 
-	self:creditCollar(pPlayer, SceneObject(pVictim):getObjectID())
+	self:creditCollar(pPlayer, AiAgent(pVictim):getCreatureTemplateName())
 
 	return 0
 end
 
-function jediDogScreenPlay:creditCollar(pPlayer, victimID)
+function jediDogScreenPlay:creditCollar(pPlayer, victimTemplate)
 	if (self:getStage(pPlayer) ~= self.STAGE_FIND_COBAK) then
 		return
 	end
 
-	if (self.cobakID == 0 or victimID ~= self.cobakID) then
+	if (victimTemplate ~= self.cobakTemplate) then
 		return
 	end
 

@@ -261,22 +261,7 @@ its own allowRepeats flag. Nothing here refuses a second run. The eggs already
 in the player's inventory are left alone -- the .qst says nothing about taking
 them back, and destroying a player's items on a guess is not a thing to invent.
 
-THE LEVEL GATE
-
-[list] Level 75, and grantQuest refuses a player below it -- because for this
-quest the .qst number is the only number there is.
-
-That wants saying plainly, because a .qst [list] level is a client-side display
-value, not a gate. Three Mustafar quests turned out to be really gated, and each
-one was gated in its giver's server-side conversation rather than in its .qst:
-collectors_business, cursed_shard and moral_choice all test level against 60, so
-all three enforce 61 and all three ignore the 75 their .qst displays. This quest
-has no such conversation -- no giver of it carries a level test -- so nothing
-contradicts the 75 and nothing better is available to replace it with.
-
-Do not read this as precedent for trusting a [list] level. It is the fallback
-when the real gate is absent. If the maintainer would rather the level be advisory,
-minimumLevel below is the single number to change.
+The questlist level describes difficulty. Stardust does not enforce it at grant time.
 
 WHAT IS NOT MODELLED
 
@@ -306,9 +291,6 @@ somStrikingMinersScreenPlay = ScreenPlay:new {
 	-- [list] journalEntryTitle / journalEntryDescription.
 	questTitle = "The Strike",
 	questDescription = "The Mustafar Mining Company is having a number of problems. One of them is that a group of their miners is on strike. Talks between the miners and the company have broken down and the miners refuse to meet with the company to resolve the strike. Urup Fal'co needs an outsider to convince the miners to return to the discussions since they refuse to speak with any member of the company.",
-
-	-- [list] Level 75. See THE LEVEL GATE.
-	minimumLevel = 75,
 
 	-- task 0 musicOnActivate and task 7 musicOnComplete. "exception" is what the
 	-- shipped file says on the activate leg; quoted, not corrected.
@@ -343,8 +325,8 @@ somStrikingMinersScreenPlay = ScreenPlay:new {
 	-- The ten shared_tulrus_egg snapshot nodes; see THE TEN EGGS. Positions are
 	-- recorded in the header, in the .ws's own (x, height, z) order.
 	eggNodeIDs = {
-		12110479, 12110482, 12110483, 12110487, 12110488,
-		12110489, 12110490, 12112298, 12112303, 12112304,
+		MustafarBuildout.objects[12110479], MustafarBuildout.objects[12110482], MustafarBuildout.objects[12110483], MustafarBuildout.objects[12110487], MustafarBuildout.objects[12110488],
+		MustafarBuildout.objects[12110489], MustafarBuildout.objects[12110490], MustafarBuildout.objects[12112298], MustafarBuildout.objects[12112303], MustafarBuildout.objects[12112304],
 	},
 
 	-- task 7: Bank Credits 10000, quoted.
@@ -379,7 +361,7 @@ function somStrikingMinersScreenPlay:attachEggs()
 		local pEgg = getSceneObject(nodeID)
 
 		if (pEgg == nil) then
-			print("somStrikingMinersScreenPlay: snapshot object " .. nodeID .. " (tulrus egg) was not found; that nest cannot be robbed")
+			print("somStrikingMinersScreenPlay: buildout object " .. nodeID .. " (tulrus egg) was not found; that nest cannot be robbed")
 		else
 			writeStringData(nodeID .. ":somStrikingMinersRole", "egg")
 			SceneObject(pEgg):setObjectMenuComponent("SomStrikingMinersMenuComponent")
@@ -444,14 +426,14 @@ function somStrikingMinersScreenPlay:getEggs(pPlayer)
 end
 
 function somStrikingMinersScreenPlay:hasRobbedNest(pPlayer, nodeID)
-	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "egg_" .. nodeID)) == 1
+	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "egg_" .. MustafarBuildout.getProgressID(nodeID))) == 1
 end
 
 function somStrikingMinersScreenPlay:clearNests(pPlayer)
 	writeScreenPlayData(pPlayer, self.screenplayName, "eggs", "0")
 
 	for i = 1, #self.eggNodeIDs do
-		deleteScreenPlayData(pPlayer, self.screenplayName, "egg_" .. self.eggNodeIDs[i])
+		deleteScreenPlayData(pPlayer, self.screenplayName, "egg_" .. MustafarBuildout.getProgressID(self.eggNodeIDs[i]))
 	end
 end
 
@@ -514,11 +496,6 @@ function somStrikingMinersScreenPlay:grantQuest(pPlayer)
 	end
 
 	if (CreatureObject(pPlayer):getScreenPlayState("somStrikingMinersBlocked") ~= 0) then
-		return false
-	end
-
-	-- [list] Level 75.
-	if (CreatureObject(pPlayer):getLevel() < self.minimumLevel) then
 		return false
 	end
 
@@ -638,7 +615,7 @@ function somStrikingMinersScreenPlay:stealEgg(pPlayer, nodeID)
 		return false
 	end
 
-	writeScreenPlayData(pPlayer, self.screenplayName, "egg_" .. nodeID, "1")
+	writeScreenPlayData(pPlayer, self.screenplayName, "egg_" .. MustafarBuildout.getProgressID(nodeID), "1")
 
 	local taken = self:getEggs(pPlayer) + 1
 

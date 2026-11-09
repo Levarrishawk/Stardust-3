@@ -126,17 +126,7 @@ progress lives in persistent screenplay data on the player's ghost, and the
 journalEntryDescription lines go out as system messages and as waypoint descriptions
 instead, which is where the player would otherwise have read them.
 
-THE LEVEL GATE
-
-The [list] block says Level = 75 and it is enforced, in the conversation handler.
-
-It is enforced for want of anything better, not because the .qst is authoritative. A
-[list] level is a client-side display value; the Mustafar quests that are really gated
-take their number from the giver's server-side conversation, and those test against 60
-rather than 75. Pwwoz's live conversation has since been read: six conditions, none of
-them a level test. So his 75 stands unopposed, and that is now checked rather than
-inferred from his having no refusal line. The handler carries the full note, along with
-the one piece of invented text in this quest and why it exists.
+Stardust offers the quest without a combat-level check.
 
 THE REWARD  --  substituted
 
@@ -189,9 +179,6 @@ samaritanScreenPlay = ScreenPlay:new {
 
 	screenplayName = "samaritanScreenPlay",
 
-	-- Quoted; see THE LEVEL GATE.
-	requiredLevel = 75,
-
 	-- Live position; see WHERE PWWOZ STANDS. Cell-local, inside the facility:
 	-- entrance_room_02 = cell 12112224. respawn is the table's own 120, and it
 	-- is in seconds -- DirectorManager::spawnMobile passes it to
@@ -199,7 +186,7 @@ samaritanScreenPlay = ScreenPlay:new {
 	-- RespawnCreatureTask.
 	questGiver = {
 		template = "som_pwwoz_pwwa",
-		cell = 12112224,
+		cell = MustafarBuildout.objects[12112224],
 		x = -9.7,
 		z = 10.8,
 		y = 90.8,
@@ -509,7 +496,7 @@ function samaritanScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	end
 
 	local stage = self:getStage(pPlayer)
-	local victim = AiAgent(pVictim):getCreatureTemplateName()
+	local victim = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (stage == self.STAGE_HUNT) then
 		if (not self.fleaTemplates[victim]) then

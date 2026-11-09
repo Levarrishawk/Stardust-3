@@ -1,22 +1,7 @@
 --[[
-	THE CELL MAP -- the one place Mustafar's facility cell ids are derived.
-
-	Every Mensix placement in this tree is a cell id, and the ids are not
-	guessable: the building is snapshot node 12112217 and its 30 cell children
-	run 12112218..12112249 with 12112233 and 12112239 absent, so
-	buildingID + cellIndex drifts by one past index 15 and by two past index 20.
-
-	The map below is not inferred. It is the join of two files:
-
-	  * appearance/thm_must_mining_outpost.pob -- the portal layout the building
-	    template points at. Its CELS form holds 31 CELL records in order; record
-	    0 is the exterior r0 and records 1..30 carry the cell names.
-	  * snapshot/mustafar.ws -- node 12112217's 30 child NODE records, each
-	    carrying its own object id and its cell index.
-
-	PlanetManagerImplementation::loadSnapshotObject is what ties them: it creates
-	each cell with objectID = the .ws node id and files it under the node's cell
-	index, so POB record N is snapshot child index N is the id in this table.
+	Mensix cell indices come from appearance/thm_must_mining_outpost.pob.
+	The table gives the legacy ID for each room. MustafarBuildout.objects
+	resolves those keys to the native cells in mustafar_main_se.
 
 	  1  main_entrance_01  12112218      16  small_room_03      12112234
 	  2  main_entrance_02  12112219      17  hall_ramp_01       12112235
@@ -35,9 +20,7 @@
 	 15  small_room_02     12112232      30  mountain_entrance  12112249
 
 	medium_room_01 is the cantina, conference_room is Milo's office, and
-	hub_room is the mining network floor. BuildingObject(pBuilding):getNamedCell
-	resolves the same names at runtime and is the cross-check if the snapshot is
-	ever re-cut; the ids are written out here so a spawn line stays one line.
+	hub_room is the mining network floor.
 
 	The building sits at (-2420.50, h 199.40, 1767.08) with an identity rotation,
 	so a cell-local coordinate is simply world minus that origin. That is what
@@ -46,8 +29,6 @@
 	(-9.5, 52.6) in entrance_room_01, and the junk dealer's /way height of 222
 	is 199.40 + 22.7.
 --]]
-
-local ObjectManager = require("managers.object.object_manager")
 
 mensix_mining_facility_main = ScreenPlay:new {
 	numberOfActs = 1,
@@ -87,16 +68,14 @@ end
 
 function mensix_mining_facility_main:start()
 	if (isZoneEnabled("mustafar")) then
-		writeData("mensix_mining_facility_main:travelerConvoInProgress", 0)
-		writeData("mensix_mining_facility_main:travelerConvoState", 0)
-
-		writeData("mensix_mining_facility_main:minerConvoInProgress", 0)
-    writeData("mensix_mining_facility_main:minerConvoState", 0)
+		if (getSceneObject(MustafarBuildout.objects[12112217]) == nil) then
+			printLuaError("MensixMiningFacility: native building is missing")
+			return
+		end
 
 		self:spawnMobiles()
 		self:spawnSceneObjects()
-		self:startMinerConvo()
-		self:startTravelerConvo()
+		self:startAmbientSequences()
 
 		if (self.placedCount == self.expectedCount) then
 			print("MensixMiningFacility: screenplay loaded successfully")
@@ -165,449 +144,477 @@ end
 function mensix_mining_facility_main:spawnSceneObjects()
 
 	-- Stardust Specific Droid:  Remove for other servers.
-  spawnSceneObject("mustafar", "object/tangible/terminal/terminal_event_buffs.iff", -83.7, 10.3, 122, 12112227, math.rad(173) )
+  spawnSceneObject("mustafar", "object/tangible/terminal/terminal_event_buffs.iff", -83.7, 10.3, 122, MustafarBuildout.objects[12112227], math.rad(173) )
 
   -- row 16  control_room_02   -93 / 23.2 / -47.4  yaw 58.  Three metres from the
   -- junk dealer spawned below, which is the cross-check that 12112245 is right.
-  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_beetle_beads.iff", -93, 23.2, -47.4, 12112245, math.rad(58) ), "row 16 lava_beetle_beads")
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_beetle_beads.iff", -93, 23.2, -47.4, MustafarBuildout.objects[12112245], math.rad(58) ), "row 16 lava_beetle_beads")
 
   -- row 22  small_room_01     -120.7 / 10.8 / 122.1   yaw blank
-  self:placed(spawnSceneObject("mustafar", "object/static/structure/general/cloning_tube.iff", -120.7, 10.8, 122.1, 12112228, 0 ), "row 22 cloning_tube")
+  self:placed(spawnSceneObject("mustafar", "object/static/structure/general/cloning_tube.iff", -120.7, 10.8, 122.1, MustafarBuildout.objects[12112228], 0 ), "row 22 cloning_tube")
 
   -- row 23  control_room_01   -73.3 / 10.8 / 128.1    yaw blank
-  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/jundak_hunter_hologram.iff", -73.3, 10.8, 128.1, 12112227, 0 ), "row 23 jundak_hunter_hologram")
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/jundak_hunter_hologram.iff", -73.3, 10.8, 128.1, MustafarBuildout.objects[12112227], 0 ), "row 23 jundak_hunter_hologram")
 
   -- row 28  control_room_02   -80.1 / 23.96 / -35.8   yaw blank
-  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_flea_bounty.iff", -80.1, 23.96, -35.8, 12112245, 0 ), "row 28 lava_flea_bounty")
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_flea_bounty.iff", -80.1, 23.96, -35.8, MustafarBuildout.objects[12112245], 0 ), "row 28 lava_flea_bounty")
 
   -- row 29  medium_room_01    -71.3 / 11.53 / 41      yaw blank.  This is the
   -- "Plate of Tanray Meat" -- see the cross-check in the header for why that
   -- identification is sourced and not a guess at the filename.
-  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_lizard_food.iff", -71.3, 11.53, 41, 12112226, 0 ), "row 29 lava_lizard_food")
+  self:placed(spawnSceneObject("mustafar", "object/tangible/item/som/lava_lizard_food.iff", -71.3, 11.53, 41, MustafarBuildout.objects[12112226], 0 ), "row 29 lava_lizard_food")
 
 end
 
 function mensix_mining_facility_main:spawnMobiles()
 
-    local pTraveler_m = spawnMobile("mustafar", "traveler_m",0,-2481,230.1,1633.7,-51,0)  -- -55.1,31.5,-120.3,-53,12112248  Original NGE Position (changed to outdoors due to spatialChat not working in cell)
-      self:setMoodString(pTraveler_m, "npc_consoling")    
-    local pTraveler_f = spawnMobile("mustafar", "traveler_f",0,-2483.1,230.1,1635.7,-90,0)  -- -56.5,31.5,-119.1,135,12112248 Original NGE Position (changed to outdoors due to spatialChat not working in cell)
-      self:setMoodString(pTraveler_f, "angry")    
-      
-     writeData("mensix_mining_facility_main:traveler_m_objectID", SceneObject(pTraveler_m):getObjectID() )
-     writeData("mensix_mining_facility_main:traveler_f_objectID", SceneObject(pTraveler_f):getObjectID() )    
-     
-     local pMiner1 = spawnMobile("mustafar", "mustafarian_miner_02",0,-2384.0,210.2,1809.9,-35,0)
-     local pMiner2 = spawnMobile("mustafar", "mustafarian_miner_01",0,-2384.3,210.2,1813.2,165,0)
-     local pMiner3 = spawnMobile("mustafar", "mustafarian_miner_01",0,-2387.6,210.2,1812.2,123,0)
-     
-     writeData("mensix_mining_facility_main:pMiner1_objectID", SceneObject(pMiner1):getObjectID() )
-     writeData("mensix_mining_facility_main:pMiner2_objectID", SceneObject(pMiner2):getObjectID() )
-     writeData("mensix_mining_facility_main:pMiner3_objectID", SceneObject(pMiner3):getObjectID() )
-     
+    local landingDeck = MustafarBuildout.objects[12112248]
+    self:registerAmbientActor("male_traveler", spawnMobile("mustafar", "traveler_m", 0, -55.1, 31.5, -120.3, -53, landingDeck))
+    self:registerAmbientActor("female_traveler", spawnMobile("mustafar", "traveler_f", 0, -56.5, 31.5, -119.1, 135, landingDeck))
+
      -- Was "junk_dealer_mustafar", which is not a creature template anywhere in this tree --
      -- CreatureTemplateManager would fail the lookup and the facility's junk dealer simply
      -- never appeared. The Mustafar junk dealer template is must_junk
      -- (mobile/custom_content/som/must_junk.lua, customName "Junk Dealer").
      -- Live row: som_mustafarian_junk, control_room_02, -90 / 22.7 / -47.9, yaw 49.
-     spawnMobile("mustafar", "must_junk",0,-90,22.7,-47.9,49,12112245)
+     spawnMobile("mustafar", "must_junk",0,-90,22.7,-47.9,49,MustafarBuildout.objects[12112245])
      
      
      -- Background NPCs
-     local pMiner_b1 = spawnMobile("mustafar", "mustafarian_miner_01",0,-82.4,23.2,-35.5,-3,12112245)
-     self:setMoodString(pMiner_b1, "npc_use_terminal_high")  
-     local pMiner_b2 = spawnMobile("mustafar", "mustafarian_miner_01",0,-154.4,19.1,-66.4,-158,12112243)
-     self:setMoodString(pMiner_b2, "npc_use_terminal_high") 
-     local pMiner_b3 = spawnMobile("mustafar", "mustafarian_miner_01",0,-78.8,14.9,1.7,88,12112236)
-     self:setMoodString(pMiner_b3, "npc_use_terminal_high")
-     local pMiner_b4 = spawnMobile("mustafar", "mustafarian_miner_01",0,-88.3,10.8,49.4,28,12112226)
-     self:setMoodString(pMiner_b4, "entertained")
-     local pMiner_b5 = spawnMobile("mustafar", "mustafarian_miner_01",0,-86.8,10.8,41.9,113,12112226)
-     self:setMoodString(pMiner_b5, "entertained")
-     local pMiner_b6 = spawnMobile("mustafar", "mustafarian_miner_01",0,-80.6,10.8,42.2,179,12112226)
-     self:setMoodString(pMiner_b6, "npc_accusing")
-     local pMiner_b7 = spawnMobile("mustafar", "mustafarian_miner_01",0,-81.1,10.8,39.7,1,12112226)
-     self:setMoodString(pMiner_b7, "npc_accusing")
-     
+     local pMiner_b1 = spawnMobile("mustafar", "mustafarian_miner_01",0,-82.3,23.2,-35.2,0,MustafarBuildout.objects[12112245])
+     self:registerAmbientActor("waiting1", pMiner_b1)
+     local pMiner_b2 = spawnMobile("mustafar", "mustafarian_miner_01",0,-154.8,19.1,-66.6,0,MustafarBuildout.objects[12112243])
+     self:registerAmbientActor("technician1", pMiner_b2)
+     local pMiner_b5 = spawnMobile("mustafar", "mustafarian_miner_01",0,-86.7,10.8,41.8,0,MustafarBuildout.objects[12112226])
+     self:registerAmbientActor("patron2", pMiner_b5)
+     local pMiner_b6 = spawnMobile("mustafar", "mustafarian_miner_01",0,-80.6,10.8,41.9,0,MustafarBuildout.objects[12112226])
+     self:registerAmbientActor("patron1", pMiner_b6)
      -- Quest Givers.  Positions and headings are the live ones (see THE CELL MAP
      -- below for where the numbers come from); the mood column is empty on every
      -- one of these rows, so none of them gets a setMoodString.
-     spawnMobile("mustafar", "pei_yi",0,-77.2,10.8,67.4,117,12112226)
-     spawnMobile("mustafar", "diskret_stahn",0,-75.5,10.8,66.3,-85,12112226)
+     spawnMobile("mustafar", "pei_yi",0,-77.2,10.8,67.4,117,MustafarBuildout.objects[12112226])
+     spawnMobile("mustafar", "diskret_stahn",0,-75.5,10.8,66.3,-85,MustafarBuildout.objects[12112226])
 
-     spawnMobile("mustafar", "foreman_donko",0,-13.5,10.8,35,180,12112222)
-     spawnMobile("mustafar", "urup_falco",0,-152.7,19.1,-17.4,-68,12112241)
-     spawnMobile("mustafar", "chief_armstrong",0,-150,18.6,-61,0,12112243)
-     spawnMobile("mustafar", "chief_glost",0,-9.5,10.8,52.6,90,12112222)
-
-     --[[ THE REST OF THE TABLE.  Everything above came out of
-          som_mining_facility.tab; so does everything below.  The rows below were
-          simply never transcribed.  Nothing here is placed by eye and nothing here
-          is read off a .ilf -- same standard as the block above it.
-
-          spawnMobile takes heading in DEGREES, so yaw crosses unconverted.  That is
-          the opposite of spawnSceneObjects() above.  Blank yaw reads 0.
-
-          miner_a -> mustafarian_miner_01 and miner_b -> mustafarian_miner_02 is not
-          a new mapping.  It is the one the seven background miners above already
-          use: row 39 (miner_a, control_room_02, -82.3/23.2/-35.2) is pMiner_b1 and
-          row 34 (miner_a, small_room_05) is pMiner_b2, both spawned as _01.  These
-          seven rows are the ones that mapping never got applied to. ]]
+     spawnMobile("mustafar", "foreman_donko",0,-13.5,10.8,35,180,MustafarBuildout.objects[12112222])
+     spawnMobile("mustafar", "urup_falco",0,-152.7,19.1,-17.4,-68,MustafarBuildout.objects[12112241])
+     spawnMobile("mustafar", "chief_armstrong",0,-150,18.6,-61,0,MustafarBuildout.objects[12112243])
+     spawnMobile("mustafar", "chief_glost",0,-9.5,10.8,52.6,90,MustafarBuildout.objects[12112222])
 
      -- rows 44-46  hall_08  12112244.  The only three rows in the table with a real
      -- yaw on a background miner; the rest are blank.
-     local pMiner_b8  = self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-126.9,19.1,-44.6,50,12112244), "row 44 miner_b hall_08")
-     self:setMoodString(pMiner_b8, "npc_accusing")
-     local pMiner_b9  = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-126,19.1,-41.8,-161,12112244), "row 45 miner_a hall_08")
-     self:setMoodString(pMiner_b9, "npc_accusing")
-     local pMiner_b10 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-124.3,19.1,-44,-95,12112244), "row 46 miner_a hall_08")
-     self:setMoodString(pMiner_b10, "entertained")
+     local pMiner_b8  = self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-126.9,19.1,-44.6,50,MustafarBuildout.objects[12112244]), "row 44 miner_b hall_08")
+     self:registerAmbientActor("joker1", pMiner_b8)
+     local pMiner_b9  = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-126,19.1,-41.8,-161,MustafarBuildout.objects[12112244]), "row 45 miner_a hall_08")
+     self:registerAmbientActor("joker2", pMiner_b9)
+     local pMiner_b10 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-124.3,19.1,-44,-95,MustafarBuildout.objects[12112244]), "row 46 miner_a hall_08")
+     self:registerAmbientActor("joker3", pMiner_b10)
 
-     --[[ row 47  hub_room 12112236, yaw -90.  ADDED 2026-08-31, after the first pass
-          of this block missed it.
-
-          The miss and how it was caught, because the method is the reusable part.
-          Rows 44/45/46 are the hall_08 group and row 47 is the next line in the
-          file; the first pass walked the hall_08 block and moved on to hall_04.
-          Nothing flagged it -- the counter said 15 of 15 because 15 was what this
-          file asked for, so it proved the placements ran, not that the table was
-          finished.  What caught it was reconciling all 49 non-npe rows against
-          every coordinate this tree declares.  47 of 49 matched inside 3 m; this
-          was one of the two that did not.  (The other, row 78's
-          communication_console, is placed at story_arc_chapters.lua:1206 and was
-          a false alarm from the reconciler, not a gap.)
-
-          pMiner_b3 stands in this same room at the same height, 15.3 m away at
-          -78.8/14.9/1.7.  That is a free-hand ambient miner, not this row moved --
-          it predates this work and cites no row.  Both stand.
-
-          MOOD IS OURS, and the table gives better grounds for it than a guess.
-          The mood column is empty on all twelve miner rows, but the script column
-          is not: it names the behaviour SOE attached to each one -- joker_one/two/
-          three in hall_08, patrol1/2 in the corridors, cantina1/2 and patron1/2 in
-          the bar, and working_miner1 here.  Those are content_tools sequencer
-          entries; Core3 has no sequencer, so the behaviour cannot be ported.  A
-          mood is the closest thing this engine has, and "a miner working" is what
-          pMiner_b1/b2/b3 already use npc_use_terminal_high for.  Sourced intent,
-          our approximation, said out loud. ]]
-     local pMiner_b13 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-94,14.9,3,-90,12112236), "row 47 miner_a hub_room")
-     self:setMoodString(pMiner_b13, "npc_use_terminal_high")
+     -- Row 47, hub room miner.
+     local pMiner_b13 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-94,14.9,3,-90,MustafarBuildout.objects[12112236]), "row 47 miner_a hub_room")
+     self:registerAmbientActor("miner1", pMiner_b13)
 
      -- rows 52, 53  the two corridor miners.  hall_04 12112231, hall_03 12112230.
-     self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-107.8,10.8,32.5,0,12112231), "row 52 miner_a hall_04")
-     self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-59.7,10.8,32.5,0,12112230), "row 53 miner_b hall_03")
+     self:registerAmbientActor("patrol1", self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-107.8,10.8,32.5,0,MustafarBuildout.objects[12112231]), "row 52 miner_a hall_04"))
+     self:registerAmbientActor("patrol2", self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-59.7,10.8,32.5,0,MustafarBuildout.objects[12112230]), "row 53 miner_b hall_03"))
 
      -- rows 68, 71  medium_room_01 12112226 -- the cantina.  Rows 69 and 70 of the
      -- same group are already up as pMiner_b6 and pMiner_b5; these two are the
      -- pair that was missed.
-     local pMiner_b11 = self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-85.6,10.8,39.6,0,12112226), "row 68 miner_b medium_room_01")
-     self:setMoodString(pMiner_b11, "entertained")
-     local pMiner_b12 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-94.3,10.8,55,0,12112226), "row 71 miner_a medium_room_01")
-     self:setMoodString(pMiner_b12, "entertained")
+     local pMiner_b11 = self:placed(spawnMobile("mustafar", "mustafarian_miner_02",0,-85.6,10.8,39.6,0,MustafarBuildout.objects[12112226]), "row 68 miner_b medium_room_01")
+     self:registerAmbientActor("bartender", pMiner_b11)
+     local pMiner_b12 = self:placed(spawnMobile("mustafar", "mustafarian_miner_01",0,-94.3,10.8,55,0,MustafarBuildout.objects[12112226]), "row 71 miner_a medium_room_01")
+     self:registerAmbientActor("drunk1", pMiner_b12)
 
-     --[[ THE TWO MINING DROIDS -- rows 62 and 63, small_room_03 12112234.
-
-          SUBSTITUTED, and this is the disclosure.  The table asks for
-          som_mining_droid_fork and som_mining_droid_claw.  Neither exists as a
-          template in this repo or anywhere in the extracted source; like the
-          seventeen names in mustafar_dungeon_population.lua, they are strings in a
-          table and nothing else.
-
-          What this repo ships is must_mining_droid_mark_01 / _02 / _03 -- "Mark I /
-          II / III Mining Droid".  Live has exactly three mining droid variants too:
-          ground_spawning/types/mustafar/mining_droids.tab lists bucket, claw and
-          fork.  Three for three.  But the two naming schemes describe different
-          things -- an attachment versus a model generation -- so there is no
-          mapping between them, and nothing in either tree supplies one.
-
-          So: THE PLACEMENT IS SOURCED (room, coordinates, both rows verbatim) and
-          WHICH MARK STANDS IN IS OURS.  The rule used is alphabetical against the
-          live list, bucket/claw/fork -> mark_01/_02/_03, which is arbitrary but
-          stated and reproducible rather than a coin toss left undocumented.  Same
-          trade dungeon_population makes and says out loud: the encounter is real,
-          the exact droid is not. ]]
-     self:placed(spawnMobile("mustafar", "must_mining_droid_mark_03",0,-120.9,10.8,38.6,0,12112234), "row 62 mining_droid_fork -> mark_03")
-     self:placed(spawnMobile("mustafar", "must_mining_droid_mark_02",0,-125.4,10.8,46.7,0,12112234), "row 63 mining_droid_claw -> mark_02")
+     -- DSRC mob/creatures.tab assigns Mark III to fork and Mark II to claw.
+     self:registerAmbientActor("droid2", self:placed(spawnMobile("mustafar", "must_mining_droid_mark_03",0,-120.9,10.8,38.6,0,MustafarBuildout.objects[12112234]), "row 62 mining_droid_fork -> mark_03"))
+     self:registerAmbientActor("droid3", self:placed(spawnMobile("mustafar", "must_mining_droid_mark_02",0,-125.4,10.8,46.7,0,MustafarBuildout.objects[12112234]), "row 63 mining_droid_claw -> mark_02"))
 
      -- row 79  small_room_01 12112228, yaw -121.  clone_droid is a real registered
      -- template (mobile/custom_content/mobile/clone_droid.lua, included at
      -- mobile/custom_content/mobile/serverobjects.lua:166) -- no substitution.  It
      -- stands beside the cloning tube placed from row 22 in the same room.
      -- conversationTemplate is "" on the template, so it is silent by design.
-     self:placed(spawnMobile("mustafar", "clone_droid",0,-104,10.8,126.6,-121,12112228), "row 79 clone_droid")
+     self:placed(spawnMobile("mustafar", "clone_droid",0,-104,10.8,126.6,-121,MustafarBuildout.objects[12112228]), "row 79 clone_droid")
 
-     --[[ NOT PLACED, and deliberately: the 30 object/tangible/npe/npe_node.iff rows.
-          They are the NPE system's anchor markers, not content -- each one sits on
-          top of a creature row to the centimetre (row 47 miner_a hub_room -94/14.9/3
-          and row 48 npe_node hub_room -94/14.9/3 are the same point -- row 47 is
-          the miner placed above, so the marker is standing inside him).  Core3 has no
-          NPE node consumer, so placing 30 invisible objects would add nothing a
-          player can see and nothing any code reads.  Skipped on purpose, recorded
-          here so the next person does not re-derive it as a gap. ]]
 
 end
 
+-- Positions of the sequencer targets in spawning/dungeon/som_mining_facility.tab.
+local ambientTargets = {
+	traveler_object = { "landing_deck_room", -58.5, 31.5, -119.1 },
+	patrol_rt1 = { "hall_04", -107.8, 10.8, 32.5 },
+	patrol_rt2 = { "hall_03", -59.7, 10.8, 32.5 },
+	patrol_rt3 = { "hall_junction_01", -59.6, 10.8, 63.8 },
+	patrol_rt4 = { "hall_junction_01", -44, 10.8, 64.4 },
+	patrol_rt5 = { "hall_01", -44, 10.8, 90.8 },
+	patrol_rt6 = { "hall_02", -107.8, 10.8, 90.8 },
+	patrol_mt1 = { "hall_junction_02", -85.4, 10.8, 90.7 },
+	patrol_mt2 = { "hall_junction_02", -82, 10.8, 90.5 },
+	tech_face1 = { "small_room_05", -154.8, 19.1, -67.2 },
+	tech_face2 = { "small_room_05", -140, 19.1, -62.7 },
+	tech_goto2 = { "small_room_05", -154.8, 19.1, -66.5 },
+	tech_goto1 = { "small_room_05", -140, 19.1, -63.3 },
+	wait_goto1 = { "control_room_02", -82.3, 23.2, -35.4 },
+	wait_faceto1 = { "control_room_02", -82.3, 23.2, -34.7 },
+	wait_faceto2 = { "control_room_02", -77.8, 23.2, -52.3 },
+	wait_goto2 = { "control_room_02", -77.8, 23.2, -51.7 },
+	miner1_go1 = { "hub_room", -94, 14.9, 3 },
+	miner1_face1 = { "hub_room", -94.9, 14.9, 2.98 },
+	miner1_go2 = { "hub_room", -78.4, 14.9, 1.7 },
+	miner1_face2 = { "hub_room", -78.3, 14.9, 0.97 },
+	droid2_go1 = { "small_room_03", -120.9, 10.8, 38.6 },
+	droid2_go2 = { "small_room_03", -121.6, 10.3, 43.1 },
+	droid2_go3 = { "small_room_03", -121.8, 10.3, 46.7 },
+	droid2_go4 = { "small_room_03", -125.4, 10.8, 52 },
+	bar1 = { "medium_room_01", -85.6, 10.8, 39.6 },
+	bar2 = { "medium_room_01", -80.6, 10.8, 39.6 },
+	drunk_go1 = { "medium_room_01", -94.3, 10.8, 55 },
+	drunk_go2 = { "medium_room_01", -83.8, 11.3, 49.7 },
+	drunk_face1 = { "medium_room_01", -83.9, 11.3, 50.9 },
+}
 
-function mensix_mining_facility_main:startTravelerConvo(pActiveArea1, pMovingObject, pPlayer, pTraveler_m, pTraveler_f)
-  
-   local pTraveler_f = getSceneObject(readData("mensix_mining_facility_main:traveler_f_objectID"))
-   local pTraveler_m = getSceneObject(readData("mensix_mining_facility_main:traveler_m_objectID"))
+-- Times and actions from datatables/sequencer/event_sequence.
+local ambientSequences = {
+	must_joker = {
+		{ 9000, "joker3", "faceTo", "joker1" },
+		{ 10000, "joker2", "faceTo", "joker1" },
+		{ 11000, "joker3", "say", "do_humans" },
+		{ 14000, "joker1", "say", "alright_humans" },
+		{ 17000, "joker1", "animation", "curtsey" },
+		{ 17100, "joker1", "say", "i_am_human" },
+		{ 20000, "joker1", "animation", "scared" },
+		{ 20100, "joker2", "animation", "laugh" },
+		{ 20200, "joker3", "animation", "laugh_pointing" },
+		{ 20500, "joker3", "say", "i_love_that" },
+		{ 60000, "joker2", "say", "do_wookiee" },
+		{ 64000, "joker1", "animation", "hold_nose" },
+		{ 64100, "joker1", "say", "wookiee_smell" },
+		{ 65000, "joker2", "animation", "belly_laugh" },
+		{ 65100, "joker3", "animation", "rofl" },
+		{ 120000, "joker1", "animation", "mock" },
+		{ 120100, "joker1", "say", "offworlders" },
+		{ 121000, "joker2", "animation", "laugh_cackle" },
+		{ 121100, "joker3", "animation", "laugh_cackle" },
+		{ 124000, "joker1", "animation", "smackbottom" },
+		{ 125000, "joker2", "animation", "laugh_cackle" },
+		{ 125100, "joker3", "animation", "laugh" },
+		{ 128000, "joker1", "animation", "loser" },
+		{ 129000, "joker2", "animation", "rofl" },
+		{ 129100, "joker3", "animation", "rofl" },
+		{ 130000, "joker1", "animation", "rofl" },
+		{ 145000, "joker2", "say", "do_rodian" },
+		{ 145100, "joker2", "animation", "point_forward" },
+		{ 145500, "joker3", "animation", "nod_head_multiple" },
+		{ 150000, "joker1", "say", "okay_rodian" },
+		{ 150100, "joker1", "animation", "rub_chin_thoughtful" },
+		{ 152000, "joker1", "animation", "chicken" },
+		{ 152100, "joker1", "say", "i_am_rodian" },
+		{ 152200, "joker3", "animation", "belly_laugh" },
+		{ 153000, "joker2", "animation", "wft" },
+		{ 155000, "joker2", "say", "i_dont_get_it" },
+		{ 159000, "joker1", "animation", "smack_self" },
+		{ 159100, "joker1", "say", "rodian_yellow" },
+		{ 163000, "joker2", "animation", "laugh_titter" },
+		{ 163100, "joker2", "say", "no_i_get_it" },
+		{ 300000 },
+	},
+	must_mining_traveler = {
+		{ 9000, "female_traveler", "faceTo", "male_traveler" },
+		{ 10000, "female_traveler", "animation", "point_accusingly" },
+		{ 10100, "female_traveler", "say", "cant_believe" },
+		{ 20000, "male_traveler", "say", "do_not_start" },
+		{ 20100, "male_traveler", "animation", "standing_placate" },
+		{ 30000, "female_traveler", "animation", "wave_finger_warning" },
+		{ 30100, "female_traveler", "say", "want_to_leave" },
+		{ 40000, "male_traveler", "animation", "sigh_deeply" },
+		{ 40100, "male_traveler", "say", "of_course_dear" },
+		{ 50000, "female_traveler", "animation", "wave_finger_warning" },
+		{ 50100, "female_traveler", "say", "we_better" },
+		{ 53000, "female_traveler", "faceTo", "traveler_object" },
+		{ 59000, "female_traveler", "setAnimationMood", "angry" },
+		{ 60000, "male_traveler", "say", "yes_dear" },
+		{ 60100, "male_traveler", "animation", "sigh_deeply" },
+		{ 70000, "male_traveler", "setAnimationMood", "sorry" },
+		{ 100000, "male_traveler", "animation", "implore" },
+		{ 200000, "male_traveler", "animation", "implore" },
+		{ 300000, "male_traveler", "animation", "implore" },
+		{ 400000, "male_traveler", "animation", "implore" },
+		{ 500000, "male_traveler", "animation", "implore" },
+		{ 600000 },
+	},
+	must_miner_patrol = {
+		{ 5000, "patrol2", "moveTo", "patrol_rt3" },
+		{ 9000, "patrol1", "moveTo", "patrol_rt6" },
+		{ 20000, "patrol2", "moveTo", "patrol_rt4" },
+		{ 35000, "patrol2", "moveTo", "patrol_rt5" },
+		{ 45000, "patrol1", "faceTo", "patrol_mt2" },
+		{ 46000, "patrol1", "animation", "tap_foot" },
+		{ 63000, "patrol1", "moveTo", "patrol_mt1" },
+		{ 63100, "patrol2", "moveTo", "patrol_mt2" },
+		{ 83000, "patrol1", "faceTo", "patrol_mt2" },
+		{ 83100, "patrol2", "faceTo", "patrol_mt1" },
+		{ 83500, "patrol1", "say", "hi" },
+		{ 83600, "patrol1", "animation", "wave1" },
+		{ 84000, "patrol2", "animation", "greet" },
+		{ 89000, "patrol2", "say", "hows_work" },
+		{ 94000, "patrol1", "animation", "shrug_hands" },
+		{ 94100, "patrol1", "say", "same" },
+		{ 99000, "patrol2", "say", "obi_wan" },
+		{ 99100, "patrol2", "animation", "nervous" },
+		{ 105000, "patrol1", "animation", "stop" },
+		{ 105100, "patrol1", "say", "not_again" },
+		{ 110000, "patrol2", "animation", "explain" },
+		{ 110100, "patrol2", "say", "no_really" },
+		{ 111000, "patrol1", "animation", "yawn" },
+		{ 115000, "patrol1", "animation", "cuckoo" },
+		{ 115100, "patrol1", "say", "you_are_crazy" },
+		{ 120000, "patrol1", "moveTo", "patrol_rt6" },
+		{ 122000, "patrol2", "animation", "sigh_deeply" },
+		{ 125000, "patrol2", "moveTo", "patrol_rt5" },
+		{ 145000, "patrol1", "moveTo", "patrol_rt1" },
+		{ 150000, "patrol2", "moveTo", "patrol_rt4" },
+		{ 170000, "patrol2", "moveTo", "patrol_rt3" },
+		{ 185000, "patrol2", "moveTo", "patrol_rt2" },
+		{ 195000, "patrol1", "faceTo", "patrol_rt6" },
+		{ 200000, "patrol1", "animation", "tap_foot" },
+		{ 210000, "patrol2", "faceTo", "patrol_rt3" },
+		{ 210100, "patrol1", "animation", "tap_foot" },
+		{ 215000, "patrol2", "animation", "check_wrist_device" },
+		{ 220000 },
+	},
+	must_miner1 = {
+		{ 5000, "miner1", "faceTo", "miner1_face1" },
+		{ 8000, "miner1", "animation", "manipulate_medium" },
+		{ 13000, "miner1", "animation", "manipulate_medium" },
+		{ 18000, "miner1", "animation", "scream" },
+		{ 23000, "miner1", "animation", "door_pound" },
+		{ 27000, "miner1", "effect", "clienteffect/trap_electric_01.cef" },
+		{ 27500, "miner1", "animation", "gesticulate_wildly" },
+		{ 32000, "miner1", "animation", "pet_creature_medium" },
+		{ 37000, "miner1", "animation", "sweat" },
+		{ 42000, "miner1", "animation", "threaten" },
+		{ 47000, "miner1", "animation", "giveup" },
+		{ 52000, "miner1", "moveTo", "miner1_go2" },
+		{ 65000, "miner1", "faceTo", "miner1_face2" },
+		{ 68000, "miner1", "animation", "manipulate_medium" },
+		{ 78000, "miner1", "animation", "manipulate_medium" },
+		{ 88000, "miner1", "animation", "manipulate_medium" },
+		{ 98000, "miner1", "animation", "manipulate_medium" },
+		{ 108000, "miner1", "animation", "manipulate_medium" },
+		{ 128000, "miner1", "animation", "manipulate_medium" },
+		{ 148000, "miner1", "animation", "manipulate_medium" },
+		{ 188000, "miner1", "animation", "manipulate_medium" },
+		{ 250000, "miner1", "animation", "manipulate_medium" },
+		{ 275000, "miner1", "animation", "manipulate_medium" },
+		{ 300000, "miner1", "animation", "manipulate_medium" },
+		{ 350000, "miner1", "animation", "manipulate_medium" },
+		{ 400000, "miner1", "animation", "manipulate_medium" },
+		{ 450000, "miner1", "moveTo", "miner1_go1" },
+		{ 465000 },
+	},
+	must_waiting_one = {
+		{ 9000, "waiting1", "faceTo", "wait_faceto1" },
+		{ 10000, "waiting1", "animation", "manipulate_medium" },
+		{ 25000, "waiting1", "animation", "manipulate_medium" },
+		{ 45000, "waiting1", "animation", "manipulate_medium" },
+		{ 65000, "waiting1", "animation", "manipulate_medium" },
+		{ 80000, "waiting1", "animation", "manipulate_medium" },
+		{ 95000, "waiting1", "animation", "manipulate_medium" },
+		{ 120000, "waiting1", "animation", "manipulate_medium" },
+		{ 130000, "waiting1", "animation", "check_wrist_device" },
+		{ 134000, "waiting1", "moveTo", "wait_goto2" },
+		{ 144000, "waiting1", "faceTo", "wait_faceto2" },
+		{ 150000, "waiting1", "animation", "manipulate_medium" },
+		{ 165000, "waiting1", "animation", "manipulate_medium" },
+		{ 180000, "waiting1", "animation", "manipulate_medium" },
+		{ 195000, "waiting1", "animation", "manipulate_medium" },
+		{ 210000, "waiting1", "animation", "manipulate_medium" },
+		{ 235000, "waiting1", "animation", "manipulate_medium" },
+		{ 250000, "waiting1", "animation", "manipulate_medium" },
+		{ 265000, "waiting1", "animation", "check_wrist_device" },
+		{ 270000, "waiting1", "", "wait_goto1" },
+		{ 271000 },
+	},
+	must_technician_one = {
+		{ 5000, "technician1", "faceTo", "tech_face1" },
+		{ 10000, "technician1", "animation", "manipulate_medium" },
+		{ 15000, "technician1", "animation", "manipulate_medium" },
+		{ 20000, "technician1", "animation", "manipulate_medium" },
+		{ 25000, "technician1", "animation", "manipulate_medium" },
+		{ 35000, "technician1", "animation", "manipulate_medium" },
+		{ 38000, "technician1", "animation", "rub_chin_thoughtful" },
+		{ 40000, "technician1", "moveTo", "tech_goto1" },
+		{ 49000, "technician1", "faceTo", "tech_face2" },
+		{ 52000, "technician1", "animation", "manipulate_medium" },
+		{ 55000, "technician1", "animation", "manipulate_medium" },
+		{ 60000, "technician1", "animation", "manipulate_medium" },
+		{ 65000, "technician1", "animation", "manipulate_medium" },
+		{ 70000, "technician1", "animation", "manipulate_medium" },
+		{ 75000, "technician1", "animation", "manipulate_medium" },
+		{ 80000, "technician1", "animation", "rub_chin_thoughtful" },
+		{ 83000, "technician1", "moveTo", "tech_goto2" },
+		{ 88000 },
+	},
+	must_droid2 = {
+		{ 5000, "droid2", "moveTo", "droid2_go2" },
+		{ 30000, "droid3", "moveTo", "droid2_go4" },
+		{ 30500, "droid2", "moveTo", "droid2_go1" },
+		{ 60000, "droid3", "moveTo", "droid2_go3" },
+		{ 60500 },
+	},
+	must_cantina1 = {
+		{ 5000, "bartender", "faceTo", "patron1" },
+		{ 6000, "bartender", "animation", "thumb_up" },
+		{ 8000, "patron1", "animation", "nod_head_multiple" },
+		{ 10000, "bartender", "animation", "point_forward" },
+		{ 14000, "bartender", "animation", "expect_tip" },
+		{ 14500, "patron1", "animation", "point_forward" },
+		{ 18000, "patron2", "faceTo", "bartender" },
+		{ 19000, "patron2", "animation", "wave1" },
+		{ 19500, "bartender", "animation", "explain" },
+		{ 20000, "patron1", "animation", "listen" },
+		{ 22000, "patron2", "animation", "wave1" },
+		{ 23000, "bartender", "animation", "airguitar" },
+		{ 23500, "patron1", "animation", "laugh" },
+		{ 24000, "patron2", "animation", "stamp_feet" },
+		{ 27000, "patron1", "animation", "rub_belly" },
+		{ 27500, "bartender", "animation", "laugh" },
+		{ 29000, "patron2", "animation", "beckon" },
+		{ 31000, "bartender", "animation", "explain" },
+		{ 31500, "patron1", "animation", "listen" },
+		{ 33000, "patron1", "animation", "laugh" },
+		{ 33100, "patron2", "animation", "scream" },
+		{ 34000, "bartender", "faceTo", "patron2" },
+		{ 34100, "patron1", "faceTo", "patron2" },
+		{ 35000, "bartender", "animation", "point_accusingly" },
+		{ 39000, "patron2", "animation", "apologize" },
+		{ 40000, "bartender", "moveTo", "bar1" },
+		{ 44000, "bartender", "faceTo", "patron2" },
+		{ 46000, "patron2", "faceTo", "bartender" },
+		{ 47000, "patron1", "animation", "loser" },
+		{ 48000, "patron2", "animation", "explain" },
+		{ 51000, "bartender", "animation", "shake_head_no" },
+		{ 53000, "patron2", "animation", "explain" },
+		{ 54000, "patron1", "animation", "mock" },
+		{ 57000, "bartender", "animation", "shake_head_no" },
+		{ 60000, "patron2", "animation", "shrug_hands" },
+		{ 62000, "bartender", "animation", "shakefist" },
+		{ 63000, "patron1", "animation", "belly_laugh" },
+		{ 67000, "bartender", "moveTo", "bar2" },
+		{ 68000, "patron2", "animation", "weeping" },
+		{ 71000, "bartender", "faceTo", "patron1" },
+		{ 71500, "patron1", "faceTo", "bartender" },
+		{ 75000 },
+	},
+	must_cantina2 = {
+		{ 5000, "drunk1", "animation", "tap_foot" },
+		{ 8000, "drunk1", "animation", "nod_head_multiple" },
+		{ 12000, "drunk1", "animation", "celebrate" },
+		{ 15000, "drunk1", "animation", "snap_finger1" },
+		{ 18000, "drunk1", "animation", "clap_rousing" },
+		{ 24000, "drunk1", "moveTo", "drunk_go2" },
+		{ 30000, "drunk1", "faceTo", "drunk_face1" },
+		{ 32000, "drunk1", "animation", "nod_head_multiple" },
+		{ 34000, "drunk1", "animation", "point_to_self" },
+		{ 38000, "drunk1", "animation", "bounce" },
+		{ 43000, "drunk1", "animation", "airguitar" },
+		{ 47000, "drunk1", "animation", "bounce" },
+		{ 51000, "drunk1", "animation", "bump" },
+		{ 55000, "drunk1", "animation", "celebrate" },
+		{ 59000, "drunk1", "animation", "clap_rousing" },
+		{ 63000, "drunk1", "animation", "nervous" },
+		{ 67000, "drunk1", "animation", "embarrassed" },
+		{ 70000, "drunk1", "moveTo", "drunk_go1" },
+		{ 76000, "drunk1", "faceTo", "drunk_face1" },
+		{ 120000 },
+	},
+}
 
-   if not(readData("mensix_mining_facility_main:travelerConvoInProgress") == 1) then       
-          writeData("mensix_mining_facility_main:travelerConvoInProgress", 1)
-          createEvent(90 * 1000, "mensix_mining_facility_main", "touristConvoF1", pTraveler_f, "")
-          createEvent(100 * 1000, "mensix_mining_facility_main", "touristConvoM1", pTraveler_m, "")
-   else
-      return 0
-   end              
+local ambientMovers = {
+	bartender = true,
+	droid2 = true,
+	droid3 = true,
+	drunk1 = true,
+	miner1 = true,
+	patrol1 = true,
+	patrol2 = true,
+	technician1 = true,
+	waiting1 = true,
+}
+
+function mensix_mining_facility_main:registerAmbientActor(name, pActor)
+	if (pActor ~= nil) then
+		writeData("mensixAmbient:" .. name, SceneObject(pActor):getObjectID())
+		if (ambientMovers[name]) then
+			AiAgent(pActor):setAITemplate()
+		end
+	end
 end
 
-
-
-
-
-
-function mensix_mining_facility_main:touristConvoF1(pTraveler_f, pPlayer)
-  
-  local pTraveler_f = getSceneObject(readData("mensix_mining_facility_main:traveler_f_objectID"))
-  
-  if (readData("mensix_mining_facility_main:travelerConvoState") == 0) then
-      spatialChat(pTraveler_f, "I cannot believe you took me to this flaming hunk of rock! What were you thinking? This world is a nightmare.")     
-        writeData("mensix_mining_facility_main:travelerConvoState", 1)   
-        createEvent(20 * 1000, "mensix_mining_facility_main", "touristConvoF2", pTraveler_f, "")  
-  end
+function mensix_mining_facility_main:startAmbientSequences()
+	for name, sequence in pairs(ambientSequences) do
+		createEvent(sequence[1][1], self.screenplayName, "ambientStep", nil, name .. ":1")
+	end
 end
 
-function mensix_mining_facility_main:touristConvoM1(pTraveler_m, pPlayer)
-  
-  local pTraveler_m = getSceneObject(readData("mensix_mining_facility_main:traveler_m_objectID"))
-  
-  if (readData("mensix_mining_facility_main:travelerConvoState") == 1) then
-      spatialChat(pTraveler_m, "Please, Clarrisa, don't start. I thought this would be a nice change of pace for us. You said you wanted to go some place full of adventure and mystery. With all of the discoveries here on Mustafar I thought you would love it.")     
-        writeData("mensix_mining_facility_main:travelerConvoState", 2)   
-        createEvent(20 * 1000, "mensix_mining_facility_main", "touristConvoM2", pTraveler_m, "")   
-  end
+function mensix_mining_facility_main:ambientStep(pUnused, args)
+	local name, index = string.match(args or "", "^([%w_]+):(%d+)$")
+	local sequence = ambientSequences[name]
+	index = tonumber(index)
+	local step = sequence and sequence[index]
+	if (step == nil) then
+		return
+	end
+
+	local time, actor, action, arg = step[1], step[2], step[3], step[4]
+	if (actor == nil) then
+		createEvent(sequence[1][1], self.screenplayName, "ambientStep", nil, name .. ":1")
+		return
+	end
+
+	local pActor = getSceneObject(readData("mensixAmbient:" .. actor))
+	if (pActor ~= nil and SceneObject(pActor):getZoneName() == "mustafar" and not CreatureObject(pActor):isDead()) then
+		self:performAmbientAction(name, pActor, action, arg)
+	end
+
+	local nextStep = sequence[index + 1]
+	createEvent(nextStep[1] - time, self.screenplayName, "ambientStep", nil, name .. ":" .. (index + 1))
 end
 
-function mensix_mining_facility_main:touristConvoF2(pTraveler_f, pPlayer)
-  
-  local pTraveler_f = getSceneObject(readData("mensix_mining_facility_main:traveler_f_objectID"))
-  
-  if (readData("mensix_mining_facility_main:travelerConvoState") == 2) then
-      spatialChat(pTraveler_f, "Adventure! When I said that, I meant we should go someplace nice like Naboo. You drag me half way across the galaxy to show me a burning rock! We are going to have a serious talk about your concept of adventure when we get home. Are you listening to me?")     
-        writeData("mensix_mining_facility_main:travelerConvoState", 3)    
-        createEvent(20 * 1000, "mensix_mining_facility_main", "touristConvoF3", pTraveler_f, "")  
-  end
+function mensix_mining_facility_main:performAmbientAction(sequence, pActor, action, arg)
+	if (action == "say") then
+		spatialChat(pActor, "@" .. sequence .. ":" .. arg)
+	elseif (action == "animation") then
+		CreatureObject(pActor):doAnimation(arg)
+	elseif (action == "effect") then
+		SceneObject(pActor):playEffect(arg, "")
+	elseif (action == "setAnimationMood") then
+		self:setMoodString(pActor, arg)
+	elseif (action == "faceTo") then
+		local point = ambientTargets[arg]
+		local actor = SceneObject(pActor)
+		if (point ~= nil) then
+			actor:setDirectionalHeading(math.atan(point[2] - actor:getPositionX(), point[4] - actor:getPositionY()))
+		else
+			local pTarget = getSceneObject(readData("mensixAmbient:" .. arg))
+			if (pTarget ~= nil) then
+				actor:faceObject(pTarget, true)
+			end
+		end
+	elseif (action == "moveTo") then
+		local point = ambientTargets[arg]
+		local pBuilding = SceneObject(pActor):getRootParent()
+		if (point == nil or pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+			return
+		end
+		local pCell = BuildingObject(pBuilding):getNamedCell(point[1])
+		if (pCell ~= nil) then
+			local agent = AiAgent(pActor)
+			agent:setMovementState(AI_PATROLLING)
+			agent:stopWaiting()
+			agent:setWait(0)
+			agent:setNextPosition(point[2], point[3], point[4], SceneObject(pCell):getObjectID())
+			agent:executeBehavior()
+		end
+	end
 end
-
-function mensix_mining_facility_main:touristConvoM2(pTraveler_m, pPlayer)
-  
-  local pTraveler_m = getSceneObject(readData("mensix_mining_facility_main:traveler_m_objectID"))
-  
-  if (readData("mensix_mining_facility_main:travelerConvoState") == 3) then
-      spatialChat(pTraveler_m, "Of course dear. I was just trying to be exciting and unexpected for you. We could have explored some of those ruins and maybe make a discovery of our own.")     
-        writeData("mensix_mining_facility_main:travelerConvoState", 4)  
-        createEvent(22 * 1000, "mensix_mining_facility_main", "touristConvoM3", pTraveler_m, "")   
-  end
-end
-
-function mensix_mining_facility_main:touristConvoF3(pTraveler_f, pPlayer)
-  
-  local pTraveler_f = getSceneObject(readData("mensix_mining_facility_main:traveler_f_objectID"))
-  
-  if (readData("mensix_mining_facility_main:travelerConvoState") == 4) then
-      spatialChat(pTraveler_f, "Next time you want to be exciting...don't. I will not have any such foolishness like you digging around in the dirt like some grubby archeologist. What would people back home say? Now we are just going to wait until the next shuttle and never speak of this again. Is that understood?")     
-        writeData("mensix_mining_facility_main:travelerConvoState", 5)           
-  end
-end
-
-function mensix_mining_facility_main:touristConvoM3(pTraveler_m, pPlayer)
-  
-  local pTraveler_m = getSceneObject(readData("mensix_mining_facility_main:traveler_m_objectID"))
-  
-  if (readData("mensix_mining_facility_main:travelerConvoState") == 5) then
-      spatialChat(pTraveler_m, "Yes, dear. Whatever you say.") 
-        writeData("mensix_mining_facility_main:travelerConvoState", 0)   
-        createEvent(6 * 100 * 1000, "mensix_mining_facility_main", "resetTravelerConvo", pTraveler_m, "")   
-  end
-end
-
-function mensix_mining_facility_main:resetTravelerConvo(pPlayer, pTraveler_f, pTraveler_m)
-    writeData("mensix_mining_facility_main:travelerConvoInProgress", 0)    
-    self:startTravelerConvo()
-end
-
--- Miner Jokes
-
-function mensix_mining_facility_main:startMinerConvo(pActiveArea1, pMovingObject, pPlayer, pMiner1, pMiner2, pMiner3)
-  
-   local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-   local pMiner2 = getSceneObject(readData("mensix_mining_facility_main:pMiner2_objectID"))
-   local pMiner3 = getSceneObject(readData("mensix_mining_facility_main:pMiner3_objectID"))
-
-   if not(readData("mensix_mining_facility_main:minerConvoInProgress") == 1) then       
-          writeData("mensix_mining_facility_main:minerConvoInProgress", 1)
-          writeData("mensix_mining_facility_main:minerConvoState", 1)
-          createEvent(90 * 1000, "mensix_mining_facility_main", "minerConvo_miner3_1", pMiner3, "")          
-          createEvent(94 * 1000, "mensix_mining_facility_main", "minerConvo_miner1_1", pMiner1, "")
-          createEvent(141 * 1000, "mensix_mining_facility_main", "minerConvo_miner2_1", pMiner2, "")
-   else
-      return 0
-   end              
-end
-
-function mensix_mining_facility_main:minerConvo_miner3_1(pMiner3, pPlayer)
-  
-  local pMiner3 = getSceneObject(readData("mensix_mining_facility_main:pMiner3_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 1) then
-      spatialChat(pMiner3, "Hey, do your impression of those human fellas.") --@must_joker:do_humans
-        writeData("mensix_mining_facility_main:minerConvoState", 2)   
-        createEvent(11 * 1000, "mensix_mining_facility_main", "minerConvo_miner3_2", pMiner3, "")   
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner1_1(pMiner1, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 2) then
-      spatialChat(pMiner1, "So you want to see what humans are like, eh? Well just you watch this...it is uncanny.") --@must_joker:alright_humans
-        writeData("mensix_mining_facility_main:minerConvoState", 3)   
-        createEvent(4 * 1000, "mensix_mining_facility_main", "minerConvo_miner1_2", pMiner1, "")   
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner1_2(pMiner1, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 3) then
-      spatialChat(pMiner1, "Hey look at me. I am human. I am so pretty. This lava is too hot for my tender pink skin. Oooo, it is a scary blistmok...help me...help me.") --@must_joker:i_am_human
-        writeData("mensix_mining_facility_main:minerConvoState", 4)   
-        createEvent(48 * 1000, "mensix_mining_facility_main", "minerConvo_miner1_3", pMiner1, "")   -- 43
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner3_2(pMiner3, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  local pMiner2 = getSceneObject(readData("mensix_mining_facility_main:pMiner2_objectID"))
-  local pMiner3 = getSceneObject(readData("mensix_mining_facility_main:pMiner3_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 4) then
-      spatialChat(pMiner3, "It is funny because it is true.") --@must_joker:i_love_that
-      CreatureObject(pMiner1):doAnimation("emt_rofl")
-      CreatureObject(pMiner2):doAnimation("emt_rofl")
-      CreatureObject(pMiner3):doAnimation("emt_rofl")
-        writeData("mensix_mining_facility_main:minerConvoState", 5)   
-        createEvent(2 * 64 * 1000, "mensix_mining_facility_main", "minerConvo_miner3_3", pMiner3, "")   --
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner2_1(pMiner2, pPlayer)
-  
-  local pMiner2 = getSceneObject(readData("mensix_mining_facility_main:pMiner2_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 5) then
-      spatialChat(pMiner2, "Hey, hey...now do a Wookiee.") --@must_joker:do_wookiee
-        writeData("mensix_mining_facility_main:minerConvoState", 6)   
-        createEvent(76 * 1000, "mensix_mining_facility_main", "minerConvo_miner2_2", pMiner2, "")   --76
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner1_3(pMiner1, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  local pMiner2 = getSceneObject(readData("mensix_mining_facility_main:pMiner2_objectID"))
-  local pMiner3 = getSceneObject(readData("mensix_mining_facility_main:pMiner3_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 6) then
-      spatialChat(pMiner1, "No way! Those walking furballs smell something fierce.") -- @must_joker:wookiee_smell
-      CreatureObject(pMiner1):doAnimation("emt_rofl")
-      CreatureObject(pMiner2):doAnimation("emt_rofl")
-      CreatureObject(pMiner3):doAnimation("emt_rofl")
-        writeData("mensix_mining_facility_main:minerConvoState", 7)   
-        createEvent(45 * 1000, "mensix_mining_facility_main", "minerConvo_miner1_4", pMiner1, "")   -- 43
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner1_4(pMiner1, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 7) then
-      spatialChat(pMiner1, "Hey, guys. Watch this. I am going to do all those treasure hunters out in those ruins thinking they are going to get rich. Silly off-worlders...there are more credits floating in the lava pools than they will ever find in those dumb ruins.") --@must_joker:offworlders
-        writeData("mensix_mining_facility_main:minerConvoState", 8)   
-        createEvent(31 * 1000, "mensix_mining_facility_main", "minerConvo_miner1_5", pMiner1, "")   -- 43
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner2_2(pMiner2, pPlayer)
-  
-  local pMiner2 = getSceneObject(readData("mensix_mining_facility_main:pMiner2_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 8) then
-      spatialChat(pMiner2, "I bet you can't do a Rodian.") --@must_joker:do_rodian
-        writeData("mensix_mining_facility_main:minerConvoState", 9)   
-       
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner1_5(pMiner1, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 9) then
-      spatialChat(pMiner1, "Hmmmmm...rodian eh? That could be a tough one...") --@must_joker:okay_rodian
-        writeData("mensix_mining_facility_main:minerConvoState", 10)   
-        createEvent(5 * 1000, "mensix_mining_facility_main", "minerConvo_miner1_6", pMiner1, "")   -- 43
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner1_6(pMiner1, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 10) then
-      spatialChat(pMiner1, "Hey everyone, I am Rodian.  Look at me with my skinny green legs and my flappy little lips. I am a scary bounty hunter...OoooOOooO. ") --@must_joker:i_am_rodian
-        writeData("mensix_mining_facility_main:minerConvoState", 11)   
-        createEvent(3 * 1000, "mensix_mining_facility_main", "minerConvo_miner1_7", pMiner1, "")   -- 43
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner3_3(pMiner3, pPlayer)
-  
-  local pMiner3 = getSceneObject(readData("mensix_mining_facility_main:pMiner3_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 11) then
-      spatialChat(pMiner3, "I don't get it.") --@must_joker:i_dont_get_it
-        writeData("mensix_mining_facility_main:minerConvoState", 12)   
-        createEvent(9 * 1000, "mensix_mining_facility_main", "minerConvo_miner3_4", pMiner3, "")   --
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner1_7(pMiner1, pPlayer)
-  
-  local pMiner1 = getSceneObject(readData("mensix_mining_facility_main:pMiner1_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 12) then
-      spatialChat(pMiner1, "Rodians are all yella...well green anyways. They are all supposed to be scary but how can you be scary with those weird things sticking out of your head?") --@must_joker:rodian_yellow
-        writeData("mensix_mining_facility_main:minerConvoState", 13)   
-       
-  end
-end
-
-function mensix_mining_facility_main:minerConvo_miner3_4(pMiner3, pPlayer)
-  
-  local pMiner3 = getSceneObject(readData("mensix_mining_facility_main:pMiner3_objectID"))
-  
-  if (readData("mensix_mining_facility_main:minerConvoState") == 13) then
-      spatialChat(pMiner3, "Oh...yeah...that was a good one...") --@must_joker:no_i_get_it
-        writeData("mensix_mining_facility_main:minerConvoState", 0) 
-        writeData("mensix_mining_facility_main:minerConvoInProgress", 0)   
-        createEvent(3 * 100 * 1000, "mensix_mining_facility_main", "startMinerConvo", pMiner3, "")   
-  end
-end
-
-

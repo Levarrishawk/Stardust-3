@@ -431,7 +431,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- task 0 / task 2 target templates, quoted.
 	-- Both crash-site terminal nodes are already observed by map_exploration.lua,
 	-- so this file stacks an OBJECTRADIALUSED observer and sets NO menu component.
-	crashTerminals = { 12111401, 12112127 },
+	crashTerminals = { MustafarBuildout.objects[12111401], MustafarBuildout.objects[12112127] },
 
 	-- task 2's target: object/tangible/quest/must_orc_computer.iff, registered by
 	-- addTemplate in object/custom_content/tangible/quest/must_orc_computer.lua:5,
@@ -444,7 +444,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- .ilf's two pilot chairs and is superseded -- it was 3.4 m too far forward and
 	-- faced the wrong way. Root cause of the guess: the dungeon spawn tables were
 	-- not in the searched set, only the .qst files and the interior layouts.
-	cruiser = { nodeID = 12112205, cell = "bridge", x = 2.2, z = 1.9, y = 8, heading = -90 },
+	cruiser = { nodeID = MustafarBuildout.objects[12112205], cell = "bridge", x = 2.2, z = 1.9, y = 8, heading = -90 },
 
 	-- task 1: 4 circuit boards at 60 percent, from Salvage Bandits.
 	-- "Social Group must_bandit" is unusable (all SOM templates carry socialGroup
@@ -472,7 +472,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- and the "story_arc_uplink" gate. This file owns 12111374 only. Keeping the
 	-- two straight matters -- an earlier note in this file claimed a menu collision
 	-- between them, and there is none.
-	uplinkEntrance = { nodeID = 12111374 },
+	uplinkEntrance = { nodeID = MustafarBuildout.objects[12111374] },
 
 	-- SUBSTITUTED (repairDroid only): the .qst names "an automated repair droid"
 	-- and "the relay it makes" but gives no template for either.
@@ -685,9 +685,9 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	factoryArea = { x = 516, z = 64, y = 1990, radius = 50, waypointName = "Operational Droid Factory" },
 
 	-- Snapshot furniture on the factory's doorstep.
-	factoryTerminal = { nodeID = 12112268 },
-	factoryKeypad = { nodeID = 12112269 },
-	factoryDoor = { nodeID = 12112909 },
+	factoryTerminal = { nodeID = MustafarBuildout.objects[12112268] },
+	factoryKeypad = { nodeID = MustafarBuildout.objects[12112269] },
+	factoryDoor = { nodeID = MustafarBuildout.objects[12112909] },
 
 	-- task 10 Reward: object/tangible/item/som/droid_factory_history_datapad.iff,
 	-- CountItem 1. Registered by addTemplate in
@@ -729,7 +729,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- the technician patrol markers, Chief Drono and the exploration marker -- so
 	-- he stands in the free corner of it. The ROOM is reasoned from live evidence.
 	-- The coordinate inside it is not.
-	cobar = { template = "engineer_cobar", cellID = 12112243, x = -147.5, z = 19.1, y = -64.8, heading = 45, respawn = 300 },
+	cobar = { template = "engineer_cobar", cellID = MustafarBuildout.objects[12112243], x = -147.5, z = 19.1, y = -64.8, heading = 45, respawn = 300 },
 
 	--------------------------------------------------------------------------
 	-- CHAPTER THREE 03 -- "Destroy HK-47"
@@ -746,7 +746,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- two travellers mensix_mining_facility_main.lua moves out of the deck. Those
 	-- travellers are outdoors only because Levarris moved them there for
 	-- spatialChat; borrowing their height was borrowing a workaround's position.
-	pilot = { template = "miner_pilot", cellID = 12112248, x = -41.9, z = 31.5, y = -106.9, heading = -145, respawn = 300 },
+	pilot = { template = "miner_pilot", cellID = MustafarBuildout.objects[12112248], x = -41.9, z = 31.5, y = -106.9, heading = -145, respawn = 300 },
 
 	-- The invented HK-47 spawn lived here. There was no live position for him --
 	-- chapter three 03 carries no coordinates at all, because live fights him in
@@ -822,7 +822,7 @@ storyArcChaptersScreenPlay = ScreenPlay:new {
 	-- and the spot cleared all seven of them by 8 m. Both statements were true
 	-- and neither was evidence; story_arc_prelude.lua records the same mistake
 	-- made about Chivos, one room over.
-	milo = { template = "must_milo_mensix", cellID = 12112241, x = -158.1, z = 22.6, y = -15.2, heading = 90, respawn = 300 },
+	milo = { template = "must_milo_mensix", cellID = MustafarBuildout.objects[12112241], x = -158.1, z = 22.6, y = -15.2, heading = 90, respawn = 300 },
 
 	-- "the terminal located in this room" -- chapter three chapter 03 task 6.
 	-- LIVE. The spawn table carries exactly one object row for conference_room:
@@ -948,7 +948,6 @@ function storyArcChaptersScreenPlay:start()
 		self:spawnFactoryTerminals()
 		self:spawnMilo()
 		self:spawnCobar()
-		self:spawnScout()
 		self:spawnPilot()
 		self:spawnAreas()
 	end
@@ -978,7 +977,7 @@ function storyArcChaptersScreenPlay:attachOne(nodeID, role)
 	local pObject = getSceneObject(nodeID)
 
 	if (pObject == nil) then
-		print("storyArcChaptersScreenPlay: snapshot object " .. nodeID .. " (" .. role .. ") was not found; that step of the arc will be unreachable")
+		print("storyArcChaptersScreenPlay: buildout object " .. nodeID .. " (" .. role .. ") was not found; that step of the arc will be unreachable")
 		return
 	end
 
@@ -992,7 +991,7 @@ function storyArcChaptersScreenPlay:observeOnly(nodeID, role)
 	local pObject = getSceneObject(nodeID)
 
 	if (pObject == nil) then
-		print("storyArcChaptersScreenPlay: snapshot object " .. nodeID .. " (" .. role .. ") was not found; that step of the arc will be unreachable")
+		print("storyArcChaptersScreenPlay: buildout object " .. nodeID .. " (" .. role .. ") was not found; that step of the arc will be unreachable")
 		return
 	end
 
@@ -1258,22 +1257,6 @@ end
 -- names for its waypoint. That task gives a height (157) but the surrounding
 -- terrain is authored, so the world floor is used and the .qst height is kept in
 -- the comment as the evidence it is.
-function storyArcChaptersScreenPlay:spawnScout()
-	-- The .qst gave LocationY 157 for this waypoint, but a waypoint height and a
-	-- standing height are not the same number, so the live floor is resolved the
-	-- way every other file on this planet does it (cursed_shard.lua:257).
-	local z = getWorldFloor(self.scoutPost.x, self.scoutPost.y, "mustafar")
-	local pScout = spawnMobile("mustafar", "must_scout", self.scoutPost.respawn, self.scoutPost.x, z, self.scoutPost.y, 0, 0)
-
-	if (pScout == nil) then
-		print("storyArcChaptersScreenPlay: must_scout failed to spawn at the droid army waypoint")
-	end
-
-	-- No role and no menu component. He carries story_arc_chapter_three_scout on
-	-- his mobile template, so the converse radial is the stock one and everything
-	-- he does runs through scout_conv_handler.
-end
-
 -- Live position, cell-local on the landing deck; see the pilot block above.
 function storyArcChaptersScreenPlay:spawnPilot()
 	local pPilot = spawnMobile("mustafar", self.pilot.template, self.pilot.respawn, self.pilot.x, self.pilot.z, self.pilot.y, self.pilot.heading, self.pilot.cellID)
@@ -2375,7 +2358,7 @@ function storyArcChaptersScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 1
 	end
 
-	local template = AiAgent(pVictim):getCreatureTemplateName()
+	local template = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (stage == self.STAGE_SEARCH_BANDITS) then
 		self:countBandit(pPlayer, template)

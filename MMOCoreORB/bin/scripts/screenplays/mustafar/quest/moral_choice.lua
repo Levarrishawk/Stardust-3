@@ -60,17 +60,7 @@ reaches them, and they are what the .qst allows.
 [list]: Level 75, Tier 4, Type solo, category Mustafar, allowRepeats true,
 completeWhenTasksComplete true, Bank Credits 0, Experience Amount 0.
 
-THE LEVEL GATE  --  61, not 75
-
-The .qst's Level 75 is a client-side display value and the exec does not enforce
-it. His server-side conversation gates the offer on a level test against 60: the
-offer is only reached when the player's level is greater than 60, so the real
-minimum is 61 and requiredLevel below says 61.
-
-The condition is named levelTooLow and it returns TRUE for the players who ARE
-high enough -- the name is inverted relative to what it does. Read the body, not
-the identifier. Menth Paul's tree has the same condition, the same way round;
-cursed_shard.lua records it too.
+Stardust offers the quest without a combat-level check.
 
 THE TWO THINGS THE PLAYER CLICKS, AND WHERE THEY ARE
 
@@ -142,10 +132,6 @@ so the .qst quotes exactly one waypoint -- "Striking miners camp" at
 that says "head back to the new mining facility" with no journal and no marker
 is unfinishable by anyone who did not read the coordinates out of the file.
 
-The gate itself is 61, not the .qst's 75 -- see THE LEVEL GATE above. It is
-enforced in the executive's conversation handler, on his own shipped s_47. No
-invented text; only the number changed.
-
 WHAT IS NOT MODELLED
 
 allowRepeats = true: stage stops at done, as in every other quest in this wave.
@@ -170,14 +156,10 @@ moralChoiceScreenPlay = ScreenPlay:new {
 
 	screenplayName = "moralChoiceScreenPlay",
 
-	-- The gate the exec actually enforces, not the .qst's 75; see THE LEVEL GATE.
-	-- Enforced in moral_exec_conv_handler.
-	requiredLevel = 61,
-
 	-- The new mining facility, snapshot node 12112217; see THE TWO THINGS THE
 	-- PLAYER CLICKS.
 	facility = {
-		buildingID = 12112217,
+		buildingID = MustafarBuildout.objects[12112217],
 		x = -2420.5,
 		y = 1767.08,
 	},
@@ -188,7 +170,7 @@ moralChoiceScreenPlay = ScreenPlay:new {
 	exec = {
 		template = "som_kenobi_moral_exec",
 		cellName = "conference_room",
-		cellID = 12112241,
+		cellID = MustafarBuildout.objects[12112241],
 		x = -152.4,
 		z = 19.1,
 		y = -13.3,
@@ -199,7 +181,7 @@ moralChoiceScreenPlay = ScreenPlay:new {
 	terminal = {
 		template = "object/tangible/quest/som_kenobi_network_computer.iff",
 		cellName = "hub_room",
-		cellID = 12112236,
+		cellID = MustafarBuildout.objects[12112236],
 		x = -87.9,
 		z = 14.4,
 		y = -6.3,
@@ -213,17 +195,10 @@ moralChoiceScreenPlay = ScreenPlay:new {
 		waypointName = "Striking miners camp",
 	},
 
-	generatorID = 12111382,
+	generatorID = MustafarBuildout.objects[12111382],
 
 	-- Placed. 19 m from the generator, inside the compound, among the nine
 	-- miner_on_strike smoking_forest_region.lua already puts there.
-	strikeLeader = {
-		template = "som_kenobi_moral_strike_leader",
-		x = -5280,
-		y = 4498,
-		heading = 60,
-		respawn = 60,
-	},
 
 	-- Tasks 4 and 5: Count 2, Min Distance 5, Max Distance 15, one lot per step.
 	minerEncounter = {
@@ -265,7 +240,6 @@ moralChoiceScreenPlay = ScreenPlay:new {
 	execID = 0,
 	execCellID = 0,
 	execCellBy = "none",
-	strikeLeaderID = 0,
 	terminalID = 0,
 	terminalCellID = 0,
 	terminalCellBy = "none",
@@ -289,7 +263,6 @@ registerScreenPlay("moralChoiceScreenPlay", true)
 function moralChoiceScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachGenerator()
-		self:spawnStrikeLeader()
 		self:spawnFacilityObjects()
 	end
 end
@@ -300,25 +273,13 @@ function moralChoiceScreenPlay:attachGenerator()
 	local pGenerator = getSceneObject(self.generatorID)
 
 	if (pGenerator == nil) then
-		print("moralChoiceScreenPlay: snapshot object " .. self.generatorID .. " (the power generator) was not found; branch A cannot be started")
+		print("moralChoiceScreenPlay: buildout object " .. self.generatorID .. " (the power generator) was not found; branch A cannot be started")
 		return
 	end
 
 	writeStringData(self.generatorID .. ":moralChoiceRole", "generator")
 	SceneObject(pGenerator):setObjectMenuComponent("MoralChoiceMenuComponent")
 	self.generatorAttached = true
-end
-
-function moralChoiceScreenPlay:spawnStrikeLeader()
-	local leader = self.strikeLeader
-	local z = getWorldFloor(leader.x, leader.y, "mustafar")
-	local pNpc = spawnMobile("mustafar", leader.template, leader.respawn, leader.x, z, leader.y, leader.heading, 0)
-
-	if (pNpc == nil) then
-		print("moralChoiceScreenPlay: failed to spawn " .. leader.template .. "; branch B cannot be started")
-	else
-		self.strikeLeaderID = SceneObject(pNpc):getObjectID()
-	end
 end
 
 -- Cell name first, recorded snapshot node id second. Returns the cell id and how

@@ -1,454 +1,111 @@
---[[
-Mustafar instance pools  --  the six SOE dungeon pools
-
-WHAT THIS IS, AND WHAT IT SITS ON TOP OF
-
-Mustafar content in this tree is ours to write. We are sanctioned to do Mustafar
-for Levarris (Aaron, 2026-08-31), so nothing here is deferred to another owner and
-no part of this file is somebody else's to finish.
-
-What is genuinely his, and is true, is the layer underneath: the C++ POB ('0001')
-and CellPortal ('0002') parsing in the portal-layout reader, which is what makes
-these buildings load with working cells at all. That is already compiled into the
-server and is left exactly alone -- not because it belongs to someone else's
-scope, but because it works and this file is Lua. What was missing on top of it
-was any script that lets a player reach the interiors. That is this file.
-
-THE POOLS ARE SOE'S, AND THEY ARE ALREADY LOADED
-
-snapshot/mustafar.ws in stardust_03.tre -- the snapshot the server actually loads --
-places six dungeon buildings many times over, in evenly spaced rows well outside
-the playable map:
-
-    old_republic_facility    12 copies   z = -4746.16, x = -6748.81 .. 951.18, 700 apart
-    working_droid_factory    12 copies   z = -3745.18, x = -6753.41 .. 946.59, 700 apart
-    decrepit_droid_factory    9 copies   z = -2745.18, x = -6753.41 .. -1853.41
-    monster_lair             12 copies
-    lair_of_the_crystal      12 copies   x =  6748.99, z =  6954.54 .. -745.46, 700 apart
-    uplink_cave               9 copies   x =  5947.36, z =  6255.33 .. 1355.33, 700 apart
-
-That is SOE's instancing model: a fixed pool of identical off-map copies, one
-handed to each party. Nothing has to be created for it. A boot probe on the devbox
-enumerated all 66 copies live with cells attached and zero portal errors in the
-log, so the pool is real at runtime and not just in the snapshot.
-
-(Two positions in the snapshot are duplicated -- uplink 12114801/12114804 both at
-z=2055.33, and decrepit 12115008/12115037 both at x=-2553.41. They are still
-distinct buildings with distinct cells, so both are usable; SOE simply stacked
-them. Noted so the coordinates above are not read as a transcription error.)
-
-CELL NAMES COME FROM THE .ilf FILES
-
-Each dungeon has an interior layout file (interiorlayout/*.ilf) listing every
-placed object as a template, a cell name and a 4x3 transform. Those files are the
-authoritative record of the interiors. Core3 has an InteriorLayoutTemplate parser
-for them but nothing calls it, so the buildings load as correct geometry with none
-of the furniture -- anything wanted inside has to be spawned from script.
-
-The cell names read out of som_old_republic_facility.ilf were checked against a
-live server: BuildingObject:getNamedCell resolved 22 of 22 of them on copy
-12115823, and the first cell of each of the three single-room dungeons resolved
-too. So getNamedCell against .ilf names is a sound way to address these interiors.
-
-The ORF has 35 cells but the .ilf names only 22, because the .ilf only lists cells
-that contain objects. The 13 unnamed ones are empty by construction.
-
-RESERVATIONS
-
-One copy per entrant, claimed on entry and released when it empties. Not per party:
-there is no getGroup call anywhere in this file, so grouped players each claim their
-own copy and land in different ones. Group entry is an open design question, not a
-thing this file half-implements.
-
-    mustafarInstance:<buildingID>              1 while the copy is claimed
-    mustafarInstance:<buildingID>:claimedAt    os.time() of the claim
-    <playerID>:mustafarInstance                the copy that player is inside
-    <playerID>:mustafarInstanceEjecting        set while an eject is in flight
-
-A copy is released when a sweep finds nobody in any of its cells and the claim is
-older than claimGrace. The grace matters: between reserving a copy and the
-switchZone landing the player in it, the copy is legitimately empty, and without
-the grace it would be handed to somebody else in that window.
-
-The sweep is a self-terminating chain rather than a global timer -- checkCopy
-reschedules itself only while the copy is still claimed, so events exist only for
-copies actually in use. EXITEDBUILDING also fires a one-shot releaseIfEmpty so a
-copy normally frees within seconds rather than waiting for the next sweep.
-
-initialize() does call deleteData on both reservation keys and then ejectAllPlayers,
-in prepareCopy -- but at boot both are no-ops, and the paragraph that used to stand
-here credited them with covering a stranded logout. They do not.
-
-start() runs inside startManagers() (ZoneServerImplementation.cpp:230), which is
-before serverState = ONLINE (:233), so no player is logged in yet. And reservations
-live in DirectorSharedMemory, which is four plain in-memory HashTables (see
-DirectorSharedMemory.h) constructed fresh by new DirectorSharedMemory() at
-DirectorManager.cpp:125 -- nothing serializes it, so it is already empty on every
-boot. reloadscreenplays never re-runs initialize() either.
-
-What actually covers a stranded logout is the ordinary path: logging out removes the
-creature from the world (PlayerObjectImplementation.cpp:419), so countPlayersInside
-falls to 0 and the 120 s checkCopy sweep releases the copy once claimGrace has
-passed. The slot is not leaked within a run either.
-
-WHAT IS WIRED, AND WHAT DELIBERATELY IS NOT
-
-Five of the six pools have an entry. This paragraph has now been wrong twice: it
-first said only the Old Republic Facility had one, then it said two did. Both
-readings were written without checking the story arc that actually drives these
-dungeons, and the second one was used to justify leaving three pools unwired.
-
-  old_republic_facility   entry, own prop 12110161   ungated
-  lair_of_the_crystal     entry, own prop 12112106   gate = "kenobi_spine"
-  uplink_cave             entry, own prop 12111281   gate = "story_arc_uplink"
-  working_droid_factory   entry, NO prop             gate = "story_arc_factory"
-  decrepit_droid_factory  entry, NO prop             gate = "story_arc_factory"
-
-som_kenobi_historian_1 sends the player to the Old Republic Facility and
-reunite_shard_3's fusion machine stands inside it. The lair is the shard site; its
-gate string is resolved against the screenplay of that name, so the radial only
-appears once kenobiSpineScreenPlay:mayEnterLair (kenobi_spine.lua:1491) says the
-player is at that point in the spine.
-
-An entry whose nodeID is nil is the case this file did not have before, and it is
-the whole point of the seam. A pool needs a landing spot -- cell, x, z, y -- to be
-enterable at all, but it does not have to own a radial to get one.
-
-Both factories share exterior door 12112909, and story_arc_chapters.lua already
-owns that node's menu for "restart the main computer processor" (chapter two 01
-task 1) and "shut down the factory" (chapter three 01 task 16).
-setObjectMenuComponent REPLACES an object's menu wholesale, so attaching a prop
-here would silently destroy those two radials. So the factory pools carry
-nodeID = nil, attachEntryProp skips them, and storyArcChaptersScreenPlay's own
-radial calls MustafarInstances:enterInstance directly. One owner for the node, one
-owner for the pool, and no collision to leave behind as a warning.
-
-uplink_cave does NOT need that treatment, and the note that used to claim it did
-was wrong on the node numbers. The cave's door is 12111281; the node
-story_arc_chapters owns is 12111374, the bunker entrance standing beside it. Two
-different objects, so the cave keeps its own prop and its own radial.
-
-monster_lair used to be the only pool still carrying entry = nil. Its note gave
-two reasons -- no .qst in this tree points at Sherkar's lair, and no screenplay
-populates it -- and called the pair an honest gap. They were one blocker, not
-two. old_republic_facility has no .qst either and has always been enterable, so
-the missing .qst never blocked anything on its own; the empty room did. So the
-room was populated (mustafar_dungeon_population's lairBosses table puts Sher Kar
-in cell r1 of all 12 copies) and the entry was wired. Every pool is now
-enterable. The lesson the old note half-learned still stands: the other three
-nil entries were justified the same way and it was not true of them either --
-the arc drives all three. They were not gaps, they were unfinished connections.
-
-STRINGS
-
-"Enter the facility" is this file's wording, not a shipped one. The live entry was
-a door you walked through, not a radial, so there is no SOE string for it.
---]]
+-- Six native buildout pools. Entry cells and transfer coordinates are from
+-- DSRC datatables/instance/instance_datatable.tab. Coordinates in Lua are
+-- stored in Core3 switchZone order (x, height, y).
+--
+-- The two factories share an exterior door. story_arc_chapters.lua owns its
+-- radial and selects the pool, so neither factory registers a separate entry.
+--
+-- Party members use the copy of a groupmate already inside. The occupancy
+-- sweep releases empty copies after the transfer grace period or expires a run.
 
 MustafarInstances = ScreenPlay:new {
 	numberOfActs = 1,
 
 	screenplayName = "MustafarInstances",
 
-	-- Seconds a claimed-but-empty copy is held before it can be reissued; see
-	-- RESERVATIONS in the header.
+	-- Hold an empty copy long enough for the transfer to finish.
 	claimGrace = 60,
 
 	-- How often the self-rescheduling sweep revisits a claimed copy.
 	sweepSeconds = 120,
+	maxPlayers = 8,
+	timeLimit = 3600,
 
 	pools = {
 		{
 			key = "old_republic_facility",
 			label = "Old Republic Facility",
 
-			buildings = { 12115823, 12115861, 12115785, 12115747, 12115709, 12115671,
-				12115633, 12115595, 12115557, 12115519, 12115481, 12115443 },
-
-			-- Snapshot node 12110161,
-			-- object/building/mustafar/structures/shared_old_republic_facility_door_exterior.iff
-			-- at (-775.93, 89.14, 6088.28). This is the door the client already draws.
+			buildings = { 0xf8acfffffcc2fd70, 0xf8abfffffcc2fd70, 0xf8adfffffcc2fd70, 0xf8aefffffcc2fd70,
+				0xf8affffffcc2fd70, 0xf8b0fffffcc2fd70, 0xf8b1fffffcc2fd70, 0xf8b2fffffcc2fd70,
+				0xf8b3fffffcc2fd70, 0xf8b4fffffcc2fd70, 0xf8b5fffffcc2fd70, 0xf8b6fffffcc2fd70 },
 			entry = {
-				nodeID = 12110161,
-				text = "Enter the facility",
-
-				-- entrance cell, from som_old_republic_facility.ilf. Its floor is at
-				-- y=0 and its clutter sits at x 4.4-14 / z +7..+9.4, x 19-23.4 at both
-				-- ends, and x 6-8 / z -9. x=12 z=0 is open floor between them.
-				-- .ilf y (up) becomes the switchZone height argument.
-				cell = "entrance",
-				x = 12.0, z = 0.0, y = 0.0,
+				nodeID = MustafarBuildout.objects[12110161],
+				text = "@travel/zone_transition:old_republic_facility",
+				cell = "entrance", x = 12, z = 0, y = 0,
 			},
-
-			-- Just outside the door, stepped ~7m along the vector from the facility
-			-- exterior (node 12110934, -782.04/6096.14) through the door, so the
-			-- player lands facing away from the building rather than inside its mass.
-			-- Height is resolved with getWorldFloor, never hardcoded.
-			exit = { x = -771.6, y = 6082.8 },
+			exit = { x = -768, z = 87, y = 6078 },
+			gate = "old_republic_facility",
 		},
 		{
 			key = "monster_lair",
 			label = "Sherkar's Lair",
-			buildings = { 12115929, 12115932, 12115926, 12115923, 12115920, 12115917,
-				12115914, 12115911, 12115908, 12115905, 12115902, 12115899 },
-
-			--[[ WIRED. This block used to read `entry = nil` with a note saying an
-			     entry "would drop the player into an empty room". That was true when
-			     it was written and is no longer: the room is furnished by
-			     MustafarDungeonPopulation:populateLairBosses(), which puts the
-			     finished level-200 sher_kar in every copy. The two reasons that note
-			     gave for holding off -- nothing populates it, no .qst points at it --
-			     were one blocker, not two. The second never mattered;
-			     old_republic_facility has no .qst pointing at it either and has been
-			     enterable all along.
-
-			     THE DOOR IS SOURCED. Snapshot node 12110143,
-			     shared_must_sherkar_door.iff at (-2077.07, h 87.16, 4276.08), beside
-			     exterior 12110517 shared_must_sherkar_lair_exterior.iff at
-			     (-2128.27, h 86.79, 4356.34). Both re-read from
-			     snapshot/mustafar.ws (stardust_03) rather than copied.
-
-			     THE CELL NAME IS CERTAIN. must_monster_lair.ilf holds 456 nodes and
-			     every single one is in cell "r1" -- there is no second cell to pick
-			     wrong. master_index.txt agrees: the only interior collision floor
-			     shipped is thm_must_monster_lair_s01_r1_collision_floor.flr.
-
-			     THE ARRIVAL POINT IS OURS. There is no monster_lair entry in
-			     datatables/spawning/dungeon/ (the only SoM ones are
-			     crash_site_cruiser, decrepit_droid_factory, mining_facility,
-			     old_republic_facility and working_droid_factory), and
-			     thm_must_monster_lair_s01.pob is listed in master_index.txt but is
-			     not present in any TRE available here, so the collision floor cannot
-			     be read. Live has no arrival point of its own to copy either -- it
-			     opened this lair through the Mustafarian bandit chain, not a portal
-			     drop -- so this one stays ours.
-
-			     THE BOSS POINT IS NOT OURS ANY MORE. This block used to give a
-			     second fitted point for Sher Kar himself and call it ours on the
-			     same reasoning. That was a wrong-tree search: the SoM trials keep
-			     their spawn data in datatables/dungeon/mustafar_trials/<system>/,
-			     a different tree from datatables/spawning/dungeon/, and
-			     sher_kar/sher_kar_data.tab does exist there. It gives Sher Kar and
-			     his four guards, and mustafar_dungeon_population.lua now uses those
-			     rows. Only the arrival point below is still a fit.
-
-			     What it IS derived from, rather than guessed: the .ilf's only
-			     furnished area is the nest at the far end -- 44 ground-resting props
-			     (nine trash piles, eight human skeletons, bith and ithorian
-			     skeletons, poi_ev9d9head, r2_head, r5_torso, AT-AT/AT-ST and Death
-			     Star debris) spanning x -94.96..-69.08, z -207.24..-194.86. Fitting
-			     a plane to those 44 heights gives floor h = -3.74 + -0.1966*(z +
-			     202.35), mean residual 0.24 m, max 1.30 m. That is a well-attested
-			     26 m x 12 m floor, and the arrival point sits inside it, so it does
-			     not rely on extrapolating into the unmapped tunnel.
-
-			       arrival  x -86.3, z(height) -5.19, y -195.5   (near edge of the nest)
-
-			     THAT PLANE IS CORROBORATED BY LIVE, which is worth recording because
-			     it is what confirms the axis mapping in the line below. Applied to
-			     the sher_kar_data.tab rows -- which were found later and were not
-			     available when it was fitted -- it predicts -18.29 at guard0
-			     (y -128.367) against live's -18.2924, and -17.37 at guard4
-			     (y -133.004) against live's -17.1073. It only breaks far up the
-			     tunnel where the floor flattens out, so it is trustworthy exactly
-			     where it is used: the nest.
-
-			     Sher Kar himself now stands at his own sourced point about 43 m up
-			     the tunnel, so the player lands in the bone field and sees him and
-			     his guards down its length rather than face to face. sher_kar.lua is
-			     pvpBitmask ATTACKABLE and not AGGRESSIVE, so that distance does not
-			     force an instant pull -- and it is now a longer distance, not a
-			     shorter one.
-
-			     Field order is (x, height, y) per switchZone at :567 -- .ilf y (up)
-			     becomes the middle argument, .ilf z becomes the last, the same
-			     mapping old_republic_facility's entry above already uses.
-
-			     NO GATE, deliberately. isEntryAllowed is an if-chain on pool.gate and
-			     the header at :476 warns every new gate costs a branch. Live opened
-			     this lair through the Mustafarian bandit chain, which this tree does
-			     not have, so there is nothing faithful to gate on -- and a level-200
-			     boss gates itself by difficulty. ]]
+			buildings = { 0xf8a0fffffcc28840, 0xf89ffffffcc28840, 0xf8a1fffffcc28840, 0xf8a2fffffcc28840,
+				0xf8a3fffffcc28840, 0xf8a4fffffcc28840, 0xf8a5fffffcc28840, 0xf8a6fffffcc28840,
+				0xf8a7fffffcc28840, 0xf8a8fffffcc28840, 0xf8a9fffffcc28840, 0xf8aafffffcc28840 },
 			entry = {
-				nodeID = 12110143,
-				text = "Enter the lair",
-				cell = "r1",
-				x = -86.3, z = -5.19, y = -195.5,
+				nodeID = MustafarBuildout.objects[12110143],
+				text = "@travel/zone_transition:sher_kar_cave",
+				cell = "r1", x = -56, z = -5, y = 20,
 			},
-
-			-- Stepped 7 m past the door along the exterior->door vector, the same
-			-- convention as the other pools: exterior (-2128.27, 4356.34) -> door
-			-- (-2077.07, 4276.08) is (51.20, -80.26), length 95.20, unit
-			-- (0.5378, -0.8431). Height is resolved by sendToExit with getWorldFloor
-			-- and is never stored here.
-			exit = { x = -2073.3, y = 4270.2 },
-
-			door = 12110143,
+			exit = { x = -2017, z = 82, y = 4197 },
+			door = MustafarBuildout.objects[12110143],
 		},
 		{
 			key = "uplink_cave",
 			label = "Uplink Cave",
-			buildings = { 12114807, 12114801, 12114804, 12114798, 12114795, 12114792,
-				12114789, 12114786, 12114783 },
-			-- Snapshot node 12111281,
-			-- shared_must_uplink_bunker_entrance_door.iff at (-3591.53, 3489.44).
-			-- This is the cave's OWN door. It is not node 12111374 -- that is the
-			-- bunker entrance standing 0.5 m away, and story_arc_chapters.lua owns
-			-- that one for the surface work site. Two nodes, two owners, no clash.
+			buildings = { 0xf8d7fffffcc4d230, 0xf8d8fffffcc4d230, 0xf8d9fffffcc4d230, 0xf8dafffffcc4d230,
+				0xf8dbfffffcc4d230, 0xf8dcfffffcc4d230, 0xf8ddfffffcc4d230, 0xf8defffffcc4d230 },
 			entry = {
-				nodeID = 12111281,
-				text = "Enter the cave",
-
-				-- INVENTED PLACEMENT, and the absence behind it is a checked one.
-				-- som_uplink_cave has NO table under datatables/spawning/dungeon/ --
-				-- the five that ship there are som_mining_facility,
-				-- som_old_republic_facility, som_crash_site_cruiser,
-				-- som_working_droid_factory and som_decrepit_droid_factory. Its
-				-- placement table lives elsewhere:
-				-- datatables/dungeon/mustafar_trials/link_establish/link_event_data.tab
-				-- (26 content rows), reached from the building's own server template
-				-- through link_event_manager, and read by
-				-- mustafar_dungeon_population.lua. That table has no ENTRY row, so
-				-- the entry coordinate below is still invented -- the .ilf is the
-				-- best evidence that exists for where the player lands -- which is
-				-- exactly the use of a .ilf this tree already calls fair: Core3
-				-- never instantiates .ilf furniture, so these coordinates are not
-				-- "where the prop is", they are shipped evidence of where SOE left
-				-- open floor.
-				--
-				-- som_uplink_cave.ilf has one cell, mainroom, and 197 nodes. Within 20 m
-				-- of the cell origin the only ground-level fixtures are two
-				-- must_miner_tower, at (-3.879, h -2.012, -6.071) and
-				-- (-4.271, h -1.978, 5.125), so the floor there sits at h = -2.0.
-				-- Everything else near the origin is overhead -- cargo and death-star
-				-- debris from h +1.5 to +15. x = 0, z = 0 is open floor between the two
-				-- towers with the nearest fixture 5.5 m away.
-				cell = "mainroom",
-				x = 0.0, z = -2.0, y = 0.0,
+				nodeID = MustafarBuildout.objects[12111281],
+				text = "@dungeon/space_dungeon:uplink_cave",
+				cell = "mainroom", x = -85, z = 0, y = 128,
 			},
-
-			-- Stepped 6 m out from the door toward the .qst's own work-site waypoint
-			-- (-3604 / 3483), which is the direction the player arrives from. The
-			-- door and the bunker entrance are only 0.5 m apart, so that pair is far
-			-- too short a baseline to take a direction from; the authored waypoint is
-			-- the one real bearing available. Lands 5.8 m clear of the bunker.
-			-- Height is resolved with getWorldFloor, never hardcoded.
-			exit = { x = -3596.9, y = 3486.7 },
-
-			-- Chapter one 03's work site. Entering before that chapter would put the
-			-- player in a cave with no droid, no relay and no reason to be there.
+			exit = { x = -3601, z = 158, y = 3486 },
 			gate = "story_arc_uplink",
-
-			door = 12111281,
+			door = MustafarBuildout.objects[12111281],
 		},
 		{
 			key = "lair_of_the_crystal",
 			label = "Lair of the Crystal",
-			buildings = { 12114830, 12114828, 12114832, 12114826, 12114824, 12114822,
-				12114820, 12114818, 12114816, 12114814, 12114812, 12114810 },
-			-- Snapshot node 12112106,
-			-- object/tangible/dungeon/mustafar/obiwan_finale/shared_obiwan_finale_entrance_stone.iff
-			-- at (-2693.52, 42.57, 6075.59). This is the end of the arc's main
-			-- spine, not a side door, so unlike every other pool here it is gated:
-			-- see gate below and kenobiSpineScreenPlay:mayEnterLair.
+			maxPlayers = 1,
+			timeLimit = 1800,
+			buildings = { 0xf8ccfffffcc45d00, 0xf8cdfffffcc45d00, 0xf8cbfffffcc45d00, 0xf8cefffffcc45d00,
+				0xf8cffffffcc45d00, 0xf8d0fffffcc45d00, 0xf8d1fffffcc45d00, 0xf8d2fffffcc45d00,
+				0xf8d3fffffcc45d00, 0xf8d4fffffcc45d00, 0xf8d5fffffcc45d00, 0xf8d6fffffcc45d00 },
 			entry = {
-				nodeID = 12112106,
-
-				-- Authored. main_quest_3 task 1 is a Go to Location and carries no
-				-- retrieveMenuText, because in live the stone was a client-side
-				-- dungeon portal rather than a quest object.
+				nodeID = MustafarBuildout.objects[12112106],
 				text = "Wedge the crystal shard into the pillar",
-
-				-- mainroom, from som_obiwan_crystal_lair.ilf. Its floor is at y=0
-				-- and the statue gallery runs x 21..40 in two rows at z 2.5 and
-				-- z 7.68; x=24 z=5.1 is the open aisle between them, at the near
-				-- end. The boss waits at x=37 down the same aisle.
-				cell = "mainroom",
-				x = 24.0, z = 0.0, y = 5.1,
+				cell = "mainroom", x = 9.4, z = 0, y = -3.5,
 			},
-
-			-- Stepped ~6 m back from the stone along the vector out of the temple
-			-- ruin, so the player lands on open ground rather than inside the
-			-- jeditemple wall at 7.67 m or the dome at 8.10 m. Height is resolved
-			-- with getWorldFloor, never hardcoded.
-			exit = { x = -2693.5, y = 6069.6 },
-
-			-- One of four gated pools now, not the only one. See isEntryAllowed.
+			exit = { x = -2696, z = 42, y = 6077 },
 			gate = "kenobi_spine",
-
-			door = 12112106,
+			door = MustafarBuildout.objects[12112106],
 		},
 		{
 			key = "working_droid_factory",
 			label = "Working Droid Factory",
-			buildings = { 12115385, 12115414, 12115356, 12115327, 12115298, 12115269,
-				12115240, 12115211, 12115182, 12115153, 12115124, 12115095 },
-			-- nodeID = nil ON PURPOSE. The door is snapshot node 12112909
-			-- (shared_droid_factory_exterior_door.iff, 532.71/1977.03), and beside it
-			-- the snapshot places a keypad (12112269) and a history terminal
-			-- (12112268). story_arc_chapters.lua owns 12112909's menu component for
-			-- its two factory tasks, and setObjectMenuComponent replaces a menu
-			-- wholesale -- so this pool takes a landing spot and no prop, and
-			-- storyArcChaptersScreenPlay:useFactoryDoor calls enterInstance for it.
-			--
-			-- In live the keypad gated the door behind a code from the factory quest
-			-- line, and both factories share the one door, so which pool a player got
-			-- was part of that quest's logic. That code puzzle does not ship here;
-			-- the arc stage decides instead, which is the deviation, not a gap.
+			buildings = { 0xfffffffffcab2fb0, 0xfffffffffcaaba80, 0xfffffffffcaba4e0, 0xfffffffffcac1a10,
+				0xfffffffffcac8f40, 0xfffffffffcad0470, 0xfffffffffcad79a0, 0xfffffffffcadeed0,
+				0xfffffffffcae6400, 0xfffffffffcaed930, 0xfffffffffcaf4e60, 0xfffffffffcafc390 },
 			entry = {
-				nodeID = nil,
-				text = "Enter the factory",
-
-				-- QUOTED, from the working factory's own dungeon spawn table. Its
-				-- interior door row is
-				-- object/building/mustafar/structures/droid_factory_interior_door.iff
-				-- in cell hall1 at loc_x 0.091872, loc_y 4.00E-06, loc_z 0.141262 --
-				-- the arrival door, effectively the cell origin. The player is put
-				-- 3 m inside it along hall1, clear of the door's own mass. hall1 also
-				-- carries the exit_terminal access_controller at (-1.99229, h 0.189741,
-				-- 2.81714), so the floor there is h = 0.19.
-				cell = "hall1",
-				x = 0.0, z = 0.19, y = 3.0,
+				cell = "hall1", x = 0, z = 0, y = 4,
 			},
-
-			-- Stepped 6 m out from the door along the vector from the factory
-			-- exterior (node 12112250, 538.25/1972.65) through the door, so the
-			-- player lands facing away from the building rather than inside its
-			-- mass -- the same construction the ORF exit uses. Height is resolved
-			-- with getWorldFloor, never hardcoded.
-			exit = { x = 528.0, y = 1980.8 },
-
-			-- Chapter two 01 task 1 onward. See storyArcChaptersScreenPlay:mayEnterDroidFactory.
+			exit = { x = 515, z = 64, y = 1991 },
 			gate = "story_arc_factory",
-
-			door = 12112909,
+			door = MustafarBuildout.objects[12112909],
 		},
 		{
 			key = "decrepit_droid_factory",
 			label = "Decrepit Droid Factory",
-			buildings = { 12115066, 12115008, 12115037, 12114979, 12114950, 12114921,
-				12114892, 12114863, 12114834 },
-			-- Same door, same seam, same reason as working_droid_factory above:
-			-- nodeID = nil because story_arc_chapters.lua owns 12112909's menu.
+			buildings = { 0xfffffffffcb038c0, 0xfffffffffcb0adf0, 0xfffffffffcb12320, 0xfffffffffcb19850,
+				0xfffffffffcb20d80, 0xfffffffffcb282b0, 0xfffffffffcb2f7e0, 0xfffffffffcb36d10 },
 			entry = {
-				nodeID = nil,
-				text = "Enter the factory",
-
-				-- QUOTED. The decrepit factory's own table carries the identical
-				-- interior door row -- droid_factory_interior_door.iff in hall1 at
-				-- 0.091872 / 4.00E-06 / 0.141262 -- and the identical hall1
-				-- exit_terminal at (-1.99229, h 0.189741, 2.81714). The two buildings
-				-- share a floor plan, so they share the arrival spot.
-				cell = "hall1",
-				x = 0.0, z = 0.19, y = 3.0,
+				cell = "hall1", x = 0, z = 0, y = 4,
 			},
-
-			-- The same door, so the same exit as working_droid_factory.
-			exit = { x = 528.0, y = 1980.8 },
-
+			exit = { x = 515, z = 64, y = 1991 },
 			gate = "story_arc_factory",
-
-			door = 12112909,
+			door = MustafarBuildout.objects[12112909],
 		},
 	},
 }
@@ -477,8 +134,6 @@ function MustafarInstances:initialize()
 	end
 end
 
--- Clear any reservation left over from the last run and get anybody who logged
--- out inside back onto the surface; see RESERVATIONS in the header.
 function MustafarInstances:prepareCopy(pool, buildingID)
 	local pBuilding = getSceneObject(buildingID)
 
@@ -487,8 +142,7 @@ function MustafarInstances:prepareCopy(pool, buildingID)
 		return
 	end
 
-	deleteData("mustafarInstance:" .. buildingID)
-	deleteData("mustafarInstance:" .. buildingID .. ":claimedAt")
+	self:releaseCopy(buildingID)
 
 	self:ejectAllPlayers(pBuilding)
 
@@ -559,26 +213,6 @@ end
 
 --[[ Entry ]]
 
---[[ The Old Republic Facility is open ground with a door on it; whoever walks up
-     may go in. The other four wired pools are not. lair_of_the_crystal is the
-     last room of the Kenobi spine, and walking into it early would put the player
-     in front of Sinistro with none of the arc behind them. uplink_cave and the two
-     droid factories are story-arc work sites that are empty and meaningless before
-     their chapter. So a pool may name a gate, and the gate is asked in both places:
-     the radial is not offered to a player who cannot enter, and the selection is
-     refused as well, because a radial the client already drew can still be clicked.
-
-     Both screenplays named below live in this same Lua state, so calling them
-     directly is safe.
-
-     This block used to claim the lookup shape meant "a second gated pool does not
-     have to edit this function". That was wrong, and adding the second and third
-     gates is what proved it: the gate string is resolved by an if-chain here, so
-     every new gate costs a branch. The shape is still worth keeping -- it puts all
-     three gates in one readable place (three gate strings serve four pools, because
-     both factories share story_arc_factory) -- but it is not the extension point the
-     old comment advertised, and the next person should not plan around that. ]]
-
 function MustafarInstances:isEntryAllowed(pool, pPlayer)
 	if (pool == nil or pPlayer == nil) then
 		return false
@@ -595,7 +229,11 @@ function MustafarInstances:isEntryAllowed(pool, pPlayer)
 			return false
 		end
 
-		return kenobiSpineScreenPlay:mayEnterLair(pPlayer)
+		return not CreatureObject(pPlayer):isGrouped() and kenobiSpineScreenPlay:mayEnterLair(pPlayer)
+	end
+
+	if (pool.gate == "old_republic_facility") then
+		return self:mayEnterOldRepublicFacility(pPlayer)
 	end
 
 	if (pool.gate == "story_arc_uplink") then
@@ -621,6 +259,31 @@ function MustafarInstances:isEntryAllowed(pool, pPlayer)
 	return false
 end
 
+function MustafarInstances:mayEnterOldRepublicFacility(pPlayer)
+	if (readScreenPlayData(pPlayer, self.screenplayName, "oldRepublicAccess") == "1") then
+		return true
+	end
+
+	if (storyArcChaptersScreenPlay ~= nil
+		and storyArcChaptersScreenPlay:getStage(pPlayer) >= storyArcChaptersScreenPlay.STAGE_TRAVEL_ORF) then
+		return true
+	end
+
+	if (historianScreenPlay ~= nil) then
+		local stage = historianScreenPlay:getStage(pPlayer)
+		if (stage == historianScreenPlay.STAGE_Q1 or stage == historianScreenPlay.STAGE_Q1_TURNIN) then
+			return true
+		end
+	end
+
+	if (reuniteShardScreenPlay ~= nil) then
+		local stage = reuniteShardScreenPlay:rawStage(pPlayer)
+		return stage >= 4 and stage <= 6
+	end
+
+	return false
+end
+
 function MustafarInstances:enterInstance(pPlayer, poolKey)
 	local pool = self:getPool(poolKey)
 
@@ -636,14 +299,25 @@ function MustafarInstances:enterInstance(pPlayer, poolKey)
 		return
 	end
 
-	local buildingID = self:findFreeCopy(pool)
+	local pBuilding = self:findPartyCopy(pPlayer, pool)
+	local joining = pBuilding ~= nil
+	if (not joining) then
+		pBuilding = self:findFreeCopy(pool)
+	end
 
-	if (buildingID == 0) then
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
 		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:unable_to_find_dungeon") -- That area is currently unavailable. Please try again later.
 		return
 	end
+	if (SceneObject(pPlayer):getRootParent() == pBuilding) then
+		return
+	end
+	if (joining and self:countPlayersInside(pBuilding) >= (pool.maxPlayers or self.maxPlayers)) then
+		CreatureObject(pPlayer):sendSystemMessage("@dungeon/space_dungeon:unable_to_find_dungeon")
+		return
+	end
 
-	local pBuilding = getSceneObject(buildingID)
+	local buildingID = SceneObject(pBuilding):getObjectID()
 	local pCell = BuildingObject(pBuilding):getNamedCell(pool.entry.cell)
 
 	if (pCell == nil) then
@@ -652,8 +326,13 @@ function MustafarInstances:enterInstance(pPlayer, poolKey)
 		return
 	end
 
-	writeData("mustafarInstance:" .. buildingID, 1)
-	writeData("mustafarInstance:" .. buildingID .. ":claimedAt", os.time())
+	if (pool.key == "old_republic_facility") then
+		writeScreenPlayData(pPlayer, self.screenplayName, "oldRepublicAccess", "1")
+	end
+
+	if (not joining) then
+		self:claimCopy(pBuilding, pool)
+	end
 
 	if (CreatureObject(pPlayer):isRidingMount()) then
 		CreatureObject(pPlayer):dismount()
@@ -662,21 +341,41 @@ function MustafarInstances:enterInstance(pPlayer, poolKey)
 	writeData(SceneObject(pPlayer):getObjectID() .. ":mustafarInstance", buildingID)
 
 	SceneObject(pPlayer):switchZone("mustafar", pool.entry.x, pool.entry.z, pool.entry.y, SceneObject(pCell):getObjectID())
+end
 
-	-- Starts the sweep chain for this copy; it ends itself when the copy is released.
-	createEvent(self.sweepSeconds * 1000, "MustafarInstances", "checkCopy", pBuilding, "")
+function MustafarInstances:findPartyCopy(pPlayer, pool)
+	if (pool.maxPlayers == 1) then
+		return nil
+	end
+
+	local player = CreatureObject(pPlayer)
+	for i = 0, player:getGroupSize() - 1 do
+		local pMember = player:getGroupMember(i)
+		if (pMember ~= nil and pMember ~= pPlayer and SceneObject(pMember):isPlayerCreature()) then
+			local pBuilding = SceneObject(pMember):getRootParent()
+			if (pBuilding ~= nil and SceneObject(pBuilding):isBuildingObject()) then
+				local buildingID = SceneObject(pBuilding):getObjectID()
+				local key = "mustafarInstance:" .. buildingID
+				if (self:getPoolByBuildingID(buildingID) == pool and readData(key) == 1
+					and readData(key .. ":expiresAt") > os.time()) then
+					return pBuilding
+				end
+			end
+		end
+	end
 end
 
 function MustafarInstances:findFreeCopy(pool)
 	for i = 1, #pool.buildings do
 		local buildingID = pool.buildings[i]
 
-		if (readData("mustafarInstance:" .. buildingID) ~= 1 and getSceneObject(buildingID) ~= nil) then
-			return buildingID
+		if (readData("mustafarInstance:" .. buildingID) ~= 1) then
+			local pBuilding = getSceneObject(buildingID)
+			if (pBuilding ~= nil and SceneObject(pBuilding):isBuildingObject()) then
+				return pBuilding
+			end
 		end
 	end
-
-	return 0
 end
 
 --[[ Occupancy ]]
@@ -761,9 +460,7 @@ function MustafarInstances:sendToExit(pPlayer, pBuilding)
 		CreatureObject(pPlayer):dismount()
 	end
 
-	local height = getWorldFloor(pool.exit.x, pool.exit.y, "mustafar")
-
-	SceneObject(pPlayer):switchZone("mustafar", pool.exit.x, height, pool.exit.y, 0)
+	SceneObject(pPlayer):switchZone("mustafar", pool.exit.x, pool.exit.z, pool.exit.y, 0)
 
 	deleteData(playerID .. ":mustafarInstance")
 	createEvent(2000, "MustafarInstances", "clearEjecting", pPlayer, "")
@@ -788,9 +485,11 @@ function MustafarInstances:onEnteredInstance(pBuilding, pPlayer)
 	-- sits off the map, so in practice this is a stale reference or a warp. Claim
 	-- the copy for them rather than leave it able to be handed to somebody else.
 	if (readData("mustafarInstance:" .. buildingID) ~= 1) then
-		writeData("mustafarInstance:" .. buildingID, 1)
-		writeData("mustafarInstance:" .. buildingID .. ":claimedAt", os.time())
-		createEvent(self.sweepSeconds * 1000, "MustafarInstances", "checkCopy", pBuilding, "")
+		local pool = self:getPoolByBuildingID(buildingID)
+		if (pool == nil) then
+			return 0
+		end
+		self:claimCopy(pBuilding, pool)
 	end
 
 	writeData(SceneObject(pPlayer):getObjectID() .. ":mustafarInstance", buildingID)
@@ -815,9 +514,27 @@ releaseIfEmpty is the one-shot fired by an exit; checkCopy is the recurring
 backstop chain. Only checkCopy reschedules, so the two cannot multiply.
 --]]
 
+function MustafarInstances:claimCopy(pBuilding, pool)
+	local key = "mustafarInstance:" .. SceneObject(pBuilding):getObjectID()
+	local now = os.time()
+	writeData(key .. ":claimedAt", now)
+	writeData(key .. ":expiresAt", now + (pool.timeLimit or self.timeLimit))
+	writeData(key, 1)
+	self:scheduleCopyCheck(pBuilding, key, self.sweepSeconds)
+end
+
 function MustafarInstances:releaseCopy(buildingID)
-	deleteData("mustafarInstance:" .. buildingID)
-	deleteData("mustafarInstance:" .. buildingID .. ":claimedAt")
+	local key = "mustafarInstance:" .. buildingID
+	deleteData(key)
+	deleteData(key .. ":claimedAt")
+	deleteData(key .. ":expiresAt")
+end
+
+function MustafarInstances:scheduleCopyCheck(pBuilding, key, delay)
+	if (readData(key .. ":checkPending") == 0) then
+		writeData(key .. ":checkPending", 1)
+		createEvent(delay * 1000, "MustafarInstances", "checkCopy", pBuilding, "")
+	end
 end
 
 function MustafarInstances:isReleasable(pBuilding)
@@ -848,8 +565,16 @@ function MustafarInstances:checkCopy(pBuilding)
 	end
 
 	local buildingID = SceneObject(pBuilding):getObjectID()
+	local key = "mustafarInstance:" .. buildingID
+	deleteData(key .. ":checkPending")
 
-	if (readData("mustafarInstance:" .. buildingID) ~= 1) then
+	if (readData(key) ~= 1) then
+		return
+	end
+	local remaining = readData(key .. ":expiresAt") - os.time()
+	if (remaining <= 0) then
+		self:ejectAllPlayers(pBuilding)
+		self:releaseCopy(buildingID)
 		return
 	end
 
@@ -858,7 +583,7 @@ function MustafarInstances:checkCopy(pBuilding)
 		return
 	end
 
-	createEvent(self.sweepSeconds * 1000, "MustafarInstances", "checkCopy", pBuilding, "")
+	self:scheduleCopyCheck(pBuilding, key, math.min(self.sweepSeconds, remaining))
 end
 
 --[[ Radial dispatch

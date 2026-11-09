@@ -248,7 +248,7 @@ somJenhaTarCubeScreenPlay = ScreenPlay:new {
 	},
 
 	-- The three snapshot nodes; see WHERE THE TABLETS COME FROM.
-	tabletNodes = { 12112287, 12112288, 12112289 },
+	tabletNodes = { MustafarBuildout.objects[12112287], MustafarBuildout.objects[12112288], MustafarBuildout.objects[12112289] },
 
 	-- task 2, Wait for Signal.
 	returnTask = {
@@ -282,7 +282,7 @@ somJenhaTarCubeScreenPlay = ScreenPlay:new {
 	-- small_room_04 is cell 12112238. See THE GIVER in the header.
 	questGiver = {
 		template = "npc_ithes_olok",
-		buildingID = 12112217,
+		buildingID = MustafarBuildout.objects[12112217],
 		cellName = "small_room_04",
 		x = -23.7,
 		z = 19.1,
@@ -406,7 +406,7 @@ function somJenhaTarCubeScreenPlay:getTabletCount(pPlayer)
 end
 
 function somJenhaTarCubeScreenPlay:hasCopiedTablet(pPlayer, nodeID)
-	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "copied_" .. nodeID)) == 1
+	return tonumber(readScreenPlayData(pPlayer, self.screenplayName, "copied_" .. MustafarBuildout.getProgressID(nodeID))) == 1
 end
 
 --[[ Entry points
@@ -520,7 +520,7 @@ function somJenhaTarCubeScreenPlay:copyTablet(pPlayer, nodeID)
 		return false
 	end
 
-	writeScreenPlayData(pPlayer, self.screenplayName, "copied_" .. nodeID, "1")
+	writeScreenPlayData(pPlayer, self.screenplayName, "copied_" .. MustafarBuildout.getProgressID(nodeID), "1")
 
 	local copied = self:getTabletCount(pPlayer) + 1
 	writeScreenPlayData(pPlayer, self.screenplayName, "tablets", tostring(copied))

@@ -79,6 +79,41 @@ function SpacestationAvatarPlatformConvoHandler:getInitialScreen(pPlayer, pNpc, 
 	return convoTemplate:getScreen(screenID)
 end
 
+function SpacestationAvatarPlatformConvoHandler:hasGodMode(pPlayer)
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	return pGhost ~= nil and PlayerObject(pGhost):hasGodMode()
+end
+
+function SpacestationAvatarPlatformConvoHandler:boardInGodMode(pPlayer, pStation, screen)
+	if (not self:hasGodMode(pPlayer)) then
+		screen:setCustomDialogText("Enable God Mode to use this boarding option.")
+		return
+	end
+
+	local pShip = SceneObject(pPlayer):getRootParent()
+	if (pStation == nil or pShip == nil or not SceneObject(pShip):isShipObject()
+		or SceneObject(pShip):getZoneName() ~= "space_kashyyyk" or not SceneObject(pShip):checkInConversationRange(pStation)) then
+		screen:setCustomDialogText("Move your ship within communications range of the Avatar Platform.")
+		return
+	end
+
+	if (AvatarPlatform == nil or not isZoneEnabled(AvatarPlatform.zoneName)) then
+		screen:setCustomDialogText("The Avatar Platform instance is unavailable.")
+		return
+	end
+
+	local pBuilding = AvatarPlatform:getBuilding()
+	if (pBuilding == nil or SceneObject(pBuilding):getZoneName() ~= AvatarPlatform.zoneName) then
+		screen:setCustomDialogText("The Avatar Platform instance is unavailable.")
+		return
+	end
+
+	-- space_dungeon.tab gives an outdoor landing offset from the dungeon controller.
+	local building = SceneObject(pBuilding)
+	ShipObject(pShip):storeShip(pPlayer, AvatarPlatform.zoneName,
+		building:getWorldPositionX() + 215.5, building:getWorldPositionZ(), building:getWorldPositionY() + 35.9, true)
+end
+
 function SpacestationAvatarPlatformConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, pNpc, selectedOption, pConvScreen)
 	if (pPlayer == nil or pConvScreen == nil) then
 		return
@@ -109,6 +144,11 @@ function SpacestationAvatarPlatformConvoHandler:runScreenHandlers(pConvTemplate,
 	--        -- the transmission is cut off mid-order; that IS the comms going down.
 	elseif (screenID == "spacestation_avatar_platform_help" or screenID == "spacestation_avatar_platform_refuse") then
 		self:setStage(pPlayer, 2)
+	elseif (screenID == "spacestation_avatar_platform_god_mode_board") then
+		self:boardInGodMode(pPlayer, pNpc, pClonedConvo)
+	elseif ((screenID == SPACESTATION_AVATAR_PLATFORM_STAGES[0] or screenID == SPACESTATION_AVATAR_PLATFORM_STAGES[1]
+		or screenID == SPACESTATION_AVATAR_PLATFORM_STAGES[2]) and self:hasGodMode(pPlayer)) then
+		pClonedConvo:addOption("[God Mode] Board Avatar Platform", "spacestation_avatar_platform_god_mode_board")
 	end
 
 	return pScreenClone

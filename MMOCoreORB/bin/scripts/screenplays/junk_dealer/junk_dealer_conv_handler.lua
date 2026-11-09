@@ -109,6 +109,12 @@ JunkDealerGenericConvoHandler = JunkDealerConvoHandler:new {
 	inventorText = "@conversation/junk_dealer_generic:s_3aa18b2d"
 }
 
+JunkDealerMustafarConvoHandler = JunkDealerConvoHandler:new {
+	junkType = "generic",
+	noLootText = "@conversation/som_mustafar_junk_dealer:s_10",
+	startSaleText = "@conversation/som_mustafar_junk_dealer:s_6"
+}
+
 JunkDealerArmsConvoHandler = JunkDealerConvoHandler:new {
 	junkType = "arms",
 	noLootText = "@conversation/junk_dealer_arms:s_370a03c",

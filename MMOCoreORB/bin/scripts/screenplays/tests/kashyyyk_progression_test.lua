@@ -531,6 +531,45 @@ local sp, p = slaverGursanEntryQuestScreenPlay, player()
 assert(sp:grantQuest(p))
 screenplay("trando_slave_camp")
 local gate = object()
+do
+	local camp = TrandoSlaveCamp
+	local entry = TrandoSlaveCampEntryMenuComponent
+	local tester = player()
+	local distance, godMode = 0, false
+	function tester:getDistanceTo() return distance end
+	function tester.ghost:hasGodMode() return godMode end
+	function tester:switchZone(zone, x, z, y, parent)
+		self.destination = {zone, x, z, y, parent}
+	end
+
+	local menu, originalWrapper = {}, LuaObjectMenuResponse
+	function menu:addRadialMenuItem(id, callback, label) self[id] = label end
+	LuaObjectMenuResponse = SceneObject
+	entry:fillObjectMenuResponse(gate, menu, tester)
+	assert(menu[20] and not menu[68])
+	godMode = true
+	entry:fillObjectMenuResponse(gate, menu, tester)
+	assert(menu[68] == "[God Mode] Enter Blackscale Compound")
+	LuaObjectMenuResponse = originalWrapper
+
+	local wasEnabled, eventCount = enabled[camp.zoneDungeon], #events
+	entry:handleObjectMenuSelect(gate, tester, 68)
+	assert(not tester.destination)
+	enabled[camp.zoneDungeon] = true
+	godMode = false
+	entry:handleObjectMenuSelect(gate, tester, 68)
+	assert(not tester.destination)
+	godMode, distance = true, camp.gateRange + 1
+	entry:handleObjectMenuSelect(gate, tester, 68)
+	assert(not tester.destination)
+	distance = 0
+	entry:handleObjectMenuSelect(gate, tester, 68)
+	local dest = assert(tester.destination)
+	assert(dest[1] == camp.zoneDungeon and dest[2] == camp.arrival.x and dest[3] == camp.arrival.z
+		and dest[4] == camp.arrival.y and dest[5] == 0)
+	assert(#events == eventCount and sp:getStage(tester) == 0)
+	enabled[camp.zoneDungeon] = wasEnabled
+end
 function p:getDistanceTo() return 0 end
 function TrandoSlaveCamp:travelTo(visitor) visitor.campEntered = true end
 TrandoSlaveCamp:notifyGateUsed(gate, p)

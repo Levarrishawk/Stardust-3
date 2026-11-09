@@ -89,20 +89,10 @@ tables use. What is substituted is applying it to the rows live left blank, and
 the alternative was worse: respawn 0 would mean the second player to be handed a
 recycled copy finds a building that has already been cleared out.
 
-THE PATROL PATHS ARE NOT HONOURED
+FACTORY PATROLS
 
-Four rows carry a patrol_path objvar -- the two som_decrepit_cww8_combat_droid,
-the som_decrepit_blastromech and the som_decrepit_patrol_bot. The paths name
-waypoint sets (bridgeOne;bridgeTwo, roomOne..roomFour, controlOne..controlFive,
-obsBotOne..obsBotFour) and the decrepit table spawns fifteen
-object/tangible/ground_spawning/patrol_waypoint.iff rows to mark them, on lines
-55-65 and 68-71.
-
-Nothing in this tree reads that objvar, and the waypoint props are markers with
-no behaviour attached. The four droids are therefore spawned STATIC, on the
-position their own row gives. They stand where live started them and they do not
-walk the route. The waypoints are not spawned, because a marker prop with no
-patrol behind it is furniture that means nothing.
+The four patrol_path rows now walk the fifteen named DSRC waypoints. They
+retain the current dungeon respawn interval until the instance reset is ported.
 
 THE obsBot WAYPOINTS SIT IN THE OTHER TABLE
 
@@ -120,30 +110,30 @@ because the cell name in the .pob is whatever the live server matched against.
 Do not tidy it. If it turns out to be wrong the boot check below will say so by
 name, and that is the moment to change it, not before.
 
-THE BOOT COST  --  921 creatures, said out loud
+THE BOOT COST
 
-The pools are 12, 9 and 12 copies deep, and every copy is furnished:
+The native pools are 12, 8 and 12 copies deep, and every copy is furnished:
 
     old_republic_facility    42 rows x 12 copies  =  504
-    decrepit_droid_factory   45 rows x  9 copies  =  405
+    decrepit_droid_factory   45 rows x  8 copies  =  360
     working_droid_factory     1 row  x 12 copies  =   12
                                                     ----
-                                                     921
+                                                     876
 
 That is a real number and it is stated here rather than left to be discovered in
 a profile. If it has to come down, the honest lever is the pool depth in
 mustafar_instances.lua, not a quiet cull of rows in this file.
 
-THE PROPS COST ANOTHER 366, added 2026-08-31
+THE PROPS COST ANOTHER 356
 
 The same tables carry non-creature rows, and until now this file read only the
 creature ones. The props tables below place the rest:
 
     old_republic_facility    21 rows x 12 copies  =  252
-    decrepit_droid_factory   10 rows x  9 copies  =   90
+    decrepit_droid_factory   10 rows x  8 copies  =   80
     working_droid_factory     2 rows x 12 copies  =   24
                                                     ----
-                                                     366
+                                                     356
 
 Same lever if it has to come down, and the same rule: pool depth, not a quiet cull.
 
@@ -264,6 +254,33 @@ MustafarDungeonPopulation = ScreenPlay:new {
 
 	-- See RESPAWN in the header for why this is one number and why it is 600.
 	respawn = 600,
+
+	-- patrol_path rows in the two factory tables resolve to the decrepit table's markers.
+	patrolPaths = {
+		bridgeOne = {
+			{ "mainroom27", 32.0361, -36, -22.9252 },
+			{ "mainroom27", 31.739, -36, 36.05 },
+		},
+		roomOne = {
+			{ "mediumroom18", -12.0958, -28, 15.2144 },
+			{ "mediumroom18", -10.0067, -28, -5.36731 },
+			{ "mediumroom18", -31.2332, -28, -2.95046 },
+			{ "mediumroom18", -31.0833, -28, 14.5192 },
+		},
+		controlOne = {
+			{ "mainroom27", 27.3934, -24, 15.0194 },
+			{ "mainroom27", 70, -24, 13.8 },
+			{ "mainroom27", 73.0992, -24, 6.0921 },
+			{ "mainroom27", 69.1, -24, 0.1 },
+			{ "mainroom27", 24.943, -24, -1.22054 },
+		},
+		obsBotOne = {
+			{ "mainroom27", 26.8313, -12, 36.0326 },
+			{ "mainroom27", 26.8285, -12, -21.8869 },
+			{ "mainroom27", 85.3443, -12, -21.712 },
+			{ "mainroom27", 85.1039, -12, 36.0252 },
+		},
+	},
 
 	--[[ Every one of the seventeen now has its own template in
 	     mobile/custom_content/som/. The mapping is identity. The
@@ -445,12 +462,12 @@ MustafarDungeonPopulation = ScreenPlay:new {
 				{ "som_decrepit_super_battle_droid", "smallroom20", 21.2929, -24, 6.4, -139.885 },
 				{ "som_decrepit_super_battle_droid", "smallroom20", 6.62137, -24, 6.31427, 135.381 },
 				{ "som_decrepit_super_battle_droid", "smallroom20", 6.69044, -24, -8.38334, 44.5929 },
-				-- The three patrol_guard rows. Spawned static; see THE PATROL PATHS
+				-- The three patrol_guard rows. See FACTORY PATROLS
 				-- ARE NOT HONOURED. Live walked them bridgeOne;bridgeTwo,
 				-- roomOne..roomFour and controlOne..controlFive respectively.
-				{ "som_decrepit_cww8_combat_droid", "mainroom27", 31.6079, -36, 25.8964, 178.408 },
-				{ "som_decrepit_cww8_combat_droid", "mediumroom18", -11.0435, -28, 7.27548, -179.47 },
-				{ "som_decrepit_blastromech", "mainroom27", 32.0532, -24, 15.171, 85.9483 },
+				{ "som_decrepit_cww8_combat_droid", "mainroom27", 31.6079, -36, 25.8964, 178.408, "bridgeOne" },
+				{ "som_decrepit_cww8_combat_droid", "mediumroom18", -11.0435, -28, 7.27548, -179.47, "roomOne" },
+				{ "som_decrepit_blastromech", "mainroom27", 32.0532, -24, 15.171, 85.9483, "controlOne" },
 			},
 
 			--[[ Table lines 45-54. The five rows this table has that are NOT here --
@@ -483,8 +500,8 @@ MustafarDungeonPopulation = ScreenPlay:new {
 				-- observation droid. The building is not meant to be fought
 				-- through -- the arc sends the player to a terminal in it, and the
 				-- decrepit table is the same geometry with the fight in it.
-				-- Spawned static; its obsBotOne..obsBotFour route is not walked.
-				{ "som_decrepit_patrol_bot", "mainroom27", 26.3758, -12, 23.2726, 109.317 },
+				-- The obsBotOne..obsBotFour route is defined in the decrepit table.
+				{ "som_decrepit_patrol_bot", "mainroom27", 26.3758, -12, 23.2726, 109.317, "obsBotOne" },
 			},
 
 			--[[ Table lines 3 and 43. Both name the DECREPIT factory's
@@ -847,7 +864,7 @@ MustafarDungeonPopulation = ScreenPlay:new {
 	     the lair's 50000 hit points and self-repair, and the soldier_spawner
 	     marker the lair drops when destroyed. So live's 8 is a ceiling a player
 	     climbs toward and this is 8 standing there from the start. Stated, not
-	     hidden. Count: 52 creatures and 5 props per copy, across the 9 copies in
+	     hidden. Count: 52 creatures and 5 props per copy, across the 8 copies in
 	     the uplink_cave pool.
 
 	     WHAT THE TABLE PLACES THAT THIS DOES NOT:
@@ -1031,7 +1048,7 @@ end
 -- Separate from populatePool because these have no live table and no substitute
 -- key; see the lairBosses comment for why that distinction is kept honest rather
 -- than papered over. One boss per copy of the pool, the same per-copy shape
--- populatePool uses -- twelve Sher Kars against the 921 creatures the pools above
+-- populatePool uses -- twelve Sher Kars against the 876 creatures the pools above
 -- already place.
 function MustafarDungeonPopulation:populateLairBosses()
 	for i = 1, #self.lairBosses do
@@ -1227,7 +1244,9 @@ function MustafarDungeonPopulation:spawnRow(pool, row, cellID, buildingID)
 	-- row is { live name, cell, x, z, y, heading } and spawnMobile wants
 	-- x, z, y, heading, so the row reads straight across. Heading is in DEGREES
 	-- here -- see THE AXIS MAPPING.
-	local pMobile = spawnMobile("mustafar", template, self.respawn, row[3], row[4], row[5], row[6], cellID)
+	local pathName = row[7]
+	local respawn = pathName == nil and self.respawn or 0
+	local pMobile = spawnMobile("mustafar", template, respawn, row[3], row[4], row[5], row[6], cellID)
 
 	if (pMobile == nil) then
 		print("MustafarDungeonPopulation: failed to spawn " .. template .. " (" .. row[1] .. ") in " .. row[2] .. " of " .. pool.key .. " copy " .. buildingID)
@@ -1235,6 +1254,99 @@ function MustafarDungeonPopulation:spawnRow(pool, row, cellID, buildingID)
 	end
 
 	self.spawnedCount = self.spawnedCount + 1
+	if (pathName ~= nil) then
+		local key = SceneObject(pMobile):getObjectID() .. ":factoryPatrol"
+		writeStringData(key, pathName)
+		writeData(key .. ":point", 1)
+		AiAgent(pMobile):setAITemplate()
+		AiAgent(pMobile):setMovementState(AI_PATROLLING)
+		createObserver(DESTINATIONREACHED, "MustafarDungeonPopulation", "advancePatrol", pMobile)
+		createObserver(OBJECTDESTRUCTION, "MustafarDungeonPopulation", "respawnPatrol", pMobile)
+		createEvent(5000, "MustafarDungeonPopulation", "walkPatrol", pMobile, "")
+	end
+end
+
+function MustafarDungeonPopulation:walkPatrol(pMobile)
+	if (pMobile == nil or CreatureObject(pMobile):isDead()) then
+		return
+	end
+
+	local pBuilding = SceneObject(pMobile):getRootParent()
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		return
+	end
+	if (CreatureObject(pMobile):isInCombat()) then
+		createEvent(10000, "MustafarDungeonPopulation", "walkPatrol", pMobile, "")
+		return
+	end
+
+	local key = SceneObject(pMobile):getObjectID() .. ":factoryPatrol"
+	local path = self.patrolPaths[readStringData(key)]
+	local point = path and path[readData(key .. ":point")]
+	if (point == nil) then
+		return
+	end
+
+	local cellID = self:resolveCell(pBuilding, point[1])
+	if (cellID ~= 0) then
+		local agent = AiAgent(pMobile)
+		agent:setMovementState(AI_PATROLLING)
+		agent:stopWaiting()
+		agent:setWait(0)
+		agent:setNextPosition(point[2], point[3], point[4], cellID)
+		agent:executeBehavior()
+	end
+end
+
+function MustafarDungeonPopulation:advancePatrol(pMobile)
+	if (pMobile ~= nil and not CreatureObject(pMobile):isDead() and not CreatureObject(pMobile):isInCombat()) then
+		local key = SceneObject(pMobile):getObjectID() .. ":factoryPatrol"
+		local path = self.patrolPaths[readStringData(key)]
+		if (path ~= nil) then
+			writeData(key .. ":point", readData(key .. ":point") % #path + 1)
+			createEvent(1000, "MustafarDungeonPopulation", "walkPatrol", pMobile, "")
+		end
+	end
+	return 0
+end
+
+function MustafarDungeonPopulation:respawnPatrol(pMobile)
+	if (pMobile == nil) then
+		return 1
+	end
+
+	local key = SceneObject(pMobile):getObjectID() .. ":factoryPatrol"
+	local pathName = readStringData(key)
+	deleteStringData(key)
+	deleteData(key .. ":point")
+
+	local pBuilding = SceneObject(pMobile):getRootParent()
+	if (pBuilding ~= nil and self.patrolPaths[pathName] ~= nil) then
+		createEvent(self.respawn * 1000, "MustafarDungeonPopulation", "replacePatrol", pBuilding, pathName)
+	end
+	return 1
+end
+
+function MustafarDungeonPopulation:replacePatrol(pBuilding, pathName)
+	if (pBuilding == nil or not SceneObject(pBuilding):isBuildingObject()) then
+		return
+	end
+
+	local buildingID = SceneObject(pBuilding):getObjectID()
+	local instancePool = MustafarInstances:getPoolByBuildingID(buildingID)
+	for _, pool in ipairs(self.pools) do
+		if (instancePool ~= nil and pool.key == instancePool.key) then
+			for _, row in ipairs(pool.rows) do
+				if (row[7] == pathName) then
+					local cellID = self:resolveCell(pBuilding, row[2])
+					if (cellID ~= 0) then
+						self:spawnRow(pool, row, cellID, buildingID)
+					end
+					return
+				end
+			end
+		end
+	end
 end
 
 --[[ The prop half of spawnRow, and the one difference that matters is the last

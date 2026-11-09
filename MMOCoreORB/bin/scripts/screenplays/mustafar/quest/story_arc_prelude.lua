@@ -285,7 +285,7 @@ storyArcPreludeScreenPlay = ScreenPlay:new {
 	-- the Mensix mining facility POB -- his own office, not the cantina.
 	chivos = {
 		template = "must_foreman_chivos",
-		cellID = 12112232,
+		cellID = MustafarBuildout.objects[12112232],
 		x = -125.7,
 		z = 10.3,
 		y = 82.8,
@@ -302,21 +302,21 @@ storyArcPreludeScreenPlay = ScreenPlay:new {
 	     recorded for the record only, since getSceneObject finds them by id. ]]
 
 	-- .qst _01 task 4: Count 1. (-2901.85, h 103.47, -261.45)
-	locker = { nodeID = 12112260 },
+	locker = { nodeID = MustafarBuildout.objects[12112260] },
 
 	-- .qst _02 task 1: Count 4.
 	vents = {
-		12112644,   -- (-2887.53, h 151.52, 1384.76)
-		12112645,   -- (-3157.32, h 145.23, 1331.70)
-		12112646,   -- (-3385.52, h 151.72, 1375.13)
-		12112857,   -- (-3064.01, h 145.64, 1359.12)
+		MustafarBuildout.objects[12112644],   -- (-2887.53, h 151.52, 1384.76)
+		MustafarBuildout.objects[12112645],   -- (-3157.32, h 145.23, 1331.70)
+		MustafarBuildout.objects[12112646],   -- (-3385.52, h 151.72, 1375.13)
+		MustafarBuildout.objects[12112857],   -- (-3064.01, h 145.64, 1359.12)
 	},
 
 	-- .qst _03 task 12: Count 3.
 	rods = {
-		12112128,   -- (-2733.85, h 127.73, 3080.30)
-		12112129,   -- (-2740.11, h 163.21, 3236.79)
-		12112130,   -- (-2742.13, h 246.58, 3636.59)
+		MustafarBuildout.objects[12112128],   -- (-2733.85, h 127.73, 3080.30)
+		MustafarBuildout.objects[12112129],   -- (-2740.11, h 163.21, 3236.79)
+		MustafarBuildout.objects[12112130],   -- (-2742.13, h 246.58, 3636.59)
 	},
 
 	-- .qst _01 task 4: createWaypoint true, waypointName quoted, mustafar
@@ -328,11 +328,6 @@ storyArcPreludeScreenPlay = ScreenPlay:new {
 
 	-- Placed, not quoted; see THE SALVAGE LEADERS. All three inside the Radius 500.
 	salvageLeader = { template = "must_salvage_bandit_leader_01", respawn = 300 },
-	salvageLeaders = {
-		{ x = -2652, y = 3130, heading = 40 },    -- beside the hull, node 12112171
-		{ x = -2690, y = 3178, heading = 190 },   -- beside the forward gun, node 12112169
-		{ x = -2662, y = 3282, heading = 300 },   -- beside the far engine, node 12112173
-	},
 
 	-- planet_manager.lua:726, the planet's only travel point. Height is the travel
 	-- point's own; see NO TIMERS.
@@ -403,7 +398,6 @@ function storyArcPreludeScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachQuestObjects()
 		self:spawnChivos()
-		self:spawnSalvageLeaders()
 		self:spawnCrashArea()
 		self:spawnArrivalArea()
 	end
@@ -429,7 +423,7 @@ function storyArcPreludeScreenPlay:attachOne(nodeID, role)
 	local pObject = getSceneObject(nodeID)
 
 	if (pObject == nil) then
-		print("storyArcPreludeScreenPlay: snapshot object " .. nodeID .. " (" .. role .. ") was not found; that step of the prelude will be unreachable")
+		print("storyArcPreludeScreenPlay: buildout object " .. nodeID .. " (" .. role .. ") was not found; that step of the prelude will be unreachable")
 		return
 	end
 
@@ -454,18 +448,6 @@ function storyArcPreludeScreenPlay:spawnChivos()
 	-- The role write and the menu component that used to follow are gone with the
 	-- radial. The snapshot props still get both; only Chivos does not.
 	self.chivosID = SceneObject(pChivos):getObjectID()
-end
-
-function storyArcPreludeScreenPlay:spawnSalvageLeaders()
-	for i = 1, #self.salvageLeaders do
-		local spot = self.salvageLeaders[i]
-		local z = getWorldFloor(spot.x, spot.y, "mustafar")
-		local pLeader = spawnMobile("mustafar", self.salvageLeader.template, self.salvageLeader.respawn, spot.x, z, spot.y, spot.heading, 0)
-
-		if (pLeader == nil) then
-			print("storyArcPreludeScreenPlay: failed to spawn " .. self.salvageLeader.template .. " at the wreck; som_story_arc_prelude_03 cannot be finished")
-		end
-	end
 end
 
 -- .qst _03 task 15, Go to Location: the two collection tasks are nested under it,
@@ -540,7 +522,7 @@ function storyArcPreludeScreenPlay:countFlags(pPlayer, nodeIDs, prefix)
 	local done = 0
 
 	for i = 1, #nodeIDs do
-		if (self:hasFlag(pPlayer, prefix .. nodeIDs[i])) then
+		if (self:hasFlag(pPlayer, prefix .. MustafarBuildout.getProgressID(nodeIDs[i]))) then
 			done = done + 1
 		end
 	end
@@ -694,7 +676,7 @@ function storyArcPreludeScreenPlay:startFilters(pPlayer)
 		local pVent = getSceneObject(nodeID)
 
 		if (pVent ~= nil) then
-			self:giveWaypoint(pPlayer, "vent" .. nodeID, "Replace Air Filters", "Replace Air Filters",
+			self:giveWaypoint(pPlayer, "vent" .. MustafarBuildout.getProgressID(nodeID), "Replace Air Filters", "Replace Air Filters",
 				SceneObject(pVent):getWorldPositionX(), SceneObject(pVent):getWorldPositionY())
 		end
 	end
@@ -703,12 +685,12 @@ end
 -- .qst _02 task 1: retrieveMenuText "Replace Air Filters", Count 4,
 -- LootDropPercent 100. One "item" per station, so the flags are the count.
 function storyArcPreludeScreenPlay:replaceFilter(pPlayer, nodeID)
-	if (self:getStage(pPlayer) ~= self.STAGE_FILTERS or self:hasFlag(pPlayer, "vent" .. nodeID)) then
+	if (self:getStage(pPlayer) ~= self.STAGE_FILTERS or self:hasFlag(pPlayer, "vent" .. MustafarBuildout.getProgressID(nodeID))) then
 		return
 	end
 
-	self:setFlag(pPlayer, "vent" .. nodeID)
-	self:removeWaypoint(pPlayer, "vent" .. nodeID)
+	self:setFlag(pPlayer, "vent" .. MustafarBuildout.getProgressID(nodeID))
+	self:removeWaypoint(pPlayer, "vent" .. MustafarBuildout.getProgressID(nodeID))
 
 	local done = self:countFlags(pPlayer, self.vents, "vent")
 
@@ -819,7 +801,7 @@ function storyArcPreludeScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 0
 	end
 
-	if (AiAgent(pVictim):getCreatureTemplateName() ~= self.salvageLeader.template) then
+	if (MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName()) ~= self.salvageLeader.template) then
 		return 0
 	end
 
@@ -837,11 +819,11 @@ end
 -- .qst _03 task 12: retrieveMenuText "Remove Power Rod from Core", Count 3,
 -- LootDropPercent 100.
 function storyArcPreludeScreenPlay:takeRod(pPlayer, nodeID)
-	if (self:getStage(pPlayer) ~= self.STAGE_SALVAGE or self:hasFlag(pPlayer, "rod" .. nodeID)) then
+	if (self:getStage(pPlayer) ~= self.STAGE_SALVAGE or self:hasFlag(pPlayer, "rod" .. MustafarBuildout.getProgressID(nodeID))) then
 		return
 	end
 
-	self:setFlag(pPlayer, "rod" .. nodeID)
+	self:setFlag(pPlayer, "rod" .. MustafarBuildout.getProgressID(nodeID))
 
 	local done = self:countFlags(pPlayer, self.rods, "rod")
 
@@ -1040,11 +1022,11 @@ function storyArcPreludeScreenPlay:getRadialText(pPlayer, role, objectID)
 			return "Restock Supplies"                          -- _01 task 4
 		end
 	elseif (role == "vent") then
-		if (stage == self.STAGE_FILTERS and not self:hasFlag(pPlayer, "vent" .. objectID)) then
+		if (stage == self.STAGE_FILTERS and not self:hasFlag(pPlayer, "vent" .. MustafarBuildout.getProgressID(objectID))) then
 			return "Replace Air Filters"                       -- _02 task 1
 		end
 	elseif (role == "rod") then
-		if (stage == self.STAGE_SALVAGE and not self:hasFlag(pPlayer, "rod" .. objectID)) then
+		if (stage == self.STAGE_SALVAGE and not self:hasFlag(pPlayer, "rod" .. MustafarBuildout.getProgressID(objectID))) then
 			return "Remove Power Rod from Core"                -- _03 task 12
 		end
 	end

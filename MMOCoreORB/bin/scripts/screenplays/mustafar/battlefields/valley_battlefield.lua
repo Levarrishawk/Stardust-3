@@ -108,9 +108,8 @@ SCOPED OMISSIONS / SUBSTITUTIONS
   defined and never called from anywhere in the mustafar_trials tree
   (checked by grep across the whole tree). Deliberately not ported.
 
-- Stage-1 mining leaders auto-deploy here. Live gated them on a conversation
-  (som_battlefield_miner_leader); no conversation file and no .stf ship in
-  this tree. Stage -1 leaders already autoDeployed in live. Divergence stated.
+- Stage-1 mining leaders use som_battlefield_miner_leader for deployment orders.
+  DSRC's separate stage -1 leaders use automatic deployment.
 
 - Mining-droid radial reactivation is gated on class_engineering_phase2_novice
   + a deactivated scriptvar that nothing ever sets -- droids always auto-start.
@@ -304,8 +303,8 @@ ValleyBattlefield.stage1Creatures = {
 	{ template = "som_battlefield_mining_droid", locx = 8, locz = -2, yaw = -70, role = "mining_droid" },
 	{ template = "som_battlefield_mining_droid", locx = 6, locz = -5, yaw = -70, role = "mining_droid" },
 	{ template = "som_battlefield_mining_droid", locx = 3, locz = -8, yaw = -70, role = "mining_droid" },
-	{ template = "som_battlefield_mining_leader", locx = 2, locz = -3, yaw = -70, role = "mining_leader", autoDeploy = true },
-	{ template = "som_battlefield_mining_leader", locx = 4, locz = 3, yaw = -70, role = "mining_leader", autoDeploy = true },
+	{ template = "som_battlefield_mining_leader", locx = 2, locz = -3, yaw = -70, role = "mining_leader" },
+	{ template = "som_battlefield_mining_leader", locx = 4, locz = 3, yaw = -70, role = "mining_leader" },
 	{ template = "som_battlefield_foreman_koseyet", locx = -81, locz = -131, yaw = -133, role = "foreman" },
 }
 
@@ -459,7 +458,16 @@ function ValleyBattlefield:getBlastCandidates()
 	end
 
 	for i = 1, #track.allies do
-		table.insert(out, track.allies[i])
+		local allyID = track.allies[i]
+		table.insert(out, allyID)
+		if (readData(allyID .. ":valleyLeaderSession") == self:currentSession()) then
+			for j = 1, #self.minerBoxOffsets do
+				local minerID = readData(allyID .. ":valleyMiner:" .. j)
+				if (minerID ~= 0) then
+					table.insert(out, minerID)
+				end
+			end
+		end
 	end
 
 	for i = 1, #track.players do
@@ -879,14 +887,72 @@ function ValleyBattlefield:startMiningDroid(pMob, args)
 end
 
 function ValleyBattlefield:setupMiningLeader(pMob, session, autoDeploy)
+	local oid = SceneObject(pMob):getObjectID()
+	writeData(oid .. ":valleyLeaderSession", session)
 	TangibleObject(pMob):setOptionBit(INVULNERABLE)
 	AiAgent(pMob):addObjectFlag(AI_STATIONARY)
 	AiAgent(pMob):setAITemplate()
 	createObserver(DAMAGERECEIVED, "ValleyBattlefield", "allyDamaged", pMob)
+	createObserver(DEFENDERADDED, "ValleyBattlefield", "minerEngaged", pMob)
+	createObserver(OBJECTREMOVEDFROMZONE, "ValleyBattlefield", "leaderRemoved", pMob)
 
 	if (autoDeploy) then
 		createEvent(5000, "ValleyBattlefield", "deployMinerForces", pMob, tostring(session))
 	end
+end
+
+function ValleyBattlefield:getLeaderOrderState(pPlayer, pMob)
+	if (pPlayer == nil or pMob == nil or not SceneObject(pMob):isAiAgent()
+		or CreatureObject(pMob):isDead() or CreatureObject(pMob):isInCombat()
+		or CreatureObject(pPlayer):isInCombat()
+		or readData(SceneObject(pPlayer):getObjectID() .. ":valleyBattlefield") ~= 1
+		or SceneObject(pMob):getZoneName() ~= SceneObject(pPlayer):getZoneName()) then
+		return nil
+	end
+
+	local oid = SceneObject(pMob):getObjectID()
+	if (not self:isSessionCurrent(readData(oid .. ":valleyLeaderSession"))
+		or readData(oid .. ":valleyEngaged") == 1) then
+		return nil
+	end
+	if (readData(oid .. ":valleyDeployed") == 1) then
+		return "deployed"
+	end
+	return AiAgent(pMob):getFollowObject() == nil and "standby" or "following"
+end
+
+function ValleyBattlefield:orderMiningLeader(pPlayer, pMob, order)
+	local state = self:getLeaderOrderState(pPlayer, pMob)
+	if ((order == "follow" and state == "standby") or (order == "withdraw" and state == "deployed")) then
+		if (order == "withdraw") then
+			self:withdrawMinerForces(SceneObject(pMob):getObjectID())
+			TangibleObject(pMob):setOptionBit(INVULNERABLE)
+		end
+		local agent = AiAgent(pMob)
+		agent:removeObjectFlag(AI_STATIONARY)
+		agent:setAITemplate()
+		agent:setFollowObject(pPlayer)
+		agent:setMovementState(AI_FOLLOWING)
+		agent:executeBehavior()
+		return true
+	elseif (order == "stop" and state == "following") then
+		self:holdMiningLeader(pMob)
+		return true
+	elseif (order == "deploy" and (state == "standby" or state == "following")) then
+		self:deployMinerForces(pMob, self:currentSession())
+		return true
+	end
+	return false
+end
+
+function ValleyBattlefield:holdMiningLeader(pMob)
+	local leader = SceneObject(pMob)
+	local agent = AiAgent(pMob)
+	agent:setFollowObject(nil)
+	agent:setHomeLocation(leader:getPositionX(), leader:getPositionZ(), leader:getPositionY(), 0)
+	agent:setMovementState(AI_OBLIVIOUS)
+	agent:addObjectFlag(AI_STATIONARY)
+	agent:setAITemplate()
 end
 
 function ValleyBattlefield:deployMinerForces(pMob, args)
@@ -896,13 +962,18 @@ function ValleyBattlefield:deployMinerForces(pMob, args)
 		return
 	end
 
+	local oid = SceneObject(pMob):getObjectID()
+	if (readData(oid .. ":valleyDeployed") == 1 or readData(oid .. ":valleyLeaderSession") ~= session) then
+		return
+	end
+	writeData(oid .. ":valleyDeployed", 1)
+	self:holdMiningLeader(pMob)
 	TangibleObject(pMob):clearOptionBit(INVULNERABLE)
 	AiAgent(pMob):removeObjectFlag(AI_STATIONARY)
 	AiAgent(pMob):setAITemplate()
 
 	local lx = SceneObject(pMob):getPositionX()
 	local ly = SceneObject(pMob):getPositionY()
-	local track = self:getTrack(session)
 
 	for i = 1, #self.minerBoxOffsets do
 		local off = self.minerBoxOffsets[i]
@@ -912,11 +983,54 @@ function ValleyBattlefield:deployMinerForces(pMob, args)
 		local pMiner = spawnMobile("mustafar", "som_battlefield_miner", 0, x, z, y, -70, 0)
 
 		if (pMiner ~= nil) then
-			table.insert(track.allies, SceneObject(pMiner):getObjectID())
+			local minerID = SceneObject(pMiner):getObjectID()
+			writeData(oid .. ":valleyMiner:" .. i, minerID)
+			writeData(minerID .. ":valleyLeader", oid)
 			createObserver(DAMAGERECEIVED, "ValleyBattlefield", "allyDamaged", pMiner)
+			createObserver(DEFENDERADDED, "ValleyBattlefield", "minerEngaged", pMiner)
 			AiAgent(pMiner):setFollowObject(pMob)
+			AiAgent(pMiner):setMovementState(AI_FOLLOWING)
 		end
 	end
+end
+
+function ValleyBattlefield:minerEngaged(pMob)
+	if (pMob ~= nil) then
+		local oid = SceneObject(pMob):getObjectID()
+		local leaderID = readData(oid .. ":valleyLeader")
+		if (leaderID == 0) then
+			TangibleObject(pMob):clearOptionBit(CONVERSABLE)
+			leaderID = oid
+		end
+		writeData(leaderID .. ":valleyEngaged", 1)
+	end
+	return 1
+end
+
+function ValleyBattlefield:withdrawMinerForces(leaderID)
+	deleteData(leaderID .. ":valleyDeployed")
+	for i = 1, #self.minerBoxOffsets do
+		local key = leaderID .. ":valleyMiner:" .. i
+		local minerID = readData(key)
+		local pMiner = getSceneObject(minerID)
+		deleteData(key)
+		if (minerID ~= 0) then
+			deleteData(minerID .. ":valleyLeader")
+		end
+		if (pMiner ~= nil) then
+			SceneObject(pMiner):destroyObjectFromWorld()
+		end
+	end
+end
+
+function ValleyBattlefield:leaderRemoved(pMob)
+	if (pMob ~= nil) then
+		local oid = SceneObject(pMob):getObjectID()
+		self:withdrawMinerForces(oid)
+		deleteData(oid .. ":valleyLeaderSession")
+		deleteData(oid .. ":valleyEngaged")
+	end
+	return 1
 end
 
 -- A player who shoots a miner heals it. Anti-grief design; load-bearing.

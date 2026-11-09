@@ -427,24 +427,10 @@ somStormLordScreenPlay = ScreenPlay:new {
 	-- the floor is resolved at spawn. Talper is placed beside her because her
 	-- shipped dialogue is about him standing there; the 3 m gap is nominal, not
 	-- shipped -- one waypoint cannot hold two bodies. See THE GIVER in the header.
-	questGiver = {
-		template = "reporter_jural",
-		x = 440,
-		y = 5115,
-		heading = 0,
-	},
 
-	brother = {
-		template = "reporter_talper",
-		x = 443,
-		y = 5115,
-		heading = 0,
-	},
 
 	-- The stage the ladder reaches when task 9 has paid out.
 	finishedStage = 9,
-	questGiverID = 0,
-	brotherID = 0,
 }
 
 -- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
@@ -461,36 +447,10 @@ somStormLordScreenPlay.journalMap = {
 	[9] = { quest = "som_storm_lord", complete = {8}, activate = {9}, finish = true }, -- 9→t9 Reward (then reset 0)
 }
 
-registerScreenPlay("somStormLordScreenPlay", true)
+registerScreenPlay("somStormLordScreenPlay", false)
 
 -- start() exists because DirectorManager::startScreenPlay (DirectorManager.cpp:3605-3611)
 -- calls "start" by name on every screenplay registered with true.
-function somStormLordScreenPlay:start()
-	if (isZoneEnabled("mustafar")) then
-		self:spawnGiver()
-	end
-end
-
-function somStormLordScreenPlay:spawnGiver()
-	local giver = self.questGiver
-	local pNpc = spawnMobile("mustafar", giver.template, 0, giver.x, getWorldFloor(giver.x, giver.y, "mustafar"), giver.y, giver.heading, 0)
-
-	if (pNpc == nil) then
-		print("somStormLordScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
-	else
-		self.questGiverID = SceneObject(pNpc):getObjectID()
-	end
-
-	local brother = self.brother
-	local pBrother = spawnMobile("mustafar", brother.template, 0, brother.x, getWorldFloor(brother.x, brother.y, "mustafar"), brother.y, brother.heading, 0)
-
-	if (pBrother == nil) then
-		print("somStormLordScreenPlay: failed to spawn " .. brother.template .. "; Talper cannot be placed")
-	else
-		self.brotherID = SceneObject(pBrother):getObjectID()
-	end
-end
-
 --[[ State
 
 Persistent screenplay data on the player, so the ladder survives a restart.
@@ -716,7 +676,7 @@ function somStormLordScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 0
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil or leg.killTemplates[victimTemplate] == nil) then
 		return 0

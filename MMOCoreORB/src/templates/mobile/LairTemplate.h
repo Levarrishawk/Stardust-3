@@ -21,6 +21,7 @@ protected:
 	Vector<String> weightedMobiles;
 	VectorMap<String, int> bossMobiles; // mobile template, number to spawn
 	int spawnLimit;
+	bool cappedMobileCounts = false;
 
 	VectorMap<uint32, Reference<Vector<String>*> > buildings;
 
@@ -82,6 +83,7 @@ public:
 
 	void readObject(LuaObject* templateData) {
 		spawnLimit = templateData->getIntField("spawnLimit");
+		cappedMobileCounts = templateData->getBooleanField("cappedMobileCounts");
 
 		if (templateData->getStringField("faction").length() > 0) {
 			String factionString = templateData->getStringField("faction");
@@ -225,6 +227,10 @@ public:
 
 	int getSpawnLimit() const {
 		return spawnLimit;
+	}
+
+	bool hasCappedMobileCounts() const {
+		return cappedMobileCounts;
 	}
 
 	const VectorMap<String, int>* getMobiles() const {

@@ -10,22 +10,7 @@
 	ghost; nothing is kept here. readScreenPlayData returns "" for a key never written, which is
 	why getStage does "tonumber(...) or 0".
 
-	THE LEVEL GATE  --  61, not the .qst's 75
-
-	The refusal line is shipped and is used as shipped: s_122, "you seem to lack the experience
-	to assist me". Only the number changed. Q4P3's server-side conversation gates his briefing
-	on a level test against 60 -- the briefing is reached when the player's level is greater
-	than 60 -- and s_122 is the fallback screen every other branch falls through to. So the
-	first level that can take this job is 61.
-
-	The condition is named levelTooLow and returns TRUE for the players who ARE high enough.
-	The name is inverted relative to what it does; read the body, not the identifier. Menth
-	Paul and the mining executive carry the same condition the same way round.
-
-	The .qst's [list] Level 75 is a client-side display value. An earlier revision enforced it
-	because the conversation had not been found yet. The number lives in
-	collectorsBusinessScreenPlay.requiredLevel, which this file compares against, so there is
-	one place to change it and it is not here.
+	Stardust offers the quest without the original combat-level check.
 
 	WHERE THE ACTIONS FIRE  --  one screen later than they used to
 
@@ -126,13 +111,6 @@ function q4p3_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local stage = collectorsBusinessScreenPlay:getStage(pPlayer)
 
 	if (stage == 0) then
-		if (CreatureObject(pPlayer):getLevel() < collectorsBusinessScreenPlay.requiredLevel) then
-			-- The one opening where the droid moves and the player does not.
-			CreatureObject(pNpc):doAnimation("greet")
-
-			return convoTemplate:getScreen("too_low")
-		end
-
 		CreatureObject(pPlayer):doAnimation("nod")
 
 		return convoTemplate:getScreen("greeting")

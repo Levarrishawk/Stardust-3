@@ -16,8 +16,7 @@
 	  shard_1 or shard_2 active, or
 	    shard_2 done                      -> s_67  finished     STAGE_SHARD, STAGE_BROOD,
 	                                                            STAGE_DONE
-	  level > 60                          -> s_110 greeting     stage 0, Level 61+
-	  default                             -> s_72  too_low      stage 0, under 61
+	  default                             -> s_110 greeting     stage 0
 
 	WHOSE LINE IS s_67 -- everyone holding the shard, not just the player who is done
 
@@ -56,22 +55,7 @@
 	Live also defines playerJedi and hermitChat2 conditions that its own tree never uses.
 	Nothing here needs them.
 
-	THE LEVEL GATE  --  61, not the .qst's 75
-
-	The refusal line is shipped and is used as shipped: s_72, "I wish you were more experienced...
-	I could really use some help.", the one string in the table that fits no other beat. Only the
-	number changed. Menth Paul's server-side conversation gates his ask on a level test against
-	60 -- the ask is reached when the player's level is greater than 60 -- so the first level that
-	can take this job is 61.
-
-	The condition is named levelTooLow and returns TRUE for the players who ARE high enough. The
-	name is inverted relative to what it does; read the body, not the identifier. Q4P3 and the
-	mining executive carry the same condition the same way round.
-
-	The .qst's [list] Level 75 is a client-side display value. An earlier revision enforced it
-	because the conversation had not been found yet. The number lives in
-	cursedShardScreenPlay.requiredLevel, which this file compares against, so there is one place
-	to change it and it is not here.
+	Stardust offers the quest without the original combat-level check.
 
 	THE PRICE
 
@@ -143,7 +127,6 @@ menth_paul_conv_handler.screenAnimations = {
 	-- the roots
 	greeting        = { { "npc", "implore" } },
 	plea            = { { "npc", "implore" } },
-	too_low         = { { "npc", "sigh_deeply" } },
 	in_progress     = { { "npc", "nervous" } },
 	finished        = { { "npc", "greet" }, { "player", "nod" } },
 
@@ -202,10 +185,6 @@ function menth_paul_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	elseif (stage ~= 0) then
 		-- STAGE_SHARD, STAGE_BROOD and STAGE_DONE: s_67, his luck has turned.
 		return convoTemplate:getScreen("finished")
-	end
-
-	if (CreatureObject(pPlayer):getLevel() < cursedShardScreenPlay.requiredLevel) then
-		return convoTemplate:getScreen("too_low")
 	end
 
 	return convoTemplate:getScreen("greeting")

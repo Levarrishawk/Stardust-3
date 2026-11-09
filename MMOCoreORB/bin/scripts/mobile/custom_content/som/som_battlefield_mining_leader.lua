@@ -34,14 +34,14 @@ som_battlefield_mining_leader = Creature:new {
 	ferocity = 0,
 	pvpBitmask = ATTACKABLE,
 	creatureBitmask = PACK + STALKER,
-	optionsBitmask = AIENABLED,
+	optionsBitmask = AIENABLED + CONVERSABLE,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/som/mustafarian_m_01.iff"},
 	lootGroups = {},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
-	conversationTemplate = "",
+	conversationTemplate = "som_battlefield_miner_leader",
 	primaryAttacks = { },
 	secondaryAttacks = { }
 }

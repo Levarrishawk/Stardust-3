@@ -1,154 +1,75 @@
--- Planet Region Definitions
--- This file has been generated with the SWGEmu World Spawner Tool.
---
--- {"regionName", xCenter, yCenter, shape and size, tier, {"spawnGroup1", ...}, maxSpawnLimit}
--- Shape and size is a table with the following format depending on the shape of the area:
---   - Circle: {1, radius}
---   - Rectangle: {2, width, height}
---   - Ring: {3, inner radius, outer radius}
--- Tier is a bit mask with the following possible values where each hexadecimal position is one possible configuration.
--- That means that it is not possible to have both a spawn area and a no spawn area in the same region, but
--- a spawn area that is also a no build zone is possible.
-
 require("scripts.managers.planet.regions")
 
---[[ 
+mustafar_regions = {
+	-- Existing build restrictions.
+	{"mensix_southwest_1", -3396, 1305, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_2", -3439, 902, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_3", -3367, 510, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_4", -3266, 122, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_5", -3642, -30, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_6", -4063, 92, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_7", -4171, 479, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_8", -4042, 866, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_southwest_9", -3952, 1264, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_west_7", -4719, 2340, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_west_8", -5104, 2159, {1, 250}, NOBUILDZONEAREA},
+	{"mensix_west_9", -5591, 2173, {1, 250}, NOBUILDZONEAREA},
+	{"mensix_west_10", -5591, 2173, {1, 500}, NOBUILDZONEAREA},
+	{"mensix_west_11", -5960, 871, {1, 300}, NOBUILDZONEAREA},
+	{"mensix_west_12", -5933, 459, {1, 200}, NOBUILDZONEAREA},
+	{"mensix_west_13", -5933, 459, {1, 750}, NOBUILDZONEAREA},
+	{"old_mining_facility_1", -2774, 279, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_2", -2746, 681, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_3", -2417, 911, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_4", -2053, 731, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_5", -1752, 455, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_6", -1487, 135, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_7", -1109, -8, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_8", -710, 53, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_9", -303, 62, {1, 200}, NOBUILDZONEAREA},
+	{"old_mining_facility_10", 88, -132, {1, 200}, NOBUILDZONEAREA},
+	{"berkens_4", -616, 4433, {1, 300}, NOBUILDZONEAREA},
+	{"berkens_4a", -616, 4433, {1, 300}, NOBUILDZONEAREA},
+	{"storm_lord_ruins", 193, 4163, {1, 500}, NOBUILDZONEAREA},
+	{"sw_bandit_camp", -6029, 0, {1, 100}, NOSPAWNAREA + NOBUILDZONEAREA},
+	{"mensix_mining_facility", -2601, 1635, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
+	{"striking_miner_camp", -5335, 4429, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
+	{"blackguard_jedi_ruins", -4373, 3255, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
+	{"nw_jedi_ruins", -5424, 6028, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
 
-Mustafar Creature Spawn Groups
-- mustafar_lava_fleas
-- mustafar_blistmoks
-- mustafar_tulrus
-- mustafar_tanrays
-- mustafar_xandanks
-- mustafar_jundaks
-- mustafar_kubaza_beetles
-
---]]
-
-mustafar_regions = {  
-  -- Mensix Region
-  {"mensix_southwest_1", -3396, 1305, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"mensix_southwest_2", -3439, 902, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"mensix_southwest_3", -3367, 510, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"mensix_southwest_4", -3266, 122, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"mensix_southwest_5", -3642, -30, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"mensix_southwest_6", -4063, 92, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_southwest_7", -4171, 479, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_southwest_8", -4042, 866, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_southwest_9", -3952, 1264, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_southwest_10", -3672, 1570, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256}, 
-  {"mensix_southwest_10", -3672, 1570, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_southwest_11", -3448, 1905, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},  
-  {"mensix_southwest_11", -3448, 1905, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_west_1", -3600, 2274, {1, 400}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_west_1", -3600, 2274, {1, 400}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"mensix_west_2", -3600, 2274, {1, 300}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256}, 
-  {"mensix_west_3", -2776, 2414, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_west_3", -2776, 2414, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256}, 
-  {"mensix_west_4", -3562, 2393, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_west_4", -3562, 2393, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"mensix_west_5", -3946, 2484, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_west_5", -3946, 2484, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256}, 
-  {"mensix_west_6", -4357, 2519, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_west_6", -4357, 2519, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256}, 
-  {"mensix_west_7", -4719, 2340, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256}, 
-  {"mensix_west_7", -4719, 2340, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256}, 
-  {"mensix_west_8", -5104, 2159, {1, 250}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_west_9", -5591, 2173, {1, 250}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_west_10", -5591, 2173, {1, 500}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_west_11", -5960, 871, {1, 300}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_west_12", -5933, 459, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  {"mensix_west_13", -5933, 459, {1, 750}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  -- Old Mining Facility Region
-  {"old_mining_facility_1", -2774, 279, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_2", -2746, 681, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_3", -2417, 911, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_4", -2053, 731, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_5", -1752, 455, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_6", -1487, 135, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_7", -1109, -8, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_8", -710, 53, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_9", -303, 62, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  {"old_mining_facility_10", 88, -132, {1, 200}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_lava_fleas"}, 256},
-  -- Tulrus Isle
-  {"tulrus_isle_1", -1491, 2239, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256}, 
-  {"tulrus_isle_2", -1720, 2573, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256}, 
-  {"tulrus_isle_2", -1720, 2573, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_jundaks"}, 256},
-  {"tulrus_isle_3", -1748, 3016, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256}, 
-  {"tulrus_isle_3", -1748, 3016, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_jundaks"}, 256}, 
-  {"tulrus_isle_4", -1751, 3424, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_jundaks"}, 256},
-  {"tulrus_isle_4", -1751, 3424, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"tulrus_isle_5", -1781, 3814, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"tulrus_isle_5", -1781, 3814, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_jundaks"}, 256}, 
-  {"tulrus_isle_6", -1999, 4194, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_jundaks"}, 256},
-  {"tulrus_isle_6", -1999, 4194, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"tulrus_isle_7", -1056, 2463, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"tulrus_isle_8", -1113, 2879, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"tulrus_isle_8", -1113, 2879, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_jundaks"}, 256},
-  -- Berkens Flow
-  {"berkens_1", -494, 3619, {1, 250}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"berkens_1", -494, 3619, {1, 250}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"berkens_1a", -494, 3619, {1, 250}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tanrays"}, 256},
-  {"berkens_2", -453, 4064, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"berkens_2", -453, 4064, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_3", -616, 4433, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"berkens_3", -616, 4433, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_3a", -616, 4433, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"berkens_4", -616, 4433, {1, 300}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"berkens_4", -616, 4433, {1, 300}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_4a", -616, 4433, {1, 300}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_tanrays"}, 256},
-  {"berkens_4a", -616, 4433, {1, 300}, NOBUILDZONEAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"berkens_5", -474, 5120, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_5", -474, 5120, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"berkens_6", -106, 5143, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tulrus"}, 256},
-  {"berkens_6", -106, 5143, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_7", -106, 5143, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_7", -106, 5143, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"berkens_8", -494, 3619, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"berkens_8", -494, 3619, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_8a", -494, 3619, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tanrays"}, 256},
-  {"berkens_9", 495, 5732, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256}, 
-  {"berkens_9", 495, 5732, {1, 200}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"berkens_10", 51, 5753, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_tanrays"}, 256},
-  {"berkens_10", 51, 5753, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_xandanks"}, 256},
-  {"berkens_10", 51, 5753, {1, 450}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  -- Burning Plains
-  -- Not produced by the World Spawner Tool: the block bounded by the NGE mining
-  -- field markers (x -2100..-4500, y 4590..5920) had no spawn region at all, so
-  -- the documented "kill 5 Kubaza Beetles in the Burning Plain" objective had no
-  -- creatures anywhere near any of the three waypoints the NGE guide quotes for
-  -- it. These are plain SPAWNAREA -- they layer kubaza beetles onto the plain
-  -- without suppressing the planet-wide world_spawner or changing build rules.
-  -- Centres are the NGE marker positions plus the guide's own alternates.
-  {"burning_plains_1", -2805, 5131, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"burning_plains_2", -2789, 5921, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"burning_plains_3", -2155, 5511, {1, 300}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"burning_plains_4", -4490, 5905, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"burning_plains_5", -2776, 4593, {1, 300}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"burning_plains_6", -3955, 5328, {1, 400}, SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  -- Smoking Forest
-  {"smoking_forest_1", -5464, 4110, {1, 1000}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_kubaza_beetles"}, 256},
-  {"smoking_forest_2", -5464, 4110, {1, 1000}, NOWORLDSPAWNAREA + SPAWNAREA, {"mustafar_blistmoks"}, 256},
-  -- Storm Lord Ruins
-  -- SPAWNAREA added: the row names a spawn group, but PlanetManagerImplementation.cpp:1069
-  -- only reads argument 6 when that flag is set, so this was built as a plain region_area
-  -- and mustafar_storm_lord_minions never spawned. setRegionFlags runs first at :1067, so
-  -- NOWORLDSPAWNAREA still applied -- the 500 m circle suppressed the planet-wide spawner
-  -- and supplied nothing in its place. Flag order matches smoking_forest_1/_2 above.
-  {"storm_lord_ruins", 193, 4163, {1, 500}, NOWORLDSPAWNAREA + SPAWNAREA + NOBUILDZONEAREA, {"mustafar_storm_lord_minions"}, 256},
-  -- Areas Cleared of World Spawns
-  -- Re-centred from (-6170, 10). The camp it is meant to clear is the 13 mobiles at
-  -- screenplays/mustafar/regions/mensix_facility_region.lua:68-93, which span
-  -- x -6059..-5998.9 and y -73.0..73.7. Against the old centre every one of the 13 sat
-  -- 111.4-181.1 m out, i.e. entirely outside the 100 m circle, so the camp was exposed to
-  -- the mensix_west_13 blistmoks and the planet-wide lava fleas. -6029, 0 is the bounding
-  -- box centre of those 13; it brings the farthest in to 75.7 m, so the shipped radius is
-  -- left at 100 rather than widened.
-  {"sw_bandit_camp", -6029, 0, {1, 100}, NOSPAWNAREA + NOBUILDZONEAREA},
-  {"mensix_mining_facility", -2601, 1635, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
-  {"striking_miner_camp", -5335, 4429, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
-  {"blackguard_jedi_ruins", -4373, 3255, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
-  {"nw_jedi_ruins", -5424, 6028, {1, 200}, NOSPAWNAREA + NOBUILDZONEAREA},
-  -- World Spawns
-  {"world_spawner", 0, 0, {1, -1}, SPAWNAREA + WORLDSPAWNAREA, {"mustafar_lava_fleas"}, 2048}
+	-- DSRC wildlife regions generated by utils/mustafar/build_population.py.
+	{"crystal_flats_main", -6142, -8.666667, {2, -4094, 2440}, SPAWNAREA, {"mustafar_native_crystal_flats_main"}, 256},
+	{"crystal_flats_field", -4674.023955, 1481.453601, {2, -3538.972424, 2676.979128}, SPAWNAREA, {"mustafar_native_crystal_flats_field"}, 256},
+	{"crystal_flats_field_two", -3742, 2090, {2, -2840, 2650}, SPAWNAREA, {"mustafar_native_crystal_flats_field_two"}, 256},
+	{"mining_area_south", -3658.666667, -120, {2, -3273.333333, 1382}, SPAWNAREA, {"mustafar_native_mining_area_south"}, 256},
+	{"nesting_grounds_north", -2175.333333, 4058, {2, -1895.146086, 4356.666667}, SPAWNAREA, {"mustafar_native_nesting_grounds_north"}, 256},
+	{"nesting_grounds_central", -1942, 2608, {2, -1600, 3820}, SPAWNAREA, {"mustafar_native_nesting_grounds_central"}, 256},
+	{"nesting_grounds_south", -1542, 2074.666667, {2, -1240, 2320}, SPAWNAREA, {"mustafar_native_nesting_grounds_south"}, 256},
+	{"nesting_grounds_northeast", -1942, 4591.333333, {2, -1674.245735, 4886.666667}, SPAWNAREA, {"mustafar_native_nesting_grounds_northeast"}, 256},
+	{"nesting_grounds_southeast", -1325.333333, 2191.333333, {2, -1036.666666, 3000}, SPAWNAREA, {"mustafar_native_nesting_grounds_southeast"}, 256},
+	{"smoking_forest_north", -6275.333333, 5240, {2, -5100, 6348.666667}, SPAWNAREA, {"mustafar_native_smoking_forest_north"}, 256},
+	{"smoking_forest_main", -6358.666667, 3520, {2, -4700, 5265.333333}, SPAWNAREA, {"mustafar_native_smoking_forest_main"}, 256},
+	{"smoking_forest_northeast", -5092, 5291.333333, {2, -4700, 5647.344633}, SPAWNAREA, {"mustafar_native_smoking_forest_northeast"}, 256},
+	{"smoking_forest_south", -6358.666667, 3041.333333, {2, -4310.666667, 3470}, SPAWNAREA, {"mustafar_native_smoking_forest_south"}, 256},
+	{"smoking_forest_east", -4658.666667, 3520, {2, -4250, 5482}, SPAWNAREA, {"mustafar_native_smoking_forest_east"}, 256},
+	{"burning_plains_northwest", -4887.134707, 5715.68063, {2, -3863.047179, 6145.68063}, SPAWNAREA, {"mustafar_native_burning_plains_northwest"}, 256},
+	{"burning_plains_central", -4000, 4440, {2, -2750, 6140}, SPAWNAREA, {"mustafar_native_burning_plains_central"}, 256},
+	{"burning_plains_east", -2758.666667, 5024.666667, {2, -2020, 6048.666667}, SPAWNAREA, {"mustafar_native_burning_plains_east"}, 256},
+	{"burning_plains_southeast", -2951.152561, 4734.046885, {2, -2320, 5079.380219}, SPAWNAREA, {"mustafar_native_burning_plains_southeast"}, 256},
+	{"berkens_flow_north", -1892, 5290, {2, 580, 6348.666667}, SPAWNAREA, {"mustafar_native_berkens_flow_north"}, 256},
+	{"berkens_flow_main", -970, 3174.666667, {2, -240, 5258.000301}, SPAWNAREA, {"mustafar_native_berkens_flow_main"}, 256},
+	{"mining_area_central", -2908.666667, -158.666667, {2, -1640, 650}, SPAWNAREA, {"mustafar_native_mining_area_central"}, 256},
+	{"mining_area_north", -2332.666667, 1016.5, {1, 376}, SPAWNAREA, {"mustafar_native_mining_area_north"}, 256},
+	{"mining_area_east", -1318.666667, 157.333333, {1, 340}, SPAWNAREA, {"mustafar_native_mining_area_east"}, 256},
+	{"mining_area_anakins_beach", -1826, 1807.333333, {1, 349.333333}, SPAWNAREA, {"mustafar_native_mining_area_anakins_beach"}, 256},
+	{"mining_area_southeast", -758.666667, -308.666667, {2, 330, 570}, SPAWNAREA, {"mustafar_native_mining_area_southeast"}, 256},
+	{"berkens_flow_south", -675.333333, 2120, {2, 324.666667, 2850}, SPAWNAREA, {"mustafar_native_berkens_flow_south"}, 256},
+	{"berkens_flow_southeast", -770, 2724.666667, {2, 40, 3150}, SPAWNAREA, {"mustafar_native_berkens_flow_southeast"}, 256},
+	{"berkens_flow_droidfactory", 227.333333, 2139.666667, {1, 369.333333}, SPAWNAREA, {"mustafar_native_berkens_flow_droidfactory"}, 256},
+	{"berkens_flow_jedithree", 308, 3364.666667, {1, 266.666667}, SPAWNAREA, {"mustafar_native_berkens_flow_jedithree"}, 256},
+	{"nesting_grounds_central_east", -1375.333333, 2991.333333, {2, -1170, 4015.333333}, SPAWNAREA, {"mustafar_native_nesting_grounds_central_east"}, 256},
+	{"nesting_grounds_east", -1592, 3958, {2, -1340, 4270}, SPAWNAREA, {"mustafar_native_nesting_grounds_east"}, 256},
+	{"nesting_grounds_entrance", -1758.666667, 2308, {2, -1502.666667, 2623.333333}, SPAWNAREA, {"mustafar_native_nesting_grounds_entrance"}, 256},
+	{"nesting_grounds_ancient", -2008.666667, 3808, {2, -1746, 4110}, SPAWNAREA, {"mustafar_native_nesting_grounds_ancient"}, 256},
+	{"berkens_flow_northwest", -1490, 4441.333333, {2, -1012.666667, 5330}, SPAWNAREA, {"mustafar_native_berkens_flow_northwest"}, 256},
 }

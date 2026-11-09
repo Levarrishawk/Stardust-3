@@ -28,6 +28,10 @@ function KashyyykSpawnController:respawnDelay(controller)
 	return getRandomNumber(math.floor(controller.respawnMin * 1000), math.floor(controller.respawnMax * 1000))
 end
 
+function KashyyykSpawnController:spawnSearchRadius(entry)
+	return entry.searchRadius
+end
+
 function KashyyykSpawnController:start()
 	local zone = self:getLayout()
 	if (zone == nil) then
@@ -92,7 +96,7 @@ function KashyyykSpawnController:spawnSlot(pUnused, args)
 	end
 	x, y = x + offsetX, y + offsetY
 	if (c.findSpawnPoint) then
-		local point = getSpawnPointInArea(zone, x, y, entry.searchRadius)
+		local point = getSpawnPointInArea(zone, x, y, self:spawnSearchRadius(entry))
 		if (point == nil) then
 			self:scheduleSpawn(index, slot, self:respawnDelay(c))
 			return

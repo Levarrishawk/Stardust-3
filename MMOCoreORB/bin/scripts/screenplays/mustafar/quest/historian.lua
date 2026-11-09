@@ -301,15 +301,15 @@ historianScreenPlay = ScreenPlay:new {
 	requiredLevel = 75,
 
 	-- Snapshot nodes; see WHERE THE OBJECTS COME FROM.
-	corpseNodeID = 12110928,
-	rubbleNodeID = 12110929,
+	corpseNodeID = MustafarBuildout.objects[12110928],
+	rubbleNodeID = MustafarBuildout.objects[12110929],
 
 	-- Live, quoted; see WHERE EPO STANDS. small_room_04 of the Mensix Mining
 	-- Facility is cell 12112238, and the live row is -16.4 / 19.1 / -20.4 at
 	-- heading -75. Cell coordinates, and 19.1 is the upper floor.
 	questGiver = {
 		template = "som_kenobi_epo_qetora",
-		cell = 12112238,
+		cell = MustafarBuildout.objects[12112238],
 		x = -16.4,
 		z = 19.1,
 		y = -20.4,
@@ -431,7 +431,6 @@ function historianScreenPlay:start()
 		self:spawnQuestGiver()
 		self:spawnBunkerArea()
 		self:spawnFacilityObjects()
-		self:spawnCampMobiles()
 	end
 end
 
@@ -466,7 +465,7 @@ function historianScreenPlay:attachSnapshotObjects()
 		local pProp = getSceneObject(props[i].id)
 
 		if (pProp == nil) then
-			print("historianScreenPlay: snapshot object " .. props[i].id .. " (" .. props[i].role .. ") was not found; that tablet piece will be unreachable")
+			print("historianScreenPlay: buildout object " .. props[i].id .. " (" .. props[i].role .. ") was not found; that tablet piece will be unreachable")
 		else
 			writeStringData(props[i].id .. ":historianRole", props[i].role)
 			SceneObject(pProp):setObjectMenuComponent("HistorianMenuComponent")
@@ -567,36 +566,6 @@ end
 
 -- _2 tasks 2 and 3. Neither creature has spawn data anywhere in this tree, so the
 -- camp the journal text describes is populated here.
-function historianScreenPlay:spawnCampMobiles()
-	local camp = self.camp
-
-	for i = 1, self.darkJedi.count do
-		self:spawnCampMobile(self.darkJedi.template, self.darkJedi.respawn)
-	end
-
-	for i = 1, self.scavengers.count do
-		local template = self.scavengers.templates[((i - 1) % #self.scavengers.templates) + 1]
-
-		self:spawnCampMobile(template, self.scavengers.respawn)
-	end
-end
-
-function historianScreenPlay:spawnCampMobile(template, respawn)
-	local x = self.camp.x + getRandomNumber(-self.camp.spread, self.camp.spread)
-	local y = self.camp.y + getRandomNumber(-self.camp.spread, self.camp.spread)
-	local z = getWorldFloor(x, y, "mustafar")
-	local pMobile = spawnMobile("mustafar", template, respawn, x, z, y, getRandomNumber(360) - 180, 0)
-
-	if (pMobile == nil) then
-		print("historianScreenPlay: failed to spawn " .. template .. "; quest two will be short a tablet piece")
-	else
-		-- A list, not a map keyed by template: the dark jedi spawns four times
-		-- from one template and the scavenger list cycles, so a keyed store
-		-- would silently drop every duplicate but the last.
-		self.campMobileIDs[#self.campMobileIDs + 1] = SceneObject(pMobile):getObjectID()
-	end
-end
-
 --[[ State
 
 Persistent screenplay data on the player's ghost, so progress survives a restart.
@@ -1027,7 +996,7 @@ function historianScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 0
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil) then
 		return 0

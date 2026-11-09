@@ -116,11 +116,11 @@ hiddenTreasureScreenPlay = ScreenPlay:new {
 	-- Snapshot node IDs; see the header. Each is paired with the role name the
 	-- menu component dispatches on.
 	questObjects = {
-		{ role = "plaque",  nodeID = 12110146 },
-		{ role = "dial",    nodeID = 12110959 },
-		{ role = "holocron",nodeID = 12110960 },
-		{ role = "lever",   nodeID = 12110958 },
-		{ role = "lever2",  nodeID = 12110956 },
+		{ role = "plaque",  nodeID = MustafarBuildout.objects[12110146] },
+		{ role = "dial",    nodeID = MustafarBuildout.objects[12110959] },
+		{ role = "holocron",nodeID = MustafarBuildout.objects[12110960] },
+		{ role = "lever",   nodeID = MustafarBuildout.objects[12110958] },
+		{ role = "lever2",  nodeID = MustafarBuildout.objects[12110956] },
 	},
 
 	-- .qst _1 task 14, Go to Location: mustafar (-1130, 46, 4190), Radius 10,
@@ -170,7 +170,7 @@ function hiddenTreasureScreenPlay:attachQuestObjects()
 		local pObject = getSceneObject(entry.nodeID)
 
 		if (pObject == nil) then
-			print("hiddenTreasureScreenPlay: snapshot object " .. entry.nodeID .. " (" .. entry.role .. ") was not found; that step of the quest will be unreachable")
+			print("hiddenTreasureScreenPlay: buildout object " .. entry.nodeID .. " (" .. entry.role .. ") was not found; that step of the quest will be unreachable")
 		else
 			-- The component is a single global table shared by all five objects;
 			-- it reads this back to know which one it is talking about.

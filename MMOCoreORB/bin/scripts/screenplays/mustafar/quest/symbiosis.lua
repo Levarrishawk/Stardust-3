@@ -130,15 +130,15 @@ symbiosisScreenPlay = ScreenPlay:new {
 	screenplayName = "symbiosisScreenPlay",
 
 	-- Snapshot node; see the header.
-	containerNodeID = 12112643,
+	containerNodeID = MustafarBuildout.objects[12112643],
 
 	-- corpse_03's position is .qst task 7 verbatim. corpse_01 and corpse_02 are
 	-- placed around it; see CORPSE POSITIONS in the header. Height is resolved at
 	-- spawn time, never taken from here.
 	corpses = {
-		{ role = "corpse1", template = "som_kenobi_treasure_hunter_corpse_01", x = -1543, y = 462, heading = 40 },
-		{ role = "corpse2", template = "som_kenobi_treasure_hunter_corpse_02", x = -1547, y = 458, heading = 200 },
-		{ role = "corpse3", template = "som_kenobi_treasure_hunter_corpse_03", x = -1545, y = 460, heading = 120 },
+		{ role = "corpse1", template = "som_kenobi_treasure_hunter_corpse_01" },
+		{ role = "corpse2", template = "som_kenobi_treasure_hunter_corpse_02" },
+		{ role = "corpse3", template = "som_kenobi_treasure_hunter_corpse_03" },
 	},
 
 	-- .qst _1 task 15, Go to Location: mustafar (-1584, 101, 701), Radius 3,
@@ -190,7 +190,7 @@ function symbiosisScreenPlay:attachContainer()
 	local pContainer = getSceneObject(self.containerNodeID)
 
 	if (pContainer == nil) then
-		print("symbiosisScreenPlay: snapshot object " .. self.containerNodeID .. " (fluid container) was not found; the quest cannot be started")
+		print("symbiosisScreenPlay: buildout object " .. self.containerNodeID .. " (fluid container) was not found; the quest cannot be started")
 		return
 	end
 
@@ -201,8 +201,7 @@ end
 function symbiosisScreenPlay:spawnCorpses()
 	for i = 1, #self.corpses do
 		local entry = self.corpses[i]
-		local z = getWorldFloor(entry.x, entry.y, "mustafar")
-		local pCorpse = spawnMobile("mustafar", entry.template, 0, entry.x, z, entry.y, entry.heading, 0)
+		local pCorpse = MustafarOverworld:spawnActor(entry.template)
 
 		if (pCorpse == nil) then
 			print("symbiosisScreenPlay: failed to spawn " .. entry.template .. "; that step of the quest will be unreachable")

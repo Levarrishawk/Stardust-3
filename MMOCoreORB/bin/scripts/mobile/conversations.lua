@@ -311,7 +311,9 @@ includeFile("conversations/space/space_conversations.lua")
 includeFile("conversations/kashyyyk/serverobjects.lua")
 
 -- Mustafar
+includeFile("conversations/mustafar/som_battlefield_miner_leader.lua")
 includeFile("conversations/mustafar/som_exploration_marker.lua")
+includeFile("conversations/mustafar/som_mustafar_junk_dealer.lua")
 includeFile("conversations/mustafar/som_pei_yi.lua")
 includeFile("conversations/mustafar/som_diskret_stahn.lua")
 includeFile("conversations/mustafar/som_doctor_lu.lua")

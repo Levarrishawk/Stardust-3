@@ -7,9 +7,7 @@ quest/som_kenobi_collectors_business_1.qst in the client TREs. Both locations an
 their radii, both waypoint names, the two radial texts ("Plug in scanner",
 "Search rubble"), both message box titles and bodies, the comm text, the three
 encounter creature names with their counts and distances, the 120-180 s timer and
-the 10,000 bank credits are all quoted from it. The level gate is NOT the .qst's
-75 -- the droid enforces 61; see the requiredLevel note below. The conversation
-tree is mobile/conversations/mustafar/som_kenobi_q4p3.lua.
+the 10,000 bank credits are all quoted from it. The conversation tree is mobile/conversations/mustafar/som_kenobi_q4p3.lua.
 
 WHERE THE OBJECTS COME FROM
 
@@ -127,30 +125,17 @@ collectorsBusinessScreenPlay = ScreenPlay:new {
 
 	screenplayName = "collectorsBusinessScreenPlay",
 
-	-- The gate Q4P3 actually applies.  His conversation tests
-	-- getLevel(player) > 60 and opens the briefing only when that is true, so
-	-- 61 is the first level that can take the job.  requiredLevel is compared
-	-- with "<" in q4p3_conv_handler, so it holds the first QUALIFYING level.
-	--
-	-- (SOE named that condition "levelTooLow" and then used it as the pass
-	-- test.  The name is backwards; the arithmetic is what runs.)
-	--
-	-- The .qst [list] Level field says 75.  That is the journal's difficulty
-	-- label, not an entry check -- nothing reads it at grant time.  An earlier
-	-- revision enforced the 75 because the conversation had not been found yet.
-	requiredLevel = 61,
-
 	-- Snapshot nodes; see the header.
-	droidNodeID = 12112927,
-	codexRubbleNodeID = 12111383,
-	emptyRubbleNodeID = 12111384,
+	droidNodeID = MustafarBuildout.objects[12112927],
+	codexRubbleNodeID = MustafarBuildout.objects[12111383],
+	emptyRubbleNodeID = MustafarBuildout.objects[12111384],
 
 	-- Live, quoted; see WHERE Q4P3 STANDS. small_room_04 of the Mensix Mining
 	-- Facility is cell 12112238, and the live row is -28.8 / 19.1 / -22 at
 	-- heading 29. Cell coordinates, and 19.1 is the upper floor.
 	questGiver = {
 		template = "som_pann_protocol_droid",
-		cell = 12112238,
+		cell = MustafarBuildout.objects[12112238],
 		x = -28.8,
 		z = 19.1,
 		y = -22,
@@ -218,7 +203,7 @@ function collectorsBusinessScreenPlay:attachSnapshotObjects()
 		local pProp = getSceneObject(props[i].id)
 
 		if (pProp == nil) then
-			print("collectorsBusinessScreenPlay: snapshot object " .. props[i].id .. " (" .. props[i].role .. ") was not found; that step of the quest will be unreachable")
+			print("collectorsBusinessScreenPlay: buildout object " .. props[i].id .. " (" .. props[i].role .. ") was not found; that step of the quest will be unreachable")
 		else
 			writeStringData(props[i].id .. ":collectorsRole", props[i].role)
 			SceneObject(pProp):setObjectMenuComponent("CollectorsBusinessMenuComponent")

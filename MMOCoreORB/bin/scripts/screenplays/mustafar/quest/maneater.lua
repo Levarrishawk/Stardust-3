@@ -517,7 +517,7 @@ function maneaterScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 0
 	end
 
-	self:creditStomachContents(pPlayer, AiAgent(pVictim):getCreatureTemplateName())
+	self:creditStomachContents(pPlayer, MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName()))
 
 	return 0
 end

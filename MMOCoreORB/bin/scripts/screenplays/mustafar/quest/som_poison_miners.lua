@@ -263,21 +263,7 @@ REPEATS
 count, the same way bounty_hunts.lua treats its own allowRepeats flag. Nothing here
 refuses a second run.
 
-THE LEVEL GATE
-
-[list] Level 70, and grantQuest refuses a player below it -- because for this quest
-the .qst number is the only number there is.
-
-A .qst [list] level is a client-side display value, not a gate. The Mustafar quests
-that are really gated -- collectors_business, cursed_shard, moral_choice -- are each
-gated in the giver's server-side conversation, which tests level against 60, so all
-three enforce 61 and ignore the 75 their .qst displays. This quest has no giver
-carrying a level test, so nothing contradicts the 70 and there is nothing better to
-put in its place.
-
-That makes this the fallback case, not a precedent for trusting a [list] level. If
-the maintainer would rather the level be advisory, minimumLevel below is the single number to
-change.
+The questlist level describes difficulty. Stardust does not enforce it at grant time.
 
 WHAT IS NOT MODELLED
 
@@ -308,9 +294,6 @@ somPoisonMinersScreenPlay = ScreenPlay:new {
 	questTitle = "Miner Madness",
 	questDescription = "Trilom gas emissions are a constant source of danger for miners on Mustafar. This deadly gas causes paranoia, dementia, and eventually, agonizing death. Armstrong discovered that one of his mining crews hit a pocket of this gas. There is no cure for Trilom poisoning, and the affected miners need to be destroyed before they can cause harm to others.",
 
-	-- [list] Level 70. See THE LEVEL GATE.
-	minimumLevel = 70,
-
 	-- task 0 musicOnActivate and task 8 musicOnComplete. "exception" is what the
 	-- shipped file says on the activate leg; quoted, not corrected.
 	musicOnActivate = "sound/mus_mustafar_quest_exception.snd",
@@ -334,7 +317,7 @@ somPoisonMinersScreenPlay = ScreenPlay:new {
 	},
 
 	-- Snapshot node; see THE TRACKING COMPUTER.
-	trackingComputerNodeID = 12113487,
+	trackingComputerNodeID = MustafarBuildout.objects[12113487],
 
 	-- task 10, Encounter. Count / Min Distance / Max Distance are quoted; the
 	-- template is substituted for som_mustafarian_miner_crazed, see THE CRAZED
@@ -384,7 +367,7 @@ function somPoisonMinersScreenPlay:attachTrackingComputer()
 	local pComputer = getSceneObject(self.trackingComputerNodeID)
 
 	if (pComputer == nil) then
-		print("somPoisonMinersScreenPlay: snapshot object " .. self.trackingComputerNodeID .. " (tracking computer) was not found; the tracking step will be unreachable")
+		print("somPoisonMinersScreenPlay: buildout object " .. self.trackingComputerNodeID .. " (tracking computer) was not found; the tracking step will be unreachable")
 		return
 	end
 
@@ -505,11 +488,6 @@ function somPoisonMinersScreenPlay:grantQuest(pPlayer)
 	end
 
 	if (CreatureObject(pPlayer):getScreenPlayState("somPoisonMinersBlocked") ~= 0) then
-		return false
-	end
-
-	-- [list] Level 70.
-	if (CreatureObject(pPlayer):getLevel() < self.minimumLevel) then
 		return false
 	end
 

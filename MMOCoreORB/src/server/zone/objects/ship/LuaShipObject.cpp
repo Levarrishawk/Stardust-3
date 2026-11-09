@@ -83,16 +83,17 @@ int LuaShipObject::getControlDeviceID(lua_State* L) {
 int LuaShipObject::storeShip(lua_State* L) {
 	int numberOfArguments = lua_gettop(L) - 1;
 
-	if (numberOfArguments != 5) {
+	if (numberOfArguments != 5 && numberOfArguments != 6) {
 		realObject->error() << "Improper number of arguments in LuaShipObject::storeShip.";
 		return 0;
 	}
 
-	float y = lua_tonumber(L, -1);
-	float z =  lua_tonumber(L, -2);
-	float x = lua_tonumber(L, -3);
-	String zoneName =  lua_tostring(L, -4);
-	CreatureObject* player = (CreatureObject*) lua_touserdata(L, -5);
+	CreatureObject* player = (CreatureObject*) lua_touserdata(L, 2);
+	String zoneName = lua_tostring(L, 3);
+	float x = lua_tonumber(L, 4);
+	float z = lua_tonumber(L, 5);
+	float y = lua_tonumber(L, 6);
+	const bool soloGodModeLanding = numberOfArguments == 6 && lua_toboolean(L, 7);
 
 	if (player == nullptr)
 		return 0;
@@ -114,7 +115,7 @@ int LuaShipObject::storeShip(lua_State* L) {
 
 	Vector3 coordinates(x, y, z);
 
-	StoreShipTask* task = new StoreShipTask(player, shipControlDevice, zoneName, coordinates);
+	StoreShipTask* task = new StoreShipTask(player, shipControlDevice, zoneName, coordinates, soloGodModeLanding);
 
 	if (task != nullptr)
 		task->schedule(500);

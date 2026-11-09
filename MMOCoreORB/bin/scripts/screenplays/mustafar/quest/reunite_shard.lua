@@ -225,8 +225,8 @@ reuniteShardScreenPlay = ScreenPlay:new {
 	screenplayName = "reuniteShardScreenPlay",
 
 	-- Snapshot nodes; see the header.
-	questStartNodeID = 12111454,
-	splinters1NodeID = 12111453,
+	questStartNodeID = MustafarBuildout.objects[12111454],
+	splinters1NodeID = MustafarBuildout.objects[12111453],
 
 	-- _1 task 1, Go to Location: mustafar (-4370, 94, 3229), Radius 25.
 	vibration = { x = -4370, z = 94, y = 3229, radius = 25, name = "Crystal splinters" },
@@ -267,7 +267,7 @@ reuniteShardScreenPlay = ScreenPlay:new {
 			key = "shard3",                                     -- _2 task 13
 			x = -742, z = 87, y = 6132, radius = 100,
 			kind = "retrieve",
-			nodeID = 12110454,
+			nodeID = MustafarBuildout.objects[12110454],
 			waypointName = "Old research facility",
 		},
 	},
@@ -338,7 +338,6 @@ function reuniteShardScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachSnapshotObjects()
 		self:spawnLegAreas()
-		self:spawnLegMobiles()
 		self:spawnFusionMachine()
 	end
 end
@@ -359,7 +358,7 @@ function reuniteShardScreenPlay:attachSnapshotObjects()
 		local pObject = getSceneObject(props[i].nodeID)
 
 		if (pObject == nil) then
-			print("reuniteShardScreenPlay: snapshot object " .. props[i].nodeID .. " (" .. props[i].role .. ") was not found; that step of the chain will be unreachable")
+			print("reuniteShardScreenPlay: buildout object " .. props[i].nodeID .. " (" .. props[i].role .. ") was not found; that step of the chain will be unreachable")
 		else
 			writeStringData(props[i].nodeID .. ":reuniteRole", props[i].role)
 			SceneObject(pObject):setObjectMenuComponent("ReuniteShardMenuComponent")
@@ -392,22 +391,6 @@ end
 
 -- Only the two legs whose creatures ship with no spawn data anywhere; see
 -- CREATURE SPAWNS in the header.
-function reuniteShardScreenPlay:spawnLegMobiles()
-	for i = 1, #self.legs do
-		local leg = self.legs[i]
-
-		for n = 1, (leg.spawnCount or 0) do
-			local x = leg.x + getRandomNumber(-12, 12)
-			local y = leg.y + getRandomNumber(-12, 12)
-			local z = getWorldFloor(x, y, "mustafar")
-
-			if (spawnMobile("mustafar", leg.template, 300, x, z, y, getRandomNumber(360) - 180, 0) == nil) then
-				print("reuniteShardScreenPlay: failed to spawn " .. leg.template .. "; leg " .. leg.key .. " will have nothing to kill")
-			end
-		end
-	end
-end
-
 -- One machine per copy of the Old Research Facility; see THE FUSION MACHINE.
 function reuniteShardScreenPlay:spawnFusionMachine()
 	local buildings = MustafarInstances:getPoolBuildings(self.fusion.pool)
@@ -714,7 +697,7 @@ function reuniteShardScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 0
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil) then
 		return 0

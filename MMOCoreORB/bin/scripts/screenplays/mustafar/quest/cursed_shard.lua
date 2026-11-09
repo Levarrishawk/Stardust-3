@@ -6,7 +6,7 @@ SOURCE OF RECORD
 quest/som_kenobi_cursed_shard_1.qst and quest/som_kenobi_cursed_shard_2.qst in the
 client TREs. Every location and radius, every message box title and body, both
 encounter creature counts and distances and all four timer ranges are quoted from
-them. The level gate is NOT the .qst's -- see THE LEVEL GATE. The two conversation
+them. The two conversation
 trees are
 mobile/conversations/mustafar/som_kenobi_menth_paul.lua and
 som_kenobi_cursed_shard_sucker.lua.
@@ -32,21 +32,7 @@ a location. That one does get a waypoint, for the reason under PROGRESS TRACKING
 The two branches of _2 are alternatives -- destroy the shard in the volcano, or
 palm it off on someone else -- and either completes the quest.
 
-THE LEVEL GATE  --  61, not 75
-
-Both .qst files carry [list] Level 75 and an earlier revision quoted it. The giver
-does not enforce it. Menth Paul's server-side conversation gates his opening screen
-on a condition of its own, and that condition is a level test against 60: the offer
-screen s_110 is only reached when the player's level is greater than 60. So the real
-minimum is 61 and requiredLevel below says 61.
-
-The condition is named levelTooLow and it returns TRUE for the players who ARE high
-enough. The name is inverted relative to what it does. Read the body, not the name --
-this trips anyone who greps for the gate and stops at the identifier.
-
-The .qst Level field is a client-side display value. Where it and the server-side
-conversation disagree, the conversation is what the player experiences, so that is
-what this tree honours.
+Stardust offers the quest without a combat-level check.
 
 WHERE THE NPCs STAND  --  live positions, recovered
 
@@ -181,14 +167,11 @@ cursedShardScreenPlay = ScreenPlay:new {
 
 	screenplayName = "cursedShardScreenPlay",
 
-	-- The gate the giver actually enforces, not the .qst's; see THE LEVEL GATE.
-	requiredLevel = 61,
-
 	-- Live positions; see WHERE THE NPCs STAND. Both are cell-local coordinates
 	-- inside the Mensix cantina, medium_room_01 = cell 12112226.
 	menthPaul = {
 		template = "som_kenobi_menth_paul",
-		cell = 12112226,
+		cell = MustafarBuildout.objects[12112226],
 		x = -73.6,
 		z = 10.8,
 		y = 53.8,
@@ -197,7 +180,7 @@ cursedShardScreenPlay = ScreenPlay:new {
 
 	sucker = {
 		template = "som_kenobi_sucker",
-		cell = 12112226,
+		cell = MustafarBuildout.objects[12112226],
 		x = -75.7,
 		z = 10.8,
 		y = 40.4,

@@ -254,7 +254,7 @@ somGlyphHuntScreenPlay = ScreenPlay:new {
 			description = "The historian needs you to locate the glyph showing Mustafar as it used to be.",
 			template = "object/tangible/quest/som_jedi_two_glyph_01.iff",
 			itemName = "The Glyph of Mustafar shows the moon having forests and water. It also shows the planet having great cities",
-			nodeID = 12111392,
+			nodeID = MustafarBuildout.objects[12111392],
 		},
 		{
 			taskName = "glyph_hunt_two",
@@ -263,7 +263,7 @@ somGlyphHuntScreenPlay = ScreenPlay:new {
 			description = "The historian needs you to locate the glyph showing Mustafar as it is today.",
 			template = "object/tangible/quest/som_jedi_two_glyph_02.iff",
 			itemName = "This Glyph of Mustafar shows the moon in its current volcanic state",
-			nodeID = 12111391,
+			nodeID = MustafarBuildout.objects[12111391],
 		},
 		{
 			taskName = "glyph_hunt_three",
@@ -272,7 +272,7 @@ somGlyphHuntScreenPlay = ScreenPlay:new {
 			description = "The historian needs you to locate the glyph showing Mustafar as it went through its change.",
 			template = "object/tangible/quest/som_jedi_two_glyph_03.iff",
 			itemName = "This glyph appears to have been defaced. It appears that two huge portions of the glyph are missing so you cannot decipher what occured",
-			nodeID = 12111390,
+			nodeID = MustafarBuildout.objects[12111390],
 		},
 	},
 
@@ -347,18 +347,10 @@ somGlyphHuntScreenPlay = ScreenPlay:new {
 
 	-- THE GIVER. The .qst's own hand-in waypoint, mustafar (-5791, 106, 5808) --
 	-- full 3D, so nothing is derived. See THE GIVER in the header.
-	questGiver = {
-		template = "naboo_historian",
-		x = -5791,
-		z = 106,
-		y = 5808,
-		heading = 0,
-	},
 
 	-- Built by attachGlyphs on every boot. In-memory only, which is correct: it is
 	-- derived from placements and the placements are re-attached each start.
 	glyphIndex = {},
-	questGiverID = 0,
 }
 
 -- JOURNAL MIRROR (J-3, 2026-09-04): stage -> client journal task bits, from the SOE task tree in
@@ -376,29 +368,6 @@ registerScreenPlay("somGlyphHuntScreenPlay", true)
 function somGlyphHuntScreenPlay:start()
 	if (isZoneEnabled("mustafar")) then
 		self:attachGlyphs()
-		self:spawnGiver()
-	end
-end
-
-function somGlyphHuntScreenPlay:spawnGiver()
-	local giver = self.questGiver
-	-- z off the .qst is a WAYPOINT altitude -- where the map marker floats -- not
-	-- ground level, and this is an outdoor spawn. Take the terrain height and keep
-	-- the quoted value only as a fallback.
-	local groundZ = getWorldFloor(giver.x, giver.y, "mustafar")
-
-	-- Not `or` -- 0 is truthy in Lua, so an `or` fallback would keep a zero floor
-	-- and bury him. Zero is treated as failure here: no point on Mustafar's terrain
-	-- in this tree is at height 0.
-	if (groundZ == nil or groundZ == 0) then
-		groundZ = giver.z
-	end
-	local pNpc = spawnMobile("mustafar", giver.template, 0, giver.x, groundZ, giver.y, giver.heading, 0)
-
-	if (pNpc == nil) then
-		print("somGlyphHuntScreenPlay: failed to spawn " .. giver.template .. "; the quest cannot be started")
-	else
-		self.questGiverID = SceneObject(pNpc):getObjectID()
 	end
 end
 
@@ -691,7 +660,7 @@ function somGlyphHuntScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 1
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil) then
 		return 0

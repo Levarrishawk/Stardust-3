@@ -345,10 +345,10 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 	musicOnCount = "sound/ui_npe2_quest_counter.snd",
 
 	-- snapshot/mustafar.ws, object/tangible/quest/shared_must_chem_locker.iff
-	chemLockers = { 12110160, 12111127, 12111128, 12112910, 12113486 },
+	chemLockers = { MustafarBuildout.objects[12110160], MustafarBuildout.objects[12111127], MustafarBuildout.objects[12111128], MustafarBuildout.objects[12112910], MustafarBuildout.objects[12113486] },
 
 	-- snapshot node 12112217, object/building/mustafar/structures/shared_must_new_mining_facility.iff
-	facilityID = 12112217,
+	facilityID = MustafarBuildout.objects[12112217],
 
 	-- Every object this screenplay puts inside Mensix, in SOE's own numbers.
 	-- All three rows are som_mining_facility.tab verbatim; see THE FACILITY
@@ -358,35 +358,30 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			role = "bleachVat",
 			template = "object/tangible/item/som/bleach_vat.iff",
 			cellName = "small_room_04",
-			cellID = 12112238,
+			cellID = MustafarBuildout.objects[12112238],
 			x = -16.6, z = 19.1, y = -11.3, heading = 0,
 		},
 		{
 			role = "jundakSkullProp",
 			template = "object/tangible/item/som/jundak_skull.iff",
 			cellName = "control_room_02",
-			cellID = 12112245,
+			cellID = MustafarBuildout.objects[12112245],
 			x = -87.5, z = 23.2, y = -50.3, heading = 0,
 		},
 		{
 			role = "blistmokRugProp",
 			template = "object/tangible/item/som/blistmok_rug.iff",
 			cellName = "entrance_room_02",
-			cellID = 12112224,
+			cellID = MustafarBuildout.objects[12112224],
 			x = -16.3, z = 10.8, y = 84.6, heading = 0,
 		},
 	},
 
-	respawnTimer = 300,
 
 	-- role -> objectID, filled by spawnFacilityProps.
 	propIDs = {},
 
 	areaByObjectID = {},
-	uraJenID = 0,
-	ancientJundakID = 0,
-	packLeaderID = 0,
-	packMemberIDs = {},
 
 	quests = {
 
@@ -447,11 +442,9 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			uraJenWaypointName = "Ura Jen",		-- task 4, waypointName
 			-- task 4: LocationX -3791, LocationY 66 (height), LocationZ 2625
 			uraJenX = -3791,
-			uraJenZ = 66,
 			uraJenY = 2625,
 			-- som_blistmok_ura_jen does not ship anywhere.  SUBSTITUTE -- see header.
-			uraJenTemplate = "blistmok_trampler",
-			uraJenName = "Ura Jen",
+			uraJenTemplate = "mustafar_world_blistmok_ura_jen",
 		},
 
 		-- ================================================================
@@ -482,12 +475,10 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			huntWaypointName = "Ancient Jundak",	-- task 1, waypointName
 			-- task 1: LocationX -1616, LocationY 40 (height), LocationZ 4275
 			huntX = -1616,
-			huntZ = 40,
 			huntY = 4275,
 			-- substitution retired: som_ancient_jundak is in creatures.tab at CL 84 ELITE on
 			-- som/jundak.iff.  jundak_devourer was both the wrong creature and the wrong model.
-			huntTemplate = "som_ancient_jundak",
-			huntName = "Ancient Jundak",
+			huntTemplate = "mustafar_world_ancient_jundak",
 
 			-- task 5, Wait for Signal (jundak_skull_two), Signal Name jundak_skull_signal_one
 			bleachTitle = "Bleach the Skull",
@@ -542,7 +533,7 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			-- task 18, Wait for Signal (xandank_trophy_two), Signal Name xandank_trophy_signal_one
 			searchOneTitle = "Search the Area",
 			searchOneDescription = "Search the area for any physical traces that indicate that the pack was here.",
-			searchOneNodeID = 12111126,	-- shared_xandank_lair.iff, 4.5 m from the task 16 waypoint
+			searchOneNodeID = MustafarBuildout.objects[12111126],	-- shared_xandank_lair.iff, 4.5 m from the task 16 waypoint
 
 			-- task 17, Go to Location (xandank_trophy_three)
 			siteTwoTitle = "Follow the Pack's Trail",
@@ -556,7 +547,7 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			-- task 19, Wait for Signal (xandank_trophy_four), Signal Name xandank_trophy_signal_two
 			searchTwoTitle = "Search the Area",
 			searchTwoDescription = "You found where the pack stopped and rested for a while. Look around for any physical traces that may indicate where they went next.",
-			searchTwoNodeID = 12111108,	-- shared_xandank_lair_two.iff, 25.8 m from the task 17 waypoint
+			searchTwoNodeID = MustafarBuildout.objects[12111108],	-- shared_xandank_lair_two.iff, 25.8 m from the task 17 waypoint
 
 			-- task 20, Go to Location (xandank_trophy_five)
 			denTitle = "Follow the Pack's Trail",
@@ -570,14 +561,6 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			-- The five shared_must_xandank_lair.iff nodes that sit inside task 20's
 			-- Radius 75, read out of snapshot/mustafar.ws.  The pack spawns on them;
 			-- the sixth member and the packleader take the .qst's own den coordinate.
-			packSpawns = {
-				{ x = -4556.56, z = 51.93, y = 5118.53 },	-- lair node 12111121
-				{ x = -4580.00, z = 51.01, y = 5082.46 },	-- lair node 12111122
-				{ x = -4602.76, z = 45.67, y = 5097.91 },	-- lair node 12111123
-				{ x = -4571.51, z = 49.62, y = 5102.81 },	-- lair node 12111124
-				{ x = -4595.75, z = 47.90, y = 5113.97 },	-- lair node 12111125
-				{ x = -4586.00, z = 48.00, y = 5104.00 },	-- task 20's own coordinate
-			},
 
 			-- task 22, Wait for Tasks (xandank_trophy_eight) -- the umbrella over 23 and 27
 			fightTitle = "Eliminate the Pack",
@@ -589,12 +572,7 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			packRequired = 6,
 			-- .qst "Target Server Template = som_xandank_pack".  Does not ship.
 			-- SUBSTITUTE per mustafar_xandank_pack.lua:2 -- see header.
-			packTemplates = {
-				["xandank"] = true,
-				["xandank_onyx_plated"] = true,
-				["xandank_patriarch"] = true,
-			},
-			packTemplate = "xandank",
+			packTemplate = "mustafar_world_xandank_pack",
 
 			-- task 27, Destroy Multiple and Loot (xandank_trophy_six)
 			leaderTitle = "Remove the Head of the Packleader",
@@ -603,8 +581,7 @@ trophyHuntsScreenPlay = ScreenPlay:new {
 			-- som_xandank_packleader does not ship anywhere.  SUBSTITUTE -- see header.
 			-- ELITE-85, matching "The Xandank Packleader (CL79 Elite)" in
 			-- ngecore_mustafar.md:198.  Was xandank_patriarch, which is NAMED-100.
-			leaderTemplate = "xandank_onyx_plated",
-			leaderName = "Xandank Packleader",
+			leaderTemplate = "mustafar_world_xandank_packleader",
 
 			-- task 25, Wait for Signal (xandank_trophy_nine), Signal Name xandank_trophy_signal_three
 			returnTitle = "Return to Miner Renlo Hens",
@@ -665,7 +642,6 @@ function trophyHuntsScreenPlay:start()
 		self:attachChemLockers()
 		self:attachPackTraces()
 		self:spawnFacilityProps()
-		self:spawnUniques()
 		self:spawnAreas()
 	end
 end
@@ -678,7 +654,7 @@ function trophyHuntsScreenPlay:attachChemLockers()
 		local pLocker = getSceneObject(nodeID)
 
 		if (pLocker == nil) then
-			print("trophyHuntsScreenPlay: chem locker snapshot object " .. nodeID .. " was not found; that field camp will be unusable")
+			print("trophyHuntsScreenPlay: chem locker buildout object " .. nodeID .. " was not found; that field camp will be unusable")
 		else
 			writeStringData(nodeID .. ":trophyRole", "chemLocker")
 			SceneObject(pLocker):setObjectMenuComponent("TrophyHuntsMenuComponent")
@@ -699,7 +675,7 @@ function trophyHuntsScreenPlay:attachPackTraces()
 		local pTrace = getSceneObject(traces[i].id)
 
 		if (pTrace == nil) then
-			print("trophyHuntsScreenPlay: snapshot object " .. traces[i].id .. " (" .. traces[i].role .. ") was not found; that step of som_xandank_trophey will be unreachable")
+			print("trophyHuntsScreenPlay: buildout object " .. traces[i].id .. " (" .. traces[i].role .. ") was not found; that step of som_xandank_trophey will be unreachable")
 		else
 			writeStringData(traces[i].id .. ":trophyRole", traces[i].role)
 			SceneObject(pTrace):setObjectMenuComponent("TrophyHuntsMenuComponent")
@@ -761,42 +737,6 @@ end
 -- spawnMobile's 3rd argument must be > 0 or RespawnCreatureTask never fires.
 -- Respawn re-inserts the SAME object, so the objectID recorded here survives a
 -- respawn and is what the kill observer matches on.
-function trophyHuntsScreenPlay:spawnNamed(template, name, x, z, y)
-	local pMobile = spawnMobile("mustafar", template, self.respawnTimer, x, z, y, getRandomNumber(360) - 180, 0)
-
-	if (pMobile == nil) then
-		print("trophyHuntsScreenPlay: " .. template .. " failed to spawn at " .. x .. " " .. y)
-		return 0
-	end
-
-	if (name ~= nil) then
-		CreatureObject(pMobile):setCustomObjectName(name)
-	end
-
-	return SceneObject(pMobile):getObjectID()
-end
-
-function trophyHuntsScreenPlay:spawnUniques()
-	local rug = self.quests.blistmokRug
-	local skull = self.quests.jundakSkull
-	local pack = self.quests.xandankTrophey
-
-	self.uraJenID = self:spawnNamed(rug.uraJenTemplate, rug.uraJenName, rug.uraJenX, rug.uraJenZ, rug.uraJenY)
-	self.ancientJundakID = self:spawnNamed(skull.huntTemplate, skull.huntName, skull.huntX, skull.huntZ, skull.huntY)
-	self.packLeaderID = self:spawnNamed(pack.leaderTemplate, pack.leaderName, pack.denX, pack.denZ, pack.denY)
-
-	self.packMemberIDs = {}
-
-	for i = 1, #pack.packSpawns do
-		local spot = pack.packSpawns[i]
-		local memberID = self:spawnNamed(pack.packTemplate, nil, spot.x, spot.z, spot.y)
-
-		if (memberID ~= 0) then
-			table.insert(self.packMemberIDs, memberID)
-		end
-	end
-end
-
 function trophyHuntsScreenPlay:spawnArea(role, x, z, y, radius)
 	local pArea = spawnActiveArea("mustafar", "object/active_area.iff", x, z, y, radius, 0)
 
@@ -955,29 +895,21 @@ function trophyHuntsScreenPlay:refreshKillObserver(pPlayer)
 	end
 end
 
-function trophyHuntsScreenPlay:isPackMember(objectID)
-	for i = 1, #self.packMemberIDs do
-		if (self.packMemberIDs[i] == objectID) then
-			return true
-		end
-	end
-
-	return false
-end
-
 function trophyHuntsScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 	if (pPlayer == nil or pVictim == nil) then
 		return 0
 	end
 
-	local victimID = SceneObject(pVictim):getObjectID()
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	if (not SceneObject(pVictim):isAiAgent()) then
+		return 0
+	end
 
-	self:creditUraJen(pPlayer, victimID)
-	self:creditBlistmokSkin(pPlayer, victimTemplate)
-	self:creditAncientJundak(pPlayer, victimID)
-	self:creditPackLeader(pPlayer, victimID)
-	self:creditPackMember(pPlayer, victimID, victimTemplate)
+	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	self:creditUraJen(pPlayer, victimTemplate)
+	self:creditBlistmokSkin(pPlayer, MustafarOverworld.questTemplate(victimTemplate))
+	self:creditAncientJundak(pPlayer, victimTemplate)
+	self:creditPackLeader(pPlayer, victimTemplate)
+	self:creditPackMember(pPlayer, victimTemplate)
 
 	return 0
 end
@@ -1215,14 +1147,14 @@ function trophyHuntsScreenPlay:checkRugGathering(pPlayer)
 	self:setWaypoint(pPlayer, quest, quest.uraJenWaypointName, quest.uraJenDescription, quest.uraJenX, quest.uraJenY)
 end
 
-function trophyHuntsScreenPlay:creditUraJen(pPlayer, victimID)
+function trophyHuntsScreenPlay:creditUraJen(pPlayer, victimTemplate)
 	local quest = self.quests.blistmokRug
 
 	if (self:getStage(pPlayer, quest) ~= quest.STAGE_URA_JEN) then
 		return
 	end
 
-	if (self.uraJenID == 0 or victimID ~= self.uraJenID) then
+	if (victimTemplate ~= quest.uraJenTemplate) then
 		return
 	end
 
@@ -1262,14 +1194,14 @@ function trophyHuntsScreenPlay:grantJundakSkull(pPlayer)
 	return true
 end
 
-function trophyHuntsScreenPlay:creditAncientJundak(pPlayer, victimID)
+function trophyHuntsScreenPlay:creditAncientJundak(pPlayer, victimTemplate)
 	local quest = self.quests.jundakSkull
 
 	if (self:getStage(pPlayer, quest) ~= quest.STAGE_HUNT) then
 		return
 	end
 
-	if (self.ancientJundakID == 0 or victimID ~= self.ancientJundakID) then
+	if (victimTemplate ~= quest.huntTemplate) then
 		return
 	end
 
@@ -1417,14 +1349,14 @@ function trophyHuntsScreenPlay:searchTrace(pPlayer, role)
 	end
 end
 
-function trophyHuntsScreenPlay:creditPackLeader(pPlayer, victimID)
+function trophyHuntsScreenPlay:creditPackLeader(pPlayer, victimTemplate)
 	local quest = self.quests.xandankTrophey
 
 	if (self:getStage(pPlayer, quest) ~= quest.STAGE_FIGHT) then
 		return
 	end
 
-	if (self.packLeaderID == 0 or victimID ~= self.packLeaderID) then
+	if (victimTemplate ~= quest.leaderTemplate) then
 		return
 	end
 
@@ -1441,21 +1373,14 @@ function trophyHuntsScreenPlay:creditPackLeader(pPlayer, victimID)
 	self:checkPackFight(pPlayer)
 end
 
-function trophyHuntsScreenPlay:creditPackMember(pPlayer, victimID, victimTemplate)
+function trophyHuntsScreenPlay:creditPackMember(pPlayer, victimTemplate)
 	local quest = self.quests.xandankTrophey
 
 	if (self:getStage(pPlayer, quest) ~= quest.STAGE_FIGHT) then
 		return
 	end
 
-	-- The leader is not one of task 23's six.
-	if (victimID == self.packLeaderID) then
-		return
-	end
-
-	-- Prefer the recorded spawn ids; fall back to the template set so a spawn
-	-- lost to a restart cannot strand this leg.
-	if (not self:isPackMember(victimID) and quest.packTemplates[victimTemplate] ~= true) then
+	if (victimTemplate ~= quest.packTemplate) then
 		return
 	end
 

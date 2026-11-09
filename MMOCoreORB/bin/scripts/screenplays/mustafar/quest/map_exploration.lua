@@ -99,7 +99,6 @@ exploreMustafarScreenPlay = ScreenPlay:new {
 	-- SOM item that is present and is what the guide calls the reward, so it
 	-- stands in until the painting exists.
 	rewardItem = "object/tangible/item/som/mustafar_damaged_map.iff",
-	minimumLevel = 70,
 
 	-- QUOTED, som_mining_facility.tab: object/tangible/item/som/mustafar_damaged_map.iff
 	-- in landing_deck_room at loc_x -48.9 / loc_y 31 / loc_z -112.9, yaw 180. Under the
@@ -108,7 +107,7 @@ exploreMustafarScreenPlay = ScreenPlay:new {
 	-- against the shipped row.
 	mapConsole = {
 		template = "object/tangible/item/som/mustafar_damaged_map.iff",
-		x = -48.9, z = 31, y = -112.9, cell = 12112248, heading = 180,
+		x = -48.9, z = 31, y = -112.9, cell = MustafarBuildout.objects[12112248], heading = 180,
 	},
 
 	-- Old Republic Cruiser Crash Site. Task 21 of the .qst, "Examine the Crash
@@ -134,7 +133,7 @@ exploreMustafarScreenPlay = ScreenPlay:new {
 	-- north end. The waypoint uses the terminal the player actually clicks.
 	crashSite = {
 		x = -2668.84, z = 145.20, y = 3263.38,
-		nodeIDs = { 12111401, 12112127 },
+		nodeIDs = { MustafarBuildout.objects[12111401], MustafarBuildout.objects[12112127] },
 	},
 
 	-- Radius(m) is 25 on every "Go to Location" task in the .qst.
@@ -340,11 +339,6 @@ function exploreMustafarScreenPlay:mapUsed(pMap, pPlayer)
 		return 0
 	end
 
-	if (CreatureObject(pPlayer):getLevel() < self.minimumLevel) then
-		CreatureObject(pPlayer):sendSystemMessage("The survey work this map calls for is meant for someone of at least combat level " .. self.minimumLevel .. ".")
-		return 0
-	end
-
 	self:setState(pPlayer, 1)
 
 	self:addObjectiveWaypoints(pPlayer)
@@ -437,7 +431,7 @@ function exploreMustafarScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 1
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil) then
 		return 0

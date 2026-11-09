@@ -273,9 +273,13 @@ void SpawnAreaImplementation::tryToSpawn(CreatureObject* player) {
 	float spawnZ = zone->getHeight(randomPosition.getX(), randomPosition.getY());
 	randomPosition.setZ(spawnZ);
 
+	const auto* spawnTemplate = CreatureTemplateManager::instance()->getLairTemplate(lairHashCode);
+	const bool useMemberCaps = spawnTemplate != nullptr && spawnTemplate->hasCappedMobileCounts()
+		&& spawnTemplate->getBuildingType() == LairTemplate::NONE;
+
 	// Caculate the lair difficulty
 	// Highest player level is 25 and highest group level is 120
-	int playerLevel = getPlayerSpawnLevel(player);
+	int playerLevel = useMemberCaps ? 1 : getPlayerSpawnLevel(player);
 
 #ifdef DEBUG_LAIR_DIFFICULTY
 	playerLevel = System::random(120);
@@ -298,7 +302,7 @@ void SpawnAreaImplementation::tryToSpawn(CreatureObject* player) {
 
 	// Difficulty level is the possible level range for the lairs template
 	float lairLevel = Math::min(maxDifficulty, (int)(minDifficulty + System::random(lairRange)));
-	float difficultyVariable = playerLevel / lairLevel;
+	float difficultyVariable = useMemberCaps ? 1.f : playerLevel / lairLevel;
 
 	int lairBuildingLevel = 5;
 
@@ -320,7 +324,24 @@ void SpawnAreaImplementation::tryToSpawn(CreatureObject* player) {
 		return;
 	}
 
-	ManagedReference<SceneObject*> obj = creatureManager->spawn(lairHashCode, lairLevel, lairBuildingLevel, randomPosition.getX(), spawnZ, randomPosition.getY(), finalSpawn->getSize());
+	ManagedReference<SceneObject*> obj;
+	if (useMemberCaps) {
+		// DSRC pack size uses the number of player group members.
+		int members = 1;
+		ManagedReference<GroupObject*> group = player->getGroup();
+		if (group != nullptr) {
+			if (player->isLockedByCurrentThread()) {
+				Locker groupLocker(group, player);
+				members = Math::max(1, group->getNumberOfPlayerMembers());
+			} else {
+				ReadLocker groupLocker(group);
+				members = Math::max(1, group->getNumberOfPlayerMembers());
+			}
+		}
+		obj = creatureManager->spawnDynamicSpawn(lairHashCode, members, randomX, spawnZ, randomY, finalSpawn->getSize());
+	} else {
+		obj = creatureManager->spawn(lairHashCode, lairLevel, lairBuildingLevel, randomX, spawnZ, randomY, finalSpawn->getSize());
+	}
 
 	if (obj == nullptr) {
 		error("Failed to spawn lair: " + lairTemplate);

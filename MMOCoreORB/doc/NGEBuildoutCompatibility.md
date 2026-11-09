@@ -1,12 +1,12 @@
 # NGE buildout datatables
 
-Native shared-client buildouts are enabled **only for kashyyyk_rryatt_trail**,
-using the first four native area rows and all four section tables (1,709 objects).
-The Rryatt loader skips the legacy snapshot entirely and rejects incomplete or
-stale instance data before publishing runtime objects. See the matching asset,
-NPC/travel and deployment receipt in [RryattSingleInstanceMigration.md](RryattSingleInstanceMigration.md).
-The framework remains dormant for other worlds, which retain their existing
-snapshot loading. Normal path checks do not consult buildout area rules.
+Rryatt Trail, Kashyyyk Hunting Grounds, North Dungeons, South Dungeons, and
+Mustafar load their native shared-client buildouts without a snapshot.
+Kashyyyk POB Dungeons loads the native Myyydril caves alongside its Avatar
+Platform snapshot objects. Other worlds use the snapshot loader. See
+[RryattSingleInstanceMigration.md](RryattSingleInstanceMigration.md) and
+[MustafarBuildoutAudit.md](MustafarBuildoutAudit.md) for the matching assets
+and deployment details. Normal path checks do not consult buildout area rules.
 
 ## Inputs and source rules
 
@@ -58,7 +58,7 @@ diagnostic naming the file and area index. Rryatt rejects the whole load; the
 framework's dormant general-world branch can continue with unrelated areas.
 
 `PlanetManagerImplementation::loadSnapshotObjects` appends these nodes to the
-existing snapshot adapter for Rryatt. Buildings, cells and other objects use
+existing snapshot adapter. Buildings, cells and other objects use
 Core3's normal
 scene-object factory and transfers. Buildout loads run in dependency order even
 when `PARALLEL_SNAPSHOT_LOADING` is enabled. A missing runtime parent causes the
@@ -133,10 +133,8 @@ existing `COMPILE_TESTS` option enabled, run from `MMOCoreORB/bin`:
 ./core3 runUnitTests --gtest_filter='BuildoutDataTest.*:NgeTerrainTest.*:BasicTerrainTest.*'
 ```
 
-The framework has not yet passed a complete Debian build or live server/client
-verification. Rryatt is implemented locally with matching loose client assets;
-its server build/deployment and live checks remain pending. The Mustafar checks
-below describe future activation of that world, which remains dormant.
+Mustafar's buildout switch and matching loose files are ready for a Debian
+build and live server/client verification.
 
 Use matching native terrain, scene/area/object tables, CRC string table, templates
 and collision assets on the server and NGE client. A legacy custom `.ws` that

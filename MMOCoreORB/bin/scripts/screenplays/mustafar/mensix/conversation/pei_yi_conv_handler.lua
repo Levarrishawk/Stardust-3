@@ -5,22 +5,7 @@
 	the grant live makes is not made here) and THE GATE (what live actually tests). This file
 	only routes.
 
-	THE GATE
-
-	Live guards the lesson twice on the same condition:
-
-	    condition_isEntertainer -> utils.isProfession(player, utils.ENTERTAINER) && level >= 46
-
-	branch 13 hides the s_56 option "I'm a dancer myself" from anyone who fails it, and
-	branch 15 checks it again before granting. The second check is unreachable in live, since
-	nobody who fails the first ever reaches it -- but s_64 "you're just not skilled enough yet"
-	is the arm it guards, so both are kept here.
-
-	Core3 has no NGE profession enum. social_entertainer_novice is the profession root and is
-	what the rest of this codebase tests for an entertainer (see
-	screenplays/themepark/conversations/theater_manager_conv_handler.lua:203), so that plus
-	getLevel() >= 46 is the rendering. This file used to gate on social_dancer_novice, which is
-	the skill live's UNUSED condition_isDancer names.
+	Stardust uses the entertainer skill to qualify for the lesson.
 
 	State is one flag, kept in persistent screenplay data under the screenplay that spawns her,
 	so a character who has had the lesson still gets the return-visit greeting after a restart.
@@ -34,20 +19,18 @@ pei_yi_conv_handler = conv_handler:new {}
 pei_yi_conv_handler.screenPlayName = "mensix_mining_facility_main"
 pei_yi_conv_handler.taughtKey = "pei_yi_taught"
 pei_yi_conv_handler.requiredSkill = "social_entertainer_novice"
-pei_yi_conv_handler.requiredLevel = 46
 
 function pei_yi_conv_handler:hasBeenTaught(pPlayer)
 	return readScreenPlayData(pPlayer, self.screenPlayName, self.taughtKey) == "1"
 end
 
--- Live's condition_isEntertainer, in Core3 terms; see THE GATE.
+-- Use the entertainer profession root.
 function pei_yi_conv_handler:isEntertainer(pPlayer)
 	if (pPlayer == nil) then
 		return false
 	end
 
 	return CreatureObject(pPlayer):hasSkill(self.requiredSkill)
-		and CreatureObject(pPlayer):getLevel() >= self.requiredLevel
 end
 
 function pei_yi_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)

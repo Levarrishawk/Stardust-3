@@ -22,9 +22,11 @@ class StoreShipTask : public Task, public Logger {
 	ManagedWeakReference<ShipControlDevice*> shipDev;
 	String zoneName;
 	Vector3 coordinates;
+	bool soloGodModeLanding;
 
 public:
-	StoreShipTask(CreatureObject* creo, ShipControlDevice* controlDevice, String zName, Vector3 coords) : play(creo), shipDev(controlDevice), zoneName(zName), coordinates(coords) {
+	StoreShipTask(CreatureObject* creo, ShipControlDevice* controlDevice, String zName, Vector3 coords, bool soloGodMode = false)
+		: play(creo), shipDev(controlDevice), zoneName(zName), coordinates(coords), soloGodModeLanding(soloGodMode) {
 		setLoggingName("StoreShipTask");
 	}
 
@@ -43,7 +45,8 @@ public:
 			return;
 		}
 
-		ManagedReference<ShipObject*> ship = shipControlDevice->getControlledObject()->asShipObject();
+		auto controlledObject = shipControlDevice->getControlledObject();
+		ManagedReference<ShipObject*> ship = controlledObject == nullptr ? nullptr : controlledObject->asShipObject();
 
 		if (ship == nullptr) {
 			return;
@@ -62,6 +65,19 @@ public:
 		// Lock the player
 		Locker shipLock(player);
 		Locker shipClock(ship, player);
+
+		if (soloGodModeLanding) {
+			if (ghost == nullptr || !ghost->hasGodMode() || player->getRootParent() != ship.get()
+				|| !ship->isShipLaunched() || zoneServer->getZone(zoneName) == nullptr) {
+				return;
+			}
+
+			// Storing a ship lands every occupant, so the pilot must be alone.
+			if (ship->getPilot() != player.get() || ship->getTotalPlayersOnBoard() != 1 || ship->getPlayerOnBoard(0) != player.get()) {
+				player->sendSystemMessage("You must be piloting alone to use God Mode boarding.");
+				return;
+			}
+		}
 
 		// Landing cancels an in-progress hyperspace calculation. The calculation
 		// task stops rescheduling once the ship is no longer launched, so the flag

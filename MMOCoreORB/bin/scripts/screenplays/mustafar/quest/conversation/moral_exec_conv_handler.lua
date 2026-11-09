@@ -16,8 +16,7 @@
 	  haveCore   s_140 has_core   isTaskActive gotCore
 	  defected   s_45  betrayed   hasCompletedTask switchedSides
 	  onQuest    s_139 progress   isQuestActive
-	  level > 60 s_110 greeting
-	  default    s_47  toolow
+	  default    s_110 greeting
 
 	The order is not cosmetic here, because done and defected overlap. Both of
 	this quest's branches end in an Immediately Complete Quest task -- 9 on the
@@ -41,24 +40,7 @@
 	first. The two endings are indistinguishable to him afterwards -- which is
 	the point of s_171 being neutral.
 
-	THE LEVEL GATE  --  61, not the .qst's 75. No text is invented here either
-	way: unlike Pwwoz Pwwa -- whose table shipped nothing of the kind, so his
-	handler has to explain the refusal in a system message -- this executive has
-	s_47: "I'm busy and you're too wet behind the ears. Come back when you've
-	gained some experience and I may have a job for you." That line is used as
-	shipped. Only the number changed. His server-side conversation gates the
-	offer on a level test against 60 -- the offer is reached when the player's
-	level is greater than 60 -- so the first level that can take this job is 61.
-
-	The condition is named levelTooLow and returns TRUE for the players who ARE
-	high enough. The name is inverted relative to what it does; read the body,
-	not the identifier. Q4P3 and Menth Paul carry the same condition the same
-	way round.
-
-	The .qst's [list] Level = 75 is a client-side display value. An earlier
-	revision enforced it because the conversation had not been found yet. The
-	number lives in moralChoiceScreenPlay.requiredLevel, which this file compares
-	against, so there is one place to change it and it is not here.
+	Stardust offers the quest without the original combat-level check.
 
 	STAGE_UPLOAD FALLS THROUGH TO s_139 ON PURPOSE. A player who has taken the
 	miners' disk but not yet uploaded it is, as far as the executive knows,
@@ -114,7 +96,6 @@ moral_exec_conv_handler.screenAnimations = {
 	betrayed     = { { "npc", "stamp_feet" } },
 	progress     = { { "npc", "point_accusingly" } },
 	greeting     = { { "npc", "point_forward" }, { "player", "greet" } },
-	toolow       = { { "npc", "dismiss" } },
 
 	-- the two ways out of the greeting
 	later        = { { "player", "shake_head_no" } },
@@ -163,10 +144,6 @@ function moral_exec_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 		-- STAGE_CABLES, STAGE_CORE and STAGE_UPLOAD: s_139, "Get out there and
 		-- finish the job!"
 		return convoTemplate:getScreen("progress")
-	end
-
-	if (CreatureObject(pPlayer):getLevel() < moralChoiceScreenPlay.requiredLevel) then
-		return convoTemplate:getScreen("toolow")
 	end
 
 	return convoTemplate:getScreen("greeting")

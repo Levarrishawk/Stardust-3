@@ -40,29 +40,7 @@
 	search, and three strings that had been written off as combat barks were
 	sitting unused in the same table. See CORRECTING THE BARKS in the tree.
 
-	THE LEVEL GATE, AND THE ONE DEVIATION IN THIS FILE
-
-	som_kenobi_samaritan_1.qst's [list] block says Level = 75, and 75 is what is
-	enforced here -- but for a weaker reason than it looks.
-
-	A .qst [list] level is a client-side display value. Where a Mustafar quest is
-	really gated the number comes from the giver's server-side conversation:
-	Menth Paul, the mining executive and Q4P3 each test level against 60, so each
-	enforces 61 and each ignores the 75 its .qst displays. Pwwoz carries no level
-	test -- his live conversation defines six conditions, playerJedi, foundCrystal,
-	onQuest, keptCrystal, gaveCrystal and killPwwoz, and not one of them looks at
-	level. That was inferred from the absence of a refusal line before the live
-	script was read; it is now confirmed from the script itself. There is no
-	better number to replace his 75 with, so it stands as the fallback rather
-	than as a gate anyone found.
-
-	Pwwoz shipped no refusal line either. Menth Paul's table has s_72 ("I wish
-	you were more experienced..."); Pwwoz's has nothing of the kind. So the
-	refusal is stated in a system message and the conversation is routed to s_114
-	-- "Bah! What could be more...ex.. excuse me, where's my manners. Have a nice
-	day." -- which is the shipped brush-off. The system message is the deviation:
-	it is text SOE did not write, and it exists only because leaving the player
-	with s_114 alone gives no reason for the refusal.
+	Stardust offers the quest without a combat-level check.
 
 	THE FORCE GATE
 
@@ -194,13 +172,6 @@ function pwwoz_pwwa_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
 	local stage = samaritanScreenPlay:getStage(pPlayer)
 
 	if (stage == 0) then
-		if (CreatureObject(pPlayer):getLevel() < samaritanScreenPlay.requiredLevel) then
-			CreatureObject(pPlayer):sendSystemMessage("Pwwoz Pwwa will not trust his errand to someone of your experience. (Requires combat level "
-				.. samaritanScreenPlay.requiredLevel .. ".)")
-
-			return convoTemplate:getScreen("busy")
-		end
-
 		return convoTemplate:getScreen("greeting")
 	elseif (stage == samaritanScreenPlay.STAGE_DECIDE) then
 		return convoTemplate:getScreen("has_crystal")

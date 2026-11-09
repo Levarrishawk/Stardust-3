@@ -138,14 +138,14 @@ serpentShardScreenPlay = ScreenPlay:new {
 	screenplayName = "serpentShardScreenPlay",
 
 	-- Snapshot node; see THE ALTAR.
-	altarNodeID = 12111381,
+	altarNodeID = MustafarBuildout.objects[12111381],
 
 	-- Live position, not placed; see WHERE IKT STANDS. Cell coordinates.
 	-- medium_room_01 is cell 12112226, which is where the earlier guess had him
 	-- too -- the room was reasoned correctly, the spot in it was not.
 	questGiver = {
 		template = "som_mustafarian_ikt",
-		cell = 12112226,
+		cell = MustafarBuildout.objects[12112226],
 		x = -94.3,
 		z = 10.8,
 		y = 53.1,
@@ -210,7 +210,7 @@ function serpentShardScreenPlay:attachAltar()
 	local pAltar = getSceneObject(self.altarNodeID)
 
 	if (pAltar == nil) then
-		print("serpentShardScreenPlay: snapshot object " .. self.altarNodeID .. " (the sith altar) was not found; the quest cannot be finished")
+		print("serpentShardScreenPlay: buildout object " .. self.altarNodeID .. " (the sith altar) was not found; the quest cannot be finished")
 		return
 	end
 

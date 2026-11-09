@@ -102,5 +102,12 @@ spacestation_avatar_platform_garbled_leave = ConvoScreen:new {
 }
 spacestation_avatar_platform_convotemplate:addScreen(spacestation_avatar_platform_garbled_leave);
 
+spacestation_avatar_platform_convotemplate:addScreen(ConvoScreen:new {
+	id = "spacestation_avatar_platform_god_mode_board",
+	leftDialog = "@conversation/station_avatar_platform:s_66",
+	stopConversation = "true",
+	options = {}
+})
+
 -- Add Template (EOF)
 addConversationTemplate("spacestation_avatar_platform_convotemplate", spacestation_avatar_platform_convotemplate);

@@ -305,7 +305,7 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	--[[ The new mining facility: the technician and the search computer. ]]
 
 	facility = {
-		buildingID = 12112217,
+		buildingID = MustafarBuildout.objects[12112217],
 		x = -2420.5,
 		y = 1767.08,
 	},
@@ -316,7 +316,7 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	technician = {
 		template = "som_mustafarian_computer_technician",
 		cellName = "small_room_03",
-		cellID = 12112234,
+		cellID = MustafarBuildout.objects[12112234],
 		x = -117.4,
 		z = 10.8,
 		y = 39.6,
@@ -326,7 +326,7 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	computer = {
 		template = "object/tangible/quest/som_kenobi_mining_computer.iff",
 		cellName = "small_room_03",
-		cellID = 12112234,
+		cellID = MustafarBuildout.objects[12112234],
 		x = -132.2,
 		z = 10.8,
 		y = 44.6,
@@ -366,7 +366,7 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 	miner = {
 		template = "som_kenobi_dying_miner",
 		cellName = "landing_deck_room",
-		cellID = 12112248,
+		cellID = MustafarBuildout.objects[12112248],
 		x = -55.1,
 		z = 31.5,
 		y = -120.3,
@@ -418,7 +418,7 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		{
 			key = "conduit1",
 			label = "North West enclave",
-			nodeID = 12112107,
+			nodeID = MustafarBuildout.objects[12112107],
 			x = -5302.96,
 			y = 6010.56,
 			chargeMin = 180,
@@ -434,7 +434,7 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		{
 			key = "conduit2",
 			label = "East enclave",
-			nodeID = 12110936,
+			nodeID = MustafarBuildout.objects[12110936],
 			x = 206.66,
 			y = 4126.13,
 			chargeMin = 80,
@@ -449,7 +449,7 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		{
 			key = "conduit3",
 			label = "West enclave",
-			nodeID = 12112110,
+			nodeID = MustafarBuildout.objects[12112110],
 			x = -4467.51,
 			y = 3206.98,
 			chargeMin = 70,
@@ -997,7 +997,7 @@ function kenobiSpineScreenPlay:attachConduits()
 		local pConduit = getSceneObject(conduit.nodeID)
 
 		if (pConduit == nil) then
-			printLuaError("kenobiSpineScreenPlay: snapshot object " .. conduit.nodeID .. " (" .. conduit.label .. ") was not found; that conduit cannot be charged")
+			printLuaError("kenobiSpineScreenPlay: buildout object " .. conduit.nodeID .. " (" .. conduit.label .. ") was not found; that conduit cannot be charged")
 		else
 			writeStringData(conduit.nodeID .. ":kenobiSpineRole", conduit.key)
 			SceneObject(pConduit):setObjectMenuComponent("KenobiSpineMenuComponent")
@@ -1089,7 +1089,7 @@ end
 -- the live one for that copy. Returns the buildingID, or 0 if the chain is stale.
 -- Pattern tolerates a trailing ":waveIndex" so lairWave can carry its index.
 function kenobiSpineScreenPlay:liveLair(args)
-	local buildingID, session = string.match(tostring(args), "^(%d+):(%d+)")
+	local buildingID, session = string.match(tostring(args), "^(-?%d+):(%d+)")
 
 	if (buildingID == nil) then
 		return 0
@@ -1317,7 +1317,7 @@ function kenobiSpineScreenPlay:lairWave(pPlayer, args)
 		return
 	end
 
-	local waveIndex = tonumber(string.match(tostring(args), "^%d+:%d+:(%d+)$")) or 0
+	local waveIndex = tonumber(string.match(tostring(args), "^-?%d+:%d+:(%d+)$")) or 0
 	local size = self.lair.waves[waveIndex] or 0
 	local pBuilding = getSceneObject(buildingID)
 	local cellID = self:resolveCell(pBuilding, self.lair.cellName, 0)
@@ -1592,7 +1592,7 @@ end
      re-arm itself inside fight two and the player would face two overlapping chains of
      force attacks. Bumped in lairStartFight, checked here. ]]
 function kenobiSpineScreenPlay:liveFight(buildingID, args)
-	local fightNum = tonumber(string.match(tostring(args), "^%d+:%d+:(%d+)$"))
+	local fightNum = tonumber(string.match(tostring(args), "^-?%d+:%d+:(%d+)$"))
 
 	if (fightNum == nil) then
 		return false
@@ -2408,7 +2408,7 @@ function kenobiSpineScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 0
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil) then
 		return 0

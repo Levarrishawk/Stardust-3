@@ -97,18 +97,37 @@ void DynamicSpawnObserverImplementation::spawnInitialMobiles(SceneObject* buildi
 	if (totalNumberToSpawn < 1)
 		totalNumberToSpawn = 1;
 
+	const bool useMemberCaps = lairTemplate->hasCappedMobileCounts();
+	const auto* memberCaps = lairTemplate->getMobiles();
+	Vector<int> available;
+	if (useMemberCaps) {
+		// The capped pack caller supplies player group size as difficulty.
+		const int minimum = (difficulty * 3 + 1) / 2;
+		const int maximum = (difficulty * 5 + 1) / 2;
+		totalNumberToSpawn = minimum + System::random(maximum - minimum);
+		for (int i = 0; i < memberCaps->size(); ++i) {
+			if (memberCaps->elementAt(i).getValue() > 0)
+				available.add(i);
+		}
+	}
+
 	for (int i = 0; i < totalNumberToSpawn; i++) {
-		int num = System::random(mobiles->size() - 1);
-		const String& mob = mobiles->get(num);
+		if (useMemberCaps && available.isEmpty())
+			break;
+
+		int roll = System::random((useMemberCaps ? available.size() : mobiles->size()) - 1);
+		const String& mob = useMemberCaps ? memberCaps->elementAt(available.get(roll)).getKey() : mobiles->get(roll);
 
 		int find = objectsToSpawn.find(mob);
-
+		int count = 1;
 		if (find != -1) {
 			int& value = objectsToSpawn.elementAt(find).getValue();
-			++value;
+			count = ++value;
 		} else {
 			objectsToSpawn.put(mob, 1);
 		}
+		if (useMemberCaps && count == memberCaps->elementAt(available.get(roll)).getValue())
+			available.remove(roll);
 	}
 
 	ManagedReference<AiAgent*> herdLeader = nullptr;

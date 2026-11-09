@@ -487,7 +487,7 @@ function bountyHuntsScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 		return 1
 	end
 
-	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
+	local victimTemplate = MustafarOverworld.questTemplate(AiAgent(pVictim):getCreatureTemplateName())
 
 	if (victimTemplate == nil) then
 		return 0

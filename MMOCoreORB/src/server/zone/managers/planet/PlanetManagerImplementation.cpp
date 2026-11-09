@@ -59,6 +59,7 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 	const bool huntingGrounds = zone->getZoneName() == "kashyyyk_hunting";
 	const bool northDungeons = zone->getZoneName() == "kashyyyk_north_dungeons";
 	const bool southDungeons = zone->getZoneName() == "kashyyyk_south_dungeons";
+	const bool mustafar = zone->getZoneName() == "mustafar";
 	TemplateManager* manager = TemplateManager::instance();
 	UniqueReference<IffStream*> sceneStream(manager->openIffFile("datatables/buildout/buildout_scenes.iff"));
 	if (sceneStream == nullptr)
@@ -72,6 +73,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		throw Exception("North Dungeons requires the native buildout scene index");
 	if (southDungeons && sceneIndex != 6)
 		throw Exception("South Dungeons requires the native buildout scene index");
+	if (mustafar && sceneIndex != 18)
+		throw Exception("Mustafar requires the native buildout scene index");
 	if (sceneIndex < 0) {
 		if (zone->getZoneName() == "kashyyyk_rryatt_trail")
 			throw Exception("Rryatt is missing from the native buildout scene list");
@@ -94,6 +97,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		throw Exception("Hunting Grounds requires its single native buildout area");
 	if (northDungeons && areaTable.getTotalRows() != 16)
 		throw Exception("North Dungeons requires all sixteen native buildout areas");
+	if (mustafar && areaTable.getTotalRows() != 88)
+		throw Exception("Mustafar requires all 88 native buildout areas");
 	buildout.readAreas(areaTable, sceneIndex);
 	if (huntingGrounds) {
 		const BuildoutArea& area = buildout.getAreas().get(0);
@@ -181,7 +186,7 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				++added;
 			}
 		} catch (Exception& e) {
-			if (singleRryatt || myyydril || huntingGrounds || northDungeons || southDungeons)
+			if (singleRryatt || myyydril || huntingGrounds || northDungeons || southDungeons || mustafar)
 				throw Exception("Buildout " + filename + ": " + e.getMessage());
 			Logger::console.error("Buildout " + filename + " area index " + String::valueOf(area.index) + ": " + e.getMessage());
 		}
@@ -196,6 +201,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		throw Exception("North Dungeons buildout has no placements");
 	if (southDungeons && added == 0)
 		throw Exception("South Dungeons buildout has no placements");
+	if (mustafar && added != 5917)
+		throw Exception("Mustafar requires all 5917 native placements");
 	Logger::console.info("Loaded " + String::valueOf(added) + " buildout nodes for " + zone->getZoneName(), true);
 	return added != 0;
 }
@@ -820,7 +827,8 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 	// These zones use the IDs from their native buildout tables.
 	const bool buildoutOnly = zone->getZoneName() == "kashyyyk_rryatt_trail"
 		|| zone->getZoneName() == "kashyyyk_hunting"
-		|| zone->getZoneName() == "kashyyyk_north_dungeons" || zone->getZoneName() == "kashyyyk_south_dungeons";
+		|| zone->getZoneName() == "kashyyyk_north_dungeons" || zone->getZoneName() == "kashyyyk_south_dungeons"
+		|| zone->getZoneName() == "mustafar";
 	const bool nativeMyyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
 	const bool useBuildouts = buildoutOnly || nativeMyyydril;
 	UniqueReference<IffStream*> iffStream(buildoutOnly ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
