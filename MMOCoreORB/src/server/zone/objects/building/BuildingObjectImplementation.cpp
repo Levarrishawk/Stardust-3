@@ -2116,11 +2116,9 @@ bool BuildingObjectImplementation::isBuildingObject() {
 }
 
 float BuildingObjectImplementation::getOutOfRangeDistance(uint64 specialRangeID) {
-	// Mensix's portal shell extends beyond the normal range from its origin.
-	// Use the full candidate radius of QuadTree::safeInRange for its native root.
 	if (forceSend && getPlanetCRC() == STRING_HASHCODE("mustafar")
 			&& getServerObjectCRC() == STRING_HASHCODE("object/building/mustafar/structures/must_new_mining_facility.iff")) {
-		return ZoneServer::CLOSEOBJECTRANGE * 2.f;
+		return Math::max(getRadius(), ZoneServer::CLOSEOBJECTRANGE);
 	}
 
 #ifdef COV_BUILDING_QUAD_RANGE

@@ -754,8 +754,13 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 				object->setClientObject(true);
 				object->initializeTransientMembers();
 				// The multiplayer client streams scenery, but waits for native portal buildings and cells.
-				if (zone->getZoneName() == "mustafar" && (node->getPortalLayoutCRC() != 0 || object->isCellObject()))
+				if (zone->getZoneName() == "mustafar" && (node->getPortalLayoutCRC() != 0 || object->isCellObject())) {
 					object->setForceSend(true);
+
+					// Index the Mensix shell across its visibility range. Keep 512m inside the removal cutoff.
+					if (serverTemplate == "object/building/mustafar/structures/must_new_mining_facility.iff")
+						object->setRadius(513.f);
+				}
 			}
 		} catch (Exception& e) {
 			error("Could not create buildout object " + String::valueOf(objectID) + " template " + serverTemplate + ": " + e.getMessage());
