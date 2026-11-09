@@ -23,6 +23,12 @@ object_building_naboo_shared_small_imperial_bunker = SharedBuildingObjectTemplat
 }
 ObjectTemplates:addClientTemplate(object_building_naboo_shared_small_imperial_bunker, "object/building/naboo/shared_small_imperial_bunker.iff")
 --*******************************************************************************************************************************
+object_building_naboo_shared_stardust_naboo_church = SharedBuildingObjectTemplate:new {
+	clientTemplateFileName = "object/building/naboo/shared_stardust_naboo_church.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_building_naboo_shared_stardust_naboo_church, "object/building/naboo/shared_stardust_naboo_church.iff")
+--*******************************************************************************************************************************
 object_building_naboo_shared_syren4_safehouse = SharedBuildingObjectTemplate:new {
 	clientTemplateFileName = "object/building/naboo/shared_syren4_safehouse.iff"
 
