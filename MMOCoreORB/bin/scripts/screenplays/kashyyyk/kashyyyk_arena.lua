@@ -13,6 +13,7 @@ player with KashyyykArena.enter(pPlayer).
 JAVA -> LUA
 
 	arena_controller.java:23-36   dressed_arena_champion at the control object, yaw 171
+	celebrity_spawner.java        Rhylis at the arena_guard_inner spawner
 	player.java                   signalArenaChallengeAccepted, kerritamba_epic_6 mark,
 	                             death -> ejected_by_death + 3 s eject + clear
 	                             ep3_forest_wirartu_epic_1
@@ -30,20 +31,16 @@ QUEST STATE  --  sibling-arc screenplay names, never quest names
 OPEN
 
 	Outdoor isolation / the space-dungeon session model. A second challenger is
-	not refused. clearArena's 150 m creature wipe is not run -- those mobiles
-	are the north-dungeons spawn areas. ep3_wirartu_arena has no repo template;
-	never a look-alike. conversation.ep3_forest_wirartu_arena is not in the tree.
+	not refused. The DSRC arena buildout has no area or patrol spawners.
 	endDungeonSession on a kerritamba_epic_6 death is OPEN (no session here).
 	OURS: live player.java is OnIncapacitated. Core3 has no INCAPACITATED
 	observer (DirectorManager.cpp:565-603). This file keeps PLAYERKILLED.
 
 COORDINATE TRANSFORM
 
-	kashyyyk_north_dungeons_regions.lua {#kash-offset}, copy #0:
-		world_x = buildout_x - 3840
-		world_y = buildout_z + 2816
-	kashyyyk_regions.lua kashyyyk_dead_forest merge:
-		kashyyyk_dead_forest.ws dx -1500, dz +1500
+	areas_kashyyyk_north_dungeons.tab, first arena area:
+		world_x = buildout_x + 88
+		world_y = buildout_z - 2192
 	space_dungeon.tab kash_the_arena start_loc is an offset from the controller
 	(space_dungeon.java:831), same as the slave camp.
 
@@ -62,14 +59,16 @@ KashyyykArena = ScreenPlay:new {
 	championYaw = 171,
 
 	-- arena.tab kash_the_arena_control_object.iff
-	-- buildout (411.935, 19.6667, 359.971) -> world (-3428.065, 19.6667, 3175.971)
-	control = { x = 411.935 - 3840, z = 19.6667, y = 359.971 + 2816 },
+	control = { x = 411.935 + 88, z = 19.6667, y = 359.971 - 2192 },
+
+	-- arena_guard_inner.iff is a server-only spawner. Celebrity spawns add 0.5 m.
+	guard = { x = 430.679 + 88, z = 21.2941 + 0.5, y = 280.743 - 2192 },
 
 	-- controller + space_dungeon.tab start_loc (9.6, 1.8, -63.9)
 	landing = {
-		x = (411.935 + 9.6) - 3840,
+		x = 411.935 + 88 + 9.6,
 		z = 19.6667 + 1.8,
-		y = (359.971 + (-63.9)) + 2816,
+		y = 359.971 - 2192 - 63.9,
 	},
 
 	-- space_dungeon.tab exit_planet kashyyyk_dead_forest (-302, 38, -208)
@@ -89,6 +88,14 @@ function KashyyykArena:start()
 	end
 
 	self:spawnChampion()
+
+	local g = self.guard
+	local pGuard = spawnMobile(self.zoneDungeon, "arena_guard_inner", 0, g.x, g.z, g.y, getRandomNumber(0, 359), 0)
+	if (pGuard == nil) then
+		print("KashyyykArena: failed to spawn Rhylis at the arena guard spawner")
+	elseif (SceneObject(pGuard):isAiAgent()) then
+		AiAgent(pGuard):addObjectFlag(AI_STATIONARY)
+	end
 end
 
 function KashyyykArena:questStage(pPlayer, screenplayName)
@@ -151,9 +158,6 @@ function KashyyykArena:doEnter(pPlayer)
 	end
 
 	createObserver(PLAYERKILLED, "KashyyykArena", "notifyPlayerKilled", pPlayer)
-
-	-- OPEN: no repo template ep3_wirartu_arena. Never a look-alike.
-	print("KashyyykArena: OPEN spawn ep3_wirartu_arena (no repo template)")
 end
 
 function KashyyykArena:notifyPlayerKilled(pPlayer, pKiller)

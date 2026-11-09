@@ -13,6 +13,7 @@ includeFile("custom_content/kashyyyk_dead_forest_profiles.lua")
 includeFile("custom_content/kashyyyk_main_profiles.lua")
 includeFile("custom_content/kashyyyk_hunting_profiles.lua")
 includeFile("custom_content/kashyyyk_south_dungeons_profiles.lua")
+includeFile("custom_content/kashyyyk_north_dungeons_profiles.lua")
 includeFile("custom_content/myyydril_profiles.lua")
 
 

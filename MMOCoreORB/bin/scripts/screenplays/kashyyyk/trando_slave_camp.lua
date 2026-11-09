@@ -7,16 +7,16 @@ WHAT THIS IS
 
 Live ran the Blackscale camp as a space dungeon (theme_park.dungeon.space_dungeon_controller,
 dungeon_name trando_slave_camp) on kashyyyk_north_dungeons. Core3 has no space-dungeon
-controller. Copy #0 is shared outdoor surface plus one snapshot bunker. Reach it from
+controller. Copy #0 is shared outdoor surface plus the native buildout bunker. Reach it from
 the Kachirho zone gate on the merged main zone (ticket point kashyyyk_main).
 
 JAVA -> LUA
 
 	bunker_controller.java     populate the 31 camp_command_bunker.tab rows; lock
 	                           barracks + powerroom; door_signal on entry
-	kachirho_slave_gate.java   radial on a spawned terminal beside the snapshot door
+	kachirho_slave_gate.java   radial on the Kachirho stone zone gate door
 	player.java                arrival signalSlaverCampEntered
-	exit_terminal.java         SUI confirm + travelBack to the Kachirho gate
+	exit_terminal.java         SUI confirm + travelBack to the DSRC return point
 	comp_room_trigger.java     unlock barracks + DISABLED
 	power_terminal.java        signalSlaverDisableLocks, unlock powerroom + UNLOCKED
 	door_signal.java           ENTEREDBUILDING grant while Tosk lives
@@ -41,20 +41,17 @@ OPEN
 	resets is OURS -- this file does not respawn the 31 rows or clear the flag.
 	broken_shock_lance: the result template object/weapon/melee/polearm/lance_shock.iff
 	is in the tree; the broken item is not in camp_command_bunker.tab and
-	createLimitedUseSchematic is not a Lua binding. Mine scatter (live
-	mineCount-in-radius, ~383 objects), 600 s
+	createLimitedUseSchematic is not a Lua binding. Mine scatter (377 total
+	capacity across 21 DSRC fields), 600 s
 	respawn, commando defuse, smuggler reverse, prone 1-in-20, blast-radius
 	AOE, and pet targeting stay OPEN. One mine object per spawner row.
 	One-click gate (live two-click task progression) is OURS.
 	OURS: live warden_tosk.java is OnIncapacitated. Core3 has no INCAPACITATED
 	observer (DirectorManager.cpp:565-603). This file keeps OBJECTDESTRUCTION.
-	11 barracks rows ep3_slaver_blackscale_wookiee_berserker are OPEN (listed,
-	not spawned): creatures.tab maps that name to ep3_blackscale_berserker,
-	which is not in the tree; no north-dungeons lair header IFF-maps it.
 
 COORDINATE TRANSFORM
 
-	kashyyyk_north_dungeons_regions.lua {#kash-offset}, copy #0:
+	slaver.iff in native area 300, copy #0:
 		world_x = buildout_x - 3840
 		world_y = buildout_z + 2816    -- Core3 y is SOE pz
 		world_z = buildout_y           -- height
@@ -66,8 +63,8 @@ COORDINATE TRANSFORM
 
 CELL NAMES
 
-	bunker_controller.java:17-27 CELL_NAMES. Snapshot node 13680785, cells
-	13680786..13680795 = index 1..10. slaver.tab cell_index 1 carries
+	bunker_controller.java:17-27 CELL_NAMES. Buildout node -9030000, cells
+	-9029999 through -9029990 = index 1..10. slaver.tab cell_index 1 carries
 	door_signal; live attaches that script to getCellId(bunker, "entry") --
 	index 1 is entry. Named lookup is BuildingObject:getNamedCell, the same
 	call KashyyykPobPopulation:resolveCell uses.
@@ -85,7 +82,9 @@ TrandoSlaveCamp = ScreenPlay:new {
 	zoneDungeon = "kashyyyk_north_dungeons",
 	zoneMain = "kashyyyk_main",
 
-	bunkerID = 13680785,
+	-- slaver.iff starts with the bunker POB in native area 300.
+	bunkerID = -9030000,
+	bunkerTemplate = "object/building/general/ep3_trando_slave_camp_bunker.iff",
 
 	-- slaver.tab bunker row (px 272.32, py 35.4327, pz 796.077)
 	-- + space_dungeon.tab start_loc (290, -15, -759)
@@ -103,11 +102,10 @@ TrandoSlaveCamp = ScreenPlay:new {
 		qz = 0,
 	},
 
-	-- slaver.tab exit_terminal door. Offset from that row is (0, 0, 0), same as
-	-- HraccaMonsterIsland:spawnExitTerminal at its door row.
-	exitRow = { 561.82, 22.7207, 12.6987, 1, 0, 0, 0 },
-	exitTemplate = "object/tangible/dungeon/terminal_free_s1.iff",
-	gateTemplate = "object/tangible/dungeon/terminal_free_s1.iff",
+	-- slaver.tab row 402, compiled placement index 305 in native area 300.
+	exitID = -9027706,
+	returnPoint = { x = 404, z = 18, y = 656 },
+	gateTemplate = "object/tangible/door/thm_kash_zonegate_door_simple.iff",
 
 	exitTitle = "@dungeon/space_dungeon:trando_camp_exit",
 	exitConfirm = "@dungeon/space_dungeon:trando_camp_exit_confirm",
@@ -123,25 +121,6 @@ TrandoSlaveCamp = ScreenPlay:new {
 
 	gateRange = 6,
 	arrivalSignalMs = 10 * 1000,
-
-	-- kashyyyk_kash_blackscale_assault.lua / _trooper.lua / _enforcer.lua headers.
-	assault = {
-		"ep3_blackscale_assault_m_01",
-		"ep3_blackscale_assault_m_02",
-		"ep3_blackscale_assault_m_03",
-	},
-	trooper = {
-		"ep3_blackscale_trooper_m_01",
-		"ep3_blackscale_trooper_m_02",
-		"ep3_blackscale_trooper_m_03",
-	},
-	enforcer = {
-		"ep3_blackscale_enforcer_m_01",
-		"ep3_blackscale_enforcer_m_02",
-		"ep3_blackscale_enforcer_m_03",
-		"ep3_blackscale_enforcer_m_04",
-	},
-	toskTemplate = "ep3_blackscale_warden_tosk",
 
 	mineTypes = {
 		ApMine = {
@@ -217,36 +196,35 @@ TrandoSlaveCamp = ScreenPlay:new {
 	-- kind "mobile" or "object". role is tosk / comp / power or nil.
 	-- x,z,y are cell-local (table locx, locy=height, locz).
 	bunkerRows = {
-		{ "mobile", "ep3_blackscale_assault_m_01", "anteroom", 8, -12, 35, -151, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_01", "anteroom", 0, -12, 35, 157, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_02", "anteroom", 0, -12, 27, 41, nil },
-		{ "mobile", "ep3_blackscale_assault_m_02", "anteroom", 7, -12, 26, -38, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_03", "anteroom", 3, -12, 30, 170, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_01", "computerroom", 9, -16, 63, -86, nil },
-		{ "mobile", "ep3_blackscale_enforcer_m_01", "computerroom", -2, -16, 63, 91, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_02", "computerroom", 4, -16, 69, 177, nil },
-		{ "mobile", "ep3_blackscale_assault_m_03", "computerroom", -8, -16, 82, -174, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_03", "computerroom", -8, -16, 73, 1, nil },
-		{ "mobile", "ep3_blackscale_assault_m_01", "computerroom", 18, -16, 74, 2, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_01", "computerroom", 19, -16, 84, 178, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_assault", "anteroom", 8, -12, 35, -151, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "anteroom", 0, -12, 35, 157, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "anteroom", 0, -12, 27, 41, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_assault", "anteroom", 7, -12, 26, -38, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "anteroom", 3, -12, 30, 170, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "computerroom", 9, -16, 63, -86, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_enforcer", "computerroom", -2, -16, 63, 91, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "computerroom", 4, -16, 69, 177, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_assault", "computerroom", -8, -16, 82, -174, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "computerroom", -8, -16, 73, 1, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_assault", "computerroom", 18, -16, 74, 2, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "computerroom", 19, -16, 84, 178, nil },
 		{ "object", "object/tangible/dungeon/terminal_free_s1.iff", "computerroom", 25, -16, 81, -90, "comp" },
-		{ "mobile", "ep3_blackscale_trooper_m_02", "office", -32, -14, 83, -136, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_03", "office", -32, -14, 73, -51, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_01", "office", -42, -14, 73, 58, nil },
-		{ "mobile", "ep3_blackscale_trooper_m_02", "office", -41, -14, 84, 127, nil },
-		{ "mobile", "ep3_blackscale_warden_tosk", "office", -38, -14, 79, 90, "tosk" },
-		-- OPEN: ep3_slaver_blackscale_wookiee_berserker -> ep3_blackscale_berserker (absent; no lair IFF map)
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 42, -16, 69, -12, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 48, -16, 81, -88, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 55, -16, 64, -37, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 65, -16, 80, -103, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 69, -16, 60, -47, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 80, -16, 81, -115, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 77, -16, 74, -85, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 64, -16, 73, -92, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 40, -16, 82, 177, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 41, -16, 60, 6, nil },
-		{ "open", "ep3_slaver_blackscale_wookiee_berserker", "barracks", 73, -16, 66, -48, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "office", -32, -14, 83, -136, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "office", -32, -14, 73, -51, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "office", -42, -14, 73, 58, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_trooper", "office", -41, -14, 84, 127, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_warden_tosk", "office", -38, -14, 79, 90, "tosk" },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 42, -16, 69, -12, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 48, -16, 81, -88, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 55, -16, 64, -37, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 65, -16, 80, -103, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 69, -16, 60, -47, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 80, -16, 81, -115, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 77, -16, 74, -85, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 64, -16, 73, -92, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 40, -16, 82, 177, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 41, -16, 60, 6, nil },
+		{ "mobile", "north_ep3_slaver_blackscale_wookiee_berserker", "barracks", 73, -16, 66, -48, nil },
 		{ "object", "object/tangible/dungeon/terminal_free_s1.iff", "barracks", 72, -16, 64, 90, "power" },
 		{ "object", "object/tangible/quest/computer_console.iff", "powerroom", 29, -12, 30, 90, nil },
 	},
@@ -261,7 +239,7 @@ function TrandoSlaveCamp:start()
 	if (isZoneEnabled(self.zoneDungeon)) then
 		enabled = true
 		loaded = self:populateBunker() and loaded
-		loaded = self:spawnExitTerminal() and loaded
+		loaded = self:setupExitTerminal() and loaded
 		loaded = self:spawnMines() and loaded
 	end
 
@@ -305,8 +283,10 @@ end
 function TrandoSlaveCamp:populateBunker()
 	local pBunker = getSceneObject(self.bunkerID)
 
-	if (pBunker == nil or not SceneObject(pBunker):isBuildingObject()) then
-		print("TrandoSlaveCamp: snapshot bunker " .. self.bunkerID .. " is missing; the 31 rows are not placed")
+	if (pBunker == nil or not SceneObject(pBunker):isBuildingObject()
+		or SceneObject(pBunker):getZoneName() ~= self.zoneDungeon
+		or SceneObject(pBunker):getTemplateObjectPath() ~= self.bunkerTemplate) then
+		print("TrandoSlaveCamp: native bunker is unavailable; check the North Dungeons buildout assets")
 		return false
 	end
 
@@ -314,7 +294,6 @@ function TrandoSlaveCamp:populateBunker()
 
 	local cells = {}
 	local placed = 0
-	local openRows = 0
 
 	for i = 1, #self.bunkerRows do
 		local row = self.bunkerRows[i]
@@ -328,18 +307,14 @@ function TrandoSlaveCamp:populateBunker()
 			end
 		end
 
-		if (row[1] == "open") then
-			openRows = openRows + 1
-		elseif (cells[cellName] ~= 0) then
-			if (self:spawnBunkerRow(row, cells[cellName])) then
-				placed = placed + 1
-			end
+		if (cells[cellName] ~= 0 and self:spawnBunkerRow(row, cells[cellName])) then
+			placed = placed + 1
 		end
 	end
 
 	self:lockEventRooms(pBunker, cells)
 	createObserver(ENTEREDBUILDING, "TrandoSlaveCamp", "notifyEnteredBunker", pBunker)
-	return placed + openRows == #self.bunkerRows
+	return placed == #self.bunkerRows
 end
 
 function TrandoSlaveCamp:resolveCell(pBunker, cellName)
@@ -530,23 +505,35 @@ function TrandoSlaveCamp:notifyPowerTerminalUsed(pTerminal, pPlayer)
 	return 0
 end
 
-function TrandoSlaveCamp:spawnExitTerminal()
-	local row = self.exitRow
-	local x, z, y = self:worldFromBuildout(row[1], row[2], row[3])
-	local pTerminal = spawnSceneObject(self.zoneDungeon, self.exitTemplate, x, z, y, 0, row[4], row[5], row[6], row[7])
-
-	if (pTerminal == nil) then
-		print("TrandoSlaveCamp: failed to spawn the exit terminal at slaver.tab exit_terminal door")
+function TrandoSlaveCamp:setupExitTerminal()
+	local pTerminal = getSceneObject(self.exitID)
+	if (pTerminal == nil or SceneObject(pTerminal):getZoneName() ~= self.zoneDungeon
+		or SceneObject(pTerminal):getTemplateObjectPath() ~= self.gateTemplate) then
+		print("TrandoSlaveCamp: native exit gate is unavailable; check the North Dungeons buildout assets")
 		return false
 	end
 
-	createObserver(OBJECTRADIALUSED, "TrandoSlaveCamp", "notifyExitUsed", pTerminal)
-	writeData("TrandoSlaveCamp:exitTerminal", SceneObject(pTerminal):getObjectID())
+	SceneObject(pTerminal):setObjectMenuComponent("TrandoSlaveCampExitMenuComponent")
 	return true
 end
 
+TrandoSlaveCampExitMenuComponent = {}
+
+function TrandoSlaveCampExitMenuComponent:fillObjectMenuResponse(pTerminal, pMenuResponse, pPlayer)
+	LuaObjectMenuResponse(pMenuResponse):addRadialMenuItem(20, 3, TrandoSlaveCamp.exitTitle)
+end
+
+function TrandoSlaveCampExitMenuComponent:handleObjectMenuSelect(pTerminal, pPlayer, selectedID)
+	if (selectedID == 20) then
+		return TrandoSlaveCamp:notifyExitUsed(pTerminal, pPlayer)
+	end
+	return 0
+end
+
 function TrandoSlaveCamp:notifyExitUsed(pTerminal, pPlayer)
-	if (pTerminal == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
+	if (pTerminal == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()
+		or SceneObject(pPlayer):getZoneName() ~= self.zoneDungeon
+		or SceneObject(pPlayer):getDistanceTo(pTerminal) > self.gateRange) then
 		return 0
 	end
 
@@ -572,26 +559,43 @@ end
 
 function TrandoSlaveCamp:spawnKachirhoGate()
 	local g = self.kachirhoGate
-	-- Offset from the snapshot door is (0, 0, 0), same as Hracca at its door row.
-	local pTerminal = spawnSceneObject(self.zoneMain, self.gateTemplate, g.x, g.z, g.y, 0, g.qw, g.qx, g.qy, g.qz)
+	-- The Kachirho snapshot supplies the gate arch but omits the DSRC door.
+	local pGate = spawnSceneObject(self.zoneMain, self.gateTemplate, g.x, g.z, g.y, 0, g.qw, g.qx, g.qy, g.qz)
 
-	if (pTerminal == nil) then
-		print("TrandoSlaveCamp: failed to spawn the Kachirho gate terminal")
+	if (pGate == nil) then
+		print("TrandoSlaveCamp: failed to spawn the Kachirho stone gate")
 		return false
 	end
 
-	SceneObject(pTerminal):setObjectName(self.gateLabelFile, self.gateLabelKey, true)
-	createObserver(OBJECTRADIALUSED, "TrandoSlaveCamp", "notifyGateUsed", pTerminal)
-	writeData("TrandoSlaveCamp:gateTerminal", SceneObject(pTerminal):getObjectID())
+	SceneObject(pGate):setObjectName(self.gateLabelFile, self.gateLabelKey, true)
+	SceneObject(pGate):setObjectMenuComponent("TrandoSlaveCampEntryMenuComponent")
 	return true
 end
 
-function TrandoSlaveCamp:notifyGateUsed(pTerminal, pPlayer)
-	if (pTerminal == nil or pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
-		return 0
-	end
+function TrandoSlaveCamp:canUseGate(pGate, pPlayer)
+	return pGate ~= nil and pPlayer ~= nil and SceneObject(pPlayer):isPlayerCreature()
+		and SceneObject(pPlayer):getZoneName() == self.zoneMain
+		and SceneObject(pPlayer):getDistanceTo(pGate) <= self.gateRange
+end
 
-	if (SceneObject(pPlayer):getDistanceTo(pTerminal) > self.gateRange) then
+TrandoSlaveCampEntryMenuComponent = {}
+
+function TrandoSlaveCampEntryMenuComponent:fillObjectMenuResponse(pGate, pMenuResponse, pPlayer)
+	local camp = TrandoSlaveCamp
+	if (camp:canUseGate(pGate, pPlayer)) then
+		LuaObjectMenuResponse(pMenuResponse):addRadialMenuItem(20, 3, "@" .. camp.gateLabelFile .. ":" .. camp.gateLabelKey)
+	end
+end
+
+function TrandoSlaveCampEntryMenuComponent:handleObjectMenuSelect(pGate, pPlayer, selectedID)
+	if (selectedID == 20) then
+		return TrandoSlaveCamp:notifyGateUsed(pGate, pPlayer)
+	end
+	return 0
+end
+
+function TrandoSlaveCamp:notifyGateUsed(pGate, pPlayer)
+	if (not self:canUseGate(pGate, pPlayer)) then
 		return 0
 	end
 
@@ -668,8 +672,8 @@ function TrandoSlaveCamp:travelBack(pPlayer)
 		CreatureObject(pPlayer):dismount()
 	end
 
-	local g = self.kachirhoGate
-	SceneObject(pPlayer):switchZone(self.zoneMain, g.x, g.z, g.y, 0)
+	local dest = self.returnPoint
+	SceneObject(pPlayer):switchZone(self.zoneMain, dest.x, dest.z, dest.y, 0)
 end
 
 function TrandoSlaveCamp:spawnMines()

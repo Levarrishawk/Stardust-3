@@ -1,8 +1,8 @@
 -- SOURCED (ruling 2026-09-04): socialGroup/faction from datatables/mob/creatures.tab line 1238 (ep3_arena_guard_inner, where=kashyyyk, NORMAL).
 -- Level/damage/HAM: OURS, unchanged -- the Kashyyyk curve is an open maintainer decision.
 arena_guard_inner = Creature:new {
-	customName = "Arena Guard",
-	randomNameType = NAME_GENERIC_TAG,
+	objectName = "@ep3/npc_names:rhylis",
+	randomNameType = NAME_TAG,
 	socialGroup = "kashyyyk",
 	faction = "",
 	mobType = MOB_NPC,
@@ -24,9 +24,9 @@ arena_guard_inner = Creature:new {
 	milk = 0,
 	tamingChance = 0,
 	ferocity = 0,
-	pvpBitmask = ATTACKABLE,
+	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
+	optionsBitmask = AIENABLED + INVULNERABLE + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/arena_guard_inner.iff"},

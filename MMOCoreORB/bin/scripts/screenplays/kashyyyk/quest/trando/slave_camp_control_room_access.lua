@@ -31,6 +31,7 @@ slaveCampControlRoomAccessScreenPlay = ScreenPlay:new {
 	killCount = 1,
 	lootDropPercent = 100,
 	killTemplates = {
+		"north_ep3_slaver_blackscale_warden_tosk",
 		"ep3_blackscale_warden_tosk",
 	},
 }

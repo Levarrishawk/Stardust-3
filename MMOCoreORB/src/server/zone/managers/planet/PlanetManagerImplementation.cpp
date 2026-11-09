@@ -57,6 +57,7 @@ void collectSnapshotIDs(WorldSnapshotNode* node, VectorMap<uint64, bool>& ids) {
 bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff* snapshot) {
 	const bool myyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
 	const bool huntingGrounds = zone->getZoneName() == "kashyyyk_hunting";
+	const bool northDungeons = zone->getZoneName() == "kashyyyk_north_dungeons";
 	const bool southDungeons = zone->getZoneName() == "kashyyyk_south_dungeons";
 	TemplateManager* manager = TemplateManager::instance();
 	UniqueReference<IffStream*> sceneStream(manager->openIffFile("datatables/buildout/buildout_scenes.iff"));
@@ -67,6 +68,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 	int sceneIndex = BuildoutData::findSceneIndex(scenes, zone->getZoneName());
 	if (huntingGrounds && sceneIndex != 1)
 		throw Exception("Hunting Grounds requires the native buildout scene index");
+	if (northDungeons && sceneIndex != 3)
+		throw Exception("North Dungeons requires the native buildout scene index");
 	if (southDungeons && sceneIndex != 6)
 		throw Exception("South Dungeons requires the native buildout scene index");
 	if (sceneIndex < 0) {
@@ -89,6 +92,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		throw Exception("Rryatt requires scene row 5 and exactly the first four native area rows");
 	if (huntingGrounds && areaTable.getTotalRows() != 1)
 		throw Exception("Hunting Grounds requires its single native buildout area");
+	if (northDungeons && areaTable.getTotalRows() != 16)
+		throw Exception("North Dungeons requires all sixteen native buildout areas");
 	buildout.readAreas(areaTable, sceneIndex);
 	if (huntingGrounds) {
 		const BuildoutArea& area = buildout.getAreas().get(0);
@@ -176,7 +181,7 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				++added;
 			}
 		} catch (Exception& e) {
-			if (singleRryatt || myyydril || huntingGrounds || southDungeons)
+			if (singleRryatt || myyydril || huntingGrounds || northDungeons || southDungeons)
 				throw Exception("Buildout " + filename + ": " + e.getMessage());
 			Logger::console.error("Buildout " + filename + " area index " + String::valueOf(area.index) + ": " + e.getMessage());
 		}
@@ -187,6 +192,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		throw Exception("Myyydril requires all ten public buildout copies");
 	if (huntingGrounds && added == 0)
 		throw Exception("Hunting Grounds buildout has no placements");
+	if (northDungeons && added == 0)
+		throw Exception("North Dungeons buildout has no placements");
 	if (southDungeons && added == 0)
 		throw Exception("South Dungeons buildout has no placements");
 	Logger::console.info("Loaded " + String::valueOf(added) + " buildout nodes for " + zone->getZoneName(), true);
@@ -812,7 +819,8 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 
 	// These zones use the IDs from their native buildout tables.
 	const bool buildoutOnly = zone->getZoneName() == "kashyyyk_rryatt_trail"
-		|| zone->getZoneName() == "kashyyyk_hunting" || zone->getZoneName() == "kashyyyk_south_dungeons";
+		|| zone->getZoneName() == "kashyyyk_hunting"
+		|| zone->getZoneName() == "kashyyyk_north_dungeons" || zone->getZoneName() == "kashyyyk_south_dungeons";
 	const bool nativeMyyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
 	const bool useBuildouts = buildoutOnly || nativeMyyydril;
 	UniqueReference<IffStream*> iffStream(buildoutOnly ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
@@ -822,7 +830,8 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 		return;
 	}
 
-	info(true) << "----- Loading World snapshot objects for Zone: " << zone->getZoneName() << " -----";
+	info(true) << "----- Loading " << (buildoutOnly ? "native buildout objects" : "World snapshot objects")
+		<< " for Zone: " << zone->getZoneName() << " -----";
 
 	Reference<WorldSnapshotIff*> wsiff = new WorldSnapshotIff();
 	if (iffStream != nullptr)
