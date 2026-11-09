@@ -90,9 +90,18 @@ function KashyyykSpawnController:spawnSlot(pUnused, args)
 		x = x + getRandomNumber(-radius, radius) / 1000
 		y = y + getRandomNumber(-radius, radius) / 1000
 	end
+	x, y = x + offsetX, y + offsetY
+	if (c.findSpawnPoint) then
+		local point = getSpawnPointInArea(zone, x, y, entry.searchRadius)
+		if (point == nil) then
+			self:scheduleSpawn(index, slot, self:respawnDelay(c))
+			return
+		end
+		x, z, y = point[1], point[2], point[3]
+	end
 	-- DSRC's helper changes only the horizontal axes. A highest-floor lookup
 	-- can select a different floor above the controller's authored platform.
-	local pMobile = spawnMobile(zone, entry.mobile, 0, x + offsetX, z, y + offsetY, c.heading, 0)
+	local pMobile = spawnMobile(zone, entry.mobile, 0, x, z, y, c.heading, 0)
 	if (pMobile == nil) then
 		print(self.screenplayName .. ": spawn failed for " .. c.id .. " (" .. entry.mobile .. ")")
 		self:scheduleSpawn(index, slot, self:respawnDelay(c))

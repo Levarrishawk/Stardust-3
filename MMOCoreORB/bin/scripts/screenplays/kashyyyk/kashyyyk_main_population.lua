@@ -24,6 +24,27 @@ function KashyyykMainPopulation:selectMobile(typeName)
 	return entries[getRandomNumber(1, #entries)].mobiles[1]
 end
 
+function KashyyykMainPopulation:spawnEncounterMobile(pPlayer, encounter)
+	local player = SceneObject(pPlayer)
+	if (player:getZoneName() ~= self.zone or player:getParentID() ~= 0) then
+		return nil
+	end
+
+	local distance = getRandomNumber(encounter.minDistance * 1000, encounter.maxDistance * 1000) / 1000
+	local angle = math.rad(getRandomNumber(0, 360))
+	local x = player:getWorldPositionX() + encounter.offsetX + distance * math.sin(angle)
+	local y = player:getWorldPositionY() + encounter.offsetY + distance * math.cos(angle)
+	local z = getTerrainHeight(pPlayer, x, y)
+	if (z == nil or z ~= z) then
+		return nil
+	end
+	local pMobile = spawnMobile(self.zone, encounter.mobile, 0, x, z, y, 0, 0)
+	if (pMobile ~= nil) then
+		CreatureObject(pMobile):engageCombat(pPlayer)
+	end
+	return pMobile
+end
+
 function KashyyykMainPopulation:start()
 	if (not isZoneEnabled(self.zone)) then
 		return

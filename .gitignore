@@ -9,6 +9,7 @@ MMOCoreORB/bin/conf/config.lua
 *.pyc
 *.py
 !/MMOCoreORB/utils/kashyyyk/build_main_population.py
+!/MMOCoreORB/utils/kashyyyk/build_hunting_population.py
 *.tre
 *.vsh
 *.psh

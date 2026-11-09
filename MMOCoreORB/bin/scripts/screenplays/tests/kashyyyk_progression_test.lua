@@ -25,6 +25,7 @@ local function object(o)
 	function o:isDead() return self.dead == true end
 	function o:isIncapacitated() return self.incapacitated == true end
 	function o:isInCombat() return self.combat == true end
+	function o:engageCombat(target) self.combatTarget = target end
 	function o:isRidingMount() return self.mounted == true end
 	function o:dismount()
 		if self.failDismount then return end
@@ -117,6 +118,7 @@ deleteScreenPlayData = function(p, name, key) p.data[name .. ":" .. key] = nil e
 writeStringData = writeData
 isZoneEnabled = function(zone) return enabled[zone] == true end
 getWorldFloor = function() return nil end
+getTerrainHeight = function() return 18 end
 getRandomNumber = function(a, b) return b or a end
 getSceneObject = function(id) return objects[id] end
 giveItem = function() return object() end
@@ -318,18 +320,19 @@ assert(camp:getRuns(other) == 1 and other.credits == nil)
 assert(not camp:canUseContainer(other, container))
 
 screenplay("kashyyyk_main_population_data")
+screenplay("kashyyyk_main_population")
 screenplay("kashyyyk_static_npcs")
 enabled = {kashyyyk_main = true, kashyyyk_hunting = true, kashyyyk_dead_forest = true}
 spawned = {}
 KashyyykStaticNpcsScreenPlay:start()
-assert(#spawned == 72) -- Dead Forest has its own population controller.
+assert(#spawned == 55) -- The other zones have their own population controllers.
 local counts = {}
 for _, npc in ipairs(spawned) do
 	counts[npc.zone] = (counts[npc.zone] or 0) + 1
 	assert(npc.flag == AI_STATIONARY)
 	if (npc.zone ~= "kashyyyk_main") then assert(math.abs(npc.x) < 2048 and math.abs(npc.y) < 2048) end
 end
-assert(counts.kashyyyk_main == 55 and counts.kashyyyk_hunting == 17 and counts.kashyyyk_dead_forest == nil)
+assert(counts.kashyyyk_main == 55 and counts.kashyyyk_hunting == nil and counts.kashyyyk_dead_forest == nil)
 local corpses = 0
 for _, npc in ipairs(spawned) do
 	if (npc.mood == "npc_dead_01") then corpses = corpses + 1 end
@@ -460,7 +463,12 @@ local sp, p, helper = trandoBoshazZssik02ScreenPlay, player(), player()
 assert(sp:grantQuest(p))
 sp:completeGoto(p)
 local guards = {}
-for i = 1, 5 do guards[i] = getSceneObject(tonumber(readScreenPlayData(p, sp.screenplayName, "ambush" .. i))) end
+for i = 1, 5 do
+	local guard = getSceneObject(tonumber(readScreenPlayData(p, sp.screenplayName, "ambush" .. i)))
+	assert(guard.template == "kachirho_ep3_slaver_blackscale_guard" and guard.combatTarget == p)
+	assert(math.abs(guard.x) < 0.001 and guard.y == 10 and guard.z == 18)
+	guards[i] = guard
+end
 local unrelated = object({template = guards[1].template})
 sp:notifyKilledCreature(p, unrelated)
 sp:notifyKilledCreature(helper, guards[1])
@@ -500,6 +508,8 @@ sp:notifyKilledCreature(p, object({template = "ep3_wke_freedom_fighter_01"}))
 for _, wave in ipairs({2, 1, 3}) do
 	for i = 1, 5 do
 		local mob = getSceneObject(tonumber(readScreenPlayData(p, sp.screenplayName, "wave" .. wave .. "s" .. i)))
+		local expected = wave == 3 and "kachirho_ep3_npc_wookiee_commando" or "kachirho_ep3_npc_wookiee_freedom_fighters"
+		assert(mob.template == expected and mob.combatTarget == p)
 		sp:notifyEncounterDestroyed(mob, helper)
 		sp:notifyKilledCreature(p, mob)
 	end
@@ -518,13 +528,24 @@ sp:timerWaveOne(p, oldToken)
 assert(#spawned == before, "An old timer spawned in the next run")
 
 local sp, p = slaverGursanEntryQuestScreenPlay, player()
-assert(sp:grantQuest(p) and sp:signalSlaverEnterGate(p))
+assert(sp:grantQuest(p))
+screenplay("trando_slave_camp")
+local gate = object()
+function p:getDistanceTo() return 0 end
+function TrandoSlaveCamp:travelTo(visitor) visitor.campEntered = true end
+TrandoSlaveCamp:notifyGateUsed(gate, p)
 local beshk = getSceneObject(tonumber(readScreenPlayData(p, sp.screenplayName, "beshkOid")))
+assert(beshk.template == "kachirho_ep3_slaver_blackscale_captain_beshk" and beshk.combatTarget == p)
+assert(math.abs(beshk.x + 2) < 0.001 and beshk.y == 6 and beshk.z == 18)
+TrandoSlaveCamp:notifyGateUsed(gate, p)
+assert(not p.campEntered and getSceneObject(tonumber(readScreenPlayData(p, sp.screenplayName, "beshkOid"))) == beshk)
 sp:notifyKilledCreature(p, object({template = beshk.template}))
 assert(sp:getStage(p) == 2)
 sp:notifyEncounterDestroyed(beshk, helper)
 sp:notifyKilledCreature(p, beshk)
 assert(sp:getStage(p) == 3 and journal(p, "ep3_slaver_gursan_entry_quest").active[10])
+TrandoSlaveCamp:notifyGateUsed(gate, p)
+assert(p.campEntered)
 assert(sp:signalSlaverCampEntered(p) and journal(p, "ep3_slaver_gursan_entry_quest").done)
 print("Kashyyyk journal (32 quests) and encounter credit regression checks passed")
 

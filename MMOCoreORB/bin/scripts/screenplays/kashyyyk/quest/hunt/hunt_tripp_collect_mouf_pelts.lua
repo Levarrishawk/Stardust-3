@@ -32,7 +32,7 @@ huntTrippCollectMoufPeltsScreenPlay = ScreenPlay:new {
 	rewardCredits = 0,
 	rewardItem = "",
 	killCount = 14,
-	lootDropPercent = 40,
+	lootDropPercent = 95,
 	killStage = 2,
 	maxStage = 3,
 	clearOnFinish = false,
@@ -107,6 +107,7 @@ function huntTrippCollectMoufPeltsScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
 end
 
@@ -121,6 +122,7 @@ function huntTrippCollectMoufPeltsScreenPlay:grantQuest(pPlayer)
 		return true
 	end
 
+	huntLootNamedKillsScreenPlay:attachPlayer(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_hunt_tripp_collect_mouf_pelts:journal_entry_title")
 	return true
 end

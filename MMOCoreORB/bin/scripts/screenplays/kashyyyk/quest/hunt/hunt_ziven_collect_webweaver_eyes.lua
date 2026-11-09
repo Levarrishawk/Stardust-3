@@ -39,7 +39,8 @@ huntZivenCollectWebweaverEyesScreenPlay = ScreenPlay:new {
 	timerSeconds = 0,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "webweaver" },
+	killTemplates = { "webweaver",
+		"hunting_ep3_etyyy_webweaver_warrior" },
 	taskStages = { ziven_collectWebweaverEyes = 1,
 		ziven_webweaverEyes = 2 },
 }

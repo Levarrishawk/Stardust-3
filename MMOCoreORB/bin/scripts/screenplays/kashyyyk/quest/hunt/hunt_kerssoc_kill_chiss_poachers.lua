@@ -40,7 +40,12 @@ huntKerssocKillChissPoachersScreenPlay = ScreenPlay:new {
 		"ep3_etyyy_chiss_poacher_02",
 		"ep3_etyyy_chiss_poacher_03",
 		"ep3_etyyy_chiss_poacher_04",
-		"ep3_etyyy_chiss_poacher_05" },
+		"ep3_etyyy_chiss_poacher_05",
+		"hunting_ep3_etyyy_chiss_poacher",
+		"hunting_ep3_etyyy_chiss_poacher_defender",
+		"hunting_ep3_etyyy_chiss_poacher_hunter",
+		"hunting_ep3_etyyy_chiss_poacher_smuggler",
+		"hunting_ep3_etyyy_chiss_poacher_laen_pieweto" },
 	taskStages = { kerssoc_killingChissPoachers = 1,
 		kerssoc_attackChissPoachers = 2 },
 }

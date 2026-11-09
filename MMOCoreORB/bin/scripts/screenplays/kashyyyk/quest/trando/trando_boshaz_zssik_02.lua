@@ -27,12 +27,6 @@ trandoBoshazZssik02ScreenPlay = ScreenPlay:new {
 	gotoRadius = 15,
 	gotoZone = "kashyyyk_main",
 	killCount = 5,
-	killTemplates = {
-		"ep3_blackscale_guard_m_01",
-		"ep3_blackscale_guard_m_02",
-		"ep3_blackscale_guard_m_03",
-		"ep3_blackscale_guard_m_04",
-	},
 }
 
 registerScreenPlay("trandoBoshazZssik02ScreenPlay", true)
@@ -148,19 +142,6 @@ function trandoBoshazZssik02ScreenPlay:notifyEnteredGoto(pArea, pPlayer)
 	return 1
 end
 
-function trandoBoshazZssik02ScreenPlay:isKillTemplate(name)
-	if (name == "kachirho_ep3_slaver_blackscale_guard") then
-		return true
-	end
-	for i = 1, #self.killTemplates do
-		if (self.killTemplates[i] == name) then
-			return true
-		end
-	end
-
-	return false
-end
-
 function trandoBoshazZssik02ScreenPlay:attachKillObserver(pPlayer)
 	if ((tonumber(readScreenPlayData(pPlayer, self.screenplayName, "observer")) or 0) == 1) then
 		return
@@ -262,17 +243,13 @@ end
 
 function trandoBoshazZssik02ScreenPlay:spawnAmbush(pPlayer)
 	if (self:getStage(pPlayer) ~= 2) then return end
-	local x = SceneObject(pPlayer):getWorldPositionX()
-	local y = SceneObject(pPlayer):getWorldPositionY()
-	local z = SceneObject(pPlayer):getWorldPositionZ()
-	local zone = CreatureObject(pPlayer):getZoneName()
+	local encounter = KashyyykMainPopulationData.encounters.blackscaleAmbush
 
-	for i = 1, self.killCount do
+	for i = 1, encounter.count do
 		local key = "ambush" .. i
 		local stored = tonumber(readScreenPlayData(pPlayer, self.screenplayName, key)) or 0
 		if (stored ~= -1 and getSceneObject(stored) == nil) then
-			local tpl = self.killTemplates[((i - 1) % #self.killTemplates) + 1]
-			local pMob = spawnMobile(zone, tpl, 0, x + getRandomNumber(-12, 12), z, y + getRandomNumber(-12, 12), 0, 0)
+			local pMob = KashyyykMainPopulation:spawnEncounterMobile(pPlayer, encounter)
 			if (pMob ~= nil) then
 				local oid = SceneObject(pMob):getObjectID()
 				writeScreenPlayData(pPlayer, self.screenplayName, key, tostring(oid))

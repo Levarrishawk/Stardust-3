@@ -31,7 +31,7 @@ huntManfredCollectEnhancementsScreenPlay = ScreenPlay:new {
 	rewardCredits = 0,
 	rewardItem = "",
 	killCount = 16,
-	lootDropPercent = 47,
+	lootDropPercent = 80,
 	killStage = 1,
 	maxStage = 2,
 	clearOnFinish = false,
@@ -105,6 +105,7 @@ function huntManfredCollectEnhancementsScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
 end
 
@@ -119,6 +120,7 @@ function huntManfredCollectEnhancementsScreenPlay:grantQuest(pPlayer)
 		return true
 	end
 
+	huntLootNamedKillsScreenPlay:attachPlayer(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_hunt_manfred_collect_enhancements:journal_entry_title")
 	return true
 end

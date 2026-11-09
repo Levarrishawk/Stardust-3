@@ -1,4 +1,5 @@
 local KashyyykQuestJournal = require("screenplays.kashyyyk.quest.kashyyyk_quest_journal")
+local waveEncounters = {"wkeWaveOne", "wkeWaveTwo", "wkeWaveThree"}
 
 --[[
 	ep3_trando_ssiksik
@@ -34,18 +35,6 @@ trandoSsiksikScreenPlay = ScreenPlay:new {
 	gotoRadius = 25,
 	gotoZone = "kashyyyk_main",
 	killCount = 5,
-	killTemplates = {
-		"ep3_wke_freedom_fighter_01",
-		"ep3_wke_freedom_fighter_02",
-		"ep3_wke_freedom_fighter_03",
-		"ep3_wke_freedom_fighter_04",
-		"ep3_wke_freedom_fighter_05",
-	},
-	wave3Templates = {
-		"ep3_wke_commando_01",
-		"ep3_wke_commando_02",
-		"ep3_wke_commando_03",
-	},
 }
 
 registerScreenPlay("trandoSsiksikScreenPlay", true)
@@ -162,20 +151,6 @@ function trandoSsiksikScreenPlay:notifyEnteredGoto(pArea, pPlayer)
 
 	self:completeGoto(pPlayer)
 	return 1
-end
-
-function trandoSsiksikScreenPlay:isKillTemplate(name)
-	if (name == "kachirho_ep3_npc_wookiee_commando"
-		or name == "kachirho_ep3_npc_wookiee_freedom_fighters") then
-		return true
-	end
-	for i = 1, #self.killTemplates do
-		if (self.killTemplates[i] == name) then
-			return true
-		end
-	end
-
-	return false
 end
 
 function trandoSsiksikScreenPlay:attachKillObserver(pPlayer)
@@ -343,14 +318,6 @@ function trandoSsiksikScreenPlay:timerWaveThree(pPlayer, arg)
 	return 0
 end
 
-function trandoSsiksikScreenPlay:waveTemplates(wave)
-	if (wave == 3) then
-		return self.wave3Templates
-	end
-
-	return self.killTemplates
-end
-
 function trandoSsiksikScreenPlay:isWaveSpawn(pPlayer, wave, victimOid)
 	for i = 1, 5 do
 		local stored = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "wave" .. tostring(wave) .. "s" .. tostring(i)))
@@ -387,21 +354,14 @@ function trandoSsiksikScreenPlay:spawnWave(pPlayer, wave)
 		return
 	end
 
-	local x = SceneObject(pPlayer):getWorldPositionX()
-	local y = SceneObject(pPlayer):getWorldPositionY()
-	local z = SceneObject(pPlayer):getWorldPositionZ()
-	local zone = CreatureObject(pPlayer):getZoneName()
-	local tpls = self:waveTemplates(wave)
+	local encounter = KashyyykMainPopulationData.encounters[waveEncounters[wave]]
 	local playerOid = SceneObject(pPlayer):getObjectID()
 
-	for i = 1, self.killCount do
+	for i = 1, encounter.count do
 		local key = "wave" .. wave .. "s" .. i
 		local stored = tonumber(readScreenPlayData(pPlayer, self.screenplayName, key)) or 0
 		if (stored ~= -1 and getSceneObject(stored) == nil) then
-			local dx = getRandomNumber(10, 25)
-			local dy = getRandomNumber(10, 25)
-			local tpl = tpls[((i - 1) % #tpls) + 1]
-			local pMob = spawnMobile(zone, tpl, 0, x + dx, z, y + dy, 0, 0)
+			local pMob = KashyyykMainPopulation:spawnEncounterMobile(pPlayer, encounter)
 
 			if (pMob ~= nil) then
 				local oid = SceneObject(pMob):getObjectID()

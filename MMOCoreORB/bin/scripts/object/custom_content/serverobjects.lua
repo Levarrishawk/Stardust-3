@@ -17,6 +17,7 @@ includeFile("custom_content/draft_schematic/serverobjects.lua")
      which would register 355 never-loaded templates in one go. Ordering is safe: main.lua
      runs allobjects.lua (which defines the shared parent) before this file. ]]
 includeFile("custom_content/weapon/melee/som_sword_obsidian.lua")
+includeFile("custom_content/weapon/melee/lance_kaminoan.lua")
 
 --[[ The same shape one directory over: custom_content/tangible/serverobjects.lua
      includes every sibling except container/, so

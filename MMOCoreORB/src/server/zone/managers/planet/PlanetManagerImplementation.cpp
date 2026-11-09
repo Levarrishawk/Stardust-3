@@ -56,6 +56,7 @@ void collectSnapshotIDs(WorldSnapshotNode* node, VectorMap<uint64, bool>& ids) {
 
 bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff* snapshot) {
 	const bool myyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
+	const bool huntingGrounds = zone->getZoneName() == "kashyyyk_hunting";
 	TemplateManager* manager = TemplateManager::instance();
 	UniqueReference<IffStream*> sceneStream(manager->openIffFile("datatables/buildout/buildout_scenes.iff"));
 	if (sceneStream == nullptr)
@@ -63,6 +64,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 	DataTableIff scenes;
 	scenes.readObject(sceneStream);
 	int sceneIndex = BuildoutData::findSceneIndex(scenes, zone->getZoneName());
+	if (huntingGrounds && sceneIndex != 1)
+		throw Exception("Hunting Grounds requires the native buildout scene index");
 	if (sceneIndex < 0) {
 		if (zone->getZoneName() == "kashyyyk_rryatt_trail")
 			throw Exception("Rryatt is missing from the native buildout scene list");
@@ -81,7 +84,14 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 	const bool singleRryatt = zone->getZoneName() == "kashyyyk_rryatt_trail";
 	if (singleRryatt && (sceneIndex != 5 || areaTable.getTotalRows() != 4))
 		throw Exception("Rryatt requires scene row 5 and exactly the first four native area rows");
+	if (huntingGrounds && areaTable.getTotalRows() != 1)
+		throw Exception("Hunting Grounds requires its single native buildout area");
 	buildout.readAreas(areaTable, sceneIndex);
+	if (huntingGrounds) {
+		const BuildoutArea& area = buildout.getAreas().get(0);
+		if (area.name != zone->getZoneName() || !area.requiredEvent.isEmpty())
+			throw Exception("Invalid Hunting Grounds buildout area");
+	}
 	if (singleRryatt) {
 		const char* names[] = {"kashyyyk_rryatt_trail_lvl_1_and_2", "kashyyyk_rryatt_trail_lvl_3", "kashyyyk_rryatt_trail_lvl_4", "kashyyyk_rryatt_trail_lvl_5"};
 		const float bounds[][4] = {{-3908, 3114, -2208, 4614}, {-2208, 2614, -408, 4614}, {-3908, 1864, -2208, 3114}, {-2208, 1864, -708, 2614}};
@@ -163,7 +173,7 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 				++added;
 			}
 		} catch (Exception& e) {
-			if (singleRryatt || myyydril)
+			if (singleRryatt || myyydril || huntingGrounds)
 				throw Exception("Buildout " + filename + ": " + e.getMessage());
 			Logger::console.error("Buildout " + filename + " area index " + String::valueOf(area.index) + ": " + e.getMessage());
 		}
@@ -172,6 +182,8 @@ bool appendBuildoutObjects(Zone* zone, BuildoutData& buildout, WorldSnapshotIff*
 		throw Exception("Rryatt requires all 1709 native placements");
 	if (myyydril && myyydrilCopies != 10)
 		throw Exception("Myyydril requires all ten public buildout copies");
+	if (huntingGrounds && added == 0)
+		throw Exception("Hunting Grounds buildout has no placements");
 	Logger::console.info("Loaded " + String::valueOf(added) + " buildout nodes for " + zone->getZoneName(), true);
 	return added != 0;
 }
@@ -793,11 +805,11 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 void PlanetManagerImplementation::loadSnapshotObjects() {
 	TemplateManager* templateManager = TemplateManager::instance();
 
-	// Rryatt's native buildouts replace its relocated snapshot; never request the old IDs.
-	const bool nativeRryatt = zone->getZoneName() == "kashyyyk_rryatt_trail";
+	// Rryatt and Hunting Grounds use the IDs from their native buildout tables.
+	const bool buildoutOnly = zone->getZoneName() == "kashyyyk_rryatt_trail" || zone->getZoneName() == "kashyyyk_hunting";
 	const bool nativeMyyydril = zone->getZoneName() == "kashyyyk_pob_dungeons";
-	const bool useBuildouts = nativeRryatt || nativeMyyydril;
-	UniqueReference<IffStream*> iffStream(nativeRryatt ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
+	const bool useBuildouts = buildoutOnly || nativeMyyydril;
+	UniqueReference<IffStream*> iffStream(buildoutOnly ? nullptr : templateManager->openIffFile("snapshot/" + zone->getZoneName() + ".ws"));
 
 	if (!useBuildouts && iffStream == nullptr) {
 		info("Snapshot wasn't found.", true);
@@ -818,7 +830,7 @@ void PlanetManagerImplementation::loadSnapshotObjects() {
 		} catch (Exception& e) {
 			terrainManager->getBuildoutData().clear();
 			error("Could not load buildouts for " + zone->getZoneName() + ": " + e.getMessage());
-			if (nativeRryatt)
+			if (buildoutOnly)
 				return;
 			// Preserve Avatar even when the matching Myyydril assets are unavailable.
 		}

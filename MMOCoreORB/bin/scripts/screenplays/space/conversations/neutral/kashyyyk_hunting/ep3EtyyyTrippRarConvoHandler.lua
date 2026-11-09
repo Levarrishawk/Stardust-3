@@ -94,6 +94,10 @@ function Ep3EtyyyTrippRarConvoHandler:getInitialScreen(pPlayer, pNpc, pConvTempl
 		return
 	end
 
+	if (huntTrippCollectMoufPeltsScreenPlay:isQuestActive(pPlayer) or huntTrippCollectMoufIncisorsScreenPlay:isQuestActive(pPlayer)) then
+		huntLootNamedKillsScreenPlay:attachPlayer(pPlayer)
+	end
+
 	local convoTemplate = LuaConversationTemplate(pConvTemplate)
 
 	-- ep3_etyyy_tripp_rar.java OnStartNpcConversation:1188-1750

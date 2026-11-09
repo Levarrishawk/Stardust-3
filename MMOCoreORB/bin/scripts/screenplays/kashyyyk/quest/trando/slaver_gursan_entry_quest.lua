@@ -29,11 +29,6 @@ slaverGursanEntryQuestScreenPlay = ScreenPlay:new {
 	repeatable = true,
 	turnInStage = 3,
 	killCount = 1,
-	killTemplates = {
-		"ep3_blackscale_captain_beshk",
-	},
-	encounterMin = 20,
-	encounterMax = 50,
 }
 registerScreenPlay("slaverGursanEntryQuestScreenPlay", true)
 
@@ -73,16 +68,6 @@ function slaverGursanEntryQuestScreenPlay:canGrantQuest(pPlayer)
 	end
 
 	return self.repeatable or self:getRuns(pPlayer) == 0
-end
-
-function slaverGursanEntryQuestScreenPlay:isKillTemplate(name)
-	for i = 1, #self.killTemplates do
-		if (self.killTemplates[i] == name) then
-			return true
-		end
-	end
-
-	return false
 end
 
 function slaverGursanEntryQuestScreenPlay:attachKillObserver(pPlayer)
@@ -174,41 +159,23 @@ end
 
 function slaverGursanEntryQuestScreenPlay:spawnBeshk(pPlayer)
 	if (pPlayer == nil) then
-		return
+		return false
 	end
 
-	local existing = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "beshkOid"))
-
-	if (existing ~= nil and existing ~= 0) then
-		local pExisting = getSceneObject(existing)
-
-		if (pExisting ~= nil) then
-			return
-		end
+	local existing = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "beshkOid")) or 0
+	if (existing ~= 0 and getSceneObject(existing) ~= nil) then
+		return true
 	end
 
-	local x = SceneObject(pPlayer):getWorldPositionX()
-	local y = SceneObject(pPlayer):getWorldPositionY()
-	local z = SceneObject(pPlayer):getWorldPositionZ()
-	local zone = CreatureObject(pPlayer):getZoneName()
-	local dx = getRandomNumber(self.encounterMin, self.encounterMax)
-	local dy = getRandomNumber(self.encounterMin, self.encounterMax)
-
-	if (getRandomNumber(0, 1) == 0) then
-		dx = -dx
+	local pMob = KashyyykMainPopulation:spawnEncounterMobile(pPlayer, KashyyykMainPopulationData.encounters.slaverCaptainBeshk)
+	if (pMob == nil) then
+		return false
 	end
-
-	if (getRandomNumber(0, 1) == 0) then
-		dy = -dy
-	end
-
-	local pMob = spawnMobile(zone, "ep3_blackscale_captain_beshk", 0, x + dx, z, y + dy, 0, 0)
-
-	if (pMob ~= nil) then
-		writeScreenPlayData(pPlayer, self.screenplayName, "beshkOid", tostring(SceneObject(pMob):getObjectID()))
-		writeData(SceneObject(pMob):getObjectID() .. ":" .. self.screenplayName .. ":owner", SceneObject(pPlayer):getObjectID())
-		createObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyEncounterDestroyed", pMob)
-	end
+	local oid = SceneObject(pMob):getObjectID()
+	writeScreenPlayData(pPlayer, self.screenplayName, "beshkOid", tostring(oid))
+	writeData(oid .. ":" .. self.screenplayName .. ":owner", SceneObject(pPlayer):getObjectID())
+	createObserver(OBJECTDESTRUCTION, self.screenplayName, "notifyEncounterDestroyed", pMob)
+	return true
 end
 
 function slaverGursanEntryQuestScreenPlay:signalSlaverEnterGate(pPlayer)
@@ -216,7 +183,9 @@ function slaverGursanEntryQuestScreenPlay:signalSlaverEnterGate(pPlayer)
 		return false
 	end
 
-	self:spawnBeshk(pPlayer)
+	if (not self:spawnBeshk(pPlayer)) then
+		return false
+	end
 	self:setStage(pPlayer, 2)
 	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:attachKillObserver(pPlayer)

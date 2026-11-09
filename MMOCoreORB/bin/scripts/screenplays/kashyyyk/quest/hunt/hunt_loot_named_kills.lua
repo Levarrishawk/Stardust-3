@@ -9,21 +9,24 @@
 	it, and raises the Wait-for-Signal. Conversation turn-in still raises
 	that signal as the Java conversation does.
 
-	Paleclaw / Brightclaw have no mouf creature template. OPEN. Not substituted.
-
 	NO JOURNAL: do not call the journal engine.
 ]]
 
 huntLootNamedKillsScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "huntLootNamedKillsScreenPlay",
+	collections = {
+		hunting_ep3_etyyy_chiss_poacher_hunter = {huntManfredCollectEnhancementsScreenPlay, "manfred_collectChemicals"},
+		hunting_ep3_etyyy_mouf_vibrant = {huntTrippCollectMoufPeltsScreenPlay, "tripp_collectingMoufPelts"},
+		hunting_ep3_etyyy_mouf_vicious = {huntTrippCollectMoufIncisorsScreenPlay, "tripp_collectingMoufIncisors"},
+	},
 	rows = {
-	{ quest = "ep3_hunt_loot_silkthrower_killed", sp = huntLootSilkthrowerKilledScreenPlay, signal = "lootQuest_defeatedSilkthrower", item = "object/tangible/quest/quest_start/ep3_hunt_loot_silkthrower_fang.iff", templates = { "kashyyyk_hunt_silkthrower" } },
-	{ quest = "ep3_hunt_loot_stoneleg_killed", sp = huntLootStonelegKilledScreenPlay, signal = "lootQuest_defeatedStoneleg", item = "object/tangible/quest/quest_start/ep3_hunt_loot_stoneleg_heart.iff", templates = { "kashyyyk_hunt_stoneleg" } },
-	{ quest = "ep3_hunt_loot_spiketop_killed", sp = huntLootSpiketopKilledScreenPlay, signal = "lootQuest_defeatedSpiketop", item = "object/tangible/quest/quest_start/ep3_hunt_loot_spiketop_horn.iff", templates = { "kashyyyk_hunt_spiketop" } },
-	{ quest = "ep3_hunt_loot_greyclimber_killed", sp = huntLootGreyclimberKilledScreenPlay, signal = "lootQuest_defeatedGreyclimber", item = "object/tangible/quest/quest_start/ep3_hunt_loot_greyclimber_eye.iff", templates = { "kashyyyk_hunt_greyclimber" } },
-	{ quest = "ep3_hunt_loot_paleclaw_killed", sp = huntLootPaleclawKilledScreenPlay, signal = "lootQuest_defeatedPaleclaw", item = "object/tangible/quest/quest_start/ep3_hunt_loot_paleclaw_jaw.iff", templates = {  } },
-	{ quest = "ep3_hunt_loot_brightclaw_killed", sp = huntLootBrightclawKilledScreenPlay, signal = "lootQuest_defeatedBrightclaw", item = "object/tangible/quest/quest_start/ep3_hunt_loot_brightclaw_jaw.iff", templates = {  } },
+	{ quest = "ep3_hunt_loot_silkthrower_killed", sp = huntLootSilkthrowerKilledScreenPlay, signal = "lootQuest_defeatedSilkthrower", item = "object/tangible/quest/quest_start/ep3_hunt_loot_silkthrower_fang.iff", templates = { "kashyyyk_hunt_silkthrower", "hunting_ep3_etyyy_webweaver_silkthrower" } },
+	{ quest = "ep3_hunt_loot_stoneleg_killed", sp = huntLootStonelegKilledScreenPlay, signal = "lootQuest_defeatedStoneleg", item = "object/tangible/quest/quest_start/ep3_hunt_loot_stoneleg_heart.iff", templates = { "kashyyyk_hunt_stoneleg", "hunting_ep3_etyyy_walluga_stoneleg" } },
+	{ quest = "ep3_hunt_loot_spiketop_killed", sp = huntLootSpiketopKilledScreenPlay, signal = "lootQuest_defeatedSpiketop", item = "object/tangible/quest/quest_start/ep3_hunt_loot_spiketop_horn.iff", templates = { "kashyyyk_hunt_spiketop", "hunting_ep3_etyyy_uller_spiketop" } },
+	{ quest = "ep3_hunt_loot_greyclimber_killed", sp = huntLootGreyclimberKilledScreenPlay, signal = "lootQuest_defeatedGreyclimber", item = "object/tangible/quest/quest_start/ep3_hunt_loot_greyclimber_eye.iff", templates = { "kashyyyk_hunt_greyclimber", "hunting_ep3_etyyy_bantha_kashyyyk_greyclimber" } },
+	{ quest = "ep3_hunt_loot_paleclaw_killed", sp = huntLootPaleclawKilledScreenPlay, signal = "lootQuest_defeatedPaleclaw", item = "object/tangible/quest/quest_start/ep3_hunt_loot_paleclaw_jaw.iff", templates = { "hunting_ep3_etyyy_mouf_paleclaw" } },
+	{ quest = "ep3_hunt_loot_brightclaw_killed", sp = huntLootBrightclawKilledScreenPlay, signal = "lootQuest_defeatedBrightclaw", item = "object/tangible/quest/quest_start/ep3_hunt_loot_brightclaw_jaw.iff", templates = { "hunting_ep3_etyyy_mouf_brightclaw" } },
 	},
 }
 
@@ -53,12 +56,23 @@ function huntLootNamedKillsScreenPlay:isRowTemplate(row, name)
 end
 
 function huntLootNamedKillsScreenPlay:notifyKilledCreature(pPlayer, pVictim)
-	if (pPlayer == nil or pVictim == nil) then
+	if (pPlayer == nil or pVictim == nil or not SceneObject(pVictim):isAiAgent()) then
 		return 0
 	end
 	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
 	if (victimTemplate == nil) then
 		return 0
+	end
+	local collection = self.collections[victimTemplate]
+	if (collection ~= nil) then
+		local quest, task = collection[1], collection[2]
+		if (quest:isTaskActive(pPlayer, task) and getRandomNumber(1, 100) <= quest.lootDropPercent) then
+			local count = (tonumber(readScreenPlayData(pPlayer, quest.screenplayName, "kills")) or 0) + 1
+			writeScreenPlayData(pPlayer, quest.screenplayName, "kills", tostring(count))
+			if (count >= quest.killCount) then
+				quest:raiseSignal(pPlayer, task)
+			end
+		end
 	end
 	for i = 1, #self.rows do
 		local row = self.rows[i]

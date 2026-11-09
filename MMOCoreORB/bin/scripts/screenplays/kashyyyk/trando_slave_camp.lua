@@ -595,7 +595,7 @@ function TrandoSlaveCamp:notifyGateUsed(pTerminal, pPlayer)
 		return 0
 	end
 
-	local active = self:questStage(pPlayer, self.entryScreenPlay) > 0
+	local entryStage = self:questStage(pPlayer, self.entryScreenPlay)
 	local completed = self:questCompleted(pPlayer, self.entryScreenPlay)
 	local kymayrrDone = self:kymayrrCompleted(pPlayer)
 
@@ -604,17 +604,18 @@ function TrandoSlaveCamp:notifyGateUsed(pTerminal, pPlayer)
 		return 0
 	end
 
-	if (not active) then
+	if (entryStage == 0) then
 		CreatureObject(pPlayer):sendSystemMessage(self.noAccess)
 		return 0
 	end
 
-	if slaverGursanEntryQuestScreenPlay ~= nil then
+	if (entryStage == 1 and slaverGursanEntryQuestScreenPlay ~= nil) then
 		slaverGursanEntryQuestScreenPlay:signalSlaverEnterGate(pPlayer)
-	else
-		print("trando_slave_camp.lua: slaverGursanEntryQuest screenplay absent; signalSlaverEnterGate not raised")
+	elseif (entryStage == 2 and slaverGursanEntryQuestScreenPlay ~= nil) then
+		slaverGursanEntryQuestScreenPlay:spawnBeshk(pPlayer)
+	elseif (entryStage == 3) then
+		self:travelTo(pPlayer)
 	end
-	self:travelTo(pPlayer)
 
 	return 0
 end

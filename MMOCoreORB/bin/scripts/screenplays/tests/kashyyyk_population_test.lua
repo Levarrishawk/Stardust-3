@@ -3,6 +3,7 @@ local root = "MMOCoreORB/bin/scripts/"
 -- Check the scoped registrations and exercise the real population screenplay below.
 NONE, AIENABLED, ATTACKABLE, AGGRESSIVE, ENEMY, INVULNERABLE = 0, 1, 2, 4, 8, 16
 CONVERSABLE, INTERESTING, FACTIONAGGRO, NAME_TAG, STALKER, KILLER = 32, 64, 128, 256, 512, 1024
+MOB_HERBIVORE, MOB_CARNIVORE, MOB_NPC, MOB_DROID, MOB_ANDROID = 1, 2, 3, 4, 5
 local registered = {}
 addTemplate = function(name, template) registered[name] = template end
 local weapons = {}
@@ -15,6 +16,7 @@ for base in profiles:gmatch('{([%w_]+), "kachirho_') do _G[base] = Creature end
 dofile(root .. "mobile/custom_content/kashyyyk_main_profiles.lua")
 local vulture = assert(registered.kachirho_ep3_jyykle_vulture)
 assert(vulture.randomNameType == NAME_TAG and vulture.customName == "")
+assert(vulture.mobType == MOB_CARNIVORE)
 assert(vulture.objectName == "@mob/creature_names:ep3_jyykle_vulture")
 assert(vulture.pvpBitmask == ATTACKABLE and vulture.aggroRadius == 0)
 local bolotaur = assert(registered.kachirho_ep3_kachirho_bolotaur_sunbaked)
@@ -26,6 +28,16 @@ assert(#leaders == 2 and leaders[1] == "object/mobile/ep3/ep3_wke_battleleader_0
 local captain = assert(registered.kachirho_ep3_npc_ceremonial_captain)
 assert(captain.objectName == "@mob/creature_names:ep3_npc_ceremonial_captain")
 assert(captain.templates[1] == "object/mobile/ep3/ep3_wke_cerimonial_captain.iff")
+for _, name in ipairs({"kachirho_clone_relics_admiral_krieg", "kachirho_clone_relics_darth_vader"}) do
+ local profile = assert(registered[name])
+ assert(profile.pvpBitmask == NONE and profile.optionsBitmask % (INVULNERABLE * 2) >= INVULNERABLE)
+end
+assert(registered.kachirho_clone_relics_darth_vader.conversationTemplate == "ep3_clone_relics_darth_vader_convotemplate")
+assert(registered.kachirho_ep3_wke_vryyyr.customName == "Vryyyr (Master Hunter)")
+local beshk = assert(registered.kachirho_ep3_slaver_blackscale_captain_beshk)
+assert(beshk.objectName == "@mob/creature_names:ep3_slaver_blackscale_captain_beshk")
+assert(beshk.mobType == MOB_NPC)
+assert(beshk.pvpBitmask == ATTACKABLE + AGGRESSIVE + ENEMY)
 
 ScreenPlay = {new = function(self, t) return t end}
 registerScreenPlay = function() end
@@ -103,15 +115,20 @@ for i, entry in ipairs(commandos) do
  assert(entry.item == expected and entry.clearance == 1)
 end
 assert(#commandos[6].mobiles == 1 and commandos[6].mobiles[1] == "kachirho_ep3_npc_wookiee_battleleader")
-local profileCount = 0
+local profileCount, wildlifeCount = 0, 0
 for _, profile in pairs(registered) do
  assert(profile.randomNameType == NAME_TAG and #profile.templates > 0)
+ if profile.mobType == MOB_CARNIVORE then
+  assert(profile.objectName ~= "" and profile.customName == "")
+  assert(profile.pvpBitmask % (ATTACKABLE * 2) >= ATTACKABLE and profile.optionsBitmask == AIENABLED)
+  wildlifeCount = wildlifeCount + 1
+ end
  for _, group in ipairs({profile.primaryWeapon, profile.secondaryWeapon}) do
   assert(group == "unarmed" or group == "none" or weapons[group])
  end
  profileCount = profileCount + 1
 end
-assert(profileCount == 104)
+assert(profileCount == 105 and wildlifeCount == 18)
 for _, entries in pairs(source.types) do
  for _, entry in ipairs(entries) do assert(#entry.mobiles == 1 and registered[entry.mobiles[1]]) end
 end

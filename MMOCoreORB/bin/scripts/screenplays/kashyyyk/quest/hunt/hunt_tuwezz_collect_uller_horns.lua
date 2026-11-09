@@ -38,7 +38,8 @@ huntTuwezzCollectUllerHornsScreenPlay = ScreenPlay:new {
 	timerSeconds = 0,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "uller_stoneclaw" },
+	killTemplates = { "uller_stoneclaw",
+		"hunting_ep3_etyyy_uller_elder" },
 	taskStages = { tuwezz_collectUllerHorns = 1,
 		tuwezz_elderUllerHorns = 2 },
 }

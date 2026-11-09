@@ -8,6 +8,10 @@ The 27 patrol rows now use the same DSRC type tables. The two four-slot Wookiee 
 
 The main map also uses 50 named actors, five corpses, and ten Imperial bunker spawns. The bunker rows use cell-local coordinates. The Destroyed Camp radio uses its authored height and heading.
 
+The Boshaz ambush, three Ssiksik waves, and Captain Beshk now use their DSRC creature IDs, counts, and placement ranges. The profiles use DSRC's creature classification and explicit names. The client archives supply Vryyyr's display name as an English fallback for the configured server archives. Vader and Admiral Krieg use the invulnerability set by their DSRC conversation scripts.
+
+Fifteen DSRC conversations still lack a matching Core3 binding. The early Clone Relics ground quests also define encounters and escorts whose quest flows are absent in Core3.
+
 Four ceremonial guards still resolve the current ground height, and Colonel Gurnst uses his previously verified first-tree-landing coordinates. The bolotaur type table's incomplete `ep3_kachirho_sunbaked` ID resolves to `ep3_kachirho_bolotaur_sunbaked` in the creature dictionary, with the shipped `ep3_bolotaur_sunbaked` string key.
 
 The controller inventory below records the authored placements. Generate the Lua data and profiles with `python MMOCoreORB/utils/kashyyyk/build_main_population.py DSRC_ROOT`. The live server needs a restart to load the Lua changes.

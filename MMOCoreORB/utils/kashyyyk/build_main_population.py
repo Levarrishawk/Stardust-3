@@ -26,6 +26,11 @@ CORPSE_SCRIPT = 'npc.celebrity.corpse_spawner'
 CELEBRITY_SCRIPT = 'npc.celebrity.celebrity_spawner'
 AREA_SCRIPT = 'systems.spawning.spawner_area'
 PATROL_SCRIPT = 'systems.spawning.spawner_patrol'
+ENCOUNTER_QUESTS = ('ep3_trando_boshaz_zssik_02', 'ep3_trando_ssiksik', 'ep3_slaver_gursan_entry_quest')
+# Their DSRC conversation OnAttach and OnInitialize handlers set invulnerability.
+SCRIPT_INVULNERABLE = {'clone_relics_admiral_krieg', 'clone_relics_darth_vader'}
+# The local client archive has this text, but the configured server archives lack the key.
+SERVER_NAME_FALLBACKS = {'ep3_wke_vryyyr': 'Vryyyr (Master Hunter)'}
 
 
 def mobile_name(item):
@@ -152,9 +157,19 @@ def generate(root):
     bunker = [[mobile_name(r['spawns']), r['room'],
                *(float(r[k]) for k in ('loc_x', 'loc_y', 'loc_z', 'yaw')), r['animation_mood']]
               for r in bunker_source]
+    encounters = {}
+    for quest in ENCOUNTER_QUESTS:
+        for row in table(shared / f'datatables/questtask/quest/{quest}.tab'):
+            if row['ATTACH_SCRIPT'] == 'quest.task.ground.encounter':
+                encounters[row['TASK_NAME']] = dict(
+                    mobile=mobile_name(row['CREATURE_TYPE']), count=int(row['COUNT']),
+                    minDistance=int(row['MIN_DISTANCE']), maxDistance=int(row['MAX_DISTANCE']),
+                    offsetX=float(row['RELATIVE_OFFSET_X']), offsetY=float(row['RELATIVE_OFFSET_Z']),
+                )
     actor_ids = {a[0].removeprefix('kachirho_') for a in actors}
     bunker_ids = {r['spawns'] for r in bunker_source}
-    identities = actor_ids | bunker_ids | {
+    encounter_ids = {row['mobile'].removeprefix('kachirho_') for row in encounters.values()}
+    identities = actor_ids | bunker_ids | encounter_ids | {
         e['mobiles'][0].removeprefix('kachirho_') for entries in types.values() for e in entries
     }
     assert (len(controllers), sum(c['count'] for c in controllers), len(types), len(patrols), len(actors), len(bunker)) == (
@@ -168,6 +183,7 @@ def generate(root):
     data.append('\t},')
     for key, entries in (('controllers', controllers), ('patrols', patrols), ('actors', actors), ('bunker', bunker)):
         data += ['\t' + key + ' = {', *('\t\t' + lua(e) + ',' for e in entries), '\t},']
+    data += ['\tencounters = {', *(f'\t\t{name} = {lua(row)},' for name, row in encounters.items()), '\t},']
     data += ['}', '']
 
     profiles = ['-- Generated from DSRC creatures.tab, dressed species, and the Kachirho spawn sources.',
@@ -192,10 +208,9 @@ def generate(root):
             base, _, legacy = registered['ep3_clone_relics_darth_vader']
         elif item == 'clone_relics_admiral_krieg':
             base, _, legacy = registered['ep3_clone_relics_admiral_krieg']
-        conv = re.search(r'\bconversationTemplate\s*=\s*"([^"]+)"', legacy)
+        legacy = re.sub(r'--\[(=*)\[.*?\]\1\]', '', legacy, flags=re.S)
+        conv = re.search(r'^\s*conversationTemplate\s*=\s*"([^"]+)"', legacy, re.M)
         conv = conv[1] if conv else ''
-        if item == 'clone_relics_darth_vader':
-            conv = 'ep3_clone_relics_darth_vader_convo'
         conv_script = actor_scripts.get(item) or next((s for s in r['scripts'].split(',') if s.startswith('conversation.')), '')
         if conv_script:
             source = server / 'script/conversation' / (conv_script.split('.', 1)[1] + '.java')
@@ -207,7 +222,7 @@ def generate(root):
         else:
             assignments = set()
         models = [model_properties(shared, a) for a in apps]
-        custom = actor_names.get(item, '')
+        custom = actor_names.get(item, SERVER_NAME_FALLBACKS.get(item, ''))
         if assignments:
             label = '@' + ':'.join(assignments.pop())
         elif item == 'clone_droid':
@@ -223,7 +238,8 @@ def generate(root):
             label = ''
         radius = int(r['aggressive'] or 0)
         faction = r['pvpFaction'].lower()
-        invulnerable = item in actor_ids or r['invulnerable'] == '1'
+        dictionary_invulnerable = r['invulnerable'] == '1'
+        invulnerable = item in actor_ids or item in SCRIPT_INVULNERABLE or dictionary_invulnerable
         flags = 'NONE' if invulnerable else 'ATTACKABLE' + (' + AGGRESSIVE + ENEMY' if radius else '')
         options = 'AIENABLED' + (' + INVULNERABLE' if invulnerable else '')
         if conv:
@@ -247,7 +263,7 @@ def generate(root):
         hue = int(r['hue'] or 0)
         if hue:
             fields['hues'] = list(range((hue - 1) * 8, hue * 8))
-        if not invulnerable:
+        if item not in actor_ids and not dictionary_invulnerable:
             base_level = int(r['BaseLevel'])
             hp_level, damage_level, hit_level, armor_level = (
                 max(1, base_level + int(r[k] or 0)) for k in
@@ -262,12 +278,15 @@ def generate(root):
                           damageMin=math.floor(damage * .5 + .5), damageMax=math.floor(damage * 1.5 + .5))
         traits = ' + '.join(bit for bit, field in [('STALKER', 'stalker'), ('KILLER', 'death_blow')]
                             if not invulnerable and r[field] in ('1', 'yes', 'instant')) or 'NONE'
+        niche = r['niche'].upper()
+        assert niche in {'CARNIVORE', 'HERBIVORE', 'NPC', 'DROID', 'ANDROID'}, (item, niche)
         profiles.append(f'\t{{{base}, {lua(mobile_name(item))}, ' + lua(fields)[:-1] +
-                        f', randomNameType = NAME_TAG, pvpBitmask = {flags}, optionsBitmask = {options}, creatureBitmask = {traits}}}}},')
+                        f', mobType = MOB_{niche}, randomNameType = NAME_TAG, pvpBitmask = {flags}, '
+                        f'optionsBitmask = {options}, creatureBitmask = {traits}}}}},')
     profiles += ['}', '', 'for _, profile in ipairs(profiles) do',
                  '\tCreatureTemplates:addCreatureTemplate(profile[1]:new(profile[3]), profile[2])', 'end', '']
     print(f'{len(controllers)} area controllers, {len(patrols)} patrols, {len(actors)} static placements, '
-          f'{len(bunker)} bunker rows and {len(identities)} DSRC creature identities.')
+          f'{len(bunker)} bunker rows, {len(encounters)} quest encounters and {len(identities)} DSRC creature identities.')
     return {
         SCRIPTS / 'screenplays/kashyyyk/kashyyyk_main_population_data.lua': '\n'.join(data),
         SCRIPTS / 'mobile/custom_content/kashyyyk_main_profiles.lua': '\n'.join(profiles),

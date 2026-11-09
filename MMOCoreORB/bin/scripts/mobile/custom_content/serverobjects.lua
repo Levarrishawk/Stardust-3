@@ -11,6 +11,7 @@ includeFile("custom_content/mobile/ep3_fern_bicker.lua")
 includeFile("custom_content/kashyyyk_rryatt_profiles.lua")
 includeFile("custom_content/kashyyyk_dead_forest_profiles.lua")
 includeFile("custom_content/kashyyyk_main_profiles.lua")
+includeFile("custom_content/kashyyyk_hunting_profiles.lua")
 includeFile("custom_content/myyydril_profiles.lua")
 
 

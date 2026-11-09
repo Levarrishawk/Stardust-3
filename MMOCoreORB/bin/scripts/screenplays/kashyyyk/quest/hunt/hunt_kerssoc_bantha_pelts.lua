@@ -39,7 +39,11 @@ huntKerssocBanthaPeltsScreenPlay = ScreenPlay:new {
 	timerSeconds = 0,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "kashyyyk_hunt_bantha", "kashyyyk_hunt_greyclimber" },
+	killTemplates = { "kashyyyk_hunt_bantha", "kashyyyk_hunt_greyclimber",
+		"hunting_ep3_etyyy_bantha_kashyyyk",
+		"hunting_ep3_etyyy_bantha_kashyyyk_herdleader",
+		"hunting_ep3_etyyy_bantha_kashyyyk_matriarch",
+		"hunting_ep3_etyyy_bantha_kashyyyk_greyclimber" },
 	taskStages = { kerssoc_huntingBantha = 1,
 		kerssoc_kashyyykBanthaPelts = 2 },
 }

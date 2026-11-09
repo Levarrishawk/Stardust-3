@@ -31,7 +31,7 @@ huntTrippCollectMoufIncisorsScreenPlay = ScreenPlay:new {
 	rewardCredits = 0,
 	rewardItem = "",
 	killCount = 18,
-	lootDropPercent = 37,
+	lootDropPercent = 95,
 	killStage = 1,
 	maxStage = 2,
 	clearOnFinish = false,
@@ -105,6 +105,7 @@ function huntTrippCollectMoufIncisorsScreenPlay:clearQuest(pPlayer)
 		return
 	end
 
+	deleteScreenPlayData(pPlayer, self.screenplayName, "kills")
 	self:setStage(pPlayer, 0)
 end
 
@@ -119,6 +120,7 @@ function huntTrippCollectMoufIncisorsScreenPlay:grantQuest(pPlayer)
 		return true
 	end
 
+	huntLootNamedKillsScreenPlay:attachPlayer(pPlayer)
 	CreatureObject(pPlayer):sendSystemMessage("@quest/ground/ep3_hunt_tripp_collect_mouf_incisors:journal_entry_title")
 	return true
 end

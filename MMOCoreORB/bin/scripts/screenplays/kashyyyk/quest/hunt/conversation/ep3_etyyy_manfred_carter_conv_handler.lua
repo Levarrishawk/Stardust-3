@@ -84,6 +84,9 @@ function ep3_etyyy_manfred_carter_conv_handler:getInitialScreen(pPlayer, pNpc, p
 	if (pPlayer == nil) then
 		return convoTemplate:getScreen("s_600")
 	end
+	if (huntManfredCollectEnhancementsScreenPlay:isQuestActive(pPlayer)) then
+		huntLootNamedKillsScreenPlay:attachPlayer(pPlayer)
+	end
 	if (self:hasCompletedManfredQuests(pPlayer, pNpc)) then
 		return convoTemplate:getScreen("s_566")
 	elseif (self:finishedKillChissLeader(pPlayer, pNpc)) then

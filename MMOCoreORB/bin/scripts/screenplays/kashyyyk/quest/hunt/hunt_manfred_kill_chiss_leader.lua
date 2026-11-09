@@ -36,7 +36,8 @@ huntManfredKillChissLeaderScreenPlay = ScreenPlay:new {
 	timerSeconds = 0,
 	retrieveCount = 0,
 	retrieveTemplate = "",
-	killTemplates = { "ep3_etyyy_laen_pieweto" },
+	killTemplates = { "ep3_etyyy_laen_pieweto",
+		"hunting_ep3_etyyy_chiss_poacher_laen_pieweto" },
 	taskStages = { manfred_killingChissLeader = 1,
 		manfred_killedChissLeader = 2 },
 }

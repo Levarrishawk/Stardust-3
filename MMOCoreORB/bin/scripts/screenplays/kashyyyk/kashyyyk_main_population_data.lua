@@ -516,4 +516,11 @@ KashyyykMainPopulationData = {
 		{"kachirho_dark_trooper", "bunker", -0.458444, -20.75, 28, 90, "npc_imperial"},
 		{"kachirho_clone_relics_darth_vader", "bunker", 1.60572, -20.75, 32.6753, -180, ""},
 	},
+	encounters = {
+		blackscaleAmbush = {mobile = "kachirho_ep3_slaver_blackscale_guard", count = 5, minDistance = 5, maxDistance = 10, offsetX = 0, offsetY = 0},
+		wkeWaveThree = {mobile = "kachirho_ep3_npc_wookiee_commando", count = 5, minDistance = 10, maxDistance = 25, offsetX = 0, offsetY = 0},
+		wkeWaveTwo = {mobile = "kachirho_ep3_npc_wookiee_freedom_fighters", count = 5, minDistance = 10, maxDistance = 25, offsetX = 0, offsetY = 0},
+		wkeWaveOne = {mobile = "kachirho_ep3_npc_wookiee_freedom_fighters", count = 5, minDistance = 10, maxDistance = 25, offsetX = 0, offsetY = 0},
+		slaverCaptainBeshk = {mobile = "kachirho_ep3_slaver_blackscale_captain_beshk", count = 1, minDistance = 1, maxDistance = 40, offsetX = -2, offsetY = -34},
+	},
 }
