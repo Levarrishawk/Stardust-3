@@ -19,38 +19,26 @@ function KashyyykMainPopulation:isAlive(pMobile)
 		and not CreatureObject(pMobile):isIncapacitated()
 end
 
+function KashyyykMainPopulation:selectMobile(typeName)
+	local entries = KashyyykMainPopulationData.types[typeName]
+	return entries[getRandomNumber(1, #entries)].mobiles[1]
+end
+
 function KashyyykMainPopulation:start()
 	if (not isZoneEnabled(self.zone)) then
 		return
 	end
 
-	for name, entries in pairs(KashyyykMainPopulationData.types) do
-		for i = 1, #entries do
-			if (#entries[i].mobiles == 0) then
-				print("KashyyykMainPopulation: unresolved creature " .. entries[i].item .. " in " .. name)
-			end
-		end
-	end
-
 	for index = 1, #KashyyykMainPopulationData.controllers do
 		local controller = KashyyykMainPopulationData.controllers[index]
-		local entries = KashyyykMainPopulationData.types[controller.type]
-		local supported = false
-		for i = 1, #entries do
-			if (#entries[i].mobiles > 0) then
-				supported = true
+		-- Retail starts after 20 seconds and fills one creature per spawn interval.
+		local delay = 20000
+		for slot = 1, controller.count do
+			local key = self:slotKey(controller, slot)
+			if (not self:isAlive(getSceneObject(readData(key))) and readData(key .. ":pending") == 0) then
+				self:scheduleSpawn(index, slot, delay)
 			end
-		end
-		if (supported) then
-			-- Retail starts after 20 seconds and fills one creature per spawn interval.
-			local delay = 20000
-			for slot = 1, controller.count do
-				local key = self:slotKey(controller, slot)
-				if (not self:isAlive(getSceneObject(readData(key))) and readData(key .. ":pending") == 0) then
-					self:scheduleSpawn(index, slot, delay)
-				end
-				delay = delay + self:respawnDelay(controller)
-			end
+			delay = delay + self:respawnDelay(controller)
 		end
 	end
 end
@@ -86,13 +74,7 @@ function KashyyykMainPopulation:spawnSlot(pUnused, args)
 		return
 	end
 
-	local entries = KashyyykMainPopulationData.types[controller.type]
-	local entry = entries[getRandomNumber(1, #entries)]
-	if (#entry.mobiles == 0) then
-		self:scheduleSpawn(index, slot, self:respawnDelay(controller))
-		return
-	end
-	local mobile = entry.mobiles[getRandomNumber(1, #entry.mobiles)]
+	local mobile = self:selectMobile(controller.type)
 	local x, z, y = controller.x, controller.z, controller.y
 	if (controller.radius > 0) then
 		-- The retail helper offsets X and Y independently, within this controller's radius.

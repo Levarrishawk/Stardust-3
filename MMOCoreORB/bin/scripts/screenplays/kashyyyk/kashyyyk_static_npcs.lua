@@ -1,68 +1,11 @@
--- Kashyyyk surface static NPCs (ruling 2026-09-04: "ensure kashyyyk is done in full").
--- Celebrity spawners from the main and hunting buildout tabs. World coords are
--- x, z, y = wx, py, wz. Heading is baked as degrees(2 * atan2(qy, qw)) from the
--- placement quaternion: no quaternion-to-heading converter exists in tools/ or
--- screenplays (qx = qz = 0 on these rows). spawnMobile respawn is 0, matching unique
--- static NPCs in cities/*.lua (tatooine_wayfar.lua:169 informant_npc_lvl_2).
--- spawnMobile does not revive them; this screenplay does not add a despawn observer.
+-- Kachirho static spawns come from the main population data.
+-- Hunting keeps its existing buildout placements below.
 
 KashyyykStaticNpcsScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 	screenplayName = "KashyyykStaticNpcsScreenPlay",
 
-	-- {template, x, z, y, heading, "<SOE spawns name> (main|hunting row N)"}
-	mainNpcs = {
-		{"ep3_tien_wallub", -508.77, 18.2927, -66.29, 80.787, "ep3_tien_wallub (main row 9)"}, -- registered name equals spawns
-		{"ep3_kymayrr", -502.2, 18.7602, -74.1, -73.339, "ep3_kymayrr (main row 15)"}, -- registered name equals spawns
-		{"ep3_etyyy_kerssoc", 577.3, 23.9216, -639.23, -37.724, "ep3_etyyy_kerssoc (main row 1615)"}, -- registered name equals spawns
-		{"ep3_etyyy_chrilooc", -701.06, 17.127, 11.24, 195.133, "ep3_etyyy_chrilooc (main row 1616)"}, -- registered name equals spawns
-		{"ep3_etyyy_wrelaac", -507.5, 179.535, -112.16, 35.349, "ep3_etyyy_wrelaac (main row 1617)"}, -- registered name equals spawns
-		{"ep3_etyyy_mada_johnson", -478.41, 211.338, -92.74, 100.098, "ep3_etyyy_mada_johnson (main row 1618)"}, -- registered name equals spawns
-		{"ep3_harwakokok_mighty", -419.1, 179.386, -88.78, 245.408, "ep3_harwakokok_mighty (main row 1619)"}, -- registered name equals spawns
-		{"ep3_cmd_richards", -635.95, 22.8335, -119.63, 73.911, "ep3_cmd_richards (main row 1620)"}, -- registered name equals spawns
-		{"ep3_dr_price", -660.88, 25.8335, -111.88, 125.478, "ep3_dr_price (main row 1621)"}, -- registered name equals spawns
-		{"ep3_olima_grunc", 220.82, 18.5518, 40.51, 81.933, "ep3_olima_grunc (main row 1622)"}, -- registered name equals spawns
-		{"ep3_boshaz", 110.01, 26.9675, 168.42, 146.104, "ep3_boshaz (main row 1623)"}, -- registered name equals spawns
-		{"ep3_mssikss", 125.71, 22.3529, 195.29, 49.847, "ep3_mssikss (main row 1624)"}, -- registered name equals spawns
-		{"ep3_ysith", 132.92, 22.3529, 204.68, 191.55, "ep3_ysith (main row 1625)"}, -- registered name equals spawns
-		{"ep3_borantok", 461.49, 19.0716, 258.7, 233.376, "ep3_borantok (main row 1626)"}, -- registered name equals spawns
-		{"ep3_dakar", 522.8, 24.8102, 267.3, 97.403, "ep3_dakar (main row 1627)"}, -- registered name equals spawns
-		{"ep3_tempal_buncho", 497.19, 27.0588, 275.74, 0, "ep3_tempal_buncho (main row 1628)"}, -- registered name equals spawns
-		{"ep3_musolium", 518.99, 24.7059, 433.37, 84.798, "ep3_musolium (main row 1629)"}, -- registered name equals spawns
-		{"ep3_lesnorr", 539.24, 30.7403, 482.95, 206.265, "ep3_lesnorr (main row 1630)"}, -- registered name equals spawns
-		{"ep3_chawroo", -133.77, 22.7451, 864.98, 235.095, "ep3_chawroo (main row 1631)"},
-		{"ep3_pressk", -93.15, 18.3847, 98.56, -25.783, "ep3_pressk (main row 1632)"}, -- registered name equals spawns
-		{"ep3_eyma", -549.64, 18.9918, -132.42, -46.262, "ep3_eyma (main row 1633)"}, -- registered name equals spawns
-		{"ep3_clone_relics_ovarra", -425.85, 179.545, -85.21, 187.54, "ep3_clone_relics_ovarra (main row 1634)"}, -- registered name equals spawns
-		{"ep3_clone_relics_geonosian_ikvizi", -513.05, 19.3062, -108.74, 194.232, "ep3_clone_relics_geonosian_ikvizi (main row 1635)"}, -- registered name equals spawns
-		{"ep3_ssiksik", 208.81, 26.7459, 109.15, 146.677, "ep3_ssiksik (main row 1636)"}, -- registered name equals spawns
-		{"ep3_ortha_ledox", 553.86, 24.7059, -654.79, 0, "ep3_ortha_ledox (main row 1637)"}, -- registered name equals spawns
-		{"ep3_clone_relics_wookie_prisoner_04", 546.26, 30.9634, 463.49, 206.447, "ep3_clone_relics_wookiee_prisoner_04 (main row 1638)"}, -- numbered variant _04 (no exact name, no _01)
-		{"ep3_dr_farnsworth", -504.27, 179.411, -98.91, 150.87, "ep3_dr_farnsworth (main row 1639)"}, -- registered name equals spawns
-		{"ep3_unluto_bartender", -465.44, 158.143, -19.46, 225.544, "ep3_unluto_bartender (main row 1640)"}, -- registered name equals spawns
-		{"ep3_col_gurnst", -457.8, 158.5, -26.2, -72.766, "ep3_col_gurnst (main row 1641)"}, -- first tree level; position verified in game
-		{"ep3_orooroo_betrayer", 545.23, 24.7059, 402.08, -54.431, "ep3_orooroo_betrayer (main row 1642)"}, -- registered name equals spawns
-		{"ep3_kachirho_chatook", -448.43, 158.584, -102.85, -28.073, "ep3_kachirho_chatook (main row 1643)"}, -- registered name equals spawns
-		{"ep3_fezrik_bendledon", -442.75, 211.198, -74.56, 232.803, "ep3_fezrik_bendledon (main row 1644)"}, -- registered name equals spawns
-		{"ep3_marium_valmont", -578.87, 18.8235, -68.11, 176.474, "ep3_marium_valmont (main row 1645)"}, -- registered name equals spawns
-		{"ep3_criss_nepomi", -495.54, 179.491, -109.9, -59.015, "ep3_criss_nepomi (main row 1646)"}, -- registered name equals spawns
-		{"ep3_stren_colo", -667.66, 18.8235, -116.09, 168.632, "ep3_stren_colo (main row 1647)"}, -- registered name equals spawns
-		{"ep3_belga_daeri", -441.41, 158.434, -63.77, 244.262, "ep3_belga_daeri (main row 1648)"}, -- registered name equals spawns
-		{"ep3_cheyerooto", -432.37, 179.608, -96.57, 44.691, "ep3_cheyerooto (main row 1649)"}, -- registered name equals spawns
-		{"ep3_gursan_bryes", -556.01, 19.8111, -71.23, 214.47, "ep3_gursan_bryes (main row 1650)"}, -- registered name equals spawns
-		{"ep3_rroow", -501.77, 179.43, -113.02, 0, "ep3_rroow (main row 1651)"}, -- registered name equals spawns
-		{"ep3_sera_jossi", -236.18, 6.4583, 59.79, 192.124, "ep3_sera_jossi (main row 1652)"}, -- registered name equals spawns
-		{"ep3_wke_merchant_03", -548.04, 19.2773, -108.26, 0, "ep3_wke_merchant_03 (main row 1653)"}, -- registered name equals spawns
-		{"ep3_wke_merchant_03", -512.49, 17.8367, -69.99, 197.67, "ep3_wke_merchant_03 (main row 1654)"}, -- registered name equals spawns
-		{"ep3_wke_merchant_04", 554.85, 24.2538, -644.07, 0, "ep3_wke_merchant_04 (main row 1655)"}, -- registered name equals spawns
-		{"space_ep3_chassis_broker_05", -682.21, 18.8235, -160.87, 0, "ep3_chassis_broker_05 (main row 1656)"}, -- single repo candidate
-		{"ep3_mining_flash_harrison", -453.74, 158.428, -20.06, 264.915, "ep3_mining_flash_harrison (main row 1657)"}, -- registered name equals spawns
-		{"ep3_mining_captain_koh", -441.35, 211.219, -75.77, 265.462, "ep3_mining_captain_koh (main row 1658)"}, -- registered name equals spawns
-		{"ep3_rawarok", -131.81, 22.7451, 861.22, 262.024, "ep3_rawarok (main row 1659)"}, -- registered name equals spawns
-		{"ep3_chewbacca", -587.29, 18.5615, -104.16, -21.772, "chewbacca (main row 1660)"}, -- single repo candidate
-		{"ep3_wke_vryyyr", -589.23, 18.4857, -103.28, 26.357, "ep3_wke_vryyyr (main row 1661)"}, -- registered name equals spawns
-		{"ep3_hssissk_bloodscale", 517.05, 24.7059, 426.54, 88.808, "ep3_hssissk_bloodscale (main row 1672)"}, -- registered name equals spawns
-	},
+	mainNpcs = KashyyykMainPopulationData.actors,
 
 	-- Separated surface zones use buildout coordinates minus 2048 on both axes.
 	huntingNpcs = {
@@ -91,6 +34,7 @@ registerScreenPlay("KashyyykStaticNpcsScreenPlay", true)
 function KashyyykStaticNpcsScreenPlay:start()
 	if (isZoneEnabled("kashyyyk_main")) then
 		self:spawnNpcs("kashyyyk_main", self.mainNpcs)
+		self:spawnBunkerNpcs()
 	end
 
 	if (isZoneEnabled("kashyyyk_hunting")) then
@@ -101,9 +45,44 @@ end
 function KashyyykStaticNpcsScreenPlay:spawnNpcs(zone, npcs)
 	for i = 1, #npcs, 1 do
 		local npc = npcs[i]
-		local pMobile = spawnMobile(zone, npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
-		if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
-			AiAgent(pMobile):addObjectFlag(AI_STATIONARY)
+		local key = zone == "kashyyyk_main" and (self.screenplayName .. ":actor:" .. npc[6])
+		if (not key or getSceneObject(readData(key)) == nil) then
+			local pMobile = spawnMobile(zone, npc[1], 0, npc[2], npc[3], npc[4], npc[5], 0)
+			if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+				AiAgent(pMobile):addObjectFlag(AI_STATIONARY)
+				if (key) then
+					writeData(key, SceneObject(pMobile):getObjectID())
+				end
+				if (npc[7]) then
+					CreatureObject(pMobile):setMoodString("npc_dead_01")
+				end
+			end
+		end
+	end
+end
+
+function KashyyykStaticNpcsScreenPlay:spawnBunkerNpcs()
+	-- The split map supports both the snapshot building and the native buildout copy.
+	local pBunker = getSceneObject(14602403) or getSceneObject(-6029991)
+	if (pBunker == nil or not SceneObject(pBunker):isBuildingObject()
+		or SceneObject(pBunker):getZoneName() ~= "kashyyyk_main"
+		or SceneObject(pBunker):getTemplateObjectPath() ~= "object/building/general/bunker_imperial_kashyyyk_01.iff") then
+		return
+	end
+
+	local buildingID = SceneObject(pBunker):getObjectID()
+	for index, npc in ipairs(KashyyykMainPopulationData.bunker) do
+		local key = self.screenplayName .. ":bunker:" .. buildingID .. ":" .. index
+		local pCell = BuildingObject(pBunker):getNamedCell(npc[2])
+		if (pCell ~= nil and getSceneObject(readData(key)) == nil) then
+			local pMobile = spawnMobile("kashyyyk_main", npc[1], 0, npc[3], npc[4], npc[5], npc[6], SceneObject(pCell):getObjectID())
+			if (pMobile ~= nil and SceneObject(pMobile):isAiAgent()) then
+				writeData(key, SceneObject(pMobile):getObjectID())
+				AiAgent(pMobile):addObjectFlag(AI_STATIONARY)
+				if (npc[7] ~= "") then
+					CreatureObject(pMobile):setMoodString(npc[7])
+				end
+			end
 		end
 	end
 end

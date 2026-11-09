@@ -106,6 +106,9 @@ function huntKerssocKillChissPoachersScreenPlay:getKills(pPlayer)
 end
 
 function huntKerssocKillChissPoachersScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_etyyy_chiss_poacher") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

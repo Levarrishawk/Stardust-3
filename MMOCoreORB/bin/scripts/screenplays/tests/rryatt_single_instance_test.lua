@@ -59,6 +59,7 @@ local controllers={}
 for _, c in ipairs(KashyyykRryattPopulationData.controllers) do controllers[c.id]=c end
 assert(controllers["kashyyyk_rryatt_trail_lvl_4:4"].x==-3503.619)
 assert(controllers["kashyyyk_rryatt_trail_lvl_1_and_2:34"].y==4454.01)
+dofile("MMOCoreORB/bin/scripts/screenplays/kashyyyk/kashyyyk_main_population_data.lua")
 dofile("MMOCoreORB/bin/scripts/screenplays/kashyyyk/kashyyyk_patrol_paths.lua")
 local trails=0
 for _, route in ipairs(KashyyykPatrolPaths) do

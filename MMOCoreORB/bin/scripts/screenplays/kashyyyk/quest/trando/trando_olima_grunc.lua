@@ -182,6 +182,11 @@ function trandoOlimaGruncScreenPlay:notifyEnteredGoto(pArea, pPlayer)
 end
 
 function trandoOlimaGruncScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_kachirho_uller"
+		or name == "kachirho_ep3_kachirho_uller_packleader"
+		or name == "kachirho_ep3_kachirho_uller_stoneclaw") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

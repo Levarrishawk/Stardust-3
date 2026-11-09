@@ -22,7 +22,14 @@ function KashyyykPatrolsScreenPlay:spawnPatrols()
 	for routeIndex = 1, #KashyyykPatrolPaths, 1 do
 		local route = KashyyykPatrolPaths[routeIndex]
 
-		if (route ~= nil and route.spawnZone ~= nil and isZoneEnabled(route.spawnZone) and route.mobiles ~= nil and route.points ~= nil and route.count ~= nil and route.count > 0 and #route.mobiles > 0 and #route.points > 0) then
+		if (route.spawnZone == "kashyyyk_main" and isZoneEnabled(route.spawnZone)) then
+			local key = self.screenplayName .. ":initial:" .. route.id
+			-- DSRC rejects routes with no spare patrol point.
+			if (route.count < #route.points and readData(key) == 0) then
+				writeData(key, 1)
+				createEvent(10000, self.screenplayName, "spawnMainRoute", nil, tostring(routeIndex))
+			end
+		elseif (route.spawnZone ~= nil and isZoneEnabled(route.spawnZone) and route.mobiles ~= nil and route.points ~= nil and route.count ~= nil and route.count > 0 and #route.mobiles > 0 and #route.points > 0) then
 			local count = route.count
 			local pointCount = #route.points
 			local mobileCount = #route.mobiles
@@ -43,6 +50,26 @@ function KashyyykPatrolsScreenPlay:spawnPatrols()
 				self:spawnOne(routeIndex, template, startIdx)
 			end
 		end
+	end
+end
+
+function KashyyykPatrolsScreenPlay:spawnMainRoute(pUnused, args)
+	local routeIndex = tonumber(args)
+	local route = routeIndex and KashyyykPatrolPaths[routeIndex]
+	if (route == nil or route.spawnZone ~= "kashyyyk_main") then
+		return
+	end
+	local key = self.screenplayName .. ":initial:" .. route.id
+	if (readData(key) ~= 1) then
+		return
+	end
+	if (not isZoneEnabled(route.spawnZone)) then
+		deleteData(key)
+		return
+	end
+	writeData(key, 2)
+	for slot = 1, route.count do
+		self:spawnOne(routeIndex, KashyyykMainPopulation:selectMobile(route.type), slot)
 	end
 end
 
@@ -72,6 +99,10 @@ function KashyyykPatrolsScreenPlay:spawnOne(routeIndex, template, startIdx)
 	local pMobile = spawnMobile(route.spawnZone, template, 0, startPoint[1], startPoint[2], startPoint[3], heading, 0)
 
 	if (pMobile == nil) then
+		if (route.spawnZone == "kashyyyk_main") then
+			local delay = KashyyykMainPopulation:respawnDelay(route)
+			createEvent(delay, self.screenplayName, "respawnMobile", nil, routeIndex .. ":" .. template)
+		end
 		return
 	end
 
@@ -89,6 +120,10 @@ function KashyyykPatrolsScreenPlay:armMobile(pMobile, routeIndex, template, targ
 	writeData(oid .. ":KashyyykPatrols:loc", targetIdx)
 	writeData(oid .. ":KashyyykPatrols:dir", dir)
 	writeStringData(oid .. ":KashyyykPatrols:mobile", template)
+	local route = KashyyykPatrolPaths[routeIndex]
+	if (route.spawnZone == "kashyyyk_main") then
+		writeData(oid .. ":KashyyykPatrols:delay", KashyyykMainPopulation:respawnDelay(route) + 2000)
+	end
 
 	-- Chandrila hanna patrol1.lua:41-42 calls setAiTemplate("manualescortwalk") and
 	-- setFollowState(4). This fork binds setAITemplate() with no template string
@@ -99,8 +134,9 @@ function KashyyykPatrolsScreenPlay:armMobile(pMobile, routeIndex, template, targ
 	createObserver(DESTINATIONREACHED, "KashyyykPatrolsScreenPlay", "notifyDestinationReached", pMobile)
 	createObserver(OBJECTDESTRUCTION, "KashyyykPatrolsScreenPlay", "notifyDestroyed", pMobile)
 
-	if (#KashyyykPatrolPaths[routeIndex].points >= 2) then
-		createEvent(getRandomNumber(2, 6) * 1000, "KashyyykPatrolsScreenPlay", "walkStep", pMobile, "")
+	if (#route.points >= 2) then
+		local delay = route.spawnZone == "kashyyyk_main" and 5000 or getRandomNumber(2, 6) * 1000
+		createEvent(delay, "KashyyykPatrolsScreenPlay", "walkStep", pMobile, "")
 	end
 end
 
@@ -241,11 +277,13 @@ function KashyyykPatrolsScreenPlay:notifyDestroyed(pVictim, pAttacker)
 	local oid = SceneObject(pVictim):getObjectID()
 	local routeIndex = readData(oid .. ":KashyyykPatrols:route")
 	local template = readStringData(oid .. ":KashyyykPatrols:mobile")
+	local delay = readData(oid .. ":KashyyykPatrols:delay")
 
 	deleteData(oid .. ":KashyyykPatrols:route")
 	deleteData(oid .. ":KashyyykPatrols:loc")
 	deleteData(oid .. ":KashyyykPatrols:dir")
 	deleteStringData(oid .. ":KashyyykPatrols:mobile")
+	deleteData(oid .. ":KashyyykPatrols:delay")
 
 	local route = KashyyykPatrolPaths[routeIndex]
 
@@ -253,9 +291,10 @@ function KashyyykPatrolsScreenPlay:notifyDestroyed(pVictim, pAttacker)
 		return 1
 	end
 
-	local delay = getRandomNumber(route.respawnMin, route.respawnMax)
-
-	createEvent(delay * 1000, "KashyyykPatrolsScreenPlay", "respawnMobile", nil, tostring(routeIndex) .. ":" .. template)
+	if (delay == 0) then
+		delay = getRandomNumber(route.respawnMin, route.respawnMax) * 1000
+	end
+	createEvent(delay, "KashyyykPatrolsScreenPlay", "respawnMobile", nil, tostring(routeIndex) .. ":" .. template)
 
 	return 1
 end
@@ -276,6 +315,11 @@ function KashyyykPatrolsScreenPlay:respawnMobile(pMobile, args)
 
 	if (routeIndex == nil or template == nil or template == "") then
 		return
+	end
+
+	local route = KashyyykPatrolPaths[routeIndex]
+	if (route ~= nil and route.spawnZone == "kashyyyk_main") then
+		template = KashyyykMainPopulation:selectMobile(route.type)
 	end
 
 	-- SOE timers: respawn at the route's first point, then start walking again.

@@ -149,6 +149,9 @@ function trandoBoshazZssik02ScreenPlay:notifyEnteredGoto(pArea, pPlayer)
 end
 
 function trandoBoshazZssik02ScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_slaver_blackscale_guard") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

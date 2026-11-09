@@ -11,6 +11,7 @@ local function object(o)
 	objects[o.id] = o
 	function o:getObjectID() return self.id end
 	function o:getZoneName() return self.zone end
+	function o:setMoodString(value) self.mood = value end
 	function o:getParentID() return self.parent or 0 end
 	function o:getWorldPositionX() return self.x or 0 end
 	function o:getWorldPositionY() return self.y or 0 end
@@ -316,18 +317,43 @@ camp:containerKeypadCallback(other, success, 0, "25854", "enter")
 assert(camp:getRuns(other) == 1 and other.credits == nil)
 assert(not camp:canUseContainer(other, container))
 
+screenplay("kashyyyk_main_population_data")
 screenplay("kashyyyk_static_npcs")
 enabled = {kashyyyk_main = true, kashyyyk_hunting = true, kashyyyk_dead_forest = true}
 spawned = {}
 KashyyykStaticNpcsScreenPlay:start()
-assert(#spawned == 67) -- Dead Forest has its own population controller.
+assert(#spawned == 72) -- Dead Forest has its own population controller.
 local counts = {}
 for _, npc in ipairs(spawned) do
 	counts[npc.zone] = (counts[npc.zone] or 0) + 1
 	assert(npc.flag == AI_STATIONARY)
 	if (npc.zone ~= "kashyyyk_main") then assert(math.abs(npc.x) < 2048 and math.abs(npc.y) < 2048) end
 end
-assert(counts.kashyyyk_main == 50 and counts.kashyyyk_hunting == 17 and counts.kashyyyk_dead_forest == nil)
+assert(counts.kashyyyk_main == 55 and counts.kashyyyk_hunting == 17 and counts.kashyyyk_dead_forest == nil)
+local corpses = 0
+for _, npc in ipairs(spawned) do
+	if (npc.mood == "npc_dead_01") then corpses = corpses + 1 end
+end
+assert(corpses == 5)
+
+local bunker = object({zone = "kashyyyk_main", template = "object/building/general/bunker_imperial_kashyyyk_01.iff"})
+objects[14602403] = bunker
+local rooms = {room3 = object(), bunker = object()}
+function bunker:isBuildingObject() return true end
+function bunker:getNamedCell(name) return rooms[name] end
+BuildingObject = SceneObject
+local beforeBunker = #spawned
+KashyyykStaticNpcsScreenPlay:spawnBunkerNpcs()
+assert(#spawned == beforeBunker + 10)
+for i, row in ipairs(KashyyykMainPopulationData.bunker) do
+	local npc = spawned[beforeBunker + i]
+	assert(npc.template == row[1] and npc.parent == rooms[row[2]].id)
+	assert(npc.x == row[3] and npc.z == row[4] and npc.y == row[5])
+	assert(npc.mood == (row[7] ~= "" and row[7] or nil))
+end
+KashyyykStaticNpcsScreenPlay:spawnBunkerNpcs()
+assert(#spawned == beforeBunker + 10)
+objects[14602403] = nil
 for _, name in ipairs({"forest_athnalu_quest_1", "forest_meust_quest_1", "forest_kerritamba_epic_1", "forest_perusta_quest_1"}) do
 	screenplay("quest/forest/" .. name)
 end

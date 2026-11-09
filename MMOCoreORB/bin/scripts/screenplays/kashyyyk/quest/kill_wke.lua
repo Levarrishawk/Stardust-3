@@ -126,6 +126,10 @@ function kachirhoKillWkeScreenPlay:awardQuest(pPlayer)
 end
 
 function kachirhoKillWkeScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_npc_wookiee_forest_stalker"
+		or name == "kachirho_ep3_npc_wookiee_freedom_fighters") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

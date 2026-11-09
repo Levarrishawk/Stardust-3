@@ -100,6 +100,10 @@ function trandoTempalBunchoScreenPlay:grantQuest(pPlayer)
 end
 
 function trandoTempalBunchoScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_kachirho_wke_bloodsample"
+		or name == "kachirho_ep3_qst_wookiee_civilians") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

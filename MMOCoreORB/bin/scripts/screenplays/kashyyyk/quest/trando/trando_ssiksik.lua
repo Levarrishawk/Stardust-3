@@ -165,6 +165,10 @@ function trandoSsiksikScreenPlay:notifyEnteredGoto(pArea, pPlayer)
 end
 
 function trandoSsiksikScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_npc_wookiee_commando"
+		or name == "kachirho_ep3_npc_wookiee_freedom_fighters") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

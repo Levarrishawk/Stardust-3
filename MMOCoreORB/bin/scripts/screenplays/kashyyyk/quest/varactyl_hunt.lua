@@ -129,6 +129,11 @@ function kachirhoVaractylHuntScreenPlay:awardQuest(pPlayer)
 end
 
 function kachirhoVaractylHuntScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_kachirho_varactyl"
+		or name == "kachirho_ep3_kachirho_varactyl_preystalker"
+		or name == "kachirho_ep3_kachirho_varactyl_deathspine") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

@@ -1,6 +1,6 @@
 ep3_kachirho_qst_radio = Creature:new {
-	customName = "kachirho_qst_radio",
-	--randomNameType = NAME_GENERIC_TAG,
+	objectName = "@item_n:ep3_qst_radio",
+	randomNameType = NAME_TAG,
 	socialGroup = "townsperson",
 	faction = "",
 	level = 30,
@@ -23,7 +23,7 @@ ep3_kachirho_qst_radio = Creature:new {
 	ferocity = 0,
 	pvpBitmask = NONE,
 	creatureBitmask = NONE,
-	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
+	optionsBitmask = AIENABLED + INVULNERABLE + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
 	templates = {"object/mobile/ep3/ep3_kachirho_qst_radio.iff"},

@@ -44,6 +44,7 @@ kachirhoDestroyedCampScreenPlay = ScreenPlay:new {
 	radioX = 116.17,
 	radioZ = 11.4634,
 	radioY = 813.43,
+	radioHeading = 80.3073301,
 	drumTemplate = "object/tangible/quest/kachirho_destroyed_camp.iff",
 	bagTemplate = "object/tangible/quest/kachirho_qst_bag.iff",
 	-- Main buildout row 1793; preserve the authored height and tilted quaternion.
@@ -72,13 +73,7 @@ function kachirhoDestroyedCampScreenPlay:start()
 end
 
 function kachirhoDestroyedCampScreenPlay:spawnRadio()
-	local z = getWorldFloor(self.radioX, self.radioY, "kashyyyk_main")
-
-	if (z == nil or z == 0) then
-		z = self.radioZ
-	end
-
-	spawnMobile("kashyyyk_main", "ep3_kachirho_qst_radio", 0, self.radioX, z, self.radioY, 0, 0)
+	spawnMobile("kashyyyk_main", "ep3_kachirho_qst_radio", 0, self.radioX, self.radioZ, self.radioY, self.radioHeading, 0)
 end
 
 function kachirhoDestroyedCampScreenPlay:spawnProps()
@@ -300,6 +295,11 @@ function kachirhoDestroyedCampScreenPlay:signalCodeEntered(pPlayer)
 end
 
 function kachirhoDestroyedCampScreenPlay:isKillTemplate(name)
+	if (name == "kachirho_ep3_kachirho_canopy_bandit"
+		or name == "kachirho_ep3_kachirho_canopy_cutthroat"
+		or name == "kachirho_ep3_kachirho_canopy_reaper") then
+		return true
+	end
 	for i = 1, #self.killTemplates do
 		if (self.killTemplates[i] == name) then
 			return true

@@ -141,7 +141,7 @@ function kachirhoVaractylEggScreenPlay:notifyKilledCreature(pPlayer, pVictim)
 
 	local victimTemplate = AiAgent(pVictim):getCreatureTemplateName()
 
-	if (victimTemplate ~= self.killTemplate) then
+	if (victimTemplate ~= self.killTemplate and victimTemplate ~= "kachirho_ep3_kachirho_varactyl_jaggedfang") then
 		return 0
 	end
 

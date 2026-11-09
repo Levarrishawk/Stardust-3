@@ -1,38 +1,31 @@
 -- Standalone population regression test. Run from the repository root with Lua 5.1+.
 local root = "MMOCoreORB/bin/scripts/"
--- Use the real Creature inheritance and registration helpers for the new captain.
-NONE, AIENABLED, ATTACKABLE, MOB_NPC, NAME_GENERIC_TAG, HERBIVORE = 0, 1, 2, 3, 4, 5
-brawlermaster, marksmanmaster, commandomaster, bountyhuntermaster = {}, {}, {}, {}
-includeFile = function() end
+-- Check the scoped registrations and exercise the real population screenplay below.
+NONE, AIENABLED, ATTACKABLE, AGGRESSIVE, ENEMY, INVULNERABLE = 0, 1, 2, 4, 8, 16
+CONVERSABLE, INTERESTING, FACTIONAGGRO, NAME_TAG, STALKER, KILLER = 32, 64, 128, 256, 512, 1024
 local registered = {}
 addTemplate = function(name, template) registered[name] = template end
+local weapons = {}
+addWeapon = function(name, paths) weapons[name] = paths end
+includeFile = function() end
 dofile(root .. "mobile/creatures.lua")
-dofile(root .. "mobile/custom_content/ep3/ep3_wke_cerimonial_guard_01.lua")
-dofile(root .. "mobile/custom_content/ep3/ep3_wke_cerimonial_captain.lua")
-local guard, captain = registered.ep3_wke_cerimonial_guard_01, registered.ep3_wke_cerimonial_captain
-assert(captain.customName == "Ceremonial Captain")
+local file = assert(io.open(root .. "mobile/custom_content/kashyyyk_main_profiles.lua", "r"))
+local profiles = file:read("*a"); file:close()
+for base in profiles:gmatch('{([%w_]+), "kachirho_') do _G[base] = Creature end
+dofile(root .. "mobile/custom_content/kashyyyk_main_profiles.lua")
+local vulture = assert(registered.kachirho_ep3_jyykle_vulture)
+assert(vulture.randomNameType == NAME_TAG and vulture.customName == "")
+assert(vulture.objectName == "@mob/creature_names:ep3_jyykle_vulture")
+assert(vulture.pvpBitmask == ATTACKABLE and vulture.aggroRadius == 0)
+local bolotaur = assert(registered.kachirho_ep3_kachirho_bolotaur_sunbaked)
+assert(bolotaur.objectName == "@mob/creature_names:ep3_bolotaur_sunbaked")
+assert(bolotaur.pvpBitmask == ATTACKABLE + AGGRESSIVE + ENEMY and bolotaur.aggroRadius == 24)
+local leaders = assert(registered.kachirho_ep3_npc_wookiee_battleleader).templates
+assert(#leaders == 2 and leaders[1] == "object/mobile/ep3/ep3_wke_battleleader_01.iff"
+ and leaders[2] == "object/mobile/ep3/ep3_wke_battleleader_02.iff")
+local captain = assert(registered.kachirho_ep3_npc_ceremonial_captain)
+assert(captain.objectName == "@mob/creature_names:ep3_npc_ceremonial_captain")
 assert(captain.templates[1] == "object/mobile/ep3/ep3_wke_cerimonial_captain.iff")
-for field, value in pairs(guard) do
-	if (field ~= "__index" and field ~= "customName" and field ~= "templates") then
-		assert(captain[field] == value and rawget(captain, field) == nil, "Captain overrides guard profile: " .. field)
-	end
-end
-assert(captain.baseXp == guard.baseXp and captain.lootGroups == guard.lootGroups and #captain.lootGroups == 0)
-dofile(root .. "mobile/custom_content/ep3/ep3_wke_commando_01.lua")
-local commando = registered.ep3_wke_commando_01
-for _, variant in ipairs({"01", "02"}) do
- local name = "ep3_wke_battleleader_" .. variant
- dofile(root .. "mobile/custom_content/ep3/" .. name .. ".lua")
- local leader = assert(registered[name])
- assert(leader.customName == "Wookiee Battle Leader")
- assert(#leader.templates == 1 and leader.templates[1] == "object/mobile/ep3/" .. name .. ".iff")
- for field, value in pairs(commando) do
-  if field ~= "__index" and field ~= "customName" and field ~= "templates" then
-   assert(leader[field] == value and rawget(leader, field) == nil, "Leader overrides commando profile: " .. field)
-  end
- end
-end
-
 
 ScreenPlay = {new = function(self, t) return t end}
 registerScreenPlay = function() end
@@ -109,8 +102,19 @@ for i, entry in ipairs(commandos) do
  local expected = i <= 2 and 'ep3_npc_wookiee_commando' or (i <= 5 and 'ep3_npc_wookiee_freedom_fighters' or 'ep3_npc_wookiee_battleleader')
  assert(entry.item == expected and entry.clearance == 1)
 end
-local leaders = commandos[6].mobiles
-assert(#leaders == 2 and leaders[1] == 'ep3_wke_battleleader_01' and leaders[2] == 'ep3_wke_battleleader_02')
+assert(#commandos[6].mobiles == 1 and commandos[6].mobiles[1] == "kachirho_ep3_npc_wookiee_battleleader")
+local profileCount = 0
+for _, profile in pairs(registered) do
+ assert(profile.randomNameType == NAME_TAG and #profile.templates > 0)
+ for _, group in ipairs({profile.primaryWeapon, profile.secondaryWeapon}) do
+  assert(group == "unarmed" or group == "none" or weapons[group])
+ end
+ profileCount = profileCount + 1
+end
+assert(profileCount == 104)
+for _, entries in pairs(source.types) do
+ for _, entry in ipairs(entries) do assert(#entry.mobiles == 1 and registered[entry.mobiles[1]]) end
+end
 
 assert(#source.controllers == 240)
 local total, unique, captainIndex = 0, {}, nil
@@ -134,7 +138,7 @@ assert(total == 579 and #guardControllers == 4)
 enabled = false; sp:start(); assert(#events == 0)
 assert(captainIndex ~= nil)
 local entry = source.types['kashyyyk/kash_kachirho_wke_ceremonial_captain'][1]
-assert(entry.item == 'ep3_npc_ceremonial_captain' and #entry.mobiles == 1 and entry.mobiles[1] == 'ep3_wke_cerimonial_captain')
+assert(entry.item == 'ep3_npc_ceremonial_captain' and #entry.mobiles == 1 and entry.mobiles[1] == 'kachirho_ep3_npc_ceremonial_captain')
 local originalPrint, warnings = print, {}
 print = function(message) warnings[#warnings + 1] = message end
 enabled = true; sp:start()
@@ -214,13 +218,13 @@ runNext()
 local replacement = objects[readData(guardKey)]
 assert(born == 583 and #events == 0 and replacement.id ~= guardMobile.id)
 assert(replacement.z == guardFloors[floorKey], 'Respawn must use the current guard floor')
--- Exercise the existing battle-leader row with each appearance on the real respawn path.
+-- Exercise the authored battle-leader row on the real respawn path.
 local commandoController
 for _, controller in ipairs(source.controllers) do
  if controller.type == 'kashyyyk/kash_kachirho_wke_commando' then commandoController = controller; break end
 end
 local commandoKey = sp:slotKey(assert(commandoController), 1)
-for variant = 1, 2 do
+do
  local oldMobile = objects[readData(commandoKey)]
  local previousBorn = born
  oldMobile.dead = true; sp:notifyDestroyed(oldMobile, nil)
@@ -228,17 +232,73 @@ for variant = 1, 2 do
  getRandomNumber = function(a, b)
   rolls = rolls + 1
   if rolls == 1 then assert(a == 1 and b == #commandos); return 6 end
-  if rolls == 2 then assert(a == 1 and b == #leaders); return variant end
   return originalRandom(a, b)
  end
  runNext(); getRandomNumber = originalRandom
  local leader = objects[readData(commandoKey)]
  assert(born == previousBorn + 1 and #events == 0 and leader.id ~= oldMobile.id)
- assert(leader.template == leaders[variant] and leader.flag == AI_STATIC)
+ assert(leader.template == commandos[6].mobiles[1] and leader.flag == AI_STATIC)
  assert(leader.z == 50 and math.abs(leader.x - commandoController.x) <= commandoController.radius)
  assert(math.abs(leader.y - commandoController.y) <= commandoController.radius)
  sp:notifyDestroyed(oldMobile, nil); assert(#events == 0, 'Old occupant must not duplicate a leader')
 end
 sp:spawnSlot(nil, nil); sp:spawnSlot(nil, 'bad'); sp:spawnSlot(nil, '9999:1:1'); sp:spawnSlot(nil, '1:0:1')
 sp:notifyDestroyed(nil, nil)
-print('PASS: all 240 controllers / 579 slots, captain/leader identity and inherited profiles, both leader respawns and source row weights, guard floor correction/retries, platform heights, startup/respawn timing, retries, stale events and duplicate prevention')
+print('PASS: all 240 controllers / 579 slots, DSRC profiles, leader respawns and source row weights, guard floor correction/retries, platform heights, startup/respawn timing, retries, stale events and duplicate prevention')
+
+dofile(root .. "screenplays/kashyyyk/kashyyyk_patrol_paths.lua")
+dofile(root .. "screenplays/kashyyyk/kashyyyk_patrols.lua")
+local patrol = KashyyykPatrolsScreenPlay
+local initial, walk, replacements = {}, {}, {}
+createEvent = function(delay, name, method, mobile, args)
+ assert(name == patrol.screenplayName)
+ if method == "spawnMainRoute" then
+  assert(delay == 10000 and mobile == nil)
+  initial[#initial + 1] = args
+ elseif method == "walkStep" then
+  assert(delay == 5000 and mobile)
+  walk[#walk + 1] = mobile
+ else
+  assert(method == "respawnMobile" and mobile == nil)
+  replacements[#replacements + 1] = {delay, args}
+ end
+end
+writeStringData, deleteStringData = writeData, deleteData
+readStringData = function(key) return data[key] or "" end
+DESTINATIONREACHED, AI_PATROLLING = 4, 5
+AiAgent = function(p)
+ return {setAITemplate = function() end, setMovementState = function(_, state) assert(state == AI_PATROLLING) end}
+end
+createObserver = function(event, name, method, mobile)
+ assert((event == DESTINATIONREACHED or event == OBJECTDESTRUCTION) and name == patrol.screenplayName)
+end
+isZoneEnabled = function(zone) return zone == "kashyyyk_main" end
+patrol:start()
+patrol:start()
+assert(#source.patrols == 27 and #initial == 25)
+for _, args in ipairs(initial) do
+ local route = KashyyykPatrolPaths[tonumber(args)]
+ assert(route.count < #route.points)
+ local first = #walk
+ patrol:spawnMainRoute(nil, args)
+ patrol:spawnMainRoute(nil, args)
+ assert(#walk == first + route.count)
+ for slot = 1, route.count do
+  local mob, point = walk[first + slot], route.points[slot]
+  assert(mob.x == point[1] and mob.z == point[2] and mob.y == point[3])
+  local valid = false
+  for _, entry in ipairs(source.types[route.type]) do valid = valid or mob.template == entry.mobiles[1] end
+  assert(valid)
+ end
+end
+local first = walk[1]
+local route = source.patrols[1]
+local delay = readData(first.id .. ":KashyyykPatrols:delay")
+patrol:notifyDestroyed(first, nil)
+patrol:notifyDestroyed(first, nil)
+assert(#replacements == 1 and replacements[1][1] == delay)
+assert(delay >= route.respawnMin * 1000 + 2000 and delay <= route.respawnMax * 1000 + 2000)
+patrol:respawnMobile(nil, replacements[1][2])
+local respawn = walk[#walk]
+assert(respawn.id ~= first.id and respawn.x == route.points[1][1] and respawn.y == route.points[1][3])
+print("PASS: Kachirho patrol validation, starting points, source type selection and respawn delay")
