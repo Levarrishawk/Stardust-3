@@ -1033,7 +1033,9 @@ int ShipAiAgentImplementation::getPatrolSizeMax() {
 }
 
 int ShipAiAgentImplementation::setDestination() {
-	if (patrolPoints.size() > PATROLPOINTS_MAX) {
+	// A configured fixed route can be longer than the generated patrol limit.
+	if (patrolPoints.size() > PATROLPOINTS_MAX &&
+			(!isFixedPatrolShipAgent() || patrolPoints.size() > fixedPatrolPoints.size())) {
 		info() << "Patrol points have overflowed. Total points: " << patrolPoints.size();
 		clearPatrolPoints();
 	}

@@ -499,6 +499,8 @@ includeFile("groups/ship/components/ship_component_valarian_tier3.lua")
 includeFile("groups/ship/components/ship_component_valarian_tier4.lua")
 includeFile("groups/ship/components/ship_component_valarian_tier5.lua")
 
+includeFile("groups/space/npe_space_loot.lua")
+
 -- space/faction sub-folder
 includeFile("groups/space/faction/space_blacksun_tier1.lua")
 includeFile("groups/space/faction/space_blacksun_tier2.lua")

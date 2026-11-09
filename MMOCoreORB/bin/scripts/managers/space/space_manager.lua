@@ -225,3 +225,11 @@ space_yavin4 = {
 		{templateFile = "spacestation_yavin4", x = -5570.46, z = -5168, y = -5234.88, ow = 0.994108, ox = 0.105996, oy = -0.0145207, oz = -0.0173906, parentid = 0}
 	}
 }
+
+-- Source: DSRC space_zones/buildout/space_ord_mantell.tab (Stella Bellum / Cekis).
+space_ord_mantell = {
+	spaceStations = {
+		{templateFile = "station_ord_mantell", x = 5.37, z = 5.37, y = 2.93, ow = 0.7530439, ox = -0.0079265, oy = 0.6579226, oz = 0},
+		{templateFile = "spacestation_ord_mantell_dungeon", x = 481, z = -1139, y = 2041, ow = 0.9998426, ox = -0.0079353, oy = -0.0158705, oz = -1e-7},
+	}
+}
