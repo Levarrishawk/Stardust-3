@@ -13,6 +13,11 @@ object_mobile_som_shared_battlefield_foreman = SharedCreatureObjectTemplate:new 
 }
 ObjectTemplates:addClientTemplate(object_mobile_som_shared_battlefield_foreman, "object/mobile/som/shared_battlefield_foreman.iff")
 --***********************************************************************************************************************************************************************
+object_mobile_som_shared_ben_kenobi = SharedCreatureObjectTemplate:new {
+	clientTemplateFileName = "object/mobile/som/shared_ben_kenobi.iff"
+}
+ObjectTemplates:addClientTemplate(object_mobile_som_shared_ben_kenobi, "object/mobile/som/shared_ben_kenobi.iff")
+--***********************************************************************************************************************************************************************
 object_mobile_som_shared_blackguard_elite = SharedCreatureObjectTemplate:new {
 	clientTemplateFileName = "object/mobile/som/shared_blackguard_elite.iff"
 }

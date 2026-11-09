@@ -1,17 +1,17 @@
 --[[ The Mustafar Kenobi spine -- six .qst files on one conversation
 
-Obi-Wan Kenobi meets the player on the northeastern shoreline, sends them after a
+Qui-Gon Jinn meets the player on the northeastern shoreline, sends them after a
 dying miner, then after a crazed hermit carrying a Soul Crystal shard, then to
 charge three Jedi conduits with it, and finally into the hidden chamber under the
 Burning Plains to destroy the crystal and the Sith who came for it.
 
 THE .qst FILES, AS THEY SHIPPED
 
-  som_obi_wan_signal_1        "Obi-Wan's Redemption"
+  som_obi_wan_signal_1        "Qui-Gon's Redemption"
     task 0  Wait for Signal  dyingMiner   taskName "The Dying Miner"
     task 1  Reward  Bank Credits 2500
 
-  som_obi_wan_signal_2        "Return To Obi-Wan"
+  som_obi_wan_signal_2        "Return to Qui-Gon"
     task 0  Wait for Signal  returnToObiWan
     task 1  Reward  Bank Credits 2500
 
@@ -199,8 +199,8 @@ THE CREATURES  --  four substituted, one exact
   so it is resolved to a random draw from som_dark_jedi_minion_1..8 -- the full
   set that ships. That is a substitution, not shipped data.
 
-  The dying miner has no template, no conversation table and no string anywhere;
-  see som_kenobi_dying_miner.lua. Obi-Wan is a new additive template,
+  DSRC has the dying miner's quest radial but no placement for him in the
+  Mensix spawn table. Obi-Wan is a new additive template,
   som_kenobi_obi_wan, so that obi_wan_ghost's obi_wan_elysium conversation is
   left untouched; see som_kenobi_obi_wan.lua.
 
@@ -333,43 +333,16 @@ kenobiSpineScreenPlay = ScreenPlay:new {
 		heading = 90,
 	},
 
-	--[[ The dying miner. som_obi_wan_signal_1 says only "at the new mining
-	     facility", so he lies on the landing deck, cell index 29 of the same POB
-	     -- node 12112248 -- which is the one room in the building a body could be
-	     carried into off the field.
-
-	     This used to read x -47.0, z 19.07, y 6.0, and the comment here used to
-	     claim no shipped line pinned the spot down. That was wrong on both counts.
-	     mensix/mensix_mining_facility_main.lua:87-89 records the original NGE
-	     positions of the two travelers, in this exact cell 12112248, and the live
-	     facility spawn table carries the same two rows:
-
-	         traveler_m   -55.1, 31.5, -120.3
-	         traveler_f   -56.5, 31.5, -119.1
-
-	     Two independent sources agree the floor plane of landing_deck_room is
-	     z = 31.5. The old z of 19.07 was the upper-floor height this file was
-	     using everywhere else at the time -- a copy-paste off the technician
-	     block, which has since turned out to be wrong itself and now reads 10.8.
-	     It put the miner about twelve metres beneath the deck and outside every
-	     room in the POB. Since STAGE_REPORT is set at exactly one site (inside
-	     examineMiner) and the report gates on isInRangeWithObject(..., 8), no
-	     player could reach him and som_obi_wan_signal_1 was uncompletable.
-
-	     The coordinates below are traveler_m's recorded position, reused because
-	     it is a proven in-cell point on that floor. traveler_m itself does not
-	     stand there on this server: mensix_mining_facility_main.lua:87 moves both
-	     travelers outdoors, Levarris's own change, because spatialChat does not
-	     carry inside a cell. So the spot is unoccupied here even though live had
-	     someone in it. ]]
+	-- The quest places the miner at the new mining facility. Use a clear point
+	-- on the landing deck collision floor away from both DSRC traveler spawns.
 
 	miner = {
 		template = "som_kenobi_dying_miner",
 		cellName = "landing_deck_room",
 		cellID = MustafarBuildout.objects[12112248],
-		x = -55.1,
-		z = 31.5,
-		y = -120.3,
+		x = -57,
+		z = 31.52,
+		y = -113.5,
 		heading = 0,
 	},
 
@@ -938,8 +911,7 @@ function kenobiSpineScreenPlay:spawnComputer(pBuilding)
 	SceneObject(pComputer):setObjectMenuComponent("KenobiSpineMenuComponent")
 end
 
--- som_obi_wan_signal_1's only task. He is scenery with a radial, because SOE
--- shipped him no conversation and no template; see som_kenobi_dying_miner.lua.
+-- The examine radial reproduces quest.som.dying_miner from DSRC.
 function kenobiSpineScreenPlay:spawnMiner(pBuilding)
 	local miner = self.miner
 
@@ -2095,7 +2067,7 @@ function kenobiSpineScreenPlay:giveMinerTask(pPlayer)
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_exception.snd")
 
 	-- No createWaypoint on the task; see PROGRESS TRACKING for why one is given.
-	self:giveWaypoint(pPlayer, "New mining facility", "Obi-Wan's Redemption", self.facility.x, self.facility.y)
+	self:giveWaypoint(pPlayer, "New mining facility", "Qui-Gon's Redemption", self.facility.x, self.facility.y)
 end
 
 -- The miner's radial. He is the whole of som_obi_wan_signal_1 task 0 and SOE gave
@@ -2115,9 +2087,9 @@ function kenobiSpineScreenPlay:examineMiner(pPlayer, pMiner)
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
 
 	-- som_obi_wan_signal_2 opens here: go back and tell him.
-	CreatureObject(pPlayer):sendSystemMessage("Return to Obi-Wan on the northeastern shoreline and tell him what you found.")
+	CreatureObject(pPlayer):sendSystemMessage("Return to Qui-Gon on the northeastern shoreline and tell him what you found.")
 
-	self:giveWaypoint(pPlayer, "Obi-Wan Kenobi", "Return To Obi-Wan", self.shore.x, self.shore.y)
+	self:giveWaypoint(pPlayer, "Qui-Gon Jinn", "Return to Qui-Gon", self.shore.x, self.shore.y)
 end
 
 -- Screen pro_west, s_28. 'returnToObiWan' closes som_obi_wan_signal_2 and the
@@ -2468,7 +2440,7 @@ function kenobiSpineScreenPlay:hermitHandsOverShard(pPlayer, pNpc)
 
 	self:closeHermitLeg(pPlayer)
 
-	CreatureObject(pPlayer):sendSystemMessage("The hermit hands you the Soul Crystal. Take it back to Obi-Wan.")
+	CreatureObject(pPlayer):sendSystemMessage("The hermit hands you the Soul Crystal. Take it back to Qui-Gon.")
 end
 
 -- Any of the six second-meeting screens live answers with removeInvuln + attack.
@@ -2508,7 +2480,7 @@ function kenobiSpineScreenPlay:closeHermitLeg(pPlayer)
 
 	CreatureObject(pPlayer):playMusicMessage("sound/ui_npe2_quest_counter.snd")
 
-	self:giveWaypoint(pPlayer, "Obi-Wan Kenobi", "Fate of the Galaxy", self.shore.x, self.shore.y)
+	self:giveWaypoint(pPlayer, "Qui-Gon Jinn", "Fate of the Galaxy", self.shore.x, self.shore.y)
 end
 
 --[[ som_kenobi_main_quest_spared / _killed -- "Fate of the Galaxy, II"
@@ -2722,10 +2694,10 @@ function kenobiSpineScreenPlay:takeCrystal(pPlayer, key)
 		MustafarQuestXp:award(pPlayer, "som_kenobi_main_quest_killed")
 	end
 
-	CreatureObject(pPlayer):sendSystemMessage("All three conduits are charged. Return to Obi-Wan.")
+	CreatureObject(pPlayer):sendSystemMessage("All three conduits are charged. Return to Qui-Gon.")
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_success.snd")
 
-	self:giveWaypoint(pPlayer, "Obi-Wan Kenobi", "Fate of the Galaxy, II", self.shore.x, self.shore.y)
+	self:giveWaypoint(pPlayer, "Qui-Gon Jinn", "Fate of the Galaxy, II", self.shore.x, self.shore.y)
 end
 
 --[[ som_kenobi_main_quest_3 / _3_b -- "Fate of the Galaxy, III"
@@ -2745,7 +2717,7 @@ function kenobiSpineScreenPlay:talkedKenobi2(pPlayer)
 	self:setStage(pPlayer, self.STAGE_ENTRANCE)
 
 	-- task 1's createWaypoint, and the _visible file's line for it.
-	CreatureObject(pPlayer):sendSystemMessage("Make your way to the hidden chamber beneath the Burning Plains. Obi-Wan will meet you at the entrance.")
+	CreatureObject(pPlayer):sendSystemMessage("Make your way to the hidden chamber beneath the Burning Plains. Qui-Gon will meet you at the entrance.")
 	CreatureObject(pPlayer):playMusicMessage("sound/mus_mustafar_quest_exception.snd")
 
 	self:giveWaypoint(pPlayer, self.chamberSite.waypointName, "Fate of the Galaxy, III", self.chamberSite.x, self.chamberSite.y)
@@ -2789,7 +2761,7 @@ function kenobiSpineScreenPlay:resumeJourney(pPlayer)
 		-- entrance stone is still where he is sending them.
 		CreatureObject(pPlayer):sendSystemMessage("The way into the chamber is open. Destroy the crystal, and whatever came for it.")
 	else
-		CreatureObject(pPlayer):sendSystemMessage("Make your way to the hidden chamber beneath the Burning Plains. Obi-Wan will meet you at the entrance.")
+		CreatureObject(pPlayer):sendSystemMessage("Make your way to the hidden chamber beneath the Burning Plains. Qui-Gon will meet you at the entrance.")
 	end
 
 	self:giveWaypoint(pPlayer, self.chamberSite.waypointName, "Fate of the Galaxy, III", self.chamberSite.x, self.chamberSite.y)
@@ -2833,7 +2805,7 @@ function kenobiSpineScreenPlay:notifyEnteredChamberSite(pArea, pPlayer)
 
 	self:removeWaypoint(pPlayer)
 
-	CreatureObject(pPlayer):sendSystemMessage("Obi-Wan is waiting for you at the entrance stone.")
+	CreatureObject(pPlayer):sendSystemMessage("Qui-Gon is waiting for you at the entrance stone.")
 
 	return 0
 end
@@ -3072,7 +3044,7 @@ function kenobiSpineScreenPlay:destroyCrystal(pPlayer)
 	self:grantFinaleBadge(pPlayer, self.goodBadge)
 
 	CreatureObject(pPlayer):playEffect("clienteffect/mustafar/som_force_crystal_destruction.cef", "")
-	CreatureObject(pPlayer):sendSystemMessage("Obi-Wan congratulates you. The Soul Crystal is destroyed.")
+	CreatureObject(pPlayer):sendSystemMessage("Qui-Gon congratulates you. The Soul Crystal is destroyed.")
 end
 
 -- Named takeCrystal_finale so it does not shadow takeCrystal at the conduits.
@@ -3098,7 +3070,7 @@ function kenobiSpineScreenPlay:takeCrystal_finale(pPlayer)
 	self:grantFinaleBadge(pPlayer, self.badBadge)
 
 	CreatureObject(pPlayer):playEffect("clienteffect/pl_force_healing.cef", "")
-	CreatureObject(pPlayer):sendSystemMessage("Obi-Wan is disappointed. You take the drained crystal for yourself.")
+	CreatureObject(pPlayer):sendSystemMessage("Qui-Gon is disappointed. You take the drained crystal for yourself.")
 end
 
 -- Live obiwan_exit_object.java:26-42 calls

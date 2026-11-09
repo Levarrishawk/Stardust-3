@@ -1,5 +1,5 @@
 --[[
-	som_kenobi_obi_wan -- Ben Kenobi, for the whole Mustafar Kenobi arc.
+	som_kenobi_obi_wan -- Qui-Gon Jinn, for the Mustafar arc.
 
 	SOURCE. Two shipped conversation tables, merged into this one tree:
 	  string/en/conversation/som_obi_wan_kenobi.stf   17 strings -- the prologue,
@@ -16,7 +16,7 @@
 	the ids only look like one table because they are read side by side here.
 
 	WHY ONE TREE AND NOT TWO. conversationTemplate binds per creature template,
-	not per instance, so two trees would mean two Ben Kenobis standing on the
+	not per instance, so two trees would mean two copies of Qui-Gon standing on the
 	same shore. The shipped text names exactly one place to find him -- s_266 and
 	s_302, "the northeastern shoreline between the old and new mining
 	facilities" -- so there is one of him, and the handler picks the root screen
@@ -70,7 +70,7 @@
 
 	Live plays 73 gestures across this conversation -- 72 hung off player answers
 	and one on the opening line. 69 of them are on the screens below, in
-	ConvoScreen's own "animation" (Ben's) and "playerAnimation" (the player's)
+	ConvoScreen's own "animation" (Qui-Gon's) and "playerAnimation" (the player's)
 	fields, which the engine plays when it sends the screen. 57 screens carry at
 	least one.
 
@@ -122,7 +122,7 @@ pro_greeting = ConvoScreen:new {
 	leftDialog = "@conversation/som_obi_wan_kenobi:s_10", -- Greetings, young Jedi. What has brought you here to this distant world?
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_obi_wan_kenobi:s_12", "pro_reflect"},   -- Master Kenobi, I didn't expect to find you here!
+		{"@conversation/som_obi_wan_kenobi:s_12", "pro_reflect"},   -- Master Jinn, I didn't expect to find you here!
 		{"@conversation/som_obi_wan_kenobi:s_30", "pro_adventure"}, -- I have come seeking adventure.
 	}
 }
@@ -138,7 +138,7 @@ som_kenobi_obi_wan:addScreen(pro_adventure)
 
 pro_reflect = ConvoScreen:new {
 	id = "pro_reflect",
-	leftDialog = "@conversation/som_obi_wan_kenobi:s_14", -- I come here sometimes to reflect upon the past. Terrible things happened here...
+	leftDialog = "@conversation/som_obi_wan_kenobi:s_14", -- The Living Force drew me here. Terrible things happened on this world...
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_obi_wan_kenobi:s_16", "pro_imbalance"}, -- I know...
@@ -148,10 +148,10 @@ som_kenobi_obi_wan:addScreen(pro_reflect)
 
 pro_imbalance = ConvoScreen:new {
 	id = "pro_imbalance",
-	leftDialog = "@conversation/som_obi_wan_kenobi:s_18", -- What happened has happened, and even I cannot change history. This planet, though, still resonates with his energy. I fear there is a great imbalance in the Force.
+	leftDialog = "@conversation/som_obi_wan_kenobi:s_18", -- The past is beyond our reach, but its echoes remain. I sense a great imbalance in the Force here.
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_obi_wan_kenobi:s_22", "pro_task"}, -- Perhaps I could help, Master Kenobi?
+		{"@conversation/som_obi_wan_kenobi:s_22", "pro_task"}, -- Perhaps I could help, Master Jinn?
 	}
 }
 som_kenobi_obi_wan:addScreen(pro_imbalance)
@@ -178,7 +178,7 @@ pro_return = ConvoScreen:new {
 	leftDialog = "@conversation/som_obi_wan_kenobi:s_20", -- Have you done as I asked, young Jedi?
 	stopConversation = "false",
 	options = {
-		{"@conversation/som_obi_wan_kenobi:s_24", "pro_and"}, -- Yes, I have, Master Obi-Wan.
+		{"@conversation/som_obi_wan_kenobi:s_24", "pro_and"}, -- Yes, I have, Master Jinn.
 	}
 }
 som_kenobi_obi_wan:addScreen(pro_return)
@@ -255,7 +255,7 @@ som_kenobi_obi_wan:addScreen(who_b)
 
 ben_a = ConvoScreen:new {
 	id = "ben_a",
-	leftDialog = "@conversation/som_kenobi_obi_wan:s_201", -- You can call me Ben. Now let me continue, please.
+	leftDialog = "@conversation/som_kenobi_obi_wan:s_201", -- I am Qui-Gon Jinn. Now let me continue, please.
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_obi_wan:s_202", "hist_b"}, -- Of course. My apologies.
@@ -265,7 +265,7 @@ som_kenobi_obi_wan:addScreen(ben_a)
 
 ben_b = ConvoScreen:new {
 	id = "ben_b",
-	leftDialog = "@conversation/som_kenobi_obi_wan:s_348", -- I just told you, the entire galaxy. Very well, you can call me Ben. Now can I go on?
+	leftDialog = "@conversation/som_kenobi_obi_wan:s_348", -- I just told you, the entire galaxy. Very well, you can call me Qui-Gon. Now can I go on?
 	stopConversation = "false",
 	options = {
 		{"@conversation/som_kenobi_obi_wan:s_354", "hist_a"}, -- Fine, what is it you need help with?

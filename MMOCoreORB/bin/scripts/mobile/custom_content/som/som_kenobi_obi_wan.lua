@@ -1,9 +1,9 @@
--- Ben Kenobi for the Mustafar Kenobi arc -- som_obi_wan_signal_1/2 and
+-- Qui-Gon Jinn for the Mustafar arc -- som_obi_wan_signal_1/2 and
 -- som_kenobi_main_quest_1 through _3.
 --
 -- WHY THIS IS NOT obi_wan_ghost. conversationTemplate binds to the creature
 -- template, not to the spawned instance, so pointing the arc's dialogue at
--- obi_wan_ghost would replace obi_wan_elysium on every Ben Kenobi in the game.
+-- obi_wan_ghost would replace obi_wan_elysium on that creature template.
 -- obi_wan_elysium is World Beyond Worlds content and is left exactly as it is.
 -- This is an additive template that reuses the same registered appearance,
 -- object/mobile/som/obi_wan_ghost.iff -- the same thing som_kenobi_moral_exec
@@ -17,7 +17,7 @@
 --
 -- scale 1.1 matches obi_wan_ghost, so the two stand the same height.
 som_kenobi_obi_wan = Creature:new {
-	customName = "Ben Kenobi (a Hermit)",
+	customName = "Qui-Gon Jinn",
 	socialGroup = "townsperson",
 	faction = "",
 	mobType = MOB_NPC,

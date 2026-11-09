@@ -2,6 +2,7 @@
 includeFile("custom_content/mobile/som/droid_8t88.lua")
 includeFile("custom_content/mobile/som/asn_121.lua")
 includeFile("custom_content/mobile/som/battlefield_foreman.lua")
+includeFile("custom_content/mobile/som/ben_kenobi.lua")
 includeFile("custom_content/mobile/som/blackguard.lua")
 includeFile("custom_content/mobile/som/blackguard_elite.lua")
 includeFile("custom_content/mobile/som/blackguard_wilder.lua")

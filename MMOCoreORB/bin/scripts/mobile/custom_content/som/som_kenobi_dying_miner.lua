@@ -1,19 +1,7 @@
 -- som_obi_wan_signal_1 target -- the dying miner at the new mining facility.
 --
--- SUBSTITUTED, and the gap is recorded rather than papered over. The quest is
--- one Wait-for-Signal task on 'dyingMiner' and nothing else; there is no
--- creature template, no conversation table and no string for him anywhere in
--- the shipped data. Obi-Wan's s_26 ("Go seek out a dying miner who is at the
--- new mining facility") and s_27 ("The miner had been attacked with a
--- lightsaber") are the only two lines about him that ship. So he is built the
--- same way the symbiosis corpses were: scenery with a screenplay-supplied
--- radial, because SOE left nothing for him to say.
---
--- The appearance is object/mobile/som/mustafarian_m_01.iff, which ships and is
--- registered from object/custom_content/mobile/som/serverobjects.lua. Mensix's
--- workforce is already Mustafarian in this arc -- som_kenobi_moral_strike_leader
--- uses mustafarian_m_02.iff -- so the other one of the pair is used here to keep
--- the two from being the same face.
+-- DSRC's som_dying_miner creature row uses mustafarian_m_01.iff. The
+-- quest.som.dying_miner script grants the next quest through an examine radial.
 --
 -- Scenery only: never fights, never dies. The 'Examine the dying miner' radial
 -- is supplied at spawn time by the screenplay via SceneObject:setObjectMenuComponent().
