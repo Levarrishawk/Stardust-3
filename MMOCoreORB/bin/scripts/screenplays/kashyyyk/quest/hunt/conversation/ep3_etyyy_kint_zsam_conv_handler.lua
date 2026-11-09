@@ -84,12 +84,13 @@ function ep3_etyyy_kint_zsam_conv_handler:tooManyInGroup(pPlayer, pNpc)
 	return (CreatureObject(pPlayer):isGrouped() and CreatureObject(pPlayer):getGroupSize() > 8)
 end
 
--- OPEN: java isInGodMode / giveHraccaGatePass. Core3 has no matching god-ticket grant.
-function ep3_etyyy_kint_zsam_conv_handler:isInGodMode(pPlayer, pNpc)
+function ep3_etyyy_kint_zsam_conv_handler:isInGodMode(pPlayer)
 	if (pPlayer == nil) then
 		return false
 	end
-	return false
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	return pGhost ~= nil and PlayerObject(pGhost):hasGodMode()
 end
 
 function ep3_etyyy_kint_zsam_conv_handler:getInitialScreen(pPlayer, pNpc, pConvTemplate)
@@ -161,6 +162,11 @@ function ep3_etyyy_kint_zsam_conv_handler:runScreenHandlers(pConvTemplate, pPlay
 		if (KashyyykIslands ~= nil) then
 			KashyyykIslands.travelTo(pPlayer, "hracca")
 		end
+	elseif (screenID == "god_mode_enter") then
+		if (not self:isInGodMode(pPlayer) or KashyyykIslands == nil or not isZoneEnabled(KashyyykIslands.zoneDungeon)) then
+			return LuaConversationTemplate(pConvTemplate):getScreen("s_208")
+		end
+		KashyyykIslands.travelTo(pPlayer, "hracca")
 	elseif (screenID == "s_254") then
 		EtyyyHuntState:raise(pPlayer, "johnson_talkToKint")
 		huntHraccaKkorrwrotHuntScreenPlay:grantQuest(pPlayer)
@@ -169,5 +175,10 @@ function ep3_etyyy_kint_zsam_conv_handler:runScreenHandlers(pConvTemplate, pPlay
 		EtyyyHuntState:raise(pPlayer, "johnson_talkToKint")
 		huntHraccaKkorrwrotHuntScreenPlay:grantQuest(pPlayer)
 	end
+
+	if ((screenID == "s_183" or screenID == "s_203") and self:isInGodMode(pPlayer)) then
+		clonedConversation:addOption("[God Mode] Enter Hracca Glade", "god_mode_enter")
+	end
+
 	return pClonedScreen
 end

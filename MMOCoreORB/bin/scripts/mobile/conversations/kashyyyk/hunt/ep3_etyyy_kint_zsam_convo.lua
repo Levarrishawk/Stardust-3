@@ -71,6 +71,14 @@ ep3_etyyy_kint_zsam_convo_s_259 = ConvoScreen:new {
 }
 ep3_etyyy_kint_zsam_convo:addScreen(ep3_etyyy_kint_zsam_convo_s_259)
 
+ep3_etyyy_kint_zsam_convo_god_mode_enter = ConvoScreen:new {
+	id = "god_mode_enter",
+	leftDialog = "@conversation/ep3_etyyy_kint_zsam:s_259",
+	stopConversation = "true",
+	options = {}
+}
+ep3_etyyy_kint_zsam_convo:addScreen(ep3_etyyy_kint_zsam_convo_god_mode_enter)
+
 ep3_etyyy_kint_zsam_convo_s_382 = ConvoScreen:new {
 	id = "s_382",
 	leftDialog = "@conversation/ep3_etyyy_kint_zsam:s_382", -- You're welcome.
