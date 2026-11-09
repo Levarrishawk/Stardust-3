@@ -153,7 +153,7 @@ public:
 		return cellid;
 	}
 
-	uint32 getUnknown2() const {
+	uint32 getPortalLayoutCRC() const {
 		return unknown2;
 	}
 

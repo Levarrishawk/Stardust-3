@@ -753,6 +753,9 @@ Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSna
 			if (object != nullptr) {
 				object->setClientObject(true);
 				object->initializeTransientMembers();
+				// The multiplayer client streams scenery, but waits for native portal buildings and cells.
+				if (zone->getZoneName() == "mustafar" && (node->getPortalLayoutCRC() != 0 || object->isCellObject()))
+					object->setForceSend(true);
 			}
 		} catch (Exception& e) {
 			error("Could not create buildout object " + String::valueOf(objectID) + " template " + serverTemplate + ": " + e.getMessage());

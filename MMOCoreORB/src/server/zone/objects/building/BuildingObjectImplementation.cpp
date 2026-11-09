@@ -17,6 +17,7 @@
 #include "server/zone/packets/tangible/TangibleObjectMessage3.h"
 #include "server/zone/packets/tangible/TangibleObjectMessage6.h"
 #include "server/zone/packets/cell/UpdateCellPermissionsMessage.h"
+#include "server/zone/packets/scene/SceneObjectDestroyMessage.h"
 
 #include "server/zone/managers/structure/StructureManager.h"
 #include "server/zone/managers/stringid/StringIdManager.h"
@@ -180,7 +181,8 @@ void BuildingObjectImplementation::sendContainerObjectsTo(SceneObject* player, b
 void BuildingObjectImplementation::sendTo(SceneObject* player, bool doClose, bool forceLoadContainer) {
 	debug("building sendto..");
 
-	if (!isStaticBuilding()) { // send Baselines etc..
+	const bool sendNativePortal = forceSend && getPlanetCRC() == STRING_HASHCODE("mustafar");
+	if (!isStaticBuilding() || sendNativePortal) {
 		debug("sending building object create");
 
 		TangibleObjectImplementation::sendTo(player, doClose, forceLoadContainer);
@@ -190,7 +192,7 @@ void BuildingObjectImplementation::sendTo(SceneObject* player, bool doClose, boo
 	auto streamedCell = getStreamedPlayerCell(asBuildingObject(), player);
 	const auto* portalCell = streamedCell != nullptr ? getPortalCell(asBuildingObject(), streamedCell) : nullptr;
 
-	// The snapshot cells already exist on the client. Create the owner before their contents.
+	// Create the owner after the cells and before sending their contents.
 	if (streamedCell != nullptr && player->getMovementCounter() == 0)
 		player->sendTo(player, true, false);
 
@@ -427,6 +429,9 @@ void BuildingObjectImplementation::sendDestroyTo(SceneObject* player) {
 		debug("sending building object destroy");
 
 		SceneObjectImplementation::sendDestroyTo(player);
+	} else if (forceSend && getPlanetCRC() == STRING_HASHCODE("mustafar") && player != nullptr
+			&& player->getRootParent() != asBuildingObject()) {
+		player->sendMessage(new SceneObjectDestroyMessage(asSceneObject()));
 	}
 }
 
