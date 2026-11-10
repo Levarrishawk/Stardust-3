@@ -1,11 +1,8 @@
 -- moral_choice quest giver -- the mining corporation executive.
 --
--- SUBSTITUTED. som_kenobi_moral_choice_1.qst never names him (he is only a
--- conversation, never a task target), and no creature template of any executive
--- ships. The appearance is object/mobile/som/neimoidian.iff, which does ship and
--- is registered from object/custom_content/mobile/som/serverobjects.lua -- the
--- Neimoidians are the Trade Federation's corporate caste, and the existing
--- neimoidian template is left alone because it is generic population.
+-- Reuse the Mustafarian appearance worn by Urup Fal'co in the same room.
+-- The Neimoidian appearance references missing arm and body mesh generators,
+-- which make the client render the default appearance cube.
 --
 -- ATTACKABLE, not invulnerable, and no faction: nothing in the .qst kills him,
 -- but s_45 in his string table ("You have ruined me! I thought I could trust you,
@@ -39,7 +36,7 @@ som_kenobi_moral_exec = Creature:new {
 	optionsBitmask = AIENABLED + CONVERSABLE + INTERESTING,
 	diet = HERBIVORE,
 
-	templates = {"object/mobile/som/neimoidian.iff"},
+	templates = {"object/mobile/som/mustafarian_02.iff"},
 	lootGroups = {},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)
