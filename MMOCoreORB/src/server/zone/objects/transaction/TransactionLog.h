@@ -111,6 +111,7 @@ enum class TrxCode {
 	TRANSFERSTRUCT,             // Transfer Structure
 	VENDORLIFECYCLE,            // Vendor lifecycle (create/destroy)
 	VETERANREWARD,              // /claimveteranreward command
+	INSPIRATION,                // Entertainer Build-a-Buff cover charge
 };
 // clang-format on
 

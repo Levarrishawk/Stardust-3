@@ -996,6 +996,7 @@ const String TransactionLog::trxCodeToString(TrxCode code) {
 	case TrxCode::FORAGED:                  return "foraged";                   // Foraged items
 	case TrxCode::HARVESTED:                return "harvested";                 // Harvested items
 	case TrxCode::IMAGEDESIGN:              return "imagedesign";               // Image Design Fees
+	case TrxCode::INSPIRATION:              return "inspiration";               // Entertainer Build-a-Buff cover charge
 	case TrxCode::INSTANTBUY:               return "instantbuy";                // Instant Buy
 	case TrxCode::LOTTERYDROID:             return "lotterydroid";              // Lottery Droid
 	case TrxCode::LUASCRIPT:                return "luascript";                 // LUA Script

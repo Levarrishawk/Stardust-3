@@ -2,17 +2,22 @@
 
 #include <atomic>
 #include <ctime>
+#include <limits>
 
 #include "server/zone/ZoneServer.h"
 #include "server/zone/managers/collision/CollisionManager.h"
+#include "server/zone/managers/player/PlayerManager.h"
 #include "server/zone/managers/skill/PerformanceManager.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/creature/buffs/Buff.h"
 #include "server/zone/objects/creature/buffs/BuffType.h"
+#include "server/zone/objects/creature/credits/CreditObject.h"
 #include "server/zone/objects/player/sessions/EntertainingSession.h"
 #include "server/zone/objects/player/sessions/InspirationSession.h"
+#include "server/zone/objects/transaction/TransactionLog.h"
 #include "server/zone/packets/object/BuffBuilderChangeMessageCallback.h"
 #include "server/zone/packets/object/ObjectControllerMessage.h"
+#include "server/zone/packets/object/ShowFlyText.h"
 #include "templates/params/creature/CreatureAttribute.h"
 
 namespace {
@@ -20,6 +25,7 @@ namespace {
 constexpr int ATTENDANCE_TICK_MS = 10 * 1000;
 constexpr int DURATION_INCREMENT_SECONDS = 10 * 60;
 constexpr int MAX_DURATION_SECONDS = 5 * 60 * 60;
+constexpr int XP_PER_DURATION_INCREMENT = 100;
 // Leave time to offer a build after a patron reaches the five-minute attendance cap.
 constexpr int BUILD_TIMEOUT_SECONDS = 10 * 60;
 constexpr int OFFER_TIMEOUT_SECONDS = 30;
@@ -71,7 +77,7 @@ int getEarnedDuration(uint64 attendanceStart, uint64 now) {
 	const uint64 elapsed = now > attendanceStart ? now - attendanceStart : 0;
 	const uint64 ticks = Math::min(elapsed / ATTENDANCE_TICK_MS,
 			static_cast<uint64>(MAX_DURATION_SECONDS / DURATION_INCREMENT_SECONDS));
-	return ticks * DURATION_INCREMENT_SECONDS;
+	return static_cast<int>(ticks) * DURATION_INCREMENT_SECONDS;
 }
 
 bool getTerms(CreatureObject* performer, CreatureObject* patron, uint64& attendanceStart, int& points) {
@@ -121,7 +127,7 @@ void sendUpdate(CreatureObject* player, const InspirationState& state, bool repl
 	message->insertLong(state.performerID);
 	message->insertLong(state.patronID);
 	message->insertInt(state.token);
-	message->insertInt(0); // Cover charge
+	message->insertInt(cancel ? 0 : state.coverCharge);
 	message->insertByte(!cancel && state.offered ? 1 : 0);
 	message->insertInt(InspirationUpdate::SERVER);
 
@@ -190,18 +196,34 @@ void scheduleExpiry(CreatureObject* performer, CreatureObject* patron, int token
 	}, "InspirationExpiry", delay);
 }
 
-void scheduleDurationUpdate(CreatureObject* performer, CreatureObject* patron, const InspirationState& state) {
-	if (state.durationSeconds >= MAX_DURATION_SECONDS)
+String formatDurationIndicator(int duration) {
+	if (duration == MAX_DURATION_SECONDS)
+		return "Max Duration";
+
+	const int hours = duration / 3600;
+	const int minutes = (duration / 60) % 60;
+	StringBuffer text;
+	text << "Duration: ";
+	if (hours > 0)
+		text << hours << (hours == 1 ? " hour" : " hours");
+	if (hours > 0 && minutes > 0)
+		text << ", ";
+	if (minutes > 0)
+		text << minutes << " minutes";
+	return text.toString();
+}
+
+void scheduleDurationUpdate(CreatureObject* performer, CreatureObject* patron, uint64 attendanceStart, int previousDuration) {
+	if (previousDuration >= MAX_DURATION_SECONDS)
 		return;
 
 	const uint64 now = Time(Time::MONOTONIC_TIME).getMiliTime();
-	const uint64 nextTick = state.attendanceStart + (state.durationSeconds / DURATION_INCREMENT_SECONDS + 1) * ATTENDANCE_TICK_MS;
+	const uint64 nextTick = attendanceStart + (previousDuration / DURATION_INCREMENT_SECONDS + 1) * ATTENDANCE_TICK_MS;
 	const uint64 delay = nextTick > now ? nextTick - now : 1;
-	const int token = state.token;
 	WeakReference<CreatureObject*> weakPerformer = performer;
 	WeakReference<CreatureObject*> weakPatron = patron;
 
-	Core::getTaskManager()->scheduleTask([weakPerformer, weakPatron, token] {
+	Core::getTaskManager()->scheduleTask([weakPerformer, weakPatron, attendanceStart, previousDuration] {
 		ManagedReference<CreatureObject*> performer = weakPerformer.get();
 		ManagedReference<CreatureObject*> patron = weakPatron.get();
 		if (performer == nullptr || patron == nullptr)
@@ -210,26 +232,44 @@ void scheduleDurationUpdate(CreatureObject* performer, CreatureObject* patron, c
 		Locker performerLocker(performer);
 		Locker patronLocker(patron, performer);
 		ManagedReference<InspirationSession*> session = getSession(performer);
-		if (session == nullptr || session->getInspirationState()->token != token)
-			return;
+		if (session != nullptr) {
+			const InspirationState& state = *session->getInspirationState();
+			if (state.patronID != patron->getObjectID() || state.attendanceStart != attendanceStart)
+				session = nullptr;
+		}
 
-		InspirationState& state = *session->getInspirationState();
+		ManagedReference<EntertainingSession*> performance = performer->getActiveSession(SessionFacadeType::ENTERTAINING).castTo<EntertainingSession*>();
+		if (performance == nullptr || performance->getEntertainerBuffStartTime(patron) != attendanceStart
+				|| !Inspiration::isAudienceMember(performer, patron) || !performer->isOnline() || !patron->isOnline()) {
+			if (session != nullptr)
+				closeSession(performer, patron, session);
+			return;
+		}
+
+		const int duration = getEarnedDuration(attendanceStart, Time(Time::MONOTONIC_TIME).getMiliTime());
+		uint64 currentStart = attendanceStart;
 		int budget = 0;
-		if (getSession(patron) != session || time(nullptr) >= state.deadline
-				|| !getTerms(performer, patron, state.attendanceStart, budget)) {
-			closeSession(performer, patron, session);
-			return;
+		const bool eligible = getTerms(performer, patron, currentStart, budget);
+		if (eligible) {
+			for (int earned = previousDuration + DURATION_INCREMENT_SECONDS; earned <= duration; earned += DURATION_INCREMENT_SECONDS) {
+				auto* flyText = new ShowFlyText(patron, "", formatDurationIndicator(earned), 255, 182, 193, 0.66f, ShowFlyText::PRIVATE);
+				patron->sendMessage(flyText);
+			}
 		}
 
-		const int duration = getEarnedDuration(state.attendanceStart, Time(Time::MONOTONIC_TIME).getMiliTime());
-		if (duration != state.durationSeconds) {
-			state.durationSeconds = duration;
-			const bool replacing = patron->hasBuff(Inspiration::BUFF_CRC);
-			sendUpdate(performer, state, replacing);
-			sendUpdate(patron, state, replacing);
+		if (session != nullptr) {
+			InspirationState& state = *session->getInspirationState();
+			if (!eligible || getSession(patron) != session || time(nullptr) >= state.deadline) {
+				closeSession(performer, patron, session);
+			} else if (duration != state.durationSeconds) {
+				state.durationSeconds = duration;
+				const bool replacing = patron->hasBuff(Inspiration::BUFF_CRC);
+				sendUpdate(performer, state, replacing);
+				sendUpdate(patron, state, replacing);
+			}
 		}
 
-		scheduleDurationUpdate(performer, patron, state);
+		scheduleDurationUpdate(performer, patron, attendanceStart, duration);
 	}, "InspirationDuration", delay);
 }
 
@@ -291,6 +331,54 @@ void applyBuff(CreatureObject* patron, const InspirationState& state) {
 	patron->removeBuff(STRING_HASHCODE("performance_enhance_music_willpower"));
 }
 
+bool grantInspiration(CreatureObject* performer, CreatureObject* patron, const InspirationState& state) {
+	const int price = state.coverCharge;
+	if (price == 0) {
+		applyBuff(patron, state);
+		return true;
+	}
+
+	ManagedReference<CreditObject*> payer = patron->getCreditObject();
+	ManagedReference<CreditObject*> payee = performer->getCreditObject();
+	if (payer == nullptr || payee == nullptr) {
+		patron->sendSystemMessage("The Inspiration cover charge could not be processed.");
+		performer->sendSystemMessage("The Inspiration cover charge could not be processed.");
+		return false;
+	}
+
+	Locker payerLocker(payer);
+	Locker payeeLocker(payee, payer);
+	// Use the bank first, as DSRC does, and keep each balance within the credit cap.
+	const int bankDebit = Math::min(price, payer->getBankCredits());
+	const int cashDebit = price - bankDebit;
+	if (cashDebit > payer->getCashCredits()) {
+		patron->sendSystemMessage("You do not have enough credits to pay the Inspiration cover charge.");
+		performer->sendSystemMessage(patron->getFirstName() + " cannot afford the Inspiration cover charge.");
+		return false;
+	}
+
+	const int bankRoom = Math::max(0, CreditObject::CREDITCAP - payee->getBankCredits());
+	const int bankDeposit = Math::min(price, bankRoom);
+	const int cashDeposit = price - bankDeposit;
+	const int cashRoom = Math::max(0, CreditObject::CREDITCAP - payee->getCashCredits());
+	if (cashDeposit > cashRoom) {
+		patron->sendSystemMessage("The entertainer cannot receive the full Inspiration cover charge.");
+		performer->sendSystemMessage("Your balances are too high to receive the full Inspiration cover charge.");
+		return false;
+	}
+
+	applyBuff(patron, state);
+
+	TransactionLog payment(patron, performer, TrxCode::INSPIRATION, price, false);
+	payment.addState("cashDebit", cashDebit);
+	payment.addState("cashDeposit", cashDeposit);
+	payer->subtractBankCredits(bankDebit);
+	payer->subtractCashCredits(cashDebit);
+	payee->addBankCredits(bankDeposit);
+	payee->addCashCredits(cashDeposit);
+	return true;
+}
+
 }
 
 bool Inspiration::isAudienceMember(CreatureObject* performer, CreatureObject* patron) {
@@ -341,7 +429,6 @@ void Inspiration::open(CreatureObject* performer, CreatureObject* patron) {
 	sendUpdate(performer, state, replacing);
 	sendUpdate(patron, state, replacing);
 	scheduleExpiry(performer, patron, state.token, false);
-	scheduleDurationUpdate(performer, patron, state);
 }
 
 void Inspiration::handleUpdate(CreatureObject* player, const InspirationUpdate& update, bool cancel) {
@@ -392,21 +479,35 @@ void Inspiration::handleUpdate(CreatureObject* player, const InspirationUpdate& 
 	const int duration = getEarnedDuration(state.attendanceStart, Time(Time::MONOTONIC_TIME).getMiliTime());
 	const bool replacing = patron->hasBuff(BUFF_CRC);
 	if (state.offered) {
-		if (fromPerformer || !update.accepted || !update.valid || update.ranks != state.ranks) {
+		if (fromPerformer || !update.accepted || !update.valid || update.ranks != state.ranks || update.coverCharge != state.coverCharge) {
 			sendUpdate(player, state, replacing);
 			return;
 		}
 
 		if (pointsSpent(state.ranks) > budget || duration == 0) {
+			closeSession(performer, patron, session);
 			patron->sendSystemMessage("The performer can no longer grant the offered Inspiration.");
-		} else {
-			state.durationSeconds = duration;
-			applyBuff(patron, state);
+			return;
+		}
+
+		state.durationSeconds = duration;
+		bool granted;
+		try {
+			granted = grantInspiration(performer, patron, state);
+		} catch (...) {
+			closeSession(performer, patron, session);
+			throw;
+		}
+		closeSession(performer, patron, session);
+		if (granted) {
+			auto playerManager = zoneServer->getPlayerManager();
+			const int healingXp = (duration / DURATION_INCREMENT_SECONDS) * XP_PER_DURATION_INCREMENT;
+			if (playerManager != nullptr)
+				playerManager->awardExperience(performer, "entertainer_healing", healingXp, true, 1.0f, false);
+
 			patron->sendSystemMessage("You accepted Inspiration from " + performer->getFirstName() + ".");
 			performer->sendSystemMessage(patron->getFirstName() + " accepted your Inspiration.");
 		}
-
-		closeSession(performer, patron, session);
 		return;
 	}
 
@@ -424,6 +525,7 @@ void Inspiration::handleUpdate(CreatureObject* player, const InspirationUpdate& 
 		performer->sendSystemMessage("Choose valid effects within the available Inspiration points before offering a build.");
 	} else {
 		state.ranks = update.ranks;
+		state.coverCharge = update.coverCharge;
 		if (update.accepted && duration == 0) {
 			performer->sendSystemMessage("Your patron must watch or listen for 10 seconds before you can offer Inspiration.");
 		} else if (update.accepted) {
@@ -435,6 +537,11 @@ void Inspiration::handleUpdate(CreatureObject* player, const InspirationUpdate& 
 
 	sendUpdate(performer, state, replacing);
 	sendUpdate(patron, state, replacing);
+}
+
+void Inspiration::attendanceStarted(CreatureObject* performer, CreatureObject* patron, uint64 attendanceStart) {
+	if (performer->isPlayerCreature() && patron->isPlayerCreature())
+		scheduleDurationUpdate(performer, patron, attendanceStart, 0);
 }
 
 void Inspiration::attendanceEnded(CreatureObject* performer, CreatureObject* patron) {
@@ -456,7 +563,10 @@ void BuffBuilderChangeMessageCallback::parse(Message* message) {
 	update.performerID = message->parseLong();
 	update.patronID = message->parseLong();
 	update.token = message->parseInt();
-	const int cover = message->parseInt();
+	const uint32 coverCharge = message->parseInt();
+	const bool validCoverCharge = coverCharge <= static_cast<uint32>(std::numeric_limits<int>::max());
+	if (validCoverCharge)
+		update.coverCharge = static_cast<int>(coverCharge);
 	const uint8 accepted = message->parseByte();
 	update.accepted = accepted == 1;
 	update.origin = message->parseInt();
@@ -464,7 +574,7 @@ void BuffBuilderChangeMessageCallback::parse(Message* message) {
 	if (count < 0 || count > EFFECT_COUNT)
 		return;
 
-	update.valid = cover == 0 && accepted <= 1;
+	update.valid = validCoverCharge && accepted <= 1;
 	for (int i = 0; i < count; ++i) {
 		if (message->size() - message->getOffset() < 2)
 			return;

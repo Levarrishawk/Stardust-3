@@ -29,6 +29,7 @@ struct InspirationState {
 	uint64 attendanceStart = 0;
 	int points = 0;
 	int durationSeconds = 0;
+	int coverCharge = 0;
 	time_t deadline = 0;
 	bool offered = false;
 	Ranks ranks{};
@@ -45,6 +46,7 @@ struct InspirationUpdate {
 	uint64 patronID = 0;
 	int token = 0;
 	int origin = SERVER;
+	int coverCharge = 0;
 	bool accepted = false;
 	bool valid = false;
 	InspirationState::Ranks ranks{};

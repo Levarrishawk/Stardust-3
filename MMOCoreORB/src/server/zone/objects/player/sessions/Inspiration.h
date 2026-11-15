@@ -34,6 +34,8 @@ bool isAudienceMember(server::zone::objects::creature::CreatureObject* performer
 void open(server::zone::objects::creature::CreatureObject* performer,
 		server::zone::objects::creature::CreatureObject* patron);
 void handleUpdate(server::zone::objects::creature::CreatureObject* player, const InspirationUpdate& update, bool cancel);
+void attendanceStarted(server::zone::objects::creature::CreatureObject* performer,
+		server::zone::objects::creature::CreatureObject* patron, uint64 attendanceStart);
 // Called with the performer and patron locked.
 void attendanceEnded(server::zone::objects::creature::CreatureObject* performer,
 		server::zone::objects::creature::CreatureObject* patron);

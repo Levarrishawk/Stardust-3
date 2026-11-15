@@ -1076,6 +1076,10 @@ void EntertainingSessionImplementation::addPatron(CreatureObject* patron) {
 	EntertainingData data;
 
 	patronDataMap.put(patron, data);
+
+	ManagedReference<CreatureObject*> performer = entertainer.get();
+	if (performer != nullptr)
+		Inspiration::attendanceStarted(performer, patron, data.getTimeStarted());
 }
 
 
