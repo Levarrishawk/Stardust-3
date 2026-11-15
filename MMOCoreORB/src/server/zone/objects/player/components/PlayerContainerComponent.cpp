@@ -9,10 +9,7 @@
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/objects/player/FactionStatus.h"
-#include "server/zone/objects/tangible/wearables/ArmorObject.h"
 #include "server/zone/objects/tangible/weapon/WeaponObject.h"
-#include "server/zone/managers/player/PlayerManager.h"
-#include "server/zone/ZoneServer.h"
 #include "server/zone/managers/visibility/VisibilityManager.h"
 
 int PlayerContainerComponent::canAddObject(SceneObject* sceneObject, SceneObject* object, int containmentType, String& errorDescription) const {
@@ -51,16 +48,6 @@ int PlayerContainerComponent::canAddObject(SceneObject* sceneObject, SceneObject
 
 					return TransferErrorCode::PLAYERUSEMASKERROR;
 				}
-			}
-		}
-
-		if (object->isArmorObject()) {
-			PlayerManager* playerManager = sceneObject->getZoneServer()->getPlayerManager();
-
-			if (!playerManager->checkEncumbrancies(creo, cast<ArmorObject*>(object))) {
-				errorDescription = "You lack the necessary secondary stats to equip this item";
-
-				return TransferErrorCode::NOTENOUGHENCUMBRANCE;
 			}
 		}
 
@@ -122,11 +109,6 @@ int PlayerContainerComponent::notifyObjectInserted(SceneObject* sceneObject, Sce
 		return 0;
 	}
 
-	if (object->isArmorObject()) {
-		PlayerManager* playerManager = sceneObject->getZoneServer()->getPlayerManager();
-		playerManager->applyEncumbrancies(creo, cast<ArmorObject*>(object));
-	}
-
 	if (object->isTangibleObject()) {
 		ManagedReference<TangibleObject*> tano = object->asTangibleObject();
 
@@ -178,11 +160,6 @@ int PlayerContainerComponent::notifyObjectRemoved(SceneObject* sceneObject, Scen
 
 	if (creo == nullptr) {
 		return 0;
-	}
-
-	if (object->isArmorObject()) {
-		PlayerManager* playerManager = creo->getZoneServer()->getPlayerManager();
-		playerManager->removeEncumbrancies(creo, cast<ArmorObject*>(object));
 	}
 
 	if (object->isTangibleObject()) {

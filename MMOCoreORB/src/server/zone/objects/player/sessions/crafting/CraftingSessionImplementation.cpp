@@ -466,6 +466,8 @@ bool CraftingSessionImplementation::createPrototypeObject(DraftSchematic* drafts
 	}
 
 	Locker locker(strongPrototype);
+	if (strongPrototype->isArmorObject())
+		strongPrototype->setCraftersID(crafter->getObjectID());
 
 	strongPrototype->createChildObjects();
 

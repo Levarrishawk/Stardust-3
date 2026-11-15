@@ -618,57 +618,26 @@ void SlicingSessionImplementation::handleArmorSlice() {
 	if (tangibleObject == nullptr || player == nullptr)
 		return;
 
-	uint8 sliceType = System::random(1);
 	int sliceSkill = getSlicingSkill(player);
 	uint8 min = 0;
 	uint8 max = 0;
 
 	switch (sliceSkill) {
 	case 5:
-		min += (sliceType == 0) ? 6 : 5;
+		min += 6;
 		max += 5;
 	case 4:
-		min += (sliceType == 0) ? 0 : 10;
 		max += 10;
 	case 3:
 		min += 5;
-		max += (sliceType == 0) ? 20 : 30;
+		max += 20;
 		break;
 	default:
 		return;
 	}
 
 	uint8 percent = System::random(max - min) + min;
-
-	switch (sliceType) {
-	case 0:
-		handleSliceEffectiveness(percent);
-		break;
-	case 1:
-		handleSliceEncumbrance(percent);
-		break;
-	}
-}
-
-void SlicingSessionImplementation::handleSliceEncumbrance(uint8 percent) {
-	ManagedReference<CreatureObject*> player = this->player.get();
-	ManagedReference<TangibleObject*> tangibleObject = this->tangibleObject.get();
-
-	if (tangibleObject == nullptr || player == nullptr || !tangibleObject->isArmorObject())
-		return;
-
-	ArmorObject* armor = cast<ArmorObject*>(tangibleObject.get());
-
-	Locker locker(armor);
-
-	armor->setEncumbranceSlice(percent / 100.f);
-	armor->setSliced(true);
-
-	StringIdChatParameter params;
-	params.setDI(percent);
-	params.setStringId("@slicing/slicing:enc_mod");
-
-	player->sendSystemMessage(params);
+	handleSliceEffectiveness(percent);
 }
 
 void SlicingSessionImplementation::handleSliceEffectiveness(uint8 percent) {

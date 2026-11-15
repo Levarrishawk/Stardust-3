@@ -12,7 +12,6 @@ include server.zone.packets.charcreation.ClientCreateCharacterCallback;
 import server.zone.objects.tangible.TangibleObject;
 import engine.core.ManagedObject;
 import server.zone.ZoneServer;
-import server.zone.objects.tangible.wearables.ArmorObject;
 import engine.util.Observer;
 import engine.util.Observable;
 import server.zone.objects.player.PlayerObject;
@@ -209,12 +208,6 @@ class PlayerManager extends Observer implements Logger {
 	 */
 	public native byte calculateIncapacitationTimer(CreatureObject player, int condition);
 
-	/**
-	 * Check for enough encumbrances
-	 */
-	public native boolean checkEncumbrancies(CreatureObject player, ArmorObject armor);
-	public native void applyEncumbrancies(CreatureObject player, ArmorObject armor);
-	public native void removeEncumbrancies(CreatureObject player, ArmorObject armor);
 	public native void awardBadge(PlayerObject ghost, unsigned int badge);
 	@local
 	public native void awardBadge(PlayerObject ghost, final Badge badge);

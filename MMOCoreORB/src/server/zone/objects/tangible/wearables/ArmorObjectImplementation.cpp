@@ -28,10 +28,6 @@ void ArmorObjectImplementation::loadTemplateData(SharedObjectTemplate* templateD
 
 	specialResists = armorTemplate->getSpecialResists();
 
-	healthEncumbrance = armorTemplate->getHealthEncumbrance();
-	actionEncumbrance = armorTemplate->getActionEncumbrance();
-	mindEncumbrance = armorTemplate->getMindEncumbrance();
-
 	rating = armorTemplate->getRating();
 
 	kinetic = armorTemplate->getKinetic();
@@ -61,6 +57,11 @@ void ArmorObjectImplementation::loadTemplateData(SharedObjectTemplate* templateD
 
 void ArmorObjectImplementation::notifyLoadFromDatabase() {
 	WearableObjectImplementation::notifyLoadFromDatabase();
+
+	healthEncumbrance = 0;
+	actionEncumbrance = 0;
+	mindEncumbrance = 0;
+	encumbranceSlice = 1;
 
 	if (templateObject == nullptr)
 		return;
@@ -280,30 +281,29 @@ bool ArmorObjectImplementation::isVulnerable(int type) const {
 }
 
 float ArmorObjectImplementation::getTypeValue(int type, float value) const {
-	int newValue = 0;
+	const bool crafted = craftersID != 0 || !craftersName.isEmpty();
+	const int resistanceCap = crafted ? 70 : 80;
 
-	if (vulnerabilites & type)
-		newValue = value;
-
-	else if (isSpecial(type)) {
-		newValue = specialProtection + value;
-
-		if (newValue > 80)
-			newValue = 80;
-	} else {
-		newValue = baseProtection + value;
-		newValue *= effectivenessSlice;
-
-		if(sliced && effectivenessSlice > 1) {
-			if(newValue > 90)
-				newValue = 90;
-		} else {
-			if(newValue > 80)
-				newValue = 80;
-		}
+	if (vulnerabilites & type) {
+		int resistance = value;
+		return crafted ? Math::min(resistance, resistanceCap) : resistance;
 	}
 
-	return newValue;
+	if (isSpecial(type)) {
+		int resistance = specialProtection + value;
+		return Math::min(resistance, resistanceCap);
+	}
+
+	int resistance = baseProtection + value;
+	if (crafted)
+		resistance = Math::min(resistance, resistanceCap);
+
+	resistance *= effectivenessSlice;
+
+	if (sliced && effectivenessSlice > 1)
+		return Math::min(resistance, crafted ? 75 : 90);
+
+	return Math::min(resistance, resistanceCap);
 }
 
 int ArmorObjectImplementation::handleObjectMenuSelect(CreatureObject* player, byte selectedID) {
@@ -362,7 +362,6 @@ void ArmorObjectImplementation::updateCraftingValues(CraftingValues* values, boo
 		baseProtection = 0;
 		specialProtection = 0;
 		effectivenessSlice = 1;
-		encumbranceSlice = 1;
 
 		calculateSpecialProtection(values);
 
@@ -374,16 +373,15 @@ void ArmorObjectImplementation::updateCraftingValues(CraftingValues* values, boo
 		setRating(armorRating);
 
 		setConditionDamage(0);
+
+		const char* encumbranceAttributes[] = {
+			"armor_health_encumbrance", "armor_action_encumbrance", "armor_mind_encumbrance"
+		};
+		for (const char* attribute : encumbranceAttributes) {
+			values->setCurrentValue(attribute, 0.f, 0.f, 0.f);
+			values->setCurrentPercentage(attribute, 0.f, 0.f);
+		}
 	}
-
-	int healthEncum = values->getCurrentValue("armor_health_encumbrance");
-	setHealthEncumbrance((healthEncum < 0) ? 0 : healthEncum);
-
-	int actionEncum = values->getCurrentValue("armor_action_encumbrance");
-	setActionEncumbrance((actionEncum < 0) ? 0 : actionEncum);
-
-	int mindEncum = values->getCurrentValue("armor_mind_encumbrance");
-	setMindEncumbrance((mindEncum < 0) ? 0 : mindEncum);
 
 	int maxCond = values->getCurrentValue("armor_integrity");
 
