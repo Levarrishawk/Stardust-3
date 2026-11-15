@@ -367,6 +367,7 @@ class PlayerObject extends IntangibleObject {
 
 		cloningFacility = 0;
 		isPlayerCloning = false;
+		resetCloneCounter();
 
 		skillPoints = 0;
 
@@ -1220,8 +1221,8 @@ class PlayerObject extends IntangibleObject {
 		return incapacitationTimes.size();
 	}
 	
-	byte cloneCounter = 0;
-	unsigned int cloneReplenishmentTime = 0;
+	byte cloneCounter;
+	unsigned int cloneReplenishmentTime;
 
 	private native void replenishClones(unsigned int now);
 
