@@ -3494,6 +3494,9 @@ bool CreatureObjectImplementation::isAggressiveTo(TangibleObject* target) {
 		if (ghost->isOnLoadScreen())
 			return false;
 
+		uint32 thisFaction = getFaction();
+		uint32 targetFaction = target->getFaction();
+
 		if (tarCreo->isPlayerCreature()) {
 			Zone* thisZone = getZone();
 			Zone* targetZone = tarCreo->getZone();
@@ -3501,14 +3504,14 @@ bool CreatureObjectImplementation::isAggressiveTo(TangibleObject* target) {
 			if ((thisZone != nullptr && (thisZone->getZoneName() == "elysium" || thisZone->getZoneName() == "elysium2")) ||
 					(targetZone != nullptr && (targetZone->getZoneName() == "elysium" || targetZone->getZoneName() == "elysium2")))
 				return false;
+
+			// Apply free-for-all faction protection before personal enemy flags.
+			if (thisFaction != 0 && thisFaction == targetFaction && ConfigManager::instance()->getPvpMode())
+				return false;
 		}
 
 		if (hasPersonalEnemyFlag(tarCreo) && tarCreo->hasPersonalEnemyFlag(asCreatureObject()))
 			return true;
-
-		// Get factions
-		uint32 thisFaction = getFaction();
-		uint32 targetFaction = target->getFaction();
 
 		if (ghost->hasCrackdownTefTowards(thisFaction)) {
 			return true;
@@ -3784,12 +3787,15 @@ bool CreatureObjectImplementation::isAttackableBy(CreatureObject* creature, bool
 			if (zone != nullptr && (zone->getZoneName() == "elysium" || zone->getZoneName() == "elysium2"))
 				return false;
 
-			// PvP Mode Config active, players outside the same group and guild are attackable
+			// Free-for-all protects players who share a group, guild, or faction.
 			if (ConfigManager::instance()->getPvpMode()) {
 				if (getGroupID() != 0 && getGroupID() == creature->getGroupID())
 					return false;
 
 				if (getGuildID() != 0 && getGuildID() == creature->getGuildID())
+					return false;
+
+				if (thisFaction != 0 && thisFaction == creatureFaction)
 					return false;
 
 				if (ghost->isLinkDead() &&

@@ -1,5 +1,5 @@
 elysiumGuardianConvoHandler = conv_handler:new {
-	waitSeconds = 30 * 24 * 60 * 60,
+	waitSeconds = 24 * 60 * 60,
 }
 
 function elysiumGuardianConvoHandler:isPrivileged(pPlayer)

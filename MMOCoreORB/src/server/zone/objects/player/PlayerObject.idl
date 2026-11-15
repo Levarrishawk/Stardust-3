@@ -1221,22 +1221,21 @@ class PlayerObject extends IntangibleObject {
 	}
 	
 	byte cloneCounter = 0;
-	
-	public byte getCloneCounter() {
-		return cloneCounter;
-	}
-	
-	public void addCloneCounter() {
-		cloneCounter++;
-	}	
+	unsigned int cloneReplenishmentTime = 0;
 
-	public void setCloneCounter(byte count) {
-		cloneCounter = count;
-	}
-	
+	private native void replenishClones(unsigned int now);
+
+	public native byte getCloneCounter();
+
+	public native void addCloneCounter();
+
+	public native void setCloneCounter(byte count);
+
 	public void resetCloneCounter() {
-		cloneCounter = 0;}
-	
+		cloneCounter = 0;
+		cloneReplenishmentTime = 0;
+	}
+
 	public void resetIncapacitationTimes() {
 		incapacitationTimes.removeAll();
 	}

@@ -1672,6 +1672,56 @@ void PlayerObjectImplementation::setTitle(const String& characterTitle, bool not
 	}
 }
 
+void PlayerObjectImplementation::replenishClones(uint32 now) {
+	if (cloneCounter == 0)
+		return;
+
+	// Existing characters start their first interval when the timestamp is initialized.
+	if (cloneReplenishmentTime == 0)
+		cloneReplenishmentTime = now;
+
+	if (now <= cloneReplenishmentTime)
+		return;
+
+	const uint32 replenishmentInterval = 14 * 24 * 60 * 60;
+	const uint32 replenished = (now - cloneReplenishmentTime) / replenishmentInterval;
+	if (replenished >= cloneCounter) {
+		resetCloneCounter();
+		return;
+	}
+
+	cloneCounter -= static_cast<byte>(replenished);
+	cloneReplenishmentTime += replenished * replenishmentInterval;
+}
+
+byte PlayerObjectImplementation::getCloneCounter() {
+	replenishClones(Time().getTime());
+	return cloneCounter;
+}
+
+void PlayerObjectImplementation::addCloneCounter() {
+	const auto now = Time().getTime();
+	replenishClones(now);
+	if (cloneCounter == 0)
+		cloneReplenishmentTime = now;
+
+	++cloneCounter;
+}
+
+void PlayerObjectImplementation::setCloneCounter(byte count) {
+	if (count == 0) {
+		resetCloneCounter();
+		return;
+	}
+
+	const auto now = Time().getTime();
+	replenishClones(now);
+	if (cloneCounter == 0)
+		cloneReplenishmentTime = now;
+
+	cloneCounter = count;
+}
+
 void PlayerObjectImplementation::notifyOnline() {
 	ManagedReference<SceneObject*> parent = getParent().get();
 
@@ -1684,6 +1734,8 @@ void PlayerObjectImplementation::notifyOnline() {
 	if (playerCreature == nullptr) {
 		return;
 	}
+
+	replenishClones(Time().getTime());
 
 	miliSecsSession = 0;
 
