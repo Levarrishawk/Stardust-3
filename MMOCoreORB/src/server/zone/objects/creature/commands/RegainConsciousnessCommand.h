@@ -5,6 +5,7 @@
 #ifndef REGAINCONSCIOUSNESSCOMMAND_H_
 #define REGAINCONSCIOUSNESSCOMMAND_H_
 
+#include "server/zone/Zone.h"
 #include "server/zone/ZoneServer.h"
 #include "server/zone/managers/player/PlayerManager.h"
 
@@ -26,9 +27,32 @@ public:
 		// They should be dead...
 		if (creature->isDead()){
 
+			ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
+			Zone* zone = creature->getZone();
+			if (playerObject == nullptr || zone == nullptr)
+				return GENERALERROR;
+
 			int res = doCommonJediSelfChecks(creature);
 			if(res != SUCCESS)
 				return res;
+
+			Locker cooldownLocker(playerObject);
+			const uint64 now = Time().getMiliTime();
+			const uint64 expiresAt = UnsignedLong::valueOf(playerObject->getScreenPlayData(name, "cooldownExpiresAt"));
+			if (now < expiresAt) {
+				const uint64 minutesRemaining = (expiresAt - now + 59999) / 60000;
+				creature->sendSystemMessage("Regain Consciousness is on cooldown for another " + String::valueOf(minutesRemaining) + " min.");
+				return GENERALERROR;
+			}
+
+			const uint64 cooldownDuration = 24 * 60 * 60 * 1000;
+			playerObject->setScreenPlayData(name, "cooldownExpiresAt", String::valueOf(now + cooldownDuration));
+			cooldownLocker.release();
+
+			if (zone->getZoneName() != "mortis" && System::random(3) != 0) {
+				creature->sendSystemMessage("Regain Consciousness failed. You can try again in 24 hours.");
+				return GENERALERROR;
+			}
 
 			doForceCost(creature);
 
@@ -50,8 +74,6 @@ public:
 			// Add buffs to creature
 			creature->addBuff(groggyDebuff);
 			creature->addBuff(regenDebuff);
-
-			ManagedReference<PlayerObject*> playerObject = creature->getPlayerObject();
 
 			//close clone window
 			playerObject->removeSuiBoxType(SuiWindowType::CLONE_REQUEST);
