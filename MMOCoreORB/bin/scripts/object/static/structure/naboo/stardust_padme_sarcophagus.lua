@@ -1,0 +1,4 @@
+object_static_structure_naboo_stardust_padme_sarcophagus = object_static_structure_naboo_shared_stardust_padme_sarcophagus:new {
+}
+
+ObjectTemplates:addTemplate(object_static_structure_naboo_stardust_padme_sarcophagus, "object/static/structure/naboo/stardust_padme_sarcophagus.iff")

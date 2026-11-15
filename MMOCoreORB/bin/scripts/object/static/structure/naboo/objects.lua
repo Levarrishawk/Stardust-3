@@ -4988,6 +4988,12 @@ object_static_structure_naboo_shared_seawall_straight_naboo_theed_style_4 = Shar
 
 ObjectTemplates:addClientTemplate(object_static_structure_naboo_shared_seawall_straight_naboo_theed_style_4, "object/static/structure/naboo/shared_seawall_straight_naboo_theed_style_4.iff")
 
+object_static_structure_naboo_shared_stardust_padme_sarcophagus = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/naboo/shared_stardust_padme_sarcophagus.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_static_structure_naboo_shared_stardust_padme_sarcophagus, "object/static/structure/naboo/shared_stardust_padme_sarcophagus.iff")
+
 object_static_structure_naboo_shared_street_bridge_s01 = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/static/structure/naboo/shared_street_bridge_s01.iff"
 	--Data below here is deprecated and loaded from the tres, keeping for easy lookups
