@@ -136,7 +136,8 @@ class EntertainingSession extends Facade {
 
 	public native int getEntertainerBuffStrength(CreatureObject creature, int performanceType);
 	public native int getEntertainerBuffDuration(CreatureObject creature, int performanceType);
-	public native int getEntertainerBuffStartTime(CreatureObject creature, int performanceType);
+	// Monotonic timestamp in milliseconds for the start of the current watch or listen.
+	public native unsigned long getEntertainerBuffStartTime(CreatureObject creature);
 
 	public native void sendEntertainingUpdate(CreatureObject creature, int performanceType, boolean startPerformance);
 	public native void sendEntertainmentUpdate(CreatureObject creature, unsigned long entid, final string mood);

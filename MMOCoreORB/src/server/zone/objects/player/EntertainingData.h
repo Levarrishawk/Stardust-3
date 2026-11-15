@@ -13,12 +13,12 @@
 class EntertainingData : public Serializable {
 	int duration;
 	int strength;
-	int timeStarted;
+	uint64 timeStarted;
 public:
 	EntertainingData() {
 		duration = 0;
 		strength = 0;
-		timeStarted = time(0);
+		timeStarted = Time(Time::MONOTONIC_TIME).getMiliTime();
 		addSerializableVariables();
 	}
 
@@ -53,7 +53,7 @@ public:
 	inline int getStrength() {
 		return strength;
 	}
-	inline int getTimeStarted() {
+	inline uint64 getTimeStarted() {
 		return timeStarted;
 	}
 	inline void setStrength(int str) {

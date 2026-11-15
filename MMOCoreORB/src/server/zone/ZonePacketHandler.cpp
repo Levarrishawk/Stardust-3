@@ -47,6 +47,7 @@
 #include "packets/object/CraftingCustomizationCallback.h"
 #include "packets/object/ImageDesignRejectMessageCallback.h"
 #include "packets/object/ImageDesignChangeMessageCallback.h"
+#include "packets/object/BuffBuilderChangeMessageCallback.h"
 #include "packets/object/LotteryWindowCallback.h"
 
 #include "packets/ship/ShipUpdateTransformCallback.h"
@@ -210,6 +211,8 @@ void ZonePacketHandler::registerObjectControllerMessages() {
 	objectMessageControllerFactory->registerObject<CraftingCustomizationCallback>(0x15A);
 	objectMessageControllerFactory->registerObject<ImageDesignChangeMessageCallback>(0x238);
 	objectMessageControllerFactory->registerObject<ImageDesignRejectMessageCallback>(0x239);
+	objectMessageControllerFactory->registerObject<BuffBuilderChangeMessageCallback>(Inspiration::CHANGE_MESSAGE);
+	objectMessageControllerFactory->registerObject<BuffBuilderChangeMessageCallback>(Inspiration::CANCEL_MESSAGE);
 	objectMessageControllerFactory->registerObject<LotteryWindowCallback>(0x43f);
 
 	// Space Callbacks

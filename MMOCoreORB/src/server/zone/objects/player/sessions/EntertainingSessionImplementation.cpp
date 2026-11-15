@@ -6,6 +6,7 @@
  */
 
 #include "server/zone/objects/player/sessions/EntertainingSession.h"
+#include "server/zone/objects/player/sessions/Inspiration.h"
 #include "server/zone/managers/skill/SkillManager.h"
 #include "server/zone/managers/skill/Performance.h"
 #include "server/zone/managers/skill/PerformanceManager.h"
@@ -779,7 +780,7 @@ int EntertainingSessionImplementation::getEntertainerBuffStrength(CreatureObject
 	return data->getStrength();
 }
 
-int EntertainingSessionImplementation::getEntertainerBuffStartTime(CreatureObject* creature, int performanceType) {
+uint64 EntertainingSessionImplementation::getEntertainerBuffStartTime(CreatureObject* creature) {
 	if (!patronDataMap.contains(creature))
 		return 0;
 
@@ -901,9 +902,6 @@ void EntertainingSessionImplementation::increaseEntertainerBuff(CreatureObject* 
 
 	if (isInDenyServiceList(patron))
 		return;
-
-	float buffAcceleration = 1 + ((float)entertainer->getSkillMod("accelerate_entertainer_buff") / 100.f);
-	addEntertainerBuffDuration(patron, performance->getType(), 2.0f * buffAcceleration);
 
 	ManagedReference<PlayerObject*> entPlayer = entertainer->getPlayerObject();
 	// Preserve how the legacy target selection earns entertainer healing XP.
@@ -1086,6 +1084,10 @@ void EntertainingSessionImplementation::removePatron(CreatureObject* patron) {
 		return;
 
 	patronDataMap.drop(patron);
+
+	ManagedReference<CreatureObject*> performer = entertainer.get();
+	if (performer != nullptr)
+		Inspiration::attendanceEnded(performer, patron);
 }
 
 bool EntertainingSessionImplementation::isPlayingMusic() {
