@@ -45,6 +45,7 @@ object_tangible_deed_player_house_deed_generic_medium_window_s02_deed = object_t
 	templateType = STRUCTUREDEED,
 	placeStructureComponent = "PlaceStructureComponent",
 	generatedObjectTemplate = "object/building/player/generic_medium_window_s02.iff",
+	craftingPreviewTemplate = "object/tangible/deed/player_house_deed/shared_generic_medium_window_s02_deed_paint_preview.iff",
 }
 
 ObjectTemplates:addTemplate(object_tangible_deed_player_house_deed_generic_medium_window_s02_deed, "object/tangible/deed/player_house_deed/generic_medium_window_s02_deed.iff")

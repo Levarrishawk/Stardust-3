@@ -45,6 +45,7 @@ object_tangible_deed_player_house_deed_tatooine_small_window_s01_deed = object_t
 	templateType = STRUCTUREDEED,
 	placeStructureComponent = "PlaceStructureComponent",
 	generatedObjectTemplate = "object/building/player/tatooine_small_window_s01.iff",
+	craftingPreviewTemplate = "object/tangible/deed/player_house_deed/shared_tatooine_small_window_s01_deed_paint_preview.iff",
 }
 
 ObjectTemplates:addTemplate(object_tangible_deed_player_house_deed_tatooine_small_window_s01_deed, "object/tangible/deed/player_house_deed/tatooine_small_window_s01_deed.iff")

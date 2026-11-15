@@ -32,6 +32,7 @@
 #include "server/zone/objects/creature/commands/CombatQueueCommand.h"
 #include "server/zone/objects/creature/commands/SquadLeaderCommand.h"
 #include "server/zone/objects/creature/commands/ForceHealQueueCommand.h"
+#include "server/zone/objects/creature/commands/InspireCommand.h"
 #include "server/zone/objects/creature/commands/JediQueueCommand.h"
 #include "server/zone/objects/creature/commands/effect/StateEffect.h"
 #include "server/zone/objects/creature/commands/effect/DotEffect.h"
@@ -343,6 +344,8 @@ void CommandConfigManager::registerSpecialCommands(CommandList* sCommands) {
 
 	QueueCommand* admin = new AdminCommand("admin", server);
 	slashCommands->put(admin);
+
+	createCommand("inspire");
 
 	// Fri Oct  7 17:09:26 PDT 2011 - Karl Bunch <karlbunch@karlbunch.com>
 	// Turns out this isn't in the base datatables/command/command_tables_shared.iff file
@@ -861,6 +864,8 @@ void CommandConfigManager::registerCommands() {
 	registerCommands2();
 	registerCommands3();
 	registerCommands4();
+
+	commandFactory.registerCommand<InspireCommand>("inspire");
 
 	//Space Commands
 	commandFactory.registerCommand<CommCommand>(String("comm").toLowerCase());

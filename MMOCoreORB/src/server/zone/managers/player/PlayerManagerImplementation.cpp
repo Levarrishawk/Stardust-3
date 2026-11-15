@@ -28,7 +28,7 @@
 #include "server/zone/packets/chat/ChatRoomMessage.h"
 #include "server/zone/managers/objectcontroller/ObjectController.h"
 #include "server/zone/managers/combat/CombatManager.h"
-#include "server/zone/managers/skill/Performance.h"
+#include "server/zone/objects/player/sessions/Inspiration.h"
 #include "server/zone/managers/collision/CollisionManager.h"
 #include "server/zone/objects/intangible/VehicleControlDevice.h"
 #include "server/zone/objects/tangible/threat/ThreatMap.h"
@@ -2576,8 +2576,12 @@ int PlayerManagerImplementation::awardExperience(CreatureObject* player, const S
 
 	float buffMultiplier = 1.f;
 
+	long long foodBonus = 0;
 	if (player->hasBuff(BuffCRC::FOOD_XP_INCREASE) && !player->containsActiveSession(SessionFacadeType::CRAFTING))
-		buffMultiplier += player->getSkillModFromBuffs("xp_increase") / 100.f;
+		foodBonus = player->getSkillModFromBuffs("xp_increase");
+
+	const long long inspirationBonus = amount > 0 ? player->getSkillMod(Inspiration::EXPERIENCE) : 0;
+	buffMultiplier += (inspirationBonus > 0 ? Math::max(foodBonus, inspirationBonus) : foodBonus) / 100.f;
 
 	int xp = 0;
 
@@ -3364,11 +3368,8 @@ void PlayerManagerImplementation::stopListen(CreatureObject* creature, uint64 en
 		if (session != nullptr) {
 			esession = dynamic_cast<EntertainingSession*>(session.get());
 
-			if (esession != nullptr) {
-				esession->activateEntertainerBuff(creature, PerformanceType::MUSIC);
-
+			if (esession != nullptr)
 				esession->removePatron(creature);
-			}
 		}
 
 		clocker.release();
@@ -3451,11 +3452,8 @@ void PlayerManagerImplementation::stopWatch(CreatureObject* creature, uint64 ent
 		if (session != nullptr) {
 			esession = dynamic_cast<EntertainingSession*>(session.get());
 
-			if (esession != nullptr) {
-				esession->activateEntertainerBuff(creature, PerformanceType::DANCE);
-
+			if (esession != nullptr)
 				esession->removePatron(creature);
-			}
 		}
 
 		clocker.release();

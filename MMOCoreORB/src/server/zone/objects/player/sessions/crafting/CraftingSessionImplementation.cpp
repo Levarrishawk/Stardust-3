@@ -27,11 +27,40 @@
 #include "server/zone/objects/player/sessions/crafting/events/UpdateToolCountdownTask.h"
 
 #include "templates/customization/AssetCustomizationManagerTemplate.h"
+#include "templates/manager/DataArchiveStore.h"
 #include "templates/params/RangedIntCustomizationVariable.h"
+#include "templates/tangible/StructureDeedTemplate.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
 
 // #define DEBUG_CRAFTING_SESSION
 // #define DEBUG_EXPERIMENTATION
+
+static const StructureDeedTemplate* getActiveCraftingPreviewTemplate(const TangibleObject* prototype) {
+	const auto* deedTemplate = dynamic_cast<const StructureDeedTemplate*>(prototype->getObjectTemplate());
+
+	if (deedTemplate == nullptr)
+		return nullptr;
+
+	const auto& previewTemplate = deedTemplate->getCraftingPreviewTemplate();
+
+	if (previewTemplate.isEmpty() || prototype->getClientObjectCRC() != previewTemplate.hashCode())
+		return nullptr;
+
+	return deedTemplate;
+}
+
+static void restoreCraftingPreview(TangibleObject* prototype, CreatureObject* crafter, bool sendDeed) {
+	const auto* deedTemplate = getActiveCraftingPreviewTemplate(prototype);
+
+	if (deedTemplate == nullptr)
+		return;
+
+	prototype->sendDestroyTo(crafter);
+	prototype->setClientObjectCRC(deedTemplate->getClientObjectCRC());
+
+	if (sendDeed)
+		prototype->sendTo(crafter, true);
+}
 
 int CraftingSessionImplementation::initializeSession(CraftingTool* tool, CraftingStation* station) {
 	craftingTool = tool;
@@ -470,6 +499,15 @@ bool CraftingSessionImplementation::createPrototypeObject(DraftSchematic* drafts
 		strongPrototype->setCraftersID(crafter->getObjectID());
 
 	strongPrototype->createChildObjects();
+
+	const auto* deedTemplate = dynamic_cast<const StructureDeedTemplate*>(strongPrototype->getObjectTemplate());
+
+	if (deedTemplate != nullptr) {
+		const auto& previewTemplate = deedTemplate->getCraftingPreviewTemplate();
+
+		if (!previewTemplate.isEmpty() && DataArchiveStore::instance()->fileExists(previewTemplate))
+			strongPrototype->setClientObjectCRC(previewTemplate.hashCode());
+	}
 
 	TransactionLog trx(crafter, craftingTool, strongPrototype, TrxCode::CRAFTINGSESSION);
 	craftingTool->transferObject(strongPrototype, -1, false);
@@ -916,8 +954,12 @@ void CraftingSessionImplementation::initialAssembly(int clientCounter) {
 
 	dMsco7->updateForAssembly(manufactureSchematic, experimentalFailureRate);
 
-	if (custpoints > 0)
+	if (getActiveCraftingPreviewTemplate(prototype) != nullptr) {
+		constexpr int housePaletteColorCount = 64;
+		dMsco7->updateCustomizationOptions(&variables, housePaletteColorCount);
+	} else if (custpoints > 0) {
 		dMsco7->updateCustomizationOptions(&variables, custpoints);
+	}
 
 	dMsco7->close();
 
@@ -1369,13 +1411,14 @@ void CraftingSessionImplementation::finishStage2(int clientCounter) {
 void CraftingSessionImplementation::createPrototype(int clientCounter, bool createItem) {
 	ManagedReference<CreatureObject*> crafter = this->crafter.get();
 	ManagedReference<ManufactureSchematic*> manufactureSchematic = this->manufactureSchematic.get();
+	ManagedReference<TangibleObject*> prototype = this->prototype.get();
 
 	if (manufactureSchematic == nullptr) {
 		sendSlotMessage(clientCounter, IngredientSlot::NOSCHEMATIC);
 		return;
 	}
 
-	if (!checkPrototype()) {
+	if (prototype == nullptr || !checkPrototype()) {
 		sendSlotMessage(clientCounter, IngredientSlot::PROTOTYPENOTFOUND);
 		return;
 	}
@@ -1384,6 +1427,11 @@ void CraftingSessionImplementation::createPrototype(int clientCounter, bool crea
 
 	if (manufactureSchematic->isAssembled() && !manufactureSchematic->isCompleted()) {
 		closeCraftingWindow(clientCounter, true);
+
+		{
+			Locker prototypeLocker(prototype);
+			restoreCraftingPreview(prototype, crafter, true);
+		}
 
 		String xpType = manufactureSchematic->getDraftSchematic()->getXpType();
 		int xp = manufactureSchematic->getDraftSchematic()->getXpAmount();
@@ -1478,6 +1526,7 @@ void CraftingSessionImplementation::createManufactureSchematic(int clientCounter
 
 		Locker prototypeLocker(prototype);
 
+		restoreCraftingPreview(prototype, crafter, false);
 		prototype->destroyObjectFromWorld(0);
 
 		manufactureSchematic->setPersistent(2);

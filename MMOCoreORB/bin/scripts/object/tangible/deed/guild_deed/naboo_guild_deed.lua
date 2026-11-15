@@ -45,6 +45,7 @@ object_tangible_deed_guild_deed_naboo_guild_deed = object_tangible_deed_guild_de
 	templateType = STRUCTUREDEED,
 	placeStructureComponent = "PlaceStructureComponent",
 	generatedObjectTemplate = "object/building/player/player_guildhall_naboo_style_01.iff",
+	craftingPreviewTemplate = "object/tangible/deed/guild_deed/shared_naboo_guild_deed_paint_preview.iff",
 
 
 

@@ -46,6 +46,7 @@ object_tangible_deed_city_deed_garden_endor_lrg_01_deed = object_tangible_deed_c
 	placeStructureComponent = "PlaceDecorationComponent",
 	gameObjectType = 8388609,
 	generatedObjectTemplate = "object/building/player/city/garden_endor_lrg_01.iff",
+	craftingPreviewTemplate = "object/tangible/deed/city_deed/shared_garden_endor_lrg_01_deed_paint_preview.iff",
 
 	numberExperimentalProperties = {1, 1, 1},
 	experimentalProperties = {"XX", "XX", "XX"},

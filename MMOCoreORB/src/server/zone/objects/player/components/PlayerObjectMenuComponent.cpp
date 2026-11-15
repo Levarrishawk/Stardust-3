@@ -6,6 +6,7 @@
 #include "server/zone/packets/object/ObjectMenuResponse.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
+#include "server/zone/objects/player/sessions/Inspiration.h"
 #include "server/zone/objects/group/GroupObject.h"
 #include "server/zone/managers/player/PlayerManager.h"
 #include "server/zone/managers/mission/MissionManager.h"
@@ -38,6 +39,9 @@ void PlayerObjectMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject,
 		else
 			menuResponse->addRadialMenuItem(116, 3, "@radial_performance:watch_stop");
 	}
+
+	if (Inspiration::isAudienceMember(player, creature))
+		menuResponse->addRadialMenuItem(RadialOptions::SERVER_MENU9, 3, "Inspire");
 
 	// Allow admins to grant divorce to married players
 	if (targetGhost != nullptr && targetGhost->isMarried() && ghost != nullptr && ghost->isPrivileged()) {
@@ -83,6 +87,9 @@ int PlayerObjectMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, 
 				playerManager->grantDivorce(ownerPlayer);
 			}, "GrantDivorceLambda");
 		}
+		break;
+	case RadialOptions::SERVER_MENU9:
+		player->executeObjectControllerAction(STRING_HASHCODE("inspire"), sceneObject->getObjectID(), "");
 		break;
 	case RadialOptions::SERVER_MENU10: {
 		MissionManager* missionManager = player->getZoneServer()->getMissionManager();

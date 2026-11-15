@@ -45,6 +45,7 @@ object_tangible_deed_guild_deed_tatooine_guild_style_02_deed = object_tangible_d
 	templateType = STRUCTUREDEED,
 	placeStructureComponent = "PlaceStructureComponent",
 	generatedObjectTemplate = "object/building/player/player_guildhall_tatooine_style_02.iff",
+	craftingPreviewTemplate = "object/tangible/deed/guild_deed/shared_tatooine_guild_style_02_deed_paint_preview.iff",
 
 	numberExperimentalProperties = {1, 1, 1},
 	experimentalProperties = {"XX", "XX", "DR"},

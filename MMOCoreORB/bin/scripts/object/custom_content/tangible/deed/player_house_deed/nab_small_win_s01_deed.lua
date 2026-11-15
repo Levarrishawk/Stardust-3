@@ -45,6 +45,7 @@ object_tangible_deed_player_house_deed_naboo_small_window_s01_deed = object_tang
 	templateType = STRUCTUREDEED,
 	placeStructureComponent = "PlaceStructureComponent",
 	generatedObjectTemplate = "object/building/player/naboo_small_window_s01.iff",
+	craftingPreviewTemplate = "object/tangible/deed/player_house_deed/shared_naboo_small_window_s01_deed_paint_preview.iff",
 }
 
 ObjectTemplates:addTemplate(object_tangible_deed_player_house_deed_naboo_small_window_s01_deed, "object/tangible/deed/player_house_deed/naboo_small_window_s01_deed.iff")

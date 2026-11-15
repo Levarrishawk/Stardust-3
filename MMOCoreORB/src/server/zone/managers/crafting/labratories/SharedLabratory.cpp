@@ -4,6 +4,7 @@
 
 #include "SharedLabratory.h"
 #include "server/zone/managers/crafting/CraftingManager.h"
+#include "server/zone/objects/player/sessions/Inspiration.h"
 #include "server/zone/objects/tangible/misc/CustomIngredient.h"
 #include "server/zone/objects/manufactureschematic/ingredientslots/ComponentSlot.h"
 #include "server/zone/objects/manufactureschematic/ingredientslots/ResourceSlot.h"
@@ -145,11 +146,10 @@ int SharedLabratory::calculateAssemblySuccess(CreatureObject* player,DraftSchema
 	/// City bonus should be 10
 	float cityBonus = player->getSkillMod("private_spec_assembly");
 
-	int assemblySkill = player->getSkillMod(draftSchematic->getAssemblySkill());
-	assemblySkill += player->getSkillMod("force_assembly");
+	const int assemblySkill = player->getSkillMod(draftSchematic->getAssemblySkill()) + player->getSkillMod(Inspiration::ASSEMBLY);
 
-	float assemblyPoints = ((float)assemblySkill) / 10.0f;
-	int failMitigate = (player->getSkillMod(draftSchematic->getAssemblySkill()) - 100 + cityBonus) / 7;
+	float assemblyPoints = (assemblySkill + player->getSkillMod("force_assembly")) / 10.0f;
+	int failMitigate = (assemblySkill - 100 + cityBonus) / 7;
 	failMitigate += player->getSkillMod("force_failure_reduction");
 
 	if(failMitigate < 0)
@@ -173,7 +173,7 @@ int SharedLabratory::calculateAssemblySuccess(CreatureObject* player,DraftSchema
 
 	int luckRoll = System::random(100) + cityBonus;
 
-	if(luckRoll > (95 - craftbonus))
+	if(luckRoll > (95 - craftbonus - player->getSkillMod(Inspiration::AMAZING_SUCCESS)))
 		return CraftingManager::AMAZINGSUCCESS;
 
 	if(luckRoll < (5 - craftbonus - failMitigate))

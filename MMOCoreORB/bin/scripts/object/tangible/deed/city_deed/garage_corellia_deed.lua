@@ -46,6 +46,7 @@ object_tangible_deed_city_deed_garage_corellia_deed = object_tangible_deed_city_
 	placeStructureComponent = "PlaceStructureComponent",
 	gameObjectType = 8388609,
 	generatedObjectTemplate = "object/building/player/player_garage_corellia_style_01.iff",
+	craftingPreviewTemplate = "object/tangible/deed/city_deed/shared_garage_corellia_deed_paint_preview.iff",
 
 	numberExperimentalProperties = {1, 1, 1},
 	experimentalProperties = {"XX", "XX", "DR"},

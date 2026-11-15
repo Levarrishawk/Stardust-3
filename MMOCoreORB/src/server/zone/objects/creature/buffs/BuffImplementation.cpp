@@ -5,6 +5,7 @@
 #include "engine/engine.h"
 
 #include "server/zone/objects/creature/buffs/Buff.h"
+#include "server/zone/objects/player/sessions/Inspiration.h"
 #include "BuffDurationEvent.h"
 
 #include "templates/params/creature/CreatureAttribute.h"
@@ -312,7 +313,7 @@ void BuffImplementation::applyAttributeModifiers() {
 				if (fillAttributesOnBuff) {
 					int attributeval = Math::max(newMaxHAM, creo->getHAM(attribute) + value);
 					creo->healDamage(creo, attribute, attributeval, true);
-				} else if (value >= 0)
+				} else if (value >= 0 && (buffCRC != Inspiration::BUFF_CRC || attribute != CreatureAttribute::ACTION))
 					creo->healDamage(creo, attribute, value);
 			}
 

@@ -46,6 +46,7 @@ object_tangible_deed_city_deed_theater_corellia_deed = object_tangible_deed_city
 	placeStructureComponent = "PlaceStructureComponent",
 	gameObjectType = 8388609,
 	generatedObjectTemplate = "object/building/player/city/theater_corellia.iff",
+	craftingPreviewTemplate = "object/tangible/deed/city_deed/shared_theater_corellia_deed_paint_preview.iff",
 
 	numberExperimentalProperties = {1, 1, 1},
 	experimentalProperties = {"XX", "XX", "DR"},

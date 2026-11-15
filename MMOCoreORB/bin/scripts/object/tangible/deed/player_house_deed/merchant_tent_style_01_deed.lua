@@ -46,6 +46,7 @@ object_tangible_deed_player_house_deed_merchant_tent_style_01_deed = object_tang
 	placeStructureComponent = "PlaceStructureComponent",
 	gameObjectType = 8388609,
 	generatedObjectTemplate = "object/building/player/player_merchant_tent_style_01.iff",
+	craftingPreviewTemplate = "object/tangible/deed/player_house_deed/shared_merchant_tent_style_01_deed_paint_preview.iff",
 
 	numberExperimentalProperties = {1, 1, 1},
 	experimentalProperties = {"XX", "XX", "DR"},

@@ -141,8 +141,6 @@ class EntertainingSession extends Facade {
 	public native void sendEntertainingUpdate(CreatureObject creature, int performanceType, boolean startPerformance);
 	public native void sendEntertainmentUpdate(CreatureObject creature, unsigned long entid, final string mood);
 
-	public native void activateEntertainerBuff(CreatureObject creature, int performanceType);
-
 	public native string getPerformanceName();
 
 	public native void addPatron(CreatureObject creature);

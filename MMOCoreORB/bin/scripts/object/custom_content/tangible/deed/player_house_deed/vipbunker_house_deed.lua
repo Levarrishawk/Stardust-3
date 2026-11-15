@@ -45,6 +45,7 @@ object_tangible_deed_player_house_deed_vipbunker_house_deed = object_tangible_de
 	templateType = STRUCTUREDEED,
 	placeStructureComponent = "PlaceStructureComponent",
 	generatedObjectTemplate = "object/building/player/vipbunker_house.iff",
+	craftingPreviewTemplate = "object/tangible/deed/player_house_deed/shared_vipbunker_house_deed_paint_preview.iff",
 
 	numberExperimentalProperties = {1, 1, 1},
 	experimentalProperties = {"XX", "XX", "DR"},

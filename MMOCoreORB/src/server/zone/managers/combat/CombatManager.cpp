@@ -12,6 +12,7 @@
 #include "server/zone/objects/building/BuildingObject.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/player/PlayerObject.h"
+#include "server/zone/objects/player/sessions/Inspiration.h"
 #include "server/zone/objects/player/FactionStatus.h"
 #include "server/zone/objects/guild/GuildObject.h"
 #include "templates/params/creature/CreatureState.h"
@@ -1847,6 +1848,9 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 	bool actionDamaged = (!!(poolsToDamage & ACTION) && data.getActionDamageMultiplier() > 0.0f);
 	bool mindDamaged = (!!(poolsToDamage & MIND) && data.getMindDamageMultiplier() > 0.0f);
 
+	const int healthBefore = defender->isPlayerCreature() && defender->hasBuff(Inspiration::BUFF_CRC)
+			? defender->getHAM(CreatureAttribute::HEALTH) : 0;
+
 	int numberOfPoolsDamaged = (healthDamaged ? 1 : 0) + (actionDamaged ? 1 : 0) + (mindDamaged ? 1 : 0);
 	Vector<int> poolsToWound;
 
@@ -2010,6 +2014,19 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 
 	int totalDamage = (int)(healthDamage + actionDamage + mindDamage);
 	defender->notifyObservers(ObserverEventType::DAMAGERECEIVED, attacker, totalDamage);
+
+	if (healthBefore > 0 && attacker != defender && !defender->isDead() && !defender->isIncapacitated()) {
+		const int healthAfter = defender->getHAM(CreatureAttribute::HEALTH);
+		const int chance = defender->getSkillMod(Inspiration::SECOND_CHANCE);
+		const int heal = Math::min(healthBefore - healthAfter, defender->getMaxHAM(CreatureAttribute::HEALTH) / 20);
+		if (healthAfter > 0 && heal > 0 && chance > 0 && defender->checkCooldownRecovery(Inspiration::SECOND_CHANCE)
+				&& System::random(99) < chance) {
+			defender->updateCooldownTimer(Inspiration::SECOND_CHANCE, 10000);
+			const int restored = defender->healDamage(defender, CreatureAttribute::HEALTH, heal, true, false);
+			if (restored > 0)
+				defender->sendSystemMessage("Second Chance restored " + String::valueOf(restored) + " Health.");
+		}
+	}
 
 	if (attacker->isPlayerCreature()) {
 		showHitLocationFlyText(attacker->asCreatureObject(), defender, hitLocation);
@@ -2456,7 +2473,7 @@ int CombatManager::getDefenderSecondaryDefenseModifier(CreatureObject* defender)
 	if (defender->isIntimidated() || defender->isBerserked() || defender->isVehicleObject())
 		return 0;
 
-	int targetDefense = defender->getLevel();
+	int targetDefense = defender->getLevel() + defender->getSkillMod(Inspiration::SECONDARY_DEFENSE);
 	ManagedReference<WeaponObject*> weapon = defender->getWeapon();
 
 	const auto defenseAccMods = weapon->getDefenderSecondaryDefenseModifiers();

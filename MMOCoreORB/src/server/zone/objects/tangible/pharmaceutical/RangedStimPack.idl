@@ -108,6 +108,7 @@ class RangedStimPack extends StimPack {
 		}
 
 		float modSkill = (float) healer.getSkillMod("combat_medic_effectiveness");
+		power *= 1.0f + healer.getSkillMod("private_inspiration_healing") / 100.0f;
 
 		return (100 + modSkill) / 100 * power;
 	}

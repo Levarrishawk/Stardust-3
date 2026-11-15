@@ -12,6 +12,7 @@
 
 class StructureDeedTemplate : public DeedTemplate {
 	String placementComponent;
+	String craftingPreviewTemplate;
 
 public:
 	StructureDeedTemplate() {
@@ -22,10 +23,15 @@ public:
 		DeedTemplate::readObject(obj);
 
 		placementComponent = obj->getStringField("placeStructureComponent");
+		craftingPreviewTemplate = obj->getStringField("craftingPreviewTemplate");
 	}
 
 	inline const String& getStructurePlacementComponent() {
 		return placementComponent;
+	}
+
+	inline const String& getCraftingPreviewTemplate() const {
+		return craftingPreviewTemplate;
 	}
 };
 

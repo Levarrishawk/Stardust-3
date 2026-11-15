@@ -72,6 +72,7 @@ class StimPack extends PharmaceuticalObject {
 			return power;
 		} else {
 			float modSkill = (float) healer.getSkillMod("healing_injury_treatment");
+			power *= 1.0f + healer.getSkillMod("private_inspiration_healing") / 100.0f;
 
 			return (100 + modSkill) / 100 * power;
 		}
