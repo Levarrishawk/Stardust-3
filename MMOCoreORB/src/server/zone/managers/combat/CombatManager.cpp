@@ -2018,11 +2018,10 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 	if (healthBefore > 0 && attacker != defender && !defender->isDead() && !defender->isIncapacitated()) {
 		const int healthAfter = defender->getHAM(CreatureAttribute::HEALTH);
 		const int chance = defender->getSkillMod(Inspiration::SECOND_CHANCE);
-		const int heal = Math::min(healthBefore - healthAfter, defender->getMaxHAM(CreatureAttribute::HEALTH) / 20);
-		if (healthAfter > 0 && heal > 0 && chance > 0 && defender->checkCooldownRecovery(Inspiration::SECOND_CHANCE)
+		if (healthAfter > 0 && healthAfter < healthBefore && chance > 0 && defender->checkCooldownRecovery(Inspiration::SECOND_CHANCE)
 				&& System::random(99) < chance) {
 			defender->updateCooldownTimer(Inspiration::SECOND_CHANCE, 10000);
-			const int restored = defender->healDamage(defender, CreatureAttribute::HEALTH, heal, true, false);
+			const int restored = defender->healDamage(defender, CreatureAttribute::HEALTH, 250, true, false);
 			if (restored > 0)
 				defender->sendSystemMessage("Second Chance restored " + String::valueOf(restored) + " Health.");
 		}
