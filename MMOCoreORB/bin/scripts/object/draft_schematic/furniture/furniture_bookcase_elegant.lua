@@ -67,7 +67,7 @@ object_draft_schematic_furniture_furniture_bookcase_elegant = object_draft_schem
 	ingredientTemplateNames = {"craft_furniture_ingredients_n", "craft_furniture_ingredients_n"},
 	ingredientTitleNames = {"frame", "shelves"},
 	ingredientSlotType = {0, 0},
-	resourceTypes = {"aluminum_titanium", "metal_nonferrous"},
+	resourceTypes = {"aluminum", "metal_nonferrous"},
 	resourceQuantities = {200, 150},
 	contribution = {100, 100},
 

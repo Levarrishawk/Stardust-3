@@ -67,7 +67,7 @@ object_draft_schematic_armor_component_armor_layer_kinetic = object_draft_schema
 	ingredientTemplateNames = {"craft_armor_ingredients_n", "craft_armor_ingredients_n", "craft_armor_ingredients_n"},
 	ingredientTitleNames = {"armor_layer_shock_casing", "ablative_damage_absorbtion_medium", "shockwave_repulsion_compound"},
 	ingredientSlotType = {0, 0, 0},
-	resourceTypes = {"metal", "petrochem_inert_polymer", "gemstone_armophous"},
+	resourceTypes = {"metal", "petrochem_inert", "gemstone_armophous"},
 	resourceQuantities = {20, 8, 8},
 	contribution = {100, 100, 100},
 

@@ -67,7 +67,7 @@ object_draft_schematic_chemistry_component_resilience_compound_advanced = object
 	ingredientTemplateNames = {"craft_chemical_ingredients_n", "craft_chemical_ingredients_n"},
 	ingredientTitleNames = {"delivery_medium", "drug_strength_compound"},
 	ingredientSlotType = {0, 0},
-	resourceTypes = {"gas_reactive_tolium", "radioactive_type1"},
+	resourceTypes = {"gas_reactive_known", "radioactive_known"},
 	resourceQuantities = {24, 24},
 	contribution = {100, 100},
 

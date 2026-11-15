@@ -66,7 +66,7 @@ object_draft_schematic_space_shields_shield_limiter_mk4 = object_draft_schematic
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"casing", "shield_limiter_mechanism"},
    ingredientSlotType = {0, 0},
-   resourceTypes = {"steel", "fiberplast_gravitonic"},
+   resourceTypes = {"steel", "fiberplast"},
    resourceQuantities = {1000, 250},
    contribution = {100, 100},
 

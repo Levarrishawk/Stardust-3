@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_boots_field_34 = object_draft_schematic
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"body", "hardware", "liner", "sole", "reinforcement"},
    ingredientSlotType = {0, 1, 0, 0, 0},
-   resourceTypes = {"fiberplast", "object/tangible/component/clothing/shared_metal_fasteners.iff", "hide", "petrochem_inert_polymer", "metal"},
+   resourceTypes = {"fiberplast", "object/tangible/component/clothing/shared_metal_fasteners.iff", "hide", "petrochem_inert", "metal"},
    resourceQuantities = {5, 1, 20, 10, 5},
    contribution = {100, 100, 100, 100, 100},
 

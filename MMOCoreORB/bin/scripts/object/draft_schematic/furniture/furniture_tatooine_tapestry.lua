@@ -67,7 +67,7 @@ object_draft_schematic_furniture_furniture_tatooine_tapestry = object_draft_sche
    ingredientTemplateNames = {"craft_furniture_ingredients_n", "craft_furniture_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"flag_base", "flag", "paints"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"metal", "fiberplast", "petrochem_inert_polymer"},
+   resourceTypes = {"metal", "fiberplast", "petrochem_inert"},
    resourceQuantities = {30, 80, 25},
    contribution = {100, 100, 100},
 

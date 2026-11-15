@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_naboo = object_draft_schematic_scout_s
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins", "camo_dye"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"meat_herbivore_naboo", "hide_scaley_naboo", "bone_avian_naboo"},
+   resourceTypes = {"meat_herbivore", "hide_scaley", "bone_avian"},
    resourceQuantities = {20, 30, 10},
    contribution = {100, 100, 100},
 

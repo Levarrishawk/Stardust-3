@@ -67,7 +67,7 @@ object_draft_schematic_furniture_furniture_utensils = object_draft_schematic_fur
    ingredientTemplateNames = {"craft_furniture_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"utensil_base", "forks_spoons_knives", "utensil_handles"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"metal_nonferrous", "metal_nonferrous", "petrochem_inert_polymer"},
+   resourceTypes = {"metal_nonferrous", "metal_nonferrous", "petrochem_inert"},
    resourceQuantities = {45, 150, 50},
    contribution = {100, 100, 100},
 

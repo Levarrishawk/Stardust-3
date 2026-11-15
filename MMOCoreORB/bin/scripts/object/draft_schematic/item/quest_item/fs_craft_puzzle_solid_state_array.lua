@@ -65,7 +65,7 @@ object_draft_schematic_item_quest_item_fs_craft_puzzle_solid_state_array = objec
 	ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
 	ingredientTitleNames = {"solid_state_units", "cooling_network", "array_housing", "socket_connection"},
 	ingredientSlotType = {0, 0, 0, 0},
-	resourceTypes = {"ore_extrusive", "water_vapor_naboo", "petrochem_inert_polymer", "copper"},
+	resourceTypes = {"ore_extrusive", "water", "petrochem_inert", "copper"},
 	resourceQuantities = {100, 10, 20, 10},
 	contribution = {100, 100, 100, 100},
 

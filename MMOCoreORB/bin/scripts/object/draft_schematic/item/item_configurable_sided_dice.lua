@@ -66,7 +66,7 @@ object_draft_schematic_item_item_configurable_sided_dice = object_draft_schemati
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"cube_core", "hardened_shell", "logic_unit", "color_actuator", "parallel_logic_unit", "interface_pad", "power_unit"},
    ingredientSlotType = {0, 0, 0, 0, 0, 0, 0},
-   resourceTypes = {"metal", "petrochem_inert_polymer", "metal", "petrochem_inert_polymer", "petrochem_inert_polymer", "petrochem_inert_polymer", "metal_nonferrous"},
+   resourceTypes = {"metal", "petrochem_inert", "metal", "petrochem_inert", "petrochem_inert", "petrochem_inert", "metal_nonferrous"},
    resourceQuantities = {6, 5, 2, 2, 2, 1, 2},
    contribution = {100, 100, 100, 100, 100, 100, 100},
 

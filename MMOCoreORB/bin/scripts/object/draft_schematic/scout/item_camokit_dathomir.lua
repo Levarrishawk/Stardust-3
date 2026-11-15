@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_dathomir = object_draft_schematic_scou
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins", "camo_dye"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"meat_carnivore_dathomir", "hide_leathery_dathomir", "bone_mammal_dathomir"},
+   resourceTypes = {"meat_carnivore", "hide_leathery", "bone"},
    resourceQuantities = {30, 40, 25},
    contribution = {100, 100, 100},
 

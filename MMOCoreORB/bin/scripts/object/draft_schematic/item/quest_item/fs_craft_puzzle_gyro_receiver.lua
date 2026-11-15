@@ -65,7 +65,7 @@ object_draft_schematic_item_quest_item_fs_craft_puzzle_gyro_receiver = object_dr
 	ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
 	ingredientTitleNames = {"gyro_power_core", "bearing_lubrication", "receiver_unit", "socket_connection"},
 	ingredientSlotType = {0, 0, 0, 0},
-	resourceTypes = {"energy_renewable_unlimited_wind_yavin4", "petrochem_inert_lubricating_oil", "steel", "copper"},
+	resourceTypes = {"energy_renewable_unlimited_wind", "petrochem_inert", "steel", "copper"},
 	resourceQuantities = {50, 20, 45, 20},
 	contribution = {100, 100, 100, 100},
 

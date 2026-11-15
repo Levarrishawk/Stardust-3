@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_talus = object_draft_schematic_scout_s
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins", "camo_dye"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"meat_avian_talus", "hide_leathery_talus", "bone_avian_talus"},
+   resourceTypes = {"meat_avian", "hide_leathery", "bone_avian"},
    resourceQuantities = {25, 30, 15},
    contribution = {100, 100, 100},
 

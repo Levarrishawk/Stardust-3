@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_bodysuit_field_14 = object_draft_schema
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"flightsuit_fabric_layer_one", "flightsuit_fabric_layer_two", "flightsuit_fabric_layer_three", "wiring_and_reinforcement", "hardware"},
    ingredientSlotType = {1, 1, 1, 0, 1},
-   resourceTypes = {"object/tangible/component/clothing/shared_synthetic_cloth.iff", "object/tangible/component/clothing/shared_synthetic_cloth.iff", "object/tangible/component/clothing/shared_reinforced_fiber_panels.iff", "petrochem_inert_polymer", "object/tangible/component/clothing/shared_metal_fasteners.iff"},
+   resourceTypes = {"object/tangible/component/clothing/shared_synthetic_cloth.iff", "object/tangible/component/clothing/shared_synthetic_cloth.iff", "object/tangible/component/clothing/shared_reinforced_fiber_panels.iff", "petrochem_inert", "object/tangible/component/clothing/shared_metal_fasteners.iff"},
    resourceQuantities = {2, 4, 2, 80, 3},
    contribution = {100, 100, 100, 100, 100},
 

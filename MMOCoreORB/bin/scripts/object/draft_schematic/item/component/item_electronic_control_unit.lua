@@ -66,7 +66,7 @@ object_draft_schematic_item_component_item_electronic_control_unit = object_draf
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"assembly_lattice", "mechanism_stabilization_and_insulation_material", "shock_reflective_substrate", "switching_mechanism_and_logic_circuitry", "coolant", "circuitry_mount_and_harness"},
    ingredientSlotType = {0, 0, 0, 0, 0, 0},
-   resourceTypes = {"metal", "petrochem_inert_polymer", "ore", "copper", "gas_inert", "petrochem_inert_polymer"},
+   resourceTypes = {"metal", "petrochem_inert", "ore", "copper", "gas_inert", "petrochem_inert"},
    resourceQuantities = {10, 5, 5, 3, 3, 5},
    contribution = {100, 100, 100, 100, 100, 100},
 

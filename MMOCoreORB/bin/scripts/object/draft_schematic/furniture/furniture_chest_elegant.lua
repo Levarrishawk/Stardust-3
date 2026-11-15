@@ -67,7 +67,7 @@ object_draft_schematic_furniture_furniture_chest_elegant = object_draft_schemati
 	ingredientTemplateNames = {"craft_furniture_ingredients_n", "craft_furniture_ingredients_n"},
 	ingredientTitleNames = {"frame", "panelling"},
 	ingredientSlotType = {0, 0},
-	resourceTypes = {"steel_duranium", "steel"},
+	resourceTypes = {"steel", "steel"},
 	resourceQuantities = {140, 160},
 	contribution = {100, 100},
 

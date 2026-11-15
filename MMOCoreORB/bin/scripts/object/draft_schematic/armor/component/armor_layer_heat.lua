@@ -67,7 +67,7 @@ object_draft_schematic_armor_component_armor_layer_heat = object_draft_schematic
 	ingredientTemplateNames = {"craft_armor_ingredients_n", "craft_armor_ingredients_n", "craft_armor_ingredients_n"},
 	ingredientTitleNames = {"armor_layer_frame", "secondary_insulator_microsheath", "primary_insulator_micro_layer"},
 	ingredientSlotType = {0, 0, 0},
-	resourceTypes = {"metal_nonferrous", "petrochem_inert_polymer", "ore_intrusive"},
+	resourceTypes = {"metal_nonferrous", "petrochem_inert", "ore_intrusive"},
 	resourceQuantities = {25, 12, 10},
 	contribution = {100, 100, 100},
 

@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_backpack_field_01 = object_draft_schema
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"primary_pocket", "secondary_pocket", "strap_pad", "strap_adjustment"},
    ingredientSlotType = {0, 0, 0, 0},
-   resourceTypes = {"fiberplast", "petrochem_inert_polymer", "hide", "metal"},
+   resourceTypes = {"fiberplast", "petrochem_inert", "hide", "metal"},
    resourceQuantities = {50, 10, 5, 5},
    contribution = {100, 100, 100, 100},
 

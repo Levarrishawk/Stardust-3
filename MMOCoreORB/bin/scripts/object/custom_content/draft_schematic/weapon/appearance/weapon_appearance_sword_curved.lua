@@ -22,7 +22,7 @@ object_draft_schematic_weapon_appearance_weapon_appearance_sword_curved = object
    ingredientTemplateNames = {"craft_weapon_ingredients_n", "craft_weapon_ingredients_n", "craft_weapon_ingredients_n"},
    ingredientTitleNames = {"sword_core_jacket", "grip", "jacketed_sword_core"},
    ingredientSlotType = {0, 0, 1},
-   resourceTypes = {"iron", "petrochem_inert_polymer", "object/tangible/component/weapon/shared_sword_core.iff"},
+   resourceTypes = {"iron", "petrochem_inert", "object/tangible/component/weapon/shared_sword_core.iff"},
    resourceQuantities = {42, 12, 1},
    contribution = {100, 100, 100},
 

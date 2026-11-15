@@ -66,7 +66,7 @@ object_draft_schematic_item_component_item_electronic_energy_distributor = objec
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"assembly_frame", "charge_neutralization_barrier", "module_brackets", "micro_switching_mechanism_contacts", "switching_and_routing_mechanism", "thermal_barrier"},
    ingredientSlotType = {0, 0, 0, 0, 0, 0},
-   resourceTypes = {"metal", "gas_inert", "steel", "metal", "petrochem_inert_polymer", "ore"},
+   resourceTypes = {"metal", "gas_inert", "steel", "metal", "petrochem_inert", "ore"},
    resourceQuantities = {12, 4, 4, 2, 2, 3},
    contribution = {100, 100, 100, 100, 100, 100},
 

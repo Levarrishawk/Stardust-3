@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_wke_hood_s01 = object_draft_schematic_c
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"body", "binding_and_hardware"},
    ingredientSlotType = {0, 0},
-   resourceTypes = {"hide", "petrochem_inert_polymer"},
+   resourceTypes = {"hide", "petrochem_inert"},
    resourceQuantities = {12, 6},
    contribution = {100, 100},
 

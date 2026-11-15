@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_endor = object_draft_schematic_scout_s
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins", "camo_dye"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"meat_insect_endor", "hide_leathery_endor", "bone_avian_endor"},
+   resourceTypes = {"meat_insect", "hide_leathery", "bone_avian"},
    resourceQuantities = {30, 40, 20},
    contribution = {100, 100, 100},
 

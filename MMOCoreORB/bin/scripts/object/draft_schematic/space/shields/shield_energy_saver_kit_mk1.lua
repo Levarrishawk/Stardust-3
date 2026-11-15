@@ -66,7 +66,7 @@ object_draft_schematic_space_shields_shield_energy_saver_kit_mk1 = object_draft_
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"casing", "energy_saving_mechanism"},
    ingredientSlotType = {0, 0},
-   resourceTypes = {"steel", "fiberplast_gravitonic"},
+   resourceTypes = {"steel", "fiberplast"},
    resourceQuantities = {75, 25},
    contribution = {100, 100},
 

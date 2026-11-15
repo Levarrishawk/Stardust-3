@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_dantooine = object_draft_schematic_sco
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins"},
    ingredientSlotType = {0, 0},
-   resourceTypes = {"meat_herbivore_dantooine", "hide_scaley_dantooine"},
+   resourceTypes = {"meat_herbivore", "hide_scaley"},
    resourceQuantities = {40, 45},
    contribution = {100, 100},
 

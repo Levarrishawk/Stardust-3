@@ -66,7 +66,7 @@ object_draft_schematic_munition_component_warhead_light = object_draft_schematic
    ingredientTemplateNames = {"craft_munition_ingredients_n", "craft_munition_ingredients_n", "craft_munition_ingredients_n", "craft_munition_ingredients_n"},
    ingredientTitleNames = {"warhead_module_casing", "casing_brackets", "fuse_coupling", "reaction_medium"},
    ingredientSlotType = {0, 0, 0, 0},
-   resourceTypes = {"steel", "steel", "petrochem_inert_polymer", "gas_reactive"},
+   resourceTypes = {"steel", "steel", "petrochem_inert", "gas_reactive"},
    resourceQuantities = {6, 2, 1, 9},
    contribution = {100, 100, 100, 100},
 

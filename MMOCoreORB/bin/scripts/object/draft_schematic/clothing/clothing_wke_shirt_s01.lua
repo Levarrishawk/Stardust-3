@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_wke_shirt_s01 = object_draft_schematic_
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"heavy_shell", "binding_and_weatherproofing"},
    ingredientSlotType = {0, 0},
-   resourceTypes = {"fiberplast", "petrochem_inert_polymer"},
+   resourceTypes = {"fiberplast", "petrochem_inert"},
    resourceQuantities = {18, 2},
    contribution = {100, 100},
 

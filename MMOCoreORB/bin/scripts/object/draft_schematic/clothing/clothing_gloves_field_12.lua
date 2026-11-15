@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_gloves_field_12 = object_draft_schemati
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"shell", "liner", "grip_pads"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"hide", "fiberplast", "petrochem_inert_polymer"},
+   resourceTypes = {"hide", "fiberplast", "petrochem_inert"},
    resourceQuantities = {10, 10, 10},
    contribution = {100, 100, 100},
 

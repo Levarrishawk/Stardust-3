@@ -67,7 +67,7 @@ object_draft_schematic_armor_component_armor_layer_blast = object_draft_schemati
 	ingredientTemplateNames = {"craft_armor_ingredients_n", "craft_armor_ingredients_n", "craft_armor_ingredients_n", "craft_armor_ingredients_n"},
 	ingredientTitleNames = {"armor_layer_frame", "defensive_layer_microlattice", "shockwave_repulsion_compound", "blast_harmonics_absorbtion_medium"},
 	ingredientSlotType = {0, 0, 0, 0},
-	resourceTypes = {"metal_ferrous", "petrochem_inert_polymer", "gemstone_armophous", "ore_intrusive"},
+	resourceTypes = {"metal_ferrous", "petrochem_inert", "gemstone_armophous", "ore_intrusive"},
 	resourceQuantities = {25, 10, 8, 3},
 	contribution = {100, 100, 100, 100},
 

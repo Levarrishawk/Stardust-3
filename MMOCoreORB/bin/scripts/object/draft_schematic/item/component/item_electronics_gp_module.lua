@@ -66,7 +66,7 @@ object_draft_schematic_item_component_item_electronics_gp_module = object_draft_
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"module_brackets", "circuit_stabilization_medium", "circuit_shielding_and_substrate", "pre_processing_logic_circuitry", "thermal_and_contaminant_shield"},
    ingredientSlotType = {0, 0, 0, 0, 0},
-   resourceTypes = {"metal", "petrochem_inert_polymer", "ore", "copper", "gas_inert"},
+   resourceTypes = {"metal", "petrochem_inert", "ore", "copper", "gas_inert"},
    resourceQuantities = {10, 7, 3, 3, 3},
    contribution = {100, 100, 100, 100, 100},
 

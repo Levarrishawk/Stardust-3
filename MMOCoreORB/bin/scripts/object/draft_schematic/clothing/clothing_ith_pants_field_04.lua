@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_ith_pants_field_04 = object_draft_schem
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"body", "binding_and_reinforcement", "hardware", "liner"},
    ingredientSlotType = {0, 0, 1, 1},
-   resourceTypes = {"fiberplast", "petrochem_inert_polymer", "object/tangible/component/clothing/shared_metal_fasteners.iff", "object/tangible/component/clothing/shared_fiberplast_panel.iff"},
+   resourceTypes = {"fiberplast", "petrochem_inert", "object/tangible/component/clothing/shared_metal_fasteners.iff", "object/tangible/component/clothing/shared_fiberplast_panel.iff"},
    resourceQuantities = {20, 10, 1, 1},
    contribution = {100, 100, 100, 100},
 

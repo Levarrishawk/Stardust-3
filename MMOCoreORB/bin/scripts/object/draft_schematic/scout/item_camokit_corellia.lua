@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_corellia = object_draft_schematic_scou
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins", "camo_dye"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"meat_insect_corellia", "hide_bristley_corellia", "bone_mammal_corellia"},
+   resourceTypes = {"meat_insect", "hide_bristley", "bone"},
    resourceQuantities = {20, 30, 10},
    contribution = {100, 100, 100},
 

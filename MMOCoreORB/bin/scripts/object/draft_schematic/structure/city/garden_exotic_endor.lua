@@ -67,7 +67,7 @@ object_draft_schematic_structure_city_garden_exotic_endor = object_draft_schemat
 	ingredientTemplateNames = {"craft_structure_ingredients_n", "craft_structure_ingredients_n", "craft_structure_ingredients_n"},
 	ingredientTitleNames = {"decorative_flora", "foundation", "wall_sections"},
 	ingredientSlotType = {0, 0, 2},
-	resourceTypes = {"wood_deciduous_endor", "softwood_evergreen_endor", "object/tangible/component/structure/shared_wall_module.iff"},
+	resourceTypes = {"wood_deciduous", "softwood_evergreen", "object/tangible/component/structure/shared_wall_module.iff"},
 	resourceQuantities = {3000, 1500, 14},
 	contribution = {100, 100, 100},
 

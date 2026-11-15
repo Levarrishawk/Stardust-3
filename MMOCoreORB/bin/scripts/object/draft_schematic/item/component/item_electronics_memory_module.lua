@@ -66,7 +66,7 @@ object_draft_schematic_item_component_item_electronics_memory_module = object_dr
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"module_brackets", "mechanism_stabilization_and_insulation_material", "data_lattice_sheath", "data_storage_lattice", "thermal_and_contaminant_shield"},
    ingredientSlotType = {0, 0, 0, 0, 0},
-   resourceTypes = {"metal", "petrochem_inert_polymer", "ore", "copper", "gas_inert"},
+   resourceTypes = {"metal", "petrochem_inert", "ore", "copper", "gas_inert"},
    resourceQuantities = {8, 5, 2, 3, 2},
    contribution = {100, 100, 100, 100, 100},
 

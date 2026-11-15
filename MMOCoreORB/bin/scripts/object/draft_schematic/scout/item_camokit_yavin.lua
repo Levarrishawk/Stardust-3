@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_yavin = object_draft_schematic_scout_s
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins", "camo_dye"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"meat_carnivore_yavin4", "hide_scaley_yavin4", "bone_mammal_yavin4"},
+   resourceTypes = {"meat_carnivore", "hide_scaley", "bone"},
    resourceQuantities = {30, 35, 20},
    contribution = {100, 100, 100},
 

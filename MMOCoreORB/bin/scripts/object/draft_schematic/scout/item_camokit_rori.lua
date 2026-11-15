@@ -66,7 +66,7 @@ object_draft_schematic_scout_item_camokit_rori = object_draft_schematic_scout_sh
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"musk_extract", "native_animal_skins", "camo_dye"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"meat_carnivore_rori", "hide_leathery_rori", "bone_mammal_rori"},
+   resourceTypes = {"meat_carnivore", "hide_leathery", "bone"},
    resourceQuantities = {25, 30, 15},
    contribution = {100, 100, 100},
 

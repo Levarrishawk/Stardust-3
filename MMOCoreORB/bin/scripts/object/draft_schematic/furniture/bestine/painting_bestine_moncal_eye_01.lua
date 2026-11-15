@@ -66,7 +66,7 @@ object_draft_schematic_furniture_bestine_painting_bestine_moncal_eye_01 = object
 	ingredientTemplateNames = {"craft_furniture_ingredients_n", "craft_furniture_ingredients_n", "craft_furniture_ingredients_n"},
 	ingredientTitleNames = {"frame", "canvas", "paints"},
 	ingredientSlotType = {0, 0, 0},
-	resourceTypes = {"metal", "hide", "petrochem_inert_polymer"},
+	resourceTypes = {"metal", "hide", "petrochem_inert"},
 	resourceQuantities = {50, 50, 40},
 	contribution = {100, 100, 100},
 

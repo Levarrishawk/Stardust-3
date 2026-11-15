@@ -66,7 +66,7 @@ object_draft_schematic_clothing_clothing_bodysuit_formal_06 = object_draft_schem
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"highly_elastic_skin_fabric", "jewelry_setting", "hardware"},
    ingredientSlotType = {0, 1, 1},
-   resourceTypes = {"petrochem_inert_polymer", "object/tangible/component/clothing/shared_jewelry_setting.iff", "object/tangible/component/clothing/shared_metal_fasteners.iff"},
+   resourceTypes = {"petrochem_inert", "object/tangible/component/clothing/shared_jewelry_setting.iff", "object/tangible/component/clothing/shared_metal_fasteners.iff"},
    resourceQuantities = {300, 2, 4},
    contribution = {100, 100, 100},
 

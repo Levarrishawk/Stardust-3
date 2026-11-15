@@ -66,7 +66,7 @@ object_draft_schematic_clothing_component_clothing_shoe_sole = object_draft_sche
    ingredientTemplateNames = {"craft_clothing_ingredients_n", "craft_clothing_ingredients_n"},
    ingredientTitleNames = {"body", "binding_and_reinforcement"},
    ingredientSlotType = {0, 0},
-   resourceTypes = {"petrochem_inert_polymer", "petrochem_inert"},
+   resourceTypes = {"petrochem_inert", "petrochem_inert"},
    resourceQuantities = {20, 5},
    contribution = {100, 100},
 

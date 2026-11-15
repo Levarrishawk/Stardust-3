@@ -66,7 +66,7 @@ object_draft_schematic_weapon_component_chemical_dispersion_mechanism = object_d
    ingredientTemplateNames = {"craft_weapon_ingredients_n", "craft_weapon_ingredients_n", "craft_weapon_ingredients_n"},
    ingredientTitleNames = {"chemical_barrel_coupling", "emitter_nozzle", "sealant_gaskets"},
    ingredientSlotType = {0, 0, 0},
-   resourceTypes = {"steel", "metal_nonferrous", "petrochem_inert_polymer"},
+   resourceTypes = {"steel", "metal_nonferrous", "petrochem_inert"},
    resourceQuantities = {14, 5, 5},
    contribution = {100, 100, 100},
 

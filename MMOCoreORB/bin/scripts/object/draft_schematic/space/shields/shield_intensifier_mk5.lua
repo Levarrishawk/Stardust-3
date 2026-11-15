@@ -66,7 +66,7 @@ object_draft_schematic_space_shields_shield_intensifier_mk5 = object_draft_schem
    ingredientTemplateNames = {"craft_item_ingredients_n", "craft_item_ingredients_n"},
    ingredientTitleNames = {"casing", "shield_intensifying_mechanism"},
    ingredientSlotType = {0, 0},
-   resourceTypes = {"steel", "fiberplast_gravitonic"},
+   resourceTypes = {"steel", "fiberplast"},
    resourceQuantities = {2000, 500},
    contribution = {100, 100},
 

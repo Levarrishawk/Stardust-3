@@ -67,7 +67,7 @@ object_draft_schematic_armor_component_armor_layer_cold = object_draft_schematic
 	ingredientTemplateNames = {"craft_armor_ingredients_n", "craft_armor_ingredients_n", "craft_armor_ingredients_n"},
 	ingredientTitleNames = {"armor_layer_frame", "defensive_layer_microlattice", "insulation_medium"},
 	ingredientSlotType = {0, 0, 0},
-	resourceTypes = {"aluminum", "petrochem_inert_polymer", "ore_carbonate"},
+	resourceTypes = {"aluminum", "petrochem_inert", "ore_carbonate"},
 	resourceQuantities = {25, 10, 12},
 	contribution = {100, 100, 100},
 

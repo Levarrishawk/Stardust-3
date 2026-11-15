@@ -67,7 +67,7 @@ object_draft_schematic_chemistry_component_solid_delivery_shell_advanced = objec
 	ingredientTemplateNames = {"craft_chemical_ingredients_n", "craft_chemical_ingredients_n"},
 	ingredientTitleNames = {"purified_organic_element", "shell_material_seed_matrix"},
 	ingredientSlotType = {0, 0},
-	resourceTypes = {"oats_domesticated", "iron_dolovite"},
+	resourceTypes = {"oats_domesticated", "iron"},
 	resourceQuantities = {16, 16},
 	contribution = {100, 100},
 
