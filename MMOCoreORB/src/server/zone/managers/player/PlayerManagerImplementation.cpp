@@ -1794,7 +1794,7 @@ void PlayerManagerImplementation::sendPlayerToCloner(CreatureObject* player, uin
 	Zone* playerZone = player->getZone();
 	bool onMortis = playerZone != nullptr && playerZone->getZoneName() == "mortis";
 
-	if (!onMortis && ghost->getCloneCounter() >= 5) {
+	if (!onMortis && ghost->getCloneCounter() >= PlayerObject::CLONE_LIMIT) {
 		player->sendSystemMessage("Critical Error: Clone data corrupted from degradation!");
 		sendPlayerToAfterlife(player);
 		return;
@@ -1974,7 +1974,7 @@ void PlayerManagerImplementation::sendPlayerToAfterlife(CreatureObject* player) 
 	ghost->setCloning(true);
 
 	player->switchZone("elysium", 47, 12, -14, 0);
-	ghost->setCloneCounter(5);
+	ghost->setCloneCounter(PlayerObject::CLONE_LIMIT);
 
 	Time entryTime;
 	ghost->setScreenPlayData("ElysiumGuardian", "entryTime", String::valueOf(entryTime.getTime()));

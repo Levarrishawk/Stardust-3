@@ -19,6 +19,9 @@
 void CloningTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, ObjectMenuResponse* menuResponse, CreatureObject* player) const {
 
 	TangibleObjectMenuComponent::fillObjectMenuResponse(sceneObject, menuResponse, player);
+
+	if (player->isPlayerCreature())
+		menuResponse->addRadialMenuItem(RadialOptions::SERVER_MENU1, 3, "Check Clones Remaining");
 }
 
 int CloningTerminalMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, CreatureObject* player, byte selectedID) const {
@@ -37,9 +40,17 @@ int CloningTerminalMenuComponent::handleObjectMenuSelect(SceneObject* sceneObjec
 		}
 	}
 
-	if(selectedID == 20) {
+	ManagedReference<PlayerObject*> ghost = player->getPlayerObject();
+	if (ghost == nullptr)
+		return 0;
 
-		ManagedReference<PlayerObject*> ghost = player->getPlayerObject();
+	if (selectedID == RadialOptions::SERVER_MENU1) {
+		const int remaining = Math::max(0, PlayerObject::CLONE_LIMIT - ghost->getCloneCounter());
+		player->sendSystemMessage("You have " + String::valueOf(remaining) + " of " + String::valueOf(PlayerObject::CLONE_LIMIT) + " clones remaining.");
+		return 0;
+	}
+
+	if (selectedID == RadialOptions::ITEM_USE) {
 		ManagedReference<BuildingObject*> cloner = cast<BuildingObject*>(sceneObject->getRootParent());
 
 		if (cloner != nullptr && (ghost->getCloningFacility() == cloner->getObjectID())) {

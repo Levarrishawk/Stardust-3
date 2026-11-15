@@ -342,6 +342,7 @@ class PlayerObject extends IntangibleObject {
 
 	public static final int PVP_RATING_FLOOR = 500;
 	public static final unsigned long PVP_RESET_TIME = 259200000; // 3 days
+	public static final int CLONE_LIMIT = 5;
 
 	public PlayerObject() {
 		playerLogLevel = 4; // INFO

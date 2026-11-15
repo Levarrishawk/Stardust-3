@@ -458,8 +458,8 @@ int LuaPlayerObject::setCloneCounter(lua_State* L) {
 
 	if (cloneCount < 0)
 		cloneCount = 0;
-	else if (cloneCount > 5)
-		cloneCount = 5;
+	else if (cloneCount > PlayerObject::CLONE_LIMIT)
+		cloneCount = PlayerObject::CLONE_LIMIT;
 
 	realObject->setCloneCounter(cloneCount);
 	return 0;
