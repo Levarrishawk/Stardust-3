@@ -7,7 +7,7 @@ corvetteCrowleyConvoTemplate = ConvoTemplate:new {
 
 no_faction = ConvoScreen:new {
 	id = "no_faction",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_c55f8e77", --I've much to do... I'm afraid I don't have time to spare unless it involves urgent Rebel business.
+	customDialogText = "This is dock business. If you need freight work, ask at the port.",
 	stopConversation = "true",
 	options = {}
 }
@@ -23,10 +23,10 @@ corvetteCrowleyConvoTemplate:addScreen(already_busy);
 
 convo_start = ConvoScreen:new {
 	id = "convo_start",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_84bd3f49",--One of our own Corellian corvettes. Unthinkable. The Empire has crafted a diabolical political maneuver. They've stolen a Corellian corvette and are filling it with explosives. They intend to send it hurtling into Centerpoint Station near Corellia. The plan being to make the Rebels look both foolish and dangerous at the same time. We must stop them before they complete their horrible plan.
+	customDialogText = "The Empire is going to crash an impounded corvette into a Corellian repair yard at shift change. They've already drafted a statement blaming the dockworkers. My people are on that shift.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_crowley_rebel1:s_59f5cee6","quest_start"},--Is there anything I can do to help?
+		{"I'll look for the document.", "quest_start"},
 		{"@conversation/corvette_crowley_rebel1:s_df8ea53","convo_exit"} --Not interested.
 	}
 }
@@ -34,7 +34,7 @@ corvetteCrowleyConvoTemplate:addScreen(convo_start);
 
 quest_start = ConvoScreen:new {
 	id = "quest_start",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_e77661bc",--Hmm... Indeed. You seem capable enough to help us in this endeavor. We must find the location of that Corellian corvette. We believe it to be somewhere in deep space and thus harder to find and safer in case anything goes wrong. Based on intel gathered, I know of three places you should look. Those being  the Imperial Base on Lok, the Rogue CorSec base on Corellia, and the Imperial prison on Dathomir.
+	customDialogText = "I have three leads for the Impound Flight Order. Bring me the current copy and I'll clear you for boarding. Which lead do you want first?",
 	stopConversation = "false",
 	options = {	}
 }
@@ -50,7 +50,7 @@ corvetteCrowleyConvoTemplate:addScreen(convo_exit);
 
 which_planet = ConvoScreen:new {
 	id = "which_planet",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_dd846d25",--You need to find a document which details the location of the Corellian corvette. Which location do you need more information on?
+	customDialogText = "Which lead for the Impound Flight Order should I go over again?",
 	stopConversation = "false",
 	options = {}
 }
@@ -58,7 +58,7 @@ corvetteCrowleyConvoTemplate:addScreen(which_planet);
 
 first_location = ConvoScreen:new {
 	id = "first_location",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_fa42cc8d",--We have reason to believe that Imperial General Otto, stationed at the Imperial base on Lok, may be supplying the explosives being used on the corvette. General Otto is known to be fairly careless, so it would not be surprising if the information you seek was in an unsecured crate or desk somewhere. Seek out his base and return with any information you find.
+	customDialogText = "The Imperial outpost on Lok issued equipment for a so-called navigation trial. Check the outdoor freight crate at (-1891, -3034) for the dispatch packet.",
 	stopConversation = "false",
 	options = {}
 }
@@ -66,7 +66,7 @@ corvetteCrowleyConvoTemplate:addScreen(first_location);
 
 second_location = ConvoScreen:new {
 	id = "second_location",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_2621fdc0", --Rumor is that a group of Rogue CorSec operatives have stolen some important documents from the Empire. This could well include the information I'm looking for. If so, it's in their hideout on Corellia.
+	customDialogText = "Former CorSec agents copied the order while looking into the impound. Search their records in the bunker on Corellia (5238, 1600).",
 	stopConversation = "false",
 	options = {}
 }
@@ -74,7 +74,7 @@ corvetteCrowleyConvoTemplate:addScreen(second_location);
 
 third_location = ConvoScreen:new {
 	id = "third_location",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_7ed78a88", --Many who have been taken to the Imperial Prison on Dathomir have never been seen again. It is a dangerous and forbidding place. Rumor is that the surviving crew of this corvette is incarcerated there. Travel to this dangerous planet and infiltrate the prison. Search for any information you can find.
+	customDialogText = "The original crew refused to sign off on the flight and wound up in prison. Search the custody shed on Dathomir (-6309, 752) for the order filed with their case.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -122,7 +122,7 @@ corvetteCrowleyConvoTemplate:addScreen(has_intel);
 
 bad_intel_1 = ConvoScreen:new {
 	id = "bad_intel_1",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_9dc63a4b",--Unfortunately, this isn't the information needed for our mission. However, any information is good information. I will reward you for this.
+	customDialogText = "This copy was superseded before the ship left. I'll pay you for the lead. Keep looking for the current one.",
 	stopConversation = "false",
 	options = {}
 }
@@ -130,7 +130,7 @@ corvetteCrowleyConvoTemplate:addScreen(bad_intel_1);
 
 bad_intel_2 = ConvoScreen:new {
 	id = "bad_intel_2",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_9dc63a4b", --Unfortunately, this isn't the information needed for our mission. However, any information is good information. I will reward you for this.
+	customDialogText = "This belongs to the operation, but it won't get you aboard. I'll pay you for bringing it in.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -155,7 +155,7 @@ corvetteCrowleyConvoTemplate:addScreen(other_documents);
 
 good_intel = ConvoScreen:new {
 	id = "good_intel",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_397c5f6d",--Excellent! This is exactly the information we've needed! We now know where the Corellian corvette is. You'll need to speak with Lt. Lance at the Rebel Alliance hideout on Corellia. He will provide transportation which will enable you to intercept the stolen Corellian corvette. When you get to the corvette, it must be destroyed before it hits Centerpoint Station near Corellia. Once that has been accomplished return to me for a reward. Now go see Lt. Lance on Corellia.
+	customDialogText = "That's the signed flight order. Take the crew authorization to Lance at Tyrena Starport on Corellia. Take the drive out before it reaches the yard, then get to an escape pod.",
 	stopConversation = "false",
 	options = { }
 }
@@ -163,7 +163,7 @@ corvetteCrowleyConvoTemplate:addScreen(good_intel);
 
 go_to_corvette = ConvoScreen:new {
 	id = "go_to_corvette",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_908f0d55", --Good luck, young recruit. Return in victory and be rewarded. May the Force be with you.
+	customDialogText = "Bring the crew authorization to Lance at Tyrena Starport on Corellia. Find him seated in the second ticket room. Bring your whole crew.",
 	stopConversation = "true",
 	options = {}
 }
@@ -206,7 +206,7 @@ corvetteCrowleyConvoTemplate:addScreen(changed_mind);
 
 launch_location = ConvoScreen:new {
 	id = "launch_location",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_2373d61a", --Lt. Lance at the Rebel hideout on Corellia is waiting to meet you. He will provide transportation which will enable you to intercept the stolen Corellian corvette. After you've victoriously completed your mission, return to me for a reward.
+	customDialogText = "Bring the crew authorization to Lance at Tyrena Starport on Corellia. Find him seated in the second ticket room. Bring your whole crew.",
 	stopConversation = "true",
 	options = {}
 }
@@ -214,10 +214,10 @@ corvetteCrowleyConvoTemplate:addScreen(launch_location);
 
 reward = ConvoScreen:new {
 	id = "reward",
-	leftDialog = "@conversation/corvette_crowley_rebel1:s_729d86e2", --You've done an outstanding job! When I heard that the corvette was destroyed, I was ecstatic. Are you here for your reward?
+	customDialogText = "The repair yard is still standing. The crews made it home. Here, take what we put together for you.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_crowley_rebel1:s_36e1dfe9","give_reward"}, --I am. Thank you.
+		{"I'll take the payment.", "give_reward"},
 		{"@conversation/corvette_crowley_rebel1:s_823e1fa","reward_notyet"} --No, I'm not yet ready for it.
 	}
 }

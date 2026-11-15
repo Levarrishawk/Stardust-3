@@ -102,6 +102,7 @@ function CorvetteIntelSearchMenuComponent:handleObjectMenuSelect(pContainer, pPl
 		local pItem = giveItem(pInventory, self.ticketGiver.intelMap.itemTemplates[intelItem], -1)
 
 		if pItem ~= nil then
+			SceneObject(pItem):setCustomObjectName(self.ticketGiver.intelMap.itemNames[intelItem])
 			SceneObject(pItem):sendTo(pPlayer)
 			player:sendSystemMessage("@bestine:default_receive_msg") -- You search and find something then place it into your inventory.
 			setQuestStatus(player:getObjectID() .. ":corvetteIntelAcquired", intelNumber + intelAcquired)
@@ -157,6 +158,10 @@ function CorvetteTicketGiverLogic:hasIntel(pPlayer)
 end
 
 function CorvetteTicketGiverLogic:removeDocuments(pPlayer)
+	if (self.ticketInfo.faction == "rebel") then
+		self:setPickupWaypoint(pPlayer, false)
+	end
+
 	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
 
 	if pInventory == nil then
@@ -233,8 +238,40 @@ function CorvetteTicketGiverLogic:giveTicket(pPlayer)
 		ticket:setArrivalPlanet(self.ticketInfo.missionType)
 		ticket:setArrivalPoint(self.ticketInfo.faction)
 		ticket:setOwnerID(SceneObject(pPlayer):getObjectID())
+		SceneObject(pItem):setCustomObjectName(self.contractTitle .. " Boarding Authorization")
 		SceneObject(pItem):sendTo(pPlayer)
 		createObserver(OBJECTREMOVEDFROMZONE, "CorvetteTicketGiverLogic", "notifyTicketDestroyed", pItem, 1)
+
+		if (self.ticketInfo.faction == "rebel") then
+			self:setPickupWaypoint(pPlayer, true)
+		end
+	end
+end
+
+function CorvetteTicketGiverLogic:setPickupWaypoint(pPlayer, show)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if (pGhost == nil) then
+		return
+	end
+
+	local ghost = PlayerObject(pGhost)
+	local key = SceneObject(pPlayer):getObjectID() .. ":corvettePickupWaypoint"
+	local waypointID = tonumber(getQuestStatus(key))
+	if (waypointID ~= nil) then
+		ghost:removeWaypoint(waypointID, true)
+		removeQuestStatus(key)
+	end
+
+	if (show) then
+		local pickup = ticketTakerLtLance.pickupWaypoint
+		waypointID = ghost:addWaypoint("corellia", "Tyrena Freight Pickup", "", pickup.x, pickup.z, pickup.y, WAYPOINTBLUE, true, true, 0)
+		if (waypointID ~= nil) then
+			setQuestStatus(key, tostring(waypointID))
+		end
 	end
 end
 
@@ -245,6 +282,10 @@ function CorvetteTicketGiverLogic:notifyTicketDestroyed(pTicket)
 
 	local ticket = LuaTicketObject(pTicket)
 	local ownerID = ticket:getOwnerID()
+
+	if (ticket:getDeparturePoint() == "rebel") then
+		self:setPickupWaypoint(getSceneObject(ownerID), false)
+	end
 
 	removeQuestStatus(ownerID .. ":activeCorvetteQuest")
 	removeQuestStatus(ownerID .. ":activeCorvetteStep")

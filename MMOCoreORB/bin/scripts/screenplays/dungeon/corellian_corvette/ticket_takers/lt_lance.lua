@@ -1,14 +1,15 @@
-lt_lance = { planetName = "corellia", npcTemplate = "lt_lance", x = -6518.5, z = 398.0, y = 6044.1, direction = -18, cellID = 0, position = STAND }
+lt_lance = { planetName = "corellia", npcTemplate = "lt_lance", x = -36.7, z = 1.6, y = 66.1, direction = 128, cellID = 1935692, position = SIT }
 
 ticketTakerLtLance = CorvetteTicketTakerLogic:new {
 	numberOfActs = 1,
 	npc = lt_lance,
+	pickupWaypoint = { x = -4995.8, z = 22.6, y = -2302.7 },
 	takerName = "ticketTakerLtLance",
 	faction = FACTIONREBEL,
-	goodbyeString = "@conversation/corvette_rebel_pilot:s_6e257495", -- No, I'm just passing through.
-	helpMeString = "@conversation/corvette_rebel_pilot:s_1a003c0e", -- Ah no. I hear you can help me intercept a Corellian corvette controlled by the Empire?
-	nevermindString = "@conversation/corvette_rebel_pilot:s_1a71d76e", -- Um... nothing. Nevermind.
-	aboutMissionString = "@conversation/corvette_rebel_pilot:s_1ab00f5e", -- [Tell him about your mission]
+	goodbyeString = "I'm just passing through.",
+	helpMeString = "I'm here for the crew transfer.",
+	nevermindString = "I'll come back later.",
+	aboutMissionString = "I'm here for the crew transfer.",
 }
 
 registerScreenPlay("ticketTakerLtLance", true)

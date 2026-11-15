@@ -125,6 +125,10 @@ function CorvetteTicketTakerLogic:finishValidateTicket(pPlayer)
 	local result = CorellianCorvette:activate(pPlayer, self:getFactionString(), activeQuestType)
 
 	if (result) then
+		if (self.faction == FACTIONREBEL) then
+			CorvetteTicketGiverLogic:setPickupWaypoint(pPlayer, false)
+		end
+
 		dropObserver(OBJECTREMOVEDFROMZONE, "CorvetteTicketGiverLogic", "notifyTicketDestroyed", pInvItem)
 		SceneObject(pInvItem):destroyObjectFromWorld()
 		SceneObject(pInvItem):destroyObjectFromDatabase()

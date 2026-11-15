@@ -1,6 +1,6 @@
 corvette_rebel_crowley = Creature:new {
 	objectName = "@npc_name:twilek_base_female",
-	customName = "Master Sergeant Crowley",
+	customName = "Crowley",
 	socialGroup = "rebel",
 	faction = "rebel",
 	mobType = MOB_NPC,

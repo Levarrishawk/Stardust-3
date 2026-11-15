@@ -18,7 +18,7 @@ function corvettePrisonerConvoHandler:runScreenHandlers(pConvTemplate, pPlayer, 
 
 	local pConvScreen = screen:cloneScreen()
 	local clonedConversation = LuaConversationScreen(pConvScreen)
-	if (screenID == "not_rescued") then
+	if (screenID == "not_rescued" and readData(SceneObject(pNpc):getObjectID() .. ":alreadyRescued") ~= 1) then
 		writeData(SceneObject(pNpc):getObjectID() .. ":alreadyRescued", 1)
 		createEvent(3000, "CorellianCorvette", "doPrisonerEscape", pNpc, "")
 		self:handleReward(pPlayer)

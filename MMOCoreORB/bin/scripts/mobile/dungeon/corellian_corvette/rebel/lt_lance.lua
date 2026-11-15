@@ -1,6 +1,6 @@
 lt_lance = Creature:new {
 	objectName = "",
-	customName = "Lt. Lance",
+	customName = "Lance, Freight Dispatcher",
 	socialGroup = "rebel",
 	mobType = MOB_NPC,
 	faction = "rebel",
@@ -27,7 +27,7 @@ lt_lance = Creature:new {
 	optionsBitmask = CONVERSABLE + INTERESTING + INVULNERABLE,
 	diet = HERBIVORE,
 
-	templates = {"object/mobile/dressed_lieutenant_lance.iff"},
+	templates = {"object/mobile/dressed_artisan_trainer_02.iff"},
 	lootGroups = {},
 
 	-- Primary and secondary weapon should be different types (rifle/carbine, carbine/pistol, rifle/unarmed, etc)

@@ -26,7 +26,7 @@ convo_start = ConvoScreen:new {
 	leftDialog = "@conversation/corvette_sabol_imperial1:s_145e07df", --Idiots! Complete and utter idiots! How can I complete my tasks when my commanding officers are nothing but fools! I... Excuse me. I didn't see you standing there. Well... what do you want? I'm very busy as you can see.
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_sabol_imperial1:s_3098b584	","convo_start_2"}, --You said something about tasks.
+		{"Tell me more.", "convo_start_2"},
 		{"@conversation/corvette_sabol_imperial1:s_4c16d4f","convo_exit"} --Ah, nothing. My apologies for disturbing you.
 	}
 }
@@ -45,7 +45,7 @@ convo_start_2 = ConvoScreen:new {
 	leftDialog = "@conversation/corvette_sabol_imperial1:s_1e7ac1df", --So? Are you looking for work? Are you that desperate? I suppose I might be thankful but, as a lieutenant of the Empire, I am more suspicious than grateful. Oh fine! I'll tell you but only because I need someone to help me with some... field work. Do you wish to hear me out?
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_sabol_imperial1:s_683de974	","convo_start_3"}, --Yes, I'll hear your story.
+		{"Tell me more.", "convo_start_3"},
 		{"@conversation/corvette_sabol_imperial1:s_d143f357","convo_exit_2"} --No thanks. I'm going now. Good-bye.
 	}
 }
@@ -61,10 +61,10 @@ corvetteSabolConvoTemplate:addScreen(convo_exit_2);
 
 convo_start_3 = ConvoScreen:new {
 	id = "convo_start_3",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_f7d97fec", --My superiors have instructed me to eliminate a high-ranking Rebel officer. To do so, I must find an important document belonging to the Rebel Alliance that tells me where to find this officer. As an Imperial lieutenant, I will not participate in such menial tasks. But I am also a woman of great ambition, so I'll not ignore such orders. Instead I prefer to find others who will do my bidding. Are you interested in the task? Mind you, I will not tolerate failure.
+	customDialogText = "A former Republic captain is using a civilian corvette to coordinate evacuation corridors for several insurgent cells. My orders are to close those routes. Yours are to find the man and eliminate him before he briefs his next convoy.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_sabol_imperial1:s_1f9dab05	","convo_start_4"}, --I'll gladly help eliminate a Rebel officer. Where can I find this document?
+		{"Tell me more.", "convo_start_4"},
 		{"@conversation/corvette_sabol_imperial1:s_df8ea53","convo_exit_3"} --Not interested.
 	}
 }
@@ -80,10 +80,10 @@ corvetteSabolConvoTemplate:addScreen(convo_exit_3);
 
 convo_start_4 = ConvoScreen:new {
 	id = "convo_start_4",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_963fc82f", --I have some data on where this document might be found. Let me check my datapad. Hmm... Only three locations. Unfortunately I have nothing that gives us a hint about which might be the one with the document we seek. It could be at any of these places. Are you still interested in assisting me?
+	customDialogText = "Find the Outbound Freight Manifest. It identifies the corvette's civilian registration and places the captain aboard. I have three leads. I expect results.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_sabol_imperial1:s_b9bb7669	","quest_start"}, --Yes, of course. I'll check all three if need be.
+		{"I'll look for the document.", "quest_start"},
 		{"@conversation/corvette_sabol_imperial1:s_a11b6dbf","convo_exit_4"} --No, that would be a little too hard.
 	}
 }
@@ -99,7 +99,7 @@ corvetteSabolConvoTemplate:addScreen(convo_exit_4);
 
 quest_start = ConvoScreen:new {
 	id = "quest_start",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_3e470c42", --Excellent. The document we seek can be found at any one of these locations: at the Rebel base on Dantooine, in the Afarathu cave on Corellia, and on a cruise liner... the Star Tours Tzarina.
+	customDialogText = "I have three leads for the Outbound Freight Manifest. Bring me the current copy and I'll clear you for boarding. Which lead do you want first?",
 	stopConversation = "false",
 	options = {	}
 }
@@ -107,7 +107,7 @@ corvetteSabolConvoTemplate:addScreen(quest_start);
 
 which_planet = ConvoScreen:new {
 	id = "which_planet",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_29dd35da", -- Ugh! This is turning out to be a disaster. About which location do you need more information?
+	customDialogText = "Which lead for the Outbound Freight Manifest should I go over again?",
 	stopConversation = "false",
 	options = {	}
 }
@@ -115,7 +115,7 @@ corvetteSabolConvoTemplate:addScreen(which_planet);
 
 first_location = ConvoScreen:new {
 	id = "first_location",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_b687be9",--An old Rebel base can be found in the northwest corner of Dantooine. It was supposedly abandoned when the traitors making up the Rebel Alliance opted for a new and, one would assume, better base of operations. My belief is that there are still Rebels making use of the base. Maybe not many, but some. Look there for the information we need.
+	customDialogText = "A courier traveling under a passenger alias carried a duplicate in a sealed case. Search the Tzarina debris field on Dathomir (5694, 1935).",
 	stopConversation = "false",
 	options = {	}
 }
@@ -123,7 +123,7 @@ corvetteSabolConvoTemplate:addScreen(first_location);
 
 second_location = ConvoScreen:new {
 	id = "second_location",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_ba8810ed", --We have reports that in the recent past some Rebels were fighting warriors from the Afarathu Sect on Corellia. Further intelligence hinted that the Afarathu made off with some important Rebel documents... possibly including the one we need. The Afarathu are slime though. You won't be able to enter their cave without a fight. Regardless, search it well and find the document.
+	customDialogText = "The captain registered the ship through a broker in Anchorhead, Tatooine (132, -5356). Search the broker's house for the filed manifest.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -131,7 +131,7 @@ corvetteSabolConvoTemplate:addScreen(second_location);
 
 third_location = ConvoScreen:new {
 	id = "third_location",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_c23e3bbe", --The Star Tours Tzarina was a cruise liner. It was struck by an unidentified object while in flight and crashed on Dathomir. Word is that a Rebel spy was on this cruise liner and among his cargo could be the document we seek. You'll have to search for it among the wreckage of the starship. Try the northwestern area of Dathomir. It might be difficult to find, but then this mission isn't for the faint of heart. Find it.
+	customDialogText = "The captain's runners use a shed at an abandoned Dantooine outpost (-6678, 5561) as a dead drop. Search it for the next convoy packet.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -179,7 +179,7 @@ corvetteSabolConvoTemplate:addScreen(has_intel);
 
 bad_intel_1 = ConvoScreen:new {
 	id = "bad_intel_1",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_63bcc509", --No, no, no! This is not the right document! Damn those Rebels! I will record your findings in case I can use this data in future operations, and I suppose a small reward is in order. But find the information we need!
+	customDialogText = "This copy was superseded before the ship left. I'll pay you for the lead. Keep looking for the current one.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -187,7 +187,7 @@ corvetteSabolConvoTemplate:addScreen(bad_intel_1);
 
 bad_intel_2 = ConvoScreen:new {
 	id = "bad_intel_2",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_63bcc509", --No, no, no! This is not the right document! Damn those Rebels! I will record your findings in case I can use this data in future operations, and I suppose a small reward is in order. But find the information we need!
+	customDialogText = "This belongs to the operation, but it won't get you aboard. I'll pay you for bringing it in.",
 	stopConversation = "false",
 	options = {}
 }
@@ -211,7 +211,7 @@ corvetteSabolConvoTemplate:addScreen(other_documents);
 
 good_intel = ConvoScreen:new {
 	id = "good_intel",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_60956d9a", --Perfect! This is the correct document. It provides information location of the high-ranking Rebel officer that the Empire wants assassinated. And for once, I agree... all Rebel officers should be put to death. Here, take this. It authorizes you for transportation that will intercept your target on the corvette. Go to the Emperor's private retreat on Naboo and speak to the shuttle pilot there. If you succeed in eliminating that officer, return to me for a reward. Go now.
+	customDialogText = "The registration checks out. Take this authorization to DS-297 at the Emperor's Retreat on Naboo. Get aboard, eliminate the captain and report directly to me.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -219,7 +219,7 @@ corvetteSabolConvoTemplate:addScreen(good_intel);
 
 go_to_corvette = ConvoScreen:new {
 	id = "go_to_corvette",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_9caa2380", --And what is keeping you? Go away. I have other important tasks to complete. Go to the Emperor's private retreat on Naboo and speak to the shuttle pilot there. If you somehow manage to succeed in this mission, return to me for your reward. Now go. Hurry.
+	customDialogText = "Present your authorization to DS-297 at the Emperor's Retreat on Naboo. Assemble your team before you speak to the pilot.",
 	stopConversation = "true",
 	options = {}
 }
@@ -262,7 +262,7 @@ corvetteSabolConvoTemplate:addScreen(changed_mind);
 
 launch_location = ConvoScreen:new {
 	id = "launch_location",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_550eac58", -- It is not that hard to understand. You need to travel to the Emperor's Retreat and contact the shuttle pilot there. He will then provide you transportation on a starship that will intercept the Alliance Corellian corvette in flight. If you somehow manage to succeed in this mission, return to me for your reward. Now go.
+	customDialogText = "Present your authorization to DS-297 at the Emperor's Retreat on Naboo. Assemble your team before you speak to the pilot.",
 	stopConversation = "true",
 	options = {}
 }
@@ -270,10 +270,10 @@ corvetteSabolConvoTemplate:addScreen(launch_location);
 
 reward = ConvoScreen:new {
 	id = "reward",
-	leftDialog = "@conversation/corvette_sabol_imperial1:s_afa2913f", -- You've actually succeeded? Unprecedented. This will truly make me look good. What's that? Oh, yes I suppose it makes you look good as well. Maybe a little anyway. I imagine you want your reward?
+	customDialogText = "The captain is dead and the corridor is closed. Local patrols will deal with the remaining ships. Collect your payment.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_sabol_imperial1:s_6f43c8f7","give_reward"}, --That's right, I do.
+		{"I'll take the payment.", "give_reward"},
 		{"@conversation/corvette_sabol_imperial1:s_be293abc","reward_notyet"} -- No, not yet. I'll return.
 	}
 }

@@ -1353,27 +1353,28 @@ void PlanetManagerImplementation::readRegionObject(LuaObject& regionObject) {
 		cityRegion->addRegion(region);
 		region->setCityRegion(cityRegion);
 
-		// Attach Scenery
-		ManagedReference<SceneObject*> scenery = nullptr;
+		if (regionObject.getBooleanField("spawnDistantShips", true)) {
+			ManagedReference<SceneObject*> scenery = nullptr;
 
-		if (gcwManager != nullptr) {
-			int strongholdFaction = gcwManager->isStrongholdCity(name);
+			if (gcwManager != nullptr) {
+				int strongholdFaction = gcwManager->isStrongholdCity(name);
 
-			if (strongholdFaction == Factions::FACTIONIMPERIAL || name.contains("imperial")) {
-				scenery = zone->getZoneServer()->createObject(STRING_HASHCODE("object/static/particle/particle_distant_ships_imperial.iff"), 0);
-			} else if (strongholdFaction == Factions::FACTIONREBEL || name.contains("rebel")) {
-				scenery = zone->getZoneServer()->createObject(STRING_HASHCODE("object/static/particle/particle_distant_ships_rebel.iff"), 0);
+				if (strongholdFaction == Factions::FACTIONIMPERIAL || name.contains("imperial")) {
+					scenery = zone->getZoneServer()->createObject(STRING_HASHCODE("object/static/particle/particle_distant_ships_imperial.iff"), 0);
+				} else if (strongholdFaction == Factions::FACTIONREBEL || name.contains("rebel")) {
+					scenery = zone->getZoneServer()->createObject(STRING_HASHCODE("object/static/particle/particle_distant_ships_rebel.iff"), 0);
+				} else {
+					scenery = zone->getZoneServer()->createObject(STRING_HASHCODE("object/static/particle/particle_distant_ships.iff"), 0);
+				}
 			} else {
 				scenery = zone->getZoneServer()->createObject(STRING_HASHCODE("object/static/particle/particle_distant_ships.iff"), 0);
 			}
-		} else {
-			scenery = zone->getZoneServer()->createObject(STRING_HASHCODE("object/static/particle/particle_distant_ships.iff"), 0);
-		}
 
-		if (scenery != nullptr) {
-			Locker slocker(scenery, region);
-			scenery->initializePosition(x, zone->getHeight(x, y) + 100, y);
-			region->attachScenery(scenery);
+			if (scenery != nullptr) {
+				Locker slocker(scenery, region);
+				scenery->initializePosition(x, zone->getHeight(x, y) + 100, y);
+				region->attachScenery(scenery);
+			}
 		}
 
 		regionMap.addCityRegion(cityRegion);

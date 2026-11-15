@@ -18,7 +18,7 @@ convo_start = ConvoScreen:new {
 	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_8c30ea7c", -- You there. I must demand your assistance with this mission of utmost importance. You will help, yes? This mission is vital to Lord Jabba and I am only speaking on his behalf. I, of course, get nothing out of this myself. So you will help, yes yes?
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_bronell_neutral_assassin:s_d62f7d90","convo_start_2"}, -- Depends, tell me about this mission?
+		{"Tell me more.", "convo_start_2"},
 		{"@conversation/corvette_bronell_neutral_assassin:s_bd40a944","convo_exit"} -- Sorry, I have other things to do.
 	}
 }
@@ -34,27 +34,27 @@ corvetteBronellConvoTemplate:addScreen(convo_exit);
 
 convo_start_2 = ConvoScreen:new {
 	id = "convo_start_2",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_bef20f69", -- Yes, indeed. Lord Hutt has a problem with a person who owes more than he could possibly pay, yes? You know what our venerable Lord does to those who can't pay debts, yes?
+	customDialogText = "A CorSec chief has been charging Lord Jabba's freight crews to get through Imperial inspections. I think he has mistaken whose business this is, yes?",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_bronell_neutral_assassin:s_f5dcf8ec","convo_start_3"}, -- Was that a question or a statement?
+		{"Tell me more.", "convo_start_3"},
 	}
 }
 corvetteBronellConvoTemplate:addScreen(convo_start_2);
 
 convo_start_3 = ConvoScreen:new {
 	id = "convo_start_3",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_560a7d6e", -- Quiet! I was not done yet, yes? This person is an officer in the Corellian Security Forces and thinks that will protect him, yes? He has incurred debts all over the galaxy, though, and I know a way to find him, yes?
+	customDialogText = "He owes debts all over the sector. He pays in favors and tells his collectors where he will be posted. Bring me a current Gambling Debt Ledger and I can tell you which ship he is on.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_bronell_neutral_assassin:s_eece1fb8","quest_start"}, -- I don't know... have you?
+		{"I'll look for the document.", "quest_start"},
 	}
 }
 corvetteBronellConvoTemplate:addScreen(convo_start_3);
 
 quest_start = ConvoScreen:new {
 	id = "quest_start",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_832183d2", --Didn't I just say I have, yes? There are three lowly gangs of pirates, and this CorSec officer owes money to each of them, yes? These pirates can be found on Talus, Naboo, and Lok. Any of them may have documented his whereabouts, yes?
+	customDialogText = "I have three leads for the Gambling Debt Ledger. Bring me the current copy and I'll clear you for boarding. Which lead do you want first?",
 	stopConversation = "false",
 	options = {}
 }
@@ -62,7 +62,7 @@ corvetteBronellConvoTemplate:addScreen(quest_start);
 
 which_planet = ConvoScreen:new {
 	id = "which_planet",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_f9bdde1d", -- Bah! Fine. Talus, Naboo, or Lok... which planet, yes?
+	customDialogText = "Which lead for the Gambling Debt Ledger should I go over again?",
 	stopConversation = "false",
 	options = {}
 }
@@ -70,7 +70,7 @@ corvetteBronellConvoTemplate:addScreen(which_planet);
 
 first_location = ConvoScreen:new {
 	id = "first_location",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_f7203ef1", -- On Talus resides the despicable gang of pirates called Binayre. Scum they are, yes? Well below our notice normally, but this CorSec officer owes them a small amount of money. Perhaps they have information on CorSec operations that would tell us his location, yes?
+	customDialogText = "The Binayre hold one of the chief's markers, yes? Search their accounts in the bunker on Talus (5584, -4080) for his promised payoff and the next rendezvous.",
 	stopConversation = "false",
 	options = {}
 }
@@ -78,7 +78,7 @@ corvetteBronellConvoTemplate:addScreen(first_location);
 
 second_location = ConvoScreen:new {
 	id = "second_location",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_469c9070", -- A ragtag bunch of pirates has a hideout there, yes? They are mostly known for kidnapping Naboo royalty, but they indulge in gambling from time to time as well. This CorSec officer owes them money, yes? He has quite a gambling problem, yes?
+	customDialogText = "He signed off a cargo release for pirates who held his debt. Search the bookkeeper's files in their bunker on Naboo (-1482, -1729).",
 	stopConversation = "false",
 	options = {	}
 }
@@ -86,7 +86,7 @@ corvetteBronellConvoTemplate:addScreen(second_location);
 
 third_location = ConvoScreen:new {
 	id = "third_location",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_e1341a5c", -- I learned of a third option from an informant... well, a former informant. While his tongue was still attached, yes? The Canyon Corsairs on Lok have also dealt with this gambling maniac, yes? They might have the correct information as well, yes?
+	customDialogText = "A Corsair collector was due to meet him on his next rotation. Check the collector's outdoor stash at the stronghold on Lok (-3893, -3801).",
 	stopConversation = "false",
 	options = {	}
 }
@@ -150,7 +150,7 @@ corvetteBronellConvoTemplate:addScreen(has_intel);
 
 bad_intel_1 = ConvoScreen:new {
 	id = "bad_intel_1",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_8c845e29", -- Hmm, yes, yes, completely useless. Here's some credits as compensation for you time. Anything else, yes?
+	customDialogText = "This copy was superseded before the ship left. I'll pay you for the lead. Keep looking for the current one.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -158,7 +158,7 @@ corvetteBronellConvoTemplate:addScreen(bad_intel_1);
 
 bad_intel_2 = ConvoScreen:new {
 	id = "bad_intel_2",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_e9499aa6", -- Let me see. Hmm, yes, yes...No! Did you even read this? Oh well, guess I have to compensate you for your time, yes? Now check the other hideouts!
+	customDialogText = "This belongs to the operation, but it won't get you aboard. I'll pay you for bringing it in.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -174,7 +174,7 @@ corvetteBronellConvoTemplate:addScreen(other_documents);
 
 good_intel = ConvoScreen:new {
 	id = "good_intel",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_c79b5a4b", -- Splendid, let me see. Hmm, no, no...wait, yes! There he is! So that's where his ship is, yes? You must intercept this corvette and arrange his demise immediately, yes? If you succeed in this, Lord Jabba has allowed me to reward you generously, yes? Yes!
+	customDialogText = "Here he is. The ledger names the corvette and his next posting. Give this authorization to Klaatu behind Jabba's Palace. Settle the account, then come back to me.",
 	stopConversation = "false",
 	options = {}
 }
@@ -182,7 +182,7 @@ corvetteBronellConvoTemplate:addScreen(good_intel);
 
 go_to_corvette = ConvoScreen:new {
 	id = "go_to_corvette",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_c1d18ea0", -- Go talk to Klaatu outside behind the palace and give him the travel authorization I provided you with, yes? He will make all the arrangements. If you succeed in your mission, return to me for your reward. Now hurry, who knows when the corvette will move on, yes?
+	customDialogText = "Show your authorization to Klaatu behind Jabba's Palace on Tatooine. Gather your crew before you talk to him.",
 	stopConversation = "true",
 	options = {}
 }
@@ -190,7 +190,7 @@ corvetteBronellConvoTemplate:addScreen(go_to_corvette);
 
 launch_location = ConvoScreen:new {
 	id = "launch_location",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_3ffc96c6", -- He's outside with the shuttle... back behind this building, Lord Jabba's palace! If you succeed in your mission, return to me for your reward, yes? Now hurry!
+	customDialogText = "Show your authorization to Klaatu behind Jabba's Palace on Tatooine. Gather your crew before you talk to him.",
 	stopConversation = "true",
 	options = {}
 }
@@ -225,10 +225,10 @@ corvetteBronellConvoTemplate:addScreen(changed_mind);
 
 reward = ConvoScreen:new {
 	id = "reward",
-	leftDialog = "@conversation/corvette_bronell_neutral_assassin:s_1779cf3b", -- Lord Jabba is pleased to hear that the CorSec officer has been eliminated. Let this be a lesson to all who fail to pay their debts to Lord Jabba the Hutt, yes? Are you here to receive your reward, yes?
+	customDialogText = "The chief's account is closed. Lord Jabba is pleased. I may be a little pleased myself, yes?",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_bronell_neutral_assassin:s_b5022ce5","give_reward"}, -- I am, yes. Hand it over!
+		{"I'll take the payment.", "give_reward"},
 		{"@conversation/corvette_bronell_neutral_assassin:s_ffc988c3","ill_be_back"} --  No, not just yet. I'll be back.
 	}
 }

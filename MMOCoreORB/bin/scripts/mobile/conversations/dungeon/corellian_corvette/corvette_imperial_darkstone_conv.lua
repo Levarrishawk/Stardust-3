@@ -26,7 +26,7 @@ convo_start = ConvoScreen:new {
 	leftDialog = "@conversation/corvette_colonel_imperial1:s_d630c3b6",--I am nearing the end of my days serving as the main point of contact in regards to Imperial officers who find themselves in a hostage situation. Every mission is important. As possibly my last, this one proves to be most difficult.
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_colonel_imperial1:s_df607c49","convo_start_1"},-- I'm listening.
+		{"Tell me more.", "convo_start_1"},
 		{"@conversation/corvette_colonel_imperial1:s_5200ce80","convo_exit"},--I'm not interested. Good-bye.
 	}
 }
@@ -34,10 +34,10 @@ corvetteDarkstoneConvoTemplate:addScreen(convo_start);
 
 convo_start_1 = ConvoScreen:new {
 	id = "convo_start_1",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_a5e941d1",--Dr. Bledsoe is the Empire's expert in the areas of disease and medicine. Unfortunately, he was abducted by Alliance terrorists. There's no telling what those ruthless animals will do to him but his existence is extremely important to the Empire's efforts. He needs to be returned. Will you help us?
+	customDialogText = "An insurgent cell abducted Dr. Bledsoe. He signed quarantine orders under which several civilians were detained. His captors mean to put him before witnesses. Find their Detainee Movement Order and bring him back into Imperial custody.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_colonel_imperial1:s_1944f1e6","quest_start"},-- Yes, I will.
+		{"I'll look for the document.", "quest_start"},
 		{"@conversation/corvette_colonel_imperial1:s_157ef5eb","convo_exit"} --I... don't like this at all. I'll have to pass.
 	}
 }
@@ -53,7 +53,7 @@ corvetteDarkstoneConvoTemplate:addScreen(convo_exit);
 
 quest_start = ConvoScreen:new {
 	id = "quest_start",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_a342e94c",--Very well. I shall continue. We have intercepted faint transmissions discussing Dr. Bledsoe's transfer but have been unable to determine where they are they are holding him. This is where you come in. There are three locations at which we believe you might find prisoner transfer orders for Dr. Bledsoe. These three locations are the Woolamander Palace on Yavin IV, the Rogue CorSec base on Corellia, and the Droid Engineer cave on Lok.
+	customDialogText = "I have three leads for the Detainee Movement Order. Bring me the current copy and I'll clear you for boarding. Which lead do you want first?",
 	stopConversation = "false",
 	options = {}
 }
@@ -61,7 +61,7 @@ corvetteDarkstoneConvoTemplate:addScreen(quest_start);
 
 which_planet = ConvoScreen:new {
 	id = "which_planet",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_ec42069a",--Very well. We have intercepted faint transmissions discussing Dr. Bledsoe's transfer but have been unable to determine where they are they are holding him. This is where you come in. There are three locations at which we believe you might find prisoner transfer orders for Dr. Bledsoe. These three locations are the Woolamander Palace on Yavin IV, the Rogue CorSec base on Corellia, and the Droid Engineer cave on Lok.
+	customDialogText = "Which lead for the Detainee Movement Order should I go over again?",
 	stopConversation = "false",
 	options = {}
 }
@@ -69,7 +69,7 @@ corvetteDarkstoneConvoTemplate:addScreen(which_planet);
 
 first_location = ConvoScreen:new {
 	id = "first_location",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_56fe6ddb",--The Woolamander Palace can be found on Yavin IV. I do not know the history of the place. We have received several reports that affiliates of the Alliance still operate from its ruins from time to time. It can be found in the central area of Yavin IV. I don't have anymore information.
+	customDialogText = "A runner used the Woolamander Temple on Yavin IV (549, -622) as a blind drop. Search the sealed dispatch cache inside the ruins.",
 	stopConversation = "false",
 	options = { }
 }
@@ -77,7 +77,7 @@ corvetteDarkstoneConvoTemplate:addScreen(first_location);
 
 second_location = ConvoScreen:new {
 	id = "second_location",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_3b10534d", --We've discovered that a group of ex-CorSec agents on Corellia have been monitoring local activities of certain Rebel Alliance groups. While we don't know the exact reasons behind this, we do know that these former members of the Corellian Security Forces have turned to a life of crime and are not helping the Alliance. The Empire typically leaves them alone, but we now need to find out if they have information about the abduction of Dr. Bledsoe. Go and search their base.
+	customDialogText = "A runner lost a field pack outside the Mokk stronghold on Dantooine (-7065, -3326). Search the outdoor cache on the approach.",
 	stopConversation = "false",
 	options = {}
 }
@@ -85,7 +85,7 @@ corvetteDarkstoneConvoTemplate:addScreen(second_location);
 
 third_location = ConvoScreen:new {
 	id = "third_location",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_fc068f1e", --This cave was established by a crazed droid engineer and served as a place to operate on his droids, making them lethal killing machines. What the Alliance is doing there is beyond my comprehension. The cave can be found on Lok in the heart of the volcano. He was mad, indeed.
+	customDialogText = "A repair broker sold the kidnappers a transponder and kept their shipping instructions as collateral. Search the workshop in the Droid Engineer Cave on Lok (3302, -4890).",
 	stopConversation = "false",
 	options = {}
 }
@@ -133,7 +133,7 @@ corvetteDarkstoneConvoTemplate:addScreen(has_intel);
 
 bad_intel_1 = ConvoScreen:new {
 	id = "bad_intel_1",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_adecb4e7",--Hmm.. this information is very interesting. However, these are not the orders I had been looking for. I will take these off your hands, though, and reward you for finding them.
+	customDialogText = "This copy was superseded before the ship left. I'll pay you for the lead. Keep looking for the current one.",
 	stopConversation = "false",
 	options = {}
 }
@@ -141,7 +141,7 @@ corvetteDarkstoneConvoTemplate:addScreen(bad_intel_1);
 
 bad_intel_2 = ConvoScreen:new {
 	id = "bad_intel_2",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_adecb4e7", --Hmm.. this information is very interesting. However, these are not the orders I had been looking for. I will take these off your hands, though, and reward you for finding them.
+	customDialogText = "This belongs to the operation, but it won't get you aboard. I'll pay you for bringing it in.",
 	stopConversation = "false",
 	options = {}
 }
@@ -166,7 +166,7 @@ corvetteDarkstoneConvoTemplate:addScreen(other_documents);
 
 good_intel = ConvoScreen:new {
 	id = "good_intel",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_e6e45415",--Finally! We now know his whereabouts. He has been moved to a Corellian corvette within deep space. I need an Imperial soldier I can trust to go there and rescue the doctor. Ah...You! You are that soldier. Take this item to the shuttle pilot at the Emperor's Retreat. He will help you to intercept the Corellian corvette with Dr. Bledsoe. If your mission is successful I will probably be able to offer you a reward. If you desire one. Either way, I wish you luck in this endeavor.
+	customDialogText = "We have the handoff coordinates. Take the authorization to DS-297 at the Emperor's Retreat on Naboo. Bring Bledsoe to extraction. Imperial Security will take custody from there.",
 	stopConversation = "false",
 	options = {}
 }
@@ -174,7 +174,7 @@ corvetteDarkstoneConvoTemplate:addScreen(good_intel);
 
 go_to_corvette = ConvoScreen:new {
 	id = "go_to_corvette",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_2a973e2d", --This news pleases me. Please be careful and return safely. Oh, and if you succeed in this mission, I can offer you a reward. Though a true soldier of the Empire would desire no such thing.
+	customDialogText = "Present your authorization to DS-297 at the Emperor's Retreat on Naboo. Assemble your team before you speak to the pilot.",
 	stopConversation = "true",
 	options = {}
 }
@@ -217,7 +217,7 @@ corvetteDarkstoneConvoTemplate:addScreen(changed_mind);
 
 launch_location = ConvoScreen:new {
 	id = "launch_location",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_4002f794", --You must travel to the Emperor's Retreat and present your ticket to the shuttle pilot there. He will help you to intercept the Corellian corvette so that you may continue your mission. If your mission is successful and you desire a reward, return and speak with me afterwards.
+	customDialogText = "Present your authorization to DS-297 at the Emperor's Retreat on Naboo. Assemble your team before you speak to the pilot.",
 	stopConversation = "true",
 	options = {}
 }
@@ -225,10 +225,10 @@ corvetteDarkstoneConvoTemplate:addScreen(launch_location);
 
 reward = ConvoScreen:new {
 	id = "reward",
-	leftDialog = "@conversation/corvette_colonel_imperial1:s_c48932d",--Your service to the Empire has been adequate. I suppose a reward is in order, if you desire one?
+	customDialogText = "Bledsoe is in our custody. The quarantine files have been sealed. Your recovery is on record and your payment is ready.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_colonel_imperial1:s_21550a19","give_reward"}, --A reward? Definitely. Hand it over.
+		{"I'll take the payment.", "give_reward"},
 		{"@conversation/corvette_colonel_imperial1:s_a38773c1","reward_notyet"} --I'm not sure. Maybe I'll come back later.
 	}
 }

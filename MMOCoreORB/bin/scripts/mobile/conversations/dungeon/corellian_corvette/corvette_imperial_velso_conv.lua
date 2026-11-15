@@ -23,10 +23,10 @@ corvetteVelsoConvoTemplate:addScreen(already_busy);
 
 convo_start = ConvoScreen:new {
 	id = "convo_start",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_477d6952",--Just in time soldier! I have an urgent mission that requires your assistance.
+	customDialogText = "A corvette listed as a medical ship is carrying weapons to an armed cell. They're preparing to break an Imperial blockade. Shooting a registered medical ship would invite a hearing. You're going aboard to make sure we never have to attend one.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_velso_imperial_destroy:s_757e4a85","quest_start"},-- Yes Sir, what are the details?
+		{"I'll look for the document.", "quest_start"},
 		{"@conversation/corvette_velso_imperial_destroy:s_823dca3f","convo_exit"} --Sorry, too busy right now.
 	}
 }
@@ -34,7 +34,7 @@ corvetteVelsoConvoTemplate:addScreen(convo_start);
 
 quest_start = ConvoScreen:new {
 	id = "quest_start",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_36c480be",--A payload of weapons is being smuggled to a group of Rebels waiting to slaughter some outnumbered Imperial... er.. I mean to slaughter some innocent civilians. Yes. They're on a Corellian corvette, but it's marked as a medical transport so we don't want to attack it directly. I need you to find the destruction sequences for the corvette and blow it up from the inside. I have three leads on where the sequences could be located.
+	customDialogText = "I have three leads for the Drive Service Packet. Bring me the current copy and I'll clear you for boarding. Which lead do you want first?",
 	stopConversation = "false",
 	options = {}
 }
@@ -50,7 +50,7 @@ corvetteVelsoConvoTemplate:addScreen(convo_exit);
 
 which_planet = ConvoScreen:new {
 	id = "which_planet",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_524ad772",--Were you not listening soldier?! If I weren't desperate I would put you on kitchen duty for a month! Now which location do I have to repeat myself about?
+	customDialogText = "Which lead for the Drive Service Packet should I go over again?",
 	stopConversation = "false",
 	options = {}
 }
@@ -58,7 +58,7 @@ corvetteVelsoConvoTemplate:addScreen(which_planet);
 
 first_location = ConvoScreen:new {
 	id = "first_location",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_e5e44e1d",--The traitor Erran Sif is leading a small group of warriors on Talus. She betrayed the Empire in the past and is considered an enemy, so don't expect a friendly reception. I hear she's also no friend to the Rebel Alliance for whatever that's worth. Regardless, I believe she may have the codes for this corvette as she may have used it once herself. Infiltrate her base and report back with whatever you find.
+	customDialogText = "Erran Sif dealt with the ship's engineer. Search the old service records in her bunker on Talus (2147, -5632).",
 	stopConversation = "false",
 	options = { }
 }
@@ -66,7 +66,7 @@ corvetteVelsoConvoTemplate:addScreen(first_location);
 
 second_location = ConvoScreen:new {
 	id = "second_location",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_32084dfe", --The city of Anchorhead is in southern Tatooine. Rebels are known to congregate in Anchorhead, so I feel there is a good chance the sequences we seek could be there. They might be in an abandoned building or in the back room of a cantina. I really have no idea. It is your job to uncover those sequences and return them to me.
+	customDialogText = "The Afarathu seized a shipment of spares intended for the corvette. Search their storage chamber on Corellia (-2523, 2927) for the engineer's paperwork.",
 	stopConversation = "false",
 	options = {}
 }
@@ -74,7 +74,7 @@ corvetteVelsoConvoTemplate:addScreen(second_location);
 
 third_location = ConvoScreen:new {
 	id = "third_location",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_b68e2c66", --The Rebels are rumored to have hidden among the Dantari on Dantooine. Specifically with a tribe called the Janta. We believe that when the Rebels evacuated the area, this ship was among those used. There may be information at the Janta Stronghold... retrieve it.
+	customDialogText = "The crew cached spare components in the Janta cave on Dantooine (7106, -4093) to wait out an inspection. Search the cache for the service packet.",
 	stopConversation = "false",
 	options = {}
 }
@@ -122,7 +122,7 @@ corvetteVelsoConvoTemplate:addScreen(has_intel);
 
 bad_intel_1 = ConvoScreen:new {
 	id = "bad_intel_1",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_29a2b68d",--Are you kidding me soldier? Can you even read? This is useless! But I'll keep it anyway, just in case...
+	customDialogText = "This copy was superseded before the ship left. I'll pay you for the lead. Keep looking for the current one.",
 	stopConversation = "false",
 	options = {}
 }
@@ -130,7 +130,7 @@ corvetteVelsoConvoTemplate:addScreen(bad_intel_1);
 
 bad_intel_2 = ConvoScreen:new {
 	id = "bad_intel_2",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_988cb045", --Who let you in to the Empire soldier?! This is rubbish! No, you can't have it back!
+	customDialogText = "This belongs to the operation, but it won't get you aboard. I'll pay you for bringing it in.",
 	stopConversation = "false",
 	options = {}
 }
@@ -154,7 +154,7 @@ corvetteVelsoConvoTemplate:addScreen(other_documents);
 
 good_intel = ConvoScreen:new {
 	id = "good_intel",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_95397df3",--It sure is soldier, good work! Now take this travel authorization to the Imperial pilot out by the shuttle, and he will arrange deep space transportation for you that will intercept that corvette. If you succeed in destroying that corvette and in escaping it, return to me for a reward.
+	customDialogText = "This packet has the transponder and the drive overrides. DS-297 will fly you out from the Emperor's Retreat on Naboo. Destroy the drive from inside the ship and get yourself out.",
 	stopConversation = "false",
 	options = {}
 }
@@ -162,7 +162,7 @@ corvetteVelsoConvoTemplate:addScreen(good_intel);
 
 go_to_corvette = ConvoScreen:new {
 	id = "go_to_corvette",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_9e916cc9", --Yes soldier, you are a lot brighter than you look! And after doing that and successfully escaping, return to me for a reward. Now hurry, hurry, hurry!
+	customDialogText = "Present your authorization to DS-297 at the Emperor's Retreat on Naboo. Assemble your team before you speak to the pilot.",
 	stopConversation = "true",
 	options = {}
 }
@@ -205,7 +205,7 @@ corvetteVelsoConvoTemplate:addScreen(changed_mind);
 
 launch_location = ConvoScreen:new {
 	id = "launch_location",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_c159261e", --You will be the death of me... take it to the pilot outside by the Lambda shuttle. If by some miracle you don't fail in this mission, return to me for a reward. Now go!
+	customDialogText = "Present your authorization to DS-297 at the Emperor's Retreat on Naboo. Assemble your team before you speak to the pilot.",
 	stopConversation = "true",
 	options = {}
 }
@@ -213,10 +213,10 @@ corvetteVelsoConvoTemplate:addScreen(launch_location);
 
 reward = ConvoScreen:new {
 	id = "reward",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_446ba9d",--Nothing left of that corvette but space dust. I knew I could whip you into shape. That's exactly what the Empire needs... more soldiers like me. Like you? Ha. I guess you did earn a reward, though.
+	customDialogText = "The registry now shows a mechanical failure. If anyone asks, you read it there. Here's your payment.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_velso_imperial_destroy:s_b384a269","give_reward"}, --At least you'll admit that much. Can I have my reward?
+		{"I'll take the payment.", "give_reward"},
 		{"@conversation/corvette_velso_imperial_destroy:s_5aca4872","reward_notyet"} --Um... I think I'll come back later.
 	}
 }
@@ -240,7 +240,7 @@ corvetteVelsoConvoTemplate:addScreen(give_reward);
 
 cant_give_reward = ConvoScreen:new {
 	id = "cant_give_reward",
-	leftDialog = "@conversation/corvette_velso_imperial_destroy:s_131222b8", --Are you not aware of the fact that you cannot carry anything else? What kind of soldier are you? You must be aware of these things at all times. Otherwise the Alliance will kill you in your sleep. Don't return until you've made some room to carry this reward.
+	customDialogText = "Your inventory is full. Make room for the payment and come back.",
 	stopConversation = "true",
 	options = {}
 }

@@ -7,7 +7,7 @@ corvettePashnaConvoTemplate = ConvoTemplate:new {
 
 no_faction = ConvoScreen:new {
 	id = "no_faction",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_dbef483d", --I have some serious... and unfortunate... business for the Rebellion that demands my attention. Forgive me, but I can't speak with you right now.
+	customDialogText = "I have private business to attend to. Please excuse me.",
 	stopConversation = "true",
 	options = {}
 }
@@ -23,10 +23,10 @@ corvettePashnaConvoTemplate:addScreen(already_busy);
 
 convo_start = ConvoScreen:new {
 	id = "convo_start",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_bbd30f60",--You couldn't have come at a more distressing time, my friend.
+	customDialogText = "I have word of an Imperial prisoner ship. If you're free to help, I'd rather speak quietly.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_pashna_rebel1:s_d3412303","convo_start_1"},-- What seems to be the problem?
+		{"Tell me more.", "convo_start_1"},
 		{"@conversation/corvette_pashna_rebel1:s_b89af325","convo_exit"} --Be that as it may, good-bye.
 	}
 }
@@ -34,10 +34,10 @@ corvettePashnaConvoTemplate:addScreen(convo_start);
 
 convo_start_1 = ConvoScreen:new {
 	id = "convo_start_1",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_77da0881",--You are one of us, therefore I can trust you with this information. It seems that one of our Corellian corvettes has been boarded and seized by a ruthless Imperial commander. This Imperial commander is bent on guiding the ship toward Talus and crashing it into our base there. My first priority is to retake the ship before it crashes into our base. And second is to... well... is to assassinate the Imperial commander responsible for this threat.
+	customDialogText = "An Inquisitor took over an impounded corvette and turned it into an interrogation post. He has names of households that hid a survivor of Order 66. Once his warrant reaches sector security, those families are gone.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_pashna_rebel1:s_e10e18f5","convo_start_2"},--Do you need any help with this situation?
+		{"Tell me more.", "convo_start_2"},
 		{"@conversation/corvette_pashna_rebel1:s_f7e9bbb3","convo_exit_2"},--Good luck with that. I'm not interested in getting involved.
 	}
 }
@@ -45,10 +45,10 @@ corvettePashnaConvoTemplate:addScreen(convo_start_1);
 
 convo_start_2 = ConvoScreen:new {
 	id = "convo_start_2",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_73f241bd",--In fact, I do. Before we take any measure of action, I need more information regarding this Imperial commander, his background. I can't issue an assassination without knowing he, without a doubt, warrants such a demise. I have reason to believe that such information exists at one of three places: Fort Tusken on Tatooine, a Geonosian laboratory on Yavin IV, or the Mokk stronghold on Dantooine. Can you see to this?
+	customDialogText = "We need his Inquisitorial Transit Warrant. It identifies the ship and gives Lance an intercept. Bring me the current copy and I'll send you to stop the Inquisitor before the handoff.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_pashna_rebel1:s_ba7150b1","quest_start"},--Yes, I will help you.
+		{"I'll look for the document.", "quest_start"},
 		{"@conversation/corvette_pashna_rebel1:s_436d636d","convo_exit_3"},--That sounds like a problem. I wish I could help, but really I don't care.
 	}
 }
@@ -80,7 +80,7 @@ corvettePashnaConvoTemplate:addScreen(convo_exit_3);
 
 quest_start = ConvoScreen:new {
 	id = "quest_start",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_ffb796fa",--I am relieved and thankful for your eager assistance. Seek out the documents in the locations I mentioned. If you need more information about any of them, please let me know.
+	customDialogText = "I have three leads for the Inquisitorial Transit Warrant. Bring me the current copy and I'll clear you for boarding. Which lead do you want first?",
 	stopConversation = "false",
 	options = {}
 }
@@ -88,7 +88,7 @@ corvettePashnaConvoTemplate:addScreen(quest_start);
 
 which_planet = ConvoScreen:new {
 	id = "which_planet",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_89df7355",--Which location would you like more information about?
+	customDialogText = "Which lead for the Inquisitorial Transit Warrant should I go over again?",
 	stopConversation = "false",
 	options = {}
 }
@@ -96,7 +96,7 @@ corvettePashnaConvoTemplate:addScreen(which_planet);
 
 first_location = ConvoScreen:new {
 	id = "first_location",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_e92b0e11",--An Imperial force led by this Imperial commander was sent to Fort Tusken not long ago. Before he received his current rank, actually. We don't know why his force was there, though we speculate that they intended to research the Sand People living there. Or maybe attempt to broker some sort of deal with them. We do know it went badly and much of the Imperial force was obliterated by the Tusken Raiders. Seek out anything that might have been left behind during their retreat.
+	customDialogText = "At Fort Tusken on Tatooine (-3967, 6240), the Inquisitor's advance party withdrew under fire. Search the dispatch case they left inside the fort.",
 	stopConversation = "false",
 	options = {}
 }
@@ -104,7 +104,7 @@ corvettePashnaConvoTemplate:addScreen(first_location);
 
 second_location = ConvoScreen:new {
 	id = "second_location",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_fe36e67a", --I don't have much information regarding the Mokk stronghold other than the fact that the Mokk are a Dantari tribe. The stronghold can be found on Dantooine around the northwestern edge of the planet. The Imperial commander we are investigating was known to have led a search of this stronghold looking for members of the Alliance he believed to have been hiding there.
+	customDialogText = "The Nyax cult took a courier's satchel after ambushing a patrol on Corellia. Search their cache of seized gear in the bunker (1366, -340).",
 	stopConversation = "false",
 	options = {}
 }
@@ -112,7 +112,7 @@ corvettePashnaConvoTemplate:addScreen(second_location);
 
 third_location = ConvoScreen:new {
 	id = "third_location",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_a1ce5a7c", --A fairly new discovery, that one. It is said that the Empire has been conducting secretive experiments there with the help of the Geonosians. Possibly involving biological weapons. The laboratory can be found on Yavin IV in the northwestern part of the planet. I don't have much more information about the place.
+	customDialogText = "The Geonosian laboratory on Yavin IV (-6449, -401) transferred confiscated effects to the Inquisitor. Search its outbound transfer records for the warrant.",
 	stopConversation = "false",
 	options = {}
 }
@@ -160,7 +160,7 @@ corvettePashnaConvoTemplate:addScreen(has_intel);
 
 bad_intel_1 = ConvoScreen:new {
 	id = "bad_intel_1",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_b0c99345",--Mmm. This isn't the correct document, however, we can still use it in our research and in our efforts against the Empire. I'll reward you for recovering them.
+	customDialogText = "This copy was superseded before the ship left. I'll pay you for the lead. Keep looking for the current one.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -168,7 +168,7 @@ corvettePashnaConvoTemplate:addScreen(bad_intel_1);
 
 bad_intel_2 = ConvoScreen:new {
 	id = "bad_intel_2",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_b0c99345", --Mmm. This isn't the correct document, however, we can still use it in our research and in our efforts against the Empire. I'll reward you for recovering them.
+	customDialogText = "This belongs to the operation, but it won't get you aboard. I'll pay you for bringing it in.",
 	stopConversation = "false",
 	options = {}
 }
@@ -193,7 +193,7 @@ corvettePashnaConvoTemplate:addScreen(other_documents);
 
 good_intel = ConvoScreen:new {
 	id = "good_intel",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_1cce61b2",--Well done. This is exactly the information we needed. Hmm... this Imperial commander is worse than expected. He must definitely be eliminated. So much so that our primary concern has changed. First priority is now to assassinate this Imperial commander. Take this travel authorization to the Rebel Alliance hideout on Corellia. Speak with Lt. Lance there and he'll give you more instructions. If you prevail, return to me for your reward.
+	customDialogText = "This warrant is current. Take the crew authorization to Lance at Tyrena Starport on Corellia. Board the ship, stop the Inquisitor and get out.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -201,7 +201,7 @@ corvettePashnaConvoTemplate:addScreen(good_intel);
 
 go_to_corvette = ConvoScreen:new {
 	id = "go_to_corvette",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_47eb05e", --No. I have no further instructions for you. You'll need to present your travel authorization to Lt. Lance at the Rebel Alliance hideout on Corellia. If you succeed in your mission, return to me for your reward.
+	customDialogText = "Bring the crew authorization to Lance at Tyrena Starport on Corellia. Find him seated in the second ticket room. Bring your whole crew.",
 	stopConversation = "true",
 	options = {}
 }
@@ -244,7 +244,7 @@ corvettePashnaConvoTemplate:addScreen(changed_mind);
 
 launch_location = ConvoScreen:new {
 	id = "launch_location",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_aaee7ac8", -- Go to the Rebel Alliance hideout on Corellia. Seek Lt. Lance who will accept your travel authorization and allow you to board a starship which intercept the Imperial commander on the Corellian corvette. After the Imperial commander has been eliminated and you've escaped from the corvette, I will have your reward ready.
+	customDialogText = "Bring the crew authorization to Lance at Tyrena Starport on Corellia. Find him seated in the second ticket room. Bring your whole crew.",
 	stopConversation = "true",
 	options = {}
 }
@@ -252,10 +252,10 @@ corvettePashnaConvoTemplate:addScreen(launch_location);
 
 reward = ConvoScreen:new {
 	id = "reward",
-	leftDialog = "@conversation/corvette_pashna_rebel1:s_fd5fb0cf",--It was an unfortunate business, but it is at last at an end. I thank you for your part in this. Would you like your reward?
+	customDialogText = "The families are moving to new safehouses. What you did bought them the time. You've earned your payment.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_pashna_rebel1:s_cb13589","give_reward"}, --Yes, please. Thank you.
+		{"I'll take the payment.", "give_reward"},
 		{"@conversation/corvette_pashna_rebel1:s_615637f6","reward_notyet"} --No, not yet. Maybe later.
 	}
 }

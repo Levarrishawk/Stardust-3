@@ -10,7 +10,7 @@ CorellianCorvette = ScreenPlay:new {
 	escapePoints = {
 		{ faction = "neutral", planet = "tatooine", x = -5842, y = -6191 },
 		{ faction = "imperial", planet = "naboo", x = 2445, y = -3913 },
-		{ faction = "rebel", planet = "corellia", x = -6460, y = 5972 },
+		{ faction = "rebel", planet = "corellia", x = -5005.354, y = -2386.9819 },
 	},
 
 	missionBadges = {
@@ -26,6 +26,8 @@ CorellianCorvette = ScreenPlay:new {
 	},
 
 	lockedRooms = { "elevator57", "meetingroom38", "armorybackroom55", "officerquarters63", "officerquarters64", "officerquarters65", "bridge66" },
+
+	prisonerEscapePoint = { room = "elevator57", x = -18.1, z = 0, y = 117.7 },
 
 	electricTrapLocs = {
 		{ x = 1, z = -14, y = -32 },
@@ -341,6 +343,10 @@ function CorellianCorvette:setupAssassinationTarget(pTarget)
 		return
 	end
 
+	if (self:getBuildingFaction(pCorvette) == "imperial") then
+		SceneObject(pTarget):setCustomObjectName("Evacuation Captain")
+	end
+
 	createObserver(OBJECTDESTRUCTION, "CorellianCorvette", "onAssassinationTargetKilled", pTarget)
 end
 
@@ -539,7 +545,7 @@ function CorellianCorvette:setupPrisoner(pPrisoner)
 		return
 	end
 
-	createObserver(DESTINATIONREACHED, "CorellianCorvette", "prisonerDestinationReached", pPrisoner)
+	createObserver(OBJECTREMOVEDFROMZONE, "CorellianCorvette", "prisonerRemoved", pPrisoner)
 	AiAgent(pPrisoner):setMovementState(AI_PATROLLING)
 
 	if (SceneObject(pPrisoner):getObjectName() == "prisoner") then
@@ -556,32 +562,89 @@ function CorellianCorvette:setupPrisoner(pPrisoner)
 	end
 end
 
-function CorellianCorvette:doPrisonerEscape(pPrisoner)
+function CorellianCorvette:releaseRescueTarget(pPrisoner)
 	local pCorvette = self:getCorvetteObject(pPrisoner)
 
 	if (pCorvette == nil) then
 		return
 	end
 
-	local pCell = BuildingObject(pCorvette):getNamedCell("elevator57")
+	local prisonerID = SceneObject(pPrisoner):getObjectID()
+	local corvetteID = SceneObject(pCorvette):getObjectID()
+
+	if (readData(prisonerID .. ":alreadyRescued") == 1 or readData("corvetteActive:" .. corvetteID) ~= 1 or
+			readData(corvetteID .. ":ending") == 1) then
+		return
+	end
+
+	writeData(prisonerID .. ":alreadyRescued", 1)
+	if (readStringData("corvetteQuestType:" .. corvetteID) == "rescue") then
+		writeData(prisonerID .. ":rescueObjective", 1)
+		self:broadcastToPlayers(pCorvette, "The prisoner is free. Get them to the extraction point near the forward elevator.")
+	else
+		local faction = self:getBuildingFaction(pCorvette)
+		self:increaseGroupFactionStanding(pCorvette, faction == "neutral" and "jabba" or faction, 20)
+	end
+
+	createEvent(3000, "CorellianCorvette", "doPrisonerEscape", pPrisoner, "")
+end
+
+function CorellianCorvette:doPrisonerEscape(pPrisoner)
+	local pCorvette = self:getCorvetteObject(pPrisoner)
+
+	if (pCorvette == nil or CreatureObject(pPrisoner):isDead()) then
+		return
+	end
+
+	local point = self.prisonerEscapePoint
+	local pCell = BuildingObject(pCorvette):getNamedCell(point.room)
 
 	if (pCell == nil) then
 		return
 	end
 
-	createEvent(60 * 1000, "CorellianCorvette", "removePrisoner", pPrisoner, "")
+	if (readData(SceneObject(pPrisoner):getObjectID() .. ":rescueObjective") ~= 1) then
+		createEvent(60 * 1000, "CorellianCorvette", "removePrisoner", pPrisoner, "")
+	end
 
 	local cellId = SceneObject(pCell):getObjectID()
 
+	createObserver(DESTINATIONREACHED, "CorellianCorvette", "prisonerDestinationReached", pPrisoner)
 	AiAgent(pPrisoner):stopWaiting()
 	AiAgent(pPrisoner):setWait(0)
-	AiAgent(pPrisoner):setNextPosition(-18.1, 0, 117.7, cellId)
+	AiAgent(pPrisoner):setNextPosition(point.x, point.z, point.y, cellId)
 	AiAgent(pPrisoner):executeBehavior()
 end
 
 function CorellianCorvette:prisonerDestinationReached(pPrisoner)
-	if (pPrisoner == nil) then
+	local pCorvette = self:getCorvetteObject(pPrisoner)
+
+	if (pCorvette == nil or CreatureObject(pPrisoner):isDead()) then
 		return 1
+	end
+
+	local prisoner = SceneObject(pPrisoner)
+	local prisonerID = prisoner:getObjectID()
+	if (readData(prisonerID .. ":rescueObjective") == 1) then
+		local corvetteID = SceneObject(pCorvette):getObjectID()
+		local startTime = readData("corvetteStartTime:" .. corvetteID)
+		if (readData("corvetteActive:" .. corvetteID) ~= 1 or readData(corvetteID .. ":ending") == 1 or
+				startTime == 0 or os.time() - startTime >= 3600 or readStringData("corvetteQuestType:" .. corvetteID) ~= "rescue") then
+			return 1
+		end
+
+		local point = self.prisonerEscapePoint
+		local pCell = BuildingObject(pCorvette):getNamedCell(point.room)
+		if (pCell == nil or prisoner:getParentID() ~= SceneObject(pCell):getObjectID() or
+				math.abs(prisoner:getPositionX() - point.x) > 2 or math.abs(prisoner:getPositionY() - point.y) > 2) then
+			return 0
+		end
+
+		deleteData(prisonerID .. ":rescueObjective")
+		local faction = self:getBuildingFaction(pCorvette)
+		self:increaseGroupFactionStanding(pCorvette, faction == "neutral" and "jabba" or faction, 250)
+		self:broadcastToPlayers(pCorvette, "The prisoner has reached extraction.")
+		self:handleQuestSuccess(pCorvette)
 	end
 
 	createEvent(2 * 1000, "CorellianCorvette", "removePrisoner", pPrisoner, "")
@@ -594,8 +657,17 @@ function CorellianCorvette:removePrisoner(pPrisoner)
 		return
 	end
 
-	deleteData(SceneObject(pPrisoner):getObjectID() .. ":alreadyRescued")
 	SceneObject(pPrisoner):destroyObjectFromWorld()
+end
+
+function CorellianCorvette:prisonerRemoved(pPrisoner)
+	if (pPrisoner ~= nil) then
+		local prisonerID = SceneObject(pPrisoner):getObjectID()
+		deleteData(prisonerID .. ":alreadyRescued")
+		deleteData(prisonerID .. ":rescueObjective")
+	end
+
+	return 1
 end
 
 function CorellianCorvette:setupRoomPanel(pPanel, room)
@@ -1022,6 +1094,7 @@ function CorellianCorvette:getCorvetteObject(pPlayer)
 end
 
 function CorellianCorvette:handleQuestFailure(pCorvette)
+	writeData(SceneObject(pCorvette):getObjectID() .. ":ending", 1)
 	self:ejectAllPlayers(pCorvette)
 	createEvent(5000, "CorellianCorvette", "doCorvetteCleanup", pCorvette, "")
 end
@@ -1325,6 +1398,7 @@ function CorellianCorvette:doCorvetteCleanup(pCorvette)
 	deleteData(corvetteID .. ":H3P0ID")
 	deleteData(corvetteID .. ":repairDroidComplete")
 	deleteData(corvetteID .. ":ownerID")
+	deleteData(corvetteID .. ":ending")
 	deleteData("corvetteActive:" .. corvetteID)
 	deleteData("corvetteDungeonID:" .. corvetteID)
 	deleteData("corvetteStartTime:" .. corvetteID)

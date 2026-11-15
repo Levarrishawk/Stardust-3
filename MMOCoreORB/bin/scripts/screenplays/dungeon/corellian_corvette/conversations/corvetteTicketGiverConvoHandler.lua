@@ -67,6 +67,10 @@ function CorvetteTicketGiverConvoHandler:runScreenHandlers(pConvoTemplate, pPlay
 		pConvoScreen = self:handleScreenGoodIntel(pConvoTemplate, pPlayer, pNpc, selectedOption, pConvoScreen)
 	elseif (screenID == "still_here") then
 		pConvoScreen = self:handleScreenStillHere(pConvoTemplate, pPlayer, pNpc, selectedOption, pConvoScreen)
+	elseif (screenID == "go_to_corvette" or screenID == "launch_location") then
+		if (self.ticketGiver.ticketInfo.faction == "rebel" and self.ticketGiver:hasTicket(pPlayer)) then
+			self.ticketGiver:setPickupWaypoint(pPlayer, true)
+		end
 	elseif (screenID == "earned_reward") then
 		pConvoScreen = self:handleScreenReward(pConvoTemplate, pPlayer, pNpc, selectedOption, pConvoScreen)
 	elseif (screenID == "give_reward") then

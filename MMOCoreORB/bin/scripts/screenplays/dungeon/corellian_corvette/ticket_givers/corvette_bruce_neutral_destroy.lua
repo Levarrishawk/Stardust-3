@@ -1,5 +1,6 @@
 bruceIntel =	{
 	itemTemplates = { "object/tangible/loot/dungeon/corellian_corvette/neutral_destroy_filler01.iff", "object/tangible/loot/dungeon/corellian_corvette/neutral_destroy_filler02.iff", "object/tangible/loot/dungeon/corellian_corvette/neutral_destroy_intel.iff" },
+	itemNames = { "Expired CorSec Destruct Codes", "CorSec Evidence Shipping Record", "CorSec Destruct Sequence Codes" },
 }
 
 bruceTicketInfo = { depPlanet = "tatooine", faction = "neutral", missionType = "destroy" }
@@ -12,30 +13,31 @@ ticketGiverBruce = CorvetteTicketGiverLogic:new {
 	npc = bruce_mcbrain,
 	intelMap = bruceIntel,
 	ticketInfo = bruceTicketInfo,
+	contractTitle = "The Audit Shipment",
 	giverName = "ticketGiverBruce",
 	faction = 0,
 	compensation = bruceCompensation,
 	menuComponent = "BruceIntelSearchMenuComponent",
 
-	first_location = "@conversation/corvette_bruce_neutral_destroy:s_d6cf9803", -- Okay, what's the first possible location?
-	second_location = "@conversation/corvette_bruce_neutral_destroy:s_47a242b", -- Alright, what about the second location?
-	third_location = "@conversation/corvette_bruce_neutral_destroy:s_7f2cdc", -- Right, what's the third location?
+	first_location = "Mauler stronghold, Naboo.",
+	second_location = "Rogue CorSec bunker, Corellia.",
+	third_location = "Nightsister labor camp, Dathomir.",
 	go_get_intel = "@conversation/corvette_bruce_neutral_destroy:s_65ecd99d", -- Alright, I will try and find the sequence.
 	hear_locations_quit = "@conversation/corvette_bruce_neutral_destroy:s_369d526d",-- Sorry, this sounds like something I can't do right now.
 
 	has_intel = "@conversation/corvette_bruce_neutral_destroy:s_ca5faf1b", --I've found some documents that may be it.
-	which_planet = "@conversation/corvette_bruce_neutral_destroy:s_8bd8c49d", -- Could you repeat the information on the locations?
+	which_planet = "Can you go over the leads again?",
 	back_already_reset = "@conversation/corvette_bruce_neutral_destroy:s_283ba480", -- Sorry, I give up, this is taking too long.
 
-	bad_intel_1 = "@conversation/corvette_bruce_neutral_destroy:s_d3f9d91d", -- Not sure about this one, it's 'Bounty Hunter Means and Methods'.
-	bad_intel_2 = "@conversation/corvette_bruce_neutral_destroy:s_90650308", --  Maybe this 'The Edict of Jiaan' could be useful?
-	good_intel = "@conversation/corvette_bruce_neutral_destroy:s_3e583623", --  Here's a document labeled 'CorSec Destruction Code Sequences'.
-	go_to_corvette = "@conversation/corvette_bruce_neutral_destroy:s_77928d48",--Alright, I'll take care of it.
+	bad_intel_1 = "I found the Expired CorSec Destruct Codes.",
+	bad_intel_2 = "I found the CorSec Evidence Shipping Record.",
+	good_intel = "Here is the CorSec Destruct Sequence Codes.",
+	go_to_corvette = "Where do I take this authorization?",
 
 	check_other_places = "@conversation/corvette_bruce_neutral_destroy:s_7e619810",--So I guess I'll have to go and check the other places.
 	other_documents = "@conversation/corvette_bruce_neutral_destroy:s_3bfca8b3", -- I was wondering if these other documents would be of use?
 
-	launch_location= "@conversation/corvette_bruce_neutral_destroy:s_2972f7c", --Where was Klaatu again?
+	launch_location= "Remind me where the pickup is.",
 	still_here_decline = "@conversation/corvette_bruce_neutral_destroy:s_dc1051b",-- Something came up, can't do it right now.
 }
 

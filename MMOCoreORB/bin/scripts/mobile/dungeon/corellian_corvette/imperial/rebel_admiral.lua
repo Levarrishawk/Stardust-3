@@ -1,7 +1,6 @@
 rebel_admiral = Creature:new {
-	objectName = "@mob/creature_names:corvette_rebel_admiral",
-	randomNameType = NAME_GENERIC,
-	randomNameTag = true,
+	objectName = "",
+	customName = "Resistance Convoy Officer",
 	mobType = MOB_NPC,
 	socialGroup = "rebel",
 	faction = "rebel",

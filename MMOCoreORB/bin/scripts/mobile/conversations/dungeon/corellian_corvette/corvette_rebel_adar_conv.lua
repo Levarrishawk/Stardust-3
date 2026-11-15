@@ -7,7 +7,7 @@ corvetteTallonConvoTemplate = ConvoTemplate:new {
 
 no_faction = ConvoScreen:new {
 	id = "no_faction",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_3e144812", --No... no. This can't be allowed to... Oh, my apologies. I didn't see you there. More apologies, because another matter urgently demands my attention. Good bye.
+	customDialogText = "I'm waiting for a private courier. If you have relief supplies, the port can tell you where to leave them.",
 	stopConversation = "true",
 	options = {}
 }
@@ -23,10 +23,10 @@ corvetteTallonConvoTemplate:addScreen(already_busy);
 
 convo_start = ConvoScreen:new {
 	id = "convo_start",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_f85a3545", -- Arrested... treason... Dathomir prison. It truly is a pity. One of our most trusted and well-decorated pilots has been taken prisoner by the Empire. He was arrested for a crime that was not his doing. The Empire even went as far as planting false evidence to destroy his innocence. He needs to be rescued. He has been taken to a Corellian corvette which is en route to Dathomir. I need security codes in order to assemble a team to rescue him. Will you get those keys for us?
+	customDialogText = "I used to serve the Republic. These days I help get relief cargo through inspections. Gabriel Ian saw Imperial officers seize civilian shipments and falsify their reports. They're moving him to Dathomir before he can testify. Help me get him out.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_tallon_rebel1:s_1944f1e6","quest_start"}, -- Yes, I will
+		{"I'll look for the document.", "quest_start"},
 		{"@conversation/corvette_tallon_rebel1:s_df8ea53","convo_exit"} -- Not interested.
 	}
 }
@@ -34,7 +34,7 @@ corvetteTallonConvoTemplate:addScreen(convo_start);
 
 quest_start = ConvoScreen:new {
 	id = "quest_start",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_94007006", --There is hope yet! I have been informed that the security override codes I need could be in one of three locations. Based on that information, the places to seek out are a downed Bloodrazor smuggling vessel on Lok, the Imperial Warren on Dantooine and the Imperial Prison itself on Dathomir.  It will be a dangerous journey, filled with obstacles, but justice must be done. We must rescue the officer before he reaches that prison!
+	customDialogText = "I have three leads for the Prisoner Transfer Override. Bring me the current copy and I'll clear you for boarding. Which lead do you want first?",
 	stopConversation = "false",
 	options = {	}
 }
@@ -50,7 +50,7 @@ corvetteTallonConvoTemplate:addScreen(convo_exit);
 
 which_planet = ConvoScreen:new {
 	id = "which_planet",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_57504441", -- I have several locations for you... places that, we think, may have the codes. Which location do you need more information on?
+	customDialogText = "Which lead for the Prisoner Transfer Override should I go over again?",
 	stopConversation = "false",
 	options = {	}
 }
@@ -58,7 +58,7 @@ corvetteTallonConvoTemplate:addScreen(which_planet);
 
 first_location = ConvoScreen:new {
 	id = "first_location",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_439048cf",--The Empire has conducted many top secret operations at this location. Unfortunately, it has been very difficult to penetrate the defenses of the Warren on our side. We'll need a cunning Alliance operative to enter the establishment and find those codes. The Warren is on Dantooine.
+	customDialogText = "The Warren on Dantooine (-547, -3846) handled Ian's first detention. Search its records for the override attached to his transfer.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -66,7 +66,7 @@ corvetteTallonConvoTemplate:addScreen(first_location);
 
 second_location = ConvoScreen:new {
 	id = "second_location",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_e1aa98dd", --Ah the Imperial Prison of Dathomir. Many who are arrested for their 'sins' against the Empire are taken to this location. Most are never seen again. We must not allow our officer to meet the same fate. We've lost too many men as it is! Since the Imperial Prison is where they are taking him, it wouldn't be surprising to find information about his current location there.
+	customDialogText = "The receiving staff on Dathomir (-6354, 751) requested access credentials for Ian. Search the intake shed for their copy.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -74,7 +74,7 @@ corvetteTallonConvoTemplate:addScreen(second_location);
 
 third_location = ConvoScreen:new {
 	id = "third_location",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_a073eacd", --The Bloodrazors are a mysterious band of pirates and criminals. It is said they have access to radar technology that can detect certain unique codes used by ships that approach within their range. This is my hope. The downed Bloodrazor vessel is on Lok though the exact location is unknown.
+	customDialogText = "The Bloodrazors salvaged a dispatch recorder from a courier pod. Search the warehouse beside the wreck on Lok (3663, 2186).",
 	stopConversation = "false",
 	options = {	}
 }
@@ -122,7 +122,7 @@ corvetteTallonConvoTemplate:addScreen(has_intel);
 
 bad_intel_1 = ConvoScreen:new {
 	id = "bad_intel_1",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_b2503658", --This isn't what I'm looking for. I need the security codes as soon as possible! Return to the locations I gave you and find those codes!  Arrgh... well... okay, this is potentially useful information. I'll reward you for finding it. But then you must go find those security codes.
+	customDialogText = "This copy was superseded before the ship left. I'll pay you for the lead. Keep looking for the current one.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -130,7 +130,7 @@ corvetteTallonConvoTemplate:addScreen(bad_intel_1);
 
 bad_intel_2 = ConvoScreen:new {
 	id = "bad_intel_2",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_581c3ef2", -- This isn't what I'm looking for. I need the security codes as soon as possible! Bah... well... okay, this is potentially useful information. I'll reward you for finding it. But then you must go find those security codes.
+	customDialogText = "This belongs to the operation, but it won't get you aboard. I'll pay you for bringing it in.",
 	stopConversation = "false",
 	options = {}
 }
@@ -155,7 +155,7 @@ corvetteTallonConvoTemplate:addScreen(other_documents);
 
 good_intel = ConvoScreen:new {
 	id = "good_intel",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_62379ba", -- Ahh, the codes! We now have the exact location of the Corellian corvette he is on. Here, take this travel authorization to the Rebel hideout on Corellia and meet with Lt. Lance there. He will provide you transport on a starship which is capable of intercepting the Corellian corvette in deep space. Once your mission has been successfully completed, return to me for a reward. I wish you haste and luck on your journey.
+	customDialogText = "This override identifies the corvette and tells us where they're holding Ian. Take this crew authorization to Lance at Tyrena Starport on Corellia. Get Ian to the extraction point. I've arranged a separate pickup for him.",
 	stopConversation = "false",
 	options = {	}
 }
@@ -163,7 +163,7 @@ corvetteTallonConvoTemplate:addScreen(good_intel);
 
 go_to_corvette = ConvoScreen:new {
 	id = "go_to_corvette",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_7cea4aed", --Excellent! I wish you luck and haste in your journey. Succeed in your mission and then return to me for your reward. May the Force be with you.
+	customDialogText = "Bring the crew authorization to Lance at Tyrena Starport on Corellia. Find him seated in the second ticket room. Bring your whole crew.",
 	stopConversation = "true",
 	options = {}
 }
@@ -206,7 +206,7 @@ corvetteTallonConvoTemplate:addScreen(changed_mind);
 
 launch_location = ConvoScreen:new {
 	id = "launch_location",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_49139b6", -- Lt. Lance is at the Rebel hideout on Corellia. He will provide you transportation to the Corellian corvette which houses our well-decorated pilot. We need that pilot returned to us as soon as possible. Once your mission has been successfully completed, return to me for a reward.
+	customDialogText = "Bring the crew authorization to Lance at Tyrena Starport on Corellia. Find him seated in the second ticket room. Bring your whole crew.",
 	stopConversation = "true",
 	options = {}
 }
@@ -214,10 +214,10 @@ corvetteTallonConvoTemplate:addScreen(launch_location);
 
 reward = ConvoScreen:new {
 	id = "reward",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_5f61380e", -- I cannot thank you enough for your actions. You have not only rescued a pilot of the Alliance, but also a friend. I am pleased to be able to reward you.
+	customDialogText = "Ian is safe. He's agreed to put his name to what he saw. I'll see that his testimony reaches people who can act on it.",
 	stopConversation = "false",
 	options = {
-		{"@conversation/corvette_tallon_rebel1:s_d938179c","give_reward"}, --Great. Let's see this reward then.
+		{"I'll take the payment.", "give_reward"},
 		{"@conversation/corvette_tallon_rebel1:s_60bce77f","reward_notyet"} --Reward? Not now. I'll return later.
 	}
 }
@@ -233,7 +233,7 @@ corvetteTallonConvoTemplate:addScreen(reward_notyet);
 
 give_reward = ConvoScreen:new {
 	id = "give_reward",
-	leftDialog = "@conversation/corvette_tallon_rebel1:s_ae9868f4", --[smiling] Eager as always. You've earned this... and the gratitude of the Alliance.
+	customDialogText = "Take this. It comes from people who know what it costs to speak up.",
 	stopConversation = "true",
 	options = {}
 }
