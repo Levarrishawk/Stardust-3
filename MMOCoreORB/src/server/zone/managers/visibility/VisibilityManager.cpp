@@ -171,12 +171,12 @@ int VisibilityManager::getJediContainmentLevel(float visibility) const {
 	return 0;
 }
 
-int VisibilityManager::advanceToNextJediContainmentLevel(CreatureObject* creature) {
+int VisibilityManager::advanceToNextJediContainmentLevel(CreatureObject* creature, bool allowGodMode) {
 	if (creature == nullptr || !creature->isPlayerCreature())
 		return 0;
 
 	Reference<PlayerObject*> ghost = creature->getSlottedObject("ghost").castTo<PlayerObject*>();
-	if (ghost == nullptr || ghost->hasGodMode())
+	if (ghost == nullptr || (!allowGodMode && ghost->hasGodMode()))
 		return 0;
 
 	Locker locker(ghost);

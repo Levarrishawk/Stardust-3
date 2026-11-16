@@ -133,7 +133,7 @@ public:
 	 */
 	void increaseVisibility(CreatureObject* creature, int visibilityMultiplier);
 	int getJediContainmentLevel(float visibility) const;
-	int advanceToNextJediContainmentLevel(CreatureObject* creature);
+	int advanceToNextJediContainmentLevel(CreatureObject* creature, bool allowGodMode = false);
 
 	/**
 	 * Clear the visibility for a player and remove him/her from the visibility

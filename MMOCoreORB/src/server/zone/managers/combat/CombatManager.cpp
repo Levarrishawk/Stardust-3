@@ -126,12 +126,12 @@ namespace {
 		if (!isCityAuthorityLightsaber(activeWeapon))
 			return;
 
-		const int containmentLevel = VisibilityManager::instance()->advanceToNextJediContainmentLevel(offender);
-		if (containmentLevel == 0)
-			return;
-
 		offender->addCooldown(cityAuthorityJediReported, cooldown);
 		sendCityAuthorityChat(responder, "Command, inform the Inqusitorius.   The suspect is a Jedi.  Repeat, suspect is a Jedi!");
+
+		const int containmentLevel = VisibilityManager::instance()->advanceToNextJediContainmentLevel(offender, /*allowGodMode=*/true);
+		if (containmentLevel == 0)
+			return;
 
 		PlayerObject* ghost = offender->getPlayerObject();
 		if (ghost != nullptr)
@@ -151,13 +151,39 @@ namespace {
 				!responder->checkCooldownRecovery(getCityAuthorityOffenderMarker(offender->getObjectID()));
 	}
 
-	void reportCityAuthoritySaberUse(CreatureObject* offender, WeaponObject* weapon) {
-		if (!offender->isPlayerCreature() || offender->checkCooldownRecovery(cityAuthorityResponse) ||
+	bool reportCityAuthoritySaberWitness(AiAgent* responder, CreatureObject* offender, WeaponObject* weapon, Zone* zone, bool attacked) {
+		if (!isCityAuthorityResponderFor(responder, offender))
+			return false;
+
+		Locker responderLocker(responder, offender);
+		if (offender->getZone() != zone || responder->getZone() != zone || responder->isDead() ||
+				responder->isIncapacitated() || !isCityAuthorityResponderFor(responder, offender))
+			return false;
+
+		// The combat command already validated range and line of sight for its target.
+		if (!attacked && (!offender->isInRange(responder, COMBAT_SPAM_RANGE) || !CollisionManager::checkLineOfSight(responder, offender)))
+			return false;
+
+		const Time* responseEnd = responder->getCooldownTime(cityAuthorityResponder);
+		Time now;
+		if (responseEnd == nullptr || responseEnd->getMiliTime() <= now.getMiliTime())
+			return false;
+
+		reportCityAuthorityJedi(responder, offender, responseEnd->getMiliTime() - now.getMiliTime(), weapon);
+		return true;
+	}
+
+	void reportCityAuthoritySaberUse(CreatureObject* offender, WeaponObject* weapon, TangibleObject* target) {
+		if (!offender->isPlayerCreature() ||
 				!offender->checkCooldownRecovery(cityAuthorityJediReported) || !isCityAuthorityLightsaber(weapon))
 			return;
 
 		Zone* zone = offender->getZone();
 		if (zone == nullptr)
+			return;
+
+		if (reportCityAuthoritySaberWitness(target->asAiAgent(), offender, weapon, zone, true) ||
+				offender->checkCooldownRecovery(cityAuthorityResponse))
 			return;
 
 		const Vector3 position = offender->getWorldPosition();
@@ -166,23 +192,8 @@ namespace {
 
 		for (int i = 0; i < nearby.size(); ++i) {
 			SceneObject* object = static_cast<SceneObject*>(nearby.get(i).get());
-			AiAgent* responder = object != nullptr ? object->asAiAgent() : nullptr;
-			if (!isCityAuthorityResponderFor(responder, offender))
-				continue;
-
-			Locker responderLocker(responder, offender);
-			if (offender->getZone() != zone || responder->getZone() != zone || responder->isDead() ||
-					responder->isIncapacitated() || !isCityAuthorityResponderFor(responder, offender) ||
-					!offender->isInRange(responder, COMBAT_SPAM_RANGE) ||
-					!CollisionManager::checkLineOfSight(responder, offender))
-				continue;
-
-			const Time* responseEnd = responder->getCooldownTime(cityAuthorityResponder);
-			Time now;
-			if (responseEnd != nullptr && responseEnd->getMiliTime() > now.getMiliTime()) {
-				reportCityAuthorityJedi(responder, offender, responseEnd->getMiliTime() - now.getMiliTime(), weapon);
+			if (object != nullptr && reportCityAuthoritySaberWitness(object->asAiAgent(), offender, weapon, zone, false))
 				return;
-			}
 		}
 	}
 
@@ -1012,7 +1023,7 @@ int CombatManager::doCombatAction(CreatureObject* attacker, WeaponObject* weapon
 		return -2;
 	}
 
-	reportCityAuthoritySaberUse(attacker, weapon);
+	reportCityAuthoritySaberUse(attacker, weapon, defenderObject);
 
 	debug("past special attack cost");
 
