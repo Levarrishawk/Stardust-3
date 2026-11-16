@@ -6,6 +6,7 @@
 #include <cmath>
 #include "conf/ConfigManager.h"
 #include "server/zone/ZoneServer.h"
+#include "server/zone/ZoneClientSession.h"
 #include "server/zone/managers/collision/CollisionManager.h"
 #include "server/zone/objects/building/BuildingObject.h"
 #include "engine/service/proto/BaseMessage.h"
