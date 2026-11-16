@@ -51,12 +51,12 @@ inline bool parse(const std::string& text, Request& request) {
 	if (request.operation == "end" || request.operation == "select") return words.size() == 4;
 	if (request.operation == "move") { if (words.size() != 9) return false; }
 	else if (request.operation == "rotate") { if (words.size() != 8) return false; }
-	else if (request.operation == "reset") { if (words.size() != 6) return false; }
+	else if (request.operation == "floor" || request.operation == "reset" || request.operation == "undo" || request.operation == "redo") { if (words.size() != 6) return false; }
 	else return false;
 	if (!unsignedNumber(words[4], UINT64_MAX, request.cell) || !request.cell ||
 			!unsignedNumber(words[5], UINT32_MAX, revision)) return false;
 	request.revision = static_cast<uint32_t>(revision);
-	if (request.operation == "reset") return true;
+	if (request.operation == "floor" || request.operation == "reset" || request.operation == "undo" || request.operation == "redo") return true;
 	if (request.operation == "rotate") {
 		request.axis = words[6];
 		return (request.axis == "yaw" || request.axis == "pitch" || request.axis == "roll") &&

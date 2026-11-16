@@ -64,7 +64,7 @@ Requests lock the target and recheck session, permission and ordering after lock
 acquisition. Legacy move/rotate commands now acquire the same target lock.
 Movement reuses Core3's parent-cell collision check and teleport/replication path.
 This is a ray/containment check, not full furniture-volume overlap detection.
-No cross-cell item transfer, surface snap or undo history is introduced.
+No cross-cell item transfer or surface snap is introduced. Undo/Redo is documented below.
 
 ## Result packet
 
@@ -133,3 +133,86 @@ With a matching client, qualify:
 
 Visual tools, client packet round-trip, full Debian compilation, concurrent
 administrator behavior and in-game multi-cell continuity remain unverified.
+
+
+## Undo/Redo extension — November 16, 2026
+
+The server now owns per-selected-item history within the existing building
+session: up to 32 edits for each of 16 recently used items. Selection and room
+changes retain histories; closing/reopening the mode, leaving the building or
+disconnecting clears them. The least recently used item's history is evicted
+at the item limit.
+
+Accepted movement, rotation and reset store before/after transforms. Undo/Redo
+restore those stored transforms; clients cannot submit arbitrary replacement
+positions or quaternions. Restores reuse the same target lock, session/admin,
+cell, revision and collision checks. The history's last known revision and
+transform must also match, so obtaining a fresh select snapshot cannot authorize
+undoing another editor's newer change. A mismatch discards only that item's
+history. Revisions are updated after each undo/redo so consecutive reversals
+remain valid. A new accepted edit after undo drops that item's redo branch.
+Rejected/colliding edits preserve the cursor. No-op edits do not add entries.
+
+Additional request forms, using the existing explicit target-ID field:
+```text
+decor1 TOKEN REQUEST undo CELL REVISION
+decor1 TOKEN REQUEST redo CELL REVISION
+```
+
+Successful restores use the original MOVED/ROTATED result codes and snapshots.
+A separate message follows results, leaving StardustDecorationResult unchanged
+for older clients:
+
+**StardustDecorationHistory**, operand count 9, 44 payload bytes (50 total):
+version uint32 (1), token uint64, request uint32, target uint64, cell uint64,
+revision uint32, undoCount uint32, redoCount uint32. Counts are 0..32 and their
+sum is at most 32. Non-target responses contain zero target/cell/counts.
+
+The matching client enables Undo/Redo only for matching
+token/request/target/cell/revision metadata and a synchronized target transform.
+Old servers send no history metadata, leaving the new buttons disabled.
+A lost reply is resolved by selecting again, never by repeating the undo request.
+Counts reflect the server's actual history even when an earlier edit reply was lost.
+
+No new configuration is required. Rebuild the server after syncing these source
+changes; history is transient and makes no database/schema change. The existing
+Engine3 source and generated source tree are untouched. Session IDL generation
+passed in an isolated development directory with the new state header.
+
+Native parser/history fixture: **18,951 checks passed**. Tests include multiple
+undos/redos, per-item/cell isolation, stale revisions and transforms, reset
+restoration, redo branching, no-op edits, rejected-operation cursor preservation
+and both storage limits. Diagnostics:
+`C:\SWG-DEV\SRC-Client-Dev\diagnostics\decoration-undo-20261116`.
+
+Full Debian compilation and live operation remain unverified. Qualify movement,
+signed rotation and reset followed by repeated undo/redo; switch items/rooms;
+test another admin's intervening edit, a blocked restore, reconnect, history
+limits and new edits after undo. Existing clients can continue ordinary edits
+against the updated server; only the matching client exposes history controls.
+
+
+## Snap to Floor (November 16)
+
+`decor1 TOKEN REQUEST floor CELL REVISION` uses the selected item's cell floor
+mesh through `CollisionManager::getCellFloorCollision`. The server selects the
+highest finite floor at or below the item's origin (2 cm tolerance for mesh
+rounding), preserves horizontal position and quaternion, and uses the existing
+movement collision check before applying the change. Missing floors or blocked
+paths reject the operation without consuming history. No floor height or pose
+is accepted from the client. Session, building, target permission, cell and
+revision validation are the same as other edits.
+
+An accepted snap is one per-item Undo/Redo entry. Already on the floor is a
+successful no-op that preserves redo. This is origin-to-building-floor placement:
+it does not align a tilted object's bounding geometry, snap to furniture, search
+adjacent cells, or lift a buried origin onto a floor above it beyond the tolerance.
+Unlike a manual drag's 5 m limit, floor snap reaches the nearest floor beneath
+the origin, subject to the existing collision test. No Engine3 or IDL changes.
+
+The matching client adds Snap to Floor beside Reset rotation. Rebuild both
+server and client; no additional configuration. The parser/floor/history native
+fixture passes 18,966 checks. Full Debian compilation and live acceptance remain
+operator checks: raised chair snap/undo/redo, repeated no-op, upper and lower
+rooms, stacked floors, tilted item retaining orientation, missing floor/blocked
+path, and stale selection after another editor's change.
