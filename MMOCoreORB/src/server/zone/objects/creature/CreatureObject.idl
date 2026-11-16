@@ -98,7 +98,9 @@ class CreatureObject extends TangibleObject {
 	protected Vector<unsigned long> hiddenWearableContainerObjectIDs;
 	protected unsigned long appearanceSourceObjectID;
 	protected unsigned long appearanceTargetObjectID;
+	@dereferenced
 	protected transient AtomicBoolean appearanceRestorePending;
+	@dereferenced
 	protected transient AtomicBoolean appearanceRestoreQueued;
 
 	@weakReference
