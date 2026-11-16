@@ -216,3 +216,55 @@ fixture passes 18,966 checks. Full Debian compilation and live acceptance remain
 operator checks: raised chair snap/undo/redo, repeated no-op, upper and lower
 rooms, stacked floors, tilted item retaining orientation, missing floor/blocked
 path, and stale selection after another editor's change.
+
+
+## Snap to Nearest Wall (November 16)
+
+`decor1 TOKEN REQUEST wall CELL REVISION` preserves height and quaternion.
+The current cell's appearance meshes are exported with an identity transform;
+the navigation export's Z reflection is reversed to restore client cell space.
+The search slices near-vertical triangles at the rotated item bounding-box
+centre height (at least 10 cm above its origin), finds perpendicular wall
+projections within 32 m, and chooses the smallest nonnegative translation.
+The item's rotated appearance bounding box supplies clearance along the wall
+normal, plus a 2 cm gap. Wall triangles more than roughly 8.6 degrees from
+vertical, missing/invalid bounds, other cells, and floor/ceiling faces are excluded.
+The item is not rotated or raised. This can select built-in pillars or other
+vertical room geometry; it does not search other furniture or align orientation.
+A nearest candidate blocked by the existing movement collision test is rejected.
+Existing building authorization, cell/revision checks and per-item Undo/Redo apply.
+Already touching at the tolerance is a successful no-op that preserves redo.
+No new configuration, packet layout, persistence, IDL, or Engine3 changes.
+
+The pure production wall-search/parser/history fixture passes 18,988 checks,
+including straight/angled walls, rotated clearance, floor exclusion, height/range
+limits, invalid bounds and reversible placement. This does not compile the full
+server integration. The Debian build and live checks remain required: chair in
+each direction, non-square/rotated furniture, angled walls, upper floors, corners,
+door openings, blocked paths, repeated snap, and Undo/Redo. Appearance bounds are
+conservative and may leave a visible gap around irregular furniture. Centre-height
+wall detection and origin-path collision are not a full swept-volume collision test.
+
+
+## Snap to Ceiling (November 16)
+
+`decor1 TOKEN REQUEST ceiling CELL REVISION` moves only vertically, preserving
+horizontal position and quaternion. It shares the wall-snap room mesh traversal
+and validated rotated appearance bounds. The vertical projection of the item
+origin must hit a ceiling triangle in its own cell, within 32 m above the origin.
+Surfaces up to 45 degrees from horizontal are supported; wall faces are ignored.
+The rotated bounding box is kept below the triangle's plane with a 2 cm vertical
+gap. The shortest upward translation wins. An overlapping lower ceiling rejects
+the operation instead of allowing a jump to a higher surface. Missing geometry,
+invalid bounds and blocked movement reject without consuming history. Repeated
+snaps within tolerance are no-ops. Existing authorization, revision checks,
+collision checks and per-item Undo/Redo apply. No config/IDL/packet layout changes.
+
+This is a point-projection ceiling query with conservative plane clearance, not
+a full bounding-volume sweep or support test across an entire ceiling footprint.
+Beams and other overhead room geometry can be selected. Irregular items may have
+a visible gap due to appearance bounds. Full Debian build and live checks remain
+required, especially top-origin hanging items, angled ceilings and openings.
+The pure production parser/geometry/history fixture passed 19,012 checks. Test
+chair snap/undo/redo, tilted furniture with unchanged rotation, repeated snap,
+other rooms and upper storeys, missing/blocked ceilings and overlapping bounds.

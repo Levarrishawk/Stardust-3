@@ -1,6 +1,9 @@
 #include "DecorationMode.h"
 #include "DecorationRequest.h"
 #include "DecorationFloor.h"
+#include "DecorationWall.h"
+#include "DecorationCeiling.h"
+#include "templates/appearance/PortalLayout.h"
 #include "server/zone/objects/cell/CellObject.h"
 #include "server/zone/objects/player/sessions/DecorationSession.h"
 
@@ -265,6 +268,57 @@ bool DecorationMode::handle(CreatureObject* player, uint64 targetID, const Strin
 		}
 		z = height;
 		if (z == target->getPositionZ()) {
+			reply(player, *state, request.id, MOVED, target);
+			return true;
+		}
+	}
+	if (request.operation == "wall" || request.operation == "ceiling") {
+		bool ceiling = request.operation == "ceiling";
+		const AppearanceTemplate* itemAppearance = target->getAppearanceTemplate();
+		const BaseBoundingVolume* bounds = itemAppearance ? itemAppearance->getBoundingVolume() : nullptr;
+		SharedObjectTemplate* buildingTemplate = root->getObjectTemplate();
+		const PortalLayout* layout = buildingTemplate ? buildingTemplate->getPortalLayout() : nullptr;
+		int cellNumber = cast<CellObject*>(cell.get())->getCellNumber();
+		const AppearanceTemplate* room = layout && cellNumber >= 0 && cellNumber < layout->getAppearanceTemplatesSize()
+			? layout->getAppearanceTemplate(cellNumber) : nullptr;
+		DecorationWall::Search search;
+		if (bounds != nullptr && room != nullptr) {
+			const Vector3& low = *bounds->getBoundingBox().getMinBound();
+			const Vector3& high = *bounds->getBoundingBox().getMaxBound();
+			if (search.initialize({x,z,y}, {low.getX(),low.getY(),low.getZ()}, {high.getX(),high.getY(),high.getZ()},
+				{{target->getDirectionX(),target->getDirectionY(),target->getDirectionZ(),target->getDirectionW()}})) {
+				Matrix4 identity;
+				auto meshes = room->getTransformedMeshData(identity);
+				for (int i = 0; i < meshes.size(); ++i) {
+					if (meshes.get(i) == nullptr) continue;
+					const auto* vertices = meshes.get(i)->getVerts();
+					const auto* triangles = meshes.get(i)->getTriangles();
+					for (int j = 0; j < triangles->size(); ++j) {
+						std::array<DecorationWall::Point,3> points;
+						const int* indices = triangles->get(j).getVerts();
+						bool validIndices = true;
+						for (int k = 0; k < 3; ++k) {
+							if (indices[k] < 0 || indices[k] >= vertices->size()) { validIndices = false; break; }
+							const Vector3& v = vertices->get(indices[k]);
+							// MeshData exports right-handed navigation geometry; restore cell Z.
+							points[k] = {v.getX(),v.getY(),-v.getZ()};
+						}
+						if (validIndices) {
+							if (ceiling) DecorationCeiling::consider(search, points);
+							else search.consider(points);
+						}
+					}
+				}
+			}
+		}
+		if (!search.found) {
+			player->sendSystemMessage(ceiling ? "No suitable ceiling or item bounds were found in this room." :
+				"No suitable wall or item bounds were found in this room.");
+			reply(player, *state, request.id, REJECTED, target);
+			return false;
+		}
+		x = search.destination.x; y = search.destination.z; z = search.destination.y;
+		if (x == target->getPositionX() && y == target->getPositionY() && z == target->getPositionZ()) {
 			reply(player, *state, request.id, MOVED, target);
 			return true;
 		}

@@ -2,6 +2,8 @@
 #include "../src/server/zone/objects/player/sessions/DecorationHistory.h"
 #include "../src/server/zone/objects/player/sessions/DecorationFloor.h"
 #include <limits>
+#include "../src/server/zone/objects/player/sessions/DecorationCeiling.h"
+#include "../src/server/zone/objects/player/sessions/DecorationWall.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -98,11 +100,102 @@ static void floorTests() {
     check(history.destination(1, true, destination) && DecorationHistory::same(destination, after));
 }
 
+static void wallQuad(DecorationWall::Search& search, float nx, float nz, float distance) {
+    using DecorationWall::Point;
+    Point a={nx*distance-nz*10,0,nz*distance+nx*10};
+    Point b=a; b.y=4;
+    Point c={nx*distance+nz*10,4,nz*distance-nx*10};
+    Point d=c; d.y=0;
+    search.consider({{a,b,c}}); search.consider({{a,c,d}});
+}
+static void wallTests() {
+    using namespace DecorationWall;
+    Search search;
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0,1}}));
+    wallQuad(search,1,0,5); wallQuad(search,-1,0,3);
+    check(search.found && std::fabs(search.destination.x+2.48f)<0.0001f && search.destination.y==0 && search.destination.z==0);
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0.70710678f,0,0.70710678f}}));
+    wallQuad(search,1,0,5);
+    check(search.found && std::fabs(search.destination.x-3.98f)<0.0001f);
+    check(search.initialize({0,0,0},{-0.5f,0,-0.5f},{0.5f,2,0.5f},{{0,0,0,1}}));
+    const float diagonal=0.70710678f;
+    wallQuad(search,diagonal,diagonal,5);
+    check(search.found && std::fabs(search.distance-(5-diagonal-0.02f))<0.0001f);
+    check(std::fabs(search.destination.x-search.destination.z)<0.0001f);
+    check(search.initialize({0,0,0},{-0.5f,0,-0.5f},{0.5f,2,0.5f},{{0,0,0,1}}));
+    search.consider({{{-5,0,-5},{5,0,-5},{5,0,5}}}); // floor is not a wall
+    wallQuad(search,1,0,40); // bounded search
+    check(!search.found);
+    wallQuad(search,1,0,0.52f); // already at the 2 cm gap
+    check(search.found && search.distance<0.0001f);
+    check(search.initialize({0,10,0},{-0.5f,0,-0.5f},{0.5f,2,0.5f},{{0,0,0,1}}));
+    wallQuad(search,1,0,5); check(!search.found); // another height/storey
+    check(!search.initialize({0,0,0},{1,0,0},{-1,2,1},{{0,0,0,1}}));
+    check(!search.initialize({0,0,0},{0,0,0},{0,0,0},{{0,0,0,1}}));
+    check(!search.initialize({0,0,0},{-1,0,-1},{1,2,1},{{0,0,0,0}}));
+    DecorationHistory::Store history; DecorationHistory::Pose before, after, result;
+    before.values={{0,2,0,0,0.70710678f,0,0.70710678f}};
+    after=before; after.values[0]=3.98f;
+    history.record(1,42,1,3,before,after);
+    check(history.destination(1,false,result)&&DecorationHistory::same(result,before));
+    history.committed(1,false,5);
+    check(history.destination(1,true,result)&&DecorationHistory::same(result,after));
+}
+
+static void ceilingQuad(DecorationWall::Search& search, float height, float slope=0) {
+    DecorationCeiling::consider(search, {{{-10,height-slope*10,-10},{10,height+slope*10,-10},{10,height+slope*10,10}}});
+    DecorationCeiling::consider(search, {{{-10,height-slope*10,-10},{10,height+slope*10,10},{-10,height-slope*10,10}}});
+}
+static void ceilingTests() {
+    using namespace DecorationWall;
+    Search search;
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0,1}}));
+    ceilingQuad(search,0); ceilingQuad(search,8); ceilingQuad(search,5);
+    check(search.found && std::fabs(search.destination.y-2.98f)<0.0001f && search.destination.x==0 && search.destination.z==0);
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0.70710678f,0.70710678f}}));
+    ceilingQuad(search,5);
+    check(search.found && std::fabs(search.destination.y-4.48f)<0.0001f); // rotated top
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0,1}}));
+    ceilingQuad(search,5,0.5f);
+    check(search.found && std::fabs(search.destination.y-2.73f)<0.0001f); // sloped plane clearance
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0,1}}));
+    ceilingQuad(search,-1); ceilingQuad(search,40);
+    DecorationCeiling::consider(search, {{{5,0,-5},{5,4,-5},{5,4,5}}});
+    check(!search.found); // floor, out-of-range ceiling, and walls excluded
+    ceilingQuad(search,1); ceilingQuad(search,8); check(!search.found); // never skip an overlapping lower ceiling
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0,1}}));
+    ceilingQuad(search,2.02f); check(search.found && search.distance<0.0001f);
+    check(search.initialize({20,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0,1}}));
+    ceilingQuad(search,5); check(!search.found); // outside triangle / opening
+    check(search.initialize({0,0,0},{-0.5f,0,-1},{0.5f,2,1},{{0,0,0,1}}));
+    ceilingQuad(search,5,2); check(!search.found); // steep wall excluded
+    DecorationCeiling::consider(search, {{{0,0,0},{0,0,0},{0,0,0}}}); check(!search.found);
+    DecorationHistory::Store history; DecorationHistory::Pose before, after, result;
+    before.values={{1,2,3,0,0,0.70710678f,0.70710678f}}; after=before; after.values[1]=4.48f;
+    history.record(1,42,1,3,before,after);
+    check(history.destination(1,false,result)&&DecorationHistory::same(result,before));
+    history.committed(1,false,5);
+    check(history.destination(1,true,result)&&DecorationHistory::same(result,after));
+}
+
 int main() {
+    ceilingTests();
+    wallTests();
     floorTests();
     historyTests();
 	using namespace DecorationWire;
 	Request request;
+    check(parse("decor1 7 3 ceiling 42 17", request));
+    check(request.operation == "ceiling" && request.cell == 42 && request.revision == 17);
+    check(!parse("decor1 7 3 ceiling 42 17 0", request));
+    check(!parse("decor1 7 3 ceiling 0 17", request));
+    check(!parse("decor1 7 3 ceiling 42 -1", request));
+    check(!parse("decor1 7 3 ceiling 42", request));
+    check(parse("decor1 7 3 wall 42 17", request));
+    check(request.operation == "wall" && request.cell == 42 && request.revision == 17);
+    check(!parse("decor1 7 3 wall 42 17 0", request));
+    check(!parse("decor1 7 3 wall 0 17", request));
+    check(!parse("decor1 7 3 wall 42 -1", request));
     check(parse("decor1 7 3 floor 42 17", request));
     check(request.operation == "floor" && request.cell == 42 && request.revision == 17);
     check(!parse("decor1 7 3 floor 42 17 0", request));
