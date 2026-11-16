@@ -2,6 +2,7 @@
 				Copyright <SWGEmu>
 		See file COPYING for copying conditions. */
 
+#include "server/zone/objects/player/sessions/DecorationMode.h"
 #include "server/zone/objects/player/PlayerObject.h"
 
 #include "server/zone/managers/object/ObjectManager.h"
@@ -339,6 +340,8 @@ void PlayerObjectImplementation::unload() {
 		error() << "PlayerCreature parent was null during PlayerObjectImplementation::unload. -- PlayerObjectID: " << getObjectID();
 		return;
 	}
+
+	DecorationMode::close(creature);
 
 	auto zoneServer = creature->getZoneServer();
 
@@ -2743,6 +2746,8 @@ void PlayerObjectImplementation::disconnect(bool closeClient, bool doLock) {
 
 	if (creature == nullptr)
 		return;
+
+	DecorationMode::close(creature);
 
 	setLastLogoutWorldPosition();
 

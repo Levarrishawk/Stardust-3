@@ -6,6 +6,7 @@
  */
 
 #include "StructureTerminalMenuComponent.h"
+#include "server/zone/objects/player/sessions/DecorationMode.h"
 #include "server/zone/Zone.h"
 #include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/packets/object/ObjectMenuResponse.h"
@@ -52,6 +53,8 @@ void StructureTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneOb
 				menuResponse->addRadialMenuItemToRadialID(118, 50, 3, "@player_structure:management_name_structure"); //Name Structure
 				menuResponse->addRadialMenuItemToRadialID(118, 201, 3, "@player_structure:delete_all_items"); //Delete all items
 				menuResponse->addRadialMenuItemToRadialID(118, 202, 3, "@player_structure:move_first_item"); //Find Lost Items
+				if (DecorationMode::canOpen(creature, structureObject))
+					menuResponse->addRadialMenuItemToRadialID(118, 204, 3, "Decoration Mode");
 
 				// Not all civic buildings have signs.  Check to see if build already has one before allowing a change
 				BuildingObject* building = cast<BuildingObject*>(structureObject.get());
@@ -113,6 +116,8 @@ void StructureTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneOb
 			menuResponse->addRadialMenuItemToRadialID(118, 69, 3, "@player_structure:management_change_sign"); //Change Sign
 			menuResponse->addRadialMenuItemToRadialID(118, 201, 3, "@player_structure:delete_all_items"); //Delete all items
 			menuResponse->addRadialMenuItemToRadialID(118, 202, 3, "@player_structure:move_first_item"); //Find Lost Items
+			if (DecorationMode::canOpen(creature, structureObject))
+				menuResponse->addRadialMenuItemToRadialID(118, 204, 3, "Decoration Mode");
 		}
 
 		menuResponse->addRadialMenuItem(117, 3, "@player_structure:permissions"); //Structure Permissions
@@ -152,6 +157,12 @@ int StructureTerminalMenuComponent::handleObjectMenuSelect(SceneObject* sceneObj
 
 	if (zone == nullptr)
 		return 1;
+
+	if (selectedID == 204) {
+		Locker structureLocker(structureObject, creature);
+		DecorationMode::open(creature, structureObject);
+		return 0;
+	}
 
 	if (structureObject->isCivicStructure()) {
 		if (structureObject->isOnAdminList(creature)) {

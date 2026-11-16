@@ -87,6 +87,8 @@ public:
 			return GENERALERROR;
 		}
 
+		Locker targetLocker(obj, creature);
+
 		if (!isValidMoveable(creature, obj, rotateYaw, rotatePitch, rotateRoll, resetRotate, enhancedRotate))
 			return GENERALERROR;
 

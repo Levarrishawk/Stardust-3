@@ -6,6 +6,7 @@
 #define MOVEFURNITURECOMMAND_H_
 
 #include "server/zone/objects/scene/SceneObject.h"
+#include "server/zone/objects/player/sessions/DecorationMode.h"
 #include "server/zone/objects/building/BuildingObject.h"
 #include "server/zone/objects/ship/PobShipObject.h"
 
@@ -23,6 +24,11 @@ public:
 	}
 
 	int doQueueCommand(CreatureObject* creature, const uint64& target, const UnicodeString& arguments) const {
+		String decorationArguments = arguments.toString();
+		if (decorationArguments.beginsWith("decor1"))
+			return DecorationMode::handle(creature, target, decorationArguments,
+					checkStateMask(creature) && checkInvalidLocomotions(creature)) ? SUCCESS : GENERALERROR;
+
 		if (!checkStateMask(creature))
 			return INVALIDSTATE;
 
@@ -40,6 +46,8 @@ public:
 			creature->sendSystemMessage("@player_structure:move_what"); //What do you want to move?
 			return GENERALERROR;
 		}
+
+		Locker targetLocker(obj, creature);
 
 		ManagedReference<SceneObject*> targetRoot = obj->getRootParent();
 		ManagedReference<SceneObject*> creatureParent = creature->getRootParent();

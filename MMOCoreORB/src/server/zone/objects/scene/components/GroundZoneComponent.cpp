@@ -4,6 +4,7 @@
  */
 
 #include "GroundZoneComponent.h"
+#include "server/zone/objects/player/sessions/DecorationMode.h"
 #include "server/zone/objects/scene/SceneObject.h"
 #include "server/zone/objects/area/ActiveArea.h"
 #include "server/zone/objects/building/BuildingObject.h"
@@ -326,6 +327,7 @@ void GroundZoneComponent::switchZone(SceneObject* sceneObject, const String& new
 	}
 
 	sceneObject->setMovementCounter(0);
+	DecorationMode::validate(sceneObject);
 }
 
 void GroundZoneComponent::notifyRemoveFromZone(SceneObject* sceneObject) const {
@@ -471,6 +473,7 @@ void GroundZoneComponent::removeObjectFromZone(SceneObject* sceneObject, Zone* z
 }
 
 void GroundZoneComponent::notifySelfPositionUpdate(SceneObject* sceneObject) const {
+	DecorationMode::validate(sceneObject);
 	sceneObject->notifySelfPositionUpdate();
 }
 
