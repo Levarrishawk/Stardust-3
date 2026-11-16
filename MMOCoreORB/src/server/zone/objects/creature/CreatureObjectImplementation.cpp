@@ -79,6 +79,7 @@
 #include "server/zone/managers/guild/GuildManager.h"
 #include "system/lang/ref/Reference.h"
 #include "server/zone/objects/player/events/LogoutTask.h"
+#include "server/zone/objects/player/components/PlayerContainerComponent.h"
 #include "server/zone/objects/player/events/StoreSpawnedChildrenTask.h"
 
 #include "server/zone/objects/tangible/threat/ThreatMap.h"
@@ -101,6 +102,7 @@ void CreatureObjectImplementation::initializeTransientMembers() {
 	TangibleObjectImplementation::initializeTransientMembers();
 	wearablesVector.clearAppearance();
 	wearablesVector.setHiddenContainers(Vector<uint64>());
+	appearanceRestoreQueued = false;
 	appearanceRestorePending = appearanceSourceObjectIDs.size() != 0 || appearanceSourceObjectID != 0 || appearanceTargetObjectID != 0 || hiddenWearableContainerObjectIDs.size() != 0;
 
 	groupInviterID = 0;
@@ -134,6 +136,7 @@ void CreatureObjectImplementation::initializeMembers() {
 	appearanceSourceObjectID = 0;
 	appearanceTargetObjectID = 0;
 	appearanceRestorePending = false;
+	appearanceRestoreQueued = false;
 	linkedCreature = nullptr;
 	controlDevice = nullptr;
 
@@ -484,7 +487,35 @@ void CreatureObjectImplementation::sendBaselinesTo(SceneObject* player) {
 		return;
 	}
 
-	restoreAppearanceSelection();
+	// Scene delivery may hold zone/building locks. Restore outside that call stack.
+	if (appearanceRestorePending && appearanceRestoreQueued.compareAndSet(false, true)) {
+		ManagedReference<CreatureObject*> creature = thisPointer;
+		Core::getTaskManager()->executeTask([creature, this] () {
+			Locker locker(creature);
+			if (!appearanceRestorePending) {
+				appearanceRestoreQueued = false;
+				return;
+			}
+			try {
+				restoreAppearanceSelection();
+			} catch (...) {
+				appearanceRestoreQueued = false;
+				throw;
+			}
+			appearanceRestoreQueued = false;
+			if (appearanceRestorePending || getZone() == nullptr)
+				return;
+			CreatureObjectDeltaMessage6* msg = new CreatureObjectDeltaMessage6(creature);
+			msg->startUpdate(0x0F);
+			wearablesVector.refreshAppearance(msg);
+			msg->close();
+			sendMessage(msg->clone());
+			Vector<BasePacket*> messages;
+			messages.add(msg);
+			broadcastMessages(&messages, false);
+			sendAppearanceToOwner();
+		}, "RestoreAppearanceSelection");
+	}
 
 	if (player == thisPointer) {
 		debug() << "sending baselines to myself";
@@ -4199,8 +4230,8 @@ bool CreatureObjectImplementation::equipAppearance(TangibleObject* object) {
 		return false;
 
 	String errorDescription;
-	int result = canAddObject(object, 4, errorDescription);
-	if (result != 0 && result != TransferErrorCode::SLOTOCCUPIED) {
+	int result = PlayerContainerComponent::checkEquipmentRequirements(asCreatureObject(), object, 4, errorDescription);
+	if (result != 0) {
 		if (!errorDescription.isEmpty())
 			sendSystemMessage(errorDescription);
 		return false;
@@ -4292,8 +4323,8 @@ bool CreatureObjectImplementation::cacheAppearanceSelection(TangibleObject* sour
 			!parent->checkContainerPermission(asCreatureObject(), ContainerPermissions::MOVEOUT))
 		return false;
 	String error;
-	int result = canAddObject(source, 4, error);
-	if (result != 0 && result != TransferErrorCode::SLOTOCCUPIED)
+	int result = PlayerContainerComponent::checkEquipmentRequirements(asCreatureObject(), source, 4, error);
+	if (result != 0)
 		return false;
 
 	WearablesDeltaVector::AppearanceSelection selection;

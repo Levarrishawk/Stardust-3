@@ -13,6 +13,13 @@
 #include "server/zone/managers/visibility/VisibilityManager.h"
 
 int PlayerContainerComponent::canAddObject(SceneObject* sceneObject, SceneObject* object, int containmentType, String& errorDescription) const {
+	int result = checkEquipmentRequirements(sceneObject, object, containmentType, errorDescription);
+	if (result != 0)
+		return result;
+	return ContainerComponent::canAddObject(sceneObject, object, containmentType, errorDescription);
+}
+
+int PlayerContainerComponent::checkEquipmentRequirements(SceneObject* sceneObject, SceneObject* object, int containmentType, String& errorDescription) {
 	CreatureObject* creo = dynamic_cast<CreatureObject*>(sceneObject);
 
 	if (creo == nullptr) {
@@ -95,7 +102,7 @@ int PlayerContainerComponent::canAddObject(SceneObject* sceneObject, SceneObject
 		}
 	}
 
-	return ContainerComponent::canAddObject(sceneObject, object, containmentType, errorDescription);
+	return 0;
 }
 
 /**

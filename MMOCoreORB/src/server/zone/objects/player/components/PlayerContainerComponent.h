@@ -19,6 +19,9 @@ public:
 	 */
 	int canAddObject(SceneObject* sceneObject, SceneObject* object, int containmentType, String& errorDescription) const;
 
+	// Eligibility only: cosmetic projection does not transfer objects or lock ancestors.
+	static int checkEquipmentRequirements(SceneObject* sceneObject, SceneObject* object, int containmentType, String& errorDescription);
+
 	/**
 	 * Is called when this object has been inserted with an object
 	 * @param object object that has been inserted

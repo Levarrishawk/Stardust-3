@@ -16,6 +16,7 @@ import server.zone.objects.area.CampSiteActiveArea;
 import system.util.VectorMap;
 import system.lang.Time;
 import server.zone.objects.creature.events.DizzyFallDownEvent;
+include system.thread.atomic.AtomicBoolean;
 include templates.SharedObjectTemplate;
 import server.zone.objects.creature.buffs.Buff;
 import server.zone.ZoneClientSession;
@@ -97,7 +98,8 @@ class CreatureObject extends TangibleObject {
 	protected Vector<unsigned long> hiddenWearableContainerObjectIDs;
 	protected unsigned long appearanceSourceObjectID;
 	protected unsigned long appearanceTargetObjectID;
-	protected transient boolean appearanceRestorePending;
+	protected transient AtomicBoolean appearanceRestorePending;
+	protected transient AtomicBoolean appearanceRestoreQueued;
 
 	@weakReference
 	protected transient AuctionSearchTask auctionSearch;
