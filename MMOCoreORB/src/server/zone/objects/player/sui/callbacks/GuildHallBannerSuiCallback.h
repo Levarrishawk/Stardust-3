@@ -50,7 +50,7 @@ public:
     }
 
     void run(CreatureObject* creature, SuiBox* sui, uint32 eventIndex, Vector<UnicodeString>* args) {
-        if (creature == nullptr || sui == nullptr || !sui->isListBox() || eventIndex != 0 || args == nullptr || args->size() != 1) return;
+        if (creature == nullptr || sui == nullptr || !sui->isListBox() || eventIndex != 0 || args == nullptr || args->size() < 1) return;
         ManagedReference<SceneObject*> object = sui->getUsingObject().get();
         if (object == nullptr || !object->isTerminal()) return;
         Terminal* terminal = cast<Terminal*>(object.get());
