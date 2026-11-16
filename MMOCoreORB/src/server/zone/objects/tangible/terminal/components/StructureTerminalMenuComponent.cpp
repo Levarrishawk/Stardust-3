@@ -6,6 +6,7 @@
  */
 
 #include "StructureTerminalMenuComponent.h"
+#include "server/zone/objects/player/sui/callbacks/GuildHallBannerSuiCallback.h"
 #include "server/zone/objects/player/sessions/DecorationMode.h"
 #include "server/zone/Zone.h"
 #include "server/zone/objects/player/PlayerObject.h"
@@ -46,6 +47,8 @@ void StructureTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneOb
 	if (structureObject->isCivicStructure()) {
 		if (structureObject->isOnAdminList(creature)) {
 			menuResponse->addRadialMenuItem(118, 3, "@player_structure:management"); //Structure Management
+			if (GuildHallBannerSuiCallback::supports(structureObject) && structureObject->isOnAdminList(creature))
+				menuResponse->addRadialMenuItemToRadialID(118, 205, 3, "Change Exterior Banners");
 			menuResponse->addRadialMenuItemToRadialID(118, 128, 3, "@player_structure:permission_destroy"); //Destroy Structure
 			menuResponse->addRadialMenuItemToRadialID(118, 124, 3, "@player_structure:management_status"); //Status
 
@@ -68,6 +71,8 @@ void StructureTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneOb
 
 	if (structureObject->isOnAdminList(creature)) {
 		menuResponse->addRadialMenuItem(118, 3, "@player_structure:management"); //Structure Management
+			if (GuildHallBannerSuiCallback::supports(structureObject) && structureObject->isOnAdminList(creature))
+				menuResponse->addRadialMenuItemToRadialID(118, 205, 3, "Change Exterior Banners");
 		menuResponse->addRadialMenuItemToRadialID(118, 128, 3, "@player_structure:permission_destroy"); //Destroy Structure
 		menuResponse->addRadialMenuItemToRadialID(118, 124, 3, "@player_structure:management_status"); //Status
 		menuResponse->addRadialMenuItemToRadialID(118, 129, 3, "@player_structure:management_pay"); //Pay Maintenance
@@ -131,6 +136,8 @@ void StructureTerminalMenuComponent::fillObjectMenuResponse(SceneObject* sceneOb
 	} else if(structureObject->isOnPermissionList("VENDOR", creature)) {
 		if (creature->hasSkill("crafting_artisan_business_03")) {
 			menuResponse->addRadialMenuItem(118, 3, "@player_structure:management"); //Structure Management
+			if (GuildHallBannerSuiCallback::supports(structureObject) && structureObject->isOnAdminList(creature))
+				menuResponse->addRadialMenuItemToRadialID(118, 205, 3, "Change Exterior Banners");
 			menuResponse->addRadialMenuItemToRadialID(118, 130, 3, "@player_structure:create_vendor"); //Create Vendor
 		}
 	}
@@ -157,6 +164,12 @@ int StructureTerminalMenuComponent::handleObjectMenuSelect(SceneObject* sceneObj
 
 	if (zone == nullptr)
 		return 1;
+
+	if (selectedID == 205) {
+		Locker structureLocker(structureObject, creature);
+		GuildHallBannerSuiCallback::open(creature, terminal, structureObject);
+		return 0;
+	}
 
 	if (selectedID == 204) {
 		Locker structureLocker(structureObject, creature);
