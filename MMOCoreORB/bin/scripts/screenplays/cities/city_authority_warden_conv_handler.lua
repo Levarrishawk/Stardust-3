@@ -56,10 +56,12 @@ function cityAuthorityWardenConvoHandler:runScreenHandlers(pConvTemplate, pPlaye
 	end
 
 	local sentenceEnd = CityAuthorityScreenPlay:getSentenceEnd(pPlayer)
+	local fine = CityAuthorityScreenPlay:getReleaseFine(pPlayer)
+	local payFineOption = "Pay the " .. fine .. " credit fine and process my release."
 
 	if (sentenceEnd == 0) then
-		clonedScreen:setCustomDialogText("You have no active sentence recorded. I can process your release after payment of a 20,000 credit fine.")
-		clonedScreen:addOption("Pay the 20,000 credit fine and process my release.", "pay_fine")
+		clonedScreen:setCustomDialogText("You have no active sentence recorded. I can process your release after payment of a " .. fine .. " credit fine.")
+		clonedScreen:addOption(payFineOption, "pay_fine")
 		clonedScreen:addOption("Not now.", "end_conversation")
 
 		return pClonedScreen
@@ -72,8 +74,8 @@ function cityAuthorityWardenConvoHandler:runScreenHandlers(pConvTemplate, pPlaye
 				" remaining on your sentence.")
 		clonedScreen:addOption("Understood.", "end_conversation")
 	else
-		clonedScreen:setCustomDialogText("Your sentence has elapsed. I can process your release after payment of a 20,000 credit fine.")
-		clonedScreen:addOption("Pay the 20,000 credit fine and process my release.", "pay_fine")
+		clonedScreen:setCustomDialogText("Your sentence has elapsed. I can process your release after payment of a " .. fine .. " credit fine.")
+		clonedScreen:addOption(payFineOption, "pay_fine")
 		clonedScreen:addOption("Not now.", "end_conversation")
 	end
 

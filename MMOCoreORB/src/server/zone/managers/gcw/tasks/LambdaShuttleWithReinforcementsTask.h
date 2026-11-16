@@ -17,7 +17,9 @@
 #include "server/zone/managers/creature/CreatureManager.h"
 #include "server/zone/managers/gcw/GCWManager.h"
 #include "server/zone/managers/gcw/observers/SquadObserver.h"
+#include "server/zone/managers/mission/MissionManager.h"
 #include "server/zone/objects/player/FactionStatus.h"
+#include "server/zone/packets/player/PlayMusicMessage.h"
 #include "templates/faction/Factions.h"
 
 class LambdaShuttleWithReinforcementsTask : public Task {
@@ -41,6 +43,7 @@ private:
 	int delayTime;
 	ReinforcementType reinforcementType;
 	Vector<String> containmentTroops;
+	bool spawnContainmentNearPlayer = false;
 
 	const String LAMBDATEMPLATE = "object/creature/npc/theme_park/lambda_shuttle.iff";
 	const int LANDINGTIME = 18000;
@@ -130,13 +133,23 @@ private:
 			y = lambdaShuttle->getPositionY() + yOffsetRotated;
 		}
 
-		if (reinforcementType == CONTAINMENTTEAM) {
+		uint64 parentID = 0;
+		if (spawnContainmentNearPlayer) {
+			auto parent = player->getParent().get();
+			if (parent != nullptr && parent->isCellObject())
+				parentID = parent->getObjectID();
+
+			const Vector3 position = parentID != 0 ? player->getPosition() : player->getWorldPosition();
+			x = position.getX();
+			y = position.getY();
+			z = position.getZ();
+		} else if (reinforcementType == CONTAINMENTTEAM) {
 			z = player->getPositionZ();
 		} else {
 			z = CollisionManager::getWorldFloorCollision(x, y, zone, true);
 		}
 
-		Reference<AiAgent*> npc = cast<AiAgent*>(zone->getCreatureManager()->spawnCreature(creatureTemplate.hashCode(), 0, x, z, y, 0, false, spawnDirection.getRadians()));
+		Reference<AiAgent*> npc = cast<AiAgent*>(zone->getCreatureManager()->spawnCreature(creatureTemplate.hashCode(), 0, x, z, y, parentID, false, spawnDirection.getRadians()));
 
 		if (npc != nullptr) {
 			Locker npcLock(npc, player);
@@ -394,7 +407,8 @@ public:
 		}
 	}
 
-	LambdaShuttleWithReinforcementsTask(CreatureObject* player, unsigned int containmentLevel, String chatMessageId, Vector3 position, Quaternion direction) {
+	LambdaShuttleWithReinforcementsTask(CreatureObject* player, unsigned int containmentLevel, String chatMessageId,
+			Vector3 position, Quaternion direction, bool spawnNearPlayer = false) : spawnContainmentNearPlayer(spawnNearPlayer) {
 		weakPlayer = player;
 		squadObserver = new SquadObserver();
 		difficulty = 1;
@@ -438,6 +452,31 @@ public:
 		default:
 			break;
 		}
+	}
+
+	static bool scheduleJediContainmentTeam(CreatureObject* player, int containmentLevel, bool allowNearbySpawn = false) {
+		if (player == nullptr || player->getZone() == nullptr || containmentLevel < 1 || containmentLevel > 5)
+			return false;
+
+		ZoneServer* zoneServer = player->getZoneServer();
+		MissionManager* missionManager = zoneServer != nullptr ? zoneServer->getMissionManager() : nullptr;
+		auto spawnPoint = missionManager != nullptr ? missionManager->getFreeNpcSpawnPoint(player->getPlanetCRC(),
+				player->getWorldPositionX(), player->getWorldPositionY(), NpcSpawnPoint::CONTAINMENTTEAMSPAWN) : nullptr;
+
+		if (spawnPoint == nullptr && !allowNearbySpawn)
+			return false;
+
+		if (containmentLevel == 3 || containmentLevel == 4)
+			player->sendMessage(new PlayMusicMessage("sound/mus_vader_terror.snd"));
+		else if (containmentLevel == 5)
+			player->sendMessage(new PlayMusicMessage("sound/mus_hopeless_situation.snd"));
+
+		const Vector3 position = spawnPoint != nullptr ? *spawnPoint->getPosition() : player->getWorldPosition();
+		const Quaternion direction = spawnPoint != nullptr ? *spawnPoint->getDirection() : *player->getDirection();
+		Reference<Task*> containmentTask = new LambdaShuttleWithReinforcementsTask(player, containmentLevel,
+				"@imperial_presence/contraband_search:containment_team_jedi_imperial", position, direction, spawnPoint == nullptr);
+		containmentTask->schedule(1);
+		return true;
 	}
 
 	void run() {

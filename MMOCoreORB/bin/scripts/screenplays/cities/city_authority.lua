@@ -1,8 +1,11 @@
 CityAuthorityScreenPlay = ScreenPlay:new {
 	screenplayName = "CityAuthorityScreenPlay",
 	arrestDelay = 1000,
-	sentenceDuration = 24 * 60 * 60,
-	releaseFine = 20000,
+	sentences = {
+		surrender = { duration = 24 * 60 * 60, fine = 20000 },
+		escalation = { duration = 48 * 60 * 60, fine = 50000 },
+		murder = { duration = 7 * 24 * 60 * 60, fine = 100000 },
+	},
 
 	arrestDestination = {
 		zone = "coruscant",
@@ -59,31 +62,26 @@ function CityAuthorityScreenPlay:start()
 	end
 end
 
-function CityAuthorityScreenPlay:arrestPlayer(pPlayer)
+function CityAuthorityScreenPlay:arrestPlayer(pPlayer, offense)
 	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
 		return
 	end
 
-	createEvent(self.arrestDelay, "CityAuthorityScreenPlay", "completeArrest", pPlayer, "")
+	createEvent(self.arrestDelay, self.screenplayName, "completeArrest", pPlayer, offense or "")
 end
 
-function CityAuthorityScreenPlay:completeArrest(pPlayer)
+function CityAuthorityScreenPlay:completeArrest(pPlayer, offense, surrendered)
 	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature()) then
 		return
 	end
 
+	local scene = SceneObject(pPlayer)
 	local player = CreatureObject(pPlayer)
-
-	if (not player:isIncapacitated() or player:isDead()) then
+	local destination = self.arrestDestination
+	if (scene:getZoneName() == "" or not isZoneEnabled(destination.zone) or player:isDead() or
+			(not surrendered and not player:isIncapacitated())) then
 		return
 	end
-
-	local destination = self.arrestDestination
-
-	writeScreenPlayData(pPlayer, self.screenplayName, "sentenceEnd",
-			tostring(getTimestamp() + self.sentenceDuration))
-
-	player:sendSystemMessage("You have been arrested by local authorities.")
 
 	for _, attribute in ipairs({ 0, 3, 6 }) do
 		if (player:getHAM(attribute) < 1) then
@@ -92,7 +90,17 @@ function CityAuthorityScreenPlay:completeArrest(pPlayer)
 	end
 
 	player:setPosture(UPRIGHT)
-	SceneObject(pPlayer):switchZone(destination.zone, destination.x, destination.z, destination.y, destination.cellID)
+	scene:switchZone(destination.zone, destination.x, destination.z, destination.y, destination.cellID)
+
+	if (scene:getZoneName() ~= destination.zone or scene:getParentID() ~= destination.cellID) then
+		return
+	end
+
+	local sentence = self.sentences[offense] or self.sentences.surrender
+	writeScreenPlayData(pPlayer, self.screenplayName, "sentenceEnd",
+			tostring(getTimestamp() + sentence.duration))
+	writeScreenPlayData(pPlayer, self.screenplayName, "sentenceFine", tostring(sentence.fine))
+	player:sendSystemMessage("You have been arrested by local authorities.")
 end
 
 function CityAuthorityScreenPlay:getSentenceEnd(pPlayer)
@@ -107,6 +115,15 @@ function CityAuthorityScreenPlay:getRemainingSentence(pPlayer)
 	return math.max(0, self:getSentenceEnd(pPlayer) - getTimestamp())
 end
 
+function CityAuthorityScreenPlay:getReleaseFine(pPlayer)
+	local fine = tonumber(readScreenPlayData(pPlayer, self.screenplayName, "sentenceFine"))
+	if (fine ~= nil and fine > 0) then
+		return fine
+	end
+
+	return self.sentences.surrender.fine
+end
+
 function CityAuthorityScreenPlay:releasePlayer(pPlayer)
 	if (pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature() or
 			self:getRemainingSentence(pPlayer) > 0) then
@@ -116,19 +133,21 @@ function CityAuthorityScreenPlay:releasePlayer(pPlayer)
 	local player = CreatureObject(pPlayer)
 	local cash = player:getCashCredits()
 	local bank = player:getBankCredits()
+	local fine = self:getReleaseFine(pPlayer)
 
-	if (cash + bank < self.releaseFine) then
-		return false, "You do not have the 20,000 credits required to pay your release fine."
+	if (cash + bank < fine) then
+		return false, "You do not have the " .. fine .. " credits required to pay your release fine."
 	end
 
-	if (cash >= self.releaseFine) then
-		player:subtractCashCredits(self.releaseFine)
+	if (cash >= fine) then
+		player:subtractCashCredits(fine)
 	else
 		player:subtractCashCredits(cash)
-		player:subtractBankCredits(self.releaseFine - cash)
+		player:subtractBankCredits(fine - cash)
 	end
 
 	deleteScreenPlayData(pPlayer, self.screenplayName, "sentenceEnd")
+	deleteScreenPlayData(pPlayer, self.screenplayName, "sentenceFine")
 	player:sendSystemMessage("Your fine has been paid. You are released from Imperial custody.")
 
 	local destination = self.releaseDestination

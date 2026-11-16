@@ -14,6 +14,11 @@ const String VisibilityManager::factionStringImperial = "imperial";
 const unsigned int VisibilityManager::factionRebel = STRING_HASHCODE("rebel");
 const unsigned int VisibilityManager::factionImperial = STRING_HASHCODE("imperial");
 
+namespace {
+	const float jediContainmentThresholds[] = { 1500.f, 3000.f, 4500.f, 6000.f, 8000.f };
+	const int jediContainmentLevels = sizeof(jediContainmentThresholds) / sizeof(jediContainmentThresholds[0]);
+}
+
 float VisibilityManager::calculateVisibilityIncrease(CreatureObject* creature) {
 	Zone* zone = creature->getZone();
 
@@ -108,12 +113,13 @@ VisibilityManager::VisibilityManager() : Logger("VisibilityManager") {
 	decayTask->schedule(visDecayTickRate * 1000);
 }
 
-void VisibilityManager::addToVisibilityList(CreatureObject* creature) {
+void VisibilityManager::addToVisibilityList(CreatureObject* creature, bool applyDecay) {
 	//info("Logging in " + creature->getFirstName(), true);
 	Reference<PlayerObject*> ghost = creature->getSlottedObject("ghost").castTo<PlayerObject*>();
 
 	if (ghost != nullptr) {
-		decreaseVisibility(creature);
+		if (applyDecay)
+			decreaseVisibility(creature);
 
 		Locker locker(&visibilityListLock);
 
@@ -154,6 +160,36 @@ void VisibilityManager::increaseVisibility(CreatureObject* creature, int visibil
 
 		addToVisibilityList(creature);
 	}
+}
+
+int VisibilityManager::getJediContainmentLevel(float visibility) const {
+	for (int level = jediContainmentLevels; level > 0; --level) {
+		if (visibility >= jediContainmentThresholds[level - 1])
+			return level;
+	}
+
+	return 0;
+}
+
+int VisibilityManager::advanceToNextJediContainmentLevel(CreatureObject* creature) {
+	if (creature == nullptr || !creature->isPlayerCreature())
+		return 0;
+
+	Reference<PlayerObject*> ghost = creature->getSlottedObject("ghost").castTo<PlayerObject*>();
+	if (ghost == nullptr || ghost->hasGodMode())
+		return 0;
+
+	Locker locker(ghost);
+	const float currentVisibility = ghost->getVisibility();
+	const int currentLevel = getJediContainmentLevel(currentVisibility);
+	const int nextThreshold = Math::min(currentLevel, jediContainmentLevels - 1);
+	const float newVisibility = Math::max(currentVisibility, Math::min(maxVisibility, jediContainmentThresholds[nextThreshold]));
+	if (newVisibility > currentVisibility)
+		ghost->setVisibility(newVisibility);
+	locker.release();
+
+	addToVisibilityList(creature, false);
+	return getJediContainmentLevel(newVisibility);
 }
 
 void VisibilityManager::clearVisibility(CreatureObject* creature) {

@@ -140,6 +140,8 @@ public:
 #endif
 	}
 
+	void getRegionsInRange(float x, float y, float range, Vector<Reference<ActiveArea*>>& results) const;
+
 #ifdef AREA_TREE_SIMPLE
 	void remove(Reference<ActiveArea*> area) {
 		areas.drop(area);
@@ -152,6 +154,8 @@ protected:
 #ifndef AREA_TREE_SIMPLE
 	void insert(ActiveAreaQuadTreeNode& node, ActiveArea* area);
 	void removeActiveArea(ActiveAreaQuadTreeNode& node, ActiveArea* area);
+	void getRegionsInRange(const ActiveAreaQuadTreeNode* node, float x, float y, float range,
+			Vector<Reference<ActiveArea*>>& results) const;
 
 	template <typename AreaType>
 	void getActiveAreas(ActiveAreaQuadTreeNode* node, float x, float y, ArrayList<AreaType>& areas) const {

@@ -118,7 +118,7 @@ public:
 	 * Add player to the visibility list if he/she still has visibility.
 	 * @param creature the player to add.
 	 */
-	void addToVisibilityList(CreatureObject* creature);
+	void addToVisibilityList(CreatureObject* creature, bool applyDecay = true);
 
 	/**
 	 * Remove player from the visibility list.
@@ -132,6 +132,8 @@ public:
 	 * @param creature the player to increase the visibility for.
 	 */
 	void increaseVisibility(CreatureObject* creature, int visibilityMultiplier);
+	int getJediContainmentLevel(float visibility) const;
+	int advanceToNextJediContainmentLevel(CreatureObject* creature);
 
 	/**
 	 * Clear the visibility for a player and remove him/her from the visibility

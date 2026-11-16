@@ -1686,7 +1686,7 @@ void PlayerObjectImplementation::replenishClones(uint32 now) {
 	if (now <= cloneReplenishmentTime)
 		return;
 
-	const uint32 replenishmentInterval = 14 * 24 * 60 * 60;
+	const uint32 replenishmentInterval = 7 * 24 * 60 * 60;
 	const uint32 replenished = (now - cloneReplenishmentTime) / replenishmentInterval;
 	if (replenished >= cloneCounter) {
 		resetCloneCounter();

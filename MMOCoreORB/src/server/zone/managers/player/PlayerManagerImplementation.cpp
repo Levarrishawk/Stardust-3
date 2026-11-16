@@ -123,35 +123,6 @@
 
 #include "server/zone/managers/statistics/StatisticsManager.h"
 
-namespace {
-	void scheduleCityAuthorityArrest(TangibleObject* destructor, CreatureObject* offender) {
-		if (destructor == nullptr || offender == nullptr || !destructor->isAiAgent() || !offender->isPlayerCreature())
-			return;
-
-		CreatureObject* responder = destructor->asCreatureObject();
-
-		if (responder == nullptr || responder->checkCooldownRecovery("city_authority_responder"))
-			return;
-
-		StringBuffer offenderMarker;
-		offenderMarker << "city_authority_offender:" << offender->getObjectID();
-
-		if (responder->checkCooldownRecovery(offenderMarker.toString()))
-			return;
-
-		if (responder->getZoneServer() != nullptr) {
-			responder->getZoneServer()->getChatManager()->broadcastChatMessage(
-					responder, "Target down, Area Secure!", 0, 0, responder->getMoodID());
-		}
-
-		Lua* lua = DirectorManager::instance()->getLuaInstance();
-		Reference<LuaFunction*> arrestPlayer = lua->createFunction("CityAuthorityScreenPlay", "arrestPlayer", 0);
-
-		*arrestPlayer << offender;
-		arrestPlayer->callFunction();
-	}
-}
-
 // #define DEBUG_SPEED_HACK
 
 PlayerManagerImplementation::PlayerManagerImplementation(ZoneServer* zoneServer, ZoneProcessServer* impl, bool trackOnlineUsers) : Logger("PlayerManager") {
@@ -1268,7 +1239,7 @@ int PlayerManagerImplementation::notifyDestruction(TangibleObject* destructor, T
 		Reference<Task*> task = new PlayerIncapacitationRecoverTask(playerCreature, false);
 		playerCreature->addPendingTask("incapacitationRecovery", task, incapTime * 1000);
 
-		scheduleCityAuthorityArrest(destructor, playerCreature);
+		CombatManager::instance()->handleCityAuthorityIncapacitation(destructor, playerCreature);
 
 		StringIdChatParameter toVictim;
 
