@@ -15,6 +15,7 @@
 #include "server/zone/objects/player/sessions/Inspiration.h"
 #include "server/zone/objects/player/FactionStatus.h"
 #include "server/zone/objects/guild/GuildObject.h"
+#include "templates/params/OptionBitmask.h"
 #include "templates/params/creature/CreatureState.h"
 #include "server/zone/objects/creature/commands/CombatQueueCommand.h"
 #include "templates/params/creature/CreatureAttribute.h"
@@ -45,16 +46,19 @@
 #include "server/zone/managers/planet/PlanetManager.h"
 #include "server/chat/ChatManager.h"
 #include "system/thread/ReadLocker.h"
+#include "system/util/HashTable.h"
 #include "templates/faction/Factions.h"
 
 #define COMBAT_SPAM_RANGE 85 // Range at which players will see Combat Log Info
 
 namespace {
 	const char* const cityAuthorityResponse = "city_authority_response";
+	const char* const cityAuthorityResponder = "city_authority_responder";
 	const char* const cityAuthorityWarningTask = "city_authority_warning";
 	const char* const cityAuthorityTransportTask = "city_authority_transport";
 	const char* const cityAuthoritySurrender = "city_authority_surrender_requested";
 	const char* const cityAuthorityEscalation = "city_authority_escalated";
+	const char* const cityAuthorityContained = "city_authority_contained";
 	const char* const cityAuthorityMurder = "city_authority_murder";
 	const char* const cityAuthorityJediReported = "city_authority_jedi_reported";
 	const int cityAuthorityTransportDelay = 5000;
@@ -63,6 +67,44 @@ namespace {
 	const int cityAuthorityLambdaLandingTime = 18000;
 	const int cityAuthorityLambdaUnloadingTime = 5000;
 	const int cityAuthorityLambdaTakeoffTime = 17000;
+	const uint32 cityAuthorityMaxResponders = 18;
+	const int maxSaberBlockAgainstPlayers = 33;
+	const int maxSaberBlockAgainstNpcs = 75;
+
+	Mutex cityAuthorityResponderCountsMutex;
+	HashTable<uint64, uint32> cityAuthorityResponderCounts;
+
+	// The cleanup task holds the slot until the responder is removed from the world.
+	class CityAuthorityResponderSlot : public Object {
+		const uint64 offenderID;
+		bool reserved;
+
+	public:
+		explicit CityAuthorityResponderSlot(uint64 offenderID) : offenderID(offenderID), reserved(false) {
+			Locker locker(&cityAuthorityResponderCountsMutex);
+			const uint32 count = cityAuthorityResponderCounts.get(offenderID);
+			if (count < cityAuthorityMaxResponders) {
+				cityAuthorityResponderCounts.put(offenderID, count + 1);
+				reserved = true;
+			}
+		}
+
+		~CityAuthorityResponderSlot() {
+			if (!reserved)
+				return;
+
+			Locker locker(&cityAuthorityResponderCountsMutex);
+			const uint32 count = cityAuthorityResponderCounts.get(offenderID);
+			if (count <= 1)
+				cityAuthorityResponderCounts.remove(offenderID);
+			else
+				cityAuthorityResponderCounts.put(offenderID, count - 1);
+		}
+
+		bool isReserved() const {
+			return reserved;
+		}
+	};
 
 	void sendCityAuthorityChat(AiAgent* responder, const String& message) {
 		if (responder == nullptr || responder->getZoneServer() == nullptr)
@@ -72,12 +114,16 @@ namespace {
 				responder, message, 0, 0, responder->getMoodID());
 	}
 
-	void reportCityAuthorityJedi(AiAgent* responder, CreatureObject* offender, int cooldown) {
+	bool isCityAuthorityLightsaber(WeaponObject* weapon) {
+		return weapon != nullptr && (weapon->isJediWeapon() || weapon->getDamageType() == SharedWeaponObjectTemplate::LIGHTSABER);
+	}
+
+	void reportCityAuthorityJedi(AiAgent* responder, CreatureObject* offender, uint64 cooldown, WeaponObject* weapon = nullptr) {
 		if (!offender->checkCooldownRecovery(cityAuthorityJediReported))
 			return;
 
-		Reference<WeaponObject*> weapon = offender->getWeapon();
-		if (weapon == nullptr || !weapon->isJediWeapon())
+		Reference<WeaponObject*> activeWeapon = weapon != nullptr ? Reference<WeaponObject*>(weapon) : offender->getWeapon();
+		if (!isCityAuthorityLightsaber(activeWeapon))
 			return;
 
 		const int containmentLevel = VisibilityManager::instance()->advanceToNextJediContainmentLevel(offender);
@@ -98,6 +144,46 @@ namespace {
 		StringBuffer marker;
 		marker << "city_authority_offender:" << offenderID;
 		return marker.toString();
+	}
+
+	bool isCityAuthorityResponderFor(AiAgent* responder, CreatureObject* offender) {
+		return responder != nullptr && !responder->checkCooldownRecovery(cityAuthorityResponder) &&
+				!responder->checkCooldownRecovery(getCityAuthorityOffenderMarker(offender->getObjectID()));
+	}
+
+	void reportCityAuthoritySaberUse(CreatureObject* offender, WeaponObject* weapon) {
+		if (!offender->isPlayerCreature() || offender->checkCooldownRecovery(cityAuthorityResponse) ||
+				!offender->checkCooldownRecovery(cityAuthorityJediReported) || !isCityAuthorityLightsaber(weapon))
+			return;
+
+		Zone* zone = offender->getZone();
+		if (zone == nullptr)
+			return;
+
+		const Vector3 position = offender->getWorldPosition();
+		SortedVector<ManagedReference<TreeEntry*>> nearby;
+		zone->getInRangeObjects(position.getX(), position.getZ(), position.getY(), COMBAT_SPAM_RANGE, &nearby, true);
+
+		for (int i = 0; i < nearby.size(); ++i) {
+			SceneObject* object = static_cast<SceneObject*>(nearby.get(i).get());
+			AiAgent* responder = object != nullptr ? object->asAiAgent() : nullptr;
+			if (!isCityAuthorityResponderFor(responder, offender))
+				continue;
+
+			Locker responderLocker(responder, offender);
+			if (offender->getZone() != zone || responder->getZone() != zone || responder->isDead() ||
+					responder->isIncapacitated() || !isCityAuthorityResponderFor(responder, offender) ||
+					!offender->isInRange(responder, COMBAT_SPAM_RANGE) ||
+					!CollisionManager::checkLineOfSight(responder, offender))
+				continue;
+
+			const Time* responseEnd = responder->getCooldownTime(cityAuthorityResponder);
+			Time now;
+			if (responseEnd != nullptr && responseEnd->getMiliTime() > now.getMiliTime()) {
+				reportCityAuthorityJedi(responder, offender, responseEnd->getMiliTime() - now.getMiliTime(), weapon);
+				return;
+			}
+		}
 	}
 
 	String getCityAuthorityDeathBlowMarker(uint64 victimID) {
@@ -275,7 +361,12 @@ namespace {
 		return nullptr;
 	}
 
-	void scheduleCityAuthorityCleanup(AiAgent* responder, int cleanupTime) {
+	bool canDispatchCityAuthorityBackup(CreatureObject* offender, Zone* zone) {
+		return zone != nullptr && offender->getZone() == zone && !offender->isDead() && !offender->isIncapacitated() &&
+				offender->checkCooldownRecovery(cityAuthorityContained) && !offender->containsPendingTask(cityAuthorityTransportTask);
+	}
+
+	void scheduleCityAuthorityCleanup(AiAgent* responder, int cleanupTime, Reference<CityAuthorityResponderSlot*> slot) {
 		ManagedReference<AiAgent*> strongResponder = responder;
 		int standDownTime = Math::max(0, cleanupTime - 2000);
 
@@ -289,7 +380,7 @@ namespace {
 				sendCityAuthorityChat(strongResponder, "Standing down, returning to base.");
 		}, "CityAuthorityStandDownTask", standDownTime);
 
-		Core::getTaskManager()->scheduleTask([strongResponder] {
+		Core::getTaskManager()->scheduleTask([strongResponder, slot] () mutable {
 			if (strongResponder == nullptr)
 				return;
 
@@ -297,12 +388,18 @@ namespace {
 
 			if (strongResponder->getZone() != nullptr)
 				strongResponder->destroyObjectFromWorld(true);
+
+			slot = nullptr;
 		}, "CityAuthorityCleanupTask", cleanupTime);
 	}
 
 	ManagedReference<AiAgent*> spawnCityAuthorityResponder(Zone* zone, const String& responderTemplate, CreatureObject* offender,
 			float offset, bool engageOffender, int cleanupTime, const Vector3* groundPosition = nullptr, float heading = 0.f) {
 		if (zone == nullptr || offender == nullptr)
+			return nullptr;
+
+		Reference<CityAuthorityResponderSlot*> slot = new CityAuthorityResponderSlot(offender->getObjectID());
+		if (!slot->isReserved())
 			return nullptr;
 
 		const String spawnTemplate = responderTemplate == "stormtrooper" ? "city_authority_stormtrooper" : responderTemplate;
@@ -318,6 +415,12 @@ namespace {
 
 		{
 			Locker responderLocker(responder, offender);
+			if (engageOffender && !canDispatchCityAuthorityBackup(offender, zone)) {
+				if (responder->getZone() != nullptr)
+					responder->destroyObjectFromWorld(true);
+				return nullptr;
+			}
+
 			ManagedReference<CellObject*> parentCell;
 			if (parentID != 0)
 				parentCell = offender->getParent().get().castTo<CellObject*>();
@@ -325,11 +428,8 @@ namespace {
 			responder->setFaction(0);
 			responder->setRespawnTimer(0);
 			responder->setDespawnOnNoPlayerInRange(false);
-			responder->addCooldown("city_authority_responder", cleanupTime);
+			responder->addCooldown(cityAuthorityResponder, cleanupTime);
 			responder->addCooldown(getCityAuthorityOffenderMarker(offender->getObjectID()), cleanupTime);
-
-			if (!engageOffender)
-				responder->addCooldown("city_authority_backup_authorized", cleanupTime);
 
 			responder->setHomeLocation(position.getX(), position.getZ(), position.getY(), parentCell, heading);
 
@@ -340,9 +440,13 @@ namespace {
 				if (groundPosition != nullptr)
 					responder->activateAiBehavior(true);
 			}
+
+			responder->clearOptionBit(OptionBitmask::INVULNERABLE);
+			// Refresh attackability after changing the faction from the spawn template.
+			responder->setPvpStatusBitmask(responder->getPvpStatusBitmask() | ObjectFlag::ATTACKABLE);
 		}
 
-		scheduleCityAuthorityCleanup(responder, cleanupTime);
+		scheduleCityAuthorityCleanup(responder, cleanupTime, slot);
 
 		return responder;
 	}
@@ -406,55 +510,50 @@ namespace {
 		return nullptr;
 	}
 
-	void handleCityAuthorityBackup(CreatureObject* attacker, CreatureObject* defender) {
-		if (attacker == nullptr || defender == nullptr || !attacker->isPlayerCreature() || !defender->isAiAgent())
-			return;
-
-		const String offenderMarker = getCityAuthorityOffenderMarker(attacker->getObjectID());
-
-		if (defender->checkCooldownRecovery(offenderMarker))
-			return;
-
-		if (defender->checkCooldownRecovery("city_authority_backup_authorized"))
+	void handleCityAuthorityBackup(CreatureObject* attacker, AiAgent* defender) {
+		if (!attacker->isPlayerCreature() || !isCityAuthorityResponderFor(defender, attacker))
 			return;
 
 		const String backupCooldown = "city_authority_backup_called";
-
 		if (!defender->checkCooldownRecovery(backupCooldown))
 			return;
 
 		ManagedReference<Zone*> responseZone = attacker->getZone();
-
-		if (responseZone == nullptr || defender->getZone() != responseZone.get())
+		if (!canDispatchCityAuthorityBackup(attacker, responseZone.get()) || defender->getZone() != responseZone.get())
 			return;
 
 		ConfigManager* config = ConfigManager::instance();
 		const String responderTemplate = config->getString("Core3.CityAuthority.ResponderTemplate", "stormtrooper");
 		const int backupDelay = Math::max(1000, config->getInt("Core3.CityAuthority.BackupDelayMs", 5000));
 		const int cleanupTime = Math::max(backupDelay + 1000, config->getInt("Core3.CityAuthority.CleanupTimeMs", 120000));
+		const int responseDuration = backupDelay + cleanupTime;
+		const Time* assignmentEnd = defender->getCooldownTime(cityAuthorityResponder);
+		Time now;
+		if (assignmentEnd == nullptr || assignmentEnd->getMiliTime() <= now.getMiliTime())
+			return;
 
-		attacker->updateCooldownTimer(cityAuthorityEscalation, backupDelay + cleanupTime);
+		const Time* responseEnd = attacker->getCooldownTime(cityAuthorityResponse);
+		if (responseEnd == nullptr || responseEnd->getMiliTime() < now.getMiliTime() + responseDuration)
+			attacker->updateCooldownTimer(cityAuthorityResponse, responseDuration);
+
+		attacker->updateCooldownTimer(cityAuthorityEscalation, responseDuration);
 		if (!attacker->checkCooldownRecovery(cityAuthorityMurder))
-			attacker->updateCooldownTimer(cityAuthorityMurder, backupDelay + cleanupTime);
+			attacker->updateCooldownTimer(cityAuthorityMurder, responseDuration);
 
-		defender->addCooldown(backupCooldown, cleanupTime);
-		sendCityAuthorityChat(defender->asAiAgent(), "Suspect is hostile, requesting backup!");
-		reportCityAuthorityJedi(defender->asAiAgent(), attacker, cleanupTime);
+		defender->addCooldown(backupCooldown, assignmentEnd->getMiliTime() - now.getMiliTime());
+		sendCityAuthorityChat(defender, "Suspect is hostile, requesting backup!");
+		reportCityAuthorityJedi(defender, attacker, cleanupTime);
 
 		ManagedReference<CreatureObject*> strongAttacker = attacker;
-		ManagedReference<AiAgent*> strongCaller = defender->asAiAgent();
 
-		Core::getTaskManager()->scheduleTask([strongAttacker, strongCaller, responseZone, responderTemplate, cleanupTime] {
+		Core::getTaskManager()->scheduleTask([strongAttacker, responseZone, responderTemplate, cleanupTime] {
 			Locker attackerLocker(strongAttacker);
-
-			Zone* zone = strongAttacker->getZone();
-
-			if (zone != responseZone.get() || strongAttacker->isDead() || strongAttacker->isIncapacitated())
+			if (strongAttacker->checkCooldownRecovery(cityAuthorityResponse))
 				return;
 
+			Zone* zone = responseZone.get();
 			ManagedReference<AiAgent*> firstBackup = nullptr;
-
-			for (int i = 0; i < 3; ++i) {
+			for (int i = 0; i < 3 && canDispatchCityAuthorityBackup(strongAttacker, zone); ++i) {
 				float offset = 2.f + (i * 1.5f);
 				ManagedReference<AiAgent*> backup = spawnCityAuthorityResponder(
 						zone, responderTemplate, strongAttacker, offset, true, cleanupTime);
@@ -463,9 +562,7 @@ namespace {
 					firstBackup = backup;
 			}
 
-			if (strongCaller != nullptr && strongCaller->getZone() == zone)
-				sendCityAuthorityChat(strongCaller, "Blast him!");
-			else
+			if (firstBackup != nullptr)
 				sendCityAuthorityChat(firstBackup, "Blast him!");
 		}, "CityAuthorityBackupTask", backupDelay);
 	}
@@ -691,10 +788,14 @@ void CombatManager::handleCityAuthorityIncapacitation(TangibleObject* source, Cr
 		return;
 
 	AiAgent* responder = source->asAiAgent();
-	if (responder == nullptr || responder->checkCooldownRecovery("city_authority_responder") ||
-			responder->checkCooldownRecovery(getCityAuthorityOffenderMarker(offender->getObjectID())) ||
+	if (!isCityAuthorityResponderFor(responder, offender) ||
 			offender->containsPendingTask(cityAuthorityTransportTask))
 		return;
+
+	const Time* responseEnd = offender->getCooldownTime(cityAuthorityResponse);
+	Time now;
+	if (responseEnd != nullptr && responseEnd->getMiliTime() > now.getMiliTime())
+		offender->updateCooldownTimer(cityAuthorityContained, responseEnd->getMiliTime() - now.getMiliTime());
 
 	sendCityAuthorityChat(responder, "Target down, Area Secure!");
 	const char* offense = offender->checkCooldownRecovery(cityAuthorityMurder) ? "escalation" : "murder";
@@ -777,21 +878,15 @@ bool CombatManager::startCombat(CreatureObject* attacker, TangibleObject* defend
 		}
 	}
 
-	bool newDirectAttack = attacker->isPlayerCreature() && !attacker->hasDefender(defender);
+	bool newPlayerAttack = attacker->isPlayerCreature() && defender->isPlayerCreature() && !attacker->hasDefender(defender);
 
 	attacker->setCombatState();
 	defender->setCombatState();
 
 	attacker->setDefender(defender);
 
-	if (newDirectAttack) {
-		CreatureObject* defenderCreature = defender->asCreatureObject();
-
-		if (defender->isPlayerCreature())
-			handleCityAuthorityResponse(attacker, defenderCreature);
-		else if (defenderCreature != nullptr && defenderCreature->isAiAgent())
-			handleCityAuthorityBackup(attacker, defenderCreature);
-	}
+	if (newPlayerAttack)
+		handleCityAuthorityResponse(attacker, creo);
 
 	if (defender->isCreatureObject()) {
 		ThreatMap* defenderThreatMap = defender->getThreatMap();
@@ -916,6 +1011,8 @@ int CombatManager::doCombatAction(CreatureObject* attacker, WeaponObject* weapon
 	if (!applySpecialAttackCost(attacker, weapon, data)) {
 		return -2;
 	}
+
+	reportCityAuthoritySaberUse(attacker, weapon);
 
 	debug("past special attack cost");
 
@@ -1078,6 +1175,7 @@ int CombatManager::doTargetCombatAction(CreatureObject* attacker, WeaponObject* 
 			return -1;
 		}
 
+		handleCityAuthorityBackup(attacker, defender->asAiAgent());
 		damage = creoTargetCombatAction(attacker, weapon, defender, hitList, data, shouldGcwCrackdownTef, shouldGcwTef, shouldBhTef);
 	} else {
 		int poolsToDamage = calculatePoolsToDamage(data.getPoolsToDamage());
@@ -2874,9 +2972,10 @@ int CombatManager::getHitChance(TangibleObject* attacker, CreatureObject* creoDe
 			int attackType = weapon->getAttackType();
 
 			if ((!attacker->isTurret() && attackMask != WeaponType::GRENADEWEAPON) && (attackType == SharedWeaponObjectTemplate::RANGEDATTACK || attackMask == WeaponType::HEAVYWEAPON)) {
-				evadeTotal = evadeSkill = creoDefender->getSkillMod("saber_block");
+				const int maxSaberBlock = attacker->isPlayerCreature() ? maxSaberBlockAgainstPlayers : maxSaberBlockAgainstNpcs;
+				evadeTotal = evadeSkill = Math::min(creoDefender->getSkillMod("saber_block"), maxSaberBlock);
 
-				if (evadeTotal > 0 && System::random(100) <= evadeTotal) {
+				if (evadeTotal > 0 && System::random(99) < static_cast<uint32>(evadeTotal)) {
 					hitResult = HitStatus::RICOCHET;
 				}
 			}

@@ -6,7 +6,7 @@ city_authority_stormtrooper = stormtrooper:new {
 	baseHAM = 2000000,
 	baseHAMmax = 2000000,
 	armor = 3,
-	resists = {99,99,99,99,99,99,99,99,99},
+	resists = {95,95,95,95,95,95,95,95,95},
 }
 
 CreatureTemplates:addCreatureTemplate(city_authority_stormtrooper, "city_authority_stormtrooper")
