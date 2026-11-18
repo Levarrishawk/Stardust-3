@@ -92,7 +92,7 @@ end
 
 function CoruscantEntertainmentScreenPlay:enteredThroneRoom(pArea, pObject)
 	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
-		CreatureObject(pObject):playMusicMessage("sound/music_emperor_theme.snd")
+		CreatureObject(pObject):playMusicMessage("sound/music_emperor_theme_stereo.snd")
 	end
 	return 0
 end
