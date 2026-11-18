@@ -2,6 +2,7 @@ CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
 	screenplayName = "CoruscantEntertainmentScreenPlay",
+	councilChamberCellID = 37002516,
 
 	mountedSwoopRoute = {
 		{-5746, 0, -5051},
@@ -22,7 +23,40 @@ function CoruscantEntertainmentScreenPlay:start()
 		self:spawnMobiles()
 		self:spawnSceneObjects()
 		self:spawnMountedSwoopPatrol()
+		self:spawnCouncilChamberMusicArea()
 	end
+end
+
+function CoruscantEntertainmentScreenPlay:spawnCouncilChamberMusicArea()
+	local pCell = getSceneObject(self.councilChamberCellID)
+	if (pCell == nil or not SceneObject(pCell):isCellObject()) then
+		print(self.screenplayName .. ": Council Chamber cell missing, skipping music area")
+		return
+	end
+
+	-- Active areas use world coordinates. The cell filter separates the chamber from the lift.
+	local pArea = spawnActiveArea("coruscant", "object/active_area.iff", -181.45, 306, 4863.78, 12, self.councilChamberCellID)
+	if (pArea == nil) then
+		print(self.screenplayName .. ": failed to spawn Council Chamber music area")
+		return
+	end
+
+	createObserver(ENTEREDAREA, self.screenplayName, "enteredCouncilChamber", pArea)
+	createObserver(EXITEDAREA, self.screenplayName, "exitedCouncilChamber", pArea)
+end
+
+function CoruscantEntertainmentScreenPlay:enteredCouncilChamber(pArea, pObject)
+	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
+		CreatureObject(pObject):playMusicMessage("sound/mus_ruminations.snd")
+	end
+	return 0
+end
+
+function CoruscantEntertainmentScreenPlay:exitedCouncilChamber(pArea, pObject)
+	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
+		CreatureObject(pObject):playMusicMessage("sound/music_silence.snd")
+	end
+	return 0
 end
 
 function CoruscantEntertainmentScreenPlay:spawnMountedSwoopPatrol()
@@ -399,6 +433,11 @@ function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
   spawnSceneObject("coruscant", "object/static/structure/military/military_wall_weak_imperial_style_01.iff", -1828, 38, -25, 0, math.rad(75) )
 -- lower city shuttle
   spawnSceneObject("coruscant", "object/building/player/city/shuttleport_corellia.iff", -5816, 0, -4833, 0, math.rad(180) )
+  
+  
+ -- Imperial Palace 
+  spawnSceneObject("coruscant", "object/tangible/veteran_reward/frn_vet_emp_chair.iff", 4.1, 334.0, 23.5, 37002514, math.rad(180) )
+  
  
 end
 
@@ -1775,6 +1814,31 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -22, -23.0, 150, 135, 37002249)
   self:setMoodString(pNpc, "neutral")
   -- Palace / Jedi Temple Quarter
+  pNpc = spawnMobile("coruscant", "royal_imperial_guard", 60, -4.6, 333.0, 4.8, 40, 37002514)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "royal_imperial_guard", 60, 12.8, 333.0, 4.8, -56, 37002514)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "emperors_hand", 60, -4.4, 333.0, 22.4, 131, 37002514)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "emperors_hand", 60, 12.4, 333.0, 22.4, -134, 37002514)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "royal_imperial_guard", 60, 1.3, 1.2, -7.4, 180, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "royal_imperial_guard", 60, 6.5, 1.2, -7.4, 180, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "fbase_stormtrooper_extreme", 60, -64.2, 0.0, -59.9, 0, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "fbase_stormtrooper_extreme", 60, -64.5, 0.0, 51.2, 180, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "fbase_stormtrooper_extreme", 60, 59.9, 0.0, -59.9, 0, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "fbase_stormtrooper_extreme", 60, 62.9, 0.0, 51.2, 180, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "fbase_stormtrooper_extreme", 60, -7.1, 1.2, -203.2, 0, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  pNpc = spawnMobile("coruscant", "fbase_stormtrooper_extreme", 60, 7.1, 1.2, -203.2, 0, 37002512)
+  self:setMoodString(pNpc, "neutral")
+  
   
   
 end
