@@ -171,6 +171,26 @@ object_building_general_shared_corellia_greck_hq = SharedBuildingObjectTemplate:
 }
 ObjectTemplates:addClientTemplate(object_building_general_shared_corellia_greck_hq, "object/building/general/shared_corellia_greck_hq.iff")
 --**********************************************************************************************************************************
+object_building_general_shared_coru_block_01_a = SharedBuildingObjectTemplate:new {
+	clientTemplateFileName = "object/building/general/shared_coru_block_01_a.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_general_shared_coru_block_01_a, "object/building/general/shared_coru_block_01_a.iff")
+
+object_building_general_shared_coru_block_01_b = SharedBuildingObjectTemplate:new {
+	clientTemplateFileName = "object/building/general/shared_coru_block_01_b.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_general_shared_coru_block_01_b, "object/building/general/shared_coru_block_01_b.iff")
+
+object_building_general_shared_coru_block_01_c = SharedBuildingObjectTemplate:new {
+	clientTemplateFileName = "object/building/general/shared_coru_block_01_c.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_general_shared_coru_block_01_c, "object/building/general/shared_coru_block_01_c.iff")
+
+object_building_general_shared_coru_block_01_mini = SharedBuildingObjectTemplate:new {
+	clientTemplateFileName = "object/building/general/shared_coru_block_01_mini.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_general_shared_coru_block_01_mini, "object/building/general/shared_coru_block_01_mini.iff")
+
 object_building_general_shared_dearic_imperial_office = SharedBuildingObjectTemplate:new {
 	clientTemplateFileName = "object/building/general/shared_dearic_imperial_office.iff"
 }

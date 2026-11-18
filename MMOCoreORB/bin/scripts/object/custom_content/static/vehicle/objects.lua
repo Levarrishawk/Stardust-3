@@ -1,4 +1,9 @@
 --New
+object_static_vehicle_shared_imperial_laat = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/vehicle/shared_imperial_laat.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_vehicle_shared_imperial_laat, "object/static/vehicle/shared_imperial_laat.iff")
+
 object_static_vehicle_shared_kash_rodian_shuttle = SharedStaticObjectTemplate:new {
 	clientTemplateFileName = "object/static/vehicle/shared_kash_rodian_shuttle.iff"
 }

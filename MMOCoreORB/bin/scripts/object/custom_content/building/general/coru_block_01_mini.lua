@@ -1,0 +1,3 @@
+object_building_general_coru_block_01_mini = object_building_general_shared_coru_block_01_mini:new {
+}
+ObjectTemplates:addTemplate(object_building_general_coru_block_01_mini, "object/building/general/coru_block_01_mini.iff")

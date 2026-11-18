@@ -1,4 +1,5 @@
 -- Server Objects
+includeFile("custom_content/static/vehicle/imperial_laat.lua")
 includeFile("custom_content/static/vehicle/kash_rodian_shuttle.lua")
 includeFile("custom_content/static/vehicle/static_at_at.lua")
 includeFile("custom_content/static/vehicle/static_flare_s.lua")
