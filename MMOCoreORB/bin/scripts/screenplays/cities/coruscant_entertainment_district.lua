@@ -2,6 +2,8 @@ CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 	numberOfActs = 1,
 
 	screenplayName = "CoruscantEntertainmentScreenPlay",
+	greatHallCellID = 37002512,
+	throneRoomCellID = 37002514,
 	councilChamberCellID = 37002516,
 
 	mountedSwoopRoute = {
@@ -23,7 +25,36 @@ function CoruscantEntertainmentScreenPlay:start()
 		self:spawnMobiles()
 		self:spawnSceneObjects()
 		self:spawnMountedSwoopPatrol()
-		self:spawnCouncilChamberMusicArea()
+		self:spawnPalaceMusicAreas()
+	end
+end
+
+function CoruscantEntertainmentScreenPlay:spawnPalaceMusicAreas()
+	self:spawnCouncilChamberMusicArea()
+	self:spawnPalaceMusicRectangle("Great Hall", self.greatHallCellID, -263, 4594, 25, 5003, 1.2, "enteredGreatHall", "exitedPalaceMusicArea")
+
+	-- The throne room and both lift landings share a cell. The audience floor starts at the south doorway.
+	self:spawnPalaceMusicRectangle("Throne Room", self.throneRoomCellID, -129, 4800.25, -101, 4827.3, 333, "enteredThroneRoom", "exitedPalaceMusicArea")
+	-- Core3 only sends a cell-bound EXITEDAREA on a cell change. Walking back into the lobby also stops the theme.
+	self:spawnPalaceMusicRectangle("Throne Lift Lobby", self.throneRoomCellID, -117.2, 4793.8, -112.8, 4800.2495, 333, "exitedPalaceMusicArea")
+end
+
+function CoruscantEntertainmentScreenPlay:spawnPalaceMusicRectangle(name, cellID, x1, y1, x2, y2, height, onEnter, onExit)
+	local pCell = getSceneObject(cellID)
+	if (pCell == nil or not SceneObject(pCell):isCellObject()) then
+		print(self.screenplayName .. ": " .. name .. " cell missing, skipping music area")
+		return
+	end
+
+	local pArea = spawnRectangularActiveArea("coruscant", "object/active_area.iff", x1, y1, x2, y2, height, cellID)
+	if (pArea == nil) then
+		print(self.screenplayName .. ": failed to spawn " .. name .. " music area")
+		return
+	end
+
+	createObserver(ENTEREDAREA, self.screenplayName, onEnter, pArea)
+	if (onExit ~= nil) then
+		createObserver(EXITEDAREA, self.screenplayName, onExit, pArea)
 	end
 end
 
@@ -42,7 +73,7 @@ function CoruscantEntertainmentScreenPlay:spawnCouncilChamberMusicArea()
 	end
 
 	createObserver(ENTEREDAREA, self.screenplayName, "enteredCouncilChamber", pArea)
-	createObserver(EXITEDAREA, self.screenplayName, "exitedCouncilChamber", pArea)
+	createObserver(EXITEDAREA, self.screenplayName, "exitedPalaceMusicArea", pArea)
 end
 
 function CoruscantEntertainmentScreenPlay:enteredCouncilChamber(pArea, pObject)
@@ -52,7 +83,21 @@ function CoruscantEntertainmentScreenPlay:enteredCouncilChamber(pArea, pObject)
 	return 0
 end
 
-function CoruscantEntertainmentScreenPlay:exitedCouncilChamber(pArea, pObject)
+function CoruscantEntertainmentScreenPlay:enteredGreatHall(pArea, pObject)
+	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
+		CreatureObject(pObject):playMusicMessage("sound/mus_isd_hangar2.snd")
+	end
+	return 0
+end
+
+function CoruscantEntertainmentScreenPlay:enteredThroneRoom(pArea, pObject)
+	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
+		CreatureObject(pObject):playMusicMessage("sound/music_emperor_theme.snd")
+	end
+	return 0
+end
+
+function CoruscantEntertainmentScreenPlay:exitedPalaceMusicArea(pArea, pObject)
 	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
 		CreatureObject(pObject):playMusicMessage("sound/music_silence.snd")
 	end
