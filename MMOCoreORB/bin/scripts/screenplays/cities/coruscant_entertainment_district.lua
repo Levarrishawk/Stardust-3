@@ -438,7 +438,19 @@ function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
  -- Imperial Palace 
   spawnSceneObject("coruscant", "object/tangible/veteran_reward/frn_vet_emp_chair.iff", 4.1, 334.0, 23.5, 37002514, math.rad(180) )
   
- 
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -57.3, 306.0, 58.5, 37002516, math.rad(-40) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -55.3, 306.0, 61.9, 37002516, math.rad(-75) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -55.3, 306.0, 65.5, 37002516, math.rad(-109) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -57.3, 306.0, 68.8, 37002516, math.rad(-137) ) 
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -60.4, 306.0, 70.9, 37002516, math.rad(-164) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -64.4, 306.0, 70.9, 37002516, math.rad(164) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -67.6, 306.0, 69.9, 37002516, math.rad(134) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -69.7, 306.0, 65.7, 37002516, math.rad(104) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -69.6, 306.0, 61.9, 37002516, math.rad(75) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_jedi_council_seat.iff", -67.6, 306.0, 58.6, 37002516, math.rad(40) )
+  
+  
+  
 end
 
 function CoruscantEntertainmentScreenPlay:spawnMobiles()
