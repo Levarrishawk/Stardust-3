@@ -1814,6 +1814,11 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "dathomir_prisoner", 60, -22, -23.0, 150, 135, 37002249)
   self:setMoodString(pNpc, "neutral")
   -- Palace / Jedi Temple Quarter
+  spawnMobile("coruscant", "imperial_palace_liaison_officer", 60, -112, 40, 3303, 180, 0)
+  local pGreatHall = getSceneObject(imperialPalaceLiaisonConvoHandler.greatHallCellID)
+  if pGreatHall ~= nil and SceneObject(pGreatHall):isCellObject() then
+    spawnMobile("coruscant", "imperial_palace_liaison_officer", 60, 4, 1.2, -200, 0, imperialPalaceLiaisonConvoHandler.greatHallCellID)
+  end
   pNpc = spawnMobile("coruscant", "royal_imperial_guard", 60, -4.6, 333.0, 4.8, 40, 37002514)
   self:setMoodString(pNpc, "neutral")
   pNpc = spawnMobile("coruscant", "royal_imperial_guard", 60, 12.8, 333.0, 4.8, -56, 37002514)
