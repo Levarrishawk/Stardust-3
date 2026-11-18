@@ -3,3 +3,8 @@ object_building_coruscant_shared_sd_imperial_palace_interior = SharedBuildingObj
 }
 
 ObjectTemplates:addClientTemplate(object_building_coruscant_shared_sd_imperial_palace_interior, "object/building/coruscant/shared_sd_imperial_palace_interior.iff")
+
+object_building_coruscant_shared_sd_imperial_palace_grand = SharedBuildingObjectTemplate:new {
+	clientTemplateFileName = "object/building/coruscant/shared_sd_imperial_palace_grand.iff"
+}
+ObjectTemplates:addClientTemplate(object_building_coruscant_shared_sd_imperial_palace_grand, "object/building/coruscant/shared_sd_imperial_palace_grand.iff")
