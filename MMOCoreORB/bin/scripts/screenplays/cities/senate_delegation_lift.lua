@@ -27,9 +27,16 @@ end
 
 function SenateDelegationLift:fillObjectMenuResponse(pPanel, pMenu, pPlayer)
 	LuaObjectMenuResponse(pMenu):addRadialMenuItem(20, 3, "Select Senate lift destination")
+	if SenatePodControl:isGallery(pPlayer,pPanel) then
+		LuaObjectMenuResponse(pMenu):addRadialMenuItem(121, 3, "Board a delegation pod")
+	end
 end
 
 function SenateDelegationLift:handleObjectMenuSelect(pPanel, pPlayer, selection)
+	if selection == 121 then
+		SenatePodControl:openList(pPlayer,pPanel)
+		return 0
+	end
 	if selection ~= 20 or buildingAtPanel(pPlayer, pPanel) == nil then return 0 end
 	local pGhost = CreatureObject(pPlayer):getPlayerObject()
 	if pGhost == nil then return 0 end
@@ -75,6 +82,7 @@ function SenateDelegationLift:travel(pPlayer, pSui, eventIndex, selectedRow)
 				local x = obj:getPositionX() + 2 * math.sin(heading)
 				local y = obj:getPositionY() + 2 * math.cos(heading)
 				SceneObject(pPlayer):teleport(x, floorHeight, y, cell:getObjectID())
+				if tier > 0 then SenatePodControl:prepareTier(pCell,tier) end
 				CreatureObject(pPlayer):sendSystemMessage("Senate lift: " .. stopName(tier) .. ".")
 				return
 			end

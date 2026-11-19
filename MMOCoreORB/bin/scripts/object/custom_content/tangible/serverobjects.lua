@@ -65,6 +65,7 @@ includeFile("custom_content/tangible/npe/serverobjects.lua")
 includeFile("custom_content/tangible/smuggler/serverobjects.lua")
 includeFile("custom_content/tangible/tcg/serverobjects.lua")
 includeFile("custom_content/tangible/terminal/senate_delegation_lift.lua")
+includeFile("custom_content/tangible/terminal/senate_pod_control.lua")
 includeFile("custom_content/tangible/veteran_reward/serverobjects.lua")
 
 

@@ -6,6 +6,7 @@ function PlayerTriggers:playerLoggedIn(pPlayer)
 	if (pPlayer == nil) then
 		return
 	end
+	SenatePodControl:playerLoggedIn(pPlayer)
 	ServerEventAutomation:playerLoggedIn(pPlayer)
 	BestineElection:playerLoggedIn(pPlayer)
 	MissionJournal:onPlayerLoggedIn(pPlayer)
