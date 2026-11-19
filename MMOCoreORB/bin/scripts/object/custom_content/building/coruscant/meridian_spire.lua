@@ -1,0 +1,3 @@
+object_building_coruscant_meridian_spire = object_building_coruscant_shared_meridian_spire:new {
+}
+ObjectTemplates:addTemplate(object_building_coruscant_meridian_spire, "object/building/coruscant/meridian_spire.iff")

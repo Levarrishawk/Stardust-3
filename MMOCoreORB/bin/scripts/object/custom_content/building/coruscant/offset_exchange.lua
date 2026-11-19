@@ -1,0 +1,3 @@
+object_building_coruscant_offset_exchange = object_building_coruscant_shared_offset_exchange:new {
+}
+ObjectTemplates:addTemplate(object_building_coruscant_offset_exchange, "object/building/coruscant/offset_exchange.iff")
