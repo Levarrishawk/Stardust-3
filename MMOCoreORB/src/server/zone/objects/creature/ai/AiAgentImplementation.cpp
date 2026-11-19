@@ -2997,6 +2997,8 @@ bool AiAgentImplementation::findNextPosition(float maxDistance, bool walk) {
 
 	// Handle next Z coordinate
 	if (!isInNavMesh() && currentParent == nullptr) {
+		// Resolve stacked floors relative to the surface the agent is already walking on.
+		newPosition.setZ(currentWorldPos.getZ());
 		newPosition.setZ(getWorldZ(newPosition));
 	} else {
 		newPosition.setZ(nextMovementPosition.getZ());
@@ -3381,7 +3383,7 @@ bool AiAgentImplementation::generatePatrol(int num, float dist) {
 		Vector3 result;
 
 		for (int i = 0; i < num; i++) {
-			if (PathFinderManager::instance()->getSpawnPointInArea(sphere, zone, result, true)) {
+			if (PathFinderManager::instance()->getPatrolPointInArea(sphere, zone, result)) {
 				PatrolPoint point(result);
 
 				if (point.getPositionX() == currentPosition.getX() && point.getPositionY() == currentPosition.getY())

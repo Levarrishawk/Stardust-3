@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_chasm_bank_inset_leave = object_static_structure_coruscant_shared_senate_chasm_bank_inset_leave:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_chasm_bank_inset_leave, "object/static/structure/coruscant/senate_chasm_bank_inset_leave.iff")

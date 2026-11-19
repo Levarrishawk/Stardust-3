@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_chasm_wide_reach = object_static_structure_coruscant_shared_senate_chasm_wide_reach:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_chasm_wide_reach, "object/static/structure/coruscant/senate_chasm_wide_reach.iff")

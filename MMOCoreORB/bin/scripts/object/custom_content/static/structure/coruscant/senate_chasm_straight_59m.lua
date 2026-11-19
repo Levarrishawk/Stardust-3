@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_chasm_straight_59m = object_static_structure_coruscant_shared_senate_chasm_straight_59m:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_chasm_straight_59m, "object/static/structure/coruscant/senate_chasm_straight_59m.iff")

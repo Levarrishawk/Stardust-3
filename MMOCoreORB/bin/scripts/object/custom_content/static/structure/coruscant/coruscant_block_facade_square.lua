@@ -1,0 +1,3 @@
+object_static_structure_coruscant_coruscant_block_facade_square = object_static_structure_coruscant_shared_coruscant_block_facade_square:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_coruscant_block_facade_square, "object/static/structure/coruscant/coruscant_block_facade_square.iff")

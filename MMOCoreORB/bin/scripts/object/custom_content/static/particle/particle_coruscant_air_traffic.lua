@@ -1,0 +1,3 @@
+object_static_particle_particle_coruscant_air_traffic = object_static_particle_shared_particle_coruscant_air_traffic:new {}
+
+ObjectTemplates:addTemplate(object_static_particle_particle_coruscant_air_traffic, "object/static/particle/particle_coruscant_air_traffic.iff")

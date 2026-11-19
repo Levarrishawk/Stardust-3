@@ -70,6 +70,7 @@ public:
 
 	Vector<WorldCoordinates>* findPathFromWorldToWorld(const WorldCoordinates& pointA, const Vector<WorldCoordinates>& endPoints, Zone* zone, bool allowPartial);
 	bool getSpawnPointInArea(const Sphere& area, Zone* zone, Vector3& point, bool checkPath = true);
+	bool getPatrolPointInArea(const Sphere& area, Zone* zone, Vector3& point);
 
 	// The caller of this function is responsible for deleting the NavCollision objects.
 	// Collisions should be sorted from closest to farthest.
@@ -86,6 +87,8 @@ protected:
 
 	dtNavMeshQuery* getNavQuery();
 private:
+	enum class AreaPointType { spawn, reachableSpawn, patrol };
+	bool getPointInArea(const Sphere& area, Zone* zone, Vector3& point, AreaPointType type);
 	dtQueryFilter m_filter;
 	dtQueryFilter m_spawnFilter;
 	ThreadLocal<dtNavMeshQuery*> m_navQuery;

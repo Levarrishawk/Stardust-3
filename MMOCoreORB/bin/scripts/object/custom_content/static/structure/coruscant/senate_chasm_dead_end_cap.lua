@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_chasm_dead_end_cap = object_static_structure_coruscant_shared_senate_chasm_dead_end_cap:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_chasm_dead_end_cap, "object/static/structure/coruscant/senate_chasm_dead_end_cap.iff")

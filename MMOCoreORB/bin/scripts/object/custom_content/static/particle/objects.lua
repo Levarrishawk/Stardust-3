@@ -562,3 +562,9 @@ ObjectTemplates:addClientTemplate(object_static_particle_shared_pt_water_drop_so
 ------------------------------------------------------------------------------------------------------------------------------------
 
 
+
+object_static_particle_shared_particle_coruscant_air_traffic = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/particle/shared_particle_coruscant_air_traffic.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_static_particle_shared_particle_coruscant_air_traffic, "object/static/particle/shared_particle_coruscant_air_traffic.iff")

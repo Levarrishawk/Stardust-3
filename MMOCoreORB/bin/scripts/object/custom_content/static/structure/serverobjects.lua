@@ -1,6 +1,7 @@
 -- Server Objects
 
 includeFile("custom_content/static/structure/content/serverobjects.lua")
+includeFile("custom_content/static/structure/coruscant/serverobjects.lua")
 includeFile("custom_content/static/structure/dathomir/serverobjects.lua")
 includeFile("custom_content/static/structure/general/serverobjects.lua")
 includeFile("custom_content/static/structure/hoth/serverobjects.lua")

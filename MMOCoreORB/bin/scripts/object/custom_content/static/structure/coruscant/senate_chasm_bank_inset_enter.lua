@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_chasm_bank_inset_enter = object_static_structure_coruscant_shared_senate_chasm_bank_inset_enter:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_chasm_bank_inset_enter, "object/static/structure/coruscant/senate_chasm_bank_inset_enter.iff")

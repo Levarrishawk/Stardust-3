@@ -1282,7 +1282,28 @@ float frand() {
 	return System::getMTRand()->randExc();
 }
 
+// Detour samples a reachable polygon, but its random point can lie beyond the
+// requested radius. Keep the correction on that polygon, including its height.
+static bool constrainPatrolPoint(dtNavMeshQuery* query, dtPolyRef poly, const float* center, float radius, float* point) {
+	const float distance = dtVdist(center, point);
+	if (distance <= radius)
+		return true;
+
+	float target[3];
+	dtVlerp(target, center, point, (frand() * radius) / distance);
+	return dtStatusSucceed(query->closestPointOnPoly(poly, target, point, nullptr)) &&
+			dtVdistSqr(center, point) <= radius * radius;
+}
+
+bool PathFinderManager::getPatrolPointInArea(const Sphere& area, Zone* zone, Vector3& point) {
+	return getPointInArea(area, zone, point, AreaPointType::patrol);
+}
+
 bool PathFinderManager::getSpawnPointInArea(const Sphere& area, Zone *zone, Vector3& point, bool checkPath) {
+	return getPointInArea(area, zone, point, checkPath ? AreaPointType::reachableSpawn : AreaPointType::spawn);
+}
+
+bool PathFinderManager::getPointInArea(const Sphere& area, Zone* zone, Vector3& point, AreaPointType type) {
 	SortedVector<ManagedReference<NavArea*>> areas;
 	float radius = area.getRadius();
 	const Vector3& center = area.getCenter();
@@ -1297,6 +1318,9 @@ bool PathFinderManager::getSpawnPointInArea(const Sphere& area, Zone *zone, Vect
 	zone->getInRangeNavMeshes(center.getX(), center.getY(), &areas, true);
 
 	if (areas.size() == 0) {
+		if (type == AreaPointType::patrol)
+			return false;
+
 		Vector3 temp((frand() * 2.0f) - 1.0f, (frand() * 2.0f) - 1.0f, 0);
 		Vector3 result = temp * (frand() * radius);
 		point = center + result;
@@ -1323,13 +1347,20 @@ bool PathFinderManager::getSpawnPointInArea(const Sphere& area, Zone *zone, Vect
 
 		query->init(dtNavMesh, MAX_QUERY_NODES);
 
-		if (!((status = query->findNearestPoly(flipped.toFloatArray(), extents, &m_spawnFilter, &startPoly, polyStart.toFloatArray())) & DT_SUCCESS))
+		if (!((status = query->findNearestPoly(flipped.toFloatArray(), extents, &m_spawnFilter, &startPoly, polyStart.toFloatArray())) & DT_SUCCESS) || startPoly == 0)
 			continue;
 
 		for (int i=0; i<50; i++) {
 			try {
 				if (!((status = query->findRandomPointAroundCircle(startPoly, polyStart.toFloatArray(), radius, &m_spawnFilter, frand, &ref, pt)) & DT_SUCCESS)) {
 					continue;
+				} else if (type == AreaPointType::patrol) {
+					// A ray from the sky can hit an arch or a roof above the selected walkway.
+					// findRandomPointAroundCircle already visited this polygon from startPoly.
+					if (!constrainPatrolPoint(query, ref, flipped.toFloatArray(), radius, pt))
+						continue;
+					point = Vector3(pt[0], -pt[2], pt[1]);
+					return true;
 				} else {
 					point = Vector3(pt[0], -pt[2], CollisionManager::getWorldFloorCollision(pt[0], -pt[2], zone, false));
 
@@ -1346,7 +1377,7 @@ bool PathFinderManager::getSpawnPointInArea(const Sphere& area, Zone *zone, Vect
 					}
 				}
 
-				if (checkPath && !getRecastPath(center, point, navArea, nullptr, radius, false)) {
+				if (type == AreaPointType::reachableSpawn && !getRecastPath(center, point, navArea, nullptr, radius, false)) {
 					continue;
 				}
 

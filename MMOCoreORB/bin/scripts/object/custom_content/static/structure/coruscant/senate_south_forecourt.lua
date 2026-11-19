@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_south_forecourt = object_static_structure_coruscant_shared_senate_south_forecourt:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_south_forecourt, "object/static/structure/coruscant/senate_south_forecourt.iff")

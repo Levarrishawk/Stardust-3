@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_chasm_cross_junction = object_static_structure_coruscant_shared_senate_chasm_cross_junction:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_chasm_cross_junction, "object/static/structure/coruscant/senate_chasm_cross_junction.iff")

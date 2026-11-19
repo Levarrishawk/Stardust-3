@@ -1,0 +1,149 @@
+object_static_structure_coruscant_shared_coruscant_block_facade_east = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_coruscant_block_facade_east.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_coruscant_block_facade_east, "object/static/structure/coruscant/shared_coruscant_block_facade_east.iff")
+
+object_static_structure_coruscant_shared_coruscant_block_facade_spaceport = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_coruscant_block_facade_spaceport.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_coruscant_block_facade_spaceport, "object/static/structure/coruscant/shared_coruscant_block_facade_spaceport.iff")
+
+object_static_structure_coruscant_shared_coruscant_block_facade_square = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_coruscant_block_facade_square.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_coruscant_block_facade_square, "object/static/structure/coruscant/shared_coruscant_block_facade_square.iff")
+
+object_static_structure_coruscant_shared_coruscant_block_facade_west = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_coruscant_block_facade_west.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_coruscant_block_facade_west, "object/static/structure/coruscant/shared_coruscant_block_facade_west.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_avenue = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_avenue.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_avenue, "object/static/structure/coruscant/shared_senate_chasm_avenue.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_bank_inset = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_bank_inset.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_bank_inset, "object/static/structure/coruscant/shared_senate_chasm_bank_inset.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_bank_inset_enter = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_bank_inset_enter.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_bank_inset_enter, "object/static/structure/coruscant/shared_senate_chasm_bank_inset_enter.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_bank_inset_leave = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_bank_inset_leave.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_bank_inset_leave, "object/static/structure/coruscant/shared_senate_chasm_bank_inset_leave.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_corner = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_corner.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_corner, "object/static/structure/coruscant/shared_senate_chasm_corner.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_dead_end_cap = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_dead_end_cap.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_dead_end_cap, "object/static/structure/coruscant/shared_senate_chasm_dead_end_cap.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_exchange = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_exchange.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_exchange, "object/static/structure/coruscant/shared_senate_chasm_exchange.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_residential = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_residential.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_residential, "object/static/structure/coruscant/shared_senate_chasm_residential.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_service = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_service.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_service, "object/static/structure/coruscant/shared_senate_chasm_service.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_41m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_41m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_41m, "object/static/structure/coruscant/shared_senate_chasm_straight_41m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_47m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_47m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_47m, "object/static/structure/coruscant/shared_senate_chasm_straight_47m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_49m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_49m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_49m, "object/static/structure/coruscant/shared_senate_chasm_straight_49m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_51m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_51m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_51m, "object/static/structure/coruscant/shared_senate_chasm_straight_51m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_53m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_53m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_53m, "object/static/structure/coruscant/shared_senate_chasm_straight_53m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_59m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_59m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_59m, "object/static/structure/coruscant/shared_senate_chasm_straight_59m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_cross_junction = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_cross_junction.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_cross_junction, "object/static/structure/coruscant/shared_senate_chasm_cross_junction.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_30m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_30m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_30m, "object/static/structure/coruscant/shared_senate_chasm_straight_30m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_single_bank = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_single_bank.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_single_bank, "object/static/structure/coruscant/shared_senate_chasm_single_bank.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_wide_reach = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_wide_reach.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_wide_reach, "object/static/structure/coruscant/shared_senate_chasm_wide_reach.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_wide_shoulder = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_wide_shoulder.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_wide_shoulder, "object/static/structure/coruscant/shared_senate_chasm_wide_shoulder.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_straight_56m = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_straight_56m.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_straight_56m, "object/static/structure/coruscant/shared_senate_chasm_straight_56m.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_wide_mouth = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_wide_mouth.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_wide_mouth, "object/static/structure/coruscant/shared_senate_chasm_wide_mouth.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_t_junction = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_t_junction.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_t_junction, "object/static/structure/coruscant/shared_senate_chasm_t_junction.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_transit = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_transit.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_transit, "object/static/structure/coruscant/shared_senate_chasm_transit.iff")
+
+object_static_structure_coruscant_shared_senate_chasm_utilities = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_chasm_utilities.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_chasm_utilities, "object/static/structure/coruscant/shared_senate_chasm_utilities.iff")
+
+object_static_structure_coruscant_shared_senate_south_forecourt = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_south_forecourt.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_south_forecourt, "object/static/structure/coruscant/shared_senate_south_forecourt.iff")
