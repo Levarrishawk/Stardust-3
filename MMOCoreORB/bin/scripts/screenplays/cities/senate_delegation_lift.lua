@@ -7,10 +7,10 @@ local lastTier = 14
 
 local function buildingAtPanel(pPlayer, pPanel)
 	if pPlayer == nil or pPanel == nil then return nil end
-	local player, panel = SceneObject(pPlayer), SceneObject(pPanel)
+	local player, panel = CreatureObject(pPlayer), SceneObject(pPanel)
 	if panel:getTemplateObjectPath() ~= panelTemplate or player:getParentID() ~= panel:getParentID()
 		or math.abs(player:getPositionZ() - panel:getPositionZ()) > 3
-		or not CreatureObject(pPlayer):isInRangeWithObject(pPanel, 4) then return nil end
+		or not player:isInRangeWithObject(pPanel, 4) then return nil end
 
 	local pCell = panel:getParent()
 	if pCell == nil then return nil end
@@ -61,7 +61,8 @@ function SenateDelegationLift:travel(pPlayer, pSui, eventIndex, selectedRow)
 	local cellNumber = tier == 0 and 1 or 2
 	local pCell = BuildingObject(pBuilding):getCell(cellNumber)
 	if pCell == nil then return end
-	local cell = SceneObject(pCell)
+	-- SceneObject is rebound for every panel and for the player during teleport.
+	local cell = SceneObject1(pCell)
 	local floorHeight = tier == 0 and 0 or -40 + (tier - 1) * 8
 	for i = 0, cell:getContainerObjectsSize() - 1 do
 		local pObject = cell:getContainerObject(i)
