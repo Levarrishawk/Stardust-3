@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_colonnade_north = object_static_structure_coruscant_shared_senate_colonnade_north:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_colonnade_north, "object/static/structure/coruscant/senate_colonnade_north.iff")

@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_colonnade_bay = object_static_structure_coruscant_shared_senate_colonnade_bay:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_colonnade_bay, "object/static/structure/coruscant/senate_colonnade_bay.iff")

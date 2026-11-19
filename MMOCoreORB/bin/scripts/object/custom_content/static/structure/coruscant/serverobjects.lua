@@ -28,3 +28,8 @@ includeFile("custom_content/static/structure/coruscant/senate_chasm_t_junction.l
 includeFile("custom_content/static/structure/coruscant/senate_chasm_transit.lua")
 includeFile("custom_content/static/structure/coruscant/senate_chasm_utilities.lua")
 includeFile("custom_content/static/structure/coruscant/senate_south_forecourt.lua")
+includeFile("custom_content/static/structure/coruscant/senate_reflecting_pool.lua")
+includeFile("custom_content/static/structure/coruscant/senate_reflecting_pool_crossing.lua")
+includeFile("custom_content/static/structure/coruscant/senate_colonnade_south.lua")
+includeFile("custom_content/static/structure/coruscant/senate_colonnade_bay.lua")
+includeFile("custom_content/static/structure/coruscant/senate_colonnade_north.lua")

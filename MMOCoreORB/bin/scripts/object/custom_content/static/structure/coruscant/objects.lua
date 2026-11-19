@@ -147,3 +147,28 @@ object_static_structure_coruscant_shared_senate_south_forecourt = SharedStaticOb
 	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_south_forecourt.iff"
 }
 ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_south_forecourt, "object/static/structure/coruscant/shared_senate_south_forecourt.iff")
+
+object_static_structure_coruscant_shared_senate_reflecting_pool = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_reflecting_pool.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_reflecting_pool, "object/static/structure/coruscant/shared_senate_reflecting_pool.iff")
+
+object_static_structure_coruscant_shared_senate_reflecting_pool_crossing = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_reflecting_pool_crossing.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_reflecting_pool_crossing, "object/static/structure/coruscant/shared_senate_reflecting_pool_crossing.iff")
+
+object_static_structure_coruscant_shared_senate_colonnade_south = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_colonnade_south.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_colonnade_south, "object/static/structure/coruscant/shared_senate_colonnade_south.iff")
+
+object_static_structure_coruscant_shared_senate_colonnade_bay = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_colonnade_bay.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_colonnade_bay, "object/static/structure/coruscant/shared_senate_colonnade_bay.iff")
+
+object_static_structure_coruscant_shared_senate_colonnade_north = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_colonnade_north.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_colonnade_north, "object/static/structure/coruscant/shared_senate_colonnade_north.iff")

@@ -1,0 +1,3 @@
+object_static_structure_coruscant_senate_reflecting_pool_crossing = object_static_structure_coruscant_shared_senate_reflecting_pool_crossing:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_senate_reflecting_pool_crossing, "object/static/structure/coruscant/senate_reflecting_pool_crossing.iff")
