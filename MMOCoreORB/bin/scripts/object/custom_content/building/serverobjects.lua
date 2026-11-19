@@ -1,6 +1,7 @@
 --Children folder includes
 includeFile("custom_content/building/coruscant/sd_imperial_palace_interior.lua")
 includeFile("custom_content/building/coruscant/sd_imperial_palace_grand.lua")
+includeFile("custom_content/building/coruscant/imperial_senate.lua")
 includeFile("custom_content/building/content/serverobjects.lua")
 includeFile("custom_content/building/dathomir/serverobjects.lua")
 includeFile("custom_content/building/endor/serverobjects.lua")

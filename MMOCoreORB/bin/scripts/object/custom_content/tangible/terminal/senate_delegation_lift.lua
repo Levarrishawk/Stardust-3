@@ -1,0 +1,4 @@
+object_tangible_terminal_senate_delegation_lift = object_tangible_terminal_shared_terminal_elevator:new {
+	objectMenuComponent = "SenateDelegationLift"
+}
+ObjectTemplates:addTemplate(object_tangible_terminal_senate_delegation_lift, "object/tangible/terminal/senate_delegation_lift.iff")
