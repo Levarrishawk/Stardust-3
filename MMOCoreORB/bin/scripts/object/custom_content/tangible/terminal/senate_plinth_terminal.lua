@@ -1,0 +1,4 @@
+object_tangible_terminal_senate_plinth_terminal = object_tangible_terminal_shared_terminal_elevator:new {
+	objectMenuComponent = "SenatePlinthTerminal"
+}
+ObjectTemplates:addTemplate(object_tangible_terminal_senate_plinth_terminal, "object/tangible/terminal/senate_plinth_terminal.iff")

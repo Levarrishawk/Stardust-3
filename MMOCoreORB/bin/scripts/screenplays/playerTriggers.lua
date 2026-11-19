@@ -7,6 +7,7 @@ function PlayerTriggers:playerLoggedIn(pPlayer)
 		return
 	end
 	SenatePodControl:playerLoggedIn(pPlayer)
+	SenatePlinthTerminal:playerLoggedIn(pPlayer)
 	ServerEventAutomation:playerLoggedIn(pPlayer)
 	BestineElection:playerLoggedIn(pPlayer)
 	MissionJournal:onPlayerLoggedIn(pPlayer)
