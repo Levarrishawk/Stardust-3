@@ -1,0 +1,3 @@
+object_building_coruscant_arcade_tower = object_building_coruscant_shared_arcade_tower:new {
+}
+ObjectTemplates:addTemplate(object_building_coruscant_arcade_tower, "object/building/coruscant/arcade_tower.iff")

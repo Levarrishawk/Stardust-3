@@ -1,0 +1,3 @@
+object_building_coruscant_chancery_pinnacle = object_building_coruscant_shared_chancery_pinnacle:new {
+}
+ObjectTemplates:addTemplate(object_building_coruscant_chancery_pinnacle, "object/building/coruscant/chancery_pinnacle.iff")

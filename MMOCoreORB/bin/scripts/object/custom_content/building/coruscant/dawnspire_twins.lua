@@ -1,0 +1,3 @@
+object_building_coruscant_dawnspire_twins = object_building_coruscant_shared_dawnspire_twins:new {
+}
+ObjectTemplates:addTemplate(object_building_coruscant_dawnspire_twins, "object/building/coruscant/dawnspire_twins.iff")

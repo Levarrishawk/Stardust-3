@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_meridian_collar = object_static_structure_coruscant_shared_lc1312_meridian_collar:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_meridian_collar, "object/static/structure/coruscant/lc1312_meridian_collar.iff")

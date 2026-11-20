@@ -172,3 +172,18 @@ object_static_structure_coruscant_shared_senate_colonnade_north = SharedStaticOb
 	clientTemplateFileName = "object/static/structure/coruscant/shared_senate_colonnade_north.iff"
 }
 ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_senate_colonnade_north, "object/static/structure/coruscant/shared_senate_colonnade_north.iff")
+
+object_static_structure_coruscant_shared_lc1312_meridian_collar = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_meridian_collar.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_meridian_collar, "object/static/structure/coruscant/shared_lc1312_meridian_collar.iff")
+
+object_static_structure_coruscant_shared_lc1312_petal_collar = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_petal_collar.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_petal_collar, "object/static/structure/coruscant/shared_lc1312_petal_collar.iff")
+
+object_static_structure_coruscant_shared_lc1312_market_light_well = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_market_light_well.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_market_light_well, "object/static/structure/coruscant/shared_lc1312_market_light_well.iff")

@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_petal_collar = object_static_structure_coruscant_shared_lc1312_petal_collar:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_petal_collar, "object/static/structure/coruscant/lc1312_petal_collar.iff")

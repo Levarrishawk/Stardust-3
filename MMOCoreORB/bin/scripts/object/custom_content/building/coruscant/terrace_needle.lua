@@ -1,0 +1,3 @@
+object_building_coruscant_terrace_needle = object_building_coruscant_shared_terrace_needle:new {
+}
+ObjectTemplates:addTemplate(object_building_coruscant_terrace_needle, "object/building/coruscant/terrace_needle.iff")

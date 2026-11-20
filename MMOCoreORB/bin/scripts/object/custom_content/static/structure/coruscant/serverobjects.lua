@@ -33,3 +33,9 @@ includeFile("custom_content/static/structure/coruscant/senate_reflecting_pool_cr
 includeFile("custom_content/static/structure/coruscant/senate_colonnade_south.lua")
 includeFile("custom_content/static/structure/coruscant/senate_colonnade_bay.lua")
 includeFile("custom_content/static/structure/coruscant/senate_colonnade_north.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_meridian_collar.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_petal_collar.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_market_light_well.lua")
