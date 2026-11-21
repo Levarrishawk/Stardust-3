@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_east_market_gantry = object_static_structure_coruscant_shared_lc1312_east_market_gantry:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_east_market_gantry, "object/static/structure/coruscant/lc1312_east_market_gantry.iff")

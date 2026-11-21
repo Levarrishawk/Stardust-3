@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_intake_tower = object_static_structure_coruscant_shared_lc1312_intake_tower:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_intake_tower, "object/static/structure/coruscant/lc1312_intake_tower.iff")

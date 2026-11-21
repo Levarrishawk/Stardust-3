@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_sewer_inlet = object_static_structure_coruscant_shared_lc1312_sewer_inlet:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_sewer_inlet, "object/static/structure/coruscant/lc1312_sewer_inlet.iff")
