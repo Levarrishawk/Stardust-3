@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_coping_corner = object_static_structure_coruscant_shared_ent_coping_corner:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_coping_corner, "object/static/structure/coruscant/ent_coping_corner.iff")

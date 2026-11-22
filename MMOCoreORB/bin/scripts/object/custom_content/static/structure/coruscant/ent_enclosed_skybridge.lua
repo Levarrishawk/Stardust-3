@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_enclosed_skybridge = object_static_structure_coruscant_shared_ent_enclosed_skybridge:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_enclosed_skybridge, "object/static/structure/coruscant/ent_enclosed_skybridge.iff")

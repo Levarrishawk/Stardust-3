@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_amber_marquee = object_static_structure_coruscant_shared_ent_amber_marquee:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_amber_marquee, "object/static/structure/coruscant/ent_amber_marquee.iff")

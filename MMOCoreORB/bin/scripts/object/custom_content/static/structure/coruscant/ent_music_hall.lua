@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_music_hall = object_static_structure_coruscant_shared_ent_music_hall:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_music_hall, "object/static/structure/coruscant/ent_music_hall.iff")

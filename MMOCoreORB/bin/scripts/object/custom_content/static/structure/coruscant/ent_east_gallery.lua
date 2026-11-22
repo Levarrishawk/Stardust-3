@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_east_gallery = object_static_structure_coruscant_shared_ent_east_gallery:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_east_gallery, "object/static/structure/coruscant/ent_east_gallery.iff")

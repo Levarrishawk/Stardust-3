@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_loading_house = object_static_structure_coruscant_shared_ent_loading_house:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_loading_house, "object/static/structure/coruscant/ent_loading_house.iff")

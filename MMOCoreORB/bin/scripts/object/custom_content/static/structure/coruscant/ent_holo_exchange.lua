@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_holo_exchange = object_static_structure_coruscant_shared_ent_holo_exchange:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_holo_exchange, "object/static/structure/coruscant/ent_holo_exchange.iff")

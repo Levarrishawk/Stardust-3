@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_oola_projector = object_static_structure_coruscant_shared_ent_oola_projector:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_oola_projector, "object/static/structure/coruscant/ent_oola_projector.iff")

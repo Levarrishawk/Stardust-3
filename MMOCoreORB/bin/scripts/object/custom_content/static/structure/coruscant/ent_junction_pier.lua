@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_junction_pier = object_static_structure_coruscant_shared_ent_junction_pier:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_junction_pier, "object/static/structure/coruscant/ent_junction_pier.iff")

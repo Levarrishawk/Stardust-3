@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_lantern_tower = object_static_structure_coruscant_shared_ent_lantern_tower:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_lantern_tower, "object/static/structure/coruscant/ent_lantern_tower.iff")

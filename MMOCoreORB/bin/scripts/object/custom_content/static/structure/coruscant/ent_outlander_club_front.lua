@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_outlander_club_front = object_static_structure_coruscant_shared_ent_outlander_club_front:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_outlander_club_front, "object/static/structure/coruscant/ent_outlander_club_front.iff")

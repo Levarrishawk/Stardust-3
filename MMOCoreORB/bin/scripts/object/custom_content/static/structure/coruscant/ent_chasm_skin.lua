@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_chasm_skin = object_static_structure_coruscant_shared_ent_chasm_skin:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_chasm_skin, "object/static/structure/coruscant/ent_chasm_skin.iff")

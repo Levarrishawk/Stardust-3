@@ -302,3 +302,88 @@ object_static_structure_coruscant_shared_lc1312_hangar_winch = SharedStaticObjec
 	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_hangar_winch.iff"
 }
 ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_hangar_winch, "object/static/structure/coruscant/shared_lc1312_hangar_winch.iff")
+
+object_static_structure_coruscant_shared_ent_amber_marquee = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_amber_marquee.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_amber_marquee, "object/static/structure/coruscant/shared_ent_amber_marquee.iff")
+
+object_static_structure_coruscant_shared_ent_outlander_club_front = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_outlander_club_front.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_outlander_club_front, "object/static/structure/coruscant/shared_ent_outlander_club_front.iff")
+
+object_static_structure_coruscant_shared_ent_terraced_drum = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_terraced_drum.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_terraced_drum, "object/static/structure/coruscant/shared_ent_terraced_drum.iff")
+
+object_static_structure_coruscant_shared_ent_gallery_block = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_gallery_block.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_gallery_block, "object/static/structure/coruscant/shared_ent_gallery_block.iff")
+
+object_static_structure_coruscant_shared_ent_lantern_tower = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_lantern_tower.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_lantern_tower, "object/static/structure/coruscant/shared_ent_lantern_tower.iff")
+
+object_static_structure_coruscant_shared_ent_east_gallery = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_east_gallery.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_east_gallery, "object/static/structure/coruscant/shared_ent_east_gallery.iff")
+
+object_static_structure_coruscant_shared_ent_enclosed_skybridge = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_enclosed_skybridge.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_enclosed_skybridge, "object/static/structure/coruscant/shared_ent_enclosed_skybridge.iff")
+
+object_static_structure_coruscant_shared_ent_coping_corner = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_coping_corner.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_coping_corner, "object/static/structure/coruscant/shared_ent_coping_corner.iff")
+
+object_static_structure_coruscant_shared_ent_coping_end = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_coping_end.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_coping_end, "object/static/structure/coruscant/shared_ent_coping_end.iff")
+
+object_static_structure_coruscant_shared_ent_coping_side = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_coping_side.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_coping_side, "object/static/structure/coruscant/shared_ent_coping_side.iff")
+
+object_static_structure_coruscant_shared_ent_chasm_skin = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_chasm_skin.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_chasm_skin, "object/static/structure/coruscant/shared_ent_chasm_skin.iff")
+
+object_static_structure_coruscant_shared_ent_revue_arcade = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_revue_arcade.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_revue_arcade, "object/static/structure/coruscant/shared_ent_revue_arcade.iff")
+
+object_static_structure_coruscant_shared_ent_holo_exchange = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_holo_exchange.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_holo_exchange, "object/static/structure/coruscant/shared_ent_holo_exchange.iff")
+
+object_static_structure_coruscant_shared_ent_music_hall = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_music_hall.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_music_hall, "object/static/structure/coruscant/shared_ent_music_hall.iff")
+
+object_static_structure_coruscant_shared_ent_loading_house = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_loading_house.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_loading_house, "object/static/structure/coruscant/shared_ent_loading_house.iff")
+
+object_static_structure_coruscant_shared_ent_junction_pier = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_junction_pier.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_junction_pier, "object/static/structure/coruscant/shared_ent_junction_pier.iff")
+
+object_static_structure_coruscant_shared_ent_oola_projector = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_oola_projector.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_oola_projector, "object/static/structure/coruscant/shared_ent_oola_projector.iff")

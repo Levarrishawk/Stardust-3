@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_terraced_drum = object_static_structure_coruscant_shared_ent_terraced_drum:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_terraced_drum, "object/static/structure/coruscant/ent_terraced_drum.iff")

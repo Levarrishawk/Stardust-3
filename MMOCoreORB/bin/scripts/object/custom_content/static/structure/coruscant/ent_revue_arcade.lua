@@ -1,0 +1,3 @@
+object_static_structure_coruscant_ent_revue_arcade = object_static_structure_coruscant_shared_ent_revue_arcade:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_ent_revue_arcade, "object/static/structure/coruscant/ent_revue_arcade.iff")
