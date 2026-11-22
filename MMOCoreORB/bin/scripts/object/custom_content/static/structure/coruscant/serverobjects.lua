@@ -71,3 +71,17 @@ includeFile("custom_content/static/structure/coruscant/lc1312_sewer_junction.lua
 includeFile("custom_content/static/structure/coruscant/lc1312_freight_service_bay.lua")
 
 includeFile("custom_content/static/structure/coruscant/lc1312_return_pump.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_freight_frontage.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_freight_waymarker.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_speeder_workshop.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_fountain_runoff.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_gantry_vent.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_pipe_hammer.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_hangar_winch.lua")

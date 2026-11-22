@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_gantry_vent = object_static_structure_coruscant_shared_lc1312_gantry_vent:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_gantry_vent, "object/static/structure/coruscant/lc1312_gantry_vent.iff")

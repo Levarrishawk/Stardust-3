@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_freight_frontage = object_static_structure_coruscant_shared_lc1312_freight_frontage:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_freight_frontage, "object/static/structure/coruscant/lc1312_freight_frontage.iff")

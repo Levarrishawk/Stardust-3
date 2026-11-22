@@ -71,3 +71,7 @@ includeFile("custom_content/static/particle/pt_water_drop_sound.lua")
 includeFile("custom_content/static/particle/pt_water_drop_sound_no_visual.lua")
 
 includeFile("custom_content/static/particle/particle_coruscant_air_traffic.lua")
+
+includeFile("custom_content/static/particle/particle_coruscant_air_train.lua")
+
+includeFile("custom_content/static/particle/particle_coruscant_lower_air_train.lua")

@@ -568,3 +568,15 @@ object_static_particle_shared_particle_coruscant_air_traffic = SharedStaticObjec
 }
 
 ObjectTemplates:addClientTemplate(object_static_particle_shared_particle_coruscant_air_traffic, "object/static/particle/shared_particle_coruscant_air_traffic.iff")
+
+object_static_particle_shared_particle_coruscant_air_train = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/particle/shared_particle_coruscant_air_train.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_static_particle_shared_particle_coruscant_air_train, "object/static/particle/shared_particle_coruscant_air_train.iff")
+
+object_static_particle_shared_particle_coruscant_lower_air_train = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/particle/shared_particle_coruscant_lower_air_train.iff"
+}
+
+ObjectTemplates:addClientTemplate(object_static_particle_shared_particle_coruscant_lower_air_train, "object/static/particle/shared_particle_coruscant_lower_air_train.iff")

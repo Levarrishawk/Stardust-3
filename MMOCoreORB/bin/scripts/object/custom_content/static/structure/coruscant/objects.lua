@@ -267,3 +267,38 @@ object_static_structure_coruscant_shared_lc1312_return_pump = SharedStaticObject
 	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_return_pump.iff"
 }
 ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_return_pump, "object/static/structure/coruscant/shared_lc1312_return_pump.iff")
+
+object_static_structure_coruscant_shared_lc1312_freight_frontage = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_freight_frontage.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_freight_frontage, "object/static/structure/coruscant/shared_lc1312_freight_frontage.iff")
+
+object_static_structure_coruscant_shared_lc1312_freight_waymarker = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_freight_waymarker.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_freight_waymarker, "object/static/structure/coruscant/shared_lc1312_freight_waymarker.iff")
+
+object_static_structure_coruscant_shared_lc1312_speeder_workshop = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_speeder_workshop.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_speeder_workshop, "object/static/structure/coruscant/shared_lc1312_speeder_workshop.iff")
+
+object_static_structure_coruscant_shared_lc1312_fountain_runoff = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_fountain_runoff.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_fountain_runoff, "object/static/structure/coruscant/shared_lc1312_fountain_runoff.iff")
+
+object_static_structure_coruscant_shared_lc1312_gantry_vent = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_gantry_vent.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_gantry_vent, "object/static/structure/coruscant/shared_lc1312_gantry_vent.iff")
+
+object_static_structure_coruscant_shared_lc1312_pipe_hammer = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_pipe_hammer.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_pipe_hammer, "object/static/structure/coruscant/shared_lc1312_pipe_hammer.iff")
+
+object_static_structure_coruscant_shared_lc1312_hangar_winch = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_hangar_winch.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_hangar_winch, "object/static/structure/coruscant/shared_lc1312_hangar_winch.iff")

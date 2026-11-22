@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_hangar_winch = object_static_structure_coruscant_shared_lc1312_hangar_winch:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_hangar_winch, "object/static/structure/coruscant/lc1312_hangar_winch.iff")

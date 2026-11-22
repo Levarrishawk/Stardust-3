@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_speeder_workshop = object_static_structure_coruscant_shared_lc1312_speeder_workshop:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_speeder_workshop, "object/static/structure/coruscant/lc1312_speeder_workshop.iff")

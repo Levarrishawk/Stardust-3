@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_pipe_hammer = object_static_structure_coruscant_shared_lc1312_pipe_hammer:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_pipe_hammer, "object/static/structure/coruscant/lc1312_pipe_hammer.iff")

@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_fountain_runoff = object_static_structure_coruscant_shared_lc1312_fountain_runoff:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_fountain_runoff, "object/static/structure/coruscant/lc1312_fountain_runoff.iff")

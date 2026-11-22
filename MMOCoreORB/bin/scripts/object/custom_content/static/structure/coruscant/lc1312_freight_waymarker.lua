@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_freight_waymarker = object_static_structure_coruscant_shared_lc1312_freight_waymarker:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_freight_waymarker, "object/static/structure/coruscant/lc1312_freight_waymarker.iff")

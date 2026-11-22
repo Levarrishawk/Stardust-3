@@ -1,0 +1,3 @@
+object_static_particle_particle_coruscant_lower_air_train = object_static_particle_shared_particle_coruscant_lower_air_train:new {}
+
+ObjectTemplates:addTemplate(object_static_particle_particle_coruscant_lower_air_train, "object/static/particle/particle_coruscant_lower_air_train.iff")
