@@ -498,7 +498,83 @@ function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
   
 end
 
+function CoruscantEntertainmentScreenPlay:spawnPromenadePedestrians()
+  local pedestrians = {
+    -- West bank, along the chasm rail and the market frontage.
+    {2141, -4553, -34},
+    {2134, -4551, 133},
+    {2157, -4547, 52},
+    {2166, -4542, 40},
+    {2123, -4540, 45},
+    {2122, -4528, 14},
+    {2119, -4519, 140},
+    {2120, -4509, -90},
+    {2124, -4498, 43},
+    {2130, -4486, 63},
+    {2145, -4485, -18},
+    {2119, -4481, -87},
+    {2156, -4481, -104},
+    {2125, -4481, -138},
+    {2138, -4480, -90},
+    {2164, -4472, 34},
+    {2165, -4455, -12},
+    {2164, -4442, -53},
+    {2163, -4439, 117},
+    {2166, -4428, -130},
+    {2131, -4419, 82},
+    {2120, -4416, -88},
+    {2157, -4415, -48},
+    {2143, -4413, 177},
+    {2149, -4411, 88},
+    {2121, -4405, 9},
+    {2165, -4397, -137},
+    {2120, -4395, 177},
+    {2167, -4383, 35},
+    {2118, -4381, -111},
+    {2167, -4370, 150},
+    {2120, -4367, 42},
+    {2155, -4361, -77},
+    {2131, -4360, 162},
+    {2166, -4358, 138},
+    {2145, -4356, 3},
+
+    -- Shuttleport forecourt and the approaches on either side of the terminal.
+    {2239, -4543, -134},
+    {2257, -4545, -116},
+    {2264, -4541, 163},
+    {2271, -4551, -88},
+    {2276, -4561, -166},
+    {2272, -4572, 62},
+    {2269, -4584, -112},
+    {2259, -4589, -88},
+    {2239, -4585, 52},
+    {2229, -4578, 118},
+    {2227, -4561, 71},
+    {2230, -4557, 24},
+
+    -- Spectators facing the dancing hologram from outside the dais.
+    {2256, -4523, 65, "entertained"},
+    {2260, -4529, 37, "entertained"},
+    {2264, -4533, 17, "entertained"},
+    {2272, -4531, -12, "entertained"},
+    {2281, -4528, -47, "entertained"},
+    {2284, -4521, -75, "entertained"},
+    {2283, -4511, -113, "entertained"},
+    {2278, -4506, -141, "entertained"},
+    {2272, -4502, -169, "entertained"},
+    {2263, -4503, 157, "entertained"},
+    {2258, -4509, 126, "entertained"},
+    {2253, -4516, 94, "entertained"}
+  }
+
+  for _, pedestrian in ipairs(pedestrians) do
+    local pNpc = spawnMobile("coruscant", "commoner", 60, pedestrian[1], 0, pedestrian[2], pedestrian[3], 0)
+    self:setMoodString(pNpc, pedestrian[4] or "neutral")
+  end
+end
+
 function CoruscantEntertainmentScreenPlay:spawnMobiles()
+  self:spawnPromenadePedestrians()
 
 	--Entertainment District Exterior
 	
