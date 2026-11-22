@@ -257,3 +257,13 @@ object_static_structure_coruscant_shared_lc1312_sewer_junction = SharedStaticObj
 	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_sewer_junction.iff"
 }
 ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_sewer_junction, "object/static/structure/coruscant/shared_lc1312_sewer_junction.iff")
+
+object_static_structure_coruscant_shared_lc1312_freight_service_bay = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_freight_service_bay.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_freight_service_bay, "object/static/structure/coruscant/shared_lc1312_freight_service_bay.iff")
+
+object_static_structure_coruscant_shared_lc1312_return_pump = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_lc1312_return_pump.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_lc1312_return_pump, "object/static/structure/coruscant/shared_lc1312_return_pump.iff")

@@ -67,3 +67,7 @@ includeFile("custom_content/static/structure/coruscant/lc1312_sewer_drop.lua")
 includeFile("custom_content/static/structure/coruscant/lc1312_sewer_inlet.lua")
 
 includeFile("custom_content/static/structure/coruscant/lc1312_sewer_junction.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_freight_service_bay.lua")
+
+includeFile("custom_content/static/structure/coruscant/lc1312_return_pump.lua")

@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_return_pump = object_static_structure_coruscant_shared_lc1312_return_pump:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_return_pump, "object/static/structure/coruscant/lc1312_return_pump.iff")

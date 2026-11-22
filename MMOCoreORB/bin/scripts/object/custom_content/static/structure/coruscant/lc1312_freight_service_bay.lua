@@ -1,0 +1,3 @@
+object_static_structure_coruscant_lc1312_freight_service_bay = object_static_structure_coruscant_shared_lc1312_freight_service_bay:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_lc1312_freight_service_bay, "object/static/structure/coruscant/lc1312_freight_service_bay.iff")
