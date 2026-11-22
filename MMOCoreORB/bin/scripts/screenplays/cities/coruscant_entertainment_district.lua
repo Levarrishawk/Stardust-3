@@ -5,6 +5,7 @@ CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 	greatHallCellID = 37002512,
 	throneRoomCellID = 37002514,
 	councilChamberCellID = 37002516,
+	operaPerformanceHallCellID = 1493525002,
 
 	mountedSwoopRoute = {
 		{-5746, 0, -5051},
@@ -24,8 +25,73 @@ function CoruscantEntertainmentScreenPlay:start()
 	if (isZoneEnabled("coruscant")) then
 		self:spawnMobiles()
 		self:spawnSceneObjects()
+		self:spawnOperaSeating()
 		self:spawnMountedSwoopPatrol()
 		self:spawnPalaceMusicAreas()
+	end
+end
+
+function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
+	local cellID = self.operaPerformanceHallCellID
+	local pCell = getSceneObject(cellID)
+	if pCell == nil or not SceneObject(pCell):isCellObject() then
+		print(self.screenplayName .. ": opera performance hall cell missing, skipping seats")
+		return
+	end
+
+	local chairTemplate = "object/tangible/furniture/plain/plain_chair_s01.iff"
+	local cell = SceneObject(pCell)
+	local seats = {}
+	local function seatKey(x, z, y)
+		return string.format("%d/%d/%d", math.floor(x * 100 + 0.5), math.floor(z * 100 + 0.5), math.floor(y * 100 + 0.5))
+	end
+
+	for i = 0, cell:getContainerObjectsSize() - 1 do
+		local pObject = cell:getContainerObject(i)
+		if pObject ~= nil then
+			local object = SceneObject(pObject)
+			if object:getTemplateObjectPath() == chairTemplate then
+				seats[seatKey(object:getPositionX(), object:getPositionZ(), object:getPositionY())] = true
+			end
+		end
+	end
+
+	local function placeChair(x, height, y, heading)
+		if not seats[seatKey(x, height, y)] then
+			return spawnSceneObject("coruscant", chairTemplate, x, height, y, cellID, heading) ~= nil
+		end
+		return true
+	end
+
+	-- The bowl is a 26 x 24 m radius ellipse clipped at the foyer entrance.
+	-- Seat centers lie halfway along each straight tread. Leave the radial aisles clear.
+	local cut = math.asin(4.5 / 26)
+	local centerY = -15 + 24 * math.cos(cut)
+	local atan2 = math.atan2 or math.atan
+	local sectorAngle = (2 * math.pi - 2 * cut) / 64
+	local chord = math.cos(sectorAngle / 2)
+	local aisles = { [0] = true, [15] = true, [16] = true, [31] = true, [32] = true, [47] = true, [48] = true, [63] = true }
+	for sector = 0, 63 do
+		if not aisles[sector] then
+			local angle = cut + (sector + 0.5) * sectorAngle
+			local dx = 26 * chord * math.sin(angle)
+			local dy = -24 * chord * math.cos(angle)
+			local heading = atan2(-dx, -dy)
+			for row = 1, 7 do
+				local radius = 0.38 + (0.79 - 0.38) * (row - 0.5) / 7
+				local height = -3.6 + 6.6 * row / 7
+				if not placeChair(dx * radius, height, centerY + dy * radius, heading) then
+					return
+				end
+			end
+		end
+	end
+
+	-- The private box has a straight row behind its parapet.
+	for _, x in ipairs({-2.25, 0, 2.25}) do
+		if not placeChair(x, 3, centerY + 24 * 0.80 + 1.6, math.pi) then
+			return
+		end
 	end
 end
 
