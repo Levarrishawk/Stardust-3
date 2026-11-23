@@ -514,40 +514,40 @@ function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
    
 -- Entertainment District Sports Bar Cantina
 
-  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", -11.7, 0.5, -3.2, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", -11.7, 0.5, -11.9, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", 11.7, 0.5, -3.2, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", 11.7, 0.5, -11.9, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", -7.7, 0.25, -3.25, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", -7.5, 3.3, -16.98, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", 7.7, 0.25, -3.25, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", 7.5, 3.3, -16.98, 37000714, math.rad(0) )
   
-   spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -11.7, 0.5, -3.2, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -11.7, 0.5, -11.9, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 11.7, 0.5, -3.2, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 11.7, 0.5, -11.9, 37000714, math.rad(0) )
+   spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -12.2, 0.25, 1.6, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", -13.2, 3.3, -18.1, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 12.2, 0.25, 1.6, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 13.2, 3.3, -18.1, 37000714, math.rad(0) )
   
   
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -11.8, 0.5, -1.2, 37000714, math.rad(180) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -11.8, 0.5, -5.2, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -13.0, 0.5, -4.7, 37000714, math.rad(51) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -13.0, 0.5, -2.0, 37000714, math.rad(128) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -7.7, 0.25, -1.92, 37000714, math.rad(180) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -7.7, 0.25, -4.58, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -9.15, 0.25, -3.25, 37000714, math.rad(90) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -6.25, 0.25, -3.25, 37000714, math.rad(-90) )
   
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -11.8, 0.5, -9.9, 37000714, math.rad(180) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -11.8, 0.5, -14.0, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -13.0, 0.5, -13.3, 37000714, math.rad(51) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -13.0, 0.5, -10.6, 37000714, math.rad(128) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -7.5, 3.3, -15.65, 37000714, math.rad(180) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -7.5, 3.3, -18.31, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -8.95, 3.3, -16.98, 37000714, math.rad(90) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", -6.05, 3.3, -16.98, 37000714, math.rad(-90) )
   
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 11.8, 0.5, -1.2, 37000714, math.rad(180) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 11.8, 0.5, -5.2, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 13.0, 0.5, -4.7, 37000714, math.rad(51) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 13.0, 0.5, -2.0, 37000714, math.rad(128) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 7.7, 0.25, -1.92, 37000714, math.rad(180) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 7.7, 0.25, -4.58, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 6.25, 0.25, -3.25, 37000714, math.rad(90) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 9.15, 0.25, -3.25, 37000714, math.rad(-90) )
   
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 11.8, 0.5, -9.9, 37000714, math.rad(180) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 11.8, 0.5, -14.0, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 13.0, 0.5, -13.3, 37000714, math.rad(51) )
-  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 13.0, 0.5, -10.6, 37000714, math.rad(128) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 7.5, 3.3, -15.65, 37000714, math.rad(180) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 7.5, 3.3, -18.31, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 6.05, 3.3, -16.98, 37000714, math.rad(90) )
+  spawnSceneObject("coruscant", "object/tangible/furniture/modern/chair_modern_style_01.iff", 8.95, 3.3, -16.98, 37000714, math.rad(-90) )
   
-  spawnSceneObject("coruscant", "object/tangible/gambling/wheel/roulette.iff", 0.0, -0.7, -6.0, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/gambling/wheel/roulette.iff", 4.8, -0.7, -8.6, 37000714, math.rad(0) )
-  spawnSceneObject("coruscant", "object/tangible/gambling/wheel/roulette.iff", -4.8, -0.7, -8.6, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/gambling/wheel/roulette.iff", 0, 0.25, -14, 37000714, math.rad(0) )
+  spawnSceneObject("coruscant", "object/tangible/gambling/wheel/roulette.iff", -5.65, 0.25, -10.6, 37000714, math.rad(47) )
+  spawnSceneObject("coruscant", "object/tangible/gambling/wheel/roulette.iff", 5.65, 0.25, -10.6, 37000714, math.rad(-47) )
      
 -- Starport Static Objects
   spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_blue_style_01_on.iff", 12.2, 0.6, 50.2, 37000200, math.rad(0) )
@@ -969,7 +969,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   end
 
   --
-  spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000714)
+  spawnMobile("coruscant", "bartender", 60, 0.95, 0.25, -7.13, 20, 37000714)
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000316)
 
   -- Starport District gambling den patrons
@@ -1865,15 +1865,15 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   spawnMobile("coruscant", "trainer_imagedesigner", 60, 0.5, 0.6, -5.4, -70, 0)
   
-  pNpc = spawnMobile("coruscant", "commoner", 60, -2.1, -0.7, -6.2, 79, 37000714)
+  pNpc = spawnMobile("coruscant", "commoner", 60, -4.7, 0.25, -4.93, 124, 37000714)
   self:setMoodString(pNpc, "entertained")
-  pNpc = spawnMobile("coruscant", "commoner", 60, 1.2, -0.7, -4.9, -128, 37000714)
+  pNpc = spawnMobile("coruscant", "commoner", 60, 3.9, 0.25, -6.2, -122, 37000714)
   self:setMoodString(pNpc, "entertained")
-  pNpc = spawnMobile("coruscant", "commoner", 60, 3.7, -0.7, -7.7, 130, 37000714)
+  pNpc = spawnMobile("coruscant", "commoner", 60, -5.5, 0.25, -12.2, 0, 37000714)
   self:setMoodString(pNpc, "angry")
-  pNpc = spawnMobile("coruscant", "commoner", 60, 3.9, -0.7, -9.5, 36, 37000714)
+  pNpc = spawnMobile("coruscant", "commoner", 60, 5.8, 0.25, -12.2, 0, 37000714)
   self:setMoodString(pNpc, "entertained")
-  pNpc = spawnMobile("coruscant", "commoner", 60, 5.7, -0.7, -9.4, -50, 37000714)
+  pNpc = spawnMobile("coruscant", "commoner", 60, 0.65, 0.25, -2.68, 178, 37000714)
   self:setMoodString(pNpc, "npc_accusing")
   
  -- Federal District ------------------------------------------------------------------------------------------------------
