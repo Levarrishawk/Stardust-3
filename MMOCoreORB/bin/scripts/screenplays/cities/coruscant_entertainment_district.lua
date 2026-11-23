@@ -670,46 +670,121 @@ function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
   
 end
 
-function CoruscantEntertainmentScreenPlay:spawnPromenadePedestrians()
-  local pedestrians = {
-    -- West bank, along the chasm rail and the market frontage.
-    {2141, -4553, -34},
-    {2134, -4551, 133},
-    {2157, -4547, 52},
-    {2166, -4542, 40},
-    {2123, -4540, 45},
-    {2122, -4528, 14},
-    {2119, -4519, 140},
-    {2120, -4509, -90},
-    {2124, -4498, 43},
-    {2130, -4486, 63},
-    {2145, -4485, -18},
-    {2119, -4481, -87},
-    {2156, -4481, -104},
-    {2125, -4481, -138},
-    {2138, -4480, -90},
-    {2164, -4472, 34},
-    {2165, -4455, -12},
-    {2164, -4442, -53},
-    {2163, -4439, 117},
-    {2166, -4428, -130},
-    {2131, -4419, 82},
-    {2120, -4416, -88},
-    {2157, -4415, -48},
-    {2143, -4413, 177},
-    {2149, -4411, 88},
-    {2121, -4405, 9},
-    {2165, -4397, -137},
-    {2120, -4395, 177},
-    {2167, -4383, 35},
-    {2118, -4381, -111},
-    {2167, -4370, 150},
-    {2120, -4367, 42},
-    {2155, -4361, -77},
-    {2131, -4360, 162},
-    {2166, -4358, 138},
-    {2145, -4356, 3},
+-- Each pair of endpoints lies on one unobstructed stretch of the west sidewalk.
+local westBankWalks = {
+  -- South end and market frontage.
+  {2141, -4553, 2131, -4543},
+  {2134, -4551, 2153, -4551},
+  {2157, -4547, 2167, -4557},
+  {2163, -4542, 2149, -4556},
+  {2123, -4540, 2123, -4521},
+  {2122, -4528, 2122, -4505},
+  {2119, -4519, 2119, -4538},
+  {2120, -4509, 2120, -4495},
+  -- Between the lantern tower and the gallery.
+  {2124, -4498, 2138, -4484},
+  {2130, -4486, 2140, -4476},
+  {2145, -4485, 2122, -4485},
+  {2119, -4481, 2119, -4500},
+  {2156, -4481, 2142, -4481},
+  {2126, -4481, 2112, -4495},
+  {2138, -4480, 2124, -4480},
+  -- Sidewalk between the gallery and the west rail.
+  {2163, -4468, 2163, -4445},
+  {2162, -4455, 2162, -4436},
+  {2163, -4442, 2163, -4419},
+  {2162, -4439, 2162, -4458},
+  {2163, -4428, 2163, -4442},
+  -- Cross street south of the terraced drum.
+  {2131, -4419, 2150, -4419},
+  {2120, -4416, 2120, -4402},
+  {2157, -4415, 2134, -4415},
+  {2143, -4413, 2162, -4413},
+  {2149, -4411, 2159, -4401},
+  {2121, -4405, 2135, -4419},
+  {2163, -4397, 2153, -4407},
+  {2120, -4395, 2120, -4418},
+  -- North market approach.
+  {2163, -4367, 2153, -4357},
+  {2118, -4381, 2118, -4404},
+  {2163, -4364, 2153, -4354},
+  {2120, -4367, 2130, -4357},
+  {2154, -4359, 2168, -4359},
+  {2130, -4360, 2120, -4370},
+  {2166, -4357, 2143, -4357},
+  {2145, -4356, 2164, -4356},
+}
 
+local function westBankWalkerKey(slot)
+  return "CoruscantEntertainmentScreenPlay:westBankWalker:" .. slot
+end
+
+function CoruscantEntertainmentScreenPlay:spawnWestBankWalker(pUnused, args)
+  local slot = tonumber(args)
+  local walk = westBankWalks[slot]
+  if walk == nil or not isZoneEnabled("coruscant") then return end
+
+  local key = westBankWalkerKey(slot)
+  if getSceneObject(readData(key)) ~= nil then return end
+
+  local atan2 = math.atan2 or math.atan
+  local heading = math.deg(atan2(walk[3] - walk[1], walk[4] - walk[2]))
+  local pNpc = spawnMobile("coruscant", "coruscant_promenade_pedestrian", 0, walk[1], 0, walk[2], heading, 0)
+  if pNpc == nil then
+    createEvent(60000, self.screenplayName, "spawnWestBankWalker", nil, tostring(slot))
+    return
+  end
+
+  local id = SceneObject(pNpc):getObjectID()
+  writeData(key, id)
+  writeData(id .. ":westBankWalk", slot)
+  self:setMoodString(pNpc, "neutral")
+  AiAgent(pNpc):setMovementState(AI_PATROLLING)
+  createObserver(DESTINATIONREACHED, self.screenplayName, "westBankWalkerArrived", pNpc)
+  createObserver(CREATUREDESPAWNED, self.screenplayName, "westBankWalkerDespawned", pNpc)
+  self:westBankWalkerArrived(pNpc)
+end
+
+function CoruscantEntertainmentScreenPlay:westBankWalkerArrived(pNpc)
+  if pNpc == nil then return 1 end
+  createEvent(getRandomNumber(3000, 9000), self.screenplayName, "walkWestBankWalker", pNpc, "")
+  return 0
+end
+
+function CoruscantEntertainmentScreenPlay:walkWestBankWalker(pNpc)
+  if pNpc == nil then return end
+  local npc = SceneObject(pNpc)
+  local walk = westBankWalks[readData(npc:getObjectID() .. ":westBankWalk")]
+  if walk == nil or npc:getZoneName() ~= "coruscant" or CreatureObject(pNpc):isDead() then return end
+
+  local agent = AiAgent(pNpc)
+  if agent:getPatrolPointsSize() == 0 then
+    local x, y = walk[1], walk[2]
+    if npc:getDistanceToPosition(x, 0, y) < npc:getDistanceToPosition(walk[3], 0, walk[4]) then
+      x, y = walk[3], walk[4]
+    end
+    agent:setNextPosition(x, 0, y, 0)
+  end
+end
+
+function CoruscantEntertainmentScreenPlay:westBankWalkerDespawned(pNpc)
+  if pNpc == nil then return 1 end
+  local id = SceneObject(pNpc):getObjectID()
+  local slot = readData(id .. ":westBankWalk")
+  deleteData(id .. ":westBankWalk")
+  if westBankWalks[slot] ~= nil and readData(westBankWalkerKey(slot)) == id then
+    deleteData(westBankWalkerKey(slot))
+    createEvent(60000, self.screenplayName, "spawnWestBankWalker", nil, tostring(slot))
+  end
+  return 1
+end
+
+function CoruscantEntertainmentScreenPlay:spawnPromenadePedestrians()
+  for slot = 1, #westBankWalks do
+    self:spawnWestBankWalker(nil, slot)
+  end
+
+  local pedestrians = {
     -- Shuttleport forecourt and the approaches on either side of the terminal.
     {2239, -4543, -134},
     {2257, -4545, -116},
