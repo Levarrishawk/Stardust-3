@@ -6,6 +6,21 @@ CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 	throneRoomCellID = 37002514,
 	councilChamberCellID = 37002516,
 	operaPerformanceHallCellID = 1493525002,
+	operaBuildingID = 1493525000,
+	taxiStops = {
+		district = {
+			mobile = "entertainment_district_taxi_driver",
+			driver = {x = 2161.65, height = 0, y = -4475.65, heading = 135},
+			arrival = {x = 2163.25, height = 0, y = -4476.65},
+			destination = "opera",
+		},
+		opera = {
+			mobile = "opera_house_taxi_driver",
+			driver = {x = 2043.4, height = 594, y = -4493.9, heading = -50},
+			arrival = {x = 2042.2, height = 594.05, y = -4491.6},
+			destination = "district",
+		},
+	},
 
 	mountedSwoopRoute = {
 		{-5746, 0, -5051},
@@ -26,10 +41,32 @@ function CoruscantEntertainmentScreenPlay:start()
 		self:spawnMobiles()
 		self:spawnSceneObjects()
 		self:spawnOperaSeating()
+		self:spawnTaxiDrivers()
 		self:spawnMountedSwoopPatrol()
 		self:spawnPalaceMusicAreas()
 		-- World-space bounds of the rooftop auditorium, including the private box.
 		self:spawnPalaceMusicRectangle("Opera Auditorium", self.operaPerformanceHallCellID, 1965, -4511, 2016, -4457, 594, "enteredOperaAuditorium", "exitedPalaceMusicArea")
+	end
+end
+
+function CoruscantEntertainmentScreenPlay:isOperaTaxiPadAvailable()
+	local pBuilding = getSceneObject(self.operaBuildingID)
+	return pBuilding ~= nil and SceneObject(pBuilding):isBuildingObject() and SceneObject(pBuilding):getZoneName() == "coruscant"
+end
+
+function CoruscantEntertainmentScreenPlay:spawnTaxiDrivers()
+	for name, stop in pairs(self.taxiStops) do
+		local key = self.screenplayName .. ":" .. stop.mobile
+		if getSceneObject(readData(key)) == nil and (name ~= "opera" or self:isOperaTaxiPadAvailable()) then
+			local d = stop.driver
+			local pDriver = spawnMobile("coruscant", stop.mobile, 0, d.x, d.height, d.y, d.heading, 0)
+			if pDriver ~= nil then
+				AiAgent(pDriver):addObjectFlag(AI_STATIONARY)
+				writeData(key, SceneObject(pDriver):getObjectID())
+			else
+				printLuaError(self.screenplayName .. ": failed to spawn " .. stop.mobile)
+			end
+		end
 	end
 end
 

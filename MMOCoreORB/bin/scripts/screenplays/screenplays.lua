@@ -753,6 +753,7 @@ includeFile("../custom_scripts/screenplays/screenplays.lua")
 
 includeFile("cities/aldera_grand_tower_elevator_conv_handler.lua")
 includeFile("cities/imperial_palace_liaison_conv_handler.lua")
+includeFile("cities/entertainment_district_taxi_conv_handler.lua")
 includeFile("cities/alderaan_aldera_city.lua")
 includeFile("cities/coruscant_entertainment_district.lua")
 includeFile("cities/senate_delegation_lift.lua")
