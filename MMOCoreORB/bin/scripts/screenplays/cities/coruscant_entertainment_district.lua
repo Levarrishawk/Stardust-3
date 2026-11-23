@@ -56,12 +56,18 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 		end
 	end
 
-	local function placeChair(x, height, y, heading, oldX, oldHeight, oldY)
+	local function placeChair(x, height, y, heading, oldX, oldHeight, oldY, previousX, previousHeight, previousY)
 		local key = seatKey(x, height, y)
 		if seats[key] ~= nil then
 			return true
 		end
 		local oldKey = seatKey(oldX, oldHeight, oldY)
+		if previousX ~= nil then
+			local previousKey = seatKey(previousX, previousHeight, previousY)
+			if seats[previousKey] ~= nil then
+				oldKey = previousKey
+			end
+		end
 		local oldChair = seats[oldKey]
 		if oldChair ~= nil then
 			local chair = SceneObject(oldChair)
@@ -93,31 +99,51 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 	end
 
 	-- Each bank has 98 chairs. Shorter inner arcs take fewer seats.
-	-- Place chairs on the stage side of each tier to leave the landing and passage clear.
-	local seatsPerRow = {10, 12, 14, 15, 15, 16, 16}
+	-- Keep the flat cross-row passage in front of the chairs and the sit hardpoint on the platform.
+	local previousCounts = {10, 12, 14, 15, 15, 16, 16}
+	local seatsPerRow = {9, 12, 14, 15, 15, 17, 16}
+	local pitch = (0.925 - 0.245) / 7
 	for _, first in ipairs({1, 17, 33, 49}) do
 		local index = 0
+		local previousRow, previousSeat = 1, 1
 		local sectors = first == 49 and 14 or 13
 		for row, count in ipairs(seatsPerRow) do
-			local radius = 0.245 + (0.925 - 0.245) * (row - 1 + 0.178) / 7
+			local radius = 0.245 + pitch * (row - 1 + 1.18)
 			local height = -2.5 + 5.5 * row / 7
 			for seat = 1, count do
-				local x, y = position(first + sectors * (seat - 0.5) / count, radius)
+				local fraction = (seat - 0.5) / count
+				local previousRadius = 0.245 + pitch * (previousRow - 1 + 0.178)
+				local previousFraction = (previousSeat - 0.5) / previousCounts[previousRow]
+				local previousX, previousY = position(first + sectors * previousFraction, previousRadius)
+				local previousHeight = -2.5 + 5.5 * previousRow / 7
+				-- Leave room for a full player footprint beside the stair cheeks.
+				local inset = 0.30
+				local start, finish = first + inset, first + sectors - inset
+				if row == 7 and first == 33 then
+					start = first + 1.45
+				elseif row == 7 and first == 17 then
+					finish = first + sectors - 0.5
+				end
+				local x, y = position(start + (finish - start) * fraction, radius)
 				local heading = atan2(-x, centerY - y)
 				-- Reuse the corresponding original chair when upgrading an existing cell.
 				local oldRow = math.floor(index / 14) + 1
 				local oldRadius = 0.38 + 0.41 * (oldRow - 0.5) / 7
 				local oldX, oldY = position(first + index % 14 + 0.5, oldRadius)
-				if not placeChair(x, height, y, heading, oldX, -3.6 + 6.6 * oldRow / 7, oldY) then
+				if not placeChair(x, height, y, heading, oldX, -3.6 + 6.6 * oldRow / 7, oldY, previousX, previousHeight, previousY) then
 					return
 				end
 				index = index + 1
+				previousSeat = previousSeat + 1
+				if previousSeat > previousCounts[previousRow] then
+					previousRow, previousSeat = previousRow + 1, 1
+				end
 			end
 		end
 	end
 
 	for _, x in ipairs({-2.25, 0, 2.25}) do
-		if not placeChair(x, 3, centerY + 23.15, math.pi, x, 3, centerY + 20.8) then
+		if not placeChair(x, 3, centerY + 24.35, math.pi, x, 3, centerY + 20.8, x, 3, centerY + 23.15) then
 			return
 		end
 	end
