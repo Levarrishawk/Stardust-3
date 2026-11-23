@@ -51,45 +51,73 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 		if pObject ~= nil then
 			local object = SceneObject(pObject)
 			if object:getTemplateObjectPath() == chairTemplate then
-				seats[seatKey(object:getPositionX(), object:getPositionZ(), object:getPositionY())] = true
+				seats[seatKey(object:getPositionX(), object:getPositionZ(), object:getPositionY())] = pObject
 			end
 		end
 	end
 
-	local function placeChair(x, height, y, heading)
-		if not seats[seatKey(x, height, y)] then
-			return spawnSceneObject("coruscant", chairTemplate, x, height, y, cellID, heading) ~= nil
+	local function placeChair(x, height, y, heading, oldX, oldHeight, oldY)
+		local key = seatKey(x, height, y)
+		if seats[key] ~= nil then
+			return true
 		end
-		return true
+		local oldKey = seatKey(oldX, oldHeight, oldY)
+		local oldChair = seats[oldKey]
+		if oldChair ~= nil then
+			local chair = SceneObject(oldChair)
+			chair:setDirectionalHeading(heading)
+			chair:teleport(x, height, y, cellID)
+			if seatKey(chair:getPositionX(), chair:getPositionZ(), chair:getPositionY()) ~= key then
+				return false
+			end
+			seats[oldKey] = nil
+			seats[key] = oldChair
+			return true
+		end
+		local pChair = spawnSceneObject("coruscant", chairTemplate, x, height, y, cellID, heading)
+		seats[key] = pChair
+		return pChair ~= nil
 	end
 
-	-- The bowl is a 26 x 24 m radius ellipse clipped at the foyer entrance.
-	-- Seat centers lie halfway along each straight tread. Leave the radial aisles clear.
 	local cut = math.asin(4.5 / 26)
 	local centerY = -15 + 24 * math.cos(cut)
-	local atan2 = math.atan2 or math.atan
 	local sectorAngle = (2 * math.pi - 2 * cut) / 64
-	local chord = math.cos(sectorAngle / 2)
-	local aisles = { [0] = true, [15] = true, [16] = true, [31] = true, [32] = true, [47] = true, [48] = true, [63] = true }
-	for sector = 0, 63 do
-		if not aisles[sector] then
-			local angle = cut + (sector + 0.5) * sectorAngle
-			local dx = 26 * chord * math.sin(angle)
-			local dy = -24 * chord * math.cos(angle)
-			local heading = atan2(-dx, -dy)
-			for row = 1, 7 do
-				local radius = 0.38 + (0.79 - 0.38) * (row - 0.5) / 7
-				local height = -3.6 + 6.6 * row / 7
-				if not placeChair(dx * radius, height, centerY + dy * radius, heading) then
+	local atan2 = math.atan2 or math.atan
+	local function position(sector, radius)
+		local i = math.floor(sector)
+		local t = sector - i
+		local a = cut + i * sectorAngle
+		local b = a + sectorAngle
+		return radius * 26 * ((1-t) * math.sin(a) + t * math.sin(b)),
+			centerY - radius * 24 * ((1-t) * math.cos(a) + t * math.cos(b))
+	end
+
+	-- Each bank has 98 chairs. Shorter inner arcs take fewer seats.
+	-- Place chairs on the stage side of each tier to leave the landing and passage clear.
+	local seatsPerRow = {10, 12, 14, 15, 15, 16, 16}
+	for _, first in ipairs({1, 17, 33, 49}) do
+		local index = 0
+		local sectors = first == 49 and 14 or 13
+		for row, count in ipairs(seatsPerRow) do
+			local radius = 0.245 + (0.925 - 0.245) * (row - 1 + 0.178) / 7
+			local height = -2.5 + 5.5 * row / 7
+			for seat = 1, count do
+				local x, y = position(first + sectors * (seat - 0.5) / count, radius)
+				local heading = atan2(-x, centerY - y)
+				-- Reuse the corresponding original chair when upgrading an existing cell.
+				local oldRow = math.floor(index / 14) + 1
+				local oldRadius = 0.38 + 0.41 * (oldRow - 0.5) / 7
+				local oldX, oldY = position(first + index % 14 + 0.5, oldRadius)
+				if not placeChair(x, height, y, heading, oldX, -3.6 + 6.6 * oldRow / 7, oldY) then
 					return
 				end
+				index = index + 1
 			end
 		end
 	end
 
-	-- The private box has a straight row behind its parapet.
 	for _, x in ipairs({-2.25, 0, 2.25}) do
-		if not placeChair(x, 3, centerY + 24 * 0.80 + 1.6, math.pi) then
+		if not placeChair(x, 3, centerY + 23.15, math.pi, x, 3, centerY + 20.8) then
 			return
 		end
 	end
