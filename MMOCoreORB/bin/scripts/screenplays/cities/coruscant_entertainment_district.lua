@@ -28,6 +28,8 @@ function CoruscantEntertainmentScreenPlay:start()
 		self:spawnOperaSeating()
 		self:spawnMountedSwoopPatrol()
 		self:spawnPalaceMusicAreas()
+		-- World-space bounds of the rooftop auditorium, including the private box.
+		self:spawnPalaceMusicRectangle("Opera Auditorium", self.operaPerformanceHallCellID, 1965, -4511, 2016, -4457, 594, "enteredOperaAuditorium", "exitedPalaceMusicArea")
 	end
 end
 
@@ -143,7 +145,13 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 	end
 
 	for _, x in ipairs({-2.25, 0, 2.25}) do
-		if not placeChair(x, 3, centerY + 24.35, math.pi, x, 3, centerY + 20.8, x, 3, centerY + 23.15) then
+		-- The middle seat's original position lies on the join of two floor sectors.
+		local seatX = x == 0 and 0.28 or x
+		local priorY = centerY + 23.15
+		if seatX ~= x and seats[seatKey(x, 3, centerY + 24.35)] ~= nil then
+			priorY = centerY + 24.35
+		end
+		if not placeChair(seatX, 3, centerY + 24.35, math.pi, x, 3, centerY + 20.8, x, 3, priorY) then
 			return
 		end
 	end
@@ -194,6 +202,13 @@ function CoruscantEntertainmentScreenPlay:spawnCouncilChamberMusicArea()
 
 	createObserver(ENTEREDAREA, self.screenplayName, "enteredCouncilChamber", pArea)
 	createObserver(EXITEDAREA, self.screenplayName, "exitedPalaceMusicArea", pArea)
+end
+
+function CoruscantEntertainmentScreenPlay:enteredOperaAuditorium(pArea, pObject)
+	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
+		CreatureObject(pObject):playMusicMessage("sound/mus_squidlake.snd")
+	end
+	return 0
 end
 
 function CoruscantEntertainmentScreenPlay:enteredCouncilChamber(pArea, pObject)
