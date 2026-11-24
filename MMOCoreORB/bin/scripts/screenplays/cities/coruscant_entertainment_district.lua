@@ -77,19 +77,30 @@ function CoruscantEntertainmentScreenPlay:spawnBackstageDoor()
 	if pCell == nil or not SceneObject(pCell):isCellObject() then return end
 
 	local template = "object/tangible/door/south_cantina_backstage_door.iff"
+	local pDoor
 	local cell = SceneObject1(pCell)
 	for i = 0, cell:getContainerObjectsSize() - 1 do
 		local pObject = cell:getContainerObject(i)
-		if pObject ~= nil and SceneObject(pObject):getTemplateObjectPath() == template then return end
+		if pObject ~= nil and SceneObject(pObject):getTemplateObjectPath() == template then
+			pDoor = pObject
+			break
+		end
 	end
 
-	local pDoor = spawnSceneObject("coruscant", template, -7.41334, 0.0043, -17.64, cellID, 0)
-	if pDoor ~= nil then
-		self:updateBackstageDoor(pDoor)
+	if pDoor == nil then
+		pDoor = spawnSceneObject("coruscant", template, -7.41334, 0.0043, -17.64, cellID, 0)
+		if pDoor == nil then return end
 	end
+
+	-- Invalidate any pending poll when the screenplay reattaches to this door.
+	local key = self.screenplayName .. ":backstageDoorGeneration"
+	local generation = readData(key) + 1
+	writeData(key, generation)
+	self:updateBackstageDoor(pDoor, tostring(generation))
 end
 
-function CoruscantEntertainmentScreenPlay:updateBackstageDoor(pDoor)
+function CoruscantEntertainmentScreenPlay:updateBackstageDoor(pDoor, generation)
+	if tonumber(generation) ~= readData(self.screenplayName .. ":backstageDoorGeneration") then return 0 end
 	if pDoor == nil or SceneObject(pDoor):getParentID() ~= 37000721 then return 0 end
 	local pCell = getSceneObject(37000721)
 	if pCell == nil then return 0 end
@@ -114,7 +125,7 @@ function CoruscantEntertainmentScreenPlay:updateBackstageDoor(pDoor)
 	elseif open and not nearby then
 		TangibleObject(pDoor):clearOptionBit(openBit)
 	end
-	createEvent(occupied and 200 or 900, self.screenplayName, "updateBackstageDoor", pDoor, "")
+	createEvent(occupied and 200 or 900, self.screenplayName, "updateBackstageDoor", pDoor, generation)
 	return 0
 end
 
