@@ -48,6 +48,7 @@ function CoruscantEntertainmentScreenPlay:start()
 		self:spawnSceneObjects()
 		self:spawnBackstageDoor()
 		self:spawnOperaSeating()
+		self:spawnOperaHouseStaff()
 		self:spawnTaxiDrivers()
 		self:spawnMountedSwoopPatrol()
 		self:spawnPalaceMusicAreas()
@@ -59,6 +60,60 @@ end
 function CoruscantEntertainmentScreenPlay:isOperaTaxiPadAvailable()
 	local pBuilding = getSceneObject(self.operaBuildingID)
 	return pBuilding ~= nil and SceneObject(pBuilding):isBuildingObject() and SceneObject(pBuilding):getZoneName() == "coruscant"
+end
+
+-- Terrace coordinates are in world space. Foyer and hall coordinates are cell-local.
+local operaStaff = {
+	opera_house_doorman = {cell = 0, x = 2034, height = 594, z = -4480.7, heading = 115,
+		cue = "wave_on_directing", radius = 7, cooldown = 60},
+	opera_house_protocol_droid = {cell = 1493525001, x = -12.1, height = 0, z = -28.45, heading = 100},
+	opera_house_third_horn = {cell = 1493525001, x = 10.8, height = 3, z = -17, heading = -105},
+	opera_house_head_usher = {cell = 1493525002, x = 5.3, height = 3, z = -13.9, heading = 157,
+		cue = "point_left", radius = 6, cooldown = 45},
+	opera_house_water_technician = {cell = 1493525002, x = -25, height = 3, z = 8.5, heading = 90,
+		cue = "check_wrist_device", radius = 7, cooldown = 35},
+	opera_house_box_aide = {cell = 1493525002, x = 5, height = 3, z = 30.55, heading = 135,
+		cue = "check_wrist_device", radius = 4, cooldown = 55},
+}
+
+function CoruscantEntertainmentScreenPlay:spawnOperaHouseStaff()
+	if not self:isOperaTaxiPadAvailable() then return end
+	for mobile, post in pairs(operaStaff) do
+		local key = self.screenplayName .. ":" .. mobile
+		local pCell = getSceneObject(post.cell)
+		local validPost = post.cell == 0 or (pCell ~= nil and SceneObject(pCell):isCellObject()
+			and SceneObject(pCell):getParentID() == self.operaBuildingID)
+		if validPost and getSceneObject(readData(key)) == nil then
+			local pStaff = spawnMobile("coruscant", mobile, 0, post.x, post.height, post.z, post.heading, post.cell)
+			if pStaff ~= nil then
+				AiAgent(pStaff):addObjectFlag(AI_STATIONARY)
+				writeData(key, SceneObject(pStaff):getObjectID())
+				if post.cue ~= nil then
+					createObserver(OBJECTINRANGEMOVED, self.screenplayName, "operaStaffSeesGuest", pStaff)
+				end
+			end
+		end
+	end
+end
+
+function CoruscantEntertainmentScreenPlay:operaStaffSeesGuest(pStaff, pGuest)
+	if pGuest == nil or not SceneObject(pGuest):isPlayerCreature() then return 0 end
+	local staff = SceneObject(pStaff)
+	if staff:getParentID() ~= SceneObject(pGuest):getParentID() then return 0 end
+	local mobile = AiAgent(pStaff):getCreatureTemplateName()
+	local post = operaStaff[mobile]
+	if post == nil or post.cue == nil or staff:getDistanceTo3d(pGuest) > post.radius then return 0 end
+
+	local key = self.screenplayName .. ":" .. mobile .. ":nextCue"
+	local now = os.time()
+	if now < readData(key) then return 0 end
+	writeData(key, now + post.cooldown)
+	if mobile == "opera_house_doorman" then
+		staff:faceObject(pGuest, true)
+		spatialChat(pStaff, "Welcome to the Galaxies Opera House. This way, please.")
+	end
+	CreatureObject(pStaff):doAnimation(post.cue)
+	return 0
 end
 
 function CoruscantEntertainmentScreenPlay:spawnTaxiDrivers()
