@@ -708,8 +708,8 @@ function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
   
 end
 
--- Each pair of endpoints lies on one unobstructed stretch of the west sidewalk.
-local westBankWalks = {
+-- Each pair of endpoints follows an open stretch of sidewalk. Keep slot numbers stable.
+local promenadeWalks = {
   -- South end and market frontage.
   {2141, -4553, 2131, -4543},
   {2134, -4551, 2153, -4551},
@@ -751,6 +751,25 @@ local westBankWalks = {
   {2130, -4360, 2120, -4370},
   {2166, -4357, 2143, -4357},
   {2145, -4356, 2164, -4356},
+  -- East promenade. Keep foot traffic in front of the precinct and its windows.
+  {2249, -4413, 2249, -4425},
+  {2250, -4419, 2249, -4407},
+  {2246, -4417, 2246, -4434},
+  {2245, -4425, 2241, -4413},
+  {2249, -4430, 2249, -4446},
+  {2239, -4416, 2241, -4402},
+  {2245, -4406, 2243, -4391},
+  {2249, -4406, 2249, -4390},
+  {2243, -4394, 2240, -4381},
+  {2249, -4378, 2247, -4392},
+  {2243, -4373, 2244, -4384},
+  {2247, -4440, 2245, -4456},
+  {2239, -4436, 2239, -4450},
+  {2249, -4445, 2249, -4460},
+  {2249, -4452, 2246, -4463},
+  {2243, -4478, 2243, -4465},
+  {2249, -4476, 2248, -4490},
+  {2246, -4487, 2246, -4501},
 }
 
 local function westBankWalkerKey(slot)
@@ -759,7 +778,7 @@ end
 
 function CoruscantEntertainmentScreenPlay:spawnWestBankWalker(pUnused, args)
   local slot = tonumber(args)
-  local walk = westBankWalks[slot]
+  local walk = promenadeWalks[slot]
   if walk == nil or not isZoneEnabled("coruscant") then return end
 
   local key = westBankWalkerKey(slot)
@@ -792,7 +811,7 @@ end
 function CoruscantEntertainmentScreenPlay:walkWestBankWalker(pNpc)
   if pNpc == nil then return end
   local npc = SceneObject(pNpc)
-  local walk = westBankWalks[readData(npc:getObjectID() .. ":westBankWalk")]
+  local walk = promenadeWalks[readData(npc:getObjectID() .. ":westBankWalk")]
   if walk == nil or npc:getZoneName() ~= "coruscant" or CreatureObject(pNpc):isDead() then return end
 
   local agent = AiAgent(pNpc)
@@ -810,7 +829,7 @@ function CoruscantEntertainmentScreenPlay:westBankWalkerDespawned(pNpc)
   local id = SceneObject(pNpc):getObjectID()
   local slot = readData(id .. ":westBankWalk")
   deleteData(id .. ":westBankWalk")
-  if westBankWalks[slot] ~= nil and readData(westBankWalkerKey(slot)) == id then
+  if promenadeWalks[slot] ~= nil and readData(westBankWalkerKey(slot)) == id then
     deleteData(westBankWalkerKey(slot))
     createEvent(60000, self.screenplayName, "spawnWestBankWalker", nil, tostring(slot))
   end
@@ -818,7 +837,7 @@ function CoruscantEntertainmentScreenPlay:westBankWalkerDespawned(pNpc)
 end
 
 function CoruscantEntertainmentScreenPlay:spawnPromenadePedestrians()
-  for slot = 1, #westBankWalks do
+  for slot = 1, #promenadeWalks do
     self:spawnWestBankWalker(nil, slot)
   end
 
@@ -867,85 +886,13 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "neutral")
   --AiAgent(pMobile):addCreatureFlag(AI_STATIC)
   
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2253, 0, -4413, 12, 0)
-  self:setMoodString(pNpc, "neutral")
-  --AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2257, 0, -4419, 20, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2251, 0, -4417, 90, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2245, 0, -4425, 135, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2254, 0, -4430, 0, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2239, 0, -4416, 118, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2245, 0, -4406, 180, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2254, 0, -4406, -122, 0)
-  self:setMoodString(pNpc, "neutral")
-  --AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2243, 0, -4394, 12, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2249, 0, -4378, 22, 0)
-  self:setMoodString(pNpc, "neutral")
---  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2243, 0, -4373, 108, 0)
-  self:setMoodString(pNpc, "neutral")
---  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
   pNpc = spawnMobile("coruscant", "commoner", 60, 2255, 0, -4367, -118, 0)
   self:setMoodString(pNpc, "neutral")
 --  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
   
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2247, 0, -4440, 2, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2239, 0, -4436, 100, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2257, 0, -4445, -126, 0)
-  self:setMoodString(pNpc, "neutral")
---  AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-    
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2249, 0, -4452, 179, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-    
   pNpc = spawnMobile("coruscant", "commoner", 60, 2246, 0, -4362, 0, 0)
   self:setMoodString(pNpc, "neutral")
  -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-  
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2243, 0, -4478, 55, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-   
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2249, 0, -4476, -132, 0)
-  self:setMoodString(pNpc, "neutral")
- -- AiAgent(pMobile):addCreatureFlag(AI_STATIC)
-    
-  pNpc = spawnMobile("coruscant", "commoner", 60, 2253, 0, -4487, 177, 0)
-  self:setMoodString(pNpc, "neutral")
-  --AiAgent(pMobile):addCreatureFlag(AI_STATIC)
   
   pNpc = spawnMobile("coruscant", "commoner", 60, 2257, 0, -4496, -155, 0)
   self:setMoodString(pNpc, "neutral")
@@ -971,9 +918,10 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   
   
-  spawnMobile("coruscant", "civilian_patrolman", 60, 2236, 0, -4469, 90, 0)
+  -- Give the two gallery patrols room for their native 35 m patrol radius.
+  spawnMobile("coruscant", "civilian_patrolman", 60, 2240, 0, -4484, 90, 0)
   
-  spawnMobile("coruscant", "civilian_patrolman", 60, 2236, 0, -4395, 90, 0)
+  spawnMobile("coruscant", "civilian_patrolman", 60, 2240, 0, -4379, 90, 0)
  
   --  Cantina 1 
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000721)
