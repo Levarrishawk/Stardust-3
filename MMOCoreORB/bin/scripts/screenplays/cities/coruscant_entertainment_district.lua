@@ -12,13 +12,19 @@ CoruscantEntertainmentScreenPlay = ScreenPlay:new {
 			mobile = "entertainment_district_taxi_driver",
 			driver = {x = 2161.65, height = 0, y = -4475.65, heading = 135},
 			arrival = {x = 2163.25, height = 0, y = -4476.65},
-			destination = "opera",
+			destinations = {board = "opera"},
+		},
+		southCantina = {
+			mobile = "south_cantina_taxi_driver",
+			driver = {x = 2266, height = 0, y = -4484, heading = -76},
+			arrival = {x = 2263.75, height = 0, y = -4483.4},
+			destinations = {board = "opera"},
 		},
 		opera = {
 			mobile = "opera_house_taxi_driver",
 			driver = {x = 2043.4, height = 594, y = -4493.9, heading = -50},
 			arrival = {x = 2042.2, height = 594.05, y = -4491.6},
-			destination = "district",
+			destinations = {board = "district", boardSouthCantina = "southCantina"},
 		},
 	},
 

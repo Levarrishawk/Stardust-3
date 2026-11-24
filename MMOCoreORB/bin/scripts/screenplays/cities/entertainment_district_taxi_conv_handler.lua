@@ -22,14 +22,18 @@ function entertainmentDistrictTaxiConvoHandler:getInitialScreen(pPlayer, pNpc, p
 end
 
 function entertainmentDistrictTaxiConvoHandler:runScreenHandlers(pTemplate, pPlayer, pNpc, selectedOption, pScreen)
-	if pScreen == nil or LuaConversationScreen(pScreen):getScreenID() ~= "board" then return pScreen end
+	if pScreen == nil then return nil end
+	local screenID = LuaConversationScreen(pScreen):getScreenID()
+	if screenID ~= "board" and screenID ~= "boardSouthCantina" then return pScreen end
+
 	local _, origin = self:getStop(pPlayer, pNpc)
 	local district = CoruscantEntertainmentScreenPlay
-	if origin == nil or (origin.destination == "opera" and not district:isOperaTaxiPadAvailable()) then
+	local destination = origin and origin.destinations[screenID]
+	if destination == nil or (destination == "opera" and not district:isOperaTaxiPadAvailable()) then
 		return LuaConversationTemplate(pTemplate):getScreen("unavailable")
 	end
 
-	local arrival = district.taxiStops[origin.destination].arrival
+	local arrival = district.taxiStops[destination].arrival
 	SceneObject(pPlayer):teleport(arrival.x, arrival.height, arrival.y, 0)
 	return pScreen
 end

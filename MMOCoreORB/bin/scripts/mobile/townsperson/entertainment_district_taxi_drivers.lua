@@ -18,3 +18,8 @@ CreatureTemplates:addCreatureTemplate(driver:new {
 	customName = "Ressa Pell (Entertainment District Taxi Driver)",
 	templates = {"object/mobile/dressed_commoner_tatooine_rodian_female_01.iff"},
 }, "opera_house_taxi_driver")
+
+CreatureTemplates:addCreatureTemplate(driver:new {
+	customName = "Vela Tann (Entertainment District Taxi Driver)",
+	templates = {"object/mobile/dressed_commoner_naboo_human_female_02.iff"},
+}, "south_cantina_taxi_driver")
