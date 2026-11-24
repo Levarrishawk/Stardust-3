@@ -435,16 +435,6 @@ function CoruscantEntertainmentScreenPlay:moveMountedSwoopPatrol(pVehicle)
 	createEvent(self.mountedSwoopUpdateInterval, self.screenplayName, "moveMountedSwoopPatrol", pVehicle, "")
 end
 
-function CoruscantEntertainmentScreenPlay:animateCabaretDancer(pDancer)
-  if pDancer == nil or not SceneObject(pDancer):isCreatureObject() then
-    return
-  end
-
-  CreatureObject(pDancer):setPosture(SKILLANIMATING)
-  CreatureObject(pDancer):doAnimation("dance_8") -- exotic4
-  createEvent(9000, "CoruscantEntertainmentScreenPlay", "animateCabaretDancer", pDancer, "")
-end
-
 function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
 
 	--Monument Square Cantina Static Objects
@@ -474,17 +464,6 @@ function CoruscantEntertainmentScreenPlay:spawnSceneObjects()
   spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_couch_divan_s1.iff", 2.5, -0.7, -4.3, 37000721, math.rad(-168) ) 
   spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_couch_divan_s1.iff", -2.5, -0.7, -4.3, 37000721, math.rad(168) )
   spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_couch_divan_s1.iff", 0.0, -0.7, -3.7, 37000721, math.rad(180) )
-
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 0.0, -0.7, -6.6, 37000721, math.rad(180) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -3.5, -0.7, -7.4, 37000721, math.rad(142) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 3.5, -0.7, -7.4, 37000721, math.rad(-142) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 5.5, -0.7, -11.0, 37000721, math.rad(-90) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -5.5, -0.7, -11.0, 37000721, math.rad(90) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -6.5, -0.7, -6.4, 37000721, math.rad(142) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 6.5, -0.7, -6.4, 37000721, math.rad(-142) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 2.5, -0.7, -3.7, 37000721, math.rad(-168) ) 
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", -2.5, -0.7, -3.7, 37000721, math.rad(168) )
-  spawnSceneObject("coruscant", "object/static/structure/general/streetlamp_small_red_style_01_on.iff", 0.0, -0.7, -3.1, 37000721, math.rad(180) )
 
   spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", -11.7, 0.5, -3.2, 37000721, math.rad(0) )
   spawnSceneObject("coruscant", "object/tangible/furniture/all/frn_all_table_s03.iff", -11.7, 0.5, -11.9, 37000721, math.rad(0) )
@@ -940,14 +919,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   --  Cantina 1 
   spawnMobile("coruscant", "bartender", 60, 0.3, 0.3, 4.4, 176, 37000721)
 
-  -- Entertainment District cabaret stage and audience
-  local pDancer = spawnMobile("coruscant", "twilek_slave", 60, 0.0, 0.5, -11.5, 0, 37000721)
-  if pDancer ~= nil then
-    SceneObject(pDancer):setCustomObjectName("Twi'lek Cabaret Dancer")
-    AiAgent(pDancer):addObjectFlag(AI_STATIC)
-    self:animateCabaretDancer(pDancer)
-  end
-
+  -- Entertainment District cabaret audience
   local cabaretAudience = {
     {"patron", 0.0, -0.7, -7.3, 180, "npc_sitting_chair"},
     {"patron", -3.1, -0.7, -8.0, 142, "npc_sitting_chair"},
