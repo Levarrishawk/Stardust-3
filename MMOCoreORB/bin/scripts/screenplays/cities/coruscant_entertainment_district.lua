@@ -40,6 +40,7 @@ function CoruscantEntertainmentScreenPlay:start()
 	if (isZoneEnabled("coruscant")) then
 		self:spawnMobiles()
 		self:spawnSceneObjects()
+		self:spawnBackstageDoor()
 		self:spawnOperaSeating()
 		self:spawnTaxiDrivers()
 		self:spawnMountedSwoopPatrol()
@@ -68,6 +69,53 @@ function CoruscantEntertainmentScreenPlay:spawnTaxiDrivers()
 			end
 		end
 	end
+end
+
+function CoruscantEntertainmentScreenPlay:spawnBackstageDoor()
+	local cellID = 37000721
+	local pCell = getSceneObject(cellID)
+	if pCell == nil or not SceneObject(pCell):isCellObject() then return end
+
+	local template = "object/tangible/door/south_cantina_backstage_door.iff"
+	local cell = SceneObject1(pCell)
+	for i = 0, cell:getContainerObjectsSize() - 1 do
+		local pObject = cell:getContainerObject(i)
+		if pObject ~= nil and SceneObject(pObject):getTemplateObjectPath() == template then return end
+	end
+
+	local pDoor = spawnSceneObject("coruscant", template, -7.41334, 0.0043, -17.64, cellID, 0)
+	if pDoor ~= nil then
+		self:updateBackstageDoor(pDoor)
+	end
+end
+
+function CoruscantEntertainmentScreenPlay:updateBackstageDoor(pDoor)
+	if pDoor == nil or SceneObject(pDoor):getParentID() ~= 37000721 then return 0 end
+	local pCell = getSceneObject(37000721)
+	if pCell == nil then return 0 end
+
+	local openBit = 0x4000 -- WINGS_OPEN drives the two client-side door hinges.
+	local open = TangibleObject(pDoor):hasOptionBit(openBit)
+	local radius = open and 4.4 or 3.5
+	local occupied, nearby = false, false
+	local cell = SceneObject1(pCell)
+	for i = 0, cell:getContainerObjectsSize() - 1 do
+		local pObject = cell:getContainerObject(i)
+		if pObject ~= nil and SceneObject(pObject):isPlayerCreature() then
+			occupied = true
+			if SceneObject(pObject):getDistanceTo(pDoor) <= radius then
+				nearby = true
+				break
+			end
+		end
+	end
+	if nearby and not open then
+		TangibleObject(pDoor):setOptionBit(openBit)
+	elseif open and not nearby then
+		TangibleObject(pDoor):clearOptionBit(openBit)
+	end
+	createEvent(occupied and 200 or 900, self.screenplayName, "updateBackstageDoor", pDoor, "")
+	return 0
 end
 
 function CoruscantEntertainmentScreenPlay:spawnOperaSeating()

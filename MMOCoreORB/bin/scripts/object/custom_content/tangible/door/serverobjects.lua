@@ -2,6 +2,7 @@
 includeFile("custom_content/tangible/door/echo_base_door_hangar.lua")
 includeFile("custom_content/tangible/door/echo_base_door_large.lua")
 includeFile("custom_content/tangible/door/echo_base_door_small.lua")
+includeFile("custom_content/tangible/door/south_cantina_backstage_door.lua")
 includeFile("custom_content/tangible/door/echo_tower_door.lua")
 includeFile("custom_content/tangible/door/exar_kun_door_s1.lua")
 includeFile("custom_content/tangible/door/exar_kun_door_s2.lua")
