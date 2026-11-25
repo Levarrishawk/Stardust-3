@@ -365,12 +365,23 @@ local function seatOperaPatron(seat, key, cellID, seatedPlayers)
 	return true
 end
 
+local function vacateOperaSeat(key, cellID)
+	local id = readData(key)
+	if id == 0 then return end
+	local pPatron = getSceneObject(id)
+	if pPatron ~= nil and SceneObject(pPatron):getParentID() == cellID and SceneObject(pPatron):isAiAgent()
+		and AiAgent(pPatron):getCreatureTemplateName() == "opera_house_patron" then
+		SceneObject(pPatron):destroyObjectFromWorld()
+	end
+	deleteData(key)
+end
+
 function CoruscantEntertainmentScreenPlay:populateOperaAuditorium()
 	local rows, boxCount = self:spawnOperaSeating()
 	if rows == nil then return end
 	local publicCount = 0
 	for _, row in ipairs(rows) do publicCount = publicCount + #row end
-	local target = math.floor((publicCount + boxCount) * 0.65 + 0.5)
+	local target = math.floor((publicCount + boxCount) * 0.325 + 0.5)
 	local cellID = self.operaPerformanceHallCellID
 	local pCell = getSceneObject(cellID)
 	local seatedPlayers = {}
@@ -386,15 +397,20 @@ function CoruscantEntertainmentScreenPlay:populateOperaAuditorium()
 		totalSeats = totalSeats + #row
 		local nextAssigned = math.floor(totalSeats * target / publicCount + 0.5)
 		local rowKey = self.screenplayName .. ":operaAudience:" .. rowIndex
-		local plan = readStringData(rowKey)
-		if plan == nil or #plan ~= #row then
-			plan = operaRowPlan(#row, #row - (nextAssigned - assigned))
+		local wanted = nextAssigned - assigned
+		local plan = readStringData(rowKey) or ""
+		local _, planned = plan:gsub("P", "")
+		if #plan ~= #row or planned ~= wanted then
+			plan = operaRowPlan(#row, #row - wanted)
 			writeStringData(rowKey, plan)
 		end
 		assigned = nextAssigned
 		for i, seat in ipairs(row) do
-			if plan:sub(i, i) == "P" and not seatOperaPatron(seat, rowKey .. ":" .. i, cellID, seatedPlayers) then
-				missing = missing + 1
+			local key = rowKey .. ":" .. i
+			if plan:sub(i, i) == "P" then
+				if not seatOperaPatron(seat, key, cellID, seatedPlayers) then missing = missing + 1 end
+			else
+				vacateOperaSeat(key, cellID)
 			end
 		end
 	end
