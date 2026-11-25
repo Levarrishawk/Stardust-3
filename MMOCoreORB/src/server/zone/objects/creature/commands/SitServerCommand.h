@@ -120,7 +120,7 @@ private:
 				continue;
 
 			auto patron = object->asCreatureObject();
-			// Chair requests carry the chair origin. A patron sits 0.43 m forward at its foot hardpoint.
+			// Both the sit request and the seated patron use the chair origin in cell space.
 			if (patron != nullptr && patron->hasState(CreatureState::SITTINGONCHAIR) && patron->getPosition().squaredDistanceTo(position) < 0.55f * 0.55f)
 				return true;
 		}

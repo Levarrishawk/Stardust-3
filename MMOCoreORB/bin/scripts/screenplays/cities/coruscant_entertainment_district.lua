@@ -347,34 +347,51 @@ end
 
 local operaChairState = SITTINGONCHAIR or 0x80000 -- CreatureState::SITTINGONCHAIR in Core3.
 
+local function findOperaPatron(id, cellID)
+	if id == 0 then return nil end
+	local pPatron = getSceneObject(id)
+	if pPatron ~= nil and SceneObject(pPatron):getParentID() == cellID and SceneObject(pPatron):isAiAgent()
+		and AiAgent(pPatron):getCreatureTemplateName() == "opera_house_patron" then
+		return pPatron
+	end
+	return nil
+end
+
 local function seatOperaPatron(seat, key, cellID, seatedPlayers)
-	if getSceneObject(readData(key)) ~= nil then return true end
+	local pPatron = findOperaPatron(readData(key), cellID)
+	if pPatron ~= nil and SceneObject(pPatron):getDistanceTo3d(seat.chair) < 0.01 then
+		if CreatureObject(pPatron):hasState(operaChairState) ~= 1 then CreatureObject(pPatron):setState(operaChairState) end
+		return true
+	end
 	for _, pPlayer in ipairs(seatedPlayers) do
 		if SceneObject(pPlayer):getDistanceTo3d(seat.chair) < 0.55 then return false end
 	end
 
-	-- Late arrivals get the actor's position in its baseline. Put its feet at
-	-- the chair's foot hardpoint so the pose matches a live sit notification.
+	-- A player's sit request supplies the chair origin in cell space.
+	-- Chair playback handles the model's foot hardpoint.
 	local chair = SceneObject(seat.chair)
-	local footOffset = 0.431483
-	local x = chair:getPositionX() + math.sin(seat.heading) * footOffset
-	local y = chair:getPositionY() + math.cos(seat.heading) * footOffset
-	local pPatron = spawnMobile("coruscant", "opera_house_patron", 0, x, chair:getPositionZ(), y, math.deg(seat.heading), cellID)
-	if pPatron == nil then return false end
-	AiAgent(pPatron):addObjectFlag(AI_STATIONARY)
+	local x, height, y = chair:getPositionX(), chair:getPositionZ(), chair:getPositionY()
+	if pPatron == nil then
+		pPatron = spawnMobile("coruscant", "opera_house_patron", 0, x, height, y, math.deg(seat.heading), cellID)
+		if pPatron == nil then return false end
+		AiAgent(pPatron):addObjectFlag(AI_STATIONARY)
+		writeData(key, SceneObject(pPatron):getObjectID())
+	else
+		-- Reseat a patron spawned with the previous forward offset.
+		CreatureObject(pPatron):clearState(operaChairState)
+		AiAgent(pPatron):setHomeLocation(x, height, y, getSceneObject(cellID))
+		SceneObject(pPatron):setDirectionalHeading(seat.heading)
+		SceneObject(pPatron):teleport(x, height, y, cellID)
+	end
 	CreatureObject(pPatron):setState(operaChairState)
-	writeData(key, SceneObject(pPatron):getObjectID())
 	return true
 end
 
 local function vacateOperaSeat(key, cellID)
 	local id = readData(key)
 	if id == 0 then return end
-	local pPatron = getSceneObject(id)
-	if pPatron ~= nil and SceneObject(pPatron):getParentID() == cellID and SceneObject(pPatron):isAiAgent()
-		and AiAgent(pPatron):getCreatureTemplateName() == "opera_house_patron" then
-		SceneObject(pPatron):destroyObjectFromWorld()
-	end
+	local pPatron = findOperaPatron(id, cellID)
+	if pPatron ~= nil then SceneObject(pPatron):destroyObjectFromWorld() end
 	deleteData(key)
 end
 
