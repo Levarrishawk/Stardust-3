@@ -79,7 +79,8 @@ walker("monument_lamp_tech", {{1544.5,698.3,18,-90,"manipulate_low"},{1544.5,715
 local tableTemplate = "object/tangible/furniture/all/frn_all_table_s03.iff"
 local displays = {
 	{"cafTable",tableTemplate,1543.8,40,745},
-	{"cafCup","object/static/item/item_con_tato_cup_s2.iff",1543.8,40.75,745.25},
+	-- The cup mesh starts 0.75 m above its origin. The inset tabletop here is at 40.73956 m.
+	{"cafCup","object/static/item/item_con_tato_cup_s2.iff",1543.8,39.98956,745.25},
 	{"cafPitcher","object/static/item/item_con_pitcher_full.iff",1543.8,40.75,744.78},
 	{"keepsakeTable",tableTemplate,1481.2,40,559.2},
 	{"displayHolo","object/tangible/furniture/decorative/umate_pocket_holo.iff",1481.2,40.75,559.2},
