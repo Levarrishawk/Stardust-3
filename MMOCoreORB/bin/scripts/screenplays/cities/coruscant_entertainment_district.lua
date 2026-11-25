@@ -199,15 +199,14 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 	end
 
 	local chairTemplate = "object/tangible/furniture/plain/plain_chair_s01.iff"
-	local cell = SceneObject(pCell)
 	local seats = {}
 	local rows = {}
 	local function seatKey(x, z, y)
 		return string.format("%d/%d/%d", math.floor(x * 100 + 0.5), math.floor(z * 100 + 0.5), math.floor(y * 100 + 0.5))
 	end
 
-	for i = 0, cell:getContainerObjectsSize() - 1 do
-		local pObject = cell:getContainerObject(i)
+	for i = 0, SceneObject(pCell):getContainerObjectsSize() - 1 do
+		local pObject = SceneObject(pCell):getContainerObject(i)
 		if pObject ~= nil then
 			local object = SceneObject(pObject)
 			if object:getTemplateObjectPath() == chairTemplate then
@@ -373,10 +372,10 @@ function CoruscantEntertainmentScreenPlay:populateOperaAuditorium()
 	for _, row in ipairs(rows) do publicCount = publicCount + #row end
 	local target = math.floor((publicCount + boxCount) * 0.65 + 0.5)
 	local cellID = self.operaPerformanceHallCellID
-	local cell = SceneObject(getSceneObject(cellID))
+	local pCell = getSceneObject(cellID)
 	local seatedPlayers = {}
-	for i = 0, cell:getContainerObjectsSize() - 1 do
-		local pObj = cell:getContainerObject(i)
+	for i = 0, SceneObject(pCell):getContainerObjectsSize() - 1 do
+		local pObj = SceneObject(pCell):getContainerObject(i)
 		if pObj ~= nil and SceneObject(pObj):isPlayerCreature() and CreatureObject(pObj):hasState(operaChairState) == 1 then
 			seatedPlayers[#seatedPlayers + 1] = pObj
 		end
@@ -400,7 +399,6 @@ function CoruscantEntertainmentScreenPlay:populateOperaAuditorium()
 		end
 	end
 	if missing > 0 then
-		local pCell = getSceneObject(cellID)
 		cancelEvent(self.screenplayName, "populateOperaAuditorium", pCell)
 		createEvent(60000, self.screenplayName, "populateOperaAuditorium", pCell, "")
 	end
