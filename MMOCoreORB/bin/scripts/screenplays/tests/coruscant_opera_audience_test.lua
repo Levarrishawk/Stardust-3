@@ -69,7 +69,7 @@ add("existing decoration", 0, 0, 0)
 add("existing fixture", 1, 0, 0)
 for pass = 1, 2 do
 	district:populateOperaAuditorium()
-	assert(chairCount == 395 and patronCount == 128, "auditorium setup lost or duplicated seats or patrons")
+	assert(chairCount == 395 and patronCount == 86, "auditorium setup lost or duplicated seats or patrons")
 end
 local publicVacancies = 0
 for row = 1, 28 do
@@ -79,5 +79,5 @@ for row = 1, 28 do
 		publicVacancies = publicVacancies + #gap
 	end
 end
-assert(publicVacancies == 264) -- Three more seats are in the private box.
+assert(publicVacancies == 306) -- Three more seats are in the private box.
 print("Opera auditorium startup and repeat population passed.")

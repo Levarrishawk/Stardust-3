@@ -326,7 +326,9 @@ local function operaRowPlan(count, vacancies)
 	local slots, gaps = {}, {}
 	for i = 1, occupied + 1 do slots[i] = i end
 	while vacancies > 0 do
-		local size = math.random(2, math.min(4, vacancies))
+		-- Leave at most four empty seats for each remaining gap.
+		local minSize = math.max(2, vacancies - 4 * (#slots - 1))
+		local size = math.random(minSize, math.min(4, vacancies))
 		if vacancies - size == 1 then
 			size = vacancies <= 4 and vacancies or size - 1
 		end
@@ -381,7 +383,7 @@ function CoruscantEntertainmentScreenPlay:populateOperaAuditorium()
 	if rows == nil then return end
 	local publicCount = 0
 	for _, row in ipairs(rows) do publicCount = publicCount + #row end
-	local target = math.floor((publicCount + boxCount) * 0.325 + 0.5)
+	local target = math.floor((publicCount + boxCount) * 0.218 + 0.5)
 	local cellID = self.operaPerformanceHallCellID
 	local pCell = getSceneObject(cellID)
 	local seatedPlayers = {}
