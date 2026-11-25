@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_projection_beacon = object_static_structure_coruscant_shared_monument_projection_beacon:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_projection_beacon, "object/static/structure/coruscant/monument_projection_beacon.iff")

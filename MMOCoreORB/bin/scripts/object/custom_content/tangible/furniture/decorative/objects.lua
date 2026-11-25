@@ -1067,6 +1067,11 @@ object_tangible_furniture_decorative_shared_yr_2_cor_vette = SharedTangibleObjec
 }
 
 ObjectTemplates:addClientTemplate(object_tangible_furniture_decorative_shared_yr_2_cor_vette, "object/tangible/furniture/decorative/shared_yr_2_cor_vette.iff")
+
+object_tangible_furniture_decorative_shared_umate_pocket_holo = SharedTangibleObjectTemplate:new {
+	clientTemplateFileName = "object/tangible/furniture/decorative/shared_umate_pocket_holo.iff",
+}
+ObjectTemplates:addClientTemplate(object_tangible_furniture_decorative_shared_umate_pocket_holo, "object/tangible/furniture/decorative/shared_umate_pocket_holo.iff")
 ------------------------------------------------------------------------------------------------------------------------------------
 
 

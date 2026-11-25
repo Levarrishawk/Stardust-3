@@ -367,6 +367,7 @@ includeFile("conversations/misc/city_authority_sentence_officer_conv.lua")
 includeFile("conversations/misc/imperial_palace_liaison_officer_conv.lua")
 includeFile("conversations/misc/entertainment_district_taxi_conv.lua")
 includeFile("conversations/misc/opera_house_staff_conv.lua")
+includeFile("conversations/misc/monument_square_conv.lua")
 
 -- Junk Dealers
 includeFile("conversations/junk_dealer/junk_dealer_generic_conv.lua")

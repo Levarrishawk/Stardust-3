@@ -46,6 +46,7 @@
 includeFile("tangible/food/bartender_drinks/serverobjects.lua")
 includeFile("tangible/food/base/serverobjects.lua")
 includeFile("tangible/food/crafted/serverobjects.lua")
+includeFile("tangible/food/monument_square.lua")
 includeFile("tangible/food/creature_bio_effects/serverobjects.lua")
 includeFile("tangible/food/foraged/serverobjects.lua")
 includeFile("tangible/food/spice/serverobjects.lua")

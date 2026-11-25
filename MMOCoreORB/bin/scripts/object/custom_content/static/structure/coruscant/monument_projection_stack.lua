@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_projection_stack = object_static_structure_coruscant_shared_monument_projection_stack:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_projection_stack, "object/static/structure/coruscant/monument_projection_stack.iff")

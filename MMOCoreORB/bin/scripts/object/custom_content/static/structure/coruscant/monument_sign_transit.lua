@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_sign_transit = object_static_structure_coruscant_shared_monument_sign_transit:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_sign_transit, "object/static/structure/coruscant/monument_sign_transit.iff")

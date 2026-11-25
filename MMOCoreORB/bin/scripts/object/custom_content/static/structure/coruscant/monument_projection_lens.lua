@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_projection_lens = object_static_structure_coruscant_shared_monument_projection_lens:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_projection_lens, "object/static/structure/coruscant/monument_projection_lens.iff")

@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_concourse_kiosk = object_static_structure_coruscant_shared_monument_concourse_kiosk:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_concourse_kiosk, "object/static/structure/coruscant/monument_concourse_kiosk.iff")

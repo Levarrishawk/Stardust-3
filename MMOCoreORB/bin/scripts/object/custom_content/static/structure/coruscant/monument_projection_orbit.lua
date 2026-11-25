@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_projection_orbit = object_static_structure_coruscant_shared_monument_projection_orbit:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_projection_orbit, "object/static/structure/coruscant/monument_projection_orbit.iff")

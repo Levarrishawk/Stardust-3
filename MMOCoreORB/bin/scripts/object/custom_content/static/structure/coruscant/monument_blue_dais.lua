@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_blue_dais = object_static_structure_coruscant_shared_monument_blue_dais:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_blue_dais, "object/static/structure/coruscant/monument_blue_dais.iff")

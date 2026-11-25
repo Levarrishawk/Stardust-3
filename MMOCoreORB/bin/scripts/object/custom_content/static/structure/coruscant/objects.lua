@@ -402,3 +402,58 @@ object_static_structure_coruscant_shared_monument_promenade = SharedStaticObject
 	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_promenade.iff"
 }
 ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_promenade, "object/static/structure/coruscant/shared_monument_promenade.iff")
+
+object_static_structure_coruscant_shared_monument_rotunda_gallery = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_rotunda_gallery.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_rotunda_gallery, "object/static/structure/coruscant/shared_monument_rotunda_gallery.iff")
+
+object_static_structure_coruscant_shared_monument_lantern_tower = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_lantern_tower.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_lantern_tower, "object/static/structure/coruscant/shared_monument_lantern_tower.iff")
+
+object_static_structure_coruscant_shared_monument_blue_dais = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_blue_dais.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_blue_dais, "object/static/structure/coruscant/shared_monument_blue_dais.iff")
+
+object_static_structure_coruscant_shared_monument_concourse_kiosk = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_concourse_kiosk.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_concourse_kiosk, "object/static/structure/coruscant/shared_monument_concourse_kiosk.iff")
+
+object_static_structure_coruscant_shared_monument_projection_beacon = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_projection_beacon.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_projection_beacon, "object/static/structure/coruscant/shared_monument_projection_beacon.iff")
+
+object_static_structure_coruscant_shared_monument_projection_lens = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_projection_lens.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_projection_lens, "object/static/structure/coruscant/shared_monument_projection_lens.iff")
+
+object_static_structure_coruscant_shared_monument_projection_stack = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_projection_stack.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_projection_stack, "object/static/structure/coruscant/shared_monument_projection_stack.iff")
+
+object_static_structure_coruscant_shared_monument_projection_orbit = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_projection_orbit.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_projection_orbit, "object/static/structure/coruscant/shared_monument_projection_orbit.iff")
+
+object_static_structure_coruscant_shared_monument_sign_plaza = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_sign_plaza.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_sign_plaza, "object/static/structure/coruscant/shared_monument_sign_plaza.iff")
+
+object_static_structure_coruscant_shared_monument_sign_transit = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_sign_transit.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_sign_transit, "object/static/structure/coruscant/shared_monument_sign_transit.iff")
+
+object_static_structure_coruscant_shared_monument_sign_spire = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_sign_spire.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_sign_spire, "object/static/structure/coruscant/shared_monument_sign_spire.iff")

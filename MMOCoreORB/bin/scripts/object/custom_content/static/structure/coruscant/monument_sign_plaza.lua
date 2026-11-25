@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_sign_plaza = object_static_structure_coruscant_shared_monument_sign_plaza:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_sign_plaza, "object/static/structure/coruscant/monument_sign_plaza.iff")

@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_rotunda_gallery = object_static_structure_coruscant_shared_monument_rotunda_gallery:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_rotunda_gallery, "object/static/structure/coruscant/monument_rotunda_gallery.iff")
