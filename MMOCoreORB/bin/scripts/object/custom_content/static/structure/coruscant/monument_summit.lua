@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_summit = object_static_structure_coruscant_shared_monument_summit:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_summit, "object/static/structure/coruscant/monument_summit.iff")

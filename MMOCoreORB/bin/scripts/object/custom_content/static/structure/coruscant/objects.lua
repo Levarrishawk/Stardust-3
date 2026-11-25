@@ -387,3 +387,18 @@ object_static_structure_coruscant_shared_ent_oola_projector = SharedStaticObject
 	clientTemplateFileName = "object/static/structure/coruscant/shared_ent_oola_projector.iff"
 }
 ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_ent_oola_projector, "object/static/structure/coruscant/shared_ent_oola_projector.iff")
+
+object_static_structure_coruscant_shared_monument_summit = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_summit.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_summit, "object/static/structure/coruscant/shared_monument_summit.iff")
+
+object_static_structure_coruscant_shared_monument_pavilion = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_pavilion.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_pavilion, "object/static/structure/coruscant/shared_monument_pavilion.iff")
+
+object_static_structure_coruscant_shared_monument_promenade = SharedStaticObjectTemplate:new {
+	clientTemplateFileName = "object/static/structure/coruscant/shared_monument_promenade.iff"
+}
+ObjectTemplates:addClientTemplate(object_static_structure_coruscant_shared_monument_promenade, "object/static/structure/coruscant/shared_monument_promenade.iff")

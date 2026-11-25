@@ -119,3 +119,6 @@ includeFile("custom_content/static/structure/coruscant/ent_loading_house.lua")
 includeFile("custom_content/static/structure/coruscant/ent_junction_pier.lua")
 
 includeFile("custom_content/static/structure/coruscant/ent_oola_projector.lua")
+includeFile("custom_content/static/structure/coruscant/monument_summit.lua")
+includeFile("custom_content/static/structure/coruscant/monument_pavilion.lua")
+includeFile("custom_content/static/structure/coruscant/monument_promenade.lua")

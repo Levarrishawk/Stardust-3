@@ -1,0 +1,3 @@
+object_static_structure_coruscant_monument_promenade = object_static_structure_coruscant_shared_monument_promenade:new {
+}
+ObjectTemplates:addTemplate(object_static_structure_coruscant_monument_promenade, "object/static/structure/coruscant/monument_promenade.iff")
