@@ -69,6 +69,11 @@ public:
 				}
 			}
 
+			if (cellParent != nullptr && creature->isPlayerCreature() && isOccupiedOperaSeat(cellParent, position.getPoint())) {
+				creature->sendSystemMessage("That seat is occupied.");
+				return GENERALERROR;
+			}
+
 			auto ghost = creature->getPlayerObject();
 
 			if (ghost != nullptr && ghost->isTeleporting()) {
@@ -97,6 +102,29 @@ public:
 		creature->setQueueCommandDeltaTime(commandName, "setPosture");
 		creature->setPosture(CreaturePosture::SITTING);
 		return SUCCESS;
+	}
+private:
+	static bool isOccupiedOperaSeat(CellObject* cell, const Vector3& position) {
+		if (cell->getCellNumber() != 2)
+			return false;
+
+		auto building = cell->getParent().get();
+		if (building == nullptr || building->getClientObjectCRC() != STRING_HASHCODE("object/building/coruscant/shared_galaxies_opera_house.iff"))
+			return false;
+
+		VectorMap<uint64, ManagedReference<SceneObject*> > contents;
+		cell->getContainerObjects(contents);
+		for (int i = 0; i < contents.size(); ++i) {
+			auto object = contents.elementAt(i).getValue();
+			if (object == nullptr || !object->isAiAgent())
+				continue;
+
+			auto patron = object->asCreatureObject();
+			// Chair requests carry the chair origin. A patron sits 0.43 m forward at its foot hardpoint.
+			if (patron != nullptr && patron->hasState(CreatureState::SITTINGONCHAIR) && patron->getPosition().squaredDistanceTo(position) < 0.55f * 0.55f)
+				return true;
+		}
+		return false;
 	}
 };
 

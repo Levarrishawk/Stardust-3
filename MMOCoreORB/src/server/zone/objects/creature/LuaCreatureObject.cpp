@@ -7,6 +7,7 @@
 
 #include "LuaCreatureObject.h"
 #include "server/zone/objects/creature/CreatureObject.h"
+#include "server/zone/packets/player/PlayMusicMessage.h"
 #include "server/zone/objects/creature/ai/DroidObject.h"
 #include "server/zone/objects/cell/CellObject.h"
 #include "server/zone/objects/player/sessions/ConversationSession.h"
@@ -34,6 +35,7 @@ Luna<LuaCreatureObject>::RegType LuaCreatureObject::Register[] = {
 		{ "sendSystemMessageWithTO", &LuaCreatureObject::sendSystemMessageWithTO },
 		{ "sendGroupMessage", &LuaCreatureObject::sendGroupMessage },
 		{ "playMusicMessage", &LuaCreatureObject::playMusicMessage },
+		{ "playBackgroundMusic", &LuaCreatureObject::playBackgroundMusic },
 		{ "sendNewbieTutorialRequest", &LuaCreatureObject::sendNewbieTutorialRequest },
 		{ "hasScreenPlayState", &LuaCreatureObject::hasScreenPlayState },
 		{ "setScreenPlayState", &LuaCreatureObject::setScreenPlayState },
@@ -448,6 +450,13 @@ int LuaCreatureObject::playMusicMessage(lua_State *L) {
 	String value = lua_tostring(L, -1);
 	realObject->playMusicMessage(value);
 
+	return 0;
+}
+
+int LuaCreatureObject::playBackgroundMusic(lua_State* L) {
+	// Play type zero selects the music channel, independent of scripted sound effects.
+	const String file = luaL_checkstring(L, -1);
+	realObject->sendMessage(new PlayMusicMessage(file, 0, 0));
 	return 0;
 }
 

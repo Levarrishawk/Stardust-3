@@ -39,6 +39,7 @@ namespace creature {
 		int sendSystemMessageWithTT(lua_State* L);
 		int sendGroupMessage(lua_State* L);
 		int playMusicMessage(lua_State *L);
+		int playBackgroundMusic(lua_State* L);
 		int sendNewbieTutorialRequest(lua_State *L);
 		int hasScreenPlayState(lua_State *L);
 		int setScreenPlayState(lua_State *L);

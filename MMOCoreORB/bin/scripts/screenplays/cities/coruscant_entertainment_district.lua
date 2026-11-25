@@ -47,13 +47,13 @@ function CoruscantEntertainmentScreenPlay:start()
 		self:spawnMobiles()
 		self:spawnSceneObjects()
 		self:spawnBackstageDoor()
-		self:spawnOperaSeating()
+		self:populateOperaAuditorium()
 		self:spawnOperaHouseStaff()
 		self:spawnTaxiDrivers()
 		self:spawnMountedSwoopPatrol()
 		self:spawnPalaceMusicAreas()
 		-- World-space bounds of the rooftop auditorium, including the private box.
-		self:spawnPalaceMusicRectangle("Opera Auditorium", self.operaPerformanceHallCellID, 1965, -4511, 2016, -4457, 594, "enteredOperaAuditorium", "exitedPalaceMusicArea")
+		self:spawnPalaceMusicRectangle("Opera Auditorium", self.operaPerformanceHallCellID, 1965, -4511, 2016, -4457, 594, "enteredOperaAuditorium", "exitedOperaAuditorium")
 	end
 end
 
@@ -201,6 +201,7 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 	local chairTemplate = "object/tangible/furniture/plain/plain_chair_s01.iff"
 	local cell = SceneObject(pCell)
 	local seats = {}
+	local rows = {}
 	local function seatKey(x, z, y)
 		return string.format("%d/%d/%d", math.floor(x * 100 + 0.5), math.floor(z * 100 + 0.5), math.floor(y * 100 + 0.5))
 	end
@@ -267,6 +268,8 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 		local previousRow, previousSeat = 1, 1
 		local sectors = first == 49 and 14 or 13
 		for row, count in ipairs(seatsPerRow) do
+			local chairs = {}
+			rows[#rows + 1] = chairs
 			local radius = 0.245 + pitch * (row - 1 + 1.18)
 			local height = -2.5 + 5.5 * row / 7
 			for seat = 1, count do
@@ -292,6 +295,7 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 				if not placeChair(x, height, y, heading, oldX, -3.6 + 6.6 * oldRow / 7, oldY, previousX, previousHeight, previousY) then
 					return
 				end
+				chairs[seat] = {chair = seats[seatKey(x, height, y)], heading = heading}
 				index = index + 1
 				previousSeat = previousSeat + 1
 				if previousSeat > previousCounts[previousRow] then
@@ -301,7 +305,8 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 		end
 	end
 
-	for _, x in ipairs({-2.25, 0, 2.25}) do
+	local boxSeats = {-2.25, 0, 2.25}
+	for _, x in ipairs(boxSeats) do
 		-- The middle seat's original position lies on the join of two floor sectors.
 		local seatX = x == 0 and 0.28 or x
 		local priorY = centerY + 23.15
@@ -311,6 +316,93 @@ function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
 		if not placeChair(seatX, 3, centerY + 24.35, math.pi, x, 3, centerY + 20.8, x, 3, priorY) then
 			return
 		end
+	end
+	return rows, #boxSeats
+end
+
+-- Pick gaps between occupied seats. Unique slots guarantee at least one patron
+-- between parties, and no party can straddle a stair aisle or a row boundary.
+local function operaRowPlan(count, vacancies)
+	local occupied = count - vacancies
+	local slots, gaps = {}, {}
+	for i = 1, occupied + 1 do slots[i] = i end
+	while vacancies > 0 do
+		local size = math.random(2, math.min(4, vacancies))
+		if vacancies - size == 1 then
+			size = vacancies <= 4 and vacancies or size - 1
+		end
+		local slot = table.remove(slots, math.random(#slots))
+		gaps[slot] = size
+		vacancies = vacancies - size
+	end
+
+	local row = {}
+	for i = 1, occupied + 1 do
+		row[#row + 1] = string.rep(".", gaps[i] or 0)
+		if i <= occupied then row[#row + 1] = "P" end
+	end
+	return table.concat(row)
+end
+
+local operaChairState = SITTINGONCHAIR or 0x80000 -- CreatureState::SITTINGONCHAIR in Core3.
+
+local function seatOperaPatron(seat, key, cellID, seatedPlayers)
+	if getSceneObject(readData(key)) ~= nil then return true end
+	for _, pPlayer in ipairs(seatedPlayers) do
+		if SceneObject(pPlayer):getDistanceTo3d(seat.chair) < 0.55 then return false end
+	end
+
+	-- Late arrivals get the actor's position in its baseline. Put its feet at
+	-- the chair's foot hardpoint so the pose matches a live sit notification.
+	local chair = SceneObject(seat.chair)
+	local footOffset = 0.431483
+	local x = chair:getPositionX() + math.sin(seat.heading) * footOffset
+	local y = chair:getPositionY() + math.cos(seat.heading) * footOffset
+	local pPatron = spawnMobile("coruscant", "opera_house_patron", 0, x, chair:getPositionZ(), y, math.deg(seat.heading), cellID)
+	if pPatron == nil then return false end
+	AiAgent(pPatron):addObjectFlag(AI_STATIONARY)
+	CreatureObject(pPatron):setState(operaChairState)
+	writeData(key, SceneObject(pPatron):getObjectID())
+	return true
+end
+
+function CoruscantEntertainmentScreenPlay:populateOperaAuditorium()
+	local rows, boxCount = self:spawnOperaSeating()
+	if rows == nil then return end
+	local publicCount = 0
+	for _, row in ipairs(rows) do publicCount = publicCount + #row end
+	local target = math.floor((publicCount + boxCount) * 0.65 + 0.5)
+	local cellID = self.operaPerformanceHallCellID
+	local cell = SceneObject(getSceneObject(cellID))
+	local seatedPlayers = {}
+	for i = 0, cell:getContainerObjectsSize() - 1 do
+		local pObj = cell:getContainerObject(i)
+		if pObj ~= nil and SceneObject(pObj):isPlayerCreature() and CreatureObject(pObj):hasState(operaChairState) == 1 then
+			seatedPlayers[#seatedPlayers + 1] = pObj
+		end
+	end
+
+	local totalSeats, assigned, missing = 0, 0, 0
+	for rowIndex, row in ipairs(rows) do
+		totalSeats = totalSeats + #row
+		local nextAssigned = math.floor(totalSeats * target / publicCount + 0.5)
+		local rowKey = self.screenplayName .. ":operaAudience:" .. rowIndex
+		local plan = readStringData(rowKey)
+		if plan == nil or #plan ~= #row then
+			plan = operaRowPlan(#row, #row - (nextAssigned - assigned))
+			writeStringData(rowKey, plan)
+		end
+		assigned = nextAssigned
+		for i, seat in ipairs(row) do
+			if plan:sub(i, i) == "P" and not seatOperaPatron(seat, rowKey .. ":" .. i, cellID, seatedPlayers) then
+				missing = missing + 1
+			end
+		end
+	end
+	if missing > 0 then
+		local pCell = getSceneObject(cellID)
+		cancelEvent(self.screenplayName, "populateOperaAuditorium", pCell)
+		createEvent(60000, self.screenplayName, "populateOperaAuditorium", pCell, "")
 	end
 end
 
@@ -361,9 +453,48 @@ function CoruscantEntertainmentScreenPlay:spawnCouncilChamberMusicArea()
 	createObserver(EXITEDAREA, self.screenplayName, "exitedPalaceMusicArea", pArea)
 end
 
-function CoruscantEntertainmentScreenPlay:enteredOperaAuditorium(pArea, pObject)
-	if (pObject ~= nil and SceneObject(pObject):isPlayerCreature()) then
-		CreatureObject(pObject):playMusicMessage("sound/mus_squidlake.snd")
+-- The installed 48 kHz MP3 contains 7,509 audio frames of 1,152 samples.
+-- Scripted music messages accept finite 2D sounds; repeat the original cue.
+local operaPerformanceMs = 180216
+
+local function operaMusicKey(pPlayer)
+	return string.format("CoruscantEntertainment:operaMusic:%.0f", SceneObject(pPlayer):getObjectID())
+end
+
+function CoruscantEntertainmentScreenPlay:enteredOperaAuditorium(pArea, pPlayer)
+	if pPlayer == nil or not SceneObject(pPlayer):isPlayerCreature() then return 0 end
+	local areaID = SceneObject(pArea):getObjectID()
+	if SceneObject(pPlayer):getParentID() ~= self.operaPerformanceHallCellID or not TangibleObject(pPlayer):hasActiveArea(areaID) then return 0 end
+
+	cancelEvent(self.screenplayName, "repeatOperaMusic", pPlayer)
+	local visit = getTimestampMilli()
+	writeData(operaMusicKey(pPlayer), visit)
+	CreatureObject(pPlayer):playBackgroundMusic("sound/mus_squidlake.snd")
+	createEvent(operaPerformanceMs, self.screenplayName, "repeatOperaMusic", pPlayer, string.format("%.0f/%.0f", areaID, visit))
+	return 0
+end
+
+function CoruscantEntertainmentScreenPlay:repeatOperaMusic(pPlayer, args)
+	if pPlayer == nil then return end
+	local areaID, visit = args:match("^(%d+)/(%d+)$")
+	local key = operaMusicKey(pPlayer)
+	if visit == nil or readData(key) ~= tonumber(visit) then return end
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if pGhost == nil or not PlayerObject(pGhost):isOnline() or SceneObject(pPlayer):getParentID() ~= self.operaPerformanceHallCellID
+		or not TangibleObject(pPlayer):hasActiveArea(tonumber(areaID)) then
+		deleteData(key)
+		return
+	end
+	CreatureObject(pPlayer):playBackgroundMusic("sound/mus_squidlake.snd")
+	createEvent(operaPerformanceMs, self.screenplayName, "repeatOperaMusic", pPlayer, args)
+end
+
+function CoruscantEntertainmentScreenPlay:exitedOperaAuditorium(pArea, pPlayer)
+	if pPlayer ~= nil and SceneObject(pPlayer):isPlayerCreature() then
+		if SceneObject(pPlayer):getParentID() == self.operaPerformanceHallCellID and TangibleObject(pPlayer):hasActiveArea(SceneObject(pArea):getObjectID()) then return 0 end
+		deleteData(operaMusicKey(pPlayer))
+		cancelEvent(self.screenplayName, "repeatOperaMusic", pPlayer)
+		CreatureObject(pPlayer):playBackgroundMusic("sound/music_silence.snd")
 	end
 	return 0
 end
