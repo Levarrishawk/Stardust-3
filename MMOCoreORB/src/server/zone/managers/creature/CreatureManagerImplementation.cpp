@@ -353,7 +353,7 @@ CreatureObject* CreatureManagerImplementation::spawnCreatureAsBaby(uint32 templa
 	return creO;
 }
 
-CreatureObject* CreatureManagerImplementation::spawnCreatureAsEventMob(uint32 templateCRC, int level, float x, float z, float y, uint64 parentID) {
+CreatureObject* CreatureManagerImplementation::spawnCreatureAsEventMob(uint32 templateCRC, int level, float x, float z, float y, uint64 parentID, bool screenplaySpawned) {
 	CreatureTemplate* creoTempl = creatureTemplateManager->getTemplate(templateCRC);
 
 	if (creoTempl == nullptr)
@@ -392,12 +392,13 @@ CreatureObject* CreatureManagerImplementation::spawnCreatureAsEventMob(uint32 te
 		}
 	}
 
+	creO->setScreenplaySpawned(screenplaySpawned);
 	placeCreature(creO, x, z, y, parentID);
 
 	return creO;
 }
 
-CreatureObject* CreatureManagerImplementation::spawnCreature(uint32 templateCRC, uint32 objectCRC, float x, float z, float y, uint64 parentID, bool persistent, float direction) {
+CreatureObject* CreatureManagerImplementation::spawnCreature(uint32 templateCRC, uint32 objectCRC, float x, float z, float y, uint64 parentID, bool persistent, float direction, bool screenplaySpawned) {
 	CreatureTemplate* creoTempl = creatureTemplateManager->getTemplate(templateCRC);
 
 	if (creoTempl == nullptr)
@@ -428,6 +429,7 @@ CreatureObject* CreatureManagerImplementation::spawnCreature(uint32 templateCRC,
 			agent->loadTemplateData(creoTempl);
 	}
 
+	creature->setScreenplaySpawned(screenplaySpawned);
 	placeCreature(creature, x, z, y, parentID, direction);
 
 	return creature;

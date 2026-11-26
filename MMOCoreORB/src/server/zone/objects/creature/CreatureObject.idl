@@ -227,6 +227,7 @@ class CreatureObject extends TangibleObject {
 	protected transient string alternateAppearance;
 
 	protected transient unsigned long spawnerID;
+	protected transient boolean screenplaySpawned;
 
 	public static final int HUMAN = 0;
 	public static final int RODIAN = 1;
@@ -260,6 +261,7 @@ class CreatureObject extends TangibleObject {
 	 */
 	public CreatureObject() {
 		Logger.setLoggingName("CreatureObject");
+		screenplaySpawned = false;
 
 		initializeMembers();
 	}
@@ -2073,6 +2075,19 @@ class CreatureObject extends TangibleObject {
 	@preLocked
 	public void setWatchToID(unsigned long id) {
 		watchToID = id;
+	}
+
+	// Set at spawn before the creature becomes visible to the zone.
+	@local
+	@dirty
+	public boolean isScreenplaySpawned() {
+		return screenplaySpawned;
+	}
+
+	@local
+	@preLocked
+	public void setScreenplaySpawned(boolean value) {
+		screenplaySpawned = value;
 	}
 
 	@dirty

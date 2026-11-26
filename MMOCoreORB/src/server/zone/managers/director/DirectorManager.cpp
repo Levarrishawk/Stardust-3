@@ -2712,7 +2712,7 @@ int DirectorManager::spawnMobile(lua_State* L) {
 	msg << "trying to spawn with mobile: " << mobile << " x:" << x;
 	DirectorManager::instance()->info(msg.toString(), true);*/
 
-	CreatureObject* creature = creatureManager->spawnCreature(mobile.hashCode(), 0, x, z, y, parentID, false, heading);
+	CreatureObject* creature = creatureManager->spawnCreature(mobile.hashCode(), 0, x, z, y, parentID, false, heading, true);
 
 	if (creature == nullptr) {
 		String err = "could not spawn mobile " + mobile;
@@ -2782,7 +2782,7 @@ int DirectorManager::spawnEventMobile(lua_State* L) {
 
 	CreatureManager* creatureManager = zone->getCreatureManager();
 
-	CreatureObject* creature = creatureManager->spawnCreatureAsEventMob(mobile.hashCode(), level, x, z, y, parentID);
+	CreatureObject* creature = creatureManager->spawnCreatureAsEventMob(mobile.hashCode(), level, x, z, y, parentID, true);
 
 	if (creature == nullptr) {
 		String err = "could not spawn mobile " + mobile;
@@ -3118,6 +3118,10 @@ int DirectorManager::spawnSceneObject(lua_State* L) {
 
 		object->initializePosition(x, z, y);
 		object->setDirection(dw, dx, dy, dz);
+
+		auto* creature = object->asCreatureObject();
+		if (creature != nullptr && !creature->isPlayerCreature())
+			creature->setScreenplaySpawned(true);
 
 		if (object->isBuildingObject()) {
 			BuildingObject* building = object->asBuildingObject();

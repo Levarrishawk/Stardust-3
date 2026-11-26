@@ -71,6 +71,17 @@ bool isNearbyPortalCell(CellObject* cell, CellObject* current, const CellPropert
 	return cell == current || (portalCell != nullptr && portalCell->hasConnectedCell(cell->getCellNumber()));
 }
 
+bool canWalkIntoCell(CellObject* cell, SceneObject* viewer) {
+	auto* creature = viewer->asCreatureObject();
+	return cell->getContainerPermissions()->hasInheritPermissionsFromParent() || creature == nullptr ||
+			cell->checkContainerPermission(creature, ContainerPermissions::WALKIN);
+}
+
+bool isScreenplayNpc(SceneObject* object) {
+	auto* creature = object->asCreatureObject();
+	return creature != nullptr && creature->isScreenplaySpawned();
+}
+
 }
 
 void BuildingObjectImplementation::initializeTransientMembers() {
@@ -200,25 +211,20 @@ void BuildingObjectImplementation::sendTo(SceneObject* player, bool doClose, boo
 	for (int i = 0; i < cells.size(); ++i) {
 		auto& cell = cells.get(i);
 
-		auto perms = cell->getContainerPermissions();
+		const bool canWalkIn = canWalkIntoCell(cell, player);
+		if (!canWalkIn)
+			player->sendMessage(new UpdateCellPermissionsMessage(cell->getObjectID(), false));
 
-		if (!perms->hasInheritPermissionsFromParent()) {
-			CreatureObject* creo = player->asCreatureObject();
-
-			if (creo != nullptr && !cell->checkContainerPermission(creo, ContainerPermissions::WALKIN)) {
-				BaseMessage* perm = new UpdateCellPermissionsMessage(cell->getObjectID(), false);
-				player->sendMessage(perm);
-			}
-		}
-
-		if (!cell->isContainerLoaded() || (streamedCell != nullptr && !isNearbyPortalCell(cell, streamedCell, portalCell)))
+		const bool nearby = streamedCell == nullptr || isNearbyPortalCell(cell, streamedCell, portalCell);
+		if (!cell->isContainerLoaded() || (!nearby && !canWalkIn))
 			continue;
 
-		for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
-			auto containerObject = cell->getContainerObject(j);
-			if (containerObject == nullptr) {
+		VectorMap<uint64, ManagedReference<SceneObject*> > contents;
+		cell->getContainerObjects(contents);
+		for (int j = 0; j < contents.size(); ++j) {
+			const auto& containerObject = contents.get(j);
+			if (containerObject == nullptr || (!nearby && !isScreenplayNpc(containerObject)))
 				continue;
-			}
 
 			if (containerObject == player) {
 				if (streamedCell == nullptr && containerObject->getMovementCounter() == 0) {
@@ -1198,15 +1204,30 @@ int BuildingObjectImplementation::notifyObjectInsertedToChild(SceneObject* objec
 
 				for (int i = 0; i < cells.size(); ++i) {
 					const auto& cell = cells.get(i);
-					if (!cell->isContainerLoaded() || !isNearbyPortalCell(cell, streamedCell, portalCell))
+					const bool nearby = isNearbyPortalCell(cell, streamedCell, portalCell);
+					// Distant screenplay NPCs are registered once when the player enters the scene.
+					if (!cell->isContainerLoaded() || (!nearby && previousCell != nullptr && !loadingScene))
+						continue;
+
+					const bool canWalkIn = canWalkIntoCell(cell, object);
+					if (!nearby && !canWalkIn)
 						continue;
 
 					// sendTo sends the initial contents after CmdStartScene, including on relog.
 					const bool sendContents = !loadingScene && !isNearbyPortalCell(cell, previousCell, previousPortalCell);
-					for (int j = 0; j < cell->getContainerObjectsSize(); ++j) {
-						auto cobj = cell->getContainerObject(j);
+					VectorMap<uint64, ManagedReference<SceneObject*> > contents;
+					cell->getContainerObjects(contents);
+					for (int j = 0; j < contents.size(); ++j) {
+						const auto& cobj = contents.get(j);
 						if (cobj == nullptr || cobj == object)
 							continue;
+
+						const bool buildingWide = canWalkIn && isScreenplayNpc(cobj);
+						if (!nearby && !buildingWide)
+							continue;
+
+						auto* knownObjects = object->getCloseObjects();
+						const bool alreadyRegistered = buildingWide && previousCell != nullptr && knownObjects != nullptr && knownObjects->contains(cobj.get());
 
 						if (cobj->getCloseObjects() != nullptr && !cobj->getCloseObjects()->contains(object)) {
 							cobj->addInRangeObject(object, false);
@@ -1214,7 +1235,7 @@ int BuildingObjectImplementation::notifyObjectInsertedToChild(SceneObject* objec
 						}
 
 						object->addInRangeObject(cobj, false);
-						if (sendContents)
+						if (sendContents && !alreadyRegistered)
 							cobj->sendTo(object, true, false);
 					}
 				}
