@@ -53,6 +53,7 @@ Core3 = {
 	------ORB Server Config------
 	ORB = "",
 	ORBPort = 44419,
+	AcceptBrokerPeers = 0, -- Single process: close incoming broker connections on accept.
 
 	------Main Database Config------
 	DBHost = "127.0.0.1",

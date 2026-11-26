@@ -322,6 +322,10 @@ namespace conf {
 			return getString("Core3.ORB", "");
 		}
 
+		inline bool getAcceptBrokerPeers() {
+			return getBool("Core3.AcceptBrokerPeers", true);
+		}
+
 		inline uint16 getORBNamingDirectoryPort() {
 			return getInt("Core3.ORBPort", 44419);
 		}

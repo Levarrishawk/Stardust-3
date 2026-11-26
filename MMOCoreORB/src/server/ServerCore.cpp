@@ -4,6 +4,7 @@
 
 #include "ServerCore.h"
 
+#include <cstdlib>
 #include <type_traits>
 
 #include "db/MySqlDatabase.h"
@@ -665,6 +666,20 @@ void ServerCore::initialize() {
 
 	registerConsoleCommmands();
 
+	const String& orbaddr = configManager->getORBNamingDirectoryAddress();
+	const uint16 orbPort = configManager->getORBNamingDirectoryPort();
+	const bool acceptBrokerPeers = configManager->getAcceptBrokerPeers();
+	if (!acceptBrokerPeers) {
+		// Claim the standalone port before opening the galaxy's object databases.
+		try {
+			orb = DistributedObjectBroker::initialize(orbaddr, orbPort, false);
+		} catch (const Exception& e) {
+			error() << "Single-process broker startup failed on TCP port " << orbPort << ": " << e.getMessage();
+			System::flushStreams();
+			std::_Exit(EXIT_FAILURE);
+		}
+	}
+
 	try {
 		ObjectManager* objectManager = ObjectManager::instance();
 
@@ -674,9 +689,8 @@ void ServerCore::initialize() {
 
 		mantisDatabase = new MantisDatabase(configManager);
 
-		const String& orbaddr = configManager->getORBNamingDirectoryAddress();
-		orb = DistributedObjectBroker::initialize(orbaddr,
-				configManager->getORBNamingDirectoryPort());
+		if (acceptBrokerPeers)
+			orb = DistributedObjectBroker::initialize(orbaddr, orbPort);
 
 		orb->setCustomObjectManager(objectManager);
 
