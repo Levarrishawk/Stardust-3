@@ -1,169 +1,72 @@
-# Find engine3
-#
-#  IDLC_BIN_DIR - where to find idlc
-#  ENGINE3_INCLUDE_DIR - where to find engine headers, etc.
-#  ENGINE3_LIBRARIES   - list of libraries when using engine3
-#  ENGINE3_FOUND       - true if engine3 found.
+# Core3 and Engine3 must use the same broker headers and implementation.
+# Prepare them in the build tree from Stardust's public submodule pin and its patch.
+find_package(Git REQUIRED)
 
-IF (ENGINE3_INCLUDE_DIR)
-  SET(ENGINE3_FIND_QUIETLY_INCLUDE TRUE)
-ENDIF (ENGINE3_INCLUDE_DIR)
+function(stardust_engine_git directory)
+  execute_process(COMMAND "${GIT_EXECUTABLE}" -C "${directory}" ${ARGN}
+    RESULT_VARIABLE result ERROR_VARIABLE detail)
+  if(NOT result EQUAL 0)
+    message(FATAL_ERROR "Preparing Stardust Engine3 failed in ${directory}: ${detail}")
+  endif()
+endfunction()
 
-IF (IDLC_BIN_DIR)
-  SET(ENGINE3_FIND_QUIETLY_IDLC_BIN TRUE)
-ENDIF (IDLC_BIN_DIR)
+function(stardust_prepare_engine3 output)
+  set(patch "${CMAKE_CURRENT_LIST_DIR}/../patches/engine3-broker.patch")
+  set(item "utils/engine3")
+  execute_process(COMMAND "${GIT_EXECUTABLE}" -C "${CMAKE_CURRENT_SOURCE_DIR}"
+    rev-parse --verify ":./${item}" RESULT_VARIABLE result
+    OUTPUT_VARIABLE revision OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if(NOT result EQUAL 0 OR NOT revision MATCHES "^[0-9a-f]+$")
+    message(FATAL_ERROR "Cannot read the Engine3 submodule pin from the Stardust Git checkout")
+  endif()
+  execute_process(COMMAND "${GIT_EXECUTABLE}" -C "${CMAKE_CURRENT_SOURCE_DIR}" rev-parse --git-path index
+    OUTPUT_VARIABLE git_index OUTPUT_STRIP_TRAILING_WHITESPACE)
+  get_filename_component(git_index "${git_index}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${git_index}" "${patch}")
 
-IF (ENGINE3_LIBRARY)
-  SET(ENGINE3_FIND_QUIETLY_LIB TRUE)
-ENDIF (ENGINE3_LIBRARY)
+  file(SHA256 "${patch}" patch_hash)
+  string(SUBSTRING "${patch_hash}" 0 12 patch_id)
+  string(SUBSTRING "${revision}" 0 12 revision_id)
+  set(tree "${CMAKE_CURRENT_BINARY_DIR}/_deps/engine3-${revision_id}-${patch_id}")
+  file(MAKE_DIRECTORY "${tree}")
+  file(LOCK "${tree}/prepare.lock" GUARD FUNCTION TIMEOUT 180)
+  if(NOT EXISTS "${tree}/prepared")
+    set(source "${CMAKE_CURRENT_SOURCE_DIR}/${item}")
+    set(have_pin 1)
+    if(EXISTS "${source}/.git")
+      execute_process(COMMAND "${GIT_EXECUTABLE}" -C "${source}" cat-file -e "${revision}^{commit}"
+        RESULT_VARIABLE have_pin ERROR_QUIET)
+    endif()
+    if(NOT have_pin EQUAL 0)
+      execute_process(COMMAND "${GIT_EXECUTABLE}" config -f "${CMAKE_CURRENT_SOURCE_DIR}/../.gitmodules"
+        --get submodule.MMOCoreORB/utils/engine3.url RESULT_VARIABLE result
+        OUTPUT_VARIABLE source OUTPUT_STRIP_TRAILING_WHITESPACE)
+      if(NOT result EQUAL 0)
+        message(FATAL_ERROR "Cannot find the Engine3 URL in Stardust's .gitmodules")
+      endif()
+    endif()
 
-FIND_PATH(IDLC_BIN_DIR idlc.jar
-  /opt/engine3/bin
-  /opt/engine3pub/bin
-  ../MMOEngine/lib
-  ../MMOEngine/bin
-  ../../engine3/MMOEngine/lib
-  ../../engine3/MMOEngine/bin
-  ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/MMOEngine/bin
-  ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/MMOEngine/lib
-  NO_DEFAULT_PATH
-)
+    message(STATUS "Preparing Stardust broker patch on Engine3 ${revision_id}")
+    stardust_engine_git("${tree}" init --quiet)
+    stardust_engine_git("${tree}" config core.autocrlf false)
+    stardust_engine_git("${tree}" config core.eol lf)
+    stardust_engine_git("${tree}" fetch --quiet --no-tags --depth=1 --update-shallow "${source}" "${revision}")
+    stardust_engine_git("${tree}" checkout --quiet --force --detach "${revision}")
+    stardust_engine_git("${tree}" apply --whitespace=nowarn "${patch}")
+    file(WRITE "${tree}/prepared" "${revision}\n${patch_hash}\n")
+  endif()
+  set(${output} "${tree}" PARENT_SCOPE)
+endfunction()
 
-FIND_PATH(ENGINE3_INCLUDE_DIR engine/engine.h
-  /opt/engine3/include
-  /opt/engine3pub/include
-  ../MMOEngine/src
-  ../MMOEngine/include
-  ../../engine3/MMOEngine/src
-  ../../engine3/MMOEngine/include
-  ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/MMOEngine/include
-  ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/MMOEngine/src
-  NO_DEFAULT_PATH
-)
+stardust_prepare_engine3(stardust_engine_tree)
+set(ENGINE3_INCLUDE_DIR "${stardust_engine_tree}/MMOEngine/src")
+set(IDLC_BIN_DIR "${stardust_engine_tree}/MMOEngine/lib")
+set(IDL_DIRECTIVES -outdir autogen -cp "${ENGINE3_INCLUDE_DIR}")
+set(IDLC_JAVA_ARGS -XX:TieredStopAtLevel=1 -client -Xmx128M -cp "${IDLC_BIN_DIR}/idlc.jar" org.sr.idlc.compiler.Compiler)
 
-SET(ENGINE3_NAMES engine3)
-
-FIND_LIBRARY(ENGINE3_LIBRARY
-	NAMES ${ENGINE3_NAMES}
-	PATHS ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/MMOEngine/lib/unix /opt/engine3/lib /opt/engine3pub/lib ../MMOEngine/lib/unix ../MMOEngine/lib/linux64 ../../engine3/MMOEngine/lib/unix ../MMOEngine/lib/osx)
-
-FIND_LIBRARY(ENGINE3_ASAN_LIBRARY
-	NAMES engine3-asan
-	PATHS ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/MMOEngine/lib/unix /opt/engine3/lib /opt/engine3pub/lib ../MMOEngine/lib/unix  ../MMOEngine/lib/linux64 ../../engine3/MMOEngine/lib/unix)
-
-FIND_LIBRARY(ENGINE3_TSAN_LIBRARY
-	NAMES engine3-tsan
-	PATHS ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/unix /opt/engine3/lib /opt/engine3pub/lib ../MMOEngine/lib/unix  ../MMOEngine/lib/linux64 ../../engine3/MMOEngine/lib/unix)
-
-FIND_LIBRARY(ENGINE3_UBSAN_LIBRARY
-	NAMES engine3-ubsan
-	PATHS ${CMAKE_CURRENT_SOURCE_DIR_DIR}/utils/engine3/unix /opt/engine3/lib /opt/engine3pub/lib ../MMOEngine/lib/unix  ../MMOEngine/lib/linux64 ../../engine3/MMOEngine/lib/unix)
-
-IF (IDLC_BIN_DIR AND ENGINE3_INCLUDE_DIR AND ENGINE3_LIBRARY AND ENGINE3_ASAN_LIBRARY AND ENGINE3_TSAN_LIBRARY AND ENGINE3_UBSAN_LIBRARY)
-  IF (ENABLE_ASAN)
-	  SET(ENGINE3_LIBRARIES ${ENGINE3_ASAN_LIBRARY})
-  ELSEIF (ENABLE_TSAN)
-	  SET(ENGINE3_LIBRARIES ${ENGINE3_TSAN_LIBRARY})
-  ELSEIF (ENABLE_UBSAN)
-	  SET(ENGINE3_LIBRARIES ${ENGINE3_UBSAN_LIBRARY})
-  ELSE ()
-  	  SET(ENGINE3_LIBRARIES ${ENGINE3_LIBRARY})
-  ENDIF()
-  SET(ENGINE3_FOUND TRUE)
-  SET(IDL_DIRECTIVES -outdir autogen -cp ${ENGINE3_INCLUDE_DIR})
-
-  ADD_LIBRARY(engine3 STATIC IMPORTED GLOBAL)
-
-  SET_TARGET_PROPERTIES(engine3 PROPERTIES
-	  IMPORTED_LOCATION_DEBUG ${ENGINE3_LIBRARIES}
-	  IMPORTED_INCLUDE_DIRECTORIES ${ENGINE3_INCLUDE_DIR}
-	  IMPORTED_LOCATION_RELEASE ${ENGINE3_LIBRARIES}
-	  IMPORTED_LOCATION ${ENGINE3_LIBRARIES}
-	  INTERFACE_INCLUDE_DIRECTORIES ${ENGINE3_INCLUDE_DIR}
-	  )
-ELSE ()
-  SET(ENGINE3_FOUND FALSE)
-  SET(ENGINE3_LIBRARIES)
-  SET(IDL_DIRECTIVES)
-ENDIF ()
-
-SET(ENGINE3_DOWNLOAD FALSE)
-
-IF (ENGINE3_FOUND)
-  IF (NOT ENGINE3_FIND_QUIETLY_INCLUDE)
-    MESSAGE(STATUS "Found engine3 includes: ${ENGINE3_INCLUDE_DIR}")
-  ENDIF (NOT ENGINE3_FIND_QUIETLY_INCLUDE)
-
-  IF (NOT ENGINE3_FIND_QUIETLY_LIB)
-    MESSAGE(STATUS "Found engine3 library: ${ENGINE3_LIBRARIES}")
-  ENDIF (NOT ENGINE3_FIND_QUIETLY_LIB)
-
-  IF (NOT ENGINE3_FIND_QUIETLY_IDLC_BIN)
-    MESSAGE(STATUS "Found idlc.jar in: ${IDLC_BIN_DIR}")
-  ENDIF(NOT ENGINE3_FIND_QUIETLY_IDLC_BIN)
-
-ELSE (ENGINE3_FOUND)
-  IF (Engine3_FIND_REQUIRED)
-
-    IF (NOT GIT_FOUND)
-  	MESAGE(FATAL_ERROR "Could not find engine3 library")
-    ENDIF()
-
-    MESSAGE(STATUS "Using engine3 git submodule")
-
-    IF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine")
-        MESSAGE(STATUS "Initializing git submodules")
-
-        EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-		    RESULT_VARIABLE GIT_RESULT)
-    ENDIF()
-
-    IF (GIT_RESULT)
-	    MESSAGE(FATAL_ERROR "Could NOT download engine3 git submodule")
-    ENDIF()
-
-    SET(OLD_CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR})
-    SET(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine)
-
-    ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine)
-
-    SET(CMAKE_SOURCE_DIR ${OLD_CMAKE_SOURCE_DIR})
-
-    SET(ENGINE3_UBSAN_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine/lib/unix/libengine3-ubsan.a)
-    SET(ENGINE3_TSAN_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine/lib/unix/libengine3-tsan.a)
-    SET(ENGINE3_ASAN_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine/lib/unix/libengine3-asan.a)
-    SET(ENGINE3_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine/lib/unix/libengine3.a)
-    SET(ENGINE3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine/src)
-    SET(IDLC_BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/utils/engine3/MMOEngine/lib)
-
-    IF (ENABLE_ASAN)
-	    SET(ENGINE3_LIBRARIES ${ENGINE3_ASAN_LIBRARY})
-    ELSEIF (ENABLE_TSAN)
-	    SET(ENGINE3_LIBRARIES ${ENGINE3_TSAN_LIBRARY})
-    ELSEIF (ENABLE_UBSAN)
-	    SET(ENGINE3_LIBRARIES ${ENGINE3_UBSAN_LIBRARY})
-    ELSE ()
-	    SET(ENGINE3_LIBRARIES ${ENGINE3_LIBRARY})
-    ENDIF()
-
-    SET(IDL_DIRECTIVES -outdir autogen -cp ${ENGINE3_INCLUDE_DIR})
-
-    SET(ENGINE3_DOWNLOAD TRUE)
-    SET(ENGINE3_FOUND TRUE)
-
-  ENDIF (Engine3_FIND_REQUIRED)
-ENDIF (ENGINE3_FOUND)
-
-SET(IDLC_JAVA_ARGS -XX:TieredStopAtLevel=1 -client -Xmx128M -cp ${IDLC_BIN_DIR}/idlc.jar org.sr.idlc.compiler.Compiler)
-
-MARK_AS_ADVANCED(
-  IDLC_BIN_DIR
-  ENGINE3_LIBRARY
-  ENGINE3_INCLUDE_DIR
-  ENGINE3_TSAN_LIBRARY
-  ENGINE3_UBSAN_LIBRARY
-  ENGINE3_ASAN_LIBRARY
-)
-
-
+set(saved_source_dir "${CMAKE_SOURCE_DIR}")
+set(CMAKE_SOURCE_DIR "${stardust_engine_tree}/MMOEngine")
+add_subdirectory("${CMAKE_SOURCE_DIR}" "${stardust_engine_tree}/cmake-build")
+set(CMAKE_SOURCE_DIR "${saved_source_dir}")
+set(ENGINE3_LIBRARIES engine3)
+set(ENGINE3_FOUND TRUE)

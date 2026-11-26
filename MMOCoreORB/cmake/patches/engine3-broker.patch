@@ -1,0 +1,201 @@
+diff --git a/MMOEngine/src/engine/orb/DistributedObjectBroker.cpp b/MMOEngine/src/engine/orb/DistributedObjectBroker.cpp
+index 670a7ea..a58dfb4 100755
+--- a/MMOEngine/src/engine/orb/DistributedObjectBroker.cpp
++++ b/MMOEngine/src/engine/orb/DistributedObjectBroker.cpp
+@@ -48,19 +48,33 @@ DistributedObjectBroker::~DistributedObjectBroker() {
+ }
+ 
+ DistributedObjectBroker* DistributedObjectBroker::initialize(const String& addr, int port) {
++	return initialize(addr, port, true);
++}
++
++DistributedObjectBroker* DistributedObjectBroker::initialize(const String& addr, int port, bool acceptBrokerPeers) {
++	if (!acceptBrokerPeers && !addr.isEmpty())
++		throw ServiceException("Single-process broker mode requires an empty root broker address");
++
+ 	DistributedObjectBroker* inst = DistributedObjectBroker::instance();
+ 	inst->address = addr;
+ 	inst->port = port;
++	inst->setHandler(new DOBServiceHandler(acceptBrokerPeers));
+ 
+ 	try {
+ 		if (addr.isEmpty())
+ 			inst->start(port);
+ 	} catch (const Exception& e) {
++		if (!acceptBrokerPeers)
++			throw;
++
+ 		inst->address = "127.0.0.1";
+ 	}
+ 
+ 	inst->initialize();
+ 
++	if (inst->address.isEmpty())
++		inst->info(true) << "Incoming broker peers " << (acceptBrokerPeers ? "enabled" : "disabled") << " on TCP port " << port;
++
+ 	return inst;
+ }
+ 
+@@ -79,8 +93,8 @@ void DistributedObjectBroker::initialize() {
+ 
+ 	namingDirectoryService = new NamingDirectoryService();
+ 
+-	DOBServiceHandler* serviceHandler = new DOBServiceHandler();
+-	setHandler(serviceHandler);
++	if (serviceHandler == nullptr)
++		setHandler(new DOBServiceHandler());
+ 
+ 	objectManager = nullptr; //new DOBObjectManager();
+ 
+diff --git a/MMOEngine/src/engine/orb/DistributedObjectBroker.h b/MMOEngine/src/engine/orb/DistributedObjectBroker.h
+index dc51d72..80775de 100755
+--- a/MMOEngine/src/engine/orb/DistributedObjectBroker.h
++++ b/MMOEngine/src/engine/orb/DistributedObjectBroker.h
+@@ -63,6 +63,7 @@ namespace engine {
+ 
+ 	public:
+ 		static DistributedObjectBroker* initialize(const String& addr, int port = 44433);
++		static DistributedObjectBroker* initialize(const String& addr, int port, bool acceptBrokerPeers);
+ 
+ 		void initialize();
+ 
+diff --git a/MMOEngine/src/engine/orb/messages/DOBServiceClient.cpp b/MMOEngine/src/engine/orb/messages/DOBServiceClient.cpp
+index d8060be..c0139ec 100755
+--- a/MMOEngine/src/engine/orb/messages/DOBServiceClient.cpp
++++ b/MMOEngine/src/engine/orb/messages/DOBServiceClient.cpp
+@@ -53,64 +53,43 @@ void DOBServiceClient::run() {
+ }
+ 
+ void DOBServiceClient::receiveMessages() {
+-	Packet packet;
++	// Every broker frame starts with its total size, message type and sequence.
++	constexpr int lengthBytes = sizeof(uint32);
++	constexpr uint32 minFrameSize = 3 * lengthBytes;
++	constexpr uint32 maxFrameSize = 64 * 1024 * 1024;
++	Packet buffered;
++	Packet chunk;
+ 
+ 	fatal(serviceHandler) << "service handler is null";
+ 
+-	int messageSize = 0;
+-
+ 	while (doRun) {
+-		try	{
+-			if (packet.size() > 0) {
+-				packet.setOffset(packet.size() - 1);
+-			} else {
+-				packet.reset();
++		try {
++			if (!recieve(&chunk)) {
++				doRun = false;
++				break;
+ 			}
+ 
+-			if (receiveAppend(&packet)) {
+-				//printf("ran receive append with data:%s\n", packet.toStringData().toCharArray());
++			buffered.setOffset(buffered.size());
++			buffered.writeStream(&chunk);
++			buffered.reset();
+ 
+-				if (packet.size() == 0)
++			while (buffered.size() >= lengthBytes) {
++				const uint32 frameSize = buffered.parseInt(0);
++				if (frameSize < minFrameSize || frameSize > maxFrameSize) {
++					warning() << "Closing broker connection with invalid frame size " << frameSize;
++					doRun = false;
+ 					break;
+-
+-				while (packet.size() > 0) {
+-					packet.reset();
+-					//printf("ran while loop with data:%s\n", packet.toStringData().toCharArray());
+-
+-					if (messageSize && (messageSize <= packet.size())) {
+-						//printf("messageSize:%d packet.size() pre handle:%d\n", messageSize, packet.size());
+-
+-						Packet incomingData;
+-						incomingData.writeStream(&packet, messageSize);
+-						incomingData.reset();
+-
+-						serviceHandler->handleMessage(this, &incomingData);
+-
+-						//printf("messageSize:%d packet.size() post handle:%d\n", messageSize, packet.size());
+-						packet.removeRange(0, messageSize);
+-						messageSize = 0;
+-						packet.reset();
+-
+-						//printf("messageSize:%d packet.size() post remove range:%d\n", messageSize, packet.size());
+-						//printf("data post remove range:%s\n", packet.toStringData().toCharArray());
+-					} else {
+-						if (!messageSize) {
+-							if (packet.size() >= 4) {
+-								packet.reset();
+-
+-								messageSize = packet.parseInt(0) - 4;
+-
+-								packet.removeRange(0, 4);
+-							} else {
+-								break;
+-							}
+-						} else {
+-							break;
+-						}
+-					}
+ 				}
+-			} else {
+-				doRun = false;
++
++				const int size = static_cast<int>(frameSize);
++				if (buffered.size() < size)
++					break;
++
++				Packet incomingData;
++				incomingData.writeStream(buffered.getBuffer() + lengthBytes, size - lengthBytes);
++				incomingData.reset();
++				serviceHandler->handleMessage(this, &incomingData);
++				buffered.removeRange(0, size);
+ 			}
+ 		} catch (SocketException& e) {
+ 			if (!serviceHandler->handleError(this, e)) {
+diff --git a/MMOEngine/src/engine/orb/messages/DOBServiceHandler.cpp b/MMOEngine/src/engine/orb/messages/DOBServiceHandler.cpp
+index 1ed4348..e012f0c 100644
+--- a/MMOEngine/src/engine/orb/messages/DOBServiceHandler.cpp
++++ b/MMOEngine/src/engine/orb/messages/DOBServiceHandler.cpp
+@@ -8,7 +8,7 @@
+ 
+ #include "DOBServiceHandler.h"
+ 
+-DOBServiceHandler::DOBServiceHandler() {
++DOBServiceHandler::DOBServiceHandler(bool acceptBrokerPeers) : acceptBrokerPeers(acceptBrokerPeers) {
+ }
+ 
+ void DOBServiceHandler::initialize() {
+@@ -16,6 +16,13 @@ void DOBServiceHandler::initialize() {
+ }
+ 
+ ServiceClient* DOBServiceHandler::createConnection(Socket* sock, SocketAddress& addr) {
++	if (!acceptBrokerPeers) {
++		// accept() transfers the socket here. Its destructor does not close the descriptor.
++		sock->close();
++		delete sock;
++		return nullptr;
++	}
++
+ 	DOBServiceClient* client = new DOBServiceClient(sock);
+ 	client->setHandler(this);
+ 	client->start();
+diff --git a/MMOEngine/src/engine/orb/messages/DOBServiceHandler.h b/MMOEngine/src/engine/orb/messages/DOBServiceHandler.h
+index 9318094..1139109 100644
+--- a/MMOEngine/src/engine/orb/messages/DOBServiceHandler.h
++++ b/MMOEngine/src/engine/orb/messages/DOBServiceHandler.h
+@@ -22,9 +22,10 @@
+ 
+ class DOBServiceHandler : public ServiceHandler {
+ 	DOBMessageFactory messageFactory;
++	const bool acceptBrokerPeers;
+ 
+ public:
+-	DOBServiceHandler();
++	explicit DOBServiceHandler(bool acceptBrokerPeers = true);
+ 
+ 	void initialize();
+ 
