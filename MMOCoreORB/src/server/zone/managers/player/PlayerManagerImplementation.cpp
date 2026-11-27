@@ -66,7 +66,11 @@
 
 #include "server/zone/packets/trade/AbortTradeMessage.h"
 #include "server/zone/packets/trade/AcceptTransactionMessage.h"
-#include "server/zone/packets/trade/UnAcceptTransactionMessage.h"
+#include "server/zone/packets/trade/DenyTradeMessage.h"
+#include "server/zone/packets/DeltaMessage.h"
+#include "server/zone/objects/creature/credits/CreditObject.h"
+#include <memory>
+#include <vector>
 #include "server/zone/packets/trade/AddItemMessage.h"
 #include "server/zone/packets/trade/TradeCompleteMessage.h"
 #include "server/zone/packets/trade/GiveMoneyMessage.h"
@@ -2613,202 +2617,147 @@ void PlayerManagerImplementation::resendLoginMessageToAll() {
 	}
 }
 
+namespace {
+template<typename Operation>
+void withTradePartner(ZoneServer* server, CreatureObject* player, Operation operation) {
+	if (player == nullptr)
+		return;
+
+	Locker playerLock(player);
+	auto offer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
+	if (offer == nullptr)
+		return;
+
+	auto partner = server->getObject(offer->getTradeTargetPlayer()).castTo<CreatureObject*>();
+	if (partner == nullptr || partner == player || !partner->isPlayerCreature())
+		return;
+
+	Locker partnerLock(partner, player);
+	// Cross-locking may yield the player's lock. Ignore a replaced or closed session.
+	if (player->getActiveSession(SessionFacadeType::TRADE).get() != offer.get())
+		return;
+	auto other = partner->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
+	if (other != nullptr && other->getTradeTargetPlayer() == player->getObjectID())
+		operation(partner.get(), offer.get(), other.get());
+}
+
+void resetTradeApproval(CreatureObject* player, CreatureObject* partner, TradeSession* offer, TradeSession* other) {
+	if (!offer->getAcceptedTrade() && !other->getAcceptedTrade() && !offer->hasVerifiedTrade() && !other->hasVerifiedTrade())
+		return;
+
+	offer->setAcceptedTrade(false);
+	other->setAcceptedTrade(false);
+	offer->setVerifiedTrade(false);
+	other->setVerifiedTrade(false);
+	player->sendMessage(new DenyTradeMessage());
+	partner->sendMessage(new DenyTradeMessage());
+}
+}
+
 void PlayerManagerImplementation::handleAbortTradeMessage(CreatureObject* player) {
 	if (player == nullptr)
 		return;
 
-	// Clear trade target on player
-	player->setTradeTargetID(0);
-
-	ManagedReference<TradeSession*> tradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-	AbortTradeMessage* msg = new AbortTradeMessage();
-
-	if (tradeContainer == nullptr) {
-		player->sendMessage(msg->clone());
-		delete msg;
-
-		return;
-	}
-
-	uint64 targetID = tradeContainer->getTradeTargetPlayer();
-	ManagedReference<SceneObject*> object = server->getObject(targetID);
-
-	if (object != nullptr) {
-		CreatureObject* receiver = object->asCreatureObject();
-
+	auto offer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
+	if (offer != nullptr) {
+		auto receiver = server->getObject(offer->getTradeTargetPlayer()).castTo<CreatureObject*>();
 		if (receiver != nullptr) {
-			Locker clocker(receiver, player);
+			Locker partnerLock(receiver, player);
+			if (player->getActiveSession(SessionFacadeType::TRADE).get() != offer.get())
+				return;
 
-			ManagedReference<TradeSession*> receiverContainer = receiver->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-			if (receiverContainer != nullptr && receiverContainer->getTradeTargetPlayer() == player->getObjectID()) {
+			auto other = receiver->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
+			if (other != nullptr && other->getTradeTargetPlayer() == player->getObjectID()) {
 				receiver->dropActiveSession(SessionFacadeType::TRADE);
-				receiver->sendMessage(msg->clone());
-
-				// clear receivers trade target ID
 				receiver->setTradeTargetID(0);
+				receiver->sendMessage(new AbortTradeMessage());
 			}
-
-			clocker.release();
 		}
+		player->dropActiveSession(SessionFacadeType::TRADE);
 	}
-
-	player->sendMessage(msg->clone());
-
-	delete msg;
-
-	player->dropActiveSession(SessionFacadeType::TRADE);
+	player->setTradeTargetID(0);
+	player->sendMessage(new AbortTradeMessage());
 }
 
 void PlayerManagerImplementation::handleAddItemToTradeWindow(CreatureObject* player, uint64 itemID) {
 	if (player == nullptr)
 		return;
-
-	ManagedReference<TradeSession*> tradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-	if (tradeContainer == nullptr)
+	auto expected = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
+	if (expected == nullptr)
 		return;
 
-	// First Verify Target is Player
-	uint64 targetID = tradeContainer->getTradeTargetPlayer();
-	ManagedReference<SceneObject*> object = server->getObject(targetID);
+	auto item = server->getObject(itemID);
+	auto canOffer = [&]() {
+		return item != nullptr && item->isASubChildOf(player) && item->checkContainerPermission(player, ContainerPermissions::MOVECONTAINER)
+				&& !item->isNoTrade() && !item->containsNoTradeObjectRecursive();
+	};
 
-	if (object == nullptr || !object->isPlayerCreature())
-		return;
-
-	CreatureObject* receiver = object->asCreatureObject();
-
-	ManagedReference<SceneObject*> objectToTrade = server->getObject(itemID);
-
-	if (objectToTrade == nullptr || !objectToTrade->isASubChildOf(player) || !objectToTrade->checkContainerPermission(player, ContainerPermissions::MOVECONTAINER)) {
-		player->sendSystemMessage("@container_error_message:container26");
-		handleAbortTradeMessage(player);
-		return;
-	}
-
-	if (objectToTrade->isNoTrade()) {
-		player->sendSystemMessage("@container_error_message:container26");
-		handleAbortTradeMessage(player);
-		return;
-	}
-
-	// Containers containing notrade items...
-	if (objectToTrade->containsNoTradeObjectRecursive()) {
-		player->sendSystemMessage("@container_error_message:container26");
-		handleAbortTradeMessage(player);
-		return;
-	}
-
-	if (objectToTrade->isControlDevice()) {
-		Reference<ControlDevice*> controlDevice = cast<ControlDevice*>(objectToTrade.get());
-		Reference<TangibleObject*> controlledObject = controlDevice->getControlledObject();
-
-		if (controlledObject != nullptr) {
-			Locker crossLocker(controlledObject, player);
-
-			controlDevice->storeObject(player, true);
+	// Store a called pet or vehicle using its usual cross-lock, before locking the partner.
+	if (item != nullptr && item->isControlDevice()) {
+		auto* device = cast<ControlDevice*>(item.get());
+		Reference<TangibleObject*> controlled = device->getControlledObject();
+		if (controlled != nullptr) {
+			Locker objectLock(controlled, player);
+			if (player->getActiveSession(SessionFacadeType::TRADE).get() != expected.get())
+				return;
+			if (canOffer())
+				device->storeObject(player, true);
 		}
 	}
 
-	tradeContainer->addTradeItem(objectToTrade);
+	withTradePartner(server, player, [&](CreatureObject* receiver, TradeSession* offer, TradeSession* other) {
+		if (offer != expected.get())
+			return;
+		if (!canOffer()) {
+			player->sendSystemMessage("@container_error_message:container26");
+			handleAbortTradeMessage(player);
+			return;
+		}
 
-	SceneObject* inventory = player->getInventory();
+		const int oldSize = offer->getTradeSize();
+		offer->addTradeItem(item);
+		if (offer->getTradeSize() == oldSize)
+			return;
 
-	if (inventory != nullptr)
-		inventory->sendWithoutContainerObjectsTo(receiver);
-
-	objectToTrade->sendTo(receiver, true);
-
-	AddItemMessage* msg = new AddItemMessage(itemID);
-
-	if (msg != nullptr)
-		receiver->sendMessage(msg);
+		resetTradeApproval(player, receiver, offer, other);
+		SceneObject* inventory = player->getInventory();
+		if (inventory != nullptr)
+			inventory->sendWithoutContainerObjectsTo(receiver);
+		item->sendTo(receiver, true);
+		receiver->sendMessage(new AddItemMessage(itemID));
+	});
 }
 
 void PlayerManagerImplementation::handleGiveMoneyMessage(CreatureObject* player, uint32 value) {
-	if (player == nullptr)
-		return;
+	withTradePartner(server, player, [&](CreatureObject* receiver, TradeSession* offer, TradeSession* other) {
+		const int cash = player->getCashCredits();
+		if (cash < 0 || value > static_cast<uint32>(cash)) {
+			player->sendSystemMessage("You do not have enough cash for this trade.");
+			handleAbortTradeMessage(player);
+			return;
+		}
 
-	int currentMoney = player->getCashCredits();
-
-	if (value > currentMoney)
-		value = currentMoney;
-
-	ManagedReference<TradeSession*> tradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-	if (tradeContainer == nullptr)
-		return;
-
-	tradeContainer->setMoneyToTrade(value);
-
-	uint64 targetID = tradeContainer->getTradeTargetPlayer();
-	ManagedReference<SceneObject*> object = server->getObject(targetID);
-
-	if (object == nullptr || !object->isPlayerCreature())
-		return;
-
-	CreatureObject* receiver = object->asCreatureObject();
-
-	if (receiver == nullptr)
-		return;
-
-	GiveMoneyMessage* msg = new GiveMoneyMessage(value);
-
-	if (msg == nullptr)
-		return;
-
-	receiver->sendMessage(msg);
+		offer->setMoneyToTrade(value);
+		resetTradeApproval(player, receiver, offer, other);
+		receiver->sendMessage(new GiveMoneyMessage(value));
+	});
 }
 
 void PlayerManagerImplementation::handleAcceptTransactionMessage(CreatureObject* player) {
-	Locker _locker(player);
-
-	ManagedReference<TradeSession*> tradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-	if (tradeContainer == nullptr)
-		return;
-
-	tradeContainer->setAcceptedTrade(true);
-
-	uint64 targID = tradeContainer->getTradeTargetPlayer();
-	ManagedReference<SceneObject*> obj = server->getObject(targID);
-
-	if (obj != nullptr && obj->isPlayerCreature()) {
-		CreatureObject* receiver = cast<CreatureObject*>(obj.get());
-
-		AcceptTransactionMessage* msg = new AcceptTransactionMessage();
-		receiver->sendMessage(msg);
-	}
+	withTradePartner(server, player, [](CreatureObject* receiver, TradeSession* offer, TradeSession*) {
+		offer->setAcceptedTrade(true);
+		receiver->sendMessage(new AcceptTransactionMessage());
+	});
 }
 
 void PlayerManagerImplementation::handleUnAcceptTransactionMessage(CreatureObject* player) {
-	Locker _locker(player);
-
-	ManagedReference<TradeSession*> tradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-	if (tradeContainer == nullptr)
-		return;
-
-	tradeContainer->setAcceptedTrade(false);
-
-	uint64 targID = tradeContainer->getTradeTargetPlayer();
-	ManagedReference<SceneObject*> obj = server->getObject(targID);
-
-	if (obj != nullptr && obj->isPlayerCreature()) {
-		CreatureObject* receiver = cast<CreatureObject*>(obj.get());
-
-		UnAcceptTransactionMessage* msg = new UnAcceptTransactionMessage();
-		receiver->sendMessage(msg);
-	}
-
+	withTradePartner(server, player, [&](CreatureObject* receiver, TradeSession* offer, TradeSession* other) {
+		resetTradeApproval(player, receiver, offer, other);
+	});
 }
 
 bool PlayerManagerImplementation::checkTradeItems(CreatureObject* player, CreatureObject* receiver) {
 	// Pre: arg1 && arg2 pre-locked
-
-	PlayerObject* ghost = player->getPlayerObject();
-	PlayerObject* targetGhost = receiver->getPlayerObject();
 
 	ManagedReference<TradeSession*> tradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
 	ManagedReference<TradeSession*> receiverContainer = receiver->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
@@ -2828,6 +2777,9 @@ bool PlayerManagerImplementation::checkTradeItems(CreatureObject* player, Creatu
 	SceneObject* playerDatapad = player->getSlottedObject("datapad");
 	SceneObject* receiverDatapad = receiver->getSlottedObject("datapad");
 
+	if (playerInventory == nullptr || receiverInventory == nullptr || playerDatapad == nullptr || receiverDatapad == nullptr)
+		return false;
+
 	int playerTanos = 0;
 	int playerItnos = 0;
 	int recieverTanos = 0;
@@ -2846,7 +2798,8 @@ bool PlayerManagerImplementation::checkTradeItems(CreatureObject* player, Creatu
 	for (int i = 0; i < tradeContainer->getTradeSize(); ++i) {
 		ManagedReference<SceneObject*> scene = tradeContainer->getTradeItem(i);
 
-		if (scene->isNoTrade())
+		if (scene == nullptr || scene->isNoTrade() || scene->containsNoTradeObjectRecursive()
+				|| !scene->checkContainerPermission(player, ContainerPermissions::MOVECONTAINER))
 			return false;
 
 		if (scene->isTangibleObject()) {
@@ -2916,7 +2869,8 @@ bool PlayerManagerImplementation::checkTradeItems(CreatureObject* player, Creatu
 	for (int i = 0; i < receiverContainer->getTradeSize(); ++i) {
 		ManagedReference<SceneObject*> scene = receiverContainer->getTradeItem(i);
 
-		if (scene->isNoTrade())
+		if (scene == nullptr || scene->isNoTrade() || scene->containsNoTradeObjectRecursive()
+				|| !scene->checkContainerPermission(receiver, ContainerPermissions::MOVECONTAINER))
 			return false;
 
 		if (scene->isTangibleObject()) {
@@ -2957,6 +2911,8 @@ bool PlayerManagerImplementation::checkTradeItems(CreatureObject* player, Creatu
 						return false;
 
 					playerDroidsTraded++;
+				} else if (petControlDevice->getPetType() == PetManager::HELPERDROIDPET) {
+					return false;
 				}
 			} else if (scene->isVehicleControlDevice()) {
 				VehicleControlDevice* vehicleControlDevice = cast<VehicleControlDevice*>(scene.get());
@@ -3031,128 +2987,233 @@ bool PlayerManagerImplementation::checkTradeItems(CreatureObject* player, Creatu
 	return true;
 }
 
+namespace {
+struct TradeMove {
+	ManagedReference<SceneObject*> item;
+	ManagedReference<SceneObject*> source;
+	ManagedReference<SceneObject*> destination;
+	CreatureObject* giver;
+	CreatureObject* recipient;
+	int containment;
+};
+
+using TradeLogs = std::vector<std::unique_ptr<TransactionLog>>;
+
+bool lockTradeContainer(SceneObject* container, std::vector<std::unique_lock<ReadWriteLock>>& locks) {
+	if (container == nullptr)
+		return false;
+	auto* lock = container->getContainerLock();
+	if (lock->isLockedByCurrentThread())
+		return true;
+	// A competing inventory operation may already hold a different object lock.
+	// Cancel before moving anything instead of waiting while holding both players.
+	if (!lock->tryWLock())
+		return false;
+	std::unique_lock<ReadWriteLock> held(*lock, std::adopt_lock);
+	locks.push_back(std::move(held));
+	return true;
+}
+
+void prepareTradeMoves(CreatureObject* giver, CreatureObject* recipient, TradeSession* offer,
+		std::vector<TradeMove>& moves, TradeLogs& logs, const String& group) {
+	for (int i = 0; i < offer->getTradeSize(); ++i) {
+		auto* item = offer->getTradeItem(i);
+		const bool tangible = item->isTangibleObject();
+		SceneObject* source = tangible ? giver->getInventory() : giver->getSlottedObject("datapad");
+		SceneObject* destination = tangible ? recipient->getInventory() : recipient->getSlottedObject("datapad");
+		moves.push_back({item, source, destination, giver, recipient, static_cast<int>(item->getContainmentType())});
+
+		logs.push_back(std::make_unique<TransactionLog>(giver, recipient, item, TrxCode::PLAYERTRADE));
+		logs.back()->setAutoCommit(false);
+		logs.back()->setTrxGroup(group);
+	}
+}
+
+bool inTradeContainer(SceneObject* item, SceneObject* container) {
+	return item->getParent().get() == container && container->hasObjectInContainer(item->getObjectID());
+}
+
+void restoreTradeMoves(const std::vector<TradeMove>& moves, size_t attempted) {
+	while (attempted > 0) {
+		const auto& move = moves[--attempted];
+		try {
+			if (!inTradeContainer(move.item, move.source)) {
+				// A failed insertion may already have detached the item. Restore directly to
+				// its original slot even when the source has since reached its capacity.
+				move.source->transferObject(move.item, move.containment, true, true);
+			}
+		} catch (...) {
+			// Container observers can throw after the original parent is restored.
+		}
+		if (!inTradeContainer(move.item, move.source) || move.destination->hasObjectInContainer(move.item->getObjectID())) {
+			// A transfer hook can fail between detaching and linking. These entries
+			// were direct inventory/datapad children when the exchange started.
+			const uint64 id = move.item->getObjectID();
+			move.giver->error() << "Repairing trade container membership for item " << id;
+			{
+				auto* sourceLock = move.source->getContainerLock();
+				Locker firstLock(sourceLock);
+				Locker secondLock(move.destination->getContainerLock(), sourceLock);
+				move.source->getContainerObjects()->put(id, move.item);
+				move.destination->getContainerObjects()->drop(id);
+				move.item->setParent(move.source);
+				move.item->setContainmentType(move.containment);
+			}
+			move.source->updateToDatabase();
+			move.destination->updateToDatabase();
+			move.item->updateToDatabase();
+		}
+	}
+}
+
+bool canReceiveTradeCredits(CreditObject* credits, int outgoing, int incoming) {
+	const int cash = credits->getCashCredits();
+	const int bank = credits->getBankCredits();
+	return outgoing >= 0 && incoming >= 0 && outgoing <= cash &&
+			int64(cash) - outgoing + incoming + bank <= int64(CreditObject::CREDITCAP) * 2;
+}
+
+void exchangeTradeCredits(CreatureObject* player, CreatureObject* partner, CreditObject* first, CreditObject* second,
+		int give, int receive, TradeLogs& logs, const String& group) {
+	if (give == 0 && receive == 0)
+		return;
+
+	if (give > 0) {
+		logs.push_back(std::make_unique<TransactionLog>(player, partner, TrxCode::PLAYERTRADE, give, true));
+		logs.back()->setAutoCommit(false);
+		logs.back()->setTrxGroup(group);
+	}
+	if (receive > 0) {
+		logs.push_back(std::make_unique<TransactionLog>(partner, player, TrxCode::PLAYERTRADE, receive, true));
+		logs.back()->setAutoCommit(false);
+		logs.back()->setTrxGroup(group);
+	}
+
+	const int firstCash = first->getCashCredits(), firstBank = first->getBankCredits();
+	const int secondCash = second->getCashCredits(), secondBank = second->getBankCredits();
+	try {
+		// Debit both offers before crediting either player so bank overflow is based
+		// on the final exchange. Both wallets remain locked through the last write.
+		first->subtractCashCredits(give, false);
+		second->subtractCashCredits(receive, false);
+		first->addCashCredits(receive, false);
+		second->addCashCredits(give, false);
+	} catch (...) {
+		first->setCashCredits(firstCash, false);
+		first->setBankCredits(firstBank, false);
+		second->setCashCredits(secondCash, false);
+		second->setBankCredits(secondBank, false);
+		throw;
+	}
+}
+
+void sendTradeBalance(CreatureObject* player) {
+	auto* delta = new DeltaMessage(player->getObjectID(), 'CREO', 1);
+	delta->addIntUpdate(0x00, player->getBankCredits());
+	delta->addIntUpdate(0x01, player->getCashCredits());
+	delta->close();
+	player->sendMessage(delta);
+}
+}
+
 void PlayerManagerImplementation::handleVerifyTradeMessage(CreatureObject* player) {
-	if (player == nullptr)
-		return;
+	withTradePartner(server, player, [&](CreatureObject* partner, TradeSession* offer, TradeSession* other) {
+		if (!offer->getAcceptedTrade() || !other->getAcceptedTrade())
+			return;
+		offer->setVerifiedTrade(true);
+		if (!other->hasVerifiedTrade())
+			return;
 
-	ManagedReference<ObjectController*> objectController = server->getObjectController();
+		auto* controller = server->getObjectController();
+		auto* playerWallet = player->getCreditObject();
+		auto* partnerWallet = partner->getCreditObject();
+		if (controller == nullptr || playerWallet == nullptr || partnerWallet == nullptr || playerWallet == partnerWallet) {
+			handleAbortTradeMessage(player);
+			return;
+		}
+		Locker playerWalletLock(playerWallet);
+		Locker partnerWalletLock(partnerWallet, playerWallet);
+		const int give = offer->getMoneyToTrade();
+		const int receive = other->getMoneyToTrade();
+		if (!canReceiveTradeCredits(playerWallet, give, receive) || !canReceiveTradeCredits(partnerWallet, receive, give)) {
+			handleAbortTradeMessage(player);
+			return;
+		}
 
-	if (objectController == nullptr)
-		return;
-
-	ManagedReference<TradeSession*> tradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-	if (tradeContainer == nullptr) {
-		return;
-	}
-
-	// Get a trx group to trace all trx's in this session
-	auto trxGroup = TransactionLog::getNewTrxGroup();
-
-	tradeContainer->setVerifiedTrade(true);
-
-	uint64 targetID = tradeContainer->getTradeTargetPlayer();
-	ManagedReference<SceneObject*> object = server->getObject(targetID);
-
-	if (object == nullptr || !object->isPlayerCreature())
-		return;
-
-	CreatureObject* receiver = object->asCreatureObject();
-
-	if (receiver == nullptr)
-		return;
-
-	Locker clocker(receiver, player);
-
-	ManagedReference<TradeSession*> receiverTradeContainer = receiver->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
-
-	if (receiverTradeContainer == nullptr) {
-		tradeContainer->setVerifiedTrade(false);
-		return;
-	}
-
-	if (!checkTradeItems(player, receiver)) {
-		clocker.release();
-
-		handleAbortTradeMessage(player);
-
-		return;
-	}
-
-	if (receiverTradeContainer->hasVerifiedTrade()) {
-		SceneObject* receiverInventory = receiver->getInventory();
-		SceneObject* receiverDatapad = receiver->getSlottedObject("datapad");
-
-		for (int i = 0; i < tradeContainer->getTradeSize(); ++i) {
-			ManagedReference<SceneObject*> item = tradeContainer->getTradeItem(i);
-
-			TransactionLog trx(player, receiver, item, TrxCode::PLAYERTRADE);
-			trx.setTrxGroup(trxGroup);
-
-			if (item->isTangibleObject()) {
-				if (objectController->transferObject(item, receiverInventory, -1, true))
-					item->sendDestroyTo(player);
-			} else {
-				if (objectController->transferObject(item, receiverDatapad, -1, true))
-					item->sendDestroyTo(player);
+		const String group = TransactionLog::getNewTrxGroup();
+		std::vector<TradeMove> moves;
+		TradeLogs logs;
+		std::vector<std::unique_lock<ReadWriteLock>> containerLocks;
+		size_t attempted = 0;
+		size_t transferred = 0;
+		bool settled = false;
+		try {
+			if ((offer->getTradeSize() != 0 || other->getTradeSize() != 0) &&
+					(!lockTradeContainer(player->getInventory(), containerLocks) || !lockTradeContainer(partner->getInventory(), containerLocks)
+					|| !lockTradeContainer(player->getSlottedObject("datapad"), containerLocks) || !lockTradeContainer(partner->getSlottedObject("datapad"), containerLocks))) {
+				containerLocks.clear();
+				handleAbortTradeMessage(player);
+				return;
 			}
-		}
-
-		SceneObject* playerInventory = player->getInventory();
-		SceneObject* playerDatapad = player->getSlottedObject("datapad");
-
-		for (int i = 0; i < receiverTradeContainer->getTradeSize(); ++i) {
-			ManagedReference<SceneObject*> item = receiverTradeContainer->getTradeItem(i);
-
-			TransactionLog trx(receiver, player, item, TrxCode::PLAYERTRADE);
-			trx.setTrxGroup(trxGroup);
-
-			if (item->isTangibleObject()) {
-				if (objectController->transferObject(item, playerInventory, -1, true)) {
-					item->sendDestroyTo(receiver);
-				} else {
-					trx.errorMessage() << "transferObject failed";
-				}
-			} else {
-				if (objectController->transferObject(item, playerDatapad, -1, true)) {
-					item->sendDestroyTo(receiver);
-				} else {
-					trx.errorMessage() << "transferObject failed";
-				}
+			if (!checkTradeItems(player, partner)) {
+				containerLocks.clear();
+				handleAbortTradeMessage(player);
+				return;
 			}
+
+			prepareTradeMoves(player, partner, offer, moves, logs, group);
+			prepareTradeMoves(partner, player, other, moves, logs, group);
+			for (const auto& move : moves) {
+				if (!inTradeContainer(move.item, move.source))
+					break;
+				++attempted;
+				if (!controller->transferObject(move.item, move.destination, -1, true)
+						|| !inTradeContainer(move.item, move.destination) || move.source->hasObjectInContainer(move.item->getObjectID()))
+					break;
+				++transferred;
+			}
+
+			if (transferred == moves.size()) {
+				exchangeTradeCredits(player, partner, playerWallet, partnerWallet, give, receive, logs, group);
+				settled = true;
+			}
+		} catch (const Exception& e) {
+			error() << "Exception settling player trade " << group << ": " << e.getMessage();
+		} catch (...) {
+			error() << "Exception settling player trade " << group;
 		}
 
-		uint32 giveMoney = tradeContainer->getMoneyToTrade();
-		uint32 getMoney = receiverTradeContainer->getMoneyToTrade();
-
-		TradeCompleteMessage* msg = new TradeCompleteMessage();
-		receiver->sendMessage(msg->clone());
-		player->sendMessage(msg->clone());
-		delete msg;
-
-		if (giveMoney > 0) {
-			TransactionLog trx(player, receiver, TrxCode::PLAYERTRADE, giveMoney, true);
-			trx.setTrxGroup(trxGroup);
-			player->subtractCashCredits(giveMoney);
-			receiver->addCashCredits(giveMoney);
+		if (!settled) {
+			restoreTradeMoves(moves, attempted);
+			containerLocks.clear();
+			handleAbortTradeMessage(player);
+			for (size_t i = 0; i < attempted; ++i) {
+				moves[i].item->sendDestroyTo(moves[i].recipient);
+				moves[i].item->sendTo(moves[i].giver, true);
+			}
+			for (auto& log : logs)
+				log->abort() << "Trade canceled before settlement";
+			return;
 		}
 
-		if (getMoney > 0) {
-			TransactionLog trx(receiver, player, TrxCode::PLAYERTRADE, getMoney, true);
-			trx.setTrxGroup(trxGroup);
-			receiver->subtractCashCredits(getMoney);
-			player->addCashCredits(getMoney);
-		}
-
-		tradeContainer->clearTradeContainer();
-		receiverTradeContainer->clearTradeContainer();
-
-		receiver->dropActiveSession(SessionFacadeType::TRADE);
+		// Retire both sessions before sending the receipt or doing optional logging.
+		containerLocks.clear();
 		player->dropActiveSession(SessionFacadeType::TRADE);
-
-		receiver->setTradeTargetID(0);
+		partner->dropActiveSession(SessionFacadeType::TRADE);
 		player->setTradeTargetID(0);
-	}
+		partner->setTradeTargetID(0);
+		for (const auto& move : moves)
+			move.item->sendDestroyTo(move.giver);
+		if (give != 0 || receive != 0) {
+			sendTradeBalance(player);
+			sendTradeBalance(partner);
+		}
+
+		player->sendMessage(new TradeCompleteMessage());
+		partner->sendMessage(new TradeCompleteMessage());
+		for (auto& log : logs)
+			log->commit();
+	});
 }
 
 int PlayerManagerImplementation::notifyObserverEvent(uint32 eventType, Observable* observable, ManagedObject* arg1, int64 arg2) {

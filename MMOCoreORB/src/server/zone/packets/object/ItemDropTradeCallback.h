@@ -9,6 +9,7 @@
 #define ITEMDROPTRADECALLBACK_H_
 
 #include "server/zone/objects/creature/CreatureObject.h"
+#include "server/zone/objects/player/PlayerObject.h"
 #include "server/zone/packets/trade/BeginTradeMessage.h"
 #include "ObjectControllerMessageCallback.h"
 #include "server/zone/objects/player/sessions/TradeSession.h"
@@ -68,6 +69,8 @@ public:
 		if (targetPlayer == nullptr)
 			return;
 
+		Locker clocker(targetPlayer, player);
+
 		// Check if target to trade is ignoring player
 		auto targetGhost = targetPlayer->getPlayerObject();
 
@@ -76,8 +79,11 @@ public:
 
 		ManagedReference<TradeSession*> playerTradeContainer = player->getActiveSession(SessionFacadeType::TRADE).castTo<TradeSession*>();
 
+		if (playerTradeContainer != nullptr && playerTradeContainer->getTradeTargetPlayer() == targetToTrade)
+			return;
+
 		// Player already has an active trade session
-		if (playerTradeContainer != nullptr && playerTradeContainer->getTradeTargetPlayer() != targetToTrade) {
+		if (playerTradeContainer != nullptr) {
 			StringIdChatParameter stringIdReq("ui_trade", "start_fail_target_other_prose"); // "You cannot start a trade with %TT while you are trading with %TO."
 			stringIdReq.setTT(targetPlayer->getFirstName());
 
@@ -119,29 +125,16 @@ public:
 			return;
 		}
 
-		// Trade has passed all the checks and each player has each other as a trade target
-		Locker clocker(targetPlayer, player);
+		// A repeated request must not reopen an existing window with old approvals.
+		if (targetTradeContainer != nullptr)
+			return;
 
-		// Setup players trade container
-		if (playerTradeContainer == nullptr) {
-			playerTradeContainer = new TradeSession();
-			player->addActiveSession(SessionFacadeType::TRADE, playerTradeContainer);
-		} else {
-			playerTradeContainer->clearSession();
-		}
-
-		// Set the trade session on the target player
+		playerTradeContainer = new TradeSession();
+		player->addActiveSession(SessionFacadeType::TRADE, playerTradeContainer);
 		playerTradeContainer->setTradeTargetPlayer(targetToTrade);
 
-		// Setup targets trade container
-		if (targetTradeContainer == nullptr) {
-			targetTradeContainer = new TradeSession();
-			targetPlayer->addActiveSession(SessionFacadeType::TRADE, targetTradeContainer);
-		} else {
-			targetTradeContainer->clearSession();
-		}
-
-		// Set the targetstrade session on the this player
+		targetTradeContainer = new TradeSession();
+		targetPlayer->addActiveSession(SessionFacadeType::TRADE, targetTradeContainer);
 		targetTradeContainer->setTradeTargetPlayer(playerID);
 
 		BeginTradeMessage* msg = new BeginTradeMessage(targetPlayer->getObjectID());
