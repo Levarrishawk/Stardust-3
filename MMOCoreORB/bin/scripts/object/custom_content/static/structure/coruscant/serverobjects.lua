@@ -133,3 +133,4 @@ includeFile("custom_content/static/structure/coruscant/monument_projection_orbit
 includeFile("custom_content/static/structure/coruscant/monument_sign_plaza.lua")
 includeFile("custom_content/static/structure/coruscant/monument_sign_transit.lua")
 includeFile("custom_content/static/structure/coruscant/monument_sign_spire.lua")
+includeFile("custom_content/static/structure/coruscant/collective_commerce_lane_marker.lua")
