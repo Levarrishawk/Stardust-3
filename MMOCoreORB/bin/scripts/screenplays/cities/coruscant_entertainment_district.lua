@@ -1304,6 +1304,8 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   
   --  Collective Commerce District NPCs
   
+  spawnMobile("coruscant", "dexter_jettster", 60, -0.4, 0.1, -2.85, 0, 37000549)
+
   pNpc = spawnMobile("coruscant", "commoner", 60, 3.3, 0.1, 3.4, -90, 37000549)
   self:setMoodString(pNpc, "npc_sitting_chair")
   
