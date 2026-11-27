@@ -319,16 +319,14 @@ local calls = {
 }
 
 local function kitchenHasListener(pSpeaker)
-	for _, cell in ipairs({37000119, 37000120, 37000121, 37000111}) do
-		local pCell = getSceneObject(cell)
-		if pCell ~= nil then
-			local room = SceneObject(pCell)
-			for i = 0, room:getContainerObjectsSize() - 1 do
-				local pGuest = room:getContainerObject(i)
-				if pGuest ~= nil and SceneObject(pGuest):isPlayerCreature()
-					and (cell ~= 37000111 or SceneObject(pGuest):isInRangeWithObject(pSpeaker, 18)) then return true end
-			end
-		end
+	-- Room occupants can change during this timer. Core3 takes the cell lock
+	-- while collecting this player list. Check each guest's current room afterward.
+	local nearby = SceneObject(pSpeaker):getPlayersInRange(64)
+	for _, pGuest in ipairs(nearby or {}) do
+		local guest = SceneObject(pGuest)
+		local cell = guest:getParentID()
+		if cell == 37000119 or cell == 37000120 or cell == 37000121 then return true end
+		if cell == 37000111 and guest:isInRangeWithObject(pSpeaker, 18) then return true end
 	end
 	return false
 end

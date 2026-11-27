@@ -1,4 +1,5 @@
 -- Run from MMOCoreORB with lua bin/scripts/screenplays/tests/monument_grill_test.lua.
+local unpack = table.unpack or unpack
 local function new(self, t) return setmetatable(t or {}, {__index=self}) end
 Object={new=new}
 ScreenPlay=Object:new{}
@@ -36,8 +37,11 @@ function Actor:setNextPosition(x,h,z,cell)
 end
 function Actor:getPatrolPointsSize() return self.target and 1 or 0 end
 function Actor:isInRangeWithObject(o,r) return (self.x-o.x)^2+(self.z-o.z)^2<=r*r end
-function Actor:getContainerObjectsSize() return #(self.contents or {}) end
-function Actor:getContainerObject(i) return self.contents[i+1] end
+local nearbyPlayers
+function Actor:getPlayersInRange(range)
+    assert(self.role and range == 64)
+    return nearbyPlayers
+end
 function Actor:isPlayerCreature() return self.player end
 function Actor:getCashCredits() return self.cash end
 function Actor:subtractCashCredits(n) assert(self.cash>=n); self.cash=self.cash-n end
@@ -86,7 +90,7 @@ dofile(scripts.."object/tangible/food/monument_square.lua")
 for _,id in ipairs({"desert_bloom","imported_utozz","ruby_bliel","hot_chocolate"}) do
     dofile(scripts.."object/tangible/food/bartender_drinks/"..id..".lua")
 end
-for cell=37000109,37000121 do npcs[cell]=Actor:new{cell=37000108,id=cell,contents={}} end
+for cell=37000109,37000121 do npcs[cell]=Actor:new{cell=37000108,id=cell} end
 for i,role in ipairs({"chef","line","prep","pass"}) do
     npcs[50+i]=Actor:new{id=50+i,cell=i<=2 and 37000119 or 37000121,role=role}
     writeData("CoruscantEntertainmentScreenPlay:grill:"..role,50+i)
@@ -143,7 +147,12 @@ local function fire(method)
 end
 fire("rounds");assert(nextId==106)
 fire("kitchen");assert(#lines==0)
-npcs[37000120].contents={guest}
+-- A missing zone can return nil, and a loaded zone with no players returns {}.
+nearbyPlayers={};fire("kitchen");assert(#lines==0)
+-- A player in the zone snapshot may already have left the kitchen.
+guest.cell=0
+nearbyPlayers={guest};fire("kitchen");assert(#lines==0)
+guest.cell=37000120
 for i=1,16 do
     local e=event("kitchen");now=math.ceil(e.due);grill:kitchen(nil,e.args)
     assert(#lines==i)
@@ -151,12 +160,22 @@ for i=1,16 do
     elseif i>1 then assert(lines[i][3]-lines[i-1][3]>=55) end
 end
 assert(lines[2][2]:find("Yes, Chef!",1,true))
--- Diners close to the kitchen door can also hear it from the main room.
-npcs[37000120].contents={};npcs[37000111].contents={guest}
-guest.cell,guest.x,guest.z=37000111,-13,0
+-- Radius results may include the whole building. Apply the 18 m rule
+-- in the dining room and exclude other rooms, even at the chef's position.
 npcs[51].x,npcs[51].z=-27.51,-1.08
-local e=event("kitchen");grill:kitchen(nil,e.args);local missing=npcs[52];npcs[52]=nil
-e=event("kitchen");grill:kitchen(nil,e.args);assert(#lines==17);npcs[52]=missing
+guest.x,guest.z=npcs[51].x+19,npcs[51].z
+guest.cell=37000111;fire("kitchen");assert(#lines==16)
+guest.cell,guest.x=37000110,npcs[51].x;fire("kitchen");assert(#lines==16)
+local diner=Actor:new{id=5,player=true,cell=37000111,x=npcs[51].x+18,z=npcs[51].z}
+nearbyPlayers={guest,diner};fire("kitchen");assert(#lines==17)
+-- Leaving between call and reply suppresses that reply. The next scheduled
+-- exchange must still run when another guest arrives.
+diner.cell=0;fire("kitchen");assert(#lines==17)
+guest.cell=37000119;fire("kitchen");assert(#lines==18 and lines[18][1]=="prep")
+local missing=npcs[51];npcs[51]=nil
+fire("kitchen");assert(#lines==18);npcs[51]=missing
+guest.cell=37000121;fire("kitchen");fire("kitchen")
+assert(#lines==20 and lines[19][1]=="line" and lines[20][1]=="chef")
 
 local departed,returned,visits,homes={}, {}, {}, {}
 local firstShop, lastDeparture, stale, held = false, 0, nil, false
@@ -222,4 +241,4 @@ local oldNpc=readData("MonumentGrill:3:npc");npcs[oldNpc]=nil;fire("rounds")
 assert(nextId==107 and readData("MonumentGrill:3:npc")~=oldNpc and readData("MonumentGrill:3:point")==0)
 print("PASS six staggered routes, two complete rounds, 40 tables, home cooldowns, lost targets and staff replacement")
 print("PASS table and bar conversations, all eight orders, stale orders and failed purchases")
-print("PASS eight paired kitchen calls, speaker checks, quiet intervals and empty kitchen")
+print("PASS eight paired kitchen calls, guest departures, hearing range, missing speakers and timer continuity")
