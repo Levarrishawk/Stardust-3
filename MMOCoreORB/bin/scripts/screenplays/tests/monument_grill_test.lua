@@ -6,7 +6,7 @@ ScreenPlay=Object:new{}
 local npcs, db, events, lines, goods, templates, convos = {}, {}, {}, {}, {}, {}, {}
 local now, nextId, enabled = 1000, 100, false
 os.time=function() return now end
-AI_PATROLLING=1; CONVERSABLE=4; INVULNERABLE=8; AIENABLED=16; NONE=0; NAME_TAG=1; CONSUMABLE=12
+AI_PATROLLING=1; CONVERSABLE=4; INVULNERABLE=8; AIENABLED=16; INTERESTING=32; NONE=0; NAME_TAG=1; CONSUMABLE=12
 function registerScreenPlay(id,active) assert(active and _G[id]) end
 function readData(k) return db[k] or 0 end
 function writeData(k,v) db[k]=v end
@@ -96,6 +96,8 @@ for i,role in ipairs({"chef","line","prep","pass"}) do
     writeData("CoruscantEntertainmentScreenPlay:grill:"..role,50+i)
 end
 local grill,handler=MonumentGrill,MonumentGrillMenuHandler
+assert(templates.monument_grill_waiter.optionsBitmask==INVULNERABLE+AIENABLED+INTERESTING)
+assert(templates.monument_grill_bartender.optionsBitmask==INVULNERABLE+CONVERSABLE+INTERESTING)
 local convo=convos[templates.monument_grill_waiter.conversationTemplate]
 assert(convo==convos[templates.monument_grill_bartender.conversationTemplate] and _G[convo.luaClassHandler]==handler)
 local guest=Actor:new{id=4,player=true,inventory=Actor:new{},cash=2000}
@@ -147,10 +149,11 @@ local function fire(method)
     local e=event(method);grill[method](grill,e.actor,e.args)
 end
 fire("rounds");assert(nextId==106)
+local robedNames = {[1]="Maela Venn", [5]="Vessa Rin", [6]="Corin Hale"}
 local function checkUniform(slot)
     local npc=npcs[readData("MonumentGrill:"..slot..":npc")]
-    if slot==1 or slot==5 then
-        local name=slot==1 and "Maela Venn" or "Vessa Rin"
+    local name=robedNames[slot]
+    if name then
         assert(npc.name==name.." (Wait Staff)" and npc.role=="monument_grill_robed_waiter")
         local t=templates[npc.role]
         assert(#t.templates==1 and t.templates[1]=="object/mobile/dressed_noble_naboo_twilek_female_02.iff")
@@ -261,7 +264,7 @@ for i,p in ipairs(stations) do
 end
 local oldNpc=readData("MonumentGrill:3:npc");npcs[oldNpc]=nil;fire("rounds")
 assert(nextId==107 and readData("MonumentGrill:3:npc")~=oldNpc and readData("MonumentGrill:3:point")==0)
-for _,slot in ipairs({1,5}) do
+for slot in pairs(robedNames) do
     local key="MonumentGrill:"..slot..":npc"
     local replaced=readData(key)
     npcs[replaced]=nil

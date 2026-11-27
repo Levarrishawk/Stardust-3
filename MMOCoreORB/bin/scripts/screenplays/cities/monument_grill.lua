@@ -11,7 +11,7 @@ local staff = {
 	{name = "Seli Orr", mobile = waiter},
 	{name = "Iren Tal", mobile = waiter},
 	{name = "Vessa Rin", mobile = robedWaiter},
-	{name = "Corin Hale", mobile = waiter},
+	{name = "Corin Hale", mobile = robedWaiter},
 }
 local rest, spacing, tableTime = 300, 45, 35
 
