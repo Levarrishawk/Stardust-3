@@ -31,3 +31,5 @@ includeFile("custom_content/building/theme_park/legends/jedi/serverobjects.lua")
 --includeFile("custom_content/building/test/serverobjects.lua")
 
 -- Root Folder
+includeFile("custom_content/building/coruscant/commerce_district_storefronts.lua")
+includeFile("custom_content/building/coruscant/luthen_rael_gallery.lua")

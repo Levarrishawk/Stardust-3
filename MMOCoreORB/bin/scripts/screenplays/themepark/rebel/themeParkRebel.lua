@@ -604,32 +604,16 @@ npcMapRebel[5].useCellWorldPosition = true
 npcMapRebel[5].completedDialog = "The shipments you helped secure are bound for a small resistance cell on Yavin Four. Its commander needs help turning those supplies into reliable power, communications, and medical support. Please travel there and offer your assistance. These people are still building a refuge; they cannot yet depend on the strength of a larger movement. Your experience can help them endure. Keep their location private, and remember that every crate arriving there represents someone who chose to help despite the danger. We must be worthy of that trust."
 
 local sceneObjectMapRebel = {
-	-- Luthen's public gallery. The end-table mesh has a low pivot, so the plinths sit at 1.0.
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-0,z=0.9,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=-0,z=1.3,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-0,z=1.75,y=5.1,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Ancient Ceremonial Vessel"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.0,z=0.9,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.0,z=1.3,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=2.0,z=1.75,y=5.1,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Republic Devotional Sculpture"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=4.0,z=0.9,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=4.0,z=1.3,y=5.1,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_02.iff",x=4.0,z=1.75,y=5.1,cellID=37002117,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Outer Rim Funerary Urn"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=-10.3,z=0.9,y=2.9,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Light"},
-	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_lamp_free_s03_lit.iff",x=-1.8,z=0.9,y=0.8,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Gallery Light"},
+	-- Luthen's public collection. The gallery mesh supplies the illuminated display plinths.
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/loot/misc/artifact_rare_s01.iff",x=-4.65,z=1.980,y=3.75,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Ancient Ceremonial Vessel"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/item/lytus_family_artefact.iff",x=-3.32,z=1.660,y=1.75,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Republic Devotional Sculpture"},
+	{spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_02.iff",x=4.3,z=2.180,y=2.75,cellID=37002117,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Outer Rim Funerary Urn"},
 
   --
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=7.2,z=0.9,y=0.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=7.2,z=1.3,y=0.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_01.iff",x=7.2,z=1.75,y=0.5,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Gilded Tatooine Ceremonial Vase"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=4.7,z=0.9,y=0.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=4.7,z=1.3,y=0.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s1.iff",x=4.7,z=1.75,y=0.5,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Old Republic Reliquary"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=1.5,z=0.9,y=0.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=1.5,z=1.3,y=0.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s2.iff",x=1.5,z=1.75,y=0.5,cellID=37002117,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Archaic Navigation Instrument"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.7,z=0.9,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/elegant/end_table_s01.iff",x=2.7,z=1.2,y=2.5,cellID=37002117,dw=1,dx=0,dy=0,dz=0},customObjectName="Antiquities Plinth"},
-  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s3.iff",x=2.7,z=1.75,y=2.5,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Imperial Court Sculpture"},
+  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/tatooine/frn_tato_vase_style_01.iff",x=3.4,z=1.720,y=-0.35,cellID=37002117,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Gilded Tatooine Ceremonial Vase"},
+  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s1.iff",x=-3.7,z=2.020,y=-2.05,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Old Republic Reliquary"},
+  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s2.iff",x=4.37,z=1.940,y=-3.5,cellID=37002117,dw=0.9239,dx=0,dy=-0.3827,dz=0},customObjectName="Archaic Navigation Instrument"},
+  {spawnData={planetName="coruscant",objectTemplate="object/tangible/furniture/all/frn_all_decorative_sm_s3.iff",x=-4.3,z=1.700,y=-4.95,cellID=37002117,dw=0.7071,dx=0,dy=0.7071,dz=0},customObjectName="Pre-Imperial Court Sculpture"},
 
 	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5665,z=62,y=-4818,cellID=0,dw=0.9239,dx=0,dy=0.3827,dz=0},customObjectName="Partisan Field Shelter"},
 	{spawnData={planetName="lok",objectTemplate="object/static/structure/corellia/corl_tent_hut_s01.iff",x=-5656,z=62,y=-4826,cellID=0,dw=0.3827,dx=0,dy=0.9239,dz=0},customObjectName="Partisan Supply Shelter"},
