@@ -273,3 +273,35 @@ print("PASS fixed uniforms on initial spawn and replacement")
 print("PASS six staggered routes, two complete rounds, 40 tables, home cooldowns, lost targets and staff replacement")
 print("PASS table and bar conversations, all eight orders, stale orders and failed purchases")
 print("PASS eight paired kitchen calls, guest departures, hearing range, missing speakers and timer continuity")
+
+local hostConvo=assert(convos.monumentGrillHost)
+local hostHandler=assert(_G[hostConvo.luaClassHandler])
+local host=Actor:new{id=77,cell=37000109}
+function Actor:getFirstName() return self.firstName end
+local function hostReply(player, screen, option)
+    player.session=screen and {getLastConversationScreen=function()return screen end} or nil
+    local nextScreen=hostHandler:getNextConversationScreen(hostConvo,player,(option or 1)-1,host)
+    return hostHandler:runScreenHandlers(hostConvo,player,host,0,nextScreen)
+end
+local function hostPath(player, choices)
+    local screen=hostReply(player)
+    assert(screen.id=="welcome" and screen.customDialogText:find("reservation",1,true))
+    for _,choice in ipairs(choices) do
+        assert(screen.stopConversation=="false" and screen.options[choice])
+        screen=hostReply(player,screen,choice)
+    end
+    assert(screen.stopConversation=="true" and #screen.options==0)
+    return screen.id
+end
+local first=Actor:new{firstName="Nera"}
+local second=Actor:new{firstName="Tavi"}
+local reserved=hostReply(first,hostReply(first),1)
+local named=hostReply(first,reserved,1)
+assert(named.text:find("Nera",1,true) and hostReply(second,reserved,1).text:find("Tavi",1,true))
+assert(hostConvo:getScreen("reserved_size").text==nil)
+assert(hostPath(first,{1,1,1,1})=="window_two" and hostPath(first,{1,2})=="wait")
+assert(hostPath(first,{2,1,2})=="dining_room" and hostPath(first,{2,2,1})=="window_four")
+assert(hostPath(first,{2,2,2})=="dining_room" and hostPath(first,{2,3,1})=="group_tables")
+assert(hostPath(first,{2,3,2})=="wait" and hostPath(first,{2,4})=="wait")
+assert(hostPath(first,{3,1})=="find_table" and hostPath(first,{3,2})=="wait" and hostPath(first,{4})=="bar")
+print("PASS host reservations, walk-ins, party sizes, seating directions, foyer waiting and drinks")

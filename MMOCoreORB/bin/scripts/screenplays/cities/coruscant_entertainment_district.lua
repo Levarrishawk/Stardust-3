@@ -152,6 +152,10 @@ function CoruscantEntertainmentScreenPlay:spawnMonumentGrillStaff()
 					printLuaError(self.screenplayName .. ": could not spawn " .. post.name)
 				end
 			end
+			if pStaff ~= nil and role == "host" then
+				AiAgent(pStaff):setConvoTemplate("monumentGrillHost")
+				CreatureObject(pStaff):setOptionBit(CONVERSABLE)
+			end
 			if pStaff ~= nil and post.actions ~= nil then
 				createEvent(math.random(500, 5000), self.screenplayName, "workGrillStation", pStaff, role .. "/" .. generation)
 			end
@@ -176,7 +180,7 @@ function CoruscantEntertainmentScreenPlay:greetGrillArrival(pGuest)
 	if pHost ~= nil and SceneObject(pHost):getParentID() == grillEntrance then
 		SceneObject(pHost):faceObject(pGuest, true)
 		CreatureObject(pHost):doAnimation("greet")
-		spatialChat(pHost, "Welcome to the Monument Grill! Make yourself comfortable here while we prepare your table.")
+		spatialChat(pHost, "Welcome to the Monument Grill. Please come to the stand when you're ready to check in.")
 	end
 	return 0
 end
@@ -1838,7 +1842,7 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   pNpc = spawnMobile("coruscant", "entertainer", 60, 38.6, 0.1, 2.9, 133, 37000109)
   self:setMoodString(pNpc, "conversation")
   
-  pNpc = spawnMobile("coruscant", "noble", 60, 40.3, 0.1, 1.4, -57, 37000109)
+  pNpc = spawnMobile("coruscant", "coruscant_noble", 60, 40.3, 0.1, 1.4, -57, 37000109)
   self:setMoodString(pNpc, "npc_consoling")
   
   pNpc = spawnMobile("coruscant", "commoner", 60, 30.3, 0.1, -8.7, 48, 37000110)
@@ -1867,17 +1871,17 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "conversation")
   pNpc = spawnMobile("coruscant", "businessman",60,2.11,-0.894992,5.4,180,37000111)
   self:setMoodString(pNpc, "npc_standing_drinking")
-  pNpc = spawnMobile("coruscant", "noble",60,-3.2,-0.9,-10.8,65,37000111)
+  pNpc = spawnMobile("coruscant", "coruscant_noble",60,-3.2,-0.9,-10.8,65,37000111)
   self:setMoodString(pNpc, "npc_sitting_table_eating")
   pNpc = spawnMobile("coruscant", "patron",60,3.11,-0.895,5.4,161.005,37000111)
   self:setMoodString(pNpc, "bored")
   pNpc = spawnMobile("coruscant", "commoner_naboo",60,1.11,-0.895,5.4,330.024,37000111)
   self:setMoodString(pNpc, "npc_standing_drinking")
-  pNpc = spawnMobile("coruscant", "noble",60,-3.11,-0.895,5.4,16.6733,37000111)
+  pNpc = spawnMobile("coruscant", "coruscant_noble",60,-3.11,-0.895,5.4,16.6733,37000111)
   self:setMoodString(pNpc, "npc_standing_drinking")
   pNpc = spawnMobile("coruscant", "businessman",60,16.1,-0.9,4.1,340,37000111)
   self:setMoodString(pNpc, "conversation")
-  pNpc = spawnMobile("coruscant", "noble",60,4.11,-0.894992,5.4,158.443,37000111)
+  pNpc = spawnMobile("coruscant", "coruscant_noble",60,4.11,-0.894992,5.4,158.443,37000111)
   self:setMoodString(pNpc, "npc_standing_drinking")
   pNpc = spawnMobile("coruscant", "patron",60,1.99,-0.894992,-8.44,325.01,37000111)
   self:setMoodString(pNpc, "conversation")
@@ -1897,19 +1901,19 @@ function CoruscantEntertainmentScreenPlay:spawnMobiles()
   self:setMoodString(pNpc, "npc_sitting_table")
   pNpc = spawnMobile("coruscant", "patron",60,26.3,-0.9,-8.8,317,37000111)
   self:setMoodString(pNpc, "npc_sitting_table_eating")
-  pNpc = spawnMobile("coruscant", "noble",60,8.0,-0.9,-4.5,-21,37000111)
+  pNpc = spawnMobile("coruscant", "coruscant_noble",60,8.0,-0.9,-4.5,-21,37000111)
   self:setMoodString(pNpc, "conversation")
   pNpc = spawnMobile("coruscant", "businessman",60,6.8,-0.9,-4.5,-22,37000111)
   self:setMoodString(pNpc, "happy")
-  pNpc = spawnMobile("coruscant", "noble",60,-3.1,-0.9,11.6,97,37000111)
+  pNpc = spawnMobile("coruscant", "coruscant_noble",60,-3.1,-0.9,11.6,97,37000111)
   self:setMoodString(pNpc, "npc_sitting_table")
   pNpc = spawnMobile("coruscant", "patron",60,1.2,-0.9,11.6,269,37000111)
   self:setMoodString(pNpc, "npc_sitting_chair")
-  pNpc = spawnMobile("coruscant", "noble",60,14.1,-0.9,4.3,51,37000111)
+  pNpc = spawnMobile("coruscant", "coruscant_noble",60,14.1,-0.9,4.3,51,37000111)
   self:setMoodString(pNpc, "npc_sitting_table")
   pNpc = spawnMobile("coruscant", "businessman",60,14.4,-0.9,7.5,139,37000111)
   self:setMoodString(pNpc, "npc_sitting_chair")
-  pNpc = spawnMobile("coruscant", "noble",60,17.1,-0.9,7.8,226,37000111)
+  pNpc = spawnMobile("coruscant", "coruscant_noble",60,17.1,-0.9,7.8,226,37000111)
   self:setMoodString(pNpc, "npc_sitting_chair")
   
   -- Starport

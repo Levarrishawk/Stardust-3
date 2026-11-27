@@ -45,3 +45,8 @@ noble = Creature:new {
 }
 
 CreatureTemplates:addCreatureTemplate(noble, "noble")
+
+CreatureTemplates:addCreatureTemplate(noble:new {
+	optionsBitmask = AIENABLED,
+	conversationTemplate = "",
+}, "coruscant_noble")

@@ -442,3 +442,16 @@ function MonumentGrillMenuHandler:runScreenHandlers(pTemplate, pPlayer, pNpc, op
 	end
 	return copy
 end
+
+MonumentGrillHostHandler = conv_handler:new {}
+
+function MonumentGrillHostHandler:runScreenHandlers(pTemplate, pPlayer, pNpc, option, pScreen)
+	if pPlayer == nil or pScreen == nil or LuaConversationScreen(pScreen):getScreenID() ~= "reserved_size" then
+		return pScreen
+	end
+	local name = CreatureObject(pPlayer):getFirstName()
+	if name == nil or name == "" then return pScreen end
+	local copy = LuaConversationScreen(pScreen):cloneScreen()
+	LuaConversationScreen(copy):setCustomDialogText("Thank you, " .. name .. ". How many will be dining with us?")
+	return copy
+end
