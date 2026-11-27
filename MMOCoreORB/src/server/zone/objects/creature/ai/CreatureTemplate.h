@@ -104,6 +104,7 @@ protected:
 	CreatureAttackMap* secondaryAttacks;
 
 	uint32 conversationTemplate;
+	float indoorConversationHeight;
 	uint32 optionsBitmask;
 	uint64 customAiMap;
 
@@ -301,6 +302,10 @@ public:
 
 	inline uint32 getConversationTemplate() const {
 		return conversationTemplate;
+	}
+
+	inline float getIndoorConversationHeight() const {
+		return indoorConversationHeight;
 	}
 
 	inline uint32 getOptionsBitmask() const {

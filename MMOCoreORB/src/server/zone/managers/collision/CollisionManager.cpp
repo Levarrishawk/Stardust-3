@@ -98,7 +98,7 @@ float CollisionManager::getRayOriginPoint(CreatureObject* creature) {
 	return heightOrigin;
 }
 
-bool CollisionManager::checkLineOfSightInBuilding(SceneObject* object1, SceneObject* object2, SceneObject* building) {
+bool CollisionManager::checkLineOfSightInBuilding(SceneObject* object1, SceneObject* object2, SceneObject* building, float rayHeight) {
 	SharedObjectTemplate* objectTemplate = building->getObjectTemplate();
 	const PortalLayout* portalLayout = objectTemplate->getPortalLayout();
 
@@ -107,10 +107,10 @@ bool CollisionManager::checkLineOfSightInBuilding(SceneObject* object1, SceneObj
 
 	//we are in model space... in cells
 	Vector3 rayOrigin = object1->getPosition();
-	rayOrigin.set(rayOrigin.getX(), rayOrigin.getY(), rayOrigin.getZ() + 1.f);
+	rayOrigin.set(rayOrigin.getX(), rayOrigin.getY(), rayOrigin.getZ() + rayHeight);
 
 	Vector3 rayEnd = object2->getPosition();
-	rayEnd.set(rayEnd.getX(), rayEnd.getY(), rayEnd.getZ() + 1.f);
+	rayEnd.set(rayEnd.getX(), rayEnd.getY(), rayEnd.getZ() + rayHeight);
 
 	Vector3 direction(Vector3(rayEnd - rayOrigin));
 	direction.normalize();
@@ -772,7 +772,7 @@ void CollisionManager::getWorldFloorCollisions(float x, float y, Zone* zone, Sor
 	}
 }
 
-bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* object2, bool trace) {
+bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* object2, bool trace, float indoorHeight) {
 	Zone* zone = object1->getZone();
 
 	if (zone == nullptr)
@@ -796,7 +796,7 @@ bool CollisionManager::checkLineOfSight(SceneObject* object1, SceneObject* objec
 
 	if (rootParent1 != nullptr || rootParent2 != nullptr) {
 		if (rootParent1 == rootParent2) {
-			return CollisionManager::checkLineOfSightInBuilding(object1, object2, rootParent1);
+			return CollisionManager::checkLineOfSightInBuilding(object1, object2, rootParent1, indoorHeight);
 		} else if (rootParent1 != nullptr && rootParent2 != nullptr)
 			return false; //different buildings
 	}

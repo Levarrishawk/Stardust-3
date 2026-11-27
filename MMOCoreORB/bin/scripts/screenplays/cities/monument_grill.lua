@@ -3,7 +3,16 @@ registerScreenPlay("MonumentGrill", true)
 
 local building = 37000108
 local prefix = "MonumentGrill:"
-local names = {"Maela Venn", "Taro Dain", "Seli Orr", "Iren Tal", "Vessa Rin", "Corin Hale"}
+local waiter = "monument_grill_waiter"
+local robedWaiter = "monument_grill_robed_waiter"
+local staff = {
+	{name = "Maela Venn", mobile = robedWaiter},
+	{name = "Taro Dain", mobile = waiter},
+	{name = "Seli Orr", mobile = waiter},
+	{name = "Iren Tal", mobile = waiter},
+	{name = "Vessa Rin", mobile = robedWaiter},
+	{name = "Corin Hale", mobile = waiter},
+}
 local rest, spacing, tableTime = 300, 45, 35
 
 -- Cell number, local x, height, local z, optional table number and facing.
@@ -247,9 +256,9 @@ function MonumentGrill:serveSection(slot, now)
 	if pNpc == nil then
 		if readData(key .. "retry") > now then return end
 		writeData(key .. "retry", now + 20)
-		pNpc = spawnMobile("coruscant", "monument_grill_waiter", 0, home[2], home[3], home[4], 0, home[1])
+		pNpc = spawnMobile("coruscant", staff[slot].mobile, 0, home[2], home[3], home[4], 0, home[1])
 		if pNpc == nil then return end
-		CreatureObject(pNpc):setCustomObjectName(names[slot] .. " (Wait Staff)")
+		CreatureObject(pNpc):setCustomObjectName(staff[slot].name .. " (Wait Staff)")
 		CreatureObject(pNpc):clearOptionBit(CONVERSABLE)
 		writeData(key .. "npc", SceneObject(pNpc):getObjectID())
 		writeData(key .. "point", 0)
@@ -383,7 +392,7 @@ local function service(pPlayer, pNpc)
 		or not guest:isInRangeWithObject(pNpc, 6) then return end
 	local role = AiAgent(pNpc):getCreatureTemplateName()
 	if role == "monument_grill_bartender" and npc:getParentID() == 37000111 then return barMenu, 0, 1 end
-	if role ~= "monument_grill_waiter" then return end
+	if role ~= waiter and role ~= robedWaiter then return end
 	for slot, route in ipairs(MonumentGrill.routes) do
 		local key = prefix .. slot .. ":"
 		if readData(key .. "npc") == npc:getObjectID() then

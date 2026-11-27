@@ -10,6 +10,7 @@
 
 CreatureTemplate::CreatureTemplate() {
 	conversationTemplate = 0;
+	indoorConversationHeight = 1.f;
 	kinetic = 0;
 	energy = 0;
 	electricity = 0;
@@ -103,6 +104,7 @@ float CreatureTemplate::getSpawnScale() const {
 
 void CreatureTemplate::readObject(LuaObject* templateData) {
 	conversationTemplate = String(templateData->getStringField("conversationTemplate").trim()).hashCode();
+	indoorConversationHeight = templateData->getFloatField("indoorConversationHeight", 1.f);
 	objectName = templateData->getStringField("objectName").trim();
 	randomNameType = templateData->getIntField("randomNameType");
 	randomNameTag = templateData->getBooleanField("randomNameTag");

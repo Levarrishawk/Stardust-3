@@ -52,7 +52,7 @@ SceneObject=function(p)return p end
 CreatureObject,AiAgent,LuaConversationScreen,LuaConversationTemplate,LuaConversationSession=SceneObject,SceneObject,SceneObject,SceneObject,SceneObject
 function spatialChat(who,line) lines[#lines+1]={who.role,line,now} end
 function spawnMobile(zone,role,delay,x,h,z,heading,cell)
-    assert(zone=="coruscant" and role=="monument_grill_waiter" and cell==37000120 and templates[role] and delay==0)
+    assert(zone=="coruscant" and (role=="monument_grill_waiter" or role=="monument_grill_robed_waiter") and cell==37000120 and templates[role] and delay==0)
     nextId=nextId+1; local p=Actor:new{id=nextId,role=role,x=x,height=h,z=z,cell=cell}
     npcs[nextId]=p; return p
 end
@@ -107,8 +107,9 @@ local function choose(npc,screen,i)
     local nextScreen=handler:getNextConversationScreen(convo,guest,i-1,npc)
     return talk(npc,nextScreen.id)
 end
-local function shop(npc,number)
-    guest.cell,guest.x,guest.z=npc.cell,npc.x+.8,npc.z
+local function shop(npc,number,guestX,guestZ)
+    guestX,guestZ=guestX or npc.x+.8,guestZ or npc.z
+    guest.cell,guest.x,guest.z=npc.cell,guestX,guestZ
     local hello=talk(npc,"hello")
     assert(hello.text:find(number and string.format("%02d",number) or "bar",1,true))
     local menu=choose(npc,hello,1)
@@ -129,7 +130,7 @@ local function shop(npc,number)
         elseif failure=="cash" then guest.cash=1 elseif failure=="capacity" then guest.inventory.full=true else guest.inventory.fail=true end
         local balance=guest.cash;talk(npc,"order1")
         assert(guest.cash==balance and #guest.inventory==before)
-        guest.x,guest.cell,guest.cash=npc.x+.8,npc.cell,cash
+        guest.x,guest.cell,guest.cash=guestX,npc.cell,cash
         guest.inventory.full,guest.inventory.fail=false,false
     end
 end
@@ -146,6 +147,20 @@ local function fire(method)
     local e=event(method);grill[method](grill,e.actor,e.args)
 end
 fire("rounds");assert(nextId==106)
+local function checkUniform(slot)
+    local npc=npcs[readData("MonumentGrill:"..slot..":npc")]
+    if slot==1 or slot==5 then
+        local name=slot==1 and "Maela Venn" or "Vessa Rin"
+        assert(npc.name==name.." (Wait Staff)" and npc.role=="monument_grill_robed_waiter")
+        local t=templates[npc.role]
+        assert(#t.templates==1 and t.templates[1]=="object/mobile/dressed_noble_naboo_twilek_female_02.iff")
+        assert(t.conversationTemplate==templates.monument_grill_waiter.conversationTemplate)
+        assert(t.optionsBitmask==templates.monument_grill_waiter.optionsBitmask)
+    else
+        assert(npc.role=="monument_grill_waiter")
+    end
+end
+for slot=1,6 do checkUniform(slot) end
 fire("kitchen");assert(#lines==0)
 -- A missing zone can return nil, and a loaded zone with no players returns {}.
 nearbyPlayers={};fire("kitchen");assert(#lines==0)
@@ -236,9 +251,25 @@ for slot,r in ipairs(grill.routes) do
 end
 for i=1,40 do assert(seen[i]) end
 assert(firstShop and held and not stale)
-for i=1,3 do shop(Actor:new{id=200+i,cell=37000111,x=0,z=0,role="monument_grill_bartender"},nil) end
+-- Spawn positions and guest positions across the nose and both long sides of the bar.
+local stations={{8.6,.6,11.5,.6},{-.9,3.3,-.9,6.3},{-1.7,-2.4,-1.7,-5.35}}
+assert(templates.monument_grill_bartender.indoorConversationHeight==1.5)
+for i,p in ipairs(stations) do
+    local bartender=Actor:new{id=200+i,cell=37000111,x=p[1],z=p[2],role="monument_grill_bartender"}
+    assert((p[1]-p[3])^2+(p[2]-p[4])^2<25)
+    shop(bartender,nil,p[3],p[4])
+end
 local oldNpc=readData("MonumentGrill:3:npc");npcs[oldNpc]=nil;fire("rounds")
 assert(nextId==107 and readData("MonumentGrill:3:npc")~=oldNpc and readData("MonumentGrill:3:point")==0)
+for _,slot in ipairs({1,5}) do
+    local key="MonumentGrill:"..slot..":npc"
+    local replaced=readData(key)
+    npcs[replaced]=nil
+    fire("rounds")
+    assert(readData(key)~=replaced)
+    checkUniform(slot)
+end
+print("PASS fixed uniforms on initial spawn and replacement")
 print("PASS six staggered routes, two complete rounds, 40 tables, home cooldowns, lost targets and staff replacement")
 print("PASS table and bar conversations, all eight orders, stale orders and failed purchases")
 print("PASS eight paired kitchen calls, guest departures, hearing range, missing speakers and timer continuity")

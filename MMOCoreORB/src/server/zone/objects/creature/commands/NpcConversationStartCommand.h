@@ -5,6 +5,7 @@
 #ifndef NPCCONVERSATIONSTARTCOMMAND_H_
 #define NPCCONVERSATIONSTARTCOMMAND_H_
 
+#include "server/zone/objects/creature/ai/CreatureTemplate.h"
 #include "server/zone/objects/scene/SceneObject.h"
 #include "server/zone/objects/ship/ai/SpaceStationObject.h"
 
@@ -100,7 +101,9 @@ public:
 				}
 
 				// No conversing without LoS
-				if (!CollisionManager::checkLineOfSight(agent, creature, trace)) {
+				auto npcTemplate = agent->getCreatureTemplate();
+				float indoorHeight = npcTemplate != nullptr ? npcTemplate->getIndoorConversationHeight() : 1.f;
+				if (!CollisionManager::checkLineOfSight(agent, creature, trace, indoorHeight)) {
 					traceConversation("rejected: line of sight");
 					return GENERALERROR;
 				}
