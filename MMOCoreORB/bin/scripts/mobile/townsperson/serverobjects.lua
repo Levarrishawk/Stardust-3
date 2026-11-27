@@ -53,6 +53,7 @@ includeFile("townsperson/teras_kasi_master.lua")
 includeFile("townsperson/twilek_slave.lua")
 includeFile("townsperson/vendor.lua")
 includeFile("townsperson/monument_square.lua")
+includeFile("townsperson/monument_grill.lua")
 
 includeFile("townsperson/commoner_child.lua")
 includeFile("townsperson/chandrila_park_ranger.lua")

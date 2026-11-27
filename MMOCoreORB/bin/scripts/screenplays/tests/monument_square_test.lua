@@ -23,7 +23,8 @@ ConvoTemplate=Object:new{addScreen=function(self,v) assert(not self.screens[v.id
 ConvoScreen=Object:new{}
 function addConversationTemplate(n,v) assert(not convos[n]);convos[n]=v end
 ObjectTemplates={addTemplate=function(_,v,k) assert(not goods[k]);goods[k]=v end}
-for _,n in ipairs({"drink_caf","dessert_puffcake","dish_fire_stew","dessert_bofa_treat"}) do
+for _,n in ipairs({"drink_caf","dessert_puffcake","dish_fire_stew","dessert_bofa_treat",
+	"dish_ramorrean_capanata", "dish_teltier_noodles", "dish_braised_canron", "dessert_ryshcate"}) do
 	_G["object_tangible_food_crafted_shared_"..n]=Object:new{parent=n}
 end
 object_tangible_furniture_decorative_shared_umate_pocket_holo=Object:new{}

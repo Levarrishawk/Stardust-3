@@ -17,7 +17,7 @@ local shop = {
 	},
 }
 
-local function purchase(pPlayer, pNpc, item)
+function MonumentSquareVendorHandler:purchase(pPlayer, pNpc, item)
 	if SceneObject(pPlayer):getZoneName() ~= "coruscant" or not SceneObject(pPlayer):isInRangeWithObject(pNpc,6) then
 		return "Come a little closer so I can hand it to you."
 	end
@@ -50,7 +50,7 @@ function MonumentSquareVendorHandler:runScreenHandlers(pTemplate,pPlayer,pNpc,op
 		end
 		screen:addOption("Just browsing, thanks.", "bye")
 	elseif id == "buy1" or id == "buy2" then
-		screen:setCustomDialogText(purchase(pPlayer,pNpc,stock[id == "buy1" and 1 or 2]))
+		screen:setCustomDialogText(self:purchase(pPlayer,pNpc,stock[id == "buy1" and 1 or 2]))
 	end
 	return copy
 end
