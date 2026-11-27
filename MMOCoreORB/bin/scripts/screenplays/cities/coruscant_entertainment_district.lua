@@ -49,6 +49,7 @@ function CoruscantEntertainmentScreenPlay:start()
 		self:spawnBackstageDoor()
 		self:populateOperaAuditorium()
 		self:spawnOperaHouseStaff()
+		self:spawnMonumentGrillStaff()
 		self:spawnTaxiDrivers()
 		self:spawnMountedSwoopPatrol()
 		self:spawnPalaceMusicAreas()
@@ -113,6 +114,81 @@ function CoruscantEntertainmentScreenPlay:operaStaffSeesGuest(pStaff, pGuest)
 		spatialChat(pStaff, "Welcome to the Galaxies Opera House. This way, please.")
 	end
 	CreatureObject(pStaff):doAnimation(post.cue)
+	return 0
+end
+
+local grillBuilding = 37000108
+local grillEntrance = 37000109
+local grillStaff = {
+	host = {mobile = "dressed_npe_bartender", name = "Monument Grill Host", cell = grillEntrance,
+		x = 45.0, height = 0.1, z = 1.30, heading = 153},
+	chef = {mobile = "npc_dressed_meat_chef", name = "Head Chef", cell = 37000119,
+		x = -27.51, height = -0.895, z = -1.08, heading = 180, actions = {"manipulate_medium", "manipulate_low"}},
+	line = {mobile = "dressed_meatlump_male_chef_02", name = "Line Cook", cell = 37000119,
+		x = -27.41, height = -0.895, z = 1.05, heading = -90, actions = {"manipulate_medium", "manipulate_high"}},
+	prep = {mobile = "dressed_meatlump_female_chef_02", name = "Prep Cook", cell = 37000121,
+		x = -30.07, height = -0.895, z = 10.49, heading = -90, actions = {"manipulate_low", "manipulate_medium"}},
+	pass = {mobile = "dressed_meatlump_male_chef_02", name = "Plating Cook", cell = 37000121,
+		x = -25.0, height = -0.895, z = 10.40, heading = 90, actions = {"manipulate_medium", "manipulate_low"}},
+}
+
+function CoruscantEntertainmentScreenPlay:spawnMonumentGrillStaff()
+	local pBuilding = getSceneObject(grillBuilding)
+	if pBuilding == nil or not SceneObject(pBuilding):isBuildingObject() then return end
+	local prefix = self.screenplayName .. ":grill:"
+	local generation = readData(prefix .. "shift") + 1
+	writeData(prefix .. "shift", generation)
+	for role, post in pairs(grillStaff) do
+		local pCell = getSceneObject(post.cell)
+		if pCell ~= nil and SceneObject(pCell):getParentID() == grillBuilding then
+			local pStaff = getSceneObject(readData(prefix .. role))
+			if pStaff == nil then
+				pStaff = spawnMobile("coruscant", post.mobile, 0, post.x, post.height, post.z, post.heading, post.cell)
+				if pStaff ~= nil then
+					AiAgent(pStaff):addObjectFlag(AI_STATIONARY)
+					CreatureObject(pStaff):setCustomObjectName(post.name)
+					writeData(prefix .. role, SceneObject(pStaff):getObjectID())
+				else
+					printLuaError(self.screenplayName .. ": could not spawn " .. post.name)
+				end
+			end
+			if pStaff ~= nil and post.actions ~= nil then
+				createEvent(math.random(500, 5000), self.screenplayName, "workGrillStation", pStaff, role .. "/" .. generation)
+			end
+		end
+	end
+	if not hasObserver(ENTEREDBUILDING, self.screenplayName, "enteredMonumentGrill", pBuilding) then
+		createObserver(ENTEREDBUILDING, self.screenplayName, "enteredMonumentGrill", pBuilding)
+	end
+end
+
+function CoruscantEntertainmentScreenPlay:enteredMonumentGrill(pBuilding, pGuest)
+	if pGuest ~= nil and SceneObject(pGuest):isPlayerCreature() and SceneObject(pGuest):getParentID() == grillEntrance then
+		-- Allow the entering client to receive the host before the greeting arrives.
+		createEvent(900, self.screenplayName, "greetGrillArrival", pGuest, "")
+	end
+	return 0
+end
+
+function CoruscantEntertainmentScreenPlay:greetGrillArrival(pGuest)
+	if pGuest == nil or SceneObject(pGuest):getParentID() ~= grillEntrance then return 0 end
+	local pHost = getSceneObject(readData(self.screenplayName .. ":grill:host"))
+	if pHost ~= nil and SceneObject(pHost):getParentID() == grillEntrance then
+		SceneObject(pHost):faceObject(pGuest, true)
+		CreatureObject(pHost):doAnimation("greet")
+		spatialChat(pHost, "Welcome to the Monument Grill! Make yourself comfortable here while we prepare your table.")
+	end
+	return 0
+end
+
+function CoruscantEntertainmentScreenPlay:workGrillStation(pStaff, args)
+	if pStaff == nil then return 0 end
+	local role, generation = string.match(args, "^(%a+)/(%d+)$")
+	local post = grillStaff[role]
+	if post == nil or post.actions == nil or tonumber(generation) ~= readData(self.screenplayName .. ":grill:shift") then return 0 end
+	if SceneObject(pStaff):getParentID() ~= post.cell then return 0 end
+	CreatureObject(pStaff):doAnimation(post.actions[math.random(#post.actions)])
+	createEvent(math.random(3800, 7800), self.screenplayName, "workGrillStation", pStaff, args)
 	return 0
 end
 
