@@ -224,8 +224,6 @@ void ZonePacketHandler::registerObjectControllerMessages() {
 }
 
 Task* ZonePacketHandler::generateMessageTask(ZoneClientSession* client, Message* pack) const {
-	debug() << "parsing " << *pack;
-
 	if (client == nullptr)
 		return nullptr;
 

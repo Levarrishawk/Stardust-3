@@ -22,12 +22,7 @@ public:
 	}
 
 	void run() final {
-		try {
-			database->doExecuteStatement(query);
-		} catch (const Exception& e) {
-			database->error(e.getMessage().toCharArray());
-		}
-
+		database->doExecuteStatement(query);
 	}
 };
 
@@ -56,14 +51,10 @@ public:
 	}
 
 	void run() final {
-		try {
-			engine::db::ResultSet* res = database->executeQuery(query);
+		engine::db::ResultSet* res = database->executeQuery(query);
 
-			MysqlCallback* callback = new MysqlCallback(res, std::move(function));
-			callback->execute();
-		} catch (const Exception& e) {
-			database->error(e.getMessage().toCharArray());
-		}
+		MysqlCallback* callback = new MysqlCallback(res, std::move(function));
+		callback->execute();
 	}
 };
 
@@ -139,10 +130,10 @@ void MySqlDatabase::doExecuteStatement(const String& statement) {
 		unsigned int errorNumber = mysql_errno(&mysql);
 
 		if (errorNumber != 1205/*ER_LOCK_WAIT_TIMEOUT*/) {
-			error(statement.toCharArray());
+			error("executeStatement");
 			break;
 		} else
-			warning() << "mysql lock wait timeout on statement: " << statement;
+			warning() << "mysql lock wait timeout";
 	}
 
 #ifdef WITH_STM
@@ -156,7 +147,7 @@ void MySqlDatabase::doExecuteStatement(const String& statement) {
 	TaskWorkerThread* worker = thread ? thread->asTaskWorkerThread() : nullptr;
 
 	if (worker) {
-		worker->addMysqlStats(statement, elapsed);
+		worker->addMysqlStats("executeStatement", elapsed);
 	}
 #endif
 
@@ -194,10 +185,10 @@ engine::db::ResultSet* MySqlDatabase::executeQuery(const char* statement) {
 		unsigned int errorNumber = mysql_errno(&mysql);
 
 		if (errorNumber != 1205/* ER_LOCK_WAIT_TIMEOUT*/) {
-			error(statement);
+			error("executeQuery");
 			break;
 		} else
-			warning() << "mysql lock wait timeout on statement: " << statement;
+			warning() << "mysql lock wait timeout";
 	}
 
 	MYSQL_RES* result = mysql_store_result(&mysql);
@@ -206,7 +197,7 @@ engine::db::ResultSet* MySqlDatabase::executeQuery(const char* statement) {
 		//TA: insert statements return nullptr result
 		//but if the table has auto_increment you can still call mysql_insert_id(mysql) to get the last affected row
 		if (mysql_field_count(&mysql) != 0) {
-			error(statement);
+			error("executeQuery");
 		}
 	}
 
@@ -221,7 +212,7 @@ engine::db::ResultSet* MySqlDatabase::executeQuery(const char* statement) {
 	TaskWorkerThread* worker = thread ? thread->asTaskWorkerThread() : nullptr;
 
 	if (worker) {
-		worker->addMysqlStats(statement, elapsed);
+		worker->addMysqlStats("executeQuery", elapsed);
 	}
 #endif
 
@@ -269,9 +260,9 @@ void MySqlDatabase::error() {
 	throw DatabaseException(msg.toString());
 }
 
-void MySqlDatabase::error(const char* query) {
+void MySqlDatabase::error(const char* operation) {
 	StringBuffer msg;
-	msg << "DatabaseException caused by query: " << query << "\n" << mysql_errno(&mysql) << ": " << mysql_error(&mysql);
+	msg << "MySQL " << operation << " failed with error " << mysql_errno(&mysql);
 	Logger::error(msg);
 
 	throw DatabaseException(msg.toString());

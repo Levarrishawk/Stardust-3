@@ -1,0 +1,1033 @@
+diff --git a/MMOEngine/src/engine/service/DatagramServiceThread.cpp b/MMOEngine/src/engine/service/DatagramServiceThread.cpp
+--- a/MMOEngine/src/engine/service/DatagramServiceThread.cpp
++++ b/MMOEngine/src/engine/service/DatagramServiceThread.cpp
+@@ -165,6 +165,9 @@
+ 		client = clients->get(netid);
+ 
+ 		if (client == nullptr)	{
++			if (clients->isFull())
++				return;
++
+ 			if ((client = serviceHandler->createConnection(socket, addr)) == nullptr)
+ 				return;
+ 
+diff --git a/MMOEngine/src/engine/service/Message.h b/MMOEngine/src/engine/service/Message.h
+--- a/MMOEngine/src/engine/service/Message.h
++++ b/MMOEngine/src/engine/service/Message.h
+@@ -55,6 +55,9 @@
+ 		}
+ 
+ 		Message* clone(int startoffs = 0) {
++			if (startoffs < 0 || startoffs > size())
++				throw StreamIndexOutOfBoundsException(this, startoffs);
++
+ 			Message* pack = new Message();
+ 			copy(pack, startoffs);
+ 
+diff --git a/MMOEngine/src/engine/service/ServiceClientMap.h b/MMOEngine/src/engine/service/ServiceClientMap.h
+--- a/MMOEngine/src/engine/service/ServiceClientMap.h
++++ b/MMOEngine/src/engine/service/ServiceClientMap.h
+@@ -26,6 +26,10 @@
+ 			setNullValue(nullptr);
+ 		}
+ 
++		bool isFull() const {
++			return size() >= maxConnections;
++		}
++
+ 		bool add(ServiceClient* client) {
+ 			if (HashTable<uint64, ServiceClient*>::put(client->getNetworkID(), client) == nullptr) {
+ 				client->acquire();
+diff --git a/MMOEngine/src/engine/service/proto/BaseClient.cpp b/MMOEngine/src/engine/service/proto/BaseClient.cpp
+--- a/MMOEngine/src/engine/service/proto/BaseClient.cpp
++++ b/MMOEngine/src/engine/service/proto/BaseClient.cpp
+@@ -366,7 +366,7 @@
+ 
+ 			if (!DatagramServiceClient::send(pack)) {
+ 			#ifdef TRACE_CLIENTS
+-				debug() << "LOSING " << pack->toStringData();
++				debug() << "LOSING " << pack->size() << " bytes";
+ 			#endif
+ 			}
+ 		}
+@@ -394,7 +394,7 @@
+ #endif
+ 
+ 			if (!DatagramServiceClient::send(pack))
+-				debug() << "LOSING " << *pack;
++				debug() << "LOSING " << pack->size() << " bytes";
+ 		}
+ 	} catch (SocketException& e) {
+ 		StringBuffer err;
+@@ -647,7 +647,7 @@
+ 				lock();
+ 
+ 				if (!DatagramServiceClient::send(pack)) {
+-					debug() << "LOSING (" << pack->getSequence() << ") " << *pack;
++					debug() << "LOSING (" << pack->getSequence() << ") " << pack->size() << " bytes";
+ 				}
+ 
+ 				++sentPackets;
+@@ -691,7 +691,7 @@
+ 			lock();
+ 
+ 			if (!DatagramServiceClient::send(pack)) {
+-				debug() << "LOSING (" << pack->getSequence() << ") " << *pack;
++				debug() << "LOSING (" << pack->getSequence() << ") " << pack->size() << " bytes";
+ 			}
+ 		}
+ 
+@@ -740,7 +740,7 @@
+ 				lock();
+ 
+ 				if (!DatagramServiceClient::send(pack)) {
+-					debug() << "LOSING (" << pack->getSequence() << ") " << *pack;
++					debug() << "LOSING (" << pack->getSequence() << ") " << pack->size() << " bytes";
+ 				}
+ 
+ 				if (pack->getReferenceCount())
+@@ -953,7 +953,7 @@
+ 
+ 
+ 	#ifdef TRACE_CLIENTS
+-		debug() << "READ(" << seq << ") - " << *pack;
++		debug() << "READ(" << seq << ") - " << pack->size() << " bytes";
+ 	#endif
+ 
+ 	return true;
+@@ -992,7 +992,7 @@
+ 	}
+ 
+ 	if (!fragmentedPacket->addFragment(pack)) {
+-		error() << "addFragment failed: " << fragmentedPacket->getError() << "; fragmentedPacket: " << *fragmentedPacket << endl << "packet: " << *pack;
++		error() << "addFragment failed: " << fragmentedPacket->getError() << "; fragmentedPacket: " << fragmentedPacket->size() << " bytes" << endl << "packet: " << pack->size() << " bytes";
+ 
+ 		if (fragmentedPacket->getReferenceCount())
+ 			fragmentedPacket->release();
+@@ -1018,8 +1018,8 @@
+ 			error()
+ 				<< "fragmentedPacket->isComplete() exception: " << e.getMessage()
+ 				<< "; error: " << fragmentedPacket->getError()
+-				<< "; fragmentedPacket: " << *fragmentedPacket
+-				<< "; packet: " << *pack;
++				<< "; fragmentedPacket: " << fragmentedPacket->size() << " bytes"
++				<< "; packet: " << pack->size() << " bytes";
+ 
+ 			if (fragmentedPacket->getReferenceCount())
+ 				fragmentedPacket->release();
+@@ -1029,15 +1029,15 @@
+ 			fragmentedPacket = nullptr;
+ 			packet = nullptr;
+ 		} else {
+-			error() << "fragmentedPacket->isComplete() exception: " << e.getMessage() << "; packet: " << *pack;
++			error() << "fragmentedPacket->isComplete() exception: " << e.getMessage() << "; packet: " << pack->size() << " bytes";
+ 		}
+ 	} catch (...) {
+ 		if (fragmentedPacket != nullptr) {
+ 			error()
+ 				<< "fragmentedPacket->isComplete() exception: unreproted exception caught"
+ 				<< "; error: " << fragmentedPacket->getError()
+-				<< "; fragmentedPacket: " << *fragmentedPacket
+-				<< "; packet: " << *pack;
++				<< "; fragmentedPacket: " << fragmentedPacket->size() << " bytes"
++				<< "; packet: " << pack->size() << " bytes";
+ 
+ 			if (fragmentedPacket->getReferenceCount())
+ 				fragmentedPacket->release();
+@@ -1047,7 +1047,7 @@
+ 			fragmentedPacket = nullptr;
+ 			packet = nullptr;
+ 		} else {
+-			error() << "fragmentedPacket->isComplete() exception: unreproted exception caught; packet: " << *pack;
++			error() << "fragmentedPacket->isComplete() exception: unreproted exception caught; packet: " << pack->size() << " bytes";
+ 		}
+ 	}
+ 
+@@ -1124,13 +1124,13 @@
+ 		packet->setTimeout(checkupEvent->getCheckupTime());
+ 
+ 		if (!DatagramServiceClient::send(packet)) {
+-			debug() << "LOSING on resend (" << packet->getSequence() << ") " << *packet;
++			debug() << "LOSING on resend (" << packet->getSequence() << ") " << packet->size() << " bytes";
+ 		}
+ 
+ 		++resentPackets;
+ 
+ 		#ifdef TRACE_CLIENTS
+-			debug() << "RESEND(" << packet->getSequence() << ") - " << *packet;
++			debug() << "RESEND(" << packet->getSequence() << ") - " << packet->size() << " bytes";
+ 		#endif
+ 	}
+ }
+@@ -1150,7 +1150,7 @@
+ 		}
+ 
+ 		if (!DatagramServiceClient::send(packet)) {
+-			debug() << "LOSING on resend (" << packet->getSequence() << ") " << *packet;
++			debug() << "LOSING on resend (" << packet->getSequence() << ") " << packet->size() << " bytes";
+ 		}
+ 
+ 		packet->setTimeout(checkupEvent->getCheckupTime());
+@@ -1186,7 +1186,7 @@
+ */
+ 
+ 		if (!DatagramServiceClient::send(packet)) {
+-			debug() << "LOSING on resend (" << packet->getSequence() << ") " << *packet;
++			debug() << "LOSING on resend (" << packet->getSequence() << ") " << packet->size() << " bytes";
+ 		}
+ 
+ 		++resentPackets;
+diff --git a/MMOEngine/src/engine/service/proto/BaseFragmentedPacket.cpp b/MMOEngine/src/engine/service/proto/BaseFragmentedPacket.cpp
+--- a/MMOEngine/src/engine/service/proto/BaseFragmentedPacket.cpp
++++ b/MMOEngine/src/engine/service/proto/BaseFragmentedPacket.cpp
+@@ -37,7 +37,7 @@
+ 		totalSize = pack->parseNetInt();
+ 
+ 		if (totalSize < 0 || totalSize > MAX_COMPLETE_FRAG_SIZE) {
+-			addError() << "received fragmented packet with size too big = (" << totalSize << ") for frag: " << pack->toStringData();
++			addError() << "received fragmented packet with size too big = (" << totalSize << ") for frag: " << pack->size() << " bytes";
+ 
+ 			return false;
+ 		} else if (totalSize == 0) {
+diff --git a/MMOEngine/src/engine/service/proto/BaseMessage.h b/MMOEngine/src/engine/service/proto/BaseMessage.h
+--- a/MMOEngine/src/engine/service/proto/BaseMessage.h
++++ b/MMOEngine/src/engine/service/proto/BaseMessage.h
+@@ -26,24 +26,17 @@
+ 			insertShort(0x0000);
+ 		}
+ 
+-		BaseMessage(const Packet* pack, int start) : BasePacket(pack->size() - start) {
+-			if (start < 0)
+-				throw PacketIndexOutOfBoundsException(pack, start);
+-
+-			insertStream(pack->getBuffer() + start, pack->size() - start);
+-
+-			reset();
++		BaseMessage(const Packet* pack, int start) : BaseMessage(pack, start, pack->size()) {
+ 		}
+ 
+-		BaseMessage(const Packet* pack, int startoffs, int endoffs) : BasePacket(endoffs - startoffs) {
+-			if (startoffs < 0)
++		BaseMessage(const Packet* pack, int startoffs, int endoffs) {
++			if (startoffs < 0 || startoffs > endoffs)
+ 				throw PacketIndexOutOfBoundsException(pack, startoffs);
+-
+ 			if (endoffs > pack->size())
+ 				throw PacketIndexOutOfBoundsException(pack, endoffs);
+ 
+-			insertStream(pack->getBuffer() + startoffs, endoffs - startoffs);
+-
++			if (startoffs != endoffs)
++				insertStream(pack->getBuffer() + startoffs, endoffs - startoffs);
+ 			reset();
+ 		}
+ 
+@@ -51,6 +44,9 @@
+ 		}
+ 
+ 		BaseMessage* clone(int startoffs = 0) {
++			if (startoffs < 0 || startoffs > size())
++				throw StreamIndexOutOfBoundsException(this, startoffs);
++
+ 			BaseMessage* pack = new BaseMessage();
+ 			copy(pack, startoffs);
+ 
+diff --git a/MMOEngine/src/engine/service/proto/BasePacket.cpp b/MMOEngine/src/engine/service/proto/BasePacket.cpp
+--- a/MMOEngine/src/engine/service/proto/BasePacket.cpp
++++ b/MMOEngine/src/engine/service/proto/BasePacket.cpp
+@@ -40,6 +40,9 @@
+ }
+ 
+ BasePacket* BasePacket::clone(int startoffs) {
++	if (startoffs < 0 || startoffs > size())
++		throw StreamIndexOutOfBoundsException(this, startoffs);
++
+ 	BasePacket* pack = new BasePacket(elementCount - startoffs);
+ 	copy(pack, startoffs);
+ 
+diff --git a/MMOEngine/src/engine/service/proto/BasePacketHandler.cpp b/MMOEngine/src/engine/service/proto/BasePacketHandler.cpp
+--- a/MMOEngine/src/engine/service/proto/BasePacketHandler.cpp
++++ b/MMOEngine/src/engine/service/proto/BasePacketHandler.cpp
+@@ -33,7 +33,7 @@
+ }
+ 
+ void BasePacketHandler::handlePacket(BaseClient* client, Packet* pack) {
+-	debug() << "READ - " << *pack;
++	debug() << "READ - " << pack->size() << " bytes";
+ 
+ 	try {
+ 		uint16 opcode = pack->parseShort();
+@@ -284,7 +284,7 @@
+ 				BaseMessage* fragPiece = new BaseMessage(pack, pack->getOffset(), endOffset);
+ 
+ 				if (handleFragmentedPacket(client, fragPiece)) {
+-					client->error() << "could not parse frag in handleMultiPacket: " << *pack <<
++					client->error() << "could not parse frag in handleMultiPacket: " << pack->size() << " bytes" <<
+ 						" with validatePackets:" << validatePackets;
+ 				}
+ 
+@@ -339,7 +339,7 @@
+ 			//pack->shiftOffset(4);
+ 			if (handleFragmentedPacket(client, pack)) {
+ 				client->error() <<
+-					"could not parse frag in processBufferedPackets: " << *pack;
++					"could not parse frag in processBufferedPackets: " << pack->size() << " bytes";
+ 			}
+ 		} else
+ 			handleDataChannelPacket(client, pack);
+@@ -429,7 +429,7 @@
+ 
+ 		if (handleFragmentedPacket(client, message)) {
+ 			client->error() <<
+-				"could not parse frag in handleDataChannelMultiPacket: " << *pack;
++				"could not parse frag in handleDataChannelMultiPacket: " << pack->size() << " bytes";
+ 		}
+ 
+ 		delete message;
+@@ -498,7 +498,7 @@
+ }
+ 
+ void BasePacketHandler::processMessage(Message* msg) {
+-	debug() << "PROCESSING - " << *msg;
++	debug() << "PROCESSING - " << msg->size() << " bytes";
+ 
+ 	// FIXME
+ 	serviceHandler->processMessage(msg);
+diff --git a/MMOEngine/src/engine/service/proto/BaseProtocol.cpp b/MMOEngine/src/engine/service/proto/BaseProtocol.cpp
+--- a/MMOEngine/src/engine/service/proto/BaseProtocol.cpp
++++ b/MMOEngine/src/engine/service/proto/BaseProtocol.cpp
+@@ -20,7 +20,7 @@
+ void BaseProtocol::prepareSequence(BasePacket* pack) {
+ 	pack->close();
+ 
+-	debug() << "SEND - " << *pack;
++	debug() << "SEND - " << pack->size() << " bytes";
+ 
+ 	if (pack->doSequencing())
+ 		pack->setSequence(serverSequence++);
+@@ -61,7 +61,7 @@
+ 
+ 	pack->close();
+ 
+-	debug() << "SEND - " << *pack;
++	debug() << "SEND - " << pack->size() << " bytes";
+ 
+ 	if (pack->doSequencing())
+ 		pack->setSequence(serverSequence++);
+@@ -81,14 +81,14 @@
+ 
+ bool BaseProtocol::processRecieve(Packet* pack) {
+ 	if (!testCRC(pack)) {
+-		debug() << "incorrect CRC for " << *pack;
++		debug() << "incorrect CRC for " << pack->size() << " bytes";
+ 
+ 		return false;
+ 	}
+ 
+ 	decrypt(pack);
+ 
+-	debug() << "decrypted into " << *pack;
++	debug() << "decrypted into " << pack->size() << " bytes";
+ 
+ 	if (pack->size() < 3)
+ 		throw PacketIndexOutOfBoundsException(pack, 3);
+@@ -97,7 +97,7 @@
+ 		decompress(pack);
+ 	}
+ 
+-	debug() << "READ - " << *pack;
++	debug() << "READ - " << pack->size() << " bytes";
+ 
+ 	pack->removeLastBytes(3);
+ 
+@@ -105,7 +105,7 @@
+ }
+ 
+ void BaseProtocol::encrypt(Packet* pack, bool crc) const {
+-	debug() << "encrypting packet: " << *pack;
++	debug() << "encrypting packet: " << pack->size() << " bytes";
+ 
+ 	char* pData = pack->getBuffer();
+ 	int nLength = pack->size();
+diff --git a/MMOEngine/src/system/io/ObjectInputStream.h b/MMOEngine/src/system/io/ObjectInputStream.h
+--- a/MMOEngine/src/system/io/ObjectInputStream.h
++++ b/MMOEngine/src/system/io/ObjectInputStream.h
+@@ -51,11 +51,10 @@
+ 		T readPrimitiveFrom(int offs) {
+ 			constexpr auto typeSize = sizeof(T);
+ 
+-			auto elementOffset = elementData + offs;
++			if (offs < 0 || offs > size() || typeSize > static_cast<size_t>(size() - offs))
++				throw StreamIndexOutOfBoundsException(this, offs);
+ 
+-			if (elementOffset + typeSize > end)
+-				throw StreamIndexOutOfBoundsException(this, offs + typeSize);
+-
++			char* elementOffset = elementData + offs;
+ 			T val;
+ 			memcpy(&val, elementOffset, typeSize);
+ 
+diff --git a/MMOEngine/src/system/io/ObjectOutputStream.h b/MMOEngine/src/system/io/ObjectOutputStream.h
+--- a/MMOEngine/src/system/io/ObjectOutputStream.h
++++ b/MMOEngine/src/system/io/ObjectOutputStream.h
+@@ -41,10 +41,10 @@
+ 		void writePrimitiveTo(int offs, const T& val) {
+ 			constexpr auto typeSize = sizeof(T);
+ 
+-			char* elementOffset = elementData + offs;
+-			if (elementOffset + typeSize > end)
++			if (offs < 0 || offs > size() || typeSize > static_cast<size_t>(size() - offs))
+ 				throw StreamIndexOutOfBoundsException(this, offs);
+ 
++			char* elementOffset = elementData + offs;
+ 			memcpy(elementOffset, &val, typeSize);
+ 		}
+ 
+diff --git a/MMOEngine/src/system/io/Stream.cpp b/MMOEngine/src/system/io/Stream.cpp
+--- a/MMOEngine/src/system/io/Stream.cpp
++++ b/MMOEngine/src/system/io/Stream.cpp
+@@ -3,6 +3,7 @@
+ ** See file COPYING for copying conditions.
+ */
+ #include "Stream.h"
++#include <climits>
+ 
+ Stream::Stream() : ArrayList<char>() {
+ 	end = offset = elementData;
+@@ -29,77 +30,79 @@
+ }
+ 
+ Stream* Stream::clone(int startoffs) {
+-	if (startoffs) {
+-		E3_ASSERT(startoffs < size());
+-	}
+-
+-	int newSize = size() - startoffs;
+-	Stream* stream = new Stream(newSize);
+-
+-	stream->writeStream(elementData + startoffs, newSize);
+-
++	if (startoffs < 0 || startoffs > size())
++		throw StreamIndexOutOfBoundsException(this, startoffs);
++
++	Stream* stream = new Stream(size() - startoffs);
++	if (startoffs < size())
++		stream->writeStream(elementData + startoffs, size() - startoffs);
+ 	return stream;
+ }
+ 
+ void Stream::copy(Stream* stream, int startoffs) const {
+-	if (startoffs) {
+-		E3_ASSERT(startoffs < size());
+-	}
+-
+-	int newSize = size() - startoffs;
+-
+-	stream->reset();
+-
+-	if (elementData) {
+-		stream->writeStream(elementData + startoffs, newSize);
+-	}
+-
+-	/* TA: resetting the offset breaks message->clone() for BaseProtocol
+-	 * because it expects the offset to be at the end.
+-	 * if startoffs == 0, means we copy all the packet -> we can copy the offset too of the original packet
+-	 */
++	if (startoffs < 0 || startoffs > size())
++		throw StreamIndexOutOfBoundsException(this, startoffs);
++
++	if (stream == this) {
++		if (startoffs) {
++			stream->removeRange(0, startoffs);
++			stream->setOffset(stream->size());
++		}
++		return;
++	}
++
++	stream->clear();
++	if (startoffs < size())
++		stream->writeStream(elementData + startoffs, size() - startoffs);
+ 
+ 	if (startoffs == 0)
+-		stream->offset = stream->elementData + (offset - elementData);
++		stream->setOffset(getOffset());
+ }
+ 
+ void Stream::setSize(int len, bool copyContent) {
+-	char* oldElementData = elementData;
++	if (len < 0)
++		throw StreamIndexOutOfBoundsException(this, len);
++
++	const int cursor = getOffset();
++	const int initialized = !copyContent && len > elementCapacity ? 0 : size();
++	// ArrayList doubles its growth increment on each reallocation.
++	if (len > elementCapacity && (capacityIncrement < 0 || capacityIncrement > INT_MAX / 2 ||
++			(capacityIncrement ? elementCapacity > INT_MAX - capacityIncrement : elementCapacity > INT_MAX / 2)))
++		capacityIncrement = 1;
+ 	ArrayList<char>::setSize(len, copyContent);
+-
+-	if (oldElementData != elementData)
+-		offset = (offset - oldElementData) + elementData;
+-
+-	end = elementData + len;
++	if (len > initialized)
++		memset(elementData + initialized, 0, len - initialized);
++
++	end = len ? elementData + len : elementData;
++	setOffset(Math::min(cursor, len));
+ }
+ 
+ void Stream::extendSize(int len, bool copyContent) {
+-	if ((offset += len) > end) {
+-		char* oldElementData = elementData;
+-		ArrayList<char>::setSize(offset - elementData);
+-
+-		if (oldElementData != elementData)
+-			offset = (offset - oldElementData) + elementData;
+-
+-		end = offset;
+-
+-		E3_ASSERT(offset);
+-	}
++	const int cursor = getOffset();
++	if (len < 0 || len > INT_MAX - cursor)
++		throw StreamIndexOutOfBoundsException(this, len);
++
++	const int next = cursor + len;
++	if (next > size())
++		setSize(next, copyContent);
++	setOffset(next);
+ }
+ 
+ void Stream::setOffset(int offs) {
+-	if ((offset = elementData + offs) > end)
+-		throw StreamIndexOutOfBoundsException(this, offs);
++	if (offs < 0 || offs > size())
++		throw StreamIndexOutOfBoundsException(this, offs);
++	offset = offs ? elementData + offs : elementData;
+ }
+ 
+ void Stream::shiftOffset(int offs) {
+-	if ((offset += offs) > end)
+-		throw StreamIndexOutOfBoundsException(this, offset - elementData);
++	const int cursor = getOffset();
++	if (offs < -cursor || offs > size() - cursor)
++		throw StreamIndexOutOfBoundsException(this, offs);
++	setOffset(cursor + offs);
+ }
+ 
+ void Stream::clear() {
+ 	ArrayList<char>::setSize(0);
+-
+ 	end = offset = elementData;
+ }
+ 
+@@ -108,37 +111,41 @@
+ }
+ 
+ void Stream::removeLastBytes(int len) {
+-	int newSize = size() - len;
+-	if (newSize < 0)
+-		throw StreamIndexOutOfBoundsException(this, newSize);
+-
+-	setSize(newSize);
++	if (len < 0 || len > size())
++		throw StreamIndexOutOfBoundsException(this, len);
++	setSize(size() - len);
+ }
+ 
+ void Stream::removeRange(int fromIndex, int toIndex) {
+-	char* oldElementData = elementData;
+-
++	const int cursor = getOffset();
+ 	ArrayList<char>::removeRange(fromIndex, toIndex);
+-
+-	end = elementData + ArrayList<char>::size();
+-
+-	if (oldElementData != elementData || offset > end)
+-		offset = (offset - oldElementData) + elementData;
++	end = elementCount ? elementData + elementCount : elementData;
++	setOffset(Math::min(cursor, elementCount));
+ }
+ 
+ void Stream::removeAll(int newSize, int newIncrement) {
+ 	removeRange(0, size());
+ }
+ 
+-// stream manipulation methods
+-void Stream::writeStream(const char *buf, int len) {
+-	if (len) {
+-		E3_ASSERT(buf);
+-
+-		extendSize(len);
+-
+-		memcpy(offset - len, buf, len);
+-	}
++void Stream::writeStream(const char* buf, int len) {
++	if (len == 0)
++		return;
++	if (len < 0 || !buf)
++		throw StreamIndexOutOfBoundsException(this, len);
++
++	// A source slice may belong to this stream and move during growth.
++	const uintptr_t source = reinterpret_cast<uintptr_t>(buf);
++	const uintptr_t base = reinterpret_cast<uintptr_t>(elementData);
++	const bool internal = elementData && source >= base && source - base < static_cast<uintptr_t>(elementCapacity);
++	int sourceOffset = 0;
++	if (internal) {
++		sourceOffset = static_cast<int>(source - base);
++		if (len > size() - sourceOffset)
++			throw StreamIndexOutOfBoundsException(this, len);
++	}
++
++	extendSize(len);
++	memmove(offset - len, internal ? elementData + sourceOffset : buf, len);
+ }
+ 
+ void Stream::writeStream(const Stream* stream) {
+@@ -146,67 +153,71 @@
+ }
+ 
+ void Stream::writeStream(const Stream* stream, int len) {
+-	if (len > stream->size())
++	if (len < 0 || len > stream->size())
+ 		throw StreamIndexOutOfBoundsException(stream, len);
+-
+ 	writeStream(stream->getBuffer(), len);
+ }
+ 
+ void Stream::writeStream(const Stream* stream, int len, int offs) {
+-	if (len > stream->size())
++	if (len < 0 || len > stream->size())
+ 		throw StreamIndexOutOfBoundsException(stream, len);
+-
+-	if (stream->getBuffer() == nullptr) {
+-		return;
+-	}
+-
+-	if ((elementData + offs + len) > end) {
++	if (offs < 0 || len > INT_MAX - offs)
++		throw StreamIndexOutOfBoundsException(this, offs);
++	if (!len)
++		return;
++
++	if (offs + len > size())
+ 		setSize(offs + len);
+-	}
+-
+-	memcpy(elementData + offs, stream->getBuffer(), len);
++	memmove(elementData + offs, stream->getBuffer(), len);
+ }
+ 
+ void Stream::insertStream(const Stream* stream, int len, int offs) {
+-	if (len > stream->size())
++	if (len < 0 || len > stream->size())
+ 		throw StreamIndexOutOfBoundsException(stream, len);
+-
+-	if (stream->getBuffer() == nullptr) {
+-		return;
+-	}
+-
+-	if (elementData + offs > end) {
++	if (offs < 0 || len > INT_MAX - size())
++		throw StreamIndexOutOfBoundsException(this, offs);
++	if (!len)
++		return;
++	if (offs > size()) {
+ 		writeStream(stream, len);
+-
+-		return;
+-	}
+-
+-	char* oldElementData = elementData;
+-
+-	for (int i = 0; i < stream->size(); ++i) {
+-		ArrayList<char>::insertElementAt(stream->getBuffer()[i], offs + i);
+-	}
+-
+-	if (oldElementData != elementData)
+-		offset = (offset - oldElementData) + elementData;
+-
+-	end = elementData + ArrayList<char>::size();
+-}
+-
+-void Stream::readStream(char *buf, int len) {
++		return;
++	}
++
++	const int oldSize = size();
++	setSize(oldSize + len);
++	memmove(elementData + offs + len, elementData + offs, oldSize - offs);
++	// In a self-insert the tail of the source moved with the suffix.
++	if (stream == this && len > offs) {
++		memmove(elementData + offs, elementData, offs);
++		memmove(elementData + 2 * offs, elementData + offs + len, len - offs);
++	} else {
++		memmove(elementData + offs, stream->getBuffer(), len);
++	}
++}
++
++void Stream::readStream(char* buf, int len) {
++	if (len < 0 || len > size() - getOffset() || (len && !buf))
++		throw StreamIndexOutOfBoundsException(this, len);
+ 	if (len) {
+-		E3_ASSERT(buf);
+-
++		memmove(buf, offset, len);
+ 		shiftOffset(len);
+-
+-		memcpy(buf, offset - len, len);
+ 	}
+ }
+ 
+ void Stream::readStream(Stream* stream, int len) {
++	if (len < 0 || len > size() - getOffset())
++		throw StreamIndexOutOfBoundsException(this, len);
++
++	if (stream == this) {
++		if (len)
++			memmove(elementData, offset, len);
++		setSize(len);
++		setOffset(len);
++		return;
++	}
++
+ 	stream->setSize(len);
+-
+-	readStream(stream->getBuffer(), stream->size());
++	readStream(stream->getBuffer(), len);
+ }
+ 
+ String Stream::toStringData() const {
+diff --git a/MMOEngine/src/system/io/Stream.h b/MMOEngine/src/system/io/Stream.h
+--- a/MMOEngine/src/system/io/Stream.h
++++ b/MMOEngine/src/system/io/Stream.h
+@@ -63,7 +63,7 @@
+ 
+ 		// getters
+ 		inline int getOffset() const {
+-			return offset - elementData;
++			return elementData ? offset - elementData : 0;
+ 		}
+ 
+ 		inline bool hasData() const {
+@@ -79,7 +79,7 @@
+ 		}
+ 
+ 		inline int size() const {
+-			return end - elementData;
++			return elementCount;
+ 		}
+ 
+ 		inline const char* begin() const {
+diff --git a/MMOEngine/src/system/lang/UnicodeString.cpp b/MMOEngine/src/system/lang/UnicodeString.cpp
+--- a/MMOEngine/src/system/lang/UnicodeString.cpp
++++ b/MMOEngine/src/system/lang/UnicodeString.cpp
+@@ -34,7 +34,8 @@
+ 	uString = new UnicodeCharType[str.count + 1];
+ 	count = str.count;
+ 
+-	copy(uString, str.uString);
++	copy(uString, str.uString, count);
++	uString[count] = 0;
+ }
+ 
+ UnicodeString::UnicodeString(UnicodeString&& str) : Variable(), uString(str.uString), count(str.count) {
+@@ -80,18 +81,6 @@
+ void UnicodeString::asciitowide(UnicodeCharType* UnicodeString, const char* ascii, int len) {
+ 	for (int i = 0; i < len; ++i)
+ 		UnicodeString[i] = ascii[i];
+-}
+-
+-void UnicodeString::copy(UnicodeCharType* dest, const UnicodeCharType* src) {
+-	for (int i = 0; true; ++i) {
+-		UnicodeCharType chr;
+-		memcpy(&chr, src + i, sizeof(chr));
+-
+-		dest[i] = chr;
+-
+-		if (chr == 0)
+-			break;
+-	}
+ }
+ 
+ void UnicodeString::copy(UnicodeCharType* dest, const UnicodeCharType* src, int len) {
+@@ -101,8 +90,11 @@
+ 
+ 		dest[i] = chr;
+ 
+-		if (chr == 0)
++		if (chr == 0) {
++			// Counted strings retain their wire length after a terminator.
++			memset(dest + i, 0, (len - i) * sizeof(chr));
+ 			break;
++		}
+ 	}
+ }
+ 
+@@ -113,8 +105,8 @@
+ 		count = str.count;
+ 		uString = new UnicodeCharType[count + 1];
+ 
+-		//wcscpy(uString, str.uString);
+-		copy(uString, str.uString);
++		copy(uString, str.uString, count);
++		uString[count] = 0;
+ 	}
+ 
+ 	return *this;
+@@ -227,10 +219,8 @@
+ 
+ 	//wmemcpy(nuString, uString, count);
+ 	copy(nuString, uString, count);
++	copy(nuString + count, str, len);
+ 	delete [] uString;
+-
+-	//wmemcpy(nuString + count, str, len);
+-	copy(nuString + count, str, len);
+ 
+ 	uString = nuString;
+ 	uString[count = ncount] = 0;
+@@ -323,19 +313,19 @@
+ }
+ 
+ bool UnicodeString::parseFromBinaryStream(ObjectInputStream* stream) {
+-	uint32 len = stream->readInt();
+-	auto buffer = stream->getBuffer() + stream->getOffset();
+-
+-	stream->shiftOffset(len * UnicodeCharSize::value);
+-
+-	if (uString) {
+-		delete [] uString;
+-	}
+-
+-	uString = new UnicodeCharType[len + 1];
+-	copy(uString, reinterpret_cast<const UnicodeCharType*>(buffer), len);
+-
+-	uString[count = len] = 0;
++	const int offset = stream->getOffset();
++	const uint32 len = stream->readInt(offset);
++	const size_t width = UnicodeCharSize::value;
++	if (len > static_cast<size_t>(stream->size() - offset - 4) / width)
++		throw StreamIndexOutOfBoundsException(stream, offset);
++
++	auto* data = new UnicodeCharType[len + 1];
++	copy(data, reinterpret_cast<const UnicodeCharType*>(stream->getBuffer() + offset + 4), len);
++	data[len] = 0;
++	stream->setOffset(offset + 4 + len * width);
++	delete [] uString;
++	uString = data;
++	count = len;
+ 
+ 	return true;
+ }
+diff --git a/MMOEngine/src/system/lang/UnicodeString.h b/MMOEngine/src/system/lang/UnicodeString.h
+--- a/MMOEngine/src/system/lang/UnicodeString.h
++++ b/MMOEngine/src/system/lang/UnicodeString.h
+@@ -130,7 +130,6 @@
+ 		void create(const char* ascii, int len);
+ 		void asciitowide(UnicodeCharType* unicode, const char* ascii, int len);
+ 
+-		void copy(UnicodeCharType* dest, const UnicodeCharType* src);
+ 		void copy(UnicodeCharType* dest, const UnicodeCharType* src, int len);
+ 
+ 		template<UnicodeCharSize::value_type CharTypeSize, std::enable_if_t<CharTypeSize == sizeof(std::u16string::value_type), int> = 0>
+diff --git a/MMOEngine/src/system/net/Packet.cpp b/MMOEngine/src/system/net/Packet.cpp
+--- a/MMOEngine/src/system/net/Packet.cpp
++++ b/MMOEngine/src/system/net/Packet.cpp
+@@ -15,6 +15,9 @@
+ }
+ 
+ Packet* Packet::clone(int startoffs) {
++	if (startoffs < 0 || startoffs > size())
++		throw StreamIndexOutOfBoundsException(this, startoffs);
++
+ 	Packet* pack = new Packet();
+ 	copy(pack, startoffs);
+ 
+diff --git a/MMOEngine/src/system/net/Packet.h b/MMOEngine/src/system/net/Packet.h
+--- a/MMOEngine/src/system/net/Packet.h
++++ b/MMOEngine/src/system/net/Packet.h
+@@ -272,75 +272,62 @@
+ 			return readFloat(offs);
+ 		}
+ 
+-		inline int parseAscii(char *ascii) {
+-			uint16 len = readShort();
+-			readStream(ascii, (int) len);
+-
++		template<size_t N>
++		inline int parseAscii(char (&ascii)[N]) {
++			return parseAscii(ascii, N);
++		}
++
++		inline int parseAscii(char* ascii, size_t capacity) {
++			const int cursor = getOffset();
++			const uint16 len = readShort(cursor);
++			if (!ascii || len >= capacity || len > size() - cursor - 2)
++				throw StreamIndexOutOfBoundsException(this, len);
++			memmove(ascii, elementData + cursor + 2, len);
+ 			ascii[len] = 0;
++			setOffset(cursor + 2 + len);
+ 			return len;
+ 		}
+ 
+ 		inline void parseAscii(String& ascii) {
+-			uint32 len = readShort();
+-			shiftOffset(len);
+-
+-			ascii = String(offset - len, len);
++			const int cursor = getOffset();
++			parseAscii(cursor, ascii);
++			setOffset(cursor + 2 + readShort(cursor));
+ 		}
+ 
+ 		inline String parseAscii() {
+-			uint32 len = readShort();
+-			shiftOffset(len);
+-
+-			return String(offset - len, len);
++			String result;
++			parseAscii(result);
++			return result;
+ 		}
+ 
+ 		inline void parseAscii(int offs, String& ascii) {
+-			uint32 len = readShort(offs);
+-
+-			char* elementOffset = elementData + offs + 2;
+-			if (elementOffset > end)
+-				throw StreamIndexOutOfBoundsException(this, offs + 2);
+-
+-			ascii = String(elementOffset - len, len);
++			const uint16 len = readShort(offs);
++			if (len > size() - offs - 2)
++				throw StreamIndexOutOfBoundsException(this, offs);
++
++			ascii = String(elementData + offs + 2, len);
+ 		}
+ 
+ 		inline void parseUnicode(UnicodeString& str) {
+-			uint32 len = readInt();
+-			uint32 totalLen = len * UnicodeString::UnicodeCharSize::value;
+-
+-			if (totalLen > MAX_UNICODE_LENGTH) {
+-				throw StreamIndexOutOfBoundsException(this, MAX_UNICODE_LENGTH);
+-			}
+-
+-			shiftOffset(totalLen);
+-
+-			str.clear();
+-			str.append(reinterpret_cast<UnicodeString::UnicodeCharType*>((offset - totalLen)), len);
++			const int cursor = getOffset();
++			parseUnicode(cursor, str);
++			setOffset(cursor + 4 + readInt(cursor) * UnicodeString::UnicodeCharSize::value);
+ 		}
+ 
+ 		inline UnicodeString parseUnicode() {
+ 			UnicodeString str;
+ 			parseUnicode(str);
+-
+ 			return str;
+ 		}
+ 
+ 		inline void parseUnicode(int offs, UnicodeString& str) {
+-			uint32 len = readInt(offs);
+-			uint32 totalLen = len * UnicodeString::UnicodeCharSize::value;
+-
+-			if (totalLen > MAX_UNICODE_LENGTH) {
+-				throw StreamIndexOutOfBoundsException(this, MAX_UNICODE_LENGTH);
+-			}
+-
+-			char* elementOffset = elementData + offs + 4;
+-
+-			if (elementOffset > end) {
+-				throw StreamIndexOutOfBoundsException(this, offs + 4);
+-			}
++			const uint32 len = readInt(offs);
++			const uint32 width = UnicodeString::UnicodeCharSize::value;
++			if (len > MAX_UNICODE_LENGTH / width || len > static_cast<uint32>(size() - offs - 4) / width)
++				throw StreamIndexOutOfBoundsException(this, offs);
+ 
+ 			str.clear();
+-			str.append(reinterpret_cast<UnicodeString::UnicodeCharType*>((elementOffset - totalLen)), len);
++			str.append(reinterpret_cast<UnicodeString::UnicodeCharType*>(elementData + offs + 4), len);
+ 		}
+ 
+ 		inline void parseStream(char *buf, int len) {
+diff --git a/MMOEngine/src/system/net/Socket.cpp b/MMOEngine/src/system/net/Socket.cpp
+--- a/MMOEngine/src/system/net/Socket.cpp
++++ b/MMOEngine/src/system/net/Socket.cpp
+@@ -84,16 +84,8 @@
+ }
+ 
+ bool Socket::readAppend(Stream* pack) {
+-	int offset = pack->getOffset();
+-	int size = pack->size();
+-
+-	if (size - offset < Packet::RAW_MAX_SIZE) {
+-		pack->extendSize(Packet::RAW_MAX_SIZE - offset + 1);
+-	}
+-
+-	//char buffer[Packet::RAW_MAX_SIZE];
+-
+-	int len = recv(fileDescriptor, pack->getBuffer() + offset, Packet::RAW_MAX_SIZE, 0);
++	char buffer[Packet::RAW_MAX_SIZE];
++	int len = recv(fileDescriptor, buffer, sizeof(buffer), 0);
+ 	if (len < 0) {
+ 		StringBuffer msg;
+ 		msg << "error reading from socket";
+@@ -102,18 +94,15 @@
+ 	} else if (len == 0)
+ 		return false;
+ 
+-	pack->setSize(len + size);
++	pack->setOffset(pack->size());
++	pack->writeStream(buffer, len);
+ 	pack->reset();
+-	//printf("received buffer size:%d\n", len);
+-
+-	//pack->writeStream(buffer, len);
+-	//pack->reset();
+-
+ 	return true;
+ }
+ 
+ bool Socket::read(Packet* pack) {
+-	int len = recv(fileDescriptor, pack->getBuffer(), Packet::RAW_MAX_SIZE, 0);
++	char buffer[Packet::RAW_MAX_SIZE];
++	int len = recv(fileDescriptor, buffer, sizeof(buffer), 0);
+ 	if (len < 0) {
+ 		StringBuffer msg;
+ 		msg << "error reading from socket";
+@@ -122,7 +111,8 @@
+ 	} else if (len == 0)
+ 		return false;
+ 
+-	pack->setSize(len);
++	pack->clear();
++	pack->writeStream(buffer, len);
+ 	pack->reset();
+ 
+ 	return true;
+@@ -136,16 +126,18 @@
+ 	#endif
+ 
+ 	addr->clear();
++	char buffer[Packet::RAW_MAX_SIZE];
+ 
+ 	int len = -1;
+ 	do {
+-		len = recvfrom(fileDescriptor, pack->getBuffer(), Packet::RAW_MAX_SIZE, 0, addr->getAddress(), &addr_len);
++		len = recvfrom(fileDescriptor, buffer, sizeof(buffer), 0, addr->getAddress(), &addr_len);
+ 	} while (len < 0 && (errno == EINTR || errno == EAGAIN || errno == EWOULDBLOCK));
+ 
+ 	if (len < 0)
+ 		throw SocketException("error reading from socket");
+ 
+-	pack->setSize(len);
++	pack->clear();
++	pack->writeStream(buffer, len);
+ 	pack->reset();
+ 
+ 	return len;

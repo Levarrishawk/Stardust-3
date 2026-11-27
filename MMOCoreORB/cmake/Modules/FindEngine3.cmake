@@ -1,5 +1,5 @@
 # Core3 and Engine3 must use the same broker headers and implementation.
-# Prepare them in the build tree from Stardust's public submodule pin and its patch.
+# Prepare them in the build tree from Stardust's public submodule pin and patches.
 find_package(Git REQUIRED)
 
 function(stardust_engine_git directory)
@@ -12,6 +12,7 @@ endfunction()
 
 function(stardust_prepare_engine3 output)
   set(patch "${CMAKE_CURRENT_LIST_DIR}/../patches/engine3-broker.patch")
+  set(security_patch "${CMAKE_CURRENT_LIST_DIR}/../patches/engine3-security.patch")
   set(item "utils/engine3")
   execute_process(COMMAND "${GIT_EXECUTABLE}" -C "${CMAKE_CURRENT_SOURCE_DIR}"
     rev-parse --verify ":./${item}" RESULT_VARIABLE result
@@ -22,9 +23,11 @@ function(stardust_prepare_engine3 output)
   execute_process(COMMAND "${GIT_EXECUTABLE}" -C "${CMAKE_CURRENT_SOURCE_DIR}" rev-parse --git-path index
     OUTPUT_VARIABLE git_index OUTPUT_STRIP_TRAILING_WHITESPACE)
   get_filename_component(git_index "${git_index}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${git_index}" "${patch}")
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${git_index}" "${patch}" "${security_patch}")
 
-  file(SHA256 "${patch}" patch_hash)
+  file(SHA256 "${patch}" broker_hash)
+  file(SHA256 "${security_patch}" security_hash)
+  string(SHA256 patch_hash "${broker_hash}:${security_hash}")
   string(SUBSTRING "${patch_hash}" 0 12 patch_id)
   string(SUBSTRING "${revision}" 0 12 revision_id)
   set(tree "${CMAKE_CURRENT_BINARY_DIR}/_deps/engine3-${revision_id}-${patch_id}")
@@ -46,13 +49,13 @@ function(stardust_prepare_engine3 output)
       endif()
     endif()
 
-    message(STATUS "Preparing Stardust broker patch on Engine3 ${revision_id}")
+    message(STATUS "Preparing Stardust patches on Engine3 ${revision_id}")
     stardust_engine_git("${tree}" init --quiet)
     stardust_engine_git("${tree}" config core.autocrlf false)
     stardust_engine_git("${tree}" config core.eol lf)
     stardust_engine_git("${tree}" fetch --quiet --no-tags --depth=1 --update-shallow "${source}" "${revision}")
     stardust_engine_git("${tree}" checkout --quiet --force --detach "${revision}")
-    stardust_engine_git("${tree}" apply --whitespace=nowarn "${patch}")
+    stardust_engine_git("${tree}" apply --whitespace=nowarn "${patch}" "${security_patch}")
     file(WRITE "${tree}/prepared" "${revision}\n${patch_hash}\n")
   endif()
   set(${output} "${tree}" PARENT_SCOPE)

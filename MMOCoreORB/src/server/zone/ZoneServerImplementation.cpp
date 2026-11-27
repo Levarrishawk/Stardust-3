@@ -625,8 +625,6 @@ void ZoneServerImplementation::handleMessage(ZoneClientSession* client, Packet* 
 
 	} catch (PacketIndexOutOfBoundsException& e) {
 		error(e.getMessage());
-
-		error("incorrect packet - " + message->toStringData());
 	} catch (DatabaseException& e) {
 		error(e.getMessage());
 	} catch (ArrayIndexOutOfBoundsException& e) {

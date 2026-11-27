@@ -28,8 +28,6 @@ void LoginPacketHandler::handleMessage(Message* pack) {
 	if (client == nullptr)
 		return;
 
-	debug() << "parsing " << *pack;
-
 	uint16 opcount = pack->parseShort();
 	uint32 opcode = pack->parseInt();
 

@@ -91,7 +91,7 @@ float ObjectControllerImplementation::activateCommand(CreatureObject* object, un
 		if (object->isPlayerCreature()) {
 			Reference<PlayerObject*> playerObject =  object->getSlottedObject("ghost").castTo<PlayerObject*>();
 
-			if (!playerObject->hasAbility(characterAbility)) {
+			if (playerObject == nullptr || !playerObject->hasAbility(characterAbility)) {
 				object->clearQueueAction(actionCount, 0, 2);
 
 				return 0.f;
@@ -128,6 +128,13 @@ float ObjectControllerImplementation::activateCommand(CreatureObject* object, un
 				return 0.f;
 			}
 
+		} catch (const Exception& e) {
+			Logger::error("Admin command permission check failed: " + e.getMessage());
+			object->clearQueueAction(actionCount, 0, 2);
+			return 0.f;
+		}
+
+		try {
 			logAdminCommand(object, queueCommand, targetID, arguments);
 		} catch (const Exception& e) {
 			Logger::error("Unhandled Exception logging admin commands" + e.getMessage());

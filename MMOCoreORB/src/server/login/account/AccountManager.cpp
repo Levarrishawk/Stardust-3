@@ -138,9 +138,6 @@ void AccountManager::loginApprovedAccount(LoginClient* client, ManagedReference<
 
 	if (sessionID.isEmpty()) {
 		sessionID = Crypto::randomSalt<64>();
-		client->debug() << "generated sessionID: " << sessionID;
-	} else {
-		client->debug() << "logged in with sessionID: " << sessionID;
 	}
 
 	auto* lct = new LoginClientToken(account, sessionID);
@@ -197,13 +194,13 @@ Reference<Account*> AccountManager::validateAccountCredentials(LoginClient* clie
 		sessionIdQuery << "SELECT a.active, a.username, a.password, a.salt, a.account_id, a.station_id, "
 			     "UNIX_TIMESTAMP(a.created), a.admin_level, IFNULL(s.session_id, '') AS session_id "
 			     "FROM accounts a, sessions s "
-			     "WHERE s.account_id = a.account_id AND s.session_id = '" << password << "'";
+			     "WHERE s.account_id = a.account_id AND s.expires > NOW() AND s.session_id = '" << password << "'";
 
 		if (!username.isEmpty()) {
 			sessionIdQuery << " AND a.username = '" << username << "'";
 		}
 
-		sessionIdQuery << "LIMIT 1;";
+		sessionIdQuery << " LIMIT 1;";
 
 		account = getAccount(sessionIdQuery.toString(), passwordStored, true);
 

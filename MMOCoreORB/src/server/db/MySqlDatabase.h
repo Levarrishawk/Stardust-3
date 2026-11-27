@@ -65,7 +65,7 @@ namespace server {
 		void close();
 
 		void error();
-		void error(const char* query);
+		void error(const char* operation);
 
 		static void finalizeLibrary();
 		static void initializeLibrary();

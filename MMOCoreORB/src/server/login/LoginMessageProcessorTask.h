@@ -32,14 +32,8 @@ namespace server {
 					message->reset();
 
 					packetHandler->handleMessage(message);
-				} catch (const PacketIndexOutOfBoundsException& e) {
-					logger.error() << e.getMessage();
-
-					logger.debug() << "incorrect packet - " << *message;
 				} catch (const Exception& e) {
 					logger.error() << e.getMessage();
-
-					logger.debug() << "incorrect packet - " << *message;
 				}
 			}
 

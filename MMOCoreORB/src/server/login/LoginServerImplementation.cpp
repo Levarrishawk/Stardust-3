@@ -127,17 +127,13 @@ void LoginServerImplementation::handleMessage(LoginClient* client, Packet* messa
 			phandler->handlePacket(session, message);
 
 	} catch (PacketIndexOutOfBoundsException& e) {
-		System::out << e.getMessage();
-
-		error("incorrect packet - " + message->toStringData());
+		error(e.getMessage());
 	} catch (Exception& e) {
 		error(e.getMessage());
 	}
 }
 
 void LoginServerImplementation::processMessage(Message* message) {
-	debug() << "processing message " << *message;
-
 	Reference<Task*> task = new LoginMessageProcessorTask(message, processor->getPacketHandler());
 	task->execute();
 }
