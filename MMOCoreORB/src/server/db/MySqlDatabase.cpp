@@ -12,6 +12,8 @@ Distribution of this file for usage outside of Core3 is prohibited.
 
 #include "MySqlDatabase.h"
 
+#include <chrono>
+
 using namespace server::db::mysql;
 
 class MysqlTask final : public Task {
@@ -118,6 +120,25 @@ void MySqlDatabase::connect(const String& dbname, const String& user, const Stri
 #endif
 }
 
+void MySqlDatabase::executeWithLockRetry(const char* statement, const char* operation) {
+	constexpr int maxAttempts = 3;
+	constexpr unsigned int lockWaitTimeoutError = 1205; // ER_LOCK_WAIT_TIMEOUT
+	const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+
+	for (int attempt = 0; attempt < maxAttempts; ++attempt) {
+		if (attempt > 0 && std::chrono::steady_clock::now() >= deadline)
+			break;
+
+		if (mysql_query(&mysql, statement) == 0)
+			return;
+
+		if (mysql_errno(&mysql) != lockWaitTimeoutError)
+			break;
+	}
+
+	error(operation);
+}
+
 void MySqlDatabase::doExecuteStatement(const String& statement) {
 	Locker locker(this);
 
@@ -126,15 +147,7 @@ void MySqlDatabase::doExecuteStatement(const String& statement) {
 	timer.start();
 #endif
 
-	while (mysql_query(&mysql, statement.toCharArray())) {
-		unsigned int errorNumber = mysql_errno(&mysql);
-
-		if (errorNumber != 1205/*ER_LOCK_WAIT_TIMEOUT*/) {
-			error("executeStatement");
-			break;
-		} else
-			warning() << "mysql lock wait timeout";
-	}
+	executeWithLockRetry(statement.toCharArray(), "executeStatement");
 
 #ifdef WITH_STM
 	MysqlDatabaseManager::instance()->addModifiedDatabase(this);
@@ -181,15 +194,7 @@ engine::db::ResultSet* MySqlDatabase::executeQuery(const char* statement) {
 	timer.start();
 #endif
 
-	while (mysql_query(&mysql, statement)) {
-		unsigned int errorNumber = mysql_errno(&mysql);
-
-		if (errorNumber != 1205/* ER_LOCK_WAIT_TIMEOUT*/) {
-			error("executeQuery");
-			break;
-		} else
-			warning() << "mysql lock wait timeout";
-	}
+	executeWithLockRetry(statement, "executeQuery");
 
 	MYSQL_RES* result = mysql_store_result(&mysql);
 

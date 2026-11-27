@@ -29,6 +29,7 @@ namespace server {
 		uint32 writeQueryTimeout;
 
 	private:
+		void executeWithLockRetry(const char* statement, const char* operation);
 		static int createDatabaseThread();
 		static const char* mysqlThreadName;
 
