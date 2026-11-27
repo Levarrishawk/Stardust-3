@@ -46,7 +46,7 @@ namespace server {
 #ifdef WITH_SWGREALMS_API
 				void loginApprovedAccount(LoginClient* client, ManagedReference<Account*> account);
 #else // !WITH_SWGREALMS_API
-				Reference<Account*> validateAccountCredentials(LoginClient* client, const String& username, const String& password);
+				Reference<Account*> validateAccountCredentials(LoginClient* client, const String& username, const String& password, String& sessionID);
 
 				Reference<Account*> createAccount(const String& username, const String& password, String& passwordStored);
 
@@ -82,7 +82,7 @@ namespace server {
 				}
 
 #ifndef WITH_SWGREALMS_API
-				static void expireSession(Reference<Account*> account, const String& sessionID);
+				static Reference<Account*> getAccountForZoneSession(uint32 accountID, const String& sessionID, const String& ip);
 #endif
 
 				static Reference<Account*> getAccount(uint32 accountID, bool forceSqlUpdate = false);
@@ -93,7 +93,7 @@ namespace server {
 				static Reference<Account*> getAccount(uint32 accountID, String& passwordStored, bool forceSqlUpdate = false);
 
 			private:
-				static Reference<Account*> getAccount(String query, String& passwordStored, bool forceSqlUpdate = false);
+				static Reference<Account*> getAccount(String query, String& passwordStored, bool forceSqlUpdate = false, String* sessionID = nullptr);
 #endif // !WITH_SWGREALMS_API
 			};
 		}

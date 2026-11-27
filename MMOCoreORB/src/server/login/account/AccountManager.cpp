@@ -52,6 +52,65 @@ AccountManager::~AccountManager() {
 
 }
 
+#ifndef WITH_SWGREALMS_API
+namespace {
+// A binary literal preserves the exact bytes regardless of the sessions table's collation.
+String sessionMatch(uint32 accountID, const String& sessionID) {
+	static const char hex[] = "0123456789abcdef";
+	StringBuffer match;
+	match << " WHERE account_id = " << accountID << " AND BINARY session_id = X'";
+	for (const auto ch : sessionID) {
+		const auto byte = static_cast<uint8>(ch);
+		match << hex[byte >> 4] << hex[byte & 15];
+	}
+	match << "' AND expires > NOW()";
+	return match.toString();
+}
+
+bool sessionExists(const String& match) {
+	UniqueReference<ResultSet*> result(ServerDatabase::instance()->executeQuery("SELECT 1 FROM sessions" + match));
+	return result != nullptr && result->next();
+}
+
+bool consumeSession(const String& match) {
+	UniqueReference<ResultSet*> result(ServerDatabase::instance()->executeQuery("DELETE FROM sessions" + match));
+	return result != nullptr && result->getRowsAffected() == 1;
+}
+
+bool saveLoginSession(Account* account, const String& ip, String& sessionID) {
+	Locker locker(account);
+	const uint32 accountID = account->getAccountID();
+	const bool reusable = !sessionID.isEmpty();
+	String duration = ConfigManager::instance()->getString("Core3.Login.SessionDuration", "00:15");
+	Database::escapeString(duration);
+	StringBuffer query;
+	String match;
+	if (reusable) {
+		// Only renew the credential that was verified, while it is still current.
+		match = sessionMatch(accountID, sessionID);
+		query << "UPDATE sessions SET ip = '" << ip << "', expires = ADDTIME(NOW(), '" << duration << "')" << match;
+	} else {
+		sessionID = Crypto::randomSalt<64>();
+		query << "REPLACE INTO sessions (account_id, session_id, ip, expires) VALUES ("
+		      << accountID << ", '" << sessionID << "', '" << ip << "', ADDTIME(NOW(), '" << duration << "'))";
+	}
+
+	UniqueReference<ResultSet*> result(ServerDatabase::instance()->executeQuery(query));
+	if (result == nullptr)
+		return false;
+
+	if (result->getRowsAffected() == 0) {
+		// MySQL reports zero for a renewal from the same IP in the same second.
+		if (!reusable || !sessionExists(match + " AND ip = '" + ip + "'"))
+			return false;
+	}
+
+	account->setSessionId(reusable ? sessionID : String());
+	return true;
+}
+}
+#endif // !WITH_SWGREALMS_API
+
 void AccountManager::loginAccount(LoginClient* client, Message* packet) {
 	String username, password, version;
 	AccountVersionMessage::parse(packet, username, password, version);
@@ -65,10 +124,27 @@ void AccountManager::loginAccount(LoginClient* client, Message* packet) {
 		return;
 	}
 
-	Reference<Account*> account = validateAccountCredentials(client, username, password);
+	String sessionID;
+	Reference<Account*> account = validateAccountCredentials(client, username, password, sessionID);
 
 	if (account == nullptr)
 		return;
+
+	auto connection = client->getSession();
+	if (connection == nullptr)
+		return;
+
+	String ip = connection->getAddress().getIPAddress();
+	try {
+		if (!saveLoginSession(account, ip, sessionID)) {
+			client->sendErrorMessage("Login Error", "Unable to start your session. Please log in again.");
+			return;
+		}
+	} catch (const DatabaseException& e) {
+		client->error() << e.getMessage();
+		client->sendErrorMessage("Login Error", "Unable to start your session. Please try again.");
+		return;
+	}
 
 #else // WITH_SWGREALMS_API
 	StringBuffer clientEndpoint;
@@ -133,12 +209,12 @@ void AccountManager::loginAccount(LoginClient* client, Message* packet) {
 };
 
 void AccountManager::loginApprovedAccount(LoginClient* client, ManagedReference<Account*> account) {
-#endif // WITH_SWGREALMS_API
 	String sessionID = account->getSessionId();
 
 	if (sessionID.isEmpty()) {
 		sessionID = Crypto::randomSalt<64>();
 	}
+#endif // WITH_SWGREALMS_API
 
 	auto* lct = new LoginClientToken(account, sessionID);
 	client->sendMessage(lct);
@@ -147,30 +223,19 @@ void AccountManager::loginApprovedAccount(LoginClient* client, ManagedReference<
 
 	client->setAccountID(accountID);
 
-	String ip = client->getSession()->getAddress().getIPAddress();
-
 #ifdef WITH_SWGREALMS_API
+	String ip = client->getSession()->getAddress().getIPAddress();
 	SWGRealmsAPI::instance()->notifySessionStart(ip, accountID);
-#endif // WITH_SWGREALMS_API
-
-#ifndef WITH_SWGREALMS_API
-	String sessionDuration = ConfigManager::instance()->getString("Core3.Login.SessionDuration", "00:15");
-	StringBuffer sessionQuery;
-	sessionQuery << "REPLACE INTO sessions (account_id, session_id, ip, expires) VALUES (";
-	sessionQuery << accountID << ", '" << sessionID << "', '" << ip << "' , ADDTIME(NOW(), '" << sessionDuration << "'));";
-#endif // !WITH_SWGREALMS_API
-
+#else
 	StringBuffer logQuery;
 	logQuery << "INSERT INTO account_log (account_id, ip_address, timestamp) VALUES (" << accountID << ", '" << ip << "', NOW());";
 
 	try {
-#ifndef WITH_SWGREALMS_API
-		ServerDatabase::instance()->executeStatement(sessionQuery);
 		ServerDatabase::instance()->executeStatement(logQuery);
-#endif // !WITH_SWGREALMS_API
 	} catch (const DatabaseException& e) {
 		client->error() << e.getMessage();
 	}
+#endif // WITH_SWGREALMS_API
 
 	client->sendMessage(loginServer->getLoginEnumClusterMessage(account));
 	client->sendMessage(loginServer->getLoginClusterStatusMessage(account));
@@ -180,7 +245,7 @@ void AccountManager::loginApprovedAccount(LoginClient* client, ManagedReference<
 }
 
 #ifndef WITH_SWGREALMS_API
-Reference<Account*> AccountManager::validateAccountCredentials(LoginClient* client, const String& username, const String& password) {
+Reference<Account*> AccountManager::validateAccountCredentials(LoginClient* client, const String& username, const String& password, String& sessionID) {
 	if (client == nullptr) {
 		return nullptr;
 	}
@@ -189,12 +254,13 @@ Reference<Account*> AccountManager::validateAccountCredentials(LoginClient* clie
 	String passwordStored;
 	Reference<Account*> account = nullptr;
 
-	if (ConfigManager::instance()->getLoginEnableSessionId()) {
+	sessionID = "";
+	if (!password.isEmpty() && ConfigManager::instance()->getLoginEnableSessionId()) {
 		StringBuffer sessionIdQuery;
 		sessionIdQuery << "SELECT a.active, a.username, a.password, a.salt, a.account_id, a.station_id, "
 			     "UNIX_TIMESTAMP(a.created), a.admin_level, IFNULL(s.session_id, '') AS session_id "
 			     "FROM accounts a, sessions s "
-			     "WHERE s.account_id = a.account_id AND s.expires > NOW() AND s.session_id = '" << password << "'";
+			     "WHERE s.account_id = a.account_id AND s.expires > NOW() AND BINARY s.session_id = '" << password << "'";
 
 		if (!username.isEmpty()) {
 			sessionIdQuery << " AND a.username = '" << username << "'";
@@ -202,7 +268,7 @@ Reference<Account*> AccountManager::validateAccountCredentials(LoginClient* clie
 
 		sessionIdQuery << " LIMIT 1;";
 
-		account = getAccount(sessionIdQuery.toString(), passwordStored, true);
+		account = getAccount(sessionIdQuery.toString(), passwordStored, true, &sessionID);
 
 		if (account != nullptr) {
 			isSessionIdLogin = true;
@@ -432,7 +498,7 @@ Reference<Account*> AccountManager::getAccount(uint32 accountID, String& passwor
 	return getAccount(query.toString(), passwordStored, forceSqlUpdate);
 }
 
-Reference<Account*> AccountManager::getAccount(String query, String& passwordStored, bool forceSqlUpdate) {
+Reference<Account*> AccountManager::getAccount(String query, String& passwordStored, bool forceSqlUpdate, String* sessionID) {
 	static Logger logger("AccountManager");
 
 	Locker locker(&mutex);
@@ -488,7 +554,8 @@ Reference<Account*> AccountManager::getAccount(String query, String& passwordSto
 
 		account->setAdminLevel(result->getInt(7));
 
-		account->setSessionId(result->getString(8));
+		if (sessionID != nullptr)
+			*sessionID = result->getString(8);
 
 		Time ttl;
 		ttl.addMiliTime(3600 * 1000);
@@ -584,25 +651,22 @@ Reference<Account*> AccountManager::getAccount(const String& accountName, bool f
 #endif // WITH_SWGREALMS_API
 
 #ifndef WITH_SWGREALMS_API
-void AccountManager::expireSession(Reference<Account*> account, const String& sessionID) {
-	if (account == nullptr || sessionID.isEmpty()) {
-		return;
-	}
+Reference<Account*> AccountManager::getAccountForZoneSession(uint32 accountID, const String& sessionID, const String& ip) {
+	if (sessionID.isEmpty() || sessionID.length() > 255)
+		return nullptr;
 
-	StringBuffer delQuery;
-	delQuery << "DELETE FROM sessions WHERE account_id = " << account->getAccountID();
+	const String match = sessionMatch(accountID, sessionID) + " AND ip = '" + ip + "'";
+	// Ignore invalid requests before loading the account. The locked check below decides admission.
+	if (!sessionExists(match))
+		return nullptr;
+	auto account = getAccount(accountID, true);
+	if (account == nullptr)
+		return nullptr;
 
-	if (!account->getSessionId().isEmpty()) {
-		delQuery << " AND `expires` < NOW()";
-	}
-
-	delQuery << ";";
-
-	try {
-		ServerDatabase::instance()->executeStatement(delQuery);
-	} catch (const DatabaseException& e) {
-		static Logger logger("AccountManager");
-		logger.error() << e.getMessage();
-	}
+	Locker locker(account);
+	const bool reusable = ConfigManager::instance()->getLoginEnableSessionId() && account->getSessionId() == sessionID;
+	if (reusable ? sessionExists(match) : consumeSession(match))
+		return account;
+	return nullptr;
 }
 #endif // !WITH_SWGREALMS_API

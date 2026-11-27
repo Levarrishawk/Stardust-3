@@ -710,7 +710,7 @@ void ServerCore::initialize() {
 
 #ifndef WITH_SWGREALMS_API
 			if (!ConfigManager::instance()->getLoginEnableSessionId()) {
-				database->instance()->executeStatement("TRUNCATE TABLE sessions");
+				UniqueReference<ResultSet*> cleared(database->instance()->executeQuery("TRUNCATE TABLE sessions"));
 			}
 #endif
 		}

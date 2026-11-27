@@ -17,15 +17,15 @@ namespace server {
     namespace mysql {
 
 	class ResultSet : public engine::db::ResultSet {
-		MYSQL *mysql;
+		sys::uint64 rowsAffected;
+		sys::uint64 lastAffectedRow;
 
 		MYSQL_RES *result;
 		MYSQL_ROW row;
 
 	public:
-		ResultSet(MYSQL* db, MYSQL_RES *res) : row(nullptr) {
-			mysql = db;
-			result = res;
+		ResultSet(MYSQL* db, MYSQL_RES *res) : rowsAffected(mysql_affected_rows(db)),
+				lastAffectedRow(mysql_insert_id(db)), result(res), row(nullptr) {
 		}
 
 		virtual ~ResultSet() {
@@ -65,11 +65,11 @@ namespace server {
 		}
 
 		sys::uint64 getRowsAffected() {
-			return mysql_affected_rows(mysql);
+			return rowsAffected;
 		}
 
 		sys::uint64 getLastAffectedRow() {
-			return mysql_insert_id(mysql);
+			return lastAffectedRow;
 		}
 
 		inline sys::uint64 size() {

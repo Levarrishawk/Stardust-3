@@ -69,44 +69,11 @@ public:
 			approveSession(zoneClient, zoneServer, approved_sessionID, approved_accountID);
 		});
 #else // WITH_SWGREALMS_API
-		StringBuffer query;
-		query << "SELECT session_id FROM sessions WHERE account_id = " << accountID;
-		query << " AND  ip = '"<< client->getSession()->getIPAddress() <<"' AND expires > NOW();";
-		UniqueReference<ResultSet*> result(ServerDatabase::instance()->executeQuery(query));
-
-		if (result == nullptr || !result->next()) {
-			ErrorMessage* errMsg = new ErrorMessage("Login Error", "Unable to obtain a valid session key from the server, please login again.", 0x0);
-			client->sendMessage(errMsg);
-
-			return;
-		}
-
-		// Get the Session Key the client is using
-		String sessionKey = result->getString(0);
-
-		/*
-		info(true) << "got session id from db: " << sessionKey << endl
-			<< "parsed session id in packet: " << sessionID << endl
-			<< "Client Version: " << version << endl
-			<< "gameBits: " << gameBits;
-		*/
-
-		// Set the result null
-		result = nullptr;
-
 		// Check client version
 		const String& validClient = ConfigManager::instance()->getLoginRequiredVersion();
 
 		if (version != validClient) {
 			ErrorMessage* errMsg = new ErrorMessage("Login Error", "You are using an improper client version.", 0x0);
-			client->sendMessage(errMsg);
-
-			return;
-		}
-
-		// Invalid Session Key
-		if (sessionKey != sessionID) {
-			ErrorMessage* errMsg = new ErrorMessage("Login Error", "Your session key is invalid, or has expired. Please re-login", 0x0);
 			client->sendMessage(errMsg);
 
 			return;
@@ -123,21 +90,37 @@ public:
 			return;
 		}
 
+#ifdef WITH_SWGREALMS_API
 		client->setSessionID(sessionID);
 		client->setAccountID(accountID);
-
 		auto account = AccountManager::getAccount(accountID, true);
-
 		if (account == nullptr) {
 			return;
 		}
+#else
+		auto connection = client->getSession();
+		if (connection == nullptr)
+			return;
+
+		Reference<Account*> account;
+		try {
+			account = AccountManager::getAccountForZoneSession(accountID, sessionID, connection->getIPAddress());
+		} catch (const DatabaseException& e) {
+			client->error() << e.getMessage();
+			client->sendMessage(new ErrorMessage("Login Error", "Unable to verify your session. Please log in again.", 0x0));
+			return;
+		}
+		if (account == nullptr) {
+			client->sendMessage(new ErrorMessage("Login Error", "Your session key is invalid, or has expired. Please re-login", 0x0));
+			return;
+		}
+		client->setSessionID(sessionID);
+		client->setAccountID(accountID);
+#endif
 
 		// Lock the account object
 		Locker alocker(account);
 
-#ifndef WITH_SWGREALMS_API
-		AccountManager::expireSession(account, sessionID);
-#endif
 		client->resetCharacters();
 
 		int galaxyID = zoneServer->getGalaxyID();
