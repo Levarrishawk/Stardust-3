@@ -737,7 +737,6 @@ function theme_park_rebel_mission_giver_conv_handler:handleScreenNotYet(t,p,n,o,
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNext(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNext(self,t,p,n,o,s); local npcNumber=self.themePark:getNpcNumber(n); local data=self.themePark:getNpcData(npcNumber); if data~=nil then LuaConversationScreen(result):setCustomDialogText(data.completedDialog) end
-	if npcNumber == 4 then self:giveSawWaypoint(p) end
 	if npcNumber == 8 then self:giveMothmaWaypoint(p) end
 	return result
 end
@@ -755,6 +754,56 @@ function theme_park_rebel_mission_giver_conv_handler:handleScreenNoLoc(t,p,n,o,s
 end
 function theme_park_rebel_mission_giver_conv_handler:handleScreenNoFaction(t,p,n,o,s)
 	local result=mission_giver_conv_handler.handleScreenNoFaction(self,t,p,n,o,s); local data=self.themePark:getNpcData(self.themePark:getNpcNumber(n)); local dialog="There is nothing I can discuss with you."; if data~=nil and data.noFactionDialog~=nil then dialog=data.noFactionDialog end; LuaConversationScreen(result):setCustomDialogText(dialog); return result
+end
+
+-- Luthen receives ordinary gallery visitors between his Rebel assignments.
+luthen_rael_conv_handler = theme_park_rebel_mission_giver_conv_handler:new {}
+
+local function galleryGreeting(park, pPlayer)
+	local stage = park:getActiveNpcNumber(pPlayer)
+	local isRebel = park:isInFaction(park:getGlobalFaction(), pPlayer)
+	if stage == 4 and isRebel then
+		return nil -- Let the mission handler process offers, active jobs and turn-ins.
+	end
+
+	local lastStage = park.npcMap[#park.npcMap].npcNumber
+	local pGhost = CreatureObject(pPlayer):getPlayerObject()
+	if stage > lastStage or (pGhost ~= nil and PlayerObject(pGhost):hasBadge(THEME_PARK_REBEL_BADGE)) then
+		return "gallery_veteran"
+	end
+	if not isRebel or stage < 4 then
+		return "gallery_public"
+	end
+	if stage == 8 and park:getCurrentMissionNumber(8, pPlayer) == 1 and park:missionStatus(pPlayer) == 0
+		and readStringData(CreatureObject(pPlayer):getObjectID() .. ":activeScreenPlay") == "" then
+		return "gallery_handoff"
+	end
+	return "gallery_return"
+end
+
+function luthen_rael_conv_handler:getInitialScreen(pPlayer, pNpc, pTemplate)
+	local greeting = galleryGreeting(self.themePark, pPlayer)
+	if greeting then
+		return LuaConversationTemplate(pTemplate):getScreen(greeting)
+	end
+	return conv_handler.getInitialScreen(self, pPlayer, pNpc, pTemplate)
+end
+
+function luthen_rael_conv_handler:runScreenHandlers(pTemplate, pPlayer, pNpc, selectedOption, pScreen)
+	if LuaConversationScreen(pScreen):getScreenID() == "gallery_directions" then
+		if galleryGreeting(self.themePark, pPlayer) ~= "gallery_handoff" then
+			return LuaConversationTemplate(pTemplate):getScreen("gallery_exhibits")
+		end
+		self:giveSawWaypoint(pPlayer)
+		return pScreen
+	end
+	return mission_giver_conv_handler.runScreenHandlers(self, pTemplate, pPlayer, pNpc, selectedOption, pScreen)
+end
+
+function luthen_rael_conv_handler:handleScreenQuitQuest(pTemplate, pPlayer, pNpc, selectedOption, pScreen)
+	local result = mission_giver_conv_handler.handleScreenQuitQuest(self, pTemplate, pPlayer, pNpc, selectedOption, pScreen)
+	LuaConversationScreen(result):addOption("I'm just here to see the collection.", "gallery_exhibits")
+	return result
 end
 
 theme_park_rebel_mission_target_conv_handler = mission_target_conv_handler:new {themePark=ThemeParkRebel}

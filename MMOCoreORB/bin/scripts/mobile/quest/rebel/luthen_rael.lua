@@ -31,7 +31,7 @@ luthen_rael = Creature:new {
 	lootGroups = {},
 	primaryWeapon = "unarmed",
 	secondaryWeapon = "none",
-	conversationTemplate = "theme_park_rebel_mission_giver_convotemplate",
+	conversationTemplate = "luthen_rael_convotemplate",
 	primaryAttacks = {},
 	secondaryAttacks = {}
 }

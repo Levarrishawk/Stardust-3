@@ -1,4 +1,4 @@
-function createMissionGiverConvoTemplate(templateName, convoHandler)
+function createMissionGiverConvoTemplate(templateName, convoHandler, addScreens)
 	mission_giver_convotemplate = ConvoTemplate:new {
 		initialScreen = "init",
 		templateType = "Lua",
@@ -295,6 +295,9 @@ function createMissionGiverConvoTemplate(templateName, convoHandler)
 
 	mission_giver_convotemplate:addScreen(mission_giver_npc_continue);
 
+	if addScreens then
+		addScreens(mission_giver_convotemplate)
+	end
 	addConversationTemplate(templateName, mission_giver_convotemplate);
 end
 

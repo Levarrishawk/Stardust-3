@@ -127,6 +127,7 @@ includeFile("conversations/themepark/epic_quests/goru_conv.lua")
 
 -- Themepark Logic Convos
 includeFile("conversations/themepark/logic/mission_giver_conv.lua")
+includeFile("conversations/themepark/luthen_rael_conv.lua")
 includeFile("conversations/themepark/logic/mission_target_conv.lua")
 
 -- Enough Quest
