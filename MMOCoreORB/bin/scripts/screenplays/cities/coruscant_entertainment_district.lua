@@ -46,6 +46,7 @@ function CoruscantEntertainmentScreenPlay:start()
 	if (isZoneEnabled("coruscant")) then
 		self:spawnMobiles()
 		self:spawnSceneObjects()
+		self:spawnDistrictTheatreSeats()
 		self:spawnBackstageDoor()
 		self:populateOperaAuditorium()
 		self:spawnOperaHouseStaff()
@@ -268,6 +269,65 @@ function CoruscantEntertainmentScreenPlay:updateBackstageDoor(pDoor, generation)
 	end
 	createEvent(occupied and 200 or 900, self.screenplayName, "updateBackstageDoor", pDoor, generation)
 	return 0
+end
+
+-- The same sittable furniture used in the Galaxies Opera House performance hall.
+function CoruscantEntertainmentScreenPlay:spawnDistrictTheatreSeats()
+	local template = "object/tangible/furniture/plain/plain_chair_s01.iff"
+	local atan2 = math.atan2 or math.atan
+	local function populate(cellID, arrange)
+		local pCell = getSceneObject(cellID)
+		if pCell == nil or not SceneObject(pCell):isCellObject() then
+			print(self.screenplayName .. ": missing district theatre cell " .. cellID)
+			return
+		end
+		local cell = SceneObject(pCell)
+		local placed = {}
+		local function key(x, h, z)
+			return string.format("%d/%d/%d", math.floor(x*100+.5), math.floor(h*100+.5), math.floor(z*100+.5))
+		end
+		for i = 0, cell:getContainerObjectsSize() - 1 do
+			local p = cell:getContainerObject(i)
+			if p ~= nil then
+				local object = SceneObject(p)
+				if object:getTemplateObjectPath() == template then
+					placed[key(object:getPositionX(), object:getPositionZ(), object:getPositionY())] = true
+				end
+			end
+		end
+		arrange(function(x, z, heading)
+			local height = 0.04
+			local k = key(x, height, z)
+			if not placed[k] then
+				local p = spawnSceneObject("coruscant", template, x, height, z, cellID, heading)
+				if p == nil then
+					print(self.screenplayName .. ": could not place district theatre chair in " .. cellID .. " at " .. k)
+				else
+					placed[k] = true
+				end
+			end
+		end)
+	end
+
+	populate(37002602, function(seat)
+		for row = 0, 4 do
+			for _, side in ipairs({-1, 1}) do
+				for column = 0, 5 do
+					local x = side * (3.25 + 1.75*column + .30*(row%2))
+					local z = -6.10 + 2.55*row + .005*x*x
+					local angle = math.min(math.rad(22), atan2(math.abs(x), z+14))
+					seat(x, z, -side*(math.pi-angle))
+				end
+			end
+		end
+	end)
+	populate(37002601, function(seat)
+		for _, center in ipairs({-12, 9}) do
+			for i = 0, 3 do
+				seat(center + (i-1.5)*1.35, 14.70, math.pi)
+			end
+		end
+	end)
 end
 
 function CoruscantEntertainmentScreenPlay:spawnOperaSeating()
